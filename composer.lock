@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "7e3d0a0c29e686ab681bf6506e530ca1",
+    "hash": "00d7903d976acdfaddf993f5c726bc0b",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1135,6 +1135,30 @@
                 ]
             },
             "description": "Module d'authentification pour les applis ZF2 de l'UCBN"
+        },
+        {
+            "name": "unicaen/unicaen-ldap",
+            "version": "dev-trunk",
+            "source": {
+                "type": "svn",
+                "url": "https://svn.unicaen.fr/svn/UnicaenLdap",
+                "reference": "/trunk/@3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=3.7",
+                "zendframework/zend-test": ">=2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "UnicaenLdap": "src/",
+                    "UnicaenLdapTest": "tests/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "description": "Module Ldap de l'UCBN"
         },
         {
             "name": "zendframework/zend-authentication",
@@ -2775,7 +2799,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "unicaen/unicaen-app": 20,
-        "unicaen/unicaen-auth": 20
+        "unicaen/unicaen-auth": 20,
+        "unicaen/unicaen-ldap": 20
     },
     "platform": [
 

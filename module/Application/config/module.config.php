@@ -8,6 +8,32 @@
  */
 
 return array(
+    'doctrine' => array(
+        'connection' => array(
+            'orm_default' => array(
+                'driverClass' => 'Doctrine\DBAL\Driver\OCI8\Driver',
+            ),
+        ),
+        'driver' => array(
+            'orm_default_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'paths' => array(
+                    __DIR__ . '/../src/Application/Entity/Db',
+                ),
+            ),
+            'orm_default' => array(
+                'class'   => 'Doctrine\ORM\Mapping\Driver\DriverChain',
+                'drivers' => array(
+                    'Application\Entity\Db' => 'orm_default_driver'
+                )
+            ),
+        ),
+//        'cache' => array(
+//            'apc' => array(
+//                'namespace' => __NAMESPACE__,
+//            ),
+//        ),
+    ),
     'router' => array(
         'routes' => array(
             'home' => array(
@@ -45,6 +71,7 @@ return array(
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
+                                'controller' => 'Index',
                             ),
                         ),
                     ),

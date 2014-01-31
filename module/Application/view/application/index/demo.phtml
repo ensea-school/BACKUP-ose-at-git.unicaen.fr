@@ -1,0 +1,17 @@
+<div class="hero-unit">
+    <h1>Demo</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <?php 
+        $tf = new \UnicaenApp\Form\Element\SearchAndSelect('tf');
+        $tf->setAutocompleteSource($this->url('application/default', array('action' => 'search')))
+                ->setLabel("Recherchez une personne dans l'annuaire :");
+        ?>
+        <form method="POST">
+        <?php echo $this->formControlGroup($tf); ?>
+        <input class="btn btn-primary" type="submit" value="Valider" name="submit">
+        </form>
+    </div>
+</div>

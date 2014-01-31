@@ -9,6 +9,11 @@
     ],
     "require": {
         "unicaen/unicaen-app":                  "dev-trunk",
-        "unicaen/unicaen-auth":                 "dev-trunk"
+        "unicaen/unicaen-auth":                 "dev-trunk",
+        "unicaen/unicaen-ldap":                 "dev-trunk"
+    },
+    "require-dev": {
+        "zendframework/zend-test":              ">=2.2",
+        "phpunit/PHPUnit":                      ">=3.7"
     }
 }

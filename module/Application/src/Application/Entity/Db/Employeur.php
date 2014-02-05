@@ -6,53 +6,63 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Employeur
- *
- * @ORM\Table(name="EMPLOYEUR", indexes={@ORM\Index(name="IDX_C385FF2814FA4434", columns={"EMPLOYEUR_PERE_ID"})})
- * @ORM\Entity
  */
 class Employeur
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="CODE_NAF", type="string", length=4, nullable=false)
      */
     private $codeNaf;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="EMPLOYEUR_ID_seq", allocationSize=1, initialValue=1)
      */
-    private $id;
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LIBELLE", type="string", length=60, nullable=false)
      */
     private $libelle;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="SIRET", type="string", length=14, nullable=false)
      */
     private $siret;
 
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var \Application\Entity\Db\Employeur
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Employeur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="EMPLOYEUR_PERE_ID", referencedColumnName="ID")
-     * })
      */
     private $employeurPere;
-
 
 
     /**
@@ -79,13 +89,141 @@ class Employeur
     }
 
     /**
-     * Get id
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return Employeur
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
      *
      * @return integer 
      */
-    public function getId()
+    public function getHistoCreateur()
     {
-        return $this->id;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return Employeur
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return Employeur
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return Employeur
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return Employeur
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Employeur
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -132,6 +270,16 @@ class Employeur
     public function getSiret()
     {
         return $this->siret;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

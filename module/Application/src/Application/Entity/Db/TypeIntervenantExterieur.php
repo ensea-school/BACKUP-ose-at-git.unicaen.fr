@@ -6,46 +6,191 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TypeIntervenantExterieur
- *
- * @ORM\Table(name="TYPE_INTERVENANT_EXTERIEUR")
- * @ORM\Entity
  */
 class TypeIntervenantExterieur
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="TYPE_INTERVENANT_EXTERIEUR_ID_", allocationSize=1, initialValue=1)
      */
-    private $id;
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LIBELLE", type="string", length=60, nullable=false)
      */
     private $libelle;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="LIMITE_HEURES_COMPLEMENTAIRES", type="float", precision=126, scale=0, nullable=false)
      */
     private $limiteHeuresComplementaires;
 
+    /**
+     * @var integer
+     */
+    private $id;
 
 
     /**
-     * Get id
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return TypeIntervenantExterieur
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
      *
      * @return integer 
      */
-    public function getId()
+    public function getHistoCreateur()
     {
-        return $this->id;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return TypeIntervenantExterieur
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return TypeIntervenantExterieur
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return TypeIntervenantExterieur
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return TypeIntervenantExterieur
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return TypeIntervenantExterieur
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -92,5 +237,15 @@ class TypeIntervenantExterieur
     public function getLimiteHeuresComplementaires()
     {
         return $this->limiteHeuresComplementaires;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

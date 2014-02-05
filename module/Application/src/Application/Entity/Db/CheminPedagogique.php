@@ -6,46 +6,253 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CheminPedagogique
- *
- * @ORM\Table(name="CHEMIN_PEDAGOGIQUE", indexes={@ORM\Index(name="IDX_B1F283FEB4F27801", columns={"ETAPE_ID"}), @ORM\Index(name="IDX_B1F283FE8AB4A516", columns={"ELEMENT_PEDAGOGIQUE_ID"})})
- * @ORM\Entity
  */
 class CheminPedagogique
 {
     /**
+     * @var integer
+     */
+    private $histoCreateur;
+
+    /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="DATE_DEBUT_ANNEE_UNIV", type="datetime", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
+     * @var string
+     */
+    private $ue;
+
+    /**
+     * @var integer
+     */
+    private $index;
+
+    /**
+     * @var \DateTime
      */
     private $dateDebutAnneeUniv;
 
     /**
      * @var \Application\Entity\Db\Etape
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\Etape")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ETAPE_ID", referencedColumnName="ID")
-     * })
      */
     private $etape;
 
     /**
      * @var \Application\Entity\Db\ElementPedagogique
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\ElementPedagogique")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ELEMENT_PEDAGOGIQUE_ID", referencedColumnName="ID")
-     * })
      */
     private $elementPedagogique;
 
+    /**
+     * @var \Application\Entity\Db\Periode
+     */
+    private $periode;
 
+
+    /**
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return CheminPedagogique
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return integer 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return CheminPedagogique
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return CheminPedagogique
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return CheminPedagogique
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return CheminPedagogique
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return CheminPedagogique
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
+
+    /**
+     * Set ue
+     *
+     * @param string $ue
+     * @return CheminPedagogique
+     */
+    public function setUe($ue)
+    {
+        $this->ue = $ue;
+
+        return $this;
+    }
+
+    /**
+     * Get ue
+     *
+     * @return string 
+     */
+    public function getUe()
+    {
+        return $this->ue;
+    }
+
+    /**
+     * Set index
+     *
+     * @param integer $index
+     * @return CheminPedagogique
+     */
+    public function setIndex($index)
+    {
+        $this->index = $index;
+
+        return $this;
+    }
+
+    /**
+     * Get index
+     *
+     * @return integer 
+     */
+    public function getIndex()
+    {
+        return $this->index;
+    }
 
     /**
      * Set dateDebutAnneeUniv
@@ -114,5 +321,28 @@ class CheminPedagogique
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
+    }
+
+    /**
+     * Set periode
+     *
+     * @param \Application\Entity\Db\Periode $periode
+     * @return CheminPedagogique
+     */
+    public function setPeriode(\Application\Entity\Db\Periode $periode = null)
+    {
+        $this->periode = $periode;
+
+        return $this;
+    }
+
+    /**
+     * Get periode
+     *
+     * @return \Application\Entity\Db\Periode 
+     */
+    public function getPeriode()
+    {
+        return $this->periode;
     }
 }

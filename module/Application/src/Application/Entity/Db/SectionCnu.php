@@ -6,33 +6,51 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SectionCnu
- *
- * @ORM\Table(name="SECTION_CNU")
- * @ORM\Entity
  */
 class SectionCnu
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="ID", type="string", length=2, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="SECTION_CNU_ID_seq", allocationSize=1, initialValue=1)
+     * @var integer
      */
-    private $id;
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LIBELLE", type="string", length=60, nullable=false)
      */
     private $libelle;
 
     /**
+     * @var string
+     */
+    private $id;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Application\Entity\Db\Intervenant", mappedBy="sectionCnu")
      */
     private $intervenant;
 
@@ -44,15 +62,142 @@ class SectionCnu
         $this->intervenant = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return SectionCnu
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
 
     /**
-     * Get id
+     * Get histoCreateur
      *
-     * @return string 
+     * @return integer 
      */
-    public function getId()
+    public function getHistoCreateur()
     {
-        return $this->id;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return SectionCnu
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return SectionCnu
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return SectionCnu
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return SectionCnu
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return SectionCnu
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -76,6 +221,16 @@ class SectionCnu
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

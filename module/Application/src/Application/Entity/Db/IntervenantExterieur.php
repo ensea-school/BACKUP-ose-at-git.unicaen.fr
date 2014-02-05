@@ -6,62 +6,207 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * IntervenantExterieur
- *
- * @ORM\Table(name="INTERVENANT_EXTERIEUR", indexes={@ORM\Index(name="IDX_8FEA72F0B407ABDC", columns={"REGIME_SECU_ID"}), @ORM\Index(name="IDX_8FEA72F0C2443469", columns={"TYPE_ID"}), @ORM\Index(name="IDX_8FEA72F05E37C346", columns={"SITUATION_FAMILIALE_ID"})})
- * @ORM\Entity
  */
-class IntervenantExterieur extends Intervenant
+class IntervenantExterieur extends Intervenant implements HistoInterface
 {
     /**
+     * @var integer
+     */
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
      * @var string
-     *
-     * @ORM\Column(name="PROFESSION", type="string", length=60, nullable=false)
      */
     private $profession;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\Intervenant")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="INTERVENANT_ID", referencedColumnName="ID")
-     * })
+     * @var integer
      */
-    private $intervenant;
+    private $id;
 
     /**
-     * @var \Application\Entity\Db\RegimeSecu
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\RegimeSecu")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="REGIME_SECU_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\SituationFamiliale
      */
-    private $regimeSecu;
+    private $situationFamiliale;
 
     /**
      * @var \Application\Entity\Db\TypeIntervenantExterieur
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\TypeIntervenantExterieur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="TYPE_ID", referencedColumnName="ID")
-     * })
      */
     private $type;
 
     /**
-     * @var \Application\Entity\Db\SituationFamiliale
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\SituationFamiliale")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="SITUATION_FAMILIALE_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\RegimeSecu
      */
-    private $situationFamiliale;
+    private $regimeSecu;
+
+    /**
+     * @var \Application\Entity\Db\Intervenant
+     */
+    private $intervenant;
 
 
+    /**
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return IntervenantExterieur
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return integer 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return IntervenantExterieur
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return IntervenantExterieur
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return IntervenantExterieur
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return IntervenantExterieur
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return IntervenantExterieur
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
 
     /**
      * Set profession
@@ -87,49 +232,26 @@ class IntervenantExterieur extends Intervenant
     }
 
     /**
-     * Set intervenant
+     * Set situationFamiliale
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param \Application\Entity\Db\SituationFamiliale $situationFamiliale
      * @return IntervenantExterieur
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant)
+    public function setSituationFamiliale(\Application\Entity\Db\SituationFamiliale $situationFamiliale = null)
     {
-        $this->intervenant = $intervenant;
+        $this->situationFamiliale = $situationFamiliale;
 
         return $this;
     }
 
     /**
-     * Get intervenant
+     * Get situationFamiliale
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Application\Entity\Db\SituationFamiliale 
      */
-    public function getIntervenant()
+    public function getSituationFamiliale()
     {
-        return $this->intervenant;
-    }
-
-    /**
-     * Set regimeSecu
-     *
-     * @param \Application\Entity\Db\RegimeSecu $regimeSecu
-     * @return IntervenantExterieur
-     */
-    public function setRegimeSecu(\Application\Entity\Db\RegimeSecu $regimeSecu = null)
-    {
-        $this->regimeSecu = $regimeSecu;
-
-        return $this;
-    }
-
-    /**
-     * Get regimeSecu
-     *
-     * @return \Application\Entity\Db\RegimeSecu 
-     */
-    public function getRegimeSecu()
-    {
-        return $this->regimeSecu;
+        return $this->situationFamiliale;
     }
 
     /**
@@ -156,25 +278,25 @@ class IntervenantExterieur extends Intervenant
     }
 
     /**
-     * Set situationFamiliale
+     * Set regimeSecu
      *
-     * @param \Application\Entity\Db\SituationFamiliale $situationFamiliale
+     * @param \Application\Entity\Db\RegimeSecu $regimeSecu
      * @return IntervenantExterieur
      */
-    public function setSituationFamiliale(\Application\Entity\Db\SituationFamiliale $situationFamiliale = null)
+    public function setRegimeSecu(\Application\Entity\Db\RegimeSecu $regimeSecu = null)
     {
-        $this->situationFamiliale = $situationFamiliale;
+        $this->regimeSecu = $regimeSecu;
 
         return $this;
     }
 
     /**
-     * Get situationFamiliale
+     * Get regimeSecu
      *
-     * @return \Application\Entity\Db\SituationFamiliale 
+     * @return \Application\Entity\Db\RegimeSecu 
      */
-    public function getSituationFamiliale()
+    public function getRegimeSecu()
     {
-        return $this->situationFamiliale;
+        return $this->regimeSecu;
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\CompteBancaire" table="COMPTE_BANCAIRE">
+    <id name="intervenantId" type="integer" column="INTERVENANT_ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="banqueBic" type="string" column="BANQUE_BIC" length="4" nullable="true"/>
+    <field name="banqueId" type="string" column="BANQUE_ID" length="5" nullable="false"/>
+    <field name="branche" type="string" column="BRANCHE" length="2" nullable="true"/>
+    <field name="cleRib" type="string" column="CLE_RIB" length="2" nullable="false"/>
+    <field name="compte" type="string" column="COMPTE" length="11" nullable="false"/>
+    <field name="emplacement" type="string" column="EMPLACEMENT" length="2" nullable="true"/>
+    <field name="guichet" type="string" column="GUICHET" length="5" nullable="false"/>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="iban2" type="string" column="IBAN_2" length="4" nullable="true"/>
+    <field name="iban3" type="string" column="IBAN_3" length="4" nullable="true"/>
+    <field name="iban4" type="string" column="IBAN_4" length="4" nullable="true"/>
+    <field name="iban5" type="string" column="IBAN_5" length="4" nullable="true"/>
+    <field name="iban6" type="string" column="IBAN_6" length="4" nullable="true"/>
+    <field name="iban7" type="string" column="IBAN_7" length="4" nullable="true"/>
+    <field name="ibanFin" type="string" column="IBAN_FIN" length="7" nullable="true"/>
+    <field name="ibanIso" type="string" column="IBAN_ISO" length="4" nullable="true"/>
+    <field name="intervenantExterieurId" type="integer" column="INTERVENANT_EXTERIEUR_ID" nullable="false"/>
+    <field name="paysIso" type="string" column="PAYS_ISO" length="2" nullable="true"/>
+  </entity>
+</doctrine-mapping>

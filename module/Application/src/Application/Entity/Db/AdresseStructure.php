@@ -6,112 +6,103 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AdresseStructure
- *
- * @ORM\Table(name="ADRESSE_STRUCTURE", indexes={@ORM\Index(name="IDX_D72AAFC854222575", columns={"BIS_TER_ID"}), @ORM\Index(name="IDX_D72AAFC8884B0F7B", columns={"STRUCTURE_ID"})})
- * @ORM\Entity
  */
 class AdresseStructure
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="CODE_POSTAL", type="string", length=15, nullable=true)
      */
     private $codePostal;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="ADRESSE_STRUCTURE_ID_seq", allocationSize=1, initialValue=1)
      */
-    private $id;
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LOCALITE", type="string", length=26, nullable=true)
      */
     private $localite;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="NOM_VOIE", type="string", length=22, nullable=true)
      */
     private $nomVoie;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="NO_VOIE", type="string", length=4, nullable=true)
      */
     private $noVoie;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="PAYS_CODE_INSEE", type="string", length=3, nullable=true)
      */
     private $paysCodeInsee;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="PAYS_LIBELLE", type="string", length=30, nullable=true)
      */
     private $paysLibelle;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="PRINCIPALE", type="boolean", nullable=true)
      */
     private $principale;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="TELEPHONE", type="string", length=20, nullable=false)
      */
     private $telephone;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="VILLE_CODE_INSEE", type="string", length=5, nullable=true)
      */
     private $villeCodeInsee;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="VILLE_LIBELLE", type="string", length=26, nullable=true)
      */
     private $villeLibelle;
 
     /**
-     * @var \Application\Entity\Db\BisTer
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\BisTer")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="BIS_TER_ID", referencedColumnName="ID")
-     * })
+     * @var integer
      */
-    private $bisTer;
+    private $id;
 
     /**
      * @var \Application\Entity\Db\Structure
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Structure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="STRUCTURE_ID", referencedColumnName="ID")
-     * })
      */
     private $structure;
 
+    /**
+     * @var \Application\Entity\Db\BisTer
+     */
+    private $bisTer;
 
 
     /**
@@ -138,13 +129,141 @@ class AdresseStructure
     }
 
     /**
-     * Get id
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return AdresseStructure
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
      *
      * @return integer 
      */
-    public function getId()
+    public function getHistoCreateur()
     {
-        return $this->id;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return AdresseStructure
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return AdresseStructure
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return AdresseStructure
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return AdresseStructure
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return AdresseStructure
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -355,26 +474,13 @@ class AdresseStructure
     }
 
     /**
-     * Set bisTer
+     * Get id
      *
-     * @param \Application\Entity\Db\BisTer $bisTer
-     * @return AdresseStructure
+     * @return integer 
      */
-    public function setBisTer(\Application\Entity\Db\BisTer $bisTer = null)
+    public function getId()
     {
-        $this->bisTer = $bisTer;
-
-        return $this;
-    }
-
-    /**
-     * Get bisTer
-     *
-     * @return \Application\Entity\Db\BisTer 
-     */
-    public function getBisTer()
-    {
-        return $this->bisTer;
+        return $this->id;
     }
 
     /**
@@ -398,5 +504,28 @@ class AdresseStructure
     public function getStructure()
     {
         return $this->structure;
+    }
+
+    /**
+     * Set bisTer
+     *
+     * @param \Application\Entity\Db\BisTer $bisTer
+     * @return AdresseStructure
+     */
+    public function setBisTer(\Application\Entity\Db\BisTer $bisTer = null)
+    {
+        $this->bisTer = $bisTer;
+
+        return $this;
+    }
+
+    /**
+     * Get bisTer
+     *
+     * @return \Application\Entity\Db\BisTer 
+     */
+    public function getBisTer()
+    {
+        return $this->bisTer;
     }
 }

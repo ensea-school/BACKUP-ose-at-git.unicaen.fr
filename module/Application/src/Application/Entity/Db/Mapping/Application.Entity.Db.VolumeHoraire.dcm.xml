@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\VolumeHoraire" table="VOLUME_HORAIRE">
+    <indexes>
+      <index name="IDX_C2A901856DA70281" columns="TYPE_INTERVENTION_ID"/>
+      <index name="IDX_C2A90185D09A4004" columns="MOTIF_NON_PAIEMENT_ID"/>
+      <index name="IDX_C2A90185C0569A10" columns="PERIODE_ID"/>
+      <index name="IDX_C2A90185DE8EF239" columns="SERVICE_ID"/>
+    </indexes>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="aPayer" type="string" column="A_PAYER" length="1" nullable="true"/>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <many-to-one field="service" target-entity="Application\Entity\Db\Service">
+      <join-columns>
+        <join-column name="SERVICE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="periode" target-entity="Application\Entity\Db\Periode">
+      <join-columns>
+        <join-column name="PERIODE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="motifNonPaiement" target-entity="Application\Entity\Db\MotifNonPaiement">
+      <join-columns>
+        <join-column name="MOTIF_NON_PAIEMENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
+      <join-columns>
+        <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

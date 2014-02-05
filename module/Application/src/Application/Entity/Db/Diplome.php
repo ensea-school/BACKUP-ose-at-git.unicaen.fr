@@ -6,51 +6,66 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Diplome
- *
- * @ORM\Table(name="DIPLOME", indexes={@ORM\Index(name="IDX_D409B354C2443469", columns={"TYPE_ID"})})
- * @ORM\Entity
  */
 class Diplome
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="ID", type="string", length=10, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="DIPLOME_ID_seq", allocationSize=1, initialValue=1)
      */
-    private $id;
+    private $code;
+
+    /**
+     * @var integer
+     */
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LIBELLE", type="string", length=40, nullable=false)
      */
     private $libelle;
 
     /**
+     * @var string
+     */
+    private $source;
+
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var \Application\Entity\Db\TypeDiplome
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\TypeDiplome")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="TYPE_ID", referencedColumnName="ID")
-     * })
      */
     private $type;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Application\Entity\Db\Etape", inversedBy="diplome")
-     * @ORM\JoinTable(name="diplome_etape",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="DIPLOME_ID", referencedColumnName="ID")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="ETAPE_ID", referencedColumnName="ID")
-     *   }
-     * )
      */
     private $etape;
 
@@ -62,15 +77,165 @@ class Diplome
         $this->etape = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Diplome
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
 
     /**
-     * Get id
+     * Get code
      *
      * @return string 
      */
-    public function getId()
+    public function getCode()
     {
-        return $this->id;
+        return $this->code;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return Diplome
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return integer 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return Diplome
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return Diplome
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return Diplome
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return Diplome
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Diplome
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -94,6 +259,39 @@ class Diplome
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set source
+     *
+     * @param string $source
+     * @return Diplome
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return string 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

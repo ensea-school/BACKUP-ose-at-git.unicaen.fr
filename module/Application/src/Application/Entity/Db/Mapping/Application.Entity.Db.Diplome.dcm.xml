@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Diplome" table="DIPLOME">
+    <indexes>
+      <index name="IDX_D409B354C2443469" columns="TYPE_ID"/>
+    </indexes>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="code" type="string" column="CODE" length="10" nullable="false"/>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="40" nullable="false"/>
+    <field name="source" type="string" column="SOURCE" length="15" nullable="true"/>
+    <many-to-one field="type" target-entity="Application\Entity\Db\TypeDiplome">
+      <join-columns>
+        <join-column name="TYPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="etape" target-entity="Application\Entity\Db\Etape" inversed-by="diplome">
+      <join-table name="diplome_etape">
+        <join-columns>
+          <join-column name="DIPLOME_ID" referenced-column-name="ID"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

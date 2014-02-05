@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\TypePieceJointe" table="TYPE_PIECE_JOINTE">
+    <id name="id" type="string" column="ID" length="3">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="60" nullable="false"/>
+    <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
+  </entity>
+</doctrine-mapping>

@@ -16,9 +16,9 @@ return array(
         ),
         'driver' => array(
             'orm_default_driver' => array(
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
                 'paths' => array(
-                    __DIR__ . '/../src/Application/Entity/Db',
+                    __DIR__ . '/../src/Application/Entity/Db/Mapping',
                 ),
             ),
             'orm_default' => array(
@@ -26,6 +26,14 @@ return array(
                 'drivers' => array(
                     'Application\Entity\Db' => 'orm_default_driver'
                 )
+            ),
+        ),
+        'eventmanager' => array(
+            'orm_default' => array(
+                'subscribers' => array(
+                    'Doctrine\DBAL\Event\Listeners\OracleSessionInit',
+                    'Application\ORM\Event\Listeners\Histo',
+                ),
             ),
         ),
 //        'cache' => array(
@@ -81,7 +89,7 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            
+            'Application\ORM\Event\Listeners\Histo' => 'Application\ORM\Event\Listeners\HistoFactory',
         ),
     ),
     'translator' => array(

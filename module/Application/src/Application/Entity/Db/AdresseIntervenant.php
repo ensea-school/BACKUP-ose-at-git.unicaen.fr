@@ -6,119 +6,108 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AdresseIntervenant
- *
- * @ORM\Table(name="ADRESSE_INTERVENANT", indexes={@ORM\Index(name="IDX_845CF54B54222575", columns={"BIS_TER_ID"}), @ORM\Index(name="IDX_845CF54B78FF2BCB", columns={"INTERVENANT_ID"})})
- * @ORM\Entity
  */
 class AdresseIntervenant
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="CODE_POSTAL", type="string", length=15, nullable=true)
      */
     private $codePostal;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="HABITANT_CHEZ", type="string", length=32, nullable=true)
      */
     private $habitantChez;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="ADRESSE_INTERVENANT_ID_seq", allocationSize=1, initialValue=1)
+     * @var \DateTime
      */
-    private $id;
+    private $histoDebut;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LOCALITE", type="string", length=26, nullable=true)
      */
     private $localite;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="NOM_VOIE", type="string", length=22, nullable=true)
      */
     private $nomVoie;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="NO_VOIE", type="string", length=4, nullable=true)
      */
     private $noVoie;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="PAYS_CODE_INSEE", type="string", length=3, nullable=false)
      */
     private $paysCodeInsee;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="PAYS_LIBELLE", type="string", length=30, nullable=false)
      */
     private $paysLibelle;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="PRINCIPALE", type="boolean", nullable=true)
      */
     private $principale;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="TELEPHONE_DOMICILE", type="string", length=25, nullable=true)
      */
     private $telephoneDomicile;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="VILLE_CODE_INSEE", type="string", length=5, nullable=true)
      */
     private $villeCodeInsee;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="VILLE_LIBELLE", type="string", length=26, nullable=true)
      */
     private $villeLibelle;
 
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var \Application\Entity\Db\Intervenant
+     */
+    private $intervenant;
+
+    /**
      * @var \Application\Entity\Db\BisTer
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\BisTer")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="BIS_TER_ID", referencedColumnName="ID")
-     * })
      */
     private $bisTer;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Intervenant")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="INTERVENANT_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\Personnel
      */
-    private $intervenant;
+    private $histoModificateur;
 
+    /**
+     * @var \Application\Entity\Db\Personnel
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Personnel
+     */
+    private $histoCreateur;
 
 
     /**
@@ -168,13 +157,72 @@ class AdresseIntervenant
     }
 
     /**
-     * Get id
+     * Set histoDebut
      *
-     * @return integer 
+     * @param \DateTime $histoDebut
+     * @return AdresseIntervenant
      */
-    public function getId()
+    public function setHistoDebut($histoDebut)
     {
-        return $this->id;
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return AdresseIntervenant
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return AdresseIntervenant
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -385,26 +433,13 @@ class AdresseIntervenant
     }
 
     /**
-     * Set bisTer
+     * Get id
      *
-     * @param \Application\Entity\Db\BisTer $bisTer
-     * @return AdresseIntervenant
+     * @return integer 
      */
-    public function setBisTer(\Application\Entity\Db\BisTer $bisTer = null)
+    public function getId()
     {
-        $this->bisTer = $bisTer;
-
-        return $this;
-    }
-
-    /**
-     * Get bisTer
-     *
-     * @return \Application\Entity\Db\BisTer 
-     */
-    public function getBisTer()
-    {
-        return $this->bisTer;
+        return $this->id;
     }
 
     /**
@@ -428,5 +463,97 @@ class AdresseIntervenant
     public function getIntervenant()
     {
         return $this->intervenant;
+    }
+
+    /**
+     * Set bisTer
+     *
+     * @param \Application\Entity\Db\BisTer $bisTer
+     * @return AdresseIntervenant
+     */
+    public function setBisTer(\Application\Entity\Db\BisTer $bisTer = null)
+    {
+        $this->bisTer = $bisTer;
+
+        return $this;
+    }
+
+    /**
+     * Get bisTer
+     *
+     * @return \Application\Entity\Db\BisTer 
+     */
+    public function getBisTer()
+    {
+        return $this->bisTer;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param \Application\Entity\Db\Personnel $histoModificateur
+     * @return AdresseIntervenant
+     */
+    public function setHistoModificateur(\Application\Entity\Db\Personnel $histoModificateur = null)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return \Application\Entity\Db\Personnel 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param \Application\Entity\Db\Personnel $histoDestructeur
+     * @return AdresseIntervenant
+     */
+    public function setHistoDestructeur(\Application\Entity\Db\Personnel $histoDestructeur = null)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return \Application\Entity\Db\Personnel 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Personnel $histoCreateur
+     * @return AdresseIntervenant
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Personnel $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Personnel 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
     }
 }

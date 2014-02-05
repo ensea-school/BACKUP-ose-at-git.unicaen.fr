@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Annee" table="ANNEE">
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
+    <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="9" nullable="false"/>
+    <many-to-many field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="annee">
+      <join-table name="prime_excellence_scientifique">
+        <join-columns>
+          <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

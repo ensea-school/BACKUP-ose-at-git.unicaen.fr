@@ -6,56 +6,206 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Structure
- *
- * @ORM\Table(name="STRUCTURE", indexes={@ORM\Index(name="IDX_2BC32905F1A6E54F", columns={"PARENTE_ID"})})
- * @ORM\Entity
  */
-class Structure
+class Structure implements HistoInterface
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="ID", type="string", length=10, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="STRUCTURE_ID_seq", allocationSize=1, initialValue=1)
+     * @var integer
      */
-    private $id;
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LIBELLE_COURT", type="string", length=25, nullable=false)
      */
     private $libelleCourt;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LIBELLE_LONG", type="string", length=60, nullable=false)
      */
     private $libelleLong;
 
     /**
+     * @var string
+     */
+    private $id;
+
+    /**
+     * @var \Application\Entity\Db\TypeStructure
+     */
+    private $type;
+
+    /**
+     * @var \Application\Entity\Db\Etablissement
+     */
+    private $etablissement;
+
+    /**
      * @var \Application\Entity\Db\Structure
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Structure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="PARENTE_ID", referencedColumnName="ID")
-     * })
      */
     private $parente;
 
 
+    /**
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return Structure
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
 
     /**
-     * Get id
+     * Get histoCreateur
      *
-     * @return string 
+     * @return integer 
      */
-    public function getId()
+    public function getHistoCreateur()
     {
-        return $this->id;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return Structure
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return Structure
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return Structure
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return Structure
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Structure
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -102,6 +252,62 @@ class Structure
     public function getLibelleLong()
     {
         return $this->libelleLong;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \Application\Entity\Db\TypeStructure $type
+     * @return Structure
+     */
+    public function setType(\Application\Entity\Db\TypeStructure $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \Application\Entity\Db\TypeStructure 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set etablissement
+     *
+     * @param \Application\Entity\Db\Etablissement $etablissement
+     * @return Structure
+     */
+    public function setEtablissement(\Application\Entity\Db\Etablissement $etablissement = null)
+    {
+        $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    /**
+     * Get etablissement
+     *
+     * @return \Application\Entity\Db\Etablissement 
+     */
+    public function getEtablissement()
+    {
+        return $this->etablissement;
     }
 
     /**

@@ -6,57 +6,66 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Etape
- *
- * @ORM\Table(name="ETAPE", indexes={@ORM\Index(name="IDX_DF0BB76D884B0F7B", columns={"STRUCTURE_ID"})})
- * @ORM\Entity
  */
 class Etape
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="ETAPE_ID", type="string", length=10, nullable=false)
      */
-    private $etapeId;
+    private $code;
+
+    /**
+     * @var integer
+     */
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ID", type="string", length=3, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="ETAPE_ID_seq", allocationSize=1, initialValue=1)
+     */
+    private $libelle;
+
+    /**
+     * @var string
+     */
+    private $source;
+
+    /**
+     * @var integer
      */
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="LIBELLE_COURT", type="string", length=25, nullable=false)
-     */
-    private $libelleCourt;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="LIBELLE_LONG", type="string", length=60, nullable=false)
-     */
-    private $libelleLong;
-
-    /**
      * @var \Application\Entity\Db\Structure
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Structure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="STRUCTURE_ID", referencedColumnName="ID")
-     * })
      */
     private $structure;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Application\Entity\Db\Diplome", mappedBy="etape")
      */
     private $diplome;
 
@@ -68,84 +77,221 @@ class Etape
         $this->diplome = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Set etapeId
+     * Set code
      *
-     * @param string $etapeId
+     * @param string $code
      * @return Etape
      */
-    public function setEtapeId($etapeId)
+    public function setCode($code)
     {
-        $this->etapeId = $etapeId;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get etapeId
+     * Get code
      *
      * @return string 
      */
-    public function getEtapeId()
+    public function getCode()
     {
-        return $this->etapeId;
+        return $this->code;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return Etape
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return integer 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return Etape
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return Etape
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return Etape
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return Etape
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Etape
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     * @return Etape
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string 
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+    /**
+     * Set source
+     *
+     * @param string $source
+     * @return Etape
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return string 
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**
      * Get id
      *
-     * @return string 
+     * @return integer 
      */
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     * @return Etape
-     */
-    public function setLibelleCourt($libelleCourt)
-    {
-        $this->libelleCourt = $libelleCourt;
-
-        return $this;
-    }
-
-    /**
-     * Get libelleCourt
-     *
-     * @return string 
-     */
-    public function getLibelleCourt()
-    {
-        return $this->libelleCourt;
-    }
-
-    /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     * @return Etape
-     */
-    public function setLibelleLong($libelleLong)
-    {
-        $this->libelleLong = $libelleLong;
-
-        return $this;
-    }
-
-    /**
-     * Get libelleLong
-     *
-     * @return string 
-     */
-    public function getLibelleLong()
-    {
-        return $this->libelleLong;
     }
 
     /**

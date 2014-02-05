@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Emploi" table="EMPLOI">
+    <indexes>
+      <index name="IDX_8458777CF0035C1C" columns="EMPLOYEUR_ID"/>
+    </indexes>
+    <id name="dateDebut" type="datetime" column="DATE_DEBUT"/>
+    <id name="intervenantId" type="integer" column="INTERVENANT_ID"/>
+    <id name="employeur" association-key="true"/>
+    <field name="dateFin" type="datetime" column="DATE_FIN" nullable="true"/>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="intervenantExterieurId" type="integer" column="INTERVENANT_EXTERIEUR_ID" nullable="false"/>
+    <one-to-one field="employeur" target-entity="Application\Entity\Db\Employeur">
+      <join-columns>
+        <join-column name="EMPLOYEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

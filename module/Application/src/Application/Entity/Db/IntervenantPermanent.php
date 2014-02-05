@@ -6,90 +6,196 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * IntervenantPermanent
- *
- * @ORM\Table(name="INTERVENANT_PERMANENT", indexes={@ORM\Index(name="IDX_FB425D27E774C1C4", columns={"CORPS_ID"}), @ORM\Index(name="IDX_FB425D27DF6D9E85", columns={"UNITE_RECHERCHE_ID"})})
- * @ORM\Entity
  */
-class IntervenantPermanent extends Intervenant
+class IntervenantPermanent extends Intervenant implements HistoInterface
 {
     /**
-     * @var \Application\Entity\Db\Corps
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Corps")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="CORPS_ID", referencedColumnName="ID")
-     * })
+     * @var integer
      */
-    private $corps;
+    private $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\Intervenant")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID", referencedColumnName="ID")
-     * })
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
+     * @var integer
      */
     private $id;
 
     /**
      * @var \Application\Entity\Db\Structure
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Structure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="UNITE_RECHERCHE_ID", referencedColumnName="ID")
-     * })
      */
     private $uniteRecherche;
 
+    /**
+     * @var \Application\Entity\Db\Intervenant
+     */
+    private $intervenant;
+
+    /**
+     * @var \Application\Entity\Db\Corps
+     */
+    private $corps;
 
 
     /**
-     * Set corps
+     * Set histoCreateur
      *
-     * @param \Application\Entity\Db\Corps $corps
+     * @param integer $histoCreateur
      * @return IntervenantPermanent
      */
-    public function setCorps(\Application\Entity\Db\Corps $corps = null)
+    public function setHistoCreateur($histoCreateur)
     {
-        $this->corps = $corps;
+        $this->histoCreateur = $histoCreateur;
 
         return $this;
     }
 
     /**
-     * Get corps
+     * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Corps 
+     * @return integer 
      */
-    public function getCorps()
+    public function getHistoCreateur()
     {
-        return $this->corps;
+        return $this->histoCreateur;
     }
 
     /**
-     * Set id
+     * Set histoDebut
      *
-     * @param \Application\Entity\Db\Intervenant $id
+     * @param \DateTime $histoDebut
      * @return IntervenantPermanent
      */
-    public function setId(\Application\Entity\Db\Intervenant $id)
+    public function setHistoDebut($histoDebut)
     {
-        $this->id = $id;
+        $this->histoDebut = $histoDebut;
 
         return $this;
     }
 
     /**
-     * Get id
+     * Get histoDebut
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \DateTime 
      */
-    public function getId()
+    public function getHistoDebut()
     {
-        return $this->id;
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return IntervenantPermanent
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return IntervenantPermanent
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return IntervenantPermanent
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return IntervenantPermanent
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -113,5 +219,28 @@ class IntervenantPermanent extends Intervenant
     public function getUniteRecherche()
     {
         return $this->uniteRecherche;
+    }
+
+    /**
+     * Set corps
+     *
+     * @param \Application\Entity\Db\Corps $corps
+     * @return IntervenantPermanent
+     */
+    public function setCorps(\Application\Entity\Db\Corps $corps = null)
+    {
+        $this->corps = $corps;
+
+        return $this;
+    }
+
+    /**
+     * Get corps
+     *
+     * @return \Application\Entity\Db\Corps 
+     */
+    public function getCorps()
+    {
+        return $this->corps;
     }
 }

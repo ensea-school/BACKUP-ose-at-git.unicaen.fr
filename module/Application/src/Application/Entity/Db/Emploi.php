@@ -6,76 +6,64 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Emploi
- *
- * @ORM\Table(name="EMPLOI", indexes={@ORM\Index(name="IDX_8458777C78FF2BCB", columns={"INTERVENANT_ID"}), @ORM\Index(name="IDX_8458777CF0035C1C", columns={"EMPLOYEUR_ID"})})
- * @ORM\Entity
  */
 class Emploi
 {
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="DATE_DEBUT", type="datetime", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $dateDebut;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="DATE_FIN", type="datetime", nullable=true)
      */
     private $dateFin;
 
     /**
-     * @var \Application\Entity\Db\IntervenantExterieur
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\IntervenantExterieur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="INTERVENANT_ID", referencedColumnName="INTERVENANT_ID")
-     * })
+     * @var integer
      */
-    private $intervenant;
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
+     * @var integer
+     */
+    private $intervenantExterieurId;
+
+    /**
+     * @var \DateTime
+     */
+    private $dateDebut;
+
+    /**
+     * @var integer
+     */
+    private $intervenantId;
 
     /**
      * @var \Application\Entity\Db\Employeur
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\Employeur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="EMPLOYEUR_ID", referencedColumnName="ID")
-     * })
      */
     private $employeur;
 
-
-
-    /**
-     * Set dateDebut
-     *
-     * @param \DateTime $dateDebut
-     * @return Emploi
-     */
-    public function setDateDebut($dateDebut)
-    {
-        $this->dateDebut = $dateDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get dateDebut
-     *
-     * @return \DateTime 
-     */
-    public function getDateDebut()
-    {
-        return $this->dateDebut;
-    }
 
     /**
      * Set dateFin
@@ -101,26 +89,210 @@ class Emploi
     }
 
     /**
-     * Set intervenant
+     * Set histoCreateur
      *
-     * @param \Application\Entity\Db\IntervenantExterieur $intervenant
+     * @param integer $histoCreateur
      * @return Emploi
      */
-    public function setIntervenant(\Application\Entity\Db\IntervenantExterieur $intervenant)
+    public function setHistoCreateur($histoCreateur)
     {
-        $this->intervenant = $intervenant;
+        $this->histoCreateur = $histoCreateur;
 
         return $this;
     }
 
     /**
-     * Get intervenant
+     * Get histoCreateur
      *
-     * @return \Application\Entity\Db\IntervenantExterieur 
+     * @return integer 
      */
-    public function getIntervenant()
+    public function getHistoCreateur()
     {
-        return $this->intervenant;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return Emploi
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return Emploi
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return Emploi
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return Emploi
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Emploi
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
+
+    /**
+     * Set intervenantExterieurId
+     *
+     * @param integer $intervenantExterieurId
+     * @return Emploi
+     */
+    public function setIntervenantExterieurId($intervenantExterieurId)
+    {
+        $this->intervenantExterieurId = $intervenantExterieurId;
+
+        return $this;
+    }
+
+    /**
+     * Get intervenantExterieurId
+     *
+     * @return integer 
+     */
+    public function getIntervenantExterieurId()
+    {
+        return $this->intervenantExterieurId;
+    }
+
+    /**
+     * Set dateDebut
+     *
+     * @param \DateTime $dateDebut
+     * @return Emploi
+     */
+    public function setDateDebut($dateDebut)
+    {
+        $this->dateDebut = $dateDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get dateDebut
+     *
+     * @return \DateTime 
+     */
+    public function getDateDebut()
+    {
+        return $this->dateDebut;
+    }
+
+    /**
+     * Set intervenantId
+     *
+     * @param integer $intervenantId
+     * @return Emploi
+     */
+    public function setIntervenantId($intervenantId)
+    {
+        $this->intervenantId = $intervenantId;
+
+        return $this;
+    }
+
+    /**
+     * Get intervenantId
+     *
+     * @return integer 
+     */
+    public function getIntervenantId()
+    {
+        return $this->intervenantId;
     }
 
     /**

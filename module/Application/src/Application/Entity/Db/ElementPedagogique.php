@@ -6,71 +6,112 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ElementPedagogique
- *
- * @ORM\Table(name="ELEMENT_PEDAGOGIQUE", indexes={@ORM\Index(name="IDX_CCADDAC0C0569A10", columns={"PERIODE_ID"}), @ORM\Index(name="IDX_CCADDAC0884B0F7B", columns={"STRUCTURE_ID"})})
- * @ORM\Entity
  */
 class ElementPedagogique
 {
     /**
+     * @var string
+     */
+    private $code;
+
+    /**
      * @var float
-     *
-     * @ORM\Column(name="HEURES", type="float", precision=126, scale=0, nullable=false)
      */
     private $heures;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="ID", type="string", length=15, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="ELEMENT_PEDAGOGIQUE_ID_seq", allocationSize=1, initialValue=1)
+     * @var integer
      */
-    private $id;
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LIBELLE", type="string", length=60, nullable=false)
      */
     private $libelle;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="UE", type="string", length=60, nullable=true)
+     * @var boolean
      */
-    private $ue;
+    private $nouveau;
+
+    /**
+     * @var string
+     */
+    private $source;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="index", type="integer", nullable=false)
      */
-    private $index;
+    private $tauxFoad;
 
     /**
-     * @var \Application\Entity\Db\Periode
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Periode")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="PERIODE_ID", referencedColumnName="ID")
-     * })
+     * @var integer
      */
-    private $periode;
+    private $id;
+
+    /**
+     * @var \Application\Entity\Db\TypeFormation
+     */
+    private $typeFormation;
+
+    /**
+     * @var \Application\Entity\Db\SectionCnu
+     */
+    private $sectionCnu;
 
     /**
      * @var \Application\Entity\Db\Structure
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Structure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="STRUCTURE_ID", referencedColumnName="ID")
-     * })
      */
     private $structure;
 
 
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return ElementPedagogique
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
     /**
      * Set heures
@@ -96,13 +137,141 @@ class ElementPedagogique
     }
 
     /**
-     * Get id
+     * Set histoCreateur
      *
-     * @return string 
+     * @param integer $histoCreateur
+     * @return ElementPedagogique
      */
-    public function getId()
+    public function setHistoCreateur($histoCreateur)
     {
-        return $this->id;
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return integer 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return ElementPedagogique
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return ElementPedagogique
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return ElementPedagogique
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return ElementPedagogique
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return ElementPedagogique
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -129,72 +298,128 @@ class ElementPedagogique
     }
 
     /**
-     * Set ue
+     * Set nouveau
      *
-     * @param string $ue
+     * @param boolean $nouveau
      * @return ElementPedagogique
      */
-    public function setUe($ue)
+    public function setNouveau($nouveau)
     {
-        $this->ue = $ue;
+        $this->nouveau = $nouveau;
 
         return $this;
     }
 
     /**
-     * Get ue
+     * Get nouveau
+     *
+     * @return boolean 
+     */
+    public function getNouveau()
+    {
+        return $this->nouveau;
+    }
+
+    /**
+     * Set source
+     *
+     * @param string $source
+     * @return ElementPedagogique
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
      *
      * @return string 
      */
-    public function getUe()
+    public function getSource()
     {
-        return $this->ue;
+        return $this->source;
     }
 
     /**
-     * Set index
+     * Set tauxFoad
      *
-     * @param integer $index
+     * @param integer $tauxFoad
      * @return ElementPedagogique
      */
-    public function setIndex($index)
+    public function setTauxFoad($tauxFoad)
     {
-        $this->index = $index;
+        $this->tauxFoad = $tauxFoad;
 
         return $this;
     }
 
     /**
-     * Get index
+     * Get tauxFoad
      *
      * @return integer 
      */
-    public function getIndex()
+    public function getTauxFoad()
     {
-        return $this->index;
+        return $this->tauxFoad;
     }
 
     /**
-     * Set periode
+     * Get id
      *
-     * @param \Application\Entity\Db\Periode $periode
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set typeFormation
+     *
+     * @param \Application\Entity\Db\TypeFormation $typeFormation
      * @return ElementPedagogique
      */
-    public function setPeriode(\Application\Entity\Db\Periode $periode = null)
+    public function setTypeFormation(\Application\Entity\Db\TypeFormation $typeFormation = null)
     {
-        $this->periode = $periode;
+        $this->typeFormation = $typeFormation;
 
         return $this;
     }
 
     /**
-     * Get periode
+     * Get typeFormation
      *
-     * @return \Application\Entity\Db\Periode 
+     * @return \Application\Entity\Db\TypeFormation 
      */
-    public function getPeriode()
+    public function getTypeFormation()
     {
-        return $this->periode;
+        return $this->typeFormation;
+    }
+
+    /**
+     * Set sectionCnu
+     *
+     * @param \Application\Entity\Db\SectionCnu $sectionCnu
+     * @return ElementPedagogique
+     */
+    public function setSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu = null)
+    {
+        $this->sectionCnu = $sectionCnu;
+
+        return $this;
+    }
+
+    /**
+     * Get sectionCnu
+     *
+     * @return \Application\Entity\Db\SectionCnu 
+     */
+    public function getSectionCnu()
+    {
+        return $this->sectionCnu;
     }
 
     /**

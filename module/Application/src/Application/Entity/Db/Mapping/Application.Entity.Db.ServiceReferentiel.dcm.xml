@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\ServiceReferentiel" table="SERVICE_REFERENTIEL">
+    <indexes>
+      <index name="IDX_42741E7DAA401F5C" columns="ANNEE_ID"/>
+      <index name="IDX_42741E7DE2C64D28" columns="FONCTION_ID"/>
+      <index name="IDX_42741E7D78FF2BCB" columns="INTERVENANT_ID"/>
+      <index name="IDX_42741E7D884B0F7B" columns="STRUCTURE_ID"/>
+    </indexes>
+    <id name="annee" association-key="true"/>
+    <id name="fonction" association-key="true"/>
+    <id name="intervenant" association-key="true"/>
+    <id name="structure" association-key="true"/>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <one-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="fonction" target-entity="Application\Entity\Db\FonctionReferentiel">
+      <join-columns>
+        <join-column name="FONCTION_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+      <join-columns>
+        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

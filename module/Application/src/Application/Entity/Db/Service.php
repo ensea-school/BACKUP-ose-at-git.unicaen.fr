@@ -6,73 +6,207 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Service
- *
- * @ORM\Table(name="SERVICE", indexes={@ORM\Index(name="IDX_DED864C878FF2BCB", columns={"INTERVENANT_ID"}), @ORM\Index(name="IDX_DED864C8884B0F7B", columns={"STRUCTURE_ID"}), @ORM\Index(name="IDX_DED864C8AA401F5C", columns={"ANNEE_ID"}), @ORM\Index(name="IDX_DED864C86D76003C", columns={"CADRE_ID"}), @ORM\Index(name="IDX_DED864C88AB4A516", columns={"ELEMENT_PEDAGOGIQUE_ID"})})
- * @ORM\Entity
  */
 class Service
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="SERVICE_ID_seq", allocationSize=1, initialValue=1)
+     */
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
+     * @var integer
      */
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Intervenant")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="INTERVENANT_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\Etablissement
      */
-    private $intervenant;
+    private $etablissement;
 
     /**
-     * @var \Application\Entity\Db\Structure
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Structure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="STRUCTURE_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\ElementPedagogique
      */
-    private $structure;
+    private $elementPedagogique;
 
     /**
      * @var \Application\Entity\Db\Annee
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Annee")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ANNEE_ID", referencedColumnName="ID")
-     * })
      */
     private $annee;
 
     /**
-     * @var \Application\Entity\Db\CadreService
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\CadreService")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="CADRE_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\Structure
      */
-    private $cadre;
+    private $structure;
 
     /**
-     * @var \Application\Entity\Db\ElementPedagogique
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\ElementPedagogique")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ELEMENT_PEDAGOGIQUE_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\Intervenant
      */
-    private $elementPedagogique;
+    private $intervenant;
 
 
+    /**
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return Service
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return integer 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return Service
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return Service
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return Service
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return Service
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Service
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
 
     /**
      * Get id
@@ -85,49 +219,49 @@ class Service
     }
 
     /**
-     * Set intervenant
+     * Set etablissement
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param \Application\Entity\Db\Etablissement $etablissement
      * @return Service
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    public function setEtablissement(\Application\Entity\Db\Etablissement $etablissement = null)
     {
-        $this->intervenant = $intervenant;
+        $this->etablissement = $etablissement;
 
         return $this;
     }
 
     /**
-     * Get intervenant
+     * Get etablissement
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Application\Entity\Db\Etablissement 
      */
-    public function getIntervenant()
+    public function getEtablissement()
     {
-        return $this->intervenant;
+        return $this->etablissement;
     }
 
     /**
-     * Set structure
+     * Set elementPedagogique
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
      * @return Service
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
-        $this->structure = $structure;
+        $this->elementPedagogique = $elementPedagogique;
 
         return $this;
     }
 
     /**
-     * Get structure
+     * Get elementPedagogique
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\ElementPedagogique 
      */
-    public function getStructure()
+    public function getElementPedagogique()
     {
-        return $this->structure;
+        return $this->elementPedagogique;
     }
 
     /**
@@ -154,48 +288,48 @@ class Service
     }
 
     /**
-     * Set cadre
+     * Set structure
      *
-     * @param \Application\Entity\Db\CadreService $cadre
+     * @param \Application\Entity\Db\Structure $structure
      * @return Service
      */
-    public function setCadre(\Application\Entity\Db\CadreService $cadre = null)
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
     {
-        $this->cadre = $cadre;
+        $this->structure = $structure;
 
         return $this;
     }
 
     /**
-     * Get cadre
+     * Get structure
      *
-     * @return \Application\Entity\Db\CadreService 
+     * @return \Application\Entity\Db\Structure 
      */
-    public function getCadre()
+    public function getStructure()
     {
-        return $this->cadre;
+        return $this->structure;
     }
 
     /**
-     * Set elementPedagogique
+     * Set intervenant
      *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @param \Application\Entity\Db\Intervenant $intervenant
      * @return Service
      */
-    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
-        $this->elementPedagogique = $elementPedagogique;
+        $this->intervenant = $intervenant;
 
         return $this;
     }
 
     /**
-     * Get elementPedagogique
+     * Get intervenant
      *
-     * @return \Application\Entity\Db\ElementPedagogique 
+     * @return \Application\Entity\Db\Intervenant 
      */
-    public function getElementPedagogique()
+    public function getIntervenant()
     {
-        return $this->elementPedagogique;
+        return $this->intervenant;
     }
 }

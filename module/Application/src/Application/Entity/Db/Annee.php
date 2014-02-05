@@ -6,55 +6,61 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Annee
- *
- * @ORM\Table(name="ANNEE")
- * @ORM\Entity
  */
 class Annee
 {
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="DATE_DEBUT", type="datetime", nullable=false)
      */
     private $dateDebut;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="DATE_FIN", type="datetime", nullable=false)
      */
     private $dateFin;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="ANNEE_ID_seq", allocationSize=1, initialValue=1)
      */
-    private $id;
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="LIBELLE", type="string", length=9, nullable=false)
      */
     private $libelle;
 
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Application\Entity\Db\Intervenant", inversedBy="annee")
-     * @ORM\JoinTable(name="prime_excellence_scientifique",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="ANNEE_ID", referencedColumnName="ID")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="INTERVENANT_ID", referencedColumnName="ID")
-     *   }
-     * )
      */
     private $intervenant;
 
@@ -65,7 +71,6 @@ class Annee
     {
         $this->intervenant = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Set dateDebut
@@ -114,13 +119,141 @@ class Annee
     }
 
     /**
-     * Get id
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return Annee
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
      *
      * @return integer 
      */
-    public function getId()
+    public function getHistoCreateur()
     {
-        return $this->id;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return Annee
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return Annee
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return Annee
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return Annee
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Annee
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -144,6 +277,16 @@ class Annee
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\ElementPedagogique" table="ELEMENT_PEDAGOGIQUE">
+    <indexes>
+      <index name="IDX_CCADDAC0884B0F7B" columns="STRUCTURE_ID"/>
+      <index name="IDX_CCADDAC08AD1AE90" columns="SECTION_CNU_ID"/>
+      <index name="IDX_CCADDAC0401921A" columns="TYPE_FORMATION_ID"/>
+    </indexes>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="code" type="string" column="CODE" length="15" nullable="false"/>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="60" nullable="false"/>
+    <field name="nouveau" type="boolean" column="NOUVEAU" nullable="true"/>
+    <field name="source" type="string" column="SOURCE" length="15" nullable="true"/>
+    <field name="tauxFoad" type="integer" column="TAUX_FOAD" nullable="true"/>
+    <many-to-one field="typeFormation" target-entity="Application\Entity\Db\TypeFormation">
+      <join-columns>
+        <join-column name="TYPE_FORMATION_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="sectionCnu" target-entity="Application\Entity\Db\SectionCnu">
+      <join-columns>
+        <join-column name="SECTION_CNU_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

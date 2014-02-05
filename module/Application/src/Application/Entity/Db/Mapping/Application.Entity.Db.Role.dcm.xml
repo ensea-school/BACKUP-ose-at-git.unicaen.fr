@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Role" table="ROLE">
+    <indexes>
+      <index name="IDX_61FC67DEB16F9F85" columns="PERSONNEL_ID"/>
+      <index name="IDX_61FC67DE884B0F7B" columns="STRUCTURE_ID"/>
+      <index name="IDX_61FC67DEC2443469" columns="TYPE_ID"/>
+    </indexes>
+    <id name="personnel" association-key="true"/>
+    <id name="structure" association-key="true"/>
+    <id name="type" association-key="true"/>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="false"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="false"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <one-to-one field="type" target-entity="Application\Entity\Db\TypeRole">
+      <join-columns>
+        <join-column name="TYPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="personnel" target-entity="Application\Entity\Db\Personnel">
+      <join-columns>
+        <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

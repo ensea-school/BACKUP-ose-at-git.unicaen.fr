@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Service" table="SERVICE">
+    <indexes>
+      <index name="IDX_DED864C878FF2BCB" columns="INTERVENANT_ID"/>
+      <index name="IDX_DED864C8884B0F7B" columns="STRUCTURE_ID"/>
+      <index name="IDX_DED864C8AA401F5C" columns="ANNEE_ID"/>
+      <index name="IDX_DED864C88AB4A516" columns="ELEMENT_PEDAGOGIQUE_ID"/>
+      <index name="IDX_DED864C8B3FC6B16" columns="ETABLISSEMENT_ID"/>
+    </indexes>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
+    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
+    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <many-to-one field="etablissement" target-entity="Application\Entity\Db\Etablissement">
+      <join-columns>
+        <join-column name="ETABLISSEMENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
+      <join-columns>
+        <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+      <join-columns>
+        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

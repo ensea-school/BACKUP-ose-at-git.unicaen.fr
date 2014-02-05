@@ -6,119 +6,252 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Agrement
- *
- * @ORM\Table(name="AGREMENT", indexes={@ORM\Index(name="IDX_CD3F1085884B0F7B", columns={"STRUCTURE_ID"}), @ORM\Index(name="IDX_CD3F108578FF2BCB", columns={"INTERVENANT_ID"})})
- * @ORM\Entity
  */
 class Agrement
 {
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="DEBUT_VALIDITE", type="datetime", nullable=true)
+     * @var integer
      */
-    private $debutValidite;
+    private $histoCreateur;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="FIN_VALIDITE", type="datetime", nullable=false)
      */
-    private $finValidite;
+    private $histoDebut;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="AGREMENT_ID_seq", allocationSize=1, initialValue=1)
      */
-    private $id;
+    private $histoDestructeur;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
+     * @var integer
+     */
+    private $intervenantExterieurId;
+
+    /**
+     * @var integer
+     */
+    private $intervenantId;
+
+    /**
+     * @var \DateTime
      */
     private $date;
 
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var \Application\Entity\Db\Annee
+     */
+    private $annee;
+
+    /**
      * @var \Application\Entity\Db\Structure
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Structure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="STRUCTURE_ID", referencedColumnName="ID")
-     * })
      */
     private $structure;
 
-    /**
-     * @var \Application\Entity\Db\IntervenantExterieur
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\IntervenantExterieur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="INTERVENANT_ID", referencedColumnName="INTERVENANT_ID")
-     * })
-     */
-    private $intervenant;
-
-
 
     /**
-     * Set debutValidite
+     * Set histoCreateur
      *
-     * @param \DateTime $debutValidite
+     * @param integer $histoCreateur
      * @return Agrement
      */
-    public function setDebutValidite($debutValidite)
+    public function setHistoCreateur($histoCreateur)
     {
-        $this->debutValidite = $debutValidite;
+        $this->histoCreateur = $histoCreateur;
 
         return $this;
     }
 
     /**
-     * Get debutValidite
-     *
-     * @return \DateTime 
-     */
-    public function getDebutValidite()
-    {
-        return $this->debutValidite;
-    }
-
-    /**
-     * Set finValidite
-     *
-     * @param \DateTime $finValidite
-     * @return Agrement
-     */
-    public function setFinValidite($finValidite)
-    {
-        $this->finValidite = $finValidite;
-
-        return $this;
-    }
-
-    /**
-     * Get finValidite
-     *
-     * @return \DateTime 
-     */
-    public function getFinValidite()
-    {
-        return $this->finValidite;
-    }
-
-    /**
-     * Get id
+     * Get histoCreateur
      *
      * @return integer 
      */
-    public function getId()
+    public function getHistoCreateur()
     {
-        return $this->id;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return Agrement
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return Agrement
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return Agrement
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return Agrement
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Agrement
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
+
+    /**
+     * Set intervenantExterieurId
+     *
+     * @param integer $intervenantExterieurId
+     * @return Agrement
+     */
+    public function setIntervenantExterieurId($intervenantExterieurId)
+    {
+        $this->intervenantExterieurId = $intervenantExterieurId;
+
+        return $this;
+    }
+
+    /**
+     * Get intervenantExterieurId
+     *
+     * @return integer 
+     */
+    public function getIntervenantExterieurId()
+    {
+        return $this->intervenantExterieurId;
+    }
+
+    /**
+     * Set intervenantId
+     *
+     * @param integer $intervenantId
+     * @return Agrement
+     */
+    public function setIntervenantId($intervenantId)
+    {
+        $this->intervenantId = $intervenantId;
+
+        return $this;
+    }
+
+    /**
+     * Get intervenantId
+     *
+     * @return integer 
+     */
+    public function getIntervenantId()
+    {
+        return $this->intervenantId;
     }
 
     /**
@@ -145,6 +278,39 @@ class Agrement
     }
 
     /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set annee
+     *
+     * @param \Application\Entity\Db\Annee $annee
+     * @return Agrement
+     */
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get annee
+     *
+     * @return \Application\Entity\Db\Annee 
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
+    }
+
+    /**
      * Set structure
      *
      * @param \Application\Entity\Db\Structure $structure
@@ -165,28 +331,5 @@ class Agrement
     public function getStructure()
     {
         return $this->structure;
-    }
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\IntervenantExterieur $intervenant
-     * @return Agrement
-     */
-    public function setIntervenant(\Application\Entity\Db\IntervenantExterieur $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\IntervenantExterieur 
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
     }
 }

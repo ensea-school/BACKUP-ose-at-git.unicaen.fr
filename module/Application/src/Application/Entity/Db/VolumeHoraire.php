@@ -6,76 +6,73 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * VolumeHoraire
- *
- * @ORM\Table(name="VOLUME_HORAIRE", indexes={@ORM\Index(name="IDX_C2A901856DA70281", columns={"TYPE_INTERVENTION_ID"}), @ORM\Index(name="IDX_C2A90185D09A4004", columns={"MOTIF_NON_PAIEMENT_ID"}), @ORM\Index(name="IDX_C2A90185C0569A10", columns={"PERIODE_ID"}), @ORM\Index(name="IDX_C2A90185DE8EF239", columns={"SERVICE_ID"})})
- * @ORM\Entity
  */
 class VolumeHoraire
 {
     /**
      * @var string
-     *
-     * @ORM\Column(name="A_PAYER", type="string", length=1, nullable=true)
      */
     private $aPayer;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="HEURES", type="float", precision=126, scale=0, nullable=false)
      */
     private $heures;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ID", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="VOLUME_HORAIRE_ID_seq", allocationSize=1, initialValue=1)
+     */
+    private $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
+     * @var integer
      */
     private $id;
 
     /**
-     * @var \Application\Entity\Db\TypeIntervention
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\TypeIntervention")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="TYPE_INTERVENTION_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\Service
      */
-    private $typeIntervention;
-
-    /**
-     * @var \Application\Entity\Db\MotifNonPaiement
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\MotifNonPaiement")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="MOTIF_NON_PAIEMENT_ID", referencedColumnName="ID")
-     * })
-     */
-    private $motifNonPaiement;
+    private $service;
 
     /**
      * @var \Application\Entity\Db\Periode
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Periode")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="PERIODE_ID", referencedColumnName="ID")
-     * })
      */
     private $periode;
 
     /**
-     * @var \Application\Entity\Db\Service
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\Db\Service")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="SERVICE_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\MotifNonPaiement
      */
-    private $service;
+    private $motifNonPaiement;
 
+    /**
+     * @var \Application\Entity\Db\TypeIntervention
+     */
+    private $typeIntervention;
 
 
     /**
@@ -125,6 +122,144 @@ class VolumeHoraire
     }
 
     /**
+     * Set histoCreateur
+     *
+     * @param integer $histoCreateur
+     * @return VolumeHoraire
+     */
+    public function setHistoCreateur($histoCreateur)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return integer 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDebut
+     *
+     * @param \DateTime $histoDebut
+     * @return VolumeHoraire
+     */
+    public function setHistoDebut($histoDebut)
+    {
+        $this->histoDebut = $histoDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDebut
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDebut()
+    {
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return VolumeHoraire
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return VolumeHoraire
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return VolumeHoraire
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return VolumeHoraire
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -135,49 +270,26 @@ class VolumeHoraire
     }
 
     /**
-     * Set typeIntervention
+     * Set service
      *
-     * @param \Application\Entity\Db\TypeIntervention $typeIntervention
+     * @param \Application\Entity\Db\Service $service
      * @return VolumeHoraire
      */
-    public function setTypeIntervention(\Application\Entity\Db\TypeIntervention $typeIntervention = null)
+    public function setService(\Application\Entity\Db\Service $service = null)
     {
-        $this->typeIntervention = $typeIntervention;
+        $this->service = $service;
 
         return $this;
     }
 
     /**
-     * Get typeIntervention
+     * Get service
      *
-     * @return \Application\Entity\Db\TypeIntervention 
+     * @return \Application\Entity\Db\Service 
      */
-    public function getTypeIntervention()
+    public function getService()
     {
-        return $this->typeIntervention;
-    }
-
-    /**
-     * Set motifNonPaiement
-     *
-     * @param \Application\Entity\Db\MotifNonPaiement $motifNonPaiement
-     * @return VolumeHoraire
-     */
-    public function setMotifNonPaiement(\Application\Entity\Db\MotifNonPaiement $motifNonPaiement = null)
-    {
-        $this->motifNonPaiement = $motifNonPaiement;
-
-        return $this;
-    }
-
-    /**
-     * Get motifNonPaiement
-     *
-     * @return \Application\Entity\Db\MotifNonPaiement 
-     */
-    public function getMotifNonPaiement()
-    {
-        return $this->motifNonPaiement;
+        return $this->service;
     }
 
     /**
@@ -204,25 +316,48 @@ class VolumeHoraire
     }
 
     /**
-     * Set service
+     * Set motifNonPaiement
      *
-     * @param \Application\Entity\Db\Service $service
+     * @param \Application\Entity\Db\MotifNonPaiement $motifNonPaiement
      * @return VolumeHoraire
      */
-    public function setService(\Application\Entity\Db\Service $service = null)
+    public function setMotifNonPaiement(\Application\Entity\Db\MotifNonPaiement $motifNonPaiement = null)
     {
-        $this->service = $service;
+        $this->motifNonPaiement = $motifNonPaiement;
 
         return $this;
     }
 
     /**
-     * Get service
+     * Get motifNonPaiement
      *
-     * @return \Application\Entity\Db\Service 
+     * @return \Application\Entity\Db\MotifNonPaiement 
      */
-    public function getService()
+    public function getMotifNonPaiement()
     {
-        return $this->service;
+        return $this->motifNonPaiement;
+    }
+
+    /**
+     * Set typeIntervention
+     *
+     * @param \Application\Entity\Db\TypeIntervention $typeIntervention
+     * @return VolumeHoraire
+     */
+    public function setTypeIntervention(\Application\Entity\Db\TypeIntervention $typeIntervention = null)
+    {
+        $this->typeIntervention = $typeIntervention;
+
+        return $this;
+    }
+
+    /**
+     * Get typeIntervention
+     *
+     * @return \Application\Entity\Db\TypeIntervention 
+     */
+    public function getTypeIntervention()
+    {
+        return $this->typeIntervention;
     }
 }

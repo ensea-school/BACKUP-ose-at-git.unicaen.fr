@@ -6,67 +6,63 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ServiceReferentiel
- *
- * @ORM\Table(name="SERVICE_REFERENTIEL", indexes={@ORM\Index(name="IDX_42741E7DAA401F5C", columns={"ANNEE_ID"}), @ORM\Index(name="IDX_42741E7DE2C64D28", columns={"FONCTION_ID"}), @ORM\Index(name="IDX_42741E7D78FF2BCB", columns={"INTERVENANT_ID"}), @ORM\Index(name="IDX_42741E7D884B0F7B", columns={"STRUCTURE_ID"})})
- * @ORM\Entity
  */
 class ServiceReferentiel
 {
     /**
      * @var float
-     *
-     * @ORM\Column(name="HEURES", type="float", precision=126, scale=0, nullable=false)
      */
     private $heures;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\Annee")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ANNEE_ID", referencedColumnName="ID")
-     * })
+     * @var integer
      */
-    private $annee;
+    private $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\FonctionReferentiel
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\FonctionReferentiel")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="FONCTION_ID", referencedColumnName="ID")
-     * })
+     * @var \DateTime
      */
-    private $fonction;
+    private $histoDebut;
+
+    /**
+     * @var integer
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoFin;
+
+    /**
+     * @var integer
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structure;
 
     /**
      * @var \Application\Entity\Db\Intervenant
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\Intervenant")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="INTERVENANT_ID", referencedColumnName="ID")
-     * })
      */
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Structure
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Application\Entity\Db\Structure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="STRUCTURE_ID", referencedColumnName="ID")
-     * })
+     * @var \Application\Entity\Db\FonctionReferentiel
      */
-    private $structure;
+    private $fonction;
 
+    /**
+     * @var \Application\Entity\Db\Annee
+     */
+    private $annee;
 
 
     /**
@@ -93,49 +89,164 @@ class ServiceReferentiel
     }
 
     /**
-     * Set annee
+     * Set histoCreateur
      *
-     * @param \Application\Entity\Db\Annee $annee
+     * @param integer $histoCreateur
      * @return ServiceReferentiel
      */
-    public function setAnnee(\Application\Entity\Db\Annee $annee)
+    public function setHistoCreateur($histoCreateur)
     {
-        $this->annee = $annee;
+        $this->histoCreateur = $histoCreateur;
 
         return $this;
     }
 
     /**
-     * Get annee
+     * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Annee 
+     * @return integer 
      */
-    public function getAnnee()
+    public function getHistoCreateur()
     {
-        return $this->annee;
+        return $this->histoCreateur;
     }
 
     /**
-     * Set fonction
+     * Set histoDebut
      *
-     * @param \Application\Entity\Db\FonctionReferentiel $fonction
+     * @param \DateTime $histoDebut
      * @return ServiceReferentiel
      */
-    public function setFonction(\Application\Entity\Db\FonctionReferentiel $fonction)
+    public function setHistoDebut($histoDebut)
     {
-        $this->fonction = $fonction;
+        $this->histoDebut = $histoDebut;
 
         return $this;
     }
 
     /**
-     * Get fonction
+     * Get histoDebut
      *
-     * @return \Application\Entity\Db\FonctionReferentiel 
+     * @return \DateTime 
      */
-    public function getFonction()
+    public function getHistoDebut()
     {
-        return $this->fonction;
+        return $this->histoDebut;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param integer $histoDestructeur
+     * @return ServiceReferentiel
+     */
+    public function setHistoDestructeur($histoDestructeur)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return integer 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoFin
+     *
+     * @param \DateTime $histoFin
+     * @return ServiceReferentiel
+     */
+    public function setHistoFin($histoFin)
+    {
+        $this->histoFin = $histoFin;
+
+        return $this;
+    }
+
+    /**
+     * Get histoFin
+     *
+     * @return \DateTime 
+     */
+    public function getHistoFin()
+    {
+        return $this->histoFin;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param integer $histoModificateur
+     * @return ServiceReferentiel
+     */
+    public function setHistoModificateur($histoModificateur)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return integer 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return ServiceReferentiel
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
+
+    /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @return ServiceReferentiel
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure)
+    {
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructure()
+    {
+        return $this->structure;
     }
 
     /**
@@ -162,25 +273,48 @@ class ServiceReferentiel
     }
 
     /**
-     * Set structure
+     * Set fonction
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Application\Entity\Db\FonctionReferentiel $fonction
      * @return ServiceReferentiel
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure)
+    public function setFonction(\Application\Entity\Db\FonctionReferentiel $fonction)
     {
-        $this->structure = $structure;
+        $this->fonction = $fonction;
 
         return $this;
     }
 
     /**
-     * Get structure
+     * Get fonction
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\FonctionReferentiel 
      */
-    public function getStructure()
+    public function getFonction()
     {
-        return $this->structure;
+        return $this->fonction;
+    }
+
+    /**
+     * Set annee
+     *
+     * @param \Application\Entity\Db\Annee $annee
+     * @return ServiceReferentiel
+     */
+    public function setAnnee(\Application\Entity\Db\Annee $annee)
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get annee
+     *
+     * @return \Application\Entity\Db\Annee 
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
     }
 }

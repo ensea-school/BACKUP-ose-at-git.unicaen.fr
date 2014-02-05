@@ -6,8 +6,8 @@
     <div class="col-md-4">
         <?php 
         $tf = new \UnicaenApp\Form\Element\SearchAndSelect('tf');
-        $tf->setAutocompleteSource($this->url('application/default', array('action' => 'search')))
-                ->setLabel("Recherchez une personne dans l'annuaire :");
+        $tf->setAutocompleteSource($this->url('import/intervenant', array('action' => 'search')))
+                ->setLabel("Recherchez un intervenant :");
         ?>
         <form method="POST">
         <?php echo $this->formControlGroup($tf); ?>

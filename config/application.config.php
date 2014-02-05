@@ -2,10 +2,12 @@
 return array(
     'modules' => array(
         'Application',
-        'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize', 
+        'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
         'UnicaenApp', 'AssetManager',
         'UnicaenAuth',
         'UnicaenLdap',
+        'Test',
+        'Import'
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(

@@ -6,7 +6,7 @@ return array(
         'UnicaenApp', 'AssetManager',
         'UnicaenAuth',
         'UnicaenLdap',
-        'Test',
+//        'Test',
         'Import'
     ),
     'module_listener_options' => array(

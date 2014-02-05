@@ -25,11 +25,28 @@ class Bootstrap
         if (($path = static::findParentPath('module')) !== $zf2ModulePaths[0]) {
             $zf2ModulePaths[] = $path;
         }
-        $zf2ModulePaths[] = __DIR__;
 
         static::initAutoloader();
 
-        static::$serviceManager = new ServiceManager(new ServiceManagerConfig());
+        // use ModuleManager to load this module and it's dependencies
+        $config = array(
+            'module_listener_options' => array(
+                'module_paths' => $zf2ModulePaths,
+            ),
+        );
+        $config = \Zend\Stdlib\ArrayUtils::merge($config, require 'config/application.config.php');
+        
+        $smConfig = isset($config['service_manager']) ? $config['service_manager'] : array();
+        $serviceManager = new ServiceManager(new ServiceManagerConfig($smConfig));
+        $serviceManager->setService('ApplicationConfig', $config);
+        $serviceManager->get('ModuleManager')->loadModules();
+        static::$serviceManager = $serviceManager;
+    }
+
+    public static function chroot()
+    {
+        $rootPath = dirname(static::findParentPath('module'));
+        chdir($rootPath);
     }
 
     public static function getServiceManager()
@@ -41,24 +58,26 @@ class Bootstrap
     {
         $vendorPath = static::findParentPath('vendor');
         
-        if (is_readable($vendorPath . '/autoload.php')) {
-            include $vendorPath . '/autoload.php';
-            return;
-        }
-        
         $zf2Path = getenv('ZF2_PATH');
         if (!$zf2Path) {
             if (defined('ZF2_PATH')) {
                 $zf2Path = ZF2_PATH;
             } elseif (is_dir($vendorPath . '/ZF2/library')) {
                 $zf2Path = $vendorPath . '/ZF2/library';
-            } elseif (is_dir($vendorPath . '/zendframework/zendframework/library')) {
-                $zf2Path = $vendorPath . '/zendframework/zendframework/library';
+            } elseif (is_dir($vendorPath . '/zendframework/zend-loader')) {
+                $zf2Path = $vendorPath . '/zendframework/zend-loader';
             }
         }
 
         if (!$zf2Path) {
-            throw new RuntimeException('Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.');
+            throw new RuntimeException(
+                'Unable to load ZF2. Run `php composer.phar install` or'
+                . ' define a ZF2_PATH environment variable.'
+            );
+        }
+
+        if (file_exists($vendorPath . '/autoload.php')) {
+            include $vendorPath . '/autoload.php';
         }
 
         include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
@@ -78,7 +97,9 @@ class Bootstrap
         $previousDir = '.';
         while (!is_dir($dir . '/' . $path)) {
             $dir = dirname($dir);
-            if ($previousDir === $dir) return false;
+            if ($previousDir === $dir) {
+                return false;
+            }
             $previousDir = $dir;
         }
         return $dir . '/' . $path;
@@ -86,3 +107,4 @@ class Bootstrap
 }
 
 Bootstrap::init();
+Bootstrap::chroot();

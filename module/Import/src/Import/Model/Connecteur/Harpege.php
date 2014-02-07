@@ -5,6 +5,7 @@ namespace Import\Model\Connecteur;
 use Import\Model\Entity\Intervenant\Intervenant as IntervenantEntity;
 use Import\Model\Entity\Intervenant\Adresse as IntervenantAdresseEntity;
 use DateTime;
+use Import\Model\Hydrator\Oracle as OracleHydrator;
 
 /**
  * Connecteur Harpège
@@ -30,29 +31,40 @@ class Harpege extends Connecteur {
      */
     public function searchIntervenant( $criterion )
     {
+
+        $params = array(
+            'criterionId' => (integer)$criterion,
+            'limit'       => 100
+        );
+
+        $criterion = explode( ' ', $criterion );
+
+        $sqlCrit = '';
+        for( $i=0; $i<count($criterion); $i++ ){
+            if ('' != $sqlCrit) $sqlCrit .= ' AND ';
+            $sqlCrit .= "(lower(nom_usuel) LIKE :criterionStr$i"
+                     ." OR lower(nom_patronymique) LIKE :criterionStr$i"
+                     ." OR lower(prenom) LIKE :criterionStr$i)";
+            $params["criterionStr$i"] = '%'.strtolower($criterion[$i]).'%';
+        }
+
         $sql = <<<EOS
         SELECT DISTINCT
             source_id,
             civilite_id,
-            nom_usuel,
+            UPPER(nom_usuel) nom_usuel,
             prenom,
             date_naissance
         FROM
             V_HARP_INTERVENANT
         WHERE
-            (source_id = :criterionId
-            OR lower(nom_usuel) like :criterionStr
-            OR lower(nom_patronymique) like :criterionStr)
+            (source_id = :criterionId OR ($sqlCrit))
             AND rownum <= :limit
         ORDER BY
             nom_usuel, prenom
 EOS;
 
-        $stmt = $this->query($sql, array(
-            'criterionId'    => (integer)$criterion,
-            'criterionStr'   => '%'.strtolower($criterion).'%',
-            'limit'     => 100
-        ) );
+        $stmt = $this->query($sql, $params );
 
         $result = array();
         while( $r = $stmt->fetch() ){
@@ -60,7 +72,7 @@ EOS;
 
             $result[$r['SOURCE_ID']] = array(
                'id'    => $r['SOURCE_ID'],
-               'label' => $r['PRENOM'].' '.$r['NOM_USUEL'],
+               'label' => $r['NOM_USUEL'].' '.$r['PRENOM'],
                'extra' => '(n° '.$r['SOURCE_ID'].', né'.('M.' == $r['CIVILITE_ID'] ? '' : 'e').' le '.$dateNaissance->format('d/m/Y').')',
             );
         }
@@ -79,7 +91,11 @@ EOS;
             'id' => (integer)$id
         ) );
         if (($result = $stmt->fetch())){
-            return new IntervenantEntity( $result );
+            $entity = new IntervenantEntity();
+            $hydrator = new OracleHydrator();
+            $hydrator->makeStrategies($entity);
+            $hydrator->hydrate($result, $entity);
+            return $entity;
         }
         return null;
     }
@@ -97,8 +113,12 @@ EOS;
             'id' => (integer)$id
         ) );
         $result = array();
+        $hydrator = new OracleHydrator();
+        $hydrator->makeStrategies(new IntervenantAdresseEntity());
         while($r = $stmt->fetch()){
-            $result[] = new IntervenantAdresseEntity( $r );
+            $entity = new IntervenantAdresseEntity();
+            $hydrator->hydrate($r, $entity);
+            $result[] = $entity;
         }
         return $result;
     }
@@ -112,10 +132,8 @@ EOS;
      */
     protected function query( $sql, array $params )
     {
-        /* @var $em \Doctrine\ORM\EntityManager */
-        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
-        /* @var $stmt \Doctrine\DBAL\Driver\Statement */
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');/* @var $em \Doctrine\ORM\EntityManager */
         $stmt = $em->getConnection()->prepare($sql);
         foreach( $params as $name => $value ){
             $stmt->bindValue($name, $value);

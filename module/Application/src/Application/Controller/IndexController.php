@@ -17,7 +17,7 @@ class IndexController extends AbstractActionController
     {
         return array();
     }
-    
+
     public function demoAction()
     {
         if (($data = $this->params()->fromPost())) {

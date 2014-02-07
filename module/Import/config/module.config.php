@@ -3,7 +3,7 @@ return array(
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
-                array('controller' => 'Import\Controller\Import', 'action' => array(), 'roles' => array()),
+                array('controller' => 'Import\Controller\Import', 'action' => array('index'), 'roles' => array()),
                 array('controller' => 'Import\Controller\Intervenant', 'action' => array('search'), 'roles' => array()),
             ),
         ),
@@ -24,8 +24,10 @@ return array(
                     'route'    => '/import',
                     'defaults' => array(
                         'controller' => 'Import\Controller\Import',
+                        'action'     => 'index',
                     ),
                 ),
+                'may_terminate' => true,
                 'child_routes' => array(
                     'intervenant' => array(
                         'type'    => 'segment',

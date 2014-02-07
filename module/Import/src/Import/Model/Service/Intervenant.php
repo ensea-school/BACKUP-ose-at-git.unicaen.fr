@@ -2,27 +2,12 @@
 
 namespace Import\Model\Service;
 
+/**
+ *
+ *
+ * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
+ */
 class Intervenant extends Service {
-
-    /**
-     *
-     * @var type 
-     */
-    protected $mapper;
-
-    /**
-     * Retourne le mapper LDAP à utiliser.
-     *
-     * @return \UnicaenApp\Mapper\Ldap\Group
-     */
-    protected function getMapper()
-    {
-        if (null === $this->mapper) {
-            $this->mapper = new \Import\Model\Mapper\Intervenant\Harpege();
-            $this->mapper->setServiceManager( $this->getServiceManager() );
-        }
-        return $this->mapper;
-    }
 
     /**
      * recherche un ensemble d'enseignants
@@ -30,9 +15,31 @@ class Intervenant extends Service {
      * @param string $term
      * @return array[]
      */
-    public function search( $term, $limit=100 )
+    public function search( $term )
     {
-        return $this->getMapper()->search($term, $limit);
+        return $this->getMapper()->searchIntervenant( $term );
     }
 
+    /**
+     * Retourne les données d'un intervenant
+     *
+     * @param string $id
+     * @return array
+     */
+    public function get( $id )
+    {
+        return $this->getMapper()->getIntervenant( $id );
+    }
+
+    /**
+     * Retourne la liste des adresses d'un intervenant
+     *
+     * @param string $id Identifiant de l'intervenant
+     * @return \Import\Model\Entity\Intervenant\Adresse[]
+     * @throws Exception
+     */
+    public function getAdresses( $id )
+    {
+        return $this->getMapper()->getIntervenantAdresses( $id );
+    }
 }

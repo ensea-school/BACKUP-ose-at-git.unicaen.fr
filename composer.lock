@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "7cc827949fe08f6e59e043f37a7cc48f",
+    "hash": "3e3c607a2e842116ce8a58bbb7740618",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1069,7 +1069,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@400"
+                "reference": "/trunk/@402"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1113,7 +1113,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenAuth",
-                "reference": "/trunk/@171"
+                "reference": "/trunk/@172"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1262,6 +1262,54 @@
                 "zf2"
             ],
             "time": "2013-10-26 10:00:05"
+        },
+        {
+            "name": "zendframework/zend-code",
+            "version": "2.2.5",
+            "target-dir": "Zend/Code",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/Component_ZendCode.git",
+                "reference": "93aa1d45effaef200f1e413e131dd672222905cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendCode/zipball/93aa1d45effaef200f1e413e131dd672222905cf",
+                "reference": "93aa1d45effaef200f1e413e131dd672222905cf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "zendframework/zend-eventmanager": "self.version"
+            },
+            "require-dev": {
+                "doctrine/common": ">=2.1"
+            },
+            "suggest": {
+                "doctrine/common": "Doctrine\\Common >=2.1 for annotation features"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev",
+                    "dev-develop": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend\\Code\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "provides facilities to generate arbitrary code using an object oriented interface",
+            "keywords": [
+                "code",
+                "zf2"
+            ],
+            "time": "2013-10-23 17:00:16"
         },
         {
             "name": "zendframework/zend-config",

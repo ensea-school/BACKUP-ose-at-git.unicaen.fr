@@ -4,6 +4,7 @@ namespace Import\Model\Service;
 
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
+use Import\Model\Mapper\Mapper;
 
 /**
  * Classe mère des services
@@ -17,9 +18,29 @@ class Service implements ServiceManagerAwareInterface {
      */
     protected $serviceManager;
 
+    /**
+     *
+     * @var type
+     */
+    protected $mapper;
 
 
 
+
+
+    /**
+     * Retourne le mapper à utiliser.
+     *
+     * @return Mapper
+     */
+    protected function getMapper()
+    {
+        if (null === $this->mapper) {
+            $this->mapper = new Mapper();
+            $this->mapper->setServiceManager( $this->getServiceManager() );
+        }
+        return $this->mapper;
+    }
 
     /**
      * Get service manager

@@ -22,6 +22,12 @@ class IndexController extends AbstractActionController
     {
         if (($data = $this->params()->fromPost())) {
             var_dump($data);
+            $intervenant = $this->getServiceLocator()->get('importServiceIntervenant');
+            $result = $intervenant->get( $data['tf']['id'] );
+            var_dump($result);
+
+            $result = $intervenant->getAdresses( $data['tf']['id'] );
+            var_dump($result);
         }
         return array();
         

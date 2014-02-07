@@ -4,7 +4,11 @@ namespace Import\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Import\Model\Service\Intervenant;
 
-
+/**
+ *
+ *
+ * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
+ */
 class IntervenantController extends AbstractActionController
 {
 

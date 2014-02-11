@@ -1,15 +1,26 @@
 <?php
+
+$env = getenv('APP_ENV') ?: 'production';
+
+$modules = array(
+    'Application',
+    'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
+    'UnicaenApp', 'AssetManager',
+    'UnicaenAuth',
+    'UnicaenLdap',
+    'Import'
+);
+
+if ($env == 'development') {
+    $laurentIP = '10.60.11.40';
+
+    if ( $laurentIP == getenv('REMOTE_ADDR')){
+        $modules[] = 'Test';
+    }
+}
+
 return array(
-    'modules' => array(
-        'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
-        'UnicaenApp', 'AssetManager',
-        'UnicaenAuth',
-        'UnicaenLdap',
-//        'Test',
-        'Common',
-        'Application',
-        'Import'
-    ),
+    'modules' => $modules,
     'module_listener_options' => array(
         'config_glob_paths'    => array(
             'config/autoload/{,*.}{global,local}.php',
@@ -20,4 +31,3 @@ return array(
         ),
     ),
 );
-

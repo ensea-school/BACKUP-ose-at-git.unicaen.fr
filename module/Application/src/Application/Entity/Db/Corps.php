@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Corps
  */
@@ -54,6 +52,25 @@ class Corps implements HistoInterface
      */
     private $id;
 
+    /**
+     * @var Source
+     */
+    private $source;
+
+    /**
+     * @var string
+     */
+    private $sourceCode;
+
+    /**
+     * Représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelleCourt();
+    }
 
     /**
      * Set histoCreateur
@@ -240,12 +257,71 @@ class Corps implements HistoInterface
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Corps
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+
+    /**
      * Get id
      *
-     * @return string 
+     * @return integer 
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set source
+     *
+     * @param Source $source
+     * @return Corps
+     */
+    public function setSource(Source $source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return Corps
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
     }
 }

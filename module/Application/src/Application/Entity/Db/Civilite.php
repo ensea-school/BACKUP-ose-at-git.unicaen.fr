@@ -54,6 +54,15 @@ class Civilite
      */
     private $id;
 
+    /**
+     * Représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getId();
+    }
 
     /**
      * Set histoCreateur

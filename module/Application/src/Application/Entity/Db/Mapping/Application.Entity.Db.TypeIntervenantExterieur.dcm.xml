@@ -3,6 +3,7 @@
   <entity name="Application\Entity\Db\TypeIntervenantExterieur" table="TYPE_INTERVENANT_EXTERIEUR">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
+      <sequence-generator sequence-name="TYPE_INT_EXT_ID_SEQ" />
     </id>
     <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>

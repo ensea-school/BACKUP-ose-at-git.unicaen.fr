@@ -49,6 +49,16 @@ class Etablissement implements HistoInterface
      */
     private $id;
 
+    /**
+     * @var Source
+     */
+    private $source;
+
+    /**
+     * @var string
+     */
+    private $sourceCode;
+
 
     /**
      * Set histoCreateur
@@ -219,5 +229,51 @@ class Etablissement implements HistoInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set source
+     *
+     * @param Source $source
+     * @return Intervenant
+     */
+    public function setSource(Source $source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return Intervenant
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
     }
 }

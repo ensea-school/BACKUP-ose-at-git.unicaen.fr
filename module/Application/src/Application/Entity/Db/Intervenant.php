@@ -2,20 +2,30 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use Zend\Form\Annotation;
+use Common\Constants;
 
 /**
  * Intervenant
+ * 
+ * @Annotation\Name("intervenant")
+ * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
+ * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
 abstract class Intervenant
 {
     /**
      * @var \DateTime
+     * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")
+     * @Annotation\Options({"date_inf_label":"Date de naissance :"})
      */
-    private $dateNaissance;
+    public $dateNaissance;
 
     /**
      * @var string
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Département de naissance (code INSEE) :"})
      */
     private $depNaissanceCodeInsee;
 
@@ -26,21 +36,33 @@ abstract class Intervenant
 
     /**
      * @var string
+     * @Annotation\Type("Zend\Form\Element\Email")
+     * @Annotation\Validator({"name":"EmailAddress"})
+     * @Annotation\Options({"label":"Adresse mail :"})
      */
     private $email;
 
     /**
      * @var string
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Nom patronymique :"})
      */
     private $nomPatronymique;
 
     /**
      * @var string
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Nom usuel :"})
      */
     private $nomUsuel;
 
     /**
      * @var string
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Numéro INSEE :"})
      */
     private $numeroInsee;
 
@@ -56,6 +78,9 @@ abstract class Intervenant
 
     /**
      * @var string
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Pays de naissance (code Insee) :"})
      */
     private $paysNaissanceCodeInsee;
 
@@ -66,6 +91,9 @@ abstract class Intervenant
 
     /**
      * @var string
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Pays de nationalité (code Insee) :"})
      */
     private $paysNationaliteCodeInsee;
 
@@ -75,12 +103,11 @@ abstract class Intervenant
     private $paysNationaliteLibelle;
 
     /**
-     * @var integer
-     */
-    private $personnelId;
-
-    /**
      * @var string
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Validator({"name":"StringLength", "options":{"min":1, "max":25}})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Prénom :"})
      */
     private $prenom;
 
@@ -96,6 +123,9 @@ abstract class Intervenant
 
     /**
      * @var string
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"VIlle de naissance (code Insee) :"})
      */
     private $villeNaissanceCodeInsee;
 
@@ -115,12 +145,26 @@ abstract class Intervenant
     private $type;
 
     /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
+
+    /**
+     * @var string
+     */
+    private $sourceCode;
+
+    /**
      * @var \Application\Entity\Db\Structure
      */
     private $structure;
 
     /**
      * @var \Application\Entity\Db\Civilite
+     * @Annotation\Type("Zend\Form\Element\Select")
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Civilité :"})
      */
     private $civilite;
 
@@ -143,6 +187,46 @@ abstract class Intervenant
         $this->sectionCnu = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return strtoupper($this->getNomUsuel()) . ' ' . ucfirst($this->getPrenom());
+    }
+
+    /**
+     * Get nomUsuel
+     *
+     * @return string 
+     */
+    public function getNomComplet($includeCivilite = false, $includeNomPatronymique = false)
+    {
+        $nomComplet = array();
+        if ($includeCivilite) {
+            $nomComplet[] = $this->getCivilite();
+        }
+        $nomComplet[] = $this->getNomUsuel();
+        $nomComplet[] = $this->getPrenom();
+        if ($includeNomPatronymique && $this->getNomPatronymique()) {
+            $nomComplet[] = sprintf("(née %s)", $this->getNomPatronymique());
+        }
+        
+        return implode(" ", $nomComplet);
+    }
+
+    /**
+     * Get dateNaissance
+     *
+     * @return \DateTime 
+     */
+    public function getDateNaissanceToString()
+    {
+        return $this->dateNaissance->format(Constants::DATE_FORMAT);
+    }
+    
     /**
      * Set dateNaissance
      *
@@ -443,29 +527,6 @@ abstract class Intervenant
     }
 
     /**
-     * Set personnelId
-     *
-     * @param integer $personnelId
-     * @return Intervenant
-     */
-    public function setPersonnelId($personnelId)
-    {
-        $this->personnelId = $personnelId;
-
-        return $this;
-    }
-
-    /**
-     * Get personnelId
-     *
-     * @return integer 
-     */
-    public function getPersonnelId()
-    {
-        return $this->personnelId;
-    }
-
-    /**
      * Set prenom
      *
      * @param string $prenom
@@ -723,5 +784,51 @@ abstract class Intervenant
     public function getSectionCnu()
     {
         return $this->sectionCnu;
+    }
+
+    /**
+     * Set source
+     *
+     * @param Source $source
+     * @return Intervenant
+     */
+    public function setSource(Source $source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return Intervenant
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
     }
 }

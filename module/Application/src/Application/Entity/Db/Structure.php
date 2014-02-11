@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Structure
  */
@@ -69,6 +67,15 @@ class Structure implements HistoInterface
      */
     private $parente;
 
+    /**
+     * @var Source
+     */
+    private $source;
+
+    /**
+     * @var string
+     */
+    private $sourceCode;
 
     /**
      * Set histoCreateur
@@ -331,5 +338,51 @@ class Structure implements HistoInterface
     public function getParente()
     {
         return $this->parente;
+    }
+
+    /**
+     * Set source
+     *
+     * @param Source $source
+     * @return Intervenant
+     */
+    public function setSource(Source $source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return Intervenant
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
     }
 }

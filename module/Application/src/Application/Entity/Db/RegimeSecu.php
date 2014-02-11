@@ -54,6 +54,15 @@ class RegimeSecu implements HistoInterface
      */
     private $id;
 
+    /**
+     * Représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
 
     /**
      * Set histoCreateur
@@ -194,6 +203,29 @@ class RegimeSecu implements HistoInterface
     }
 
     /**
+     * Set id
+     *
+     * @param string $id
+     * @return RegimeSecu
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set libelle
      *
      * @param string $libelle
@@ -237,15 +269,5 @@ class RegimeSecu implements HistoInterface
     public function getTauxTaxe()
     {
         return $this->tauxTaxe;
-    }
-
-    /**
-     * Get id
-     *
-     * @return string 
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

@@ -1,12 +1,13 @@
 <?php
 return array(
     'modules' => array(
-        'Application',
         'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
         'UnicaenApp', 'AssetManager',
         'UnicaenAuth',
         'UnicaenLdap',
 //        'Test',
+        'Common',
+        'Application',
         'Import'
     ),
     'module_listener_options' => array(

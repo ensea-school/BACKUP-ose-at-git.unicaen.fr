@@ -3,12 +3,13 @@
 $env = getenv('APP_ENV') ?: 'production';
 
 $modules = array(
-    'Application',
     'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
     'UnicaenApp', 'AssetManager',
     'UnicaenAuth',
     'UnicaenLdap',
-    'Import'
+    'Common',
+    'Import',
+    'Application'
 );
 
 if ($env == 'development') {

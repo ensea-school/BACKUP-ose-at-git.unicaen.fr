@@ -2,6 +2,9 @@
 
 namespace Import\Model\Service;
 
+use Import\Model\Entity\Intervenant\Intervenant as IntervenantEntity;
+use Import\Model\Entity\Intervenant\Adresse as IntervenantAdresseEntity;
+
 /**
  *
  *
@@ -24,7 +27,7 @@ class Intervenant extends Service {
      * Retourne les données d'un intervenant
      *
      * @param string $id
-     * @return array
+     * @return IntervenantEntity
      */
     public function get( $id )
     {
@@ -35,7 +38,7 @@ class Intervenant extends Service {
      * Retourne la liste des adresses d'un intervenant
      *
      * @param string $id Identifiant de l'intervenant
-     * @return \Import\Model\Entity\Intervenant\Adresse[]
+     * @return IntervenantAdresseEntity[]
      * @throws Exception
      */
     public function getAdresses( $id )

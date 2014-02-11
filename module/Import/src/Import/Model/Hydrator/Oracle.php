@@ -7,6 +7,7 @@ use Zend\Code\Reflection\ClassReflection;
 use ReflectionMethod;
 use Import\Model\Hydrator\Strategy\DateStrategy;
 use Import\Model\Hydrator\Strategy\BooleanStrategy;
+use Import\Model\Hydrator\Strategy\IntegerStrategy;
 
 /**
  *

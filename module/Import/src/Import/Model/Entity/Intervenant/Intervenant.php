@@ -45,7 +45,7 @@ class Intervenant extends Entity {
      *
      * @var DateTime
      */
-    protected $dateDeNaissance;
+    protected $dateNaissance;
 
     /**
      * Code INSEE du pays de naissance
@@ -143,14 +143,14 @@ class Intervenant extends Entity {
      *
      * @var string
      */
-    protected $source;
+    protected $sourceId;
 
     /**
      * Identifiant de l'intervenant au niveau de la source
      *
      * @var string
      */
-    protected $sourceId;
+    protected $sourceCode;
 
     /**
      * Prime d'excellence scientifique
@@ -218,9 +218,9 @@ class Intervenant extends Entity {
         return $this->nomPatronymique;
     }
 
-    public function getDateDeNaissance()
+    public function getDateNaissance()
     {
-        return $this->dateDeNaissance;
+        return $this->dateNaissance;
     }
 
     public function getPaysNaissanceCodeInsee()
@@ -288,14 +288,14 @@ class Intervenant extends Entity {
         return $this->structureId;
     }
 
-    public function getSource()
-    {
-        return $this->source;
-    }
-
     public function getSourceId()
     {
         return $this->sourceId;
+    }
+
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
     }
 
     public function getPrimeExcellenceScientifique()
@@ -352,9 +352,9 @@ class Intervenant extends Entity {
         return $this;
     }
 
-    public function setDateDeNaissance(DateTime $dateDeNaissance)
+    public function setDateNaissance(DateTime $dateNaissance)
     {
-        $this->dateDeNaissance = $dateDeNaissance;
+        $this->dateNaissance = $dateNaissance;
         return $this;
     }
 
@@ -436,15 +436,15 @@ class Intervenant extends Entity {
         return $this;
     }
 
-    public function setSource($source)
-    {
-        $this->source = $source;
-        return $this;
-    }
-
     public function setSourceId($sourceId)
     {
         $this->sourceId = $sourceId;
+        return $this;
+    }
+
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
         return $this;
     }
 
@@ -472,14 +472,18 @@ class Intervenant extends Entity {
         return $this;
     }
 
-    public function setHistoDebut(DateTime $histoDebut)
+    public function setHistoDebut($histoDebut)
     {
+        if (!($histoDebut === null || $histoDebut instanceof DateTime))
+            throw new Exception('DateTime ou null doit être transmis');
         $this->histoDebut = $histoDebut;
         return $this;
     }
 
-    public function setHistoFin(DateTime $histoFin)
+    public function setHistoFin($histoFin)
     {
+        if (!($histoFin === null || $histoFin instanceof DateTime))
+            throw new Exception('DateTime ou null doit être transmis');
         $this->histoFin = $histoFin;
         return $this;
     }

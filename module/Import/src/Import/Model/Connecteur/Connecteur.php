@@ -60,6 +60,29 @@ abstract class Connecteur implements ServiceManagerAwareInterface {
     }
 
     /**
+     * Retourne la liste des identifiants source des structures
+     * 
+     * @return string[]
+     * @throws Exception
+     */
+    public function getStructureList()
+    {
+        throw new Exception('Récupération des identifiants des structures non implémentée dans le connecteur '.$this->getName());
+    }
+
+    /**
+     * Retourne une structure à partir de son identifiant
+     *
+     * @param string $id Identifiant de la structure
+     * @return \Import\Model\Entity\Structure\Structure
+     * @throws Exception
+     */
+    public function getStructure( $id )
+    {
+        throw new Exception('Récupération des identifiants des structures non implémentée dans le connecteur '.$this->getName());
+    }
+
+    /**
      * Get service manager
      *
      * @return ServiceManager

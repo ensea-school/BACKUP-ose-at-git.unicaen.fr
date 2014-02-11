@@ -12,8 +12,13 @@ use Zend\View\Model\ViewModel;
 class ImportController extends AbstractActionController
 {
 
-    public function indexAction()
+    public function test()
     {
+
+    }
+
+    public function indexAction()
+    {return $this->test();
         $data = array(
             'PRENOM' => 'Laurent',
             'DATE_DE_NAISSANCE' => '1980-09-27',

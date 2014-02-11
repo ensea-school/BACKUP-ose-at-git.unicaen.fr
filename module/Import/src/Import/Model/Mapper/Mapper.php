@@ -22,6 +22,8 @@ class Mapper implements ServiceManagerAwareInterface {
         'searchIntervenant'         => 'Harpege',
         'getIntervenant'            => 'Harpege',
         'getIntervenantAdresses'    => 'Harpege',
+        'getStructureList'          => 'Harpege',
+        'getStructure'              => 'Harpege',
     );
 
     protected $connecteurs = array();

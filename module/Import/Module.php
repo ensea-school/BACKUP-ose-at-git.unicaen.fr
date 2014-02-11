@@ -33,12 +33,22 @@ class Module
     {
         $services = array(
             'Intervenant',
+            'Structure',
+        );
+        $processus = array(
+            'Import',
         );
         $factories = array(
         );
         foreach( $services as $service ){
             $factories['importService'.$service] = function($sm) use ($service){
                 $className = 'Import\\Model\\Service\\'.$service;
+                return new $className;
+            };
+        }
+        foreach( $processus as $proc ){
+            $factories['importProcessus'.$proc] = function($sm) use ($proc){
+                $className = 'Import\\Model\\Processus\\'.$proc;
                 return new $className;
             };
         }

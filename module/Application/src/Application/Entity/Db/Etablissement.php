@@ -2,15 +2,13 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Etablissement
  */
 class Etablissement implements HistoInterface
 {
     /**
-     * @var integer
+     * @var User
      */
     private $histoCreateur;
 
@@ -20,7 +18,7 @@ class Etablissement implements HistoInterface
     private $histoDebut;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoDestructeur;
 
@@ -30,7 +28,7 @@ class Etablissement implements HistoInterface
     private $histoFin;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoModificateur;
 
@@ -63,10 +61,10 @@ class Etablissement implements HistoInterface
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return Etablissement
      */
-    public function setHistoCreateur($histoCreateur)
+    public function setHistoCreateur(User $histoCreateur)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -76,7 +74,7 @@ class Etablissement implements HistoInterface
     /**
      * Get histoCreateur
      *
-     * @return integer 
+     * @return User 
      */
     public function getHistoCreateur()
     {
@@ -109,10 +107,10 @@ class Etablissement implements HistoInterface
     /**
      * Set histoDestructeur
      *
-     * @param integer $histoDestructeur
+     * @param User $histoDestructeur
      * @return Etablissement
      */
-    public function setHistoDestructeur($histoDestructeur)
+    public function setHistoDestructeur(User $histoDestructeur)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -122,7 +120,7 @@ class Etablissement implements HistoInterface
     /**
      * Get histoDestructeur
      *
-     * @return integer 
+     * @return User 
      */
     public function getHistoDestructeur()
     {
@@ -155,10 +153,10 @@ class Etablissement implements HistoInterface
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return Etablissement
      */
-    public function setHistoModificateur($histoModificateur)
+    public function setHistoModificateur(User $histoModificateur)
     {
         $this->histoModificateur = $histoModificateur;
 

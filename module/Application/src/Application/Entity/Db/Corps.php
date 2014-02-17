@@ -75,10 +75,10 @@ class Corps implements HistoInterface
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return Corps
      */
-    public function setHistoCreateur($histoCreateur)
+    public function setHistoCreateur(User $histoCreateur)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -124,7 +124,7 @@ class Corps implements HistoInterface
      * @param integer $histoDestructeur
      * @return Corps
      */
-    public function setHistoDestructeur($histoDestructeur)
+    public function setHistoDestructeur(User $histoDestructeur)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -167,10 +167,10 @@ class Corps implements HistoInterface
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return Corps
      */
-    public function setHistoModificateur($histoModificateur)
+    public function setHistoModificateur(User $histoModificateur)
     {
         $this->histoModificateur = $histoModificateur;
 

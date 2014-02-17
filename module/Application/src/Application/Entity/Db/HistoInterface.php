@@ -12,10 +12,10 @@ interface HistoInterface
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return Annee
      */
-    public function setHistoCreateur($histoCreateur);
+    public function setHistoCreateur(User $histoCreateur);
 
     /**
      * Get histoCreateur
@@ -45,7 +45,7 @@ interface HistoInterface
      * @param integer $histoDestructeur
      * @return Annee
      */
-    public function setHistoDestructeur($histoDestructeur);
+    public function setHistoDestructeur(User $histoDestructeur);
 
     /**
      * Get histoDestructeur
@@ -72,10 +72,10 @@ interface HistoInterface
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return Annee
      */
-    public function setHistoModificateur($histoModificateur);
+    public function setHistoModificateur(User $histoModificateur);
 
     /**
      * Get histoModificateur

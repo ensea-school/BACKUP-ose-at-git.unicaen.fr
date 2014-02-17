@@ -2,7 +2,9 @@
 
 namespace OSETest\Entity\Db;
 
+use Application\Entity\Db\Civilite;
 use Application\Entity\Db\Corps;
+use Application\Entity\Db\SectionCnu;
 use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\IntervenantPermanent;
@@ -114,6 +116,15 @@ class Asset
         return $e;
     }
         
+    static public function sectionCnu()
+    {
+        $e = new SectionCnu();
+        $e
+                ->setLibelle("Section d'assaut");
+        
+        return $e;
+    }
+        
     static public function regimeSecu()
     {
         $e = new RegimeSecu();
@@ -125,12 +136,23 @@ class Asset
         return $e;
     }
         
-    static public function intervenantPermanent(Structure $structure, Corps $corps)
+    static public function civilite()
+    {
+        $e = new Civilite();
+        $e
+                ->setId('M.')
+                ->setLibelle("Mister")
+                ->setSexe('M');
+        
+        return $e;
+    }
+        
+    static public function intervenantPermanent(Civilite $civilite, Structure $structure, Corps $corps, SectionCnu $sectionCnu)
     {
         $e = new IntervenantPermanent();
         $e
                 ->setCorps($corps)
-                ->setCivilite()
+                ->setCivilite($civilite)
                 ->setDateNaissance(new DateTime())
                 ->setDepNaissanceCodeInsee('75')
                 ->setDepNaissanceLibelle('IDF')
@@ -142,10 +164,9 @@ class Asset
                 ->setPaysNationaliteCodeInsee('12')
                 ->setPaysNationaliteLibelle('Française')
                 ->setPrenom('Alco')
-                ->setPrimeExcellenceScientifique(null)
+                ->setSectionCnu($sectionCnu)
                 ->setSource(static::getSource())
                 ->setSourceCode(rand(1, 99999))
-                ->setStructure($structure)
                 ->setTelMobile(null)
                 ->setVilleNaissanceCodeInsee('75019')
                 ->setVilleNaissanceLibelle('CF');
@@ -153,13 +174,12 @@ class Asset
         return $e;
     }
     
-    static public function intervenantExterieur(Structure $structure, RegimeSecu $regimeSecu)
+    static public function intervenantExterieur(Civilite $civilite, Structure $structure, RegimeSecu $regimeSecu)
     {
         $e = new IntervenantExterieur();
         $e
                 ->setRegimeSecu($regimeSecu)
-                ->setProfession("Vigneron")
-                ->setCivilite()
+                ->setCivilite($civilite)
                 ->setDateNaissance(new DateTime())
                 ->setDepNaissanceCodeInsee('75')
                 ->setDepNaissanceLibelle('IDF')
@@ -171,10 +191,8 @@ class Asset
                 ->setPaysNationaliteCodeInsee('12')
                 ->setPaysNationaliteLibelle('Française')
                 ->setPrenom('Alco')
-                ->setPrimeExcellenceScientifique(null)
                 ->setSource(static::getSource())
                 ->setSourceCode(rand(1, 99999))
-                ->setStructure($structure)
                 ->setTelMobile(null)
                 ->setVilleNaissanceCodeInsee('75019')
                 ->setVilleNaissanceLibelle('CF');

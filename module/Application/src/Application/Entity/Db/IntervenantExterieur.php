@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * IntervenantExterieur
  */
@@ -40,11 +38,6 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
     private $histoModification;
 
     /**
-     * @var string
-     */
-    private $profession;
-
-    /**
      * @var integer
      */
     private $id;
@@ -60,23 +53,23 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
     private $type;
 
     /**
+     * @var \Application\Entity\Db\TypePoste
+     */
+    private $typePoste;
+
+    /**
      * @var \Application\Entity\Db\RegimeSecu
      */
     private $regimeSecu;
-
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
 
 
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return IntervenantExterieur
      */
-    public function setHistoCreateur($histoCreateur)
+    public function setHistoCreateur(User $histoCreateur)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -122,7 +115,7 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
      * @param integer $histoDestructeur
      * @return IntervenantExterieur
      */
-    public function setHistoDestructeur($histoDestructeur)
+    public function setHistoDestructeur(User $histoDestructeur)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -165,10 +158,10 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return IntervenantExterieur
      */
-    public function setHistoModificateur($histoModificateur)
+    public function setHistoModificateur(User $histoModificateur)
     {
         $this->histoModificateur = $histoModificateur;
 
@@ -206,29 +199,6 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
     public function getHistoModification()
     {
         return $this->histoModification;
-    }
-
-    /**
-     * Set profession
-     *
-     * @param string $profession
-     * @return IntervenantExterieur
-     */
-    public function setProfession($profession)
-    {
-        $this->profession = $profession;
-
-        return $this;
-    }
-
-    /**
-     * Get profession
-     *
-     * @return string 
-     */
-    public function getProfession()
-    {
-        return $this->profession;
     }
 
     /**
@@ -298,5 +268,28 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
     public function getRegimeSecu()
     {
         return $this->regimeSecu;
+    }
+
+    /**
+     * Set typePoste
+     *
+     * @param \Application\Entity\Db\TypePoste $typePoste
+     * @return IntervenantExterieur
+     */
+    public function setTypePoste(\Application\Entity\Db\TypePoste $typePoste = null)
+    {
+        $this->typePoste = $typePoste;
+
+        return $this;
+    }
+
+    /**
+     * Get typePoste
+     *
+     * @return \Application\Entity\Db\TypePoste 
+     */
+    public function getTypePoste()
+    {
+        return $this->typePoste;
     }
 }

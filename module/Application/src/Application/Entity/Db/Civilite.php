@@ -67,10 +67,10 @@ class Civilite
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return Civilite
      */
-    public function setHistoCreateur($histoCreateur)
+    public function setHistoCreateur(User $histoCreateur)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -116,7 +116,7 @@ class Civilite
      * @param integer $histoDestructeur
      * @return Civilite
      */
-    public function setHistoDestructeur($histoDestructeur)
+    public function setHistoDestructeur(User $histoDestructeur)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -159,10 +159,10 @@ class Civilite
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return Civilite
      */
-    public function setHistoModificateur($histoModificateur)
+    public function setHistoModificateur(User $histoModificateur)
     {
         $this->histoModificateur = $histoModificateur;
 
@@ -246,6 +246,19 @@ class Civilite
     public function getSexe()
     {
         return $this->sexe;
+    }
+
+    /**
+     * Set id
+     *
+     * @param string $id
+     * @return Civilite
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**

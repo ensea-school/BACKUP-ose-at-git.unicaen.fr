@@ -131,10 +131,10 @@ class AdresseStructure
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return AdresseStructure
      */
-    public function setHistoCreateur($histoCreateur)
+    public function setHistoCreateur(User $histoCreateur)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -180,7 +180,7 @@ class AdresseStructure
      * @param integer $histoDestructeur
      * @return AdresseStructure
      */
-    public function setHistoDestructeur($histoDestructeur)
+    public function setHistoDestructeur(User $histoDestructeur)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -223,10 +223,10 @@ class AdresseStructure
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return AdresseStructure
      */
-    public function setHistoModificateur($histoModificateur)
+    public function setHistoModificateur(User $histoModificateur)
     {
         $this->histoModificateur = $histoModificateur;
 

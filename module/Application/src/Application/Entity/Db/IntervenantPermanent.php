@@ -45,28 +45,23 @@ class IntervenantPermanent extends Intervenant implements HistoInterface
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $uniteRecherche;
-
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
-
-    /**
      * @var \Application\Entity\Db\Corps
      */
     private $corps;
+
+    /**
+     * @var \Application\Entity\Db\SectionCnu
+     */
+    private $sectionCnu;
 
 
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return IntervenantPermanent
      */
-    public function setHistoCreateur($histoCreateur)
+    public function setHistoCreateur(User $histoCreateur)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -112,7 +107,7 @@ class IntervenantPermanent extends Intervenant implements HistoInterface
      * @param integer $histoDestructeur
      * @return IntervenantPermanent
      */
-    public function setHistoDestructeur($histoDestructeur)
+    public function setHistoDestructeur(User $histoDestructeur)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -155,10 +150,10 @@ class IntervenantPermanent extends Intervenant implements HistoInterface
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return IntervenantPermanent
      */
-    public function setHistoModificateur($histoModificateur)
+    public function setHistoModificateur(User $histoModificateur)
     {
         $this->histoModificateur = $histoModificateur;
 
@@ -199,29 +194,6 @@ class IntervenantPermanent extends Intervenant implements HistoInterface
     }
 
     /**
-     * Set uniteRecherche
-     *
-     * @param \Application\Entity\Db\Structure $uniteRecherche
-     * @return IntervenantPermanent
-     */
-    public function setUniteRecherche(\Application\Entity\Db\Structure $uniteRecherche = null)
-    {
-        $this->uniteRecherche = $uniteRecherche;
-
-        return $this;
-    }
-
-    /**
-     * Get uniteRecherche
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getUniteRecherche()
-    {
-        return $this->uniteRecherche;
-    }
-
-    /**
      * Set corps
      *
      * @param \Application\Entity\Db\Corps $corps
@@ -242,5 +214,28 @@ class IntervenantPermanent extends Intervenant implements HistoInterface
     public function getCorps()
     {
         return $this->corps;
+    }
+
+    /**
+     * Set sectionCnu
+     *
+     * @param \Application\Entity\Db\SectionCnu $sectionCnu
+     * @return IntervenantPermanent
+     */
+    public function setSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu = null)
+    {
+        $this->sectionCnu = $sectionCnu;
+
+        return $this;
+    }
+
+    /**
+     * Get sectionCnu
+     *
+     * @return \Application\Entity\Db\SectionCnu 
+     */
+    public function getSectionCnu()
+    {
+        return $this->sectionCnu;
     }
 }

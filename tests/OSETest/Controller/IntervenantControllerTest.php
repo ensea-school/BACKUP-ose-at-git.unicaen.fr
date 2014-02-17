@@ -23,49 +23,66 @@ class IntervenantControllerTest extends BaseTest
         }
         DbAsset::setSource($source);
         
+        if (!($user = $this->getEntityManager()->find('\Application\Entity\Db\User', 1))) {
+            $this->markTestIncomplete("Utilisateur 1 introuvable.");
+        }
+            
         // insertion de quelques intervenants de tests
         $typeStructure = $em->find('Application\Entity\Db\TypeStructure', 'SCM');
         $etablissement = DbAsset::etablissement()
-                ->setHistoCreateur(1)
-                ->setHistoModificateur(1);
+                ->setHistoCreateur($user)
+                ->setHistoModificateur($user);
         $structure = DbAsset::structure($typeStructure, $etablissement)
-                ->setHistoCreateur(1)
-                ->setHistoModificateur(1);
+                ->setHistoCreateur($user)
+                ->setHistoModificateur($user);
+        $civilite = $em->find('Application\Entity\Db\Civilite', $id = 'M.');
+        if (!$civilite) {
+            $civilite = DbAsset::civilite();
+        }
         $corps = $em->find('Application\Entity\Db\Corps', $id = 1);
         if (!$corps) {
             $corps = DbAsset::corps()
                     ->setId($id)
-                    ->setHistoCreateur(1)
-                    ->setHistoModificateur(1);
+                    ->setHistoCreateur($user)
+                    ->setHistoModificateur($user);
+        }
+        $sectionCnu = $em->find('Application\Entity\Db\SectionCnu', $id = '1');
+        if (!$sectionCnu) {
+            $sectionCnu = DbAsset::sectionCnu()
+                    ->setId($id)
+                    ->setHistoCreateur($user)
+                    ->setHistoModificateur($user);
         }
         $regime = $em->find('Application\Entity\Db\RegimeSecu', $id = '60');
         if (!$regime) {
             $regime = DbAsset::regimeSecu()
                     ->setId($id)
-                    ->setHistoCreateur(1)
-                    ->setHistoModificateur(1);
+                    ->setHistoCreateur($user)
+                    ->setHistoModificateur($user);
         }
-        $i1 = DbAsset::intervenantPermanent($structure, $corps)
+        $i1 = DbAsset::intervenantPermanent($structure, $corps, $sectionCnu)
                 ->setNomUsuel("Gauthier")
                 ->setNomPatronymique("Gauthier")
                 ->setPrenom("Bertrand")
-                ->setHistoCreateur(1)
-                ->setHistoModificateur(1);
+                ->setHistoCreateur($user)
+                ->setHistoModificateur($user);
         $i2 = DbAsset::intervenantExterieur($structure, $regime)
                 ->setNomUsuel("Gautier")
                 ->setNomPatronymique("Hochon")
                 ->setPrenom("Jean-Paul")
-                ->setHistoCreateur(1)
-                ->setHistoModificateur(1);
+                ->setHistoCreateur($user)
+                ->setHistoModificateur($user);
         $i3 = DbAsset::intervenantExterieur($structure, $regime)
                 ->setNomUsuel("Gaudé")
                 ->setNomPatronymique("Gaudé")
                 ->setPrenom("Laurent")
-                ->setHistoCreateur(1)
-                ->setHistoModificateur(1);
+                ->setHistoCreateur($user)
+                ->setHistoModificateur($user);
         $em->persist($typeStructure);
         $em->persist($etablissement);
         $em->persist($structure);
+        $em->persist($civilite);
+        $em->persist($sectionCnu);
         $em->persist($corps);
         $em->persist($regime);
         $em->persist($i1);

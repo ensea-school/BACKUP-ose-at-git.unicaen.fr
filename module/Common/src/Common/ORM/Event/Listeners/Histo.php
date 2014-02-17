@@ -6,10 +6,8 @@ use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
 
 /**
- * Listener Doctrine.
- * 
- * Ajout automatique de l'heure de création/modification et de l'auteur de création/modification
- * de toute entité avant qu'elle soit persistée.
+ * Listener Doctrine permettant l'ajout automatique de l'heure de création/modification 
+ * et de l'auteur de création/modification de toute entité avant qu'elle soit persistée.
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -36,6 +34,7 @@ class Histo implements EventSubscriber
     {
         $entity = $args->getEntity(); /* @var $entity \Application\Entity\Db\HistoInterface */
         
+        // l'entité doit implémenter l'interface requise
         if (!$entity instanceof \Application\Entity\Db\HistoInterface) {
             return;
         }
@@ -46,17 +45,25 @@ class Histo implements EventSubscriber
         }
         $entity->setHistoModification(new \DateTime());
         
-//        $authenticationService = $this->sl->get('Zend\Authentication\AuthenticationService');
-//        
-//        if ($authenticationService->hasIdentity()) {
-//            $identity = $authenticationService->getIdentity();
-//            
-//            // on extrait l'identifiant de l'utilisateur dans les données d'identité
-//            if (null === $entity->getHistoCreateur()) {
-//                $entity->setHistoCreateur($identity->getSupannAliasLogin());
-//            }
-//            $entity->setHistoModificateur($identity->getSupannAliasLogin());
-//        }
+        // inscription de l'utilisateur connecté comme auteur de la création/modification
+        $authenticationService = $this->sl->get('Zend\Authentication\AuthenticationService');
+        if ($authenticationService->hasIdentity()) {
+            $identity = $authenticationService->getIdentity();
+            if (!isset($identity['db'])) {
+//                throw new \Common\Exception\LogicException("Aucune donnée d'identité 'db' disponible.");
+                return;
+            }
+            $user = $identity['db']; /* @var $user \Application\Entity\Db\User */
+            if (!$user instanceof \Application\Entity\Db\User) {
+//                throw new \Common\Exception\LogicException("Type des données d'identité 'db' inattendu.");
+                return;
+            }
+
+            if (null === $entity->getHistoCreateur()) {
+                $entity->setHistoCreateur($user);
+            }
+            $entity->setHistoModificateur($user);
+        }
     }
 
     /**

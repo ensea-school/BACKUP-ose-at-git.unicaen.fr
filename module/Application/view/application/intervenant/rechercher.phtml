@@ -20,13 +20,15 @@
 </div>
 
 <script>
-    var url = '<?php echo $this->url('intervenant/default', array('action' => 'voir')) ?>';
-    $("body").on("submit", "form.intervenant-rech", function(event) {
-        var form = $(event.target);
-        $.post(url, form.serializeArray(), function(data) {
-            $("div.intervenant-voir").html(data);
-        });
-    });
+//    var url = '<?php echo $this->url('intervenant/default', array('action' => 'voir')) ?>';
+//    $("body").on("submit", "form.intervenant-rech", function(event) {
+//        var form = $(event.target);
+//        var id = $("input.sas", form).val();
+//        $.post(url, { 'id': id }, function(data) {
+//            $("div.intervenant-voir").html(data);
+//        });
+//        event.preventDefault();
+//    });
     
     $(function() {
         $(":input").tooltip();

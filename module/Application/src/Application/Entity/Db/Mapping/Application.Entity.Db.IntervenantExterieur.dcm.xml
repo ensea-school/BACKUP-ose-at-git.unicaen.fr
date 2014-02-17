@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\IntervenantExterieur" table="INTERVENANT_EXTERIEUR">
-    <indexes>
+<!--    <indexes>
       <index name="IDX_8FEA72F0B407ABDC" columns="REGIME_SECU_ID"/>
       <index name="IDX_8FEA72F0C2443469" columns="TYPE_ID"/>
       <index name="IDX_8FEA72F05E37C346" columns="SITUATION_FAMILIALE_ID"/>
     </indexes>
     <unique-constraints>
       <unique-constraint name="intervenant_exterieur_idx" columns="INTERVENANT_ID"/>
-    </unique-constraints>
+    </unique-constraints>-->
 <!--    <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>-->
@@ -18,17 +18,16 @@
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
     <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="profession" type="string" column="PROFESSION" length="60" nullable="false"/>
     <many-to-one field="situationFamiliale" target-entity="Application\Entity\Db\SituationFamiliale">
       <join-columns>
         <join-column name="SITUATION_FAMILIALE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-<!--    <many-to-one field="type" target-entity="Application\Entity\Db\TypeIntervenantExterieur">
+    <many-to-one field="type" target-entity="Application\Entity\Db\TypeIntervenantExterieur">
       <join-columns>
         <join-column name="TYPE_ID" referenced-column-name="ID"/>
       </join-columns>
-    </many-to-one>-->
+    </many-to-one>
     <many-to-one field="regimeSecu" target-entity="Application\Entity\Db\RegimeSecu">
       <join-columns>
         <join-column name="REGIME_SECU_ID" referenced-column-name="ID"/>
@@ -39,5 +38,10 @@
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>-->
+    <many-to-one field="typePoste" target-entity="Application\Entity\Db\TypePoste">
+      <join-columns>
+        <join-column name="TYPE_POSTE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

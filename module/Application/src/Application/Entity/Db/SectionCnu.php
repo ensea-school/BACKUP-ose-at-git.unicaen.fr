@@ -50,25 +50,19 @@ class SectionCnu
     private $id;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $intervenant;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->intervenant = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return SectionCnu
      */
-    public function setHistoCreateur($histoCreateur)
+    public function setHistoCreateur(User $histoCreateur)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -114,7 +108,7 @@ class SectionCnu
      * @param integer $histoDestructeur
      * @return SectionCnu
      */
-    public function setHistoDestructeur($histoDestructeur)
+    public function setHistoDestructeur(User $histoDestructeur)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -157,10 +151,10 @@ class SectionCnu
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return SectionCnu
      */
-    public function setHistoModificateur($histoModificateur)
+    public function setHistoModificateur(User $histoModificateur)
     {
         $this->histoModificateur = $histoModificateur;
 
@@ -224,6 +218,19 @@ class SectionCnu
     }
 
     /**
+     * Set id
+     *
+     * @param string $id
+     * @return SectionCnu
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return string 
@@ -231,38 +238,5 @@ class SectionCnu
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Add intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return SectionCnu
-     */
-    public function addIntervenant(\Application\Entity\Db\Intervenant $intervenant)
-    {
-        $this->intervenant[] = $intervenant;
-
-        return $this;
-    }
-
-    /**
-     * Remove intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     */
-    public function removeIntervenant(\Application\Entity\Db\Intervenant $intervenant)
-    {
-        $this->intervenant->removeElement($intervenant);
-    }
-
-    /**
-     * Get intervenant
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
     }
 }

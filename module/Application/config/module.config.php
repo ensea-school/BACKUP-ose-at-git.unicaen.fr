@@ -49,6 +49,12 @@ return array(
 //            ),
 //        ),
     ),
+    'zfcuser' => array(
+        // telling ZfcUser to use our own class
+        'user_entity_class' => 'Application\Entity\Db\User',
+//        // telling ZfcUserDoctrineORM to skip the entities it defines
+//        'enable_default_entities' => false,
+    ),
     'router' => array(
         'routes' => array(
             'home' => array(
@@ -104,33 +110,33 @@ return array(
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /application/:controller/:action
-//            'application' => array(
-//                'type'    => 'Literal',
-//                'options' => array(
-//                    'route'    => '/application',
-//                    'defaults' => array(
-//                        '__NAMESPACE__' => 'Application\Controller',
-//                        'controller'    => 'Index',
-//                        'action'        => 'index',
-//                    ),
-//                ),
-//                'may_terminate' => true,
-//                'child_routes' => array(
-//                    'default' => array(
-//                        'type'    => 'Segment',
-//                        'options' => array(
-//                            'route'    => '/[:controller[/:action]]',
-//                            'constraints' => array(
-//                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-//                            ),
-//                            'defaults' => array(
-//                                'controller' => 'Index',
-//                            ),
-//                        ),
-//                    ),
-//                ),
-//            ),
+            'application' => array(
+                'type'    => 'Literal',
+                'options' => array(
+                    'route'    => '/application',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller'    => 'Index',
+                        'action'        => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'default' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/[:controller[/:action]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Index',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
         ),
     ),    
     'navigation' => array(
@@ -138,8 +144,9 @@ return array(
             'home' => array(
                 'pages' => array(
                     'intervenant' => array(
-                        'label'  => 'Intervenant',
-                        'route'  => 'intervenant',
+                        'label'    => 'Intervenant',
+                        'route'    => 'intervenant',
+                        'resource' => 'controller/Application\Controller\Intervenant:index',
                         'pages' => array(
                             'rechercher' => array(
                                 'label'  => "Rechercher",
@@ -174,12 +181,23 @@ return array(
         ),
     ),
     'bjyauthorize' => array(
+        'role_providers' => array(
+            /**
+             * Fournit les rôles issus de la base de données éventuelle de l'appli.
+             * NB: si le rôle par défaut 'guest' est fourni ici, il ne sera pas ajouté en double dans les ACL.
+             * NB: si la connexion à la base échoue, ce n'est pas bloquant!
+             */
+//            'UnicaenAuth\Provider\Role\DbRole' => array(
+//                'object_manager'    => 'doctrine.entitymanager.orm_default',
+//                'role_entity_class' => 'Application\Entity\Db\UserRole',
+//            ),
+        ),
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant', 
                     'action' => array('index', 'modifier', 'rechercher', 'voir', 'search'), 
-                    'roles' => array()),
+                    'roles' => array('user')),
             ),
         ),
     ),

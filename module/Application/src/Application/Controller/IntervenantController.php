@@ -16,6 +16,19 @@ class IntervenantController extends AbstractActionController
 {
     public function indexAction()
     {
+//        var_dump($this->identity());
+//        $em = $this->intervenant()->getEntityManager();
+//        $e = new \Application\Entity\Db\Etablissement();
+//        $e
+//                ->setLibelle('Établissement de test')
+//                ->setSource($em->find('Application\Entity\Db\Source', 'Harpege'))
+//                ->setSourceCode(rand(1, 999))
+////                ->setHistoCreateur($user = $em->find('Application\Entity\Db\User', 2))
+////                ->setHistoModificateur($user)
+//                ;
+//        $em->persist($e);
+//        $em->flush();
+        
         $view = new \Zend\View\Model\ViewModel();
 //        $view->setVariables(array('form' => $form, 'intervenant' => $intervenant));
         $this->getEvent()->setParam('modal', true);
@@ -41,6 +54,7 @@ class IntervenantController extends AbstractActionController
         // post
         if (is_array($data)) {
             $form->setData($data);
+//            var_dump($data);
             if ($form->isValid()) {
                 $repo = $this->intervenant()->getRepo();
                 $intervenant = $repo->findOneBy(array('sourceCode' => $form->get('interv')->getValueId()));
@@ -98,6 +112,8 @@ class IntervenantController extends AbstractActionController
         // union
         $result = $result + $resultHarp;
         
+        uasort($result, function($v1, $v2) { return strcasecmp($v1['label'], $v2['label']); });
+
 //        var_dump($result);
         
         return new \Zend\View\Model\JsonModel($result);
@@ -105,10 +121,16 @@ class IntervenantController extends AbstractActionController
     
     public function voirAction()
     {
-        if (!($id = $this->params()->fromRoute('id'))) {
+        if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
             throw new RuntimeException("Aucun intervenant spécifié.");
         }
-        if (!($intervenant = $this->intervenant()->getRepo()->find($id))) {
+        
+        $intervenant = $this->intervenant()->getRepo()->find($id);
+        if (!$intervenant) {
+            $service = $this->getServiceLocator()->get('importServiceIntervenant'); /* @var $service \Import\Model\Service\Intervenant */
+            $intervenant = $service->get($id);
+        }
+        if (!$intervenant) {
             throw new RuntimeException("Intervenant spécifié introuvable.");
         }
         

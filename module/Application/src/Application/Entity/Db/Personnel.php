@@ -47,7 +47,7 @@ class Personnel
     /**
      * @var string
      */
-    private $nom;
+    private $nomUsuel;
 
     /**
      * @var integer
@@ -64,14 +64,24 @@ class Personnel
      */
     private $id;
 
+    /**
+     * @var Source
+     */
+    private $source;
+
+    /**
+     * @var string
+     */
+    private $sourceCode;
+
 
     /**
      * Set histoCreateur
      *
-     * @param integer $histoCreateur
+     * @param User $histoCreateur
      * @return Personnel
      */
-    public function setHistoCreateur($histoCreateur)
+    public function setHistoCreateur(User $histoCreateur)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -117,7 +127,7 @@ class Personnel
      * @param integer $histoDestructeur
      * @return Personnel
      */
-    public function setHistoDestructeur($histoDestructeur)
+    public function setHistoDestructeur(User $histoDestructeur)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -160,10 +170,10 @@ class Personnel
     /**
      * Set histoModificateur
      *
-     * @param integer $histoModificateur
+     * @param User $histoModificateur
      * @return Personnel
      */
-    public function setHistoModificateur($histoModificateur)
+    public function setHistoModificateur(User $histoModificateur)
     {
         $this->histoModificateur = $histoModificateur;
 
@@ -227,26 +237,26 @@ class Personnel
     }
 
     /**
-     * Set nom
+     * Set nomUsuel
      *
-     * @param string $nom
+     * @param string $nomUsuel
      * @return Personnel
      */
-    public function setNom($nom)
+    public function setNomUsuel($nomUsuel)
     {
-        $this->nom = $nom;
+        $this->nomUsuel = $nomUsuel;
 
         return $this;
     }
 
     /**
-     * Get nom
+     * Get nomUsuel
      *
      * @return string 
      */
-    public function getNom()
+    public function getNomUsuel()
     {
-        return $this->nom;
+        return $this->nomUsuel;
     }
 
     /**
@@ -303,5 +313,51 @@ class Personnel
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set source
+     *
+     * @param Source $source
+     * @return Intervenant
+     */
+    public function setSource(Source $source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return Intervenant
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
     }
 }

@@ -18,14 +18,17 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
 {
     public function onBootstrap(MvcEvent $e)
     {
-        $e->getApplication()->getServiceManager()->get('translator');
+        $sm = $e->getApplication()->getServiceManager();
+        $sm->get('translator');
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
         
 //        $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'registerModalStrategy'), 100);
+        
+        $eventManager->attach(new AuthenticatedUserSavedListener($sm->get('doctrine.entitymanager.orm_default')));
     }
-
+    
     /**
      * @param  \Zend\Mvc\MvcEvent $e The MvcEvent instance
      * @return void

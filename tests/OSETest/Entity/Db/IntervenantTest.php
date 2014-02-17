@@ -10,11 +10,13 @@ namespace OSETest\Entity\Db;
 class IntervenantTest extends BaseTest
 {
     private $source;
+    private $civilite;
     private $typeStructure;
     private $structure;
     private $typePerm;
     private $typeExt;
     private $corps;
+    private $sectionCnu;
     private $regimeSecu;
     
     protected function setUp()
@@ -53,38 +55,50 @@ class IntervenantTest extends BaseTest
         $this->corps = Asset::corps();
         $em->persist($this->corps);
         
+        $this->sectionCnu = $em->find('Application\Entity\Db\SectionCnu', $id = '1');
+        if (!$this->sectionCnu) {
+            $this->sectionCnu = Asset::sectionCnu()->setId($id);
+            $em->persist($this->sectionCnu);
+        }
+        
         $this->regimeSecu = $em->find('Application\Entity\Db\RegimeSecu', $id = '60');
         if (!$this->regimeSecu) {
             $this->regimeSecu = Asset::regimeSecu()->setId($id);
             $em->persist($this->regimeSecu);
         }
+        
+        $this->civilite = $em->find('Application\Entity\Db\Civilite', $id = 'M.');
+        if (!$this->civilite) {
+            $this->civilite = Asset::civilite()->setId($id);
+            $em->persist($this->civilite);
+        }
     }
     
-    public function testIntervenantPermanentClassTableInheritance()
-    {
-        $em = $this->getEntityManager();
-        
-        $ip = Asset::intervenantPermanent($this->structure, $this->corps);
-        $em->persist($ip);
-        $em->flush();
-        
-        $i = $em->find('Application\Entity\Db\Intervenant', $ip->getId());
-        $this->assertInstanceOf('Application\Entity\Db\Intervenant', $i);
-        $this->assertInstanceOf('Application\Entity\Db\IntervenantPermanent', $i);
-        $this->assertSame($ip, $i);
-        
-        $ie = $em->find('Application\Entity\Db\IntervenantExterieur', $ip->getId());
-        $this->assertNull($ie);
-        
-        $em->remove($ip);
-        $em->flush();
-    }
+//    public function testIntervenantPermanentClassTableInheritance()
+//    {
+//        $em = $this->getEntityManager();
+//        
+//        $ip = Asset::intervenantPermanent($this->civilite, $this->structure, $this->corps, $this->sectionCnu);
+//        $em->persist($ip);
+//        $em->flush();
+//        
+//        $i = $em->find('Application\Entity\Db\Intervenant', $ip->getId());
+//        $this->assertInstanceOf('Application\Entity\Db\Intervenant', $i);
+//        $this->assertInstanceOf('Application\Entity\Db\IntervenantPermanent', $i);
+//        $this->assertSame($ip, $i);
+//        
+//        $ie = $em->find('Application\Entity\Db\IntervenantExterieur', $ip->getId());
+//        $this->assertNull($ie);
+//        
+//        $em->remove($ip);
+//        $em->flush();
+//    }
     
     public function testIntervenantExterieurClassTableInheritance()
     {
         $em = $this->getEntityManager();
         
-        $ie = Asset::intervenantExterieur($this->structure, $this->regimeSecu);
+        $ie = Asset::intervenantExterieur($this->civilite, $this->structure, $this->regimeSecu);
         $em->persist($ie);
         $em->flush();
         

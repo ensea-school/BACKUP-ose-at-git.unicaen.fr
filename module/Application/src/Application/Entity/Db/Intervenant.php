@@ -114,11 +114,6 @@ abstract class Intervenant
     /**
      * @var string
      */
-    private $primeExcellenceScientifique;
-
-    /**
-     * @var string
-     */
     private $telMobile;
 
     /**
@@ -153,11 +148,6 @@ abstract class Intervenant
      * @var string
      */
     private $sourceCode;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
 
     /**
      * @var \Application\Entity\Db\Civilite
@@ -210,8 +200,8 @@ abstract class Intervenant
         }
         $nomComplet[] = $this->getNomUsuel();
         $nomComplet[] = $this->getPrenom();
-        if ($includeNomPatronymique && $this->getNomPatronymique()) {
-            $nomComplet[] = sprintf("(née %s)", $this->getNomPatronymique());
+        if ($includeNomPatronymique && $this->getNomPatronymique() != $this->getNomUsuel()) {
+            $nomComplet[] = sprintf(", née %s", $this->getNomPatronymique());
         }
         
         return implode(" ", $nomComplet);
@@ -550,29 +540,6 @@ abstract class Intervenant
     }
 
     /**
-     * Set primeExcellenceScientifique
-     *
-     * @param string $primeExcellenceScientifique
-     * @return Intervenant
-     */
-    public function setPrimeExcellenceScientifique($primeExcellenceScientifique)
-    {
-        $this->primeExcellenceScientifique = $primeExcellenceScientifique;
-
-        return $this;
-    }
-
-    /**
-     * Get primeExcellenceScientifique
-     *
-     * @return string 
-     */
-    public function getPrimeExcellenceScientifique()
-    {
-        return $this->primeExcellenceScientifique;
-    }
-
-    /**
      * Set telMobile
      *
      * @param string $telMobile
@@ -672,29 +639,6 @@ abstract class Intervenant
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Intervenant
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructure()
-    {
-        return $this->structure;
     }
 
     /**

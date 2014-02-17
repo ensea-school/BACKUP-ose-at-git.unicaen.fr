@@ -29,9 +29,10 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     public function prePersist(LifecycleEventArgs $args)
     {
         if ($args->getEntity() instanceof \Application\Entity\Db\HistoInterface) {
+            $user = $this->getEntityManager()->find('\Application\Entity\Db\User', 1);
             $args->getEntity()
-                    ->setHistoCreateur(1)
-                    ->setHistoModificateur(1);
+                    ->setHistoCreateur($user)
+                    ->setHistoModificateur($user);
         }
     }
     

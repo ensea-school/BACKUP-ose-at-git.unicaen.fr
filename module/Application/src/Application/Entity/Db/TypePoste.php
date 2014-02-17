@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * Periode
+ * TypePoste
  */
-class Periode
+class TypePoste
 {
     /**
      * @var integer
@@ -49,17 +47,12 @@ class Periode
      */
     private $id;
 
-    /**
-     * @var \Application\Entity\Db\PeriodeType
-     */
-    private $type;
-
 
     /**
      * Set histoCreateur
      *
      * @param User $histoCreateur
-     * @return Periode
+     * @return TypePoste
      */
     public function setHistoCreateur(User $histoCreateur)
     {
@@ -82,7 +75,7 @@ class Periode
      * Set histoDebut
      *
      * @param \DateTime $histoDebut
-     * @return Periode
+     * @return TypePoste
      */
     public function setHistoDebut($histoDebut)
     {
@@ -105,7 +98,7 @@ class Periode
      * Set histoDestructeur
      *
      * @param integer $histoDestructeur
-     * @return Periode
+     * @return TypePoste
      */
     public function setHistoDestructeur(User $histoDestructeur)
     {
@@ -128,7 +121,7 @@ class Periode
      * Set histoFin
      *
      * @param \DateTime $histoFin
-     * @return Periode
+     * @return TypePoste
      */
     public function setHistoFin($histoFin)
     {
@@ -151,7 +144,7 @@ class Periode
      * Set histoModificateur
      *
      * @param User $histoModificateur
-     * @return Periode
+     * @return TypePoste
      */
     public function setHistoModificateur(User $histoModificateur)
     {
@@ -174,7 +167,7 @@ class Periode
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Periode
+     * @return TypePoste
      */
     public function setHistoModification($histoModification)
     {
@@ -197,7 +190,7 @@ class Periode
      * Set libelle
      *
      * @param string $libelle
-     * @return Periode
+     * @return TypePoste
      */
     public function setLibelle($libelle)
     {
@@ -224,28 +217,5 @@ class Periode
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param \Application\Entity\Db\PeriodeType $type
-     * @return Periode
-     */
-    public function setType(\Application\Entity\Db\PeriodeType $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return \Application\Entity\Db\PeriodeType 
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 }

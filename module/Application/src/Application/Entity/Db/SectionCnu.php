@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SectionCnu
  */
-class SectionCnu
+class SectionCnu implements HistoInterface
 {
     /**
-     * @var integer
+     * @var User
      */
     private $histoCreateur;
 
@@ -20,7 +20,7 @@ class SectionCnu
     private $histoDebut;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoDestructeur;
 
@@ -30,7 +30,7 @@ class SectionCnu
     private $histoFin;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoModificateur;
 

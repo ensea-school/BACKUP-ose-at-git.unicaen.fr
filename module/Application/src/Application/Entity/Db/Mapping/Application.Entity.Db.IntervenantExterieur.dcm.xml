@@ -12,11 +12,8 @@
 <!--    <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>-->
-    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
-    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
-    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <many-to-one field="situationFamiliale" target-entity="Application\Entity\Db\SituationFamiliale">
       <join-columns>
@@ -41,6 +38,21 @@
     <many-to-one field="typePoste" target-entity="Application\Entity\Db\TypePoste">
       <join-columns>
         <join-column name="TYPE_POSTE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

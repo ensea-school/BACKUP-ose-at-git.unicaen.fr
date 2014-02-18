@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\Structure" table="STRUCTURE">
-    <indexes>
+<!--    <indexes>
       <index name="IDX_2BC32905F1A6E54F" columns="PARENTE_ID"/>
       <index name="IDX_2BC32905B3FC6B16" columns="ETABLISSEMENT_ID"/>
       <index name="IDX_2BC32905C2443469" columns="TYPE_ID"/>
-    </indexes>
+    </indexes>-->
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
-    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
-    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="25" nullable="false"/>
     <field name="libelleLong" type="string" column="LIBELLE_LONG" length="60" nullable="false"/>
@@ -36,6 +33,21 @@
     <many-to-one field="parente" target-entity="Application\Entity\Db\Structure">
       <join-columns>
         <join-column name="PARENTE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

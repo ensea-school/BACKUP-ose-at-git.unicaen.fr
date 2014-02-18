@@ -220,6 +220,18 @@ class Etablissement implements HistoInterface
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return integer 

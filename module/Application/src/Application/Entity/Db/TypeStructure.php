@@ -224,6 +224,19 @@ class TypeStructure implements HistoInterface
     }
 
     /**
+     * Set id
+     *
+     * @param string $id
+     * @return TypeStructure
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return integer 

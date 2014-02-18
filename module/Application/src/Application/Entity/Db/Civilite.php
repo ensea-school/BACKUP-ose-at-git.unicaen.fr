@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Civilite
  */
-class Civilite
+class Civilite implements HistoInterface
 {
     /**
-     * @var integer
+     * @var User
      */
     private $histoCreateur;
 
@@ -20,7 +20,7 @@ class Civilite
     private $histoDebut;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoDestructeur;
 
@@ -30,7 +30,7 @@ class Civilite
     private $histoFin;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoModificateur;
 

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class RegimeSecu implements HistoInterface
 {
     /**
-     * @var integer
+     * @var User
      */
     private $histoCreateur;
 
@@ -20,7 +20,7 @@ class RegimeSecu implements HistoInterface
     private $histoDebut;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoDestructeur;
 
@@ -30,7 +30,7 @@ class RegimeSecu implements HistoInterface
     private $histoFin;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoModificateur;
 
@@ -80,7 +80,7 @@ class RegimeSecu implements HistoInterface
     /**
      * Get histoCreateur
      *
-     * @return integer 
+     * @return User 
      */
     public function getHistoCreateur()
     {
@@ -126,7 +126,7 @@ class RegimeSecu implements HistoInterface
     /**
      * Get histoDestructeur
      *
-     * @return integer 
+     * @return User 
      */
     public function getHistoDestructeur()
     {
@@ -172,7 +172,7 @@ class RegimeSecu implements HistoInterface
     /**
      * Get histoModificateur
      *
-     * @return integer 
+     * @return User 
      */
     public function getHistoModificateur()
     {

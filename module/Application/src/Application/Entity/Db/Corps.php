@@ -8,7 +8,7 @@ namespace Application\Entity\Db;
 class Corps implements HistoInterface
 {
     /**
-     * @var integer
+     * @var User
      */
     private $histoCreateur;
 
@@ -18,7 +18,7 @@ class Corps implements HistoInterface
     private $histoDebut;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoDestructeur;
 
@@ -28,7 +28,7 @@ class Corps implements HistoInterface
     private $histoFin;
 
     /**
-     * @var integer
+     * @var User
      */
     private $histoModificateur;
 

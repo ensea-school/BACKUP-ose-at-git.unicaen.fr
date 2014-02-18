@@ -3,17 +3,17 @@
   <entity name="Application\Entity\Db\AdresseStructure" table="ADRESSE_STRUCTURE">
     <indexes>
       <index name="IDX_D72AAFC854222575" columns="BIS_TER_ID"/>
+      <index name="IDX_D72AAFC881526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_D72AAFC8F791438F" columns="HISTO_DESTRUCTEUR"/>
+      <index name="IDX_D72AAFC8862159D1" columns="HISTO_MODIFICATEUR"/>
       <index name="IDX_D72AAFC8884B0F7B" columns="STRUCTURE_ID"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="codePostal" type="string" column="CODE_POSTAL" length="15" nullable="true"/>
-    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
-    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
-    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="localite" type="string" column="LOCALITE" length="26" nullable="true"/>
     <field name="nomVoie" type="string" column="NOM_VOIE" length="22" nullable="true"/>
@@ -27,6 +27,21 @@
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="bisTer" target-entity="Application\Entity\Db\BisTer">

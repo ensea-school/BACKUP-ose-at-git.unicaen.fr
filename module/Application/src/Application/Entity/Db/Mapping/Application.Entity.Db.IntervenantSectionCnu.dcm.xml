@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\Annee" table="ANNEE">
+  <entity name="Application\Entity\Db\IntervenantSectionCnu" table="INTERVENANT_SECTION_CNU">
     <indexes>
-      <index name="IDX_29C6077F81526632" columns="HISTO_CREATEUR"/>
-      <index name="IDX_29C6077FF791438F" columns="HISTO_DESTRUCTEUR"/>
-      <index name="IDX_29C6077F862159D1" columns="HISTO_MODIFICATEUR"/>
+      <index name="IDX_C43F828E81526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_C43F828EF791438F" columns="HISTO_DESTRUCTEUR"/>
+      <index name="IDX_C43F828E862159D1" columns="HISTO_MODIFICATEUR"/>
+      <index name="IDX_C43F828E8AD1AE90" columns="SECTION_CNU_ID"/>
     </indexes>
-    <id name="id" type="integer" column="ID">
-      <generator strategy="SEQUENCE"/>
-    </id>
-    <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
-    <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
+    <id name="intervenantId" type="integer" column="INTERVENANT_ID"/>
+    <id name="sectionCnu" association-key="true"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="libelle" type="string" column="LIBELLE" length="9" nullable="false"/>
+    <one-to-one field="sectionCnu" target-entity="Application\Entity\Db\SectionCnu">
+      <join-columns>
+        <join-column name="SECTION_CNU_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>

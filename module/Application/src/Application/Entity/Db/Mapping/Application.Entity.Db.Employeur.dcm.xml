@@ -3,19 +3,34 @@
   <entity name="Application\Entity\Db\Employeur" table="EMPLOYEUR">
     <indexes>
       <index name="IDX_C385FF2814FA4434" columns="EMPLOYEUR_PERE_ID"/>
+      <index name="IDX_C385FF2881526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_C385FF28F791438F" columns="HISTO_DESTRUCTEUR"/>
+      <index name="IDX_C385FF28862159D1" columns="HISTO_MODIFICATEUR"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="codeNaf" type="string" column="CODE_NAF" length="4" nullable="false"/>
-    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
-    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
-    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="60" nullable="false"/>
     <field name="siret" type="string" column="SIRET" length="14" nullable="false"/>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="employeurPere" target-entity="Application\Entity\Db\Employeur">
       <join-columns>
         <join-column name="EMPLOYEUR_PERE_ID" referenced-column-name="ID"/>

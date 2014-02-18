@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT" inheritance-type="JOINED" repository-class="Application\Entity\Db\Repository\IntervenantRepository">
-    <discriminator-column name="type_id" type="string" />
-    <discriminator-map>
-        <discriminator-mapping value="P" class="Application\Entity\Db\IntervenantPermanent" />
-        <discriminator-mapping value="E" class="Application\Entity\Db\IntervenantExterieur" />
-    </discriminator-map>
+  <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT">
     <indexes>
       <index name="IDX_FED386B4C2443469" columns="TYPE_ID"/>
       <index name="IDX_FED386B48C579EB7" columns="CIVILITE_ID"/>
-      <index name="IDX_FED386B4884B0F7B" columns="STRUCTURE_ID"/>
+      <index name="IDX_FED386B4E9B3446E" columns="SOURCE_ID"/>
     </indexes>
+    <unique-constraints>
+      <unique-constraint name="intervenant_source__un" columns="SOURCE_CODE"/>
+    </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
@@ -22,36 +20,32 @@
     <field name="nomUsuel" type="string" column="NOM_USUEL" length="60" nullable="false"/>
     <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="13" nullable="true"/>
     <field name="numeroInseeCle" type="string" column="NUMERO_INSEE_CLE" length="2" nullable="true"/>
-    <field name="numeroInseeProvisoire" type="boolean" column="NUMERO_INSEE_PROVISOIRE" length="1" nullable="true"/>
+    <field name="numeroInseeProvisoire" type="string" column="NUMERO_INSEE_PROVISOIRE" length="1" nullable="true"/>
     <field name="paysNaissanceCodeInsee" type="string" column="PAYS_NAISSANCE_CODE_INSEE" length="3" nullable="false"/>
     <field name="paysNaissanceLibelle" type="string" column="PAYS_NAISSANCE_LIBELLE" length="30" nullable="false"/>
     <field name="paysNationaliteCodeInsee" type="string" column="PAYS_NATIONALITE_CODE_INSEE" length="3" nullable="false"/>
     <field name="paysNationaliteLibelle" type="string" column="PAYS_NATIONALITE_LIBELLE" length="30" nullable="false"/>
-    <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="false"/>
     <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
+    <field name="primeExcellenceScientifique" type="string" column="PRIME_EXCELLENCE_SCIENTIFIQUE" length="1" nullable="true"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
     <field name="telMobile" type="string" column="TEL_MOBILE" length="20" nullable="true"/>
+    <field name="telPro" type="string" column="TEL_PRO" length="20" nullable="true"/>
     <field name="villeNaissanceCodeInsee" type="string" column="VILLE_NAISSANCE_CODE_INSEE" length="5" nullable="true"/>
     <field name="villeNaissanceLibelle" type="string" column="VILLE_NAISSANCE_LIBELLE" length="26" nullable="true"/>
-<!--    <many-to-one field="type" target-entity="Application\Entity\Db\TypeIntervenant">
-      <join-columns>
-        <join-column name="TYPE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>-->
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-<!--    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>-->
     <many-to-one field="civilite" target-entity="Application\Entity\Db\Civilite">
       <join-columns>
         <join-column name="CIVILITE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="annee" target-entity="Application\Entity\Db\Annee" mapped-by="intervenant"/>
+    <many-to-one field="type" target-entity="Application\Entity\Db\TypeIntervenant">
+      <join-columns>
+        <join-column name="TYPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

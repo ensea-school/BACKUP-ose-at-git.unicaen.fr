@@ -2,33 +2,51 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\Role" table="ROLE">
     <indexes>
+      <index name="IDX_61FC67DE81526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_61FC67DEF791438F" columns="HISTO_DESTRUCTEUR"/>
+      <index name="IDX_61FC67DE862159D1" columns="HISTO_MODIFICATEUR"/>
       <index name="IDX_61FC67DEB16F9F85" columns="PERSONNEL_ID"/>
       <index name="IDX_61FC67DE884B0F7B" columns="STRUCTURE_ID"/>
       <index name="IDX_61FC67DEC2443469" columns="TYPE_ID"/>
     </indexes>
-    <id name="personnel" association-key="true"/>
-    <id name="structure" association-key="true"/>
-    <id name="type" association-key="true"/>
-    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
+    <unique-constraints>
+      <unique-constraint name="role_un" columns="STRUCTURE_ID,PERSONNEL_ID,TYPE_ID"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
-    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="false"/>
-    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="false"/>
-    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
+    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <one-to-one field="type" target-entity="Application\Entity\Db\TypeRole">
-      <join-columns>
-        <join-column name="TYPE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </one-to-one>
-    <one-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>
-    </one-to-one>
-    <one-to-one field="personnel" target-entity="Application\Entity\Db\Personnel">
+    </many-to-one>
+    <many-to-one field="type" target-entity="Application\Entity\Db\TypeRole">
+      <join-columns>
+        <join-column name="TYPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="personnel" target-entity="Application\Entity\Db\Personnel">
       <join-columns>
         <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
       </join-columns>
-    </one-to-one>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

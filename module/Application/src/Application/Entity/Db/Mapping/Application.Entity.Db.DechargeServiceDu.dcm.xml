@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\ServiceReferentiel" table="SERVICE_REFERENTIEL">
+  <entity name="Application\Entity\Db\DechargeServiceDu" table="DECHARGE_SERVICE_DU">
     <indexes>
-      <index name="IDX_42741E7DAA401F5C" columns="ANNEE_ID"/>
-      <index name="IDX_42741E7D81526632" columns="HISTO_CREATEUR"/>
-      <index name="IDX_42741E7DF791438F" columns="HISTO_DESTRUCTEUR"/>
-      <index name="IDX_42741E7D862159D1" columns="HISTO_MODIFICATEUR"/>
-      <index name="IDX_42741E7DE2C64D28" columns="FONCTION_ID"/>
-      <index name="IDX_42741E7D78FF2BCB" columns="INTERVENANT_ID"/>
-      <index name="IDX_42741E7D884B0F7B" columns="STRUCTURE_ID"/>
+      <index name="IDX_A7A97B43AA401F5C" columns="ANNEE_ID"/>
+      <index name="IDX_A7A97B4378FF2BCB" columns="INTERVENANT_ID"/>
+      <index name="IDX_A7A97B432E9062B5" columns="MOTIF_ID"/>
+      <index name="IDX_A7A97B4381526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_A7A97B43F791438F" columns="HISTO_DESTRUCTEUR"/>
+      <index name="IDX_A7A97B43862159D1" columns="HISTO_MODIFICATEUR"/>
     </indexes>
-    <unique-constraints>
-      <unique-constraint name="service_referentiel_un" columns="FONCTION_ID,INTERVENANT_ID,ANNEE_ID,STRUCTURE_ID"/>
-    </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
@@ -20,19 +16,9 @@
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
       <join-columns>
-        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="fonction" target-entity="Application\Entity\Db\FonctionReferentiel">
-      <join-columns>
-        <join-column name="FONCTION_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
@@ -45,9 +31,14 @@
         <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+    <many-to-one field="motif" target-entity="Application\Entity\Db\MotifDechargeService">
       <join-columns>
-        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
+        <join-column name="MOTIF_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\IntervenantPermanent">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">

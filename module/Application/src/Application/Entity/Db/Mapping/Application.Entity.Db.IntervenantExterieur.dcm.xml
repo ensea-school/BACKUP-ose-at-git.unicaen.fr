@@ -1,43 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\IntervenantExterieur" table="INTERVENANT_EXTERIEUR">
-<!--    <indexes>
+    <indexes>
       <index name="IDX_8FEA72F0B407ABDC" columns="REGIME_SECU_ID"/>
-      <index name="IDX_8FEA72F0C2443469" columns="TYPE_ID"/>
+      <index name="IDX_8FEA72F0A1E47BD5" columns="TYPE_INTERVENANT_EXTERIEUR_ID"/>
       <index name="IDX_8FEA72F05E37C346" columns="SITUATION_FAMILIALE_ID"/>
+      <index name="IDX_8FEA72F0F19FB1DC" columns="TYPE_POSTE_ID"/>
+      <index name="IDX_8FEA72F081526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_8FEA72F0F791438F" columns="HISTO_DESTRUCTEUR"/>
+      <index name="IDX_8FEA72F0862159D1" columns="HISTO_MODIFICATEUR"/>
     </indexes>
-    <unique-constraints>
-      <unique-constraint name="intervenant_exterieur_idx" columns="INTERVENANT_ID"/>
-    </unique-constraints>-->
-<!--    <id name="id" type="integer" column="ID">
-      <generator strategy="SEQUENCE"/>
-    </id>-->
+    <id name="id" association-key="true"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="situationFamiliale" target-entity="Application\Entity\Db\SituationFamiliale">
+    <one-to-one field="id" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
-        <join-column name="SITUATION_FAMILIALE_ID" referenced-column-name="ID"/>
+        <join-column name="ID" referenced-column-name="ID"/>
       </join-columns>
-    </many-to-one>
-    <many-to-one field="type" target-entity="Application\Entity\Db\TypeIntervenantExterieur">
+    </one-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
       <join-columns>
-        <join-column name="TYPE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="regimeSecu" target-entity="Application\Entity\Db\RegimeSecu">
-      <join-columns>
-        <join-column name="REGIME_SECU_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-<!--    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
-      <join-columns>
-        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>-->
-    <many-to-one field="typePoste" target-entity="Application\Entity\Db\TypePoste">
-      <join-columns>
-        <join-column name="TYPE_POSTE_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
@@ -50,9 +34,24 @@
         <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+    <many-to-one field="situationFamiliale" target-entity="Application\Entity\Db\SituationFamiliale">
       <join-columns>
-        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
+        <join-column name="SITUATION_FAMILIALE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="regimeSecu" target-entity="Application\Entity\Db\RegimeSecu">
+      <join-columns>
+        <join-column name="REGIME_SECU_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="typeIntervenantExterieur" target-entity="Application\Entity\Db\TypeIntervenantExterieur">
+      <join-columns>
+        <join-column name="TYPE_INTERVENANT_EXTERIEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="typePoste" target-entity="Application\Entity\Db\TypePoste">
+      <join-columns>
+        <join-column name="TYPE_POSTE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

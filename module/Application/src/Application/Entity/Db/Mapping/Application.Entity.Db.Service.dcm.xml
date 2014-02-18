@@ -5,36 +5,51 @@
       <index name="IDX_DED864C878FF2BCB" columns="INTERVENANT_ID"/>
       <index name="IDX_DED864C8884B0F7B" columns="STRUCTURE_ID"/>
       <index name="IDX_DED864C8AA401F5C" columns="ANNEE_ID"/>
+      <index name="IDX_DED864C881526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_DED864C8F791438F" columns="HISTO_DESTRUCTEUR"/>
       <index name="IDX_DED864C88AB4A516" columns="ELEMENT_PEDAGOGIQUE_ID"/>
       <index name="IDX_DED864C8B3FC6B16" columns="ETABLISSEMENT_ID"/>
+      <index name="IDX_DED864C8862159D1" columns="HISTO_MODIFICATEUR"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="histoCreateur" type="integer" column="HISTO_CREATEUR" nullable="false"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
-    <field name="histoDestructeur" type="integer" column="HISTO_DESTRUCTEUR" nullable="true"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
-    <field name="histoModificateur" type="integer" column="HISTO_MODIFICATEUR" nullable="false"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="etablissement" target-entity="Application\Entity\Db\Etablissement">
-      <join-columns>
-        <join-column name="ETABLISSEMENT_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
       <join-columns>
         <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+    <many-to-one field="etablissement" target-entity="Application\Entity\Db\Etablissement">
       <join-columns>
-        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+        <join-column name="ETABLISSEMENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+      <join-columns>
+        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">

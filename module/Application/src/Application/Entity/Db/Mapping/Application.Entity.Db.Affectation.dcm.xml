@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\IntervenantPermanent" table="INTERVENANT_PERMANENT">
+  <entity name="Application\Entity\Db\Affectation" table="AFFECTATION">
     <indexes>
-      <index name="IDX_FB425D27E774C1C4" columns="CORPS_ID"/>
-      <index name="IDX_FB425D2781526632" columns="HISTO_CREATEUR"/>
-      <index name="IDX_FB425D27F791438F" columns="HISTO_DESTRUCTEUR"/>
-      <index name="IDX_FB425D27862159D1" columns="HISTO_MODIFICATEUR"/>
-      <index name="IDX_FB425D278AD1AE90" columns="SECTION_CNU_ID"/>
+      <index name="IDX_79DEF33B78FF2BCB" columns="INTERVENANT_ID"/>
+      <index name="IDX_79DEF33B884B0F7B" columns="STRUCTURE_ID"/>
+      <index name="IDX_79DEF33B81526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_79DEF33BF791438F" columns="HISTO_DESTRUCTEUR"/>
+      <index name="IDX_79DEF33B862159D1" columns="HISTO_MODIFICATEUR"/>
     </indexes>
-    <id name="id" association-key="true"/>
+    <id name="intervenant" association-key="true"/>
+    <id name="structure" association-key="true"/>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <one-to-one field="id" target-entity="Application\Entity\Db\Intervenant">
+    <field name="principale" type="boolean" column="PRINCIPALE" nullable="false"/>
+    <field name="recherche" type="boolean" column="RECHERCHE" nullable="false"/>
+    <one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
-        <join-column name="ID" referenced-column-name="ID"/>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
     </one-to-one>
-    <many-to-one field="sectionCnu" target-entity="Application\Entity\Db\SectionCnu">
+    <one-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
-        <join-column name="SECTION_CNU_ID" referenced-column-name="ID"/>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>
-    </many-to-one>
+    </one-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
-      <join-columns>
-        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
@@ -37,9 +35,9 @@
         <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="corps" target-entity="Application\Entity\Db\Corps">
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
       <join-columns>
-        <join-column name="CORPS_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

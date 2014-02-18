@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\SectionCnu" table="SECTION_CNU">
-    <id name="id" type="string" column="ID" length="2"/>
+    <indexes>
+      <index name="IDX_982C817581526632" columns="HISTO_CREATEUR"/>
+      <index name="IDX_982C8175F791438F" columns="HISTO_DESTRUCTEUR"/>
+      <index name="IDX_982C8175862159D1" columns="HISTO_MODIFICATEUR"/>
+    </indexes>
+    <id name="id" type="string" column="ID" length="2">
+      <generator strategy="SEQUENCE"/>
+    </id>
     <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
     <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
@@ -11,14 +18,14 @@
         <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
-      <join-columns>
-        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
       <join-columns>
         <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

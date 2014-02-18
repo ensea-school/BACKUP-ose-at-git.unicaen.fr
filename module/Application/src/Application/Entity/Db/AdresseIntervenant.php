@@ -95,17 +95,17 @@ class AdresseIntervenant
     private $bisTer;
 
     /**
-     * @var \Application\Entity\Db\Personnel
+     * @var User
      */
     private $histoModificateur;
 
     /**
-     * @var \Application\Entity\Db\Personnel
+     * @var User
      */
     private $histoDestructeur;
 
     /**
-     * @var \Application\Entity\Db\Personnel
+     * @var User
      */
     private $histoCreateur;
 
@@ -555,5 +555,61 @@ class AdresseIntervenant
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+    /**
+     * @var string
+     */
+    private $sourceCode;
+
+    /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
+
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return AdresseIntervenant
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
+    }
+
+    /**
+     * Set source
+     *
+     * @param Source $source
+     * @return AdresseIntervenant
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 }

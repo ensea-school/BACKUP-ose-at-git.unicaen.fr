@@ -36,19 +36,19 @@
         <join-column name="BIS_TER_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Personnel">
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Personnel">
-      <join-columns>
-        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Personnel">
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
       <join-columns>
         <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">

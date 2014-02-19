@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CheminPedagogique
  */
-class CheminPedagogique
+class CheminPedagogique implements HistoriqueAwareInterface
 {
     /**
      * @var string

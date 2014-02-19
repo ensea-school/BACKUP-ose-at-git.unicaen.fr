@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AdresseIntervenant
  */
-class AdresseIntervenant
+class AdresseIntervenant implements HistoriqueAwareInterface
 {
     /**
      * @var string

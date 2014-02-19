@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Employeur
  */
-class Employeur
+class Employeur implements HistoriqueAwareInterface
 {
     /**
      * @var string

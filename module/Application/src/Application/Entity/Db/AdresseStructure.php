@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AdresseStructure
  */
-class AdresseStructure
+class AdresseStructure implements HistoriqueAwareInterface
 {
     /**
      * @var string

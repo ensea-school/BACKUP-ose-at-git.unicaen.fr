@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CompteBancaire
  */
-class CompteBancaire
+class CompteBancaire implements HistoriqueAwareInterface
 {
     /**
      * @var string

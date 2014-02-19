@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Agrement
  */
-class Agrement
+class Agrement implements HistoriqueAwareInterface
 {
     /**
      * @var integer

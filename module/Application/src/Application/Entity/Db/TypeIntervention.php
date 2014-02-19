@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeIntervention
  */
-class TypeIntervention
+class TypeIntervention implements HistoriqueAwareInterface
 {
     /**
      * @var string

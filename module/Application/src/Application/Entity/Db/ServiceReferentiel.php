@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ServiceReferentiel
  */
-class ServiceReferentiel
+class ServiceReferentiel implements HistoriqueAwareInterface
 {
     /**
      * @var float

@@ -23,7 +23,7 @@ class IntervenantController extends AbstractActionController
 //                ->setLibelle('Établissement de test')
 //                ->setSource($em->find('Application\Entity\Db\Source', 'Harpege'))
 //                ->setSourceCode(rand(1, 999))
-////                ->setHistoCreateur($user = $em->find('Application\Entity\Db\User', 2))
+////                ->setHistoCreateur($user = $em->find('Application\Entity\Db\Utilisateur', 2))
 ////                ->setHistoModificateur($user)
 //                ;
 //        $em->persist($e);

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * MotifNonPaiement
  */
-class MotifNonPaiement
+class MotifNonPaiement implements HistoriqueAwareInterface
 {
     /**
      * @var string

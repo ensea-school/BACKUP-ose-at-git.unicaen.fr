@@ -5,7 +5,7 @@ namespace Application;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\Event;
-use Application\Entity\Db\User;
+use Application\Entity\Db\Utilisateur;
 use Doctrine\ORM\EntityManager;
 
 /**

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Parametre
  */
-class Parametre
+class Parametre implements HistoriqueAwareInterface
 {
     /**
      * @var string

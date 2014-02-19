@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeFormation
  */
-class TypeFormation
+class TypeFormation implements HistoriqueAwareInterface
 {
     /**
      * @var string

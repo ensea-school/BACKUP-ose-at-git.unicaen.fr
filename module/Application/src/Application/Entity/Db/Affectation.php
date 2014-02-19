@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Affectation
  */
-class Affectation
+class Affectation implements HistoriqueAwareInterface
 {
     /**
      * @var boolean

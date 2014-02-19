@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * MotifDechargeService
  */
-class MotifDechargeService
+class MotifDechargeService implements HistoriqueAwareInterface
 {
     /**
      * @var string

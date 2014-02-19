@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeIntervenantExterieur
  */
-class TypeIntervenantExterieur
+class TypeIntervenantExterieur implements HistoriqueAwareInterface
 {
     /**
      * @var string

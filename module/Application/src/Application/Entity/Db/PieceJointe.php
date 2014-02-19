@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PieceJointe
  */
-class PieceJointe
+class PieceJointe implements HistoriqueAwareInterface
 {
     /**
      * @var string

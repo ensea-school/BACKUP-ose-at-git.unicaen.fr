@@ -44,7 +44,6 @@ class Historique
      */
     private $createur;
 
-
     /**
      * Set debut
      *

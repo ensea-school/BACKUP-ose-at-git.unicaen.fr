@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SituationFamiliale
  */
-class SituationFamiliale
+class SituationFamiliale implements HistoriqueAwareInterface
 {
     /**
      * @var string

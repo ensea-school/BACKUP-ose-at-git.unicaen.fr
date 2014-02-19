@@ -62,32 +62,4 @@ class IntervenantPermanent extends Intervenant
     {
         return $this->sectionCnu;
     }
-    /**
-     * @var \Application\Entity\Db\Historique
-     */
-    private $historique;
-
-
-    /**
-     * Set historique
-     *
-     * @param \Application\Entity\Db\Historique $historique
-     * @return IntervenantPermanent
-     */
-    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
-    {
-        $this->historique = $historique;
-
-        return $this;
-    }
-
-    /**
-     * Get historique
-     *
-     * @return \Application\Entity\Db\Historique 
-     */
-    public function getHistorique()
-    {
-        return $this->historique;
-    }
 }

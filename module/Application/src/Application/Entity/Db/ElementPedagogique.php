@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ElementPedagogique
  */
-class ElementPedagogique
+class ElementPedagogique implements HistoriqueAwareInterface
 {
     /**
      * @var float

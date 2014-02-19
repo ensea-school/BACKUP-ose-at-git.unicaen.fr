@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ServiceDu
  */
-class ServiceDu
+class ServiceDu implements HistoriqueAwareInterface
 {
     /**
      * @var float

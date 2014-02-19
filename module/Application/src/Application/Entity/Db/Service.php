@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Service
  */
-class Service
+class Service implements HistoriqueAwareInterface
 {
     /**
      * @var integer

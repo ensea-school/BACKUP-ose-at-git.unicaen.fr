@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PrimeExcellenceScientifique
  */
-class PrimeExcellenceScientifique
+class PrimeExcellenceScientifique implements HistoriqueAwareInterface
 {
     /**
      * @var integer

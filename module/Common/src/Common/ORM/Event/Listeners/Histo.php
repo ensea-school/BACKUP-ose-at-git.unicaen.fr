@@ -4,6 +4,7 @@ namespace Common\ORM\Event\Listeners;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
+use Common\Exception\RuntimeException;
 
 /**
  * Listener Doctrine permettant l'ajout automatique de l'heure de création/modification 
@@ -53,7 +54,11 @@ class Histo implements EventSubscriber
             }
         }
         
-//        var_dump(get_class($entity), is_null($user), is_null($entity->getHistorique()));
+        if (null === $user) {
+            throw new RuntimeException("Aucun utilisateur connecté disponible pour la gestion de l'historique.");
+        }
+        
+//        var_dump(get_class($entity), is_null($user), gettype($entity->getHistorique()));
         
         if (!($histo = $entity->getHistorique())) {
             $histo = new \Application\Entity\Db\Historique();
@@ -63,18 +68,16 @@ class Histo implements EventSubscriber
             $em->persist($histo);
         }
         
-        // horodatage
-//        if (null === $histo->getDebut()) {
-//            $histo->setDebut(new \DateTime());
-//        }
-        $histo->setModification(new \DateTime());
-
-//        $e = new \Exception('test');
-//        var_dump($e->getTraceAsString());
-//        if (null === $histo->getCreateur()) {
-//            $histo->setCreateur($user);
-//        }
-        $histo->setModificateur($user);
+        if (null === $histo->getCreateur()) {
+            $histo->setCreateur($user);
+        }
+        
+        $histo->setModification(new \DateTime())
+                ->setModificateur($user);
+        
+        if ($histo->getFin() && null === $histo->getDestructeur()) {
+            $histo->setDestructeur($user);
+        }
     }
     
     /**

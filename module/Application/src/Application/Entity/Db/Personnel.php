@@ -10,49 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Personnel
 {
     /**
-     * @var integer
-     */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var integer
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var integer
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
-
-    /**
-     * @var string
-     */
-    private $login;
-
-    /**
      * @var string
      */
     private $nomUsuel;
-
-    /**
-     * @var integer
-     */
-    private $personnelId;
 
     /**
      * @var string
@@ -60,181 +20,25 @@ class Personnel
     private $prenom;
 
     /**
+     * @var string
+     */
+    private $sourceCode;
+
+    /**
      * @var integer
      */
     private $id;
 
     /**
-     * @var Source
+     * @var \Application\Entity\Db\Source
      */
     private $source;
 
     /**
-     * @var string
+     * @var \Application\Entity\Db\Historique
      */
-    private $sourceCode;
+    private $historique;
 
-
-    /**
-     * Set histoCreateur
-     *
-     * @param User $histoCreateur
-     * @return Personnel
-     */
-    public function setHistoCreateur(User $histoCreateur)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return integer 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return Personnel
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return Personnel
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return Personnel
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return Personnel
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Personnel
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
-
-    /**
-     * Set login
-     *
-     * @param string $login
-     * @return Personnel
-     */
-    public function setLogin($login)
-    {
-        $this->login = $login;
-
-        return $this;
-    }
-
-    /**
-     * Get login
-     *
-     * @return string 
-     */
-    public function getLogin()
-    {
-        return $this->login;
-    }
 
     /**
      * Set nomUsuel
@@ -257,29 +61,6 @@ class Personnel
     public function getNomUsuel()
     {
         return $this->nomUsuel;
-    }
-
-    /**
-     * Set personnelId
-     *
-     * @param integer $personnelId
-     * @return Personnel
-     */
-    public function setPersonnelId($personnelId)
-    {
-        $this->personnelId = $personnelId;
-
-        return $this;
-    }
-
-    /**
-     * Get personnelId
-     *
-     * @return integer 
-     */
-    public function getPersonnelId()
-    {
-        return $this->personnelId;
     }
 
     /**
@@ -306,43 +87,10 @@ class Personnel
     }
 
     /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set source
-     *
-     * @param Source $source
-     * @return Intervenant
-     */
-    public function setSource(Source $source)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return Intervenant
+     * @return Personnel
      */
     public function setSourceCode($sourceCode)
     {
@@ -359,5 +107,61 @@ class Personnel
     public function getSourceCode()
     {
         return $this->sourceCode;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return Personnel
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return Personnel
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }

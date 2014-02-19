@@ -290,4 +290,19 @@ class User implements UserInterface, ProviderInterface
     {
         $this->roles->removeElement($role);
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $role;
+
+
+    /**
+     * Get role
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
 }

@@ -7,37 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SectionCnu
  */
-class SectionCnu implements HistoInterface
+class SectionCnu implements HistoriqueAwareInterface
 {
     /**
-     * @var User
+     * @var string
      */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var User
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var User
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
+    private $code;
 
     /**
      * @var string
@@ -45,153 +20,37 @@ class SectionCnu implements HistoInterface
     private $libelle;
 
     /**
-     * @var string
+     * @var integer
      */
     private $id;
 
     /**
-     * Constructor
+     * @var \Application\Entity\Db\Historique
      */
-    public function __construct()
-    {
-    }
+    private $historique;
+
 
     /**
-     * Set histoCreateur
+     * Set code
      *
-     * @param User $histoCreateur
+     * @param string $code
      * @return SectionCnu
      */
-    public function setHistoCreateur(User $histoCreateur)
+    public function setCode($code)
     {
-        $this->histoCreateur = $histoCreateur;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get histoCreateur
+     * Get code
      *
-     * @return integer 
+     * @return string 
      */
-    public function getHistoCreateur()
+    public function getCode()
     {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return SectionCnu
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return SectionCnu
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return SectionCnu
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return SectionCnu
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return SectionCnu
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
+        return $this->code;
     }
 
     /**
@@ -218,25 +77,35 @@ class SectionCnu implements HistoInterface
     }
 
     /**
-     * Set id
+     * Get id
      *
-     * @param string $id
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
      * @return SectionCnu
      */
-    public function setId($id)
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
     {
-        $this->id = $id;
+        $this->historique = $historique;
 
         return $this;
     }
 
     /**
-     * Get id
+     * Get historique
      *
-     * @return string 
+     * @return \Application\Entity\Db\Historique 
      */
-    public function getId()
+    public function getHistorique()
     {
-        return $this->id;
+        return $this->historique;
     }
 }

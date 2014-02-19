@@ -2,31 +2,16 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\TypePieceJointe" table="TYPE_PIECE_JOINTE">
     <indexes>
-      <index name="IDX_AA0D49C81526632" columns="HISTO_CREATEUR"/>
-      <index name="IDX_AA0D49CF791438F" columns="HISTO_DESTRUCTEUR"/>
-      <index name="IDX_AA0D49C862159D1" columns="HISTO_MODIFICATEUR"/>
+      <index name="IDX_AA0D49C7F29375B" columns="HISTORIQUE_ID"/>
     </indexes>
-    <id name="id" type="string" column="ID" length="3">
+    <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
-    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
-    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="60" nullable="false"/>
     <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
-    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
+    <many-to-one field="historique" target-entity="Application\Entity\Db\Historique">
       <join-columns>
-        <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
-      <join-columns>
-        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
-      <join-columns>
-        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
+        <join-column name="HISTORIQUE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

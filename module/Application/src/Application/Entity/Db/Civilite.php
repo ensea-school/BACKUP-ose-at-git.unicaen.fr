@@ -7,42 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Civilite
  */
-class Civilite implements HistoInterface
+class Civilite
 {
     /**
-     * @var User
+     * @var string
      */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var User
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var User
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
+    private $libelleCourt;
 
     /**
      * @var string
      */
-    private $libelle;
+    private $libelleLong;
 
     /**
      * @var string
@@ -50,179 +25,55 @@ class Civilite implements HistoInterface
     private $sexe;
 
     /**
-     * @var string
+     * @var integer
      */
     private $id;
 
-    /**
-     * Représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getId();
-    }
 
     /**
-     * Set histoCreateur
+     * Set libelleCourt
      *
-     * @param User $histoCreateur
+     * @param string $libelleCourt
      * @return Civilite
      */
-    public function setHistoCreateur(User $histoCreateur)
+    public function setLibelleCourt($libelleCourt)
     {
-        $this->histoCreateur = $histoCreateur;
+        $this->libelleCourt = $libelleCourt;
 
         return $this;
     }
 
     /**
-     * Get histoCreateur
-     *
-     * @return integer 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return Civilite
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return Civilite
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return Civilite
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return Civilite
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Civilite
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
-
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return Civilite
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
-    /**
-     * Get libelle
+     * Get libelleCourt
      *
      * @return string 
      */
-    public function getLibelle()
+    public function getLibelleCourt()
     {
-        return $this->libelle;
+        return $this->libelleCourt;
+    }
+
+    /**
+     * Set libelleLong
+     *
+     * @param string $libelleLong
+     * @return Civilite
+     */
+    public function setLibelleLong($libelleLong)
+    {
+        $this->libelleLong = $libelleLong;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleLong
+     *
+     * @return string 
+     */
+    public function getLibelleLong()
+    {
+        return $this->libelleLong;
     }
 
     /**
@@ -249,22 +100,9 @@ class Civilite implements HistoInterface
     }
 
     /**
-     * Set id
-     *
-     * @param string $id
-     * @return Civilite
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Get id
      *
-     * @return string 
+     * @return integer 
      */
     public function getId()
     {

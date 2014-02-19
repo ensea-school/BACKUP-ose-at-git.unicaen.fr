@@ -10,44 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class ElementPedagogique
 {
     /**
-     * @var string
-     */
-    private $code;
-
-    /**
      * @var float
      */
     private $heures;
-
-    /**
-     * @var integer
-     */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var integer
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var integer
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
 
     /**
      * @var string
@@ -62,7 +27,7 @@ class ElementPedagogique
     /**
      * @var string
      */
-    private $source;
+    private $sourceCode;
 
     /**
      * @var integer
@@ -89,29 +54,16 @@ class ElementPedagogique
      */
     private $structure;
 
+    /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
 
     /**
-     * Set code
-     *
-     * @param string $code
-     * @return ElementPedagogique
+     * @var \Application\Entity\Db\Historique
      */
-    public function setCode($code)
-    {
-        $this->code = $code;
+    private $historique;
 
-        return $this;
-    }
-
-    /**
-     * Get code
-     *
-     * @return string 
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
 
     /**
      * Set heures
@@ -134,144 +86,6 @@ class ElementPedagogique
     public function getHeures()
     {
         return $this->heures;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param User $histoCreateur
-     * @return ElementPedagogique
-     */
-    public function setHistoCreateur(User $histoCreateur)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return integer 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return ElementPedagogique
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return ElementPedagogique
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return ElementPedagogique
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return ElementPedagogique
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return ElementPedagogique
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
     }
 
     /**
@@ -321,26 +135,26 @@ class ElementPedagogique
     }
 
     /**
-     * Set source
+     * Set sourceCode
      *
-     * @param string $source
+     * @param string $sourceCode
      * @return ElementPedagogique
      */
-    public function setSource($source)
+    public function setSourceCode($sourceCode)
     {
-        $this->source = $source;
+        $this->sourceCode = $sourceCode;
 
         return $this;
     }
 
     /**
-     * Get source
+     * Get sourceCode
      *
      * @return string 
      */
-    public function getSource()
+    public function getSourceCode()
     {
-        return $this->source;
+        return $this->sourceCode;
     }
 
     /**
@@ -443,5 +257,51 @@ class ElementPedagogique
     public function getStructure()
     {
         return $this->structure;
+    }
+
+    /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return ElementPedagogique
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return ElementPedagogique
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }

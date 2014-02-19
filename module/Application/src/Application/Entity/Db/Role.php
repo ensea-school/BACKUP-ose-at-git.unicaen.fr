@@ -12,32 +12,7 @@ class Role
     /**
      * @var integer
      */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var integer
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var integer
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
+    private $id;
 
     /**
      * @var \Application\Entity\Db\TypeRole
@@ -56,141 +31,13 @@ class Role
 
 
     /**
-     * Set histoCreateur
-     *
-     * @param User $histoCreateur
-     * @return Role
-     */
-    public function setHistoCreateur(User $histoCreateur)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
+     * Get id
      *
      * @return integer 
      */
-    public function getHistoCreateur()
+    public function getId()
     {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return Role
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return Role
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return Role
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return Role
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Role
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
+        return $this->id;
     }
 
     /**
@@ -199,7 +46,7 @@ class Role
      * @param \Application\Entity\Db\TypeRole $type
      * @return Role
      */
-    public function setType(\Application\Entity\Db\TypeRole $type)
+    public function setType(\Application\Entity\Db\TypeRole $type = null)
     {
         $this->type = $type;
 
@@ -222,7 +69,7 @@ class Role
      * @param \Application\Entity\Db\Structure $structure
      * @return Role
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure)
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -245,7 +92,7 @@ class Role
      * @param \Application\Entity\Db\Personnel $personnel
      * @return Role
      */
-    public function setPersonnel(\Application\Entity\Db\Personnel $personnel)
+    public function setPersonnel(\Application\Entity\Db\Personnel $personnel = null)
     {
         $this->personnel = $personnel;
 

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT">
+  <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT" inheritance-type="JOINED" repository-class="Application\Entity\Db\Repository\IntervenantRepository">
+    <discriminator-column name="type_id" type="string" />
+    <discriminator-map>
+        <discriminator-mapping value="1" class="Application\Entity\Db\IntervenantPermanent" />
+        <discriminator-mapping value="2" class="Application\Entity\Db\IntervenantExterieur" />
+    </discriminator-map>
     <indexes>
       <index name="IDX_FED386B4C2443469" columns="TYPE_ID"/>
       <index name="IDX_FED386B48C579EB7" columns="CIVILITE_ID"/>

@@ -45,36 +45,6 @@ class CompteBancaire
     private $guichet;
 
     /**
-     * @var integer
-     */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var integer
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var integer
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
-
-    /**
      * @var string
      */
     private $iban2;
@@ -115,11 +85,6 @@ class CompteBancaire
     private $ibanIso;
 
     /**
-     * @var integer
-     */
-    private $intervenantExterieurId;
-
-    /**
      * @var string
      */
     private $paysIso;
@@ -127,7 +92,17 @@ class CompteBancaire
     /**
      * @var integer
      */
-    private $intervenantId;
+    private $id;
+
+    /**
+     * @var \Application\Entity\Db\IntervenantExterieur
+     */
+    private $intervenantExterieur;
+
+    /**
+     * @var \Application\Entity\Db\Historique
+     */
+    private $historique;
 
 
     /**
@@ -289,144 +264,6 @@ class CompteBancaire
     public function getGuichet()
     {
         return $this->guichet;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param User $histoCreateur
-     * @return CompteBancaire
-     */
-    public function setHistoCreateur(User $histoCreateur)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return integer 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return CompteBancaire
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return CompteBancaire
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return CompteBancaire
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return CompteBancaire
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return CompteBancaire
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
     }
 
     /**
@@ -614,29 +451,6 @@ class CompteBancaire
     }
 
     /**
-     * Set intervenantExterieurId
-     *
-     * @param integer $intervenantExterieurId
-     * @return CompteBancaire
-     */
-    public function setIntervenantExterieurId($intervenantExterieurId)
-    {
-        $this->intervenantExterieurId = $intervenantExterieurId;
-
-        return $this;
-    }
-
-    /**
-     * Get intervenantExterieurId
-     *
-     * @return integer 
-     */
-    public function getIntervenantExterieurId()
-    {
-        return $this->intervenantExterieurId;
-    }
-
-    /**
      * Set paysIso
      *
      * @param string $paysIso
@@ -660,12 +474,58 @@ class CompteBancaire
     }
 
     /**
-     * Get intervenantId
+     * Get id
      *
      * @return integer 
      */
-    public function getIntervenantId()
+    public function getId()
     {
-        return $this->intervenantId;
+        return $this->id;
+    }
+
+    /**
+     * Set intervenantExterieur
+     *
+     * @param \Application\Entity\Db\IntervenantExterieur $intervenantExterieur
+     * @return CompteBancaire
+     */
+    public function setIntervenantExterieur(\Application\Entity\Db\IntervenantExterieur $intervenantExterieur = null)
+    {
+        $this->intervenantExterieur = $intervenantExterieur;
+
+        return $this;
+    }
+
+    /**
+     * Get intervenantExterieur
+     *
+     * @return \Application\Entity\Db\IntervenantExterieur 
+     */
+    public function getIntervenantExterieur()
+    {
+        return $this->intervenantExterieur;
+    }
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return CompteBancaire
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }

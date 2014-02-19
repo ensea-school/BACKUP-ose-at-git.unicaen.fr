@@ -8,37 +8,14 @@ namespace Application\Entity\Db;
 class Source
 {
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
      * @var string
      */
     private $libelle;
 
     /**
-     * Set id
-     *
-     * @param string $id
-     * @return Source
+     * @var integer
      */
-    public function setId($id)
-    {
-        $this->id = $id;
-        
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return string 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $id;
 
     /**
      * Set libelle
@@ -61,5 +38,28 @@ class Source
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Source
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

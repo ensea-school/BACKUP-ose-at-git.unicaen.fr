@@ -12,42 +12,17 @@ class Service
     /**
      * @var integer
      */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var integer
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var integer
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
-
-    /**
-     * @var integer
-     */
     private $id;
 
     /**
      * @var \Application\Entity\Db\Etablissement
      */
     private $etablissement;
+
+    /**
+     * @var \Application\Entity\Db\Historique
+     */
+    private $historique;
 
     /**
      * @var \Application\Entity\Db\ElementPedagogique
@@ -69,144 +44,6 @@ class Service
      */
     private $intervenant;
 
-
-    /**
-     * Set histoCreateur
-     *
-     * @param User $histoCreateur
-     * @return Service
-     */
-    public function setHistoCreateur(User $histoCreateur)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return integer 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return Service
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return Service
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return Service
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return Service
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Service
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Get id
@@ -239,6 +76,29 @@ class Service
     public function getEtablissement()
     {
         return $this->etablissement;
+    }
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return Service
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 
     /**

@@ -7,37 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * RegimeSecu
  */
-class RegimeSecu implements HistoInterface
+class RegimeSecu implements HistoriqueAwareInterface
 {
     /**
-     * @var User
+     * @var string
      */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var User
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var User
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
+    private $code;
 
     /**
      * @var string
@@ -50,179 +25,37 @@ class RegimeSecu implements HistoInterface
     private $tauxTaxe;
 
     /**
-     * @var string
+     * @var integer
      */
     private $id;
 
     /**
-     * Représentation littérale de cet objet.
-     * 
-     * @return string
+     * @var \Application\Entity\Db\Historique
      */
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
+    private $historique;
+
 
     /**
-     * Set histoCreateur
+     * Set code
      *
-     * @param User $histoCreateur
+     * @param string $code
      * @return RegimeSecu
      */
-    public function setHistoCreateur(User $histoCreateur)
+    public function setCode($code)
     {
-        $this->histoCreateur = $histoCreateur;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get histoCreateur
-     *
-     * @return User 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return RegimeSecu
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return RegimeSecu
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return User 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return RegimeSecu
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return RegimeSecu
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return User 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return RegimeSecu
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
-
-    /**
-     * Set id
-     *
-     * @param string $id
-     * @return RegimeSecu
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        
-        return $this;
-    }
-
-    /**
-     * Get id
+     * Get code
      *
      * @return string 
      */
-    public function getId()
+    public function getCode()
     {
-        return $this->id;
+        return $this->code;
     }
 
     /**
@@ -269,5 +102,38 @@ class RegimeSecu implements HistoInterface
     public function getTauxTaxe()
     {
         return $this->tauxTaxe;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return RegimeSecu
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }

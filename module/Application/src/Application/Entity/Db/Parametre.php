@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Parametre
  */
@@ -15,12 +17,22 @@ class Parametre
     /**
      * @var string
      */
-    private $value;
+    private $nom;
 
     /**
      * @var string
      */
+    private $valeur;
+
+    /**
+     * @var integer
+     */
     private $id;
+
+    /**
+     * @var \Application\Entity\Db\Historique
+     */
+    private $historique;
 
 
     /**
@@ -47,35 +59,81 @@ class Parametre
     }
 
     /**
-     * Set value
+     * Set nom
      *
-     * @param string $value
+     * @param string $nom
      * @return Parametre
      */
-    public function setValue($value)
+    public function setNom($nom)
     {
-        $this->value = $value;
+        $this->nom = $nom;
 
         return $this;
     }
 
     /**
-     * Get value
+     * Get nom
      *
      * @return string 
      */
-    public function getValue()
+    public function getNom()
     {
-        return $this->value;
+        return $this->nom;
+    }
+
+    /**
+     * Set valeur
+     *
+     * @param string $valeur
+     * @return Parametre
+     */
+    public function setValeur($valeur)
+    {
+        $this->valeur = $valeur;
+
+        return $this;
+    }
+
+    /**
+     * Get valeur
+     *
+     * @return string 
+     */
+    public function getValeur()
+    {
+        return $this->valeur;
     }
 
     /**
      * Get id
      *
-     * @return string 
+     * @return integer 
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return Parametre
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }

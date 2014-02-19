@@ -4,15 +4,10 @@
     <indexes>
       <index name="IDX_8E1D33EC7335BABF" columns="TYPE_STRUCTURE_ID"/>
       <index name="IDX_8E1D33ECAA2B20FF" columns="TYPE_ROLE_ID"/>
-      <index name="IDX_8E1D33EC81526632" columns="HISTO_CREATEUR"/>
-      <index name="IDX_8E1D33ECF791438F" columns="HISTO_DESTRUCTEUR"/>
-      <index name="IDX_8E1D33EC862159D1" columns="HISTO_MODIFICATEUR"/>
+      <index name="IDX_8E1D33EC7F29375B" columns="HISTORIQUE_ID"/>
     </indexes>
     <id name="typeStructure" association-key="true"/>
     <id name="typeRole" association-key="true"/>
-    <field name="histoDebut" type="datetime" column="HISTO_DEBUT" nullable="false"/>
-    <field name="histoFin" type="datetime" column="HISTO_FIN" nullable="true"/>
-    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <one-to-one field="typeStructure" target-entity="Application\Entity\Db\TypeStructure">
       <join-columns>
         <join-column name="TYPE_STRUCTURE_ID" referenced-column-name="ID"/>
@@ -23,19 +18,9 @@
         <join-column name="TYPE_ROLE_ID" referenced-column-name="ID"/>
       </join-columns>
     </one-to-one>
-    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\User">
+    <many-to-one field="historique" target-entity="Application\Entity\Db\Historique">
       <join-columns>
-        <join-column name="HISTO_MODIFICATEUR" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\User">
-      <join-columns>
-        <join-column name="HISTO_CREATEUR" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\User">
-      <join-columns>
-        <join-column name="HISTO_DESTRUCTEUR" referenced-column-name="ID"/>
+        <join-column name="HISTORIQUE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

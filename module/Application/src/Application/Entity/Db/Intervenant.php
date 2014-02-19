@@ -12,14 +12,19 @@ use Common\Constants;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-abstract class Intervenant
+abstract class Intervenant implements HistoriqueAwareInterface
 {
+    /**
+     * @var integer
+     */
+    protected $id;
+    
     /**
      * @var \DateTime
      * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")
      * @Annotation\Options({"date_inf_label":"Date de naissance :"})
      */
-    public $dateNaissance;
+    private $dateNaissance;
 
     /**
      * @var string
@@ -130,11 +135,6 @@ abstract class Intervenant
     private $villeNaissanceLibelle;
 
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
      * @var \Application\Entity\Db\TypeIntervenant
      */
     private $type;
@@ -161,12 +161,22 @@ abstract class Intervenant
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $annee;
+    private $sectionCnu;
+    
+    /**
+     * @var string
+     */
+    private $primeExcellenceScientifique;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var string
      */
-    private $sectionCnu;
+    private $telPro;
+
+    /**
+     * @var \Application\Entity\Db\Historique
+     */
+    private $historique;
 
     /**
      * Constructor
@@ -665,39 +675,6 @@ abstract class Intervenant
     }
 
     /**
-     * Add annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return Intervenant
-     */
-    public function addAnnee(\Application\Entity\Db\Annee $annee)
-    {
-        $this->annee[] = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Remove annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     */
-    public function removeAnnee(\Application\Entity\Db\Annee $annee)
-    {
-        $this->annee->removeElement($annee);
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
-    }
-
-    /**
      * Add sectionCnu
      *
      * @param \Application\Entity\Db\SectionCnu $sectionCnu
@@ -774,5 +751,74 @@ abstract class Intervenant
     public function getSourceCode()
     {
         return $this->sourceCode;
+    }
+
+    /**
+     * Set primeExcellenceScientifique
+     *
+     * @param string $primeExcellenceScientifique
+     * @return Intervenant
+     */
+    public function setPrimeExcellenceScientifique($primeExcellenceScientifique)
+    {
+        $this->primeExcellenceScientifique = $primeExcellenceScientifique;
+
+        return $this;
+    }
+
+    /**
+     * Get primeExcellenceScientifique
+     *
+     * @return string 
+     */
+    public function getPrimeExcellenceScientifique()
+    {
+        return $this->primeExcellenceScientifique;
+    }
+
+    /**
+     * Set telPro
+     *
+     * @param string $telPro
+     * @return Intervenant
+     */
+    public function setTelPro($telPro)
+    {
+        $this->telPro = $telPro;
+
+        return $this;
+    }
+
+    /**
+     * Get telPro
+     *
+     * @return string 
+     */
+    public function getTelPro()
+    {
+        return $this->telPro;
+    }
+    
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return IntervenantPermanent
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }

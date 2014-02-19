@@ -12,32 +12,22 @@ class AdresseIntervenant
     /**
      * @var string
      */
+    private $batiment;
+
+    /**
+     * @var string
+     */
     private $codePostal;
 
     /**
      * @var string
      */
-    private $habitantChez;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
+    private $localite;
 
     /**
      * @var string
      */
-    private $localite;
+    private $mentionComplementaire;
 
     /**
      * @var string
@@ -67,17 +57,17 @@ class AdresseIntervenant
     /**
      * @var string
      */
-    private $telephoneDomicile;
+    private $sourceCode;
 
     /**
      * @var string
      */
-    private $villeCodeInsee;
+    private $telDomicile;
 
     /**
      * @var string
      */
-    private $villeLibelle;
+    private $ville;
 
     /**
      * @var integer
@@ -90,25 +80,38 @@ class AdresseIntervenant
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\BisTer
+     * @var \Application\Entity\Db\Source
      */
-    private $bisTer;
+    private $source;
 
     /**
-     * @var User
+     * @var \Application\Entity\Db\Historique
      */
-    private $histoModificateur;
+    private $historique;
+
 
     /**
-     * @var User
+     * Set batiment
+     *
+     * @param string $batiment
+     * @return AdresseIntervenant
      */
-    private $histoDestructeur;
+    public function setBatiment($batiment)
+    {
+        $this->batiment = $batiment;
+
+        return $this;
+    }
 
     /**
-     * @var User
+     * Get batiment
+     *
+     * @return string 
      */
-    private $histoCreateur;
-
+    public function getBatiment()
+    {
+        return $this->batiment;
+    }
 
     /**
      * Set codePostal
@@ -134,98 +137,6 @@ class AdresseIntervenant
     }
 
     /**
-     * Set habitantChez
-     *
-     * @param string $habitantChez
-     * @return AdresseIntervenant
-     */
-    public function setHabitantChez($habitantChez)
-    {
-        $this->habitantChez = $habitantChez;
-
-        return $this;
-    }
-
-    /**
-     * Get habitantChez
-     *
-     * @return string 
-     */
-    public function getHabitantChez()
-    {
-        return $this->habitantChez;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return AdresseIntervenant
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return AdresseIntervenant
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return AdresseIntervenant
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
-
-    /**
      * Set localite
      *
      * @param string $localite
@@ -246,6 +157,29 @@ class AdresseIntervenant
     public function getLocalite()
     {
         return $this->localite;
+    }
+
+    /**
+     * Set mentionComplementaire
+     *
+     * @param string $mentionComplementaire
+     * @return AdresseIntervenant
+     */
+    public function setMentionComplementaire($mentionComplementaire)
+    {
+        $this->mentionComplementaire = $mentionComplementaire;
+
+        return $this;
+    }
+
+    /**
+     * Get mentionComplementaire
+     *
+     * @return string 
+     */
+    public function getMentionComplementaire()
+    {
+        return $this->mentionComplementaire;
     }
 
     /**
@@ -364,72 +298,72 @@ class AdresseIntervenant
     }
 
     /**
-     * Set telephoneDomicile
+     * Set sourceCode
      *
-     * @param string $telephoneDomicile
+     * @param string $sourceCode
      * @return AdresseIntervenant
      */
-    public function setTelephoneDomicile($telephoneDomicile)
+    public function setSourceCode($sourceCode)
     {
-        $this->telephoneDomicile = $telephoneDomicile;
+        $this->sourceCode = $sourceCode;
 
         return $this;
     }
 
     /**
-     * Get telephoneDomicile
+     * Get sourceCode
      *
      * @return string 
      */
-    public function getTelephoneDomicile()
+    public function getSourceCode()
     {
-        return $this->telephoneDomicile;
+        return $this->sourceCode;
     }
 
     /**
-     * Set villeCodeInsee
+     * Set telDomicile
      *
-     * @param string $villeCodeInsee
+     * @param string $telDomicile
      * @return AdresseIntervenant
      */
-    public function setVilleCodeInsee($villeCodeInsee)
+    public function setTelDomicile($telDomicile)
     {
-        $this->villeCodeInsee = $villeCodeInsee;
+        $this->telDomicile = $telDomicile;
 
         return $this;
     }
 
     /**
-     * Get villeCodeInsee
+     * Get telDomicile
      *
      * @return string 
      */
-    public function getVilleCodeInsee()
+    public function getTelDomicile()
     {
-        return $this->villeCodeInsee;
+        return $this->telDomicile;
     }
 
     /**
-     * Set villeLibelle
+     * Set ville
      *
-     * @param string $villeLibelle
+     * @param string $ville
      * @return AdresseIntervenant
      */
-    public function setVilleLibelle($villeLibelle)
+    public function setVille($ville)
     {
-        $this->villeLibelle = $villeLibelle;
+        $this->ville = $ville;
 
         return $this;
     }
 
     /**
-     * Get villeLibelle
+     * Get ville
      *
      * @return string 
      */
-    public function getVilleLibelle()
+    public function getVille()
     {
-        return $this->villeLibelle;
+        return $this->ville;
     }
 
     /**
@@ -466,134 +400,9 @@ class AdresseIntervenant
     }
 
     /**
-     * Set bisTer
-     *
-     * @param \Application\Entity\Db\BisTer $bisTer
-     * @return AdresseIntervenant
-     */
-    public function setBisTer(\Application\Entity\Db\BisTer $bisTer = null)
-    {
-        $this->bisTer = $bisTer;
-
-        return $this;
-    }
-
-    /**
-     * Get bisTer
-     *
-     * @return \Application\Entity\Db\BisTer 
-     */
-    public function getBisTer()
-    {
-        return $this->bisTer;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Personnel $histoModificateur
-     * @return AdresseIntervenant
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Personnel $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Personnel 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Personnel $histoDestructeur
-     * @return AdresseIntervenant
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Personnel $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Personnel 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Personnel $histoCreateur
-     * @return AdresseIntervenant
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Personnel $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Personnel 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-    /**
-     * @var string
-     */
-    private $sourceCode;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
-
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     * @return AdresseIntervenant
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-    /**
-     * Get sourceCode
-     *
-     * @return string 
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-    /**
      * Set source
      *
-     * @param Source $source
+     * @param \Application\Entity\Db\Source $source
      * @return AdresseIntervenant
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
@@ -606,10 +415,33 @@ class AdresseIntervenant
     /**
      * Get source
      *
-     * @return Source 
+     * @return \Application\Entity\Db\Source 
      */
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return AdresseIntervenant
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }

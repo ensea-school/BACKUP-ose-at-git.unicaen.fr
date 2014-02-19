@@ -15,36 +15,6 @@ class AdresseStructure
     private $codePostal;
 
     /**
-     * @var integer
-     */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var integer
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var integer
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
-
-    /**
      * @var string
      */
     private $localite;
@@ -82,12 +52,7 @@ class AdresseStructure
     /**
      * @var string
      */
-    private $villeCodeInsee;
-
-    /**
-     * @var string
-     */
-    private $villeLibelle;
+    private $ville;
 
     /**
      * @var integer
@@ -100,9 +65,9 @@ class AdresseStructure
     private $structure;
 
     /**
-     * @var \Application\Entity\Db\BisTer
+     * @var \Application\Entity\Db\Historique
      */
-    private $bisTer;
+    private $historique;
 
 
     /**
@@ -126,144 +91,6 @@ class AdresseStructure
     public function getCodePostal()
     {
         return $this->codePostal;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param User $histoCreateur
-     * @return AdresseStructure
-     */
-    public function setHistoCreateur(User $histoCreateur)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return integer 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return AdresseStructure
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return AdresseStructure
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return AdresseStructure
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return AdresseStructure
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return AdresseStructure
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
     }
 
     /**
@@ -428,49 +255,26 @@ class AdresseStructure
     }
 
     /**
-     * Set villeCodeInsee
+     * Set ville
      *
-     * @param string $villeCodeInsee
+     * @param string $ville
      * @return AdresseStructure
      */
-    public function setVilleCodeInsee($villeCodeInsee)
+    public function setVille($ville)
     {
-        $this->villeCodeInsee = $villeCodeInsee;
+        $this->ville = $ville;
 
         return $this;
     }
 
     /**
-     * Get villeCodeInsee
+     * Get ville
      *
      * @return string 
      */
-    public function getVilleCodeInsee()
+    public function getVille()
     {
-        return $this->villeCodeInsee;
-    }
-
-    /**
-     * Set villeLibelle
-     *
-     * @param string $villeLibelle
-     * @return AdresseStructure
-     */
-    public function setVilleLibelle($villeLibelle)
-    {
-        $this->villeLibelle = $villeLibelle;
-
-        return $this;
-    }
-
-    /**
-     * Get villeLibelle
-     *
-     * @return string 
-     */
-    public function getVilleLibelle()
-    {
-        return $this->villeLibelle;
+        return $this->ville;
     }
 
     /**
@@ -507,25 +311,25 @@ class AdresseStructure
     }
 
     /**
-     * Set bisTer
+     * Set historique
      *
-     * @param \Application\Entity\Db\BisTer $bisTer
+     * @param \Application\Entity\Db\Historique $historique
      * @return AdresseStructure
      */
-    public function setBisTer(\Application\Entity\Db\BisTer $bisTer = null)
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
     {
-        $this->bisTer = $bisTer;
+        $this->historique = $historique;
 
         return $this;
     }
 
     /**
-     * Get bisTer
+     * Get historique
      *
-     * @return \Application\Entity\Db\BisTer 
+     * @return \Application\Entity\Db\Historique 
      */
-    public function getBisTer()
+    public function getHistorique()
     {
-        return $this->bisTer;
+        return $this->historique;
     }
 }

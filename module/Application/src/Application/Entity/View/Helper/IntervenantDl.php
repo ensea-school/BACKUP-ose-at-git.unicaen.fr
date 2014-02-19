@@ -97,6 +97,41 @@ class IntervenantDl extends AbstractHelper
             );
         }
         
+        $dtdds[] = sprintf($tplDtdd,
+            "Prime d'excellence scientifique :", 
+            $intervenant->getPrimeExcellenceScientifique() ? 'Oui' : 'Non'
+        );
+        
+        $dtdds[] = sprintf($tplDtdd,
+            "Numéro INSEE :", 
+            $intervenant->getNumeroInsee()
+        );
+        
+        $dtdds[] = sprintf($tplDtdd,
+            "Section CNU :", 
+            $intervenant->getSectionCnu()
+        );
+        
+        $dtdds[] = sprintf($tplDtdd,
+            " :", 
+            $intervenant->get()
+        );
+        
+        $dtdds[] = sprintf($tplDtdd,
+            " :", 
+            $intervenant->get()
+        );
+        
+        $dtdds[] = sprintf($tplDtdd,
+            " :", 
+            $intervenant->get()
+        );
+        
+        $dtdds[] = sprintf($tplDtdd,
+            " :", 
+            $intervenant->get()
+        );
+        
 //        $commentaires = sprintf('<span title="%s">%s</span>', 
 //                    htmlspecialchars($tmp = $intervenant->getCommentaires(), ENT_NOQUOTES), 
 //                    $intervenant->getCommentaires() ? \UnicaenApp\Util::truncatedString($tmp) : "Aucun");

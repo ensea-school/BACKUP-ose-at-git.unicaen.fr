@@ -5,43 +5,8 @@ namespace Application\Entity\Db;
 /**
  * IntervenantExterieur
  */
-class IntervenantExterieur extends Intervenant implements HistoInterface
+class IntervenantExterieur extends Intervenant
 {
-    /**
-     * @var User
-     */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var User
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var User
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
-
-    /**
-     * @var integer
-     */
-    private $id;
-
     /**
      * @var \Application\Entity\Db\SituationFamiliale
      */
@@ -50,7 +15,7 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
     /**
      * @var \Application\Entity\Db\TypeIntervenantExterieur
      */
-    private $type;
+    private $typeIntervenantExterieur;
 
     /**
      * @var \Application\Entity\Db\TypePoste
@@ -62,144 +27,6 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
      */
     private $regimeSecu;
 
-
-    /**
-     * Set histoCreateur
-     *
-     * @param User $histoCreateur
-     * @return IntervenantExterieur
-     */
-    public function setHistoCreateur(User $histoCreateur)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return User 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return IntervenantExterieur
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return IntervenantExterieur
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return User 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return IntervenantExterieur
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return IntervenantExterieur
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return User 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return IntervenantExterieur
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set situationFamiliale
@@ -225,26 +52,26 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
     }
 
     /**
-     * Set type
+     * Set typeIntervenantExterieur
      *
-     * @param \Application\Entity\Db\TypeIntervenantExterieur $type
+     * @param \Application\Entity\Db\TypeIntervenantExterieur $typeIntervenantExterieur
      * @return IntervenantExterieur
      */
-    public function setType(\Application\Entity\Db\TypeIntervenantExterieur $type = null)
+    public function setTypeIntervenantExterieur(\Application\Entity\Db\TypeIntervenantExterieur $typeIntervenantExterieur = null)
     {
-        $this->type = $type;
+        $this->typeIntervenantExterieur = $typeIntervenantExterieur;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get typeIntervenantExterieur
      *
      * @return \Application\Entity\Db\TypeIntervenantExterieur 
      */
-    public function getType()
+    public function getTypeIntervenantExterieur()
     {
-        return $this->type;
+        return $this->typeIntervenantExterieur;
     }
 
     /**
@@ -291,5 +118,33 @@ class IntervenantExterieur extends Intervenant implements HistoInterface
     public function getTypePoste()
     {
         return $this->typePoste;
+    }
+    /**
+     * @var \Application\Entity\Db\Historique
+     */
+    private $historique;
+
+
+    /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return IntervenantExterieur
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
     }
 }

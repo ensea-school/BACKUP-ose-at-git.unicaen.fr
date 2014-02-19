@@ -17,32 +17,7 @@ class ServiceReferentiel
     /**
      * @var integer
      */
-    private $histoCreateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDebut;
-
-    /**
-     * @var integer
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoFin;
-
-    /**
-     * @var integer
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
+    private $id;
 
     /**
      * @var \Application\Entity\Db\Structure
@@ -58,6 +33,11 @@ class ServiceReferentiel
      * @var \Application\Entity\Db\FonctionReferentiel
      */
     private $fonction;
+
+    /**
+     * @var \Application\Entity\Db\Historique
+     */
+    private $historique;
 
     /**
      * @var \Application\Entity\Db\Annee
@@ -89,141 +69,13 @@ class ServiceReferentiel
     }
 
     /**
-     * Set histoCreateur
-     *
-     * @param User $histoCreateur
-     * @return ServiceReferentiel
-     */
-    public function setHistoCreateur(User $histoCreateur)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
+     * Get id
      *
      * @return integer 
      */
-    public function getHistoCreateur()
+    public function getId()
     {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDebut
-     *
-     * @param \DateTime $histoDebut
-     * @return ServiceReferentiel
-     */
-    public function setHistoDebut($histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDebut
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param integer $histoDestructeur
-     * @return ServiceReferentiel
-     */
-    public function setHistoDestructeur(User $histoDestructeur)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return integer 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoFin
-     *
-     * @param \DateTime $histoFin
-     * @return ServiceReferentiel
-     */
-    public function setHistoFin($histoFin)
-    {
-        $this->histoFin = $histoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get histoFin
-     *
-     * @return \DateTime 
-     */
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param User $histoModificateur
-     * @return ServiceReferentiel
-     */
-    public function setHistoModificateur(User $histoModificateur)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return integer 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return ServiceReferentiel
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
+        return $this->id;
     }
 
     /**
@@ -232,7 +84,7 @@ class ServiceReferentiel
      * @param \Application\Entity\Db\Structure $structure
      * @return ServiceReferentiel
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure)
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
     {
         $this->structure = $structure;
 
@@ -255,7 +107,7 @@ class ServiceReferentiel
      * @param \Application\Entity\Db\Intervenant $intervenant
      * @return ServiceReferentiel
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant)
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -278,7 +130,7 @@ class ServiceReferentiel
      * @param \Application\Entity\Db\FonctionReferentiel $fonction
      * @return ServiceReferentiel
      */
-    public function setFonction(\Application\Entity\Db\FonctionReferentiel $fonction)
+    public function setFonction(\Application\Entity\Db\FonctionReferentiel $fonction = null)
     {
         $this->fonction = $fonction;
 
@@ -296,12 +148,35 @@ class ServiceReferentiel
     }
 
     /**
+     * Set historique
+     *
+     * @param \Application\Entity\Db\Historique $historique
+     * @return ServiceReferentiel
+     */
+    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    {
+        $this->historique = $historique;
+
+        return $this;
+    }
+
+    /**
+     * Get historique
+     *
+     * @return \Application\Entity\Db\Historique 
+     */
+    public function getHistorique()
+    {
+        return $this->historique;
+    }
+
+    /**
      * Set annee
      *
      * @param \Application\Entity\Db\Annee $annee
      * @return ServiceReferentiel
      */
-    public function setAnnee(\Application\Entity\Db\Annee $annee)
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
     {
         $this->annee = $annee;
 

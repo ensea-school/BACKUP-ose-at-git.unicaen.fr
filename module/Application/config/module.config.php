@@ -8,6 +8,20 @@
  */
 
 return array(
+//    'doctrine' => array(
+//        'driver' => array(
+//            'zfcuser_entity' => array(
+//                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+//                'paths' => __DIR__ . '/xml/zfcuser'
+//            ),
+//
+//            'orm_default' => array(
+//                'drivers' => array(
+//                    'ZfcUser\Entity'  => 'zfcuser_entity'
+//                )
+//            )
+//        )
+//    ),
     'doctrine' => array(
         'configuration' => array(
             'orm_default' => array(
@@ -22,6 +36,10 @@ return array(
             ),
         ),
         'driver' => array(
+//            'zfcuser_entity' => array(
+//                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+//                'paths' => __DIR__ . '/xml/zfcuser'
+//            ),
             'orm_default_driver' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
                 'paths' => array(
@@ -51,7 +69,7 @@ return array(
     ),
     'zfcuser' => array(
         // telling ZfcUser to use our own class
-        'user_entity_class' => 'Application\Entity\Db\User',
+        'user_entity_class' => 'Application\Entity\Db\Utilisateur',
 //        // telling ZfcUserDoctrineORM to skip the entities it defines
 //        'enable_default_entities' => false,
     ),
@@ -189,7 +207,7 @@ return array(
              */
 //            'UnicaenAuth\Provider\Role\DbRole' => array(
 //                'object_manager'    => 'doctrine.entitymanager.orm_default',
-//                'role_entity_class' => 'Application\Entity\Db\UserRole',
+//                'role_entity_class' => 'Application\Entity\Db\UtilisateurRole',
 //            ),
         ),
         'guards' => array(

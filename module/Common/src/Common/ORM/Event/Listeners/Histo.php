@@ -19,6 +19,11 @@ class Histo implements EventSubscriber
     protected $sl;
     
     /**
+     * @var mixed
+     */
+    protected $identity;
+    
+    /**
      * 
      * @param \Zend\ServiceManager\ServiceLocatorInterface $sl
      */
@@ -32,39 +37,73 @@ class Histo implements EventSubscriber
      */
     public function prePersist(LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity(); /* @var $entity \Application\Entity\Db\HistoInterface */
+        $em     = $args->getEntityManager();
+        $entity = $args->getEntity();
+        $user   = null;
         
         // l'entité doit implémenter l'interface requise
-        if (!$entity instanceof \Application\Entity\Db\HistoInterface) {
+        if (!$entity instanceof \Application\Entity\Db\HistoriqueAwareInterface) {
             return;
         }
         
-        // horodatage
-        if (null === $entity->getHistoDebut()) {
-            $entity->setHistoDebut(new \DateTime());
+        // l'utilisateur connecté sera l'auteur de la création/modification
+        if (($identity = $this->getIdentity())) {
+            if (isset($identity['db']) && $identity['db'] instanceof \Application\Entity\Db\Utilisateur) {
+                $user = $identity['db']; /* @var $user \Application\Entity\Db\Utilisateur */
+            }
         }
-        $entity->setHistoModification(new \DateTime());
         
-        // inscription de l'utilisateur connecté comme auteur de la création/modification
-        $authenticationService = $this->sl->get('Zend\Authentication\AuthenticationService');
-        if ($authenticationService->hasIdentity()) {
-            $identity = $authenticationService->getIdentity();
-            if (!isset($identity['db'])) {
-//                throw new \Common\Exception\LogicException("Aucune donnée d'identité 'db' disponible.");
-                return;
-            }
-            $user = $identity['db']; /* @var $user \Application\Entity\Db\User */
-            if (!$user instanceof \Application\Entity\Db\User) {
-//                throw new \Common\Exception\LogicException("Type des données d'identité 'db' inattendu.");
-                return;
-            }
-
-            if (null === $entity->getHistoCreateur()) {
-                $entity->setHistoCreateur($user);
-            }
-            $entity->setHistoModificateur($user);
+//        var_dump(get_class($entity), is_null($user), is_null($entity->getHistorique()));
+        
+        if (!($histo = $entity->getHistorique())) {
+            $histo = new \Application\Entity\Db\Historique();
+            $histo->setDebut(new \DateTime())
+                    ->setCreateur($user);
+            $entity->setHistorique($histo);
+            $em->persist($histo);
         }
+        
+        // horodatage
+//        if (null === $histo->getDebut()) {
+//            $histo->setDebut(new \DateTime());
+//        }
+        $histo->setModification(new \DateTime());
+
+//        $e = new \Exception('test');
+//        var_dump($e->getTraceAsString());
+//        if (null === $histo->getCreateur()) {
+//            $histo->setCreateur($user);
+//        }
+        $histo->setModificateur($user);
     }
+    
+    /**
+     * 
+     * @param mixed $identity
+     * @return \Common\ORM\Event\Listeners\Histo
+     */
+    public function setIdentity($identity)
+    {
+        $this->identity = $identity;
+        
+        return $this;
+    }
+    
+    /**
+     * 
+     * @return mixed
+     */
+    public function getIdentity()
+    {
+        if (null === $this->identity) {
+            $authenticationService = $this->sl->get('Zend\Authentication\AuthenticationService');
+            if ($authenticationService->hasIdentity()) {
+                $this->identity = $authenticationService->getIdentity();
+            }
+        }
+        
+        return $this->identity;
+    }    
 
     /**
      * {@inheritdoc}

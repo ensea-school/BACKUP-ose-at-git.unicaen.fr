@@ -176,7 +176,7 @@ abstract class Intervenant implements HistoriqueAwareInterface
     /**
      * @var \Application\Entity\Db\Historique
      */
-    private $historique;
+    protected $historique;
 
     /**
      * Constructor

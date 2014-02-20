@@ -12,7 +12,7 @@ use Common\Constants;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-abstract class Intervenant implements HistoriqueAwareInterface
+abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface
 {
     /**
      * @var integer
@@ -820,5 +820,50 @@ abstract class Intervenant implements HistoriqueAwareInterface
     public function getHistorique()
     {
         return $this->historique;
+    }
+    
+    
+    /*************************** IntervenantInterface ***********************/
+    
+    /**
+     * Get civilite
+     *
+     * @return string 
+     */
+    public function getCiviliteToString()
+    {
+        return $this->getCivilite()->getLibelleCourt();
+    }
+
+    /**
+     * Get affectations
+     *
+     * @return string 
+     */
+    public function getAffectationsToString()
+    {
+        return 'À implémenter!';
+    }
+
+    /**
+     * Get source id
+     *
+     * @return integer 
+     * @see \Application\Entity\Db\Source
+     */
+    public function getSourceToString()
+    {
+        return $this->getSource()->getLibelle();
+    }
+
+    /**
+     * Get type id
+     *
+     * @return integer
+     * @see \Application\Entity\Db\TypeIntervenant
+     */
+    public function getTypeId()
+    {
+        return $this instanceof IntervenantPermanent ? TypeIntervenant::TYPE_PERMANENT : TypeIntervenant::TYPE_EXTERIEUR;
     }
 }

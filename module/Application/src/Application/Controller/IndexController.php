@@ -10,31 +10,13 @@ use Zend\Mvc\Controller\AbstractActionController;
  */
 class IndexController extends AbstractActionController
 {
+    /**
+     * 
+     * @return type
+     */
     public function indexAction()
     {
 //        var_dump($this->identity());
         return array();
-    }
-
-    public function demoAction()
-    {
-        return array();
-    }
-    
-    public function searchAction()
-    {
-        if (($id = $this->params()->fromPost('id'))) {
-            
-            $intervenant = $this->intervenant()->getRepo()->find($id);
-            
-            $view = new \Zend\View\Model\ViewModel();
-            $view->setVariables(array('intervenant' => $intervenant));
-            $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-
-            return $view;
-            
-        }
-        
-        exit;
     }
 }

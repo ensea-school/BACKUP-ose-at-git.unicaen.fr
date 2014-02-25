@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * DiplomeEtape
  */
-class DiplomeEtape implements HistoriqueAwareInterface
+class DiplomeEtape
 {
     /**
      * @var string

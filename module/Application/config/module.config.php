@@ -124,6 +124,19 @@ return array(
                     ),
                 ),
             ),
+            'demo' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/demo[/:action]',
+                    'constraints' => array(
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Demo',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -161,6 +174,45 @@ return array(
         'default' => array(
             'home' => array(
                 'pages' => array(
+                    'demo' => array(
+                        'label'    => 'Démo',
+                        'route'    => 'demo',
+                        'params' => array(
+                            'action' => 'index',
+                        ),
+                        'pages' => array(
+                            'of' => array(
+                                'label'  => "Offre de formation (avec UE)",
+                                'route'  => 'demo',
+                                'params' => array(
+                                    'action' => 'of',
+                                ),
+                                'query' => array(
+                                    'avecUe' => 1,
+                                ),
+                                'visible' => true,
+                                'pages' => array(),
+                            ),
+                            'of-sans-ue' => array(
+                                'label'  => "Offre de formation (sans UE)",
+                                'route'  => 'demo',
+                                'params' => array(
+                                    'action' => 'of',
+                                ),
+                                'visible' => true,
+                                'pages' => array(),
+                            ),
+//                            'intervenant' => array(
+//                                'label'  => "Intervenants",
+//                                'route'  => 'demo',
+//                                'params' => array(
+//                                    'action' => 'of',
+//                                ),
+//                                'visible' => true,
+//                                'pages' => array(),
+//                            ),
+                        ),
+                    ),
                     'intervenant' => array(
                         'label'    => 'Intervenant',
                         'route'    => 'intervenant',
@@ -213,6 +265,9 @@ return array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
+                    'controller' => 'Application\Controller\Demo', 
+                    'roles' => array('user')),
+                array(
                     'controller' => 'Application\Controller\Intervenant', 
                     'action' => array('index', 'modifier', 'rechercher', 'voir', 'search'), 
                     'roles' => array('user')),
@@ -237,6 +292,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index'       => 'Application\Controller\IndexController',
+            'Application\Controller\Demo'        => 'Application\Controller\DemoController',
             'Application\Controller\Intervenant' => 'Application\Controller\IntervenantController',
         ),
     ),

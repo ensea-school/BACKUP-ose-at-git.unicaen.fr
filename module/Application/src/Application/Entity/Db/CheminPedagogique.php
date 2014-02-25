@@ -7,17 +7,42 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CheminPedagogique
  */
-class CheminPedagogique implements HistoriqueAwareInterface
+class CheminPedagogique
 {
+    /**
+     * @var \DateTime
+     */
+    private $dateDebutAnneeUniv;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoCreation;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDestruction;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
     /**
      * @var string
      */
     private $sourceCode;
 
     /**
-     * @var string
+     * @var \DateTime
      */
-    private $ue;
+    private $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    private $validiteFin;
 
     /**
      * @var integer
@@ -25,14 +50,14 @@ class CheminPedagogique implements HistoriqueAwareInterface
     private $index;
 
     /**
-     * @var \DateTime
+     * @var integer
      */
-    private $dateDebutAnneeUniv;
+    private $id;
 
     /**
-     * @var \Application\Entity\Db\Etape
+     * @var \Application\Entity\Db\UniteEnseignement
      */
-    private $etape;
+    private $uniteEnseignement;
 
     /**
      * @var \Application\Entity\Db\ElementPedagogique
@@ -40,20 +65,127 @@ class CheminPedagogique implements HistoriqueAwareInterface
     private $elementPedagogique;
 
     /**
+     * @var \Application\Entity\Db\PeriodeEnseignement
+     */
+    private $periode;
+
+    /**
      * @var \Application\Entity\Db\Source
      */
     private $source;
 
     /**
-     * @var \Application\Entity\Db\Periode
+     * @var \Application\Entity\Db\Utilisateur
      */
-    private $periode;
+    private $histoModificateur;
 
     /**
-     * @var \Application\Entity\Db\Historique
+     * @var \Application\Entity\Db\Utilisateur
      */
-    private $historique;
+    private $histoCreateur;
 
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Etape
+     */
+    private $etape;
+
+
+    /**
+     * Set dateDebutAnneeUniv
+     *
+     * @param \DateTime $dateDebutAnneeUniv
+     * @return CheminPedagogique
+     */
+    public function setDateDebutAnneeUniv($dateDebutAnneeUniv)
+    {
+        $this->dateDebutAnneeUniv = $dateDebutAnneeUniv;
+
+        return $this;
+    }
+
+    /**
+     * Get dateDebutAnneeUniv
+     *
+     * @return \DateTime 
+     */
+    public function getDateDebutAnneeUniv()
+    {
+        return $this->dateDebutAnneeUniv;
+    }
+
+    /**
+     * Set histoCreation
+     *
+     * @param \DateTime $histoCreation
+     * @return CheminPedagogique
+     */
+    public function setHistoCreation($histoCreation)
+    {
+        $this->histoCreation = $histoCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreation
+     *
+     * @return \DateTime 
+     */
+    public function getHistoCreation()
+    {
+        return $this->histoCreation;
+    }
+
+    /**
+     * Set histoDestruction
+     *
+     * @param \DateTime $histoDestruction
+     * @return CheminPedagogique
+     */
+    public function setHistoDestruction($histoDestruction)
+    {
+        $this->histoDestruction = $histoDestruction;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestruction
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDestruction()
+    {
+        return $this->histoDestruction;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return CheminPedagogique
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
 
     /**
      * Set sourceCode
@@ -79,26 +211,49 @@ class CheminPedagogique implements HistoriqueAwareInterface
     }
 
     /**
-     * Set ue
+     * Set validiteDebut
      *
-     * @param string $ue
+     * @param \DateTime $validiteDebut
      * @return CheminPedagogique
      */
-    public function setUe($ue)
+    public function setValiditeDebut($validiteDebut)
     {
-        $this->ue = $ue;
+        $this->validiteDebut = $validiteDebut;
 
         return $this;
     }
 
     /**
-     * Get ue
+     * Get validiteDebut
      *
-     * @return string 
+     * @return \DateTime 
      */
-    public function getUe()
+    public function getValiditeDebut()
     {
-        return $this->ue;
+        return $this->validiteDebut;
+    }
+
+    /**
+     * Set validiteFin
+     *
+     * @param \DateTime $validiteFin
+     * @return CheminPedagogique
+     */
+    public function setValiditeFin($validiteFin)
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteFin
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeFin()
+    {
+        return $this->validiteFin;
     }
 
     /**
@@ -125,49 +280,36 @@ class CheminPedagogique implements HistoriqueAwareInterface
     }
 
     /**
-     * Set dateDebutAnneeUniv
+     * Get id
      *
-     * @param \DateTime $dateDebutAnneeUniv
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set uniteEnseignement
+     *
+     * @param \Application\Entity\Db\UniteEnseignement $uniteEnseignement
      * @return CheminPedagogique
      */
-    public function setDateDebutAnneeUniv($dateDebutAnneeUniv)
+    public function setUniteEnseignement(\Application\Entity\Db\UniteEnseignement $uniteEnseignement = null)
     {
-        $this->dateDebutAnneeUniv = $dateDebutAnneeUniv;
+        $this->uniteEnseignement = $uniteEnseignement;
 
         return $this;
     }
 
     /**
-     * Get dateDebutAnneeUniv
+     * Get uniteEnseignement
      *
-     * @return \DateTime 
+     * @return \Application\Entity\Db\UniteEnseignement 
      */
-    public function getDateDebutAnneeUniv()
+    public function getUniteEnseignement()
     {
-        return $this->dateDebutAnneeUniv;
-    }
-
-    /**
-     * Set etape
-     *
-     * @param \Application\Entity\Db\Etape $etape
-     * @return CheminPedagogique
-     */
-    public function setEtape(\Application\Entity\Db\Etape $etape)
-    {
-        $this->etape = $etape;
-
-        return $this;
-    }
-
-    /**
-     * Get etape
-     *
-     * @return \Application\Entity\Db\Etape 
-     */
-    public function getEtape()
-    {
-        return $this->etape;
+        return $this->uniteEnseignement;
     }
 
     /**
@@ -176,7 +318,7 @@ class CheminPedagogique implements HistoriqueAwareInterface
      * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
      * @return CheminPedagogique
      */
-    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique = $elementPedagogique;
 
@@ -191,6 +333,29 @@ class CheminPedagogique implements HistoriqueAwareInterface
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
+    }
+
+    /**
+     * Set periode
+     *
+     * @param \Application\Entity\Db\PeriodeEnseignement $periode
+     * @return CheminPedagogique
+     */
+    public function setPeriode(\Application\Entity\Db\PeriodeEnseignement $periode = null)
+    {
+        $this->periode = $periode;
+
+        return $this;
+    }
+
+    /**
+     * Get periode
+     *
+     * @return \Application\Entity\Db\PeriodeEnseignement 
+     */
+    public function getPeriode()
+    {
+        return $this->periode;
     }
 
     /**
@@ -217,48 +382,94 @@ class CheminPedagogique implements HistoriqueAwareInterface
     }
 
     /**
-     * Set periode
+     * Set histoModificateur
      *
-     * @param \Application\Entity\Db\Periode $periode
+     * @param \Application\Entity\Db\Utilisateur $histoModificateur
      * @return CheminPedagogique
      */
-    public function setPeriode(\Application\Entity\Db\Periode $periode = null)
+    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
-        $this->periode = $periode;
+        $this->histoModificateur = $histoModificateur;
 
         return $this;
     }
 
     /**
-     * Get periode
+     * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Periode 
+     * @return \Application\Entity\Db\Utilisateur 
      */
-    public function getPeriode()
+    public function getHistoModificateur()
     {
-        return $this->periode;
+        return $this->histoModificateur;
     }
 
     /**
-     * Set historique
+     * Set histoCreateur
      *
-     * @param \Application\Entity\Db\Historique $historique
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
      * @return CheminPedagogique
      */
-    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
-        $this->historique = $historique;
+        $this->histoCreateur = $histoCreateur;
 
         return $this;
     }
 
     /**
-     * Get historique
+     * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Historique 
+     * @return \Application\Entity\Db\Utilisateur 
      */
-    public function getHistorique()
+    public function getHistoCreateur()
     {
-        return $this->historique;
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return CheminPedagogique
+     */
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set etape
+     *
+     * @param \Application\Entity\Db\Etape $etape
+     * @return CheminPedagogique
+     */
+    public function setEtape(\Application\Entity\Db\Etape $etape = null)
+    {
+        $this->etape = $etape;
+
+        return $this;
+    }
+
+    /**
+     * Get etape
+     *
+     * @return \Application\Entity\Db\Etape 
+     */
+    public function getEtape()
+    {
+        return $this->etape;
     }
 }

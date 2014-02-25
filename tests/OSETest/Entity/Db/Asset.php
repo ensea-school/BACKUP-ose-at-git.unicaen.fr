@@ -10,6 +10,7 @@ use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\RegimeSecu;
 use Application\Entity\Db\Source;
+use Application\Entity\Db\Utilisateur;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeStructure;
@@ -46,6 +47,18 @@ class Asset
     {
         $e = new Source();
         $e->setLibelle('Source de test');
+        
+        return $e;
+    }
+    
+    static public function user()
+    {
+        $e = new Utilisateur();
+        $e->setDisplayName('Alco TEST')
+                ->setEmail('test@domain.fr')
+                ->setPassword('azerty')
+                ->setState(1)
+                ->setUsername(uniqid());
         
         return $e;
     }
@@ -88,7 +101,7 @@ class Asset
     {
         $e = new TypeIntervenant();
         $e
-                ->setId('P')
+                ->setId(TypeIntervenant::TYPE_PERMANENT)
                 ->setLibelle("Intervenant permanent");
         
         return $e;
@@ -98,7 +111,7 @@ class Asset
     {
         $e = new TypeIntervenant();
         $e
-                ->setId('E')
+                ->setId(TypeIntervenant::TYPE_EXTERIEUR)
                 ->setLibelle("Intervenant extérieur");
         
         return $e;
@@ -108,10 +121,10 @@ class Asset
     {
         $e = new Corps();
         $e
-                ->setLibelleCourt("TEST")
+                ->setLibelleCourt("C1")
                 ->setLibelleLong("Corps de test")
                 ->setSource(static::getSource())
-                ->setSourceCode(rand(1, 999));
+                ->setSourceCode("" . rand(1, 99999));
         
         return $e;
     }
@@ -120,6 +133,7 @@ class Asset
     {
         $e = new SectionCnu();
         $e
+                ->setCode("" . rand(1, 99))
                 ->setLibelle("Section d'assaut");
         
         return $e;
@@ -129,7 +143,7 @@ class Asset
     {
         $e = new RegimeSecu();
         $e
-                ->setId('12')
+                ->setCode('' . rand(1, 99))
                 ->setLibelle("Taux de test")
                 ->setTauxTaxe(5.5);
         
@@ -140,7 +154,6 @@ class Asset
     {
         $e = new Civilite();
         $e
-                ->setId('M.')
                 ->setLibelle("Mister")
                 ->setSexe('M');
         

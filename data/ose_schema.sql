@@ -1,3 +1,73 @@
+
+CREATE SEQUENCE UTILISATEUR_ID_seq INCREMENT BY 1 START WITH 1 NOCACHE NOORDER NOCYCLE ;
+
+-- trigger 
+CREATE OR REPLACE TRIGGER type_structure_changes
+  BEFORE UPDATE ON type_structure
+  FOR EACH ROW
+DECLARE
+    v_historique_id number;
+BEGIN
+    if (:new.historique_id is null) then -- historique_id null : improbable!
+      --select historique_id_seq.nextval into v_historique_id from dual;
+      --insert into historique (id, debut, modification, createur, modificateur) values (v_historique_id, sysdate, sysdate, ose_historique.get_current_user(), ose_historique.get_current_user());
+      select OSE_HISTORIQUE.CREATE_HISTORIQUE_ID into v_historique_id from dual;
+      update type_structure set historique_id = v_historique_id;
+    else
+      update historique set modification = sysdate, modificateur = ose_historique.get_current_user() where id = :new.historique_id;
+    end if;
+END;
+/
+
+-- generation des triggers
+ select distinct 'CREATE OR REPLACE TRIGGER ' || TABLE_NAME || '_UPDATE ' || '
+  BEFORE UPDATE ON ' || TABLE_NAME || '
+  FOR EACH ROW
+DECLARE
+    v_historique_id number;
+BEGIN
+    if (:new.historique_id is null) then -- historique_id null : improbable!
+      --select historique_id_seq.nextval into v_historique_id from dual;
+      --insert into historique (id, debut, modification, createur, modificateur) values (v_historique_id, sysdate, sysdate, ose_historique.get_current_user(), ose_historique.get_current_user());
+      select OSE_HISTORIQUE.CREATE_HISTORIQUE_ID into v_historique_id from dual;
+      update ' || TABLE_NAME || ' set historique_id = v_historique_id;
+    else
+      update historique set modification = sysdate, modificateur = ose_historique.get_current_user() where id = :new.historique_id;
+    end if;
+END;
+/
+'
+from ALL_TAB_COLUMNS where owner = 'OSE' and column_name = 'HISTORIQUE_ID';
+
+
+
+
+-- test fonction et trigger historique
+
+delete from TYPE_STRUCTURE;
+delete from HISTORIQUE;
+delete from "USER";
+insert into "USER" (ID, USERNAME, EMAIL, DISPLAY_NAME, PASSWORD, STATE) values (1, 'gauthierb', 'bertrand.gauthier@unicaen.Fr', 'Beber', 'ldap', 1) ;
+insert into "USER" (ID, USERNAME, EMAIL, DISPLAY_NAME, PASSWORD, STATE) values (2, 'lecluse', 'lecluse@unicaen.Fr', 'Lolo', 'ldap', 1) ; 
+
+BEGIN ose_historique.set_current_user(1); END;
+/
+insert into TYPE_STRUCTURE( ID, LIBELLE, HISTORIQUE_ID) values (1, 'Test bertrand', OSE_HISTORIQUE.CREATE_HISTORIQUE_ID);
+select * from TYPE_STRUCTURE;
+select * from HISTORIQUE;
+
+BEGIN ose_historique.set_current_user(2); END;
+/
+update TYPE_STRUCTURE set LIBELLE = 'Test 2' where id = 1;
+select * from TYPE_STRUCTURE;
+select * from HISTORIQUE;
+commit;
+
+
+
+
+ 
+ 
  CREATE OR REPLACE  VIEW "HARP_ADM"."UNICAEN_V_AFFECTATION" AS 
   SELECT aa.NO_DOSSIER_PERS,
   aa.C_STRUCTURE,

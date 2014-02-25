@@ -3,7 +3,7 @@
 namespace Application\Entity\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
-use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\IntervenantInterface;
         
 /**
  * Description of IntervenantDl
@@ -13,7 +13,7 @@ use Application\Entity\Db\Intervenant;
 class IntervenantDl extends AbstractHelper
 {
     /**
-     * @var Intervenant
+     * @var IntervenantInterface
      */
     protected $intervenant;
     
@@ -29,11 +29,11 @@ class IntervenantDl extends AbstractHelper
     
     /**
      * 
-     * @param Intervenant $intervenant
+     * @param IntervenantInterface $intervenant
      * @param bool $horizontal
      * @return self
      */
-    public function __invoke(Intervenant $intervenant = null, $horizontal = false)
+    public function __invoke(IntervenantInterface $intervenant = null, $horizontal = false)
     {
         $this->intervenant = $intervenant;
         $this->horizontal  = $horizontal;
@@ -68,21 +68,50 @@ class IntervenantDl extends AbstractHelper
         $dtdds   = array();
         
         $dtdds[] = sprintf($tplDtdd,
-            "Nom :", 
-            $intervenant->getNomComplet(true, true)
+            "Nom prénom :", 
+            $intervenant
         );
+        
+        $dtdds[] = sprintf($tplDtdd,
+            "N° {$intervenant->getSourceToString()} :", 
+            $intervenant->getSourceCode()
+        );
+            
+        if ($intervenant instanceof \Application\Entity\Db\Intervenant) {
+            $dtdds[] = sprintf($tplDtdd,
+                "N° INSEE :", 
+                $intervenant->getNumeroInsee()
+            );
+        }
+        
+        $dtdds[] = sprintf($tplDtdd,
+            "Email :", 
+            $intervenant->getEmail()
+        );
+        
         $dtdds[] = sprintf($tplDtdd,
             "Date de naissance :", 
             $intervenant->getDateNaissanceToString()
         );
-        $dtdds[] = sprintf($tplDtdd,
-            "Ville de naissance :", 
-            $intervenant->getVilleNaissanceLibelle()
-        );
-        $dtdds[] = sprintf($tplDtdd,
-            "Pays de naissance :", 
-            $intervenant->getPaysNaissanceLibelle()
-        );
+            
+        if ($intervenant instanceof \Application\Entity\Db\Intervenant) {
+            $dtdds[] = sprintf($tplDtdd,
+                "Ville de naissance :", 
+                $intervenant->getVilleNaissanceLibelle()
+            );
+            $dtdds[] = sprintf($tplDtdd,
+                "Pays de naissance :", 
+                $intervenant->getPaysNaissanceLibelle()
+            );
+            $dtdds[] = sprintf($tplDtdd,
+                "Téléphone mobile :", 
+                $intervenant->getTelMobile()
+            );
+            $dtdds[] = sprintf($tplDtdd,
+                "Téléphone pro :", 
+                $intervenant->getTelPro()
+            );
+        }
         
         if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
             $dtdds[] = sprintf($tplDtdd,
@@ -97,40 +126,16 @@ class IntervenantDl extends AbstractHelper
             );
         }
         
-        $dtdds[] = sprintf($tplDtdd,
-            "Prime d'excellence scientifique :", 
-            $intervenant->getPrimeExcellenceScientifique() ? 'Oui' : 'Non'
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            "Numéro INSEE :", 
-            $intervenant->getNumeroInsee()
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            "Section CNU :", 
-            $intervenant->getSectionCnu()
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            " :", 
-            $intervenant->get()
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            " :", 
-            $intervenant->get()
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            " :", 
-            $intervenant->get()
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            " :", 
-            $intervenant->get()
-        );
+        if ($intervenant instanceof \Application\Entity\Db\Intervenant) {
+            $dtdds[] = sprintf($tplDtdd,
+                "Prime d'excellence scientifique :", 
+                $intervenant->getPrimeExcellenceScientifique() ? 'Oui' : 'Non'
+            );
+            $dtdds[] = sprintf($tplDtdd,
+                "Section CNU :", 
+                $intervenant->getSectionCnu() ? implode(' ; ', $intervenant->getSectionCnu()) : "Aucune"
+            );
+        }
         
 //        $commentaires = sprintf('<span title="%s">%s</span>', 
 //                    htmlspecialchars($tmp = $intervenant->getCommentaires(), ENT_NOQUOTES), 

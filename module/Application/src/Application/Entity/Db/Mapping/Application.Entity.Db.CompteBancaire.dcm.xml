@@ -3,7 +3,9 @@
   <entity name="Application\Entity\Db\CompteBancaire" table="COMPTE_BANCAIRE">
     <indexes>
       <index name="cbie_fk" columns="INTERVENANT_EXTERIEUR_ID"/>
-      <index name="IDX_B1A0E7DE7F29375B" columns="HISTORIQUE_ID"/>
+      <index name="IDX_B1A0E7DE59860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_B1A0E7DE7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_B1A0E7DE63F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
@@ -15,6 +17,9 @@
     <field name="compte" type="string" column="COMPTE" length="11" nullable="false"/>
     <field name="emplacement" type="string" column="EMPLACEMENT" length="2" nullable="true"/>
     <field name="guichet" type="string" column="GUICHET" length="5" nullable="false"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="iban2" type="string" column="IBAN_2" length="4" nullable="true"/>
     <field name="iban3" type="string" column="IBAN_3" length="4" nullable="true"/>
     <field name="iban4" type="string" column="IBAN_4" length="4" nullable="true"/>
@@ -24,14 +29,26 @@
     <field name="ibanFin" type="string" column="IBAN_FIN" length="7" nullable="true"/>
     <field name="ibanIso" type="string" column="IBAN_ISO" length="4" nullable="true"/>
     <field name="paysIso" type="string" column="PAYS_ISO" length="2" nullable="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="intervenantExterieur" target-entity="Application\Entity\Db\IntervenantExterieur">
       <join-columns>
         <join-column name="INTERVENANT_EXTERIEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="historique" target-entity="Application\Entity\Db\Historique">
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
-        <join-column name="HISTORIQUE_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

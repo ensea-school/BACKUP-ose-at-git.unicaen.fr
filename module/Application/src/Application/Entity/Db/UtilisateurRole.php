@@ -162,4 +162,14 @@ class UtilisateurRole implements \BjyAuthorize\Acl\HierarchicalRoleInterface
     {
         return $this->user;
     }
+
+    /**
+     * Get user
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

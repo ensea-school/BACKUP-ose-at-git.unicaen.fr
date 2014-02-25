@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AdresseIntervenant
  */
-class AdresseIntervenant implements HistoriqueAwareInterface
+class AdresseIntervenant
 {
     /**
      * @var string
@@ -18,6 +18,21 @@ class AdresseIntervenant implements HistoriqueAwareInterface
      * @var string
      */
     private $codePostal;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoCreation;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDestruction;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
@@ -65,6 +80,16 @@ class AdresseIntervenant implements HistoriqueAwareInterface
     private $telDomicile;
 
     /**
+     * @var \DateTime
+     */
+    private $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    private $validiteFin;
+
+    /**
      * @var string
      */
     private $ville;
@@ -85,9 +110,19 @@ class AdresseIntervenant implements HistoriqueAwareInterface
     private $source;
 
     /**
-     * @var \Application\Entity\Db\Historique
+     * @var \Application\Entity\Db\Utilisateur
      */
-    private $historique;
+    private $histoModificateur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoCreateur;
 
 
     /**
@@ -134,6 +169,75 @@ class AdresseIntervenant implements HistoriqueAwareInterface
     public function getCodePostal()
     {
         return $this->codePostal;
+    }
+
+    /**
+     * Set histoCreation
+     *
+     * @param \DateTime $histoCreation
+     * @return AdresseIntervenant
+     */
+    public function setHistoCreation($histoCreation)
+    {
+        $this->histoCreation = $histoCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreation
+     *
+     * @return \DateTime 
+     */
+    public function getHistoCreation()
+    {
+        return $this->histoCreation;
+    }
+
+    /**
+     * Set histoDestruction
+     *
+     * @param \DateTime $histoDestruction
+     * @return AdresseIntervenant
+     */
+    public function setHistoDestruction($histoDestruction)
+    {
+        $this->histoDestruction = $histoDestruction;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestruction
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDestruction()
+    {
+        return $this->histoDestruction;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return AdresseIntervenant
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -344,6 +448,52 @@ class AdresseIntervenant implements HistoriqueAwareInterface
     }
 
     /**
+     * Set validiteDebut
+     *
+     * @param \DateTime $validiteDebut
+     * @return AdresseIntervenant
+     */
+    public function setValiditeDebut($validiteDebut)
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteDebut
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeDebut()
+    {
+        return $this->validiteDebut;
+    }
+
+    /**
+     * Set validiteFin
+     *
+     * @param \DateTime $validiteFin
+     * @return AdresseIntervenant
+     */
+    public function setValiditeFin($validiteFin)
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteFin
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeFin()
+    {
+        return $this->validiteFin;
+    }
+
+    /**
      * Set ville
      *
      * @param string $ville
@@ -423,25 +573,71 @@ class AdresseIntervenant implements HistoriqueAwareInterface
     }
 
     /**
-     * Set historique
+     * Set histoModificateur
      *
-     * @param \Application\Entity\Db\Historique $historique
+     * @param \Application\Entity\Db\Utilisateur $histoModificateur
      * @return AdresseIntervenant
      */
-    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
-        $this->historique = $historique;
+        $this->histoModificateur = $histoModificateur;
 
         return $this;
     }
 
     /**
-     * Get historique
+     * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Historique 
+     * @return \Application\Entity\Db\Utilisateur 
      */
-    public function getHistorique()
+    public function getHistoModificateur()
     {
-        return $this->historique;
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return AdresseIntervenant
+     */
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @return AdresseIntervenant
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
     }
 }

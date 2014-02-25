@@ -4,8 +4,6 @@ namespace OSETest\Entity\Db;
 
 use Doctrine\Common\EventManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Events;
 use OSETest\Bootstrap;
 use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
@@ -19,26 +17,24 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 {
     protected $em;
     protected $eventm;
-    
-    /**
-     * Évite d'avoir à faire ->setHistoCreateur(1)->setHistoModificateur(1)
-     * sur toutes les entités créées.
-     * 
-     * @param LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args)
-    {
-        if ($args->getEntity() instanceof \Application\Entity\Db\HistoInterface) {
-            $user = $this->getEntityManager()->find('\Application\Entity\Db\User', 1);
-            $args->getEntity()
-                    ->setHistoCreateur($user)
-                    ->setHistoModificateur($user);
-        }
-    }
+    protected $user;
     
     protected function setUp()
     {
-        $this->getEventManager()->addEventListener(Events::prePersist, $this);
+        $em = $this->getEntityManager();
+        
+        if (!($this->user = $em->find("Application\Entity\Db\Utilisateur", $id = 1))) {
+            $this->markTestIncomplete("Utilisateur (id = $id) introuvable.");
+        }
+
+        // recherche du listener de gestion de l'historique pour lui transmettre l'utilisateur
+        foreach ($this->getEventManager()->getListeners() as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                if ($listener instanceof \Common\ORM\Event\Listeners\Histo) {
+                    $listener->setIdentity(array('db' => $this->user));
+                }
+            }
+        }
     }
     
     protected function tearDown()

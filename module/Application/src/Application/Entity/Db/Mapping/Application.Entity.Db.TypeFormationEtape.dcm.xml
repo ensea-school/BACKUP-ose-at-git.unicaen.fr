@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\TypeFormationEtape" table="TYPE_FORMATION_ETAPE">
+    <indexes>
+      <index name="IDX_823C929CB4F27801" columns="ETAPE_ID"/>
+      <index name="IDX_823C929CE9B3446E" columns="SOURCE_ID"/>
+      <index name="IDX_823C929C401921A" columns="TYPE_FORMATION_ID"/>
+      <index name="IDX_823C929C59860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_823C929C7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_823C929C63F06898" columns="HISTO_MODIFICATEUR_ID"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="type_formation_etape__un" columns="SOURCE_CODE"/>
+    </unique-constraints>
+    <id name="etape" association-key="true"/>
+    <id name="typeFormation" association-key="true"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="niveau" type="integer" column="NIVEAU" nullable="false"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <one-to-one field="etape" target-entity="Application\Entity\Db\Etape">
+      <join-columns>
+        <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="typeFormation" target-entity="Application\Entity\Db\TypeFormation">
+      <join-columns>
+        <join-column name="TYPE_FORMATION_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="source" target-entity="Application\Entity\Db\Source">
+      <join-columns>
+        <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

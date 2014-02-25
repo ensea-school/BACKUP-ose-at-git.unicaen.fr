@@ -46,6 +46,7 @@ class Histo implements EventSubscriber
         if (!$entity instanceof \Application\Entity\Db\HistoriqueAwareInterface) {
             return;
         }
+        /* @var $entity \Application\Entity\Db\HistoriqueAwareInterface */
         
         // l'utilisateur connecté sera l'auteur de la création/modification
         if (($identity = $this->getIdentity())) {
@@ -58,25 +59,33 @@ class Histo implements EventSubscriber
             throw new RuntimeException("Aucun utilisateur connecté disponible pour la gestion de l'historique.");
         }
         
-//        var_dump(get_class($entity), is_null($user), gettype($entity->getHistorique()));
+        $now = new \DateTime();
         
-        if (!($histo = $entity->getHistorique())) {
-            $histo = new \Application\Entity\Db\Historique();
-            $histo->setDebut(new \DateTime())
-                    ->setCreateur($user);
-            $entity->setHistorique($histo);
-            $em->persist($histo);
+        /**
+         * Validité
+         */
+        
+        if (null === $entity->getValiditeDebut()) {
+            $entity->setValiditeDebut($now);
         }
         
-        if (null === $histo->getCreateur()) {
-            $histo->setCreateur($user);
+        /**
+         * Historique
+         */
+        
+        if (null === $entity->getHistoCreation()) {
+            $entity->setHistoCreation($now);
         }
         
-        $histo->setModification(new \DateTime())
-                ->setModificateur($user);
+        if (null === $entity->getHistoCreateur()) {
+            $entity->setHistoCreateur($user);
+        }
         
-        if ($histo->getFin() && null === $histo->getDestructeur()) {
-            $histo->setDestructeur($user);
+        $entity->setHistoModification($now)
+                ->setHistoModificateur($user);
+        
+        if (null !== $entity->getHistoDestruction() && null === $entity->getHistoDestructeur()) {
+            $entity->setHistoDestructeur($user);
         }
     }
     

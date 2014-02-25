@@ -174,9 +174,44 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $telPro;
 
     /**
-     * @var \Application\Entity\Db\Historique
+     * @var \DateTime
      */
-    protected $historique;
+    protected $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    protected $validiteFin;
+    
+    /**
+     * @var \DateTime
+     */
+    protected $histoCreation;
+
+    /**
+     * @var \DateTime
+     */
+    protected $histoDestruction;
+
+    /**
+     * @var \DateTime
+     */
+    protected $histoModification;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    protected $histoModificateur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    protected $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    protected $histoCreateur;
 
     /**
      * Constructor
@@ -619,16 +654,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set type
      *
      * @param \Application\Entity\Db\TypeIntervenant $type
@@ -822,6 +847,213 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->historique;
     }
     
+    /**
+     * Set histoCreation
+     *
+     * @param \DateTime $histoCreation
+     * @return IntervenantPermanent
+     */
+    public function setHistoCreation($histoCreation)
+    {
+        $this->histoCreation = $histoCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreation
+     *
+     * @return \DateTime 
+     */
+    public function getHistoCreation()
+    {
+        return $this->histoCreation;
+    }
+
+    /**
+     * Set histoDestruction
+     *
+     * @param \DateTime $histoDestruction
+     * @return IntervenantPermanent
+     */
+    public function setHistoDestruction($histoDestruction)
+    {
+        $this->histoDestruction = $histoDestruction;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestruction
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDestruction()
+    {
+        return $this->histoDestruction;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return IntervenantPermanent
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
+
+    /**
+     * Set validiteDebut
+     *
+     * @param \DateTime $validiteDebut
+     * @return IntervenantPermanent
+     */
+    public function setValiditeDebut($validiteDebut)
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteDebut
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeDebut()
+    {
+        return $this->validiteDebut;
+    }
+
+    /**
+     * Set validiteFin
+     *
+     * @param \DateTime $validiteFin
+     * @return IntervenantPermanent
+     */
+    public function setValiditeFin($validiteFin)
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteFin
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeFin()
+    {
+        return $this->validiteFin;
+    }
+
+    /**
+     * Set id
+     *
+     * @param \Application\Entity\Db\Intervenant $id
+     * @return IntervenantPermanent
+     */
+    public function setId(\Application\Entity\Db\Intervenant $id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return \Application\Entity\Db\Intervenant 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoModificateur
+     * @return IntervenantPermanent
+     */
+    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return IntervenantPermanent
+     */
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @return IntervenantPermanent
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+    
     
     /*************************** IntervenantInterface ***********************/
     
@@ -866,4 +1098,5 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this instanceof IntervenantPermanent ? TypeIntervenant::TYPE_PERMANENT : TypeIntervenant::TYPE_EXTERIEUR;
     }
+
 }

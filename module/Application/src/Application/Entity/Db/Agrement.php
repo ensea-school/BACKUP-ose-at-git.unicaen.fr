@@ -7,12 +7,37 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Agrement
  */
-class Agrement implements HistoriqueAwareInterface
+class Agrement
 {
+    /**
+     * @var \DateTime
+     */
+    private $histoCreation;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDestruction;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
     /**
      * @var integer
      */
     private $intervenantId;
+
+    /**
+     * @var \DateTime
+     */
+    private $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    private $validiteFin;
 
     /**
      * @var \DateTime
@@ -25,14 +50,24 @@ class Agrement implements HistoriqueAwareInterface
     private $id;
 
     /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoModificateur;
+
+    /**
      * @var \Application\Entity\Db\IntervenantExterieur
      */
     private $intervenantExterieur;
 
     /**
-     * @var \Application\Entity\Db\Historique
+     * @var \Application\Entity\Db\Utilisateur
      */
-    private $historique;
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Annee
@@ -44,6 +79,75 @@ class Agrement implements HistoriqueAwareInterface
      */
     private $structure;
 
+
+    /**
+     * Set histoCreation
+     *
+     * @param \DateTime $histoCreation
+     * @return Agrement
+     */
+    public function setHistoCreation($histoCreation)
+    {
+        $this->histoCreation = $histoCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreation
+     *
+     * @return \DateTime 
+     */
+    public function getHistoCreation()
+    {
+        return $this->histoCreation;
+    }
+
+    /**
+     * Set histoDestruction
+     *
+     * @param \DateTime $histoDestruction
+     * @return Agrement
+     */
+    public function setHistoDestruction($histoDestruction)
+    {
+        $this->histoDestruction = $histoDestruction;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestruction
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDestruction()
+    {
+        return $this->histoDestruction;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Agrement
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
 
     /**
      * Set intervenantId
@@ -66,6 +170,52 @@ class Agrement implements HistoriqueAwareInterface
     public function getIntervenantId()
     {
         return $this->intervenantId;
+    }
+
+    /**
+     * Set validiteDebut
+     *
+     * @param \DateTime $validiteDebut
+     * @return Agrement
+     */
+    public function setValiditeDebut($validiteDebut)
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteDebut
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeDebut()
+    {
+        return $this->validiteDebut;
+    }
+
+    /**
+     * Set validiteFin
+     *
+     * @param \DateTime $validiteFin
+     * @return Agrement
+     */
+    public function setValiditeFin($validiteFin)
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteFin
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeFin()
+    {
+        return $this->validiteFin;
     }
 
     /**
@@ -102,6 +252,29 @@ class Agrement implements HistoriqueAwareInterface
     }
 
     /**
+     * Set histoModificateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoModificateur
+     * @return Agrement
+     */
+    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
      * Set intervenantExterieur
      *
      * @param \Application\Entity\Db\IntervenantExterieur $intervenantExterieur
@@ -125,26 +298,49 @@ class Agrement implements HistoriqueAwareInterface
     }
 
     /**
-     * Set historique
+     * Set histoDestructeur
      *
-     * @param \Application\Entity\Db\Historique $historique
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
      * @return Agrement
      */
-    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
-        $this->historique = $historique;
+        $this->histoDestructeur = $histoDestructeur;
 
         return $this;
     }
 
     /**
-     * Get historique
+     * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Historique 
+     * @return \Application\Entity\Db\Utilisateur 
      */
-    public function getHistorique()
+    public function getHistoDestructeur()
     {
-        return $this->historique;
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @return Agrement
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
     }
 
     /**

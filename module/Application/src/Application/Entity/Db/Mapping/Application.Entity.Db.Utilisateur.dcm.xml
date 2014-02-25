@@ -9,7 +9,7 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="display_name" type="string" column="DISPLAY_NAME" length="64" nullable="false"/>
+    <field name="displayName" type="string" column="DISPLAY_NAME" length="64" nullable="false"/>
     <field name="email" type="string" column="EMAIL" length="255" nullable="false"/>
     <field name="password" type="string" column="PASSWORD" length="128" nullable="false"/>
     <field name="state" type="integer" column="STATE" nullable="false"/>
@@ -24,6 +24,15 @@
         <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="role" target-entity="Application\Entity\Db\UtilisateurRole" mapped-by="user"/>
+     <many-to-many field="roles" inversed-by="utilisateurs" target-entity="Application\Entity\Db\UtilisateurRole">
+        <join-table name="ROLE_UTILISATEUR_LINKER">
+            <join-columns>
+                <join-column name="USER_ID" referenced-column-name="ID" />
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="ROLE_ID" referenced-column-name="ID" />
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

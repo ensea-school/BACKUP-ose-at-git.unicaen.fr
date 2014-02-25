@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Periode
  */
-class Periode implements HistoriqueAwareInterface
+class Periode
 {
     /**
      * @var string

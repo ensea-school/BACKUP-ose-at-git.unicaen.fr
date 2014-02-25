@@ -274,4 +274,15 @@ class Utilisateur
     {
         return $this->role;
     }
+    /**
+     * @var string
+     */
+    private $displayName;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $roles;
+
+
 }

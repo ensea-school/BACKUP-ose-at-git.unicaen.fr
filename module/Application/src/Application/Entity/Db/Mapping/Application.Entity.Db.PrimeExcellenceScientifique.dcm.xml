@@ -4,17 +4,31 @@
     <indexes>
       <index name="IDX_66C94419AA401F5C" columns="ANNEE_ID"/>
       <index name="IDX_66C9441978FF2BCB" columns="INTERVENANT_ID"/>
-      <index name="IDX_66C944197F29375B" columns="HISTORIQUE_ID"/>
+      <index name="IDX_66C9441959860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_66C944197E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_66C9441963F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
-    <unique-constraints>
-      <unique-constraint name="pes_un" columns="INTERVENANT_ID,ANNEE_ID"/>
-    </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <many-to-one field="historique" target-entity="Application\Entity\Db\Historique">
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
-        <join-column name="HISTORIQUE_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">

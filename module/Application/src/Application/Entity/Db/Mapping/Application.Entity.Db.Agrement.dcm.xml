@@ -4,22 +4,39 @@
     <indexes>
       <index name="IDX_CD3F1085884B0F7B" columns="STRUCTURE_ID"/>
       <index name="IDX_CD3F1085AA401F5C" columns="ANNEE_ID"/>
-      <index name="IDX_CD3F10857F29375B" columns="HISTORIQUE_ID"/>
+      <index name="IDX_CD3F108559860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_CD3F10857E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_CD3F108563F06898" columns="HISTO_MODIFICATEUR_ID"/>
       <index name="IDX_CD3F108520B9A217" columns="INTERVENANT_EXTERIEUR_ID"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="intervenantId" type="integer" column="INTERVENANT_ID" nullable="false"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <field name="date" type="datetime" column="date" nullable="false"/>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="intervenantExterieur" target-entity="Application\Entity\Db\IntervenantExterieur">
       <join-columns>
         <join-column name="INTERVENANT_EXTERIEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="historique" target-entity="Application\Entity\Db\Historique">
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
-        <join-column name="HISTORIQUE_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">

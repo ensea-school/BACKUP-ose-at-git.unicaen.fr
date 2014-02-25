@@ -49,7 +49,7 @@ class IntervenantController extends AbstractActionController
         $form->setAttributes(array('class' => 'intervenant-rech'));
         $form->add($interv);
         
-        $intervenant = null;
+        $intervenant = false;
         
         // post
         if (is_array($data)) {
@@ -126,9 +126,10 @@ class IntervenantController extends AbstractActionController
         }
         
         $intervenant = $this->intervenant()->getRepo()->find($id);
+        // recherche dans la source externe si introuvable dans OSE
         if (!$intervenant) {
             $service = $this->getServiceLocator()->get('importServiceIntervenant'); /* @var $service \Import\Model\Service\Intervenant */
-            $intervenant = $service->get($id);
+            $intervenant = $service->get($id); /* @var $intervenant \Import\Model\Entity\Intervenant\Intervenant */
         }
         if (!$intervenant) {
             throw new RuntimeException("Intervenant spécifié introuvable.");

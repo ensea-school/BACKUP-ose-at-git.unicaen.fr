@@ -2,11 +2,18 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Source
  */
 class Source
 {
+    /**
+     * @var string
+     */
+    private $code;
+
     /**
      * @var string
      */
@@ -16,6 +23,30 @@ class Source
      * @var integer
      */
     private $id;
+
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Source
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
     /**
      * Set libelle
@@ -38,19 +69,6 @@ class Source
     public function getLibelle()
     {
         return $this->libelle;
-    }
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return Source
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**

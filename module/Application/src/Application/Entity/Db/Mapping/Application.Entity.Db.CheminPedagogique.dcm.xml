@@ -3,43 +3,67 @@
   <entity name="Application\Entity\Db\CheminPedagogique" table="CHEMIN_PEDAGOGIQUE">
     <indexes>
       <index name="IDX_B1F283FEB4F27801" columns="ETAPE_ID"/>
-      <index name="IDX_B1F283FE7F29375B" columns="HISTORIQUE_ID"/>
-      <index name="IDX_B1F283FEC0569A10" columns="PERIODE_ID"/>
+      <index name="IDX_B1F283FE59860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_B1F283FE7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_B1F283FE63F06898" columns="HISTO_MODIFICATEUR_ID"/>
       <index name="IDX_B1F283FEE9B3446E" columns="SOURCE_ID"/>
+      <index name="IDX_B1F283FE9B2B60EB" columns="UNITE_ENSEIGNEMENT_ID"/>
       <index name="IDX_B1F283FE8AB4A516" columns="ELEMENT_PEDAGOGIQUE_ID"/>
+      <index name="IDX_B1F283FEC0569A10" columns="PERIODE_ID"/>
     </indexes>
     <unique-constraints>
       <unique-constraint name="chemin_pedago_src_id_un" columns="SOURCE_CODE"/>
+      <unique-constraint name="chemin_pedagogique__un" columns="ELEMENT_PEDAGOGIQUE_ID,ETAPE_ID,DATE_DEBUT_ANNEE_UNIV"/>
     </unique-constraints>
-    <id name="dateDebutAnneeUniv" type="datetime" column="DATE_DEBUT_ANNEE_UNIV"/>
-    <id name="etape" association-key="true"/>
-    <id name="elementPedagogique" association-key="true"/>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="dateDebutAnneeUniv" type="datetime" column="DATE_DEBUT_ANNEE_UNIV" nullable="false"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
-    <field name="ue" type="string" column="UE" length="60" nullable="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <field name="index" type="integer" column="index" nullable="false"/>
-    <one-to-one field="etape" target-entity="Application\Entity\Db\Etape">
+    <many-to-one field="uniteEnseignement" target-entity="Application\Entity\Db\UniteEnseignement">
       <join-columns>
-        <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+        <join-column name="UNITE_ENSEIGNEMENT_ID" referenced-column-name="ID"/>
       </join-columns>
-    </one-to-one>
-    <one-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
+    </many-to-one>
+    <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
       <join-columns>
         <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
       </join-columns>
-    </one-to-one>
+    </many-to-one>
+    <many-to-one field="periode" target-entity="Application\Entity\Db\PeriodeEnseignement">
+      <join-columns>
+        <join-column name="PERIODE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="periode" target-entity="Application\Entity\Db\Periode">
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
-        <join-column name="PERIODE_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="historique" target-entity="Application\Entity\Db\Historique">
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
-        <join-column name="HISTORIQUE_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="etape" target-entity="Application\Entity\Db\Etape">
+      <join-columns>
+        <join-column name="ETAPE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

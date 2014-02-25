@@ -12,12 +12,47 @@ class Etablissement implements HistoriqueAwareInterface
     /**
      * @var string
      */
+    private $departement;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoCreation;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDestruction;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
+
+    /**
+     * @var string
+     */
     private $libelle;
 
     /**
      * @var string
      */
+    private $localisation;
+
+    /**
+     * @var string
+     */
     private $sourceCode;
+
+    /**
+     * @var \DateTime
+     */
+    private $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    private $validiteFin;
 
     /**
      * @var integer
@@ -30,10 +65,112 @@ class Etablissement implements HistoriqueAwareInterface
     private $source;
 
     /**
-     * @var \Application\Entity\Db\Historique
+     * @var \Application\Entity\Db\Utilisateur
      */
-    private $historique;
+    private $histoModificateur;
 
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoCreateur;
+
+
+    /**
+     * Set departement
+     *
+     * @param string $departement
+     * @return Etablissement
+     */
+    public function setDepartement($departement)
+    {
+        $this->departement = $departement;
+
+        return $this;
+    }
+
+    /**
+     * Get departement
+     *
+     * @return string 
+     */
+    public function getDepartement()
+    {
+        return $this->departement;
+    }
+
+    /**
+     * Set histoCreation
+     *
+     * @param \DateTime $histoCreation
+     * @return Etablissement
+     */
+    public function setHistoCreation($histoCreation)
+    {
+        $this->histoCreation = $histoCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreation
+     *
+     * @return \DateTime 
+     */
+    public function getHistoCreation()
+    {
+        return $this->histoCreation;
+    }
+
+    /**
+     * Set histoDestruction
+     *
+     * @param \DateTime $histoDestruction
+     * @return Etablissement
+     */
+    public function setHistoDestruction($histoDestruction)
+    {
+        $this->histoDestruction = $histoDestruction;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestruction
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDestruction()
+    {
+        return $this->histoDestruction;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Etablissement
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
+    }
 
     /**
      * Set libelle
@@ -59,6 +196,29 @@ class Etablissement implements HistoriqueAwareInterface
     }
 
     /**
+     * Set localisation
+     *
+     * @param string $localisation
+     * @return Etablissement
+     */
+    public function setLocalisation($localisation)
+    {
+        $this->localisation = $localisation;
+
+        return $this;
+    }
+
+    /**
+     * Get localisation
+     *
+     * @return string 
+     */
+    public function getLocalisation()
+    {
+        return $this->localisation;
+    }
+
+    /**
      * Set sourceCode
      *
      * @param string $sourceCode
@@ -79,6 +239,52 @@ class Etablissement implements HistoriqueAwareInterface
     public function getSourceCode()
     {
         return $this->sourceCode;
+    }
+
+    /**
+     * Set validiteDebut
+     *
+     * @param \DateTime $validiteDebut
+     * @return Etablissement
+     */
+    public function setValiditeDebut($validiteDebut)
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteDebut
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeDebut()
+    {
+        return $this->validiteDebut;
+    }
+
+    /**
+     * Set validiteFin
+     *
+     * @param \DateTime $validiteFin
+     * @return Etablissement
+     */
+    public function setValiditeFin($validiteFin)
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteFin
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeFin()
+    {
+        return $this->validiteFin;
     }
 
     /**
@@ -115,25 +321,71 @@ class Etablissement implements HistoriqueAwareInterface
     }
 
     /**
-     * Set historique
+     * Set histoModificateur
      *
-     * @param \Application\Entity\Db\Historique $historique
+     * @param \Application\Entity\Db\Utilisateur $histoModificateur
      * @return Etablissement
      */
-    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
+    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
-        $this->historique = $historique;
+        $this->histoModificateur = $histoModificateur;
 
         return $this;
     }
 
     /**
-     * Get historique
+     * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Historique 
+     * @return \Application\Entity\Db\Utilisateur 
      */
-    public function getHistorique()
+    public function getHistoModificateur()
     {
-        return $this->historique;
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return Etablissement
+     */
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @return Etablissement
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
     }
 }

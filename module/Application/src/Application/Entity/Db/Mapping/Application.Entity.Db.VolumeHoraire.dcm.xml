@@ -6,16 +6,33 @@
       <index name="IDX_C2A90185D09A4004" columns="MOTIF_NON_PAIEMENT_ID"/>
       <index name="IDX_C2A90185C0569A10" columns="PERIODE_ID"/>
       <index name="IDX_C2A90185DE8EF239" columns="SERVICE_ID"/>
-      <index name="IDX_C2A901857F29375B" columns="HISTORIQUE_ID"/>
+      <index name="IDX_C2A9018559860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_C2A901857E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_C2A9018563F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="aPayer" type="boolean" column="A_PAYER" nullable="true"/>
     <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
-    <many-to-one field="historique" target-entity="Application\Entity\Db\Historique">
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
-        <join-column name="HISTORIQUE_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="service" target-entity="Application\Entity\Db\Service">
@@ -23,14 +40,14 @@
         <join-column name="SERVICE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="periode" target-entity="Application\Entity\Db\Periode">
-      <join-columns>
-        <join-column name="PERIODE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <many-to-one field="motifNonPaiement" target-entity="Application\Entity\Db\MotifNonPaiement">
       <join-columns>
         <join-column name="MOTIF_NON_PAIEMENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="periode" target-entity="Application\Entity\Db\PeriodePaiement">
+      <join-columns>
+        <join-column name="PERIODE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">

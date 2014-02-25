@@ -2,11 +2,12 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\ElementPedagogique" table="ELEMENT_PEDAGOGIQUE">
     <indexes>
-      <index name="IDX_CCADDAC07F29375B" columns="HISTORIQUE_ID"/>
+      <index name="IDX_CCADDAC059860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_CCADDAC07E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_CCADDAC063F06898" columns="HISTO_MODIFICATEUR_ID"/>
       <index name="IDX_CCADDAC0E9B3446E" columns="SOURCE_ID"/>
       <index name="IDX_CCADDAC0884B0F7B" columns="STRUCTURE_ID"/>
       <index name="IDX_CCADDAC08AD1AE90" columns="SECTION_CNU_ID"/>
-      <index name="IDX_CCADDAC0401921A" columns="TYPE_FORMATION_ID"/>
     </indexes>
     <unique-constraints>
       <unique-constraint name="ep_code__un" columns="SOURCE_CODE"/>
@@ -15,13 +16,21 @@
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="heuresCm" type="float" column="HEURES_CM" precision="126" scale="0" nullable="false"/>
+    <field name="heuresTd" type="float" column="HEURES_TD" precision="126" scale="0" nullable="false"/>
+    <field name="heuresTp" type="float" column="HEURES_TP" precision="126" scale="0" nullable="false"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="60" nullable="false"/>
     <field name="nouveau" type="boolean" column="NOUVEAU" nullable="true"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
     <field name="tauxFoad" type="integer" column="TAUX_FOAD" nullable="true"/>
-    <many-to-one field="typeFormation" target-entity="Application\Entity\Db\TypeFormation">
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
-        <join-column name="TYPE_FORMATION_ID" referenced-column-name="ID"/>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="sectionCnu" target-entity="Application\Entity\Db\SectionCnu">
@@ -29,19 +38,24 @@
         <join-column name="SECTION_CNU_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="historique" target-entity="Application\Entity\Db\Historique">
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
-        <join-column name="HISTORIQUE_ID" referenced-column-name="ID"/>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

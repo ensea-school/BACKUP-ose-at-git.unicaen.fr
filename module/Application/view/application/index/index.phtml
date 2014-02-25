@@ -5,6 +5,6 @@
     <p><a class="btn btn-success btn-large" href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Connectez-vous...') ?></a></p>
     <?php else: ?>
     <p>Bonjour, <?php echo reset($this->identity()) ?>.</p>
-    <p><a href="<?php echo $this->url('application/default', array('action' => 'demo')) ?>">Démo</a></p>
+    <p><a href="<?php echo $this->url('demo') ?>">Démo</a></p>
     <?php endif; ?>
 </div>

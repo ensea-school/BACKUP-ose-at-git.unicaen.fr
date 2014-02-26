@@ -7,7 +7,22 @@
     span.vet { background-color: #d3d7cf; }
     span.pel { background-color: #babdb6; }
     span.elt {  }
-    .ui-menu-item .elt { display: block; margin-top: -0.25em; } 
+    /*.ui-menu-item .elt { display: block; margin-top: -0.25em; }*/ 
+</style>
+
+<style>
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+    * we use height instead, but this forces the menu to always be this tall
+    */
+/*    * html .ui-autocomplete {
+        height: 300px;
+    }*/
 </style>
 
 <div class="jumbotron">
@@ -19,6 +34,28 @@
     
     <div class="col-md-9" role="main">
 
+        <div class="panel panel-default">
+            <div class="panel-heading">Élément</div>
+            <div class="panel-body">
+                <?php echo $this->form()->openTag($form) ?> 
+                <?php echo $this->formControlGroup($form->get('element')); ?>
+                <input id="filter" class="btn btn-primary" type="submit" value="Y aller..." name="submit" />
+                <?php echo $this->form()->closeTag() ?> 
+            </div>
+            <script>
+                $("body").on("submit", "form.element-rech", function(event) {
+                    var form = $(event.target);
+                    var id = $("input.sas", form).val();
+                    if (id) {
+                        $('html, body').animate({
+                            scrollTop: $("#" + id).offset().top - $(window).height() / 2
+                        }, 500, 'swing', function() { $("#" + id).effect("highlight"); });
+                    }
+                    event.preventDefault();
+                });
+            </script>
+        </div>
+        
         <p><?php echo count($entities) ?> éléments trouvés.</p>
         
         <table class="table table-bordered table-condensed table-hover">
@@ -124,28 +161,6 @@
                     });
                 </script>
             </div>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">Élément</div>
-            <div class="panel-body">
-                <?php echo $this->form()->openTag($form) ?> 
-                <?php echo $this->formControlGroup($form->get('element')); ?>
-                <input id="filter" class="btn btn-primary" type="submit" value="Y aller..." name="submit" />
-                <?php echo $this->form()->closeTag() ?> 
-            </div>
-            <script>
-                $("body").on("submit", "form.element-rech", function(event) {
-                    var form = $(event.target);
-                    var id = $("input.sas", form).val();
-                    if (id) {
-                        $('html, body').animate({
-                            scrollTop: $("#" + id).offset().top - $(window).height() / 2
-                        }, 500, 'swing', function() { $("#" + id).effect("highlight"); });
-                    }
-                    event.preventDefault();
-                });
-            </script>
         </div>
         
     </div>

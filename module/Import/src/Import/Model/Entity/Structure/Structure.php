@@ -2,8 +2,6 @@
 
 namespace Import\Model\Entity\Structure;
 
-use DateTime;
-use Exception;
 use Import\Model\Entity\Entity;
 
 /**
@@ -44,7 +42,7 @@ class Structure extends Entity {
     /**
      * Identifiant du type de structure
      *
-     * @var string
+     * @var integer
      */
     protected $typeId;
 
@@ -54,34 +52,6 @@ class Structure extends Entity {
      * @var integer
      */
     protected $etablissementId;
-
-    /**
-     * Nom de la source de données
-     *
-     * @var string
-     */
-    protected $sourceId;
-
-    /**
-     * Identifiant de la donnée source
-     *
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
-     * Date de début pour l'historique
-     *
-     * @var DateTime
-     */
-    protected $histoDebut;
-
-    /**
-     * Date de fin pour l'historique
-     *
-     * @var DateTime
-     */
-    protected $histoFin;
 
 
 
@@ -117,26 +87,6 @@ class Structure extends Entity {
         return $this->etablissementId;
     }
 
-    public function getSourceId()
-    {
-        return $this->sourceId;
-    }
-
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    public function getHistoFin()
-    {
-        return $this->histoFin;
-    }
-
     public function setId($id)
     {
         $this->id = $id;
@@ -170,34 +120,6 @@ class Structure extends Entity {
     public function setEtablissementId($etablissementId)
     {
         $this->etablissementId = $etablissementId;
-        return $this;
-    }
-
-    public function setSourceId($sourceId)
-    {
-        $this->sourceId = $sourceId;
-        return $this;
-    }
-
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-        return $this;
-    }
-
-    public function setHistoDebut($histoDebut)
-    {
-        if (!($histoDebut === null || $histoDebut instanceof DateTime))
-            throw new Exception('DateTime ou null doit être transmis');
-        $this->histoDebut = $histoDebut;
-        return $this;
-    }
-
-    public function setHistoFin($histoFin)
-    {
-        if (!($histoFin === null || $histoFin instanceof DateTime))
-            throw new Exception('DateTime ou null doit être transmis');
-        $this->histoFin = $histoFin;
         return $this;
     }
 

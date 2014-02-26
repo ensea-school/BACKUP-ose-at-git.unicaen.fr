@@ -13,9 +13,16 @@ use Import\Model\Entity\Entity;
 class Intervenant extends Entity {
 
     /**
+     * Identifiant
+     *
+     * @var integer
+     */
+    protected $id;
+
+    /**
      * Civilité
      *
-     * @var string
+     * @var integer
      */
     protected $civiliteId;
 
@@ -73,7 +80,7 @@ class Intervenant extends Entity {
      *
      * @var string
      */
-    protected $depnaissanceLibelle;
+    protected $depNaissanceLibelle;
 
     /**
      * Code INSEE de la ville de naissance
@@ -103,12 +110,6 @@ class Intervenant extends Entity {
      */
     protected $paysNationaliteLibelle;
 
-    /**
-     * Téléphone mobile
-     *
-     * @var string
-     */
-    protected $telMobile;
 
     /**
      * Téléphone professionnel
@@ -118,6 +119,13 @@ class Intervenant extends Entity {
     protected $telPro;
 
     /**
+     * Téléphone mobile
+     *
+     * @var string
+     */
+    protected $telMobile;
+
+    /**
      * Email Pro
      *
      * @var string
@@ -125,32 +133,11 @@ class Intervenant extends Entity {
     protected $email;
 
     /**
-     * Identifiant du type (P ou E)
+     * Identifiant du type
      *
-     * @var string
+     * @var integer
      */
     protected $typeId;
-
-    /**
-     * Identifiant de la structure d'affectation principale
-     *
-     * @var string
-     */
-    protected $structureId;
-
-    /**
-     * Source de données
-     *
-     * @var string
-     */
-    protected $sourceId;
-
-    /**
-     * Identifiant de l'intervenant au niveau de la source
-     *
-     * @var string
-     */
-    protected $sourceCode;
 
     /**
      * Prime d'excellence scientifique
@@ -180,23 +167,20 @@ class Intervenant extends Entity {
      */
     protected $numeroInseeProvisoire;
 
-    /**
-     * Date de début d'historique
-     *
-     * @var DateTime
-     */
-    protected $histoDebut;
 
-    /**
-     * Date de fin d'historique
-     *
-     * @var DateTime
-     */
-    protected $histoFin;
+    
 
 
+    public function getId()
+    {
+        return $this->id;
+    }
 
-
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getCiviliteId()
     {
@@ -238,7 +222,7 @@ class Intervenant extends Entity {
         return $this->depNaissanceCodeInsee;
     }
 
-    public function getDepnaissanceLibelle()
+    public function getDepNaissanceLibelle()
     {
         return $this->depnaissanceLibelle;
     }
@@ -283,21 +267,6 @@ class Intervenant extends Entity {
         return $this->typeId;
     }
 
-    public function getStructureId()
-    {
-        return $this->structureId;
-    }
-
-    public function getSourceId()
-    {
-        return $this->sourceId;
-    }
-
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
     public function getPrimeExcellenceScientifique()
     {
         return $this->primeExcellenceScientifique;
@@ -316,16 +285,6 @@ class Intervenant extends Entity {
     public function getNumeroInseeProvisoire()
     {
         return $this->numeroInseeProvisoire;
-    }
-
-    public function getHistoDebut()
-    {
-        return $this->histoDebut;
-    }
-
-    public function getHistoFin()
-    {
-        return $this->histoFin;
     }
 
     public function setCiviliteId($civiliteId)
@@ -376,7 +335,7 @@ class Intervenant extends Entity {
         return $this;
     }
 
-    public function setDepnaissanceLibelle($depnaissanceLibelle)
+    public function setDepNaissanceLibelle($depnaissanceLibelle)
     {
         $this->depnaissanceLibelle = $depnaissanceLibelle;
         return $this;
@@ -430,24 +389,6 @@ class Intervenant extends Entity {
         return $this;
     }
 
-    public function setStructureId($structureId)
-    {
-        $this->structureId = $structureId;
-        return $this;
-    }
-
-    public function setSourceId($sourceId)
-    {
-        $this->sourceId = $sourceId;
-        return $this;
-    }
-
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-        return $this;
-    }
-
     public function setPrimeExcellenceScientifique($primeExcellenceScientifique)
     {
         $this->primeExcellenceScientifique = $primeExcellenceScientifique;
@@ -469,22 +410,6 @@ class Intervenant extends Entity {
     public function setNumeroInseeProvisoire($numeroInseeProvisoire)
     {
         $this->numeroInseeProvisoire = $numeroInseeProvisoire;
-        return $this;
-    }
-
-    public function setHistoDebut($histoDebut)
-    {
-        if (!($histoDebut === null || $histoDebut instanceof DateTime))
-            throw new Exception('DateTime ou null doit être transmis');
-        $this->histoDebut = $histoDebut;
-        return $this;
-    }
-
-    public function setHistoFin($histoFin)
-    {
-        if (!($histoFin === null || $histoFin instanceof DateTime))
-            throw new Exception('DateTime ou null doit être transmis');
-        $this->histoFin = $histoFin;
         return $this;
     }
 

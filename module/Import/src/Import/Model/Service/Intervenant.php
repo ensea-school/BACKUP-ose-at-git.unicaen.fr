@@ -3,6 +3,8 @@
 namespace Import\Model\Service;
 
 use Import\Model\Entity\Intervenant\Intervenant as IntervenantEntity;
+use Import\Model\Entity\Intervenant\Permanent as IntervenantPermanentEntity;
+use Import\Model\Entity\Intervenant\Exterieur as IntervenantExterieurEntity;
 use Import\Model\Entity\Intervenant\Adresse as IntervenantAdresseEntity;
 
 /**
@@ -32,6 +34,28 @@ class Intervenant extends Service {
     public function get( $id )
     {
         return $this->getMapper()->getIntervenant( $id );
+    }
+
+    /**
+     * Retourne les données d'un intervenant permanent
+     *
+     * @param string $id
+     * @return IntervenantPermanentEntity
+     */
+    public function getPermanent( $id )
+    {
+        return $this->getMapper()->getIntervenantPermanent( $id );
+    }
+
+    /**
+     * Retourne les données d'un intervenant exterieur
+     *
+     * @param string $id
+     * @return IntervenantExterieurEntity
+     */
+    public function getExterieur( $id )
+    {
+        return $this->getMapper()->getIntervenantExterieur( $id );
     }
 
     /**

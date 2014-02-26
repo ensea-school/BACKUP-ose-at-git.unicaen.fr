@@ -3,6 +3,7 @@
 namespace Import\Model\Service;
 
 use Import\Model\Entity\Structure as StructureEntity;
+use Import\Model\Entity\Structure\Etablissement as EtablissementEntity;
 
 /**
  *
@@ -29,6 +30,27 @@ class Structure extends Service {
      */
     public function get( $id )
     {
-        return $this->getMapper()->getStructure( $id );
+        return $this->getMapper()->getStructure( $id );       
+    }
+
+    /**
+     * Retourne la liste des identifiants d'établissements
+     *
+     * @return string[]
+     */
+    public function getEtablissementList()
+    {
+        return $this->getMapper()->getEtablissementList();
+    }
+
+    /**
+     * Retourne les données d'un établissement
+     *
+     * @param string $id
+     * @return EtablissementEntity
+     */
+    public function getEtablissement( $id )
+    {
+        return $this->getMapper()->getEtablissement( $id );
     }
 }

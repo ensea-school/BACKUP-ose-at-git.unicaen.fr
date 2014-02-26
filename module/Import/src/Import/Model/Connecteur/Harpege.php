@@ -3,12 +3,16 @@
 namespace Import\Model\Connecteur;
 
 use Import\Model\Entity\Entity;
-use Import\Model\Entity\Intervenant\Intervenant as IntervenantEntity;
-use Import\Model\Entity\Intervenant\Adresse as IntervenantAdresseEntity;
-use Import\Model\Entity\Structure\Structure as StructureEntity;
+use Import\Model\Entity\Intervenant\Intervenant     as IntervenantEntity;
+use Import\Model\Entity\Intervenant\Permanent       as IntervenantPermanentEntity;
+use Import\Model\Entity\Intervenant\Exterieur       as IntervenantExterieurEntity;
+use Import\Model\Entity\Intervenant\Adresse         as IntervenantAdresseEntity;
+use Import\Model\Entity\Intervenant\Affectation     as IntervenantAffectationEntity;
+use Import\Model\Entity\Structure\Structure         as StructureEntity;
+use Import\Model\Exception\MissingDependency        as MissingDependencyException;
+use Import\Model\Exception\NotFound                 as NotFoundException;
+use Import\Model\Hydrator\Oracle                    as OracleHydrator;
 use DateTime;
-use Import\Model\Exception;
-use Import\Model\Hydrator\Oracle as OracleHydrator;
 
 /**
  * Connecteur Harpège
@@ -20,8 +24,7 @@ class Harpege extends Connecteur {
 
 
     /**
-     * 
-     * @return string
+     * {@inheritDoc}
      */
     public function getName()
     {
@@ -29,10 +32,7 @@ class Harpege extends Connecteur {
     }
 
     /**
-     * Recherche d'un intervenant à partir des données source
-     *
-     * @param string @criterion Critère de recherche
-     * @return array
+     * {@inheritDoc}
      */
     public function searchIntervenant( $criterion )
     {
@@ -85,9 +85,7 @@ EOS;
     }
 
     /**
-     *
-     * @param string $id Identifiant de l'intervenant
-     * @return IntervenantEntity
+     * {@inheritDoc}
      */
     public function getIntervenant( $id )
     {
@@ -98,15 +96,44 @@ EOS;
         if (($result = $stmt->fetch())){
             return $this->hydrateEntity($result, new IntervenantEntity() );
         }else{
-            throw new Exception('Intervenant non trouvé');
+            throw new NotFoundException('Intervenant non trouvé');
         }
     }
 
     /**
-     * Retourne la liste des adresses d'un intervenant
-     *
-     * @param string $id Identifiant de l'intervenant
-     * @return IntervenantAdresseEntity[]
+     * {@inheritDoc}
+     */
+    public function getIntervenantPermanent( $id )
+    {
+        $sql = "SELECT * FROM V_HARP_INTERVENANT_PERMANENT WHERE source_code = :id";
+        $stmt = $this->query( $sql, array(
+            'id' => (integer)$id
+        ) );
+        if (($result = $stmt->fetch())){
+            return $this->hydrateEntity($result, new IntervenantPermanentEntity() );
+        }else{
+            throw new NotFoundException('Intervenant permanent non trouvé');
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIntervenantExterieur( $id )
+    {
+        $sql = "SELECT * FROM V_HARP_INTERVENANT_EXTERIEUR WHERE source_code = :id";
+        $stmt = $this->query( $sql, array(
+            'id' => (integer)$id
+        ) );
+        if (($result = $stmt->fetch())){
+            return $this->hydrateEntity($result, new IntervenantExterieurEntity() );
+        }else{
+            throw new NotFoundException('Intervenant exterieur non trouvé');
+        }
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getIntervenantAdresses( $id )
     {
@@ -116,16 +143,29 @@ EOS;
         ) );
         $result = array();
         while($r = $stmt->fetch()){
-            $result[] = $this->hydrateEntity($result, new IntervenantAdresseEntity() );
+            $result[] = $this->hydrateEntity($r, new IntervenantAdresseEntity() );
         }
         return $result;
     }
 
     /**
-     * Retourne la liste des identifiants source des structures
-     *
-     * @return string[]
-     * @throws Exception
+     * {@inheritDoc}
+     */
+    public function getIntervenantAffectations( $id )
+    {
+        $sql = "SELECT * FROM V_HARP_AFFECTATION WHERE z_intervenant_id = :id";
+        $stmt = $this->query( $sql, array(
+            'id' => (integer)$id
+        ) );
+        $result = array();
+        while($r = $stmt->fetch()){
+            $result[] = $this->hydrateEntity($r, new IntervenantAffectationEntity() );
+        }
+        return $result;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getStructureList()
     {
@@ -139,11 +179,7 @@ EOS;
     }
 
     /**
-     * Retourne une structure à partir de son identifiant
-     *
-     * @param string $id Identifiant de la structure
-     * @return StructureEntity
-     * @throws Exception
+     * {@inheritDoc}
      */
     public function getStructure( $id )
     {
@@ -154,7 +190,7 @@ EOS;
         if (($result = $stmt->fetch())){
             return $this->hydrateEntity($result, new StructureEntity() );
         }else{
-            throw new Exception('Structure non trouvée');
+            throw new NotFoundException('Structure non trouvée');
         }
     }
 
@@ -172,7 +208,6 @@ EOS;
         foreach( $params as $name => $value ){
             $stmt->bindValue($name, $value);
         }
-        $stmt->setFetchMode(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $stmt->execute();
         return $stmt;
     }
@@ -191,7 +226,7 @@ EOS;
                 $iVal = isset($data[substr($key,2)]) ? $data[substr($key,2)] : null;
                 $zVal = $value;
                 if (null !== $zVal && null === $iVal){
-                    throw new Exception('Impossible d\'importer la . Il  dans OSE');
+                    throw new MissingDependencyException('Impossible d\'importer la donnée "'.substr($key,2).'". Elle dépend d\'informations non présentes dans OSE');
                 }
             }
         }

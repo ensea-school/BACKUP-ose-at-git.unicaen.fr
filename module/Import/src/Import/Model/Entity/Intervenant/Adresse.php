@@ -2,33 +2,28 @@
 
 namespace Import\Model\Entity\Intervenant;
 
-use DateTime;
 use Import\Model\Entity\Entity;
 
 /**
  *
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
- * 
- * @property boolean $principale
- * @property string $habitantChez
- * @property string $telDomicile
- * @property string $noVoie
- * @property string $bisTerId
- * @property string $typeVoieId
- * @property string $nomVoie
- * @property string $localite
- * @property string $codePostal
- * @property string $villeCodeInsee
- * @property string $villeLibelle
- * @property string $paysCodeInsee
- * @property string $paysLibelle
- * @property DateTime $histoDebut
- * @property DateTime $histoModification
- * @property DateTime $histoDebut
- * @property DateTime $histoFin
  */
 class Adresse extends Entity {
+
+    /**
+     * Identifiant
+     *
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     * ID intervenant
+     *
+     * @var integer
+     */
+    protected $intervenantId;
 
     /**
      * Si l'adresse est principale ou non
@@ -38,13 +33,6 @@ class Adresse extends Entity {
     protected $principale;
 
     /**
-     * Si l'intervenant habite chez un autre ou non
-     *
-     * @var string
-     */
-    protected $habitantChez;
-
-    /**
      * Téléphone du domicile
      *
      * @var string
@@ -52,25 +40,25 @@ class Adresse extends Entity {
     protected $telDomicile;
 
     /**
+     * Mention complémentaire
+     *
+     * @var string
+     */
+    protected $mentionComplementaire;
+
+    /**
+     * Bâtiment
+     *
+     * @var string
+     */
+    protected $batiment;
+
+    /**
      * Numéro de voie
      *
      * @var string
      */
     protected $noVoie;
-
-    /**
-     * Bis, Ter, Quarter, Quinties
-     *
-     * @var string
-     */
-    protected $bisTerId;
-
-    /**
-     * Code du type de voie (rue, voie, chemin, etc)
-     *
-     * @var string
-     */
-    protected $typeVoieId;
 
     /**
      * Nom de la voie
@@ -94,18 +82,11 @@ class Adresse extends Entity {
     protected $codePostal;
 
     /**
-     * Code INSEE de la ville
+     * Ville
      *
      * @var string
      */
-    protected $villeCodeInsee;
-
-    /**
-     * Libellé de la ville
-     *
-     * @var string
-     */
-    protected $villeLibelle;
+    protected $ville;
 
     /**
      * Code INSEE du pays
@@ -121,32 +102,23 @@ class Adresse extends Entity {
      */
     protected $paysLibelle;
 
-    /**
-     * Date de début d'historique
-     *
-     * @var DateTime
-     */
-    protected $histoDebut;
-
-    /**
-     * Date de fin d'historique
-     *
-     * @var DateTime
-     */
-    protected $histoFin;
 
 
-    
 
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getIntervenantId()
+    {
+        return $this->intervenantId;
+    }
 
     public function getPrincipale()
     {
         return $this->principale;
-    }
-
-    public function getHabitantChez()
-    {
-        return $this->habitantChez;
     }
 
     public function getTelDomicile()
@@ -154,19 +126,19 @@ class Adresse extends Entity {
         return $this->telDomicile;
     }
 
+    public function getMentionComplementaire()
+    {
+        return $this->mentionComplementaire;
+    }
+
+    public function getBatiment()
+    {
+        return $this->batiment;
+    }
+
     public function getNoVoie()
     {
         return $this->noVoie;
-    }
-
-    public function getBisTerId()
-    {
-        return $this->bisTerId;
-    }
-
-    public function getTypeVoieId()
-    {
-        return $this->typeVoieId;
     }
 
     public function getNomVoie()
@@ -184,14 +156,9 @@ class Adresse extends Entity {
         return $this->codePostal;
     }
 
-    public function getVilleCodeInsee()
+    public function getVille()
     {
-        return $this->villeCodeInsee;
-    }
-
-    public function getVilleLibelle()
-    {
-        return $this->villeLibelle;
+        return $this->ville;
     }
 
     public function getPaysCodeInsee()
@@ -204,25 +171,21 @@ class Adresse extends Entity {
         return $this->paysLibelle;
     }
 
-    public function getHistoDebut()
+    public function setId($id)
     {
-        return $this->histoDebut;
+        $this->id = $id;
+        return $this;
     }
 
-    public function getHistoFin()
+    public function setIntervenantId($intervenantId)
     {
-        return $this->histoFin;
+        $this->intervenantId = $intervenantId;
+        return $this;
     }
 
     public function setPrincipale($principale)
     {
         $this->principale = $principale;
-        return $this;
-    }
-
-    public function setHabitantChez($habitantChez)
-    {
-        $this->habitantChez = $habitantChez;
         return $this;
     }
 
@@ -232,21 +195,21 @@ class Adresse extends Entity {
         return $this;
     }
 
+    public function setMentionComplementaire($mentionComplementaire)
+    {
+        $this->mentionComplementaire = $mentionComplementaire;
+        return $this;
+    }
+
+    public function setBatiment($batiment)
+    {
+        $this->batiment = $batiment;
+        return $this;
+    }
+
     public function setNoVoie($noVoie)
     {
         $this->noVoie = $noVoie;
-        return $this;
-    }
-
-    public function setBisTerId($bisTerId)
-    {
-        $this->bisTerId = $bisTerId;
-        return $this;
-    }
-
-    public function setTypeVoieId($typeVoieId)
-    {
-        $this->typeVoieId = $typeVoieId;
         return $this;
     }
 
@@ -268,15 +231,9 @@ class Adresse extends Entity {
         return $this;
     }
 
-    public function setVilleCodeInsee($villeCodeInsee)
+    public function setVille($ville)
     {
-        $this->villeCodeInsee = $villeCodeInsee;
-        return $this;
-    }
-
-    public function setVilleLibelle($villeLibelle)
-    {
-        $this->villeLibelle = $villeLibelle;
+        $this->ville = $ville;
         return $this;
     }
 
@@ -291,18 +248,5 @@ class Adresse extends Entity {
         $this->paysLibelle = $paysLibelle;
         return $this;
     }
-
-    public function setHistoDebut(DateTime $histoDebut)
-    {
-        $this->histoDebut = $histoDebut;
-        return $this;
-    }
-
-    public function setHistoFin(DateTime $histoFin)
-    {
-        $this->histoFin = $histoFin;
-        return $this;
-    }
-
 
 }

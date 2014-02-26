@@ -4,7 +4,7 @@ namespace Import\Model\Connecteur;
 
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Import\Model\Exception;
+use Import\Model\Exception\Exception;
 
 /**
  *
@@ -48,6 +48,28 @@ abstract class Connecteur implements ServiceManagerAwareInterface {
     }
 
     /**
+     *
+     * @param string $id Identifiant de l'intervenant
+     * @return \Import\Model\Entity\Intervenant\Permanent
+     * @throws Exception
+     */
+    public function getIntervenantPermanent( $id )
+    {
+         throw new Exception('Récupération d\'un intervenant permanent non implémentée dans le connecteur '.$this->getName());
+    }
+
+    /**
+     *
+     * @param string $id Identifiant de l'intervenant
+     * @return \Import\Model\Entity\Intervenant\Exterieur
+     * @throws Exception
+     */
+    public function getIntervenantExterieur( $id )
+    {
+         throw new Exception('Récupération d\'un intervenant extérieur non implémentée dans le connecteur '.$this->getName());
+    }
+
+    /**
      * Retourne la liste des adresses d'un intervenant
      * 
      * @param string $id Identifiant de l'intervenant
@@ -57,6 +79,18 @@ abstract class Connecteur implements ServiceManagerAwareInterface {
     public function getIntervenantAdresses( $id )
     {
         throw new Exception('Récupération des adresses d\'intervenant non implémentée dans le connecteur '.$this->getName());
+    }
+
+    /**
+     * Retourne la liste des affectations d'un intervenant
+     *
+     * @param string $id Identifiant de l'intervenant
+     * @return \Import\Model\Entity\Intervenant\Affectation[]
+     * @throws Exception
+     */
+    public function getIntervenantAffectations( $id )
+    {
+        throw new Exception('Récupération des affectations d\'intervenant non implémentée dans le connecteur '.$this->getName());
     }
 
     /**
@@ -79,7 +113,30 @@ abstract class Connecteur implements ServiceManagerAwareInterface {
      */
     public function getStructure( $id )
     {
-        throw new Exception('Récupération des identifiants des structures non implémentée dans le connecteur '.$this->getName());
+        throw new Exception('Récupération d\'une structure non implémentée dans le connecteur '.$this->getName());
+    }
+
+    /**
+     * Retourne la liste des identifiants source des établissements
+     *
+     * @return string[]
+     * @throws Exception
+     */
+    public function getEtablissementList()
+    {
+        throw new Exception('Récupération des identifiants des établissements non implémentée dans le connecteur '.$this->getName());
+    }
+
+    /**
+     * Retourne un établissement à partir de son identifiant
+     *
+     * @param string|array $id Identifiant de(s) l'établissement(s)
+     * @return \Import\Model\Entity\Structure\Etablissement
+     * @throws Exception
+     */
+    public function getEtablissement( $id )
+    {
+        throw new Exception('Récupération d\'un établissement non implémentée dans le connecteur '.$this->getName());
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Import\Model\Mapper;
 
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
-use Import\Model\Exception;
+use Import\Model\Exception\Exception;
 
 /**
  * Mapper
@@ -21,9 +21,14 @@ class Mapper implements ServiceManagerAwareInterface {
     protected $mapping = array(
         'searchIntervenant'         => 'Harpege',
         'getIntervenant'            => 'Harpege',
+        'getIntervenantPermanent'   => 'Harpege',
+        'getIntervenantExterieur'   => 'Harpege',
         'getIntervenantAdresses'    => 'Harpege',
         'getStructureList'          => 'Harpege',
         'getStructure'              => 'Harpege',
+
+        'getEtablissementList'      => 'Apogee',
+        'getEtablissement'          => 'Apogee',
     );
 
     protected $connecteurs = array();

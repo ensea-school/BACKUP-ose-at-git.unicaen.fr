@@ -1,6 +1,6 @@
 <?php
 
-namespace Import\Model;
+namespace Import\Model\Exception;
 
 use Common\Exception\RuntimeException;
 

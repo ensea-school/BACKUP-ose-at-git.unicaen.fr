@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Utilisateur
  */
-class Utilisateur
+class Utilisateur implements \ZfcUser\Entity\UserInterface
 {
     /**
      * @var string
@@ -184,6 +184,19 @@ class Utilisateur
     public function getUsername()
     {
         return $this->username;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Utilisateur
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
     }
 
     /**

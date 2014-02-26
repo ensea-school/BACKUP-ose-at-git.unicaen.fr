@@ -2,25 +2,26 @@
 
 namespace Application;
 
-use Zend\EventManager\Event;
-use UnicaenAuth\Event\Listener\AuthenticatedUserSaved;
+use UnicaenAuth\Event\Listener\AuthenticatedUserSavedAbstractListener;
+use UnicaenAuth\Event\UserAuthenticatedEvent;
 
 /**
- * Renseigne les relations 'intervenant' et 'personnel' avant que l'objet soit persisté.
+ * Scrute l'événement déclenché juste avant que l'entité utilisateur ne soit persistée
+ * pour renseigner les relations 'intervenant' et 'personnel'.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AuthenticatedUserSavedListener extends AuthenticatedUserSaved
+class AuthenticatedUserSavedListener extends AuthenticatedUserSavedAbstractListener
 {
     /**
      * Renseigne les relations 'intervenant' et 'personnel' avant que l'objet soit persisté.
      * 
-     * @param Event $e
+     * @param UserAuthenticatedEvent $e
      */
-    public function onUserAuthenticatedPrePersist(Event $e)
+    public function onUserAuthenticatedPrePersist(UserAuthenticatedEvent $e)
     {
-        $user       = $e->getParam('entity');     /* @var $user       \ZfcUser\Entity\UserInterface */
-        $ldapPeople = $e->getParam('ldapPeople'); /* @var $ldapPeople \UnicaenApp\Entity\Ldap\People */
+        $user       = $e->getDbUser();   /* @var $user       \ZfcUser\Entity\UserInterface */
+        $ldapPeople = $e->getLdapUser(); /* @var $ldapPeople \UnicaenApp\Entity\Ldap\People */
         
         if ($user instanceof User) {
             $repo = $this->em->getRepository('Application\Entity\Db\Personnel');

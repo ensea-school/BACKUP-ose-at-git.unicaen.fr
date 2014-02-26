@@ -31,13 +31,6 @@
         });
         event.preventDefault();
     });
-    
-    $(document).ajaxComplete(function(event, xhr, settings) {
-        if (xhr.status === 403) {
-            alert("Votre session a expiré, vous allez devoir vous reconnecter...");
-            $(location).attr('href', '<?php echo $this->url('zfcuser/login') ?>?redirect=' + $(location).attr('href'));
-        }
-    });
 
     $(function() {
         $(":input").tooltip();

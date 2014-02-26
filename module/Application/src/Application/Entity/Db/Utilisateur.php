@@ -12,7 +12,7 @@ class Utilisateur implements \ZfcUser\Entity\UserInterface
     /**
      * @var string
      */
-    private $display_name;
+    private $displayName;
 
     /**
      * @var string
@@ -72,26 +72,26 @@ class Utilisateur implements \ZfcUser\Entity\UserInterface
     }
 
     /**
-     * Set display_name
+     * Set displayName
      *
      * @param string $displayName
      * @return Utilisateur
      */
     public function setDisplayName($displayName)
     {
-        $this->display_name = $displayName;
+        $this->displayName = $displayName;
 
         return $this;
     }
 
     /**
-     * Get display_name
+     * Get displayName
      *
      * @return string 
      */
     public function getDisplayName()
     {
-        return $this->display_name;
+        return $this->displayName;
     }
 
     /**
@@ -283,19 +283,8 @@ class Utilisateur implements \ZfcUser\Entity\UserInterface
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRoles()
+    public function getRole()
     {
         return $this->role;
     }
-    /**
-     * @var string
-     */
-    private $displayName;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $roles;
-
-
 }

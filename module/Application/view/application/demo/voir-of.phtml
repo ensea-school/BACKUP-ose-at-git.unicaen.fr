@@ -10,10 +10,14 @@
         <dd><?php echo $element->getLibNivVet() ?></dd>
         <dt>VET</dt>
         <dd><?php echo $element->getLibWebVet() ?></dd>
+        <?php if ($element->getCodPel()): ?>
         <dt>Période</dt>
         <dd><?php echo $element->getCodPel() ?></dd>
+        <?php endif; ?>
+        <?php if ($element->getLicUe()): ?>
         <dt>UE</dt>
         <dd><?php echo $element->getLicUe() ?></dd>
+        <?php endif; ?>
         <dt>Code élément</dt>
         <dd><?php echo $element->getCodElp() ?></dd>
         <dt>Libellé élément</dt>

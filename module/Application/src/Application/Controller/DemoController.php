@@ -171,7 +171,7 @@ class DemoController extends AbstractActionController
             $extra .= sprintf('<span class="vet" title="%s">%s</span> > ', "Version d'étape", $item->getLibWebVet());
             $extra .= sprintf('<span class="pel" title="%s">%s</span> ', "Période", $item->getCodPel());
             $extra .= $avecUe ? sprintf('> <span class="ue" title="%s">%s</span>', "UE", $item->getLicUe()) : null;
-            $template = sprintf('<span class=\"extra\">{extra}</span><span class="elt" title="%s">{label}</span>', "Élément");
+            $template = sprintf('<span class="extra">{extra}</span> <span class="elt" title="%s">{label}</span>', "Élément");
             $result[$item->getId()] = array(
                 'id'       => $item->getId(),
                 'label'    => $item->getCodElp() . ' ' . $item->getLibElp(),

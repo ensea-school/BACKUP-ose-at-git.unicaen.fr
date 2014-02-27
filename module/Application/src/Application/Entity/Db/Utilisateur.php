@@ -2,12 +2,13 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use BjyAuthorize\Provider\Role\ProviderInterface;
+use ZfcUser\Entity\UserInterface;
 
 /**
  * Utilisateur
  */
-class Utilisateur implements \ZfcUser\Entity\UserInterface
+class Utilisateur implements UserInterface, ProviderInterface
 {
     /**
      * @var string
@@ -52,14 +53,14 @@ class Utilisateur implements \ZfcUser\Entity\UserInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $role;
-
+    private $roles;
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -258,12 +259,12 @@ class Utilisateur implements \ZfcUser\Entity\UserInterface
     /**
      * Add role
      *
-     * @param \Application\Entity\Db\UtilisateurRole $role
+     * @param \Application\Entity\Db\RoleUtilisateur $role
      * @return Utilisateur
      */
-    public function addRole(\Application\Entity\Db\UtilisateurRole $role)
+    public function addRole(\Application\Entity\Db\RoleUtilisateur $role)
     {
-        $this->role[] = $role;
+        $this->roles[] = $role;
 
         return $this;
     }
@@ -271,20 +272,20 @@ class Utilisateur implements \ZfcUser\Entity\UserInterface
     /**
      * Remove role
      *
-     * @param \Application\Entity\Db\UtilisateurRole $role
+     * @param \Application\Entity\Db\RoleUtilisateur $role
      */
-    public function removeRole(\Application\Entity\Db\UtilisateurRole $role)
+    public function removeRole(\Application\Entity\Db\RoleUtilisateur $role)
     {
-        $this->role->removeElement($role);
+        $this->roles->removeElement($role);
     }
 
     /**
-     * Get role
+     * Get roles
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRole()
+    public function getRoles()
     {
-        return $this->role;
+        return $this->roles;
     }
 }

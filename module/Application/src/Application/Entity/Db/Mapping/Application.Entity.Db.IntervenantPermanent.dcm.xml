@@ -9,29 +9,9 @@
       <index name="IDX_FB425D278AD1AE90" columns="SECTION_CNU_ID"/>
     </indexes>
     <id name="id" association-key="true"/>
-    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
-    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
-    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
-    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="sectionCnu" target-entity="Application\Entity\Db\SectionCnu">
       <join-columns>
         <join-column name="SECTION_CNU_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
-      <join-columns>
-        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
-      <join-columns>
-        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
-      <join-columns>
-        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="corps" target-entity="Application\Entity\Db\Corps">

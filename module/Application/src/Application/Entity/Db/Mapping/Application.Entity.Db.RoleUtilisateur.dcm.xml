@@ -17,7 +17,7 @@
         <join-column name="PARENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="utilisateur" target-entity="Application\Entity\Db\Utilisateur" inversed-by="role">
+    <many-to-many field="utilisateurs" target-entity="Application\Entity\Db\Utilisateur" inversed-by="roles">
       <join-table name="ROLE_UTILISATEUR_LINKER">
         <join-columns>
           <join-column name="ROLE_ID" referenced-column-name="ID"/>

@@ -21,6 +21,9 @@
     <field name="depNaissanceCodeInsee" type="string" column="DEP_NAISSANCE_CODE_INSEE" length="3" nullable="true"/>
     <field name="depNaissanceLibelle" type="string" column="DEP_NAISSANCE_LIBELLE" length="30" nullable="true"/>
     <field name="email" type="string" column="EMAIL" length="255" nullable="true"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="60" nullable="false"/>
     <field name="nomUsuel" type="string" column="NOM_USUEL" length="60" nullable="false"/>
     <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="13" nullable="true"/>
@@ -35,6 +38,8 @@
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
     <field name="telMobile" type="string" column="TEL_MOBILE" length="20" nullable="true"/>
     <field name="telPro" type="string" column="TEL_PRO" length="20" nullable="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <field name="villeNaissanceCodeInsee" type="string" column="VILLE_NAISSANCE_CODE_INSEE" length="5" nullable="true"/>
     <field name="villeNaissanceLibelle" type="string" column="VILLE_NAISSANCE_LIBELLE" length="26" nullable="true"/>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
@@ -45,6 +50,21 @@
     <many-to-one field="civilite" target-entity="Application\Entity\Db\Civilite">
       <join-columns>
         <join-column name="CIVILITE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

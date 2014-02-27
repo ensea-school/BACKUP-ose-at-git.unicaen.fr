@@ -32,8 +32,9 @@ class Module
     public function getServiceConfig()
     {
         $services = array(
-            'Intervenant',
-            'Structure',
+            'Schema',
+            'QueryGenerator',
+            'Intervenant'
         );
         $processus = array(
             'Import',
@@ -42,13 +43,13 @@ class Module
         );
         foreach( $services as $service ){
             $factories['importService'.$service] = function($sm) use ($service){
-                $className = 'Import\\Model\\Service\\'.$service;
+                $className = 'Import\\Service\\'.$service;
                 return new $className;
             };
         }
         foreach( $processus as $proc ){
             $factories['importProcessus'.$proc] = function($sm) use ($proc){
-                $className = 'Import\\Model\\Processus\\'.$proc;
+                $className = 'Import\\Processus\\'.$proc;
                 return new $className;
             };
         }

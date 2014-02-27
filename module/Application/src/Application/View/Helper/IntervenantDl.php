@@ -2,55 +2,13 @@
 
 namespace Application\Entity\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Application\Entity\Db\IntervenantInterface;
-        
 /**
  * Description of IntervenantDl
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantDl extends AbstractHelper
+class IntervenantDl extends AbstractDl
 {
-    /**
-     * @var IntervenantInterface
-     */
-    protected $intervenant;
-    
-    /**
-     * @var bool
-     */
-    protected $includeVisas = false;
-    
-    /**
-     * @var bool
-     */
-    protected $horizontal = false;
-    
-    /**
-     * 
-     * @param IntervenantInterface $intervenant
-     * @param bool $horizontal
-     * @return self
-     */
-    public function __invoke(IntervenantInterface $intervenant = null, $horizontal = false)
-    {
-        $this->intervenant = $intervenant;
-        $this->horizontal  = $horizontal;
-        
-        return $this;
-    }
-    
-    /**
-     * 
-     * 
-     * @return string Code HTML
-     */
-    public function __toString()
-    {
-        return $this->render();
-    }
-    
     /**
      * 
      * 
@@ -58,119 +16,95 @@ class IntervenantDl extends AbstractHelper
      */
     public function render()
     {
-        if (!$this->intervenant) {
+        if (!$this->entity) {
             return '';
         }
         
-        $intervenant   = $this->intervenant;
+        $entity   = $this->entity; /* @var $entity \Application\Entity\Db\IntervenantInterface */
         $tplDtdd = $this->getTemplateDtDd();
         $html    = '';
         $dtdds   = array();
         
         $dtdds[] = sprintf($tplDtdd,
             "Nom prénom :", 
-            $intervenant
+            $entity
         );
         
         $dtdds[] = sprintf($tplDtdd,
-            "N° {$intervenant->getSourceToString()} :", 
-            $intervenant->getSourceCode()
+            "N° {$entity->getSourceToString()} :", 
+            $entity->getSourceCode()
         );
             
-        if ($intervenant instanceof \Application\Entity\Db\Intervenant) {
+        if ($entity instanceof \Application\Entity\Db\Intervenant) {
             $dtdds[] = sprintf($tplDtdd,
                 "N° INSEE :", 
-                $intervenant->getNumeroInsee()
+                $entity->getNumeroInsee()
             );
         }
         
         $dtdds[] = sprintf($tplDtdd,
             "Email :", 
-            $intervenant->getEmail()
+            $entity->getEmail()
         );
         
         $dtdds[] = sprintf($tplDtdd,
             "Date de naissance :", 
-            $intervenant->getDateNaissanceToString()
+            $entity->getDateNaissanceToString()
         );
             
-        if ($intervenant instanceof \Application\Entity\Db\Intervenant) {
+        if ($entity instanceof \Application\Entity\Db\Intervenant) {
             $dtdds[] = sprintf($tplDtdd,
                 "Ville de naissance :", 
-                $intervenant->getVilleNaissanceLibelle()
+                $entity->getVilleNaissanceLibelle()
             );
             $dtdds[] = sprintf($tplDtdd,
                 "Pays de naissance :", 
-                $intervenant->getPaysNaissanceLibelle()
+                $entity->getPaysNaissanceLibelle()
             );
             $dtdds[] = sprintf($tplDtdd,
                 "Téléphone mobile :", 
-                $intervenant->getTelMobile()
+                $entity->getTelMobile()
             );
             $dtdds[] = sprintf($tplDtdd,
                 "Téléphone pro :", 
-                $intervenant->getTelPro()
+                $entity->getTelPro()
             );
         }
         
-        if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
+        if ($entity instanceof \Application\Entity\Db\IntervenantPermanent) {
             $dtdds[] = sprintf($tplDtdd,
                 "Corps :", 
-                $intervenant->getCorps()
+                $entity->getCorps()
             );
         }
-        elseif ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
+        elseif ($entity instanceof \Application\Entity\Db\IntervenantExterieur) {
             $dtdds[] = sprintf($tplDtdd,
                 "Régime sécu :", 
-                $intervenant->getRegimeSecu()
+                $entity->getRegimeSecu()
             );
         }
         
-        if ($intervenant instanceof \Application\Entity\Db\Intervenant) {
+        if ($entity instanceof \Application\Entity\Db\Intervenant) {
             $dtdds[] = sprintf($tplDtdd,
                 "Prime d'excellence scientifique :", 
-                $intervenant->getPrimeExcellenceScientifique() ? 'Oui' : 'Non'
+                $entity->getPrimeExcellenceScientifique() ? 'Oui' : 'Non'
             );
             $dtdds[] = sprintf($tplDtdd,
                 "Section CNU :", 
-                $intervenant->getSectionCnu() ? implode(' ; ', $intervenant->getSectionCnu()) : "Aucune"
+                $entity->getSectionCnu() ? implode(' ; ', $entity->getSectionCnu()) : "Aucune"
             );
         }
         
 //        $commentaires = sprintf('<span title="%s">%s</span>', 
-//                    htmlspecialchars($tmp = $intervenant->getCommentaires(), ENT_NOQUOTES), 
-//                    $intervenant->getCommentaires() ? \UnicaenApp\Util::truncatedString($tmp) : "Aucun");
+//                    htmlspecialchars($tmp = $entity->getCommentaires(), ENT_NOQUOTES), 
+//                    $entity->getCommentaires() ? \UnicaenApp\Util::truncatedString($tmp) : "Aucun");
 //        $dtdds[] = sprintf($tplDtdd,
 //            "Commentaires",
 //            $commentaires
 //        );
         
-        $html .= sprintf($this->getTemplateDl('intervenant-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
+        $html .= sprintf($this->getTemplateDl('intervenant intervenant-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
  
         return $html;
-    }
-    
-    /**
-     *
-     * @param string $class 
-     * @return string
-     */
-    public function getTemplateDl($class = null)
-    {
-        $classes = array();
-        $classes[] = $this->horizontal ? 'dl-horizontal' : null;
-        $classes[] = $class;
-        $classes = implode(' ', $classes);
-        
-        return '<dl class="intervenant ' . $classes . '">' . PHP_EOL . '%s' . PHP_EOL . '</dl>'. PHP_EOL;
-    }
-    
-    /**
-     *
-     * @return string
-     */
-    public function getTemplateDtDd()
-    {
-        return '<dt>' . PHP_EOL . '%s' . PHP_EOL . '</dt>'. PHP_EOL . '<dd>' . PHP_EOL . '%s' . PHP_EOL . '</dd>'. PHP_EOL;
     }
 }

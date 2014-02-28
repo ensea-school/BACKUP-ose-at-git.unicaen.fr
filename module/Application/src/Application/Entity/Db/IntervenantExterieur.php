@@ -27,6 +27,16 @@ class IntervenantExterieur extends Intervenant
      */
     private $regimeSecu;
 
+    /**
+     * @var \DateTime
+     */
+    protected $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    protected $validiteFin;
+
 
     /**
      * Set situationFamiliale
@@ -118,5 +128,51 @@ class IntervenantExterieur extends Intervenant
     public function getTypePoste()
     {
         return $this->typePoste;
+    }
+
+    /**
+     * Set validiteDebut
+     *
+     * @param \DateTime $validiteDebut
+     * @return IntervenantPermanent
+     */
+    public function setValiditeDebut($validiteDebut)
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteDebut
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeDebut()
+    {
+        return $this->validiteDebut;
+    }
+
+    /**
+     * Set validiteFin
+     *
+     * @param \DateTime $validiteFin
+     * @return IntervenantPermanent
+     */
+    public function setValiditeFin($validiteFin)
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteFin
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeFin()
+    {
+        return $this->validiteFin;
     }
 }

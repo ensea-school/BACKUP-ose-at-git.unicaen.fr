@@ -34,12 +34,10 @@
     <field name="paysNationaliteCodeInsee" type="string" column="PAYS_NATIONALITE_CODE_INSEE" length="3" nullable="false"/>
     <field name="paysNationaliteLibelle" type="string" column="PAYS_NATIONALITE_LIBELLE" length="30" nullable="false"/>
     <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
-    <field name="primeExcellenceScientifique" type="string" column="PRIME_EXCELLENCE_SCIENTIFIQUE" length="1" nullable="true"/>
+    <field name="primeExcellenceScient" type="boolean" column="PRIME_EXCELLENCE_SCIENT" nullable="true"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
     <field name="telMobile" type="string" column="TEL_MOBILE" length="20" nullable="true"/>
     <field name="telPro" type="string" column="TEL_PRO" length="20" nullable="true"/>
-    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
-    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <field name="villeNaissanceCodeInsee" type="string" column="VILLE_NAISSANCE_CODE_INSEE" length="5" nullable="true"/>
     <field name="villeNaissanceLibelle" type="string" column="VILLE_NAISSANCE_LIBELLE" length="26" nullable="true"/>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">

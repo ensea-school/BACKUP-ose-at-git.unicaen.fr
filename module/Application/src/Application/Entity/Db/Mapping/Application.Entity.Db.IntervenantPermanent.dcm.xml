@@ -9,6 +9,8 @@
       <index name="IDX_FB425D278AD1AE90" columns="SECTION_CNU_ID"/>
     </indexes>
     <id name="id" association-key="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="sectionCnu" target-entity="Application\Entity\Db\SectionCnu">
       <join-columns>
         <join-column name="SECTION_CNU_ID" referenced-column-name="ID"/>

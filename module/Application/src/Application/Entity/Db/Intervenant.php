@@ -164,24 +164,14 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $sectionCnu;
     
     /**
-     * @var string
+     * @var boolean
      */
-    private $primeExcellenceScientifique;
+    private $primeExcellenceScient;
 
     /**
      * @var string
      */
     private $telPro;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
     
     /**
      * @var \DateTime
@@ -779,26 +769,26 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
-     * Set primeExcellenceScientifique
+     * Set primeExcellenceScient
      *
-     * @param string $primeExcellenceScientifique
+     * @param boolean $primeExcellenceScient
      * @return Intervenant
      */
-    public function setPrimeExcellenceScientifique($primeExcellenceScientifique)
+    public function setPrimeExcellenceScient($primeExcellenceScient)
     {
-        $this->primeExcellenceScientifique = $primeExcellenceScientifique;
+        $this->primeExcellenceScient = $primeExcellenceScient;
 
         return $this;
     }
 
     /**
-     * Get primeExcellenceScientifique
+     * Get primeExcellenceScient
      *
-     * @return string 
+     * @return boolean 
      */
-    public function getPrimeExcellenceScientifique()
+    public function getPrimeExcellenceScient()
     {
-        return $this->primeExcellenceScientifique;
+        return $this->primeExcellenceScient;
     }
 
     /**
@@ -914,52 +904,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getHistoModification()
     {
         return $this->histoModification;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return IntervenantPermanent
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return IntervenantPermanent
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

@@ -18,6 +18,16 @@ class IntervenantPermanent extends Intervenant
     private $sectionCnu;
 
     /**
+     * @var \DateTime
+     */
+    protected $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    protected $validiteFin;
+
+    /**
      * Set corps
      *
      * @param \Application\Entity\Db\Corps $corps
@@ -61,5 +71,51 @@ class IntervenantPermanent extends Intervenant
     public function getSectionCnu()
     {
         return $this->sectionCnu;
+    }
+
+    /**
+     * Set validiteDebut
+     *
+     * @param \DateTime $validiteDebut
+     * @return IntervenantPermanent
+     */
+    public function setValiditeDebut($validiteDebut)
+    {
+        $this->validiteDebut = $validiteDebut;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteDebut
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeDebut()
+    {
+        return $this->validiteDebut;
+    }
+
+    /**
+     * Set validiteFin
+     *
+     * @param \DateTime $validiteFin
+     * @return IntervenantPermanent
+     */
+    public function setValiditeFin($validiteFin)
+    {
+        $this->validiteFin = $validiteFin;
+
+        return $this;
+    }
+
+    /**
+     * Get validiteFin
+     *
+     * @return \DateTime 
+     */
+    public function getValiditeFin()
+    {
+        return $this->validiteFin;
     }
 }

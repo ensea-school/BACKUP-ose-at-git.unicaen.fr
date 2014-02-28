@@ -11,6 +11,8 @@
       <index name="IDX_8FEA72F063F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
     <id name="id" association-key="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="situationFamiliale" target-entity="Application\Entity\Db\SituationFamiliale">
       <join-columns>
         <join-column name="SITUATION_FAMILIALE_ID" referenced-column-name="ID"/>

@@ -36,13 +36,18 @@ class Intervenant extends Service {
             $params["criterionStr$i"] = '%'.$criterion[$i].'%';
         }
 
+        $sexeFem = \Common\Constants::SEXE_F;
+        
         $sql = <<<EOS
         SELECT DISTINCT
             source_code,
             civilite.libelle_court civilite,
-            UPPER(nom_usuel) nom_usuel,
+            nom_usuel,
+            nom_patronymique,
+            decode(civilite.sexe, '$sexeFem', 1, 0) est_une_femme,
             prenom,
-            date_naissance
+            date_naissance,
+            'UFR Sciences, UFR LVE' affectation
         FROM
             SRC_INTERVENANT
             JOIN CIVILITE ON (CIVILITE.ID = SRC_INTERVENANT.CIVILITE_ID)
@@ -56,15 +61,17 @@ EOS;
         $res = $this->query($sql, $params );
 
         $result = array();
+        $f = new \Common\Filter\IntervenantTrouveFormatter();
         foreach( $res as $r ){
-            $dateNaissance = new DateTime( $r['DATE_NAISSANCE'] );
-
-            $result[$r['SOURCE_CODE']] = array(
-               'id'    => $r['SOURCE_CODE'],
-               'label' => $r['NOM_USUEL'].' '.$r['PRENOM'],
-               'extra' => '(n° '.$r['SOURCE_CODE'].', né'.('M.' == $r['CIVILITE'] ? '' : 'e').' le '.$dateNaissance->format('d/m/Y').')',
-            );
+//            $dateNaissance = new DateTime( $r['DATE_NAISSANCE'] );
+//            $result[$r['SOURCE_CODE']] = array(
+//               'id'    => $r['SOURCE_CODE'],
+//               'label' => $r['NOM_USUEL'].' '.$r['PRENOM'],
+//               'extra' => '(n° '.$r['SOURCE_CODE'].', né'.('M.' == $r['CIVILITE'] ? '' : 'e').' le '.$dateNaissance->format('d/m/Y').')',
+//            );
+            $result[$r['SOURCE_CODE']] = $f->filter($r);
         }
+
         return $result;
     }
 

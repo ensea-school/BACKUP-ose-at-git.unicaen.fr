@@ -1,0 +1,42 @@
+<div class="jumbotron">
+    <h1>Intervenants</h1>
+</div>
+
+<style>
+    span.sas-highlight { font-weight: bold; }
+</style>
+
+<?php $form->prepare(); ?>
+
+<div class="row">
+    <div class="col-md-4">
+        <?php echo $this->form()->openTag($form) ?> 
+        <?php echo $this->formControlGroup($form->get('interv')); ?>
+        <input class="btn btn-primary" type="submit" value="Consulter" name="submit">
+        <?php echo $this->form()->closeTag() ?> 
+    </div>
+    <div class="col-md-8 intervenant-voir">
+        <?php if (false !== $intervenant): ?>
+            <?php echo $intervenant ? $this->intervenantDl($intervenant, true) : "Intervenant introuvable dans OSE." ?> 
+        <?php endif ?>
+        <?php if ($intervenant): ?>
+            <?php echo $this->navigation('navigation')->menuContextuel()->withTarget($intervenant->getId()) ?>
+        <?php endif ?>
+    </div>
+</div>
+
+<script>
+    var url = '<?php echo $this->url('intervenant/default', array('action' => 'voir')) ?>';
+    $("body").on("submit", "form.intervenant-rech", function(event) {
+        var form = $(event.target);
+        var id = $("input.sas", form).val();
+        $.post(url, { 'id': id }, function(data) {
+            $("div.intervenant-voir").html(data);
+        });
+        event.preventDefault();
+    });
+
+    $(function() {
+        $(":input").tooltip();
+    });
+</script>

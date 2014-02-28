@@ -21,6 +21,34 @@ interface IntervenantInterface
     public function __toString();
 
     /**
+     * Retourne le nom usuel.
+     * 
+     * @return string
+     */
+    public function getNomUsuel();
+
+    /**
+     * Retourne le nom patronymique.
+     * 
+     * @return string
+     */
+    public function getNomPatronymique();
+
+    /**
+     * Retourne le prenom.
+     * 
+     * @return string
+     */
+    public function getPrenom();
+
+    /**
+     * Get estUneFemme
+     *
+     * @return bool 
+     */
+    public function estUneFemme();
+    
+    /**
      * Get civilite
      *
      * @return string 

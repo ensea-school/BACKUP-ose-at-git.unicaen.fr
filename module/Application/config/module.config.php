@@ -1,11 +1,6 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
+
+namespace Application;
 
 return array(
     'doctrine' => array(
@@ -22,10 +17,6 @@ return array(
             ),
         ),
         'driver' => array(
-//            'zfcuser_entity' => array(
-//                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
-//                'paths' => __DIR__ . '/xml/zfcuser'
-//            ),
             'orm_default_driver' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
                 'paths' => array(
@@ -47,11 +38,11 @@ return array(
                 ),
             ),
         ),
-//        'cache' => array(
-//            'apc' => array(
-//                'namespace' => __NAMESPACE__,
-//            ),
-//        ),
+        'cache' => array(
+            'apc' => array(
+                'namespace' => 'OSE__' . __NAMESPACE__,
+            ),
+        ),
     ),
     'zfcuser' => array(
         // telling ZfcUser to use our own class
@@ -68,6 +59,18 @@ return array(
                     'defaults' => array(
                         'controller' => 'Application\Controller\Index',
                         'action'     => 'index',
+                    ),
+                ),
+            ),
+            'recherche' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route'    => '/recherche/:action',
+                    'constraints' => array(
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Recherche',
                     ),
                 ),
             ),
@@ -188,15 +191,15 @@ return array(
                                 'visible' => true,
                                 'pages' => array(),
                             ),
-//                            'intervenant' => array(
-//                                'label'  => "Intervenants",
-//                                'route'  => 'demo',
-//                                'params' => array(
-//                                    'action' => 'of',
-//                                ),
-//                                'visible' => true,
-//                                'pages' => array(),
-//                            ),
+                            'intervenant' => array(
+                                'label'  => "Intervenants",
+                                'route'  => 'demo',
+                                'params' => array(
+                                    'action' => 'intervenant',
+                                ),
+                                'visible' => true,
+                                'pages' => array(),
+                            ),
                         ),
                     ),
 //                    'intervenant' => array(
@@ -257,6 +260,9 @@ return array(
                     'controller' => 'Application\Controller\Intervenant', 
                     'action' => array('index', 'modifier', 'rechercher', 'voir', 'search'), 
                     'roles' => array('user')),
+                array(
+                    'controller' => 'Application\Controller\Recherche', 
+                    'roles' => array('user')),
             ),
         ),
     ),
@@ -280,6 +286,7 @@ return array(
             'Application\Controller\Index'       => 'Application\Controller\IndexController',
             'Application\Controller\Demo'        => 'Application\Controller\DemoController',
             'Application\Controller\Intervenant' => 'Application\Controller\IntervenantController',
+            'Application\Controller\Recherche'   => 'Application\Controller\RechercheController',
         ),
     ),
     'view_manager' => array(

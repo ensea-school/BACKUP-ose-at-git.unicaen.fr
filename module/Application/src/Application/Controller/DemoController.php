@@ -29,6 +29,39 @@ class DemoController extends AbstractActionController
      * 
      * @return \Zend\View\Model\ViewModel
      */
+    public function intervenantAction()
+    {
+        $url    = $this->url()->fromRoute('recherche', array('action' => 'intervenantFind'));
+        $interv = new \UnicaenApp\Form\Element\SearchAndSelect('interv');
+        $interv->setAutocompleteSource($url)
+                ->setLabel("Rechercher un intervenant :")
+                ->setAttributes(array('title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"));
+        $form = new \Zend\Form\Form('search');
+        $form->setAttributes(array('class' => 'intervenant-rech'));
+        $form->add($interv);
+        
+        $intervenant = false;
+        
+//        // post
+//        if (is_array($data)) {
+//            $form->setData($data);
+////            var_dump($data);
+//            if ($form->isValid()) {
+//                $repo = $this->intervenant()->getRepo();
+//                $intervenant = $repo->findOneBy(array('sourceCode' => $form->get('interv')->getValueId()));
+//            }
+//        }
+        
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setVariables(array('form' => $form, 'intervenant' => $intervenant));
+        
+        return $view;
+    }
+
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function ofAction()
     {
         $em         = $this->intervenant()->getEntityManager(); /* @var $em \Doctrine\ORM\EntityManager */

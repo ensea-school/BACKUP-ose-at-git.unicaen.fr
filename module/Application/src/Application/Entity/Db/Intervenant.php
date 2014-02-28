@@ -227,19 +227,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      *
      * @return string 
      */
-    public function getNomComplet($includeCivilite = false, $includeNomPatronymique = false)
+    public function getNomComplet($avecCivilite = false, $avecNomPatro = false)
     {
-        $nomComplet = array();
-        if ($includeCivilite) {
-            $nomComplet[] = $this->getCivilite();
-        }
-        $nomComplet[] = $this->getNomUsuel();
-        $nomComplet[] = $this->getPrenom();
-        if ($includeNomPatronymique && $this->getNomPatronymique() != $this->getNomUsuel()) {
-            $nomComplet[] = sprintf(", née %s", $this->getNomPatronymique());
-        }
+        $f = new \Common\Formatter\NomCompletFormatter(true, $avecCivilite, $avecNomPatro);
         
-        return implode(" ", $nomComplet);
+        return $f->filter($this);
     }
 
     /**
@@ -1000,6 +992,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     
     
     /*************************** IntervenantInterface ***********************/
+    
+    /**
+     * Get estUneFemme
+     *
+     * @return bool 
+     */
+    public function estUneFemme()
+    {
+        return Civilite::SEXE_F === $this->getCivilite()->getSexe();
+    }
     
     /**
      * Get civilite

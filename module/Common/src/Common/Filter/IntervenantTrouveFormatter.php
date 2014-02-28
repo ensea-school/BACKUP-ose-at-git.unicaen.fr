@@ -43,30 +43,33 @@ class IntervenantTrouveFormatter extends AbstractFilter
             /* @var $value IntervenantInterface */
             $id        = $value->getSourceCode();
             $label     = $this->nomCompletFormatter->filter($value);
+            $civilite  = $value->getCiviliteToString();
             $dateNaiss = $value->getDateNaissanceToString();
             $feminin   = $value->estUneFemme();
             $affectat  = $value->getAffectationsToString();
         }
         else if ($value instanceof \stdClass) {
-            foreach (array('sourceCode', 'dateNaissance', 'estUneFemme', 'affectation') as $prop) {
+            foreach (array('civilite', 'sourceCode', 'dateNaissance', 'estUneFemme', 'affectation') as $prop) {
                 if (!isset($value->$prop)) {
                     throw new \Common\Exception\LogicException("L'objet à formatter doit posséder l'attribut public '$prop'.");
                 }
             }
             $id        = $value->sourceCode;
             $label     = $this->nomCompletFormatter->filter($value);
+            $civilite  = $value->civilite;
             $dateNaiss = $value->dateNaissance;
             $feminin   = $value->estUneFemme();
             $affectat  = $value->affectation;
         }
         else if (is_array($value)) {
-            foreach (array('SOURCE_CODE', 'DATE_NAISSANCE', 'EST_UNE_FEMME', 'AFFECTATION') as $prop) {
+            foreach (array('CIVILITE', 'SOURCE_CODE', 'DATE_NAISSANCE', 'EST_UNE_FEMME', 'AFFECTATION') as $prop) {
                 if (!array_key_exists($prop, $value)) {
                     throw new \Common\Exception\LogicException("Le tableau à formatter doit posséder la clé '$prop'.");
                 }
             }
             $id        = $value['SOURCE_CODE'];
             $label     = $this->nomCompletFormatter->filter($value);
+            $civilite  = $value['CIVILITE'];
             $dateNaiss = $value['DATE_NAISSANCE'];
             $feminin   = $value['EST_UNE_FEMME'];
             $affectat  = $value['AFFECTATION'];
@@ -75,11 +78,14 @@ class IntervenantTrouveFormatter extends AbstractFilter
             throw new \Common\Exception\LogicException("L'objet à formatter n'est pas d'un type supporté.");
         }
         
-        $extra  = sprintf("(né%s le %s, n°%s, %s)",
-                $feminin ? 'e' : '',
-                $dateNaiss instanceof \DateTime ? $dateNaiss->format(Constants::DATE_FORMAT) : $dateNaiss,
+        $dateNaiss = new \DateTime($dateNaiss);
+        
+        $extra  = sprintf("(%s, né%s le %s, n°%s, %s)",
+                $civilite,
+                (boolean) $feminin ? 'e' : '',
+                $dateNaiss->format(Constants::DATE_FORMAT),
                 $id ?: "Inconnu",
-                $affectat ?: "Affectation introuvable");
+                $affectat ?: "Affectation inconnue");
         
         $result = array(
             'id'    => $id,

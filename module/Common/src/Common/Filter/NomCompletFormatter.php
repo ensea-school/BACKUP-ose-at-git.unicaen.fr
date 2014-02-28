@@ -83,10 +83,10 @@ class NomCompletFormatter extends AbstractFilter
                     throw new \Common\Exception\LogicException("Le tableau à formatter doit posséder la clé '$prop'.");
                 }
             }
-            $nomUsuel = $value['nomUsuel'];
-            $nomPatro = $value['nomPatronymique'];
-            $prenom   = $value['prenom'];
-            $civilite = $value['civilite'];
+            $nomUsuel = $value['NOM_USUEL'];
+            $nomPatro = $value['NOM_PATRONYMIQUE'];
+            $prenom   = $value['PRENOM'];
+            $civilite = $value['CIVILITE'];
         }
         else {
             throw new \Common\Exception\LogicException("L'objet à formatter n'est pas d'un type supporté.");
@@ -96,11 +96,11 @@ class NomCompletFormatter extends AbstractFilter
         $nomPatro = ucfirst($this->nomEnMajuscule ? strtoupper($nomPatro) : $nomPatro);
         $prenom   = ucfirst($prenom);
         $civilite = $this->avecCivilite ? $civilite : null;
-            
+        
         $parts = array(
             $this->prenomDabord ? "$prenom $nomUsuel" : "$nomUsuel $prenom",
             $civilite,
-            $this->avecNomPatro && $nomPatro != $nomUsuel ? ", née $nomPatro" : null,
+            $this->avecNomPatro && $nomPatro != $nomUsuel ? "née $nomPatro" : null,
         );
         
         $result = implode(', ', array_filter($parts));

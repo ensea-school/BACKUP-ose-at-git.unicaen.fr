@@ -101,7 +101,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             'factories'  => array(
             ),
             'invokables' => array(
-                'intervenantDl' => 'Application\Entity\View\Helper\IntervenantDl',
+                'intervenantDl' => 'Application\View\Helper\IntervenantDl',
+                'structureDl'   => 'Application\View\Helper\StructureDl',
+                'historiqueDl'  => 'Application\View\Helper\HistoriqueDl',
             ),
         );
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Entity\View\Helper;
+namespace Application\View\Helper;
         
 /**
  * Description of StructureDl

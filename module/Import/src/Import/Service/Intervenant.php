@@ -30,29 +30,30 @@ class Intervenant extends Service {
         $sqlCrit = '';
         for( $i=0; $i<count($criterion); $i++ ){
             if ('' != $sqlCrit) $sqlCrit .= ' AND ';
-            $sqlCrit .= "(lower(CONVERT(nom_usuel,'US7ASCII')) LIKE LOWER(CONVERT(:criterionStr$i,'US7ASCII'))"
-                     ." OR lower(CONVERT(nom_patronymique,'US7ASCII')) LIKE LOWER(CONVERT(:criterionStr$i,'US7ASCII'))"
-                     ." OR lower(CONVERT(prenom,'US7ASCII')) LIKE LOWER(CONVERT(:criterionStr$i,'US7ASCII')))";
+            $sqlCrit .= "(lower(CONVERT(i.nom_usuel,'US7ASCII')) LIKE LOWER(CONVERT(:criterionStr$i,'US7ASCII'))"
+                     ." OR lower(CONVERT(i.nom_patronymique,'US7ASCII')) LIKE LOWER(CONVERT(:criterionStr$i,'US7ASCII'))"
+                     ." OR lower(CONVERT(i.prenom,'US7ASCII')) LIKE LOWER(CONVERT(:criterionStr$i,'US7ASCII')))";
             $params["criterionStr$i"] = '%'.$criterion[$i].'%';
         }
 
-        $sexeFem = \Common\Constants::SEXE_F;
-        
+        $params['sexeFem'] = \Common\Constants::SEXE_F;
+
         $sql = <<<EOS
         SELECT DISTINCT
-            source_code,
-            civilite.libelle_court civilite,
-            nom_usuel,
-            nom_patronymique,
-            decode(civilite.sexe, '$sexeFem', 1, 0) est_une_femme,
-            prenom,
-            date_naissance,
-            'UFR Sciences, UFR LVE' affectation
+            i.source_code,
+            c.libelle_court civilite,
+            i.nom_usuel,
+            i.nom_patronymique,
+            decode(c.sexe, :sexeFem, 1, 0) est_une_femme,
+            i.prenom,
+            i.date_naissance,
+            s.libelle_court affectation
         FROM
-            SRC_INTERVENANT
-            JOIN CIVILITE ON (CIVILITE.ID = SRC_INTERVENANT.CIVILITE_ID)
+            SRC_INTERVENANT i
+            JOIN CIVILITE c ON (c.ID = i.CIVILITE_ID)
+            JOIN STRUCTURE s ON (s.ID = i.STRUCTURE_ID)
         WHERE
-            (source_code = :criterionId OR ($sqlCrit))
+            (i.source_code = :criterionId OR ($sqlCrit))
             AND rownum <= :limit
         ORDER BY
             nom_usuel, prenom

@@ -60,6 +60,20 @@ class Import implements ServiceManagerAwareInterface
     }
 
     /**
+     * Import d'un, plusieurs ou toutes les sections CNU
+     *
+     * @param string|array|null  $sourceCode  Identifiant source de la section CNU
+     * @param boolean            $force       Force la mise à jour en cas d'import précédent
+     * @retun self
+     */
+    public function sectionCnu( $sourceCode=null, $force=true )
+    {
+        $sql = $this->makeMajQuery( 'SECTION_CNU', 'SOURCE_CODE', $sourceCode, $force );
+        $this->getEntityManager()->getConnection()->exec($sql);
+        return $this;
+    }
+
+    /**
      * Import d'un, plusieurs ou tous les corps
      *
      * @param string|array|null  $sourceCode  Identifiant source du corps
@@ -98,7 +112,7 @@ class Import implements ServiceManagerAwareInterface
         $sql = $this->makeMajQuery( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $ids, $force );
         $connection->exec($sql);
 
-        $sql = $this->makeMajQuery( 'AFFECTATION', 'INTERVENANT_ID', $ids, $force );
+        $sql = $this->makeMajQuery( 'AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $ids, $force );
         $connection->exec($sql);
 
         return $this;

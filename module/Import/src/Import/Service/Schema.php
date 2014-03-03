@@ -57,7 +57,8 @@ class Schema extends Service
             SELECT mview_name AS name FROM USER_MVIEWS
             UNION SELECT view_name AS name FROM USER_VIEWS
             UNION SELECT TABLE_NAME AS name FROM USER_TABLES
-        ) t WHERE name LIKE 'SRC_%'";
+        ) t JOIN user_tables ut ON (ut.table_name = SUBSTR(name,5))
+        WHERE name LIKE 'SRC_%'";
         return $this->query( $sql, array(), 'TABLE_NAME');
     }
 

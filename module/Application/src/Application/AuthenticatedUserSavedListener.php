@@ -4,6 +4,7 @@ namespace Application;
 
 use UnicaenAuth\Event\Listener\AuthenticatedUserSavedAbstractListener;
 use UnicaenAuth\Event\UserAuthenticatedEvent;
+use Application\Entity\Db\Utilisateur;
 
 /**
  * Scrute l'événement déclenché juste avant que l'entité utilisateur ne soit persistée
@@ -23,12 +24,15 @@ class AuthenticatedUserSavedListener extends AuthenticatedUserSavedAbstractListe
         $user       = $e->getDbUser();   /* @var $user       \ZfcUser\Entity\UserInterface */
         $ldapPeople = $e->getLdapUser(); /* @var $ldapPeople \UnicaenApp\Entity\Ldap\People */
         
-        if ($user instanceof User) {
+        if ($user instanceof Utilisateur) {
+            
+            $noIndividu = (integer) $ldapPeople->getSupannEmpId(); // pour virer les 0 de tête
+            
             $repo = $this->em->getRepository('Application\Entity\Db\Personnel');
-            $personnel = $repo->findOneBy(array('sourceCode' => $ldapPeople->getSupannEmpId()));
+            $personnel = $repo->findOneBy(array('sourceCode' => $noIndividu));
             
             $repo = $this->em->getRepository('Application\Entity\Db\Intervenant');
-            $intervenant = $repo->findOneBy(array('sourceCode' => $ldapPeople->getSupannEmpId()));
+            $intervenant = $repo->findOneBy(array('sourceCode' => $noIndividu));
             
             $user->setPersonnel($personnel)
                     ->setIntervenant($intervenant);

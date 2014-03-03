@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT" inheritance-type="JOINED" repository-class="Application\Entity\Db\Repository\IntervenantRepository">
-    <discriminator-column name="type_id" type="integer" />
+    <discriminator-column name="TYPE_ID" type="integer" />
     <discriminator-map>
         <discriminator-mapping value="1" class="Application\Entity\Db\IntervenantPermanent" />
         <discriminator-mapping value="2" class="Application\Entity\Db\IntervenantExterieur" />
@@ -65,5 +65,16 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-one field="type" target-entity="Application\Entity\Db\TypeIntervenant">
+      <join-columns>
+        <join-column name="TYPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="affectation" target-entity="Application\Entity\Db\Affectation" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

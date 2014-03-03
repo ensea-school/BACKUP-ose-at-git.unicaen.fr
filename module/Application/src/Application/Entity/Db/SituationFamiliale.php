@@ -64,7 +64,16 @@ class SituationFamiliale
      */
     private $histoCreateur;
 
-
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+    
     /**
      * Set code
      *

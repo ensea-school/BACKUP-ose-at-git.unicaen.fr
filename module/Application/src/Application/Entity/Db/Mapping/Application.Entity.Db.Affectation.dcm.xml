@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\Affectation" table="AFFECTATION">
+  <entity name="Application\Entity\Db\Affectation" table="AFFECTATION_RECHERCHE">
     <indexes>
       <index name="IDX_79DEF33B59860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_79DEF33B7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
@@ -8,25 +8,26 @@
       <index name="IDX_79DEF33B78FF2BCB" columns="INTERVENANT_ID"/>
       <index name="IDX_79DEF33B884B0F7B" columns="STRUCTURE_ID"/>
     </indexes>
-    <id name="intervenant" association-key="true"/>
-    <id name="structure" association-key="true"/>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="principale" type="boolean" column="PRINCIPALE" nullable="false"/>
-    <field name="recherche" type="boolean" column="RECHERCHE" nullable="false"/>
+    <!--<field name="principale" type="boolean" column="PRINCIPALE" nullable="false"/>-->
+    <!--<field name="recherche" type="boolean" column="RECHERCHE" nullable="false"/>-->
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
-    <one-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </one-to-one>
-    <one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="affectation">
       <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
-    </one-to-one>
+    </many-to-one>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

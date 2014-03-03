@@ -2,6 +2,9 @@
 
 namespace Application\View\Helper;
 
+use Application\Entity\Db\HistoriqueAwareInterface;
+use Application\Entity\Db\Source;
+
 /**
  * Description of HistoriqueDl
  *
@@ -9,6 +12,11 @@ namespace Application\View\Helper;
  */
 class HistoriqueDl extends AbstractDl
 {
+    /**
+     * @var HistoriqueAwareInterface
+     */
+    protected $entity;
+    
     /**
      * 
      * 
@@ -20,33 +28,40 @@ class HistoriqueDl extends AbstractDl
             return '';
         }
         
-        $entity   = $this->entity; /* @var $entity \Application\Entity\Db\HistoriqueAwareInterface */
         $tplDtdd = $this->getTemplateDtDd();
         $html    = '';
         $dtdds   = array();
         
+        $libelleCrea = "Creation";
+        
+        if (method_exists($this->entity, 'getSource') 
+                && ($source = $this->entity->getSource()) 
+                && Source::CODE_SOURCE_OSE !== $source->getCode()) {
+            $libelleCrea = "Importation d'$source";
+        }
+        
         $dtdds[] = sprintf($tplDtdd,
-            "Création :", 
+            "$libelleCrea :", 
             sprintf("le %s par %s", 
-                    $entity->getHistoCreation()->format(\Common\Constants::DATETIME_FORMAT),
-                    $entity->getHistoCreateur()->getDisplayName())
+                    $this->entity->getHistoCreation()->format(\Common\Constants::DATETIME_FORMAT),
+                    $this->entity->getHistoCreateur()->getDisplayName())
         );
         
-        if ($entity->getHistoModification() != $entity->getHistoCreation()) {
+        if ($this->entity->getHistoModification() != $this->entity->getHistoCreation()) {
             $dtdds[] = sprintf($tplDtdd,
                 "Modification :", 
                 sprintf("le %s par %s", 
-                        $entity->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT),
-                        $entity->getHistoModificateur()->getDisplayName())
+                        $this->entity->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT),
+                        $this->entity->getHistoModificateur()->getDisplayName())
             );
         }
         
-        if ($entity->getHistoDestruction()) {
+        if ($this->entity->getHistoDestruction()) {
             $dtdds[] = sprintf($tplDtdd,
                 "Suppression :", 
                 sprintf("le %s par %s", 
-                        $entity->getHistoDestruction()->format(\Common\Constants::DATETIME_FORMAT),
-                        $entity->getHistoDestructeur()->getDisplayName())
+                        $this->entity->getHistoDestruction()->format(\Common\Constants::DATETIME_FORMAT),
+                        $this->entity->getHistoDestructeur()->getDisplayName())
             );
         }
         

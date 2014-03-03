@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
+use Common\Exception\LogicException;
 use Zend\Form\Annotation\AnnotationBuilder;
 
 /**
@@ -35,20 +36,36 @@ class IntervenantController extends AbstractActionController
         return $view;
     }
     
+    public function importerAction()
+    {
+        if (!($sourceCode = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
+            throw new LogicException("Aucun identifiant d'intervenant spécifié.");
+        }
+        if (($intervenant = $this->intervenant()->getRepo()->find($sourceCode))) {
+            throw new RuntimeException("L'intervenant spécifié a déjà été importé : sourceCode = $sourceCode.");
+        }
+        
+        $import = $this->getServiceLocator()->get('importProcessusImport'); /* @var $import \Import\Processus\Import */
+        $import->intervenant($sourceCode);
+
+        if (!($intervenant = $this->intervenant()->getRepo()->findOneBy(array('sourceCode' => $sourceCode)))) {
+            throw new RuntimeException("L'intervenant suivant est introuvable malgré son import : sourceCode = $sourceCode.");
+        }
+        
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setVariables(array('intervenant' => $intervenant));
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        
+        return $view;
+    }
+    
     public function voirAction()
     {
         if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
-            throw new RuntimeException("Aucun intervenant spécifié.");
+            throw new LogicException("Aucun identifiant d'intervenant spécifié.");
         }
-        
-        $intervenant = $this->intervenant()->getRepo()->find($id);
-        // recherche dans la source externe si introuvable dans OSE
-        if (!$intervenant) {
-            $service = $this->getServiceLocator()->get('importServiceIntervenant'); /* @var $service \Import\Service\Intervenant */
-            $intervenant = $service->get($id); /* @var $intervenant \Import\Model\Entity\Intervenant\Intervenant */
-        }
-        if (!$intervenant) {
-            throw new RuntimeException("Intervenant spécifié introuvable.");
+        if (!($intervenant = $intervenant = $this->intervenant()->getRepo()->find($id))) {
+            throw new RuntimeException("Intervenant '$id' spécifié introuvable.");
         }
         
         $view = new \Zend\View\Model\ViewModel();
@@ -59,16 +76,16 @@ class IntervenantController extends AbstractActionController
     }
     
     public function modifierAction()
-    {      
+    {
         if (!($id = $this->params()->fromRoute('id'))) {
-            throw new RuntimeException("Aucun intervenant spécifié.");
+            throw new LogicException("Aucun identifiant d'intervenant spécifié.");
         }
-        if (!($i = $this->intervenant()->getRepo()->find($id))) {
-            throw new RuntimeException("Intervenant spécifié introuvable.");
+        if (!($intervenant = $this->intervenant()->getRepo()->find($id))) {
+            throw new RuntimeException("Intervenant '$id' spécifié introuvable.");
         }
 
         $form = $this->getFormModifier();
-        $form->bind($i);
+        $form->bind($intervenant);
 
         if (($data = $this->params()->fromPost())) {
             $form->setData($data);
@@ -77,8 +94,12 @@ class IntervenantController extends AbstractActionController
                 $em->flush($form->getObject());
             }
         }
-
-        return array('form' => $form);
+        
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setVariables(array('form' => $form, 'intervenant' => $intervenant));
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        
+        return $view;
     }
     
     protected function getFormModifier()

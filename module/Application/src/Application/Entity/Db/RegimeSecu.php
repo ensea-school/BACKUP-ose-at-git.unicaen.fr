@@ -71,6 +71,15 @@ class RegimeSecu implements HistoriqueAwareInterface
 
 
     /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+    /**
      * Set code
      *
      * @param string $code

@@ -3,6 +3,8 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Common\Exception\RuntimeException;
+use Common\Exception\LogicException;
 
 /**
  * 
@@ -40,22 +42,30 @@ class DemoController extends AbstractActionController
         $form->setAttributes(array('class' => 'intervenant-rech'));
         $form->add($interv);
         
-        $intervenant = false;
-        
-//        // post
-//        if (is_array($data)) {
-//            $form->setData($data);
-////            var_dump($data);
-//            if ($form->isValid()) {
-//                $repo = $this->intervenant()->getRepo();
-//                $intervenant = $repo->findOneBy(array('sourceCode' => $form->get('interv')->getValueId()));
-//            }
-//        }
-        
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(array('form' => $form, 'intervenant' => $intervenant));
+        $view->setVariables(array('form' => $form));
         
         return $view;
+    }
+    
+    public function voirIntervenantAction()
+    {
+        if (!($sourceCode = $this->params()->fromPost('sourceCode', $this->params()->fromQuery('sourceCode')))) {
+            exit;
+        }
+        
+        $controller = 'Application\Controller\Intervenant';
+        $params     = $this->getEvent()->getRouteMatch()->getParams();
+        
+        $params['action'] = 'importer';
+        $params['id']     = $sourceCode;
+        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
+        
+        $params['action'] = 'voir';
+        $params['id']     = $viewModel->getVariable('intervenant')->getId();
+        $viewModel        = $this->forward()->dispatch($controller, $params);
+        
+        return $viewModel;
     }
 
     /**
@@ -137,7 +147,7 @@ class DemoController extends AbstractActionController
     public function voirOfAction()
     {
         if (!($id = $this->params()->fromQuery('id'))) {
-            throw new \Common\Exception\RuntimeException("Aucun élément spécifié.");
+            throw new LogicException("Aucun élément spécifié.");
         }
            
         $em      = $this->intervenant()->getEntityManager(); /* @var $em \Doctrine\ORM\EntityManager */
@@ -226,21 +236,4 @@ class DemoController extends AbstractActionController
         }
         return $this->sessionContainer;
     }
-
-//    public function searchAction()
-//    {
-//        if (($id = $this->params()->fromPost('id'))) {
-//            
-//            $intervenant = $this->intervenant()->getRepo()->find($id);
-//            
-//            $view = new \Zend\View\Model\ViewModel();
-//            $view->setVariables(array('intervenant' => $intervenant));
-//            $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-//
-//            return $view;
-//            
-//        }
-//        
-//        exit;
-//    }
 }

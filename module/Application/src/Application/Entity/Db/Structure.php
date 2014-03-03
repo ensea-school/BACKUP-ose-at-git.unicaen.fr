@@ -90,6 +90,16 @@ class Structure implements HistoriqueAwareInterface
     private $parente;
 
     /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelleCourt();
+    }
+
+    /**
      * Get source id
      *
      * @return integer 

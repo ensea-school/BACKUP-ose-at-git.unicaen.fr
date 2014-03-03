@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Affectation
  */
@@ -23,6 +21,11 @@ class Affectation
      * @var \DateTime
      */
     private $histoModification;
+
+    /**
+     * @var integer
+     */
+    private $id;
 
     /**
      * @var boolean
@@ -69,7 +72,16 @@ class Affectation
      */
     private $histoCreateur;
 
-
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return "" . $this->getStructure();
+    }
+    
     /**
      * Set histoCreation
      *
@@ -140,50 +152,60 @@ class Affectation
     }
 
     /**
-     * Set principale
+     * Get id
      *
-     * @param boolean $principale
-     * @return Affectation
+     * @return integer 
      */
-    public function setPrincipale($principale)
+    public function getId()
     {
-        $this->principale = $principale;
-
-        return $this;
+        return $this->id;
     }
-
-    /**
-     * Get principale
-     *
-     * @return boolean 
-     */
-    public function getPrincipale()
-    {
-        return $this->principale;
-    }
-
-    /**
-     * Set recherche
-     *
-     * @param boolean $recherche
-     * @return Affectation
-     */
-    public function setRecherche($recherche)
-    {
-        $this->recherche = $recherche;
-
-        return $this;
-    }
-
-    /**
-     * Get recherche
-     *
-     * @return boolean 
-     */
-    public function getRecherche()
-    {
-        return $this->recherche;
-    }
+//
+//    /**
+//     * Set principale
+//     *
+//     * @param boolean $principale
+//     * @return Affectation
+//     */
+//    public function setPrincipale($principale)
+//    {
+//        $this->principale = $principale;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get principale
+//     *
+//     * @return boolean 
+//     */
+//    public function getPrincipale()
+//    {
+//        return $this->principale;
+//    }
+//
+//    /**
+//     * Set recherche
+//     *
+//     * @param boolean $recherche
+//     * @return Affectation
+//     */
+//    public function setRecherche($recherche)
+//    {
+//        $this->recherche = $recherche;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get recherche
+//     *
+//     * @return boolean 
+//     */
+//    public function getRecherche()
+//    {
+//        return $this->recherche;
+//    }
 
     /**
      * Set validiteDebut

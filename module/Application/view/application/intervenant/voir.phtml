@@ -1,6 +1,4 @@
-<div class="jumbotron">
-    <h1>Intervenant <?php echo $intervenant ?></h1>
-</div>
+<h1><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h1>
 
 <?php echo $this->intervenantDl($intervenant, true) ?>
 

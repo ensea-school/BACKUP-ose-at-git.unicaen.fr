@@ -20,6 +20,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $id;
     
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $affectation;
+    
+    /**
      * @var \DateTime
      * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")
      * @Annotation\Options({"date_inf_label":"Date de naissance :"})
@@ -150,6 +155,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $sourceCode;
 
     /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structure;
+
+    /**
      * @var \Application\Entity\Db\Civilite
      * @Annotation\Type("Zend\Form\Element\Select")
      * @Annotation\Filter({"name":"StringTrim"})
@@ -202,7 +212,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoCreateur;
-
+    
     /**
      * Constructor
      */
@@ -242,6 +252,39 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getDateNaissanceToString()
     {
         return $this->dateNaissance->format(Constants::DATE_FORMAT);
+    }
+
+    /**
+     * Add affectation
+     *
+     * @param \Application\Entity\Db\Affectation $affectation
+     * @return Intervenant
+     */
+    public function addAffectation(\Application\Entity\Db\Affectation $affectation)
+    {
+        $this->affectation[] = $affectation;
+
+        return $this;
+    }
+
+    /**
+     * Remove affectation
+     *
+     * @param \Application\Entity\Db\Affectation $affectation
+     */
+    public function removeAffectation(\Application\Entity\Db\Affectation $affectation)
+    {
+        $this->affectation->removeElement($affectation);
+    }
+
+    /**
+     * Get affectation
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAffectation()
+    {
+        return $this->affectation;
     }
     
     /**
@@ -761,6 +804,29 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @return Intervenant
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    {
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructure()
+    {
+        return $this->structure;
+    }
+
+    /**
      * Set primeExcellenceScient
      *
      * @param boolean $primeExcellenceScient
@@ -1020,7 +1086,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function getAffectationsToString()
     {
-        return 'À implémenter!';
+        return "" . $this->getStructure() ?: "(Inconnue)";
     }
 
     /**

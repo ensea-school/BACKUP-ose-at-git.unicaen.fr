@@ -98,39 +98,4 @@ interface IntervenantInterface
      * @see \Application\Entity\Db\TypeIntervenant
      */
     public function getTypeId();
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string 
-     */
-//    public function getNomComplet($includeCivilite = false, $includeNomPatronymique = false);
-
-    /**
-     * Get formatted dateNaissance
-     *
-     * @return string 
-     */
-//    public function getDateNaissanceToString();
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string 
-     */
-//    public function getNomUsuel();
-
-    /**
-     * Get numeroInsee
-     *
-     * @return string 
-     */
-//    public function getNumeroInsee();
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-//    public function getId();
 }

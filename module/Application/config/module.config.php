@@ -171,19 +171,7 @@ return array(
                         ),
                         'pages' => array(
                             'of' => array(
-                                'label'  => "Offre de formation (avec UE)",
-                                'route'  => 'demo',
-                                'params' => array(
-                                    'action' => 'of',
-                                ),
-                                'query' => array(
-                                    'avecUe' => 1,
-                                ),
-                                'visible' => true,
-                                'pages' => array(),
-                            ),
-                            'of-sans-ue' => array(
-                                'label'  => "Offre de formation (sans UE)",
+                                'label'  => "Offre de formation",
                                 'route'  => 'demo',
                                 'params' => array(
                                     'action' => 'of',
@@ -191,6 +179,18 @@ return array(
                                 'visible' => true,
                                 'pages' => array(),
                             ),
+//                            'of-avec-ue' => array(
+//                                'label'  => "Offre de formation (avec UE)",
+//                                'route'  => 'demo',
+//                                'params' => array(
+//                                    'action' => 'of',
+//                                ),
+//                                'query' => array(
+//                                    'avecUe' => 1,
+//                                ),
+//                                'visible' => true,
+//                                'pages' => array(),
+//                            ),
                             'intervenant' => array(
                                 'label'  => "Intervenants",
                                 'route'  => 'demo',

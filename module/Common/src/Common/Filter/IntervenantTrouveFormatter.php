@@ -44,7 +44,7 @@ class IntervenantTrouveFormatter extends AbstractFilter
             $id        = $value->getSourceCode();
             $label     = $this->nomCompletFormatter->filter($value);
             $civilite  = $value->getCiviliteToString();
-            $dateNaiss = $value->getDateNaissanceToString();
+            $dateNaiss = $value->getDateNaissance();
             $feminin   = $value->estUneFemme();
             $affectat  = $value->getAffectationsToString();
         }
@@ -78,7 +78,9 @@ class IntervenantTrouveFormatter extends AbstractFilter
             throw new \Common\Exception\LogicException("L'objet à formatter n'est pas d'un type supporté.");
         }
         
-        $dateNaiss = new \DateTime($dateNaiss);
+        if (!$dateNaiss instanceof \DateTime) {
+            $dateNaiss = new \DateTime($dateNaiss);
+        }
         
         $extra  = sprintf("(%s, né%s le %s, n°%s, %s)",
                 $civilite,

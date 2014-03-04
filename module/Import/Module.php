@@ -34,7 +34,8 @@ class Module
         $services = array(
             'Schema',
             'QueryGenerator',
-            'Intervenant'
+            'Intervenant',
+            'Differentiel',
         );
         $processus = array(
             'Import',

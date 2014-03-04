@@ -2,6 +2,7 @@
 
 namespace Import\Service;
 
+use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
@@ -24,7 +25,27 @@ class Service implements ServiceManagerAwareInterface {
 
 
     
+    /**
+     * Echappe une chaîne de caractères pour convertir en SQL
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function escapeKW($string)
+    {
+        return '"'.str_replace( '"', '""', $string ).'"';
+    }
 
+    /**
+     * Echappe une chaîne de caractères pour convertir en SQL
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function escape($string)
+    {
+        return "'".str_replace( "'", "''", $string )."'";
+    }
 
     /**
      * Retourne une tableau des résultats de la requête transmise.

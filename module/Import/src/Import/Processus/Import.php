@@ -23,6 +23,42 @@ class Import implements ServiceManagerAwareInterface
      */
     protected $serviceManager;
 
+    /**
+     * ID l'utilisateur courant
+     *
+     * @var integer
+     */
+    protected $currentUser;
+
+
+
+
+
+    /**
+     * Retourne l'ID de l'utilisateur courant
+     *
+     * @return integer
+     */
+    public function getCurrentUser()
+    {
+        return $this->currentUser;
+    }
+
+
+
+    /**
+     * Affecte un ID d'utilisateur courant pour les modifications
+     *
+     * @param integer $currentUser
+     * @return self
+     */
+    public function setCurrentUser($currentUser)
+    {
+        $this->currentUser = (integer)$currentUser;
+        return $this;
+    }
+
+
 
     public function updateViewsAndPackages()
     {
@@ -40,7 +76,32 @@ class Import implements ServiceManagerAwareInterface
      */
     public function structure( $sourceCode=null, $force=true )
     {
+        $connection = $this->getEntityManager()->getConnection();
+
         $sql = $this->makeMajQuery( 'STRUCTURE', 'SOURCE_CODE', $sourceCode, $force );
+        $connection->exec($sql);
+
+        $ids = $this->getIdFromSourceCode( 'STRUCTURE', $sourceCode );
+
+        $sql = $this->makeMajQuery( 'ADRESSE_STRUCTURE', 'STRUCTURE_ID', $ids, $force );
+        $connection->exec($sql);
+
+        $sql = $this->makeMajQuery( 'ROLE', 'STRUCTURE_ID', $ids, $force );
+        $connection->exec($sql);
+
+        return $this;
+    }
+
+    /**
+     * Import d'un, plusieurs ou tous les personnels
+     *
+     * @param string|array|null  $sourceCode  Identifiant source du personnel
+     * @param boolean            $force       Force la mise à jour en cas d'import précédent
+     * @retun self
+     */
+    public function personnel( $sourceCode=null, $force=true )
+    {
+        $sql = $this->makeMajQuery( 'PERSONNEL', 'SOURCE_CODE', $sourceCode, $force );
         $this->getEntityManager()->getConnection()->exec($sql);
         return $this;
     }
@@ -107,7 +168,7 @@ class Import implements ServiceManagerAwareInterface
         $sql = $this->makeMajQuery( 'INTERVENANT_EXTERIEUR', 'SOURCE_CODE', $sourceCode, $force );
         $connection->exec($sql);
 
-        $ids = $this->getIntervenantIdFromSourceCode( $sourceCode );
+        $ids = $this->getIdFromSourceCode( 'INTERVENANT', $sourceCode );
 
         $sql = $this->makeMajQuery( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $ids, $force );
         $connection->exec($sql);
@@ -119,12 +180,12 @@ class Import implements ServiceManagerAwareInterface
     }
 
     /**
-     * Retourne les identifiants des intervenants concernés
+     * Retourne les identifiants des données concernés
      *
      * @param string|string[]|null  $sourceCode
      * @return integer[]|null
      */
-    protected function getIntervenantIdFromSourceCode( $sourceCode )
+    protected function getIdFromSourceCode( $tableName, $sourceCode )
     {
         $ids = null;
         if (! empty($sourceCode)){
@@ -133,7 +194,7 @@ class Import implements ServiceManagerAwareInterface
             }else{
                 $sc = $sourceCode;
             }
-            $sql = 'SELECT id FROM intervenant WHERE SOURCE_CODE IN (:sourceCode)';
+            $sql = 'SELECT id FROM '.$tableName.' WHERE SOURCE_CODE IN (:sourceCode)';
             $stmt = $this->getEntityManager()->getConnection()->executeQuery(
                                                                     $sql,
                                                                     array('sourceCode' => $sc),
@@ -177,19 +238,8 @@ class Import implements ServiceManagerAwareInterface
             $conditions = 'NULL';
         }
 
-        $sql = "BEGIN OSE_IMPORT.MAJ_$tableName($conditions); END;";
+        $sql = "BEGIN OSE_IMPORT.SET_CURRENT_USER($this->currentUser);OSE_IMPORT.MAJ_$tableName($conditions); END;";
         return $sql;
-    }
-
-    /**
-     * Echappe une chaîne de caractères pour convertir en SQL
-     * 
-     * @param string $string
-     * @return string
-     */
-    protected function escape($string)
-    {
-        return "'".str_replace( "'", "''", $string )."'";
     }
 
     /**

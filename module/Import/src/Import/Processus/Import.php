@@ -243,6 +243,17 @@ class Import implements ServiceManagerAwareInterface
     }
 
     /**
+     * Echappe une chaîne de caractères pour convertir en SQL
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function escape($string)
+    {
+        return "'".str_replace( "'", "''", $string )."'";
+    }
+
+    /**
      * Retourne le gestionnaire d'entités Doctrine
      *
      * @return EntityManager

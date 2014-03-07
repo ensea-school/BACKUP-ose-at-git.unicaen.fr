@@ -1,10 +1,14 @@
 <?php
 namespace Common\ORM\Event\Listeners;
 
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
 use Common\Exception\RuntimeException;
+use Application\Entity\Db\HistoriqueAwareInterface;
 
 /**
  * Listener Doctrine permettant l'ajout automatique de l'heure de création/modification 
@@ -12,10 +16,10 @@ use Common\Exception\RuntimeException;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Histo implements EventSubscriber
+class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterface
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var ServiceLocatorInterface
      */
     protected $sl;
     
@@ -26,24 +30,18 @@ class Histo implements EventSubscriber
     
     /**
      * 
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $sl
+     * @param LifecycleEventArgs $args
+     * @return type
+     * @throws RuntimeException
      */
-    public function __construct(\Zend\ServiceManager\ServiceLocatorInterface $sl)
-    {
-        $this->sl = $sl;
-    }
-    
-    /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args)
+    protected function updateHistorique(LifecycleEventArgs $args)
     {
         $em     = $args->getEntityManager();
         $entity = $args->getEntity();
         $user   = null;
         
         // l'entité doit implémenter l'interface requise
-        if (!$entity instanceof \Application\Entity\Db\HistoriqueAwareInterface) {
+        if (!$entity instanceof HistoriqueAwareInterface) {
             return;
         }
         /* @var $entity \Application\Entity\Db\HistoriqueAwareInterface */
@@ -81,12 +79,30 @@ class Histo implements EventSubscriber
             $entity->setHistoCreateur($user);
         }
         
-        $entity->setHistoModification($now)
-                ->setHistoModificateur($user);
+        if (null === $entity->getHistoDestruction() && null === $entity->getHistoDestructeur()) {
+            $entity->setHistoModification($now)
+                    ->setHistoModificateur($user);
+        }
         
         if (null !== $entity->getHistoDestruction() && null === $entity->getHistoDestructeur()) {
             $entity->setHistoDestructeur($user);
         }
+    }
+    
+    /**
+     * @param LifecycleEventArgs $args
+     */
+    public function prePersist(LifecycleEventArgs $args)
+    {
+        $this->updateHistorique($args);
+    }
+    
+    /**
+     * @param PreUpdateEventArgs $args
+     */
+    public function preUpdate(PreUpdateEventArgs $args)
+    {
+        $this->updateHistorique($args);
     }
     
     /**
@@ -122,6 +138,28 @@ class Histo implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(Events::prePersist);
+        return array(Events::prePersist, Events::preUpdate);
+    }   
+    
+    /**
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->sl = $serviceLocator;
+        
+        return $this;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->sl;
     }
 }

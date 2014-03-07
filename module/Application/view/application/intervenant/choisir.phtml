@@ -1,0 +1,20 @@
+<div class="jumbotron">
+    <h1>Choisir un intervenant</h1>
+</div>
+
+<style>
+    span.sas-highlight { font-weight: bold; }
+</style>
+
+<?php $form->prepare(); ?>
+
+<?php echo $this->form()->openTag($form) ?> 
+<?php echo $this->formControlGroup($form->get('interv')); ?>
+<input class="btn btn-primary" type="submit" value="Choisir" name="submit">
+<?php echo $this->form()->closeTag() ?> 
+
+<script>
+    $(function() {
+        $(":input").tooltip({ /*placement: 'left'*/ });
+    });
+</script>

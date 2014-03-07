@@ -212,14 +212,21 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoCreateur;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $adresse;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->annee = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sectionCnu = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->annee       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sectionCnu  = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->adresse     = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -239,7 +246,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function getNomComplet($avecCivilite = false, $avecNomPatro = false)
     {
-        $f = new \Common\Formatter\NomCompletFormatter(true, $avecCivilite, $avecNomPatro);
+        $f = new \Common\Filter\NomCompletFormatter(true, $avecCivilite, $avecNomPatro);
         
         return $f->filter($this);
     }
@@ -873,29 +880,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
     
     /**
-     * Set historique
-     *
-     * @param \Application\Entity\Db\Historique $historique
-     * @return IntervenantPermanent
-     */
-    public function setHistorique(\Application\Entity\Db\Historique $historique = null)
-    {
-        $this->historique = $historique;
-
-        return $this;
-    }
-
-    /**
-     * Get historique
-     *
-     * @return \Application\Entity\Db\Historique 
-     */
-    public function getHistorique()
-    {
-        return $this->historique;
-    }
-    
-    /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
@@ -1055,6 +1039,66 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->histoCreateur;
     }
+
+    /**
+     * Add adresse
+     *
+     * @param \Application\Entity\Db\AdresseIntervenant $adresse
+     * @return Intervenant
+     */
+    public function addAdresse(\Application\Entity\Db\AdresseIntervenant $adresse)
+    {
+        $this->adresse[] = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * Remove adresse
+     *
+     * @param \Application\Entity\Db\AdresseIntervenant $adresse
+     */
+    public function removeAdresse(\Application\Entity\Db\AdresseIntervenant $adresse)
+    {
+        $this->adresse->removeElement($adresse);
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+    
+    /**
+     * @var Annee
+     */
+    protected $anneeCriterion;
+    
+    /**
+     * 
+     * @return Annee
+     */
+    public function getAnneeCriterion()
+    {
+        return $this->anneeCriterion;
+    }
+
+    /**
+     * 
+     * @param \Application\Entity\Db\Annee $annee
+     * @return \Application\Entity\Db\Intervenant
+     */
+    public function setAnneeCriterion(Annee $annee)
+    {
+        $this->anneeCriterion = $annee;
+        
+        return $this;
+    }
+    
     
     
     /*************************** IntervenantInterface ***********************/

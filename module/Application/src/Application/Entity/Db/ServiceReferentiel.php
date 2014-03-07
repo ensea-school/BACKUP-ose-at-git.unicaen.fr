@@ -2,17 +2,60 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use Zend\Form\Annotation;
 
 /**
  * ServiceReferentiel
+ * 
+ * @Annotation\Name("serviceReferentiel")
+ * @Annotation\Type("Application\Form\ServiceReferentiel\AjouterModifier")
+ * @Annotation\Hydrator("Application\Entity\Db\Hydrator\ServiceReferentiel")
  */
-class ServiceReferentiel
+class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
      * @var float
+     * 
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Nombre d'heures :"})
      */
     private $heures;
+
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var \Application\Entity\Db\FonctionReferentiel
+     */
+    private $fonction;
+
+    /**
+     * @var \Application\Entity\Db\IntervenantPermanent
+     */
+    private $intervenant;
+
+    /**
+     * @var \Application\Entity\Db\Annee
+     */
+    private $annee;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoCreateur;
 
     /**
      * @var \DateTime
@@ -40,41 +83,25 @@ class ServiceReferentiel
     private $validiteFin;
 
     /**
-     * @var integer
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
      */
-    private $id;
+    public function __toString()
+    {
+        return sprintf("%s : %s : %.2f", $this->getAnnee(), $this->getFonction(), $this->getHeures());
+    }
 
     /**
-     * @var \Application\Entity\Db\FonctionReferentiel
+     * 
+     * @param \Application\Entity\Db\Annee $annee
      */
-    private $fonction;
-
-    /**
-     * @var \Application\Entity\Db\IntervenantPermanent
-     */
-    private $intervenant;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoCreateur;
-
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
-
-
+    public function __construct(Annee $annee = null)
+    {
+        $this->setValiditeDebut(new \DateTime());
+        $this->setAnnee($annee);
+    }
+    
     /**
      * Set heures
      *

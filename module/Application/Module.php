@@ -82,8 +82,12 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     public function getControllerPluginConfig()
     {
         return array(
+            'invokables' => array(
+                'em' => 'Application\Controller\Plugin\Em',
+            ),
             'factories' => array(
-                'intervenant' => 'Application\Controller\Plugin\IntervenantFactory',
+                'intervenant'        => 'Application\Controller\Plugin\IntervenantFactory',
+                'serviceReferentiel' => 'Application\Controller\Plugin\ServiceReferentielFactory',
             ),
         );
     }
@@ -103,6 +107,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             'invokables' => array(
                 'intervenantDl' => 'Application\View\Helper\IntervenantDl',
                 'structureDl'   => 'Application\View\Helper\StructureDl',
+                'adresseDl'     => 'Application\View\Helper\AdresseDl',
                 'historiqueDl'  => 'Application\View\Helper\HistoriqueDl',
             ),
         );

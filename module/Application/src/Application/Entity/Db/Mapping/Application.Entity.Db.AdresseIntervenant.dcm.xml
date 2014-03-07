@@ -31,7 +31,7 @@
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <field name="ville" type="string" column="VILLE" length="60" nullable="true"/>
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="adresse">
       <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>

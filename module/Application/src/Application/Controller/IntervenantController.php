@@ -10,7 +10,9 @@ use Zend\Form\Annotation\AnnotationBuilder;
 /**
  * Description of IntervenantController
  *
- * @method \Application\Controller\Plugin\Intervenant intervenant() Description
+ * @method \Doctrine\ORM\EntityManager                em()
+ * @method \Application\Controller\Plugin\Intervenant intervenant()
+ * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class IntervenantController extends AbstractActionController
@@ -33,6 +35,40 @@ class IntervenantController extends AbstractActionController
         $view = new \Zend\View\Model\ViewModel();
 //        $view->setVariables(array('form' => $form, 'intervenant' => $intervenant));
         $this->getEvent()->setParam('modal', true);
+        return $view;
+    }
+
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function choisirAction()
+    {
+        $url    = $this->url()->fromRoute('recherche', array('action' => 'intervenantFind'));
+        $interv = new \UnicaenApp\Form\Element\SearchAndSelect('interv');
+        $interv->setAutocompleteSource($url)
+                ->setRequired(true)
+                ->setSelectionRequired(true)
+                ->setLabel("Recherchez l'intervenant concerné :")
+                ->setAttributes(array('title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"));
+        $form = new \Zend\Form\Form('search');
+        $form->setAttributes(array('class' => 'intervenant-rech'));
+        $form->add($interv);
+        
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                if (($redirect = $this->params()->fromQuery('redirect'))) {
+                    $redirect = str_replace('__sourceCode__', $form->get('interv')->getValueId(), $redirect);
+                    return $this->redirect()->toUrl($redirect);
+                }
+            }
+        }
+        
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setVariables(array('form' => $form));
+        
         return $view;
     }
     
@@ -61,6 +97,8 @@ class IntervenantController extends AbstractActionController
     
     public function voirAction()
     {
+        $this->em()->getFilters()->enable('historique');
+        
         if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
             throw new LogicException("Aucun identifiant d'intervenant spécifié.");
         }

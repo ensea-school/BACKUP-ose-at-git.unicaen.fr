@@ -99,6 +99,14 @@ class IntervenantDl extends AbstractDl
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-coord'), implode(PHP_EOL, $coord)) . PHP_EOL;
         
         /**
+         * Adresses 
+         */
+        
+        foreach ($this->entity->getAdresse() as $adresse) {
+            $html .= $this->getView()->adresseDl($adresse, true, true) . PHP_EOL;
+        }
+        
+        /**
          * Métier
          */
         
@@ -153,7 +161,20 @@ class IntervenantDl extends AbstractDl
          * Fonctions référentiel
          */
         
+        $fonctions = array();
         
+        if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
+            $serviceRef = "Aucun";
+            if (($services = $this->entity->getServiceReferentielToStrings())) {
+                $serviceRef = $this->getView()->htmlList($services);
+            }
+            $fonctions[] = sprintf($tplDtdd,
+                "Service référentiel :", 
+                $serviceRef
+            );
+        }
+        
+        $html .= sprintf($this->getTemplateDl('intervenant intervenant-fonction'), implode(PHP_EOL, $fonctions)) . PHP_EOL;
         
         /**
          * Historique

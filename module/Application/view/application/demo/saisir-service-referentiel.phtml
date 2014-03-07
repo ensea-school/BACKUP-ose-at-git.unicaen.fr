@@ -1,0 +1,79 @@
+<div class="jumbotron">
+    <h1>Saisie service référentiel <small><?php echo $intervenant ?></small></h1>
+</div>
+
+<style>
+    form.service-referentiel .form-group { float: left; }
+    form.service-referentiel input { width: 100px; }
+    form.service-referentiel input[type=submit] { margin-top: 2em; }
+    button.fonction-referentiel-ajouter   { display: block; margin-top: 0.5em; }
+    button.fonction-referentiel-supprimer { margin: 2em 0 0 1em; }
+</style>
+
+<?php if (isset($exception)) { echo $this->messenger()->setException($exception); } ?>
+
+<?php
+$form->setAttribute('id', $formId = uniqid('form-'))->prepare();
+$serviceReferentiel = $form->get('intervenant');
+?>
+
+<?php 
+echo $this->form()->openTag($form);
+echo $this->formCollection()->setElementHelper($this->formControlGroup())->render($serviceReferentiel->get('serviceReferentiel'));
+?> 
+<div id="fonction-comptage"></div>
+<?php 
+echo $this->formButton($form->get('ajouter'));
+echo $this->formHidden($form->get('security'));
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+echo $this->form()->closeTag();
+?>
+
+<script>
+    var form = $("form.service-referentiel");
+    
+    $("body").on('click', "button.fonction-referentiel-ajouter", function() {
+        addFonction();
+    });
+    $("body").on('click', "button.fonction-referentiel-supprimer", function() {
+        if (getFonctionCurrentCount() > 0) {
+            removeFonction($(this));
+        }   
+    });
+        
+    $(function() {
+        updateFonctionCounter();
+        $(":input").tooltip();
+    });
+    
+    function addFonction() 
+    {
+        var currentCount = getFonctionCurrentCount();
+        var template = $('> fieldset > span', form).data('template');
+        var element = $(template.replace(/__index__/g, currentCount));
+        $('> fieldset', form).append(element.fadeIn());
+        updateFonctionCounter();
+        return false;
+    }
+    
+    function removeFonction(button) 
+    {
+        $(button).parentsUntil('fieldset').parent().remove();
+        updateFonctionCounter();
+        return false;
+    }
+    
+    function getFonctionCurrentCount()
+    {
+        return $('> fieldset > fieldset', form).length;;
+    }
+    
+    function updateFonctionCounter() 
+    {
+        var currentCount = getFonctionCurrentCount();
+        $("#fonction-comptage").html(currentCount ? "" : "Aucune fonction.");
+    }
+</script>
+
+<script>
+ </script>

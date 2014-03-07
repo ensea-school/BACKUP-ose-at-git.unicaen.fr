@@ -21,5 +21,10 @@
         <join-column name="CORPS_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
+        <cascade>
+            <cascade-persist/>
+        </cascade>
+    </one-to-many>
   </entity>
 </doctrine-mapping>

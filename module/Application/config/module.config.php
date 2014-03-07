@@ -8,7 +8,11 @@ return array(
             'orm_default' => array(
                 'string_functions' => array(
                     'CONVERT' => 'Common\ORM\Query\Functions\Convert'
-                )
+                ),
+                'filters' => array(
+                    'historique' => 'Common\ORM\Filter\HistoriqueFilter',
+//                    'validite'   => 'Common\ORM\Filter\ValiditeFilter',
+                ),
             )
         ),
         'connection' => array(
@@ -34,7 +38,9 @@ return array(
             'orm_default' => array(
                 'subscribers' => array(
                     'Doctrine\DBAL\Event\Listeners\OracleSessionInit',
-                    'Common\ORM\Event\Listeners\Histo',
+                    'Common\ORM\Event\Listeners\SessionInitListener',
+                    'Common\ORM\Event\Listeners\HistoriqueListener',
+                    'Common\ORM\Event\Listeners\ValiditeListener',
                 ),
             ),
         ),
@@ -200,13 +206,23 @@ return array(
                                 'visible' => true,
                                 'pages' => array(),
                             ),
+                            'service-ref' => array(
+                                'label'  => "Service référentiel",
+                                'route'  => 'demo',
+                                'params' => array(
+                                    'action' => 'saisir-service-referentiel',
+                                ),
+                                'visible' => true,
+                                'pages' => array(),
+                            ),
                         ),
                     ),
-//                    'intervenant' => array(
-//                        'label'    => 'Intervenant',
-//                        'route'    => 'intervenant',
-//                        'resource' => 'controller/Application\Controller\Intervenant:index',
-//                        'pages' => array(
+                    'intervenant' => array(
+                        'label'    => 'Intervenant',
+                        'title'    => "Gestion des intervenants",
+                        'route'    => 'intervenant',
+                        'resource' => 'controller/Application\Controller\Intervenant:index',
+                        'pages' => array(
 //                            'rechercher' => array(
 //                                'label'  => "Rechercher",
 //                                'title'  => "Rechercher un intervenant",
@@ -217,14 +233,14 @@ return array(
 //                                'visible' => true,
 //                                'pages' => array(),
 //                            ),
-//                            'voir' => array(
-//                                'label'  => "Voir",
-//                                'title'  => "Voir l'intervenant {id}",
-//                                'route'  => 'intervenant/default',
-//                                'visible' => false,
-//                                'withtarget' => true,
-//                                'pages' => array(),
-//                            ),
+                            'voir' => array(
+                                'label'  => "Voir",
+                                'title'  => "Voir l'intervenant {id}",
+                                'route'  => 'intervenant/default',
+                                'visible' => false,
+                                'withtarget' => true,
+                                'pages' => array(),
+                            ),
 //                            'modifier' => array(
 //                                'label'  => "Modifier",
 //                                'title'  => "Modifier l'intervenant {id}",
@@ -233,8 +249,8 @@ return array(
 //                                'withtarget' => true,
 //                                'pages' => array(),
 //                            ),
-//                        ),
-//                    ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -258,7 +274,7 @@ return array(
                     'roles' => array('user')),
                 array(
                     'controller' => 'Application\Controller\Intervenant', 
-                    'action' => array('index', 'modifier', 'rechercher', 'voir', 'search'), 
+                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'search'), 
                     'roles' => array('user')),
                 array(
                     'controller' => 'Application\Controller\Recherche', 
@@ -267,8 +283,12 @@ return array(
         ),
     ),
     'service_manager' => array(
+        'invokables' => array(
+            'Common\ORM\Event\Listeners\SessionInitListener' => 'Common\ORM\Event\Listeners\SessionInitListener',
+            'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
+            'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
+        ),
         'factories' => array(
-            'Common\ORM\Event\Listeners\Histo' => 'Common\ORM\Event\Listeners\HistoFactory',
         ),
     ),
     'translator' => array(

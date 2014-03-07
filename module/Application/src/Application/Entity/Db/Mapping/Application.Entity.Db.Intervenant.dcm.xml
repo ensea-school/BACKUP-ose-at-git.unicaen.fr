@@ -76,5 +76,6 @@
       </join-columns>
     </many-to-one>
     <one-to-many field="affectation" target-entity="Application\Entity\Db\Affectation" mapped-by="intervenant" />
+    <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

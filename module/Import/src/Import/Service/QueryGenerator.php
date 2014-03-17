@@ -254,7 +254,7 @@ class QueryGenerator extends Service
         $cols = $this->getCols($tableName);
 
         $sql = "CREATE OR REPLACE FORCE VIEW OSE.V_DIFF_$tableName AS
-select * from (SELECT
+select diff.* from (SELECT
   COALESCE( D.id, S.id ) id,
   COALESCE( S.source_id, D.source_id ) source_id,
   COALESCE( S.source_code, D.source_code ) source_code,
@@ -273,7 +273,7 @@ WHERE
     OR (S.source_code IS NULL AND D.source_code IS NOT NULL AND (D.histo_destruction IS NULL OR D.histo_destruction > SYSDATE))
     OR (S.source_code IS NOT NULL AND D.source_code IS NULL)
     OR ".$this->formatColQuery($cols, 'D.:column <> S.:column OR (D.:column IS NULL AND S.:column IS NOT NULL) OR (D.:column IS NOT NULL AND S.:column IS NULL)',"\n  OR ")."
-) t1 WHERE import_action IS NOT NULL ";
+) diff JOIN source on source.id = diff.source_id WHERE import_action IS NOT NULL AND source.importable = 1";
         return $sql;
     }
 

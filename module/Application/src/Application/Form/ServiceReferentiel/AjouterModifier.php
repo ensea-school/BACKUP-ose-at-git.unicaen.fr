@@ -5,6 +5,9 @@ namespace Application\Form\ServiceReferentiel;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\Form\Element\Csrf;
+use Zend\Stdlib\Hydrator\ClassMethods;
+use Application\Form\ServiceReferentiel\ServiceReferentielFieldset;
+use Application\Entity\Db\IntervenantPermanent;
 
 /**
  * Description of AjouterModifier
@@ -29,18 +32,15 @@ class AjouterModifier extends Form
         
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'service-referentiel')
-                ->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods(false))
+//                ->setObject(new IntervenantPermanent())
+                ->setHydrator(new ClassMethods(false))
                 ->setInputFilter(new InputFilter())
 //                ->setPreferFormInputFilter(false)
          ;
         
-        $this->add(array(
-            'name' => 'intervenant',
-            'type' => 'Application\Form\ServiceReferentiel\ServiceReferentielFieldset',
-            'options' => array(
-                'use_as_base_fieldset' => true,
-            ),
-        ));
+        $fsIntervenant = new ServiceReferentielFieldset('intervenant');
+        $fsIntervenant->setUseAsBaseFieldset(true);
+        $this->add($fsIntervenant);
         
         $this->add(array(
             'type' => 'Button',
@@ -71,6 +71,25 @@ class AjouterModifier extends Form
         ));
     }
 
+    /**
+     * Bind an object to the form
+     *
+     * Ensures the object is populated with validated values.
+     *
+     * @param  object $object
+     * @param  int $flags
+     * @return mixed|void
+     * @throws Exception\InvalidArgumentException
+     */
+    public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
+    {
+        if (!$object instanceof IntervenantPermanent) {
+            throw new \Common\Exception\LogicException("Intervenant spécifié invalide.");
+        }
+        
+        return parent::bind($object, $flags);
+    }
+    
     /**
      * 
      * @param \Application\Entity\Db\Annee $annee

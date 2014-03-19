@@ -3,12 +3,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Doctrine\Common\Collections\ArrayCollection;
 use Common\Exception\LogicException;
-use Common\Exception\RuntimeException;
-use Application\Form\ServiceReferentiel\FonctionServiceReferentielFieldset;
-use Application\Entity\Db\IntervenantPermanent;
-use Application\Entity\Db\Repository\ServiceReferentielRepository;
 
 /**
  * 
@@ -89,69 +84,38 @@ class DemoController extends AbstractActionController
      * 
      * @return \Zend\View\Model\ViewModel
      */
-    public function saisirServiceReferentielAction()
+    public function saisirServiceReferentielIntervenantAction()
     {
-        // si aucun intervenant spécifié, redirection vers l'action "Choisir un intervenant" qui elle-
-        if (!($sourceCode = $this->params()->fromQuery('sourceCode'))) {
-            $redirect = $this->url()->fromRoute(null, array(), array('query' => array('sourceCode' => '__sourceCode__')), true);
-            return $this->redirect()->toRoute(
-                            'intervenant/default', array('action' => 'choisir'), array('query' => array('redirect' => $redirect))); /* @var $viewModel \Zend\View\Model\ViewModel */
-        }
+        $controller = 'Application\Controller\Intervenant';
+        $params     = $this->getEvent()->getRouteMatch()->getParams();
 
-        $result = $this->voirIntervenantAction();
-        if ($result instanceof \Zend\Http\Response) {
-            return $result;
-        }
-
-        $intervenant = $result->getVariable('intervenant'); /* @var $intervenant IntervenantPermanent */
-        if (!$intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
-            throw new RuntimeException("Impossible de saisir un service référentiel pour un intervenant autre que permanent. " .
-            "Intervenant spécifié : $intervenant (id = {$intervenant->getId()}).");
-        }
-        
-        $this->em()->getFilters()->enable("historique");
-        
-        $repository = $this->em()->getRepository('Application\Entity\Db\FonctionReferentiel'); /* @var $repository \Doctrine\ORM\EntityRepository */
-
-        $annee = $this->em()->getRepository('Application\Entity\Db\Annee')->find(2013);
-
-        $fonctions = $repository->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
-        FonctionServiceReferentielFieldset::setFonctionsPossibles(new ArrayCollection($fonctions));
-
-        $form = new \Application\Form\ServiceReferentiel\AjouterModifier();
-        $form->bind($intervenant->setAnneeCriterion($annee));
-        
-        $variables = array(
-            'form' => $form, 
-            'intervenant' => $intervenant,
-        );
-        
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $data = $request->getPost();
-            $form->setData($data);
-            if ($form->isValid()) {
-                try {
-                    $this->em()->flush();
-                    $this->flashMessenger()->addSuccessMessage(sprintf("Service(s) référentiel de $intervenant enregistré(s) avec succès."));
-                    $this->redirect()->toRoute('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
-                }
-                catch (\Doctrine\DBAL\DBALException $exc) {
-                    $exception = new RuntimeException("Impossible d'enregistrer les services référentiel.", null, $exc->getPrevious());
-                    $variables['exception'] = $exception;
-                }
-//                $data = isset($data['intervenant']['serviceReferentiel']) ? $data['intervenant']['serviceReferentiel'] : array();
-//                $repo = $this->em()->getRepository('Application\Entity\Db\ServiceReferentiel'); /* @var $repo ServiceReferentielRepository */
-//                $repo->updateServicesReferentiel($intervenant, $annee, $data);
-            }
-        }
-        
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables($variables);
+        $params['action'] = 'saisirServiceReferentiel';
+        $viewModel        = $this->forward()->dispatch($controller, $params);
 
         return $viewModel;
     }
 
+public function modalAction()
+{
+    $terminal = $this->getRequest()->isXmlHttpRequest();
+
+    $viewModel = new \Zend\View\Model\ViewModel();
+    $viewModel->setTemplate('application/demo/modal')
+            ->setTerminal($terminal) // Turn off the layout for AJAX requests
+            ->setVariables(array(
+                'name'     => "Beber",
+                'terminal' => $terminal,
+            ));
+
+    if ($terminal) {
+        // utilisation du plugin encapsulant le résultat de la vue dans le marquage attendu
+        // par Bootstrap pour dessiner le contenu de la fenêtre modale
+        return $this->modalInnerViewModel($viewModel, "Fenêtre modale", false);
+    }
+
+    return $viewModel;
+}
+    
     /**
      * 
      * @return \Zend\View\Model\ViewModel

@@ -4,8 +4,9 @@ namespace Application\Form\ServiceReferentiel;
 
 use Zend\Form\Fieldset;
 use Zend\Validator\LessThan;
+use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\InputFilter\InputFilterProviderInterface;;
 use Doctrine\Common\Collections\Collection;
-use Zend\InputFilter\InputFilterProviderInterface;
 use Application\Entity\Db\ServiceReferentiel;
 
 /**
@@ -27,10 +28,10 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
     {
         parent::__construct();
 
-        $this->setHydrator(new ServiceReferentielHydrator(static::$fonctionsPossibles))
-             ->setObject(new \Application\Entity\Db\ServiceReferentiel());
+        $this->setHydrator(new FonctionServiceReferentielHydrator(static::$fonctionsPossibles))
+             ->setObject(new ServiceReferentiel());
 
-        $this->setLabel("Fonction référentiel");
+        $this->setLabel("Fonction référentielle");
 
         $this->add(array(
             'name'       => 'fonction',
@@ -38,7 +39,7 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
                 'label' => "Fonction :",
             ),
             'attributes' => array(
-                'title' => "Fonction référentiel",
+                'title' => "Fonction référentielle",
                 'class' => 'fonction-referentiel fonction-referentiel-fonction input-sm',
             ),
             'type'       => 'Select',
@@ -69,12 +70,13 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
         ));
 
         $options = array();
+        $options[''] = "(Sélectionnez une fonction...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
         foreach (static::$fonctionsPossibles as $item) {
             $options[$item->getId()] = "" . $item;
         }
 
         $this->get('fonction')
-                ->setEmptyOption("(Sélectionnez une fonction...)")
+//                ->setEmptyOption("(Sélectionnez une fonction...)") 
                 ->setValueOptions($options);
 
         return $this;
@@ -126,7 +128,7 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
                         'name' => 'Zend\Validator\NotEmpty',
                         'options' => array(
                             'messages' => array(
-                                \Zend\Validator\NotEmpty::IS_EMPTY => "La fonction référentiel est requise",
+                                \Zend\Validator\NotEmpty::IS_EMPTY => "La fonction référentielle est requise",
                             ),
                         ),
                     ),
@@ -158,7 +160,7 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
     }
 }
 
-class ServiceReferentielHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
+class FonctionServiceReferentielHydrator implements HydratorInterface
 {
     /**
      * @var \Application\Entity\Db\FonctionReferentiel[]

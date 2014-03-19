@@ -4,5 +4,8 @@
 
 <?php echo $this->navigation('navigation')->menuContextuel()->withTarget($intervenant->getId()) ?>
 
-<script>
-</script>
+<ul>
+    <li><a href="<?php echo $this->url('intervenant/default', 
+        array('action' => 'saisirServiceReferentiel'), 
+        array('query' => array('sourceCode' => $intervenant->getSourceCode()))) ?>">Service référentiel</a></li>
+</ul>

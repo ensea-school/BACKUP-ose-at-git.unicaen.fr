@@ -1,5 +1,5 @@
 <div class="jumbotron">
-    <h1>Saisie service référentiel <small><?php echo $intervenant ?></small></h1>
+    <h1>Saisie du service référentiel<br /><small><?php echo $intervenant ?></small></h1>
 </div>
 
 <style>
@@ -34,17 +34,55 @@ echo $this->form()->closeTag();
     
     $("body").on('click', "button.fonction-referentiel-ajouter", function() {
         addFonction();
+        return false;
     });
     $("body").on('click', "button.fonction-referentiel-supprimer", function() {
         if (getFonctionCurrentCount() > 0) {
             removeFonction($(this));
-        }   
+        }  
+        return false; 
     });
         
     $(function() {
         updateFonctionCounter();
         $(":input").tooltip();
+        
+        $('body').on('change', 'select', function() {
+            var select = $(this); // select de référence, dont la valeur a changé
+            if (select.val() === '') {
+                return;
+            }
+            applySelectUnicity(select);
+        });
     });
+    
+    /**
+     * 
+     * @param object changedSelect Select de référence, dont la valeur a changé
+     * @param object targetSelect  Si spécifié, seul select cible à mettre à jour
+     * @returns void
+     */
+    function applySelectUnicity(changedSelect, targetSelect)
+    {
+        if (!targetSelect) {
+            targetSelect = $("select");
+        }
+        // parcours des select (autre que celui de référence)
+        targetSelect.not(changedSelect).each(function() {
+            $("option", this).each(function() {
+                // cache les items identiques à celui sélectionné dans le select de référence
+                if ($(this).val() === changedSelect.val()) {
+                    $(this).data('from', changedSelect).hide();
+                    //console.log('hide ' + $(this).text(), $(this).data('from'));
+                }
+                // fait réapparaître les items ayant été cachés précédemment
+                else if ($(this).is(":hidden") && $(this).data() && $(this).data('from').is(changedSelect)) {
+                    $(this).removeData('from').show();
+                    //console.log('show ' + $(this).text(), $(this).data('from'));
+                }
+            });
+        });
+    }
     
     function addFonction() 
     {
@@ -52,8 +90,9 @@ echo $this->form()->closeTag();
         var template = $('> fieldset > span', form).data('template');
         var element = $(template.replace(/__index__/g, currentCount));
         $('> fieldset', form).append(element.fadeIn());
+        $("select.fonction-referentiel-fonction").not($("select", element)).each(function() { applySelectUnicity($(this), $("select", element)); });
         updateFonctionCounter();
-        return false;
+        return element;
     }
     
     function removeFonction(button) 
@@ -74,6 +113,3 @@ echo $this->form()->closeTag();
         $("#fonction-comptage").html(currentCount ? "" : "Aucune fonction.");
     }
 </script>
-
-<script>
- </script>

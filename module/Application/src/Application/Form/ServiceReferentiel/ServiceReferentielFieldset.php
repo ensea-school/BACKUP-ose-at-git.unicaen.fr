@@ -14,13 +14,14 @@ use Application\Entity\Db\IntervenantPermanent;
 class ServiceReferentielFieldset extends Fieldset
 {
     /**
-     * 
+     * @param  null|int|string  $name    Optional name for the element
+     * @param  array            $options Optional options for the element
      */
-    public function __construct()
+    public function __construct($name = null, $options = array())
     {
-        parent::__construct();
+        parent::__construct($name, $options);
         
-        $this->setHydrator(new ServiceReferentielTestHydrator());
+        $this->setHydrator(new ServiceReferentielHydrator());
         
         $this->add(array(
             'type' => 'Zend\Form\Element\Collection',
@@ -39,7 +40,7 @@ class ServiceReferentielFieldset extends Fieldset
     }
 }
 
-class ServiceReferentielTestHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
+class ServiceReferentielHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
 {
     /**
      * Extract values from an object
@@ -63,6 +64,7 @@ class ServiceReferentielTestHydrator implements \Zend\Stdlib\Hydrator\HydratorIn
      */
     public function hydrate(array $data, $intervenant)
     {
+                var_dump(__METHOD__, $data);
         if (!($annee = $intervenant->getAnneeCriterion())) {
             throw new \Common\Exception\LogicException("Une année doit être spécifiée comme critère.");
         }
@@ -75,12 +77,12 @@ class ServiceReferentielTestHydrator implements \Zend\Stdlib\Hydrator\HydratorIn
         foreach ($toRemove as $serviceReferentiel) { /* @var $serviceReferentiel \Application\Entity\Db\ServiceReferentiel */
             $serviceReferentiel->setHistoDestruction(new \DateTime());
         }
-        
+//        var_dump(count($toRemove));die;
         // insertion des nouveaux services
         foreach ($newServicesReferentiel as $serviceReferentiel) { /* @var $serviceReferentiel \Application\Entity\Db\ServiceReferentiel */
             if (null === $serviceReferentiel->getId()) {
-                $intervenant->addServiceReferentiel($serviceReferentiel);
-                $serviceReferentiel
+                $intervenant->addServiceReferentiel($serviceReferentiel); 
+               $serviceReferentiel
                         ->setIntervenant($intervenant)
                         ->setAnnee($annee);
             }

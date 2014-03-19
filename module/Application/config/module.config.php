@@ -210,7 +210,7 @@ return array(
                                 'label'  => "Service référentiel",
                                 'route'  => 'demo',
                                 'params' => array(
-                                    'action' => 'saisir-service-referentiel',
+                                    'action' => 'saisir-service-referentiel-intervenant',
                                 ),
                                 'visible' => true,
                                 'pages' => array(),
@@ -274,7 +274,7 @@ return array(
                     'roles' => array('user')),
                 array(
                     'controller' => 'Application\Controller\Intervenant', 
-                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'search'), 
+                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'saisirServiceReferentiel', 'search'), 
                     'roles' => array('user')),
                 array(
                     'controller' => 'Application\Controller\Recherche', 
@@ -292,7 +292,6 @@ return array(
         ),
     ),
     'translator' => array(
-        'locale' => 'fr_FR', // en_US
         'translation_file_patterns' => array(
             array(
                 'type'     => 'gettext',

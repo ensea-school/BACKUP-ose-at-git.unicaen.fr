@@ -10,38 +10,6 @@ namespace Application\Entity\Db;
 interface HistoriqueAwareInterface
 {
     /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return IntervenantPermanent
-     */
-    public function setValiditeDebut($validiteDebut);
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut();
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return IntervenantPermanent
-     */
-    public function setValiditeFin($validiteFin);
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin();
-    
-    
-    
-    /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation

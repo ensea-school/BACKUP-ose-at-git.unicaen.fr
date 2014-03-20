@@ -1,10 +1,10 @@
 <div class="jumbotron">
     <h1>Bienvenue!</h1>
     <h2>Organisation des Services d'Enseignement</h2>
-    <?php if (!$this->identity()): ?>
+    <?php if (!($identity = $this->identity())): ?>
     <p><a class="btn btn-success btn-large" href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Connectez-vous...') ?></a></p>
     <?php else: ?>
-    <p>Bonjour, <?php $identity = $this->identity(); echo reset($identity) ?>.</p>
+    <p>Bonjour, <?php echo reset($identity) ?>.</p>
     <p><a href="<?php echo $this->url('demo') ?>">Démo</a></p>
     <?php endif; ?>
 </div>

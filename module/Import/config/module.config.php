@@ -3,35 +3,67 @@ return array(
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
-                array('controller' => 'Import\Controller\Intervenant', 'action' => array('search'), 'roles' => array()),
+                array('controller' => 'Import\Controller\Import',      'roles' => array('user')),
             ),
         ),
     ),
 
     'controllers' => array(
         'invokables' => array(
-            'Import\Controller\Intervenant' => 'Import\Controller\IntervenantController',
+            'Import\Controller\Import'      => 'Import\Controller\ImportController',
         ),
     ),
-    
+
     'router' => array(
         'routes' => array(
             'import' => array(
-                'type'    => 'segment',
+                'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/import/intervenant[/][:action]',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ),
+                    'route'    => '/import[/:action]',
                     'defaults' => array(
-                        'controller' => 'Import\Controller\Intervenant',
-                        'action'     => 'search',
+                        '__NAMESPACE__' => 'Import\Controller',
+                        'controller' => 'Import',
+                        'action'     => 'index',
                     ),
                 ),
             ),
         ),
     ),
-    
+
+    'navigation' => array(
+        'default' => array(
+            'home' => array(
+                'pages' => array(
+                    'import' => array(
+                        'label'    => 'Import',
+                        'route'    => 'import',
+                        'pages' => array(
+                            'admin' => array(
+                                'label'  => "Tableau de bord principal",
+                                'route'  => 'import',
+                                'params' => array(
+                                    'action' => 'showImportTbl',
+                                ),
+                                'visible' => true,
+                                'pages' => array(
+
+                                ),
+                            ),
+                            'showDiff' => array(
+                                'label'  => "Écarts entre OSE et ses sources",
+                                'route'  => 'import',
+                                'params' => array(
+                                    'action' => 'showDiff',
+                                ),
+                                'visible' => true,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
+
     'view_manager' => array(
         'template_path_stack' => array(
             'import' => __DIR__ . '/../view',

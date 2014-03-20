@@ -38,7 +38,6 @@ return array(
             'orm_default' => array(
                 'subscribers' => array(
                     'Doctrine\DBAL\Event\Listeners\OracleSessionInit',
-                    'Common\ORM\Event\Listeners\SessionInitListener',
                     'Common\ORM\Event\Listeners\HistoriqueListener',
                     'Common\ORM\Event\Listeners\ValiditeListener',
                 ),
@@ -284,7 +283,6 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'Common\ORM\Event\Listeners\SessionInitListener' => 'Common\ORM\Event\Listeners\SessionInitListener',
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
         ),

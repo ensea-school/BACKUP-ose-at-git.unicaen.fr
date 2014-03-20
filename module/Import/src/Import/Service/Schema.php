@@ -2,6 +2,7 @@
 namespace Import\Service;
 
 use Import\Exception\Exception;
+use Import\Entity\Schema\Column;
 
 /**
  *
@@ -37,11 +38,26 @@ class Schema extends Service
 
 
     /**
-     * @return array
+     * @return Column[][]
      */
     public function makeSchema()
     {
-        throw new Exception('NOT YET IMPLEMENTED');
+        $sql = 'SELECT * FROM V_IMPORT_TAB_COLS';
+        $d = $this->query( $sql, array() );
+
+        $sc = array();
+        foreach( $d as $col ){
+            $column = new Column;
+            $column->dataType        = $col['DATA_TYPE'];
+            $column->length          = (null === $col['LENGTH']) ? null : (integer)$col['LENGTH'];
+            $column->nullable        = $col['NULLABLE'] == '1';
+            $column->hasDefault      = $col['HAS_DEFAULT'] == '1';
+            $column->refTableName    = $col['C_TABLE_NAME'];
+            $column->refColumnName   = $col['C_COLUMN_NAME'];
+            $column->importActif     = $col['IMPORT_ACTIF'] == '1';
+            $sc[$col['TABLE_NAME']][$col['COLUMN_NAME']] = $column;
+        }
+        return $sc;
     }
 
 

@@ -1,0 +1,8 @@
+<h1>Écarts entre OSE et ses sources</h1>
+
+<?php foreach( $data as $table => $lignes ): ?>
+<h2><?php echo $table ?></h2>
+
+<?php echo $this->differentielListe( $lignes ); ?>
+
+<?php endforeach; ?>

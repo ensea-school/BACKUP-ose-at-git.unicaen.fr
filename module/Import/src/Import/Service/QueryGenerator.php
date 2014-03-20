@@ -2,6 +2,7 @@
 namespace Import\Service;
 
 use Import\Exception\Exception;
+use Import\Entity\Differentiel\Query;
 
 /**
  *
@@ -63,16 +64,31 @@ class QueryGenerator extends Service
 
 
     /**
-     * Mise à jour automatique des vues différentielles
+     * Met à jour des données d'après la requête transmise
      *
-     * @return self
+     * @param Query              $query Requête de filtrage pour la mise à jour
+     * @retun self
      */
-    public function updateDiffViews()
+    public function execMaj( Query $query )
     {
-        $views = $this->makeDiffViews();
+        $currentUser = $this->getCurrentUser();
+        if (empty($currentUser)){
+            throw new Exception('Vous devez être authentifié pour réaliser cette action');
+        }
+        $userId = $this->escape($currentUser->getId());
+        $procName = $this->escapeKW('MAJ_'.$query->getTableName());
+        $conditions = $query->toSql(false);
+        if (! empty($conditions)){
+            $conditions = $this->escape($conditions);
+        }else{
+            $conditions = 'NULL';
+        }
 
-        foreach( $views as $vn => $view ){
-            $this->exec( $view );
+        $sql = "BEGIN OSE_IMPORT.SET_CURRENT_USER($userId);OSE_IMPORT.$procName($conditions); END;";
+        try{
+            $this->getEntityManager()->getConnection()->exec($sql);
+        }catch(\Doctrine\DBAL\DBALException $e){
+            throw Exception::duringMajException($e, $query->getTableName());
         }
         return $this;
     }
@@ -80,18 +96,27 @@ class QueryGenerator extends Service
 
 
     /**
-     * Mise à jour du package OSE_IMPORT
+     * Retourne les identifiants des données concernés
      *
-     * @return self
+     * @param string                $tableName
+     * @param string|string[]|null  $sourceCode
+     * @return integer[]|null
      */
-    public function updatePackage()
+    public function getIdFromSourceCode( $tableName, $sourceCode )
     {
-        $declaration = $this->makePackageDeclaration();
-        $this->exec( $declaration );
+        if (empty($sourceCode)) return null;
 
-        $body = $this->makePackageBody();
-        $this->exec( $body );
-        return $this;
+        $sql = 'SELECT ID FROM '.$this->escapeKW($tableName).' WHERE SOURCE_CODE IN (:sourceCode)';
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery(
+                                                                $sql,
+                                                                array('sourceCode' => (array)$sourceCode),
+                                                                array('sourceCode' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+                                                            );
+        $ids = array();
+        while($r = $stmt->fetch()){
+            $ids[] = $r['ID'];
+        }
+        return $ids;
     }
 
 
@@ -101,10 +126,20 @@ class QueryGenerator extends Service
      * 
      * @return self
      */
-    public function updateAll()
+    public function updateViewsAndPackages()
     {
-        $this->updateDiffViews()
-             ->updatePackage();
+        $views = $this->makeDiffViews();
+
+        foreach( $views as $vn => $view ){
+            $this->exec( $view );
+        }
+
+        $declaration = $this->makePackageDeclaration();
+        $this->exec( $declaration );
+
+        $body = $this->makePackageBody();
+        $this->exec( $body );
+
         return $this;
     }
 

@@ -5,18 +5,27 @@ namespace Import\Service;
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
-
+use Import\Exception\Exception;
+use ZfcUser\Entity\UserInterface;
+use Common\Entity\UserAwareInterface;
 /**
  * Classe mère des services
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Service implements ServiceManagerAwareInterface {
+class Service implements ServiceManagerAwareInterface, UserAwareInterface {
 
     /**
      * @var ServiceManager
      */
     protected $serviceManager;
+
+    /**
+     * utilisateur courant
+     *
+     * @var UserInterface
+     */
+    protected $currentUser;
 
     /**
      * @var EntityManager
@@ -31,20 +40,43 @@ class Service implements ServiceManagerAwareInterface {
      * @param string $string
      * @return string
      */
-    protected function escapeKW($string)
+    public static function escapeKW($string)
     {
-        return '"'.str_replace( '"', '""', $string ).'"';
+        return '"'.str_replace( '"', '""', strtoupper($string) ).'"';
     }
 
     /**
-     * Echappe une chaîne de caractères pour convertir en SQL
+     * Echappe une valeur pour convertir en SQL
      *
-     * @param string $string
+     * @param mixed $value
      * @return string
      */
-    protected function escape($string)
+    public static function escape($value)
     {
-        return "'".str_replace( "'", "''", $string )."'";
+        if (null === $value) return 'NULL';
+        switch( gettype($value)){
+            case 'string':  return "'".str_replace( "'", "''", $value )."'";
+            case 'integer': return (string)$value;
+            case 'boolean': return $value ? '1' : '0';
+            case 'double':  return (string)$value;
+            case 'array':   return '('.implode(',',array_map('Import\Service\Service::escape', $value)).')';
+        }
+        throw new Exception('La valeur transmise ne peut pas être convertie en SQL');
+    }
+
+    /**
+     * Retourne le code SQL correspondant à la valeur transmise, précédé de "=", "IS" ou "IN" suivant le contexte.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public static function equals($value)
+    {
+        if     (null === $value)    $eq = ' IS ';
+        elseif (is_array($value))   $eq = ' IN ';
+        else                        $eq = ' = ';
+        
+        return $eq.self::escape($value);
     }
 
     /**
@@ -82,7 +114,7 @@ class Service implements ServiceManagerAwareInterface {
      *
      * @return EntityManager
      */
-    protected function getEntityManager()
+    public function getEntityManager()
     {
         if (empty($this->entityManager))
             $this->entityManager = $this->getServiceManager()->get('Doctrine\ORM\EntityManager');
@@ -110,4 +142,24 @@ class Service implements ServiceManagerAwareInterface {
         $this->serviceManager = $serviceManager;
         return $this;
     }
+
+    /**
+     *
+     * @return UserInterface
+     */
+    public function getCurrentUser()
+    {
+        return $this->currentUser;
+    }
+
+    /**
+     *  Set Current User
+     *
+     * @param UserInterface $currentUser
+     */
+    public function setCurrentUser( UserInterface $currentUser )
+    {
+        $this->currentUser = $currentUser;
+    }
+
 }

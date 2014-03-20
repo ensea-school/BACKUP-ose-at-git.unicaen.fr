@@ -14,6 +14,20 @@ class Ligne
 {
 
     /**
+     * Entity Manager
+     *
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * Nom de la table
+     *
+     * @var string
+     */
+    protected $tableName;
+
+    /**
      * ID
      *
      * @var integer
@@ -64,6 +78,9 @@ class Ligne
      */
     public function __construct(EntityManager $entityManager, $tableName, array $data)
     {
+        $this->tableName = $tableName;
+        $this->entityManager = $entityManager;
+
         $this->id = (integer)$data['ID'];
         unset($data['ID']);
 
@@ -83,6 +100,16 @@ class Ligne
                 $this->changed[$key] = $data['U_'.$key] === '1';
             }
         }
+    }
+
+    /**
+     * Retourne le nom de la table correspondante
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return $this->tableName;
     }
 
     /**
@@ -137,6 +164,18 @@ class Ligne
     }
 
     /**
+     * Retourne l'entité Doctrine correspondante
+     *
+     * @return StdClass
+     */
+    public function getEntity()
+    {
+        $filter = new \Zend\Filter\Word\UnderscoreToCamelCase;
+        $entityClass = 'Application\\Entity\Db\\'.$filter->filter(strtolower($this->getTableName()));
+        return $this->entityManager->find($entityClass, $this->getId());
+    }
+
+    /**
      * Retourne true si la colonne $colName a changé, false sinon
      *
      * @param string $colName
@@ -159,5 +198,15 @@ class Ligne
             if ($changed) $changes[$colName] = $this->values[$colName];
         }
         return $changes;
+    }
+
+    /**
+     * Retourne le gestionnaire d'entités correspondant
+     *
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
     }
 }

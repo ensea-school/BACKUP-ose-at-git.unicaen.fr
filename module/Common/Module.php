@@ -46,6 +46,18 @@ class Module
     /**
      * {@inheritDoc}
      */
+    public function getServiceConfig()
+    {
+        return array(
+            'invokables' => array(
+                'commonServiceUserContext' => '\Common\Service\UserContext'
+            ),
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getControllerPluginConfig()
     {
         return array(

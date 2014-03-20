@@ -4,6 +4,7 @@ namespace Import\Service;
 
 use Doctrine\DBAL\Driver\Statement;
 use Import\Entity\Differentiel\Ligne;
+use Import\Entity\Differentiel\Query;
 
 
 /**
@@ -13,6 +14,7 @@ use Import\Entity\Differentiel\Ligne;
  */
 class Differentiel extends Service
 {
+
     /**
      * Statement
      *
@@ -30,12 +32,18 @@ class Differentiel extends Service
 
 
 
-    public function make( $tableName )
+
+    /**
+     * Construit un différentiel
+     *
+     * @param string            $query  Requête de filtrage
+     * @return self
+     */
+    public function make( Query $query )
     {
-        $this->tableName = $tableName;
-        $diffView = 'V_DIFF_'.strtoupper($tableName);
-        $sql = 'SELECT * FROM '.$this->escapeKW($diffView);
-        $this->stmt = $this->getEntityManager()->getConnection()->executeQuery( $sql, array() );
+        $this->tableName = $query->getTableName();
+        $this->stmt = $this->getEntityManager()->getConnection()->executeQuery( $query->toSql(), array() );
+        return $this;
     }
 
     /**
@@ -48,5 +56,19 @@ class Differentiel extends Service
         $data = $this->stmt->fetch();
         if ($data) return new Ligne( $this->getEntityManager(), $this->tableName, $data );
         return false;
+    }
+
+    /**
+     * Retourne toutes les lignes concernées
+     *
+     * @return Ligne[]
+     */
+    public function fetchAll()
+    {
+        $result = array();
+        while( $data = $this->stmt->fetch() ){
+            if ($data) $result[] = new Ligne( $this->getEntityManager(), $this->tableName, $data );
+        }
+        return $result;
     }
 }

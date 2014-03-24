@@ -11,15 +11,25 @@ namespace Common;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Common\Entity\UserAwareInterface;
 
 class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
-        $e->getApplication()->getServiceManager()->get('translator');
-        $eventManager        = $e->getApplication()->getEventManager();
+        $application = $e->getApplication();
+        $sm = $application->getServiceManager();
+        $sm->get('translator');
+        $eventManager        = $application->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+        
+        // injecte l'utilisateur connecté dans les services en ayant besoin
+        $sm->addInitializer(function($instance, $serviceManager) {
+            if ($instance instanceof UserAwareInterface) {
+                $instance->setCurrentUser($serviceManager->get('commonServiceUserContext')->getCurrentUser());
+            }
+        });
     }
 
 //    public function getConfig()

@@ -23,19 +23,7 @@ class Module
         $eventManager        = $application->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
-        
-        // injecte l'utilisateur connecté dans les services en ayant besoin
-        $sm->addInitializer(function($instance, $serviceManager) {
-            if ($instance instanceof UserAwareInterface) {
-                $instance->setCurrentUser($serviceManager->get('commonServiceUserContext')->getCurrentUser());
-            }
-        });
     }
-
-//    public function getConfig()
-//    {
-//        return include __DIR__ . '/config/module.config.php';
-//    }
 
     public function getAutoloaderConfig()
     {

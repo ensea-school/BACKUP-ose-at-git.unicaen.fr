@@ -66,9 +66,6 @@ class Module
             $factories['importService'.$service] = function($sm) use ($service){
                 $className = 'Import\\Service\\'.$service;
                 $so = new $className;
-                if ($so instanceof \Common\Entity\UserAwareInterface){
-                    $so->setCurrentUser( $sm->get('commonServiceUserContext')->getCurrentUser() );
-                }
                 return $so;
             };
         }

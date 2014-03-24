@@ -24,15 +24,6 @@
         <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="roles" inversed-by="utilisateurs" target-entity="Application\Entity\Db\RoleUtilisateur">
-        <join-table name="ROLE_UTILISATEUR_LINKER">
-            <join-columns>
-                <join-column name="USER_ID" referenced-column-name="ID" />
-            </join-columns>
-            <inverse-join-columns>
-                <join-column name="ROLE_ID" referenced-column-name="ID" />
-            </inverse-join-columns>
-        </join-table>
-    </many-to-many>
+    <many-to-many field="roleUtilisateur" target-entity="Application\Entity\Db\RoleUtilisateur" mapped-by="utilisateur"/>
   </entity>
 </doctrine-mapping>

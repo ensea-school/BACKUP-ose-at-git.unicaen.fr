@@ -5,15 +5,10 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Personnel
+ * TypeModulateurStructure
  */
-class Personnel
+class TypeModulateurStructure
 {
-    /**
-     * @var string
-     */
-    private $email;
-
     /**
      * @var \DateTime
      */
@@ -28,26 +23,6 @@ class Personnel
      * @var \DateTime
      */
     private $histoModification;
-
-    /**
-     * @var string
-     */
-    private $nomPatronymique;
-
-    /**
-     * @var string
-     */
-    private $nomUsuel;
-
-    /**
-     * @var string
-     */
-    private $prenom;
-
-    /**
-     * @var string
-     */
-    private $sourceCode;
 
     /**
      * @var \DateTime
@@ -65,16 +40,6 @@ class Personnel
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
-
-    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoModificateur;
@@ -90,39 +55,21 @@ class Personnel
     private $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\Civilite
+     * @var \Application\Entity\Db\TypeModulateur
      */
-    private $civilite;
-
+    private $typeModulateur;
 
     /**
-     * Set email
-     *
-     * @param string $email
-     * @return Personnel
+     * @var \Application\Entity\Db\Structure
      */
-    public function setEmail($email)
-    {
-        $this->email = $email;
+    private $structure;
 
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return Personnel
+     * @return TypeModulateurStructure
      */
     public function setHistoCreation($histoCreation)
     {
@@ -145,7 +92,7 @@ class Personnel
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return Personnel
+     * @return TypeModulateurStructure
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -168,7 +115,7 @@ class Personnel
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Personnel
+     * @return TypeModulateurStructure
      */
     public function setHistoModification($histoModification)
     {
@@ -188,102 +135,10 @@ class Personnel
     }
 
     /**
-     * Set nomPatronymique
-     *
-     * @param string $nomPatronymique
-     * @return Personnel
-     */
-    public function setNomPatronymique($nomPatronymique)
-    {
-        $this->nomPatronymique = $nomPatronymique;
-
-        return $this;
-    }
-
-    /**
-     * Get nomPatronymique
-     *
-     * @return string 
-     */
-    public function getNomPatronymique()
-    {
-        return $this->nomPatronymique;
-    }
-
-    /**
-     * Set nomUsuel
-     *
-     * @param string $nomUsuel
-     * @return Personnel
-     */
-    public function setNomUsuel($nomUsuel)
-    {
-        $this->nomUsuel = $nomUsuel;
-
-        return $this;
-    }
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string 
-     */
-    public function getNomUsuel()
-    {
-        return $this->nomUsuel;
-    }
-
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     * @return Personnel
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    /**
-     * Get prenom
-     *
-     * @return string 
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     * @return Personnel
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-    /**
-     * Get sourceCode
-     *
-     * @return string 
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-    /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return Personnel
+     * @return TypeModulateurStructure
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -306,7 +161,7 @@ class Personnel
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return Personnel
+     * @return TypeModulateurStructure
      */
     public function setValiditeFin($validiteFin)
     {
@@ -336,56 +191,10 @@ class Personnel
     }
 
     /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return Personnel
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Personnel
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Personnel
+     * @return TypeModulateurStructure
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -408,7 +217,7 @@ class Personnel
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Personnel
+     * @return TypeModulateurStructure
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -431,7 +240,7 @@ class Personnel
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Personnel
+     * @return TypeModulateurStructure
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -451,25 +260,48 @@ class Personnel
     }
 
     /**
-     * Set civilite
+     * Set typeModulateur
      *
-     * @param \Application\Entity\Db\Civilite $civilite
-     * @return Personnel
+     * @param \Application\Entity\Db\TypeModulateur $typeModulateur
+     * @return TypeModulateurStructure
      */
-    public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
+    public function setTypeModulateur(\Application\Entity\Db\TypeModulateur $typeModulateur = null)
     {
-        $this->civilite = $civilite;
+        $this->typeModulateur = $typeModulateur;
 
         return $this;
     }
 
     /**
-     * Get civilite
+     * Get typeModulateur
      *
-     * @return \Application\Entity\Db\Civilite 
+     * @return \Application\Entity\Db\TypeModulateur 
      */
-    public function getCivilite()
+    public function getTypeModulateur()
     {
-        return $this->civilite;
+        return $this->typeModulateur;
+    }
+
+    /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @return TypeModulateurStructure
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    {
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructure()
+    {
+        return $this->structure;
     }
 }

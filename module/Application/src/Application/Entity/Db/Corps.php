@@ -74,15 +74,6 @@ class Corps implements HistoriqueAwareInterface
      */
     private $histoCreateur;
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelleLong();
-    }
 
     /**
      * Set histoCreation
@@ -368,5 +359,20 @@ class Corps implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+
+	/**************************************************************************************************
+	 * 										Début ajout
+	 **************************************************************************************************/
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelleLong();
     }
 }

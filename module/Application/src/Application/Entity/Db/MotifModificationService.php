@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 class MotifModificationService
 {
     /**
+     * @var string
+     */
+    private $code;
+
+    /**
      * @var \DateTime
      */
     private $histoCreation;
@@ -59,6 +64,29 @@ class MotifModificationService
      */
     private $histoCreateur;
 
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return MotifModificationService
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
     /**
      * Set histoCreation

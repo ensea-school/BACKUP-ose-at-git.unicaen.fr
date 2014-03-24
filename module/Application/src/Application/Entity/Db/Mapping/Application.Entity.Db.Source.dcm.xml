@@ -7,7 +7,8 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="code" type="string" column="CODE" length="15" nullable="true"/>
+    <field name="code" type="string" column="CODE" length="15" nullable="false"/>
+    <field name="importable" type="boolean" column="IMPORTABLE" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="30" nullable="false"/>
   </entity>
 </doctrine-mapping>

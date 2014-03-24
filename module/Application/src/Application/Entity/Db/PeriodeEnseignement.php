@@ -30,6 +30,16 @@ class PeriodeEnseignement
     private $libelle;
 
     /**
+     * @var integer
+     */
+    private $ordre;
+
+    /**
+     * @var string
+     */
+    private $sourceCode;
+
+    /**
      * @var \DateTime
      */
     private $validiteDebut;
@@ -43,6 +53,11 @@ class PeriodeEnseignement
      * @var integer
      */
     private $id;
+
+    /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -153,6 +168,52 @@ class PeriodeEnseignement
     }
 
     /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return PeriodeEnseignement
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer 
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return PeriodeEnseignement
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
+    }
+
+    /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
@@ -206,6 +267,29 @@ class PeriodeEnseignement
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return PeriodeEnseignement
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**

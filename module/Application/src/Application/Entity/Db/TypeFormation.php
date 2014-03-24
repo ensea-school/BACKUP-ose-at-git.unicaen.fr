@@ -74,6 +74,11 @@ class TypeFormation
      */
     private $histoCreateur;
 
+    /**
+     * @var \Application\Entity\Db\GroupeTypeFormation
+     */
+    private $groupe;
+
 
     /**
      * Set histoCreation
@@ -359,5 +364,28 @@ class TypeFormation
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Set groupe
+     *
+     * @param \Application\Entity\Db\GroupeTypeFormation $groupe
+     * @return TypeFormation
+     */
+    public function setGroupe(\Application\Entity\Db\GroupeTypeFormation $groupe = null)
+    {
+        $this->groupe = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return \Application\Entity\Db\GroupeTypeFormation 
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
     }
 }

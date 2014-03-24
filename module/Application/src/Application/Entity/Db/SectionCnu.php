@@ -32,7 +32,17 @@ class SectionCnu implements HistoriqueAwareInterface
     /**
      * @var string
      */
-    private $libelle;
+    private $libelleCourt;
+
+    /**
+     * @var string
+     */
+    private $libelleLong;
+
+    /**
+     * @var string
+     */
+    private $sourceCode;
 
     /**
      * @var \DateTime
@@ -50,6 +60,11 @@ class SectionCnu implements HistoriqueAwareInterface
     private $id;
 
     /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
+
+    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoModificateur;
@@ -64,15 +79,6 @@ class SectionCnu implements HistoriqueAwareInterface
      */
     private $histoCreateur;
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
 
     /**
      * Set code
@@ -167,26 +173,72 @@ class SectionCnu implements HistoriqueAwareInterface
     }
 
     /**
-     * Set libelle
+     * Set libelleCourt
      *
-     * @param string $libelle
+     * @param string $libelleCourt
      * @return SectionCnu
      */
-    public function setLibelle($libelle)
+    public function setLibelleCourt($libelleCourt)
     {
-        $this->libelle = $libelle;
+        $this->libelleCourt = $libelleCourt;
 
         return $this;
     }
 
     /**
-     * Get libelle
+     * Get libelleCourt
      *
      * @return string 
      */
-    public function getLibelle()
+    public function getLibelleCourt()
     {
-        return $this->libelle;
+        return $this->libelleCourt;
+    }
+
+    /**
+     * Set libelleLong
+     *
+     * @param string $libelleLong
+     * @return SectionCnu
+     */
+    public function setLibelleLong($libelleLong)
+    {
+        $this->libelleLong = $libelleLong;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleLong
+     *
+     * @return string 
+     */
+    public function getLibelleLong()
+    {
+        return $this->libelleLong;
+    }
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return SectionCnu
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
     }
 
     /**
@@ -243,6 +295,29 @@ class SectionCnu implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return SectionCnu
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**
@@ -312,5 +387,20 @@ class SectionCnu implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+
+	/**************************************************************************************************
+	 * 										Début ajout
+	 **************************************************************************************************/
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
     }
 }

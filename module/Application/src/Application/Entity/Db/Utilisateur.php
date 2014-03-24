@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use ZfcUser\Entity\UserInterface;
 
@@ -53,23 +54,14 @@ class Utilisateur implements UserInterface, ProviderInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $roles;
-    
+    private $roleUtilisateur;
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string)$this->getDisplayName();
+        $this->roleUtilisateur = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -188,19 +180,6 @@ class Utilisateur implements UserInterface, ProviderInterface
     }
 
     /**
-     * Set id
-     *
-     * @param integer $id
-     * @return Utilisateur
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        
-        return $this;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -257,35 +236,72 @@ class Utilisateur implements UserInterface, ProviderInterface
     }
 
     /**
-     * Add role
+     * Add roleUtilisateur
      *
-     * @param \Application\Entity\Db\RoleUtilisateur $role
+     * @param \Application\Entity\Db\RoleUtilisateur $roleUtilisateur
      * @return Utilisateur
      */
-    public function addRole(\Application\Entity\Db\RoleUtilisateur $role)
+    public function addRoleUtilisateur(\Application\Entity\Db\RoleUtilisateur $roleUtilisateur)
     {
-        $this->roles[] = $role;
+        $this->roleUtilisateur[] = $roleUtilisateur;
 
         return $this;
     }
 
     /**
-     * Remove role
+     * Remove roleUtilisateur
      *
-     * @param \Application\Entity\Db\RoleUtilisateur $role
+     * @param \Application\Entity\Db\RoleUtilisateur $roleUtilisateur
      */
-    public function removeRole(\Application\Entity\Db\RoleUtilisateur $role)
+    public function removeRoleUtilisateur(\Application\Entity\Db\RoleUtilisateur $roleUtilisateur)
     {
-        $this->roles->removeElement($role);
+        $this->roleUtilisateur->removeElement($roleUtilisateur);
     }
 
     /**
-     * Get roles
+     * Get roleUtilisateur
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
+    public function getRoleUtilisateur()
+    {
+        return $this->roleUtilisateur;
+    }
+
+
+	/**************************************************************************************************
+	 * 										Début ajout
+	 **************************************************************************************************/
+
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getDisplayName();
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Utilisateur
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+    
+    /************************ Interface ProviderInterface ******************/
+    
+    /**
+     * @return \Zend\Permissions\Acl\Role\RoleInterface[]
+     */
     public function getRoles()
     {
-        return $this->roles;
+        return $this->getRoleUtilisateur();
     }
 }

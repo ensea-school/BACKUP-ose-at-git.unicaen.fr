@@ -5,10 +5,15 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PrimeExcellenceScientifique
+ * TypeModulateur
  */
-class PrimeExcellenceScientifique
+class TypeModulateur
 {
+    /**
+     * @var string
+     */
+    private $code;
+
     /**
      * @var \DateTime
      */
@@ -23,6 +28,26 @@ class PrimeExcellenceScientifique
      * @var \DateTime
      */
     private $histoModification;
+
+    /**
+     * @var string
+     */
+    private $libelle;
+
+    /**
+     * @var boolean
+     */
+    private $obligatoire;
+
+    /**
+     * @var boolean
+     */
+    private $publique;
+
+    /**
+     * @var boolean
+     */
+    private $saisieParEnseignant;
 
     /**
      * @var \DateTime
@@ -54,22 +79,35 @@ class PrimeExcellenceScientifique
      */
     private $histoCreateur;
 
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Annee
+     * Set code
+     *
+     * @param string $code
+     * @return TypeModulateur
      */
-    private $annee;
+    public function setCode($code)
+    {
+        $this->code = $code;
 
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return PrimeExcellenceScientifique
+     * @return TypeModulateur
      */
     public function setHistoCreation($histoCreation)
     {
@@ -92,7 +130,7 @@ class PrimeExcellenceScientifique
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return PrimeExcellenceScientifique
+     * @return TypeModulateur
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -115,7 +153,7 @@ class PrimeExcellenceScientifique
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return PrimeExcellenceScientifique
+     * @return TypeModulateur
      */
     public function setHistoModification($histoModification)
     {
@@ -135,10 +173,102 @@ class PrimeExcellenceScientifique
     }
 
     /**
+     * Set libelle
+     *
+     * @param string $libelle
+     * @return TypeModulateur
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string 
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+    /**
+     * Set obligatoire
+     *
+     * @param boolean $obligatoire
+     * @return TypeModulateur
+     */
+    public function setObligatoire($obligatoire)
+    {
+        $this->obligatoire = $obligatoire;
+
+        return $this;
+    }
+
+    /**
+     * Get obligatoire
+     *
+     * @return boolean 
+     */
+    public function getObligatoire()
+    {
+        return $this->obligatoire;
+    }
+
+    /**
+     * Set publique
+     *
+     * @param boolean $publique
+     * @return TypeModulateur
+     */
+    public function setPublique($publique)
+    {
+        $this->publique = $publique;
+
+        return $this;
+    }
+
+    /**
+     * Get publique
+     *
+     * @return boolean 
+     */
+    public function getPublique()
+    {
+        return $this->publique;
+    }
+
+    /**
+     * Set saisieParEnseignant
+     *
+     * @param boolean $saisieParEnseignant
+     * @return TypeModulateur
+     */
+    public function setSaisieParEnseignant($saisieParEnseignant)
+    {
+        $this->saisieParEnseignant = $saisieParEnseignant;
+
+        return $this;
+    }
+
+    /**
+     * Get saisieParEnseignant
+     *
+     * @return boolean 
+     */
+    public function getSaisieParEnseignant()
+    {
+        return $this->saisieParEnseignant;
+    }
+
+    /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return PrimeExcellenceScientifique
+     * @return TypeModulateur
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -161,7 +291,7 @@ class PrimeExcellenceScientifique
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return PrimeExcellenceScientifique
+     * @return TypeModulateur
      */
     public function setValiditeFin($validiteFin)
     {
@@ -194,7 +324,7 @@ class PrimeExcellenceScientifique
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return PrimeExcellenceScientifique
+     * @return TypeModulateur
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -217,7 +347,7 @@ class PrimeExcellenceScientifique
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return PrimeExcellenceScientifique
+     * @return TypeModulateur
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -240,7 +370,7 @@ class PrimeExcellenceScientifique
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return PrimeExcellenceScientifique
+     * @return TypeModulateur
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -257,51 +387,5 @@ class PrimeExcellenceScientifique
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return PrimeExcellenceScientifique
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant 
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return PrimeExcellenceScientifique
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 }

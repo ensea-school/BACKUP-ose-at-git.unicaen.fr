@@ -42,7 +42,17 @@ class PeriodePaiement
     /**
      * @var integer
      */
+    private $index;
+
+    /**
+     * @var integer
+     */
     private $id;
+
+    /**
+     * @var \Application\Entity\Db\TypeIntervenant
+     */
+    private $typeIntervenant;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -199,6 +209,29 @@ class PeriodePaiement
     }
 
     /**
+     * Set index
+     *
+     * @param integer $index
+     * @return PeriodePaiement
+     */
+    public function setIndex($index)
+    {
+        $this->index = $index;
+
+        return $this;
+    }
+
+    /**
+     * Get index
+     *
+     * @return integer 
+     */
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -206,6 +239,29 @@ class PeriodePaiement
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set typeIntervenant
+     *
+     * @param \Application\Entity\Db\TypeIntervenant $typeIntervenant
+     * @return PeriodePaiement
+     */
+    public function setTypeIntervenant(\Application\Entity\Db\TypeIntervenant $typeIntervenant = null)
+    {
+        $this->typeIntervenant = $typeIntervenant;
+
+        return $this;
+    }
+
+    /**
+     * Get typeIntervenant
+     *
+     * @return \Application\Entity\Db\TypeIntervenant 
+     */
+    public function getTypeIntervenant()
+    {
+        return $this->typeIntervenant;
     }
 
     /**

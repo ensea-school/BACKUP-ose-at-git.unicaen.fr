@@ -5,15 +5,10 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ServiceDu
+ * ServiceModulateur
  */
-class ServiceDu
+class ServiceModulateur
 {
-    /**
-     * @var float
-     */
-    private $heures;
-
     /**
      * @var \DateTime
      */
@@ -30,24 +25,19 @@ class ServiceDu
     private $histoModification;
 
     /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
-
-    /**
      * @var integer
      */
     private $id;
 
     /**
-     * @var \Application\Entity\Db\IntervenantPermanent
+     * @var \Application\Entity\Db\Service
      */
-    private $intervenant;
+    private $service;
+
+    /**
+     * @var \Application\Entity\Db\Modulateur
+     */
+    private $modulateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -64,40 +54,12 @@ class ServiceDu
      */
     private $histoCreateur;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
-
-
-    /**
-     * Set heures
-     *
-     * @param float $heures
-     * @return ServiceDu
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = $heures;
-
-        return $this;
-    }
-
-    /**
-     * Get heures
-     *
-     * @return float 
-     */
-    public function getHeures()
-    {
-        return $this->heures;
-    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return ServiceDu
+     * @return ServiceModulateur
      */
     public function setHistoCreation($histoCreation)
     {
@@ -120,7 +82,7 @@ class ServiceDu
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return ServiceDu
+     * @return ServiceModulateur
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -143,7 +105,7 @@ class ServiceDu
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return ServiceDu
+     * @return ServiceModulateur
      */
     public function setHistoModification($histoModification)
     {
@@ -163,52 +125,6 @@ class ServiceDu
     }
 
     /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return ServiceDu
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return ServiceDu
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -219,33 +135,56 @@ class ServiceDu
     }
 
     /**
-     * Set intervenant
+     * Set service
      *
-     * @param \Application\Entity\Db\IntervenantPermanent $intervenant
-     * @return ServiceDu
+     * @param \Application\Entity\Db\Service $service
+     * @return ServiceModulateur
      */
-    public function setIntervenant(\Application\Entity\Db\IntervenantPermanent $intervenant = null)
+    public function setService(\Application\Entity\Db\Service $service = null)
     {
-        $this->intervenant = $intervenant;
+        $this->service = $service;
 
         return $this;
     }
 
     /**
-     * Get intervenant
+     * Get service
      *
-     * @return \Application\Entity\Db\IntervenantPermanent 
+     * @return \Application\Entity\Db\Service 
      */
-    public function getIntervenant()
+    public function getService()
     {
-        return $this->intervenant;
+        return $this->service;
+    }
+
+    /**
+     * Set modulateur
+     *
+     * @param \Application\Entity\Db\Modulateur $modulateur
+     * @return ServiceModulateur
+     */
+    public function setModulateur(\Application\Entity\Db\Modulateur $modulateur = null)
+    {
+        $this->modulateur = $modulateur;
+
+        return $this;
+    }
+
+    /**
+     * Get modulateur
+     *
+     * @return \Application\Entity\Db\Modulateur 
+     */
+    public function getModulateur()
+    {
+        return $this->modulateur;
     }
 
     /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return ServiceDu
+     * @return ServiceModulateur
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -268,7 +207,7 @@ class ServiceDu
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return ServiceDu
+     * @return ServiceModulateur
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -291,7 +230,7 @@ class ServiceDu
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return ServiceDu
+     * @return ServiceModulateur
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -308,28 +247,5 @@ class ServiceDu
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return ServiceDu
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 }

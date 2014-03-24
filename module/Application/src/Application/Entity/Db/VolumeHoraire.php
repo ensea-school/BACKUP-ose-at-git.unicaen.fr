@@ -10,11 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class VolumeHoraire
 {
     /**
-     * @var boolean
-     */
-    private $aPayer;
-
-    /**
      * @var float
      */
     private $heures;
@@ -84,29 +79,6 @@ class VolumeHoraire
      */
     private $typeIntervention;
 
-
-    /**
-     * Set aPayer
-     *
-     * @param boolean $aPayer
-     * @return VolumeHoraire
-     */
-    public function setAPayer($aPayer)
-    {
-        $this->aPayer = $aPayer;
-
-        return $this;
-    }
-
-    /**
-     * Get aPayer
-     *
-     * @return boolean 
-     */
-    public function getAPayer()
-    {
-        return $this->aPayer;
-    }
 
     /**
      * Set heures

@@ -89,26 +89,6 @@ class Structure implements HistoriqueAwareInterface
      */
     private $parente;
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelleCourt();
-    }
-
-    /**
-     * Get source id
-     *
-     * @return integer 
-     * @see \Application\Entity\Db\Source
-     */
-    public function getSourceToString()
-    {
-        return $this->getSource()->getLibelle();
-    }
 
     /**
      * Set histoCreation
@@ -463,5 +443,31 @@ class Structure implements HistoriqueAwareInterface
     public function getParente()
     {
         return $this->parente;
+    }
+
+
+    /**************************************************************************************************
+     *                                      Début ajout
+     **************************************************************************************************/
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelleCourt();
+    }
+
+    /**
+     * Get source id
+     *
+     * @return integer 
+     * @see \Application\Entity\Db\Source
+     */
+    public function getSourceToString()
+    {
+        return $this->getSource()->getLibelle();
     }
 }

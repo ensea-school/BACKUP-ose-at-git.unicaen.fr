@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
 use Common\Constants;
 
 /**
@@ -9,9 +10,6 @@ use Common\Constants;
  */
 class Civilite
 {
-    const SEXE_M = Constants::SEXE_M;
-    const SEXE_F = Constants::SEXE_F;
-            
     /**
      * @var string
      */
@@ -111,4 +109,12 @@ class Civilite
     {
         return $this->id;
     }
+
+
+	/**************************************************************************************************
+	 * 										Début ajout
+	 **************************************************************************************************/
+
+    const SEXE_M = Constants::SEXE_M;
+    const SEXE_F = Constants::SEXE_F;
 }

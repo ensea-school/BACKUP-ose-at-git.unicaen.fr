@@ -2,20 +2,22 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * IntervenantExterieur
  */
 class IntervenantExterieur extends Intervenant
 {
     /**
-     * @var \Application\Entity\Db\SituationFamiliale
+     * @var \DateTime
      */
-    private $situationFamiliale;
+    private $validiteDebut;
 
     /**
-     * @var \Application\Entity\Db\TypeIntervenantExterieur
+     * @var \DateTime
      */
-    private $typeIntervenantExterieur;
+    private $validiteFin;
 
     /**
      * @var \Application\Entity\Db\TypePoste
@@ -28,83 +30,60 @@ class IntervenantExterieur extends Intervenant
     private $regimeSecu;
 
     /**
-     * @var \DateTime
+     * @var \Application\Entity\Db\TypeIntervenantExterieur
      */
-    protected $validiteDebut;
+    private $typeIntervenantExterieur;
 
     /**
-     * @var \DateTime
+     * @var \Application\Entity\Db\SituationFamiliale
      */
-    protected $validiteFin;
+    private $situationFamiliale;
 
 
     /**
-     * Set situationFamiliale
+     * Set validiteDebut
      *
-     * @param \Application\Entity\Db\SituationFamiliale $situationFamiliale
+     * @param \DateTime $validiteDebut
      * @return IntervenantExterieur
      */
-    public function setSituationFamiliale(\Application\Entity\Db\SituationFamiliale $situationFamiliale = null)
+    public function setValiditeDebut($validiteDebut)
     {
-        $this->situationFamiliale = $situationFamiliale;
+        $this->validiteDebut = $validiteDebut;
 
         return $this;
     }
 
     /**
-     * Get situationFamiliale
+     * Get validiteDebut
      *
-     * @return \Application\Entity\Db\SituationFamiliale 
+     * @return \DateTime 
      */
-    public function getSituationFamiliale()
+    public function getValiditeDebut()
     {
-        return $this->situationFamiliale;
+        return $this->validiteDebut;
     }
 
     /**
-     * Set typeIntervenantExterieur
+     * Set validiteFin
      *
-     * @param \Application\Entity\Db\TypeIntervenantExterieur $typeIntervenantExterieur
+     * @param \DateTime $validiteFin
      * @return IntervenantExterieur
      */
-    public function setTypeIntervenantExterieur(\Application\Entity\Db\TypeIntervenantExterieur $typeIntervenantExterieur = null)
+    public function setValiditeFin($validiteFin)
     {
-        $this->typeIntervenantExterieur = $typeIntervenantExterieur;
+        $this->validiteFin = $validiteFin;
 
         return $this;
     }
 
     /**
-     * Get typeIntervenantExterieur
+     * Get validiteFin
      *
-     * @return \Application\Entity\Db\TypeIntervenantExterieur 
+     * @return \DateTime 
      */
-    public function getTypeIntervenantExterieur()
+    public function getValiditeFin()
     {
-        return $this->typeIntervenantExterieur;
-    }
-
-    /**
-     * Set regimeSecu
-     *
-     * @param \Application\Entity\Db\RegimeSecu $regimeSecu
-     * @return IntervenantExterieur
-     */
-    public function setRegimeSecu(\Application\Entity\Db\RegimeSecu $regimeSecu = null)
-    {
-        $this->regimeSecu = $regimeSecu;
-
-        return $this;
-    }
-
-    /**
-     * Get regimeSecu
-     *
-     * @return \Application\Entity\Db\RegimeSecu 
-     */
-    public function getRegimeSecu()
-    {
-        return $this->regimeSecu;
+        return $this->validiteFin;
     }
 
     /**
@@ -131,48 +110,71 @@ class IntervenantExterieur extends Intervenant
     }
 
     /**
-     * Set validiteDebut
+     * Set regimeSecu
      *
-     * @param \DateTime $validiteDebut
-     * @return IntervenantPermanent
+     * @param \Application\Entity\Db\RegimeSecu $regimeSecu
+     * @return IntervenantExterieur
      */
-    public function setValiditeDebut($validiteDebut)
+    public function setRegimeSecu(\Application\Entity\Db\RegimeSecu $regimeSecu = null)
     {
-        $this->validiteDebut = $validiteDebut;
+        $this->regimeSecu = $regimeSecu;
 
         return $this;
     }
 
     /**
-     * Get validiteDebut
+     * Get regimeSecu
      *
-     * @return \DateTime 
+     * @return \Application\Entity\Db\RegimeSecu 
      */
-    public function getValiditeDebut()
+    public function getRegimeSecu()
     {
-        return $this->validiteDebut;
+        return $this->regimeSecu;
     }
 
     /**
-     * Set validiteFin
+     * Set typeIntervenantExterieur
      *
-     * @param \DateTime $validiteFin
-     * @return IntervenantPermanent
+     * @param \Application\Entity\Db\TypeIntervenantExterieur $typeIntervenantExterieur
+     * @return IntervenantExterieur
      */
-    public function setValiditeFin($validiteFin)
+    public function setTypeIntervenantExterieur(\Application\Entity\Db\TypeIntervenantExterieur $typeIntervenantExterieur = null)
     {
-        $this->validiteFin = $validiteFin;
+        $this->typeIntervenantExterieur = $typeIntervenantExterieur;
 
         return $this;
     }
 
     /**
-     * Get validiteFin
+     * Get typeIntervenantExterieur
      *
-     * @return \DateTime 
+     * @return \Application\Entity\Db\TypeIntervenantExterieur 
      */
-    public function getValiditeFin()
+    public function getTypeIntervenantExterieur()
     {
-        return $this->validiteFin;
+        return $this->typeIntervenantExterieur;
+    }
+
+    /**
+     * Set situationFamiliale
+     *
+     * @param \Application\Entity\Db\SituationFamiliale $situationFamiliale
+     * @return IntervenantExterieur
+     */
+    public function setSituationFamiliale(\Application\Entity\Db\SituationFamiliale $situationFamiliale = null)
+    {
+        $this->situationFamiliale = $situationFamiliale;
+
+        return $this;
+    }
+
+    /**
+     * Get situationFamiliale
+     *
+     * @return \Application\Entity\Db\SituationFamiliale 
+     */
+    public function getSituationFamiliale()
+    {
+        return $this->situationFamiliale;
     }
 }

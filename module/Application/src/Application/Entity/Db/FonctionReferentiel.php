@@ -74,15 +74,6 @@ class FonctionReferentiel
      */
     private $histoCreateur;
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelleCourt();
-    }
 
     /**
      * Set code
@@ -368,5 +359,20 @@ class FonctionReferentiel
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+
+	/**************************************************************************************************
+	 * 										Début ajout
+	 **************************************************************************************************/
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelleCourt();
     }
 }

@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\Role" table="ROLE">
+  <entity name="Application\Entity\Db\AffectationRecherche" table="AFFECTATION_RECHERCHE">
     <indexes>
-      <index name="IDX_61FC67DE59860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_61FC67DE7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_61FC67DE63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_61FC67DEB16F9F85" columns="PERSONNEL_ID"/>
-      <index name="IDX_61FC67DEE9B3446E" columns="SOURCE_ID"/>
-      <index name="IDX_61FC67DE884B0F7B" columns="STRUCTURE_ID"/>
-      <index name="IDX_61FC67DEC2443469" columns="TYPE_ID"/>
+      <index name="IDX_E876D3F259860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_E876D3F27E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_E876D3F263F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_E876D3F278FF2BCB" columns="INTERVENANT_ID"/>
+      <index name="IDX_E876D3F2E9B3446E" columns="SOURCE_ID"/>
+      <index name="IDX_E876D3F2884B0F7B" columns="STRUCTURE_ID"/>
     </indexes>
     <unique-constraints>
-      <unique-constraint name="role_source_un" columns="SOURCE_CODE"/>
-      <unique-constraint name="role_un" columns="STRUCTURE_ID,PERSONNEL_ID,TYPE_ID"/>
+      <unique-constraint name="affectation_is_un" columns="INTERVENANT_ID,STRUCTURE_ID"/>
+      <unique-constraint name="affectation_src_un" columns="SOURCE_CODE"/>
     </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
@@ -23,34 +22,29 @@
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="type" target-entity="Application\Entity\Db\TypeRole">
-      <join-columns>
-        <join-column name="TYPE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="personnel" target-entity="Application\Entity\Db\Personnel">
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
-        <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
-        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">

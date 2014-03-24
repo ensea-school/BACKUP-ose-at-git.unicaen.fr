@@ -5,15 +5,10 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Personnel
+ * ElementPorteurPorte
  */
-class Personnel
+class ElementPorteurPorte
 {
-    /**
-     * @var string
-     */
-    private $email;
-
     /**
      * @var \DateTime
      */
@@ -28,21 +23,6 @@ class Personnel
      * @var \DateTime
      */
     private $histoModification;
-
-    /**
-     * @var string
-     */
-    private $nomPatronymique;
-
-    /**
-     * @var string
-     */
-    private $nomUsuel;
-
-    /**
-     * @var string
-     */
-    private $prenom;
 
     /**
      * @var string
@@ -70,14 +50,19 @@ class Personnel
     private $source;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Application\Entity\Db\TypeIntervention
      */
-    private $structure;
+    private $typeIntervention;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var \Application\Entity\Db\ElementPedagogique
      */
-    private $histoModificateur;
+    private $elementPorte;
+
+    /**
+     * @var \Application\Entity\Db\ElementPedagogique
+     */
+    private $elementPorteur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -87,42 +72,19 @@ class Personnel
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
+    private $histoModificateur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
     private $histoCreateur;
 
-    /**
-     * @var \Application\Entity\Db\Civilite
-     */
-    private $civilite;
-
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return Personnel
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setHistoCreation($histoCreation)
     {
@@ -145,7 +107,7 @@ class Personnel
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -168,7 +130,7 @@ class Personnel
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setHistoModification($histoModification)
     {
@@ -188,79 +150,10 @@ class Personnel
     }
 
     /**
-     * Set nomPatronymique
-     *
-     * @param string $nomPatronymique
-     * @return Personnel
-     */
-    public function setNomPatronymique($nomPatronymique)
-    {
-        $this->nomPatronymique = $nomPatronymique;
-
-        return $this;
-    }
-
-    /**
-     * Get nomPatronymique
-     *
-     * @return string 
-     */
-    public function getNomPatronymique()
-    {
-        return $this->nomPatronymique;
-    }
-
-    /**
-     * Set nomUsuel
-     *
-     * @param string $nomUsuel
-     * @return Personnel
-     */
-    public function setNomUsuel($nomUsuel)
-    {
-        $this->nomUsuel = $nomUsuel;
-
-        return $this;
-    }
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string 
-     */
-    public function getNomUsuel()
-    {
-        return $this->nomUsuel;
-    }
-
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     * @return Personnel
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    /**
-     * Get prenom
-     *
-     * @return string 
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-    /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setSourceCode($sourceCode)
     {
@@ -283,7 +176,7 @@ class Personnel
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -306,7 +199,7 @@ class Personnel
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setValiditeFin($validiteFin)
     {
@@ -339,7 +232,7 @@ class Personnel
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
     {
@@ -359,56 +252,79 @@ class Personnel
     }
 
     /**
-     * Set structure
+     * Set typeIntervention
      *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Personnel
+     * @param \Application\Entity\Db\TypeIntervention $typeIntervention
+     * @return ElementPorteurPorte
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setTypeIntervention(\Application\Entity\Db\TypeIntervention $typeIntervention = null)
     {
-        $this->structure = $structure;
+        $this->typeIntervention = $typeIntervention;
 
         return $this;
     }
 
     /**
-     * Get structure
+     * Get typeIntervention
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\TypeIntervention 
      */
-    public function getStructure()
+    public function getTypeIntervention()
     {
-        return $this->structure;
+        return $this->typeIntervention;
     }
 
     /**
-     * Set histoModificateur
+     * Set elementPorte
      *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Personnel
+     * @param \Application\Entity\Db\ElementPedagogique $elementPorte
+     * @return ElementPorteurPorte
      */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    public function setElementPorte(\Application\Entity\Db\ElementPedagogique $elementPorte = null)
     {
-        $this->histoModificateur = $histoModificateur;
+        $this->elementPorte = $elementPorte;
 
         return $this;
     }
 
     /**
-     * Get histoModificateur
+     * Get elementPorte
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\ElementPedagogique 
      */
-    public function getHistoModificateur()
+    public function getElementPorte()
     {
-        return $this->histoModificateur;
+        return $this->elementPorte;
+    }
+
+    /**
+     * Set elementPorteur
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $elementPorteur
+     * @return ElementPorteurPorte
+     */
+    public function setElementPorteur(\Application\Entity\Db\ElementPedagogique $elementPorteur = null)
+    {
+        $this->elementPorteur = $elementPorteur;
+
+        return $this;
+    }
+
+    /**
+     * Get elementPorteur
+     *
+     * @return \Application\Entity\Db\ElementPedagogique 
+     */
+    public function getElementPorteur()
+    {
+        return $this->elementPorteur;
     }
 
     /**
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -428,10 +344,33 @@ class Personnel
     }
 
     /**
+     * Set histoModificateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoModificateur
+     * @return ElementPorteurPorte
+     */
+    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Personnel
+     * @return ElementPorteurPorte
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -448,28 +387,5 @@ class Personnel
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set civilite
-     *
-     * @param \Application\Entity\Db\Civilite $civilite
-     * @return Personnel
-     */
-    public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
-    {
-        $this->civilite = $civilite;
-
-        return $this;
-    }
-
-    /**
-     * Get civilite
-     *
-     * @return \Application\Entity\Db\Civilite 
-     */
-    public function getCivilite()
-    {
-        return $this->civilite;
     }
 }

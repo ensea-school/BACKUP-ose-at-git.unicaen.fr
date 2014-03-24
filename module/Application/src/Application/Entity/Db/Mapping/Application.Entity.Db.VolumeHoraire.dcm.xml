@@ -13,7 +13,6 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="aPayer" type="boolean" column="A_PAYER" nullable="true"/>
     <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>

@@ -5,15 +5,10 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Personnel
+ * AffectationRecherche
  */
-class Personnel
+class AffectationRecherche
 {
-    /**
-     * @var string
-     */
-    private $email;
-
     /**
      * @var \DateTime
      */
@@ -28,21 +23,6 @@ class Personnel
      * @var \DateTime
      */
     private $histoModification;
-
-    /**
-     * @var string
-     */
-    private $nomPatronymique;
-
-    /**
-     * @var string
-     */
-    private $nomUsuel;
-
-    /**
-     * @var string
-     */
-    private $prenom;
 
     /**
      * @var string
@@ -75,6 +55,11 @@ class Personnel
     private $structure;
 
     /**
+     * @var \Application\Entity\Db\Intervenant
+     */
+    private $intervenant;
+
+    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoModificateur;
@@ -89,40 +74,12 @@ class Personnel
      */
     private $histoCreateur;
 
-    /**
-     * @var \Application\Entity\Db\Civilite
-     */
-    private $civilite;
-
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return Personnel
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setHistoCreation($histoCreation)
     {
@@ -145,7 +102,7 @@ class Personnel
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -168,7 +125,7 @@ class Personnel
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setHistoModification($histoModification)
     {
@@ -188,79 +145,10 @@ class Personnel
     }
 
     /**
-     * Set nomPatronymique
-     *
-     * @param string $nomPatronymique
-     * @return Personnel
-     */
-    public function setNomPatronymique($nomPatronymique)
-    {
-        $this->nomPatronymique = $nomPatronymique;
-
-        return $this;
-    }
-
-    /**
-     * Get nomPatronymique
-     *
-     * @return string 
-     */
-    public function getNomPatronymique()
-    {
-        return $this->nomPatronymique;
-    }
-
-    /**
-     * Set nomUsuel
-     *
-     * @param string $nomUsuel
-     * @return Personnel
-     */
-    public function setNomUsuel($nomUsuel)
-    {
-        $this->nomUsuel = $nomUsuel;
-
-        return $this;
-    }
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string 
-     */
-    public function getNomUsuel()
-    {
-        return $this->nomUsuel;
-    }
-
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     * @return Personnel
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    /**
-     * Get prenom
-     *
-     * @return string 
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-    /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setSourceCode($sourceCode)
     {
@@ -283,7 +171,7 @@ class Personnel
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -306,7 +194,7 @@ class Personnel
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setValiditeFin($validiteFin)
     {
@@ -339,7 +227,7 @@ class Personnel
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
     {
@@ -362,7 +250,7 @@ class Personnel
      * Set structure
      *
      * @param \Application\Entity\Db\Structure $structure
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setStructure(\Application\Entity\Db\Structure $structure = null)
     {
@@ -382,10 +270,33 @@ class Personnel
     }
 
     /**
+     * Set intervenant
+     *
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return AffectationRecherche
+     */
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    {
+        $this->intervenant = $intervenant;
+
+        return $this;
+    }
+
+    /**
+     * Get intervenant
+     *
+     * @return \Application\Entity\Db\Intervenant 
+     */
+    public function getIntervenant()
+    {
+        return $this->intervenant;
+    }
+
+    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -408,7 +319,7 @@ class Personnel
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -431,7 +342,7 @@ class Personnel
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Personnel
+     * @return AffectationRecherche
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -450,26 +361,19 @@ class Personnel
         return $this->histoCreateur;
     }
 
-    /**
-     * Set civilite
-     *
-     * @param \Application\Entity\Db\Civilite $civilite
-     * @return Personnel
-     */
-    public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
-    {
-        $this->civilite = $civilite;
 
-        return $this;
-    }
+    /**************************************************************************************************
+     *                                      Début ajout
+     **************************************************************************************************/
 
     /**
-     * Get civilite
-     *
-     * @return \Application\Entity\Db\Civilite 
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
      */
-    public function getCivilite()
+    public function __toString()
     {
-        return $this->civilite;
+        return $this->getStructure()->__toString();
     }
+
 }

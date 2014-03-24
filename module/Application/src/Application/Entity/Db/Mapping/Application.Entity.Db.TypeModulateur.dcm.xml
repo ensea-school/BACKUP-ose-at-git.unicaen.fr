@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\UniteEnseignement" table="UNITE_ENSEIGNEMENT">
+  <entity name="Application\Entity\Db\TypeModulateur" table="TYPE_MODULATEUR">
     <indexes>
-      <index name="IDX_F29982AE59860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_F29982AE7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_F29982AE63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_F29982AEE9B3446E" columns="SOURCE_ID"/>
+      <index name="IDX_CBACD72059860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_CBACD7207E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_CBACD72063F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
+    <field name="code" type="string" column="CODE" length="3" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="libelle" type="string" column="LIBELLE" length="80" nullable="false"/>
-    <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
+    <field name="libelle" type="string" column="LIBELLE" length="30" nullable="false"/>
+    <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
+    <field name="publique" type="boolean" column="PUBLIQUE" nullable="false"/>
+    <field name="saisieParEnseignant" type="boolean" column="SAISIE_PAR_ENSEIGNANT" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
-    <many-to-one field="source" target-entity="Application\Entity\Db\Source">
-      <join-columns>
-        <join-column name="SOURCE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

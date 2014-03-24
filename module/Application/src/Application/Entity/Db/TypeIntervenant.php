@@ -8,10 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
  * TypeIntervenant
  */
 class TypeIntervenant implements HistoriqueAwareInterface
-{
-    CONST TYPE_PERMANENT = 1;
-    CONST TYPE_EXTERIEUR = 2;
-    
+{    
+    /**
+     * @var string
+     */
+    private $code;
+
     /**
      * @var \DateTime
      */
@@ -62,16 +64,30 @@ class TypeIntervenant implements HistoriqueAwareInterface
      */
     private $histoCreateur;
 
+
     /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
+     * Set code
+     *
+     * @param string $code
+     * @return TypeIntervenant
      */
-    public function __toString()
+    public function setCode($code)
     {
-        return $this->getLibelle();
+        $this->code = $code;
+
+        return $this;
     }
-    
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
     /**
      * Set histoCreation
      *
@@ -287,5 +303,23 @@ class TypeIntervenant implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+
+	/**************************************************************************************************
+	 * 										Début ajout
+	 **************************************************************************************************/
+
+    CONST TYPE_PERMANENT = 1;
+    CONST TYPE_EXTERIEUR = 2;
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
     }
 }

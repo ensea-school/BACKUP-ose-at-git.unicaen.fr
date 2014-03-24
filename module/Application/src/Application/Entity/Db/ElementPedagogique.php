@@ -10,26 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class ElementPedagogique
 {
     /**
-     * @var float
-     */
-    private $heures;
-
-    /**
-     * @var float
-     */
-    private $heuresCm;
-
-    /**
-     * @var float
-     */
-    private $heuresTd;
-
-    /**
-     * @var float
-     */
-    private $heuresTp;
-
-    /**
      * @var \DateTime
      */
     private $histoCreation;
@@ -48,11 +28,6 @@ class ElementPedagogique
      * @var string
      */
     private $libelle;
-
-    /**
-     * @var boolean
-     */
-    private $nouveau;
 
     /**
      * @var string
@@ -85,9 +60,9 @@ class ElementPedagogique
     private $structure;
 
     /**
-     * @var \Application\Entity\Db\SectionCnu
+     * @var \Application\Entity\Db\PeriodeEnseignement
      */
-    private $sectionCnu;
+    private $periode;
 
     /**
      * @var \Application\Entity\Db\Source
@@ -102,105 +77,18 @@ class ElementPedagogique
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    private $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
-
-
-    /**
-     * Set heures
-     *
-     * @param float $heures
-     * @return ElementPedagogique
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = $heures;
-
-        return $this;
-    }
+    private $histoDestructeur;
 
     /**
-     * Get heures
-     *
-     * @return float 
+     * @var \Application\Entity\Db\Etape
      */
-    public function getHeures()
-    {
-        return $this->heures;
-    }
+    private $etape;
 
-    /**
-     * Set heuresCm
-     *
-     * @param float $heuresCm
-     * @return ElementPedagogique
-     */
-    public function setHeuresCm($heuresCm)
-    {
-        $this->heuresCm = $heuresCm;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresCm
-     *
-     * @return float 
-     */
-    public function getHeuresCm()
-    {
-        return $this->heuresCm;
-    }
-
-    /**
-     * Set heuresTd
-     *
-     * @param float $heuresTd
-     * @return ElementPedagogique
-     */
-    public function setHeuresTd($heuresTd)
-    {
-        $this->heuresTd = $heuresTd;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresTd
-     *
-     * @return float 
-     */
-    public function getHeuresTd()
-    {
-        return $this->heuresTd;
-    }
-
-    /**
-     * Set heuresTp
-     *
-     * @param float $heuresTp
-     * @return ElementPedagogique
-     */
-    public function setHeuresTp($heuresTp)
-    {
-        $this->heuresTp = $heuresTp;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresTp
-     *
-     * @return float 
-     */
-    public function getHeuresTp()
-    {
-        return $this->heuresTp;
-    }
 
     /**
      * Set histoCreation
@@ -292,29 +180,6 @@ class ElementPedagogique
     public function getLibelle()
     {
         return $this->libelle;
-    }
-
-    /**
-     * Set nouveau
-     *
-     * @param boolean $nouveau
-     * @return ElementPedagogique
-     */
-    public function setNouveau($nouveau)
-    {
-        $this->nouveau = $nouveau;
-
-        return $this;
-    }
-
-    /**
-     * Get nouveau
-     *
-     * @return boolean 
-     */
-    public function getNouveau()
-    {
-        return $this->nouveau;
     }
 
     /**
@@ -443,26 +308,26 @@ class ElementPedagogique
     }
 
     /**
-     * Set sectionCnu
+     * Set periode
      *
-     * @param \Application\Entity\Db\SectionCnu $sectionCnu
+     * @param \Application\Entity\Db\PeriodeEnseignement $periode
      * @return ElementPedagogique
      */
-    public function setSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu = null)
+    public function setPeriode(\Application\Entity\Db\PeriodeEnseignement $periode = null)
     {
-        $this->sectionCnu = $sectionCnu;
+        $this->periode = $periode;
 
         return $this;
     }
 
     /**
-     * Get sectionCnu
+     * Get periode
      *
-     * @return \Application\Entity\Db\SectionCnu 
+     * @return \Application\Entity\Db\PeriodeEnseignement 
      */
-    public function getSectionCnu()
+    public function getPeriode()
     {
-        return $this->sectionCnu;
+        return $this->periode;
     }
 
     /**
@@ -512,6 +377,29 @@ class ElementPedagogique
     }
 
     /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @return ElementPedagogique
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
@@ -535,25 +423,25 @@ class ElementPedagogique
     }
 
     /**
-     * Set histoCreateur
+     * Set etape
      *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @param \Application\Entity\Db\Etape $etape
      * @return ElementPedagogique
      */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    public function setEtape(\Application\Entity\Db\Etape $etape = null)
     {
-        $this->histoCreateur = $histoCreateur;
+        $this->etape = $etape;
 
         return $this;
     }
 
     /**
-     * Get histoCreateur
+     * Get etape
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Etape 
      */
-    public function getHistoCreateur()
+    public function getEtape()
     {
-        return $this->histoCreateur;
+        return $this->etape;
     }
 }

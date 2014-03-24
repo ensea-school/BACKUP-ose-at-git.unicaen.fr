@@ -8,9 +8,19 @@ namespace Application\Entity\Db;
 class IntervenantPermanent extends Intervenant
 {
     /**
-     * @var \Application\Entity\Db\Corps
+     * @var \DateTime
      */
-    private $corps;
+    private $validiteDebut;
+
+    /**
+     * @var \DateTime
+     */
+    private $validiteFin;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $serviceReferentiel;
 
     /**
      * @var \Application\Entity\Db\SectionCnu
@@ -18,74 +28,18 @@ class IntervenantPermanent extends Intervenant
     private $sectionCnu;
 
     /**
-     * @var \DateTime
+     * @var \Application\Entity\Db\Corps
      */
-    protected $validiteDebut;
+    private $corps;
 
     /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $serviceReferentiel;
-    
-    /**
-     * 
+     * Constructor
      */
     public function __construct()
     {
         parent::__construct();
         
         $this->serviceReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Set corps
-     *
-     * @param \Application\Entity\Db\Corps $corps
-     * @return IntervenantPermanent
-     */
-    public function setCorps(\Application\Entity\Db\Corps $corps = null)
-    {
-        $this->corps = $corps;
-
-        return $this;
-    }
-
-    /**
-     * Get corps
-     *
-     * @return \Application\Entity\Db\Corps 
-     */
-    public function getCorps()
-    {
-        return $this->corps;
-    }
-
-    /**
-     * Set sectionCnu
-     *
-     * @param \Application\Entity\Db\SectionCnu $sectionCnu
-     * @return IntervenantPermanent
-     */
-    public function setSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu = null)
-    {
-        $this->sectionCnu = $sectionCnu;
-
-        return $this;
-    }
-
-    /**
-     * Get sectionCnu
-     *
-     * @return \Application\Entity\Db\SectionCnu 
-     */
-    public function getSectionCnu()
-    {
-        return $this->sectionCnu;
     }
 
     /**
@@ -158,23 +112,66 @@ class IntervenantPermanent extends Intervenant
     }
 
     /**
-     * Remove all serviceReferentiel
+     * Get serviceReferentiel
      *
-     * @param Annee $annee Seule année à retenir
-     * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function removeAllServiceReferentiel(Annee $annee = null)
+//    public function getServiceReferentiel()
+//    {
+//        return $this->serviceReferentiel;
+//    }
+// NB: méthode redéfinie plus bas.
+
+    /**
+     * Set sectionCnu
+     *
+     * @param \Application\Entity\Db\SectionCnu $sectionCnu
+     * @return IntervenantPermanent
+     */
+    public function setSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu = null)
     {
-        if (null === $annee) {
-            $annee = $this->getAnneeCriterion();
-        }
-        
-        foreach ($this->getServiceReferentiel($annee) as $serviceReferentiel) {
-            $this->removeServiceReferentiel($serviceReferentiel);
-        }
-        
+        $this->sectionCnu = $sectionCnu;
+
         return $this;
     }
+
+    /**
+     * Get sectionCnu
+     *
+     * @return \Application\Entity\Db\SectionCnu 
+     */
+    public function getSectionCnu()
+    {
+        return $this->sectionCnu;
+    }
+
+    /**
+     * Set corps
+     *
+     * @param \Application\Entity\Db\Corps $corps
+     * @return IntervenantPermanent
+     */
+    public function setCorps(\Application\Entity\Db\Corps $corps = null)
+    {
+        $this->corps = $corps;
+
+        return $this;
+    }
+
+    /**
+     * Get corps
+     *
+     * @return \Application\Entity\Db\Corps 
+     */
+    public function getCorps()
+    {
+        return $this->corps;
+    }
+
+
+	/*******************************************************************************************************
+	 *										Début ajout
+	 *******************************************************************************************************/
 
     /**
      * Get serviceReferentiel
@@ -220,5 +217,24 @@ class IntervenantPermanent extends Intervenant
         }
         
         return $services;
+    }
+
+    /**
+     * Remove all serviceReferentiel
+     *
+     * @param Annee $annee Seule année à retenir
+     * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
+     */
+    public function removeAllServiceReferentiel(Annee $annee = null)
+    {
+        if (null === $annee) {
+            $annee = $this->getAnneeCriterion();
+        }
+        
+        foreach ($this->getServiceReferentiel($annee) as $serviceReferentiel) {
+            $this->removeServiceReferentiel($serviceReferentiel);
+        }
+        
+        return $this;
     }
 }

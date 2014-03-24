@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 use Common\Constants;
 
@@ -13,17 +14,7 @@ use Common\Constants;
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
 abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface
-{
-    /**
-     * @var integer
-     */
-    protected $id;
-    
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $affectation;
-    
+{    
     /**
      * @var \DateTime
      * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")
@@ -51,6 +42,21 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Options({"label":"Adresse mail :"})
      */
     private $email;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoCreation;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoDestruction;
+
+    /**
+     * @var \DateTime
+     */
+    private $histoModification;
 
     /**
      * @var string
@@ -82,7 +88,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $numeroInseeCle;
 
     /**
-     * @var string
+     * @var boolean
      */
     private $numeroInseeProvisoire;
 
@@ -122,9 +128,24 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $prenom;
 
     /**
+     * @var boolean
+     */
+    private $primeExcellenceScient;
+
+    /**
+     * @var string
+     */
+    private $sourceCode;
+
+    /**
      * @var string
      */
     private $telMobile;
+
+    /**
+     * @var string
+     */
+    private $telPro;
 
     /**
      * @var string
@@ -140,24 +161,24 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $villeNaissanceLibelle;
 
     /**
-     * @var \Application\Entity\Db\TypeIntervenant
+     * @var integer
      */
-    private $type;
+    protected $id;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $affectation;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $adresse;
 
     /**
      * @var \Application\Entity\Db\Source
      */
     private $source;
-
-    /**
-     * @var string
-     */
-    private $sourceCode;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
 
     /**
      * @var \Application\Entity\Db\Civilite
@@ -169,34 +190,9 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $civilite;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Application\Entity\Db\Utilisateur
      */
-    private $sectionCnu;
-    
-    /**
-     * @var boolean
-     */
-    private $primeExcellenceScient;
-
-    /**
-     * @var string
-     */
-    private $telPro;
-    
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -206,94 +202,27 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    protected $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
     protected $histoCreateur;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Application\Entity\Db\TypeIntervenant
      */
-    protected $adresse;
-    
+    private $type;
+
+    /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structure;
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->annee       = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sectionCnu  = new \Doctrine\Common\Collections\ArrayCollection();
         $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->adresse     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->adresse = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return strtoupper($this->getNomUsuel()) . ' ' . ucfirst($this->getPrenom());
-    }
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string 
-     */
-    public function getNomComplet($avecCivilite = false, $avecNomPatro = false)
-    {
-        $f = new \Common\Filter\NomCompletFormatter(true, $avecCivilite, $avecNomPatro);
-        
-        return $f->filter($this);
-    }
-
-    /**
-     * Get dateNaissance
-     *
-     * @return \DateTime 
-     */
-    public function getDateNaissanceToString()
-    {
-        return $this->dateNaissance->format(Constants::DATE_FORMAT);
-    }
-
-    /**
-     * Add affectation
-     *
-     * @param \Application\Entity\Db\Affectation $affectation
-     * @return Intervenant
-     */
-    public function addAffectation(\Application\Entity\Db\Affectation $affectation)
-    {
-        $this->affectation[] = $affectation;
-
-        return $this;
-    }
-
-    /**
-     * Remove affectation
-     *
-     * @param \Application\Entity\Db\Affectation $affectation
-     */
-    public function removeAffectation(\Application\Entity\Db\Affectation $affectation)
-    {
-        $this->affectation->removeElement($affectation);
-    }
-
-    /**
-     * Get affectation
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getAffectation()
-    {
-        return $this->affectation;
-    }
-    
     /**
      * Set dateNaissance
      *
@@ -384,6 +313,75 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set histoCreation
+     *
+     * @param \DateTime $histoCreation
+     * @return Intervenant
+     */
+    public function setHistoCreation($histoCreation)
+    {
+        $this->histoCreation = $histoCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreation
+     *
+     * @return \DateTime 
+     */
+    public function getHistoCreation()
+    {
+        return $this->histoCreation;
+    }
+
+    /**
+     * Set histoDestruction
+     *
+     * @param \DateTime $histoDestruction
+     * @return Intervenant
+     */
+    public function setHistoDestruction($histoDestruction)
+    {
+        $this->histoDestruction = $histoDestruction;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestruction
+     *
+     * @return \DateTime 
+     */
+    public function getHistoDestruction()
+    {
+        return $this->histoDestruction;
+    }
+
+    /**
+     * Set histoModification
+     *
+     * @param \DateTime $histoModification
+     * @return Intervenant
+     */
+    public function setHistoModification($histoModification)
+    {
+        $this->histoModification = $histoModification;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModification
+     *
+     * @return \DateTime 
+     */
+    public function getHistoModification()
+    {
+        return $this->histoModification;
     }
 
     /**
@@ -481,7 +479,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Set numeroInseeProvisoire
      *
-     * @param string $numeroInseeProvisoire
+     * @param boolean $numeroInseeProvisoire
      * @return Intervenant
      */
     public function setNumeroInseeProvisoire($numeroInseeProvisoire)
@@ -494,7 +492,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Get numeroInseeProvisoire
      *
-     * @return string 
+     * @return boolean 
      */
     public function getNumeroInseeProvisoire()
     {
@@ -617,6 +615,52 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Set primeExcellenceScient
+     *
+     * @param boolean $primeExcellenceScient
+     * @return Intervenant
+     */
+    public function setPrimeExcellenceScient($primeExcellenceScient)
+    {
+        $this->primeExcellenceScient = $primeExcellenceScient;
+
+        return $this;
+    }
+
+    /**
+     * Get primeExcellenceScient
+     *
+     * @return boolean 
+     */
+    public function getPrimeExcellenceScient()
+    {
+        return $this->primeExcellenceScient;
+    }
+
+    /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return Intervenant
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
+    }
+
+    /**
      * Set telMobile
      *
      * @param string $telMobile
@@ -637,6 +681,29 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getTelMobile()
     {
         return $this->telMobile;
+    }
+
+    /**
+     * Set telPro
+     *
+     * @param string $telPro
+     * @return Intervenant
+     */
+    public function setTelPro($telPro)
+    {
+        $this->telPro = $telPro;
+
+        return $this;
+    }
+
+    /**
+     * Get telPro
+     *
+     * @return string 
+     */
+    public function getTelPro()
+    {
+        return $this->telPro;
     }
 
     /**
@@ -686,285 +753,9 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
-     * Set type
-     *
-     * @param \Application\Entity\Db\TypeIntervenant $type
-     * @return Intervenant
-     */
-    public function setType(\Application\Entity\Db\TypeIntervenant $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return \Application\Entity\Db\TypeIntervenant 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set civilite
-     *
-     * @param \Application\Entity\Db\Civilite $civilite
-     * @return Intervenant
-     */
-    public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
-    {
-        $this->civilite = $civilite;
-
-        return $this;
-    }
-
-    /**
-     * Get civilite
-     *
-     * @return \Application\Entity\Db\Civilite 
-     */
-    public function getCivilite()
-    {
-        return $this->civilite;
-    }
-
-    /**
-     * Add sectionCnu
-     *
-     * @param \Application\Entity\Db\SectionCnu $sectionCnu
-     * @return Intervenant
-     */
-    public function addSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu)
-    {
-        $this->sectionCnu[] = $sectionCnu;
-
-        return $this;
-    }
-
-    /**
-     * Remove sectionCnu
-     *
-     * @param \Application\Entity\Db\SectionCnu $sectionCnu
-     */
-    public function removeSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu)
-    {
-        $this->sectionCnu->removeElement($sectionCnu);
-    }
-
-    /**
-     * Get sectionCnu
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSectionCnu()
-    {
-        return $this->sectionCnu;
-    }
-
-    /**
-     * Set source
-     *
-     * @param Source $source
-     * @return Intervenant
-     */
-    public function setSource(Source $source)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     * @return Intervenant
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-    /**
-     * Get sourceCode
-     *
-     * @return string 
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
-    }
-
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Intervenant
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-    /**
-     * Set primeExcellenceScient
-     *
-     * @param boolean $primeExcellenceScient
-     * @return Intervenant
-     */
-    public function setPrimeExcellenceScient($primeExcellenceScient)
-    {
-        $this->primeExcellenceScient = $primeExcellenceScient;
-
-        return $this;
-    }
-
-    /**
-     * Get primeExcellenceScient
-     *
-     * @return boolean 
-     */
-    public function getPrimeExcellenceScient()
-    {
-        return $this->primeExcellenceScient;
-    }
-
-    /**
-     * Set telPro
-     *
-     * @param string $telPro
-     * @return Intervenant
-     */
-    public function setTelPro($telPro)
-    {
-        $this->telPro = $telPro;
-
-        return $this;
-    }
-
-    /**
-     * Get telPro
-     *
-     * @return string 
-     */
-    public function getTelPro()
-    {
-        return $this->telPro;
-    }
-    
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return IntervenantPermanent
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return IntervenantPermanent
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return IntervenantPermanent
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
-
-    /**
-     * Set id
-     *
-     * @param \Application\Entity\Db\Intervenant $id
-     * @return IntervenantPermanent
-     */
-    public function setId(\Application\Entity\Db\Intervenant $id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Get id
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return integer 
      */
     public function getId()
     {
@@ -972,72 +763,36 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
-     * Set histoModificateur
+     * Add affectation
      *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return IntervenantPermanent
+     * @param \Application\Entity\Db\AffectationRecherche $affectation
+     * @return Intervenant
      */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    public function addAffectation(\Application\Entity\Db\AffectationRecherche $affectation)
     {
-        $this->histoModificateur = $histoModificateur;
+        $this->affectation[] = $affectation;
 
         return $this;
     }
 
     /**
-     * Get histoModificateur
+     * Remove affectation
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @param \Application\Entity\Db\AffectationRecherche $affectation
      */
-    public function getHistoModificateur()
+    public function removeAffectation(\Application\Entity\Db\AffectationRecherche $affectation)
     {
-        return $this->histoModificateur;
+        $this->affectation->removeElement($affectation);
     }
 
     /**
-     * Set histoDestructeur
+     * Get affectation
      *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return IntervenantPermanent
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    public function getAffectation()
     {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return IntervenantPermanent
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
+        return $this->affectation;
     }
 
     /**
@@ -1072,6 +827,172 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->adresse;
     }
+
+    /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return Intervenant
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * Set civilite
+     *
+     * @param \Application\Entity\Db\Civilite $civilite
+     * @return Intervenant
+     */
+    public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
+    {
+        $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    /**
+     * Get civilite
+     *
+     * @return \Application\Entity\Db\Civilite 
+     */
+    public function getCivilite()
+    {
+        return $this->civilite;
+    }
+
+    /**
+     * Set histoDestructeur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return Intervenant
+     */
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
+     * Set histoModificateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoModificateur
+     * @return Intervenant
+     */
+    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    {
+        $this->histoModificateur = $histoModificateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoModificateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoModificateur()
+    {
+        return $this->histoModificateur;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @return Intervenant
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \Application\Entity\Db\TypeIntervenant $type
+     * @return Intervenant
+     */
+    public function setType(\Application\Entity\Db\TypeIntervenant $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \Application\Entity\Db\TypeIntervenant 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @return Intervenant
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    {
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructure()
+    {
+        return $this->structure;
+    }
+
+
+	/*******************************************************************************************************
+     *                                        Début ajout
+     *******************************************************************************************************/
     
     /**
      * @var Annee
@@ -1098,8 +1019,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         
         return $this;
     }
-    
-    
+
     
     /*************************** IntervenantInterface ***********************/
     
@@ -1155,4 +1075,35 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this instanceof IntervenantPermanent ? TypeIntervenant::TYPE_PERMANENT : TypeIntervenant::TYPE_EXTERIEUR;
     }
 
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return strtoupper($this->getNomUsuel()) . ' ' . ucfirst($this->getPrenom());
+    }
+
+    /**
+     * Get nomUsuel
+     *
+     * @return string 
+     */
+    public function getNomComplet($avecCivilite = false, $avecNomPatro = false)
+    {
+        $f = new \Common\Filter\NomCompletFormatter(true, $avecCivilite, $avecNomPatro);
+        
+        return $f->filter($this);
+    }
+
+    /**
+     * Get dateNaissance
+     *
+     * @return \DateTime 
+     */
+    public function getDateNaissanceToString()
+    {
+        return $this->dateNaissance->format(Constants::DATE_FORMAT);
+    }
 }

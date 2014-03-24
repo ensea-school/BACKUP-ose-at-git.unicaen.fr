@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\TypeRole" table="TYPE_ROLE">
+  <entity name="Application\Entity\Db\StatutIntervenant" table="STATUT_INTERVENANT">
     <indexes>
-      <index name="IDX_5657E8959860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_5657E897E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_5657E8963F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_157F091959860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_157F09197E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_157F091963F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_157F09196C6285FC" columns="TYPE_INTERVENANT_ID"/>
     </indexes>
     <unique-constraints>
-      <unique-constraint name="type_role_code_un" columns="CODE"/>
+      <unique-constraint name="statut_intervenant__un" columns="CODE"/>
     </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="code" type="string" column="CODE" length="3" nullable="false"/>
+    <field name="depassement" type="boolean" column="DEPASSEMENT" nullable="false"/>
+    <field name="fonctionEC" type="boolean" column="FONCTION_E_C" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="libelle" type="string" column="LIBELLE" length="50" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="30" nullable="false"/>
+    <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
+      <join-columns>
+        <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

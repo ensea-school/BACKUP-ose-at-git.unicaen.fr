@@ -5,10 +5,25 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Role
+ * StatutIntervenant
  */
-class Role
+class StatutIntervenant
 {
+    /**
+     * @var string
+     */
+    private $code;
+
+    /**
+     * @var boolean
+     */
+    private $depassement;
+
+    /**
+     * @var boolean
+     */
+    private $fonctionEC;
+
     /**
      * @var \DateTime
      */
@@ -27,7 +42,12 @@ class Role
     /**
      * @var string
      */
-    private $sourceCode;
+    private $libelle;
+
+    /**
+     * @var float
+     */
+    private $serviceStatutaire;
 
     /**
      * @var \DateTime
@@ -45,29 +65,9 @@ class Role
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Application\Entity\Db\TypeIntervenant
      */
-    private $structure;
-
-    /**
-     * @var \Application\Entity\Db\TypeRole
-     */
-    private $type;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
-
-    /**
-     * @var \Application\Entity\Db\Personnel
-     */
-    private $personnel;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoDestructeur;
+    private $typeIntervenant;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -77,14 +77,88 @@ class Role
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
     private $histoCreateur;
 
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return StatutIntervenant
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set depassement
+     *
+     * @param boolean $depassement
+     * @return StatutIntervenant
+     */
+    public function setDepassement($depassement)
+    {
+        $this->depassement = $depassement;
+
+        return $this;
+    }
+
+    /**
+     * Get depassement
+     *
+     * @return boolean 
+     */
+    public function getDepassement()
+    {
+        return $this->depassement;
+    }
+
+    /**
+     * Set fonctionEC
+     *
+     * @param boolean $fonctionEC
+     * @return StatutIntervenant
+     */
+    public function setFonctionEC($fonctionEC)
+    {
+        $this->fonctionEC = $fonctionEC;
+
+        return $this;
+    }
+
+    /**
+     * Get fonctionEC
+     *
+     * @return boolean 
+     */
+    public function getFonctionEC()
+    {
+        return $this->fonctionEC;
+    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return Role
+     * @return StatutIntervenant
      */
     public function setHistoCreation($histoCreation)
     {
@@ -107,7 +181,7 @@ class Role
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return Role
+     * @return StatutIntervenant
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -130,7 +204,7 @@ class Role
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Role
+     * @return StatutIntervenant
      */
     public function setHistoModification($histoModification)
     {
@@ -150,33 +224,56 @@ class Role
     }
 
     /**
-     * Set sourceCode
+     * Set libelle
      *
-     * @param string $sourceCode
-     * @return Role
+     * @param string $libelle
+     * @return StatutIntervenant
      */
-    public function setSourceCode($sourceCode)
+    public function setLibelle($libelle)
     {
-        $this->sourceCode = $sourceCode;
+        $this->libelle = $libelle;
 
         return $this;
     }
 
     /**
-     * Get sourceCode
+     * Get libelle
      *
      * @return string 
      */
-    public function getSourceCode()
+    public function getLibelle()
     {
-        return $this->sourceCode;
+        return $this->libelle;
+    }
+
+    /**
+     * Set serviceStatutaire
+     *
+     * @param float $serviceStatutaire
+     * @return StatutIntervenant
+     */
+    public function setServiceStatutaire($serviceStatutaire)
+    {
+        $this->serviceStatutaire = $serviceStatutaire;
+
+        return $this;
+    }
+
+    /**
+     * Get serviceStatutaire
+     *
+     * @return float 
+     */
+    public function getServiceStatutaire()
+    {
+        return $this->serviceStatutaire;
     }
 
     /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return Role
+     * @return StatutIntervenant
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -199,7 +296,7 @@ class Role
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return Role
+     * @return StatutIntervenant
      */
     public function setValiditeFin($validiteFin)
     {
@@ -229,125 +326,33 @@ class Role
     }
 
     /**
-     * Set structure
+     * Set typeIntervenant
      *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Role
+     * @param \Application\Entity\Db\TypeIntervenant $typeIntervenant
+     * @return StatutIntervenant
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setTypeIntervenant(\Application\Entity\Db\TypeIntervenant $typeIntervenant = null)
     {
-        $this->structure = $structure;
+        $this->typeIntervenant = $typeIntervenant;
 
         return $this;
     }
 
     /**
-     * Get structure
+     * Get typeIntervenant
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\TypeIntervenant 
      */
-    public function getStructure()
+    public function getTypeIntervenant()
     {
-        return $this->structure;
-    }
-
-    /**
-     * Set type
-     *
-     * @param \Application\Entity\Db\TypeRole $type
-     * @return Role
-     */
-    public function setType(\Application\Entity\Db\TypeRole $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return \Application\Entity\Db\TypeRole 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return Role
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
-     * Set personnel
-     *
-     * @param \Application\Entity\Db\Personnel $personnel
-     * @return Role
-     */
-    public function setPersonnel(\Application\Entity\Db\Personnel $personnel = null)
-    {
-        $this->personnel = $personnel;
-
-        return $this;
-    }
-
-    /**
-     * Get personnel
-     *
-     * @return \Application\Entity\Db\Personnel 
-     */
-    public function getPersonnel()
-    {
-        return $this->personnel;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Role
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
+        return $this->typeIntervenant;
     }
 
     /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Role
+     * @return StatutIntervenant
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -367,10 +372,33 @@ class Role
     }
 
     /**
+     * Set histoDestructeur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return StatutIntervenant
+     */
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Role
+     * @return StatutIntervenant
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {

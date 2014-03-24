@@ -32,14 +32,14 @@ class RoleUtilisateur implements \BjyAuthorize\Acl\HierarchicalRoleInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $utilisateurs;
+    private $utilisateur;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->utilisateurs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->utilisateur = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -122,35 +122,35 @@ class RoleUtilisateur implements \BjyAuthorize\Acl\HierarchicalRoleInterface
     }
 
     /**
-     * Add Utilisateur
+     * Add utilisateur
      *
      * @param \Application\Entity\Db\Utilisateur $utilisateur
      * @return RoleUtilisateur
      */
     public function addUtilisateur(\Application\Entity\Db\Utilisateur $utilisateur)
     {
-        $this->utilisateurs[] = $utilisateur;
+        $this->utilisateur[] = $utilisateur;
 
         return $this;
     }
 
     /**
-     * Remove Utilisateur
+     * Remove utilisateur
      *
      * @param \Application\Entity\Db\Utilisateur $utilisateur
      */
     public function removeUtilisateur(\Application\Entity\Db\Utilisateur $utilisateur)
     {
-        $this->utilisateurs->removeElement($utilisateur);
+        $this->utilisateur->removeElement($utilisateur);
     }
 
     /**
-     * Get Utilisateurs
+     * Get utilisateur
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getUtilisateurs()
+    public function getUtilisateur()
     {
-        return $this->utilisateurs;
+        return $this->utilisateur;
     }
 }

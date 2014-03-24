@@ -5,6 +5,7 @@
       <index name="IDX_C230EB2059860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_C230EB207E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_C230EB2063F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_C230EB206C6285FC" columns="TYPE_INTERVENANT_ID"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
@@ -15,6 +16,12 @@
     <field name="libelle" type="string" column="LIBELLE" length="20" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <field name="index" type="integer" column="index" nullable="false"/>
+    <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
+      <join-columns>
+        <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

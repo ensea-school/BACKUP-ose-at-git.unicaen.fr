@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * Affectation
+ * ElementSection
  */
-class Affectation
+class ElementSection
 {
     /**
      * @var \DateTime
@@ -23,19 +25,9 @@ class Affectation
     private $histoModification;
 
     /**
-     * @var integer
+     * @var string
      */
-    private $id;
-
-    /**
-     * @var boolean
-     */
-    private $principale;
-
-    /**
-     * @var boolean
-     */
-    private $recherche;
+    private $sourceCode;
 
     /**
      * @var \DateTime
@@ -48,14 +40,24 @@ class Affectation
     private $validiteFin;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var integer
      */
-    private $structure;
+    private $id;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Application\Entity\Db\ElementPedagogique
      */
-    private $intervenant;
+    private $elementPedagogique;
+
+    /**
+     * @var \Application\Entity\Db\SectionCnu
+     */
+    private $sectionCnu;
+
+    /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -72,21 +74,12 @@ class Affectation
      */
     private $histoCreateur;
 
-    /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return "" . $this->getStructure();
-    }
-    
+
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return Affectation
+     * @return ElementSection
      */
     public function setHistoCreation($histoCreation)
     {
@@ -109,7 +102,7 @@ class Affectation
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return Affectation
+     * @return ElementSection
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -132,7 +125,7 @@ class Affectation
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Affectation
+     * @return ElementSection
      */
     public function setHistoModification($histoModification)
     {
@@ -152,66 +145,33 @@ class Affectation
     }
 
     /**
-     * Get id
+     * Set sourceCode
      *
-     * @return integer 
+     * @param string $sourceCode
+     * @return ElementSection
      */
-    public function getId()
+    public function setSourceCode($sourceCode)
     {
-        return $this->id;
+        $this->sourceCode = $sourceCode;
+
+        return $this;
     }
-//
-//    /**
-//     * Set principale
-//     *
-//     * @param boolean $principale
-//     * @return Affectation
-//     */
-//    public function setPrincipale($principale)
-//    {
-//        $this->principale = $principale;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get principale
-//     *
-//     * @return boolean 
-//     */
-//    public function getPrincipale()
-//    {
-//        return $this->principale;
-//    }
-//
-//    /**
-//     * Set recherche
-//     *
-//     * @param boolean $recherche
-//     * @return Affectation
-//     */
-//    public function setRecherche($recherche)
-//    {
-//        $this->recherche = $recherche;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get recherche
-//     *
-//     * @return boolean 
-//     */
-//    public function getRecherche()
-//    {
-//        return $this->recherche;
-//    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
+    }
 
     /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return Affectation
+     * @return ElementSection
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -234,7 +194,7 @@ class Affectation
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return Affectation
+     * @return ElementSection
      */
     public function setValiditeFin($validiteFin)
     {
@@ -254,56 +214,89 @@ class Affectation
     }
 
     /**
-     * Set structure
+     * Get id
      *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Affectation
+     * @return integer 
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure)
+    public function getId()
     {
-        $this->structure = $structure;
+        return $this->id;
+    }
+
+    /**
+     * Set elementPedagogique
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @return ElementSection
+     */
+    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    {
+        $this->elementPedagogique = $elementPedagogique;
 
         return $this;
     }
 
     /**
-     * Get structure
+     * Get elementPedagogique
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\ElementPedagogique 
      */
-    public function getStructure()
+    public function getElementPedagogique()
     {
-        return $this->structure;
+        return $this->elementPedagogique;
     }
 
     /**
-     * Set intervenant
+     * Set sectionCnu
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return Affectation
+     * @param \Application\Entity\Db\SectionCnu $sectionCnu
+     * @return ElementSection
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant)
+    public function setSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu = null)
     {
-        $this->intervenant = $intervenant;
+        $this->sectionCnu = $sectionCnu;
 
         return $this;
     }
 
     /**
-     * Get intervenant
+     * Get sectionCnu
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Application\Entity\Db\SectionCnu 
      */
-    public function getIntervenant()
+    public function getSectionCnu()
     {
-        return $this->intervenant;
+        return $this->sectionCnu;
+    }
+
+    /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return ElementSection
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Affectation
+     * @return ElementSection
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -326,7 +319,7 @@ class Affectation
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Affectation
+     * @return ElementSection
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -349,7 +342,7 @@ class Affectation
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Affectation
+     * @return ElementSection
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {

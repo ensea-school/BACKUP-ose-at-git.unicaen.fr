@@ -40,14 +40,19 @@ class Service
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var \Application\Entity\Db\Intervenant
      */
-    private $histoCreateur;
+    private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var \Application\Entity\Db\Structure
      */
-    private $histoDestructeur;
+    private $structureAff;
+
+    /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structureEns;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -55,9 +60,9 @@ class Service
     private $histoModificateur;
 
     /**
-     * @var \Application\Entity\Db\Etablissement
+     * @var \Application\Entity\Db\Utilisateur
      */
-    private $etablissement;
+    private $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\ElementPedagogique
@@ -65,19 +70,19 @@ class Service
     private $elementPedagogique;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Application\Entity\Db\Etablissement
      */
-    private $structure;
+    private $etablissement;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
-
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    private $intervenant;
 
 
     /**
@@ -206,49 +211,72 @@ class Service
     }
 
     /**
-     * Set histoCreateur
+     * Set intervenant
      *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @param \Application\Entity\Db\Intervenant $intervenant
      * @return Service
      */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
-        $this->histoCreateur = $histoCreateur;
+        $this->intervenant = $intervenant;
 
         return $this;
     }
 
     /**
-     * Get histoCreateur
+     * Get intervenant
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Intervenant 
      */
-    public function getHistoCreateur()
+    public function getIntervenant()
     {
-        return $this->histoCreateur;
+        return $this->intervenant;
     }
 
     /**
-     * Set histoDestructeur
+     * Set structureAff
      *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @param \Application\Entity\Db\Structure $structureAff
      * @return Service
      */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    public function setStructureAff(\Application\Entity\Db\Structure $structureAff = null)
     {
-        $this->histoDestructeur = $histoDestructeur;
+        $this->structureAff = $structureAff;
 
         return $this;
     }
 
     /**
-     * Get histoDestructeur
+     * Get structureAff
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Structure 
      */
-    public function getHistoDestructeur()
+    public function getStructureAff()
     {
-        return $this->histoDestructeur;
+        return $this->structureAff;
+    }
+
+    /**
+     * Set structureEns
+     *
+     * @param \Application\Entity\Db\Structure $structureEns
+     * @return Service
+     */
+    public function setStructureEns(\Application\Entity\Db\Structure $structureEns = null)
+    {
+        $this->structureEns = $structureEns;
+
+        return $this;
+    }
+
+    /**
+     * Get structureEns
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructureEns()
+    {
+        return $this->structureEns;
     }
 
     /**
@@ -275,26 +303,26 @@ class Service
     }
 
     /**
-     * Set etablissement
+     * Set histoDestructeur
      *
-     * @param \Application\Entity\Db\Etablissement $etablissement
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
      * @return Service
      */
-    public function setEtablissement(\Application\Entity\Db\Etablissement $etablissement = null)
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
-        $this->etablissement = $etablissement;
+        $this->histoDestructeur = $histoDestructeur;
 
         return $this;
     }
 
     /**
-     * Get etablissement
+     * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Etablissement 
+     * @return \Application\Entity\Db\Utilisateur 
      */
-    public function getEtablissement()
+    public function getHistoDestructeur()
     {
-        return $this->etablissement;
+        return $this->histoDestructeur;
     }
 
     /**
@@ -321,26 +349,49 @@ class Service
     }
 
     /**
-     * Set structure
+     * Set etablissement
      *
-     * @param \Application\Entity\Db\Structure $structure
+     * @param \Application\Entity\Db\Etablissement $etablissement
      * @return Service
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setEtablissement(\Application\Entity\Db\Etablissement $etablissement = null)
     {
-        $this->structure = $structure;
+        $this->etablissement = $etablissement;
 
         return $this;
     }
 
     /**
-     * Get structure
+     * Get etablissement
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Etablissement 
      */
-    public function getStructure()
+    public function getEtablissement()
     {
-        return $this->structure;
+        return $this->etablissement;
+    }
+
+    /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @return Service
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
     }
 
     /**
@@ -364,28 +415,5 @@ class Service
     public function getAnnee()
     {
         return $this->annee;
-    }
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return Service
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\Intervenant 
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
     }
 }

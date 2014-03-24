@@ -5,9 +5,9 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UniteEnseignement
+ * GroupeTypeFormation
  */
-class UniteEnseignement
+class GroupeTypeFormation
 {
     /**
      * @var \DateTime
@@ -27,22 +27,27 @@ class UniteEnseignement
     /**
      * @var string
      */
-    private $libelle;
+    private $libelleCourt;
+
+    /**
+     * @var string
+     */
+    private $libelleLong;
+
+    /**
+     * @var integer
+     */
+    private $ordre;
+
+    /**
+     * @var boolean
+     */
+    private $pertinenceNiveau;
 
     /**
      * @var string
      */
     private $sourceCode;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
 
     /**
      * @var integer
@@ -74,7 +79,7 @@ class UniteEnseignement
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return UniteEnseignement
+     * @return GroupeTypeFormation
      */
     public function setHistoCreation($histoCreation)
     {
@@ -97,7 +102,7 @@ class UniteEnseignement
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return UniteEnseignement
+     * @return GroupeTypeFormation
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -120,7 +125,7 @@ class UniteEnseignement
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return UniteEnseignement
+     * @return GroupeTypeFormation
      */
     public function setHistoModification($histoModification)
     {
@@ -140,33 +145,102 @@ class UniteEnseignement
     }
 
     /**
-     * Set libelle
+     * Set libelleCourt
      *
-     * @param string $libelle
-     * @return UniteEnseignement
+     * @param string $libelleCourt
+     * @return GroupeTypeFormation
      */
-    public function setLibelle($libelle)
+    public function setLibelleCourt($libelleCourt)
     {
-        $this->libelle = $libelle;
+        $this->libelleCourt = $libelleCourt;
 
         return $this;
     }
 
     /**
-     * Get libelle
+     * Get libelleCourt
      *
      * @return string 
      */
-    public function getLibelle()
+    public function getLibelleCourt()
     {
-        return $this->libelle;
+        return $this->libelleCourt;
+    }
+
+    /**
+     * Set libelleLong
+     *
+     * @param string $libelleLong
+     * @return GroupeTypeFormation
+     */
+    public function setLibelleLong($libelleLong)
+    {
+        $this->libelleLong = $libelleLong;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleLong
+     *
+     * @return string 
+     */
+    public function getLibelleLong()
+    {
+        return $this->libelleLong;
+    }
+
+    /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return GroupeTypeFormation
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer 
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
+     * Set pertinenceNiveau
+     *
+     * @param boolean $pertinenceNiveau
+     * @return GroupeTypeFormation
+     */
+    public function setPertinenceNiveau($pertinenceNiveau)
+    {
+        $this->pertinenceNiveau = $pertinenceNiveau;
+
+        return $this;
+    }
+
+    /**
+     * Get pertinenceNiveau
+     *
+     * @return boolean 
+     */
+    public function getPertinenceNiveau()
+    {
+        return $this->pertinenceNiveau;
     }
 
     /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return UniteEnseignement
+     * @return GroupeTypeFormation
      */
     public function setSourceCode($sourceCode)
     {
@@ -186,52 +260,6 @@ class UniteEnseignement
     }
 
     /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return UniteEnseignement
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return UniteEnseignement
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -245,7 +273,7 @@ class UniteEnseignement
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
-     * @return UniteEnseignement
+     * @return GroupeTypeFormation
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
     {
@@ -268,7 +296,7 @@ class UniteEnseignement
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return UniteEnseignement
+     * @return GroupeTypeFormation
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -291,7 +319,7 @@ class UniteEnseignement
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return UniteEnseignement
+     * @return GroupeTypeFormation
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -314,7 +342,7 @@ class UniteEnseignement
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return UniteEnseignement
+     * @return GroupeTypeFormation
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {

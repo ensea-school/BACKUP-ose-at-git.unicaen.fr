@@ -5,14 +5,14 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Personnel
+ * Modulateur
  */
-class Personnel
+class Modulateur
 {
     /**
      * @var string
      */
-    private $email;
+    private $code;
 
     /**
      * @var \DateTime
@@ -32,22 +32,17 @@ class Personnel
     /**
      * @var string
      */
-    private $nomPatronymique;
+    private $libelle;
 
     /**
-     * @var string
+     * @var float
      */
-    private $nomUsuel;
+    private $ponderationServiceCompl;
 
     /**
-     * @var string
+     * @var float
      */
-    private $prenom;
-
-    /**
-     * @var string
-     */
-    private $sourceCode;
+    private $ponderationServiceDu;
 
     /**
      * @var \DateTime
@@ -65,14 +60,9 @@ class Personnel
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Source
+     * @var \Application\Entity\Db\TypeModulateur
      */
-    private $source;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
+    private $type;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -89,40 +79,35 @@ class Personnel
      */
     private $histoCreateur;
 
-    /**
-     * @var \Application\Entity\Db\Civilite
-     */
-    private $civilite;
-
 
     /**
-     * Set email
+     * Set code
      *
-     * @param string $email
-     * @return Personnel
+     * @param string $code
+     * @return Modulateur
      */
-    public function setEmail($email)
+    public function setCode($code)
     {
-        $this->email = $email;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get code
      *
      * @return string 
      */
-    public function getEmail()
+    public function getCode()
     {
-        return $this->email;
+        return $this->code;
     }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return Personnel
+     * @return Modulateur
      */
     public function setHistoCreation($histoCreation)
     {
@@ -145,7 +130,7 @@ class Personnel
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return Personnel
+     * @return Modulateur
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -168,7 +153,7 @@ class Personnel
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Personnel
+     * @return Modulateur
      */
     public function setHistoModification($histoModification)
     {
@@ -188,102 +173,79 @@ class Personnel
     }
 
     /**
-     * Set nomPatronymique
+     * Set libelle
      *
-     * @param string $nomPatronymique
-     * @return Personnel
+     * @param string $libelle
+     * @return Modulateur
      */
-    public function setNomPatronymique($nomPatronymique)
+    public function setLibelle($libelle)
     {
-        $this->nomPatronymique = $nomPatronymique;
+        $this->libelle = $libelle;
 
         return $this;
     }
 
     /**
-     * Get nomPatronymique
+     * Get libelle
      *
      * @return string 
      */
-    public function getNomPatronymique()
+    public function getLibelle()
     {
-        return $this->nomPatronymique;
+        return $this->libelle;
     }
 
     /**
-     * Set nomUsuel
+     * Set ponderationServiceCompl
      *
-     * @param string $nomUsuel
-     * @return Personnel
+     * @param float $ponderationServiceCompl
+     * @return Modulateur
      */
-    public function setNomUsuel($nomUsuel)
+    public function setPonderationServiceCompl($ponderationServiceCompl)
     {
-        $this->nomUsuel = $nomUsuel;
+        $this->ponderationServiceCompl = $ponderationServiceCompl;
 
         return $this;
     }
 
     /**
-     * Get nomUsuel
+     * Get ponderationServiceCompl
      *
-     * @return string 
+     * @return float 
      */
-    public function getNomUsuel()
+    public function getPonderationServiceCompl()
     {
-        return $this->nomUsuel;
+        return $this->ponderationServiceCompl;
     }
 
     /**
-     * Set prenom
+     * Set ponderationServiceDu
      *
-     * @param string $prenom
-     * @return Personnel
+     * @param float $ponderationServiceDu
+     * @return Modulateur
      */
-    public function setPrenom($prenom)
+    public function setPonderationServiceDu($ponderationServiceDu)
     {
-        $this->prenom = $prenom;
+        $this->ponderationServiceDu = $ponderationServiceDu;
 
         return $this;
     }
 
     /**
-     * Get prenom
+     * Get ponderationServiceDu
      *
-     * @return string 
+     * @return float 
      */
-    public function getPrenom()
+    public function getPonderationServiceDu()
     {
-        return $this->prenom;
-    }
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     * @return Personnel
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-    /**
-     * Get sourceCode
-     *
-     * @return string 
-     */
-    public function getSourceCode()
-    {
-        return $this->sourceCode;
+        return $this->ponderationServiceDu;
     }
 
     /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return Personnel
+     * @return Modulateur
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -306,7 +268,7 @@ class Personnel
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return Personnel
+     * @return Modulateur
      */
     public function setValiditeFin($validiteFin)
     {
@@ -336,56 +298,33 @@ class Personnel
     }
 
     /**
-     * Set source
+     * Set type
      *
-     * @param \Application\Entity\Db\Source $source
-     * @return Personnel
+     * @param \Application\Entity\Db\TypeModulateur $type
+     * @return Modulateur
      */
-    public function setSource(\Application\Entity\Db\Source $source = null)
+    public function setType(\Application\Entity\Db\TypeModulateur $type = null)
     {
-        $this->source = $source;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get source
+     * Get type
      *
-     * @return \Application\Entity\Db\Source 
+     * @return \Application\Entity\Db\TypeModulateur 
      */
-    public function getSource()
+    public function getType()
     {
-        return $this->source;
-    }
-
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Personnel
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructure()
-    {
-        return $this->structure;
+        return $this->type;
     }
 
     /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Personnel
+     * @return Modulateur
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -408,7 +347,7 @@ class Personnel
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Personnel
+     * @return Modulateur
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -431,7 +370,7 @@ class Personnel
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Personnel
+     * @return Modulateur
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -448,28 +387,5 @@ class Personnel
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set civilite
-     *
-     * @param \Application\Entity\Db\Civilite $civilite
-     * @return Personnel
-     */
-    public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
-    {
-        $this->civilite = $civilite;
-
-        return $this;
-    }
-
-    /**
-     * Get civilite
-     *
-     * @return \Application\Entity\Db\Civilite 
-     */
-    public function getCivilite()
-    {
-        return $this->civilite;
     }
 }

@@ -30,9 +30,19 @@ class Etape
     private $libelle;
 
     /**
+     * @var integer
+     */
+    private $niveau;
+
+    /**
      * @var string
      */
     private $sourceCode;
+
+    /**
+     * @var boolean
+     */
+    private $specifiqueEchanges;
 
     /**
      * @var \DateTime
@@ -53,6 +63,11 @@ class Etape
      * @var \Application\Entity\Db\Structure
      */
     private $structure;
+
+    /**
+     * @var \Application\Entity\Db\TypeFormation
+     */
+    private $typeFormation;
 
     /**
      * @var \Application\Entity\Db\Source
@@ -168,6 +183,29 @@ class Etape
     }
 
     /**
+     * Set niveau
+     *
+     * @param integer $niveau
+     * @return Etape
+     */
+    public function setNiveau($niveau)
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * Get niveau
+     *
+     * @return integer 
+     */
+    public function getNiveau()
+    {
+        return $this->niveau;
+    }
+
+    /**
      * Set sourceCode
      *
      * @param string $sourceCode
@@ -188,6 +226,29 @@ class Etape
     public function getSourceCode()
     {
         return $this->sourceCode;
+    }
+
+    /**
+     * Set specifiqueEchanges
+     *
+     * @param boolean $specifiqueEchanges
+     * @return Etape
+     */
+    public function setSpecifiqueEchanges($specifiqueEchanges)
+    {
+        $this->specifiqueEchanges = $specifiqueEchanges;
+
+        return $this;
+    }
+
+    /**
+     * Get specifiqueEchanges
+     *
+     * @return boolean 
+     */
+    public function getSpecifiqueEchanges()
+    {
+        return $this->specifiqueEchanges;
     }
 
     /**
@@ -267,6 +328,29 @@ class Etape
     public function getStructure()
     {
         return $this->structure;
+    }
+
+    /**
+     * Set typeFormation
+     *
+     * @param \Application\Entity\Db\TypeFormation $typeFormation
+     * @return Etape
+     */
+    public function setTypeFormation(\Application\Entity\Db\TypeFormation $typeFormation = null)
+    {
+        $this->typeFormation = $typeFormation;
+
+        return $this;
+    }
+
+    /**
+     * Get typeFormation
+     *
+     * @return \Application\Entity\Db\TypeFormation 
+     */
+    public function getTypeFormation()
+    {
+        return $this->typeFormation;
     }
 
     /**

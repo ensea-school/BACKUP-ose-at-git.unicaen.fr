@@ -5,14 +5,14 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Personnel
+ * VolumeHoraireEp
  */
-class Personnel
+class VolumeHoraireEp
 {
     /**
-     * @var string
+     * @var float
      */
-    private $email;
+    private $heures;
 
     /**
      * @var \DateTime
@@ -28,21 +28,6 @@ class Personnel
      * @var \DateTime
      */
     private $histoModification;
-
-    /**
-     * @var string
-     */
-    private $nomPatronymique;
-
-    /**
-     * @var string
-     */
-    private $nomUsuel;
-
-    /**
-     * @var string
-     */
-    private $prenom;
 
     /**
      * @var string
@@ -65,19 +50,14 @@ class Personnel
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
-
-    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoModificateur;
+
+    /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -90,39 +70,44 @@ class Personnel
     private $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\Civilite
+     * @var \Application\Entity\Db\TypeIntervention
      */
-    private $civilite;
+    private $typeIntervention;
+
+    /**
+     * @var \Application\Entity\Db\ElementPedagogique
+     */
+    private $elementPedagogique;
 
 
     /**
-     * Set email
+     * Set heures
      *
-     * @param string $email
-     * @return Personnel
+     * @param float $heures
+     * @return VolumeHoraireEp
      */
-    public function setEmail($email)
+    public function setHeures($heures)
     {
-        $this->email = $email;
+        $this->heures = $heures;
 
         return $this;
     }
 
     /**
-     * Get email
+     * Get heures
      *
-     * @return string 
+     * @return float 
      */
-    public function getEmail()
+    public function getHeures()
     {
-        return $this->email;
+        return $this->heures;
     }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setHistoCreation($histoCreation)
     {
@@ -145,7 +130,7 @@ class Personnel
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -168,7 +153,7 @@ class Personnel
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setHistoModification($histoModification)
     {
@@ -188,79 +173,10 @@ class Personnel
     }
 
     /**
-     * Set nomPatronymique
-     *
-     * @param string $nomPatronymique
-     * @return Personnel
-     */
-    public function setNomPatronymique($nomPatronymique)
-    {
-        $this->nomPatronymique = $nomPatronymique;
-
-        return $this;
-    }
-
-    /**
-     * Get nomPatronymique
-     *
-     * @return string 
-     */
-    public function getNomPatronymique()
-    {
-        return $this->nomPatronymique;
-    }
-
-    /**
-     * Set nomUsuel
-     *
-     * @param string $nomUsuel
-     * @return Personnel
-     */
-    public function setNomUsuel($nomUsuel)
-    {
-        $this->nomUsuel = $nomUsuel;
-
-        return $this;
-    }
-
-    /**
-     * Get nomUsuel
-     *
-     * @return string 
-     */
-    public function getNomUsuel()
-    {
-        return $this->nomUsuel;
-    }
-
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     * @return Personnel
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    /**
-     * Get prenom
-     *
-     * @return string 
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-    /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setSourceCode($sourceCode)
     {
@@ -283,7 +199,7 @@ class Personnel
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -306,7 +222,7 @@ class Personnel
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setValiditeFin($validiteFin)
     {
@@ -336,56 +252,10 @@ class Personnel
     }
 
     /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return Personnel
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Personnel
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -405,10 +275,33 @@ class Personnel
     }
 
     /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return VolumeHoraireEp
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -431,7 +324,7 @@ class Personnel
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Personnel
+     * @return VolumeHoraireEp
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -451,25 +344,48 @@ class Personnel
     }
 
     /**
-     * Set civilite
+     * Set typeIntervention
      *
-     * @param \Application\Entity\Db\Civilite $civilite
-     * @return Personnel
+     * @param \Application\Entity\Db\TypeIntervention $typeIntervention
+     * @return VolumeHoraireEp
      */
-    public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
+    public function setTypeIntervention(\Application\Entity\Db\TypeIntervention $typeIntervention = null)
     {
-        $this->civilite = $civilite;
+        $this->typeIntervention = $typeIntervention;
 
         return $this;
     }
 
     /**
-     * Get civilite
+     * Get typeIntervention
      *
-     * @return \Application\Entity\Db\Civilite 
+     * @return \Application\Entity\Db\TypeIntervention 
      */
-    public function getCivilite()
+    public function getTypeIntervention()
     {
-        return $this->civilite;
+        return $this->typeIntervention;
+    }
+
+    /**
+     * Set elementPedagogique
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @return VolumeHoraireEp
+     */
+    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    {
+        $this->elementPedagogique = $elementPedagogique;
+
+        return $this;
+    }
+
+    /**
+     * Get elementPedagogique
+     *
+     * @return \Application\Entity\Db\ElementPedagogique 
+     */
+    public function getElementPedagogique()
+    {
+        return $this->elementPedagogique;
     }
 }

@@ -5,9 +5,9 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TypeFormationEtape
+ * ElementModulateur
  */
-class TypeFormationEtape
+class ElementModulateur
 {
     /**
      * @var \DateTime
@@ -27,32 +27,17 @@ class TypeFormationEtape
     /**
      * @var integer
      */
-    private $niveau;
+    private $id;
 
     /**
-     * @var string
+     * @var \Application\Entity\Db\Modulateur
      */
-    private $sourceCode;
+    private $modulateur;
 
     /**
-     * @var \DateTime
+     * @var \Application\Entity\Db\ElementPedagogique
      */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
-
-    /**
-     * @var \Application\Entity\Db\Etape
-     */
-    private $etape;
-
-    /**
-     * @var \Application\Entity\Db\TypeFormation
-     */
-    private $typeFormation;
+    private $element;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -69,17 +54,12 @@ class TypeFormationEtape
      */
     private $histoCreateur;
 
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
-
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return TypeFormationEtape
+     * @return ElementModulateur
      */
     public function setHistoCreation($histoCreation)
     {
@@ -102,7 +82,7 @@ class TypeFormationEtape
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return TypeFormationEtape
+     * @return ElementModulateur
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -125,7 +105,7 @@ class TypeFormationEtape
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return TypeFormationEtape
+     * @return ElementModulateur
      */
     public function setHistoModification($histoModification)
     {
@@ -145,148 +125,66 @@ class TypeFormationEtape
     }
 
     /**
-     * Set niveau
-     *
-     * @param integer $niveau
-     * @return TypeFormationEtape
-     */
-    public function setNiveau($niveau)
-    {
-        $this->niveau = $niveau;
-
-        return $this;
-    }
-
-    /**
-     * Get niveau
+     * Get id
      *
      * @return integer 
      */
-    public function getNiveau()
+    public function getId()
     {
-        return $this->niveau;
+        return $this->id;
     }
 
     /**
-     * Set sourceCode
+     * Set modulateur
      *
-     * @param string $sourceCode
-     * @return TypeFormationEtape
+     * @param \Application\Entity\Db\Modulateur $modulateur
+     * @return ElementModulateur
      */
-    public function setSourceCode($sourceCode)
+    public function setModulateur(\Application\Entity\Db\Modulateur $modulateur = null)
     {
-        $this->sourceCode = $sourceCode;
+        $this->modulateur = $modulateur;
 
         return $this;
     }
 
     /**
-     * Get sourceCode
+     * Get modulateur
      *
-     * @return string 
+     * @return \Application\Entity\Db\Modulateur 
      */
-    public function getSourceCode()
+    public function getModulateur()
     {
-        return $this->sourceCode;
+        return $this->modulateur;
     }
 
     /**
-     * Set validiteDebut
+     * Set element
      *
-     * @param \DateTime $validiteDebut
-     * @return TypeFormationEtape
+     * @param \Application\Entity\Db\ElementPedagogique $element
+     * @return ElementModulateur
      */
-    public function setValiditeDebut($validiteDebut)
+    public function setElement(\Application\Entity\Db\ElementPedagogique $element = null)
     {
-        $this->validiteDebut = $validiteDebut;
+        $this->element = $element;
 
         return $this;
     }
 
     /**
-     * Get validiteDebut
+     * Get element
      *
-     * @return \DateTime 
+     * @return \Application\Entity\Db\ElementPedagogique 
      */
-    public function getValiditeDebut()
+    public function getElement()
     {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return TypeFormationEtape
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
-    /**
-     * Set etape
-     *
-     * @param \Application\Entity\Db\Etape $etape
-     * @return TypeFormationEtape
-     */
-    public function setEtape(\Application\Entity\Db\Etape $etape)
-    {
-        $this->etape = $etape;
-
-        return $this;
-    }
-
-    /**
-     * Get etape
-     *
-     * @return \Application\Entity\Db\Etape 
-     */
-    public function getEtape()
-    {
-        return $this->etape;
-    }
-
-    /**
-     * Set typeFormation
-     *
-     * @param \Application\Entity\Db\TypeFormation $typeFormation
-     * @return TypeFormationEtape
-     */
-    public function setTypeFormation(\Application\Entity\Db\TypeFormation $typeFormation)
-    {
-        $this->typeFormation = $typeFormation;
-
-        return $this;
-    }
-
-    /**
-     * Get typeFormation
-     *
-     * @return \Application\Entity\Db\TypeFormation 
-     */
-    public function getTypeFormation()
-    {
-        return $this->typeFormation;
+        return $this->element;
     }
 
     /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return TypeFormationEtape
+     * @return ElementModulateur
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -309,7 +207,7 @@ class TypeFormationEtape
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return TypeFormationEtape
+     * @return ElementModulateur
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -332,7 +230,7 @@ class TypeFormationEtape
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return TypeFormationEtape
+     * @return ElementModulateur
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -349,28 +247,5 @@ class TypeFormationEtape
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return TypeFormationEtape
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 }

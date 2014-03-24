@@ -17,13 +17,13 @@
         <join-column name="PARENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="utilisateurs" target-entity="Application\Entity\Db\Utilisateur" inversed-by="roles">
-      <join-table name="ROLE_UTILISATEUR_LINKER">
+    <many-to-many field="utilisateur" target-entity="Application\Entity\Db\Utilisateur" inversed-by="roleUtilisateur">
+      <join-table name="role_utilisateur_linker">
         <join-columns>
-          <join-column name="ROLE_ID" referenced-column-name="ID"/>
+          <join-column name="ROLE_UTILISATEUR_ID" referenced-column-name="ID"/>
         </join-columns>
         <inverse-join-columns>
-          <join-column name="USER_ID" referenced-column-name="ID"/>
+          <join-column name="UTILISATEUR_ID" referenced-column-name="ID"/>
         </inverse-join-columns>
       </join-table>
     </many-to-many>

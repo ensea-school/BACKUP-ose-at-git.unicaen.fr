@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\Affectation" table="AFFECTATION_RECHERCHE">
+  <entity name="Application\Entity\Db\ElementModulateur" table="ELEMENT_MODULATEUR">
     <indexes>
-      <index name="IDX_79DEF33B59860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_79DEF33B7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_79DEF33B63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_79DEF33B78FF2BCB" columns="INTERVENANT_ID"/>
-      <index name="IDX_79DEF33B884B0F7B" columns="STRUCTURE_ID"/>
+      <index name="IDX_1E6102DC59860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_1E6102DC7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_1E6102DC63F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_1E6102DC2CCD71FB" columns="ELEMENT_ID"/>
+      <index name="IDX_1E6102DC7D0D4376" columns="MODULATEUR_ID"/>
     </indexes>
+    <unique-constraints>
+      <unique-constraint name="element_modulateur__un" columns="ELEMENT_ID,MODULATEUR_ID"/>
+    </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <!--<field name="principale" type="boolean" column="PRINCIPALE" nullable="false"/>-->
-    <!--<field name="recherche" type="boolean" column="RECHERCHE" nullable="false"/>-->
-    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
-    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="affectation">
+    <many-to-one field="modulateur" target-entity="Application\Entity\Db\Modulateur">
       <join-columns>
-        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+        <join-column name="MODULATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+    <many-to-one field="element" target-entity="Application\Entity\Db\ElementPedagogique">
       <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+        <join-column name="ELEMENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">

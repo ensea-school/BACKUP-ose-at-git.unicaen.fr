@@ -7,7 +7,11 @@
       <index name="IDX_FB425D277E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_FB425D2763F06898" columns="HISTO_MODIFICATEUR_ID"/>
       <index name="IDX_FB425D278AD1AE90" columns="SECTION_CNU_ID"/>
+      <index name="IDX_FB425D27E9B3446E" columns="SOURCE_ID"/>
     </indexes>
+    <unique-constraints>
+      <unique-constraint name="ip_source_un" columns="SOURCE_CODE"/>
+    </unique-constraints>
     <id name="id" association-key="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
@@ -16,15 +20,15 @@
         <join-column name="SECTION_CNU_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="corps" target-entity="Application\Entity\Db\Corps">
-      <join-columns>
-        <join-column name="CORPS_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
         <cascade>
             <cascade-persist/>
         </cascade>
     </one-to-many>
+    <many-to-one field="corps" target-entity="Application\Entity\Db\Corps">
+      <join-columns>
+        <join-column name="CORPS_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <!-- NB: héritage ajouté à la main sur l'entité -->
   <entity name="Application\Entity\Db\Intervenant" table="INTERVENANT" inheritance-type="JOINED" repository-class="Application\Entity\Db\Repository\IntervenantRepository">
     <discriminator-column name="TYPE_ID" type="integer" />
     <discriminator-map>
@@ -9,7 +10,12 @@
     <indexes>
       <index name="IDX_FED386B4C2443469" columns="TYPE_ID"/>
       <index name="IDX_FED386B48C579EB7" columns="CIVILITE_ID"/>
+      <index name="IDX_FED386B459860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_FED386B47E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_FED386B463F06898" columns="HISTO_MODIFICATEUR_ID"/>
       <index name="IDX_FED386B4E9B3446E" columns="SOURCE_ID"/>
+      <index name="IDX_FED386B48AAF600B" columns="STATUT_ID"/>
+      <index name="IDX_FED386B4884B0F7B" columns="STRUCTURE_ID"/>
     </indexes>
     <unique-constraints>
       <unique-constraint name="intervenant_source__un" columns="SOURCE_CODE"/>
@@ -28,7 +34,7 @@
     <field name="nomUsuel" type="string" column="NOM_USUEL" length="60" nullable="false"/>
     <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="13" nullable="true"/>
     <field name="numeroInseeCle" type="string" column="NUMERO_INSEE_CLE" length="2" nullable="true"/>
-    <field name="numeroInseeProvisoire" type="string" column="NUMERO_INSEE_PROVISOIRE" length="1" nullable="true"/>
+    <field name="numeroInseeProvisoire" type="boolean" column="NUMERO_INSEE_PROVISOIRE" nullable="true"/>
     <field name="paysNaissanceCodeInsee" type="string" column="PAYS_NAISSANCE_CODE_INSEE" length="3" nullable="false"/>
     <field name="paysNaissanceLibelle" type="string" column="PAYS_NAISSANCE_LIBELLE" length="30" nullable="false"/>
     <field name="paysNationaliteCodeInsee" type="string" column="PAYS_NATIONALITE_CODE_INSEE" length="3" nullable="false"/>
@@ -75,7 +81,7 @@
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="affectation" target-entity="Application\Entity\Db\Affectation" mapped-by="intervenant" />
+    <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant" />
     <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

@@ -62,6 +62,11 @@ class AdresseStructure
     /**
      * @var string
      */
+    private $sourceCode;
+
+    /**
+     * @var string
+     */
     private $telephone;
 
     /**
@@ -88,6 +93,11 @@ class AdresseStructure
      * @var \Application\Entity\Db\Structure
      */
     private $structure;
+
+    /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -336,6 +346,29 @@ class AdresseStructure
     }
 
     /**
+     * Set sourceCode
+     *
+     * @param string $sourceCode
+     * @return AdresseStructure
+     */
+    public function setSourceCode($sourceCode)
+    {
+        $this->sourceCode = $sourceCode;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCode
+     *
+     * @return string 
+     */
+    public function getSourceCode()
+    {
+        return $this->sourceCode;
+    }
+
+    /**
      * Set telephone
      *
      * @param string $telephone
@@ -458,6 +491,29 @@ class AdresseStructure
     public function getStructure()
     {
         return $this->structure;
+    }
+
+    /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return AdresseStructure
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**

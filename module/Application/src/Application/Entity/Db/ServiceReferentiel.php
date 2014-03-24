@@ -2,60 +2,17 @@
 
 namespace Application\Entity\Db;
 
-use Zend\Form\Annotation;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ServiceReferentiel
- * 
- * @Annotation\Name("serviceReferentiel")
- * @Annotation\Type("Application\Form\ServiceReferentiel\AjouterModifier")
- * @Annotation\Hydrator("Application\Entity\Db\Hydrator\ServiceReferentiel")
  */
 class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
      * @var float
-     * 
-     * @Annotation\Filter({"name":"StringTrim"})
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Nombre d'heures :"})
      */
     private $heures;
-
-    /**
-     * @var integer
-     */
-    private $id;
-
-    /**
-     * @var \Application\Entity\Db\FonctionReferentiel
-     */
-    private $fonction;
-
-    /**
-     * @var \Application\Entity\Db\IntervenantPermanent
-     */
-    private $intervenant;
-
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoCreateur;
 
     /**
      * @var \DateTime
@@ -83,25 +40,46 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     private $validiteFin;
 
     /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
+     * @var integer
      */
-    public function __toString()
-    {
-        return sprintf("%s : %s : %.2f", $this->getAnnee(), $this->getFonction(), $this->getHeures());
-    }
+    private $id;
 
     /**
-     * 
-     * @param \Application\Entity\Db\Annee $annee
+     * @var \Application\Entity\Db\IntervenantPermanent
      */
-    public function __construct(Annee $annee = null)
-    {
-        $this->setValiditeDebut(new \DateTime());
-        $this->setAnnee($annee);
-    }
-    
+    private $intervenant;
+
+    /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structure;
+
+    /**
+     * @var \Application\Entity\Db\FonctionReferentiel
+     */
+    private $fonction;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoModificateur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoCreateur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Annee
+     */
+    private $annee;
+
+
     /**
      * Set heures
      *
@@ -251,29 +229,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     }
 
     /**
-     * Set fonction
-     *
-     * @param \Application\Entity\Db\FonctionReferentiel $fonction
-     * @return ServiceReferentiel
-     */
-    public function setFonction(\Application\Entity\Db\FonctionReferentiel $fonction = null)
-    {
-        $this->fonction = $fonction;
-
-        return $this;
-    }
-
-    /**
-     * Get fonction
-     *
-     * @return \Application\Entity\Db\FonctionReferentiel 
-     */
-    public function getFonction()
-    {
-        return $this->fonction;
-    }
-
-    /**
      * Set intervenant
      *
      * @param \Application\Entity\Db\IntervenantPermanent $intervenant
@@ -294,6 +249,52 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getIntervenant()
     {
         return $this->intervenant;
+    }
+
+    /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @return ServiceReferentiel
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    {
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructure()
+    {
+        return $this->structure;
+    }
+
+    /**
+     * Set fonction
+     *
+     * @param \Application\Entity\Db\FonctionReferentiel $fonction
+     * @return ServiceReferentiel
+     */
+    public function setFonction(\Application\Entity\Db\FonctionReferentiel $fonction = null)
+    {
+        $this->fonction = $fonction;
+
+        return $this;
+    }
+
+    /**
+     * Get fonction
+     *
+     * @return \Application\Entity\Db\FonctionReferentiel 
+     */
+    public function getFonction()
+    {
+        return $this->fonction;
     }
 
     /**
@@ -320,29 +321,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     }
 
     /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return ServiceReferentiel
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
@@ -366,6 +344,29 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     }
 
     /**
+     * Set histoDestructeur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return ServiceReferentiel
+     */
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    {
+        $this->histoDestructeur = $histoDestructeur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoDestructeur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoDestructeur()
+    {
+        return $this->histoDestructeur;
+    }
+
+    /**
      * Set annee
      *
      * @param \Application\Entity\Db\Annee $annee
@@ -386,5 +387,30 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+
+	/**************************************************************************************************
+	 * 										Début ajout
+	 **************************************************************************************************/
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf("%s : %s : %.2f", $this->getAnnee(), $this->getFonction(), $this->getHeures());
+    }
+
+    /**
+     * 
+     * @param \Application\Entity\Db\Annee $annee
+     */
+    public function __construct(Annee $annee = null)
+    {
+        $this->setValiditeDebut(new \DateTime());
+        $this->setAnnee($annee);
     }
 }

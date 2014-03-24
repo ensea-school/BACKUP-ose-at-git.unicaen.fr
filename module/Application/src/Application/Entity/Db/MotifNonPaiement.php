@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 class MotifNonPaiement
 {
     /**
+     * @var string
+     */
+    private $code;
+
+    /**
      * @var \DateTime
      */
     private $histoCreation;
@@ -64,6 +69,29 @@ class MotifNonPaiement
      */
     private $histoCreateur;
 
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return MotifNonPaiement
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
     /**
      * Set histoCreation

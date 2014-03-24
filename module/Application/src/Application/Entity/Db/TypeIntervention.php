@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 class TypeIntervention
 {
     /**
+     * @var string
+     */
+    private $code;
+
+    /**
      * @var \DateTime
      */
     private $histoCreation;
@@ -25,9 +30,19 @@ class TypeIntervention
     private $histoModification;
 
     /**
+     * @var boolean
+     */
+    private $interventionIndividualisee;
+
+    /**
      * @var string
      */
     private $libelle;
+
+    /**
+     * @var integer
+     */
+    private $ordre;
 
     /**
      * @var \DateTime
@@ -59,6 +74,29 @@ class TypeIntervention
      */
     private $histoCreateur;
 
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return TypeIntervention
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
     /**
      * Set histoCreation
@@ -130,6 +168,29 @@ class TypeIntervention
     }
 
     /**
+     * Set interventionIndividualisee
+     *
+     * @param boolean $interventionIndividualisee
+     * @return TypeIntervention
+     */
+    public function setInterventionIndividualisee($interventionIndividualisee)
+    {
+        $this->interventionIndividualisee = $interventionIndividualisee;
+
+        return $this;
+    }
+
+    /**
+     * Get interventionIndividualisee
+     *
+     * @return boolean 
+     */
+    public function getInterventionIndividualisee()
+    {
+        return $this->interventionIndividualisee;
+    }
+
+    /**
      * Set libelle
      *
      * @param string $libelle
@@ -150,6 +211,29 @@ class TypeIntervention
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return TypeIntervention
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer 
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
     }
 
     /**

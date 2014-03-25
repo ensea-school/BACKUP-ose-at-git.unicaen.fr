@@ -131,12 +131,14 @@ class IntervenantDl extends AbstractDl
             "Affectation recherche :", 
             count($aff = $this->entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : "(Inconnue)"
         );
-        
-        $metier[] = sprintf($tplDtdd,
-            "Section CNU :", 
-            $this->entity->getSectionCnu() ? implode(' ; ', $this->entity->getSectionCnu()) : "(Inconnue)"
-        );
-        
+
+        if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
+           $metier[] = sprintf($tplDtdd,
+                "Section CNU :",
+                $this->entity->getSectionCnu() ? implode(' ; ', $this->entity->getSectionCnu()) : "(Inconnue)"
+            );
+        }
+
         if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
             $metier[] = sprintf($tplDtdd,
                 "Corps :", 
@@ -149,7 +151,7 @@ class IntervenantDl extends AbstractDl
                 $this->entity->getRegimeSecu() ?: "(Inconnu)"
             );
         }
-        
+
         $metier[] = sprintf($tplDtdd,
             "Prime d'excell. scientif. :", 
             null !== ($pes = $this->entity->getPrimeExcellenceScient()) ? ($pes ? 'Oui' : 'Non') : "(Inconnue)"

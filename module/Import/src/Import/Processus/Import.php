@@ -4,6 +4,15 @@ namespace Import\Processus;
 
 use Import\Entity\Differentiel\Query;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\Personnel;
+use Application\Entity\Db\Etablissement;
+use Application\Entity\Db\SectionCnu;
+use Application\Entity\Db\Corps;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\PeriodeEnseignement;
+use Application\Entity\Db\GroupeTypeFormation;
+use Application\Entity\Db\TypeFormation;
+use Application\Entity\Db\Etape;
 
 
 /**
@@ -85,9 +94,22 @@ class Import extends Processus
      */
     public function structureGetDifferentiel( Structure $structure )
     {
-        $q = new Query('structure');
-        $q->setSourceCode($structure->getSourceCode());
-        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+        $differentiel = $this->getDifferentiel();
+
+        $q1 = new Query('STRUCTURE');
+        $q1->setSourceCode($structure->getSourceCode());
+
+        $q2 = new Query('ADRESSE_STRUCTURE');
+        $q2->addColValue( 'STRUCTURE_ID', $structure->getId() );
+
+        $q3 = new Query('ROLE');
+        $q3->addColValue( 'STRUCTURE_ID', $structure->getId() );
+
+        $diff = array_merge(
+            $differentiel->make($q1)->fetchAll(),
+            $differentiel->make($q2)->fetchAll(),
+            $differentiel->make($q3)->fetchAll()
+        );
 
         return $diff;
     }
@@ -105,6 +127,22 @@ class Import extends Processus
         return $this;
     }
 
+
+    /**
+     * Retourne les lignes de différentiel correspondantes au personnel
+     *
+     * @param Personnel $personnel
+     * @return Ligne[]|array()
+     */
+    public function personnelGetDifferentiel( Personnel $personnel )
+    {
+        $q = new Query('personnel');
+        $q->setSourceCode($personnel->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
+    }
+
     /**
      * Import d'un, plusieurs ou tous les établissements
      *
@@ -116,6 +154,21 @@ class Import extends Processus
     {
         $this->execMaj( 'ETABLISSEMENT', 'SOURCE_CODE', $sourceCode, $action );
         return $this;
+    }
+
+    /**
+     * Retourne les lignes de différentiel correspondantes à l'établissement
+     *
+     * @param Etablissement $etablissement
+     * @return Ligne[]|array()
+     */
+    public function etablissementGetDifferentiel( Etablissement $etablissement )
+    {
+        $q = new Query('etablissement');
+        $q->setSourceCode($etablissement->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
     }
 
     /**
@@ -132,6 +185,21 @@ class Import extends Processus
     }
 
     /**
+     * Retourne les lignes de différentiel correspondantes à la section CNU
+     *
+     * @param SectionCnu $sectionCnu
+     * @return Ligne[]|array()
+     */
+    public function sectionCnuGetDifferentiel( SectionCnu $sectionCnu )
+    {
+        $q = new Query('sectionCnu');
+        $q->setSourceCode($sectionCnu->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
+    }
+
+    /**
      * Import d'un, plusieurs ou tous les corps
      *
      * @param string|array|null $sourceCode  Identifiant source du corps
@@ -142,6 +210,21 @@ class Import extends Processus
     {
         $this->execMaj( 'CORPS', 'SOURCE_CODE', $sourceCode, $action );
         return $this;
+    }
+
+    /**
+     * Retourne les lignes de différentiel correspondantes au corps
+     *
+     * @param Corps $corps
+     * @return Ligne[]|array()
+     */
+    public function corpsGetDifferentiel( Corps $corps )
+    {
+        $q = new Query('corps');
+        $q->setSourceCode($corps->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
     }
 
     /**
@@ -164,6 +247,42 @@ class Import extends Processus
     }
 
     /**
+     * Retourne les lignes de différentiel correspondantes à l'intervenant
+     *
+     * @param Intervenant $intervenant
+     * @return Ligne[]|array()
+     */
+    public function intervenantGetDifferentiel( Intervenant $intervenant )
+    {
+        $differentiel = $this->getDifferentiel();
+
+        $q1 = new Query('INTERVENANT');
+        $q1->setSourceCode($intervenant->getSourceCode());
+
+        $q2 = new Query('INTERVENANT_PERMANENT');
+        $q2->setSourceCode($intervenant->getSourceCode());
+
+        $q3 = new Query('INTERVENANT_EXTERIEUR');
+        $q3->setSourceCode($intervenant->getSourceCode());
+
+        $q4 = new Query('ADRESSE_INTERVENANT');
+        $q4->addColValue('INTERVENANT_ID', $intervenant->getId() );
+
+        $q5 = new Query('AFFECTATION_RECHERCHE');
+        $q5->addColValue('INTERVENANT_ID', $intervenant->getId() );
+
+        $diff = array_merge(
+            $differentiel->make($q1)->fetchAll(),
+            $differentiel->make($q2)->fetchAll(),
+            $differentiel->make($q3)->fetchAll(),
+            $differentiel->make($q4)->fetchAll(),
+            $differentiel->make($q5)->fetchAll()
+        );
+
+        return $diff;
+    }
+
+    /**
      * Import d'un, plusieurs ou toutes les périodes d'enseignement
      *
      * @param string|array|null $sourceCode  Identifiant source
@@ -174,6 +293,21 @@ class Import extends Processus
     {
         $this->execMaj( 'PERIODE_ENSEIGNEMENT', 'SOURCE_CODE', $sourceCode, $action );
         return $this;
+    }
+
+    /**
+     * Retourne les lignes de différentiel correspondantes aux périodes d'enseignement
+     *
+     * @param PeriodeEnseignement $periodeEnseignement
+     * @return Ligne[]|array()
+     */
+    public function periodeEnseignementGetDifferentiel( PeriodeEnseignement $periodeEnseignement )
+    {
+        $q = new Query('periodeEnseignement');
+        $q->setSourceCode($periodeEnseignement->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
     }
 
     /**
@@ -190,6 +324,21 @@ class Import extends Processus
     }
 
     /**
+     * Retourne les lignes de différentiel correspondantes aux groupes de types de formation
+     *
+     * @param GroupeTypeFormation $groupeTypeFormation
+     * @return Ligne[]|array()
+     */
+    public function groupeTypeFormationGetDifferentiel( GroupeTypeFormation $groupeTypeFormation )
+    {
+        $q = new Query('groupeTypeFormation');
+        $q->setSourceCode($groupeTypeFormation->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
+    }
+
+    /**
      * Import d'un, plusieurs ou tous les types de formation
      *
      * @param string|array|null $sourceCode  Identifiant source
@@ -200,6 +349,21 @@ class Import extends Processus
     {
         $this->execMaj( 'TYPE_FORMATION', 'SOURCE_CODE', $sourceCode, $action );
         return $this;
+    }
+
+    /**
+     * Retourne les lignes de différentiel correspondantes aux types de formation
+     *
+     * @param TypeFormation $typeFormation
+     * @return Ligne[]|array()
+     */
+    public function typeFormationGetDifferentiel( TypeFormation $typeFormation )
+    {
+        $q = new Query('typeFormation');
+        $q->setSourceCode($typeFormation->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
     }
 
     /**
@@ -216,7 +380,22 @@ class Import extends Processus
     }
 
     /**
-     * Construit et exécute la reqûete d\'interrogation des vues différentielles
+     * Retourne les lignes de différentiel correspondantes aux étapes
+     *
+     * @param Etape $etape
+     * @return Ligne[]|array()
+     */
+    public function etapeGetDifferentiel( Etape $etape )
+    {
+        $q = new Query('etape');
+        $q->setSourceCode($etape->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
+    }
+
+    /**
+     * Construit et exécute la reqûete d'interrogation des vues différentielles
      *
      * @param string            $tableName   Nom de la table
      * @param string            $name        Nom du champ à tester

@@ -388,4 +388,29 @@ class Etablissement implements HistoriqueAwareInterface
     {
         return $this->histoCreateur;
     }
+
+    /**************************************************************************************************
+     *                                      Début ajout
+     **************************************************************************************************/
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+
+    /**
+     * Get source id
+     *
+     * @return integer
+     * @see \Application\Entity\Db\Source
+     */
+    public function getSourceToString()
+    {
+        return $this->getSource()->getLibelle();
+    }
 }

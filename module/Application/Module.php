@@ -87,6 +87,8 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             ),
             'factories' => array(
                 'intervenant'        => 'Application\Controller\Plugin\IntervenantFactory',
+                'structure'          => 'Application\Controller\Plugin\StructureFactory',
+                'etablissement'      => 'Application\Controller\Plugin\EtablissementFactory',
                 'serviceReferentiel' => 'Application\Controller\Plugin\ServiceReferentielFactory',
             ),
         );
@@ -105,10 +107,11 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             'factories'  => array(
             ),
             'invokables' => array(
-                'intervenantDl' => 'Application\View\Helper\IntervenantDl',
-                'structureDl'   => 'Application\View\Helper\StructureDl',
-                'adresseDl'     => 'Application\View\Helper\AdresseDl',
-                'historiqueDl'  => 'Application\View\Helper\HistoriqueDl',
+                'intervenantDl'     => 'Application\View\Helper\IntervenantDl',
+                'structureDl'       => 'Application\View\Helper\StructureDl',
+                'etablissementDl'   => 'Application\View\Helper\EtablissementDl',
+                'adresseDl'         => 'Application\View\Helper\AdresseDl',
+                'historiqueDl'      => 'Application\View\Helper\HistoriqueDl',
             ),
         );
     }

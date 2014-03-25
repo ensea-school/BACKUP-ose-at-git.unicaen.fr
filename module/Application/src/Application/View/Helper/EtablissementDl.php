@@ -3,11 +3,11 @@
 namespace Application\View\Helper;
         
 /**
- * Description of StructureDl
+ * Description of EtablissementDl
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class StructureDl extends AbstractDl
+class EtablissementDl extends AbstractDl
 {
     /**
      * 
@@ -20,24 +20,24 @@ class StructureDl extends AbstractDl
             return '';
         }
         
-        $entity = $this->entity; /* @var $entity \Application\Entity\Db\Structure */
+        $entity = $this->entity; /* @var $entity \Application\Entity\Db\Etablissement */
         $tplDtdd = $this->getTemplateDtDd();
         $html    = '';
         $dtdds   = array();
         
         $dtdds[] = sprintf($tplDtdd,
-            "Libellé long :", 
-            $entity->getLibelleLong()
+            "Libellé :", 
+            $entity->getLibelle()
         );
         
         $dtdds[] = sprintf($tplDtdd,
-            "Libellé court :", 
-            $entity->getLibelleCourt()
+            "Localisation :",
+            $entity->getLocalisation()
         );
         
         $dtdds[] = sprintf($tplDtdd,
-            "Type de entity :", 
-            $entity->getType()->getLibelle()
+            "Département :",
+            $entity->getDepartement()
         );
         
         $dtdds[] = sprintf($tplDtdd,
@@ -46,16 +46,11 @@ class StructureDl extends AbstractDl
         );
         
         $dtdds[] = sprintf($tplDtdd,
-            "Structure mère :", 
-            $entity->getParente()->getLibelleLong()
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
             "Historique :", 
             $this->getView()->historiqueDl($entity)
         );
         
-        $html .= sprintf($this->getTemplateDl('structure structure-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
+        $html .= sprintf($this->getTemplateDl('etablissement etablissement-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
  
         return $html;
     }

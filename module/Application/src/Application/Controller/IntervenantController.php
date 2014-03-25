@@ -108,9 +108,12 @@ class IntervenantController extends AbstractActionController
         if (!($intervenant = $intervenant = $this->intervenant()->getRepo()->find($id))) {
             throw new RuntimeException("Intervenant '$id' spécifié introuvable.");
         }
-        
+
+        $import = $this->getServiceLocator()->get('ImportProcessusImport');
+        $changements = $import->intervenantGetDifferentiel($intervenant);
+
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(array('intervenant' => $intervenant));
+        $view->setVariables(array('intervenant' => $intervenant, 'changements' => $changements));
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         
         return $view;

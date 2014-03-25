@@ -2,6 +2,8 @@
 
 <?php echo $this->intervenantDl($intervenant, true) ?>
 
+<br /><?php foreach( $changements as $changement ) { echo $this->differentielLigne( $changement ); } ?>
+
 <?php echo $this->navigation('navigation')->menuContextuel()->withTarget($intervenant->getId()) ?>
 
 <ul>

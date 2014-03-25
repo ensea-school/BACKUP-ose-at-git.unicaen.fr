@@ -94,27 +94,6 @@ class DemoController extends AbstractActionController
 
         return $viewModel;
     }
-
-public function modalAction()
-{
-    $terminal = $this->getRequest()->isXmlHttpRequest();
-
-    $viewModel = new \Zend\View\Model\ViewModel();
-    $viewModel->setTemplate('application/demo/modal')
-            ->setTerminal($terminal) // Turn off the layout for AJAX requests
-            ->setVariables(array(
-                'name'     => "Beber",
-                'terminal' => $terminal,
-            ));
-
-    if ($terminal) {
-        // utilisation du plugin encapsulant le résultat de la vue dans le marquage attendu
-        // par Bootstrap pour dessiner le contenu de la fenêtre modale
-        return $this->modalInnerViewModel($viewModel, "Fenêtre modale", false);
-    }
-
-    return $viewModel;
-}
     
     /**
      * 

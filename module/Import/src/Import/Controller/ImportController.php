@@ -39,6 +39,9 @@ class ImportController extends AbstractActionController
 
             $queries[$table] = $q;
         }
+        if (isset($queries['CHEMIN_PEDAGOGIQUE'])){
+            $queries['CHEMIN_PEDAGOGIQUE']->setColChanged(array('ELEMENT_PEDAGOGIQUE_ID','ETAPE_ID','VALIDITE_DEBUT','VALIDITE_FIN'));
+        }
         return $queries;
     }
 
@@ -80,6 +83,7 @@ class ImportController extends AbstractActionController
 
         $data = array();
         foreach( $queries as $table => $query ){
+            $query->setLimit(101);
             $table = ucwords(str_replace( '_', ' ', strtolower($table)));
             $data[$table] = $sd->make($query)->fetchAll();
         }

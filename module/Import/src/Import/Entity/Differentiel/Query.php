@@ -68,6 +68,14 @@ class Query
      */
     protected $colValues = array();
 
+    /**
+     * Limite au nombre d'enregistrements retournés
+     *
+     * @var integer
+     */
+    protected $limit;
+
+
 
 
 
@@ -304,6 +312,26 @@ class Query
     }
 
     /**
+     * 
+     * @return integer
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    /**
+     *
+     * @param integer $limit
+     * @return self
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = (int)$limit;
+        return $this;
+    }
+
+    /**
      * Construit la requête SQL correspondante
      *
      * @return string
@@ -341,19 +369,22 @@ class Query
         }
 
         if (! empty($this->colChanged)){
-            if (is_array($this->colChanged)){
-                foreach( $this->colChanged as $column ){
-                    $where[] = $viewName.'.'.Service::escapeKW ('U_'.$column).' = 1';
-                }
-            }else{
-                $where[] = $viewName.'.'.Service::escapeKW ('U_'.$this->colChanged).' = 1';
+            $cols = (array)$this->colChanged;
+            $cond = array();
+            foreach( $cols as $column ){
+                $cond[] = $viewName.'.'.Service::escapeKW ('U_'.$column).' = 1';
             }
+            $where[] = '('.implode( ' OR ', $cond).')';
         }
 
         if (! empty($this->colValues)){
             foreach( $this->colValues as $column => $value ){
                 $where[] = $viewName.'.'.Service::escapeKW($column).Service::equals($value);
             }
+        }
+
+        if ($this->limit !== null){
+            $where[] = 'ROWNUM <= '.$this->limit;
         }
 
         if (! empty($where)){

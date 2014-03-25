@@ -5,4 +5,8 @@
 
 <?php echo $this->differentielListe( $lignes ); ?>
 
+<?php if (count($lignes) > 100){
+    echo '<div>Toutes les lignes n\'ont pas été affichées, leur nombre dépassant 100</div>';
+} ?>
+
 <?php endforeach; ?>

@@ -3,6 +3,7 @@
 namespace Import\Processus;
 
 use Import\Entity\Differentiel\Query;
+use Application\Entity\Db\Structure;
 
 
 /**
@@ -39,6 +40,16 @@ class Import extends Processus
     }
 
     /**
+     * Retourne le service différentiel
+     * 
+     * @return \Import\Service\Differentiel
+     */
+    protected function getDifferentiel()
+    {
+        return $this->getServiceManager()->get('importServiceDifferentiel');
+    }
+
+    /**
      * Mise à jour des vues différentielles et des paquetages de mise à jour des données
      *
      * @return self
@@ -64,6 +75,21 @@ class Import extends Processus
         $this->execMaj( 'ADRESSE_STRUCTURE', 'STRUCTURE_ID', $ids, $action );
         $this->execMaj( 'ROLE', 'STRUCTURE_ID', $ids, $action );
         return $this;
+    }
+
+    /**
+     * Retourne les lignes de différentiel correspondantes à la structure
+     *
+     * @param Structure $structure
+     * @return Ligne[]|array()
+     */
+    public function structureGetDifferentiel( Structure $structure )
+    {
+        $q = new Query('structure');
+        $q->setSourceCode($structure->getSourceCode());
+        $diff = $this->getDifferentiel()->make($q)->fetchAll();
+
+        return $diff;
     }
 
     /**

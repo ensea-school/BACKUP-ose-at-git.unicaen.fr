@@ -2,7 +2,7 @@
 
 namespace Application;
 
-return array(
+$main =  array(
     'doctrine' => array(
         'configuration' => array(
             'orm_default' => array(
@@ -67,70 +67,6 @@ return array(
                     ),
                 ),
             ),
-            'recherche' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/recherche/:action',
-                    'constraints' => array(
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Recherche',
-                    ),
-                ),
-            ),
-            'intervenant' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/intervenant',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Intervenant',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'modifier' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/modifier/:id',
-                            'constraints' => array(
-                                'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'action' => 'modifier',
-                            ),
-                        ),
-                    ),
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/:action[/:id]',
-                            'constraints' => array(
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'action' => 'index',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'demo' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/demo[/:action]',
-                    'constraints' => array(
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ),
-                    'defaults' => array(
-                        'controller' => 'Application\Controller\Demo',
-                        'action'     => 'index',
-                    ),
-                ),
-            ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -164,96 +100,6 @@ return array(
             ),
         ),
     ),    
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'demo' => array(
-                        'label'    => 'Démo',
-                        'route'    => 'demo',
-                        'params' => array(
-                            'action' => 'index',
-                        ),
-                        'pages' => array(
-                            'of' => array(
-                                'label'  => "Offre de formation",
-                                'route'  => 'demo',
-                                'params' => array(
-                                    'action' => 'of',
-                                ),
-                                'visible' => true,
-                                'pages' => array(),
-                            ),
-//                            'of-avec-ue' => array(
-//                                'label'  => "Offre de formation (avec UE)",
-//                                'route'  => 'demo',
-//                                'params' => array(
-//                                    'action' => 'of',
-//                                ),
-//                                'query' => array(
-//                                    'avecUe' => 1,
-//                                ),
-//                                'visible' => true,
-//                                'pages' => array(),
-//                            ),
-                            'intervenant' => array(
-                                'label'  => "Intervenants",
-                                'route'  => 'demo',
-                                'params' => array(
-                                    'action' => 'intervenant',
-                                ),
-                                'visible' => true,
-                                'pages' => array(),
-                            ),
-                            'service-ref' => array(
-                                'label'  => "Service référentiel",
-                                'route'  => 'demo',
-                                'params' => array(
-                                    'action' => 'saisir-service-referentiel-intervenant',
-                                ),
-                                'visible' => true,
-                                'pages' => array(),
-                            ),
-                        ),
-                    ),
-                    'intervenant' => array(
-                        'label'    => 'Intervenant',
-                        'title'    => "Gestion des intervenants",
-                        'route'    => 'intervenant',
-                        'resource' => 'controller/Application\Controller\Intervenant:index',
-                        'pages' => array(
-//                            'rechercher' => array(
-//                                'label'  => "Rechercher",
-//                                'title'  => "Rechercher un intervenant",
-//                                'route'  => 'intervenant/default',
-//                                'params' => array(
-//                                    'action' => 'rechercher',
-//                                ),
-//                                'visible' => true,
-//                                'pages' => array(),
-//                            ),
-                            'voir' => array(
-                                'label'  => "Voir",
-                                'title'  => "Voir l'intervenant {id}",
-                                'route'  => 'intervenant/default',
-                                'visible' => false,
-                                'withtarget' => true,
-                                'pages' => array(),
-                            ),
-//                            'modifier' => array(
-//                                'label'  => "Modifier",
-//                                'title'  => "Modifier l'intervenant {id}",
-//                                'route'  => 'intervenant/modifier',
-//                                'visible' => false,
-//                                'withtarget' => true,
-//                                'pages' => array(),
-//                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
     'bjyauthorize' => array(
         'role_providers' => array(
             /**
@@ -265,20 +111,6 @@ return array(
 //                'object_manager'    => 'doctrine.entitymanager.orm_default',
 //                'role_entity_class' => 'Application\Entity\Db\UtilisateurRole',
 //            ),
-        ),
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
-                    'controller' => 'Application\Controller\Demo', 
-                    'roles' => array('user')),
-                array(
-                    'controller' => 'Application\Controller\Intervenant', 
-                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'saisirServiceReferentiel', 'search'), 
-                    'roles' => array('user')),
-                array(
-                    'controller' => 'Application\Controller\Recherche', 
-                    'roles' => array('user')),
-            ),
         ),
     ),
     'service_manager' => array(
@@ -301,9 +133,6 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index'       => 'Application\Controller\IndexController',
-            'Application\Controller\Demo'        => 'Application\Controller\DemoController',
-            'Application\Controller\Intervenant' => 'Application\Controller\IntervenantController',
-            'Application\Controller\Recherche'   => 'Application\Controller\RechercheController',
         ),
     ),
     'view_manager' => array(
@@ -314,4 +143,12 @@ return array(
 //            'Application\View\Renderer\ModalStrategyFactory',
         ),
     ),
+);
+
+return array_merge_recursive(
+    $main,
+    include 'intervenant.config.php',
+ //   include 'structure.config.php',
+    include 'demo.config.php',
+    include 'recherche.config.php'
 );

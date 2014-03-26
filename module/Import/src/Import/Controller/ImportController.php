@@ -3,6 +3,7 @@ namespace Import\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Import\Entity\Differentiel\Query;
+use Common\Exception\LogicException;
 
 /**
  *
@@ -11,7 +12,7 @@ use Import\Entity\Differentiel\Query;
  */
 class ImportController extends AbstractActionController
 {
-    protected function makeQueries()
+    protected function makeQueries( $tableName )
     {
         /* Liste des tables pour lesquelles les insertions ne doivent pas être scrutées */
         $noInsertTables = array(
@@ -27,6 +28,15 @@ class ImportController extends AbstractActionController
 
         $tables = $sc->getImportTables();
         sort($tables);
+
+        if (! empty($tableName)){
+            $tableName = str_replace( ' ', '_', strtoupper($tableName) );
+            if (! in_array($tableName, $tables)){
+                throw new LogicException('La table "'.$tableName.'" n\'est pas correste ou n\'est pas importable.');
+            }
+            // Réduction à la seule table voulue
+            $tables = array( $tableName );
+        }
 
         $queries = array();
         foreach( $tables as $table ){
@@ -62,7 +72,20 @@ class ImportController extends AbstractActionController
             $message = 'Une erreur a été rencontrée.';
             throw new \UnicaenApp\Exception\LogicException("import impossible", null, $e);
         }
-        return compact('message');
+
+        $terminal = $this->getRequest()->isXmlHttpRequest();
+
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel
+                ->setTemplate('import/import/update-tables') // spécification du template obligatoire
+                ->setTerminal($terminal) // Turn off the layout for AJAX requests
+                ->setVariables(compact('message'));
+
+        if ($terminal) {
+            return $this->modalInnerViewModel($viewModel, "Résultat", false);
+        }
+
+        return $viewModel;
     }
 
     public function showImportTblAction()
@@ -76,7 +99,9 @@ class ImportController extends AbstractActionController
 
     public function showDiffAction()
     {
-        $queries = $this->makeQueries();
+        $tableName = $this->params()->fromRoute('table');
+
+        $queries = $this->makeQueries($tableName);
 
         $sd = $this->getServiceLocator()->get('ImportServiceDifferentiel');
         /* @var $sd \Import\Service\Differentiel */
@@ -88,27 +113,60 @@ class ImportController extends AbstractActionController
             $data[$table] = $sd->make($query)->fetchAll();
         }
 
-        return compact('data');
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel->setVariables(compact('data'));
+        if ($this->getRequest()->isXmlHttpRequest()){
+            $viewModel->setTemplate('import/import/show-diff-ajax');
+        }else{
+            $viewModel->setTemplate('import/import/show-diff');
+        }
+        return $viewModel;
     }
 
-    public function updateAllDataAction()
+    public function updateTablesAction()
     {
+        $tableName = $this->params()->fromRoute('table');
+
+        $queries = $this->makeQueries($tableName);
+
+        if (! empty($tableName)){
+            $tableName = str_replace( ' ', '_', strtoupper($tableName) );
+            if (! isset($queries[$tableName])){
+                throw new LogicException('La table "'.$tableName.'" n\'est pas correste ou n\'est pas importable.');
+            }
+            // Réduction à la seule table voulue
+            $queries = array( $tableName => $queries[$tableName]);
+        }
+
+        $sq = $this->getServiceLocator()->get('ImportServiceQueryGenerator');
+        /* @var $sq \Import\Service\QueryGenerator */
+
+        $message = '';
         try{
 
-            $queries = $this->makeQueries();
-
-            $sq = $this->getServiceLocator()->get('ImportServiceQueryGenerator');
-            /* @var $sq \Import\Service\QueryGenerator */
-
             foreach( $queries as $table => $query ){
+                $message .= '<div>Table "'.$table.'" Mise à jour.</div>';
                 $sq->execMaj($query);
             }
 
-            $message = 'Mise à jour des données OSE terminée';
+            $message .= 'Mise à jour des données OSE terminée';
         }catch(\Exception $e){
             $message = 'Une erreur a été rencontrée.';
-            throw new \UnicaenApp\Exception\LogicException("mise à juor des données OSE impossible", null, $e);
+            throw new \UnicaenApp\Exception\LogicException("mise à jour des données OSE impossible", null, $e);
         }
-        return compact('message');
+
+        $terminal = $this->getRequest()->isXmlHttpRequest();
+
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel
+                ->setTemplate('import/import/update-tables') // spécification du template obligatoire
+                ->setTerminal($terminal) // Turn off the layout for AJAX requests
+                ->setVariables(compact('message'));
+
+        if ($terminal) {
+            return $this->modalInnerViewModel($viewModel, "Résultat", false);
+        }
+
+        return $viewModel;
     }
 }

@@ -2,11 +2,39 @@
 
 <?php foreach( $data as $table => $lignes ): ?>
 <h2><?php echo $table ?></h2>
-
+<div id="DIV_<?php echo $table ?>">
 <?php echo $this->differentielListe( $lignes ); ?>
 
-<?php if (count($lignes) > 100){
-    echo '<div>Toutes les lignes n\'ont pas été affichées, leur nombre dépassant 100</div>';
-} ?>
+<?php if (count($lignes) > 100) : ?>
+<div>Toutes les lignes n'ont pas été affichées, leur nombre dépassant 100</div>
+<?php endif; ?>
 
+<?php if (count($lignes) > 0) : ?>
+<div>
+    <a class="modal-action" href="<?php echo $this->url('import', array('action' => 'updateTables', 'table' => $table)) ?>" data-table="<?php echo $table ?>">
+        <span class="glyphicon glyphicon-refresh"></span>
+        Mettre à jour les données
+    </a>
+</div>
+<?php endif; ?>
+</div>
 <?php endforeach; ?>
+
+<?php echo $this->modalAjaxDialog('modalResult'); ?>
+<script>
+    $(function() {
+        lastTableRefreshed = null;
+
+        $("body").on("click", "a.modal-action", function(e) {
+             lastTableRefreshed = this.dataset.table;
+        });
+
+        $('#modalResult').on('loaded.bs.modal', function (e) {
+
+            $.get( "<?php echo $this->url('import', array('action' => 'showDiff')) ?>/"+lastTableRefreshed, function( data ) {
+                $( "#DIV_"+lastTableRefreshed ).html( data );
+            });
+
+        });
+    });
+</script>

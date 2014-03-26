@@ -7,13 +7,14 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Import\Exception\Exception;
 use ZfcUser\Entity\UserInterface;
-use Common\Entity\UserAwareInterface;
+use UnicaenAuth\Service\DbUserAwareInterface;
+
 /**
  * Classe mère des services
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Service implements ServiceManagerAwareInterface, UserAwareInterface {
+class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
 
     /**
      * @var ServiceManager
@@ -147,7 +148,7 @@ class Service implements ServiceManagerAwareInterface, UserAwareInterface {
      *
      * @return UserInterface
      */
-    public function getCurrentUser()
+    public function getDbUser()
     {
         return $this->currentUser;
     }
@@ -157,7 +158,7 @@ class Service implements ServiceManagerAwareInterface, UserAwareInterface {
      *
      * @param UserInterface $currentUser
      */
-    public function setCurrentUser( UserInterface $currentUser )
+    public function setDbUser( UserInterface $currentUser )
     {
         $this->currentUser = $currentUser;
     }

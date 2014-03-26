@@ -71,7 +71,7 @@ class QueryGenerator extends Service
      */
     public function execMaj( Query $query )
     {
-        $currentUser = $this->getCurrentUser();
+        $currentUser = $this->getDbUser();
         if (empty($currentUser)){
             throw new Exception('Vous devez être authentifié pour réaliser cette action');
         }

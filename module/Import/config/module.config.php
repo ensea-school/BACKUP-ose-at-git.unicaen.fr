@@ -19,11 +19,12 @@ return array(
             'import' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route'    => '/import[/:action]',
+                    'route'    => '/import[/:action][/:table]',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Import\Controller',
                         'controller' => 'Import',
                         'action'     => 'index',
+                        'table'      => null
                     ),
                 ),
             ),

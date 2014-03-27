@@ -181,6 +181,21 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $source;
 
     /**
+     * @var \Application\Entity\Db\StatutIntervenant
+     */
+    private $statut;
+
+    /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structure;
+
+    /**
+     * @var \Application\Entity\Db\Discipline
+     */
+    private $discipline;
+
+    /**
      * @var \Application\Entity\Db\Civilite
      * @Annotation\Type("Zend\Form\Element\Select")
      * @Annotation\Filter({"name":"StringTrim"})
@@ -208,11 +223,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @var \Application\Entity\Db\TypeIntervenant
      */
     private $type;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
 
     /**
      * Constructor
@@ -852,6 +862,29 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Set statut
+     *
+     * @param \Application\Entity\Db\StatutIntervenant $statut
+     * @return Intervenant
+     */
+    public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * Get statut
+     *
+     * @return \Application\Entity\Db\StatutIntervenant 
+     */
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+
+    /**
      * Set civilite
      *
      * @param \Application\Entity\Db\Civilite $civilite
@@ -987,6 +1020,29 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getStructure()
     {
         return $this->structure;
+    }
+
+    /**
+     * Set discipline
+     *
+     * @param \Application\Entity\Db\Discipline $discipline
+     * @return Intervenant
+     */
+    public function setDiscipline(\Application\Entity\Db\Discipline $discipline = null)
+    {
+        $this->discipline = $discipline;
+
+        return $this;
+    }
+
+    /**
+     * Get discipline
+     *
+     * @return \Application\Entity\Db\Discipline 
+     */
+    public function getDiscipline()
+    {
+        return $this->discipline;
     }
 
 

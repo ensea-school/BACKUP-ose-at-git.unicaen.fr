@@ -23,11 +23,6 @@ class IntervenantPermanent extends Intervenant
     private $serviceReferentiel;
 
     /**
-     * @var \Application\Entity\Db\SectionCnu
-     */
-    private $sectionCnu;
-
-    /**
      * @var \Application\Entity\Db\Corps
      */
     private $corps;
@@ -121,29 +116,6 @@ class IntervenantPermanent extends Intervenant
 //        return $this->serviceReferentiel;
 //    }
 // NB: méthode redéfinie plus bas.
-
-    /**
-     * Set sectionCnu
-     *
-     * @param \Application\Entity\Db\SectionCnu $sectionCnu
-     * @return IntervenantPermanent
-     */
-    public function setSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu = null)
-    {
-        $this->sectionCnu = $sectionCnu;
-
-        return $this;
-    }
-
-    /**
-     * Get sectionCnu
-     *
-     * @return \Application\Entity\Db\SectionCnu 
-     */
-    public function getSectionCnu()
-    {
-        return $this->sectionCnu;
-    }
 
     /**
      * Set corps

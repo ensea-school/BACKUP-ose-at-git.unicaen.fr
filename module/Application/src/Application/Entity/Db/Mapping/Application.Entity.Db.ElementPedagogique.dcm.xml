@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\ElementPedagogique" table="ELEMENT_PEDAGOGIQUE">
+  <!-- NB repository-class ajoutée à la main -->
+  <entity name="Application\Entity\Db\ElementPedagogique" table="ELEMENT_PEDAGOGIQUE" repository-class="Application\Entity\Db\Repository\ElementPedagogiqueRepository">
     <indexes>
       <index name="IDX_CCADDAC0B4F27801" columns="ETAPE_ID"/>
       <index name="IDX_CCADDAC059860CDC" columns="HISTO_CREATEUR_ID"/>
@@ -20,7 +21,7 @@
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="120" nullable="false"/>
-    <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
     <field name="tauxFoad" type="integer" column="TAUX_FOAD" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>

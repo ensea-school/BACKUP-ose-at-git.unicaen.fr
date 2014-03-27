@@ -5,9 +5,9 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * VolumeHoraireEp
+ * VolumeHoraireEns
  */
-class VolumeHoraireEp
+class VolumeHoraireEns
 {
     /**
      * @var float
@@ -33,16 +33,6 @@ class VolumeHoraireEp
      * @var string
      */
     private $sourceCode;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
 
     /**
      * @var integer
@@ -75,16 +65,21 @@ class VolumeHoraireEp
     private $typeIntervention;
 
     /**
-     * @var \Application\Entity\Db\ElementPedagogique
+     * @var \Application\Entity\Db\Annee
      */
-    private $elementPedagogique;
+    private $annee;
+
+    /**
+     * @var \Application\Entity\Db\ElementDiscipline
+     */
+    private $elementDiscipline;
 
 
     /**
      * Set heures
      *
      * @param float $heures
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setHeures($heures)
     {
@@ -107,7 +102,7 @@ class VolumeHoraireEp
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setHistoCreation($histoCreation)
     {
@@ -130,7 +125,7 @@ class VolumeHoraireEp
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -153,7 +148,7 @@ class VolumeHoraireEp
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setHistoModification($histoModification)
     {
@@ -176,7 +171,7 @@ class VolumeHoraireEp
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setSourceCode($sourceCode)
     {
@@ -196,52 +191,6 @@ class VolumeHoraireEp
     }
 
     /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return VolumeHoraireEp
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return VolumeHoraireEp
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -255,7 +204,7 @@ class VolumeHoraireEp
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -278,7 +227,7 @@ class VolumeHoraireEp
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
     {
@@ -301,7 +250,7 @@ class VolumeHoraireEp
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -324,7 +273,7 @@ class VolumeHoraireEp
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -347,7 +296,7 @@ class VolumeHoraireEp
      * Set typeIntervention
      *
      * @param \Application\Entity\Db\TypeIntervention $typeIntervention
-     * @return VolumeHoraireEp
+     * @return VolumeHoraireEns
      */
     public function setTypeIntervention(\Application\Entity\Db\TypeIntervention $typeIntervention = null)
     {
@@ -367,25 +316,48 @@ class VolumeHoraireEp
     }
 
     /**
-     * Set elementPedagogique
+     * Set annee
      *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
-     * @return VolumeHoraireEp
+     * @param \Application\Entity\Db\Annee $annee
+     * @return VolumeHoraireEns
      */
-    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
     {
-        $this->elementPedagogique = $elementPedagogique;
+        $this->annee = $annee;
 
         return $this;
     }
 
     /**
-     * Get elementPedagogique
+     * Get annee
      *
-     * @return \Application\Entity\Db\ElementPedagogique 
+     * @return \Application\Entity\Db\Annee 
      */
-    public function getElementPedagogique()
+    public function getAnnee()
     {
-        return $this->elementPedagogique;
+        return $this->annee;
+    }
+
+    /**
+     * Set elementDiscipline
+     *
+     * @param \Application\Entity\Db\ElementDiscipline $elementDiscipline
+     * @return VolumeHoraireEns
+     */
+    public function setElementDiscipline(\Application\Entity\Db\ElementDiscipline $elementDiscipline = null)
+    {
+        $this->elementDiscipline = $elementDiscipline;
+
+        return $this;
+    }
+
+    /**
+     * Get elementDiscipline
+     *
+     * @return \Application\Entity\Db\ElementDiscipline 
+     */
+    public function getElementDiscipline()
+    {
+        return $this->elementDiscipline;
     }
 }

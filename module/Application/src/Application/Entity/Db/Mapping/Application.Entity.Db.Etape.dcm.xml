@@ -20,7 +20,7 @@
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="120" nullable="false"/>
     <field name="niveau" type="integer" column="NIVEAU" nullable="true"/>
-    <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
     <field name="specifiqueEchanges" type="boolean" column="SPECIFIQUE_ECHANGES" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>

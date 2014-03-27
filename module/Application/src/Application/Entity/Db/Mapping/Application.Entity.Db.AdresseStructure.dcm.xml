@@ -24,7 +24,7 @@
     <field name="paysCodeInsee" type="string" column="PAYS_CODE_INSEE" length="3" nullable="true"/>
     <field name="paysLibelle" type="string" column="PAYS_LIBELLE" length="30" nullable="true"/>
     <field name="principale" type="boolean" column="PRINCIPALE" nullable="true"/>
-    <field name="sourceCode" type="string" column="SOURCE_CODE" length="20" nullable="true"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
     <field name="telephone" type="string" column="TELEPHONE" length="20" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>

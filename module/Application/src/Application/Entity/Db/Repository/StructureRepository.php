@@ -42,4 +42,29 @@ class StructureRepository extends EntityRepository
 
         return $qb->getQuery()->execute();
     }
+    
+    /**
+     * Retourne le chercheur des structures distinctes.
+     * 
+     * @param int $niveau
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function findDistinctStructures($niveau = null)
+    {
+        $qb = $this->createQueryBuilder('ep')
+                ->select('partial s.{id, libelleCourt}')
+                ->distinct()
+                ->from('Application\Entity\Db\Structure', 's')
+//                ->innerJoin('s.elementPedagogique', 'ep')
+                ->orderBy('s.libelleCourt');
+        
+        if (null !== $niveau) {
+            $qb->where('s.niveau = ?', $niveau);
+        }
+        
+        // provisoire
+        $qb->where('s.parente = :ucbn')->setParameter('ucbn', $this->getEntityManager()->find('Application\Entity\Db\Structure', 8464));
+        
+        return $qb;
+    }
 }

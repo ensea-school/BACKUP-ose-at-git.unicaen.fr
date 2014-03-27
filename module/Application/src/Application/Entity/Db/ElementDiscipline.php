@@ -5,15 +5,10 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SectionCnu
+ * ElementDiscipline
  */
-class SectionCnu implements HistoriqueAwareInterface
+class ElementDiscipline
 {
-    /**
-     * @var string
-     */
-    private $code;
-
     /**
      * @var \DateTime
      */
@@ -28,16 +23,6 @@ class SectionCnu implements HistoriqueAwareInterface
      * @var \DateTime
      */
     private $histoModification;
-
-    /**
-     * @var string
-     */
-    private $libelleCourt;
-
-    /**
-     * @var string
-     */
-    private $libelleLong;
 
     /**
      * @var string
@@ -60,14 +45,14 @@ class SectionCnu implements HistoriqueAwareInterface
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
-
-    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoModificateur;
+
+    /**
+     * @var \Application\Entity\Db\Source
+     */
+    private $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -79,35 +64,22 @@ class SectionCnu implements HistoriqueAwareInterface
      */
     private $histoCreateur;
 
+    /**
+     * @var \Application\Entity\Db\ElementPedagogique
+     */
+    private $elementPedagogique;
 
     /**
-     * Set code
-     *
-     * @param string $code
-     * @return SectionCnu
+     * @var \Application\Entity\Db\Discipline
      */
-    public function setCode($code)
-    {
-        $this->code = $code;
+    private $discipline;
 
-        return $this;
-    }
-
-    /**
-     * Get code
-     *
-     * @return string 
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setHistoCreation($histoCreation)
     {
@@ -130,7 +102,7 @@ class SectionCnu implements HistoriqueAwareInterface
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -153,7 +125,7 @@ class SectionCnu implements HistoriqueAwareInterface
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setHistoModification($histoModification)
     {
@@ -173,56 +145,10 @@ class SectionCnu implements HistoriqueAwareInterface
     }
 
     /**
-     * Set libelleCourt
-     *
-     * @param string $libelleCourt
-     * @return SectionCnu
-     */
-    public function setLibelleCourt($libelleCourt)
-    {
-        $this->libelleCourt = $libelleCourt;
-
-        return $this;
-    }
-
-    /**
-     * Get libelleCourt
-     *
-     * @return string 
-     */
-    public function getLibelleCourt()
-    {
-        return $this->libelleCourt;
-    }
-
-    /**
-     * Set libelleLong
-     *
-     * @param string $libelleLong
-     * @return SectionCnu
-     */
-    public function setLibelleLong($libelleLong)
-    {
-        $this->libelleLong = $libelleLong;
-
-        return $this;
-    }
-
-    /**
-     * Get libelleLong
-     *
-     * @return string 
-     */
-    public function getLibelleLong()
-    {
-        return $this->libelleLong;
-    }
-
-    /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setSourceCode($sourceCode)
     {
@@ -245,7 +171,7 @@ class SectionCnu implements HistoriqueAwareInterface
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -268,7 +194,7 @@ class SectionCnu implements HistoriqueAwareInterface
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setValiditeFin($validiteFin)
     {
@@ -298,33 +224,10 @@ class SectionCnu implements HistoriqueAwareInterface
     }
 
     /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return SectionCnu
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -344,10 +247,33 @@ class SectionCnu implements HistoriqueAwareInterface
     }
 
     /**
+     * Set source
+     *
+     * @param \Application\Entity\Db\Source $source
+     * @return ElementDiscipline
+     */
+    public function setSource(\Application\Entity\Db\Source $source = null)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return \Application\Entity\Db\Source 
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -370,7 +296,7 @@ class SectionCnu implements HistoriqueAwareInterface
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return SectionCnu
+     * @return ElementDiscipline
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -389,18 +315,49 @@ class SectionCnu implements HistoriqueAwareInterface
         return $this->histoCreateur;
     }
 
+    /**
+     * Set elementPedagogique
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @return ElementDiscipline
+     */
+    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    {
+        $this->elementPedagogique = $elementPedagogique;
 
-	/**************************************************************************************************
-	 * 										Début ajout
-	 **************************************************************************************************/
+        return $this;
+    }
 
     /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
+     * Get elementPedagogique
+     *
+     * @return \Application\Entity\Db\ElementPedagogique 
      */
-    public function __toString()
+    public function getElementPedagogique()
     {
-        return $this->getLibelle();
+        return $this->elementPedagogique;
+    }
+
+    /**
+     * Set discipline
+     *
+     * @param \Application\Entity\Db\Discipline $discipline
+     * @return ElementDiscipline
+     */
+    public function setDiscipline(\Application\Entity\Db\Discipline $discipline = null)
+    {
+        $this->discipline = $discipline;
+
+        return $this;
+    }
+
+    /**
+     * Get discipline
+     *
+     * @return \Application\Entity\Db\Discipline 
+     */
+    public function getDiscipline()
+    {
+        return $this->discipline;
     }
 }

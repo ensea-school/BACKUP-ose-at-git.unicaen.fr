@@ -6,7 +6,6 @@
       <index name="IDX_FB425D2759860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_FB425D277E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_FB425D2763F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_FB425D278AD1AE90" columns="SECTION_CNU_ID"/>
       <index name="IDX_FB425D27E9B3446E" columns="SOURCE_ID"/>
     </indexes>
     <unique-constraints>
@@ -15,11 +14,6 @@
     <id name="id" association-key="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
-    <many-to-one field="sectionCnu" target-entity="Application\Entity\Db\SectionCnu">
-      <join-columns>
-        <join-column name="SECTION_CNU_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
         <cascade>
             <cascade-persist/>

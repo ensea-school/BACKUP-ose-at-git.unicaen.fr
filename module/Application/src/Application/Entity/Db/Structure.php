@@ -35,6 +35,11 @@ class Structure implements HistoriqueAwareInterface
     private $libelleLong;
 
     /**
+     * @var integer
+     */
+    private $niveau;
+
+    /**
      * @var string
      */
     private $sourceCode;
@@ -203,6 +208,29 @@ class Structure implements HistoriqueAwareInterface
     public function getLibelleLong()
     {
         return $this->libelleLong;
+    }
+
+    /**
+     * Set niveau
+     *
+     * @param integer $niveau
+     * @return Structure
+     */
+    public function setNiveau($niveau)
+    {
+        $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * Get niveau
+     *
+     * @return integer 
+     */
+    public function getNiveau()
+    {
+        return $this->niveau;
     }
 
     /**

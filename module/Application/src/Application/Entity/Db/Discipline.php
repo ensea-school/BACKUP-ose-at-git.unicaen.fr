@@ -5,9 +5,9 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ElementSection
+ * Discipline
  */
-class ElementSection
+class Discipline
 {
     /**
      * @var \DateTime
@@ -23,6 +23,21 @@ class ElementSection
      * @var \DateTime
      */
     private $histoModification;
+
+    /**
+     * @var string
+     */
+    private $libelleCourt;
+
+    /**
+     * @var string
+     */
+    private $libelleLong;
+
+    /**
+     * @var integer
+     */
+    private $ordre;
 
     /**
      * @var string
@@ -43,16 +58,6 @@ class ElementSection
      * @var integer
      */
     private $id;
-
-    /**
-     * @var \Application\Entity\Db\ElementPedagogique
-     */
-    private $elementPedagogique;
-
-    /**
-     * @var \Application\Entity\Db\SectionCnu
-     */
-    private $sectionCnu;
 
     /**
      * @var \Application\Entity\Db\Source
@@ -79,7 +84,7 @@ class ElementSection
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return ElementSection
+     * @return Discipline
      */
     public function setHistoCreation($histoCreation)
     {
@@ -102,7 +107,7 @@ class ElementSection
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return ElementSection
+     * @return Discipline
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -125,7 +130,7 @@ class ElementSection
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return ElementSection
+     * @return Discipline
      */
     public function setHistoModification($histoModification)
     {
@@ -145,10 +150,79 @@ class ElementSection
     }
 
     /**
+     * Set libelleCourt
+     *
+     * @param string $libelleCourt
+     * @return Discipline
+     */
+    public function setLibelleCourt($libelleCourt)
+    {
+        $this->libelleCourt = $libelleCourt;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleCourt
+     *
+     * @return string 
+     */
+    public function getLibelleCourt()
+    {
+        return $this->libelleCourt;
+    }
+
+    /**
+     * Set libelleLong
+     *
+     * @param string $libelleLong
+     * @return Discipline
+     */
+    public function setLibelleLong($libelleLong)
+    {
+        $this->libelleLong = $libelleLong;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleLong
+     *
+     * @return string 
+     */
+    public function getLibelleLong()
+    {
+        return $this->libelleLong;
+    }
+
+    /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return Discipline
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer 
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return ElementSection
+     * @return Discipline
      */
     public function setSourceCode($sourceCode)
     {
@@ -171,7 +245,7 @@ class ElementSection
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return ElementSection
+     * @return Discipline
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -194,7 +268,7 @@ class ElementSection
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return ElementSection
+     * @return Discipline
      */
     public function setValiditeFin($validiteFin)
     {
@@ -224,56 +298,10 @@ class ElementSection
     }
 
     /**
-     * Set elementPedagogique
-     *
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
-     * @return ElementSection
-     */
-    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
-    {
-        $this->elementPedagogique = $elementPedagogique;
-
-        return $this;
-    }
-
-    /**
-     * Get elementPedagogique
-     *
-     * @return \Application\Entity\Db\ElementPedagogique 
-     */
-    public function getElementPedagogique()
-    {
-        return $this->elementPedagogique;
-    }
-
-    /**
-     * Set sectionCnu
-     *
-     * @param \Application\Entity\Db\SectionCnu $sectionCnu
-     * @return ElementSection
-     */
-    public function setSectionCnu(\Application\Entity\Db\SectionCnu $sectionCnu = null)
-    {
-        $this->sectionCnu = $sectionCnu;
-
-        return $this;
-    }
-
-    /**
-     * Get sectionCnu
-     *
-     * @return \Application\Entity\Db\SectionCnu 
-     */
-    public function getSectionCnu()
-    {
-        return $this->sectionCnu;
-    }
-
-    /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
-     * @return ElementSection
+     * @return Discipline
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
     {
@@ -296,7 +324,7 @@ class ElementSection
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return ElementSection
+     * @return Discipline
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -319,7 +347,7 @@ class ElementSection
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return ElementSection
+     * @return Discipline
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -342,7 +370,7 @@ class ElementSection
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return ElementSection
+     * @return Discipline
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {

@@ -11,7 +11,6 @@ namespace Common;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Common\Entity\UserAwareInterface;
 
 class Module
 {
@@ -39,18 +38,6 @@ class Module
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getServiceConfig()
-    {
-        return array(
-            'invokables' => array(
-                'commonServiceUserContext' => '\Common\Service\UserContext'
-            ),
-        );
     }
 
     /**

@@ -55,12 +55,38 @@ return array(
             ),
         ),
     ),
+    'navigation' => array(
+        'default' => array(
+            'home' => array(
+                'pages' => array(
+                    'structure' => array(
+                        'label'    => 'Structures',
+                        'title'    => "Gestion des structures",
+                        'route'    => 'structure',
+                        'visible'  => false,
+                        'params' => array(
+                            'action' => 'index',
+                        ),
+                        'pages' => array(
+                            'voir' => array(
+                                'label'  => "Voir",
+                                'title'  => "Voir une structure",
+                                'route'  => 'structure',
+                                'visible' => false,
+                                'withtarget' => true,
+                                'pages' => array(),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Structure',
-                    //'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'search'),
                     'roles' => array('user')),
             ),
         ),
@@ -68,6 +94,16 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Structure'   => 'Application\Controller\StructureController',
+        ),
+    ),
+    'service_manager' => array(
+        'invokables' => array(
+            'ApplicationStructure'       => 'Application\\Service\\Structure',
+        )
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'structureDl'       => 'Application\View\Helper\StructureDl',
         ),
     ),
 );

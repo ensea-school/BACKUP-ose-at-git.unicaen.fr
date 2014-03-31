@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ab327372ef6b283b98ebcf6736aeb3f2",
+    "hash": "61e6c836d6c3362bde8fe9c75071ac64",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -701,7 +701,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1073,28 +1073,28 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@425"
+                "reference": "/trunk/@435"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
                 "php": ">=5.3.3",
                 "rwoverdijk/assetmanager": ">=1.3",
-                "zendframework/zend-eventmanager": ">=2.2",
-                "zendframework/zend-i18n": ">=2.2",
-                "zendframework/zend-ldap": ">=2.2",
-                "zendframework/zend-log": ">=2.2",
-                "zendframework/zend-mail": ">=2.2",
-                "zendframework/zend-mvc": ">=2.2",
-                "zendframework/zend-navigation": ">=2.2",
-                "zendframework/zend-servicemanager": ">=2.2",
-                "zendframework/zend-session": ">=2.2",
-                "zendframework/zend-version": ">=2.2",
-                "zendframework/zend-view": ">=2.2"
+                "zendframework/zend-eventmanager": "2.2.*",
+                "zendframework/zend-i18n": "2.2.*",
+                "zendframework/zend-ldap": "2.2.*",
+                "zendframework/zend-log": "2.2.*",
+                "zendframework/zend-mail": "2.2.*",
+                "zendframework/zend-mvc": "2.2.*",
+                "zendframework/zend-navigation": "2.2.*",
+                "zendframework/zend-servicemanager": "2.2.*",
+                "zendframework/zend-session": "2.2.*",
+                "zendframework/zend-version": "2.2.*",
+                "zendframework/zend-view": "2.2.*"
             },
             "require-dev": {
                 "mpdf/mpdf": "v5.7.1",
                 "phpunit/phpunit": ">=3.7",
-                "zendframework/zend-test": ">=2.2"
+                "zendframework/zend-test": "2.2.*"
             },
             "bin": [
                 "bin/deploy.sh",
@@ -1118,7 +1118,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenAuth",
-                "reference": "/trunk/@186"
+                "reference": "/trunk/@187"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1167,40 +1167,28 @@
         },
         {
             "name": "zendframework/zend-authentication",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Authentication",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendAuthentication.git",
-                "reference": "13771a1738ebed55b9e9ed3f4c3871576a37d847"
+                "reference": "6151c1d70ed4bb364c113a2df60a7f711031e04a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendAuthentication/zipball/13771a1738ebed55b9e9ed3f4c3871576a37d847",
-                "reference": "13771a1738ebed55b9e9ed3f4c3871576a37d847",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendAuthentication/zipball/6151c1d70ed4bb364c113a2df60a7f711031e04a",
+                "reference": "6151c1d70ed4bb364c113a2df60a7f711031e04a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-crypt": "self.version",
-                "zendframework/zend-db": "self.version",
-                "zendframework/zend-http": "self.version",
-                "zendframework/zend-ldap": "self.version",
-                "zendframework/zend-session": "self.version",
-                "zendframework/zend-uri": "self.version",
-                "zendframework/zend-validator": "self.version"
             },
             "suggest": {
                 "zendframework/zend-crypt": "Zend\\Crypt component",
                 "zendframework/zend-db": "Zend\\Db component",
-                "zendframework/zend-http": "Zend\\Http component",
-                "zendframework/zend-ldap": "Zend\\Ldap component",
                 "zendframework/zend-session": "Zend\\Session component",
-                "zendframework/zend-uri": "Zend\\Uri component",
-                "zendframework/zend-validator": "Zend\\Validator component"
+                "zendframework/zend-uri": "Zend\\Uri component"
             },
             "type": "library",
             "extra": {
@@ -1223,32 +1211,31 @@
                 "Authentication",
                 "zf2"
             ],
-            "time": "2014-03-14 16:20:28"
+            "time": "2014-01-04 13:00:06"
         },
         {
             "name": "zendframework/zend-cache",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Cache",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendCache.git",
-                "reference": "00ab70f3bcbc9d9d2a925a1221410de8a941f3e8"
+                "reference": "560355160f06cdc3ef549a7eef843af3bead7e39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendCache/zipball/00ab70f3bcbc9d9d2a925a1221410de8a941f3e8",
-                "reference": "00ab70f3bcbc9d9d2a925a1221410de8a941f3e8",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendCache/zipball/560355160f06cdc3ef549a7eef843af3bead7e39",
+                "reference": "560355160f06cdc3ef549a7eef843af3bead7e39",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-eventmanager": "self.version",
                 "zendframework/zend-servicemanager": "self.version",
                 "zendframework/zend-stdlib": "self.version"
             },
             "require-dev": {
-                "zendframework/zend-serializer": "self.version",
-                "zendframework/zend-session": "self.version"
+                "zendframework/zend-serializer": "self.version"
             },
             "suggest": {
                 "ext-apc": "APC >= 3.1.6 to use the APC storage adapter",
@@ -1279,34 +1266,32 @@
                 "cache",
                 "zf2"
             ],
-            "time": "2014-03-14 16:20:37"
+            "time": "2014-03-03 23:00:17"
         },
         {
             "name": "zendframework/zend-code",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Code",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendCode.git",
-                "reference": "7eb108341ff6c9ec240764a11270f2d12934b733"
+                "reference": "aaf820f205881563cc3c6708149e17364d1bb823"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendCode/zipball/7eb108341ff6c9ec240764a11270f2d12934b733",
-                "reference": "7eb108341ff6c9ec240764a11270f2d12934b733",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendCode/zipball/aaf820f205881563cc3c6708149e17364d1bb823",
+                "reference": "aaf820f205881563cc3c6708149e17364d1bb823",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-eventmanager": "self.version"
             },
             "require-dev": {
-                "doctrine/common": ">=2.1",
-                "zendframework/zend-stdlib": "self.version"
+                "doctrine/common": ">=2.1"
             },
             "suggest": {
-                "doctrine/common": "Doctrine\\Common >=2.1 for annotation features",
-                "zendframework/zend-stdlib": "Zend\\Stdlib component"
+                "doctrine/common": "Doctrine\\Common >=2.1 for annotation features"
             },
             "type": "library",
             "extra": {
@@ -1329,36 +1314,28 @@
                 "code",
                 "zf2"
             ],
-            "time": "2014-03-14 16:20:47"
+            "time": "2014-02-15 15:00:07"
         },
         {
             "name": "zendframework/zend-config",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Config",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendConfig.git",
-                "reference": "98ce618c4db60de1101cba39e9a1c2ef2c24f40f"
+                "reference": "a31c3980cf7ec88418a931e9cf4ba21079f47a08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendConfig/zipball/98ce618c4db60de1101cba39e9a1c2ef2c24f40f",
-                "reference": "98ce618c4db60de1101cba39e9a1c2ef2c24f40f",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendConfig/zipball/a31c3980cf7ec88418a931e9cf4ba21079f47a08",
+                "reference": "a31c3980cf7ec88418a931e9cf4ba21079f47a08",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
             },
-            "require-dev": {
-                "zendframework/zend-filter": "self.version",
-                "zendframework/zend-i18n": "self.version",
-                "zendframework/zend-json": "self.version",
-                "zendframework/zend-servicemanager": "self.version"
-            },
             "suggest": {
-                "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-i18n": "Zend\\I18n component",
                 "zendframework/zend-json": "Zend\\Json to use the Json reader or writer classes",
                 "zendframework/zend-servicemanager": "Zend\\ServiceManager for use with the Config Factory to retrieve reader and writer instances"
             },
@@ -1383,25 +1360,25 @@
                 "config",
                 "zf2"
             ],
-            "time": "2014-03-14 16:20:50"
+            "time": "2014-01-02 18:00:10"
         },
         {
             "name": "zendframework/zend-console",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendConsole.git",
-                "reference": "4660d3efc0ac39c2f571d0971bc8545f404f38ad"
+                "reference": "63a60ec11930c6b1c6bab1b85cc1fb7aa9cf0ac8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendConsole/zipball/4660d3efc0ac39c2f571d0971bc8545f404f38ad",
-                "reference": "4660d3efc0ac39c2f571d0971bc8545f404f38ad",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendConsole/zipball/63a60ec11930c6b1c6bab1b85cc1fb7aa9cf0ac8",
+                "reference": "63a60ec11930c6b1c6bab1b85cc1fb7aa9cf0ac8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
             },
             "type": "library",
@@ -1424,25 +1401,25 @@
                 "console",
                 "zf2"
             ],
-            "time": "2014-03-12 17:04:32"
+            "time": "2014-01-02 18:00:10"
         },
         {
             "name": "zendframework/zend-crypt",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Crypt",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendCrypt.git",
-                "reference": "ba5becb5adcbcf66c95480f179536b96878133d5"
+                "reference": "72cbd425ff6f8f452f9ed1ca403a5bd66ba4a0b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendCrypt/zipball/ba5becb5adcbcf66c95480f179536b96878133d5",
-                "reference": "ba5becb5adcbcf66c95480f179536b96878133d5",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendCrypt/zipball/72cbd425ff6f8f452f9ed1ca403a5bd66ba4a0b6",
+                "reference": "72cbd425ff6f8f452f9ed1ca403a5bd66ba4a0b6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-math": "self.version",
                 "zendframework/zend-servicemanager": "self.version",
                 "zendframework/zend-stdlib": "self.version"
@@ -1467,7 +1444,7 @@
                 "crypt",
                 "zf2"
             ],
-            "time": "2014-03-12 17:04:21"
+            "time": "2014-03-03 19:00:05"
         },
         {
             "name": "zendframework/zend-db",
@@ -1521,21 +1498,21 @@
         },
         {
             "name": "zendframework/zend-escaper",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Escaper",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendEscaper.git",
-                "reference": "ec2614db2ea860c5765a0adba687eacb365ad355"
+                "reference": "80abc4bc1f48b9fe8ed603aaa9eebd6e6f30fd0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendEscaper/zipball/ec2614db2ea860c5765a0adba687eacb365ad355",
-                "reference": "ec2614db2ea860c5765a0adba687eacb365ad355",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendEscaper/zipball/80abc4bc1f48b9fe8ed603aaa9eebd6e6f30fd0f",
+                "reference": "80abc4bc1f48b9fe8ed603aaa9eebd6e6f30fd0f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23"
+                "php": ">=5.3.3"
             },
             "type": "library",
             "extra": {
@@ -1557,25 +1534,25 @@
                 "escaper",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:02"
+            "time": "2014-01-04 13:00:13"
         },
         {
             "name": "zendframework/zend-eventmanager",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/EventManager",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendEventManager.git",
-                "reference": "048164ee81854942667ffdda3030ce06caa79bb5"
+                "reference": "89368704bb37303fba64c3ddd6bce0506aa7187c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendEventManager/zipball/048164ee81854942667ffdda3030ce06caa79bb5",
-                "reference": "048164ee81854942667ffdda3030ce06caa79bb5",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendEventManager/zipball/89368704bb37303fba64c3ddd6bce0506aa7187c",
+                "reference": "89368704bb37303fba64c3ddd6bce0506aa7187c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
             },
             "type": "library",
@@ -1598,37 +1575,35 @@
                 "eventmanager",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:05"
+            "time": "2014-01-04 13:00:14"
         },
         {
             "name": "zendframework/zend-filter",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Filter",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendFilter.git",
-                "reference": "95e05d19a6941f93546103af1964995213994a8b"
+                "reference": "8ceece474b29d079e86976dbd3efffe6064b3d72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendFilter/zipball/95e05d19a6941f93546103af1964995213994a8b",
-                "reference": "95e05d19a6941f93546103af1964995213994a8b",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendFilter/zipball/8ceece474b29d079e86976dbd3efffe6064b3d72",
+                "reference": "8ceece474b29d079e86976dbd3efffe6064b3d72",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
             },
             "require-dev": {
-                "zendframework/zend-crypt": "self.version",
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-uri": "self.version"
+                "zendframework/zend-crypt": "self.version"
             },
             "suggest": {
                 "zendframework/zend-crypt": "Zend\\Crypt component",
                 "zendframework/zend-i18n": "Zend\\I18n component",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
-                "zendframework/zend-uri": "Zend\\Uri component for UriNormalize filter"
+                "zendframework/zend-uri": "Zend\\Uri component for UriNormalize filter",
+                "zendframework/zend-validator": "Zend\\Validator component"
             },
             "type": "library",
             "extra": {
@@ -1651,48 +1626,32 @@
                 "filter",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:18"
+            "time": "2014-03-03 21:00:06"
         },
         {
             "name": "zendframework/zend-form",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Form",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendForm.git",
-                "reference": "d54d13514b645d415fac470ed38388a236928663"
+                "reference": "52fb1b8172b59a460b5d38467477179df188af11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendForm/zipball/d54d13514b645d415fac470ed38388a236928663",
-                "reference": "d54d13514b645d415fac470ed38388a236928663",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendForm/zipball/52fb1b8172b59a460b5d38467477179df188af11",
+                "reference": "52fb1b8172b59a460b5d38467477179df188af11",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-inputfilter": "self.version",
                 "zendframework/zend-stdlib": "self.version"
             },
             "require-dev": {
-                "zendframework/zend-captcha": "self.version",
-                "zendframework/zend-code": "self.version",
-                "zendframework/zend-eventmanager": "self.version",
-                "zendframework/zend-filter": "self.version",
-                "zendframework/zend-i18n": "self.version",
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-validator": "self.version",
-                "zendframework/zend-view": "self.version",
                 "zendframework/zendservice-recaptcha": "*"
             },
             "suggest": {
-                "zendframework/zend-captcha": "Zend\\Captcha component",
-                "zendframework/zend-code": "Zend\\Code component",
-                "zendframework/zend-eventmanager": "Zend\\EventManager component",
-                "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-i18n": "Zend\\I18n component",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
-                "zendframework/zend-validator": "Zend\\Validator component",
-                "zendframework/zend-view": "Zend\\View component",
                 "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha component"
             },
             "type": "library",
@@ -1715,25 +1674,25 @@
                 "form",
                 "zf2"
             ],
-            "time": "2014-03-12 17:04:13"
+            "time": "2014-03-05 16:00:08"
         },
         {
             "name": "zendframework/zend-http",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Http",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendHttp.git",
-                "reference": "6d4314b1e3309071f3ab958186911296d70fe5fe"
+                "reference": "b91bea1d5972da19169dc2d546a45a8208df00b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendHttp/zipball/6d4314b1e3309071f3ab958186911296d70fe5fe",
-                "reference": "6d4314b1e3309071f3ab958186911296d70fe5fe",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendHttp/zipball/b91bea1d5972da19169dc2d546a45a8208df00b3",
+                "reference": "b91bea1d5972da19169dc2d546a45a8208df00b3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-loader": "self.version",
                 "zendframework/zend-stdlib": "self.version",
                 "zendframework/zend-uri": "self.version",
@@ -1760,44 +1719,32 @@
                 "http",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:21"
+            "time": "2014-03-05 21:00:05"
         },
         {
             "name": "zendframework/zend-i18n",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/I18n",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendI18n.git",
-                "reference": "d90492e9771917392404ac0d53f09582d6462ec3"
+                "reference": "10f56e0869761d62699782e4dd04eb77262cc353"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendI18n/zipball/d90492e9771917392404ac0d53f09582d6462ec3",
-                "reference": "d90492e9771917392404ac0d53f09582d6462ec3",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendI18n/zipball/10f56e0869761d62699782e4dd04eb77262cc353",
+                "reference": "10f56e0869761d62699782e4dd04eb77262cc353",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-cache": "self.version",
-                "zendframework/zend-config": "self.version",
-                "zendframework/zend-eventmanager": "self.version",
-                "zendframework/zend-filter": "self.version",
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-validator": "self.version",
-                "zendframework/zend-view": "self.version"
             },
             "suggest": {
                 "ext-intl": "Required for most features of Zend\\I18n; included in default builds of PHP",
-                "zendframework/zend-cache": "Zend\\Cache component",
-                "zendframework/zend-config": "Zend\\Config component",
                 "zendframework/zend-eventmanager": "You should install this package to use the events in the translator",
                 "zendframework/zend-filter": "You should install this package to use the provided filters",
                 "zendframework/zend-resources": "Translation resources",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
                 "zendframework/zend-validator": "You should install this package to use the provided validators",
                 "zendframework/zend-view": "You should install this package to use the provided view helpers"
             },
@@ -1821,31 +1768,28 @@
                 "i18n",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:23"
+            "time": "2014-01-04 13:00:19"
         },
         {
             "name": "zendframework/zend-inputfilter",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/InputFilter",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendInputFilter.git",
-                "reference": "34a778412b77828830489e2d7c9efab44bbcedea"
+                "reference": "b6825ee38a013dd0f19da770d96c020489a19bff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendInputFilter/zipball/34a778412b77828830489e2d7c9efab44bbcedea",
-                "reference": "34a778412b77828830489e2d7c9efab44bbcedea",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendInputFilter/zipball/b6825ee38a013dd0f19da770d96c020489a19bff",
+                "reference": "b6825ee38a013dd0f19da770d96c020489a19bff",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-filter": "self.version",
                 "zendframework/zend-stdlib": "self.version",
                 "zendframework/zend-validator": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-servicemanager": "self.version"
             },
             "suggest": {
                 "zendframework/zend-servicemanager": "To support plugin manager support"
@@ -1870,33 +1814,28 @@
                 "inputfilter",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:25"
+            "time": "2014-03-04 15:00:12"
         },
         {
             "name": "zendframework/zend-json",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Json",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendJson.git",
-                "reference": "eedf099fb5cfc0a5735ee4e3a2fbed9fadedca6e"
+                "reference": "dd8a8239a7c08c7449a6ea219da3e2369bd90d92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendJson/zipball/eedf099fb5cfc0a5735ee4e3a2fbed9fadedca6e",
-                "reference": "eedf099fb5cfc0a5735ee4e3a2fbed9fadedca6e",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendJson/zipball/dd8a8239a7c08c7449a6ea219da3e2369bd90d92",
+                "reference": "dd8a8239a7c08c7449a6ea219da3e2369bd90d92",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
             },
-            "require-dev": {
-                "zendframework/zend-http": "self.version",
-                "zendframework/zend-server": "self.version"
-            },
             "suggest": {
-                "zendframework/zend-http": "Zend\\Http component",
                 "zendframework/zend-server": "Zend\\Server component"
             },
             "type": "library",
@@ -1920,32 +1859,26 @@
                 "json",
                 "zf2"
             ],
-            "time": "2014-03-12 17:04:14"
+            "time": "2014-03-06 18:00:05"
         },
         {
             "name": "zendframework/zend-ldap",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Ldap",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendLdap.git",
-                "reference": "348cee27fa952bdfbb186727355f5b29cf7bec6d"
+                "reference": "62d38b5e72ab4c528a40254112c8f47bb4864546"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendLdap/zipball/348cee27fa952bdfbb186727355f5b29cf7bec6d",
-                "reference": "348cee27fa952bdfbb186727355f5b29cf7bec6d",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendLdap/zipball/62d38b5e72ab4c528a40254112c8f47bb4864546",
+                "reference": "62d38b5e72ab4c528a40254112c8f47bb4864546",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-eventmanager": "self.version"
-            },
-            "suggest": {
-                "zendframework/zend-eventmanager": "Zend\\EventManager component"
             },
             "type": "library",
             "extra": {
@@ -1968,25 +1901,25 @@
                 "ldap",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:28"
+            "time": "2014-01-04 13:00:21"
         },
         {
             "name": "zendframework/zend-loader",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Loader",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendLoader.git",
-                "reference": "517f39de5c547d438556e86c270b384c9dee5b18"
+                "reference": "27a9f770630839e36cd5705f3661b5ef9abf8793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendLoader/zipball/517f39de5c547d438556e86c270b384c9dee5b18",
-                "reference": "517f39de5c547d438556e86c270b384c9dee5b18",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendLoader/zipball/27a9f770630839e36cd5705f3661b5ef9abf8793",
+                "reference": "27a9f770630839e36cd5705f3661b5ef9abf8793",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23"
+                "php": ">=5.3.3"
             },
             "type": "library",
             "extra": {
@@ -2008,38 +1941,30 @@
                 "loader",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:32"
+            "time": "2014-03-06 18:00:07"
         },
         {
             "name": "zendframework/zend-log",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Log",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendLog.git",
-                "reference": "a7fe7d3a171d9d60397452eb80a93a1f450e409a"
+                "reference": "e419a2d9b9c89a6dd2009b1cfe86de4da65cc7b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendLog/zipball/a7fe7d3a171d9d60397452eb80a93a1f450e409a",
-                "reference": "a7fe7d3a171d9d60397452eb80a93a1f450e409a",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendLog/zipball/e419a2d9b9c89a6dd2009b1cfe86de4da65cc7b0",
+                "reference": "e419a2d9b9c89a6dd2009b1cfe86de4da65cc7b0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-servicemanager": "self.version",
                 "zendframework/zend-stdlib": "self.version"
             },
-            "require-dev": {
-                "zendframework/zend-console": "self.version",
-                "zendframework/zend-db": "self.version",
-                "zendframework/zend-escaper": "self.version",
-                "zendframework/zend-mail": "self.version",
-                "zendframework/zend-validator": "self.version"
-            },
             "suggest": {
                 "ext-mongo": "*",
-                "zendframework/zend-console": "Zend\\Console component",
                 "zendframework/zend-db": "Zend\\Db component",
                 "zendframework/zend-escaper": "Zend\\Escaper component, for use in the XML formatter",
                 "zendframework/zend-mail": "Zend\\Mail component",
@@ -2067,33 +1992,29 @@
                 "logging",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:36"
+            "time": "2014-03-04 15:00:10"
         },
         {
             "name": "zendframework/zend-mail",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Mail",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendMail.git",
-                "reference": "91373a2c7d3db5055467ac88f1981dea74cf3d34"
+                "reference": "80c8bccb70bad79b1a4f3f8b42a96bd90f065290"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendMail/zipball/91373a2c7d3db5055467ac88f1981dea74cf3d34",
-                "reference": "91373a2c7d3db5055467ac88f1981dea74cf3d34",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendMail/zipball/80c8bccb70bad79b1a4f3f8b42a96bd90f065290",
+                "reference": "80c8bccb70bad79b1a4f3f8b42a96bd90f065290",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-crypt": "self.version",
                 "zendframework/zend-loader": "self.version",
                 "zendframework/zend-mime": "self.version",
                 "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-validator": "self.version"
             },
             "suggest": {
                 "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
@@ -2120,25 +2041,25 @@
                 "mail",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:39"
+            "time": "2014-01-02 19:00:03"
         },
         {
             "name": "zendframework/zend-math",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Math",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendMath.git",
-                "reference": "156c107436b43c9bc8679adf6b7af08cf6bd10ce"
+                "reference": "b982ee2edafd4075b22372596ab2e2fdd0f6424e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendMath/zipball/156c107436b43c9bc8679adf6b7af08cf6bd10ce",
-                "reference": "156c107436b43c9bc8679adf6b7af08cf6bd10ce",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendMath/zipball/b982ee2edafd4075b22372596ab2e2fdd0f6424e",
+                "reference": "b982ee2edafd4075b22372596ab2e2fdd0f6424e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23"
+                "php": ">=5.3.3"
             },
             "suggest": {
                 "ext-bcmath": "If using the bcmath functionality",
@@ -2166,32 +2087,26 @@
                 "math",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:41"
+            "time": "2014-03-05 18:00:06"
         },
         {
             "name": "zendframework/zend-mime",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Mime",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendMime.git",
-                "reference": "0b1827dfb281b718bcbcf9b3d13db13855983740"
+                "reference": "35ae58792d036828122a168f2e3fc5bd9f3f38c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendMime/zipball/0b1827dfb281b718bcbcf9b3d13db13855983740",
-                "reference": "0b1827dfb281b718bcbcf9b3d13db13855983740",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendMime/zipball/35ae58792d036828122a168f2e3fc5bd9f3f38c2",
+                "reference": "35ae58792d036828122a168f2e3fc5bd9f3f38c2",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-mail": "self.version"
-            },
-            "suggest": {
-                "zendframework/zend-mail": "Zend\\Mail component"
             },
             "type": "library",
             "extra": {
@@ -2213,40 +2128,31 @@
                 "mime",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:47"
+            "time": "2014-03-03 23:00:16"
         },
         {
             "name": "zendframework/zend-modulemanager",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/ModuleManager",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendModuleManager.git",
-                "reference": "954012707a639eb91f32b89173f5c1c413623072"
+                "reference": "cae3f622f476428ddfaf7eb1a74e413b2faa7c9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendModuleManager/zipball/954012707a639eb91f32b89173f5c1c413623072",
-                "reference": "954012707a639eb91f32b89173f5c1c413623072",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendModuleManager/zipball/cae3f622f476428ddfaf7eb1a74e413b2faa7c9c",
+                "reference": "cae3f622f476428ddfaf7eb1a74e413b2faa7c9c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-eventmanager": "self.version",
                 "zendframework/zend-stdlib": "self.version"
             },
-            "require-dev": {
-                "zendframework/zend-config": "self.version",
-                "zendframework/zend-console": "self.version",
-                "zendframework/zend-loader": "self.version",
-                "zendframework/zend-mvc": "self.version",
-                "zendframework/zend-servicemanager": "self.version"
-            },
             "suggest": {
                 "zendframework/zend-config": "Zend\\Config component",
-                "zendframework/zend-console": "Zend\\Console component",
                 "zendframework/zend-loader": "Zend\\Loader component",
-                "zendframework/zend-mvc": "Zend\\Mvc component",
                 "zendframework/zend-servicemanager": "Zend\\ServiceManager component"
             },
             "type": "library",
@@ -2269,47 +2175,28 @@
                 "modulemanager",
                 "zf2"
             ],
-            "time": "2014-03-12 17:04:28"
+            "time": "2014-01-02 18:00:23"
         },
         {
             "name": "zendframework/zend-mvc",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Mvc",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendMvc.git",
-                "reference": "9171841f8b2cdb914dba972878ec78b9885352d0"
+                "reference": "4e46a074b10c3eccae7b5a9ba14aa9b9e57c1635"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendMvc/zipball/9171841f8b2cdb914dba972878ec78b9885352d0",
-                "reference": "9171841f8b2cdb914dba972878ec78b9885352d0",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendMvc/zipball/4e46a074b10c3eccae7b5a9ba14aa9b9e57c1635",
+                "reference": "4e46a074b10c3eccae7b5a9ba14aa9b9e57c1635",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-eventmanager": "self.version",
                 "zendframework/zend-servicemanager": "self.version",
                 "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-authentication": "self.version",
-                "zendframework/zend-console": "self.version",
-                "zendframework/zend-di": "self.version",
-                "zendframework/zend-filter": "self.version",
-                "zendframework/zend-form": "self.version",
-                "zendframework/zend-http": "self.version",
-                "zendframework/zend-i18n": "self.version",
-                "zendframework/zend-inputfilter": "self.version",
-                "zendframework/zend-json": "self.version",
-                "zendframework/zend-modulemanager": "self.version",
-                "zendframework/zend-serializer": "self.version",
-                "zendframework/zend-session": "self.version",
-                "zendframework/zend-text": "self.version",
-                "zendframework/zend-uri": "self.version",
-                "zendframework/zend-validator": "self.version",
-                "zendframework/zend-version": "self.version",
-                "zendframework/zend-view": "self.version"
             },
             "suggest": {
                 "zendframework/zend-authentication": "Zend\\Authentication component for Identity plugin",
@@ -2321,7 +2208,6 @@
                 "zendframework/zend-http": "Zend\\Http component",
                 "zendframework/zend-i18n": "Zend\\I18n component for translatable segments",
                 "zendframework/zend-inputfilter": "Zend\\Inputfilter component",
-                "zendframework/zend-json": "Zend\\Json component",
                 "zendframework/zend-modulemanager": "Zend\\ModuleManager component",
                 "zendframework/zend-serializer": "Zend\\Serializer component",
                 "zendframework/zend-session": "Zend\\Session component for FlashMessenger, PRG, and FPRG plugins",
@@ -2329,7 +2215,6 @@
                 "zendframework/zend-text": "Zend\\Text component",
                 "zendframework/zend-uri": "Zend\\Uri component",
                 "zendframework/zend-validator": "Zend\\Validator component",
-                "zendframework/zend-version": "Zend\\Version component",
                 "zendframework/zend-view": "Zend\\View component"
             },
             "type": "library",
@@ -2352,39 +2237,30 @@
                 "mvc",
                 "zf2"
             ],
-            "time": "2014-03-12 17:04:30"
+            "time": "2014-03-04 00:00:04"
         },
         {
             "name": "zendframework/zend-navigation",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Navigation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendNavigation.git",
-                "reference": "cdd96824ec6e611d077950369827f605d2241db2"
+                "reference": "e97819185f0fa07a2b42df2e2976f8c7e05e02de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendNavigation/zipball/cdd96824ec6e611d077950369827f605d2241db2",
-                "reference": "cdd96824ec6e611d077950369827f605d2241db2",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendNavigation/zipball/e97819185f0fa07a2b42df2e2976f8c7e05e02de",
+                "reference": "e97819185f0fa07a2b42df2e2976f8c7e05e02de",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-config": "self.version",
-                "zendframework/zend-mvc": "self.version",
-                "zendframework/zend-permissions-acl": "self.version",
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-view": "self.version"
             },
             "suggest": {
                 "zendframework/zend-config": "Zend\\Config component",
                 "zendframework/zend-mvc": "Zend\\Mvc component",
-                "zendframework/zend-permissions-acl": "Zend\\Permissions\\Acl component",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
                 "zendframework/zend-view": "Zend\\View component"
             },
             "type": "library",
@@ -2408,42 +2284,29 @@
                 "navigation",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:49"
+            "time": "2014-01-02 18:00:24"
         },
         {
             "name": "zendframework/zend-paginator",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Paginator",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendPaginator.git",
-                "reference": "aec346c8de27300024c7b3b43b6a3e9bc0aeccb0"
+                "reference": "7ff21d9e4ffd83c6f1d66f08c8ab5960883f3eb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendPaginator/zipball/aec346c8de27300024c7b3b43b6a3e9bc0aeccb0",
-                "reference": "aec346c8de27300024c7b3b43b6a3e9bc0aeccb0",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendPaginator/zipball/7ff21d9e4ffd83c6f1d66f08c8ab5960883f3eb8",
+                "reference": "7ff21d9e4ffd83c6f1d66f08c8ab5960883f3eb8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
             },
-            "require-dev": {
-                "zendframework/zend-cache": "self.version",
-                "zendframework/zend-db": "self.version",
-                "zendframework/zend-filter": "self.version",
-                "zendframework/zend-json": "self.version",
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-view": "self.version"
-            },
             "suggest": {
-                "zendframework/zend-cache": "Zend\\Cache component to support cache features",
-                "zendframework/zend-db": "Zend\\Db component",
-                "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-json": "Zend\\Json component",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
-                "zendframework/zend-view": "Zend\\View component"
+                "zendframework/zend-cache": "To support cache feature"
             },
             "type": "library",
             "extra": {
@@ -2465,7 +2328,7 @@
                 "paginator",
                 "zf2"
             ],
-            "time": "2014-03-14 16:21:52"
+            "time": "2014-01-04 13:00:24"
         },
         {
             "name": "zendframework/zend-permissions-acl",
@@ -2510,27 +2373,24 @@
         },
         {
             "name": "zendframework/zend-serializer",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Serializer",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendSerializer.git",
-                "reference": "e858221feb705396b47b60123661df3e9fb9e1d4"
+                "reference": "d76b931d3ffa842a496c9fa319bbe285b5ddfade"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendSerializer/zipball/e858221feb705396b47b60123661df3e9fb9e1d4",
-                "reference": "e858221feb705396b47b60123661df3e9fb9e1d4",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendSerializer/zipball/d76b931d3ffa842a496c9fa319bbe285b5ddfade",
+                "reference": "d76b931d3ffa842a496c9fa319bbe285b5ddfade",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-json": "self.version",
                 "zendframework/zend-math": "self.version",
                 "zendframework/zend-stdlib": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-servicemanager": "self.version"
             },
             "suggest": {
                 "zendframework/zend-servicemanager": "To support plugin manager support"
@@ -2556,28 +2416,25 @@
                 "serializer",
                 "zf2"
             ],
-            "time": "2014-03-14 16:22:09"
+            "time": "2014-01-02 18:00:26"
         },
         {
             "name": "zendframework/zend-servicemanager",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/ServiceManager",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendServiceManager.git",
-                "reference": "310187f89fe830ed4484499f78338631f29d25c7"
+                "reference": "de182a20dfdcf978c49570514103c7477ef16e4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendServiceManager/zipball/310187f89fe830ed4484499f78338631f29d25c7",
-                "reference": "310187f89fe830ed4484499f78338631f29d25c7",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendServiceManager/zipball/de182a20dfdcf978c49570514103c7477ef16e4f",
+                "reference": "de182a20dfdcf978c49570514103c7477ef16e4f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23"
-            },
-            "require-dev": {
-                "zendframework/zend-di": "self.version"
+                "php": ">=5.3.3"
             },
             "suggest": {
                 "zendframework/zend-di": "Zend\\Di component"
@@ -2602,40 +2459,29 @@
                 "servicemanager",
                 "zf2"
             ],
-            "time": "2014-03-14 16:22:14"
+            "time": "2014-03-03 21:00:04"
         },
         {
             "name": "zendframework/zend-session",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Session",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendSession.git",
-                "reference": "6a1866b3ef74e4db2008adb5b3d7e2cb2e618d3b"
+                "reference": "39fbad1f3b72f9ba86a218bc7b6e04dc72d800bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendSession/zipball/6a1866b3ef74e4db2008adb5b3d7e2cb2e618d3b",
-                "reference": "6a1866b3ef74e4db2008adb5b3d7e2cb2e618d3b",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendSession/zipball/39fbad1f3b72f9ba86a218bc7b6e04dc72d800bf",
+                "reference": "39fbad1f3b72f9ba86a218bc7b6e04dc72d800bf",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
             },
-            "require-dev": {
-                "zendframework/zend-cache": "self.version",
-                "zendframework/zend-db": "self.version",
-                "zendframework/zend-eventmanager": "self.version",
-                "zendframework/zend-http": "self.version",
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-validator": "self.version"
-            },
             "suggest": {
-                "zendframework/zend-cache": "Zend\\Cache component",
-                "zendframework/zend-db": "Zend\\Db component",
                 "zendframework/zend-eventmanager": "Zend\\EventManager component",
-                "zendframework/zend-http": "Zend\\Http component",
                 "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
                 "zendframework/zend-validator": "Zend\\Validator component"
             },
@@ -2660,34 +2506,28 @@
                 "session",
                 "zf2"
             ],
-            "time": "2014-03-14 16:22:16"
+            "time": "2014-01-04 13:00:26"
         },
         {
             "name": "zendframework/zend-stdlib",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Stdlib",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendStdlib.git",
-                "reference": "d1c481b8a43f2f079b16d3567960ba539e9dacaa"
+                "reference": "e646729f2274f4552b6a92e38d8e458efe08ebc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendStdlib/zipball/d1c481b8a43f2f079b16d3567960ba539e9dacaa",
-                "reference": "d1c481b8a43f2f079b16d3567960ba539e9dacaa",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendStdlib/zipball/e646729f2274f4552b6a92e38d8e458efe08ebc5",
+                "reference": "e646729f2274f4552b6a92e38d8e458efe08ebc5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23"
-            },
-            "require-dev": {
-                "zendframework/zend-eventmanager": "self.version",
-                "zendframework/zend-serializer": "self.version",
-                "zendframework/zend-servicemanager": "self.version"
+                "php": ">=5.3.3"
             },
             "suggest": {
                 "zendframework/zend-eventmanager": "To support aggregate hydrator usage",
-                "zendframework/zend-serializer": "Zend\\Serializer component",
                 "zendframework/zend-servicemanager": "To support hydrator plugin manager usage"
             },
             "type": "library",
@@ -2710,25 +2550,25 @@
                 "stdlib",
                 "zf2"
             ],
-            "time": "2014-03-14 16:22:22"
+            "time": "2014-01-04 13:00:28"
         },
         {
             "name": "zendframework/zend-uri",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Uri",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendUri.git",
-                "reference": "83e617b6273625eeb771c8fb3e886a728fd9dfa4"
+                "reference": "34bedeea8e58aab8c047df1bbe71a39949ad3813"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendUri/zipball/83e617b6273625eeb771c8fb3e886a728fd9dfa4",
-                "reference": "83e617b6273625eeb771c8fb3e886a728fd9dfa4",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendUri/zipball/34bedeea8e58aab8c047df1bbe71a39949ad3813",
+                "reference": "34bedeea8e58aab8c047df1bbe71a39949ad3813",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-escaper": "self.version",
                 "zendframework/zend-validator": "self.version"
             },
@@ -2753,35 +2593,32 @@
                 "uri",
                 "zf2"
             ],
-            "time": "2014-03-14 16:22:34"
+            "time": "2014-03-04 08:00:05"
         },
         {
             "name": "zendframework/zend-validator",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Validator",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendValidator.git",
-                "reference": "1d4526a1f7db36d725a3a526d8951c1a6d0d69b3"
+                "reference": "45ba4e595ec15f4b80b04a04db2feb7e22bfda32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendValidator/zipball/1d4526a1f7db36d725a3a526d8951c1a6d0d69b3",
-                "reference": "1d4526a1f7db36d725a3a526d8951c1a6d0d69b3",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendValidator/zipball/45ba4e595ec15f4b80b04a04db2feb7e22bfda32",
+                "reference": "45ba4e595ec15f4b80b04a04db2feb7e22bfda32",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-stdlib": "self.version"
             },
             "require-dev": {
-                "zendframework/zend-db": "self.version",
                 "zendframework/zend-filter": "self.version",
                 "zendframework/zend-i18n": "self.version",
                 "zendframework/zend-math": "self.version",
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-session": "self.version",
-                "zendframework/zend-uri": "self.version"
+                "zendframework/zend-servicemanager": "self.version"
             },
             "suggest": {
                 "zendframework/zend-db": "Zend\\Db component",
@@ -2790,7 +2627,6 @@
                 "zendframework/zend-math": "Zend\\Math component",
                 "zendframework/zend-resources": "Translations of validator messages",
                 "zendframework/zend-servicemanager": "Zend\\ServiceManager component to allow using the ValidatorPluginManager and validator chains",
-                "zendframework/zend-session": "Zend\\Session component",
                 "zendframework/zend-uri": "Zend\\Uri component, required by the Uri and Sitemap\\Loc validators"
             },
             "type": "library",
@@ -2814,26 +2650,25 @@
                 "validator",
                 "zf2"
             ],
-            "time": "2014-03-14 16:22:37"
+            "time": "2014-03-03 23:00:13"
         },
         {
             "name": "zendframework/zend-version",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Version",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendVersion.git",
-                "reference": "3c399cc44790e52234a4966e1b5a82af978549e7"
+                "reference": "b214e6a0d5f8c76b3c31017fd69105bcc11af418"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendVersion/zipball/3c399cc44790e52234a4966e1b5a82af978549e7",
-                "reference": "3c399cc44790e52234a4966e1b5a82af978549e7",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendVersion/zipball/b214e6a0d5f8c76b3c31017fd69105bcc11af418",
+                "reference": "b214e6a0d5f8c76b3c31017fd69105bcc11af418",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
-                "zendframework/zend-json": "self.version"
+                "php": ">=5.3.3"
             },
             "suggest": {
                 "zendframework/zend-json": "To check latest version hosted in GitHub"
@@ -2858,58 +2693,32 @@
                 "version",
                 "zf2"
             ],
-            "time": "2014-03-12 17:04:32"
+            "time": "2014-03-06 18:00:08"
         },
         {
             "name": "zendframework/zend-view",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/View",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendView.git",
-                "reference": "470468485d3dda6db131905f4e3fcce8f6361ac1"
+                "reference": "3d5977f5e253c830e2b7291e5fece5baed951fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendView/zipball/470468485d3dda6db131905f4e3fcce8f6361ac1",
-                "reference": "470468485d3dda6db131905f4e3fcce8f6361ac1",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendView/zipball/3d5977f5e253c830e2b7291e5fece5baed951fd9",
+                "reference": "3d5977f5e253c830e2b7291e5fece5baed951fd9",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "zendframework/zend-eventmanager": "self.version",
                 "zendframework/zend-loader": "self.version",
                 "zendframework/zend-stdlib": "self.version"
             },
-            "require-dev": {
-                "zendframework/zend-authentication": "self.version",
-                "zendframework/zend-escaper": "self.version",
-                "zendframework/zend-feed": "self.version",
-                "zendframework/zend-filter": "self.version",
-                "zendframework/zend-http": "self.version",
-                "zendframework/zend-i18n": "self.version",
-                "zendframework/zend-json": "self.version",
-                "zendframework/zend-mvc": "self.version",
-                "zendframework/zend-navigation": "self.version",
-                "zendframework/zend-paginator": "self.version",
-                "zendframework/zend-permissions-acl": "self.version",
-                "zendframework/zend-servicemanager": "self.version",
-                "zendframework/zend-uri": "self.version"
-            },
             "suggest": {
-                "zendframework/zend-authentication": "Zend\\Authentication component",
-                "zendframework/zend-escaper": "Zend\\Escaper component",
-                "zendframework/zend-feed": "Zend\\Feed component",
                 "zendframework/zend-filter": "Zend\\Filter component",
-                "zendframework/zend-http": "Zend\\Http component",
-                "zendframework/zend-i18n": "Zend\\I18n component",
-                "zendframework/zend-json": "Zend\\Json component",
-                "zendframework/zend-mvc": "Zend\\Mvc component",
-                "zendframework/zend-navigation": "Zend\\Navigation component",
-                "zendframework/zend-paginator": "Zend\\Paginator component",
-                "zendframework/zend-permissions-acl": "Zend\\Permissions\\Acl component",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
-                "zendframework/zend-uri": "Zend\\Uri component"
+                "zendframework/zend-servicemanager": "2.2.6"
             },
             "type": "library",
             "extra": {
@@ -2932,7 +2741,7 @@
                 "view",
                 "zf2"
             ],
-            "time": "2014-03-14 16:22:39"
+            "time": "2014-01-04 13:00:31"
         },
         {
             "name": "zf-commons/zfc-base",
@@ -3516,21 +3325,22 @@
         },
         {
             "name": "zendframework/zend-dom",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Dom",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendDom.git",
-                "reference": "91b6afe87aeb8a67e4294e82d453e0b00c98552e"
+                "reference": "cc21e09cf61264a554b7c118e0891054def51201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendDom/zipball/91b6afe87aeb8a67e4294e82d453e0b00c98552e",
-                "reference": "91b6afe87aeb8a67e4294e82d453e0b00c98552e",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendDom/zipball/cc21e09cf61264a554b7c118e0891054def51201",
+                "reference": "cc21e09cf61264a554b7c118e0891054def51201",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23"
+                "php": ">=5.3.3",
+                "zendframework/zend-stdlib": "self.version"
             },
             "type": "library",
             "extra": {
@@ -3553,25 +3363,25 @@
                 "dom",
                 "zf2"
             ],
-            "time": "2014-03-14 16:20:59"
+            "time": "2014-01-02 18:00:13"
         },
         {
             "name": "zendframework/zend-test",
-            "version": "2.3.0",
+            "version": "2.2.6",
             "target-dir": "Zend/Test",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendTest.git",
-                "reference": "46ef619ba9858e3431ecb3e718980afea3cc4d55"
+                "reference": "29f184943bed4f822130f470c8e19fea0830916d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendTest/zipball/46ef619ba9858e3431ecb3e718980afea3cc4d55",
-                "reference": "46ef619ba9858e3431ecb3e718980afea3cc4d55",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendTest/zipball/29f184943bed4f822130f470c8e19fea0830916d",
+                "reference": "29f184943bed4f822130f470c8e19fea0830916d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.3.3",
                 "phpunit/phpunit": "3.7.*",
                 "zendframework/zend-console": "self.version",
                 "zendframework/zend-dom": "self.version",
@@ -3582,12 +3392,6 @@
                 "zendframework/zend-stdlib": "self.version",
                 "zendframework/zend-uri": "self.version",
                 "zendframework/zend-view": "self.version"
-            },
-            "require-dev": {
-                "zendframework/zend-console": "self.version"
-            },
-            "suggest": {
-                "zendframework/zend-console": "Zend\\Console component"
             },
             "type": "library",
             "extra": {
@@ -3609,7 +3413,7 @@
                 "test",
                 "zf2"
             ],
-            "time": "2014-03-14 16:22:30"
+            "time": "2014-03-04 09:00:04"
         }
     ],
     "aliases": [

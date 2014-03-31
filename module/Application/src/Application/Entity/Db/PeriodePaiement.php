@@ -42,7 +42,7 @@ class PeriodePaiement
     /**
      * @var integer
      */
-    private $index;
+    private $ordre;
 
     /**
      * @var integer
@@ -209,26 +209,26 @@ class PeriodePaiement
     }
 
     /**
-     * Set index
+     * Set ordre
      *
-     * @param integer $index
+     * @param integer $ordre
      * @return PeriodePaiement
      */
-    public function setIndex($index)
+    public function setOrdre($ordre)
     {
-        $this->index = $index;
+        $this->ordre = $ordre;
 
         return $this;
     }
 
     /**
-     * Get index
+     * Get ordre
      *
      * @return integer 
      */
-    public function getIndex()
+    public function getOrdre()
     {
-        return $this->index;
+        return $this->ordre;
     }
 
     /**

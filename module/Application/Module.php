@@ -123,14 +123,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             ),
             'invokables' => array(
                 'intervenantDl'     => 'Application\View\Helper\IntervenantDl',
-                'structureDl'       => 'Application\View\Helper\StructureDl',
-                'etablissementDl'   => 'Application\View\Helper\EtablissementDl',
-                'serviceDl'         => 'Application\View\Helper\Service\Dl',
-                'serviceListe'      => 'Application\View\Helper\Service\Liste',
-                'serviceLigne'      => 'Application\View\Helper\Service\Ligne',
-                'volumeHoraireDl'   => 'Application\View\Helper\VolumeHoraire\Dl',
                 'adresseDl'         => 'Application\View\Helper\AdresseDl',
-                'historiqueDl'      => 'Application\View\Helper\HistoriqueDl',
             ),
         );
     }
@@ -144,10 +137,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     {
          return array(
             'invokables' => array(
-                'ApplicationParametres' => 'Application\\Service\\Parametres',
-                'ApplicationService' => 'Application\\Service\\Service',
                 'ApplicationOffreFormation' => 'Application\\Service\\OffreFormation',
-                'ApplicationStructure' => 'Application\\Service\\Structure',
                 'ApplicationIntervenant' => 'Application\\Service\\Intervenant',
             ),
         );

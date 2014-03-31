@@ -5,13 +5,13 @@ namespace Application;
 return array(
     'router' => array(
         'routes' => array(
-            'etablissement' => array(
+            'service' => array(
                 'type' => 'Literal',
                 'options' => array(
-                    'route' => '/etablissement',
+                    'route' => '/service',
                     'defaults' => array(
                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'etablissement',
+                        'controller'    => 'Service',
                         'action'        => 'index',
                     ),
                 ),
@@ -55,28 +55,56 @@ return array(
             ),
         ),
     ),
+    'navigation' => array(
+        'default' => array(
+            'home' => array(
+                'pages' => array(
+                    'service' => array(
+                        'label'    => 'Services',
+                        'title'    => "Gestion des services",
+                        'route'    => 'service',
+                        'params' => array(
+                            'action' => 'index',
+                        ),
+                        'pages' => array(
+                            'consultation' => array(
+                                'label'  => "Consultation",
+                                'title'  => "Consultation des services",
+                                'route'  => 'service',
+                                'visible' => true,
+                                'withtarget' => true,
+                                'pages' => array(),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
-                    'controller' => 'Application\Controller\Etablissement',
+                    'controller' => 'Application\Controller\Service',
                     'roles' => array('user')),
             ),
         ),
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Etablissement'   => 'Application\Controller\EtablissementController',
+            'Application\Controller\Service'   => 'Application\Controller\ServiceController',
         ),
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationEtablissement'       => 'Application\\Service\\Etablissement',
+            'ApplicationService'       => 'Application\\Service\\Service',
         )
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'etablissementDl'   => 'Application\View\Helper\EtablissementDl',
+            'serviceDl'         => 'Application\View\Helper\Service\Dl',
+            'serviceListe'      => 'Application\View\Helper\Service\Liste',
+            'serviceLigne'      => 'Application\View\Helper\Service\Ligne',
         ),
     ),
 );

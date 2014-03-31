@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
@@ -11,13 +10,18 @@ use Zend\View\Model\JsonModel;
 /**
  * Description of EtablissementController
  *
- * @method \Doctrine\ORM\EntityManager                  em()
- * @method \Application\Controller\Plugin\Etablissement etablissement()
- *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class EtablissementController extends AbstractActionController
 {
+    /**
+     * @return \Application\Service\Etablissement
+     */
+    public function getServiceEtablissement()
+    {
+        return $this->getServiceLocator()->get('ApplicationEtablissement');
+    }
+
     public function indexAction()
     {
         $url = $this->url()->fromRoute('etablissement/default', array('action' => 'choisir'));
@@ -27,6 +31,7 @@ class EtablissementController extends AbstractActionController
     /**
      *
      * @return \Zend\View\Model\ViewModel
+     * @todo placer le formulaire danx une classe à part
      */
     public function choisirAction()
     {
@@ -59,9 +64,9 @@ class EtablissementController extends AbstractActionController
             return new JsonModel(array());
         }
 
-        $repo      = $this->etablissement()->getRepo();
-        $entities  = $repo->findByLibelle($term);
+        $entities  = $this->getServiceEtablissement()->findByLibelle($term)->getQuery()->execute();
         $result = array();
+        
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Etablissement */
             $result[] = array(
                 'id'    => $item->getId(),        // identifiant unique de l'item
@@ -75,22 +80,23 @@ class EtablissementController extends AbstractActionController
 
     public function voirAction()
     {
-        $this->em()->getFilters()->enable('historique');
-
         if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
             throw new LogicException("Aucun identifiant de l'établissement spécifié.");
         }
-        if (!($etablissement = $this->etablissement()->getRepo()->find($id))) {
+        if (!($etablissement = $this->getServiceEtablissement()->getRepo()->find($id))) {
             throw new RuntimeException("Etablissement '$id' spécifié introuvable.");
         }
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->etablissementGetDifferentiel($etablissement);
 
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('etablissement', 'changements'));
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        return $view;
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel->setTemplate('application/etablissement/voir')
+                  ->setVariables(compact('etablissement', 'changements'));
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return $this->modalInnerViewModel($viewModel, "Détails de l'établissement", false);
+        }
+        return $viewModel;
     }
 
 }

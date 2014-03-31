@@ -5,13 +5,13 @@ namespace Application;
 return array(
     'router' => array(
         'routes' => array(
-            'etablissement' => array(
+            'volume_horaire' => array(
                 'type' => 'Literal',
                 'options' => array(
-                    'route' => '/etablissement',
+                    'route' => '/volume_horaire',
                     'defaults' => array(
                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'etablissement',
+                        'controller'    => 'VolumeHoraire',
                         'action'        => 'index',
                     ),
                 ),
@@ -26,15 +26,6 @@ return array(
                             ),
                             'defaults' => array(
                                 'action' => 'modifier',
-                            ),
-                        ),
-                    ),
-                    'recherche' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/recherche[/:term]',
-                            'defaults' => array(
-                                'action' => 'recherche',
                             ),
                         ),
                     ),
@@ -55,28 +46,57 @@ return array(
             ),
         ),
     ),
+    'navigation' => array(
+        'default' => array(
+            'home' => array(
+                'pages' => array(
+                    'volume_horaire' => array(
+                        'label'    => 'Volumes horaires',
+                        'title'    => "Gestion des volumes horaires",
+                        'visible' => false,
+                        'route'    => 'volume_horaire',
+                        'params' => array(
+                            'action' => 'index',
+                        ),
+                        'pages' => array(
+                            'consultation' => array(
+                                'label'  => "Consultation",
+                                'title'  => "Consultation des volumes horaires",
+                                'route'  => 'volume_horaire',
+                                'visible' => false,
+                                'withtarget' => true,
+                                'pages' => array(),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
-                    'controller' => 'Application\Controller\Etablissement',
+                    'controller' => 'Application\Controller\VolumeHoraire',
                     'roles' => array('user')),
             ),
         ),
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Etablissement'   => 'Application\Controller\EtablissementController',
+            'Application\Controller\VolumeHoraire'   => 'Application\Controller\VolumeHoraireController',
         ),
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationEtablissement'       => 'Application\\Service\\Etablissement',
+            'ApplicationVolumeHoraire' => 'Application\\Service\\VolumeHoraire',
         )
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'etablissementDl'   => 'Application\View\Helper\EtablissementDl',
+            'volumeHoraireDl'   => 'Application\View\Helper\VolumeHoraire\Dl',
+            'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\Liste',
+            'volumeHoraireLigne'   => 'Application\View\Helper\VolumeHoraire\Ligne',
         ),
     ),
 );

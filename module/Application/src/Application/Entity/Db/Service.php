@@ -40,6 +40,11 @@ class Service
     private $id;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $volumeHoraire;
+
+    /**
      * @var \Application\Entity\Db\Intervenant
      */
     private $intervenant;
@@ -84,6 +89,13 @@ class Service
      */
     private $annee;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->volumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set histoCreation
@@ -208,6 +220,39 @@ class Service
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add volumeHoraire
+     *
+     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     * @return Service
+     */
+    public function addVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
+    {
+        $this->volumeHoraire[] = $volumeHoraire;
+
+        return $this;
+    }
+
+    /**
+     * Remove volumeHoraire
+     *
+     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     */
+    public function removeVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
+    {
+        $this->volumeHoraire->removeElement($volumeHoraire);
+    }
+
+    /**
+     * Get volumeHoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVolumeHoraire()
+    {
+        return $this->volumeHoraire;
     }
 
     /**

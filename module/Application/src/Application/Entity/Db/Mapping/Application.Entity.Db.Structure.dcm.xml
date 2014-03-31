@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <!-- NB: repository ajouté à la main sur l'entité -->
-  <entity name="Application\Entity\Db\Structure" table="STRUCTURE" repository-class="Application\Entity\Db\Repository\StructureRepository">
+  <entity name="Application\Entity\Db\Structure" table="STRUCTURE">
     <indexes>
       <index name="IDX_2BC32905F1A6E54F" columns="PARENTE_ID"/>
       <index name="IDX_2BC32905B3FC6B16" columns="ETABLISSEMENT_ID"/>

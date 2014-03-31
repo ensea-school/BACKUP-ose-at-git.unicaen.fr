@@ -117,8 +117,14 @@ $main =  array(
         'invokables' => array(
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
+            'ApplicationParametres'                          => 'Application\\Service\\Parametres',
         ),
         'factories' => array(
+        ),
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'historiqueDl'      => 'Application\View\Helper\HistoriqueDl',
         ),
     ),
     'translator' => array(
@@ -151,5 +157,7 @@ return array_merge_recursive(
     include 'structure.config.php',
     include 'etablissement.config.php',
     include 'demo.config.php',
-    include 'recherche.config.php'
+    include 'recherche.config.php',
+    include 'service.config.php',
+    include 'volume_horaire.config.php'
 );

@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
@@ -11,13 +10,18 @@ use Zend\View\Model\JsonModel;
 /**
  * Description of StructureController
  *
- * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Structure   structure()
- *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class StructureController extends AbstractActionController
 {
+    /**
+     * @return \Application\Service\Structure
+     */
+    public function getServiceStructure()
+    {
+        return $this->getServiceLocator()->get('ApplicationStructure');
+    }
+
     public function indexAction()
     {
         $url = $this->url()->fromRoute('structure/default', array('action' => 'choisir'));
@@ -27,6 +31,7 @@ class StructureController extends AbstractActionController
     /**
      *
      * @return \Zend\View\Model\ViewModel
+     * @todo placer le formulaire danx une classe à part
      */
     public function choisirAction()
     {
@@ -59,9 +64,7 @@ class StructureController extends AbstractActionController
             return new JsonModel(array());
         }
 
-        $repo      = $this->structure()->getRepo();
-        $entities  = $repo->findByNom($term);
-        $template  = "{label} <small>{extra}</small>";
+        $entities  = $this->getServiceStructure()->finderByNom($term)->getQuery()->execute();
         $result = array();
 
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Structure */
@@ -77,22 +80,23 @@ class StructureController extends AbstractActionController
 
     public function voirAction()
     {
-        $this->em()->getFilters()->enable('historique');
-
         if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
             throw new LogicException("Aucun identifiant de structure spécifié.");
         }
-        if (!($structure = $this->structure()->getRepo()->find($id))) {
+        if (!($structure = $this->getServiceStructure()->getRepo()->find($id))) {
             throw new RuntimeException("Structure '$id' spécifiée introuvable.");
         }
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->structureGetDifferentiel($structure);
 
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('structure', 'changements'));
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        return $view;
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel->setTemplate('application/structure/voir')
+                  ->setVariables(compact('structure', 'changements'));
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return $this->modalInnerViewModel($viewModel, "Détails de la structure", false);
+        }
+        return $viewModel;
     }
 
 }

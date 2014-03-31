@@ -25,8 +25,25 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $moduleRouteListener->attach($eventManager);
         
 //        $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'registerModalStrategy'), 100);
-        
+
         $eventManager->attach(new AuthenticatedUserSavedListener($sm->get('doctrine.entitymanager.orm_default')));
+
+        /* Déclare la dernière vue transmise comme terminale si on est en AJAX */
+        $sharedEvents = $eventManager->getSharedManager();
+        $sharedEvents->attach('Zend\Mvc\Controller\AbstractActionController','dispatch',
+             function($e) {
+                $result = $e->getResult();
+                if(is_array($result)){
+                    $result = new \Zend\View\Model\ViewModel($result);
+                    $e->setResult($result);
+                }elseif(empty($result)){
+                    $result = new \Zend\View\Model\ViewModel();
+                    $e->setResult($result);
+                }
+                if ($result instanceof \Zend\View\Model\ViewModel) {
+                    $result->setTerminal($e->getRequest()->isXmlHttpRequest());
+                }
+        });
     }
     
     /**
@@ -87,8 +104,6 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             ),
             'factories' => array(
                 'intervenant'        => 'Application\Controller\Plugin\IntervenantFactory',
-                'structure'          => 'Application\Controller\Plugin\StructureFactory',
-                'etablissement'      => 'Application\Controller\Plugin\EtablissementFactory',
                 'serviceReferentiel' => 'Application\Controller\Plugin\ServiceReferentielFactory',
             ),
         );
@@ -110,8 +125,30 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                 'intervenantDl'     => 'Application\View\Helper\IntervenantDl',
                 'structureDl'       => 'Application\View\Helper\StructureDl',
                 'etablissementDl'   => 'Application\View\Helper\EtablissementDl',
+                'serviceDl'         => 'Application\View\Helper\Service\Dl',
+                'serviceListe'      => 'Application\View\Helper\Service\Liste',
+                'serviceLigne'      => 'Application\View\Helper\Service\Ligne',
+                'volumeHoraireDl'   => 'Application\View\Helper\VolumeHoraire\Dl',
                 'adresseDl'         => 'Application\View\Helper\AdresseDl',
                 'historiqueDl'      => 'Application\View\Helper\HistoriqueDl',
+            ),
+        );
+    }
+
+    /**
+     *
+     * @return array
+     * @see ServiceProviderInterface
+     */
+    public function getServiceConfig()
+    {
+         return array(
+            'invokables' => array(
+                'ApplicationParametres' => 'Application\\Service\\Parametres',
+                'ApplicationService' => 'Application\\Service\\Service',
+                'ApplicationOffreFormation' => 'Application\\Service\\OffreFormation',
+                'ApplicationStructure' => 'Application\\Service\\Structure',
+                'ApplicationIntervenant' => 'Application\\Service\\Intervenant',
             ),
         );
     }

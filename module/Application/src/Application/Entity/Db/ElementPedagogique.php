@@ -18,15 +18,17 @@ class ElementPedagogique
     public function getEtapes($principaleIncluse = true)
     {
         $etapePrincipale = $this->getEtape();
-        
         $etapes = array();
-        foreach ($this->getCheminPedagogique() as $cp) { /* @var $cp \Application\Entity\Db\CheminPedagogique */
-            if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
-                continue;
+        
+        if (($chemins = $this->getCheminPedagogique())) {
+            foreach ($this->getCheminPedagogique() as $cp) { /* @var $cp \Application\Entity\Db\CheminPedagogique */
+                if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
+                    continue;
+                }
+                $etapes[$cp->getOrdre()] = $cp->getEtape();
             }
-            $etapes[$cp->getOrdre()] = $cp->getEtape();
+            ksort($etapes);
         }
-        ksort($etapes);
         
         return $etapes;
     }

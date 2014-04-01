@@ -54,5 +54,7 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" mapped-by="etape" />
+    <one-to-many field="cheminPedagogique" target-entity="Application\Entity\Db\CheminPedagogique" mapped-by="etape" />
   </entity>
 </doctrine-mapping>

@@ -25,7 +25,8 @@
     <field name="tauxFoad" type="integer" column="TAUX_FOAD" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+    <!-- NB: inversed-by ajouté à la main -->
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" inversed-by="elementPedagogique">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>
@@ -55,10 +56,11 @@
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="etape" target-entity="Application\Entity\Db\Etape">
+    <many-to-one field="etape" target-entity="Application\Entity\Db\Etape" inversed-by="elementPedagogique">
       <join-columns>
         <join-column name="ETAPE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="cheminPedagogique" target-entity="Application\Entity\Db\CheminPedagogique" mapped-by="elementPedagogique" />
   </entity>
 </doctrine-mapping>

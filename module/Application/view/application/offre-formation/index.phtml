@@ -1,0 +1,315 @@
+<?php
+$structuresOptions = \UnicaenApp\Util::collectionAsOptions($structures);
+$niveauxOptions    = $niveaux;
+$etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
+
+?>
+
+<style>
+    span.etape, 
+    span.periode,
+    span.element { padding: 0 5px 0 5px; }
+    span.etape   { background-color: #babdb6; }
+    span.periode { background-color: #d3d7cf; }
+    /*.ui-menu-item .element { display: block; margin-top: -0.25em; }*/ 
+    span.sas-highlight { font-weight: bold; }
+</style>
+
+<style>
+    .ui-autocomplete {
+        max-height: 300px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+    * we use height instead, but this forces the menu to always be this tall
+    */
+/*    * html .ui-autocomplete {
+        height: 300px;
+    }*/
+</style>
+
+<div class="jumbotron">
+    <h1>Offre de formation <small><?php echo $structuresOptions[$structure] ?></small></h1>
+    <p>L'offre de formation est constituée de ses éléments constitutifs les plus précis, correspondant aux cours TD et TP.</p>
+</div>
+
+<div class="row">
+    
+    <div class="col-md-9" role="main">
+
+        <!---------------- Champ de recherche d'un élément pédagogique --------------->
+        <div class="panel panel-default">
+            <div class="panel-heading">Élément</div>
+            <div class="panel-body">
+                <?php echo $this->form()->openTag($form) ?> 
+                <?php echo $this->formControlGroup($form->get('element')); ?>
+                <input id="filter" class="btn btn-primary" type="submit" value="Y aller..." name="submit" />
+                <?php echo $this->form()->closeTag() ?> 
+            </div>
+            <script>
+                $("body").on("submit", "form.element-rech", function(event) {
+                    var form = $(event.target);
+                    var id = $("input.sas", form).val();
+                    if (id) {
+                        $('html, body').animate({
+                            scrollTop: $("#" + id).offset().top - $(window).height() / 2
+                        }, 500, 'swing', function() { $("#" + id).effect("highlight"); });
+                    }
+                    event.preventDefault();
+                });
+            </script>
+        </div>
+        
+        <p><?php echo count($entities) ?> éléments trouvés.</p>
+        
+        <!---------------- Tableau des éléments pédagogiques --------------->
+        <table class="table table-bordered table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>Niveau</th>
+                    <th>Étape</th>
+                    <th>Période</th>
+                    <th>Code élément</th>
+                    <th>Libellé élément</th>
+                    <th class="action"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($entities as $entity): /* @var $entity \Application\Entity\Db\ElementPedagogique */ ?>
+                <tr id="<?php echo $entity->getId() ?>">
+                    <td class=""   ><?php echo $entity->getEtape()->getNiveauToString() ?></td>
+                    <td class="etape"><?php echo $entity->getEtape() ?></td>
+                    <td class="periode"><?php echo $entity->getPeriode() ?></td>
+                    <td class="element"><?php echo $entity->getSourceCode() ?></td>
+                    <td class="element"><?php echo $entity->getLibelle() ?></td>
+                    <td class="action">
+                        <?php $url = $this->url('of/default', 
+                                array('action' => 'voir-of'), 
+                                array('query' => array('id' => $entity->getId()))) ?>
+                        <a data-toggle="modal" data-target="#modal" title="Voir le détails de cet élément" 
+                           href="<?php echo $url ?>"><span class="glyphicon glyphicon-eye-open"></span></a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="col-md-3">
+        
+        <!---------------- Champ de sélection d'une structure --------------->
+        <div class="panel panel-default">
+            <div class="panel-heading">Structure</div>
+            <div class="panel-body">
+                <?php
+                $selectStructure = new \Zend\Form\Element\Select('structure');
+                $selectStructure
+                        ->setValueOptions($structuresOptions)
+                        ->setValue($structure)
+                        ->setAttributes(array('class' => 'struct'));
+                echo $this->formSelect($selectStructure);
+                ?>
+                <script>
+                    $("body").on("change", "select.struct", function(event) {
+                        $("*").css('cursor', 'wait');
+                        var id = $(this).val();
+                        var url = '<?php echo $this->url('of', 
+                                 array('action' => 'of'), 
+                                 array('query' => array(
+                                     'structure' => '__structure__', 
+                                     /*'niveau' => $niveau, 
+                                     'etape' => $etape*/))) ?>';
+                        $(location).attr('href', url.replace('__structure__', id));
+                    });
+                </script>
+            </div>
+        </div>
+
+        <!---------------- Champ de sélection d'un niveau --------------->
+        <div class="panel panel-default">
+            <div class="panel-heading">Niveau</div>
+            <div class="panel-body">
+                <?php
+                $niveauxOptions = array_combine(
+                        $tmp = array_map(function($v) { return $v['libelleCourt'] . $v['niveau']; }, $niveaux), 
+                        $tmp); 
+                ?>
+                <ul>
+                    <li>
+                    <?php if (null !== $niveau): ?> 
+                         <a class="niveau" href="<?php echo $this->url('of', 
+                                 array('action' => 'of'), 
+                                 array('query' => array(
+                                     'structure' => $structure, 
+                                     'niveau' => null,
+                                     /*'etape' => $etape*/))) ?>">Tous</a>
+                    <?php else: ?>
+                        <strong>Tous</strong>
+                    <?php endif; ?>
+                    </li>
+                    <?php foreach ($niveauxOptions as $code => $lib): ?>
+                    <li>
+                    <?php if ($code != $niveau): ?> 
+                         <a class="niveau" href="<?php echo $this->url('of', 
+                                 array('action' => 'of'), 
+                                 array('query' => array(
+                                     'structure' => $structure, 
+                                     'niveau' => $code, 
+                                     /*'etape' => $etape*/))) ?>"><?php echo $lib ?></a>
+                    <?php else: ?>
+                        <strong><?php echo $lib ?></strong>
+                    <?php endif; ?>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <script>
+                    $("body").on("click", "a.niveau", function(event) {
+                        $("*").css('cursor', 'wait');
+                    });
+                </script>
+            </div>
+        </div>
+
+        <!---------------- Champ de sélection d'une étape --------------->
+        <div class="panel panel-default">
+            <div class="panel-heading">Étape</div>
+            <div class="panel-body">
+                <ul>
+                    <li>
+                    <?php if (null !== $etape): ?> 
+                         <a class="etape" href="<?php echo $this->url('of', 
+                                 array('action' => 'of'), 
+                                 array('query' => array(
+                                     'structure' => $structure, 
+                                     'niveau' => $niveau, 
+                                     'etape' => null))) ?>">Toutes</a>
+                    <?php else: ?>
+                        <strong>Toutes</strong>
+                    <?php endif; ?>
+                    </li>
+                    <?php foreach ($etapesOptions as $code => $lib): ?>
+                    <li>
+                    <?php if ($code != $etape): ?> 
+                         <a class="etape" href="<?php echo $this->url('of', 
+                                 array('action' => 'of'), 
+                                 array('query' => array(
+                                     'structure' => $structure,
+                                     'niveau' => $niveau, 
+                                     'etape' => $code))) ?>"><?php echo $lib ?></a>
+                    <?php else: ?>
+                        <strong><?php echo $lib ?></strong>
+                    <?php endif; ?>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <script>
+                    $("body").on("click", "a.etape", function(event) {
+                        $("*").css('cursor', 'wait');
+                    });
+                </script>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+
+<div id="modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    $(document).on('hidden.bs.modal', function (e) {
+        $(e.target).removeData('bs.modal');
+    });
+</script>
+
+<!--<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                    Intervenant #1
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse intervenant-1">
+            <div class="panel-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                    Intervenant #2
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse intervenant-2">
+            <div class="panel-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                    Intervenant #3
+                </a>
+            </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse intervenant-3">
+            <div class="panel-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                    Intervenant #4
+                </a>
+            </h4>
+        </div>
+        <div id="collapseFour" class="panel-collapse collapse intervenant-4">
+            <div class="panel-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                    Intervenant #5
+                </a>
+            </h4>
+        </div>
+        <div id="collapseFive" class="panel-collapse collapse intervenant-5">
+            <div class="panel-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var url = '<?php echo $this->url('application/default', array('action' => 'search')) ?>';
+    $('#accordion').on('show.bs.collapse', function(event) {
+//        console.log(event);
+        if (!$(event.target).data('intervenant')) {
+            var id = getClass($(event.target), 'intervenant-', false, true);
+            $(".panel-body", $(event.target)).load(url, { id: id }, function() { $(event.target).data('intervenant', true); });
+        }
+    })
+    
+    $(function() {
+    });
+</script>-->

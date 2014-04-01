@@ -31,23 +31,11 @@ return array(
                             'action' => 'index',
                         ),
                         'pages' => array(
-                            'of' => array(
-                                'label'  => "Offre de formation",
-                                'route'  => 'demo',
-                                'params' => array(
-                                    'action' => 'of',
-                                ),
-                                'visible' => true,
-                                'pages' => array(),
-                            ),
-//                            'of-avec-ue' => array(
-//                                'label'  => "Offre de formation (avec UE)",
+//                            'of' => array(
+//                                'label'  => "Offre de formation",
 //                                'route'  => 'demo',
 //                                'params' => array(
 //                                    'action' => 'of',
-//                                ),
-//                                'query' => array(
-//                                    'avecUe' => 1,
 //                                ),
 //                                'visible' => true,
 //                                'pages' => array(),

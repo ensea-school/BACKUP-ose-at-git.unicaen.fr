@@ -7,8 +7,28 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Etape
  */
-class Etape
+class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
+    /**
+     * Retourne la représentation littérale de cet objet.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+    
+    /**
+     * Retourne la représentation littérale de cet objet.
+     *
+     * @return string
+     */
+    public function getNiveauToString()
+    {
+        return $this->getTypeFormation()->getGroupe()->getLibelleCourt() . $this->getNiveau();
+    }
+    
     /**
      * @var \DateTime
      */
@@ -58,6 +78,16 @@ class Etape
      * @var integer
      */
     private $id;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $elementPedagogique;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $cheminPedagogique;
 
     /**
      * @var \Application\Entity\Db\Structure
@@ -305,6 +335,72 @@ class Etape
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add elementPedagogique
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @return Etape
+     */
+    public function addElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    {
+        $this->elementPedagogique[] = $elementPedagogique;
+
+        return $this;
+    }
+
+    /**
+     * Remove elementPedagogique
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     */
+    public function removeElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    {
+        $this->elementPedagogique->removeElement($elementPedagogique);
+    }
+
+    /**
+     * Get elementPedagogique
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElementPedagogique()
+    {
+        return $this->elementPedagogique;
+    }
+
+    /**
+     * Add cheminPedagogique
+     *
+     * @param \Application\Entity\Db\CheminPedagogique $cheminPedagogique
+     * @return Etape
+     */
+    public function addCheminPedagogique(\Application\Entity\Db\CheminPedagogique $cheminPedagogique)
+    {
+        $this->cheminPedagogique[] = $cheminPedagogique;
+
+        return $this;
+    }
+
+    /**
+     * Remove cheminPedagogique
+     *
+     * @param \Application\Entity\Db\CheminPedagogique $cheminPedagogique
+     */
+    public function removeCheminPedagogique(\Application\Entity\Db\CheminPedagogique $cheminPedagogique)
+    {
+        $this->cheminPedagogique->removeElement($cheminPedagogique);
+    }
+
+    /**
+     * Get cheminPedagogique
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCheminPedagogique()
+    {
+        return $this->cheminPedagogique;
     }
 
     /**

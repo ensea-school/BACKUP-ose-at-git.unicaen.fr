@@ -94,6 +94,10 @@ class Structure implements HistoriqueAwareInterface
      */
     private $parente;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection 
+     */
+    private $elementPedagogique;
 
     /**
      * Set histoCreation
@@ -471,6 +475,39 @@ class Structure implements HistoriqueAwareInterface
     public function getParente()
     {
         return $this->parente;
+    }
+
+    /**
+     * Add elementPedagogique
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @return Intervenant
+     */
+    public function addElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    {
+        $this->elementPedagogique[] = $elementPedagogique;
+
+        return $this;
+    }
+
+    /**
+     * Remove elementPedagogique
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     */
+    public function removeElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
+    {
+        $this->elementPedagogique->removeElement($elementPedagogique);
+    }
+
+    /**
+     * Get elementPedagogique
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElementPedagogique()
+    {
+        return $this->elementPedagogique;
     }
 
 

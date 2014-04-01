@@ -10,6 +10,16 @@ use Doctrine\ORM\Mapping as ORM;
 class TypeFormation
 {
     /**
+     * Retourne la représentation littérale de cet objet.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelleCourt();
+    }
+    
+    /**
      * @var \DateTime
      */
     private $histoCreation;

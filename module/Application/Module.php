@@ -100,7 +100,8 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     {
         return array(
             'invokables' => array(
-                'em' => 'Application\Controller\Plugin\Em',
+                'em'      => 'Application\Controller\Plugin\Em',
+                'context' => 'Application\Controller\Plugin\Context',
             ),
             'factories' => array(
                 'intervenant'        => 'Application\Controller\Plugin\IntervenantFactory',
@@ -122,8 +123,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             'factories'  => array(
             ),
             'invokables' => array(
-                'intervenantDl'     => 'Application\View\Helper\IntervenantDl',
-                'adresseDl'         => 'Application\View\Helper\AdresseDl',
+                'intervenantDl'        => 'Application\View\Helper\IntervenantDl',
+                'adresseDl'            => 'Application\View\Helper\AdresseDl',
+                'elementPedagogiqueDl' => 'Application\View\Helper\ElementPedagogiqueDl',
             ),
         );
     }

@@ -7,7 +7,8 @@ $main =  array(
         'configuration' => array(
             'orm_default' => array(
                 'string_functions' => array(
-                    'CONVERT' => 'Common\ORM\Query\Functions\Convert'
+                    'CONVERT'  => 'Common\ORM\Query\Functions\Convert',
+                    'CONTAINS' => 'Common\ORM\Query\Functions\Contains',
                 ),
                 'filters' => array(
                     'historique' => 'Common\ORM\Filter\HistoriqueFilter',
@@ -160,5 +161,6 @@ return array_merge_recursive(
     include 'demo.config.php',
     include 'recherche.config.php',
     include 'service.config.php',
-    include 'volume_horaire.config.php'
+    include 'volume_horaire.config.php',
+    include 'offre-formation.config.php'
 );

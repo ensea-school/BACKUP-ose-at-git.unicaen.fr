@@ -60,5 +60,6 @@
         <join-column name="PARENTE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" mapped-by="structure" />
   </entity>
 </doctrine-mapping>

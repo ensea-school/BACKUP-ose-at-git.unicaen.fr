@@ -10,6 +10,28 @@ use Doctrine\ORM\Mapping as ORM;
 class ElementPedagogique
 {
     /**
+     * Retourne les étapes auxquelles est lié cet élément pédagogique.
+     * 
+     * @param bool $principaleIncluse Faut-il inclure l'étape principale ou non ?
+     * @return array
+     */
+    public function getEtapes($principaleIncluse = true)
+    {
+        $etapePrincipale = $this->getEtape();
+        
+        $etapes = array();
+        foreach ($this->getCheminPedagogique() as $cp) { /* @var $cp \Application\Entity\Db\CheminPedagogique */
+            if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
+                continue;
+            }
+            $etapes[$cp->getOrdre()] = $cp->getEtape();
+        }
+        ksort($etapes);
+        
+        return $etapes;
+    }
+        
+    /**
      * @var \DateTime
      */
     private $histoCreation;
@@ -88,6 +110,11 @@ class ElementPedagogique
      * @var \Application\Entity\Db\Etape
      */
     private $etape;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $cheminPedagogique;
 
 
     /**
@@ -443,5 +470,38 @@ class ElementPedagogique
     public function getEtape()
     {
         return $this->etape;
+    }
+
+    /**
+     * Add cheminPedagogique
+     *
+     * @param \Application\Entity\Db\CheminPedagogique $cheminPedagogique
+     * @return Etape
+     */
+    public function addCheminPedagogique(\Application\Entity\Db\CheminPedagogique $cheminPedagogique)
+    {
+        $this->cheminPedagogique[] = $cheminPedagogique;
+
+        return $this;
+    }
+
+    /**
+     * Remove cheminPedagogique
+     *
+     * @param \Application\Entity\Db\CheminPedagogique $cheminPedagogique
+     */
+    public function removeCheminPedagogique(\Application\Entity\Db\CheminPedagogique $cheminPedagogique)
+    {
+        $this->cheminPedagogique->removeElement($cheminPedagogique);
+    }
+
+    /**
+     * Get cheminPedagogique
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCheminPedagogique()
+    {
+        return $this->cheminPedagogique;
     }
 }

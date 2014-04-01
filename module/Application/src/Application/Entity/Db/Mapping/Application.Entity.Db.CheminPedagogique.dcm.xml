@@ -28,7 +28,7 @@
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
+    <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" inversed-by="cheminPedagogique">
       <join-columns>
         <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
       </join-columns>
@@ -48,7 +48,8 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="etape" target-entity="Application\Entity\Db\Etape">
+    <!-- NB inversed-by ajouté à la main -->
+    <many-to-one field="etape" target-entity="Application\Entity\Db\Etape" inversed-by="cheminPedagogique">
       <join-columns>
         <join-column name="ETAPE_ID" referenced-column-name="ID"/>
       </join-columns>

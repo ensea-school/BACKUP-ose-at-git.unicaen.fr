@@ -71,6 +71,11 @@ class Ligne extends AbstractHelper
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";
         }
         $out .= '<td>'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
+        $out .= '<td>'
+                .'<a data-service-id="'.$this->service->getId().'" title="Détail des services" onclick="serviceShowHideDetails(this)">'
+                    .'<span class="glyphicon glyphicon-chevron-down"></span>'
+                .'</a>'
+                ."</td>\n";
         $out .= '</tr>';
         return $out;
     }

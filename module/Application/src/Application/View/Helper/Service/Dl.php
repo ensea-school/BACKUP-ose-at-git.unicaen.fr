@@ -78,9 +78,8 @@ class Dl extends AbstractDl
          * Volumes horaires
          */
 
-        foreach ($this->entity->getVolumeHoraire() as $vh) {
-            $html .= $this->getView()->volumeHoraireDl($vh, true, true) . PHP_EOL;
-        }
+        $html .= '<h2>Volumes horaires</h2>';
+        $html .= $this->getView()->volumeHoraireListe( $this->entity->getVolumeHoraire(), array('service' => $this->entity) );
 
         /**
          * Historique

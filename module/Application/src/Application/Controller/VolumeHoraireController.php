@@ -31,7 +31,7 @@ class VolumeHoraireController extends AbstractActionController
     {
         $this->getServiceLocator()->get('ApplicationService')->getRepo()->find($service); /** @todo à modifier! ! ! */
         return array(
-            'service'       => $service,
+        //    'service'       => $service,
         );
     }
 

@@ -1,0 +1,8 @@
+
+table.service td.volume-horaire {
+    padding-left:10em;
+}
+
+table.service tr.volume-horaire {
+    display: none;
+}

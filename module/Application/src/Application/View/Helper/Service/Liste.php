@@ -45,22 +45,28 @@ class Liste extends AbstractHelper
     protected function render(){
         if (empty($this->services)) return 'Aucun service n\'est renseigné';
 
-        $out = '<table class="table">';
+        $colspan = 5;
+
+        $out = '<table class="table service">';
         $out .= '<tr>';
 
         $out .= "<th>Numéro</th>\n";
         if (empty($this->context['intervenant'])){
             $out .= "<th colspan=\"2\">Intervenant</th>\n";
+            $colspan += 2;
         }
         $out .= "<th>Structure</th>\n";
         $out .= "<th>Elément pédagogique</th>\n";
         if (empty($this->context['annee'])){
             $out .= "<th>Année univ.</th>\n";
+            $colspan += 1;
         }
         $out .= "<th>&Eacute;tablissement</th>\n";
+        $out .= "<th>&nbsp;</th>\n";
         $out .= "</tr>\n";
         foreach( $this->services as $service ){
             $out .= $this->getView()->serviceLigne( $service, $this->context );
+            $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-details"><td class="volume-horaire" colspan="'.$colspan.'">'.$this->getView()->volumeHoraireListe( $service->getVolumeHoraire(), array('service' => $service ) ).'</td></tr>';
         }
         $out .= '</table>'."\n";
         return $out;

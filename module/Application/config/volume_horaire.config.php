@@ -8,7 +8,7 @@ return array(
             'volume_horaire' => array(
                 'type' => 'Literal',
                 'options' => array(
-                    'route' => '/volume_horaire',
+                    'route' => '/volume-horaire',
                     'defaults' => array(
                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'VolumeHoraire',
@@ -54,7 +54,7 @@ return array(
                         'label'    => 'Volumes horaires',
                         'title'    => "Gestion des volumes horaires",
                         'visible' => false,
-                        'route'    => 'volume_horaire',
+                        'route'    => 'volume-horaire',
                         'params' => array(
                             'action' => 'index',
                         ),
@@ -62,7 +62,7 @@ return array(
                             'consultation' => array(
                                 'label'  => "Consultation",
                                 'title'  => "Consultation des volumes horaires",
-                                'route'  => 'volume_horaire',
+                                'route'  => 'volume-horaire',
                                 'visible' => false,
                                 'withtarget' => true,
                                 'pages' => array(),
@@ -93,9 +93,11 @@ return array(
         )
     ),
     'view_helpers' => array(
+        'factories' => array(
+            'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\ListeFactory',
+        ),
         'invokables' => array(
-            'volumeHoraireDl'   => 'Application\View\Helper\VolumeHoraire\Dl',
-            'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\Liste',
+            'volumeHoraireDl'      => 'Application\View\Helper\VolumeHoraire\Dl',
             'volumeHoraireLigne'   => 'Application\View\Helper\VolumeHoraire\Ligne',
         ),
     ),

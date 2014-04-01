@@ -61,10 +61,12 @@ class Ligne extends AbstractHelper
         $out = '<tr>';
 
         if (empty($this->context['service'])){
-            $out .= '<td>'.$this->renderService($volumeHoraire->getService())."</td>\n";
+            $out .= '<td>'.$this->renderService($this->volumeHoraire->getService())."</td>\n";
         }
         $out .= '<td>'.$this->renderPeriode( $this->volumeHoraire->getPeriode() )."</td>\n";
+
         $out .= '<td>'.$this->renderTypeIntervention( $this->volumeHoraire->getTypeIntervention() )."</td>\n";
+
         $out .= '<td>'.$this->renderHeures( $this->volumeHoraire->getHeures() )."</td>\n";
         $out .= '<td>'.$this->renderMotifNonPaiement( $this->volumeHoraire->getMotifNonPaiement() )."</td>\n";
         $out .= '</tr>';
@@ -79,13 +81,7 @@ class Ligne extends AbstractHelper
 
     protected function renderPeriode($periode)
     {
-        $out = $periode->getLibelle;
-        return $out;
-    }
-
-    protected function renderTypeIntervention($typeIntervention)
-    {
-        $out = $typeIntervention->getLibelle();
+        $out = $periode->getLibelle();
         return $out;
     }
 

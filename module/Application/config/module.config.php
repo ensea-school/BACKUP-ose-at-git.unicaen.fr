@@ -118,6 +118,7 @@ $main =  array(
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
+            'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
         ),
         'factories' => array(
         ),

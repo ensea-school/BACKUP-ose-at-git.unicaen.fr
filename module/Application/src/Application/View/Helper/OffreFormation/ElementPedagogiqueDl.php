@@ -1,8 +1,9 @@
 <?php
 
-namespace Application\View\Helper;
+namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\ElementPedagogique;
+use Application\View\Helper\AbstractDl;
 
 /**
  * Description of ElementPedagogiqueDl

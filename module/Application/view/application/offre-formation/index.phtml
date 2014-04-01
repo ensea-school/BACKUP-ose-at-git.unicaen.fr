@@ -32,7 +32,7 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
 
 <div class="jumbotron">
     <h1>Offre de formation <small><?php echo $structuresOptions[$structure] ?></small></h1>
-    <p>L'offre de formation est constituée de ses éléments constitutifs les plus précis, correspondant aux cours TD et TP.</p>
+    <!--<p>L'offre de formation est constituée de ses éléments constitutifs les plus précis, correspondant aux cours TD et TP.</p>-->
 </div>
 
 <div class="row">
@@ -88,7 +88,7 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
                         <?php $url = $this->url('of/default', 
                                 array('action' => 'voir-of'), 
                                 array('query' => array('id' => $entity->getId()))) ?>
-                        <a data-toggle="modal" data-target="#modal" title="Voir le détails de cet élément" 
+                        <a class="modal-action" title="Voir le détails de cet élément" 
                            href="<?php echo $url ?>"><span class="glyphicon glyphicon-eye-open"></span></a>
                     </td>
                 </tr>
@@ -216,100 +216,4 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
     
 </div>
 
-<div id="modal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content"></div>
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<script>
-    $(document).on('hidden.bs.modal', function (e) {
-        $(e.target).removeData('bs.modal');
-    });
-</script>
-
-<!--<div class="panel-group" id="accordion">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                    Intervenant #1
-                </a>
-            </h4>
-        </div>
-        <div id="collapseOne" class="panel-collapse collapse intervenant-1">
-            <div class="panel-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                    Intervenant #2
-                </a>
-            </h4>
-        </div>
-        <div id="collapseTwo" class="panel-collapse collapse intervenant-2">
-            <div class="panel-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                    Intervenant #3
-                </a>
-            </h4>
-        </div>
-        <div id="collapseThree" class="panel-collapse collapse intervenant-3">
-            <div class="panel-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
-                    Intervenant #4
-                </a>
-            </h4>
-        </div>
-        <div id="collapseFour" class="panel-collapse collapse intervenant-4">
-            <div class="panel-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-                    Intervenant #5
-                </a>
-            </h4>
-        </div>
-        <div id="collapseFive" class="panel-collapse collapse intervenant-5">
-            <div class="panel-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh heletapeica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    var url = '<?php echo $this->url('application/default', array('action' => 'search')) ?>';
-    $('#accordion').on('show.bs.collapse', function(event) {
-//        console.log(event);
-        if (!$(event.target).data('intervenant')) {
-            var id = getClass($(event.target), 'intervenant-', false, true);
-            $(".panel-body", $(event.target)).load(url, { id: id }, function() { $(event.target).data('intervenant', true); });
-        }
-    })
-    
-    $(function() {
-    });
-</script>-->
+<?php echo $this->modalAjaxDialog('modal-element-details'); ?>

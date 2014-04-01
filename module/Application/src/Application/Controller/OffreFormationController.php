@@ -109,10 +109,8 @@ class OffreFormationController extends AbstractActionController
             throw new LogicException("Aucun élément spécifié.");
         }
 
-        $em     = $this->intervenant()->getEntityManager(); /* @var $em \Doctrine\ORM\EntityManager */
-        $repoEp = $em->getRepository('Application\Entity\Db\ElementPedagogique'); /* @var $repoEp ElementPedagogiqueRepository */
-        $qb     = $repoEp->createQueryBuilder('ep'); /* @var $qb \Doctrine\ORM\QueryBuilder */
-//        $element = $qb->where("id = $id")->getQuery()->getOneOrNullResult(); /* @var $element \Application\Entity\Db\ElementPedagogique */
+        $em      = $this->intervenant()->getEntityManager(); /* @var $em \Doctrine\ORM\EntityManager */
+        $repoEp  = $em->getRepository('Application\Entity\Db\ElementPedagogique'); /* @var $repoEp ElementPedagogiqueRepository */
         $element = $repoEp->find($id);
         
         $viewModel = new \Zend\View\Model\ViewModel();

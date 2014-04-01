@@ -125,7 +125,8 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             'invokables' => array(
                 'intervenantDl'        => 'Application\View\Helper\IntervenantDl',
                 'adresseDl'            => 'Application\View\Helper\AdresseDl',
-                'elementPedagogiqueDl' => 'Application\View\Helper\ElementPedagogiqueDl',
+                'elementPedagogiqueDl' => 'Application\View\Helper\OffreFormation\ElementPedagogiqueDl',
+                'etapeDl'              => 'Application\View\Helper\OffreFormation\EtapeDl',
             ),
         );
     }

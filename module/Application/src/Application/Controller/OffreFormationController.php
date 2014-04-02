@@ -34,14 +34,6 @@ class OffreFormationController extends AbstractActionController
         
         $em->getFilters()->enable('historique');
 //        $em->getFilters()->enable('validite');
-
-        $interv = new \UnicaenApp\Form\Element\SearchAndSelect('element');
-        $interv->setAutocompleteSource($this->url()->fromRoute('of/default', array('action' => 'search-of')))
-                ->setLabel("Recherche :")
-                ->setAttributes(array('title' => "Saisissez 2 lettres au moins"));
-        $form   = new \Zend\Form\Form('search');
-        $form->setAttributes(array('class' => 'element-rech'));
-        $form->add($interv);
         
         // extraction des critères spécifiés dans la requête
         $structure = $this->context()->structureFromQuery();
@@ -67,6 +59,14 @@ class OffreFormationController extends AbstractActionController
         if (null !== $etape && is_scalar($etape)) {
             $etape = $this->em()->find('Application\Entity\Db\Etape', $etape);
         }
+
+        $ep = new \UnicaenApp\Form\Element\SearchAndSelect('element');
+        $ep->setAutocompleteSource($this->url()->fromRoute('of/default', array('action' => 'search-of'), array('query' => $criteria)))
+                ->setLabel("Recherche :")
+                ->setAttributes(array('title' => "Saisissez 2 lettres au moins"));
+        $form   = new \Zend\Form\Form('search');
+        $form->setAttributes(array('class' => 'element-rech'));
+        $form->add($ep);
         
         // élément
         if (($element = $this->params()->fromPost('element')) && isset($element['id'])) {
@@ -127,9 +127,9 @@ class OffreFormationController extends AbstractActionController
         }
         
         // respect des filtres éventuels spécifiés en GET ou sinon en session
-        $params['structure'] = $this->context()->structureFromQuery() ?: $this->context()->structureFromSession();
-        $params['niveau']    = $this->context()->niveauFromQuery()    ?: $this->context()->niveauFromSession();
-        $params['etape']     = $this->context()->etapeFromQuery()     ?: $this->context()->etapeFromSession();
+        $params['structure'] = $this->context()->structureFromQuery();
+        $params['niveau']    = $this->context()->niveauFromQuery();
+        $params['etape']     = $this->context()->etapeFromQuery();
 
         $serviceOf = $this->getServiceLocator()->get('applicationOffreFormation'); /* @var $serviceOf OffreFormationService */
         $repoOf = $serviceOf->getRepoElementPedagogique(); /* @var $serviceOf ElementPedagogiqueRepository */

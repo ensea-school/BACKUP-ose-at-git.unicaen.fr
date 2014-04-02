@@ -1046,36 +1046,9 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
 
-	/*******************************************************************************************************
+    /*******************************************************************************************************
      *                                        Début ajout
      *******************************************************************************************************/
-    
-    /**
-     * @var Annee
-     */
-    protected $anneeCriterion;
-    
-    /**
-     * 
-     * @return Annee
-     */
-    public function getAnneeCriterion()
-    {
-        return $this->anneeCriterion;
-    }
-
-    /**
-     * 
-     * @param \Application\Entity\Db\Annee $annee
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function setAnneeCriterion(Annee $annee)
-    {
-        $this->anneeCriterion = $annee;
-        
-        return $this;
-    }
-
     
     /*************************** IntervenantInterface ***********************/
     

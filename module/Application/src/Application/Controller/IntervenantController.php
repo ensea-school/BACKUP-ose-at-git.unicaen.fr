@@ -164,7 +164,14 @@ class IntervenantController extends AbstractActionController
         }
         
         // fetch intervenant
-        $intervenant = $this->intervenant()->getRepo()->findOneBy(array('sourceCode' => $sourceCode)); /* @var $intervenant IntervenantPermanent */
+        $qb = $intervenant = $this->em()->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder('ip');
+        $qb
+                ->leftJoin('ip.serviceReferentiel', 'sr')
+                ->leftJoin('sr.fonction', 'fr')
+                ->where('ip.sourceCode = :code')
+                ->orderBy('sr.id')
+                ->setParameter('code', $sourceCode); /* @var $intervenant IntervenantPermanent */
+        $intervenant = $qb->getQuery()->getOneOrNullResult();
         
         // import si demandé et si besoin
         $import = $this->params()->fromQuery('import');
@@ -190,10 +197,22 @@ class IntervenantController extends AbstractActionController
         $fonctions = $repository->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
         FonctionServiceReferentielFieldset::setFonctionsPossibles(new ArrayCollection($fonctions));
         
+        // NB: patch pour permettre de vider tous les services
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            if (empty($data['intervenant']['serviceReferentiel'])) {
+                foreach ($intervenant->getServiceReferentiel($annee) as $sr) {
+                    $sr->setHistoDestruction(new \DateTime());
+                    $this->em()->persist($sr);
+                    $this->em()->flush();
+                }
+                $this->em()->refresh($intervenant);
+            }
+        }
+        
         $form = new \Application\Form\ServiceReferentiel\AjouterModifier();
-//        if (!$this->getRequest()->isPost()) {
-            $form->bind($intervenant->setAnneeCriterion($annee));
-//        }
+        $form->getBaseFieldset()->getHydrator()->setAnnee($annee);
+        $form->bind($intervenant);
         
         $variables = array(
             'form' => $form, 
@@ -203,25 +222,29 @@ class IntervenantController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost()->toArray();
-            if (!isset($data['intervenant']['serviceReferentiel'])) {
+            if (empty($data['intervenant']['serviceReferentiel'])) {
                 $data['intervenant']['serviceReferentiel'] = array();
             }
-            var_dump($data);
+//            var_dump($data);
             $form->setData($data);
             if ($form->isValid()) {
                 try {
                     $this->em()->flush();
                     $this->flashMessenger()->addSuccessMessage(sprintf("Service(s) référentiel(s) de $intervenant enregistré(s) avec succès."));
-//                    $this->redirect()->toRoute('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
+                    $this->redirect()->toRoute('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
                 }
                 catch (\Doctrine\DBAL\DBALException $exc) {
                     $exception = new RuntimeException("Impossible d'enregistrer les services référentiels.", null, $exc->getPrevious());
                     $variables['exception'] = $exception;
+//                    var_dump($exc->getMessage(), $exc->getTraceAsString());
                 }
 //                $data = isset($data['intervenant']['serviceReferentiel']) ? $data['intervenant']['serviceReferentiel'] : array();
 //                $repo = $this->em()->getRepository('Application\Entity\Db\ServiceReferentiel'); /* @var $repo ServiceReferentielRepository */
 //                $repo->updateServicesReferentiel($intervenant, $annee, $data);
             }
+        }
+        else {
+//            $form->bind($intervenant);
         }
         
         $viewModel = new \Zend\View\Model\ViewModel();

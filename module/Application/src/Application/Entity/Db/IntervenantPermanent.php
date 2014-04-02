@@ -100,10 +100,16 @@ class IntervenantPermanent extends Intervenant
      * Remove serviceReferentiel
      *
      * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
+     * @param bool $softDelete
      */
-    public function removeServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel)
+    public function removeServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel, $softDelete = true)
     {
-        $this->serviceReferentiel->removeElement($serviceReferentiel);
+        if ($softDelete && $serviceReferentiel instanceof HistoriqueAwareInterface) {
+            $serviceReferentiel->setHistoDestruction(new \DateTime());
+        }
+        else {
+            $this->serviceReferentiel->removeElement($serviceReferentiel);
+        }
     }
 
     /**
@@ -141,9 +147,9 @@ class IntervenantPermanent extends Intervenant
     }
 
 
-	/*******************************************************************************************************
-	 *										Début ajout
-	 *******************************************************************************************************/
+    /*******************************************************************************************************
+     *										Début ajout
+     *******************************************************************************************************/
 
     /**
      * Get serviceReferentiel
@@ -154,19 +160,9 @@ class IntervenantPermanent extends Intervenant
     public function getServiceReferentiel(Annee $annee = null)
     {
         if (null === $annee) {
-            $annee = $this->getAnneeCriterion();
-        }
-        
-        if (null === $annee) {
             return $this->serviceReferentiel;
         }
         
-//        $services = new \Doctrine\Common\Collections\ArrayCollection();
-//        foreach ($this->serviceReferentiel as $sr) { /* @var $sr \Application\Entity\Db\ServiceReferentiel */
-//            if ($sr->getAnnee()->getId() === $annee->getId()) {
-//                $services->add($sr);
-//            }
-//        }
         $p = function($item) use ($annee) {
             return $item->getAnnee()->getId() === $annee->getId();
         };
@@ -195,16 +191,13 @@ class IntervenantPermanent extends Intervenant
      * Remove all serviceReferentiel
      *
      * @param Annee $annee Seule année à retenir
-     * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
+     * @param bool $softDelete
+     * @return self
      */
-    public function removeAllServiceReferentiel(Annee $annee = null)
+    public function removeAllServiceReferentiel(Annee $annee = null, $softDelete = true)
     {
-        if (null === $annee) {
-            $annee = $this->getAnneeCriterion();
-        }
-        
         foreach ($this->getServiceReferentiel($annee) as $serviceReferentiel) {
-            $this->removeServiceReferentiel($serviceReferentiel);
+            $this->removeServiceReferentiel($serviceReferentiel, $softDelete);
         }
         
         return $this;

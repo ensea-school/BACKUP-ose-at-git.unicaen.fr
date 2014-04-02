@@ -51,6 +51,7 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
                 'label' => "Nombre d'heures :",
             ),
             'attributes' => array(
+                'value' => "0",
                 'title' => "Nombre d'heures",
                 'class' => 'fonction-referentiel fonction-referentiel-heures input-sm'
             ),
@@ -189,7 +190,7 @@ class FonctionServiceReferentielHydrator implements HydratorInterface
     {
         return array(
             'fonction' => $object->getFonction()->getId(),
-            'heures'   => $object->getHeures(),
+            'heures'   => floatval($object->getHeures()),
         );
     }
 
@@ -203,7 +204,7 @@ class FonctionServiceReferentielHydrator implements HydratorInterface
     public function hydrate(array $data, $object)
     {
         $object->setFonction($this->fonctionsPossibles[$data['fonction']])
-               ->setHeures((float) $data['heures']);
+               ->setHeures(floatval($data['heures']));
         
         return $object;
     }

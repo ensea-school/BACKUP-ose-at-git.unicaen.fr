@@ -19,20 +19,15 @@ use Application\Entity\Db\IntervenantPermanent;
 class AjouterModifier extends Form
 {
     /**
-     * @var \Application\Entity\Db\Annee
+     * @param  null|int|string  $name    Optional name for the element
+     * @param  array            $options Optional options for the element
      */
-    protected $annee;
-    
-    /**
-     * 
-     */
-    public function __construct()
+    public function __construct($name = null, $options = array())
     {
-        parent::__construct();
+        parent::__construct($name, $options);
         
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'service-referentiel')
-//                ->setObject(new IntervenantPermanent())
                 ->setHydrator(new ClassMethods(false))
                 ->setInputFilter(new InputFilter())
 //                ->setPreferFormInputFilter(false)
@@ -72,6 +67,25 @@ class AjouterModifier extends Form
     }
 
     /**
+     * Set options for a fieldset. Accepted options are:
+     * - use_as_base_fieldset: is this fieldset use as the base fieldset?
+     *
+     * @param  array|Traversable $options
+     * @return Element|ElementInterface
+     * @throws Exception\InvalidArgumentException
+     */
+    public function setOptions($options)
+    {
+        parent::setOptions($options);
+
+        if (isset($options['annee'])) {
+            $this->setAnnee($options['annee']);
+        }
+
+        return $this;
+    }
+
+    /**
      * Bind an object to the form
      *
      * Ensures the object is populated with validated values.
@@ -88,17 +102,5 @@ class AjouterModifier extends Form
         }
         
         return parent::bind($object, $flags);
-    }
-    
-    /**
-     * 
-     * @param \Application\Entity\Db\Annee $annee
-     * @return \Application\Form\ServiceReferentiel\AjouterModifier
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee)
-    {
-        $this->annee = $annee;
-        
-        return $this;
     }
 }

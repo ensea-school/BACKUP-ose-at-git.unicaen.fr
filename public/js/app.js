@@ -12,3 +12,13 @@ function serviceShowHideDetails(serviceA){
         tr.hide(200);
     }
 }
+
+function serviceShowInterneExterne( id ){
+    if ('service-interne' == id){
+        $('#element-interne').show();
+        $('#element-externe').hide();
+    }else{
+        $('#element-interne').hide();
+        $('#element-externe').show();
+    }
+}

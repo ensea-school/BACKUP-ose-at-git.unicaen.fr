@@ -6,3 +6,22 @@ table.service td.volume-horaire {
 table.service tr.volume-horaire {
     display: none;
 }
+
+
+/* recherche d'élément */
+span.etape,
+span.periode,
+span.element {
+    padding: 0 5px 0 5px;
+}
+span.etape   {
+    background-color: #babdb6;
+}
+span.periode {
+    background-color: #d3d7cf;
+}
+/*.ui-menu-item .element { display: block; margin-top: -0.25em; }*/
+
+span.sas-highlight {
+    font-weight: bold;
+}

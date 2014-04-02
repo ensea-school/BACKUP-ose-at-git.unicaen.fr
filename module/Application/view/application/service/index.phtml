@@ -2,3 +2,12 @@
 
 <?php echo $this->serviceListe( $services, $context ); ?>
 <?php echo $this->modalAjaxDialog('service-div'); ?>
+
+<script>
+    $(function() {
+        $("body").on("save-message", function(event, data) {
+            event.dialog.modal('hide'); // ferme la fenêtre modale
+            location.reload();
+        });
+    });
+</script>

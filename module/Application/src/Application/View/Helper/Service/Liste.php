@@ -61,7 +61,7 @@ class Liste extends AbstractHelper
             $out .= "<th>Année univ.</th>\n";
             $colspan += 1;
         }
-        $out .= "<th>&Eacute;tablissement</th>\n";
+        $out .= "<th>&nbsp;</th>\n";
         $out .= "<th>&nbsp;</th>\n";
         $out .= "</tr>\n";
         foreach( $this->services as $service ){
@@ -69,6 +69,9 @@ class Liste extends AbstractHelper
             $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-details"><td class="volume-horaire" colspan="'.$colspan.'">'.$this->getView()->volumeHoraireListe( $service->getVolumeHoraire(), array('service' => $service ) ).'</td></tr>';
         }
         $out .= '</table>'."\n";
+        $url = $this->getView()->url('service/default', array('action' => 'saisie'));
+        $out .= '<a class="modal-action event_save-message btn btn-primary" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
+
         return $out;
     }
 

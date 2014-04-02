@@ -65,17 +65,19 @@ class Ligne extends AbstractHelper
             $out .= '<td>'.$this->service->getIntervenant()->getNomComplet(true);
             $out .= $this->renderStructure( $this->service->getStructureAff() )."</td>\n";
         }
-        $out .= '<td>'.$this->renderStructure( $this->service->getStructureEns() )."</td>\n";
-        $out .= '<td>'.$this->renderElementPedagogique( $this->service->getElementPedagogique() )."</td>\n";
+        if ($this->service->getEtablissement() == $this->context['etablissement']){
+            $out .= '<td>'.$this->renderStructure( $this->service->getStructureEns() )."</td>\n";
+            $out .= '<td>'.$this->renderElementPedagogique( $this->service->getElementPedagogique() )."</td>\n";
+        }else{
+            $out .= '<td colspan="2">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
+        }
         if (empty($this->context['annee'])){
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";
         }
-        $out .= '<td>'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
-        $out .= '<td>'
-                .'<a data-service-id="'.$this->service->getId().'" title="Détail des services" onclick="serviceShowHideDetails(this)">'
-                    .'<span class="glyphicon glyphicon-chevron-down"></span>'
-                .'</a>'
-                ."</td>\n";
+        $out .= $this->renderModifier();
+        $out .= $this->renderSupprimer();
+        $out .= $this->renderDetails();
+        
         $out .= '</tr>';
         return $out;
     }
@@ -88,8 +90,9 @@ class Ligne extends AbstractHelper
 
     protected function renderStructure($structure)
     {
-        $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
+        if (! $structure) return '';
 
+        $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
         $out = '<a href="'.$url.'" class="modal-action">'.$structure->getLibelleCourt().'</a>';
 
         return $out;
@@ -97,10 +100,9 @@ class Ligne extends AbstractHelper
 
     protected function renderElementPedagogique($element)
     {
-        //$url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
-
-        //$out = '<a href="'.$url.'" class="modal-action">'.$structure->getLibelleCourt().'</a>';
-        $out = $element->getLibelle();
+        if (! $element) return '';
+        $url = $this->getView()->url('of/default', array('action' => 'voir-element'), array('query' => array('id' => $element->getId())));
+        $out = '<a href="'.$url.'" class="modal-action">'.$element->getLibelle().' ('.$element->getSourceCode().')</a>';
 
         return $out;
     }
@@ -113,7 +115,7 @@ class Ligne extends AbstractHelper
 
     protected function renderEtablissement($etablissement)
     {
-        if (! empty($this->context['etablissement']) && $etablissement == $this->context['etablissement']){
+        if ($etablissement != $this->context['etablissement']){
             $url = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
             $out = '<a href="'.$url.'" class="modal-action">'.$etablissement->getLibelle().'</a>';            
         }else{
@@ -122,6 +124,27 @@ class Ligne extends AbstractHelper
         return $out;
     }
 
+    protected function renderModifier()
+    {
+        $url = $this->getView()->url('service/default', array('action' => 'saisie', 'id' => $this->service->getId()));
+        return '<td><a class="modal-action event_save-message" href="'.$url.'" title="Modifier le service"><span class="glyphicon glyphicon-edit"></span></a></td>';
+    }
+
+    protected function renderSupprimer()
+    {
+        $url = $this->getView()->url('service/default', array('action' => 'suppression', 'id' => $this->service->getId()));
+        return '<td><a class="modal-action event_save-message" href="'.$url.'" title="Supprimer le service"><span class="glyphicon glyphicon-remove"></span></a></td>';
+    }
+
+    protected function renderDetails()
+    {
+        $out = '<td>'
+              .'<a data-service-id="'.$this->service->getId().'" title="Détail des services" onclick="serviceShowHideDetails(this)">'
+                  .'<span class="glyphicon glyphicon-chevron-down"></span>'
+              .'</a>'
+              ."</td>\n";
+        return $out;
+    }
 
     /**
      *

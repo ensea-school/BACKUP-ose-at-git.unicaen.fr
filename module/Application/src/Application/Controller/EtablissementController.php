@@ -69,8 +69,8 @@ class EtablissementController extends AbstractActionController
         
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Etablissement */
             $result[] = array(
-                'id'    => $item->getId(),        // identifiant unique de l'item
-                'label' => $item->getLibelle(),   // libellé de l'item
+                'id'    => $item->getId(),  // identifiant unique de l'item
+                'label' => (string)$item,   // libellé de l'item
                 'extra' => '( département '.$item->getDepartement().')', // infos complémentaires (facultatives) sur l'item
             );
         };

@@ -2,18 +2,18 @@
 
 namespace Application\View\Helper\OffreFormation;
 
-use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Etape;
 use Application\View\Helper\AbstractDl;
 
 /**
- * Description of ElementPedagogiqueDl
+ * Description of EtapeDl
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ElementPedagogiqueDl extends AbstractDl
+class EtapeDl extends AbstractDl
 {
     /**
-     * @var ElementPedagogique
+     * @var Etape
      */
     protected $entity;
     
@@ -51,32 +51,25 @@ class ElementPedagogiqueDl extends AbstractDl
             "Structure :", 
             $this->entity->getStructure()
         );
-    
-        if (($periode = $this->entity->getPeriode())) {
+        
+        $details[] = sprintf($tplDtdd,
+            "Type de formation :", 
+            $this->entity->getTypeFormation()
+        );
+        
+        if (($niveau = $this->entity->getNiveau())) {
             $details[] = sprintf($tplDtdd,
-                "Période d'enseignement :", 
-                $this->entity->getPeriode()
+                "Niveau :", 
+                $niveau
             );
         }
         
-        if (($autresEtapes = $this->entity->getEtapes(false))) {
-            $details[] = sprintf($tplDtdd,
-                "Étape principale :", 
-                $this->entity->getEtape()
-            );
-            $details[] = sprintf($tplDtdd,
-                "Autre(s) étape(s) :", 
-                $this->getView()->htmlList($autresEtapes)
-            );
-        }
-        else {
-            $details[] = sprintf($tplDtdd,
-                "Étape :", 
-                $this->entity->getEtape()
-            );
-        }
+        $details[] = sprintf($tplDtdd,
+            "Spécif. échanges :", 
+            $this->entity->getNiveau()
+        );
         
-        $html .= sprintf($this->getTemplateDl('element element-details'), implode(PHP_EOL, $details)) . PHP_EOL;
+        $html .= sprintf($this->getTemplateDl('etape etape-details'), implode(PHP_EOL, $details)) . PHP_EOL;
         
         /**
          * Historique

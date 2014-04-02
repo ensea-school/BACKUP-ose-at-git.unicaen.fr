@@ -132,12 +132,10 @@ class IntervenantDl extends AbstractDl
             count($aff = $this->entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : "(Inconnue)"
         );
 
-        if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
-           $metier[] = sprintf($tplDtdd,
-                "Section CNU :",
-                $this->entity->getSectionCnu() ? implode(' ; ', $this->entity->getSectionCnu()) : "(Inconnue)"
-            );
-        }
+        $metier[] = sprintf($tplDtdd,
+             "Discipline :",
+             $this->entity->getDiscipline() ?: "(Inconnue)"
+         );
 
         if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
             $metier[] = sprintf($tplDtdd,

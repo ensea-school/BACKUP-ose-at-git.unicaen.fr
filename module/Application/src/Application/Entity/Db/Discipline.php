@@ -9,6 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Discipline
 {
+    public function __toString()
+    {
+        return $this->getLibelleCourt();
+    }
+    
     /**
      * @var \DateTime
      */

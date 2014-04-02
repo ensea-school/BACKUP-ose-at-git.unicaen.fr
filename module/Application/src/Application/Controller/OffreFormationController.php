@@ -103,7 +103,7 @@ class OffreFormationController extends AbstractActionController
         return $viewModel;
     }
 
-    public function voirOfAction()
+    public function voirElementAction()
     {
         if (!($id = $this->params()->fromQuery('id'))) {
             throw new LogicException("Aucun élément spécifié.");

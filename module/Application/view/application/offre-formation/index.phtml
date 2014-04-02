@@ -86,7 +86,7 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
                     <td class="element"><?php echo $entity->getLibelle() ?></td>
                     <td class="action">
                         <?php $url = $this->url('of/default', 
-                                array('action' => 'voir-of'), 
+                                array('action' => 'voir-element'), 
                                 array('query' => array('id' => $entity->getId()))) ?>
                         <a class="modal-action" title="Voir le détails de cet élément" 
                            href="<?php echo $url ?>"><span class="glyphicon glyphicon-eye-open"></span></a>

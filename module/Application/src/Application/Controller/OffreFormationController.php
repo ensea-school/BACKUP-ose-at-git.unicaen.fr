@@ -125,6 +125,11 @@ class OffreFormationController extends AbstractActionController
         if (!($term = $this->params()->fromQuery('term'))) {
             exit;
         }
+        
+        // respect des filtres éventuels spécifiés en GET ou sinon en session
+        $params['structure'] = $this->context()->structureFromQuery() ?: $this->context()->structureFromSession();
+        $params['niveau']    = $this->context()->niveauFromQuery()    ?: $this->context()->niveauFromSession();
+        $params['etape']     = $this->context()->etapeFromQuery()     ?: $this->context()->etapeFromSession();
 
         $serviceOf = $this->getServiceLocator()->get('applicationOffreFormation'); /* @var $serviceOf OffreFormationService */
         $repoOf = $serviceOf->getRepoElementPedagogique(); /* @var $serviceOf ElementPedagogiqueRepository */
@@ -132,11 +137,6 @@ class OffreFormationController extends AbstractActionController
         $params = array();
         $params['term']  = $term;
         $params['limit'] = 51;
-        
-        // respect des filtres éventuels spécifiés en session
-        $params['structure'] = $this->context()->structureFromSession();
-        $params['niveau']    = $this->context()->niveauFromSession();
-        $params['etape']     = $this->context()->etapeFromSession();
         
         // fetch
         $found = $repoOf->finderByTerm($params);

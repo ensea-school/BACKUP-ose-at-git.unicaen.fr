@@ -30,7 +30,11 @@ class DemoController extends AbstractActionController
                 ->setStructuresSourceUrl($urlStructures)
                 ->setNiveauxSourceUrl($urlNiveaux)
                 ->setEtapesSourceUrl($urlEtapes)
-                ->setElementsSourceUrl($urlElements);
+                ->setElementsSourceUrl($urlElements)
+                ->setStructureEnabled(false)
+//                ->setNiveauEnabled(false)
+                ->setEtapeEnabled(false)
+        ;
         
         return array('fs' => $fs);
     }

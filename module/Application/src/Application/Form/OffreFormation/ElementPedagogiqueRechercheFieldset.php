@@ -70,6 +70,43 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Form
         ));
     }
     
+    protected $structureEnabled = true;
+    protected $niveauEnabled    = true;
+    protected $etapeEnabled     = true;
+    
+    public function getStructureEnabled()
+    {
+        return $this->structureEnabled;
+    }
+
+    public function getNiveauEnabled()
+    {
+        return $this->niveauEnabled;
+    }
+
+    public function getEtapeEnabled()
+    {
+        return $this->etapeEnabled;
+    }
+
+    public function setStructureEnabled($structureEnabled = true)
+    {
+        $this->structureEnabled = $structureEnabled;
+        return $this;
+    }
+
+    public function setNiveauEnabled($niveauEnabled = true)
+    {
+        $this->niveauEnabled = $niveauEnabled;
+        return $this;
+    }
+
+    public function setEtapeEnabled($etapeEnabled = true)
+    {
+        $this->etapeEnabled = $etapeEnabled;
+        return $this;
+    }
+    
     protected $structuresSourceUrl;
     protected $niveauxSourceUrl;
     protected $etapesSourceUrl;

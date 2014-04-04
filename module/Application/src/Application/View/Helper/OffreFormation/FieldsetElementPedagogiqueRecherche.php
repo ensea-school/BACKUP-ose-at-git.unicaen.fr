@@ -55,58 +55,73 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
         
         $helper = $this->getView()->formControlGroup();
         
-        $template = <<<EOS
+        $rowTemplate = $rowArgs = array();
+        if ($this->fieldset->getStructureEnabled()) {
+            $rowTemplate[] = '<div class="col-md-2">%s</div>';
+            $rowArgs[]     = $helper($this->structureElement);
+        }
+        if ($this->fieldset->getNiveauEnabled()) {
+            $rowTemplate[] = '<div class="col-md-2">%s</div>';
+            $rowArgs[]     = $helper($this->niveauElement);
+        }
+        if ($this->fieldset->getEtapeEnabled()) {
+            $rowTemplate[] = '<div class="col-md-3">%s</div>';
+            $rowArgs[]     = $helper($this->etapeElement);
+        }
+        $rowTemplate[] = '<div class="col-md-5">%s</div>';
+        $rowArgs[]     = $helper($this->elementElement);
 
-<div class="row">
-    <div class="col-md-2">
-        %s
-    </div>
-    <div class="col-md-2">
-        %s
-    </div>
-    <div class="col-md-3">
-        %s
-    </div>
-    <div class="col-md-5">
-        %s
-    </div>
-</div>
-EOS;
         $html = '';
-        
-        $html .= sprintf($template, 
-                $helper($this->structureElement),
-                $helper($this->niveauElement),
-                $helper($this->etapeElement),
-                $helper($this->elementElement));
+        $html .= vsprintf('<div class="row">' . implode(PHP_EOL, $rowTemplate) . '</div>', $rowArgs);
         
         $html .= '<script>' . $this->getJs() . '</script>';
         
         return $html;
     }
     
+    /**
+     * 
+     * @return string
+     */
     protected function getJs()
     {
         $js = <<<EOS
 $(function() {
-    var str = $("#{$this->structureElement->getAttribute('id')}")           .data('updateUrl', '{$this->fieldset->getStructuresSourceUrl()}');
-    var niv = $("#{$this->niveauElement->getAttribute('id')}")              .data('updateUrl', '{$this->fieldset->getNiveauxSourceUrl()}');
-    var eta = $("#{$this->etapeElement->getAttribute('id')}")               .data('updateUrl', '{$this->fieldset->getEtapesSourceUrl()}');
-    var ele = $("#{$this->elementElement->getAttribute('id')}-autocomplete").data('updateUrl', '{$this->fieldset->getElementsSourceUrl()}');
-    var selects = [ str, niv, eta ];
+    var str      = $("#{$this->structureElement->getAttribute('id')}");
+    var niv      = $("#{$this->niveauElement->getAttribute('id')}");
+    var eta      = $("#{$this->etapeElement->getAttribute('id')}");
+    var ele      = $("#{$this->elementElement->getAttribute('id')}-autocomplete");
+    var elements = new Array();
+
+    if (str.length) elements.push(str.data('updateUrl', '{$this->fieldset->getStructuresSourceUrl()}'));
+    if (niv.length) elements.push(niv.data('updateUrl', '{$this->fieldset->getNiveauxSourceUrl()}'));
+    if (eta.length) elements.push(eta.data('updateUrl', '{$this->fieldset->getEtapesSourceUrl()}'));
+    if (ele.length) elements.push(ele.data('updateUrl', '{$this->fieldset->getElementsSourceUrl()}'));
     
-    updateSelect(str);
+    $.each(elements, function (index, element) {
+        element.change(function() {
+            var next = elements[index+1];
+            if (next && next.length) updateElement(next);
+        });
+    });
     
-    str.change(function() { updateSelect(niv); });
-    niv.change(function() { updateSelect(eta); });
-    eta.change(function() { updateAutocomplete(ele); });
+    updateElement(elements[0]);
     
-    function updateSelect(select)
+    
+    function updateElement(element)
     {
-        var url = getUrl(select.data('updateUrl'));
-        select.css('opacity', '0.5');
-        select.append($("<option/>").attr("value", 'temp').text("Patientez, svp...")).val('temp');
-        $.get(url, function(data) { updateSelectOptions(select, data); select.css('opacity', '1'); select.change(); });
+        element.is("select") ? updateSelect(element) : updateAutocomplete(element);
+    }
+    
+    function updateSelect(element)
+    {
+        var url       = getUrl(element.data('updateUrl'));
+        var selection = element.val();
+        element.css('opacity', '0.5').append($("<option/>").attr("value", 'temp').text("Patientez, svp...")).val('temp');
+        $.get(url, function(data) {
+            updateSelectOptions(element, data); 
+            element.val(selection).css('opacity', '1').change();
+        });
     }
     
     function updateAutocomplete(element)
@@ -114,31 +129,29 @@ $(function() {
         var url = getUrl(element.data('updateUrl'));
         element.autocomplete("option", "source", url);
         element.autocomplete("search");
-        element.change(); // inutile
+        element.change(); // inutile en fait
     }
     
     function getUrl(urlTemplate)
     {
         var pattern;
         var url = urlTemplate;
-        $.each(selects, function (key, select) {
-            pattern = new RegExp(select.attr('name') + "=(\\\w+)", "g");
-            url = url.replace(pattern, select.attr('name') + "=" + select.val());
+        $.each(elements, function (index, element) {
+            pattern = new RegExp(element.attr('name') + "=(\\\w+)", "g");
+            url = url.replace(pattern, element.attr('name') + "=" + element.val());
         });
         pattern = new RegExp("(\\\w+)=__(\\\w+)__", "g"); 
         url = url.replace(pattern, "$1=");
         return url;
     }
 });
-    
+
 function updateSelectOptions(select, options)
 {
-    var selection = select.val();
-    $("option:gt(0)", select).remove();
+    $("option[value!='']", select).remove();
     $.each(options, function(key, value) {
         select.append($("<option/>").attr("value", key).text(value));
     });
-    select.val(selection);
 }
 EOS;
         return $js;

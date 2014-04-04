@@ -3,9 +3,6 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Common\Exception\LogicException;
-use Application\Entity\Db\Repository\ElementPedagogiqueRepository;
-use Application\Service\OffreFormation as OffreFormationService;
 
 /**
  * 
@@ -22,7 +19,20 @@ class DemoController extends AbstractActionController
      */
     public function indexAction()
     {
-        return array();
+        $queryTemplate = array('structure' => '__structure__', 'niveau' => '__niveau__', 'etape' => '__etape__');
+        $urlStructures = $this->url()->fromRoute('of/default', array('action' => 'search-structures'), array('query' => $queryTemplate));
+        $urlNiveaux    = $this->url()->fromRoute('of/default', array('action' => 'search-niveaux'), array('query' => $queryTemplate));
+        $urlEtapes     = $this->url()->fromRoute('of/default', array('action' => 'search-etapes'), array('query' => $queryTemplate));
+        $urlElements   = $this->url()->fromRoute('of/default', array('action' => 'search-element'), array('query' => $queryTemplate));
+        
+        $fs = new \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset('fs');
+        $fs
+                ->setStructuresSourceUrl($urlStructures)
+                ->setNiveauxSourceUrl($urlNiveaux)
+                ->setEtapesSourceUrl($urlEtapes)
+                ->setElementsSourceUrl($urlElements);
+        
+        return array('fs' => $fs);
     }
 
     /**

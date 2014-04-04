@@ -38,7 +38,8 @@ class ElementPedagogiqueRepository extends EntityRepository
                 ->innerJoin('ep.etape', 'e')
                 ->innerJoin('e.typeFormation', 'tf')
                 ->innerJoin('tf.groupe', 'gtf')
-                ->where('ep.structure = :structure')->setParameter('structure', $context['structure'])
+                ->innerJoin('ep.structure', 's')
+                ->where('s.structureNiv2 = :structure')->setParameter('structure', $context['structure'])
                 ->orderBy('gtf.ordre, e.niveau, e.sourceCode, ep.libelle');
         
         if (isset($context['niveau'])) {
@@ -56,8 +57,15 @@ class ElementPedagogiqueRepository extends EntityRepository
     }
     
     /**
+     * Recherche textuelle d'element pédagogique.
      * 
      * @param array $context
+     * <p>Paramètres possibles :</p>
+     * <i>term</i>         : Texte recherché <b>obligatoire</b><br />
+     * <i>limit</i>        : Nombre de résultats maxi<br />
+     * <i>structure</i>    : Structure concernée sous forme d'une entité<br />
+     * <i>niveau</i>       : Niveau, i.e. CONCAT(gtf.libelle_court, e.niveau), ex: L1, M2<br />
+     * <i>etape</i>        : Etape concernée sous forme d'une entité<br />
      * @return array
      */
     public function finderByTerm(array $context = array())
@@ -81,10 +89,10 @@ class ElementPedagogiqueRepository extends EntityRepository
         
         $whereContext = array();
         if (isset($context['structure']) && $context['structure'] instanceof \Application\Entity\Db\Structure) {
-            $whereContext[] = 'ep.structure_id = :structure';
+            $whereContext[] = 's.structure_niv2_id = :structure';
             $params['structure'] = $context['structure']->getId();
         }
-        if (isset($context['niveau'])) {
+        if (isset($context['niveau']) && $context['niveau']) {
             $whereContext[] = 'CONCAT(gtf.libelle_court, e.niveau) = :niveau';
             $params['niveau'] = $context['niveau'];
         }
@@ -103,6 +111,7 @@ JOIN periode_enseignement pe ON ep.periode_id = pe.id
 JOIN etape e ON ep.etape_id = e.id
 JOIN type_formation tf ON e.type_formation_id = tf.id
 JOIN groupe_type_formation gtf ON tf.groupe_id = gtf.id
+JOIN structure s ON ep.structure_id = s.id
 JOIN V_CONCAT_ELEMENT_INFOS v ON ep.id = v.id
 WHERE $whereTerm
 $whereContext
@@ -153,7 +162,7 @@ EOS;
                 ->innerJoin('s.elementPedagogique', 'ep')
                 ->orderBy('s.libelleCourt');
         
-        if (isset($context['niveau'])) {
+        if (isset($context['niveau']) && is_numeric($context['niveau'])) {
             $qb->where('s.niveau = :niv')->setParameter('niv', $context['niveau']);
         }
         
@@ -169,12 +178,12 @@ EOS;
      */
     public function finderDistinctNiveaux(array $context = array(), \Doctrine\ORM\QueryBuilder $qb = null)
     {
-        if (!isset($context['structure'])) {
-            throw new \Common\Exception\LogicException("Aucune structure spécifiée dans le contexte.");
-        }
-        if (!$context['structure'] instanceof \Application\Entity\Db\Structure) {
-            throw new \Common\Exception\LogicException("La structure spécifiée dans le contexte n'est pas du type attendu.");
-        }
+//        if (!isset($context['structure'])) {
+//            throw new \Common\Exception\LogicException("Aucune structure spécifiée dans le contexte.");
+//        }
+//        if (!$context['structure'] instanceof \Application\Entity\Db\Structure) {
+//            throw new \Common\Exception\LogicException("La structure spécifiée dans le contexte n'est pas du type attendu.");
+//        }
         
         $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
         $qb
@@ -186,7 +195,9 @@ EOS;
                 ->innerJoin('tf.groupe', 'gtf')
                 ->orderBy('gtf.ordre, e.niveau');
         
-        $qb->andWhere('ep.structure = :struct')->setParameter('struct', $context['structure']);
+        if (isset($context['structure']) && $context['structure'] instanceof \Application\Entity\Db\Structure) {
+            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $context['structure']);
+        }
         
         return $qb;
     }
@@ -200,12 +211,12 @@ EOS;
      */
     public function finderDistinctEtapes(array $context = array(), \Doctrine\ORM\QueryBuilder $qb = null)
     {
-        if (!isset($context['structure'])) {
-            throw new \Common\Exception\LogicException("Aucune structure spécifiée dans le contexte.");
-        }
-        if (!$context['structure'] instanceof \Application\Entity\Db\Structure) {
-            throw new \Common\Exception\LogicException("La structure spécifiée dans le contexte n'est pas du type attendu.");
-        }
+//        if (!isset($context['structure'])) {
+//            throw new \Common\Exception\LogicException("Aucune structure spécifiée dans le contexte.");
+//        }
+//        if (!$context['structure'] instanceof \Application\Entity\Db\Structure) {
+//            throw new \Common\Exception\LogicException("La structure spécifiée dans le contexte n'est pas du type attendu.");
+//        }
         
         $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
         $qb
@@ -217,9 +228,10 @@ EOS;
                 ->innerJoin('tf.groupe', 'gtf')
                 ->orderBy('gtf.ordre, e.niveau, e.sourceCode');
         
-        $qb->andWhere('ep.structure = :struct')->setParameter('struct', $context['structure']);
-        
-        if (isset($context['niveau'])) {
+        if (isset($context['structure']) && $context['structure'] instanceof \Application\Entity\Db\Structure) {
+            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $context['structure']);
+        }
+        if (isset($context['niveau']) && $context['niveau']) {
             $qb->andWhere('CONCAT(gtf.libelleCourt, e.niveau) = :niveau')->setParameter('niveau', $context['niveau']);
         }
         

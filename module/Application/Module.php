@@ -127,6 +127,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                 'adresseDl'            => 'Application\View\Helper\AdresseDl',
                 'elementPedagogiqueDl' => 'Application\View\Helper\OffreFormation\ElementPedagogiqueDl',
                 'etapeDl'              => 'Application\View\Helper\OffreFormation\EtapeDl',
+                'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
             ),
         );
     }

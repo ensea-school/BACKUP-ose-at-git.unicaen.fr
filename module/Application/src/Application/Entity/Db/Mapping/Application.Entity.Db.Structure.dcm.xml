@@ -60,6 +60,11 @@
         <join-column name="PARENTE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-one field="structureNiv2" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_NIV2_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <one-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" mapped-by="structure" />
   </entity>
 </doctrine-mapping>

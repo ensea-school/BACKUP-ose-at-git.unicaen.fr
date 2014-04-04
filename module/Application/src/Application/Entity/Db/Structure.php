@@ -95,6 +95,11 @@ class Structure implements HistoriqueAwareInterface
     private $parente;
 
     /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structureNiv2;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection 
      */
     private $elementPedagogique;
@@ -475,6 +480,29 @@ class Structure implements HistoriqueAwareInterface
     public function getParente()
     {
         return $this->parente;
+    }
+
+    /**
+     * Set structureNiv2
+     *
+     * @param \Application\Entity\Db\Structure $structureNiv2
+     * @return Structure
+     */
+    public function setParenteNiv2(\Application\Entity\Db\Structure $structureNiv2 = null)
+    {
+        $this->structureNiv2 = $structureNiv2;
+
+        return $this;
+    }
+
+    /**
+     * Get structureNiv2
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getParenteNiv2()
+    {
+        return $this->structureNiv2;
     }
 
     /**

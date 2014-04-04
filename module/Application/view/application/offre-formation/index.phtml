@@ -42,7 +42,7 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
                 $("body").on("submit", "form.element-rech", function(event) {
                     var form = $(event.target);
                     var id = $("input.sas", form).val();
-                    if (id) {
+                    if (id && $("#" + id).offset()) {
                         $('html, body').animate({
                             scrollTop: $("#" + id).offset().top - $(window).height() / 2
                         }, 500, 'swing', function() { $("#" + id).effect("highlight"); });

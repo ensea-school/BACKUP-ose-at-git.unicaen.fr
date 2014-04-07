@@ -139,6 +139,7 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
                 'required' => true,
                 'filters'    => array(
                     array('name' => 'Zend\Filter\StringTrim'),
+                    new \Zend\Filter\PregReplace(array('pattern' => '/,/', 'replacement' => '.')),
                 ),
                 'validators' => array(
                     array(

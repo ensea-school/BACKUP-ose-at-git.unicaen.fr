@@ -10,6 +10,28 @@ use Doctrine\ORM\Mapping as ORM;
 class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
+        
+        return sprintf("%s - %s : %s (%sh)", $this->getAnnee(), $this->getStructure(), $this->getFonction(), $heures);
+    }
+
+    /**
+     * 
+     * @param \Application\Entity\Db\Annee $annee
+     */
+    public function __construct(Annee $annee = null)
+    {
+        $this->setValiditeDebut(new \DateTime());
+        $this->setAnnee($annee);
+    }
+    
+    /**
      * @var float
      */
     private $heures;
@@ -387,32 +409,5 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getAnnee()
     {
         return $this->annee;
-    }
-
-
-	/**************************************************************************************************
-	 * 										Début ajout
-	 **************************************************************************************************/
-
-    /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
-        
-        return sprintf("%s : %s : %s", $this->getAnnee(), $this->getFonction(), $heures);
-    }
-
-    /**
-     * 
-     * @param \Application\Entity\Db\Annee $annee
-     */
-    public function __construct(Annee $annee = null)
-    {
-        $this->setValiditeDebut(new \DateTime());
-        $this->setAnnee($annee);
     }
 }

@@ -18,7 +18,11 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     {
         $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
         
-        return sprintf("%s - %s : %s (%sh)", $this->getAnnee(), $this->getStructure(), $this->getFonction(), $heures);
+        return sprintf("%s%s : %s (%sh)", 
+                $this->getAnnee(), 
+                $this->getStructure() ? " - " . $this->getStructure() : null, 
+                $this->getFonction(), 
+                $heures);
     }
 
     /**

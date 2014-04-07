@@ -190,11 +190,14 @@ class IntervenantController extends AbstractActionController
         
         $this->em()->getFilters()->enable("historique");
         
-        $repository = $this->em()->getRepository('Application\Entity\Db\FonctionReferentiel'); /* @var $repository \Doctrine\ORM\EntityRepository */
+        $repoFonctionReferentiel = $this->em()->getRepository('Application\Entity\Db\FonctionReferentiel'); /* @var $repoFonctionReferentiel \Doctrine\ORM\EntityRepository */
+        $repoElementPedagogique  = $this->em()->getRepository('Application\Entity\Db\ElementPedagogique'); /* @var $repoElementPedagogique \Application\Entity\Db\Repository\ElementPedagogiqueRepository */
 
         $annee = $this->em()->getRepository('Application\Entity\Db\Annee')->find(2013);
 
-        $fonctions = $repository->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
+        $structures = $repoElementPedagogique->finderDistinctStructures(array('niveau' => 2))->getQuery()->getResult();
+        $fonctions  = $repoFonctionReferentiel->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
+        FonctionServiceReferentielFieldset::setStructuresPossibles(new ArrayCollection($structures));
         FonctionServiceReferentielFieldset::setFonctionsPossibles(new ArrayCollection($fonctions));
         
         // NB: patch pour permettre de vider tous les services
@@ -225,7 +228,7 @@ class IntervenantController extends AbstractActionController
             if (empty($data['intervenant']['serviceReferentiel'])) {
                 $data['intervenant']['serviceReferentiel'] = array();
             }
-//            var_dump($data);
+            var_dump($data);
             $form->setData($data);
             if ($form->isValid()) {
                 try {

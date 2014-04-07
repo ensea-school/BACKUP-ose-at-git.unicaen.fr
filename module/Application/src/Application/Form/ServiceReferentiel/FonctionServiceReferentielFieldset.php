@@ -8,6 +8,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;;
 use Doctrine\Common\Collections\Collection;
 use Application\Entity\Db\ServiceReferentiel;
+use Common\Exception\LogicException;
 
 /**
  * Description of FonctionServiceReferentiel
@@ -16,6 +17,11 @@ use Application\Entity\Db\ServiceReferentiel;
  */
 class FonctionServiceReferentielFieldset extends Fieldset implements InputFilterProviderInterface
 {
+    /**
+     * @var Collection
+     */
+    static protected $structuresPossibles;
+    
     /**
      * @var Collection
      */
@@ -28,10 +34,29 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
     {
         parent::__construct();
 
-        $this->setHydrator(new FonctionServiceReferentielHydrator(static::$fonctionsPossibles))
+        if (!static::$structuresPossibles instanceof Collection) {
+            throw new LogicException("Les structures possibles doivent être spécifiées avant l'appel au constructeur.");
+        }
+        if (!static::$fonctionsPossibles instanceof Collection) {
+            throw new LogicException("Les fonctions possibles doivent être spécifiées avant l'appel au constructeur.");
+        }
+        
+        $this->setHydrator(new FonctionServiceReferentielHydrator(static::$structuresPossibles, static::$fonctionsPossibles))
              ->setObject(new ServiceReferentiel());
 
         $this->setLabel("Fonction référentielle");
+
+        $this->add(array(
+            'name'       => 'structure',
+            'options'    => array(
+                'label' => "Structure :",
+            ),
+            'attributes' => array(
+                'title' => "Structure concernée",
+                'class' => 'fonction-referentiel fonction-referentiel-structure input-sm',
+            ),
+            'type'       => 'Select',
+        ));
 
         $this->add(array(
             'name'       => 'fonction',
@@ -70,17 +95,32 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
             'type'       => 'Button',
         ));
 
+        // liste déroulante des structures
+        $options = array();
+        $options[''] = "(Aucune)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
+        foreach (static::$structuresPossibles as $item) {
+            $options[$item->getId()] = "" . $item;
+        }
+        $this->get('structure')->setValueOptions($options);//->setEmptyOption("(Sélectionnez une structure...)");
+
+        // liste déroulante des fonctions
         $options = array();
         $options[''] = "(Sélectionnez une fonction...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
         foreach (static::$fonctionsPossibles as $item) {
             $options[$item->getId()] = "" . $item;
         }
-
-        $this->get('fonction')
-//                ->setEmptyOption("(Sélectionnez une fonction...)") 
-                ->setValueOptions($options);
+        $this->get('fonction')->setValueOptions($options);//->setEmptyOption("(Sélectionnez une fonction...)");
 
         return $this;
+    }
+    
+    /**
+     * 
+     * @param Collection $collection
+     */
+    static public function setStructuresPossibles(Collection $collection)
+    {
+        static::$structuresPossibles = $collection;
     }
     
     /**
@@ -122,6 +162,9 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
     public function getInputFilterSpecification()
     {
         $specs = array(
+            'structure' => array(
+                'required'   => false,
+            ),
             'fonction' => array(
                 'required'   => true,
                 'validators' => array(
@@ -165,19 +208,30 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
 class FonctionServiceReferentielHydrator implements HydratorInterface
 {
     /**
+     * @var Collection
+     */
+    protected $structuresPossibles;
+    
+    /**
      * @var \Application\Entity\Db\FonctionReferentiel[]
      */
     protected $fonctionsPossibles;
     
     /**
      * 
-     * @param \Doctrine\Common\Collections\Collection $collection
+     * @param \Doctrine\Common\Collections\Collection $structuresPossibles
+     * @param \Doctrine\Common\Collections\Collection $fonctionsPossibles
      */
-    public function __construct(Collection $collection)
+    public function __construct(Collection $structuresPossibles, Collection $fonctionsPossibles)
     {
+        $this->structuresPossibles = array();
+        foreach ($structuresPossibles as $v) {
+            $this->structuresPossibles[$v->getId()] = $v;
+        }
+        
         $this->fonctionsPossibles = array();
-        foreach ($collection as $f) {
-            $this->fonctionsPossibles[$f->getId()] = $f;
+        foreach ($fonctionsPossibles as $v) {
+            $this->fonctionsPossibles[$v->getId()] = $v;
         }
     }
     
@@ -190,8 +244,9 @@ class FonctionServiceReferentielHydrator implements HydratorInterface
     public function extract($object)
     {
         return array(
-            'fonction' => $object->getFonction()->getId(),
-            'heures'   => floatval($object->getHeures()),
+            'structure' => $object->getStructure() ? $object->getStructure()->getId() : null,
+            'fonction'  => $object->getFonction()->getId(),
+            'heures'    => floatval($object->getHeures()),
         );
     }
 
@@ -204,7 +259,8 @@ class FonctionServiceReferentielHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $object->setFonction($this->fonctionsPossibles[$data['fonction']])
+        $object->setStructure(isset($this->structuresPossibles[$data['structure']]) ? $this->structuresPossibles[$data['structure']] : null)
+               ->setFonction($this->fonctionsPossibles[intval($data['fonction'])])
                ->setHeures(floatval($data['heures']));
         
         return $object;

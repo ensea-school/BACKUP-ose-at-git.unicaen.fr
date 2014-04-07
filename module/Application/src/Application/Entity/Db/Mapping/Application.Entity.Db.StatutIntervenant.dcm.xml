@@ -13,7 +13,6 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="code" type="string" column="CODE" length="3" nullable="false"/>
     <field name="depassement" type="boolean" column="DEPASSEMENT" nullable="false"/>
     <field name="fonctionEC" type="boolean" column="FONCTION_E_C" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
@@ -21,6 +20,7 @@
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="30" nullable="false"/>
     <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">

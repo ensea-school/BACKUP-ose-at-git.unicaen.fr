@@ -142,6 +142,13 @@ class IntervenantDl extends AbstractDl
             $this->entity->getType()
         );
         
+        if (($statut = $this->entity->getStatut())) {
+            $metier[] = sprintf($tplDtdd,
+                "Statut de l'intervenant :", 
+                $statut
+            );
+        }
+        
         $metier[] = sprintf($tplDtdd,
             "N° {$this->entity->getSourceToString()} :", 
             $this->entity->getSourceCode()

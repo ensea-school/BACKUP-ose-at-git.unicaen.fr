@@ -9,10 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class StatutIntervenant
 {
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+    
     /**
      * @var string
      */
-    private $code;
+    private $sourceCode;
 
     /**
      * @var boolean
@@ -86,26 +91,26 @@ class StatutIntervenant
 
 
     /**
-     * Set code
+     * Set sourceCode
      *
-     * @param string $code
+     * @param string $sourceCode
      * @return StatutIntervenant
      */
-    public function setCode($code)
+    public function setCode($sourceCode)
     {
-        $this->code = $code;
+        $this->sourceCode = $sourceCode;
 
         return $this;
     }
 
     /**
-     * Get code
+     * Get sourceCode
      *
      * @return string 
      */
     public function getCode()
     {
-        return $this->code;
+        return $this->sourceCode;
     }
 
     /**

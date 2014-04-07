@@ -1,0 +1,5 @@
+<h1><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h1>
+
+<?php echo $this->intervenantDl($intervenant, true, $short) ?>
+
+<br /><?php foreach( $changements as $changement ) { echo $this->differentielLigne( $changement ); } ?>

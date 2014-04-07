@@ -17,18 +17,18 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'modifier' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/modifier/:id',
-                            'constraints' => array(
-                                'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'action' => 'modifier',
-                            ),
-                        ),
-                    ),
+//                    'modifier' => array(
+//                        'type'    => 'Segment',
+//                        'options' => array(
+//                            'route'    => '/modifier/:id',
+//                            'constraints' => array(
+//                                'id' => '[0-9]*',
+//                            ),
+//                            'defaults' => array(
+//                                'action' => 'modifier',
+//                            ),
+//                        ),
+//                    ),
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -93,7 +93,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'saisirServiceReferentiel', 'search'),
+                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'apercevoir', 'saisirServiceReferentiel', 'search'),
                     'roles' => array('user')),
             ),
         ),

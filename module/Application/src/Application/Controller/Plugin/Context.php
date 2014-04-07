@@ -82,8 +82,16 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 
         switch ($target) {
+            case 'intervenant':
+                if (null !== $value && is_numeric($value)) {
+                    if (!($value = $em->find('Application\Entity\Db\Intervenant', $value))) {
+                        throw new RuntimeException("Intervenant introuvable avec cet id : $value.");
+                    }
+                }
+                break;
+                
             case 'structure':
-                if (null !== $value && is_scalar($value)) {
+                if (null !== $value && is_numeric($value)) {
                     if (!($value = $em->find('Application\Entity\Db\Structure', $value))) {
                         throw new RuntimeException("Structure introuvable avec cet id : $value.");
                     }
@@ -91,7 +99,7 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
                 break;
 
             case 'etape':
-                if (null !== $value && is_scalar($value)) {
+                if (null !== $value && is_numeric($value)) {
                     if (!($value = $em->find('Application\Entity\Db\Etape', $value))) {
                         throw new RuntimeException("Étape introuvable avec cet id : $value.");
                     }

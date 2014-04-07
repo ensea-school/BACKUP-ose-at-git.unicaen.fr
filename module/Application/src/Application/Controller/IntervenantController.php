@@ -111,9 +111,27 @@ class IntervenantController extends AbstractActionController
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->intervenantGetDifferentiel($intervenant);
+        $short = $this->params()->fromQuery('short', false);
 
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(array('intervenant' => $intervenant, 'changements' => $changements));
+        $view->setVariables(compact('intervenant', 'changements', 'short'));
+        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        
+        return $view;
+    }
+    
+    public function apercevoirAction()
+    {
+        $this->em()->getFilters()->enable('historique');
+        
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+
+        $import = $this->getServiceLocator()->get('ImportProcessusImport');
+        $changements = $import->intervenantGetDifferentiel($intervenant);
+        $short = $this->params()->fromQuery('short', false);
+
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setVariables(compact('intervenant', 'changements', 'short'));
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         
         return $view;

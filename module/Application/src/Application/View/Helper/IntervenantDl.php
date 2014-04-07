@@ -148,6 +148,10 @@ class IntervenantDl extends AbstractDl
                 "Régime sécu :", 
                 $this->entity->getRegimeSecu() ?: "(Inconnu)"
             );
+            $metier[] = sprintf($tplDtdd,
+                "Type de poste :", 
+                $this->entity->getTypePoste() ?: "(Inconnu)"
+            );
         }
 
         $metier[] = sprintf($tplDtdd,

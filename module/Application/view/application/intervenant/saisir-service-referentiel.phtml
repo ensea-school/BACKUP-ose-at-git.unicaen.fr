@@ -47,7 +47,7 @@ echo $this->form()->closeTag();
         updateFonctionCounter();
         $(":input").tooltip();
         
-        $('body').on('change', 'select', function() {
+        $('body').on('change', 'select.fonction-referentiel-fonction', function() {
             var select = $(this); // select de référence, dont la valeur a changé
             if (select.val() === '') {
                 return;

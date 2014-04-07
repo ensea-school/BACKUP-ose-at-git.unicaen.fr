@@ -88,7 +88,7 @@ class IntervenantController extends AbstractActionController
         $import->intervenant($sourceCode);
 
         if (!($intervenant = $this->intervenant()->getRepo()->findOneBy(array('sourceCode' => $sourceCode)))) {
-            throw new RuntimeException("L'intervenant suivant est introuvable malgré son import : sourceCode = $sourceCode.");
+            throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
         }
         
         $view = new \Zend\View\Model\ViewModel();
@@ -163,8 +163,23 @@ class IntervenantController extends AbstractActionController
             throw new RuntimeException("L'intervenant spécifié a déjà été importé : sourceCode = $sourceCode.");
         }
         
-        // fetch intervenant
-        $qb = $intervenant = $this->em()->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder('ip');
+        // fetch intervenant pour simple test d'existence et de type
+        $intervenant = $this->em()->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode);
+        
+        // import éventuel
+        if (($import = $this->params()->fromQuery('import')) && !$intervenant) {
+            $viewModel   = $this->importerAction(); /* @var $viewModel \Zend\View\Model\ViewModel */
+            $intervenant = $viewModel->getVariable('intervenant');
+        }
+        
+        // verif type d'intervenant
+        if (!$intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
+            throw new RuntimeException("Impossible de saisir un service référentiel pour un intervenant autre que permanent. " .
+            "Intervenant spécifié : $intervenant (id = {$intervenant->getId()}).");
+        }
+        
+        // fetch avec jointures
+        $qb = $this->em()->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder('ip');
         $qb
                 ->leftJoin('ip.serviceReferentiel', 'sr')
                 ->leftJoin('sr.fonction', 'fr')
@@ -172,21 +187,6 @@ class IntervenantController extends AbstractActionController
                 ->orderBy('sr.id')
                 ->setParameter('code', $sourceCode); /* @var $intervenant IntervenantPermanent */
         $intervenant = $qb->getQuery()->getOneOrNullResult();
-        
-        // import si demandé et si besoin
-        $import = $this->params()->fromQuery('import');
-        if ($import && !$intervenant) {
-            $viewModel   = $this->importerAction(); /* @var $viewModel \Zend\View\Model\ViewModel */
-            $intervenant = $viewModel->getVariable('intervenant');
-        }
-//        if ($result instanceof \Zend\Http\Response) {
-//            return $result;
-//        }
-
-        if (!$intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
-            throw new RuntimeException("Impossible de saisir un service référentiel pour un intervenant autre que permanent. " .
-            "Intervenant spécifié : $intervenant (id = {$intervenant->getId()}).");
-        }
         
         $this->em()->getFilters()->enable("historique");
         

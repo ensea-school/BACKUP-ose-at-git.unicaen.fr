@@ -129,10 +129,34 @@ class OffreFormationController extends AbstractActionController
         $em      = $this->intervenant()->getEntityManager(); /* @var $em \Doctrine\ORM\EntityManager */
         $repoEp  = $em->getRepository('Application\Entity\Db\ElementPedagogique'); /* @var $repoEp ElementPedagogiqueRepository */
         $element = $repoEp->find($id);
+        $short   = $this->params()->fromQuery('short', false);
+        
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel->setTemplate('application/offre-formation/voir-element')
+                ->setVariables(compact('element', 'short'));
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return $this->modalInnerViewModel($viewModel, "Détails de l'élément pédagogique", false);
+        }
+        
+        
+        return $viewModel;
+    }
+
+    public function apercevoirElementAction()
+    {
+        if (!($id = $this->params()->fromQuery('id'))) {
+            throw new LogicException("Aucun élément spécifié.");
+        }
+
+        $em      = $this->intervenant()->getEntityManager(); /* @var $em \Doctrine\ORM\EntityManager */
+        $repoEp  = $em->getRepository('Application\Entity\Db\ElementPedagogique'); /* @var $repoEp ElementPedagogiqueRepository */
+        $element = $repoEp->find($id);
+        $short   = $this->params()->fromQuery('short', false);
         
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest())
-                ->setVariables(compact('element'));
+                ->setVariables(compact('element', 'short'));
 
         return $viewModel;
     }

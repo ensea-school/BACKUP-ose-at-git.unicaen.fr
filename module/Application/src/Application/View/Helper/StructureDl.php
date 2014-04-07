@@ -30,30 +30,36 @@ class StructureDl extends AbstractDl
             $entity->getLibelleLong()
         );
         
-        $dtdds[] = sprintf($tplDtdd,
-            "Libellé court :", 
-            $entity->getLibelleCourt()
-        );
+        if (!$this->short) {
+            $dtdds[] = sprintf($tplDtdd,
+                "Libellé court :", 
+                $entity->getLibelleCourt()
+            );
         
-        $dtdds[] = sprintf($tplDtdd,
-            "Type de entity :", 
-            $entity->getType()->getLibelle()
-        );
+            $dtdds[] = sprintf($tplDtdd,
+                "Type de structure :", 
+                $entity->getType()->getLibelle()
+            );
+        }
         
-        $dtdds[] = sprintf($tplDtdd,
-            "N° {$entity->getSource()->getLibelle()} :", 
-            $entity->getSourceCode()
-        );
-        
+        if (!$this->short) {
+            $dtdds[] = sprintf($tplDtdd,
+                "N° {$entity->getSource()->getLibelle()} :", 
+                $entity->getSourceCode()
+            );
+        }
+
         $dtdds[] = sprintf($tplDtdd,
             "Structure mère :", 
             $entity->getParente()->getLibelleLong()
         );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            "Historique :", 
-            $this->getView()->historiqueDl($entity)
-        );
+
+        if (!$this->short) {
+            $dtdds[] = sprintf($tplDtdd,
+                "Historique :", 
+                $this->getView()->historiqueDl($entity)
+            );
+        }
         
         $html .= sprintf($this->getTemplateDl('structure structure-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
  

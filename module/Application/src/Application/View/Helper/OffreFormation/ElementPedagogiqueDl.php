@@ -37,11 +37,13 @@ class ElementPedagogiqueDl extends AbstractDl
         
         $details = array();
         
-        $details[] = sprintf($tplDtdd,
-            "Code {$this->entity->getSource()->getLibelle()} :", 
-            $this->entity->getSourceCode()
-        );
-            
+        if (!$this->short) {
+            $details[] = sprintf($tplDtdd,
+                "Code {$this->entity->getSource()->getLibelle()} :", 
+                $this->entity->getSourceCode()
+            );
+        }
+        
         $details[] = sprintf($tplDtdd,
             "Libellé :", 
             $this->entity->getLibelle()
@@ -51,7 +53,7 @@ class ElementPedagogiqueDl extends AbstractDl
             "Structure :", 
             $this->entity->getStructure()
         );
-    
+        
         if (($periode = $this->entity->getPeriode())) {
             $details[] = sprintf($tplDtdd,
                 "Période d'enseignement :", 
@@ -64,10 +66,12 @@ class ElementPedagogiqueDl extends AbstractDl
                 "Étape principale :", 
                 $this->entity->getEtape()
             );
-            $details[] = sprintf($tplDtdd,
-                "Autre(s) étape(s) :", 
-                $this->getView()->htmlList($autresEtapes)
-            );
+            if (!$this->short) {
+                $details[] = sprintf($tplDtdd,
+                    "Autre(s) étape(s) :", 
+                    $this->getView()->htmlList($autresEtapes)
+                );
+            }
         }
         else {
             $details[] = sprintf($tplDtdd,
@@ -82,7 +86,9 @@ class ElementPedagogiqueDl extends AbstractDl
          * Historique
          */
         
-        $html .= $this->getView()->historiqueDl($this->entity, $this->horizontal);
+        if (!$this->short) {
+            $html .= $this->getView()->historiqueDl($this->entity, $this->horizontal);
+        }
         
         return $html;
     }

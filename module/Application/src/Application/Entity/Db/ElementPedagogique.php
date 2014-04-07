@@ -9,6 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ElementPedagogique
 {
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+    
     /**
      * Retourne les étapes auxquelles est lié cet élément pédagogique.
      * 

@@ -89,14 +89,36 @@ class EtablissementController extends AbstractActionController
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->etablissementGetDifferentiel($etablissement);
-
+        $short = $this->params()->fromQuery('short', false);
+        
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/etablissement/voir')
-                  ->setVariables(compact('etablissement', 'changements'));
+                  ->setVariables(compact('etablissement', 'changements', 'short'));
+        
         if ($this->getRequest()->isXmlHttpRequest()) {
             return $this->modalInnerViewModel($viewModel, "Détails de l'établissement", false);
         }
+        
         return $viewModel;
     }
 
+    public function apercevoirAction()
+    {
+        if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
+            throw new LogicException("Aucun identifiant de l'établissement spécifié.");
+        }
+        if (!($etablissement = $this->getServiceEtablissement()->getRepo()->find($id))) {
+            throw new RuntimeException("Etablissement '$id' spécifié introuvable.");
+        }
+
+        $import = $this->getServiceLocator()->get('ImportProcessusImport');
+        $changements = $import->etablissementGetDifferentiel($etablissement);
+        $short = $this->params()->fromQuery('short', false);
+        
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel->setTemplate('application/etablissement/voir')
+                  ->setVariables(compact('etablissement', 'changements', 'short'));
+        
+        return $viewModel;
+    }
 }

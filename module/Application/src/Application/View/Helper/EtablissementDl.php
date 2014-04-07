@@ -30,25 +30,35 @@ class EtablissementDl extends AbstractDl
             $entity->getLibelle()
         );
         
-        $dtdds[] = sprintf($tplDtdd,
-            "Localisation :",
-            $entity->getLocalisation()
-        );
+        if (!$this->short) {
+            $dtdds[] = sprintf($tplDtdd,
+                "Localisation :",
+                $entity->getLocalisation()
+            );
+
+            $dtdds[] = sprintf($tplDtdd,
+                "Département :",
+                $entity->getDepartement()
+            );
+        }
+        else {
+            $dtdds[] = sprintf($tplDtdd,
+                "Localisation :",
+                $entity->getLocalisation() . " (" . $entity->getDepartement() . ")"
+            );
+        }
         
-        $dtdds[] = sprintf($tplDtdd,
-            "Département :",
-            $entity->getDepartement()
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            "N° {$entity->getSource()->getLibelle()} :", 
-            $entity->getSourceCode()
-        );
-        
-        $dtdds[] = sprintf($tplDtdd,
-            "Historique :", 
-            $this->getView()->historiqueDl($entity)
-        );
+        if (!$this->short) {
+            $dtdds[] = sprintf($tplDtdd,
+                "N° {$entity->getSource()->getLibelle()} :", 
+                $entity->getSourceCode()
+            );
+
+            $dtdds[] = sprintf($tplDtdd,
+                "Historique :", 
+                $this->getView()->historiqueDl($entity)
+            );
+        }
         
         $html .= sprintf($this->getTemplateDl('etablissement etablissement-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
  

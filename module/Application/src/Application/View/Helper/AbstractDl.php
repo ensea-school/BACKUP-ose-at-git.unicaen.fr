@@ -19,18 +19,25 @@ abstract class AbstractDl extends AbstractHelper
     /**
      * @var bool
      */
+    protected $short = false;
+    
+    /**
+     * @var bool
+     */
     protected $horizontal = false;
     
     /**
      * 
      * @param mixed $entity
      * @param bool $horizontal
+     * @param bool $short
      * @return self
      */
-    public function __invoke($entity = null, $horizontal = false)
+    public function __invoke($entity = null, $horizontal = false, $short = false)
     {
-        $this->entity = $entity;
-        $this->horizontal  = $horizontal;
+        $this->entity     = $entity;
+        $this->horizontal = $horizontal;
+        $this->short      = $short;
         
         return $this;
     }

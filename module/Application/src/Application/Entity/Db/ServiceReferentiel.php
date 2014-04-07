@@ -401,7 +401,9 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
      */
     public function __toString()
     {
-        return sprintf("%s : %s : %.2f", $this->getAnnee(), $this->getFonction(), $this->getHeures());
+        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
+        
+        return sprintf("%s : %s : %s", $this->getAnnee(), $this->getFonction(), $heures);
     }
 
     /**

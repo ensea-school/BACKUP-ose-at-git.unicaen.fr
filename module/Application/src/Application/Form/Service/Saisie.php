@@ -47,7 +47,7 @@ class Saisie extends Form
         $elementPedagogique->setLabel("Elément pédagogique :")
                 ->setAttributes(array('title' => "Saisissez 2 lettres au moins"))
                 ->setAutocompleteSource(
-                    $url->fromRoute('of/default', array('action' => 'search-of') )
+                    $url->fromRoute('of/default', array('action' => 'search-element') )
                 );
         $this->add($elementPedagogique);
 

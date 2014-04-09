@@ -70,7 +70,7 @@ class VolumeHoraire
     private $motifNonPaiement;
 
     /**
-     * @var \Application\Entity\Db\PeriodePaiement
+     * @var \Application\Entity\Db\Periode
      */
     private $periode;
 
@@ -346,10 +346,10 @@ class VolumeHoraire
     /**
      * Set periode
      *
-     * @param \Application\Entity\Db\PeriodePaiement $periode
+     * @param \Application\Entity\Db\Periode $periode
      * @return VolumeHoraire
      */
-    public function setPeriode(\Application\Entity\Db\PeriodePaiement $periode = null)
+    public function setPeriode(\Application\Entity\Db\Periode $periode = null)
     {
         $this->periode = $periode;
 
@@ -359,7 +359,7 @@ class VolumeHoraire
     /**
      * Get periode
      *
-     * @return \Application\Entity\Db\PeriodePaiement 
+     * @return \Application\Entity\Db\Periode 
      */
     public function getPeriode()
     {

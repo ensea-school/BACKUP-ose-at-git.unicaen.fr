@@ -5,9 +5,9 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PeriodePaiement
+ * Periode
  */
-class PeriodePaiement
+class Periode
 {
     /**
      * @var \DateTime
@@ -74,7 +74,7 @@ class PeriodePaiement
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setHistoCreation($histoCreation)
     {
@@ -97,7 +97,7 @@ class PeriodePaiement
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -120,7 +120,7 @@ class PeriodePaiement
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setHistoModification($histoModification)
     {
@@ -143,7 +143,7 @@ class PeriodePaiement
      * Set libelle
      *
      * @param string $libelle
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setLibelle($libelle)
     {
@@ -166,7 +166,7 @@ class PeriodePaiement
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -189,7 +189,7 @@ class PeriodePaiement
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setValiditeFin($validiteFin)
     {
@@ -212,7 +212,7 @@ class PeriodePaiement
      * Set ordre
      *
      * @param integer $ordre
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setOrdre($ordre)
     {
@@ -245,7 +245,7 @@ class PeriodePaiement
      * Set typeIntervenant
      *
      * @param \Application\Entity\Db\TypeIntervenant $typeIntervenant
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setTypeIntervenant(\Application\Entity\Db\TypeIntervenant $typeIntervenant = null)
     {
@@ -268,7 +268,7 @@ class PeriodePaiement
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -291,7 +291,7 @@ class PeriodePaiement
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -314,7 +314,7 @@ class PeriodePaiement
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return PeriodePaiement
+     * @return Periode
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {

@@ -44,7 +44,7 @@
         <join-column name="MOTIF_NON_PAIEMENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="periode" target-entity="Application\Entity\Db\PeriodePaiement">
+    <many-to-one field="periode" target-entity="Application\Entity\Db\Periode">
       <join-columns>
         <join-column name="PERIODE_ID" referenced-column-name="ID"/>
       </join-columns>

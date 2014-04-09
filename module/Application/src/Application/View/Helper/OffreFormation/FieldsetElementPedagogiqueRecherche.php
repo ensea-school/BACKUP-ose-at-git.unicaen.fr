@@ -151,8 +151,8 @@ $(function() {
     {
         var url = getUrl(element.data('updateUrl'));
         element.autocomplete("option", "source", url);
-        element.autocomplete("search");
-        element.change(); // inutile en fait
+//        element.autocomplete("search");
+//        element.change(); // inutile en fait
     }
     
     function getUrl(urlTemplate)

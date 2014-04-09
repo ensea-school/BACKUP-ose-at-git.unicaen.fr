@@ -112,10 +112,7 @@ class ServiceController extends AbstractActionController
                 ));
             }
             if ($entity->getElementPedagogique()){
-                $form->get('elementPedagogique')->get('element')->setValue(array(
-                        'id' => $entity->getElementPedagogique()->getId(),
-                        'label' => $entity->getElementPedagogique()->getLibelle()
-                ));
+                $form->get('elementPedagogique')->setElementPedagogique($entity->getElementPedagogique());
             }
             $form->get('etablissement')->setValue(array(
                     'id' => $entity->getEtablissement()->getId(),

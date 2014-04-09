@@ -73,6 +73,35 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Inpu
         ));
     }
     
+    /**
+     * @var \Application\Entity\Db\ElementPedagogique
+     */
+    protected $elementPedagogique;
+    
+    /**
+     * @return \Application\Entity\Db\ElementPedagogique
+     */
+    public function getElementPedagogique()
+    {
+        return $this->elementPedagogique;
+    }
+
+    /**
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
+     */
+    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
+    {
+        $this->elementPedagogique = $elementPedagogique;
+        
+        $this->get('element')->setValue(array(
+            'id'    => $this->getElementPedagogique()->getId(),
+            'label' => $this->getElementPedagogique()->getLibelle()
+        ));
+        
+        return $this;
+    }
+    
     protected $structureName = 'structure';
     protected $niveauName    = 'niveau';
     protected $etapeName     = 'etape';

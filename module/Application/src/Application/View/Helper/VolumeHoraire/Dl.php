@@ -52,11 +52,13 @@ class Dl extends AbstractDl
             $this->entity->getHeures()
         );
 
-        $identite[] = sprintf($tplDtdd,
-            "Motif de non paiement :",
-            $this->entity->getMotifNonPaiement()->getLibelleCourt()
-        );
-
+        if ($this->entity->getMotifNonPaiement()) {
+            $identite[] = sprintf($tplDtdd,
+                "Motif de non paiement :",
+                $this->entity->getMotifNonPaiement()->getLibelleCourt()
+            );
+        }
+        
         $html .= sprintf($this->getTemplateDl('volume-horaire volume-horaire-identite'), implode(PHP_EOL, $identite)) . PHP_EOL;
 
         /**

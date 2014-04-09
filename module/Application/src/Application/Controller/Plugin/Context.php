@@ -106,6 +106,14 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
                 }
                 break;
 
+            case 'volumeHoraire':
+                if (null !== $value && is_numeric($value)) {
+                    if (!($value = $em->find('Application\Entity\Db\VolumeHoraire', $value))) {
+                        throw new RuntimeException("Volume horaire introuvable avec cet id : $value.");
+                    }
+                }
+                break;
+
             default:
                 break;
         }

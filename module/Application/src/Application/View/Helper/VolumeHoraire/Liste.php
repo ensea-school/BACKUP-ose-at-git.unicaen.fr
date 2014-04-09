@@ -88,12 +88,12 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
             $out .= "<td>".$this->renderPeriode($default->getPeriode())."</td>\n";
             foreach( $typesIntervention as $ti ){
                 if (isset($gvh[$ti->getId()])){
-                    $out .= "<td>".$this->renderHeures($gvh[$ti->getId()]->getHeures())."</td>\n";
+                    $out .= "<td><span rel=\"popover\" data-vh-id=\"{$gvh[$ti->getId()]->getId()}\">".$this->renderHeures($gvh[$ti->getId()]->getHeures())."</span></td>\n";
                 }else{
-                    $out .= '<td>&nbsp;</td>';
+                    $out .= '<td><span rel=\"popover\">0</span></td>';
                 }
             }
-            $out .= "<td>".$this->renderMotifNonPaiement($default->getMotifNonPaiement())."</td>\n";
+            $out .= "<td>".$this->renderMotifNonPaiement($default->getMotifNonPaiement())."</span></td>\n";
             $out .= "</tr>\n";
         }
         $out .= '</table>'."\n";

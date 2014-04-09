@@ -1,13 +1,4 @@
-<h1>Année universitaire <?php echo $annee; ?></h1>
+<h1>Services</h1>
+<h2>Année universitaire <?php echo $annee; ?></h2>
 
-<?php echo $this->serviceListe( $services, $context ); ?>
-<?php echo $this->modalAjaxDialog('service-div'); ?>
-
-<script>
-    $(function() {
-        $("body").on("save-message", function(event, data) {
-            event.dialog.modal('hide'); // ferme la fenêtre modale
-            location.reload();
-        });
-    });
-</script>
+<?php echo $this->serviceListe( $services, $context )->render(); ?>

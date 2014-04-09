@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Annee;
+use Application\Entity\Db\Service as ServiceEntity;
 
 
 /**
@@ -74,5 +75,35 @@ class Service extends AbstractService
             $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\Service');
         }
         return $this->repo;
+    }
+
+    /**
+     * Retourne, par ID du type d'intervention, la liste des heures saisies pour le service donné
+     *
+     * @param integer|ServiceEntity|null $service
+     * @return array
+     */
+    public function getTotalHeures($service)
+    {
+        if ($service instanceof ServiceEntity) $service = $service->getId();
+
+        $sql = 'SELECT * FROM V_SERVICE_HEURES';
+        if ($service) $sql .= ' WHERE service_id = '.(int)$service;
+
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+
+        $result = array();
+        while($r = $stmt->fetch()){
+            $result[(int)$r['SERVICE_ID']][(int)$r['TYPE_INTERVENTION_ID']] = (float)$r['HEURES'];
+        }
+
+        if ($service){
+            if (array_key_exists( $service, $result)){
+                return $result[$service];
+            }else{
+                return array();
+            }
+        }
+        return $result;
     }
 }

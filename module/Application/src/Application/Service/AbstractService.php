@@ -5,6 +5,7 @@ namespace Application\Service;
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Service abstrait
@@ -15,10 +16,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 class AbstractService implements ServiceLocatorAwareInterface {
 
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $serviceLocator;
+    use ServiceLocatorAwareTrait;
 
     /**
      * @var EntityManager
@@ -40,27 +38,4 @@ class AbstractService implements ServiceLocatorAwareInterface {
             $this->entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         return $this->entityManager;
     }
-
-    /**
-     * Get service locator
-     *
-     * @return ServiceLocator
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-    /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return self
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-        return $this;
-    }
-
 }

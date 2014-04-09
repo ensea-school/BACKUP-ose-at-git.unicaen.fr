@@ -4,14 +4,18 @@ namespace Application\View\Helper\Service;
 
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Service;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractHelper
+class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
 {
+
+    use ServiceLocatorAwareTrait;
 
     /**
      * @var Service
@@ -55,12 +59,16 @@ class Ligne extends AbstractHelper
     /**
      * Génère le code HTML.
      *
+     * @param boolean $details
      * @return string
      */
-    protected function render(){
-        $out = '<tr>';
+    public function render( $details=false ){
+        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
+        $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeures($this->service);
 
-        $out .= '<td>'.$this->renderId($this->service->getId())."</td>\n";
+        $sid = $this->service->getId();
+
+        $out = '';
         if (empty($this->context['intervenant'])){
             $out .= '<td>'.$this->service->getIntervenant()->getNomComplet(true);
             $out .= $this->renderStructure( $this->service->getStructureAff() )."</td>\n";
@@ -74,17 +82,13 @@ class Ligne extends AbstractHelper
         if (empty($this->context['annee'])){
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";
         }
+        foreach( $typesIntervention as $ti ){
+            $out .= $this->renderTypeIntervention( $ti, $heures );
+        }
+
         $out .= $this->renderModifier();
         $out .= $this->renderSupprimer();
-        $out .= $this->renderDetails();
-        
-        $out .= '</tr>';
-        return $out;
-    }
-
-    protected function renderId($id)
-    {
-        $out = '<a href="#">N° <span class="badge">'.(string)$id.'</span></a>'."\n";
+        $out .= $this->renderDetails( $details );
         return $out;
     }
 
@@ -93,7 +97,8 @@ class Ligne extends AbstractHelper
         if (! $structure) return '';
 
         $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
-        $out = '<a href="'.$url.'" class="modal-action">'.$structure->getLibelleCourt().'</a>';
+        $pourl = $this->getView()->url('structure/default', array('action' => 'apercevoir', 'id' => $structure->getId()));
+        $out = '<a data-poload="/ose/test" href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$structure->getLibelleCourt().'</a>';
 
         return $out;
     }
@@ -102,7 +107,8 @@ class Ligne extends AbstractHelper
     {
         if (! $element) return '';
         $url = $this->getView()->url('of/default', array('action' => 'voir-element'), array('query' => array('id' => $element->getId())));
-        $out = '<a href="'.$url.'" class="modal-action">'.$element->getLibelle().' ('.$element->getSourceCode().')</a>';
+        $pourl = $this->getView()->url('of/default', array('action' => 'apercevoir-element'), array('query' => array('id' => $element->getId())));
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$element->getSourceCode().' - '.$element->getLibelle().'</a>';
 
         return $out;
     }
@@ -117,30 +123,42 @@ class Ligne extends AbstractHelper
     {
         if ($etablissement != $this->context['etablissement']){
             $url = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
-            $out = '<a href="'.$url.'" class="modal-action">'.$etablissement->getLibelle().'</a>';            
+            $pourl = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
+            $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$etablissement->getLibelle().'</a>';
         }else{
             $out = '';
         }
         return $out;
     }
 
+    protected function renderTypeIntervention( \Application\Entity\Db\TypeIntervention $typeIntervention, $heures )
+    {
+        $out = '<td id="service-'.$this->service->getId().'-ti-'.$typeIntervention->getId().'">'
+                   .(array_key_exists($typeIntervention->getId(),$heures)
+                        ? \UnicaenApp\Util::formattedFloat($heures[$typeIntervention->getId()], \NumberFormatter::DECIMAL, -1)
+                        : ''
+                    )
+                   ."</td>\n";
+        return $out;
+    }
+
     protected function renderModifier()
     {
         $url = $this->getView()->url('service/default', array('action' => 'saisie', 'id' => $this->service->getId()));
-        return '<td><a class="modal-action event_save-message" href="'.$url.'" title="Modifier le service"><span class="glyphicon glyphicon-edit"></span></a></td>';
+        return '<td><a class="modal-action event_service-modify-message" href="'.$url.'" title="Modifier le service"><span class="glyphicon glyphicon-edit"></span></a></td>';
     }
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('service/default', array('action' => 'suppression', 'id' => $this->service->getId()));
-        return '<td><a class="modal-action event_save-message" href="'.$url.'" title="Supprimer le service"><span class="glyphicon glyphicon-remove"></span></a></td>';
+        $url = $this->getView()->url('service/default', array('action' => 'suppression', 'id' => $this->service->getId()));//onclick="return Service.get('.$this->service->getId().').delete(this)"
+        return '<td><a class="service-delete" data-id="'.$this->service->getId().'" href="'.$url.'" title="Supprimer le service"><span class="glyphicon glyphicon-remove"></span></a></td>';
     }
 
-    protected function renderDetails()
+    protected function renderDetails( $details=false )
     {
         $out = '<td>'
-              .'<a data-service-id="'.$this->service->getId().'" title="Détail des services" onclick="serviceShowHideDetails(this)">'
-                  .'<span class="glyphicon glyphicon-chevron-down"></span>'
+              .'<a class="service-details-button" title="Détail des heures" onclick="Service.get('.$this->service->getId().').showHideDetails(this)">'
+                  .'<span class="glyphicon glyphicon-chevron-'.($details ? 'up' : 'down').'"></span>'
               .'</a>'
               ."</td>\n";
         return $out;

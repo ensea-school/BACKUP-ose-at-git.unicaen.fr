@@ -7,6 +7,7 @@ use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Form\Service\Saisie;
 use Application\Entity\Db\Service;
+use Application\Exception\DbException;
 
 
 /**
@@ -49,22 +50,39 @@ class ServiceController extends AbstractActionController
         return compact('service');
     }
 
+    public function voirLigneAction()
+    {
+        $id      = (int)$this->params()->fromRoute('id',0);
+        $details = 1 == (int)$this->params()->fromQuery('details',0);
+        $onlyContent = 1 == (int)$this->params()->fromQuery('only-content',0);
+        $service = $this->getServiceService();
+        $entity  = $service->getRepo()->find($id);
+        $context = $service->getGlobalContext();
+        $details = false;
+
+        return compact('entity', 'context', 'details', 'onlyContent');
+    }
+
     public function suppressionAction()
     {
         $id      = (int)$this->params()->fromRoute('id',0);
         $service = $this->getServiceService();
         $entity  = $service->getRepo()->find($id);
-        $entity->setHistoDestruction(new \DateTime);
-        $this->em()->flush();
+        $errors  = array();
 
-        //$url = $this->url()->fromRoute('service/default', array('action' => 'index'));
-        //return $this->redirect()->toUrl($url);
+        try{
+            $entity->setHistoDestruction(new \DateTime);
+            $this->em()->flush();
+        }catch(\Exception $e){
+            $e = DbException::translate($e);
+            $errors[] = $e->getMessage();
+        }
 
         $terminal = $this->getRequest()->isXmlHttpRequest();
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/service/suppression')
-                ->setVariables(compact('form', 'context','errors'));
+                ->setVariables(compact('entity', 'context','errors'));
         if ($terminal) {
             return $this->modalInnerViewModel($viewModel, "Suppression de service", false);
         }
@@ -84,7 +102,9 @@ class ServiceController extends AbstractActionController
             /* Initialisation des valeurs */
             $entity = $service->getRepo()->find($id);
             /* @var $entity \Application\Entity\Db\Service */
-            
+
+            $form->get('id')->setValue( $entity->getId() );
+
             if (! isset($context['intervenant'])){
                 $form->get('intervenant')->setValue(array(
                         'id' => $entity->getIntervenant()->getId(),
@@ -92,9 +112,9 @@ class ServiceController extends AbstractActionController
                 ));
             }
             if ($entity->getElementPedagogique()){
-                $form->get('elementPedagogique')->setValue(array(
+                $form->get('elementPedagogique')->get('element')->setValue(array(
                         'id' => $entity->getElementPedagogique()->getId(),
-                        'label' => $entity->getElementPedagogique()->getLibelle()
+                        //'label' => $entity->getElementPedagogique()->getLibelle()
                 ));
             }
             $form->get('etablissement')->setValue(array(
@@ -109,7 +129,7 @@ class ServiceController extends AbstractActionController
             if (null == $post->etablissement['id']){
                 $post->etablissement = array( 'id' => $context['etablissement']->getId(), 'label' => (string)$context['etablissement'] );
             }elseif( (int)$post->etablissement['id'] != $context['etablissement']->getId() ){
-                $post->elementPedagogique = ''; // pas d'élément si un autre établissement a été sélectionné
+                $post->elementPedagogique['element'] = ''; // pas d'élément si un autre établissement a été sélectionné
             }
             $form->setData($post);
 
@@ -128,8 +148,8 @@ class ServiceController extends AbstractActionController
 
                 if (isset($context['elementPedagogique'])){
                     $elementPedagogique = $context['elementPedagogique'];
-                }elseif(isset($post->elementPedagogique['id']) && 0 != (int)$post->elementPedagogique['id']){
-                    $elementPedagogique = $this->em()->getRepository('Application\\Entity\\Db\\ElementPedagogique')->find($post->elementPedagogique['id']);
+                }elseif(isset($post->elementPedagogique['element']['id']) && 0 != (int)$post->elementPedagogique['element']['id']){
+                    $elementPedagogique = $this->em()->getRepository('Application\\Entity\\Db\\ElementPedagogique')->find($post->elementPedagogique['element']['id']);
                 }else{
                     $elementPedagogique = null;
                 }
@@ -149,8 +169,14 @@ class ServiceController extends AbstractActionController
                 $entity->setElementPedagogique( $elementPedagogique );
                 $entity->setEtablissement( $etablissement );
 
-                $this->em()->persist($entity);
-                $this->em()->flush();
+                try{
+                    $this->em()->persist($entity);
+                    $this->em()->flush();
+                    $form->get('id')->setValue( $entity->getId() ); // transmet le nouvel ID
+                }catch(\Exception $e){
+                    $e = DbException::translate($e);
+                    $errors[] = $e->getMessage();
+                }
             }else{
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }

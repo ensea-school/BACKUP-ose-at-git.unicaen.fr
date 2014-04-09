@@ -4,14 +4,19 @@ namespace Application\View\Helper\Service;
 
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Service;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une liste de services
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 {
+
+    use ServiceLocatorAwareTrait;
+
 
     /**
      * Helper entry point.
@@ -42,37 +47,64 @@ class Liste extends AbstractHelper
      *
      * @return string
      */
-    protected function render(){
-        if (empty($this->services)) return 'Aucun service n\'est renseigné';
+    public function render( $details = false ){
+        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
 
-        $colspan = 5;
+        if (empty($this->services)){
+            $out = 'Aucun service n\'est renseigné';
+        }else{
+            $colspan = 4;
+            $out = $this->renderShowHide();
+            $out .= '<table id="services" class="table service">';
+            $out .= '<tr>';
 
-        $out = '<table class="table service">';
-        $out .= '<tr>';
+            if (empty($this->context['intervenant'])){
+                $out .= "<th colspan=\"2\">Intervenant</th>\n";
+                $colspan += 2;
+            }
+            $out .= "<th>Structure</th>\n";
+            $out .= "<th>Enseignement ou responsabilité</th>\n";
+            if (empty($this->context['annee'])){
+                $out .= "<th>Année univ.</th>\n";
+                $colspan += 1;
+            }
+            foreach( $typesIntervention as $ti ){
+                $colspan++;
+                $out .= "<th style=\"width:8%\" title=\"".$ti->getLibelle()."\">".$ti->getCode()."</th>\n";
+            }
+            $out .= "<th>&nbsp;</th>\n";
+            $out .= "<th>&nbsp;</th>\n";
+            $out .= "</tr>\n";
+            foreach( $this->services as $service ){
+                $out .= '<tr id="service-'.$service->getId().'-ligne">';
+                $out .= $this->getView()->serviceLigne( $service, $this->context )->render($details);
+                $out .= '</tr>';
+                $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>'
+                        .'<td class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-td" colspan="'.$colspan.'">'
+                        .$this->getView()->volumeHoraireListe( $service->getVolumeHoraire(), array('service' => $service ) )->render()
+                        .'</td>'
+                        .'</tr>';
+            }
+            $out .= '</table>'."\n";
+            $out .= $this->renderShowHide();
 
-        $out .= "<th>Numéro</th>\n";
-        if (empty($this->context['intervenant'])){
-            $out .= "<th colspan=\"2\">Intervenant</th>\n";
-            $colspan += 2;
         }
-        $out .= "<th>Structure</th>\n";
-        $out .= "<th>Elément pédagogique</th>\n";
-        if (empty($this->context['annee'])){
-            $out .= "<th>Année univ.</th>\n";
-            $colspan += 1;
-        }
-        $out .= "<th>&nbsp;</th>\n";
-        $out .= "<th>&nbsp;</th>\n";
-        $out .= "</tr>\n";
-        foreach( $this->services as $service ){
-            $out .= $this->getView()->serviceLigne( $service, $this->context );
-            $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-details"><td class="volume-horaire" colspan="'.$colspan.'">'.$this->getView()->volumeHoraireListe( $service->getVolumeHoraire(), array('service' => $service ) ).'</td></tr>';
-        }
-        $out .= '</table>'."\n";
         $url = $this->getView()->url('service/default', array('action' => 'saisie'));
-        $out .= '<a class="modal-action event_save-message btn btn-primary" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
-
+        $out .= '<br /><a class="modal-action event_service-add-message btn btn-primary" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
+        $out .= $this->getView()->modalAjaxDialog('service-div');
+        $out .= '<script type="text/javascript">';
+        $out .= '$(function() { Service.init("'.$this->getView()->url('service/default', array('action' => 'voirLigne') ).'"); });';
+        $out .= '</script>';
         return $out;
+    }
+
+    public function renderShowHide()
+    {
+        return
+            '<div class="service-show-hide-buttons">'
+            .'<button type="button" class="btn btn-default btn-xs service-show-all-details"><span class="glyphicon glyphicon-chevron-down"></span> Tout déplier</button> '
+            .'<button type="button" class="btn btn-default btn-xs service-hide-all-details"><span class="glyphicon glyphicon-chevron-up"></span> Tout replier</button>'
+           .'</div>';
     }
 
     /**

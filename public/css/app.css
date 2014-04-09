@@ -1,14 +1,33 @@
-
+/* Services */
 table.service td.volume-horaire {
     padding-left:10em;
 }
 
-table.service tr.volume-horaire {
-    display: none;
+div.service-show-hide-buttons {
+    padding-bottom:3px;
+    padding-top:3px;
+    text-align:right;
 }
 
 
+
+
+
 /* recherche d'élément */
+.ui-autocomplete {
+    max-height: 300px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+}
+
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+/* * html .ui-autocomplete {
+    height: 300px;
+}*/
+
 span.etape,
 span.periode,
 span.element {
@@ -24,4 +43,12 @@ span.periode {
 
 span.sas-highlight {
     font-weight: bold;
+}
+
+
+/* Gestion des popovers */
+div.popover {
+
+    max-width:600px;
+
 }

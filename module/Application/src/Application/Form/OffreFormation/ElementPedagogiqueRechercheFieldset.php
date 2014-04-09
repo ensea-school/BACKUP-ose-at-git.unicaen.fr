@@ -9,7 +9,7 @@ use Zend\Form\Fieldset;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Form\ElementPrepareAwareInterface
+class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\InputFilter\InputFilterProviderInterface
 {
     public function __construct($name = null, $options = array())
     {
@@ -198,4 +198,28 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Form
         $this->structures = $structures;
         return $this;
     }
+
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification(){
+        return array(
+            'structure' => array(
+                'required' => false
+            ),
+            'niveau' => array(
+                'required' => false
+            ),
+            'etape' => array(
+                'required' => false
+            ),
+            'element' => array(
+                'required' => false
+            )
+        );
+    }
+
 }

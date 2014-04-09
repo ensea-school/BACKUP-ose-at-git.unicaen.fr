@@ -64,6 +64,7 @@ class Module
             'factories'  => array(
             ),
             'invokables' => array(
+                'formButtonGroup'      => 'Common\Form\View\Helper\FormButtonGroup',
             ),
         );
     }

@@ -15,7 +15,7 @@ use Zend\Mvc\Controller\Plugin\Url;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Saisie extends Form
+class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface
 {
 
     public function __construct( Url $url, array $context=array() )
@@ -43,13 +43,41 @@ class Saisie extends Form
             $this->add($intervenant);
         }
 
-        $elementPedagogique = new SearchAndSelect('elementPedagogique');
+        $interneExterne = new \Zend\Form\Element\Radio;
+        $interneExterne->setLabel('Service effectué : ');
+        $interneExterne->setName('interne-externe');
+        $interneExterne->setValueOptions(array(
+                     'service-interne' => 'en interne',
+                     'service-externe' => 'dans un autre établissement',
+        ));
+        $this->add($interneExterne);
+
+       /*$elementPedagogique = new SearchAndSelect('elementPedagogique');
         $elementPedagogique->setLabel("Elément pédagogique :")
                 ->setAttributes(array('title' => "Saisissez 2 lettres au moins"))
                 ->setAutocompleteSource(
                     $url->fromRoute('of/default', array('action' => 'search-element') )
                 );
-        $this->add($elementPedagogique);
+        $this->add($elementPedagogique);*/
+
+        $queryTemplate = array('structure' => '__structure__', 'niveau' => '__niveau__', 'etape' => '__etape__');
+        $urlStructures = $url->fromRoute('of/default', array('action' => 'search-structures'), array('query' => $queryTemplate));
+        $urlNiveaux    = $url->fromRoute('of/default', array('action' => 'search-niveaux'), array('query' => $queryTemplate));
+        $urlEtapes     = $url->fromRoute('of/default', array('action' => 'search-etapes'), array('query' => $queryTemplate));
+        $urlElements   = $url->fromRoute('of/default', array('action' => 'search-element'), array('query' => $queryTemplate));
+
+        $fs = new \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset('elementPedagogique');
+        $fs
+                ->setStructuresSourceUrl($urlStructures)
+                ->setNiveauxSourceUrl($urlNiveaux)
+                ->setEtapesSourceUrl($urlEtapes)
+                ->setElementsSourceUrl($urlElements)
+                ->setStructureEnabled(false)
+//                ->setNiveauEnabled(false)
+                ->setEtapeEnabled(false)
+        ;
+//        $fs->get('element')->setName('elementPedagogique');
+        $this->add($fs);
 
         $etablissement = new SearchAndSelect('etablissement');
         $etablissement ->setRequired(true)
@@ -94,5 +122,19 @@ class Saisie extends Form
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {
         return parent::bind($object, $flags);
+    }
+
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification(){
+        return array(
+            'interne-externe' => array(
+                'required' => false
+            )
+        );
     }
 }

@@ -93,11 +93,9 @@ return array(
         )
     ),
     'view_helpers' => array(
-        'factories' => array(
-            'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\ListeFactory',
-        ),
         'invokables' => array(
             'volumeHoraireDl'      => 'Application\View\Helper\VolumeHoraire\Dl',
+            'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\Liste',
             'volumeHoraireLigne'   => 'Application\View\Helper\VolumeHoraire\Ligne',
         ),
     ),

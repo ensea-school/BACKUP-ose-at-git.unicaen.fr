@@ -5,14 +5,19 @@ namespace Application\View\Helper\VolumeHoraire;
 use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\VolumeHoraire;
 use Doctrine\ORM\PersistentCollection;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
 
 /**
  * Aide de vue permettant d'afficher une liste de volumes horaires
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 {
+
+    use ServiceLocatorAwareTrait;
 
     /**
      * Données formattées
@@ -59,7 +64,9 @@ class Liste extends AbstractHelper
      *
      * @return string
      */
-    protected function render(){
+    public function render(){
+        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
+
         $out = '<table class="table volume-horaire">';
         $out .= '<tr>';
 
@@ -67,7 +74,7 @@ class Liste extends AbstractHelper
             $out .= "<th style=\"width:15%\">Service</th>\n";
         }
         $out .= "<th style=\"width:10%\">Période</th>\n";
-        foreach( self::$typesIntervention as $ti ){
+        foreach( $typesIntervention as $ti ){
             $out .= "<th style=\"width:8%\" title=\"".$ti->getLibelle()."\">".$ti->getCode()."</th>\n";
         }
         $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
@@ -79,7 +86,7 @@ class Liste extends AbstractHelper
                 $out .= "<td>".$this->renderService($default->getService())."</td>\n";
             }
             $out .= "<td>".$this->renderPeriode($default->getPeriode())."</td>\n";
-            foreach( self::$typesIntervention as $ti ){
+            foreach( $typesIntervention as $ti ){
                 if (isset($gvh[$ti->getId()])){
                     $out .= "<td>".$this->renderHeures($gvh[$ti->getId()]->getHeures())."</td>\n";
                 }else{
@@ -107,13 +114,7 @@ class Liste extends AbstractHelper
 
     protected function renderHeures($heures)
     {
-        $h = floor($heures);
-        $m = ($heures - floor($heures)) * 60;
-        if (0 == $m){
-            return $h.'h';
-        }else{
-            return $h.'h'.sprintf('%02s', $m);
-        }
+        return \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
     }
 
     protected function renderMotifNonPaiement($motifNonPaiement)

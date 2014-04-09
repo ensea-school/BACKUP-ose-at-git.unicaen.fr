@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Service\AbstractService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-
+use Application\Entity\Db\TypeIntervention as Entity;
 
 /**
  * Description of TypeIntervention
@@ -22,6 +22,12 @@ class TypeIntervention extends AbstractService
      */
     protected $repo;
 
+    /**
+     * Liste des types d'intervention
+     *
+     * @var Entity[]
+     */
+    protected $typesIntervention;
 
 
 
@@ -52,5 +58,23 @@ class TypeIntervention extends AbstractService
             $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervention');
         }
         return $this->repo;
+    }
+
+    /**
+     * Liste des types d'intervention
+     *
+     * @return Entity[]
+     */
+    public function getTypesIntervention()
+    {
+        if (! $this->typesIntervention){
+            $til = $this->finderByAll()->getQuery()->execute();
+
+            $this->typesIntervention = array();
+            foreach( $til as $ti ){
+                $this->typesIntervention[$ti->getId()] = $ti;
+            }
+        }
+        return $this->typesIntervention;
     }
 }

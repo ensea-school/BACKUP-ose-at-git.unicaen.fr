@@ -68,7 +68,7 @@ class ElementPedagogiqueRepository extends EntityRepository
      * <i>etape</i>        : Etape concernée sous forme d'une entité<br />
      * @return array
      */
-    public function finderByTerm(array $context = array())
+    public function finderByTermOld(array $context = array())
     {
         if (!isset($context['term'])) {
             return array();
@@ -117,6 +117,91 @@ WHERE $whereTerm
 $whereContext
 AND ROWNUM <= :limit
 ORDER BY gtf.ordre, e.niveau, ep.libelle
+EOS;
+        
+        $sql = <<<EOS
+select * from (
+  select ep.id,
+    rank() over (partition by ep.id order by cp.ordre) rang,
+    ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf, 
+    ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
+  from chemin_pedagogique cp
+  JOIN element_pedagogique ep ON cp.element_pedagogique_id = ep.id
+  JOIN periode_enseignement pe ON ep.periode_id = pe.id
+  JOIN etape e ON cp.etape_id = e.id
+  JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID and tf.HISTO_DESTRUCTEUR_ID is null and sysdate between tf.VALIDITE_DEBUT and nvl(tf.VALIDITE_FIN, sysdate)
+  JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID and gtf.HISTO_DESTRUCTEUR_ID is null
+  JOIN structure s ON ep.structure_id = s.id
+  where e.HISTO_DESTRUCTEUR_ID is null and sysdate between e.VALIDITE_DEBUT and nvl(e.VALIDITE_FIN, sysdate)
+  and lower(ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT) like '%carri_res publiques%'
+  order by gtf.ordre, e.niveau, ep.libelle
+)
+where rang = 1
+;
+EOS;
+        
+        $params["limit"] = $context["limit"];
+        
+        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+//        var_dump($sql, $params);die;
+
+        return $result->fetchAll();
+    }
+    public function finderByTerm(array $context = array())
+    {
+        if (!isset($context['term'])) {
+            return array();
+        }
+        if (!isset($context["limit"])) {
+            $context["limit"] = 100;
+        }
+        
+        $term      = preg_replace('#\s{2,}#', ' ', trim($context['term']));
+        $criterion = explode(' ', $term);
+
+        $concat = "ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT";
+        $parts  = $params = array();
+        for ($i = 0; $i < count($criterion); $i++) {
+            $parts[] = "(UPPER(CONVERT($concat, 'US7ASCII')) LIKE UPPER(CONVERT(:criterionStr$i, 'US7ASCII'))) ";
+            $params["criterionStr$i"] = '%' . $criterion[$i] . '%';
+        }
+        $whereTerm = implode(' AND ', $parts);
+        
+        $whereContext = array();
+        if (isset($context['structure']) && $context['structure'] instanceof \Application\Entity\Db\Structure) {
+            $whereContext[] = 's.structure_niv2_id = :structure';
+            $params['structure'] = $context['structure']->getId();
+        }
+        if (isset($context['niveau']) && $context['niveau']) {
+            $whereContext[] = 'CONCAT(gtf.libelle_court, e.niveau) = :niveau';
+            $params['niveau'] = $context['niveau'];
+        }
+        if (isset($context['etape']) && $context['etape'] instanceof \Application\Entity\Db\Etape) {
+            $whereContext[] = 'ep.etape_id = :etape';
+            $params['etape'] = $context['etape']->getId();
+        }
+        $whereContext = implode(PHP_EOL . 'AND ', array_filter($whereContext));
+        $whereContext = $whereContext ? 'AND ' . $whereContext : null;
+        
+        $sql = <<<EOS
+select * from (
+  select ep.id,
+    rank() over (partition by ep.id order by cp.ordre) rang,
+    ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf, 
+    ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
+  from chemin_pedagogique cp
+  JOIN element_pedagogique ep ON cp.element_pedagogique_id = ep.id
+  JOIN periode_enseignement pe ON ep.periode_id = pe.id
+  JOIN etape e ON cp.etape_id = e.id
+  JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID and tf.HISTO_DESTRUCTEUR_ID is null and sysdate between tf.VALIDITE_DEBUT and nvl(tf.VALIDITE_FIN, sysdate)
+  JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID and gtf.HISTO_DESTRUCTEUR_ID is null
+  JOIN structure s ON ep.structure_id = s.id
+  where e.HISTO_DESTRUCTEUR_ID is null and sysdate between e.VALIDITE_DEBUT and nvl(e.VALIDITE_FIN, sysdate)
+  and $whereTerm
+  $whereContext
+  order by gtf.ordre, e.niveau, ep.libelle
+)
+where rang = 1
 EOS;
         
         $params["limit"] = $context["limit"];

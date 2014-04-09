@@ -178,8 +178,7 @@ class OffreFormationController extends AbstractActionController
         $params['niveau']    = $this->context()->niveauFromQuery();
         $params['etape']     = $this->context()->etapeFromQuery();
         $params['term']      = $term;
-        $params['limit']     = 51;
-//        var_dump(array_map('strval', $params));die;
+        $params['limit']     = $limit = 101;
         
         // fetch
         $serviceOf = $this->getServiceLocator()->get('applicationOffreFormation'); /* @var $serviceOf OffreFormationService */
@@ -201,7 +200,7 @@ class OffreFormationController extends AbstractActionController
             );
         };
 
-        $result = \UnicaenApp\Form\Element\SearchAndSelect::truncatedResult($result, 50);
+        $result = \UnicaenApp\Form\Element\SearchAndSelect::truncatedResult($result, $limit - 1);
         
         return new \Zend\View\Model\JsonModel($result);
     }

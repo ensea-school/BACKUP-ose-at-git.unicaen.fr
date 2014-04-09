@@ -93,11 +93,33 @@ $(function() {
     var ele      = $("#{$this->elementElement->getAttribute('id')}-autocomplete");
     var elements = new Array();
 
-    if (str.length) elements.push(str.data('updateUrl', '{$this->fieldset->getStructuresSourceUrl()}'));
-    if (niv.length) elements.push(niv.data('updateUrl', '{$this->fieldset->getNiveauxSourceUrl()}'));
-    if (eta.length) elements.push(eta.data('updateUrl', '{$this->fieldset->getEtapesSourceUrl()}'));
-    if (ele.length) elements.push(ele.data('updateUrl', '{$this->fieldset->getElementsSourceUrl()}'));
-    
+    if (str.length) {
+        elements.push(str.data({ 
+            updateUrl: '{$this->fieldset->getStructuresSourceUrl()}',
+            paramName: "{$this->fieldset->getStructureName()}",
+            initValue: "{$this->structureElement->getValue()}"
+        }));
+    }
+    if (niv.length) {
+        elements.push(niv.data({ 
+            updateUrl: '{$this->fieldset->getNiveauxSourceUrl()}',
+            paramName: "{$this->fieldset->getNiveauName()}",
+            initValue: "{$this->niveauElement->getValue()}"
+        }));
+    }
+    if (eta.length) {
+        elements.push(eta.data({ 
+            updateUrl: '{$this->fieldset->getEtapesSourceUrl()}',
+            paramName: "{$this->fieldset->getEtapeName()}",
+            initValue: "{$this->etapeElement->getValue()}"
+        }));
+    }
+    if (ele.length) {
+        elements.push(ele.data({ 
+            updateUrl: '{$this->fieldset->getElementsSourceUrl()}',
+        }));
+    }
+        
     $.each(elements, function (index, element) {
         element.change(function() {
             var next = elements[index+1];
@@ -116,7 +138,8 @@ $(function() {
     function updateSelect(element)
     {
         var url       = getUrl(element.data('updateUrl'));
-        var selection = element.val();
+        var value     = element.data('initValue');
+        var selection = value ? value : element.val();
         element.css('opacity', '0.5').append($("<option/>").attr("value", 'temp').text("Patientez, svp...")).val('temp');
         $.get(url, function(data) {
             updateSelectOptions(element, data); 
@@ -137,8 +160,10 @@ $(function() {
         var pattern;
         var url = urlTemplate;
         $.each(elements, function (index, element) {
-            pattern = new RegExp(element.attr('name') + "=(\\\w+)", "g");
-            url = url.replace(pattern, element.attr('name') + "=" + element.val());
+            if (element.data('paramName')) {
+                pattern = new RegExp(element.data('paramName') + "=(\\\w+)", "g");
+                url = url.replace(pattern, element.data('paramName') + "=" + element.val());
+            }
         });
         pattern = new RegExp("(\\\w+)=__(\\\w+)__", "g"); 
         url = url.replace(pattern, "$1=");

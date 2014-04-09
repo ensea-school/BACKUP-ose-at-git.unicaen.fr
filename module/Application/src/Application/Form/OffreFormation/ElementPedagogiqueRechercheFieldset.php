@@ -16,11 +16,12 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Inpu
         parent::__construct($name, $options);
         
         $this->add(array(
-            'name'       => 'structure',
+            'name'       => $this->getStructureName(),
             'options'    => array(
                 'label' => "Structure :",
                 'empty_option' => "(Toutes)",
                 'value_options' => $this->getStructures(),
+                'disable_inarray_validator' => true,
             ),
             'attributes' => array(
                 'title' => "Structure",
@@ -30,11 +31,12 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Inpu
         ));
         
         $this->add(array(
-            'name'       => 'niveau',
+            'name'       => $this->getNiveauName(),
             'options'    => array(
                 'label' => "Niveau :",
                 'empty_option' => "(Tous)",
                 'value_options' => $this->getNiveaux(),
+                'disable_inarray_validator' => true,
             ),
             'attributes' => array(
                 'title' => "Niveau",
@@ -44,11 +46,12 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Inpu
         ));
 
         $this->add(array(
-            'name'       => 'etape',
+            'name'       => $this->getEtapeName(),
             'options'    => array(
                 'label' => "Étape :",
                 'empty_option' => "(Toutes)",
                 'value_options' => $this->getEtapes(),
+                'disable_inarray_validator' => true,
             ),
             'attributes' => array(
                 'title' => "Étape",
@@ -68,6 +71,25 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Inpu
             ),
             'type' => 'UnicaenApp\Form\Element\SearchAndSelect',
         ));
+    }
+    
+    protected $structureName = 'structure';
+    protected $niveauName    = 'niveau';
+    protected $etapeName     = 'etape';
+    
+    public function getStructureName()
+    {
+        return $this->structureName;
+    }
+
+    public function getNiveauName()
+    {
+        return $this->niveauName;
+    }
+
+    public function getEtapeName()
+    {
+        return $this->etapeName;
     }
     
     protected $structureEnabled = true;

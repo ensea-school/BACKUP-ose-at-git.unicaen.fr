@@ -114,7 +114,7 @@ class ServiceController extends AbstractActionController
             if ($entity->getElementPedagogique()){
                 $form->get('elementPedagogique')->get('element')->setValue(array(
                         'id' => $entity->getElementPedagogique()->getId(),
-                        //'label' => $entity->getElementPedagogique()->getLibelle()
+                        'label' => $entity->getElementPedagogique()->getLibelle()
                 ));
             }
             $form->get('etablissement')->setValue(array(

@@ -102,4 +102,18 @@ class StructureController extends AbstractActionController
         return $viewModel;
     }
 
+    public function apercevoirAction()
+    {
+        $structure = $this->context()->mandatory()->structureFromRoute('id');
+        $short     = $this->params()->fromQuery('short', false);
+        
+        $import = $this->getServiceLocator()->get('ImportProcessusImport');
+        $changements = $import->structureGetDifferentiel($structure);
+        
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest())
+                  ->setVariables(compact('structure', 'changements', 'short'));
+
+        return $viewModel;
+    }
 }

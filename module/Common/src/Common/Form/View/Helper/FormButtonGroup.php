@@ -2,7 +2,7 @@
 namespace Common\Form\View\Helper;
 
 use Zend\Form\View\Helper\FormRadio;
-use Zend\Form\Element\Radio as RadioElement;
+use Zend\Form\Element\MultiCheckbox as MultiCheckboxElement;
 use Zend\Form\LabelAwareInterface;
 
 
@@ -16,13 +16,13 @@ class FormButtonGroup extends FormRadio
     /**
      * Render options
      *
-     * @param  RadioElement $element
-     * @param  array        $options
-     * @param  array        $selectedOptions
-     * @param  array        $attributes
+     * @param  MultiCheckboxElement $element
+     * @param  array                $options
+     * @param  array                $selectedOptions
+     * @param  array                $attributes
      * @return string
      */
-    protected function renderOptions(RadioElement $element, array $options, array $selectedOptions,
+    protected function renderOptions(MultiCheckboxElement $element, array $options, array $selectedOptions,
         array $attributes)
     {
         $escapeHtmlHelper = $this->getEscapeHtmlHelper();

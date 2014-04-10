@@ -47,6 +47,8 @@ class IntervenantController extends AbstractActionController
      */
     public function choisirAction()
     {
+        $intervenant = $this->context()->intervenantFromQuery();
+        
         $url    = $this->url()->fromRoute('recherche', array('action' => 'intervenantFind'));
         $interv = new \UnicaenApp\Form\Element\SearchAndSelect('interv');
         $interv->setAutocompleteSource($url)
@@ -54,6 +56,10 @@ class IntervenantController extends AbstractActionController
                 ->setSelectionRequired(true)
                 ->setLabel("Recherchez l'intervenant concerné :")
                 ->setAttributes(array('title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"));
+        if ($intervenant) {
+            $f = new \Common\Filter\IntervenantTrouveFormatter();
+            $interv->setValue($f->filter($intervenant));
+        }
         $form = new \Zend\Form\Form('search');
         $form->setAttributes(array('class' => 'intervenant-rech'));
         $form->add($interv);
@@ -77,17 +83,17 @@ class IntervenantController extends AbstractActionController
     
     public function importerAction()
     {
-        if (!($sourceCode = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
-            throw new LogicException("Aucun identifiant d'intervenant spécifié.");
+        if (!($sourceCode = $this->params()->fromQuery('sourceCode'))) {
+            throw new LogicException("Aucun code source d'intervenant spécifié.");
         }
-        if (($intervenant = $this->intervenant()->getRepo()->find($sourceCode))) {
+        if (($intervenant = $this->intervenant()->getRepo()->findBySourceCode($sourceCode))) {
             throw new RuntimeException("L'intervenant spécifié a déjà été importé : sourceCode = $sourceCode.");
         }
         
         $import = $this->getServiceLocator()->get('importProcessusImport'); /* @var $import \Import\Processus\Import */
         $import->intervenant($sourceCode);
 
-        if (!($intervenant = $this->intervenant()->getRepo()->findOneBy(array('sourceCode' => $sourceCode)))) {
+        if (!($intervenant = $this->intervenant()->getRepo()->findOneBySourceCode($sourceCode))) {
             throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
         }
         
@@ -170,30 +176,37 @@ class IntervenantController extends AbstractActionController
      */
     public function saisirServiceReferentielAction()
     {
+        $sourceCode = $this->params()->fromQuery('sourceCode');
+        $import     = $this->params()->fromQuery('import', true);
+        
         // si aucun intervenant spécifié, redirection vers le choix d'un intervenant (action qui redirigera ici une fois l'intervenant choisi)
-        if (!($sourceCode = $this->params()->fromQuery('sourceCode'))) {
+        if (!$sourceCode) {
             $redirect = $this->url()->fromRoute('intervenant/default', array(), array('query' => array('sourceCode' => '__sourceCode__')), true);
             return $this->redirect()->toRoute(
                     'intervenant/default', array('action' => 'choisir'), array('query' => array('redirect' => $redirect)));
         }
-
-        if (($intervenant = $this->intervenant()->getRepo()->find($sourceCode))) {
-            throw new RuntimeException("L'intervenant spécifié a déjà été importé : sourceCode = $sourceCode.");
-        }
         
-        // fetch intervenant pour simple test d'existence et de type
+        // simple test d'existence de l'intervenant
         $intervenant = $this->em()->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode);
-        
-        // import éventuel
-        if (($import = $this->params()->fromQuery('import')) && !$intervenant) {
+        if (!$intervenant) {
+            if (!$import) {
+                throw new RuntimeException("Intervenant spécifié introuvable (sourceCode = $sourceCode).");
+            }
+            // import de l'intervenant
             $viewModel   = $this->importerAction(); /* @var $viewModel \Zend\View\Model\ViewModel */
             $intervenant = $viewModel->getVariable('intervenant');
         }
         
         // verif type d'intervenant
         if (!$intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
-            throw new RuntimeException("Impossible de saisir un service référentiel pour un intervenant autre que permanent. " .
-            "Intervenant spécifié : $intervenant (id = {$intervenant->getId()}).");
+//            throw new RuntimeException("La saisie de service référentiel n'est possible que pour un intervenant permanent. " .
+//                "L'intervenant $intervenant (id = {$intervenant->getId()}) n'est pas permanent.");
+            $this->flashMessenger()->addErrorMessage("La saisie de service référentiel n'est possible que pour un intervenant permanent. " .
+                    "L'intervenant $intervenant (id = {$intervenant->getId()}) n'est pas permanent.");
+            $redirect = $this->url()->fromRoute('intervenant/default', array(), array('query' => array('sourceCode' => '__sourceCode__')), true);
+            return $this->redirect()->toRoute('intervenant/default', 
+                    array('action' => 'choisir'), 
+                    array('query' => array('intervenant' => $intervenant->getId(), 'redirect' => $redirect)));
         }
         
         // fetch avec jointures

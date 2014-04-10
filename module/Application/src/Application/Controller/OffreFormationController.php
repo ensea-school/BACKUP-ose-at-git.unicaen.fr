@@ -43,19 +43,12 @@ class OffreFormationController extends AbstractActionController
         
         // structures distinctes
         $structuresDistinctes = $repoOf->finderDistinctStructures(array('niveau' => 2))->getQuery()->getResult();
-        // filtre structure (obligatoire)
-        if (null === $structure) {
-            $structure = reset($structuresDistinctes);
-            $criteria['structure'] = $structure->getId();
-        }
         
         // niveaux distincts pour la structure spécifiée
         $niveauxDistincts = $repoOf->finderDistinctNiveaux(array('structure' => $structure))->getQuery()->getResult();
         
         // etapes distinctes pour la structure spécifiée
-        $etapesDistinctes = $repoOf->finderDistinctEtapes(array(
-            'structure' => $structure, 
-            'niveau' => $niveau))->getQuery()->getResult();
+        $etapesDistinctes = $repoOf->finderDistinctEtapes(array('structure' => $structure, 'niveau' => $niveau))->getQuery()->getResult();
         // filtre étape (facultatif)
         $etape = isset($criteria['etape']) ? $criteria['etape'] : null;
         if (null !== $etape && is_scalar($etape)) {
@@ -71,19 +64,6 @@ class OffreFormationController extends AbstractActionController
         $form->setAttributes(array('class' => 'element-rech'));
         $form->add($ep);
         
-        $queryTemplate = array('structure' => '__structure__', 'niveau' => '__niveau__', 'etape' => '__etape__');
-        $urlStructures = $this->url()->fromRoute('of/default', array('action' => 'search-structures'), array('query' => $queryTemplate));
-        $urlNiveaux    = $this->url()->fromRoute('of/default', array('action' => 'search-niveaux'), array('query' => $queryTemplate));
-        $urlEtapes     = $this->url()->fromRoute('of/default', array('action' => 'search-etapes'), array('query' => $queryTemplate));
-        $urlElements   = $this->url()->fromRoute('of/default', array('action' => 'search-element'), array('query' => $queryTemplate));
-        
-        $fs = new \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset('fs');
-        $fs
-                ->setStructuresSourceUrl($urlStructures)
-                ->setNiveauxSourceUrl($urlNiveaux)
-                ->setEtapesSourceUrl($urlEtapes)
-                ->setElementsSourceUrl($urlElements);
-        
         // élément
         if (($element = $this->params()->fromPost('element')) && isset($element['id'])) {
             $form->get('element')->setValue($element);
@@ -92,29 +72,31 @@ class OffreFormationController extends AbstractActionController
 
         // mise en session des filtres courants (utilisés dans la recherche d'élément pédagogique)
         $session = $this->getSessionContainer();
-        $session->structure = $structure->getId();
+        $session->structure = $structure ? $structure->getId() : null;
         $session->niveau    = $niveau;
         $session->etape     = $etape ? $etape->getId() : null;
 
         // fetch
-//        $em->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger());
-        $qb = $serviceOf->getRepoElementPedagogique()->finder(array(
-            'structure' => $structure, 
-            'niveau' => $niveau, 
-            'etape' => $etape));
-        $entities = $qb->getQuery()->getResult();
-        
+        $entities = null;
+        if ($structure) {
+            //$em->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger());
+            $qb = $serviceOf->getRepoElementPedagogique()->finder(array(
+                'structure' => $structure, 
+                'niveau' => $niveau, 
+                'etape' => $etape));
+            $entities = $qb->getQuery()->getResult();
+        }
+         
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setVariables(array(
-            'entities'        => $entities,
-            'structures'      => $structuresDistinctes,
-            'niveaux'         => $niveauxDistincts,
-            'etapes'          => $etapesDistinctes,
-            'structure'       => $structure->getId(),
-            'niveau'          => $niveau,
-            'etape'           => $etape ? $etape->getId() : null,
-            'form'            => $form,
-            'fs'              => $fs,
+            'entities'   => $entities,
+            'structures' => $structuresDistinctes,
+            'niveaux'    => $niveauxDistincts,
+            'etapes'     => $etapesDistinctes,
+            'structure'  => $structure ? $structure->getId() : null,
+            'niveau'     => $niveau,
+            'etape'      => $etape ? $etape->getId() : null,
+            'form'       => $form,
         ));
 
         return $viewModel;
@@ -188,10 +170,10 @@ class OffreFormationController extends AbstractActionController
         $result = array();
         foreach ($found as $item) {
             $extra = '';
-            $extra .= sprintf('<span class="niveau" title="%s">%s</span> > ', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
-            $extra .= sprintf('<span class="etape" title="%s">%s</span> > ', "Étape", $item['LIBELLE_ETAPE']);
-            $extra .= sprintf('<span class="periode" title="%s">%s</span> >', "Période", $item['LIBELLE_PE']);
-            $template = sprintf('<span class="extra">{extra}</span> <span class="element" title="%s">{label}</span>', "Élément pédagogique");
+            $extra .= sprintf('<span class="element-rech niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
+            $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Étape", $item['LIBELLE_ETAPE']);
+            $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
+            $template = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Élément pédagogique");
             $result[$item['ID']] = array(
                 'id'       => $item['ID'],
                 'label'    => $item['SOURCE_CODE'] . ' ' . $item['LIBELLE'],

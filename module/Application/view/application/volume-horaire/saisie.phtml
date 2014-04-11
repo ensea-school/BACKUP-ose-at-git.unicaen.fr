@@ -1,0 +1,23 @@
+<div class="arrow"></div>
+<h3 class="popover-title">TITRE</h3>
+<div class="popover-content">
+<?php
+
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formControlGroup( $form->get('heures') );
+echo $this->formControlGroup( $form->get('motifNonPaiement') );
+echo '<hr /><div style="text-align:right">';
+echo $this->formRow($form->get('submit'));
+echo ' ';
+echo $this->formRow($form->get('annuler'));
+echo '</div>';
+echo $this->formHidden($form->get('security'));
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag().'<br />';
+
+echo $this->formErrors( $form );
+if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
+?>
+</div>

@@ -1,7 +1,9 @@
 
 
 
-/* Propre à l'affichage des services */
+/***************************************************************************************************************************************************
+    Propre à l'affichage des services
+/***************************************************************************************************************************************************/
 
 function Service( id ) {
 
@@ -45,14 +47,14 @@ function Service( id ) {
 
     this.onAfterAdd = function(){
         $.get( Service.voirLigneUrl+"/"+this.id+'?only-content=0', function( data ) {
-            $( "#service-"+this.id+"-ligne" ).load( Service.voirLigneUrl );
+            $( "#service-"+this.id+"-ligne" ).refresh();
             $('#services > tbody:last').append(data);
         });
     }
 
     this.onAfterModify = function(){
         var details = $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1';
-        $( "#service-"+this.id+"-ligne" ).load( Service.voirLigneUrl + "/"+this.id+'?only-content=1&details='+details );
+        $( "#service-"+this.id+"-ligne" ).refresh( $( "#service-"+this.id+"-ligne" ).data('url')+'&details='+details );
     }
 
     this.onAfterDelete = function(){
@@ -118,7 +120,9 @@ Service.init = function( voirLigneUrl ){
     $('body').on('click', '.service-delete', function(){
         Service.get( $(this).data('id') ).delete( $(this).attr('href') );
         return false;
-    })
+    });
+
+    VolumeHoraire.init();
 }
 
 Service.showAllDetails = function(){
@@ -136,6 +140,43 @@ Service.hideAllDetails = function(){
 
 
 
+
+
+/***************************************************************************************************************************************************
+    Propre à l'affichage des volumes horaires
+/***************************************************************************************************************************************************/
+
+function VolumeHoraire( id ) {
+
+    this.id = id;
+}
+
+VolumeHoraire.get = function( id ){
+    if (null === VolumeHoraire.volumeHoraires) VolumeHoraire.volumeHoraires = new Array();
+    if (null === VolumeHoraire.volumeHoraires[id]) VolumeHoraire.volumeHoraires[id] = new VolumeHoraire(id);
+    return VolumeHoraire.volumeHoraires[id];
+}
+
+VolumeHoraire.init = function(){
+    $("body").tooltip({
+        selector: 'a.volume-horaire',
+        placement: 'top',
+        title: "Cliquez pour ouvrir/fermer le formulaire de modification..."
+    });
+
+    ajaxPopoverInit();
+
+    $("body").on('save-volume-horaire', function(event,data){
+        event.a.popover('hide');
+        $("#service-"+event.a.data('service')+"-volume-horaire-td").refresh();
+        $( "#service-"+event.a.data('service')+"-ligne" ).refresh();
+    });
+}
+
+
+/***************************************************************************************************************************************************
+    Divers
+/***************************************************************************************************************************************************/
 
 /* Initialisation des popovers ajax de liens "a" (utilisés dans les services) */
 $(document).ready(function() {

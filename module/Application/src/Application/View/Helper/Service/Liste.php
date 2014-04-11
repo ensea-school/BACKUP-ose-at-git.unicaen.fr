@@ -72,14 +72,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         $out .= "<th>&nbsp;</th>\n";
         $out .= "</tr>\n";
         foreach( $this->services as $service ){
-            $out .= '<tr id="service-'.$service->getId().'-ligne">';
-            $out .= $this->getView()->serviceLigne( $service, $this->context )->render($details);
-            $out .= '</tr>';
-            $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>'
-                    .'<td class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-td" colspan="'.$colspan.'">'
-                    .$this->getView()->volumeHoraireListe( $service->getVolumeHoraire(), array('service' => $service ) )->render()
-                    .'</td>'
-                    .'</tr>';
+            $out .= $this->renderLigne($service, $details);
         }
         $out .= '</table>'."\n";
         $out .= $this->renderShowHide();
@@ -90,6 +83,22 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         $out .= '<script type="text/javascript">';
         $out .= '$(function() { Service.init("'.$this->getView()->url('service/default', array('action' => 'voirLigne') ).'"); });';
         $out .= '</script>';
+        return $out;
+    }
+
+    public function renderLigne( Service $service, $details=false )
+    {
+        $url = $this->getView()->url('service/voirLigne', array('id' => $service->getId(), 'only-content' => 1));
+        $detailsUrl = $this->getView()->url('volume-horaire/default', array('action' => 'liste', 'id' => $service->getId()));
+
+        $out  = '<tr id="service-'.$service->getId().'-ligne" data-url="'.$url.'">';
+        $out .= $this->getView()->serviceLigne( $service, $this->context )->render($details);
+        $out .= '</tr>';
+        $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>'
+                .'<td class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-td" data-url="'.$detailsUrl.'" colspan="999">'
+                .$this->getView()->volumeHoraireListe( $service->getVolumeHoraire(), $service )->render()
+                .'</td>'
+                .'</tr>';
         return $out;
     }
 

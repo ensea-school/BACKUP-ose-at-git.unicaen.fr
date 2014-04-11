@@ -5,13 +5,14 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
+use Application\Form\VolumeHoraire\Saisie;
 use Application\Entity\Db\VolumeHoraire;
+use Application\Exception\DbException;
 
 /**
  * Description of VolumeHoraireController
  *
  * @method \Doctrine\ORM\EntityManager em() Description
- * @method \Application\Controller\Plugin\Context context() Description
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class VolumeHoraireController extends AbstractActionController
@@ -22,26 +23,6 @@ class VolumeHoraireController extends AbstractActionController
     public function getServiceVolumeHoraire()
     {
         return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-    }
-
-    /**
-     *
-     * @param integer $serviceId
-     * @return array
-     */
-    protected function getContext( $service )
-    {
-        $this->getServiceLocator()->get('ApplicationService')->getRepo()->find($service); /** @todo à modifier! ! ! */
-        return array(
-        //    'service'       => $service,
-        );
-    }
-
-    public function indexAction()
-    {
-        $context = $this->getContext( 1 );
-        $volumeHoraires = $this->getServiceVolumeHoraire()->finderByContext($context)->getQuery()->execute();
-        return compact('volumeHoraires', 'context');
     }
 
     public function voirAction()
@@ -56,25 +37,74 @@ class VolumeHoraireController extends AbstractActionController
         return compact('volumeHoraire');
     }
 
-    public function ajouterAction()
+    public function listeAction()
     {
-        
+        if (!($serviceId = (int)$this->params()->fromRoute('id'))) {
+            throw new LogicException("Aucun identifiant de service spécifié.");
+        }
+        if (!($service = $this->getServiceLocator()->get('ApplicationService')->getRepo()->find($serviceId))) {
+            throw new RuntimeException("Service '$serviceId' spécifié introuvable.");
+        }
+
+        $volumeHoraires = $service->getVolumeHoraire();
+        return compact('service','volumeHoraires');
     }
 
-    public function modifierAction()
+    public function saisieAction()
     {
-        $vh   = $this->context()->mandatory()->volumeHoraireFromQuery(); /* @var $vh \Application\Entity\Db\VolumeHoraire */
-        $form = new \Application\Form\VolumeHoraire\Saisie('vh'); 
-        var_dump('avant', $vh->getId(), $vh->getHeures());
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
-            if ($form->isValid()) {
-                var_dump($data);
-                $vh->setHeures(floatval($data['heures']));
-                $this->em()->flush($vh);
-                var_dump('apres', $vh->getId(), $vh->getHeures());
+        $id      = (int)$this->params()->fromRoute('id',0);
+        $svh     = $this->getServiceVolumeHoraire();
+        $serviceId = (int)$this->params()->fromQuery('service');
+        $periodeId = (int)$this->params()->fromQuery('periode');
+        $motifNonPaiementId = (int)$this->params()->fromQuery('motifNonPaiement',0);
+        $typeInterventionId = (int)$this->params()->fromQuery('typeIntervention',0);
+
+        $form = new Saisie( $this->getServiceLocator() );
+        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+
+        if (0 != $id){
+            /* Initialisation des valeurs */
+            $entity = $svh->getRepo()->find($id);
+            /* @var $entity \Application\Entity\Db\VolumeHoraire */
+            $form->get('heures')->setValue($entity->getHeures());
+            $form->get('motifNonPaiement')->setValue( $entity->getMotifNonPaiement() ? $entity->getMotifNonPaiement()->getId() : 0 );
+        }else{
+            $form->get('motifNonPaiement')->setValue( $motifNonPaiementId );
+        }
+        $form->get('id')->setValue( $id === 0 ? null : $id );
+        $form->get('service')->setValue( $serviceId );
+        $form->get('periode')->setValue( $periodeId );
+        $form->get('typeIntervention')->setValue( $typeInterventionId );
+
+        $request = $this->getRequest();
+        if ($request->isPost()){
+            $post = $request->getPost();
+            if (0 == $post['motifNonPaiement']) $post['motifNonPaiement'] = null;
+            $form->setData($post);
+            if ($form->isValid()){
+                if (! isset($entity)){
+                    $entity = new VolumeHoraire;
+                    $entity->setService( $this->em()->find('Application\Entity\Db\Service', $serviceId));
+                    $entity->setPeriode( $this->em()->find('Application\Entity\Db\Periode', $periodeId));
+                    $entity->setTypeIntervention( $this->em()->find('Application\Entity\Db\TypeIntervention', $typeInterventionId));
+                }
+                $entity->setHeures($post['heures']);
+                if (null !== $post['motifNonPaiement']) $entity->setMotifNonPaiement( $this->em()->find('Application\Entity\Db\MotifNonPaiement', $post['motifNonPaiement']) );
+                else $entity->setMotifNonPaiement(null);
+
+                try{
+                    $this->em()->persist($entity);
+                    $this->em()->flush();
+                    $form->get('id')->setValue( $entity->getId() ); // transmet le nouvel ID
+                }catch(\Exception $e){
+                    $e = DbException::translate($e);
+                    $errors[] = $e->getMessage();
+                }
+            }else{
+                $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
-        }//<a onclick="$('#bsm5345063f12817').popover('hide');" class="close">×</a>
-        die;
+        }
+        $errors = array();
+        return compact('form', 'errors');
     }
 }

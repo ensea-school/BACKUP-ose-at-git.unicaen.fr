@@ -161,6 +161,6 @@ return array_merge_recursive(
     include 'demo.config.php',
     include 'recherche.config.php',
     include 'service.config.php',
-    include 'volume_horaire.config.php',
+    include 'volume-horaire.config.php',
     include 'offre-formation.config.php'
 );

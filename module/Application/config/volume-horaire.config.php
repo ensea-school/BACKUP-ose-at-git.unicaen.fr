@@ -5,7 +5,7 @@ namespace Application;
 return array(
     'router' => array(
         'routes' => array(
-            'volume_horaire' => array(
+            'volume-horaire' => array(
                 'type' => 'Literal',
                 'options' => array(
                     'route' => '/volume-horaire',
@@ -50,7 +50,7 @@ return array(
         'default' => array(
             'home' => array(
                 'pages' => array(
-                    'volume_horaire' => array(
+                    'volume-horaire' => array(
                         'label'    => 'Volumes horaires',
                         'title'    => "Gestion des volumes horaires",
                         'visible' => false,
@@ -95,8 +95,7 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'volumeHoraireDl'      => 'Application\View\Helper\VolumeHoraire\Dl',
-            'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\Liste',
-            'volumeHoraireLigne'   => 'Application\View\Helper\VolumeHoraire\Ligne',
+            'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\Liste'            
         ),
     ),
 );

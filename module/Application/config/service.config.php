@@ -38,6 +38,20 @@ return array(
                             ),
                         ),
                     ),
+                    'voirLigne' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/voirLigne[/:id][?only-content=:only-content]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'voirLigne',
+                                'only-content' => 0
+                            ),
+                        ),
+                    ),
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -97,7 +111,9 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationService'       => 'Application\\Service\\Service',
+            'ApplicationService'            => 'Application\\Service\\Service',
+            'ApplicationPeriode'            => 'Application\\Service\\Periode',
+            'ApplicationMotifNonPaiement'   => 'Application\\Service\\MotifNonPaiement',
         )
     ),
     'view_helpers' => array(

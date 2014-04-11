@@ -1,10 +1,7 @@
-<?php if (! $onlyContent): ?><tr id="service-<?php echo $entity->getId() ?>-ligne"><?php endif; ?>
-<?php echo $this->serviceLigne( $entity, $context )->render($details); ?>
-<?php if (! $onlyContent): ?>
-</tr>
-<tr class="volume-horaire" id="service-<?php echo $entity->getId() ?>-volume-horaire-tr"<?php echo ($details ? '' : ' style="display:none"') ?>>
-    <td class="volume-horaire" id="service-<?php echo $entity->getId() ?>-volume-horaire-td" colspan="999">
-        <?php echo $this->volumeHoraireListe( $entity->getVolumeHoraire(), array('service' => $entity ) )->render(); ?>
-    </td>
-</tr>
-<?php endif; ?>
+<?php
+
+if ($onlyContent){
+    echo $this->serviceLigne( $entity, $context )->render($details);
+}else{
+    echo $this->serviceListe( array($entity), $context )->renderLigne( $entity, $details );
+}

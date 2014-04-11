@@ -6,17 +6,19 @@ use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Form\Element\Hidden;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Description of Saisie
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Saisie extends Form
+class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface
 {
-    public function __construct($name = null, $options = array())
+    public function __construct( ServiceLocatorInterface $serviceLocator )
     {
-        parent::__construct($name, $options);
+        parent::__construct('volume-horaire');
         
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'volume-horaire')
@@ -24,7 +26,7 @@ class Saisie extends Form
 //                ->setInputFilter(new InputFilter())
 //                ->setPreferFormInputFilter(false)
          ;
-        
+
         $this->add(array(
             'name'       => 'heures',
             'options'    => array(
@@ -37,16 +39,40 @@ class Saisie extends Form
             ),
             'type'       => 'Text',
         ));
-         
-        $this->add(new Csrf('security'));
+
+        $this->add(array(
+            'name' => 'motifNonPaiement',
+            'options'    => array(
+                'label' => "Motif de non paiement :",
+            ),
+            'attributes' => array(
+                'value' => "",
+                'title' => "Motif de non paiement",
+                'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm'
+            ),
+            'type' => 'Select'
+        ));
+
+        $motifsNonPaiement = $serviceLocator->get('ApplicationMotifNonPaiement')->getMotifsNonPaiement();
+        foreach( $motifsNonPaiement as $id => $motifNonPaiement ){
+            $motifsNonPaiement[$id] = (string)$motifNonPaiement;
+        }
+        $motifsNonPaiement[0] = 'Aucun motif : paiement prévu';
+        $this->get('motifNonPaiement')->setValueOptions( $motifsNonPaiement );
+
+        $this->add( new Hidden('id') );
+        $this->add( new Hidden('service') );
+        $this->add( new Hidden('periode') );
+        $this->add( new Hidden('typeIntervention') );
+        $this->add( new Csrf('security') );
         
         $this->add(array(
             'name' => 'submit',
             'type'  => 'Submit',
             'attributes' => array(
                 'value' => 'Enregistrer',
-                'title' => "Enregistrer ce volume horaire",
-                'class' => 'volume-horaire volume-horaire-enregistrer btn btn-primary btn-xs'
+                'title' => "Enregistrer",
+                'class' => 'volume-horaire volume-horaire-enregistrer btn btn-primary'
             ),
         ));
         
@@ -54,15 +80,28 @@ class Saisie extends Form
             'name' => 'annuler',
             'type' => 'Button',
             'options' => array(
-                'label' => 'Annuler',
+                'label' => 'Fermer',
             ),
             'attributes' => array(
                 'title' => "Abandonner cette saisie",
-                'class' => 'volume-horaire volume-horaire-annuler btn btn-primary btn-xs'
+                'class' => 'volume-horaire volume-horaire-annuler btn btn-default fermer'
             ),
         ));
     }
     
 
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification(){
+        return array(
+            'motifNonPaiement' => array(
+                'required' => false
+            )
+        );
+    }
 
 }

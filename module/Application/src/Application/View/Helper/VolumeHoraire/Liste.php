@@ -3,10 +3,12 @@
 namespace Application\View\Helper\VolumeHoraire;
 
 use Zend\View\Helper\AbstractHelper;
-use Application\Entity\Db\VolumeHoraire;
 use Doctrine\ORM\PersistentCollection;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\Service;
+use Application\Entity\Db\TypeIntervention;
 
 
 /**
@@ -22,16 +24,24 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
     /**
      * Données formattées
      *
-     * @var array
+     * @var VolumeHoraire[][][]
      */
     protected $data = array();
 
     /**
-     * typesIntervention
+     * Service
      *
-     * @var array
+     * @var Service
      */
-    public static $typesIntervention;
+    protected $service;
+
+    /**
+     * Liste des types d'intervention
+     *
+     * @var TypeIntervention[]
+     */
+    protected $typesIntervention;
+
 
 
 
@@ -39,13 +49,14 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
      * Helper entry point.
      *
      * @param VolumeHoraire[]|PersistentCollection $volumeHoraires
-     * @param array $context
+     * @param Service $service
      * @return self
      */
-    final public function __invoke( $volumeHoraires, array $context=array() )
+    final public function __invoke( $volumeHoraires, Service $service )
     {
+        /* Initialisation */
+        $this->setService( $service );
         $this->setVolumeHoraires( $volumeHoraires );
-        $this->context = $context;
         return $this;
     }
 
@@ -65,56 +76,60 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
      * @return string
      */
     public function render(){
-        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-
         $out = '<table class="table volume-horaire">';
         $out .= '<tr>';
-
-        if (empty($this->context['service'])){
-            $out .= "<th style=\"width:15%\">Service</th>\n";
-        }
         $out .= "<th style=\"width:10%\">Période</th>\n";
-        foreach( $typesIntervention as $ti ){
+        foreach( $this->typesIntervention as $ti ){
             $out .= "<th style=\"width:8%\" title=\"".$ti->getLibelle()."\">".$ti->getCode()."</th>\n";
         }
         $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
         $out .= "</tr>\n";
-        foreach( $this->data as $gvh ){
-            $default = $gvh['vhDefault'];
-            $out .= '<tr>';
-            if (empty($this->context['service'])){
-                $out .= "<td>".$this->renderService($default->getService())."</td>\n";
-            }
-            $out .= "<td>".$this->renderPeriode($default->getPeriode())."</td>\n";
-            foreach( $typesIntervention as $ti ){
-                if (isset($gvh[$ti->getId()])){
-                    $out .= "<td><span rel=\"popover\" data-vh-id=\"{$gvh[$ti->getId()]->getId()}\">".$this->renderHeures($gvh[$ti->getId()]->getHeures())."</span></td>\n";
-                }else{
-                    $out .= '<td><span rel=\"popover\">0</span></td>';
+        foreach( $this->data as $pid => $motifsNonPaiement ){
+            $periode = $motifsNonPaiement['periode'];
+            unset($motifsNonPaiement['periode']);
+            foreach( $motifsNonPaiement as $mid => $typesIntervention ){
+                $motifNonPaiement = isset($typesIntervention['motifNonPaiement']) ? $typesIntervention['motifNonPaiement'] : null;
+                $mid = $motifNonPaiement ? $motifNonPaiement->getId() : null;
+                $out .= '<tr>';
+                $out .= "<td>".$this->renderPeriode($periode)."</td>\n";
+                foreach( $this->typesIntervention as $tid => $null ){
+                    $out .= '<td>'.$this->renderHeures( $typesIntervention[$tid], $pid, $mid, $tid ).'</td>';
                 }
+                $out .= "<td>".$this->renderMotifNonPaiement($motifNonPaiement)."</td>\n";
+                $out .= "</tr>\n";
             }
-            $out .= "<td>".$this->renderMotifNonPaiement($default->getMotifNonPaiement())."</span></td>\n";
-            $out .= "</tr>\n";
         }
         $out .= '</table>'."\n";
         return $out;
     }
 
-    protected function renderService($service)
-    {
-        $out = '<a href="#">N° <span class="badge">'.(string)$service->getId().'</span></a>'."\n";
-        return $out;
-    }
-
     protected function renderPeriode($periode)
     {
+        if (! $periode) return "&nbsp;";
         $out = $periode->getLibelle();
         return $out;
     }
 
-    protected function renderHeures($heures)
+    protected function renderHeures($volumeHoraire, $periodeId, $motifNonPaiementId, $typeInterventionId)
     {
-        return \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
+        if ($volumeHoraire){
+            $id = $volumeHoraire->getId();
+            $heures = \UnicaenApp\Util::formattedFloat($volumeHoraire->getHeures(), \NumberFormatter::DECIMAL, -1);
+        }else{
+            $id = '';
+            $heures = 0;
+        }
+
+        $params = array(
+            'action'            => 'saisie',
+            'id'                => $id,
+            'service'           => $this->getService()->getId(),
+            'periode'           => $periodeId,
+            'motifNonPaiement'  => $motifNonPaiementId,
+            'typeIntervention'  => $typeInterventionId
+        );
+        if ($id !== '') $params['id'] = $id;
+        return "<a class=\"ajax-popover volume-horaire event_save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$params['service']."\" href=\"".$this->getView()->url('volume-horaire/default', $params )."\" >$heures</a>";
     }
 
     protected function renderMotifNonPaiement($motifNonPaiement)
@@ -129,51 +144,68 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 
     /**
      *
-     * @return VolumeHoraire[]
-     */
-    public function getVolumeHoraires()
-    {
-        return $this->volumeHoraires;
-    }
-
-    /**
-     *
-     * @return array
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     *
      * @param VolumeHoraire[] $volumeHoraires
      * @return self
      */
     public function setVolumeHoraires($volumeHoraires)
     {
-        $this->volumeHoraires = $volumeHoraires;
+        $serviceTypeIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention');
+        /* @var $serviceTypeIntervention \Application\Service\TypeIntervention */
+
+        $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
+        /* @var $servicePeriode \Application\Service\Periode */
+
+        $periodes = $servicePeriode->getByTypeIntervenant( $this->getService()->getIntervenant()->getType() );
+        $typesIntervention = $serviceTypeIntervention->getTypesIntervention();
+        $this->typesIntervention = $typesIntervention;
+        $this->data = array(); // DATA [Periode][MotifNonPaiement][TypeIntervention]
+        
+        /* Initialisation du tableau */
         $this->data = array();
-        foreach( $volumeHoraires as $vh ){
-            $key = $vh->getService()->getId().'_'.$vh->getPeriode()->getId().'_';
-            if ($mnp = $vh->getMotifNonPaiement()) $key .= $mnp->getId();
-            if (! isset($this->data[$key])){
-                $this->data[$key]['vhDefault'] = $vh;
+        foreach( $periodes as $pid => $p ){
+            $motifsNonPaiement = array(0 => null);
+            foreach( $volumeHoraires as $vh ){
+                if ($vh->getPeriode()->getId() == $pid){
+                    if ($motifNonPaiement = $vh->getMotifNonPaiement()){
+                        $motifsNonPaiement[$motifNonPaiement->getId()] = $motifNonPaiement;
+                    }
+                }
             }
-            $this->data[$key][$vh->getTypeIntervention()->getId()] = $vh;
+            /* Tri des motifs de non paiement */
+            uasort( $motifsNonPaiement, function( $a, $b ){
+                return ($a ? $a->getLibelleLong() : '') > ($b ? $b->getLibelleLong() : '');
+            });
+
+            if (! isset($this->data[$pid])) $this->data[$pid] = array('periode' => $p);
+            foreach( $motifsNonPaiement as $mid => $m ){
+                if (! isset($this->data[$pid][$mid])) $this->data[$pid][$mid] = array('motifNonPaiement' => $m);
+                foreach( $typesIntervention as $tid => $t ){
+                    $this->data[$pid][$mid][$tid] = null;
+                }
+            }
+        }
+
+        /* Affectation des valeurs */
+        foreach( $volumeHoraires as $vh ){
+            $pid = $vh->getPeriode()->getId();
+            $mid = $vh->getMotifNonPaiement() ? $vh->getMotifNonPaiement()->getId() : 0;
+            $tid = $vh->getTypeIntervention()->getId();
+
+            $this->data[$pid][$mid][$tid] = $vh;
         }
         return $this;
     }
 
-    /**
-     *
-     * @param array $context
-     * @return self
-     */
-    public function setContext($context)
+    public function getService()
     {
-        $this->context = $context;
+        return $this->service;
+    }
+
+    public function setService(Service $service)
+    {
+        $this->service = $service;
         return $this;
     }
+
 
 }

@@ -70,8 +70,8 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $out = '';
         if (empty($this->context['intervenant'])){
-            $out .= '<td>'.$this->service->getIntervenant()->getNomComplet(true);
-            $out .= $this->renderStructure( $this->service->getStructureAff() )."</td>\n";
+            $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
+            $out .= '<td>'.$this->renderStructure( $this->service->getStructureAff() )."</td>\n";
         }
         if ($this->service->getEtablissement() == $this->context['etablissement']){
             $out .= '<td>'.$this->renderStructure( $this->service->getStructureEns() )."</td>\n";
@@ -89,6 +89,12 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
         $out .= $this->renderModifier();
         $out .= $this->renderSupprimer();
         $out .= $this->renderDetails( $details );
+        return $out;
+    }
+
+    protected function renderIntervenant($intervenant)
+    {
+        $out = (string)$intervenant;
         return $out;
     }
 

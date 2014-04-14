@@ -7,6 +7,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Form\Element\Hidden;
+use Application\Entity\Db\VolumeHoraire;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -64,8 +65,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         $this->add( new Hidden('service') );
         $this->add( new Hidden('periode') );
         $this->add( new Hidden('typeIntervention') );
-        $this->add( new Csrf('security') );
-        
+
         $this->add(array(
             'name' => 'submit',
             'type'  => 'Submit',
@@ -88,7 +88,20 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             ),
         ));
     }
-    
+
+    /* Associe une entity VolumeHoraire au formulaire */
+    public function bind( $object, $flags=17){
+        /* @var $object \Application\Entity\Db\VolumeHoraire */
+        $data = array(
+            'id'               => $object->getId(),
+            'heures'           => $object->getHeures(),
+            'motifNonPaiement' => $object->getMotifNonPaiement() ? $object->getMotifNonPaiement()->getId() : 0,
+            'service'          => $object->getService() ? $object->getService()->getId() : null,
+            'periode'          => $object->getPeriode() ? $object->getPeriode()->getId() : 0,
+            'typeIntervention' => $object->getTypeIntervention() ? $object->getTypeIntervention()->getId() : null,
+        );
+        $this->setData($data);
+    }
 
     /**
      * Should return an array specification compatible with
@@ -100,7 +113,10 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         return array(
             'motifNonPaiement' => array(
                 'required' => false
-            )
+            ),
+            'periode' => array(
+                'required' => false
+            ),
         );
     }
 

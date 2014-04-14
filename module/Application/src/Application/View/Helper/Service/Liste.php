@@ -55,10 +55,11 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         $out .= '<tr>';
 
         if (empty($this->context['intervenant'])){
-            $out .= "<th colspan=\"2\">Intervenant</th>\n";
+            $out .= "<th>Intervenant</th>\n";
+            $out .= "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>\n";
             $colspan += 2;
         }
-        $out .= "<th>Structure</th>\n";
+        $out .= "<th title=\"Structure gestionnaire de l'enseignement\">Structure d'enseignement</th>\n";
         $out .= "<th>Enseignement ou responsabilité</th>\n";
         if (empty($this->context['annee'])){
             $out .= "<th>Année univ.</th>\n";

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * VolumeHoraire
  */
-class VolumeHoraire
+class VolumeHoraire implements HistoriqueAwareInterface
 {
     /**
      * @var float

@@ -105,8 +105,8 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 
     protected function renderPeriode($periode)
     {
-        if (! $periode) return "&nbsp;";
-        $out = $periode->getLibelle();
+        if (! $periode) return "Indéterminée";
+        $out = (string)$periode;
         return $out;
     }
 
@@ -116,20 +116,17 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
             $id = $volumeHoraire->getId();
             $heures = \UnicaenApp\Util::formattedFloat($volumeHoraire->getHeures(), \NumberFormatter::DECIMAL, -1);
         }else{
-            $id = '';
+            $id = null;
             $heures = 0;
         }
-
-        $params = array(
-            'action'            => 'saisie',
-            'id'                => $id,
-            'service'           => $this->getService()->getId(),
-            'periode'           => $periodeId,
-            'motifNonPaiement'  => $motifNonPaiementId,
-            'typeIntervention'  => $typeInterventionId
-        );
-        if ($id !== '') $params['id'] = $id;
-        return "<a class=\"ajax-popover volume-horaire event_save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$params['service']."\" href=\"".$this->getView()->url('volume-horaire/default', $params )."\" >$heures</a>";
+        $context = array();
+        $params = array('action' => 'saisie');
+        if ($id)                 $params['id'] = $id;
+        if ($this->getService()) $context['service'] = $this->getService()->getId();
+        if ($periodeId)          $context['periode'] = $periodeId;
+        if ($motifNonPaiementId) $context['motifNonPaiement'] = $motifNonPaiementId;
+        if ($typeInterventionId) $context['typeIntervention'] = $typeInterventionId;
+        return "<a class=\"ajax-popover volume-horaire event_save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$context['service']."\" href=\"".$this->getView()->url('volume-horaire/default', $params, array('query' => $context ) )."\" >$heures</a>";
     }
 
     protected function renderMotifNonPaiement($motifNonPaiement)
@@ -155,17 +152,28 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
         /* @var $servicePeriode \Application\Service\Periode */
 
-        $periodes = $servicePeriode->getByTypeIntervenant( $this->getService()->getIntervenant()->getType() );
+        $periodes = array(0 => null);
+        $periodes += $servicePeriode->getByTypeIntervenant( $this->getService()->getIntervenant()->getType() );
+        /* Récupération éventuelle des volumes horaires saisis sur d'autres périodes que celles habituelles */
+        foreach( $volumeHoraires as $vh ){
+            if ($vh->getPeriode() && ! isset($periodes[$vh->getPeriode()->getId()])){
+                $periodes[$vh->getPeriode()->getId()] = $vh->getPeriode();
+            }
+        }
+        /* Tri des périodes */
+        uasort( $periodes, function( $a, $b ){
+            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '');
+        });
         $typesIntervention = $serviceTypeIntervention->getTypesIntervention();
         $this->typesIntervention = $typesIntervention;
         $this->data = array(); // DATA [Periode][MotifNonPaiement][TypeIntervention]
-        
+
         /* Initialisation du tableau */
         $this->data = array();
         foreach( $periodes as $pid => $p ){
             $motifsNonPaiement = array(0 => null);
             foreach( $volumeHoraires as $vh ){
-                if ($vh->getPeriode()->getId() == $pid){
+                if ($vh->getPeriode() === $p){
                     if ($motifNonPaiement = $vh->getMotifNonPaiement()){
                         $motifsNonPaiement[$motifNonPaiement->getId()] = $motifNonPaiement;
                     }
@@ -187,10 +195,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 
         /* Affectation des valeurs */
         foreach( $volumeHoraires as $vh ){
-            $pid = $vh->getPeriode()->getId();
+            $pid = $vh->getPeriode() ? $vh->getPeriode()->getId() : 0;
             $mid = $vh->getMotifNonPaiement() ? $vh->getMotifNonPaiement()->getId() : 0;
             $tid = $vh->getTypeIntervention()->getId();
-
             $this->data[$pid][$mid][$tid] = $vh;
         }
         return $this;

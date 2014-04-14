@@ -164,8 +164,6 @@ VolumeHoraire.init = function(){
         title: "Cliquez pour ouvrir/fermer le formulaire de modification..."
     });
 
-    ajaxPopoverInit();
-
     $("body").on('save-volume-horaire', function(event,data){
         event.a.popover('hide');
         $("#service-"+event.a.data('service')+"-volume-horaire-td").refresh();

@@ -14,6 +14,7 @@ use Application\Exception\DbException;
  * Description of ServiceController
  *
  * @method \Doctrine\ORM\EntityManager em()
+ * @method \Application\Controller\Plugin\Intervenant intervenant()
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
@@ -136,11 +137,18 @@ class ServiceController extends AbstractActionController
                     $entity->setAnnee($context['annee']);
                     $entity->setValiditeDebut(new \DateTime);
                 }
-              
-                if ( isset($context['intervenant']) ){
+
+                if ( isset($context['intervenant']) && $context['intervenant']){
                     $intervenant = $context['intervenant'];
                 }else{
-                    $intervenant = $this->em()->getRepository('Application\\Entity\\Db\\Intervenant')->find($post->intervenant['id']);
+                    $controller = 'Application\Controller\Intervenant';
+                    $params     = $this->getEvent()->getRouteMatch()->getParams();
+                    if (!($intervenant = $this->intervenant()->getRepo()->findOneBy(array('sourceCode' => $post->intervenant['id'])))) {
+                        $params['action'] = 'importer';
+                        $params['id']     = $post->intervenant['id'];
+                        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
+                        $intervenant      = $viewModel->getVariable('intervenant');
+                    }
                 }
 
                 if (isset($context['elementPedagogique'])){

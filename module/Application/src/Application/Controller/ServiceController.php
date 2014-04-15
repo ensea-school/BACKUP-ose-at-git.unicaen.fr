@@ -35,7 +35,21 @@ class ServiceController extends AbstractActionController
         $qb = $service->finderByContext($context);
         $annee = $context['annee'];
         $services = $qb->getQuery()->execute();
-        return compact('annee', 'services', 'context');
+//        return compact('annee', 'services', 'context');
+        
+        /* Bertrand: services référentiels */
+        $controller       = 'Application\Controller\ServiceReferentiel';
+        $params           = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'voirListe';
+        $listeViewModel   = $this->forward()->dispatch($controller, $params);
+        /* */
+        
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel
+                ->addChild($listeViewModel, 'servicesRefListe')
+                ->setVariables(compact('annee', 'services', 'context'));
+        
+        return $viewModel;
     }
 
     public function voirAction()

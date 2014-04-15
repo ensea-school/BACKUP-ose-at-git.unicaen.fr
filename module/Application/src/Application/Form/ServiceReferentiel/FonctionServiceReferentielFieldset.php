@@ -44,7 +44,7 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
         $this->setHydrator(new FonctionServiceReferentielHydrator(static::$structuresPossibles, static::$fonctionsPossibles))
              ->setObject(new ServiceReferentiel());
 
-        $this->setLabel("Fonction référentielle");
+//        $this->setLabel("Fonction référentielle");
 
         $this->add(array(
             'name'       => 'structure',

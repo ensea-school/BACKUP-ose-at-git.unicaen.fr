@@ -23,11 +23,11 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
-        
-//        $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'registerModalStrategy'), 100);
 
         $eventManager->attach(new AuthenticatedUserSavedListener($sm->get('doctrine.entitymanager.orm_default')));
 
+//        $eventManager->attach(new ModalListener());
+        
         /* Déclare la dernière vue transmise comme terminale si on est en AJAX */
         $sharedEvents = $eventManager->getSharedManager();
         $sharedEvents->attach('Zend\Mvc\Controller\AbstractActionController','dispatch',
@@ -44,37 +44,41 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                     $result->setTerminal($e->getRequest()->isXmlHttpRequest());
                 }
         });
-    }
-    
-    /**
-     * @param  \Zend\Mvc\MvcEvent $e The MvcEvent instance
-     * @return void
-     */
-    public function registerModalStrategy($e)
-    {
-//        $matches    = $e->getRouteMatch();
-//        $controller = $matches->getParam('controller');
-//        if (false === strpos($controller, __NAMESPACE__)) {
-//            // not a controller from this module
-//            return;
-//        }
-        if (!$e->getParam('modal', false)) {
-            return;
-        }
-
-//        // Potentially, you could be even more selective at this point, and test
-//        // for specific controller classes, and even specific actions or request
-//        // methods.
-
-        // Set the JSON strategy when controllers from this module are selected
-        $app          = $e->getTarget();
-        $locator      = $app->getServiceManager();
-        $view         = $locator->get('Zend\View\View');
-//        $jsonStrategy = $locator->get('ViewJsonStrategy');
-        $modalStrategy = new View\Renderer\ModalStrategy();
-
-        // Attach strategy, which is a listener aggregate, at high priority
-        $view->getEventManager()->attach($modalStrategy, 100);
+        
+//        $eventManager->attach('render',
+//             function($e) {
+//                $modal = (bool) $e->getRequest()->getQuery('modal', $e->getRequest()->getPost('modal', 0));
+//                var_dump($modal);
+//                if (!$modal) {
+//                    return;
+//                }
+//$ex = new \Exception;
+//                $result = $e->getViewModel();
+//                if (!$result instanceof \Zend\View\Model\ViewModel) {
+//                    return;
+//                }
+//                
+//                var_dump($result, $ex->getTraceAsString());
+////                if (is_array($result)) {
+////                    $result = new \Zend\View\Model\ViewModel($result);
+////                }
+////                elseif (empty($result)) {
+////                    $result = new \Zend\View\Model\ViewModel();
+////                }
+//
+//                $title         = "Test modale";
+//                $displaySubmit = false;
+//
+//                if (!$e->getRequest()->isXmlHttpRequest()) {
+//                    $f = new \UnicaenApp\Filter\ModalViewModel($title, $displaySubmit);
+//                }
+//                else {
+//                    $f = new \UnicaenApp\Filter\ModalInnerViewModel($title, $displaySubmit);
+//                }
+//                $modalViewModel = $f->filter($result);
+//
+//                $e->setResult($modalViewModel);
+//        });
     }
     
     public function getConfig()

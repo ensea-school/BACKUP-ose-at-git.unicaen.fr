@@ -20,6 +20,8 @@ class ModalStrategyFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new ModalStrategy();
+        $viewRenderer = $serviceLocator->get('ViewRenderer');
+        
+        return new ModalStrategy($viewRenderer);
     }
 }

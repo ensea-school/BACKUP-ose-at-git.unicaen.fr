@@ -4,6 +4,7 @@ namespace Application\View\Renderer;
 
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\EventManagerInterface;
+use Zend\View\Renderer\RendererInterface;
 use Zend\View\ViewEvent;
 
 /**
@@ -13,20 +14,76 @@ use Zend\View\ViewEvent;
  */
 class ModalStrategy implements ListenerAggregateInterface
 {
-    protected $listeners = array();
+    use \Zend\EventManager\ListenerAggregateTrait;
 
-    public function __construct() {
-        
+    const PARAM_NAME = 'modal';
+    
+    protected $renderer;
+    
+    /**
+     * 
+     * @param \Zend\View\Renderer\RendererInterface $renderer
+     */
+    public function __construct(RendererInterface $renderer)
+    {
+        $this->renderer = $renderer;
     }
 
     /**
-     * 
-     * @param \Zend\Mvc\MvcEvent $event
-     * @return type
+     * Select the PhpRenderer; typically, this will be registered last or at
+     * low priority.
+     *
+     * @param  ViewEvent $e
+     * @return PhpRenderer
      */
-    public function functionName(ViewEvent $event)
-    {        
-        var_dump($event->getRenderer()); 
+    public function selectRenderer(ViewEvent $e)
+    {
+        return $this->renderer;
+    }
+
+    /**
+     * Populate the response object from the View
+     *
+     * Populates the content of the response object from the view rendering
+     * results.
+     *
+     * @param ViewEvent $e
+     * @return void
+     */
+    public function injectResponse(ViewEvent $e)
+    {
+        $modal = (bool) $e->getRequest()->getQuery(
+                self::PARAM_NAME, 
+                $e->getRequest()->getPost(self::PARAM_NAME, 0));
+//        var_dump(__METHOD__, $modal, $e->getModel()/*, $e->getTraceAsString()*/);
+     
+        $renderer = $e->getRenderer();
+        if ($renderer !== $this->renderer) {
+            return;
+        }
+
+        $model = $e->getModel();
+
+        $f = new \UnicaenApp\Filter\ModalInnerViewModel("Test modale", false);
+        
+        $modalViewModel = $f->filter($model);
+        $modalViewModel->setTerminal($e->getRequest()->isXmlHttpRequest()); // Turn off the layout for AJAX requests
+        
+        $e->setModel($modalViewModel);
+        
+//        // Set content
+//        // If content is empty, check common placeholders to determine if they are
+//        // populated, and set the content from them.
+//        if (empty($result)) {
+//            $placeholders = $renderer->plugin('placeholder');
+//            foreach ($this->contentPlaceholders as $placeholder) {
+//                if ($placeholders->containerExists($placeholder)) {
+//                    $result = (string) $placeholders->getContainer($placeholder);
+//                    break;
+//                }
+//            }
+//        }
+//        $response->setContent($result);
     }
     
     /**
@@ -37,22 +94,9 @@ class ModalStrategy implements ListenerAggregateInterface
      *
      * @param EventManagerInterface $events
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 10)
     {
-        $this->listeners[] = $events->attach(ViewEvent::EVENT_RESPONSE, array($this, 'functionName'), $priority);
-    }
-
-    /**
-     * Detach all previously attached listeners
-     *
-     * @param EventManagerInterface $events
-     */
-    public function detach(EventManagerInterface $events)
-    {
-        foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
-        }
+        $this->listeners[] = $events->attach(ViewEvent::EVENT_RENDERER, array($this, 'selectRenderer'), $priority);
+        $this->listeners[] = $events->attach(ViewEvent::EVENT_RESPONSE, array($this, 'injectResponse'), $priority);
     }
 }

@@ -1,0 +1,34 @@
+<?php
+
+if (! isset($context['etablissement'])){
+    throw new Exception('Contexte Etablissement non fourni');
+}
+
+$etablissementParam = (integer)$context['etablissement']->getId();
+$etablissementValue = (integer)$form->get('etablissement')->getValue();
+
+if (null == $etablissementValue || $etablissementValue == $etablissementParam){
+    $interne = true;
+}else{
+    $interne = false;
+}
+
+$form->get('interne-externe')->setValue($interne ? 'service-interne' : 'service-externe');
+
+$form->prepare();
+
+echo $this->form()->openTag($form);
+if (! isset($context['intervenant'])){
+    echo $this->formControlGroup($form->get('intervenant'));
+}
+echo $this->formControlGroup($form->get('interne-externe'), 'formButtonGroup');
+echo '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->fieldsetElementPedagogiqueRecherche($form->get('elementPedagogique')).'</div>';
+//echo '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->formControlGroup($form->get('elementPedagogique')).'</div>';
+echo '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->formControlGroup($form->get('etablissement')).'</div>';
+echo $this->formRow($form->get('submit'));
+echo $this->formHidden($form->get('security'));
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag().'<br />';
+
+echo $this->formErrors( $form );
+if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));

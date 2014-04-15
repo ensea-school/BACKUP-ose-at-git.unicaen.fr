@@ -1,0 +1,116 @@
+<!--<h1>Saisie du service référentiel<br /><small><?php echo $intervenant ?></small></h1>-->
+
+<style>
+    form.service-referentiel .form-group { float: left; }
+    form.service-referentiel input { width: 100px; }
+    form.service-referentiel input[type=submit] { margin-top: 2em; }
+    button.fonction-referentiel-ajouter   { display: block; margin-top: 0.5em; }
+    button.fonction-referentiel-supprimer { margin: 2em 0 0 1em; }
+</style>
+
+<?php if (isset($exception)) { echo $this->messenger()->setException($exception); } ?>
+
+<?php
+$form->setAttribute('id', $formId = uniqid('form-'))->prepare();
+$serviceReferentiel = $form->get('intervenant');
+?>
+
+<?php 
+echo $this->form()->openTag($form);
+echo $this->formCollection()->setElementHelper($this->formControlGroup())->render($serviceReferentiel->get('serviceReferentiel'));
+?> 
+<div id="fonction-comptage"></div>
+<?php 
+echo $this->formButton($form->get('ajouter'));
+echo $this->formHidden($form->get('security'));
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+echo $this->form()->closeTag();
+?>
+
+<script>
+    var formId = "<?php echo $form->getAttribute('id') ?>";
+    var form   = $("#" + formId);
+    
+    $("body").on('click', "#" + formId + " button.fonction-referentiel-ajouter", function() {
+        addFonction();
+        return false;
+    });
+    $("body").on('click', "#" + formId + " button.fonction-referentiel-supprimer", function() {
+        if (getFonctionCurrentCount() > 0) {
+            removeFonction($(this));
+        }  
+        return false; 
+    });
+        
+    $(function() {
+        updateFonctionCounter();
+        $(":input").tooltip();
+        
+        $('body').on('change', "#" + formId + " select.fonction-referentiel-fonction", function() {
+            var select = $(this); // select de référence, dont la valeur a changé
+            if (select.val() === '') {
+                return;
+            }
+            applySelectUnicity(select);
+        });
+    });
+    
+    /**
+     * 
+     * @param object changedSelect Select de référence, dont la valeur a changé
+     * @param object targetSelect  Si spécifié, seul select cible à mettre à jour
+     * @returns void
+     */
+    function applySelectUnicity(changedSelect, targetSelect)
+    {
+        if (!targetSelect) {
+            targetSelect = $("#" + formId + " select");
+        }
+        // parcours des select (autre que celui de référence)
+        targetSelect.not(changedSelect).each(function() {
+            $("option", this).each(function() {
+                // cache les items identiques à celui sélectionné dans le select de référence
+                if ($(this).val() === changedSelect.val()) {
+                    $(this).data('from', changedSelect).hide();
+                    //console.log('hide ' + $(this).text(), $(this).data('from'));
+                }
+                // fait réapparaître les items ayant été cachés précédemment
+                else if ($(this).is(":hidden") && $(this).data() && $(this).data('from').is(changedSelect)) {
+                    $(this).removeData('from').show();
+                    //console.log('show ' + $(this).text(), $(this).data('from'));
+                }
+            });
+        });
+    }
+    
+    function addFonction() 
+    {
+        var currentCount = getFonctionCurrentCount();
+        var template = $('> fieldset > span', form).data('template');
+        var element = $(template.replace(/__index__/g, currentCount));
+        console.log('ici');
+console.log($('> fieldset', form));
+        $('> fieldset', form).append(element.fadeIn());
+        $("select.fonction-referentiel-fonction").not($("select", element)).each(function() { applySelectUnicity($(this), $("select", element)); });
+        updateFonctionCounter();
+        return element;
+    }
+    
+    function removeFonction(button) 
+    {
+        $(button).parentsUntil('fieldset').parent().remove();
+        updateFonctionCounter();
+        return false;
+    }
+    
+    function getFonctionCurrentCount()
+    {
+        return $('> fieldset > fieldset', form).length;;
+    }
+    
+    function updateFonctionCounter() 
+    {
+        var currentCount = getFonctionCurrentCount();
+        $("#fonction-comptage").html(currentCount ? "" : "Aucune fonction.");
+    }
+</script>

@@ -28,7 +28,7 @@ class ServiceReferentielFieldset extends Fieldset
             'type' => 'Zend\Form\Element\Collection',
             'name' => 'serviceReferentiel',
             'options' => array(
-                'label' => 'Ajoutez autant de fonctions que nécessaire...',
+//                'label' => 'Ajoutez autant de fonctions que nécessaire...',
                 'count' => 0,
                 'should_create_template' => true,
                 'allow_add' => true,

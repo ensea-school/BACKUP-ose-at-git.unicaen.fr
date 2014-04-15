@@ -29,6 +29,11 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
     protected $mandatory = false;
     
     /**
+     * @var \Application\Service\Context
+     */
+    protected $context;
+    
+    /**
      * @var \Zend\Session\Container
      */
     protected $sessionContainer;
@@ -59,8 +64,9 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
                 break;
             case ($method = 'FromPost') === substr($name, $length = -8):
                 break;
-            case 'FromSession' === substr($name, $length = -11):
-                $method = 'fromSession';
+            case ($method = 'FromSession') === substr($name, $length = -11):
+                break;
+            case ($method = 'FromContext') === substr($name, $length = -11):
                 break;
             default:
                 throw new LogicException("Méthode '$name' inexistante.");
@@ -137,6 +143,36 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
         }
 
         return $this->getSessionContainer()->$name;
+    }
+    
+    /**
+     * Return a single global context parameter.
+     *
+     * @param  string $name Parameter name to retrieve.
+     * @param  mixed $default Default value to use when the requested parameter is not set.
+     * @return mixed
+     */
+    public function fromContext($name, $default = null)
+    {
+        try {
+            $value = $this->getGlobalContext()->get($name);
+        }
+        catch (LogicException $exc) {
+            $value = $default;
+        }
+
+        return $value;
+    }
+    
+    /**
+     * @return \Application\Service\Context
+     */
+    public function getGlobalContext()
+    {
+        if (null === $this->context) {
+            $this->context = $this->sl->get('ApplicationContext');
+        }
+        return $this->context;
     }
     
     /**

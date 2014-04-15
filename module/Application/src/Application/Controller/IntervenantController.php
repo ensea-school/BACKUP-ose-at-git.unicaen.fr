@@ -75,10 +75,16 @@ class IntervenantController extends AbstractActionController
             }
         }
         
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(array('form' => $form));
+        $terminal = $this->getRequest()->isXmlHttpRequest();
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel
+                ->setTemplate('application/intervenant/choisir')
+                ->setVariables(array('form' => $form));
+        if ($terminal) {
+            return $this->modalInnerViewModel($viewModel, "Choix de l'intervenant", false);
+        }
         
-        return $view;
+        return $viewModel;
     }
     
     public function importerAction()

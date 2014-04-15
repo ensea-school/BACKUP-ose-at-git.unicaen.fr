@@ -193,3 +193,133 @@ $(document).ready(function() {
     });
 
 });
+
+
+
+
+/*************** Propre à l'affichage des services référentiels ***************/
+
+function ServiceReferentiel( id ) {
+
+    this.id = id;
+
+//    this.delete = function( url ){
+//        ok = window.confirm('Voulez-vous vraiment supprimer ce service ?');
+//        if (ok){
+//            $('#service-ref-div').modal({remote: url});
+//        }
+//        return false;
+//    }
+//
+//    this.showHideDetails = function( serviceA ){
+//
+//        var state = $.data(serviceA,'state');
+//        var tr = $('#service-ref-' + this.id + '-volume-horaire-tr');
+//
+//        if (('show' == state || 'none' == tr.css('display')) && 'hide' != state ){
+//            $(serviceA).html('<span class="glyphicon glyphicon-chevron-up"></span>');
+//            tr.show(200);
+//        }else{
+//            $(serviceA).html('<span class="glyphicon glyphicon-chevron-down"></span>');
+//            tr.hide(200);
+//        }
+//    }
+//
+//    this.showInterneExterne = function(){
+//        if ('service-ref-interne' == this.id){
+//            $('#element-interne').show();
+//            $('#element-externe').hide();
+//            $("input[name='etablissement\\[label\\]']").val('');
+//            $("input[name='etablissement\\[id\\]']").val('');
+//        }else{
+//            $('#element-interne').hide();
+//            $("input[name='elementPedagogique\\[label\\]']").val('');
+//            $("input[name='elementPedagogique\\[id\\]']").val('');
+//            $('#element-externe').show();
+//        }
+//    }
+
+    this.onAfterAdd = function(){
+//        $.get( ServiceReferentiel.voirLigneUrl+"/"+this.id+'?only-content=0', function( data ) {
+//            $( "#service-ref-"+this.id+"-ligne" ).load( ServiceReferentiel.voirLigneUrl );
+//            $('#services > tbody:last').append(data);
+//        });
+        $.get(ServiceReferentiel.voirLigneUrl, [], function(data) { $("#services-ref").replaceWith($(data).filter("table").fadeIn()); });
+    }
+
+//    this.onAfterModify = function(){
+//        var details = $('#service-ref-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1';
+//        $( "#service-ref-"+this.id+"-ligne" ).load( ServiceReferentiel.voirLigneUrl + "/"+this.id+'?only-content=1&details='+details );
+//    }
+//
+//    this.onAfterDelete = function(){
+//        $('#service-ref-'+this.id+'-volume-horaire-tr').remove();
+//        $( "#service-ref-"+this.id+"-ligne" ).remove();
+//    }
+
+}
+
+ServiceReferentiel.get = function( id )
+{
+    if (null == ServiceReferentiel.services) ServiceReferentiel.services = new Array();
+    if (null == ServiceReferentiel.services[id]) ServiceReferentiel.services[id] = new ServiceReferentiel(id);
+    return ServiceReferentiel.services[id];
+}
+
+ServiceReferentiel.init = function( voirLigneUrl )
+{
+    ServiceReferentiel.voirLigneUrl = voirLigneUrl;
+
+    $("body").on("service-ref-add-message service-ref-modify-message", function(event, data) {
+        var id = null;
+        if ($("div .messenger, div .alert").length ? false : true){
+            event.dialog.modal('hide'); // ferme la fenêtre modale
+//            for (i in data) {
+//                if (data[i].name == 'id') {
+//                    id = data[i].value;
+//                }
+//            }
+//            if (id) {
+                switch (event.type) {
+                    case "service-ref-add-message":
+                        ServiceReferentiel.get(id).onAfterAdd();
+                        break;
+//                    case "service-ref-modify-message":
+//                        ServiceReferentiel.get(id).onAfterModify();
+//                        break;
+                }
+//            }
+        }
+    });
+
+//    $('#service-ref-div').on('loaded.bs.modal', function (e) {
+//        if (id = $('#service-ref-deleted-id').val()){
+//            ServiceReferentiel.get(id).onAfterDelete();
+//        }
+//    });
+//
+//    $("body").on('change', 'form#service input[name="interne-externe"]', function(){
+//        ServiceReferentiel.get(this.value).showInterneExterne( $( this ).val() );
+//    });
+//
+//    $(".service-ref-show-all-details").on('click', function(){ ServiceReferentiel.showAllDetails(); });
+//    $(".service-ref-hide-all-details").on('click', function(){ ServiceReferentiel.hideAllDetails(); });
+//    $('body').on('click', '.service-ref-delete', function(){
+//        ServiceReferentiel.get( $(this).data('id') ).delete( $(this).attr('href') );
+//        return false;
+//    })
+}
+
+//ServiceReferentiel.showAllDetails = function(){
+//    $('.service-ref-details-button').data('state', 'show');
+//    $('.service-ref-details-button').click();
+//    $('.service-ref-details-button').data('state', '');
+//}
+//
+//ServiceReferentiel.hideAllDetails = function(){
+//    $('.service-ref-details-button').data('state', 'hide');
+//    $('.service-ref-details-button').click();
+//    $('.service-ref-details-button').data('state', '');
+//}
+
+

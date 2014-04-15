@@ -118,10 +118,12 @@ $main =  array(
         'invokables' => array(
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
+            'ApplicationContext'                             => 'Application\\Service\\Context',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
         ),
         'factories' => array(
+            'ModalStrategy' => 'Application\View\Renderer\ModalStrategyFactory',
         ),
     ),
     'view_helpers' => array(
@@ -148,7 +150,7 @@ $main =  array(
             __DIR__ . '/../view',
         ),
         'strategies' => array(
-//            'Application\View\Renderer\ModalStrategyFactory',
+//            'ModalStrategy',
         ),
     ),
 );

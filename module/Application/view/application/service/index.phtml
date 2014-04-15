@@ -1,4 +1,15 @@
-<h1>Services</h1>
-<h2>Année universitaire <?php echo $annee; ?></h2>
+<div class="jumbotron">
+    <h1>Services <small>Année universitaire <?php echo $annee; ?></small></h1>
+</div>
 
+<style>
+    .modal-dialog { width: 60%; }
+</style>
+
+<h2>Services référentiels</h2>
+<?php echo $this->servicesRefListe; ?>
+
+<hr />
+
+<h2>Services prévisionnels</h2>
 <?php echo $this->serviceListe( $services, $context )->render(); ?>

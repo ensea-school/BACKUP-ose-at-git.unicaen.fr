@@ -8,6 +8,7 @@ use Zend\Form\Element\Csrf;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Application\Form\ServiceReferentiel\ServiceReferentielFieldset;
 use Application\Entity\Db\IntervenantPermanent;
+use Common\Exception\LogicException;
 
 /**
  * Description of AjouterModifier
@@ -98,7 +99,7 @@ class AjouterModifier extends Form
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {
         if (!$object instanceof IntervenantPermanent) {
-            throw new \Common\Exception\LogicException("Intervenant spécifié invalide.");
+            throw new LogicException("Intervenant spécifié invalide.");
         }
         
         return parent::bind($object, $flags);

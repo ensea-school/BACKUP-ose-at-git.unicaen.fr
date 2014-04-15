@@ -14,29 +14,36 @@ use Zend\Mvc\Controller\AbstractActionController;
 class DemoController extends AbstractActionController
 {
     /**
+     * @return \Application\Service\ServiceReferentiel
+     */
+    public function getServiceReferentielService()
+    {
+        return $this->getServiceLocator()->get('ApplicationServiceReferentiel');
+    }
+    
+    /**
      * 
      * @return type
      */
     public function indexAction()
     {
-        $queryTemplate = array('structure' => '__structure__', 'niveau' => '__niveau__', 'etape' => '__etape__');
-        $urlStructures = $this->url()->fromRoute('of/default', array('action' => 'search-structures'), array('query' => $queryTemplate));
-        $urlNiveaux    = $this->url()->fromRoute('of/default', array('action' => 'search-niveaux'), array('query' => $queryTemplate));
-        $urlEtapes     = $this->url()->fromRoute('of/default', array('action' => 'search-etapes'), array('query' => $queryTemplate));
-        $urlElements   = $this->url()->fromRoute('of/default', array('action' => 'search-element'), array('query' => $queryTemplate));
+        $service  = $this->getServiceReferentielService();
+        $context  = $this->context()->getGlobalContext();
+        $qb       = $service->finderByContext($context);
+        $annee    = $context->getAnnee();
+        $services = $qb->getQuery()->execute();
         
-        $fs = new \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset('fs');
-        $fs
-                ->setStructuresSourceUrl($urlStructures)
-                ->setNiveauxSourceUrl($urlNiveaux)
-                ->setEtapesSourceUrl($urlEtapes)
-                ->setElementsSourceUrl($urlElements)
-                ->setStructureEnabled(false)
-//                ->setNiveauEnabled(false)
-                ->setEtapeEnabled(false)
-        ;
+        $listeViewModel = new \Zend\View\Model\ViewModel();
+        $listeViewModel
+                ->setTemplate('application/service-referentiel/voir-liste')
+                ->setVariables(compact('services', 'context'));
         
-        return array('fs' => $fs);
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel
+                ->setVariables(compact('annee'))
+                ->addChild($listeViewModel, 'serviceListe');
+        
+        return $viewModel;
     }
 
     /**

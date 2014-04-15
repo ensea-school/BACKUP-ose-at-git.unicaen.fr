@@ -1,0 +1,29 @@
+<h1>Services référentiels</h1>
+<h2>Année universitaire <?php echo $annee; ?></h2>
+
+<?php echo $this->serviceListe; ?>
+
+<script>
+    $(function() {
+        $("body").tooltip({
+            selector: '[rel=popover]',
+            placement: 'top',
+            title: "Cliquez pour ouvrir/fermer le formulaire de modification..."
+        });
+        $("body").popover({
+            selector: '[rel=popover]',
+            placement: 'bottom',
+            html: true,
+            title: "Modification d'heures ",
+            content: function() {
+                return $.ajax({
+                    url: "<?php echo $this->url('volume_horaire/default', array('action' => 'voir')) ?>/" + $(this).data('vhId'),
+//                    data: { id: $(this).data('vhId') },
+                    async: false,
+                    success: function(data) { }
+                }).responseText;
+            },
+            container: "body",
+        });
+    });
+</script>

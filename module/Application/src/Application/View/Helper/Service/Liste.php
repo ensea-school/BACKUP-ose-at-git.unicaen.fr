@@ -79,8 +79,8 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         $out .= $this->renderShowHide();
 
         $url = $this->getView()->url('service/default', array('action' => 'saisie'));
-        $out .= '<br /><a class="modal-action event_service-add-message btn btn-primary" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
-        $out .= $this->getView()->modalAjaxDialog('service-div');
+        $out .= '<br /><a class="modal-action services event_service-add-message btn btn-primary" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
+        $out .= $this->getView()->modalAjaxDialog('service-div', null, 'services');
         $out .= '<script type="text/javascript">';
         $out .= '$(function() { Service.init("'.$this->getView()->url('service/default', array('action' => 'voirLigne') ).'"); });';
         $out .= '</script>';

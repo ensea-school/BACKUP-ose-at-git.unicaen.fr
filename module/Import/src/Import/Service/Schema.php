@@ -16,7 +16,7 @@ class Schema extends Service
      * 
      * @var array
      */
-    protected static $schema;
+    protected $schema;
 
 
 

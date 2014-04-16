@@ -1,7 +1,9 @@
 <h1>Écarts entre OSE et ses sources</h1>
 
-<?php foreach( $data as $table => $lignes ): ?>
-<h2><?php echo $table ?></h2>
+<?php foreach( $data as $table => $lignes ):
+    $tableLabel = ucwords(str_replace( '_', ' ', strtolower($table)));
+?>
+<h2><?php echo $tableLabel ?></h2>
 <div id="DIV_<?php echo $table ?>">
 <?php echo $this->differentielListe( $lignes ); ?>
 
@@ -26,7 +28,7 @@
         lastTableRefreshed = null;
 
         $("body").on("click", "a.modal-action", function(e) {
-             lastTableRefreshed = this.dataset.table;
+             lastTableRefreshed = $(this).data("table");
         });
 
         $('#modalResult').on('loaded.bs.modal', function (e) {

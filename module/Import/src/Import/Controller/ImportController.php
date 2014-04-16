@@ -109,7 +109,6 @@ class ImportController extends AbstractActionController
         $data = array();
         foreach( $queries as $table => $query ){
             $query->setLimit(101);
-            $table = ucwords(str_replace( '_', ' ', strtolower($table)));
             $data[$table] = $sd->make($query)->fetchAll();
         }
 
@@ -130,7 +129,6 @@ class ImportController extends AbstractActionController
         $queries = $this->makeQueries($tableName);
 
         if (! empty($tableName)){
-            $tableName = str_replace( ' ', '_', strtoupper($tableName) );
             if (! isset($queries[$tableName])){
                 throw new LogicException('La table "'.$tableName.'" n\'est pas correste ou n\'est pas importable.');
             }

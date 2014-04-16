@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-<entity name="Application\Entity\Db\Etablissement" table="ETABLISSEMENT">
+  <entity name="Application\Entity\Db\Etablissement" table="ETABLISSEMENT">
     <indexes>
       <index name="IDX_6B15BC959860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_6B15BC97E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>

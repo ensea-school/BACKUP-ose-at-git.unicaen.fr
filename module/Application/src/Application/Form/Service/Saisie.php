@@ -52,14 +52,6 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         ));
         $this->add($interneExterne);
 
-       /*$elementPedagogique = new SearchAndSelect('elementPedagogique');
-        $elementPedagogique->setLabel("Elément pédagogique :")
-                ->setAttributes(array('title' => "Saisissez 2 lettres au moins"))
-                ->setAutocompleteSource(
-                    $url->fromRoute('of/default', array('action' => 'search-element') )
-                );
-        $this->add($elementPedagogique);*/
-
         $queryTemplate = array('structure' => '__structure__', 'niveau' => '__niveau__', 'etape' => '__etape__');
         $urlStructures = $url->fromRoute('of/default', array('action' => 'search-structures'), array('query' => $queryTemplate));
         $urlNiveaux    = $url->fromRoute('of/default', array('action' => 'search-niveaux'), array('query' => $queryTemplate));
@@ -72,11 +64,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
                 ->setNiveauxSourceUrl($urlNiveaux)
                 ->setEtapesSourceUrl($urlEtapes)
                 ->setElementsSourceUrl($urlElements)
-                ->setStructureEnabled(false)
-//                ->setNiveauEnabled(false)
-                ->setEtapeEnabled(false)
         ;
-//        $fs->get('element')->setName('elementPedagogique');
         $this->add($fs);
 
         $etablissement = new SearchAndSelect('etablissement');
@@ -88,11 +76,6 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
                        ->setLabel("Etablissement :")
                        ->setAttributes(array('title' => "Saisissez le libellé (2 lettres au moins)"));
         $this->add($etablissement);
-
-        /**
-         * Csrf
-         */
-        $this->add(new Csrf('security'));
 
         /**
          * Submit

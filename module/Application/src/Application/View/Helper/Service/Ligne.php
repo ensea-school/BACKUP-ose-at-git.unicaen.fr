@@ -94,7 +94,9 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
 
     protected function renderIntervenant($intervenant)
     {
-        $out = (string)$intervenant;
+        $url = $this->getView()->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
+        $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getId()));
+        $out = '<a data-poload="'.$pourl.'" href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$intervenant.'</a>';
         return $out;
     }
 
@@ -104,8 +106,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
         $pourl = $this->getView()->url('structure/default', array('action' => 'apercevoir', 'id' => $structure->getId()));
-        $out = '<a data-poload="/ose/test" href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action services">'.$structure->getLibelleCourt().'</a>';
-
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$structure.'</a>';
         return $out;
     }
 
@@ -114,8 +115,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
         if (! $element) return '';
         $url = $this->getView()->url('of/default', array('action' => 'voir-element'), array('query' => array('id' => $element->getId())));
         $pourl = $this->getView()->url('of/default', array('action' => 'apercevoir-element'), array('query' => array('id' => $element->getId())));
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action services">'.$element->getSourceCode().' - '.$element->getLibelle().'</a>';
-
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$element->getSourceCode().' - '.$element.'</a>';
         return $out;
     }
 
@@ -129,8 +129,8 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
     {
         if ($etablissement != $this->context['etablissement']){
             $url = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
-            $pourl = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
-            $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action services">'.$etablissement->getLibelle().'</a>';
+            $pourl = $this->getView()->url('etablissement/default', array('action' => 'apercevoir', 'id' => $etablissement->getId()));
+            $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$etablissement.'</a>';
         }else{
             $out = '';
         }

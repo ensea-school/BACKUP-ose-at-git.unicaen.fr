@@ -10,6 +10,9 @@
       <index name="IDX_C2A901857E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_C2A9018563F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
+    <unique-constraints>
+      <unique-constraint name="volume_horaire__un" columns="SERVICE_ID,PERIODE_ID,TYPE_INTERVENTION_ID,MOTIF_NON_PAIEMENT_ID"/>
+    </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>

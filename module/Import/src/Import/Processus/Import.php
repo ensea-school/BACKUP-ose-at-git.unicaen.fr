@@ -283,34 +283,6 @@ class Import extends Processus
     }
 
     /**
-     * Import d'un, plusieurs ou toutes les périodes d'enseignement
-     *
-     * @param string|array|null $sourceCode  Identifiant source
-     * @param string            $action      Action
-     * @retun self
-     */
-    public function periodeEnseignement( $sourceCode=null, $action=self::A_ALL )
-    {
-        $this->execMaj( 'PERIODE_ENSEIGNEMENT', 'SOURCE_CODE', $sourceCode, $action );
-        return $this;
-    }
-
-    /**
-     * Retourne les lignes de différentiel correspondantes aux périodes d'enseignement
-     *
-     * @param PeriodeEnseignement $periodeEnseignement
-     * @return Ligne[]|array()
-     */
-    public function periodeEnseignementGetDifferentiel( PeriodeEnseignement $periodeEnseignement )
-    {
-        $q = new Query('periodeEnseignement');
-        $q->setSourceCode($periodeEnseignement->getSourceCode());
-        $diff = $this->getDifferentiel()->make($q)->fetchAll();
-
-        return $diff;
-    }
-
-    /**
      * Import d'un, plusieurs ou tous groupes de type de formation
      *
      * @param string|array|null $sourceCode  Identifiant source

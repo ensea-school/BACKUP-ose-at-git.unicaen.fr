@@ -12,6 +12,9 @@
       <index name="IDX_DED864C879CEECC4" columns="STRUCTURE_AFF_ID"/>
       <index name="IDX_DED864C8B5E842BE" columns="STRUCTURE_ENS_ID"/>
     </indexes>
+    <unique-constraints>
+      <unique-constraint name="service__un" columns="INTERVENANT_ID,ELEMENT_PEDAGOGIQUE_ID,ANNEE_ID,ETABLISSEMENT_ID,HISTO_DESTRUCTION"/>
+    </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>

@@ -84,12 +84,17 @@ class ElementPedagogique
     private $id;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $cheminPedagogique;
+
+    /**
      * @var \Application\Entity\Db\Structure
      */
     private $structure;
 
     /**
-     * @var \Application\Entity\Db\PeriodeEnseignement
+     * @var \Application\Entity\Db\Periode
      */
     private $periode;
 
@@ -119,10 +124,12 @@ class ElementPedagogique
     private $etape;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * Constructor
      */
-    private $cheminPedagogique;
-
+    public function __construct()
+    {
+        $this->cheminPedagogique = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set histoCreation
@@ -344,10 +351,10 @@ class ElementPedagogique
     /**
      * Set periode
      *
-     * @param \Application\Entity\Db\PeriodeEnseignement $periode
+     * @param \Application\Entity\Db\Periode $periode
      * @return ElementPedagogique
      */
-    public function setPeriode(\Application\Entity\Db\PeriodeEnseignement $periode = null)
+    public function setPeriode(\Application\Entity\Db\Periode $periode = null)
     {
         $this->periode = $periode;
 
@@ -357,7 +364,7 @@ class ElementPedagogique
     /**
      * Get periode
      *
-     * @return \Application\Entity\Db\PeriodeEnseignement 
+     * @return \Application\Entity\Db\Periode 
      */
     public function getPeriode()
     {

@@ -149,12 +149,23 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         $serviceTypeIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention');
         /* @var $serviceTypeIntervention \Application\Service\TypeIntervention */
 
-        $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
-        /* @var $servicePeriode \Application\Service\Periode */
-
-        $periodes = array(0 => null);
-        $periodes += $servicePeriode->getByTypeIntervenant( $this->getService()->getIntervenant()->getType() );
-        /* Récupération éventuelle des volumes horaires saisis sur d'autres périodes que celles habituelles */
+        $periodes = null;
+        $elementPedagogique = $this->getService()->getElementPedagogique();
+        $periodes = null;
+        if ($elementPedagogique){
+            $periode = $elementPedagogique->getPeriode();
+            if ($periode){
+                // Liste des périodes possibles iniitalisée en fonction de l'élément pédagogique
+                $periodes = array( $periode->getId() => $periode );
+            }
+        }
+        if (! $periodes){
+            // Récupération des périodes issues du service Periodes
+            $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
+            /* @var $servicePeriode \Application\Service\Periode */
+            $periodes = $servicePeriode->getList( $servicePeriode->finderByEnseignement() );
+        }
+        /* Récupération éventuelle des volumes horaires saisis sur d'autres périodes que celles habituelles (en cas de besoin) */
         foreach( $volumeHoraires as $vh ){
             if ($vh->getPeriode() && ! isset($periodes[$vh->getPeriode()->getId()])){
                 $periodes[$vh->getPeriode()->getId()] = $vh->getPeriode();
@@ -164,6 +175,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         uasort( $periodes, function( $a, $b ){
             return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '');
         });
+
         $typesIntervention = $serviceTypeIntervention->getTypesIntervention();
         $this->typesIntervention = $typesIntervention;
         $this->data = array(); // DATA [Periode][MotifNonPaiement][TypeIntervention]

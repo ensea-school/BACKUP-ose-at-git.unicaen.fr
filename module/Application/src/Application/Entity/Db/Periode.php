@@ -25,11 +25,6 @@ class Periode
     private $histoModification;
 
     /**
-     * @var string
-     */
-    private $libelle;
-
-    /**
      * @var \DateTime
      */
     private $validiteDebut;
@@ -68,6 +63,26 @@ class Periode
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoCreateur;
+
+	/**
+     * @var boolean
+     */
+    private $enseignement;
+
+    /**
+     * @var string
+     */
+    private $libelleCourt;
+
+    /**
+     * @var string
+     */
+    private $libelleLong;
+
+    /**
+     * @var boolean
+     */
+    private $paiement;
 
 
     /**
@@ -137,75 +152,6 @@ class Periode
     public function getHistoModification()
     {
         return $this->histoModification;
-    }
-
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return Periode
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string 
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return Periode
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return Periode
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**
@@ -333,6 +279,98 @@ class Periode
         return $this->histoCreateur;
     }
 
+	/**
+     * Set enseignement
+     *
+     * @param boolean $enseignement
+     * @return Periode
+     */
+    public function setEnseignement($enseignement)
+    {
+        $this->enseignement = $enseignement;
+
+        return $this;
+    }
+
+    /**
+     * Get enseignement
+     *
+     * @return boolean 
+     */
+    public function getEnseignement()
+    {
+        return $this->enseignement;
+    }
+
+    /**
+     * Set libelleCourt
+     *
+     * @param string $libelleCourt
+     * @return Periode
+     */
+    public function setLibelleCourt($libelleCourt)
+    {
+        $this->libelleCourt = $libelleCourt;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleCourt
+     *
+     * @return string 
+     */
+    public function getLibelleCourt()
+    {
+        return $this->libelleCourt;
+    }
+
+    /**
+     * Set libelleLong
+     *
+     * @param string $libelleLong
+     * @return Periode
+     */
+    public function setLibelleLong($libelleLong)
+    {
+        $this->libelleLong = $libelleLong;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleLong
+     *
+     * @return string 
+     */
+    public function getLibelleLong()
+    {
+        return $this->libelleLong;
+    }
+
+    /**
+     * Set paiement
+     *
+     * @param boolean $paiement
+     * @return Periode
+     */
+    public function setPaiement($paiement)
+    {
+        $this->paiement = $paiement;
+
+        return $this;
+    }
+
+    /**
+     * Get paiement
+     *
+     * @return boolean 
+     */
+    public function getPaiement()
+    {
+        return $this->paiement;
+    }
+
     /*******************************************************************************************************
      *                                        Début ajout
      *******************************************************************************************************/
@@ -343,7 +381,6 @@ class Periode
      */
     public function __toString()
     {
-        return $this->getLibelle();
+        return $this->getLibelleLong();
     }
-
 }

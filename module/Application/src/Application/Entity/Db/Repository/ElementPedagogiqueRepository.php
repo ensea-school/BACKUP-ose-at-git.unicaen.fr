@@ -100,15 +100,15 @@ class ElementPedagogiqueRepository extends EntityRepository
         $whereContext = $whereContext ? 'AND ' . $whereContext : null;
 
         $sql = <<<EOS
-SELECT ep.id, ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle libelle_pe, 
+SELECT ep.id, ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle_long libelle_pe,
        gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf, v.etape_info
 FROM element_pedagogique ep
-JOIN periode_enseignement pe ON ep.periode_id = pe.id
 JOIN etape e ON ep.etape_id = e.id
 JOIN type_formation tf ON e.type_formation_id = tf.id
 JOIN groupe_type_formation gtf ON tf.groupe_id = gtf.id
 JOIN structure s ON ep.structure_id = s.id
 JOIN V_CONCAT_ELEMENT_INFOS v ON ep.id = v.id
+LEFT JOIN periode pe ON ep.periode_id = pe.id
 WHERE $whereTerm
 $whereContext
 AND ROWNUM <= :limit
@@ -119,15 +119,15 @@ EOS;
 select * from (
   select ep.id,
     rank() over (partition by ep.id order by cp.ordre) rang,
-    ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf, 
+    ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle_long libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf,
     ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
   from chemin_pedagogique cp
   JOIN element_pedagogique ep ON cp.element_pedagogique_id = ep.id
-  JOIN periode_enseignement pe ON ep.periode_id = pe.id
   JOIN etape e ON cp.etape_id = e.id
   JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID and tf.HISTO_DESTRUCTEUR_ID is null and sysdate between tf.VALIDITE_DEBUT and nvl(tf.VALIDITE_FIN, sysdate)
   JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID and gtf.HISTO_DESTRUCTEUR_ID is null
   JOIN structure s ON ep.structure_id = s.id
+  LEFT JOIN periode pe ON ep.periode_id = pe.id
   where e.HISTO_DESTRUCTEUR_ID is null and sysdate between e.VALIDITE_DEBUT and nvl(e.VALIDITE_FIN, sysdate)
   and lower(ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT) like '%carri_res publiques%'
   order by gtf.ordre, e.niveau, ep.libelle
@@ -183,15 +183,15 @@ EOS;
 select * from (
   select ep.id,
     rank() over (partition by ep.id order by cp.ordre) rang,
-    ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf, 
+    ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle_long libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf,
     ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
   from chemin_pedagogique cp
   JOIN element_pedagogique ep ON cp.element_pedagogique_id = ep.id
-  JOIN periode_enseignement pe ON ep.periode_id = pe.id
   JOIN etape e ON cp.etape_id = e.id
   JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID and tf.HISTO_DESTRUCTEUR_ID is null and sysdate between tf.VALIDITE_DEBUT and nvl(tf.VALIDITE_FIN, sysdate)
   JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID and gtf.HISTO_DESTRUCTEUR_ID is null
   JOIN structure s ON ep.structure_id = s.id
+  LEFT JOIN periode pe ON ep.periode_id = pe.id
   where e.HISTO_DESTRUCTEUR_ID is null and sysdate between e.VALIDITE_DEBUT and nvl(e.VALIDITE_FIN, sysdate)
   and $whereTerm
   $whereContext

@@ -23,13 +23,6 @@ class Periode extends AbstractService
      */
     protected $repo;
 
-    /**
-     * Périodes par types d'intervenants
-     *
-     * @var array[]
-     */
-    protected $periodesByTypeIntervenant;
-
 
 
 
@@ -46,28 +39,41 @@ class Periode extends AbstractService
         if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('p');
 
         $qb->andWhere('p.typeIntervenant = :type')->setParameter('type', $typeIntervenant);
-        $qb->orderBy('p.ordre');
         return $qb;
     }
 
-
     /**
+     * Retourne la liste des périodes d'enseignement
      *
-     * @param EntityTypeIntervenant $typeIntervenant
-     * @return type
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
      */
-    public function getByTypeIntervenant( EntityTypeIntervenant $typeIntervenant )
+    public function finderByEnseignement( QueryBuilder $qb=null )
     {
-        if (! isset($this->periodesByTypeIntervenant[$typeIntervenant->getId()])){
-            $periodes = $this->finderByTypeIntervenant( $typeIntervenant )->getQuery()->execute();
-            $this->periodesByTypeIntervenant[$typeIntervenant->getId()] = array();
-            foreach( $periodes as $periode ){
-                $this->periodesByTypeIntervenant[$typeIntervenant->getId()][$periode->getId()] = $periode;
-            }
-        }
-        return $this->periodesByTypeIntervenant[$typeIntervenant->getId()];
+        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('p');
+
+        $qb->andWhere('p.enseignement = 1');
+        return $qb;
     }
 
+    /**
+     * Retourne la liste des périodes
+     *
+     * @param QueryBuilder|null $queryBuilder
+     * @return Application\Entity\Db\Periode[]
+     */
+    public function getList( QueryBuilder $qb=null )
+    {
+        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('p');
+
+        $qb->orderBy('p.ordre');
+        $periodes = $qb->getQuery()->execute();
+        $result = array();
+        foreach( $periodes as $periode ){
+            $result[$periode->getId()] = $periode;
+        }
+        return $result;
+    }
 
     /**
      *

@@ -9,6 +9,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\Form\Element\Csrf;
 use Zend\Form\Element\Hidden;
 use Zend\Mvc\Controller\Plugin\Url;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Description of Saisie
@@ -18,9 +19,12 @@ use Zend\Mvc\Controller\Plugin\Url;
 class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface
 {
 
-    public function __construct( Url $url, array $context=array() )
+    public function __construct( ServiceLocatorInterface $serviceLocator, Url $url, array $context=array() )
     {
         parent::__construct('service');
+
+        $etablissementId = $serviceLocator->get('applicationParametres')->etablissement;
+        $etablissement = $serviceLocator->get('applicationEtablissement')->getRepo()->find($etablissementId);
 
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'service')
@@ -48,7 +52,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         $interneExterne->setName('interne-externe');
         $interneExterne->setValueOptions(array(
                      'service-interne' => 'en interne',
-                     'service-externe' => 'dans un autre établissement',
+                     'service-externe' => 'hors '.$etablissement,
         ));
         $this->add($interneExterne);
 

@@ -73,7 +73,6 @@ class ServiceController extends AbstractActionController
         $service = $this->getServiceService();
         $entity  = $service->getRepo()->find($id);
         $context = $service->getGlobalContext();
-        $details = false;
 
         return compact('entity', 'context', 'details', 'onlyContent');
     }
@@ -110,7 +109,7 @@ class ServiceController extends AbstractActionController
         $service = $this->getServiceService();
         $context = $service->getGlobalContext();
         $errors  = array();
-        $form = new Saisie( $this->url(), $context );
+        $form = new Saisie( $this->getServiceLocator(), $this->url(), $context );
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
 
         if (0 != $id){
@@ -157,11 +156,11 @@ class ServiceController extends AbstractActionController
                 }else{
                     $controller = 'Application\Controller\Intervenant';
                     $params     = $this->getEvent()->getRouteMatch()->getParams();
-                    if (!($intervenant = $this->intervenant()->getRepo()->findOneBy(array('sourceCode' => $post->intervenant['id'])))) {
-                        $params['action'] = 'importer';
-                        $params['id']     = $post->intervenant['id'];
-                        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
-                        $intervenant      = $viewModel->getVariable('intervenant');
+                    if (!($intervenant = $this->intervenant()->getRepo()->findOneBySourceCode($post->intervenant['id']))) {
+                        $this->getServiceLocator()->get('importProcessusImport')->intervenant($post->intervenant['id']); // Import
+                        if (!($intervenant = $this->intervenant()->getRepo()->findOneBySourceCode($post->intervenant['id']))) {
+                            throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = ".$post->intervenant['id'].".");
+                        }
                     }
                 }
 

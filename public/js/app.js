@@ -46,7 +46,7 @@ function Service( id ) {
     }
 
     this.onAfterAdd = function(){
-        $.get( Service.voirLigneUrl+"/"+this.id+'?only-content=0', function( data ) {
+        $.get( Service.voirLigneUrl+"/"+this.id+'?only-content=0&details=1', function( data ) {
             $( "#service-"+this.id+"-ligne" ).refresh();
             $('#services > tbody:last').append(data);
         });
@@ -178,7 +178,7 @@ VolumeHoraire.init = function(){
 
 /* Initialisation des popovers ajax de liens "a" (utilisés dans les services) */
 $(document).ready(function() {
-
+/*
     $("*[data-po-href]").popover({
         html: true,
         trigger: 'hover',
@@ -191,7 +191,7 @@ $(document).ready(function() {
         },
         delay: {show:1000, hide:100}
     });
-
+*/
 });
 
 

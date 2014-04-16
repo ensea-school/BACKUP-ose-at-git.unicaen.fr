@@ -63,7 +63,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Inpu
         $this->add(array(
             'name'       => 'element',
             'options'    => array(
-                'label' => "Élément pédagogique :",
+                'label' => "Enseignement ou responsabilité :",
             ),
             'attributes' => array(
                 'title' => "Saisissez 2 lettres au moins",

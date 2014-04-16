@@ -71,7 +71,12 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
         $out = '';
         if (empty($this->context['intervenant'])){
             $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
-            $out .= '<td>'.$this->renderStructure( $this->service->getStructureAff() )."</td>\n";
+            if ('P' === $this->service->getIntervenant()->getType()->getCode()){
+                $out .= '<td>'.$this->renderStructure( $this->service->getStructureAff() )."</td>\n";
+            }else{
+                $out .= "<td>&nbsp;</td>\n";
+            }
+            
         }
         if ($this->service->getEtablissement() == $this->context['etablissement']){
             $out .= '<td>'.$this->renderStructure( $this->service->getStructureEns() )."</td>\n";
@@ -94,9 +99,9 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
 
     protected function renderIntervenant($intervenant)
     {
-        $url = $this->getView()->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
+        //$url = $this->getView()->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
         $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getId()));
-        $out = '<a data-poload="'.$pourl.'" href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$intervenant.'</a>';
+        $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="modal-action services">'.$intervenant.'</a>';
         return $out;
     }
 

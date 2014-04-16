@@ -82,10 +82,13 @@ class VolumeHoraireController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()){
             $post = $request->getPost();
-            $entity->setMotifNonPaiement( $this->getEntity($post, 'motifNonPaiement', 'MotifNonPaiement') );
-            if (array_key_exists('heures', $post)){
-                $entity->setHeures( (float)$post['heures'] );
-                if (0 == $entity->getHeures()) $entity->setHistoDestruction (new \DateTime);
+
+            $heures = (float)$post['heures'];
+            if (0 == $heures){ // plus d'heures = suppression du volume horaire
+                $entity->setHistoDestruction (new \DateTime);
+            }else{
+                $entity->setMotifNonPaiement( $this->getEntity($post, 'motifNonPaiement', 'MotifNonPaiement') );
+                $entity->setHeures( $heures );
             }
         }
         $form->bind( $entity );

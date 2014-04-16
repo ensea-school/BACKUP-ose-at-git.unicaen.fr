@@ -91,7 +91,10 @@ Service.init = function( voirLigneUrl ){
 
     $('#service-div').on('loaded.bs.modal', function (e) {
         if (id = $('#service-deleted-id').val()){
-            Service.get(id).onAfterDelete();
+            var terminated = $("form .input-error, form .has-error, div.alert", $(e.target)).length ? false : true;
+            if (terminated){
+                Service.get(id).onAfterDelete();
+            }
         }
     });
 

@@ -123,7 +123,6 @@ $main =  array(
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
         ),
         'factories' => array(
-            'ModalStrategy' => 'Application\View\Renderer\ModalStrategyFactory',
         ),
     ),
     'view_helpers' => array(

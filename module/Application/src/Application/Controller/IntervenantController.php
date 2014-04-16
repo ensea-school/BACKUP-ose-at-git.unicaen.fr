@@ -89,7 +89,7 @@ class IntervenantController extends AbstractActionController
     
     public function importerAction()
     {
-        if (!($sourceCode = $this->params()->fromQuery('sourceCode'))) {
+        if (!($sourceCode = $this->params()->fromQuery('sourceCode', $this->params()->fromPost('sourceCode')))) {
             throw new LogicException("Aucun code source d'intervenant spécifié.");
         }
         if (($intervenant = $this->intervenant()->getRepo()->findBySourceCode($sourceCode))) {

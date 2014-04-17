@@ -273,26 +273,10 @@ ServiceReferentiel.init = function( voirLigneUrl )
 {
     ServiceReferentiel.voirLigneUrl = voirLigneUrl;
 
-    $("body").on("service-ref-add-message service-ref-modify-message", function(event, data) {
+    $("body").on("service-ref-add-message", function(event, data) {
         var id = null;
-        if ($("div .messenger, div .alert").length ? false : true){
-            event.dialog.modal('hide'); // ferme la fenêtre modale
-//            for (i in data) {
-//                if (data[i].name == 'id') {
-//                    id = data[i].value;
-//                }
-//            }
-//            if (id) {
-                switch (event.type) {
-                    case "service-ref-add-message":
-                        ServiceReferentiel.get(id).onAfterAdd();
-                        break;
-//                    case "service-ref-modify-message":
-//                        ServiceReferentiel.get(id).onAfterModify();
-//                        break;
-                }
-//            }
-        }
+        event.div.modal('hide'); // ferme la fenêtre modale
+        ServiceReferentiel.get(id).onAfterAdd();
     });
 
 //    $('#service-ref-div').on('loaded.bs.modal', function (e) {

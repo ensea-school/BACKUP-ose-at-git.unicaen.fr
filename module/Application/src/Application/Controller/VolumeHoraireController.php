@@ -13,6 +13,7 @@ use Application\Exception\DbException;
  * Description of VolumeHoraireController
  *
  * @method \Doctrine\ORM\EntityManager em() Description
+ * @method \Application\Controller\Plugin\Context context()
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class VolumeHoraireController extends AbstractActionController
@@ -23,15 +24,6 @@ class VolumeHoraireController extends AbstractActionController
     public function getServiceVolumeHoraire()
     {
         return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-    }
-
-    protected function getEntity( $params, $key, $classname)
-    {
-        if (array_key_exists($key, $params)){
-            $id = (int)$params[$key];
-            if ($id) return $this->em()->find('Application\\Entity\\Db\\'.$classname, $id);
-        }
-        return null;
     }
 
     public function voirAction()
@@ -66,14 +58,12 @@ class VolumeHoraireController extends AbstractActionController
         if ($id){
             $entity = $this->getServiceVolumeHoraire()->getRepo()->find($id);
         }else{
-            $params = $this->params()->fromQuery() + $this->params()->fromPost();
-
             $entity = new VolumeHoraire;
             $entity->setValiditeDebut(new \DateTime);
-            $entity->setService( $this->getEntity( $params, 'service', 'Service') );
-            $entity->setPeriode( $this->getEntity( $params, 'periode', 'Periode') );
-            $entity->setMotifNonPaiement( $this->getEntity( $params, 'motifNonPaiement', 'MotifNonPaiement') );
-            $entity->setTypeIntervention( $this->getEntity( $params, 'typeIntervention', 'TypeIntervention') );
+            $entity->setService( $this->context()->serviceFromQueryPost() );
+            $entity->setPeriode( $this->context()->periodeFromQueryPost() );
+            $entity->setMotifNonPaiement( $this->context()->motifNonPaiementFromQueryPost() );
+            $entity->setTypeIntervention( $this->context()->typeInterventionFromQueryPost() );
         }
 
         $form = new Saisie( $this->getServiceLocator() );
@@ -87,7 +77,7 @@ class VolumeHoraireController extends AbstractActionController
             if (0 == $heures){ // plus d'heures = suppression du volume horaire
                 $entity->setHistoDestruction (new \DateTime);
             }else{
-                $entity->setMotifNonPaiement( $this->getEntity($post, 'motifNonPaiement', 'MotifNonPaiement') );
+                $entity->setMotifNonPaiement( $this->context()->motifNonPaiementFromPost() );
                 $entity->setHeures( $heures );
             }
         }

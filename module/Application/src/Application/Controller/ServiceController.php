@@ -14,7 +14,7 @@ use Application\Exception\DbException;
  * Description of ServiceController
  *
  * @method \Doctrine\ORM\EntityManager em()
- * @method \Application\Controller\Plugin\Intervenant intervenant()
+ * @method \Application\Controller\Plugin\Context context()
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
@@ -36,19 +36,19 @@ class ServiceController extends AbstractActionController
         $annee = $context['annee'];
         $services = $qb->getQuery()->execute();
 //        return compact('annee', 'services', 'context');
-        
+
         /* Bertrand: services référentiels */
         $controller       = 'Application\Controller\ServiceReferentiel';
         $params           = $this->getEvent()->getRouteMatch()->getParams();
         $params['action'] = 'voirListe';
         $listeViewModel   = $this->forward()->dispatch($controller, $params);
         /* */
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->addChild($listeViewModel, 'servicesRefListe')
                 ->setVariables(compact('annee', 'services', 'context'));
-        
+
         return $viewModel;
     }
 
@@ -87,7 +87,7 @@ class ServiceController extends AbstractActionController
         $viewModel = new \Zend\View\Model\ViewModel();
 
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
-                
+
         if ($this->getRequest()->isPost()) {
             $errors = array();
             try {
@@ -102,13 +102,60 @@ class ServiceController extends AbstractActionController
         }
 
         $viewModel->setVariables(compact('entity', 'context', 'title', 'form'));
-        
+
         return $viewModel;
     }
 
     public function saisieAction()
     {
-        $id      = (int)$this->params()->fromRoute('id',0);
+        $id = (int)$this->params()->fromRoute('id');
+        $service = $this->getServiceService();
+        $context = $service->getGlobalContext();
+
+        $intervenantContext = $this->context()->intervenantFromContext();
+
+        if ($id){
+            $entity = $service->getRepo()->find($id);
+            $title   = "Modification";
+        }else{
+            $entity = new Service;
+            $entity->setAnnee( $this->context()->anneeFromContext() );
+            $entity->setValiditeDebut(new \DateTime );
+            $entity->setIntervenant( $intervenantContext );
+            $title   = "Ajout";
+        }
+        $form = new Saisie( $this->getServiceLocator(), $this->url(), $context );
+
+
+        if ($this->getRequest()->isPost()){
+            if(! $intervenantContext){
+                $entity->setIntervenant( $this->context()->intervenantFromPost() );
+            }
+            $entity->setElementPedagogique( $this->context()->elementPedagogiqueFromPost("elementPedagogique[element][id]") );
+            $entity->setEtablissement( $this->context()->etablissementFromPost("etablissement[id]") );
+        }
+        $errors  = array();
+        $form->bind( $entity );
+        if ($this->getRequest()->isPost()){
+            if ($form->isValid()){
+                try{
+                    $this->em()->persist($entity);
+                    $this->em()->flush();
+                    $form->get('id')->setValue( $entity->getId() ); // transmet le nouvel ID
+                }catch(\Exception $e){
+                    $e = DbException::translate($e);
+                    $errors[] = $e->getMessage();
+                }
+            }else{
+                $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
+            }
+        }
+        $title = 'Saisie de service';
+        return compact('form', 'context','errors','title');
+
+
+        /* OLD */
+        $id = (int)$this->params()->fromRoute('id',0);
         $service = $this->getServiceService();
         $context = $service->getGlobalContext();
         $title   = $id ? "Modification" : "Ajout";
@@ -209,7 +256,8 @@ class ServiceController extends AbstractActionController
         $viewModel
                 ->setTemplate('application/service/saisie')
                 ->setVariables(compact('form', 'context', 'title', 'errors'));
-        
+
         return $viewModel;
+ //       return compact('form', 'context','errors');
     }
 }

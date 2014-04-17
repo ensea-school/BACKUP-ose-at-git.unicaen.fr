@@ -6,7 +6,7 @@ use Zend\Form\Form;
 use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\InputFilter\InputFilter;
-use Zend\Form\Element\Csrf;
+use Application\Entity\Db\Etablissement;
 use Zend\Form\Element\Hidden;
 use Zend\Mvc\Controller\Plugin\Url;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -18,13 +18,21 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface
 {
+    /**
+     * etablissement par défaut
+     *
+     * @var Etablissement
+     */
+    protected $etablissement;
+
+
+
 
     public function __construct( ServiceLocatorInterface $serviceLocator, Url $url, array $context=array() )
     {
         parent::__construct('service');
 
-        $etablissementId = $serviceLocator->get('applicationParametres')->etablissement;
-        $etablissement = $serviceLocator->get('applicationEtablissement')->getRepo()->find($etablissementId);
+        $this->etablissement = $serviceLocator->get('applicationContext')->etablissement;
 
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'service')
@@ -52,7 +60,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         $interneExterne->setName('interne-externe');
         $interneExterne->setValueOptions(array(
                      'service-interne' => 'en interne',
-                     'service-externe' => 'hors '.$etablissement,
+                     'service-externe' => 'hors '.$this->etablissement,
         ));
         $this->add($interneExterne);
 
@@ -108,7 +116,24 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
      */
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {
-        return parent::bind($object, $flags);
+        /* @var $object \Application\Entity\Db\Service */
+        $data = array(
+            'id'               => $object->getId(),
+            'intervenant'      => $object->getIntervenant() ? $object->getIntervenant()->getId() : null
+        );
+        $this->setData($data);
+        $this->get('elementPedagogique')->setElementPedagogique( $object->getElementPedagogique() );
+        if ($etablissement = $object->getEtablissement()){
+            $this->get('etablissement')->setValue(array(
+                    'id' => $etablissement->getId(),
+                    'label' => $etablissement->getLibelle()
+            ));
+            $this->get('interne-externe')->setValue((null === $etablissement || $etablissement === $this->etablissement) ? 'service-interne' : 'service-externe');
+
+        }else{
+            $this->get('etablissement')->setValue(null);
+            $this->get('interne')->setValue('service-interne');
+        }
     }
 
     /**

@@ -75,14 +75,10 @@ class IntervenantController extends AbstractActionController
             }
         }
         
-        $terminal = $this->getRequest()->isXmlHttpRequest();
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/intervenant/choisir')
-                ->setVariables(array('form' => $form));
-        if ($terminal) {
-            return $this->modalInnerViewModel($viewModel, "Choix de l'intervenant", false);
-        }
+                ->setVariables(array('form' => $form, 'title' => "Choisir un intervenant"));
         
         return $viewModel;
     }

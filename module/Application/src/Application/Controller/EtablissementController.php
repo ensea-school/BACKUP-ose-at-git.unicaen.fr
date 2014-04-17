@@ -89,15 +89,12 @@ class EtablissementController extends AbstractActionController
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->etablissementGetDifferentiel($etablissement);
+        $title = "Détails de l'établissement";
         $short = $this->params()->fromQuery('short', false);
         
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/etablissement/voir')
-                  ->setVariables(compact('etablissement', 'changements', 'short'));
-        
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            return $this->modalInnerViewModel($viewModel, "Détails de l'établissement", false);
-        }
+                  ->setVariables(compact('etablissement', 'changements', 'title', 'short'));
         
         return $viewModel;
     }

@@ -82,6 +82,7 @@ class ServiceController extends AbstractActionController
         $id      = (int)$this->params()->fromRoute('id',0);
         $service = $this->getServiceService();
         $entity  = $service->getRepo()->find($id);
+        $title   = "Suppression de service";
         $errors  = array();
 
         try{
@@ -96,10 +97,8 @@ class ServiceController extends AbstractActionController
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/service/suppression')
-                ->setVariables(compact('entity', 'context','errors'));
-        if ($terminal) {
-            return $this->modalInnerViewModel($viewModel, "Suppression de service", false);
-        }
+                ->setVariables(compact('entity', 'context', 'title', 'errors'));
+        
         return $viewModel;
     }
 
@@ -108,6 +107,7 @@ class ServiceController extends AbstractActionController
         $id      = (int)$this->params()->fromRoute('id',0);
         $service = $this->getServiceService();
         $context = $service->getGlobalContext();
+        $title   = $id ? "Modification" : "Ajout";
         $errors  = array();
         $form = new Saisie( $this->getServiceLocator(), $this->url(), $context );
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
@@ -205,9 +205,7 @@ class ServiceController extends AbstractActionController
         $viewModel
                 ->setTemplate('application/service/saisie')
                 ->setVariables(compact('form', 'context','errors'));
-        if ($terminal) {
-            return $this->modalInnerViewModel($viewModel, ((0 != $id) ? "Modification" : "Ajout")." de service", false);
-        }
+        
         return $viewModel;
     }
 }

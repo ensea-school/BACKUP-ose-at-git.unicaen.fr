@@ -25,8 +25,6 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $moduleRouteListener->attach($eventManager);
 
         $eventManager->attach(new AuthenticatedUserSavedListener($sm->get('doctrine.entitymanager.orm_default')));
-
-//        $eventManager->attach(new ModalListener());
         
         /* Déclare la dernière vue transmise comme terminale si on est en AJAX */
         $sharedEvents = $eventManager->getSharedManager();
@@ -44,41 +42,6 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                     $result->setTerminal($e->getRequest()->isXmlHttpRequest());
                 }
         });
-        
-//        $eventManager->attach('render',
-//             function($e) {
-//                $modal = (bool) $e->getRequest()->getQuery('modal', $e->getRequest()->getPost('modal', 0));
-//                var_dump($modal);
-//                if (!$modal) {
-//                    return;
-//                }
-//$ex = new \Exception;
-//                $result = $e->getViewModel();
-//                if (!$result instanceof \Zend\View\Model\ViewModel) {
-//                    return;
-//                }
-//                
-//                var_dump($result, $ex->getTraceAsString());
-////                if (is_array($result)) {
-////                    $result = new \Zend\View\Model\ViewModel($result);
-////                }
-////                elseif (empty($result)) {
-////                    $result = new \Zend\View\Model\ViewModel();
-////                }
-//
-//                $title         = "Test modale";
-//                $displaySubmit = false;
-//
-//                if (!$e->getRequest()->isXmlHttpRequest()) {
-//                    $f = new \UnicaenApp\Filter\ModalViewModel($title, $displaySubmit);
-//                }
-//                else {
-//                    $f = new \UnicaenApp\Filter\ModalInnerViewModel($title, $displaySubmit);
-//                }
-//                $modalViewModel = $f->filter($result);
-//
-//                $e->setResult($modalViewModel);
-//        });
     }
     
     public function getConfig()

@@ -87,8 +87,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 //        $out .= $this->renderShowHide();
 
         $url = $this->getView()->url('service-ref/default', array('action' => 'saisir'));
-        $out .= '<br /><a class="modal-action services-ref event_service-ref-add-message btn btn-default" href="' . $url . '" title="Modifier le service référentiel"><span class="glyphicon glyphicon-edit"></span> Modifier le service référentiel</a>';
-        $out .= $this->getView()->modalAjaxDialog('service-ref-div', null, 'services-ref');
+        $out .= '<br /><a class="ajax-modal services-ref btn btn-default" data-event="service-ref-add-message" href="' . $url . '" title="Modifier le service référentiel"><span class="glyphicon glyphicon-edit"></span> Modifier le service référentiel</a>';
         $out .= '<script type="text/javascript">';
         $out .= '$(function() { ServiceReferentiel.init("' . $this->getView()->url('service-ref/default', array('action' => 'voirListe')) . '"); });';
         $out .= '</script>';

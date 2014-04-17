@@ -74,16 +74,13 @@ class ImportController extends AbstractActionController
         }
 
         $terminal = $this->getRequest()->isXmlHttpRequest();
-
+        $title = "Résultat";
+        
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('import/import/update-tables') // spécification du template obligatoire
                 ->setTerminal($terminal) // Turn off the layout for AJAX requests
-                ->setVariables(compact('message'));
-
-        if ($terminal) {
-            return $this->modalInnerViewModel($viewModel, "Résultat", false);
-        }
+                ->setVariables(compact('message', 'title'));
 
         return $viewModel;
     }
@@ -154,16 +151,13 @@ class ImportController extends AbstractActionController
         }
 
         $terminal = $this->getRequest()->isXmlHttpRequest();
+        $title = "Résultat";
 
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('import/import/update-tables') // spécification du template obligatoire
                 ->setTerminal($terminal) // Turn off the layout for AJAX requests
-                ->setVariables(compact('message'));
-
-        if ($terminal) {
-            return $this->modalInnerViewModel($viewModel, "Résultat", false);
-        }
+                ->setVariables(compact('message', 'title'));
 
         return $viewModel;
     }

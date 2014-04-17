@@ -101,7 +101,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
     {
         //$url = $this->getView()->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
         $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getId()));
-        $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="modal-action services">'.$intervenant.'</a>';
+        $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
         return $out;
     }
 
@@ -111,7 +111,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
 
         $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
         $pourl = $this->getView()->url('structure/default', array('action' => 'apercevoir', 'id' => $structure->getId()));
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$structure.'</a>';
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$structure.'</a>';
         return $out;
     }
 
@@ -120,7 +120,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
         if (! $element) return '';
         $url = $this->getView()->url('of/default', array('action' => 'voir-element'), array('query' => array('id' => $element->getId())));
         $pourl = $this->getView()->url('of/default', array('action' => 'apercevoir-element'), array('query' => array('id' => $element->getId())));
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$element->getSourceCode().' - '.$element.'</a>';
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$element->getSourceCode().' - '.$element.'</a>';
         return $out;
     }
 
@@ -135,7 +135,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
         if ($etablissement != $this->context['etablissement']){
             $url = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
             $pourl = $this->getView()->url('etablissement/default', array('action' => 'apercevoir', 'id' => $etablissement->getId()));
-            $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="modal-action">'.$etablissement.'</a>';
+            $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etablissement.'</a>';
         }else{
             $out = '';
         }
@@ -156,7 +156,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
     protected function renderModifier()
     {
         $url = $this->getView()->url('service/default', array('action' => 'saisie', 'id' => $this->service->getId()));
-        return '<td><a class="modal-action services event_service-modify-message" href="'.$url.'" title="Modifier le service"><span class="glyphicon glyphicon-edit"></span></a></td>';
+        return '<td><a class="ajax-modal services event_service-modify-message" href="'.$url.'" title="Modifier le service"><span class="glyphicon glyphicon-edit"></span></a></td>';
     }
 
     protected function renderSupprimer()

@@ -10,7 +10,7 @@
     <dt><a href="<?php echo $this->url('import', array('action' => 'showDiff')) ?>">Écarts entre OSE et ses sources</a></dt>
     <dd>Affiche, table par table, la liste des données différentes entre OSE et ses sources de données</dd>
 
-    <dt><a class="modal-action" href="<?php echo $this->url('import', array('action' => 'updateTables')) ?>">
+    <dt><a class="ajax-modal" href="<?php echo $this->url('import', array('action' => 'updateTables')) ?>">
         Mise à jour des données OSE à partir de leurs sources
     </a></dt>
     <dd>Met à jour l'ensemble des données d'OSE à partir de leurs sources respectives.
@@ -19,7 +19,7 @@
     <dt><a href="<?php echo $this->url('import', array('action' => 'showImportTbl')) ?>">Tableau de bord principal</a></dt>
     <dd>Liste, table par table, les colonnes dont les données sont importables ou non, leur caractéristiques et l'état de l'import à leur niveau</dd>
 
-    <dt><a class="modal-action" href="<?php echo $this->url('import', array('action' => 'updateViewsAndPackages')) ?>">
+    <dt><a class="ajax-modal" href="<?php echo $this->url('import', array('action' => 'updateViewsAndPackages')) ?>">
         Mise à jour des vues différentielles et des procédures de mise à jour
     </a></dt>
     <dd>Réactualise les vues différentielles d'import. Ces dernières servent à déterminer quelles données ont changé,
@@ -29,5 +29,3 @@
         Cette réactualisation n'est utile que si les vues sources ont été modifiées.
     </dd>
 </dl>
-
-<?php echo $this->modalAjaxDialog('modalResult'); ?>

@@ -186,7 +186,7 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
                         <?php $url = $this->url('of/default', 
                                 array('action' => 'voir-element'), 
                                 array('query' => array('id' => $entity->getId()))) ?>
-                        <a class="modal-action" title="Voir le détails de cet élément" 
+                        <a class="ajax-modal" title="Voir le détails de cet élément" 
                            href="<?php echo $url ?>"><span class="glyphicon glyphicon-eye-open"></span></a>
                     </td>
                 </tr>
@@ -199,5 +199,3 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
     </div>
     
 </div>
-
-<?php echo $this->modalAjaxDialog('modal-element-details'); ?>

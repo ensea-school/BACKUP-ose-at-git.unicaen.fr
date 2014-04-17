@@ -109,9 +109,7 @@ class ServiceReferentielController extends AbstractActionController
         $viewModel
                 ->setTemplate('application/service/suppression')
                 ->setVariables(compact('entity', 'context','errors'));
-        if ($terminal) {
-            return $this->modalInnerViewModel($viewModel, "Suppression de service", false);
-        }
+        
         return $viewModel;
     }
 
@@ -228,6 +226,7 @@ class ServiceReferentielController extends AbstractActionController
         $variables = array(
             'form' => $form, 
             'intervenant' => $intervenant,
+            'title' => "Saisie du service référentiel <small>$intervenant</small>",
         );
         
         $request = $this->getRequest();
@@ -270,9 +269,9 @@ class ServiceReferentielController extends AbstractActionController
         $viewModel
                 ->setTemplate('application/service-referentiel/saisir')
                 ->setVariables($variables);
-        if ($isAjax) {
-            return $this->modalInnerViewModel($viewModel, "Saisie du service référentiel", false);
-        }
+//        if ($isAjax) {
+//            return $this->modalInnerViewModel($viewModel, "Saisie du service référentiel", false);
+//        }
         
         return $viewModel;
     }

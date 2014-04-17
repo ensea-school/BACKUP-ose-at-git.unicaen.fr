@@ -86,7 +86,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
         $url   = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
         $pourl = $this->getView()->url('structure/default', array('action' => 'apercevoir', 'id' => $structure->getId()));
-        $out   = '<a data-poload="/ose/test" href="' . $url . '" data-po-href="' . $pourl . '" class="modal-action">' . $structure . '</a>';
+        $out   = '<a data-poload="/ose/test" href="' . $url . '" data-po-href="' . $pourl . '" class="ajax-modal">' . $structure . '</a>';
 
         return $out;
     }
@@ -119,7 +119,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderModifier()
     {
         $url = $this->getView()->url('service-ref/default', array('action' => 'saisie', 'id' => $this->service->getId()));
-        return '<td><a class="modal-action event_service-modify-message" href="' . $url . '" title="Modifier le service référentiel"><span class="glyphicon glyphicon-edit"></span></a></td>';
+        return '<td><a class="ajax-modal event_service-modify-message" href="' . $url . '" title="Modifier le service référentiel"><span class="glyphicon glyphicon-edit"></span></a></td>';
     }
 
     protected function renderSupprimer()

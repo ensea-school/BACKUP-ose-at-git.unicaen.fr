@@ -111,16 +111,12 @@ class OffreFormationController extends AbstractActionController
         $em      = $this->intervenant()->getEntityManager(); /* @var $em \Doctrine\ORM\EntityManager */
         $repoEp  = $em->getRepository('Application\Entity\Db\ElementPedagogique'); /* @var $repoEp ElementPedagogiqueRepository */
         $element = $repoEp->find($id);
+        $title   = "Détails de l'élément pédagogique";
         $short   = $this->params()->fromQuery('short', false);
         
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/offre-formation/voir-element')
-                ->setVariables(compact('element', 'short'));
-
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            return $this->modalInnerViewModel($viewModel, "Détails de l'élément pédagogique", false);
-        }
-        
+                ->setVariables(compact('element', 'title', 'short'));
         
         return $viewModel;
     }

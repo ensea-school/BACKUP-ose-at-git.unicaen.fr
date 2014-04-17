@@ -109,10 +109,11 @@ class StructureController extends AbstractActionController
         
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->structureGetDifferentiel($structure);
+        $title = "Aperçu d'une structure";
         
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest())
-                  ->setVariables(compact('structure', 'changements', 'short'));
+                  ->setVariables(compact('structure', 'changements', 'title', 'short'));
 
         return $viewModel;
     }

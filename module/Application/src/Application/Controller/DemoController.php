@@ -10,6 +10,7 @@ use Zend\Mvc\Controller\AbstractActionController;
  * @method \Application\Controller\Plugin\Context     context()
  * @method \Application\Controller\Plugin\Intervenant intervenant()
  * @method \Application\Controller\Plugin\Structure   structure()
+ * @method \UnicaenApp\Controller\Plugin\ModalInnerViewModel modalInnerViewModel()
  */
 class DemoController extends AbstractActionController
 {
@@ -27,23 +28,23 @@ class DemoController extends AbstractActionController
      */
     public function indexAction()
     {
-        $service  = $this->getServiceReferentielService();
-        $context  = $this->context()->getGlobalContext();
-        $qb       = $service->finderByContext($context);
-        $annee    = $context->getAnnee();
-        $services = $qb->getQuery()->execute();
-        
-        $listeViewModel = new \Zend\View\Model\ViewModel();
-        $listeViewModel
-                ->setTemplate('application/service-referentiel/voir-liste')
-                ->setVariables(compact('services', 'context'));
-        
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setVariables(compact('annee'))
-                ->addChild($listeViewModel, 'serviceListe');
-        
-        return $viewModel;
+//        $service  = $this->getServiceReferentielService();
+//        $context  = $this->context()->getGlobalContext();
+//        $qb       = $service->finderByContext($context);
+//        $annee    = $context->getAnnee();
+//        $services = $qb->getQuery()->execute();
+//        
+//        $listeViewModel = new \Zend\View\Model\ViewModel();
+//        $listeViewModel
+//                ->setTemplate('application/service-referentiel/voir-liste')
+//                ->setVariables(compact('services', 'context'));
+//        
+//        $viewModel = new \Zend\View\Model\ViewModel();
+//        $viewModel
+//                ->setVariables(compact('annee'))
+//                ->addChild($listeViewModel, 'serviceListe');
+//        
+//        return $viewModel;
     }
 
     /**
@@ -62,8 +63,12 @@ class DemoController extends AbstractActionController
         $form->add($interv);
 
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(array('form' => $form));
+        $view->setVariables(array('form' => $form, 'title' => "Intervenant..."));
 
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return $this->modalInnerViewModel($view);
+        }
+        
         return $view;
     }
 

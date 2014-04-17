@@ -2,3 +2,44 @@
     <h1>Pages de démo</h1>
     <h2>Organisation des Services d'Enseignement</h2>
 </div>
+
+<p>
+    <a id="link" class="ajax-modal" href="<?php echo $this->url('intervenant/default', array('action' => 'choisir')) ?>">Choix Intervenant</a>
+    <br />
+    <a id="link" data-toggle="modal" data-target="#myModal" href="<?php echo $this->url('demo', array('action' => 'intervenant')) ?>">Rech Intervenant</a>
+    <br />
+    <a id="link" class="ajax-modal" href="<?php echo $this->url('structure/default', array('action' => 'apercevoir', 'id' => 8686)) ?>">Structure</a>
+</p>
+
+<p>
+    <a id="link" class="ajax-modal" data-modal-title="Service réf" href="<?php echo $this->url('service-ref/default', array('action' => 'saisir')) ?>">Services ref</a>
+</p>
+
+<p>
+    <a id="link" class="ajax-popover" href="<?php echo $this->url('structure/default', array('action' => 'apercevoir', 'id' => 8686)) ?>">Structure</a>
+</p>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(function() {
+//    installModalAjaxDialog("ma-dialog");
+});
+</script>

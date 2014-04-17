@@ -13,6 +13,11 @@ use Common\Exception\RuntimeException;
  * @method mixed *FromRoute($name = null, $default = null) Description
  * @method mixed *FromQuery($name = null, $default = null) Description
  * @method mixed *FromPost($name = null, $default = null) Description
+ * @method mixed *FromSession($name = null, $default = null) Description
+ * @method mixed *FromContext($name = null, $default = null) Description
+ * @method mixed *FromSources($name = null, $default = null, array $sources = null) Description
+ * @method mixed *FromQueryPost($name = null, $default = null) Description
+ * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see \Zend\Mvc\Controller\Plugin\Params
  */
@@ -48,16 +53,23 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
         $this->mandatory = $mandatory;
         return $this;
     }
-    
+
     /**
-     * 
+     * Liste des arguments attendus :
+     *
+     * 0 : $argName    : Nom de l'entrée recherchée. L'entrée peut être de type entree[sous-entree]. Alors, la valeur du sous-tableau correspondant sera retournée.
+     * 1 : $argDefault : Valeur de retour par défaut
+     * 2 : $argSources : Utile dans certains cas seulement : liste des sources où rechercher (post, query, context, etc.)
+     *
      * @param type $name
      * @param type $arguments
      * @throws LogicException
      */
     public function __call($name, $arguments)
     {
+        /* Récupération des paramètres */
         $argName = isset($arguments[0]) ? $arguments[0] : null;
+        $argSubNames = array();
         $argDefault = isset($arguments[1]) ? $arguments[1] : null;
         $argSources = isset($arguments[2]) ? $arguments[2] : null;
 
@@ -81,16 +93,36 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
             default:
                 throw new LogicException("Méthode '$name' inexistante.");
         }
-        
+
+        if ($argName){ // construction du tableau des arguments et de ses sous-arguments pour, plus tard, récupérer une valeur dans un tableau
+            $names = explode('[', str_replace(']', '', $argName));
+            foreach( $names as $i => $n ){
+                if (0 === $i){
+                    $argName = $n;
+                }else{
+                    $argSubNames[] = $n;
+                }
+            }
+        }
         $target = substr($name, 0, $length);
         if (! $argName) $argName = $target;
 
+        /* Récupération de la valeur */
         if ('fromSources' === $method){
             $value = $this->fromSources($argName, $argDefault, $argSources);
         }else{
             $value = call_user_func_array(array($this, lcfirst($method)), array($argName,$argDefault));
         }
-        
+
+        /* Parcours du tableau pour récupérer la valeur attendue */
+        if (! empty($argSubNames)){
+            foreach( $argSubNames as $subName ){
+                if (! isset($value[$subName])){
+                    throw new RuntimeException("Tableau invalide ou clé \"$subName\" non trouvée.");
+                }
+                $value = $value[$subName];
+            }
+        }
 
 //        var_dump($value, $method, $target);
 
@@ -98,13 +130,15 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
             throw new LogicException("Paramètre requis introuvable : '$target'.");
         }
 
+        /* Conversion éventuelle en entité */
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $className = 'Application\\Entity\\Db\\'.ucfirst($target);
         if (class_exists($className)){
-            if (!is_object($value)){
-                if ((int)$value){
-                    if (!($value = $em->find($className, (int)$value))) {
-                        throw new RuntimeException($className." introuvable avec cet id : $value.");
+            if (!is_object($value) && ! is_array($value)){
+                $id = (int)$value;
+                if ($id){
+                    if (!($value = $em->find($className, $id))) {
+                        throw new RuntimeException($className." introuvable avec cet id : $id.");
                     }
                 }else{
                     $value = null;
@@ -116,7 +150,7 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
 
         return $value;
     }
-    
+
     /**
      * 
      * @param  string $name Parameter name to retrieve.

@@ -156,13 +156,13 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
     protected function renderModifier()
     {
         $url = $this->getView()->url('service/default', array('action' => 'saisie', 'id' => $this->service->getId()));
-        return '<td><a class="ajax-modal services event_service-modify-message" href="'.$url.'" title="Modifier le service"><span class="glyphicon glyphicon-edit"></span></a></td>';
+        return '<td><a class="ajax-modal" data-event="service-modify-message" href="'.$url.'" title="Modifier le service"><span class="glyphicon glyphicon-edit"></span></a></td>';
     }
 
     protected function renderSupprimer()
     {
         $url = $this->getView()->url('service/default', array('action' => 'suppression', 'id' => $this->service->getId()));//onclick="return Service.get('.$this->service->getId().').delete(this)"
-        return '<td><a class="service-delete" data-id="'.$this->service->getId().'" href="'.$url.'" title="Supprimer le service"><span class="glyphicon glyphicon-remove"></span></a></td>';
+        return '<td><a class="ajax-modal service-delete" data-event="service-delete-message" data-id="'.$this->service->getId().'" href="'.$url.'" title="Supprimer le service"><span class="glyphicon glyphicon-remove"></span></a></td>';
     }
 
     protected function renderDetails( $details=false )

@@ -79,25 +79,29 @@ class ServiceController extends AbstractActionController
 
     public function suppressionAction()
     {
-        $id      = (int)$this->params()->fromRoute('id',0);
-        $service = $this->getServiceService();
-        $entity  = $service->getRepo()->find($id);
-        $title   = "Suppression de service";
-        $errors  = array();
+        $id        = (int) $this->params()->fromRoute('id', 0);
+        $service   = $this->getServiceService();
+        $entity    = $service->getRepo()->find($id);
+        $title     = "Suppression de service";
+        $form      = new \Application\Form\Supprimer('suppr');
+        $viewModel = new \Zend\View\Model\ViewModel();
 
-        try{
-            $entity->setHistoDestruction(new \DateTime);
-            $this->em()->flush();
-        }catch(\Exception $e){
-            $e = DbException::translate($e);
-            $errors[] = $e->getMessage();
+        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+                
+        if ($this->getRequest()->isPost()) {
+            $errors = array();
+            try {
+                $entity->setHistoDestruction(new \DateTime);
+                $this->em()->flush();
+            }
+            catch(\Exception $e){
+                $e = DbException::translate($e);
+                $errors[] = $e->getMessage();
+            }
+            $viewModel->setVariable('errors', $errors);
         }
 
-        $terminal = $this->getRequest()->isXmlHttpRequest();
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setTemplate('application/service/suppression')
-                ->setVariables(compact('entity', 'context', 'title', 'errors'));
+        $viewModel->setVariables(compact('entity', 'context', 'title', 'form'));
         
         return $viewModel;
     }
@@ -204,7 +208,7 @@ class ServiceController extends AbstractActionController
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/service/saisie')
-                ->setVariables(compact('form', 'context','errors'));
+                ->setVariables(compact('form', 'context', 'title', 'errors'));
         
         return $viewModel;
     }

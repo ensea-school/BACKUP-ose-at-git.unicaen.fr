@@ -126,7 +126,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         if ($periodeId)          $context['periode'] = $periodeId;
         if ($motifNonPaiementId) $context['motifNonPaiement'] = $motifNonPaiementId;
         if ($typeInterventionId) $context['typeIntervention'] = $typeInterventionId;
-        return "<a class=\"ajax-popover volume-horaire event_save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$context['service']."\" href=\"".$this->getView()->url('volume-horaire/default', $params, array('query' => $context ) )."\" >$heures</a>";
+        return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$context['service']."\" href=\"".$this->getView()->url('volume-horaire/default', $params, array('query' => $context ) )."\" >$heures</a>";
     }
 
     protected function renderMotifNonPaiement($motifNonPaiement)

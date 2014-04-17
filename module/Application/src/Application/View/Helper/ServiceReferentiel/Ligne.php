@@ -119,7 +119,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderModifier()
     {
         $url = $this->getView()->url('service-ref/default', array('action' => 'saisie', 'id' => $this->service->getId()));
-        return '<td><a class="ajax-modal event_service-modify-message" href="' . $url . '" title="Modifier le service référentiel"><span class="glyphicon glyphicon-edit"></span></a></td>';
+        return '<td><a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier le service référentiel"><span class="glyphicon glyphicon-edit"></span></a></td>';
     }
 
     protected function renderSupprimer()

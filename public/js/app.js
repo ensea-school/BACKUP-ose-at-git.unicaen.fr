@@ -13,7 +13,7 @@ function Service( id ) {
         ok = window.confirm('Voulez-vous vraiment supprimer ce service ?');
         if (ok){
             $('#service-div').modal({remote: url});
-        }
+    }
         return false;
     }
 
@@ -75,8 +75,8 @@ Service.init = function( voirLigneUrl ){
 
     $("body").on("service-modify-message", function(event, data) {
         var id = null;
-        if ($("div .messenger, div .alert").length ? false : true){
-            event.dialog.modal('hide'); // ferme la fenêtre modale
+        if ($("div .messenger, div .alert", event.div).length ? false : true){
+            event.div.modal('hide'); // ferme la fenêtre modale
             for( i in data ){
                 if (data[i].name == 'id'){
                     id = data[i].value;
@@ -89,29 +89,34 @@ Service.init = function( voirLigneUrl ){
         }
     });
 
-    $('#service-div').on('loaded.bs.modal', function (e) {
-        if (id = $('#service-deleted-id').val()){
-            var terminated = $("form .input-error, form .has-error, div.alert", $(e.target)).length ? false : true;
-            if (terminated){
-                Service.get(id).onAfterDelete();
-            }
-        }
-    });
+//    $('#service-div').on('loaded.bs.modal', function (e) {
+//        if (id = $('#service-deleted-id').val()){
+//            var terminated = $("form .input-error, form .has-error, div.alert", $(e.target)).length ? false : true;
+//            if (terminated){
+//                Service.get(id).onAfterDelete();
+//            }
+//        }
+//    });
 
     $("body").on("service-add-message", function(event, data) {
         var id = null;
-        if ($("div .messenger, div .alert").length ? false : true){
-            event.dialog.modal('hide'); // ferme la fenêtre modale
+        if ($("div .messenger, div .alert", event.div).length ? false : true){
+            event.div.modal('hide'); // ferme la fenêtre modale
             for( i in data ){
                 if (data[i].name == 'id'){
                     id = data[i].value;
                 }
             }
-
+            
             if (id){
                 Service.get(id).onAfterAdd();
             }
         }
+    });
+    
+    $("body").on("service-delete-message", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        Service.get(event.a.data('id')).onAfterDelete();
     });
 
     $("body").on('change', 'form#service input[name="interne-externe"]', function(){
@@ -120,10 +125,10 @@ Service.init = function( voirLigneUrl ){
 
     $(".service-show-all-details").on('click', function(){ Service.showAllDetails(); });
     $(".service-hide-all-details").on('click', function(){ Service.hideAllDetails(); });
-    $('body').on('click', '.service-delete', function(){
-        Service.get( $(this).data('id') ).delete( $(this).attr('href') );
-        return false;
-    });
+//    $('body').on('click', '.service-delete', function(){
+//        Service.get( $(this).data('id') ).delete( $(this).attr('href') );
+//        return false;
+//    });
 
     VolumeHoraire.init();
 }

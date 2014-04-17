@@ -264,7 +264,9 @@ class Service implements HistoriqueAwareInterface
     public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
-
+        if ($intervenant && ! $this->getStructureAff()){
+            $this->setStructureAff( $intervenant->getStructure() );
+        }
         return $this;
     }
 
@@ -379,7 +381,9 @@ class Service implements HistoriqueAwareInterface
     public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique = $elementPedagogique;
-
+        if ($elementPedagogique && ! $this->getStructureEns()){
+            $this->setStructureEns( $elementPedagogique->getStructure() );
+        }
         return $this;
     }
 

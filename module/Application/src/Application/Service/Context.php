@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Annee;
-use Application\Entity\Db\Etablissement;
+use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Personnel;
@@ -48,7 +48,7 @@ class Context extends AbstractService
     protected $annee;
     
     /**
-     * @var Etablissement
+     * @var EntityEtablissement
      */
     protected $etablissement;
     
@@ -183,7 +183,7 @@ class Context extends AbstractService
         return $this;
     }
 
-    public function setEtablissement(Etablissement $etablissement)
+    public function setEtablissement(EntityEtablissement $etablissement)
     {
         $this->etablissement = $etablissement;
         return $this;

@@ -57,6 +57,10 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
      */
     public function __call($name, $arguments)
     {
+        $argName = isset($arguments[0]) ? $arguments[0] : null;
+        $argDefault = isset($arguments[1]) ? $arguments[1] : null;
+        $argSources = isset($arguments[2]) ? $arguments[2] : null;
+
         switch (true) {
             case ($method = 'FromRoute') === substr($name, $length = -9):
                 break;
@@ -68,67 +72,73 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
                 break;
             case ($method = 'FromContext') === substr($name, $length = -11):
                 break;
+            case ($method = 'FromSources') === substr($name, $length = -11):
+                break;
+            case 'FromQueryPost' === substr($name, $length = -13):
+                $method = 'FromSources';
+                $argSources = array('query','post');
+                break;
             default:
                 throw new LogicException("Méthode '$name' inexistante.");
         }
         
         $target = substr($name, 0, $length);
-        if (!$arguments) {
-            $arguments = array($target);
+        if (! $argName) $argName = $target;
+
+        if ('fromSources' === $method){
+            $value = $this->fromSources($argName, $argDefault, $argSources);
+        }else{
+            $value = call_user_func_array(array($this, lcfirst($method)), array($argName,$argDefault));
         }
         
-        $value  = call_user_func_array(array($this, lcfirst($method)), $arguments);
-        
+
 //        var_dump($value, $method, $target);
-        
+
         if ($this->mandatory && null === $value) {
             throw new LogicException("Paramètre requis introuvable : '$target'.");
         }
-        
+
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-
-        switch ($target) {
-            case 'intervenant':
-                if (null !== $value && is_numeric($value)) {
-                    if (!($value = $em->find('Application\Entity\Db\Intervenant', $value))) {
-                        throw new RuntimeException("Intervenant introuvable avec cet id : $value.");
+        $className = 'Application\\Entity\\Db\\'.ucfirst($target);
+        if (class_exists($className)){
+            if (!is_object($value)){
+                if ((int)$value){
+                    if (!($value = $em->find($className, (int)$value))) {
+                        throw new RuntimeException($className." introuvable avec cet id : $value.");
                     }
+                }else{
+                    $value = null;
                 }
-                break;
-                
-            case 'structure':
-                if (null !== $value && is_numeric($value)) {
-                    if (!($value = $em->find('Application\Entity\Db\Structure', $value))) {
-                        throw new RuntimeException("Structure introuvable avec cet id : $value.");
-                    }
-                }
-                break;
-
-            case 'etape':
-                if (null !== $value && is_numeric($value)) {
-                    if (!($value = $em->find('Application\Entity\Db\Etape', $value))) {
-                        throw new RuntimeException("Étape introuvable avec cet id : $value.");
-                    }
-                }
-                break;
-
-            case 'volumeHoraire':
-                if (null !== $value && is_numeric($value)) {
-                    if (!($value = $em->find('Application\Entity\Db\VolumeHoraire', $value))) {
-                        throw new RuntimeException("Volume horaire introuvable avec cet id : $value.");
-                    }
-                }
-                break;
-
-            default:
-                break;
+            }
         }
-        
+
         $this->mandatory = false;
-        
+
         return $value;
     }
     
+    /**
+     * 
+     * @param  string $name Parameter name to retrieve.
+     * @param  mixed $default Default value to use when the requested parameter is not set.
+     * @param array $sources
+     * @return mixed
+     */
+    public function fromSources($name, $default=null, array $sources=array())
+    {
+        $defaultSources = array('context', 'route', 'query', 'post', 'session' );
+        if (empty($sources)) $sources = $defaultSources;
+
+        foreach( $sources as $source ){
+            if (! in_array($source, $defaultSources)){
+                throw new LogicException("Source de données introuvable : '$source'.");
+            }
+            $result = call_user_func_array(array($this, 'from'.lcfirst($source)), array($name, null));
+            if ($result !== null) return $result;
+        }
+        return $default;
+    }
+
     /**
      * Return a single session parameter.
      *

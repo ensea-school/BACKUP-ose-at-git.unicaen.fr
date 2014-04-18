@@ -116,24 +116,25 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
      */
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {
-        /* @var $object \Application\Entity\Db\Service */
         $data = array(
-            'id'               => $object->getId(),
-            'intervenant'      => $object->getIntervenant() ? $object->getIntervenant()->getId() : null
+            'id'      => $object->getId(),
         );
-        $this->setData($data);
-        $this->get('elementPedagogique')->setElementPedagogique( $object->getElementPedagogique() );
-        if ($etablissement = $object->getEtablissement()){
-            $this->get('etablissement')->setValue(array(
-                    'id' => $etablissement->getId(),
-                    'label' => $etablissement->getLibelle()
-            ));
-            $this->get('interne-externe')->setValue((null === $etablissement || $etablissement === $this->etablissement) ? 'service-interne' : 'service-externe');
-
+        if ($intervenant = $object->getIntervenant()){
+            $data['intervenant'] = array( 'id' => $intervenant->getSourceCode(), 'label' => (string)$intervenant );
         }else{
-            $this->get('etablissement')->setValue(null);
-            $this->get('interne')->setValue('service-interne');
+            $data['intervenant'] = null;
         }
+        if ($elementPedagogique = $object->getElementPedagogique()){
+            $data['elememtPedagogique']['element'] = array( 'id' => $elementPedagogique->getId(), 'label' => (string)$elementPedagogique );
+        }
+        if ($etablissement = $object->getEtablissement()){
+            $data['etablissement'] = array( 'id' => $etablissement->getId(), 'label' => (string)$etablissement );
+            $data['interne-externe'] = ($etablissement === $this->etablissement) ? 'service-interne' : 'service-externe';
+        }else{
+            $data['etablissement'] = null;
+            $data['interne-externe'] = 'service-interne';
+        }
+        $this->setData($data);
     }
 
     /**
@@ -146,7 +147,13 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         return array(
             'interne-externe' => array(
                 'required' => false
-            )
+            ),
+            'etablissement' => array(
+                'required' => false
+            ),
+            'elementPedagogique' => array(
+                'required' => false
+            ),
         );
     }
 }

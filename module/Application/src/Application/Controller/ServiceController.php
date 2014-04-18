@@ -112,27 +112,28 @@ class ServiceController extends AbstractActionController
         $service = $this->getServiceService();
         $context = $service->getGlobalContext();
 
-        $intervenantContext = $this->context()->intervenantFromContext();
+        $intervenantContext = $context['intervenant'];//$this->context()->intervenantFromContext();
 
         if ($id){
             $entity = $service->getRepo()->find($id);
-            $title   = "Modification";
+            $title   = "Modification de service";
         }else{
             $entity = new Service;
             $entity->setAnnee( $this->context()->anneeFromContext() );
             $entity->setValiditeDebut(new \DateTime );
             $entity->setIntervenant( $intervenantContext );
-            $title   = "Ajout";
+            $title   = "Ajout de service";
         }
         $form = new Saisie( $this->getServiceLocator(), $this->url(), $context );
 
 
         if ($this->getRequest()->isPost()){
             if(! $intervenantContext){
-                $entity->setIntervenant( $this->context()->intervenantFromPost() );
+                $entity->setIntervenant( $this->context()->intervenantFromPost("intervenant[id]") );
             }
             $entity->setElementPedagogique( $this->context()->elementPedagogiqueFromPost("elementPedagogique[element][id]") );
             $entity->setEtablissement( $this->context()->etablissementFromPost("etablissement[id]") );
+            if (! $entity->getEtablissement()) $entity->setEtablissement( $this->context()->etablissementFromContext() );
         }
         $errors  = array();
         $form->bind( $entity );
@@ -150,114 +151,6 @@ class ServiceController extends AbstractActionController
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
-        $title = 'Saisie de service';
         return compact('form', 'context','errors','title');
-
-
-        /* OLD */
-        $id = (int)$this->params()->fromRoute('id',0);
-        $service = $this->getServiceService();
-        $context = $service->getGlobalContext();
-        $title   = $id ? "Modification" : "Ajout";
-        $errors  = array();
-        $form = new Saisie( $this->getServiceLocator(), $this->url(), $context );
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
-
-        if (0 != $id){
-            /* Initialisation des valeurs */
-            $entity = $service->getRepo()->find($id);
-            /* @var $entity \Application\Entity\Db\Service */
-
-            $form->get('id')->setValue( $entity->getId() );
-
-            if (! isset($context['intervenant'])){
-                $form->get('intervenant')->setValue(array(
-                        'id' => $entity->getIntervenant()->getId(),
-                        'label' => (string)$entity->getIntervenant()
-                ));
-            }
-            if ($entity->getElementPedagogique()){
-                $form->get('elementPedagogique')->setElementPedagogique($entity->getElementPedagogique());
-            }
-            $form->get('etablissement')->setValue(array(
-                    'id' => $entity->getEtablissement()->getId(),
-                    'label' => $entity->getEtablissement()->getLibelle()
-            ));
-        }
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $post = $request->getPost();
-            if (null == $post->etablissement['id']){
-                $post->etablissement = array( 'id' => $context['etablissement']->getId(), 'label' => (string)$context['etablissement'] );
-            }elseif( (int)$post->etablissement['id'] != $context['etablissement']->getId() ){
-                $post->elementPedagogique['element'] = ''; // pas d'élément si un autre établissement a été sélectionné
-            }
-            $form->setData($post);
-
-            if ($form->isValid()) {
-                if (! isset($entity)){
-                    $entity = new Service;
-                    $entity->setAnnee($context['annee']);
-                    $entity->setValiditeDebut(new \DateTime);
-                }
-
-                if ( isset($context['intervenant']) && $context['intervenant']){
-                    $intervenant = $context['intervenant'];
-                }else{
-                    $controller = 'Application\Controller\Intervenant';
-                    $params     = $this->getEvent()->getRouteMatch()->getParams();
-                    if (!($intervenant = $this->intervenant()->getRepo()->findOneBySourceCode($post->intervenant['id']))) {
-                        $this->getServiceLocator()->get('importProcessusImport')->intervenant($post->intervenant['id']); // Import
-                        if (!($intervenant = $this->intervenant()->getRepo()->findOneBySourceCode($post->intervenant['id']))) {
-                            throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = ".$post->intervenant['id'].".");
-                        }
-                    }
-                }
-
-                if (isset($context['elementPedagogique'])){
-                    $elementPedagogique = $context['elementPedagogique'];
-                }elseif(isset($post->elementPedagogique['element']['id']) && 0 != (int)$post->elementPedagogique['element']['id']){
-                    $elementPedagogique = $this->em()->getRepository('Application\\Entity\\Db\\ElementPedagogique')->find($post->elementPedagogique['element']['id']);
-                }else{
-                    $elementPedagogique = null;
-                }
-
-                $etablissement = $this->em()->getRepository('Application\\Entity\\Db\\Etablissement')->find($post->etablissement['id']);
-
-
-                /* Hydratation */
-                if (!$entity->getId() || $entity->getStructureAff() != $intervenant->getStructure() ){
-                    $entity->setStructureAff( $intervenant->getStructure() );
-                }
-
-                if ($elementPedagogique && (!$entity->getId() || $entity->getStructureEns() != $elementPedagogique->getStructure()) ){
-                    $entity->setStructureEns( $elementPedagogique->getStructure() );
-                }
-                $entity->setIntervenant( $intervenant );
-                $entity->setElementPedagogique( $elementPedagogique );
-                $entity->setEtablissement( $etablissement );
-
-                try{
-                    $this->em()->persist($entity);
-                    $this->em()->flush();
-                    $form->get('id')->setValue( $entity->getId() ); // transmet le nouvel ID
-                }catch(\Exception $e){
-                    $e = DbException::translate($e);
-                    $errors[] = $e->getMessage();
-                }
-            }else{
-                $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
-            }
-        }
-
-        $terminal = $this->getRequest()->isXmlHttpRequest();
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setTemplate('application/service/saisie')
-                ->setVariables(compact('form', 'context', 'title', 'errors'));
-
-        return $viewModel;
- //       return compact('form', 'context','errors');
     }
 }

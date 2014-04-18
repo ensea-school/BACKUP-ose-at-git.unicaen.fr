@@ -95,8 +95,8 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Inpu
         $this->elementPedagogique = $elementPedagogique;
         
         $this->get('element')->setValue(array(
-            'id'    => $this->getElementPedagogique()->getId(),
-            'label' => $this->getElementPedagogique()->getLibelle()
+            'id'    => $elementPedagogique ? $elementPedagogique->getId() : null,
+            'label' => $elementPedagogique ? $elementPedagogique->getLibelle() : null
         ));
         
         return $this;

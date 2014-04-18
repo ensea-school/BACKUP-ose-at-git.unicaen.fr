@@ -125,7 +125,9 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             $data['intervenant'] = null;
         }
         if ($elementPedagogique = $object->getElementPedagogique()){
-            $data['elememtPedagogique']['element'] = array( 'id' => $elementPedagogique->getId(), 'label' => (string)$elementPedagogique );
+            $data['elementPedagogique']['element'] = array( 'id' => $elementPedagogique->getId(), 'label' => (string)$elementPedagogique );
+        }else{
+            $data['elementPedagogique'] = null;
         }
         if ($etablissement = $object->getEtablissement()){
             $data['etablissement'] = array( 'id' => $etablissement->getId(), 'label' => (string)$etablissement );

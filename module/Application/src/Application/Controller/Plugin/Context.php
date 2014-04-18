@@ -124,6 +124,20 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
             }
         }
 
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+
+        /* Cas particulier pour les intervenants : import implicite */
+        if ('intervenant' === $target && (int)$value){
+            $sourceCode = (string)(int)$value;
+            if (!($intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode))) {
+                $this->getServiceLocator()->get('importProcessusImport')->intervenant($sourceCode); // Import
+                if (!($intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode))) {
+                    throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
+                }
+            }
+            $value = $intervenant;
+        }
+
 //        var_dump($value, $method, $target);
 
         if ($this->mandatory && null === $value) {
@@ -131,7 +145,6 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
         }
 
         /* Conversion éventuelle en entité */
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $className = 'Application\\Entity\\Db\\'.ucfirst($target);
         if (class_exists($className)){
             if (!is_object($value) && ! is_array($value)){

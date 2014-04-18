@@ -64,10 +64,6 @@ class DemoController extends AbstractActionController
 
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(array('form' => $form, 'title' => "Intervenant..."));
-
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            return $this->modalInnerViewModel($view);
-        }
         
         return $view;
     }

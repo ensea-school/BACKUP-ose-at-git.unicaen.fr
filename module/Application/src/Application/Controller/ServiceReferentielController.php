@@ -256,9 +256,6 @@ class ServiceReferentielController extends AbstractActionController
 //                $repo->updateServicesReferentiel($intervenant, $annee, $data);
             }
         }
-        else {
-//            $form->bind($intervenant);
-        }
         
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setVariables($variables);
@@ -269,9 +266,6 @@ class ServiceReferentielController extends AbstractActionController
         $viewModel
                 ->setTemplate('application/service-referentiel/saisir')
                 ->setVariables($variables);
-//        if ($isAjax) {
-//            return $this->modalInnerViewModel($viewModel, "Saisie du service référentiel", false);
-//        }
         
         return $viewModel;
     }

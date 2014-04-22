@@ -20,8 +20,6 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
     {
         parent::__construct($name, $options);
 
-        $this->setHydrator( $this->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator') );
-
         $this->add(array(
             'name'       => $this->getStructureName(),
             'options'    => array(
@@ -42,7 +40,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             'options'    => array(
                 'label' => "Niveau :",
                 'empty_option' => "(Tous)",
-                'value_options' => $this->getNiveaux(),
+//                'value_options' => $this->getNiveaux(),
                 'disable_inarray_validator' => true,
             ),
             'attributes' => array(
@@ -57,7 +55,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             'options'    => array(
                 'label' => "Étape :",
                 'empty_option' => "(Toutes)",
-                'value_options' => $this->getEtapes(),
+//                'value_options' => $this->getEtapes(),
                 'disable_inarray_validator' => true,
             ),
             'attributes' => array(
@@ -187,44 +185,78 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
     }
     
     protected $structures = array();
-    protected $niveaux    = array();
-    protected $etapes     = array();
-    
-    public function getNiveaux()
-    {
-        return $this->niveaux;
-    }
+//    protected $niveaux    = array();
+//    protected $etapes     = array();
+//    
+//    /**
+//     * Retournent les niveaux possibles.
+//     * 
+//     * @return array
+//     */
+//    public function getNiveaux()
+//    {
+//        return $this->niveaux;
+//    }
+//
+//    /**
+//     * Retournent les étapes possibles.
+//     * 
+//     * @return array
+//     */
+//    public function getEtapes()
+//    {
+//        return $this->etapes;
+//    }
 
-    public function getEtapes()
-    {
-        return $this->etapes;
-    }
-
+    /**
+     * Retournent les structures possibles.
+     * 
+     * @return array|Traversable
+     */
     public function getStructures()
     {
         return $this->structures;
     }
+//
+//    /**
+//     * Spécifie les niveaux possibles.
+//     * 
+//     * @param array $niveaux
+//     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
+//     */
+//    public function setNiveaux($niveaux)
+//    {
+//        $niveaux = array_combine(
+//                $tmp = array_map(function($v) { return $v['libelleCourt'] . $v['niveau']; }, $niveaux), 
+//                $tmp); 
+//        $this->niveaux = $niveaux;
+//        $this->get('niveau')->setValueOptions($this->getNiveaux());
+//        return $this;
+//    }
+//
+//    /**
+//     * Spécifie les étapes possibles.
+//     * 
+//     * @param array $etapes
+//     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
+//     */
+//    public function setEtapes($etapes)
+//    {
+//        $this->etapes = \UnicaenApp\Util::collectionAsOptions($etapes);
+//        $this->get('etape')->setValueOptions($this->getEtapes());
+//        return $this;
+//    }
 
-    public function setNiveaux($niveaux)
-    {
-        $niveaux = array_combine(
-                $tmp = array_map(function($v) { return $v['libelleCourt'] . $v['niveau']; }, $niveaux), 
-                $tmp); 
-        $this->niveaux = $niveaux;
-        $this->get('niveau')->setValueOptions($this->getNiveaux());
-        return $this;
-    }
-
-    public function setEtapes($etapes)
-    {
-        $this->etapes = \UnicaenApp\Util::collectionAsOptions($etapes);
-        $this->get('etape')->setValueOptions($this->getEtapes());
-        return $this;
-    }
-
+    /**
+     * Spécifie les structures possibles.
+     * 
+     * @param array|Traversable $structures
+     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
+     */
     public function setStructures($structures)
     {
         $this->structures = $structures;
+        $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($structures));
         return $this;
     }
 
@@ -234,7 +266,8 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
      *
      * @return array
      */
-    public function getInputFilterSpecification(){
+    public function getInputFilterSpecification()
+    {
         return array(
             'structure' => array(
                 'required' => false

@@ -68,8 +68,13 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'FormElementPedagogiqueRechercheFieldset' => 'Form\Offreformation\ElementPedagogiqueRechercheFielset',
-            'FormElementPedagogiqueRechercheHydrator' => 'Form\Offreformation\ElementPedagogiqueRechercheHydrator'
+//            'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset',
+            'FormElementPedagogiqueRechercheHydrator' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheHydrator'
+        ),
+    ),
+    'form_elements' => array(
+        'factories' => array(
+            'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldsetFactory',
         ),
     ),
 );

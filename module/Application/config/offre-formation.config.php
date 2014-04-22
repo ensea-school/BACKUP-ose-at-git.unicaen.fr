@@ -66,4 +66,10 @@ return array(
             'Application\Controller\OffreFormation' => 'Application\Controller\OffreFormationController',
         ),
     ),
+    'service_manager' => array(
+        'invokables' => array(
+            'FormElementPedagogiqueRechercheFieldset' => 'Form\Offreformation\ElementPedagogiqueRechercheFielset',
+            'FormElementPedagogiqueRechercheHydrator' => 'Form\Offreformation\ElementPedagogiqueRechercheHydrator'
+        ),
+    ),
 );

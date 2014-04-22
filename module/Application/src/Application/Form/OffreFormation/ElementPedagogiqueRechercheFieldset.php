@@ -3,18 +3,25 @@
 namespace Application\Form\OffreFormation;
 
 use Zend\Form\Fieldset;
+use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Description of ElementPedagogiqueRechercheFieldset
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\InputFilter\InputFilterProviderInterface
+class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
+
     public function __construct($name = null, $options = array())
     {
         parent::__construct($name, $options);
-        
+
+        $this->setHydrator( $this->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator') );
+
         $this->add(array(
             'name'       => $this->getStructureName(),
             'options'    => array(
@@ -71,35 +78,6 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements \Zend\Inpu
             ),
             'type' => 'UnicaenApp\Form\Element\SearchAndSelect',
         ));
-    }
-    
-    /**
-     * @var \Application\Entity\Db\ElementPedagogique
-     */
-    protected $elementPedagogique;
-    
-    /**
-     * @return \Application\Entity\Db\ElementPedagogique
-     */
-    public function getElementPedagogique()
-    {
-        return $this->elementPedagogique;
-    }
-
-    /**
-     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
-     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
-     */
-    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
-    {
-        $this->elementPedagogique = $elementPedagogique;
-        
-        $this->get('element')->setValue(array(
-            'id'    => $elementPedagogique ? $elementPedagogique->getId() : null,
-            'label' => $elementPedagogique ? $elementPedagogique->getLibelle() : null
-        ));
-        
-        return $this;
     }
     
     protected $structureName = 'structure';

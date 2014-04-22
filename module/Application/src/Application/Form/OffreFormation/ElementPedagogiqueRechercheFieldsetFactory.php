@@ -6,7 +6,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Description of ElementPedagogiqueRechercheFieldset
+ * Factory fournissant une instance du fieldset de recherche et sélection d'un élément pédagogique.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -36,7 +36,7 @@ class ElementPedagogiqueRechercheFieldsetFactory implements FactoryInterface
                 ->setEtapesSourceUrl($urlEtapes)
                 ->setElementsSourceUrl($urlElements);
         
-        $h = $serviceLocator->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator');
+        $h = $serviceLocator->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator'); /* @var $h ElementPedagogiqueRechercheHydrator */
         $fs->setHydrator($h);
         
         return $fs;

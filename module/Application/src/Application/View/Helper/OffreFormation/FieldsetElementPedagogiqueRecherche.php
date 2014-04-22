@@ -85,6 +85,9 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
      */
     protected function getJs()
     {
+        $updateStructuresOnLoad = count($this->fieldset->getStructures()) ? 'false' : 'true';
+        $updateEtapesOnLoad     = count($this->fieldset->getEtapes())     ? 'false' : 'true';
+        
         $js = <<<EOS
 $(function() {
     var str      = $("#{$this->structureElement->getAttribute('id')}");
@@ -95,31 +98,36 @@ $(function() {
 
     if (str.length) {
         elements.push(str.data({ 
-            updateUrl: '{$this->fieldset->getStructuresSourceUrl()}',
-            paramName: "{$this->fieldset->getStructureName()}",
-            initValue: "{$this->structureElement->getValue()}"
+            updateUrl:    '{$this->fieldset->getStructuresSourceUrl()}',
+            updateOnLoad: {$updateStructuresOnLoad},
+            paramName:    "{$this->fieldset->getStructureName()}",
+            initValue:    "{$this->structureElement->getValue()}"
         }));
     }
     if (niv.length) {
         elements.push(niv.data({ 
-            updateUrl: '{$this->fieldset->getNiveauxSourceUrl()}',
-            paramName: "{$this->fieldset->getNiveauName()}",
-            initValue: "{$this->niveauElement->getValue()}"
+            updateUrl:    '{$this->fieldset->getNiveauxSourceUrl()}',
+            updateOnLoad: true,
+            paramName:    "{$this->fieldset->getNiveauName()}",
+            initValue:    "{$this->niveauElement->getValue()}"
         }));
     }
     if (eta.length) {
         elements.push(eta.data({ 
-            updateUrl: '{$this->fieldset->getEtapesSourceUrl()}',
-            paramName: "{$this->fieldset->getEtapeName()}",
-            initValue: "{$this->etapeElement->getValue()}"
+            updateUrl:    '{$this->fieldset->getEtapesSourceUrl()}',
+            updateOnLoad: {$updateEtapesOnLoad},
+            paramName:    "{$this->fieldset->getEtapeName()}",
+            initValue:    "{$this->etapeElement->getValue()}"
         }));
     }
     if (ele.length) {
         elements.push(ele.data({ 
-            updateUrl: '{$this->fieldset->getElementsSourceUrl()}',
+            updateUrl:    '{$this->fieldset->getElementsSourceUrl()}',
+            updateOnLoad: true,
         }));
     }
-        
+            
+    // écoute de l'événement 'change' sur chaque élément
     $.each(elements, function (index, element) {
         element.change(function() {
             var next = elements[index+1];
@@ -128,8 +136,7 @@ $(function() {
     });
     
     updateElement(elements[0]);
-    
-    
+            
     function updateElement(element)
     {
         element.is("select") ? updateSelect(element) : updateAutocomplete(element);
@@ -137,13 +144,17 @@ $(function() {
     
     function updateSelect(element)
     {
-        var url       = getUrl(element.data('updateUrl'));
+        var url = getUrl(element.data('updateUrl'));
+        if (!url) {
+            element.change();
+            return;
+        }
         var value     = element.data('initValue');
         var selection = value ? value : element.val();
         element.css('opacity', '0.5').append($("<option/>").attr("value", 'temp').text("Patientez, svp...")).val('temp');
         $.get(url, function(data) {
-            updateSelectOptions(element, data); 
-            element.val(selection).css('opacity', '1').change();
+            updateSelectOptions(element, data);
+            element.val('').val(selection).css('opacity', '1').change();
         });
     }
     
@@ -151,8 +162,6 @@ $(function() {
     {
         var url = getUrl(element.data('updateUrl'));
         element.autocomplete("option", "source", url);
-//        element.autocomplete("search");
-//        element.change(); // inutile en fait
     }
     
     function getUrl(urlTemplate)

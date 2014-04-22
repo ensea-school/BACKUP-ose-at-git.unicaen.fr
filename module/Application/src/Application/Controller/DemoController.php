@@ -28,23 +28,21 @@ class DemoController extends AbstractActionController
      */
     public function indexAction()
     {
-//        $service  = $this->getServiceReferentielService();
-//        $context  = $this->context()->getGlobalContext();
-//        $qb       = $service->finderByContext($context);
-//        $annee    = $context->getAnnee();
-//        $services = $qb->getQuery()->execute();
-//        
-//        $listeViewModel = new \Zend\View\Model\ViewModel();
-//        $listeViewModel
-//                ->setTemplate('application/service-referentiel/voir-liste')
-//                ->setVariables(compact('services', 'context'));
-//        
-//        $viewModel = new \Zend\View\Model\ViewModel();
-//        $viewModel
-//                ->setVariables(compact('annee'))
-//                ->addChild($listeViewModel, 'serviceListe');
-//        
-//        return $viewModel;
+        $repo = $this->em()->getRepository('Application\Entity\Db\ElementPedagogique');
+        $structures = $repo->finderDistinctStructures()->getQuery()->execute();
+                
+        $sl = $this->getServiceLocator();
+        $fs = $sl->get('FormElementManager')->get('FormElementPedagogiqueRechercheFieldset');
+        
+        $fs
+                ->setStructures(array($s = $structures[0]))
+                ->setEtapes($repo->finderDistinctEtapes(array('structure' => $s))->getQuery()->execute())
+                ->setStructuresSourceUrl(null)
+                ->setEtapesSourceUrl(null)
+                ;
+        $fs->get('structure')->setValue($s->getId());
+        
+        return array('fs' => $fs);
     }
 
     /**

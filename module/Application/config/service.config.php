@@ -167,16 +167,13 @@ return array(
             'ApplicationServiceReferentiel' => 'Application\\Service\\ServiceReferentiel',
             'ApplicationPeriode'            => 'Application\\Service\\Periode',
             'ApplicationMotifNonPaiement'   => 'Application\\Service\\MotifNonPaiement',
-            'ApplicationFormServiceRecherche' => 'Form\Service\Recherche',
+            'FormServiceRechercheHydrator'  => 'Application\Form\Service\RechercheHydrator'
         ),
-        /*'factories' => array(
-            'ApplicationFormServiceRecherche' => function($sm) {
-                $serviceLocator = $sm->getServiceLocator();
-                $property_type = $serviceLocator->get('Ctmm\Model\PropertyType');
-                $form = new Form\Service\Recherche();
-                return $form;
-            },
-        )*/
+    ),
+    'form_elements' => array(
+        'factories' => array(
+            'ServiceRecherche' => 'Application\\Form\\Service\\RechercheFactory',
+        ),
     ),
     'view_helpers' => array(
         'invokables' => array(

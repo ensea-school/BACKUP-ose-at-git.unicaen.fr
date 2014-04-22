@@ -18,7 +18,23 @@
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     Les heures à saisir ci-dessous sont les heures réellement effectuées et non les heures payables.
 </div>
+<?php else: ?>
+<div class="well well-sm">
+<?php
 
+$rechercheForm->prepare();
+
+echo $this->form()->openTag($rechercheForm);
+echo $this->formControlGroup($rechercheForm->get('intervenant'));
+echo $this->fieldsetElementPedagogiqueRecherche($rechercheForm->get('elementPedagogique'));
+echo $this->formRow($rechercheForm->get('submit'));
+echo $this->form()->closeTag().'<br />';
+
+echo $this->formErrors( $rechercheForm );
+if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
+
+?>
+</div>
 <?php endif; ?>
 
 <?php echo $this->serviceListe( $services, $context )->render(); ?>

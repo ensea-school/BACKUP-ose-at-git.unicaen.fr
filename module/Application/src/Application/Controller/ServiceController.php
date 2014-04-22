@@ -34,8 +34,27 @@ class ServiceController extends AbstractActionController
         $context = $service->getGlobalContext();
         $qb = $service->finderByContext($context);
         $annee = $context['annee'];
+
+        if (empty($this->context['intervenant'])){
+            $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+            /* @var $rechercheForm \Application\Form\Service\Recherche */
+            if ($this->getRequest()->isPost()){
+                $rechercheForm->setData( $this->getRequest()->getPost() );
+            }
+
+            $filter = new \StdClass;
+            $rechercheForm->bind($o);
+            if ($rechercheForm->isValid()){
+                if ($filter->intervenant)        $service->finderByIntervenant( $filter->intervenant, $qb );
+                if ($filter->elementPedagogique) $service->finderByElementPedagogique( $filter->elementPedagogique, $qb );
+            }
+            var_dump( $filter );
+        }else{
+            $rechercheForm = null; // pas de filtrage
+        }
+
         $services = $qb->getQuery()->execute();
-//        return compact('annee', 'services', 'context');
+        $errors = null;
 
         /* Bertrand: services référentiels */
         $controller       = 'Application\Controller\ServiceReferentiel';
@@ -47,7 +66,7 @@ class ServiceController extends AbstractActionController
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->addChild($listeViewModel, 'servicesRefListe')
-                ->setVariables(compact('annee', 'services', 'context'));
+                ->setVariables(compact('annee', 'services', 'rechercheForm', 'context', 'errors'));
 
         return $viewModel;
     }

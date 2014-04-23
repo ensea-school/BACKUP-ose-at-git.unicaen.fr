@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
-use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Intervenant as EntityIntervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\Personnel;
 use Application\Entity\Db\Utilisateur;
@@ -28,7 +28,7 @@ class Context extends AbstractService
     protected $utilisateur;
     
     /**
-     * @var Intervenant
+     * @var EntityIntervenant
      */
     protected $intervenant;
     
@@ -159,7 +159,7 @@ class Context extends AbstractService
         return $this;
     }
 
-    public function setIntervenant(Intervenant $intervenant)
+    public function setIntervenant(EntityIntervenant $intervenant)
     {
         $this->intervenant = $intervenant;
         return $this;

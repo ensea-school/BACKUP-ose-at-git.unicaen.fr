@@ -103,4 +103,9 @@ return array(
             'Application\Controller\Intervenant' => 'Application\Controller\IntervenantController',
         ),
     ),
+    'service_manager' => array(
+        'invokables' => array(
+            'ApplicationIntervenant'        => 'Application\\Service\\Intervenant',
+        ),
+    ),
 );

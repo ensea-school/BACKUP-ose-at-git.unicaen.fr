@@ -62,14 +62,20 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
      */
     public function populateOptions( $services )
     {
-        $intervenants   = array();
+        $intervenant = $this->getServiceLocator()->getServiceLocator()->get('ApplicationIntervenant');
+
+        $intervenants = $intervenant->getList();
+
+        $this->get('intervenant')->setValueOptions( \UnicaenApp\Util::collectionAsOptions($intervenants) );
+
+        //$intervenants   = array();
         $elements       = array();
         $etapes         = array();
         $structuresEns  = array();
         foreach( $services as $service ){
-            if ($intervenant = $service->getIntervenant()){
-                $intervenants[$intervenant->getId()] = (string)$intervenant;
-            }
+          //  if ($intervenant = $service->getIntervenant()){
+          //      $intervenants[$intervenant->getId()] = (string)$intervenant;
+          //  }
             if ($structureEns = $service->getStructureEns()){
                 $structuresEns[$structureEns->getId()]   = (string)$structureEns;
             }
@@ -80,12 +86,12 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
             }
         }
 
-        asort( $intervenants );
+        //asort( $intervenants );
         asort( $elements );
         asort( $etapes );
         asort( $structuresEns );
 
-        $this->get('intervenant')->setValueOptions( array('' => '(Tous)') + $intervenants );
+        //$this->get('intervenant')->setValueOptions( array('' => '(Tous)') + $intervenants );
         $this->get('element-pedagogique')->setValueOptions( array('' => '(Tous)') + $elements );
         $etapeSelect = $this->get('etape')->setValueOptions( array('' => '(Toutes)') + $etapes );
         $structureEnsSelect = $this->get('structure-ens')->setValueOptions( array('' => '(Toutes)') + $structuresEns );

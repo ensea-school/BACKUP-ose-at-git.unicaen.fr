@@ -120,7 +120,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
         if (! $element) return '';
         $url = $this->getView()->url('of/default', array('action' => 'voir-element'), array('query' => array('id' => $element->getId())));
         $pourl = $this->getView()->url('of/default', array('action' => 'apercevoir-element'), array('query' => array('id' => $element->getId())));
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$element->getSourceCode().' - '.$element.'</a>';
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$element.'</a>';
         return $out;
     }
 

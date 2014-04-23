@@ -11,7 +11,7 @@ class ElementPedagogique
 {
     public function __toString()
     {
-        return $this->getLibelle();
+        return $this-getSourceCode().' - '.$this->getLibelle();
     }
     
     /**

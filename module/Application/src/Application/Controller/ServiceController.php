@@ -41,14 +41,16 @@ class ServiceController extends AbstractActionController
             if ($this->getRequest()->isPost()){
                 $rechercheForm->setData( $this->getRequest()->getPost() );
             }
-
             $filter = new \StdClass;
-            $rechercheForm->bind($o);
+            $rechercheForm->bind($filter);
             if ($rechercheForm->isValid()){
-                if ($filter->intervenant)        $service->finderByIntervenant( $filter->intervenant, $qb );
-                if ($filter->elementPedagogique) $service->finderByElementPedagogique( $filter->elementPedagogique, $qb );
+                if (isset($filter->intervenant) && $filter->intervenant){
+                    $service->finderByIntervenant( $filter->intervenant, $qb );
+                }
+                if (isset($filter->elementPedagogique) && $filter->elementPedagogique){
+                    $service->finderByElementPedagogique( $filter->elementPedagogique, $qb );
+                }
             }
-            var_dump( $filter );
         }else{
             $rechercheForm = null; // pas de filtrage
         }

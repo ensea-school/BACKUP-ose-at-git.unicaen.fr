@@ -6,6 +6,7 @@ use Application\Service\AbstractService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Service as ServiceEntity;
 
@@ -61,6 +62,34 @@ class Service extends AbstractService
         if (! empty($context['annee']) && $context['annee'] instanceof Annee){
             $qb->andWhere('s.annee = :annee')->setParameter('annee', $context['annee']);
         }
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services selon l'intervenant donné
+     *
+     * @param Intervenant $intervenant
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByIntervenant( Intervenant $intervenant, QueryBuilder $qb=null )
+    {
+        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('s');
+        $qb->andWhere('s.intervenant = :intervenant')->setParameter('intervenant', $intervenant);
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services selon l'élément pédagogique donné
+     *
+     * @param ElementPedagogique $element
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByElementPedagogique( ElementPedagogique $element, QueryBuilder $qb=null )
+    {
+        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('s');
+        $qb->andWhere('s.elementPedagogique = :element')->setParameter('element', $element);
         return $qb;
     }
 

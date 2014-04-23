@@ -2,10 +2,7 @@
 
 namespace Application\Service;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Annee;
 use Application\Entity\Db\ServiceReferentiel as ServiceEntity;
 
 
@@ -14,12 +11,28 @@ use Application\Entity\Db\ServiceReferentiel as ServiceEntity;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentiel extends AbstractService
+class ServiceReferentiel extends AbstractEntityService
 {
+
     /**
-     * @var EntityRepository
+     * retourne la classe des entités
+     *
+     * @return string
+     * @throws RuntimeException
      */
-    protected $repo;
+    public function getEntityClass()
+    {
+        return 'Application\Entity\Db\ServiceReferentiel';
+    }
+
+    /**
+     * Retourne l'alias d'entité courante
+     *
+     * @return string
+     */
+    public function getAlias(){
+        return 'seref';
+    }
 
     /**
      * Retourne la liste des services selon le contexte donné
@@ -28,33 +41,18 @@ class ServiceReferentiel extends AbstractService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByContext(Context $context, QueryBuilder $qb = null)
+    public function finderByContext(Context $context, QueryBuilder $qb = null, $alias=null)
     {
-        if (empty($qb)) {
-            $qb = $this->getRepo()->createQueryBuilder('sr');
-        }
+        list($qb,$alias) = $this->initQuery($qb, $alias);
 
         if (($intervenant = $context->getIntervenant())) {
-            $qb->andWhere('sr.intervenant = :intervenant')->setParameter('intervenant', $intervenant);
+            $qb->andWhere("$alias.intervenant = :intervenant")->setParameter('intervenant', $intervenant);
         }
         if (($annee = $context->getAnnee())) {
-            $qb->andWhere('sr.annee = :annee')->setParameter('annee', $annee);
+            $qb->andWhere("$alias.annee = :annee")->setParameter('annee', $annee);
         }
-        
-        return $qb;
-    }
 
-    /**
-     *
-     * @return EntityRepository
-     */
-    public function getRepo()
-    {
-        if( empty($this->repo) ){
-            $this->getEntityManager()->getFilters()->enable("historique");
-            $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\ServiceReferentiel');
-        }
-        return $this->repo;
+        return $qb;
     }
 
     /**

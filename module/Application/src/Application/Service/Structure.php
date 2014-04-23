@@ -14,19 +14,28 @@ use Application\Entity\Db\Structure as EntityStructure;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Structure extends AbstractService
+class Structure extends AbstractEntityService
 {
 
     /**
-     * Repository
+     * retourne la classe des entités
      *
-     * @var Repository
+     * @return string
+     * @throws RuntimeException
      */
-    protected $repo;
+    public function getEntityClass()
+    {
+        return 'Application\Entity\Db\Structure';
+    }
 
-
-
-
+    /**
+     * Retourne l'alias d'entité courante
+     *
+     * @return string
+     */
+    public function getAlias(){
+        return 'str';
+    }
 
     /**
      * Retourne le contexte global des services
@@ -48,12 +57,12 @@ class Structure extends AbstractService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByContext( array $context, QueryBuilder $qb=null )
+    public function finderByContext( array $context, QueryBuilder $qb=null, $alias=null )
     {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('s');
+        list($qb,$alias) = $this->initQuery($qb, $alias);
 
         if (! empty($context['structure']) && $context['structure'] instanceof EntityStructure){
-            $qb->andWhere('s.parente = :structure')->setParameter('structure', $context['structure']);
+            $qb->andWhere("$alias.parente = :structure")->setParameter('structure', $context['structure']);
         }
         return $qb;
     }
@@ -65,20 +74,20 @@ class Structure extends AbstractService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByNom($term, QueryBuilder $qb=null)
+    public function finderByNom($term, QueryBuilder $qb=null, $alias=null)
     {
         $term = str_replace(' ', '', $term);
 
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('s');
+        list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $libelleLong = new Func('CONVERT', array('s.libelleLong', '?3') );
-        $libelleCourt = new Func('CONVERT', array('s.libelleCourt', '?3') );
+        $libelleLong = new Func('CONVERT', array("$alias.libelleLong", '?3') );
+        $libelleCourt = new Func('CONVERT', array("$alias.libelleCourt", '?3') );
 
         $qb
-                ->where('s.sourceCode = ?1')
+                ->where("$alias.sourceCode = ?1")
                 ->orWhere($qb->expr()->like($qb->expr()->upper($libelleLong), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orWhere($qb->expr()->like($qb->expr()->upper($libelleCourt), $qb->expr()->upper('CONVERT(?2, ?3)')))
-                ->orderBy('s.libelleCourt');
+                ->orderBy("$alias.libelleCourt");
 
         $qb->setParameters(array(1 => $term, 2 => "%$term%", 3 => 'US7ASCII'));
 
@@ -94,36 +103,23 @@ class Structure extends AbstractService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderDistinctStructures($niveau = null, QueryBuilder $qb=null)
+    public function finderDistinctStructures($niveau = null, QueryBuilder $qb=null, $alias=null)
     {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('s');
+        list($qb,$alias) = $this->initQuery($qb, $alias);
 
-                $qb->select('partial s.{id, libelleCourt}')
+                $qb->select("partial $alias.{id, libelleCourt}")
                 ->distinct()
-                ->from('Application\Entity\Db\Structure', 's')
-//                ->innerJoin('s.elementPedagogique', 'ep')
-                ->orderBy('s.libelleCourt');
+                ->from($this->getEntityClass(), $alias)
+//                ->innerJoin("$alias.elementPedagogique", 'ep')
+                ->orderBy("$alias.libelleCourt");
 
         if (null !== $niveau) {
-            $qb->where('s.niveau = ?', $niveau);
+            $qb->where("$alias.niveau = ?", $niveau);
         }
 
         // provisoire
-        $qb->where('s.parente = :ucbn')->setParameter('ucbn', $this->getEntityManager()->find('Application\Entity\Db\Structure', 8464));
+        $qb->where("$alias.parente = :ucbn")->setParameter('ucbn', $this->getEntityManager()->find('Application\Entity\Db\Structure', 8464));
 
         return $qb;
-    }
-
-    /**
-     *
-     * @return EntityRepository
-     */
-    public function getRepo()
-    {
-        if( empty($this->repo) ){
-            $this->getEntityManager()->getFilters()->enable("historique");
-            $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\Structure');
-        }
-        return $this->repo;
     }
 }

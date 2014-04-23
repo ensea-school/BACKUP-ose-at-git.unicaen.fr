@@ -34,28 +34,21 @@ class ServiceController extends AbstractActionController
         $context = $service->getGlobalContext();
         $qb = $service->finderByContext($context);
         $annee = $context['annee'];
-
+        $services = $service->getList($qb);
         if (empty($this->context['intervenant'])){
             $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
             /* @var $rechercheForm \Application\Form\Service\Recherche */
-            if ($this->getRequest()->isPost()){
-                $rechercheForm->setData( $this->getRequest()->getPost() );
-            }
+            $rechercheForm->populateOptions($services);
             $filter = new \StdClass;
             $rechercheForm->bind($filter);
+            $rechercheForm->setData( $this->getRequest()->getQuery() );
             if ($rechercheForm->isValid()){
-                if (isset($filter->intervenant) && $filter->intervenant){
-                    $service->finderByIntervenant( $filter->intervenant, $qb );
-                }
-                if (isset($filter->elementPedagogique) && $filter->elementPedagogique){
-                    $service->finderByElementPedagogique( $filter->elementPedagogique, $qb );
-                }
+                $service->finderByFilterObject($filter, null, $qb);
+                $services = $service->getList($qb); // on rafraichit en fonction des filtres
             }
         }else{
             $rechercheForm = null; // pas de filtrage
         }
-
-        $services = $qb->getQuery()->execute();
         $errors = null;
 
         /* Bertrand: services référentiels */

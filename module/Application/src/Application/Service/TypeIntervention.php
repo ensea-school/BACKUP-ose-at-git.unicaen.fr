@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypeIntervention as Entity;
@@ -12,15 +11,8 @@ use Application\Entity\Db\TypeIntervention as Entity;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class TypeIntervention extends AbstractService
+class TypeIntervention extends AbstractEntityService
 {
-
-    /**
-     * Repository
-     *
-     * @var Repository
-     */
-    protected $repo;
 
     /**
      * Liste des types d'intervention
@@ -29,35 +21,37 @@ class TypeIntervention extends AbstractService
      */
     protected $typesIntervention;
 
-
-
-
     /**
-     * Retourne la liste des types d'intervention
+     * retourne la classe des entités
      *
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
+     * @return string
+     * @throws RuntimeException
      */
-    public function finderByAll( QueryBuilder $qb=null )
+    public function getEntityClass()
     {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('ti');
-
-        $qb->addOrderBy('ti.ordre');
-
-        return $qb;
+        return 'Application\Entity\Db\typeIntervention';
     }
 
     /**
+     * Retourne l'alias d'entité courante
      *
-     * @return EntityRepository
+     * @return string
      */
-    public function getRepo()
+    public function getAlias(){
+        return 'ti';
+    }
+
+    /**
+     * Retourne la liste des motifs de non paiement
+     *
+     * @param QueryBuilder|null $queryBuilder
+     * @return Application\Entity\Db\Periode[]
+     */
+    public function getList( QueryBuilder $qb=null, $alias=null )
     {
-        if( empty($this->repo) ){
-            $this->getEntityManager()->getFilters()->enable("historique");
-            $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervention');
-        }
-        return $this->repo;
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.ordre");
+        return parent::getList($qb, $alias);
     }
 
     /**
@@ -68,12 +62,7 @@ class TypeIntervention extends AbstractService
     public function getTypesIntervention()
     {
         if (! $this->typesIntervention){
-            $til = $this->finderByAll()->getQuery()->execute();
-
-            $this->typesIntervention = array();
-            foreach( $til as $ti ){
-                $this->typesIntervention[$ti->getId()] = $ti;
-            }
+            $this->typesIntervention = $this->getList();
         }
         return $this->typesIntervention;
     }

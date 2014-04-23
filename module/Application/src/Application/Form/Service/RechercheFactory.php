@@ -24,14 +24,6 @@ class RechercheFactory implements FactoryInterface
     {
         $recherche = new Recherche();
         $recherche->setServiceLocator($serviceLocator);
-        $recherche->init();
-
-        /* @var $serviceLocator \Zend\Form\FormElementManager */
-        $url = $serviceLocator->getServiceLocator()->get('viewhelpermanager')->get('url');
-
-        $recherche->get('intervenant')->setAutocompleteSource( $url('recherche', array('action' => 'intervenantFind')) );
-        $recherche->setAttribute('action', $url(null, array(), array(), true));
-
         $h = $serviceLocator->getServiceLocator()->get('FormServiceRechercheHydrator');
         $recherche->setHydrator($h);
 

@@ -27,19 +27,17 @@ class RechercheHydrator implements HydratorInterface, ServiceLocatorAwareInterfa
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         /* @var $em \Doctrine\ORM\EntityManager */
 
-        $id = (int)$data['elementPedagogique']['element']['id'];
-        if ($id){
-            $object->elementPedagogique = $em->find('Application\Entity\Db\ElementPedagogique', $id);
-        }else{
-            $object->elementPedagogique = null;
-        }
+        $id = isset($data['element-pedagogique']) ? (int)$data['element-pedagogique'] : null;
+        $object->elementPedagogique = $id ? $em->find('Application\Entity\Db\ElementPedagogique', $id) : null;
 
-        $id = (int)$data['intervenant']['id'];
-        if ($id){
-            $object->intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($id);
-        }else{
-            $object->intervenant = null;
-        }
+        $id = isset($data['etape']) ? (int)$data['etape'] : null;
+        $object->etape = $id ? $em->find('Application\Entity\Db\Etape', $id) : null;
+
+        $id = isset($data['structure-ens']) ? (int)$data['structure-ens'] : null;
+        $object->structureEns = $id ? $em->find('Application\Entity\Db\Structure', $id) : null;
+
+        $id = isset($data['intervenant']) ? (int)$data['intervenant'] : null;
+        $object->intervenant = $id ? $em->find('Application\Entity\Db\Intervenant', $id) : null;
         return $object;
     }
 
@@ -51,7 +49,12 @@ class RechercheHydrator implements HydratorInterface, ServiceLocatorAwareInterfa
      */
     public function extract($object)
     {
-        $data = array();
+        $data = array(
+            'intervenant' => isset($object->intervenant) && $object->intervenant ? $object->intervenant->getId() : null,
+            'element-pedagogique' => isset($object->elementPedagogique) && $object->elementPedagogique ? $object->elementPedagogique->getId() : null,
+            'etape' => isset($object->etape) && $object->etape ? $object->etape->getId() : null,
+            'structure-ens' => isset($object->structureEns) && $object->structureEns ? $object->structureEns->getId() : null,
+        );
         return $data;
     }
 

@@ -26,7 +26,9 @@ $rechercheForm->prepare();
 
 echo $this->form()->openTag($rechercheForm);
 echo $this->formControlGroup($rechercheForm->get('intervenant'));
-echo $this->fieldsetElementPedagogiqueRecherche($rechercheForm->get('elementPedagogique'));
+echo $this->formControlGroup($rechercheForm->get('structure-ens'));
+echo $this->formControlGroup($rechercheForm->get('etape'));
+echo $this->formControlGroup($rechercheForm->get('element-pedagogique'));
 echo $this->formRow($rechercheForm->get('submit'));
 echo $this->form()->closeTag().'<br />';
 

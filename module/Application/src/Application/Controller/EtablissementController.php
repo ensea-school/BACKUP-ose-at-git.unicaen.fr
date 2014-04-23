@@ -64,7 +64,7 @@ class EtablissementController extends AbstractActionController
             return new JsonModel(array());
         }
 
-        $entities  = $this->getServiceEtablissement()->findByLibelle($term)->getQuery()->execute();
+        $entities  = $this->getServiceEtablissement()->finderByLibelle($term)->getQuery()->execute();
         $result = array();
         
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Etablissement */

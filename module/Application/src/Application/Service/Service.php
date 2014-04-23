@@ -2,12 +2,8 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractService;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\ElementPedagogique;
-use Application\Entity\Db\Annee;
+use Application\Entity\Db\Etape;
 use Application\Entity\Db\Service as ServiceEntity;
 
 
@@ -16,19 +12,43 @@ use Application\Entity\Db\Service as ServiceEntity;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Service extends AbstractService
+class Service extends AbstractEntityService
 {
 
     /**
-     * Repository
+     * retourne la classe des entités
      *
-     * @var Repository
+     * @return string
+     * @throws RuntimeException
      */
-    protected $repo;
+    public function getEntityClass()
+    {
+        return 'Application\Entity\Db\Service';
+    }
 
+    /**
+     * Retourne l'alias d'entité courante
+     *
+     * @return string
+     */
+    public function getAlias(){
+        return 's';
+    }
 
-
-
+    /**
+     * Retourne la liste des services selon l'étape donnée
+     *
+     * @param Etape $etape
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByEtape( Etape $etape, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->join('Application\Entity\Db\ElementPedagogique', 'ep', \Doctrine\ORM\Query\Expr\Join::WITH, 'ep.id = s.elementPedagogique');
+        $qb->andWhere('ep.etape = :etape')->setParameter('etape', $etape);
+        return $qb;
+    }
 
     /**
      * Retourne le contexte global des services
@@ -52,58 +72,9 @@ class Service extends AbstractService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByContext( array $context, QueryBuilder $qb=null )
+    public function finderByContext( array $context, QueryBuilder $qb=null, $alias=null )
     {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('s');
-
-        if (! empty($context['intervenant']) && $context['intervenant'] instanceof Intervenant){
-            $qb->andWhere('s.intervenant = :intervenant')->setParameter('intervenant', $context['intervenant']);
-        }
-        if (! empty($context['annee']) && $context['annee'] instanceof Annee){
-            $qb->andWhere('s.annee = :annee')->setParameter('annee', $context['annee']);
-        }
-        return $qb;
-    }
-
-    /**
-     * Retourne la liste des services selon l'intervenant donné
-     *
-     * @param Intervenant $intervenant
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
-     */
-    public function finderByIntervenant( Intervenant $intervenant, QueryBuilder $qb=null )
-    {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('s');
-        $qb->andWhere('s.intervenant = :intervenant')->setParameter('intervenant', $intervenant);
-        return $qb;
-    }
-
-    /**
-     * Retourne la liste des services selon l'élément pédagogique donné
-     *
-     * @param ElementPedagogique $element
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
-     */
-    public function finderByElementPedagogique( ElementPedagogique $element, QueryBuilder $qb=null )
-    {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('s');
-        $qb->andWhere('s.elementPedagogique = :element')->setParameter('element', $element);
-        return $qb;
-    }
-
-    /**
-     *
-     * @return EntityRepository
-     */
-    public function getRepo()
-    {
-        if( empty($this->repo) ){
-            $this->getEntityManager()->getFilters()->enable("historique");
-            $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\Service');
-        }
-        return $this->repo;
+        return $this->finderByFilterArray($context, $qb, $alias);
     }
 
     /**

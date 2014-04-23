@@ -2,10 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractService;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeIntervenant as EntityTypeIntervenant;
 
 
 /**
@@ -13,33 +10,27 @@ use Application\Entity\Db\TypeIntervenant as EntityTypeIntervenant;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Periode extends AbstractService
+class Periode extends AbstractEntityService
 {
 
     /**
-     * Repository
+     * retourne la classe des entités
      *
-     * @var Repository
+     * @return string
+     * @throws RuntimeException
      */
-    protected $repo;
-
-
-
-
+    public function getEntityClass()
+    {
+        return 'Application\Entity\Db\Periode';
+    }
 
     /**
-     * Retourne la liste des périodes pour un type d'intervenant donné
+     * Retourne l'alias d'entité courante
      *
-     * @param EntityTypeIntervenant $typeIntervenant
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
+     * @return string
      */
-    public function finderByTypeIntervenant( EntityTypeIntervenant $typeIntervenant, QueryBuilder $qb=null )
-    {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('p');
-
-        $qb->andWhere('p.typeIntervenant = :type')->setParameter('type', $typeIntervenant);
-        return $qb;
+    public function getAlias(){
+        return 'per';
     }
 
     /**
@@ -48,11 +39,10 @@ class Periode extends AbstractService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByEnseignement( QueryBuilder $qb=null )
+    public function finderByEnseignement( QueryBuilder $qb=null, $alias=null )
     {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('p');
-
-        $qb->andWhere('p.enseignement = 1');
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->andWhere("$alias.enseignement = 1");
         return $qb;
     }
 
@@ -62,29 +52,10 @@ class Periode extends AbstractService
      * @param QueryBuilder|null $queryBuilder
      * @return Application\Entity\Db\Periode[]
      */
-    public function getList( QueryBuilder $qb=null )
+    public function getList( QueryBuilder $qb=null, $alias=null )
     {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('p');
-
-        $qb->orderBy('p.ordre');
-        $periodes = $qb->getQuery()->execute();
-        $result = array();
-        foreach( $periodes as $periode ){
-            $result[$periode->getId()] = $periode;
-        }
-        return $result;
-    }
-
-    /**
-     *
-     * @return EntityRepository
-     */
-    public function getRepo()
-    {
-        if( empty($this->repo) ){
-            $this->getEntityManager()->getFilters()->enable("historique");
-            $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\Periode');
-        }
-        return $this->repo;
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->orderBy("$alias.ordre");
+        return parent::getList($qb, $alias);
     }
 }

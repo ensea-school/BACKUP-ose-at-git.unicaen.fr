@@ -2,8 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractService;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Func;
 
@@ -14,16 +12,28 @@ use Doctrine\ORM\Query\Expr\Func;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Etablissement extends AbstractService
+class Etablissement extends AbstractEntityService
 {
 
     /**
-     * Repository
+     * retourne la classe des entités
      *
-     * @var Repository
+     * @return string
+     * @throws RuntimeException
      */
-    protected $repo;
+    public function getEntityClass()
+    {
+        return 'Application\Entity\Db\Etablissement';
+    }
 
+    /**
+     * Retourne l'alias d'entité courante
+     *
+     * @return string
+     */
+    public function getAlias(){
+        return 'etab';
+    }
 
 
 
@@ -34,16 +44,16 @@ class Etablissement extends AbstractService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function findByLibelle($term, QueryBuilder $qb=null)
+    public function finderByLibelle($term, QueryBuilder $qb=null, $alias=null)
     {
         $terms = explode( ' ', $term );
 
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('e');
+        list($qb,$alias) = $this->initQuery($qb, $alias);
 
         $concatFields = array(
-            'e.libelle',
-            'e.departement',
-            'e.localisation',
+            "$alias.libelle",
+            "$alias.departement",
+            "$alias.localisation",
         );
 
         foreach ($concatFields as $field) {
@@ -69,22 +79,9 @@ class Etablissement extends AbstractService
             $qb->andWhere($qb->expr()->like($qb->expr()->upper($haystack), $qb->expr()->upper("CONVERT(?$index, ?1)")));
             $index++;
         }
-        $qb->orderBy('e.libelle');
+        $qb->orderBy("$alias.libelle");
         $qb->setParameters( $parameters );
 
         return $qb;
-    }
-
-    /**
-     *
-     * @return EntityRepository
-     */
-    public function getRepo()
-    {
-        if( empty($this->repo) ){
-            $this->getEntityManager()->getFilters()->enable("historique");
-            $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\Etablissement');
-        }
-        return $this->repo;
     }
 }

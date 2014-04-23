@@ -2,10 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractService;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Service as EntityService;
 
 
 /**
@@ -13,43 +9,27 @@ use Application\Entity\Db\Service as EntityService;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class VolumeHoraire extends AbstractService
+class VolumeHoraire extends AbstractEntityService
 {
 
     /**
-     * Repository
+     * retourne la classe des entités
      *
-     * @var EntityRepository
+     * @return string
+     * @throws RuntimeException
      */
-    protected $repo;
-
-    /**
-     * Retourne la liste des volumes horaires selon le contexte donné
-     *
-     * @param array $context
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
-     */
-    public function finderByContext( array $context, QueryBuilder $qb=null )
+    public function getEntityClass()
     {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('vh');
-
-        if (! empty($context['service']) && $context['service'] instanceof EntityService){
-            $qb->andWhere('vh.service = :service')->setParameter('service', $context['service']);
-        }
-        return $qb;
+        return 'Application\Entity\Db\VolumeHoraire';
     }
 
     /**
+     * Retourne l'alias d'entité courante
      *
-     * @return EntityRepository
+     * @return string
      */
-    public function getRepo()
-    {
-        if( empty($this->repo) ){
-            $this->getEntityManager()->getFilters()->enable("historique");
-            $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\VolumeHoraire');
-        }
-        return $this->repo;
+    public function getAlias(){
+        return 'vh';
     }
+
 }

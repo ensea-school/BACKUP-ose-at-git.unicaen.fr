@@ -2,8 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractService;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\MotifNonPaiement as Entity;
 
@@ -12,15 +10,8 @@ use Application\Entity\Db\MotifNonPaiement as Entity;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class MotifNonPaiement extends AbstractService
+class MotifNonPaiement extends AbstractEntityService
 {
-
-    /**
-     * Repository
-     *
-     * @var Repository
-     */
-    protected $repo;
 
     /**
      * Liste des motifs de non paiement
@@ -30,34 +21,37 @@ class MotifNonPaiement extends AbstractService
     protected $motifsNonPaiement;
 
 
+    /**
+     * retourne la classe des entités correcpondantes
+     *
+     * @return string
+     * @throws RuntimeException
+     */
+    public function getEntityClass()
+    {
+        return 'Application\Entity\Db\MotifNonPaiement';
+    }
 
+    /**
+     * Retourne l'alias d'entité courante
+     *
+     * @return string
+     */
+    public function getAlias(){
+        return 'mnp';
+    }
 
     /**
      * Retourne la liste des motifs de non paiement
      *
      * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
+     * @return Application\Entity\Db\Periode[]
      */
-    public function finderByAll( QueryBuilder $qb=null )
+    public function getList( QueryBuilder $qb=null, $alias=null )
     {
-        if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder('mnp');
-
-        $qb->addOrderBy('mnp.libelleLong');
-
-        return $qb;
-    }
-
-    /**
-     *
-     * @return EntityRepository
-     */
-    public function getRepo()
-    {
-        if( empty($this->repo) ){
-            $this->getEntityManager()->getFilters()->enable("historique");
-            $this->repo = $this->getEntityManager()->getRepository('Application\Entity\Db\MotifNonPaiement');
-        }
-        return $this->repo;
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.libelleLong");
+        return parent::getList($qb, $alias);
     }
 
     /**
@@ -68,12 +62,7 @@ class MotifNonPaiement extends AbstractService
     public function getMotifsNonPaiement()
     {
         if (! $this->motifsNonPaiement){
-            $mnps = $this->finderByAll()->getQuery()->execute();
-
-            $this->motifsNonPaiement = array();
-            foreach( $mnps as $mnp ){
-                $this->motifsNonPaiement[$mnp->getId()] = $mnp;
-            }
+            $this->motifsNonPaiement = $this->getList();
         }
         return $this->motifsNonPaiement;
     }

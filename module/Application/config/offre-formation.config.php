@@ -68,6 +68,8 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
+            'ApplicationElementPedagogique'           => 'Application\\Service\\ElementPedagogique',
+            'ApplicationEtape'                        => 'Application\\Service\\Etape',
             'FormElementPedagogiqueRechercheHydrator' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheHydrator'
         ),
     ),

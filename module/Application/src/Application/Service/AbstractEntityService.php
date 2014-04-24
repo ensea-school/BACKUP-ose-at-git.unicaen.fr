@@ -6,6 +6,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\Stdlib\Hydrator\ObjectProperty;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Exception\RuntimeException;
+use Doctrine\ORM\Query\Expr;
 
 /**
  *
@@ -138,6 +139,33 @@ abstract class AbstractEntityService extends AbstractService
         return array($qb,$alias);
     }
 
+    public function join( AbstractEntityService $service, QueryBuilder $qb, $leftProperty, $rightProperty=null, $leftAlias=null, $rightAlias=null )
+    {
+        if (null == $leftAlias) $leftAlias = $this->getAlias();
+        if (null == $rightAlias) $rightAlias = $service->getAlias();
+
+        if (null == $rightProperty){ // relation
+            $qb->join( $leftAlias.'.'.$leftProperty, $rightAlias );
+        }else{ // relation spéciale
+            $qb->join( $service->getEntityClass(), $rightAlias, Expr\Join::WITH, $leftAlias.'.'.$leftProperty.'='.$rightAlias.'.'.$rightProperty );
+        }
+        return $qb;
+    }
+
+    public function leftJoin( AbstractEntityService $service, QueryBuilder $qb, $leftProperty, $rightProperty=null, $leftAlias=null, $rightAlias=null )
+    {
+        if (null == $leftAlias) $leftAlias = $this->getAlias();
+        if (null == $rightAlias) $rightAlias = $service->getAlias();
+        if (null == $rightProperty){ // relation
+            $qb->leftJoin( $leftAlias.'.'.$leftProperty, $rightAlias );
+        }else{ // relation spéciale
+            $qb->leftJoin( $service->getEntityClass(), $rightAlias, Expr\Join::WITH, $leftAlias.'.'.$leftProperty.'='.$rightAlias.'.'.$rightProperty );
+        }
+
+        
+        return $qb;
+    }
+
     /**
      * Retourne une liste d'entités en fonction du QueryBuilder donné
      *
@@ -221,6 +249,9 @@ abstract class AbstractEntityService extends AbstractService
 
     public function __call($name, $arguments)
     {
+        if (method_exists($this,$name)){
+            return call_user_func_array(array($this,$name), $arguments);
+        }
         if (0 === strpos($name, 'finderBy')){
             $property = lcfirst(substr($name, 8));
             $value = isset($arguments[0]) ? $arguments[0] : null;
@@ -228,6 +259,7 @@ abstract class AbstractEntityService extends AbstractService
             $alias = isset($arguments[2]) ? $arguments[2] : null;
             return $this->finderByProperty($property, $value, $qb, $alias);
         }
+        throw new RuntimeException('Méthode "'.$name.'" inconnue dans le service');
     }
 
 }

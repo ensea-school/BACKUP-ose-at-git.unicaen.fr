@@ -6,7 +6,6 @@ use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Service as ServiceEntity;
 
-
 /**
  * Description of Service
  *
@@ -14,7 +13,6 @@ use Application\Entity\Db\Service as ServiceEntity;
  */
 class Service extends AbstractEntityService
 {
-
     /**
      * retourne la classe des entités
      *
@@ -63,18 +61,6 @@ class Service extends AbstractEntityService
             'annee'         => $this->getEntityManager()->getRepository('Application\Entity\Db\Annee')->find($parametres->annee),
             'etablissement' => $this->getEntityManager()->getRepository('Application\Entity\Db\Etablissement')->find($parametres->etablissement)
         );
-    }
-
-    /**
-     * Retourne la liste des services selon le contexte donné
-     *
-     * @param array $context
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
-     */
-    public function finderByContext( array $context, QueryBuilder $qb=null, $alias=null )
-    {
-        return $this->finderByFilterArray($context, $qb, $alias);
     }
 
     /**

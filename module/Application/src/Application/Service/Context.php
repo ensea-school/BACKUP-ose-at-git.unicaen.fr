@@ -5,18 +5,22 @@ namespace Application\Service;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\Personnel;
 use Application\Entity\Db\Utilisateur;
 use Common\Exception\LogicException;
+use Zend\Stdlib\Hydrator\HydratorAwareInterface;
+use Zend\Stdlib\Hydrator\HydratorAwareTrait;
+use Zend\Stdlib\Hydrator\ClassMethods;
 
 /**
  * Service fournissant le contexte global de fonctionnement de l'application.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Context extends AbstractService
+class Context extends AbstractService implements HydratorAwareInterface
 {
+    use HydratorAwareTrait;
+    
     /**
      * @var Parametres
      */
@@ -33,11 +37,6 @@ class Context extends AbstractService
     protected $intervenant;
     
     /**
-     * @var Structure
-     */
-    protected $structure;
-    
-    /**
      * @var Personnel
      */
     protected $personnel;
@@ -52,18 +51,24 @@ class Context extends AbstractService
      */
     protected $etablissement;
     
-    
-    public function toArray()
+    /**
+     * Constructeur.
+     */
+    public function __construct()
     {
-        return array(
-            'utilisateur'   => $this->getUtilisateur(),
-            'intervenant'   => $this->getIntervenant(),
-            'structure'     => $this->getStructure(),
-            'personnel'     => $this->getPersonnel(),
-            'annee'         => $this->getAnnee(),
-            'etablissement' => $this->getEtablissement(),
-        );
+        $this->setHydrator(new ClassMethods(false));
     }
+    
+//    public function toArray()
+//    {
+//        return array(
+//            'utilisateur'   => $this->getUtilisateur(),
+//            'intervenant'   => $this->getIntervenant(),
+//            'personnel'     => $this->getPersonnel(),
+//            'annee'         => $this->getAnnee(),
+//            'etablissement' => $this->getEtablissement(),
+//        );
+//    }
     
     public function set($name, $value)
     {
@@ -117,14 +122,6 @@ class Context extends AbstractService
         return $this->intervenant;
     }
 
-    public function getStructure()
-    {
-        if (null === $this->structure) {
-//            $this->structure = $this->getIntervenant()->getStructure();
-        }
-        return $this->structure;
-    }
-
     public function getPersonnel()
     {
         if (null === $this->personnel) {
@@ -162,12 +159,6 @@ class Context extends AbstractService
     public function setIntervenant(EntityIntervenant $intervenant)
     {
         $this->intervenant = $intervenant;
-        return $this;
-    }
-
-    public function setStructure(Structure $structure)
-    {
-        $this->structure = $structure;
         return $this;
     }
 

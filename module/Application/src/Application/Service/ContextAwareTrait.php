@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\View\HelperPluginManager;
+use Zend\ServiceManager\AbstractPluginManager;
 use Application\Service\Context;
 
 /**
@@ -26,7 +26,7 @@ trait ContextAwareTrait
     {
         if (null === $this->context && $this instanceof ServiceLocatorAwareInterface) {
             $sl = $this->getServiceLocator();
-            if ($sl instanceof HelperPluginManager) {
+            if ($sl instanceof AbstractPluginManager) {
                 $sl = $sl->getServiceLocator();
             }
             $this->context = $sl->get('ApplicationContext');

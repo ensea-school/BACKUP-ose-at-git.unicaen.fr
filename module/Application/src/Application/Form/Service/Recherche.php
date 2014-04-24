@@ -60,41 +60,48 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
      *
      * @param Service[] $services
      */
-    public function populateOptions( $services )
+    public function populateOptions( array $serviceContext )
     {
-        $intervenant = $this->getServiceLocator()->getServiceLocator()->get('ApplicationIntervenant');
+        $sl = $this->getServiceLocator()->getServiceLocator();
 
-        $intervenants = $intervenant->getList();
+        $intervenant        = $sl->get('ApplicationIntervenant');
+        $elementPedagogique = $sl->get('ApplicationElementPedagogique');
+        $etape              = $sl->get('ApplicationEtape');
+        $structure          = $sl->get('ApplicationStructure');
+        $service            = $sl->get('ApplicationService');
 
-        $this->get('intervenant')->setValueOptions( \UnicaenApp\Util::collectionAsOptions($intervenants) );
+        $serviceContext['structureEns'] = $structure->getRepo()->find(8469);
 
-        //$intervenants   = array();
-        $elements       = array();
-        $etapes         = array();
-        $structuresEns  = array();
-        foreach( $services as $service ){
-          //  if ($intervenant = $service->getIntervenant()){
-          //      $intervenants[$intervenant->getId()] = (string)$intervenant;
-          //  }
-            if ($structureEns = $service->getStructureEns()){
-                $structuresEns[$structureEns->getId()]   = (string)$structureEns;
-            }
-            if ($element = $service->getelementPedagogique()){
-                $elements[$element->getId()]     = (string)$element;
-                $etape = $element->getEtape();
-                $etapes[$etape->getId()]       = (string)$etape;
-            }
-        }
+        $qb = $intervenant->initQuery()[0];
+        $intervenant->join( $service, $qb, 'id', 'intervenant' );
+        $service->finderByFilterArray( $serviceContext, $qb );
+        $this->get('intervenant')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
+                                                            array( '' => '(Tous)') + $intervenant->getList($qb))
+                                                  );
 
-        //asort( $intervenants );
-        asort( $elements );
-        asort( $etapes );
-        asort( $structuresEns );
+        $qb = $elementPedagogique->initQuery()[0];
+        $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );
+        /* @var $qb \Doctrine\ORM\QueryBuilder */
+        //$qb->join($service->getAlias().".elementPedagogique");
+        $service->finderByFilterArray( $serviceContext, $qb );
+        $this->get('element-pedagogique')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
+                                                            array( '' => '(Tous)') + $elementPedagogique->getList($qb))
+                                                  );
 
-        //$this->get('intervenant')->setValueOptions( array('' => '(Tous)') + $intervenants );
-        $this->get('element-pedagogique')->setValueOptions( array('' => '(Tous)') + $elements );
-        $etapeSelect = $this->get('etape')->setValueOptions( array('' => '(Toutes)') + $etapes );
-        $structureEnsSelect = $this->get('structure-ens')->setValueOptions( array('' => '(Toutes)') + $structuresEns );
+        $qb = $structure->initQuery()[0];
+        $structure->join( $service, $qb, 'id', 'structureEns' );
+        $service->finderByFilterArray( $serviceContext, $qb );
+        $this->get('structure-ens')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
+                                                            array( '' => '(Toutes)') + $structure->getList($qb))
+                                                    );
+
+        $qb = $etape->initQuery()[0];
+        $etape->join( $elementPedagogique, $qb, 'id', 'etape' );
+        $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );
+        $service->finderByFilterArray( $serviceContext, $qb );
+        $this->get('etape')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
+                                                            array( '' => '(Tous)') + $etape->getList($qb))
+                                            );
     }
 
     /**

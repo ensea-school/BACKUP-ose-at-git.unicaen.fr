@@ -100,18 +100,40 @@ $main =  array(
                 ),
             ),
         ),
-    ),    
+    ),
+    'unicaen-auth' => array(
+        /**
+         * Fournisseurs d'identité.
+         */
+        'identity_providers' => array(
+//            200 => 'UnicaenAuth\Provider\Identity\Db',
+//            100 => 'UnicaenAuth\Provider\Identity\Ldap',
+            50  => 'IdentityProvider'
+        ),
+    ),
     'bjyauthorize' => array(
         'role_providers' => array(
             /**
-             * Fournit les rôles issus de la base de données éventuelle de l'appli.
-             * NB: si le rôle par défaut 'guest' est fourni ici, il ne sera pas ajouté en double dans les ACL.
-             * NB: si la connexion à la base échoue, ce n'est pas bloquant!
+             * 
              */
-//            'UnicaenAuth\Provider\Role\DbRole' => array(
-//                'object_manager'    => 'doctrine.entitymanager.orm_default',
-//                'role_entity_class' => 'Application\Entity\Db\UtilisateurRole',
-//            ),
+            'ApplicationRoleProvider' => array(),
+            
+            /**
+             * Rôles issus de l'annuaire LDAP
+             */
+            'UnicaenAuth\Provider\Role\Config' => array(
+                // intervant = rôle de base
+                'intervenant' => array('name' => "Intervenant", 'children' => array(
+                    // gestionnaires de composantes
+                    'cn=ucbn_composantes_responsables,ou=groups,dc=unicaen,dc=fr' => array('name' => "Responsable de composante", 'children' => array(
+                        // directeurs de composantes
+                        'cn=ucbn_composantes_directeurs,ou=groups,dc=unicaen,dc=fr' => array('name' => "Directeur de composante", 'children' => array(
+                            // administrateur de l'appli
+                            'cn=admin_cartagen,ou=groups,dc=unicaen,dc=fr',
+                        )),
+                    )),
+                )),
+            ),
         ),
     ),
     'service_manager' => array(
@@ -121,8 +143,10 @@ $main =  array(
             'ApplicationContext'                             => 'Application\\Service\\Context',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
+            'IdentityProvider'                               => 'Application\Provider\Identity\IdentityProvider',
         ),
         'factories' => array(
+            'ApplicationRoleProvider' => 'Application\Provider\Role\RoleProviderFactory',
         ),
     ),
     'view_helpers' => array(

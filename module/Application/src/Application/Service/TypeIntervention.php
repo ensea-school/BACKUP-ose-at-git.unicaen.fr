@@ -29,7 +29,7 @@ class TypeIntervention extends AbstractEntityService
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\typeIntervention';
+        return 'Application\Entity\Db\TypeIntervention';
     }
 
     /**

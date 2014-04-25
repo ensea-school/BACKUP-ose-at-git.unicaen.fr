@@ -31,6 +31,7 @@ class ServiceController extends AbstractActionController
     public function indexAction()
     {
         $service = $this->getServiceService();
+        $action = $this->getRequest()->getQuery('action', null);
         $context = $service->getGlobalContext();
         $qb = $service->finderByFilterArray($context);
         $annee = $context['annee'];
@@ -48,20 +49,23 @@ class ServiceController extends AbstractActionController
             $rechercheForm = null; // pas de filtrage
         }
         $errors = null;
-        $services = $service->getList($qb);
-
-        /* Bertrand: services référentiels */
-        $controller       = 'Application\Controller\ServiceReferentiel';
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'voirListe';
-        $listeViewModel   = $this->forward()->dispatch($controller, $params);
-        /* */
 
         $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->addChild($listeViewModel, 'servicesRefListe')
-                ->setVariables(compact('annee', 'services', 'rechercheForm', 'context', 'errors'));
+        if ('afficher' === $action){
+            $services = $service->getList($qb);
 
+            /* Bertrand: services référentiels */
+            $controller       = 'Application\Controller\ServiceReferentiel';
+            $params           = $this->getEvent()->getRouteMatch()->getParams();
+            $params['action'] = 'voirListe';
+            $listeViewModel   = $this->forward()->dispatch($controller, $params);
+            $viewModel->addChild($listeViewModel, 'servicesRefListe');
+            /* */
+        }else{
+            $services = array();
+        }
+
+        $viewModel->setVariables(compact('action', 'annee', 'services', 'rechercheForm', 'context', 'errors'));
         return $viewModel;
     }
 

@@ -4,6 +4,7 @@ namespace Application\Form\Service;
 
 use Zend\Form\Form;
 use Zend\Form\Element\Select;
+use Zend\Form\Element\Hidden;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -42,6 +43,10 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         $structureEns = new Select('structure-ens');
         $structureEns->setLabel('Structure d\'enseignement :');
         $this->add($structureEns);
+
+        $action = new Hidden('action');
+        $action->setValue('afficher');
+        $this->add($action);
 
         /**
          * Submit

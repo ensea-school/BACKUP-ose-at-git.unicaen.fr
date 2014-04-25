@@ -4,30 +4,49 @@
 
 <style>
     .modal-dialog { width: 60%; }
+
+    div.row{
+        padding:1px;
+    }
 </style>
 
 <?php if (empty($this->context['intervenant'])): ?>
 <h1>Filtres</h1>
 <div class="well well-sm">
+<?php $rechercheForm->prepare(); ?>
+<?php echo $this->form()->openTag($rechercheForm); ?>
+
+<div class="row">
+  <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('intervenant')->getLabel() ?></label></div>
+  <div class="col-md-8"><?php echo $this->formSelect($rechercheForm->get('intervenant')->setAttribute('class','form-control')); ?></div>
+</div>
+<div class="row">
+  <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('structure-ens')->getLabel() ?></label></div>
+  <div class="col-md-8"><?php echo $this->formSelect($rechercheForm->get('structure-ens')->setAttribute('class','form-control')); ?></div>
+</div>
+<div class="row">
+  <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('etape')->getLabel() ?></label></div>
+  <div class="col-md-8"><?php echo $this->formSelect($rechercheForm->get('etape')->setAttribute('class','form-control')); ?></div>
+</div>
+<div class="row">
+  <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('element-pedagogique')->getLabel() ?></label></div>
+  <div class="col-md-8"><?php echo $this->formSelect($rechercheForm->get('element-pedagogique')->setAttribute('class','form-control')); ?></div>
+</div>
+<div class="row">
+  <div class="col-md-4">&nbsp;</div>
+  <div class="col-md-8"><?php echo $this->formRow($rechercheForm->get('submit')); ?></div>
+</div>
 <?php
 
-$rechercheForm->prepare();
-
-echo $this->form()->openTag($rechercheForm);
-echo $this->formControlGroup($rechercheForm->get('intervenant'));
-echo $this->formControlGroup($rechercheForm->get('structure-ens'));
-echo $this->formControlGroup($rechercheForm->get('etape'));
-echo $this->formControlGroup($rechercheForm->get('element-pedagogique'));
-echo $this->formRow($rechercheForm->get('submit'));
-echo $this->form()->closeTag().'<br />';
-
+echo $this->formHidden( $rechercheForm->get('action'));
+echo $this->form()->closeTag();
 echo $this->formErrors( $rechercheForm );
 if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
 
 ?>
 </div>
 <?php endif; ?>
-
+<?php if ('afficher' === $action ): ?>
 <h2>Services référentiels</h2>
 <?php echo $this->servicesRefListe; ?>
 
@@ -43,3 +62,7 @@ if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\M
 <?php endif; ?>
 
 <?php echo $this->serviceListe( $services, $context )->render(); ?>
+
+<?php else:?>
+<?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
+<?php endif; ?>

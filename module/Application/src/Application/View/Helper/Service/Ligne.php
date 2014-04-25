@@ -71,7 +71,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
         $out = '';
         if (empty($this->context['intervenant'])){
             $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
-            if ('P' === $this->service->getIntervenant()->getType()->getCode()){
+            if ($this->service->getIntervenant() instanceof Application\Entity\Db\IntervenantExterieur){
                 $out .= '<td>'.$this->renderStructure( $this->service->getStructureAff() )."</td>\n";
             }else{
                 $out .= "<td>&nbsp;</td>\n";

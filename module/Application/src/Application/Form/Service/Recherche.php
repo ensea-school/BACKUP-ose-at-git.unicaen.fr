@@ -70,7 +70,6 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         $structure          = $sl->get('ApplicationStructure');
         $service            = $sl->get('ApplicationService');
 
-        $serviceContext['structureEns'] = $structure->getRepo()->find(8469);
 
         $qb = $intervenant->initQuery()[0];
         $intervenant->join( $service, $qb, 'id', 'intervenant' );
@@ -81,8 +80,6 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
 
         $qb = $elementPedagogique->initQuery()[0];
         $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );
-        /* @var $qb \Doctrine\ORM\QueryBuilder */
-        //$qb->join($service->getAlias().".elementPedagogique");
         $service->finderByFilterArray( $serviceContext, $qb );
         $this->get('element-pedagogique')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
                                                             array( '' => '(Tous)') + $elementPedagogique->getList($qb))

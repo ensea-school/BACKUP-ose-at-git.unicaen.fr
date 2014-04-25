@@ -4,7 +4,7 @@
     $tableLabel = ucwords(str_replace( '_', ' ', strtolower($table)));
 ?>
 <h2><?php echo $tableLabel ?></h2>
-<div id="DIV_<?php echo $table ?>">
+<div id="DIV_<?php echo $table ?>" data-url="<?php echo $this->url('import', array('action' => 'update','table' => $table)) ?>">
 <?php echo $this->differentielListe( $lignes ); ?>
 
 <?php if (count($lignes) > 100) : ?>
@@ -13,7 +13,7 @@
 
 <?php if (count($lignes) > 0) : ?>
 <div>
-    <a class="ajax-modal" href="<?php echo $this->url('import', array('action' => 'updateTables', 'table' => $table)) ?>" data-table="<?php echo $table ?>">
+    <a class="import-update" href="javascript:void(0)" data-table="<?php echo $table ?>">
         <span class="glyphicon glyphicon-refresh"></span>
         Mettre à jour les données
     </a>
@@ -24,18 +24,10 @@
 
 <script>
     $(function() {
-        lastTableRefreshed = null;
 
-        $("body").on("click", "a.ajax-modal", function(e) {
-             lastTableRefreshed = $(this).data("table");
+        $("body").on("click", "a.import-update", function(e) {
+             $( "#DIV_"+$(this).data('table') ).refresh();
         });
 
-        $('#modalResult').on('loaded.bs.modal', function (e) {
-
-            $.get( "<?php echo $this->url('import', array('action' => 'showDiff')) ?>/"+lastTableRefreshed, function( data ) {
-                $( "#DIV_"+lastTableRefreshed ).html( data );
-            });
-
-        });
     });
 </script>

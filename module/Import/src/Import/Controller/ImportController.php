@@ -12,7 +12,7 @@ use Common\Exception\LogicException;
  */
 class ImportController extends AbstractActionController
 {
-    protected function makeQueries( $tableName )
+    protected function makeQueries( $tableName=null )
     {
         /* Liste des tables pour lesquelles les insertions ne doivent pas être scrutées */
         $noInsertTables = array(
@@ -42,7 +42,7 @@ class ImportController extends AbstractActionController
         foreach( $tables as $table ){
             $q = new Query($table);
             if (in_array($table,$noInsertTables)){
-                $q->setAction(Query::ACTION_DELETE, Query::ACTION_UPDATE, Query::ACTION_UNDELETE);
+                $q->setAction(array(Query::ACTION_DELETE, Query::ACTION_UPDATE, Query::ACTION_UNDELETE));
             }else{
                 $q->setAction(null);
             }
@@ -55,10 +55,8 @@ class ImportController extends AbstractActionController
         return $queries;
     }
 
-
     public function indexAction()
     {
-        return array('test' => 'import');
     }
 
     public function updateViewsAndPackagesAction()
@@ -72,17 +70,8 @@ class ImportController extends AbstractActionController
             $message = 'Une erreur a été rencontrée.';
             throw new \UnicaenApp\Exception\LogicException("import impossible", null, $e);
         }
-
-        $terminal = $this->getRequest()->isXmlHttpRequest();
         $title = "Résultat";
-        
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setTemplate('import/import/update-tables') // spécification du template obligatoire
-                ->setTerminal($terminal) // Turn off the layout for AJAX requests
-                ->setVariables(compact('message', 'title'));
-
-        return $viewModel;
+        return compact('message', 'title');
     }
 
     public function showImportTblAction()
@@ -119,46 +108,63 @@ class ImportController extends AbstractActionController
         return $viewModel;
     }
 
-    public function updateTablesAction()
+    public function updateAction()
     {
+        $errors = array();
+        $lignes = array();
         $tableName = $this->params()->fromRoute('table');
 
-        $queries = $this->makeQueries($tableName);
+        $query = $this->makeQueries($tableName);
 
-        if (! empty($tableName)){
-            if (! isset($queries[$tableName])){
-                throw new LogicException('La table "'.$tableName.'" n\'est pas correste ou n\'est pas importable.');
+        if (! isset($query[$tableName])){
+            $errors[] = 'La table "'.$tableName.'" n\'est pas correste ou n\'est pas importable.';
+        }else{
+            $query = $query[$tableName];
+
+            $sd = $this->getServiceLocator()->get('ImportServiceDifferentiel');
+            /* @var $sd \Import\Service\Differentiel */
+
+            $sq = $this->getServiceLocator()->get('ImportServiceQueryGenerator');
+            /* @var $sq \Import\Service\QueryGenerator */
+
+            /* Mise à jour des données et récupération des éventuelles erreurs */
+            try{
+                $sq->execMaj($query);
+            }catch(\Exception $e){
+                $errors = array($e->getMessage());
             }
-            // Réduction à la seule table voulue
-            $queries = array( $tableName => $queries[$tableName]);
+
+            $query->setLimit(101);
+            $lignes = $sd->make($query)->fetchAll();
         }
+
+        return array(
+            'lignes' => $lignes,
+            'table'  => $tableName,
+            'errors' => $errors
+        );
+    }
+
+    public function updateTablesAction()
+    {
+        $queries = $this->makeQueries();
 
         $sq = $this->getServiceLocator()->get('ImportServiceQueryGenerator');
         /* @var $sq \Import\Service\QueryGenerator */
 
         $message = '';
         try{
-
             foreach( $queries as $table => $query ){
                 $message .= '<div>Table "'.$table.'" Mise à jour.</div>';
                 $sq->execMaj($query);
             }
-
             $message .= 'Mise à jour des données OSE terminée';
         }catch(\Exception $e){
             $message = 'Une erreur a été rencontrée.';
             throw new \UnicaenApp\Exception\LogicException("mise à jour des données OSE impossible", null, $e);
         }
 
-        $terminal = $this->getRequest()->isXmlHttpRequest();
         $title = "Résultat";
-
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setTemplate('import/import/update-tables') // spécification du template obligatoire
-                ->setTerminal($terminal) // Turn off the layout for AJAX requests
-                ->setVariables(compact('message', 'title'));
-
-        return $viewModel;
+        return compact('message', 'title');
     }
 }

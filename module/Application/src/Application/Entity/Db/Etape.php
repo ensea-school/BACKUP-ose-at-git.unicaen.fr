@@ -32,92 +32,92 @@ class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var string
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @var integer
      */
-    private $niveau;
+    protected $niveau;
 
     /**
      * @var string
      */
-    private $sourceCode;
+    protected $sourceCode;
 
     /**
      * @var boolean
      */
-    private $specifiqueEchanges;
+    protected $specifiqueEchanges;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $elementPedagogique;
+    protected $elementPedagogique;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $cheminPedagogique;
+    protected $cheminPedagogique;
 
     /**
      * @var \Application\Entity\Db\Structure
      */
-    private $structure;
+    protected $structure;
 
     /**
      * @var \Application\Entity\Db\TypeFormation
      */
-    private $typeFormation;
+    protected $typeFormation;
 
     /**
      * @var \Application\Entity\Db\Source
      */
-    private $source;
+    protected $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
 
     /**

@@ -12,72 +12,72 @@ class CheminPedagogique
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var integer
      */
-    private $ordre;
+    protected $ordre;
 
     /**
      * @var string
      */
-    private $sourceCode;
+    protected $sourceCode;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Application\Entity\Db\Source
      */
-    private $source;
+    protected $source;
 
     /**
      * @var \Application\Entity\Db\ElementPedagogique
      */
-    private $elementPedagogique;
+    protected $elementPedagogique;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Etape
      */
-    private $etape;
+    protected $etape;
 
 
     /**

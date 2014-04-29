@@ -12,27 +12,27 @@ class RoleUtilisateur implements \BjyAuthorize\Acl\HierarchicalRoleInterface
     /**
      * @var integer
      */
-    private $isDefault;
+    protected $isDefault;
 
     /**
      * @var string
      */
-    private $roleId;
+    protected $roleId;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Application\Entity\Db\RoleUtilisateur
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $utilisateur;
+    protected $utilisateur;
 
     /**
      * Constructor

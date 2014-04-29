@@ -12,82 +12,87 @@ class Service implements HistoriqueAwareInterface
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $volumeHoraire;
+    protected $volumeHoraire;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $validationService;
 
     /**
      * @var \Application\Entity\Db\Intervenant
      */
-    private $intervenant;
+    protected $intervenant;
 
     /**
      * @var \Application\Entity\Db\Structure
      */
-    private $structureAff;
+    protected $structureAff;
 
     /**
      * @var \Application\Entity\Db\Structure
      */
-    private $structureEns;
+    protected $structureEns;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\ElementPedagogique
      */
-    private $elementPedagogique;
+    protected $elementPedagogique;
 
     /**
      * @var \Application\Entity\Db\Etablissement
      */
-    private $etablissement;
+    protected $etablissement;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Annee
      */
-    private $annee;
+    protected $annee;
 
     /**
      * Constructor
@@ -95,6 +100,7 @@ class Service implements HistoriqueAwareInterface
     public function __construct()
     {
         $this->volumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validationService = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -253,6 +259,39 @@ class Service implements HistoriqueAwareInterface
     public function getVolumeHoraire()
     {
         return $this->volumeHoraire;
+    }
+
+    /**
+     * Add validationService
+     *
+     * @param \Application\Entity\Db\ValidationService $validationService
+     * @return Service
+     */
+    public function addValidationService(\Application\Entity\Db\ValidationService $validationService)
+    {
+        $this->validationService[] = $validationService;
+
+        return $this;
+    }
+
+    /**
+     * Remove validationService
+     *
+     * @param \Application\Entity\Db\ValidationService $validationService
+     */
+    public function removeValidationService(\Application\Entity\Db\ValidationService $validationService)
+    {
+        $this->validationService->removeElement($validationService);
+    }
+
+    /**
+     * Get validationService
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getValidationService()
+    {
+        return $this->validationService;
     }
 
     /**

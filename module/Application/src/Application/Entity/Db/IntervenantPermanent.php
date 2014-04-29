@@ -10,22 +10,22 @@ class IntervenantPermanent extends Intervenant
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $serviceReferentiel;
+    protected $serviceReferentiel;
 
     /**
      * @var \Application\Entity\Db\Corps
      */
-    private $corps;
+    protected $corps;
 
     /**
      * Constructor

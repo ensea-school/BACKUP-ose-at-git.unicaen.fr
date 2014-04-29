@@ -12,132 +12,132 @@ class CompteBancaire
     /**
      * @var string
      */
-    private $banqueBic;
+    protected $banqueBic;
 
     /**
      * @var string
      */
-    private $banqueId;
+    protected $banqueId;
 
     /**
      * @var string
      */
-    private $branche;
+    protected $branche;
 
     /**
      * @var string
      */
-    private $cleRib;
+    protected $cleRib;
 
     /**
      * @var string
      */
-    private $compte;
+    protected $compte;
 
     /**
      * @var string
      */
-    private $emplacement;
+    protected $emplacement;
 
     /**
      * @var string
      */
-    private $guichet;
+    protected $guichet;
 
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var string
      */
-    private $iban2;
+    protected $iban2;
 
     /**
      * @var string
      */
-    private $iban3;
+    protected $iban3;
 
     /**
      * @var string
      */
-    private $iban4;
+    protected $iban4;
 
     /**
      * @var string
      */
-    private $iban5;
+    protected $iban5;
 
     /**
      * @var string
      */
-    private $iban6;
+    protected $iban6;
 
     /**
      * @var string
      */
-    private $iban7;
+    protected $iban7;
 
     /**
      * @var string
      */
-    private $ibanFin;
+    protected $ibanFin;
 
     /**
      * @var string
      */
-    private $ibanIso;
+    protected $ibanIso;
 
     /**
      * @var string
      */
-    private $paysIso;
+    protected $paysIso;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Application\Entity\Db\IntervenantExterieur
      */
-    private $intervenantExterieur;
+    protected $intervenantExterieur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
 
     /**

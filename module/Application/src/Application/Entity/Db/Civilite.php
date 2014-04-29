@@ -13,22 +13,22 @@ class Civilite
     /**
      * @var string
      */
-    private $libelleCourt;
+    protected $libelleCourt;
 
     /**
      * @var string
      */
-    private $libelleLong;
+    protected $libelleLong;
 
     /**
      * @var string
      */
-    private $sexe;
+    protected $sexe;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
 
     /**

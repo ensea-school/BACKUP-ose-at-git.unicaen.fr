@@ -41,87 +41,87 @@ class ElementPedagogique
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var string
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @var string
      */
-    private $sourceCode;
+    protected $sourceCode;
 
     /**
      * @var integer
      */
-    private $tauxFoad;
+    protected $tauxFoad;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $cheminPedagogique;
+    protected $cheminPedagogique;
 
     /**
      * @var \Application\Entity\Db\Structure
      */
-    private $structure;
+    protected $structure;
 
     /**
      * @var \Application\Entity\Db\Periode
      */
-    private $periode;
+    protected $periode;
 
     /**
      * @var \Application\Entity\Db\Source
      */
-    private $source;
+    protected $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Etape
      */
-    private $etape;
+    protected $etape;
 
     /**
      * Constructor

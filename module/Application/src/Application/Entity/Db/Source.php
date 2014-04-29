@@ -12,22 +12,22 @@ class Source
     /**
      * @var string
      */
-    private $code;
+    protected $code;
 
     /**
      * @var boolean
      */
-    private $importable;
+    protected $importable;
 
     /**
      * @var string
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
 
     /**

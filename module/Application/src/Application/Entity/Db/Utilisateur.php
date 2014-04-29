@@ -14,47 +14,47 @@ class Utilisateur implements UserInterface, ProviderInterface
     /**
      * @var string
      */
-    private $displayName;
+    protected $displayName;
 
     /**
      * @var string
      */
-    private $email;
+    protected $email;
 
     /**
      * @var string
      */
-    private $password;
+    protected $password;
 
     /**
      * @var integer
      */
-    private $state;
+    protected $state;
 
     /**
      * @var string
      */
-    private $username;
+    protected $username;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Application\Entity\Db\Intervenant
      */
-    private $intervenant;
+    protected $intervenant;
 
     /**
      * @var \Application\Entity\Db\Personnel
      */
-    private $personnel;
+    protected $personnel;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $roleUtilisateur;
+    protected $roleUtilisateur;
 
     /**
      * Constructor

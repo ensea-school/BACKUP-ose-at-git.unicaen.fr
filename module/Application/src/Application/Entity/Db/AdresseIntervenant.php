@@ -12,117 +12,117 @@ class AdresseIntervenant
     /**
      * @var string
      */
-    private $batiment;
+    protected $batiment;
 
     /**
      * @var string
      */
-    private $codePostal;
+    protected $codePostal;
 
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var string
      */
-    private $localite;
+    protected $localite;
 
     /**
      * @var string
      */
-    private $mentionComplementaire;
+    protected $mentionComplementaire;
 
     /**
      * @var string
      */
-    private $nomVoie;
+    protected $nomVoie;
 
     /**
      * @var string
      */
-    private $noVoie;
+    protected $noVoie;
 
     /**
      * @var string
      */
-    private $paysCodeInsee;
+    protected $paysCodeInsee;
 
     /**
      * @var string
      */
-    private $paysLibelle;
+    protected $paysLibelle;
 
     /**
      * @var boolean
      */
-    private $principale;
+    protected $principale;
 
     /**
      * @var string
      */
-    private $sourceCode;
+    protected $sourceCode;
 
     /**
      * @var string
      */
-    private $telDomicile;
+    protected $telDomicile;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var string
      */
-    private $ville;
+    protected $ville;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Application\Entity\Db\Intervenant
      */
-    private $intervenant;
+    protected $intervenant;
 
     /**
      * @var \Application\Entity\Db\Source
      */
-    private $source;
+    protected $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
 
     /**

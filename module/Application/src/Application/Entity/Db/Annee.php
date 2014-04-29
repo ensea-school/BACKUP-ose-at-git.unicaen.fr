@@ -12,22 +12,22 @@ class Annee
     /**
      * @var \DateTime
      */
-    private $dateDebut;
+    protected $dateDebut;
 
     /**
      * @var \DateTime
      */
-    private $dateFin;
+    protected $dateFin;
 
     /**
      * @var string
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
 
     /**

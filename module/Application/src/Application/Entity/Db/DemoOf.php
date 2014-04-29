@@ -12,72 +12,72 @@ class DemoOf
     /**
      * @var string
      */
-    private $codAnu;
+    protected $codAnu;
 
     /**
      * @var string
      */
-    private $codElp;
+    protected $codElp;
 
     /**
      * @var integer
      */
-    private $codNivVet;
+    protected $codNivVet;
 
     /**
      * @var string
      */
-    private $codPel;
+    protected $codPel;
 
     /**
      * @var string
      */
-    private $codStr;
+    protected $codStr;
 
     /**
      * @var string
      */
-    private $codUe;
+    protected $codUe;
 
     /**
      * @var string
      */
-    private $codVet;
+    protected $codVet;
 
     /**
      * @var string
      */
-    private $libElp;
+    protected $libElp;
 
     /**
      * @var string
      */
-    private $libNivVet;
+    protected $libNivVet;
 
     /**
      * @var string
      */
-    private $libStr;
+    protected $libStr;
 
     /**
      * @var string
      */
-    private $libWebVet;
+    protected $libWebVet;
 
     /**
      * @var string
      */
-    private $licStr;
+    protected $licStr;
 
     /**
      * @var string
      */
-    private $licUe;
+    protected $licUe;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
 
     /**

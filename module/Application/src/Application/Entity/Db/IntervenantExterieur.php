@@ -12,32 +12,32 @@ class IntervenantExterieur extends Intervenant
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var \Application\Entity\Db\TypePoste
      */
-    private $typePoste;
+    protected $typePoste;
 
     /**
      * @var \Application\Entity\Db\RegimeSecu
      */
-    private $regimeSecu;
+    protected $regimeSecu;
 
     /**
      * @var \Application\Entity\Db\TypeIntervenantExterieur
      */
-    private $typeIntervenantExterieur;
+    protected $typeIntervenantExterieur;
 
     /**
      * @var \Application\Entity\Db\SituationFamiliale
      */
-    private $situationFamiliale;
+    protected $situationFamiliale;
 
 
     /**

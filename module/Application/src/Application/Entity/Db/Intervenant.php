@@ -20,7 +20,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")
      * @Annotation\Options({"date_inf_label":"Date de naissance :"})
      */
-    private $dateNaissance;
+    protected $dateNaissance;
 
     /**
      * @var string
@@ -28,12 +28,12 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Département de naissance (code INSEE) :"})
      */
-    private $depNaissanceCodeInsee;
+    protected $depNaissanceCodeInsee;
 
     /**
      * @var string
      */
-    private $depNaissanceLibelle;
+    protected $depNaissanceLibelle;
 
     /**
      * @var string
@@ -41,22 +41,22 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Validator({"name":"EmailAddress"})
      * @Annotation\Options({"label":"Adresse mail :"})
      */
-    private $email;
+    protected $email;
 
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var string
@@ -64,7 +64,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Nom patronymique :"})
      */
-    private $nomPatronymique;
+    protected $nomPatronymique;
 
     /**
      * @var string
@@ -72,7 +72,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Nom usuel :"})
      */
-    private $nomUsuel;
+    protected $nomUsuel;
 
     /**
      * @var string
@@ -80,17 +80,17 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Numéro INSEE :"})
      */
-    private $numeroInsee;
+    protected $numeroInsee;
 
     /**
      * @var string
      */
-    private $numeroInseeCle;
+    protected $numeroInseeCle;
 
     /**
      * @var boolean
      */
-    private $numeroInseeProvisoire;
+    protected $numeroInseeProvisoire;
 
     /**
      * @var string
@@ -98,12 +98,12 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Pays de naissance (code Insee) :"})
      */
-    private $paysNaissanceCodeInsee;
+    protected $paysNaissanceCodeInsee;
 
     /**
      * @var string
      */
-    private $paysNaissanceLibelle;
+    protected $paysNaissanceLibelle;
 
     /**
      * @var string
@@ -111,12 +111,12 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Pays de nationalité (code Insee) :"})
      */
-    private $paysNationaliteCodeInsee;
+    protected $paysNationaliteCodeInsee;
 
     /**
      * @var string
      */
-    private $paysNationaliteLibelle;
+    protected $paysNationaliteLibelle;
 
     /**
      * @var string
@@ -125,27 +125,27 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Prénom :"})
      */
-    private $prenom;
+    protected $prenom;
 
     /**
      * @var boolean
      */
-    private $primeExcellenceScient;
+    protected $primeExcellenceScient;
 
     /**
      * @var string
      */
-    private $sourceCode;
+    protected $sourceCode;
 
     /**
      * @var string
      */
-    private $telMobile;
+    protected $telMobile;
 
     /**
      * @var string
      */
-    private $telPro;
+    protected $telPro;
 
     /**
      * @var string
@@ -153,12 +153,12 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"VIlle de naissance (code Insee) :"})
      */
-    private $villeNaissanceCodeInsee;
+    protected $villeNaissanceCodeInsee;
 
     /**
      * @var string
      */
-    private $villeNaissanceLibelle;
+    protected $villeNaissanceLibelle;
 
     /**
      * @var integer
@@ -168,32 +168,32 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $affectation;
+    protected $affectation;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $adresse;
+    protected $adresse;
 
     /**
      * @var \Application\Entity\Db\Source
      */
-    private $source;
+    protected $source;
 
     /**
      * @var \Application\Entity\Db\StatutIntervenant
      */
-    private $statut;
+    protected $statut;
 
     /**
      * @var \Application\Entity\Db\Structure
      */
-    private $structure;
+    protected $structure;
 
     /**
      * @var \Application\Entity\Db\Discipline
      */
-    private $discipline;
+    protected $discipline;
 
     /**
      * @var \Application\Entity\Db\Civilite
@@ -202,7 +202,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Attributes({"type":"text"})
      * @Annotation\Options({"label":"Civilité :"})
      */
-    private $civilite;
+    protected $civilite;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -222,7 +222,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * @var \Application\Entity\Db\TypeIntervenant
      */
-    private $type;
+    protected $type;
 
     /**
      * Constructor

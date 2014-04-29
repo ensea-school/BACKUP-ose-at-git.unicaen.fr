@@ -12,97 +12,97 @@ class Structure implements HistoriqueAwareInterface
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var string
      */
-    private $libelleCourt;
+    protected $libelleCourt;
 
     /**
      * @var string
      */
-    private $libelleLong;
+    protected $libelleLong;
 
     /**
      * @var integer
      */
-    private $niveau;
+    protected $niveau;
 
     /**
      * @var string
      */
-    private $sourceCode;
+    protected $sourceCode;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Application\Entity\Db\Source
      */
-    private $source;
+    protected $source;
 
     /**
      * @var \Application\Entity\Db\TypeStructure
      */
-    private $type;
+    protected $type;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Etablissement
      */
-    private $etablissement;
+    protected $etablissement;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Structure
      */
-    private $parente;
+    protected $parente;
 
     /**
      * @var \Application\Entity\Db\Structure
      */
-    private $structureNiv2;
+    protected $structureNiv2;
 
     /**
      * @var \Doctrine\Common\Collections\Collection 
      */
-    private $elementPedagogique;
+    protected $elementPedagogique;
 
     /**
      * Set histoCreation

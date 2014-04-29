@@ -12,72 +12,72 @@ class VolumeHoraire implements HistoriqueAwareInterface
     /**
      * @var float
      */
-    private $heures;
+    protected $heures;
 
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
+    protected $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    private $validiteFin;
+    protected $validiteFin;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Service
      */
-    private $service;
+    protected $service;
 
     /**
      * @var \Application\Entity\Db\MotifNonPaiement
      */
-    private $motifNonPaiement;
+    protected $motifNonPaiement;
 
     /**
      * @var \Application\Entity\Db\Periode
      */
-    private $periode;
+    protected $periode;
 
     /**
      * @var \Application\Entity\Db\TypeIntervention
      */
-    private $typeIntervention;
+    protected $typeIntervention;
 
 
     /**

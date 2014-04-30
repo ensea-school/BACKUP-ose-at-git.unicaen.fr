@@ -6,17 +6,19 @@ use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
+class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
-
     use ServiceLocatorAwareTrait;
-
+    use ContextProviderAwareTrait;
+    
     /**
      * @var Service
      */
@@ -28,10 +30,6 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
      * @var array
      */
     protected $context;
-
-
-
-
 
     /**
      * Helper entry point.
@@ -62,14 +60,19 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
      * @param boolean $details
      * @return string
      */
-    public function render( $details=false ){
+    public function render( $details=false )
+    {
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
         $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeures($this->service);
 
         $sid = $this->service->getId();
 
         $out = '';
-        if (empty($this->context['intervenant'])){
+//        if (empty($this->context['intervenant'])){
+        if (!$role instanceof \Application\Acl\IntervenantRole) {
             $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
             if ($this->service->getIntervenant() instanceof Application\Entity\Db\IntervenantExterieur){
                 $out .= '<td>'.$this->renderStructure( $this->service->getStructureAff() )."</td>\n";
@@ -78,13 +81,15 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface
             }
             
         }
-        if ($this->service->getEtablissement() == $this->context['etablissement']){
+//        if ($this->service->getEtablissement() == $this->context['etablissement']){
+        if ($this->service->getEtablissement() === $context->getEtablissement()) {
             $out .= '<td>'.$this->renderStructure( $this->service->getStructureEns() )."</td>\n";
             $out .= '<td>'.$this->renderElementPedagogique( $this->service->getElementPedagogique() )."</td>\n";
         }else{
             $out .= '<td colspan="2">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
         }
-        if (empty($this->context['annee'])){
+//        if (empty($this->context['annee'])){
+        if (!$context->getAnnee()) {
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";
         }
         foreach( $typesIntervention as $ti ){

@@ -1,7 +1,0 @@
-<input type="hidden" id="service-deleted-id" value="<?php echo $entity->getId() ?>" />
-<?php
-
-    if ($errors)
-        echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
-    else
-        echo 'Le service a été supprimé.';

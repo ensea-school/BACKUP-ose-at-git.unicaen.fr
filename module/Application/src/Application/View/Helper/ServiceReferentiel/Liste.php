@@ -6,18 +6,19 @@ use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\ServiceReferentiel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextAwareInterface;
-use Application\Service\ContextAwareTrait;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
+use Application\Acl\IntervenantRole;
 
 /**
  * Aide de vue permettant d'afficher une liste de services referentiels
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextAwareInterface
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextAwareTrait;
+    use ContextProviderAwareTrait;
 
     protected $services;
     
@@ -31,6 +32,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     final public function __invoke(array $services)
     {
         $this->services = $services;
+        
         return $this;
     }
 
@@ -51,56 +53,57 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function render($details = false)
     {
-//        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-
-        $colspan = 4;
-
-        $out = '';
-//        $out .= $this->renderShowHide();
-        $out .= '<table id="services-ref" class="table service-ref-ref">';
-        $out .= '<tr>';
-
-        if (!$this->getContext()->getIntervenant()) {
-            $out .= "<th colspan=\"2\">Intervenant</th>\n";
-            $colspan += 2;
-        }
-        $out .= "<th>Structure</th>\n";
-        $out .= "<th>Fonction référentielle</th>\n";
-        if (!$this->getContext()->getAnnee()) {
-            $out .= "<th>Année univ.</th>\n";
-            $colspan += 1;
-        }
-        $out .= "<th>Heures</th>\n";
-        $out .= "</tr>\n";
+        $urlSaisir    = $this->getView()->url('service-ref/default', array('action' => 'saisir'));
+        $urlVoirListe = $this->getView()->url('service-ref/default', array('action' => 'voirListe'));
+        $parts        = array();
+        
+        $parts[]              = '<table id="services-ref" class="table service-ref">';
+        $parts[]              = '<tr>';
+        $parts['intervenant'] = "<th>Intervenant</th>";
+        $parts[]              = "<th>Structure</th>";
+        $parts[]              = "<th>Fonction référentielle</th>";
+        $parts['annee']       = "<th>Année univ.</th>";
+        $parts[]              = "<th>Heures</th>";
+        $parts[]              = "<th class=\"action\" colspan=\"2\">&nbsp;</th>";
+        $parts[]              = "</tr>";
 
         foreach ($this->services as $service) {
-            $out .= '<tr id="service-ref-ref-' . $service->getId() . '-ligne">';
-            $out .= $this->getView()->serviceReferentielLigne($service)->render($details);
-            $out .= '</tr>';
-//            $out .= '<tr class="volume-horaire" id="service-ref-' . $service->getId() . '-volume-horaire-tr"' . ($details ? '' : ' style="display:none"') . '>'
-//                    . '<td class="volume-horaire" id="service-ref-' . $service->getId() . '-volume-horaire-td" colspan="' . $colspan . '">'
-//                    . $this->getView()->volumeHoraireListe($service->getVolumeHoraire(), array('service' => $service))->render()
-//                    . '</td>'
-//                    . '</tr>';
+            $parts[] = '<tr id="service-ref-' . $service->getId() . '-ligne">';
+            $parts[] = $this->getView()->serviceReferentielLigne($service)->render($details);
+            $parts[] = '</tr>';
         }
-        $out .= '</table>' . "\n";
-//        $out .= $this->renderShowHide();
+        
+        $parts[] = '</table>';
 
-        $url = $this->getView()->url('service-ref/default', array('action' => 'saisir'));
-        $out .= '<br /><a class="ajax-modal services-ref btn btn-default" data-event="service-ref-add-message" href="' . $url . '" title="Modifier le service référentiel"><span class="glyphicon glyphicon-edit"></span> Modifier le service référentiel</a>';
-        $out .= '<script type="text/javascript">';
-        $out .= '$(function() { ServiceReferentiel.init("' . $this->getView()->url('service-ref/default', array('action' => 'voirListe')) . '"); });';
-        $out .= '</script>';
-        return $out;
+        $parts[] = '<a class="ajax-modal services-ref btn btn-default" data-event="service-ref-add-message" href="' . $urlSaisir . '" title="Ajouter un service référentiel"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
+        
+        $parts[] = '<script type="text/javascript">';
+        $parts[] = '$(function() { ServiceReferentiel.init("' . $urlVoirListe . '"); });';
+        $parts[] = '</script>';
+        
+        $this->applyGlobalContext($parts);
+        
+        return implode(PHP_EOL, $parts);
     }
 
-    public function renderShowHide()
+    /**
+     * 
+     * @param array $parts
+     * @return self
+     */
+    public function applyGlobalContext(array &$parts)
     {
-        return
-                '<div class="service-ref-show-hide-buttons">'
-                . '<button type="button" class="btn btn-default btn-xs service-ref-show-all-details"><span class="glyphicon glyphicon-chevron-down"></span> Tout déplier</button> '
-                . '<button type="button" class="btn btn-default btn-xs service-ref-hide-all-details"><span class="glyphicon glyphicon-chevron-up"></span> Tout replier</button>'
-                . '</div>';
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof IntervenantRole) {
+            unset($parts['intervenant']);
+        }
+        if ($context->getAnnee()) {
+            unset($parts['annee']);
+        }
+        
+        return $this;
     }
 
     /**

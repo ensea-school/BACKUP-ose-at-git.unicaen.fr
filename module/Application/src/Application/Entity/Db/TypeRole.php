@@ -12,26 +12,6 @@ class TypeRole implements HistoriqueAwareInterface, RoleInterface
     use HistoriqueAwareTrait;
     
     /**
-     * Returns the string identifier of the Role
-     *
-     * @return string
-     */
-    public function getRoleId()
-    {
-        return $this->getCode();
-    }
-    
-    /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
-    
-    /**
      * @var string
      */
     protected $code;
@@ -60,6 +40,34 @@ class TypeRole implements HistoriqueAwareInterface, RoleInterface
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $role;
+
+    /**
+     * 
+     */
+    public function __construct()
+    {
+        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Returns the string identifier of the Role
+     *
+     * @return string
+     */
+    public function getRoleId()
+    {
+        return $this->getCode();
+    }
+    
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
 
     /**
      * Set code

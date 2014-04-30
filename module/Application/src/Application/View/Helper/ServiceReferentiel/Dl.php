@@ -37,10 +37,12 @@ class Dl extends AbstractDl
 
         $identite = array();
 
-        $identite[] = sprintf($tplDtdd,
-            "Numéro :",
-            $this->entity->getId()
-        );
+        if (!$this->short) {
+            $identite[] = sprintf($tplDtdd,
+                "Numéro :",
+                $this->entity->getId()
+            );
+        }
 
         $identite[] = sprintf($tplDtdd,
             "Intervenant :",
@@ -75,8 +77,10 @@ class Dl extends AbstractDl
          * Historique
          */
 
-        $html .= $this->getView()->historiqueDl($this->entity, $this->horizontal);
-
+        if (!$this->short) {
+            $html .= $this->getView()->historiqueDl($this->entity, $this->horizontal);
+        }
+        
         return $html;
     }
 }

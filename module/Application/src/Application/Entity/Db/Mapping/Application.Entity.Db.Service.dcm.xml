@@ -68,7 +68,8 @@
         <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <!-- NB: Ajout de la relation Volume horaire à la main -->
+    <!-- NB: Ajout de relations à la main -->
     <one-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire" mapped-by="service" />
+    <one-to-many field="validationService" target-entity="Application\Entity\Db\ValidationService" mapped-by="service" />
   </entity>
 </doctrine-mapping>

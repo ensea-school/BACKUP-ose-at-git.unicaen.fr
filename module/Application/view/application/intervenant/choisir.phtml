@@ -11,6 +11,7 @@
 
 <script>
     $(function() {
-        $(":input").tooltip({ /*placement: 'left'*/ });
+        $("form.intervenant-rech :input").tooltip({ /*placement: 'left'*/ });
+        $("input[name='interv[label]']").focus();
     });
 </script>

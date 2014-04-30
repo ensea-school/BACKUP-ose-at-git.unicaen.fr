@@ -2,32 +2,17 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Personnel
  */
-class Personnel
+class Personnel implements HistoriqueAwareInterface
 {
+    use HistoriqueAwareTrait;
+    
     /**
      * @var string
      */
     protected $email;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
 
     /**
      * @var string
@@ -75,25 +60,22 @@ class Personnel
     protected $structure;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
-
-    /**
      * @var \Application\Entity\Db\Civilite
      */
     protected $civilite;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $role;
+
+    /**
+     * 
+     */
+    public function __construct()
+    {
+        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set email
@@ -116,75 +98,6 @@ class Personnel
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return Personnel
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return Personnel
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Personnel
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
     }
 
     /**
@@ -382,75 +295,6 @@ class Personnel
     }
 
     /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Personnel
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Personnel
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Personnel
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
      * Set civilite
      *
      * @param \Application\Entity\Db\Civilite $civilite
@@ -471,5 +315,38 @@ class Personnel
     public function getCivilite()
     {
         return $this->civilite;
+    }
+
+    /**
+     * Add role
+     *
+     * @param \Application\Entity\Db\Role $role
+     * @return TypeRole
+     */
+    public function addRole(\Application\Entity\Db\Role $role)
+    {
+        $this->role[] = $role;
+
+        return $this;
+    }
+
+    /**
+     * Remove role
+     *
+     * @param \Application\Entity\Db\Role $role
+     */
+    public function removeRole(\Application\Entity\Db\Role $role)
+    {
+        $this->role->removeElement($role);
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 }

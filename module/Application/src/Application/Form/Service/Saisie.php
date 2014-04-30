@@ -32,7 +32,9 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
     {
         parent::__construct('service');
 
-        $this->etablissement = $serviceLocator->get('applicationContext')->etablissement;
+        $globalContext = $serviceLocator->get('ApplicationContextProvider')->getGlobalContext();
+        
+        $this->etablissement = $globalContext->getEtablissement();
 
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'service')

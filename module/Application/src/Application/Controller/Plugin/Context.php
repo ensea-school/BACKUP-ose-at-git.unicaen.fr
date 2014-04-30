@@ -222,12 +222,12 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
     }
     
     /**
-     * @return \Application\Service\Context
+     * @return \Application\Service\GlobalContext
      */
     public function getGlobalContext()
     {
         if (null === $this->context) {
-            $this->context = $this->sl->get('ApplicationContext');
+            $this->context = $this->sl->get('ApplicationContextProvider')->getGlobalContext();
         }
         return $this->context;
     }

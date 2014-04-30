@@ -3,9 +3,10 @@
 namespace Application\Service;
 
 use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Service abstrait
@@ -14,28 +15,21 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class AbstractService implements ServiceLocatorAwareInterface {
-
+class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwareInterface
+{
     use ServiceLocatorAwareTrait;
-
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-
-
-
+    use EntityManagerAwareTrait;
 
     /**
      * Retourne le gestionnaire d'entités Doctrine
      *
      * @return EntityManager
      */
-    protected function getEntityManager()
+    public function getEntityManager()
     {
-        if (empty($this->entityManager))
+        if (empty($this->entityManager)) {
             $this->entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        }
         return $this->entityManager;
     }
 }

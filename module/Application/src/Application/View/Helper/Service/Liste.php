@@ -6,17 +6,18 @@ use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une liste de services
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
-
     use ServiceLocatorAwareTrait;
-
+    use ContextProviderAwareTrait;
 
     /**
      * Helper entry point.
@@ -47,21 +48,27 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
      *
      * @return string
      */
-    public function render( $details = false ){
+    public function render( $details = false )
+    {
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
         $colspan = 4;
         $out = $this->renderShowHide();
         $out .= '<table id="services" class="table service">';
         $out .= '<tr>';
 
-        if (empty($this->context['intervenant'])){
+//        if (empty($this->context['intervenant'])){
+        if (!$role instanceof \Application\Acl\IntervenantRole) {
             $out .= "<th>Intervenant</th>\n";
             $out .= "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>\n";
             $colspan += 2;
         }
         $out .= "<th title=\"Structure gestionnaire de l'enseignement\">Structure d'enseignement</th>\n";
         $out .= "<th>Enseignement ou responsabilité</th>\n";
-        if (empty($this->context['annee'])){
+//        if (empty($this->context['annee'])){
+        if (!$context->getAnnee()) {
             $out .= "<th>Année univ.</th>\n";
             $colspan += 1;
         }

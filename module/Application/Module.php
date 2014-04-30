@@ -98,19 +98,4 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             ),
         );
     }
-
-    /**
-     *
-     * @return array
-     * @see ServiceProviderInterface
-     */
-    public function getServiceConfig()
-    {
-         return array(
-            'invokables' => array(
-                'ApplicationOffreFormation' => 'Application\\Service\\OffreFormation',
-                'ApplicationIntervenant' => 'Application\\Service\\Intervenant',
-            ),
-        );
-    }
 }

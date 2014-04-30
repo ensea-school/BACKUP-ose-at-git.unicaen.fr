@@ -61,7 +61,9 @@ class IntervenantController extends AbstractActionController
             $interv->setValue($f->filter($intervenant));
         }
         $form = new \Zend\Form\Form('search');
-        $form->setAttributes(array('class' => 'intervenant-rech'));
+        $form->setAttributes(array(
+            'action' => $this->getRequest()->getRequestUri(),
+            'class'  => 'intervenant-rech'));
         $form->add($interv);
         
         if ($this->getRequest()->isPost()) {
@@ -88,16 +90,8 @@ class IntervenantController extends AbstractActionController
         if (!($sourceCode = $this->params()->fromQuery('sourceCode', $this->params()->fromPost('sourceCode')))) {
             throw new LogicException("Aucun code source d'intervenant spécifié.");
         }
-        if (($intervenant = $this->intervenant()->getRepo()->findBySourceCode($sourceCode))) {
-            throw new RuntimeException("L'intervenant spécifié a déjà été importé : sourceCode = $sourceCode.");
-        }
         
-        $import = $this->getServiceLocator()->get('importProcessusImport'); /* @var $import \Import\Processus\Import */
-        $import->intervenant($sourceCode);
-
-        if (!($intervenant = $this->intervenant()->getRepo()->findOneBySourceCode($sourceCode))) {
-            throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
-        }
+        $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer($sourceCode);
         
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(array('intervenant' => $intervenant));

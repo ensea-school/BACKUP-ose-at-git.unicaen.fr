@@ -6,19 +6,19 @@ use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\ServiceReferentiel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\Context;
-use Application\Service\ContextAwareInterface;
-use Application\Service\ContextAwareTrait;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
+use Application\Acl\IntervenantRole;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, ContextAwareInterface
+class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextAwareTrait;
+    use ContextProviderAwareTrait;
     
     /**
      * @var ServiceReferentiel
@@ -34,6 +34,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     final public function __invoke(ServiceReferentiel $service)
     {
         $this->service = $service;
+        
         return $this;
     }
 
@@ -55,27 +56,40 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function render($details = false)
     {
-//        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-//        $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeures($this->service);
-
-        $out = '';
-        if (!$this->getContext()->getIntervenant()) {
-            $out .= '<td>' . $this->service->getIntervenant() . "</td>\n";
-        }
-        if (!$this->getContext()->getStructure()) {
-            $out .= '<td>' . $this->renderStructure($this->service->getStructure()) . "</td>\n";
-        }
-        if (!$this->getContext()->getAnnee()) {
-            $out .= '<td>' . $this->renderAnnee($this->service->getAnnee()) . "</td>\n";
-        }
-        $out .= '<td>' . $this->renderFonction($this->service->getFonction()) . "</td>\n";
-        $out .= '<td>' . $this->renderHeures($this->service->getHeures()) . "</td>\n";
-
-//        $out .= $this->renderModifier();
-//        $out .= $this->renderSupprimer();
-//        $out .= $this->renderDetails($details);
+        $parts = array();
         
-        return $out;
+        $parts['intervenant'] = '<td>' . $this->service->getIntervenant() . "</td>\n";
+        $parts[]              = '<td>' . $this->renderStructure($this->service->getStructure()) . "</td>\n";
+        $parts['annee']       = '<td>' . $this->renderAnnee($this->service->getAnnee()) . "</td>\n";
+        $parts[]              = '<td>' . $this->renderFonction($this->service->getFonction()) . "</td>\n";
+        $parts[]              = '<td>' . $this->renderHeures($this->service->getHeures()) . "</td>\n";
+
+        $parts[] = $this->renderModifier();
+        $parts[] = $this->renderSupprimer();
+        
+        $this->applyGlobalContext($parts);
+        
+        return implode(PHP_EOL, $parts);
+    }
+
+    /**
+     * 
+     * @param array $parts
+     * @return self
+     */
+    public function applyGlobalContext(array &$parts)
+    {
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof IntervenantRole) {
+            unset($parts['intervenant']);
+        }
+        if ($context->getAnnee()) {
+            unset($parts['annee']);
+        }
+        
+        return $this;
     }
 
     protected function renderStructure($structure)
@@ -118,24 +132,15 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderModifier()
     {
-        $url = $this->getView()->url('service-ref/default', array('action' => 'saisie', 'id' => $this->service->getId()));
-        return '<td><a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier le service référentiel"><span class="glyphicon glyphicon-edit"></span></a></td>';
+        $query = array('sourceCode' => $this->service->getIntervenant()->getSourceCode());
+        $url = $this->getView()->url('service-ref/default', array('action' => 'saisir'), array('query' => $query));
+        return '<td><a class="ajax-modal" data-event="service-modify-message" href="' . $url . '" title="Modifier le service référentiel de ' . $this->service->getIntervenant() . '"><span class="glyphicon glyphicon-edit"></span></a></td>';
     }
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('service-ref/default', array('action' => 'suppression', 'id' => $this->service->getId())); //onclick="return ServiceReferentiel.get('.$this->service->getId().').delete(this)"
-        return '<td><a class="service-delete" data-id="' . $this->service->getId() . '" href="' . $url . '" title="Supprimer le service référentiel"><span class="glyphicon glyphicon-remove"></span></a></td>';
-    }
-
-    protected function renderDetails($details = false)
-    {
-        $out = '<td>'
-                . '<a class="service-details-button" title="Détails" onclick="ServiceReferentiel.get(' . $this->service->getId() . ').showHideDetails(this)">'
-                . '<span class="glyphicon glyphicon-chevron-' . ($details ? 'up' : 'down') . '"></span>'
-                . '</a>'
-                . "</td>\n";
-        return $out;
+        $url = $this->getView()->url('service-ref/default', array('action' => 'supprimer', 'id' => $this->service->getId()));
+        return '<td><a class="ajax-modal" data-event="service-delete-message" data-id="' . $this->service->getId() . '" href="' . $url . '" title="Supprimer ce service référentiel"><span class="glyphicon glyphicon-remove"></span></a></td>';
     }
 
     /**

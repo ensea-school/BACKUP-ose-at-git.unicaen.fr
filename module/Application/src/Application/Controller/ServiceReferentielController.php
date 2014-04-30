@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
 use Application\Form\Service\Saisie;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Exception\DbException;
@@ -21,28 +23,49 @@ use Application\Form\ServiceReferentiel\FonctionServiceReferentielFieldset;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentielController extends AbstractActionController
+class ServiceReferentielController extends AbstractActionController implements ContextProviderAwareInterface
 {
+    use ContextProviderAwareTrait;
+    
     /**
-     * @return \Application\Service\Service
+     * @return \Application\Service\ServiceReferentiel
      */
-    public function getServiceReferentielService()
+    public function getContextProvider()
+    {
+        return $this->getServiceLocator()->get('ApplicationContextProvider');
+    }
+    
+    /**
+     * @return \Application\Service\ServiceReferentiel
+     */
+    public function getServiceServiceReferentiel()
     {
         return $this->getServiceLocator()->get('ApplicationServiceReferentiel');
+    }
+    
+    /**
+     * @return \Application\Service\Intervenant
+     */
+    public function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
 
     public function indexAction()
     {
-        $service  = $this->getServiceReferentielService();
-        $context  = $this->context()->getGlobalContext();
-        $qb       = $service->finderByContext($context);
-        $annee    = $context->getAnnee();
-        $services = $qb->getQuery()->execute();
+        $service  = $this->getServiceServiceReferentiel();
+        $cp       = $this->getContextProvider();
+        $annee    = $cp->getGlobalContext()->getAnnee();
+        $criteria = array();
+//        $criteria = array('structure' => $this->em()->find('Application\Entity\Db\Structure', 8494));
+        $services = $service->getFinder($criteria)
+                ->orderBy("i.nomUsuel, s.libelleCourt")
+                ->getQuery()->execute();
         
         $listeViewModel = new \Zend\View\Model\ViewModel();
         $listeViewModel
                 ->setTemplate('application/service-referentiel/voir-liste')
-                ->setVariables(compact('services', 'context'));
+                ->setVariables(compact('services'));
         
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
@@ -54,7 +77,7 @@ class ServiceReferentielController extends AbstractActionController
 
     public function voirAction()
     {
-        $service = $this->getServiceReferentielService();
+        $service = $this->getServiceServiceReferentiel();
         if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
             throw new LogicException("Aucun identifiant de service spécifié.");
         }
@@ -67,13 +90,14 @@ class ServiceReferentielController extends AbstractActionController
 
     public function voirListeAction()
     {
-        $service  = $this->getServiceReferentielService();
-        $context  = $this->context()->getGlobalContext();
-        $qb       = $service->finderByContext($context);
-        $annee    = $context->getAnnee();
-        $services = $qb->getQuery()->execute();
+        $service  = $this->getServiceServiceReferentiel();
+        $criteria = array();
+//        $criteria = array('structure' => $this->em()->find('Application\Entity\Db\Structure', 8474));
+        $services = $service->getFinder($criteria)
+                ->orderBy("i.nomUsuel, s.libelleCourt")
+                ->getQuery()->execute();
         
-        return compact('annee', 'services', 'context');
+        return compact('services');
     }
 
     public function voirLigneAction()
@@ -81,7 +105,7 @@ class ServiceReferentielController extends AbstractActionController
         $id      = (int)$this->params()->fromRoute('id',0);
         $details = 1 == (int)$this->params()->fromQuery('details',0);
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content',0);
-        $service = $this->getServiceReferentielService();
+        $service = $this->getServiceServiceReferentiel();
         $entity  = $service->getRepo()->find($id);
         $context = $service->getGlobalContext();
         $details = false;
@@ -89,27 +113,30 @@ class ServiceReferentielController extends AbstractActionController
         return compact('entity', 'context', 'details', 'onlyContent');
     }
 
-    public function suppressionAction()
+    public function supprimerAction()
     {
-        $id      = (int)$this->params()->fromRoute('id',0);
-        $service = $this->getServiceReferentielService();
-        $entity  = $service->getRepo()->find($id);
-        $errors  = array();
+        $id        = $this->params()->fromRoute('id');
+        $entity    = $this->em()->find('Application\Entity\Db\ServiceReferentiel', $id);
+        $title     = "Suppression de service référentiel";
+        $form      = new \Application\Form\Supprimer('suppr');
+        $viewModel = new \Zend\View\Model\ViewModel();
 
-        try{
-            $entity->setHistoDestruction(new \DateTime);
-            $this->em()->flush();
-        }catch(\Exception $e){
-            $e = DbException::translate($e);
-            $errors[] = $e->getMessage();
+        $form->setAttribute('action', $this->getRequest()->getRequestUri());
+
+        if ($this->getRequest()->isPost()) {
+            $errors = array();
+            try {
+                $this->getServiceServiceReferentiel()->delete($entity);
+            }
+            catch (\Exception $e){
+                $e = DbException::translate($e);
+                $errors[] = $e->getMessage();
+            }
+            $viewModel->setVariable('errors', $errors);
         }
 
-        $terminal = $this->getRequest()->isXmlHttpRequest();
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setTemplate('application/service/suppression')
-                ->setVariables(compact('entity', 'context','errors'));
-        
+        $viewModel->setVariables(compact('entity', 'title', 'form'));
+
         return $viewModel;
     }
 
@@ -121,7 +148,8 @@ class ServiceReferentielController extends AbstractActionController
      */
     protected function getIntervenant($import = true)
     {
-        $sourceCode = $this->params()->fromQuery('sourceCode');
+        $sourceCode  = $this->params()->fromQuery('sourceCode');
+        $intervenant = null;
         
         if ($sourceCode) {
             // test d'existence de l'intervenant et import éventuel
@@ -131,20 +159,46 @@ class ServiceReferentielController extends AbstractActionController
                     throw new RuntimeException("Intervenant spécifié introuvable (sourceCode = $sourceCode).");
                 }
                 // import de l'intervenant
-                $viewModel   = $this->importerAction(); /* @var $viewModel \Zend\View\Model\ViewModel */
-                $intervenant = $viewModel->getVariable('intervenant');
+                $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer($sourceCode);
             }
             
             return $intervenant;
         }
         
-        $context = $this->context()->getGlobalContext();
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if (!($intervenant = $context->getIntervenant())) {
-            throw new RuntimeException("Aucun intervenant spécifié dans le contexte.");
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            $intervenant = $context->getIntervenant();
         }
         
         return $intervenant;
+    }
+    
+    /**
+     * Redirection vers le choix d'un intervenant (action qui redirigera vers l'action 
+     * courante une fois l'intervenant choisi).
+     * 
+     * @param \Application\Entity\Db\Intervenant $intervenant Intervenant pré-choisi
+     * @return \Zend\Http\Response
+     */
+    protected function redirectToChoisirIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    {
+        $modal    = $this->params()->fromQuery('modal');
+        $redirect = $this->url()->fromRoute(
+                null, 
+                array(), 
+                array('query' => array('sourceCode' => '__sourceCode__', 'modal' => $modal)), 
+                true);
+        
+        if ($intervenant) {
+           $intervenant = $intervenant->getSourceCode();
+        }
+        
+        return $this->redirect()->toRoute(
+                'intervenant/default', 
+                array('action' => 'choisir'), 
+                array('query' => array('intervenant' => $intervenant, 'redirect' => $redirect, 'modal' => $modal)));
     }
     
     /**
@@ -153,50 +207,38 @@ class ServiceReferentielController extends AbstractActionController
      */
     public function saisirAction()
     {
-        $sourceCode  = $this->params()->fromQuery('sourceCode');
         $import      = $this->params()->fromQuery('import', true);
-        $service     = $this->getServiceReferentielService();
-        $context     = $this->context()->getGlobalContext();
+        $context     = $this->getContextProvider()->getGlobalContext();
         $isAjax      = $this->getRequest()->isXmlHttpRequest();
         $intervenant = $this->getIntervenant($import);
         
         // si aucun intervenant spécifié, redirection vers le choix d'un intervenant (action qui redirigera ici une fois l'intervenant choisi)
         if (!$intervenant) {
-            if ($isAjax) {
-                throw new RuntimeException("Aucun intervenant spécifié.");
-            }
-            $redirect = $this->url()->fromRoute('intervenant/default', array(), array('query' => array('sourceCode' => '__sourceCode__')), true);
-            return $this->redirect()->toRoute(
-                    'intervenant/default', array('action' => 'choisir'), array('query' => array('redirect' => $redirect)));
+            return $this->redirectToChoisirIntervenant();
         }
         
-        // verif type d'intervenant
-        if (!$intervenant instanceof IntervenantPermanent) {
-            $message = "La saisie de service référentiel n'est possible que pour les intervenants permanents.";
-            if ($isAjax) {
-                throw new MessageException($message);
-            }
+        // verifications concernant l'intervenant
+        try {
+            $this->getServiceIntervenant()->checkIntervenantForServiceReferentiel($intervenant);
+        }
+        catch (\Common\Exception\DomainException $exc) {
+            $message = $exc->getMessage();
             $this->flashMessenger()->addErrorMessage($message);
-            $redirect = $this->url()->fromRoute('intervenant/default', array(), array('query' => array('sourceCode' => '__sourceCode__')), true);
-            return $this->redirect()->toRoute('intervenant/default', 
-                    array('action' => 'choisir'), 
-                    array('query' => array('intervenant' => $intervenant->getId(), 'redirect' => $redirect)));
+            
+            return $this->redirectToChoisirIntervenant($intervenant);
         }
-        
-        // fetch avec jointures
-        $qb = $this->em()->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder('ip');
-        $qb
-                ->leftJoin('ip.serviceReferentiel', 'sr')
-                ->leftJoin('sr.fonction', 'fr')
-                ->where('ip.id = :id')
-                ->orderBy('sr.id')
-                ->setParameter('id', $intervenant->getId()); /* @var $intervenant IntervenantPermanent */
-        $intervenant = $qb->getQuery()->getOneOrNullResult();
         
         $this->em()->getFilters()->enable("historique");
+//        var_dump(get_class($intervenant));
+        
+        // fetch intervenant avec jointures
+        $qb = $this->getServiceIntervenant()->getFinderIntervenantPermanentWithServiceReferentiel();
+        $qb->setIntervenant($intervenant);
+        $intervenant = $qb->getQuery()->getOneOrNullResult();
+//                var_dump($qb->getQuery()->getDQL(), $qb->getQuery()->getParameters());
         
         $repoFonctionReferentiel = $this->em()->getRepository('Application\Entity\Db\FonctionReferentiel'); /* @var $repoFonctionReferentiel \Doctrine\ORM\EntityRepository */
-        $repoElementPedagogique  = $this->em()->getRepository('Application\Entity\Db\ElementPedagogique'); /* @var $repoElementPedagogique \Application\Entity\Db\Repository\ElementPedagogiqueRepository */
+        $repoElementPedagogique  = $this->em()->getRepository('Application\Entity\Db\ElementPedagogique');  /* @var $repoElementPedagogique \Application\Entity\Db\Repository\ElementPedagogiqueRepository */
 
         $annee = $context->getAnnee();
 
@@ -219,7 +261,7 @@ class ServiceReferentielController extends AbstractActionController
         }
         
         $form = new \Application\Form\ServiceReferentiel\AjouterModifier();
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->setAttribute('action', $this->getRequest()->getRequestUri());
         $form->getBaseFieldset()->getHydrator()->setAnnee($annee);
         $form->bind($intervenant);
         

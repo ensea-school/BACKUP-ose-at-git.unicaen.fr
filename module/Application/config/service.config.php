@@ -164,10 +164,13 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'ApplicationService'            => 'Application\\Service\\Service',
-            'ApplicationServiceReferentiel' => 'Application\\Service\\ServiceReferentiel',
+            'ApplicationServiceValidation'  => 'Application\\Service\\ServiceValidation',
             'ApplicationPeriode'            => 'Application\\Service\\Periode',
             'ApplicationMotifNonPaiement'   => 'Application\\Service\\MotifNonPaiement',
-            'FormServiceRechercheHydrator'  => 'Application\Form\Service\RechercheHydrator'
+            'FormServiceRechercheHydrator'  => 'Application\Form\Service\RechercheHydrator',
+        ),
+        'factories' => array(
+            'ApplicationServiceReferentiel' => 'Application\\Service\\ServiceReferentielFactory',
         ),
     ),
     'form_elements' => array(
@@ -178,11 +181,13 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'serviceDl'               => 'Application\View\Helper\Service\Dl',
-            'serviceListe'            => 'Application\View\Helper\Service\Liste',
-            'serviceLigne'            => 'Application\View\Helper\Service\Ligne',
             'serviceReferentielDl'    => 'Application\View\Helper\ServiceReferentiel\Dl',
-            'serviceReferentielListe' => 'Application\View\Helper\ServiceReferentiel\Liste',
-            'serviceReferentielLigne' => 'Application\View\Helper\ServiceReferentiel\Ligne',
+        ),
+        'factories' => array(
+            'serviceListe'            => 'Application\View\Helper\Service\ListeFactory',
+            'serviceLigne'            => 'Application\View\Helper\Service\LigneFactory',
+            'serviceReferentielListe' => 'Application\View\Helper\ServiceReferentiel\ListeFactory',
+            'serviceReferentielLigne' => 'Application\View\Helper\ServiceReferentiel\LigneFactory',
         ),
     ),
 );

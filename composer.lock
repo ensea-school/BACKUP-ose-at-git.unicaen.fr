@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c4b1706ae7945df7afa01fe214591cda",
+    "hash": "da3eba423b417df609189e5af2dfb2ba",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -701,7 +701,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1072,7 +1072,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@441"
+                "reference": "/trunk/@474"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1474,17 +1474,17 @@
         },
         {
             "name": "zendframework/zend-db",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "target-dir": "Zend/Db",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/Component_ZendDb.git",
-                "reference": "37d573ea83b9573e2247c36fac7b370283ca673e"
+                "reference": "29bb7f1ceacb32fa3e1c122bc3d14da6490aba2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/Component_ZendDb/zipball/37d573ea83b9573e2247c36fac7b370283ca673e",
-                "reference": "37d573ea83b9573e2247c36fac7b370283ca673e",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendDb/zipball/29bb7f1ceacb32fa3e1c122bc3d14da6490aba2c",
+                "reference": "29bb7f1ceacb32fa3e1c122bc3d14da6490aba2c",
                 "shasum": ""
             },
             "require": {
@@ -1503,8 +1503,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev",
-                    "dev-develop": "2.3-dev"
+                    "dev-master": "2.3-dev",
+                    "dev-develop": "2.4-dev"
                 }
             },
             "autoload": {
@@ -1520,7 +1520,7 @@
                 "db",
                 "zf2"
             ],
-            "time": "2014-03-12 17:04:30"
+            "time": "2014-04-15 15:29:07"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -2992,16 +2992,16 @@
         },
         {
             "name": "zf-commons/zfc-user",
-            "version": "0.1.2",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcUser.git",
-                "reference": "7425ea50733caeeaeaeaa77ea7e910dab3434493"
+                "reference": "db5b39df5f640c86299c74f46a91869c09c9a3ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/7425ea50733caeeaeaeaa77ea7e910dab3434493",
-                "reference": "7425ea50733caeeaeaeaa77ea7e910dab3434493",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/db5b39df5f640c86299c74f46a91869c09c9a3ed",
+                "reference": "db5b39df5f640c86299c74f46a91869c09c9a3ed",
                 "shasum": ""
             },
             "require": {
@@ -3009,20 +3009,33 @@
                 "zendframework/zend-authentication": "~2.1",
                 "zendframework/zend-crypt": "~2.1",
                 "zendframework/zend-form": "~2.1",
+                "zendframework/zend-http": "~2.1",
                 "zendframework/zend-inputfilter": "~2.1",
                 "zendframework/zend-loader": "~2.1",
                 "zendframework/zend-modulemanager": "~2.1",
                 "zendframework/zend-mvc": "~2.1",
                 "zendframework/zend-servicemanager": "~2.1",
+                "zendframework/zend-session": "~2.1",
                 "zendframework/zend-stdlib": "~2.1",
                 "zendframework/zend-validator": "~2.1",
                 "zendframework/zend-view": "~2.1",
                 "zf-commons/zfc-base": "0.*"
             },
+            "require-dev": {
+                "phpmd/phpmd": "1.4.*",
+                "phpunit/phpunit": ">=3.7,<4",
+                "squizlabs/php_codesniffer": "1.4.*",
+                "zendframework/zend-captcha": "~2.1"
+            },
             "suggest": {
-                "zendframework/zend-session": "To use the default authentication adapter."
+                "zendframework/zend-captcha": "Zend\\Captcha if you want to use the captcha component"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "ZfcUser": "src/"
@@ -3032,6 +3045,9 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
             "authors": [
                 {
                     "name": "Kyle Spraggs",
@@ -3049,20 +3065,20 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2013-05-02 12:33:31"
+            "time": "2014-04-17 10:31:44"
         },
         {
             "name": "zf-commons/zfc-user-doctrine-orm",
-            "version": "0.1.2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcUserDoctrineORM.git",
-                "reference": "731e7807857c6fb12f1ad7f37694dea3855a226a"
+                "reference": "17efcb024e8f628ba777b5bbbb6201821ac14dfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcUserDoctrineORM/zipball/731e7807857c6fb12f1ad7f37694dea3855a226a",
-                "reference": "731e7807857c6fb12f1ad7f37694dea3855a226a",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUserDoctrineORM/zipball/17efcb024e8f628ba777b5bbbb6201821ac14dfd",
+                "reference": "17efcb024e8f628ba777b5bbbb6201821ac14dfd",
                 "shasum": ""
             },
             "require": {
@@ -3105,7 +3121,7 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2014-04-04 19:57:32"
+            "time": "2014-04-17 19:39:44"
         }
     ],
     "packages-dev": [
@@ -3355,16 +3371,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.34",
+            "version": "3.7.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "248d6ce95e6ca7f0e3135252c0b984bbe1f52f19"
+                "reference": "83f9537e46346f75ed6925441ac259453213c7cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/248d6ce95e6ca7f0e3135252c0b984bbe1f52f19",
-                "reference": "248d6ce95e6ca7f0e3135252c0b984bbe1f52f19",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/83f9537e46346f75ed6925441ac259453213c7cc",
+                "reference": "83f9537e46346f75ed6925441ac259453213c7cc",
                 "shasum": ""
             },
             "require": {
@@ -3425,7 +3441,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-03-28 11:04:36"
+            "time": "2014-04-21 06:25:54"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

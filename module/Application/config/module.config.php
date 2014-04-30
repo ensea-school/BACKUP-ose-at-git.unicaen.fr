@@ -108,7 +108,7 @@ $main =  array(
         'identity_providers' => array(
 //            200 => 'UnicaenAuth\Provider\Identity\Db',
 //            100 => 'UnicaenAuth\Provider\Identity\Ldap',
-            50  => 'IdentityProvider'
+            50  => 'ApplicationIdentityProvider'
         ),
     ),
     'bjyauthorize' => array(
@@ -121,32 +121,32 @@ $main =  array(
             /**
              * Rôles issus de l'annuaire LDAP
              */
-            'UnicaenAuth\Provider\Role\Config' => array(
-                // intervant = rôle de base
-                'intervenant' => array('name' => "Intervenant", 'children' => array(
-                    // gestionnaires de composantes
-                    'cn=ucbn_composantes_responsables,ou=groups,dc=unicaen,dc=fr' => array('name' => "Responsable de composante", 'children' => array(
-                        // directeurs de composantes
-                        'cn=ucbn_composantes_directeurs,ou=groups,dc=unicaen,dc=fr' => array('name' => "Directeur de composante", 'children' => array(
-                            // administrateur de l'appli
-                            'cn=admin_cartagen,ou=groups,dc=unicaen,dc=fr',
-                        )),
-                    )),
-                )),
-            ),
+//            'UnicaenAuth\Provider\Role\Config' => array(
+//                // intervant = rôle de base
+//                'intervenant' => array('name' => "Intervenant", 'children' => array(
+//                    // gestionnaires de composantes
+//                    'cn=ucbn_composantes_responsables,ou=groups,dc=unicaen,dc=fr' => array('name' => "Responsable de composante", 'children' => array(
+//                        // directeurs de composantes
+//                        'cn=ucbn_composantes_directeurs,ou=groups,dc=unicaen,dc=fr' => array('name' => "Directeur de composante", 'children' => array(
+//                            // administrateur de l'appli
+////                            'cn=admin_cartagen,ou=groups,dc=unicaen,dc=fr',
+//                        )),
+//                    )),
+//                )),
+//            ),
         ),
     ),
     'service_manager' => array(
         'invokables' => array(
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
-            'ApplicationContext'                             => 'Application\\Service\\Context',
+            'ApplicationContextProvider'                     => 'Application\\Service\\ContextProvider',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
-            'IdentityProvider'                               => 'Application\Provider\Identity\IdentityProvider',
         ),
         'factories' => array(
-            'ApplicationRoleProvider' => 'Application\Provider\Role\RoleProviderFactory',
+            'ApplicationRoleProvider'     => 'Application\Provider\Role\RoleProviderFactory',
+            'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
         ),
     ),
     'view_helpers' => array(

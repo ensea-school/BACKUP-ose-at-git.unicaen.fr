@@ -21,20 +21,6 @@ class IntervenantRepository extends EntityRepository
      * @param string $term
      * @return \Application\Entity\Db\Intervenant[]
      */
-    public function findByNomPrenomIdQueryBuilder($term)
-    {
-        
-    }
-    
-    /**
-     * Recherche par :
-     * - id source exact (numéro Harpege ou autre), 
-     * - ou nom usuel (et prénom), 
-     * - ou nom patronymique (et prénom).
-     * 
-     * @param string $term
-     * @return \Application\Entity\Db\Intervenant[]
-     */
     public function findByNomPrenomId($term)
     {
         $term = str_replace(' ', '', $term);

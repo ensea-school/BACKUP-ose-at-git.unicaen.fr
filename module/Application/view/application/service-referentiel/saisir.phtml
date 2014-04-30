@@ -87,7 +87,7 @@ echo $this->form()->closeTag();
     {
         var currentCount = getFonctionCurrentCount();
         var template = $('> fieldset > span', form).data('template');
-        var element = $(template.replace(/__index__/g, currentCount));
+        var element = $(template.replace(/__index__/g, currentCount));console.log(template, element, currentCount);
         $('> fieldset', form).append(element.fadeIn());
         $("select.fonction-referentiel-fonction").not($("select", element)).each(function() { applySelectUnicity($(this), $("select", element)); });
         updateFonctionCounter();

@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
 use BjyAuthorize\Provider\Role\ProviderInterface;
 use ZfcUser\Entity\UserInterface;
 

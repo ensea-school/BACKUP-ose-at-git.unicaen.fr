@@ -4,18 +4,93 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\ServiceReferentiel as ServiceEntity;
-
+use Application\Entity\Db\Finder\FinderServiceReferentiel;
 
 /**
  * Description of ServiceReferentiel
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentiel extends AbstractEntityService
+class ServiceReferentiel extends AbstractService implements ContextProviderAwareInterface
 {
+    use ContextProviderAwareTrait;
 
     /**
-     * retourne la classe des entités
+     * Supprime (historise par défaut) le service spécifié.
+     *
+     * @param ServiceEntity $entity
+     * @param bool $softDelete 
+     * @return self
+     */
+    public function delete(ServiceEntity $entity, $softDelete = true)
+    {
+        if ($softDelete) {
+            $entity->setHistoDestruction(new \DateTime);
+        }
+        else {
+            $this->getEntityManager()->remove($entity);
+        }
+        
+        $this->getEntityManager()->flush($entity);
+        
+        return $this;
+    } 
+    
+    /**
+     * Retourne le requêteur des services référentiels contraint par les critères spécifiés.
+     *
+     * @param array $criteria
+     * @return FinderServiceReferentiel
+     */
+    public function getFinder(array $criteria = array())
+    {
+        $qb = new FinderServiceReferentiel($this->getEntityManager(), $this->getContextProvider());
+        
+        // application des critères locaux (filtrage par ex)
+        $this->applyLocalContext($qb, $criteria);
+
+        return $qb;
+    } 
+    
+    /**
+     * Applique le contexte local (filtres).
+     * 
+     * @param QueryBuilder $qb
+     * @param array $criteria
+     * @return self
+     */
+    public function applyLocalContext(QueryBuilder $qb, array $criteria = array())
+    {
+        if (isset($criteria['intervenant'])) {
+            $qb->andWhere("sr.intervenant = :intervenant")->setParameter('intervenant', $criteria['intervenant']);
+        }
+        if (isset($criteria['structure'])) {
+            $qb->andWhere("sr.structure = :structure")->setParameter('structure', $criteria['structure']);
+        }
+        
+        return $this;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Retourne la classe des entités
      *
      * @return string
      * @throws RuntimeException
@@ -24,7 +99,7 @@ class ServiceReferentiel extends AbstractEntityService
     {
         return 'Application\Entity\Db\ServiceReferentiel';
     }
-
+    
     /**
      * Retourne l'alias d'entité courante
      *
@@ -41,9 +116,9 @@ class ServiceReferentiel extends AbstractEntityService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByContext(Context $context, QueryBuilder $qb = null, $alias=null)
+    public function finderByContext(Context $context, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
 
         if (($intervenant = $context->getIntervenant())) {
             $qb->andWhere("$alias.intervenant = :intervenant")->setParameter('intervenant', $intervenant);

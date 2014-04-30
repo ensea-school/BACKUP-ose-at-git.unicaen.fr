@@ -105,7 +105,10 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationIntervenant'        => 'Application\\Service\\Intervenant',
+            'ApplicationOffreFormation' => 'Application\\Service\\OffreFormation',
+        ),
+        'factories' => array(
+            'ApplicationIntervenant' => 'Application\\Service\\IntervenantFactory',
         ),
     ),
 );

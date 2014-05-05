@@ -31,11 +31,10 @@ class ServiceController extends AbstractActionController
     public function indexAction()
     {
         $service = $this->getServiceService();
-        $action = $this->getRequest()->getQuery('action', null);
         $context = $service->getGlobalContext();
         $qb = $service->finderByFilterArray($context);
         $annee = $context['annee'];
-        if (empty($this->context['intervenant'])){
+        if (empty($context['intervenant'])){
             $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
             /* @var $rechercheForm \Application\Form\Service\Recherche */
             $rechercheForm->populateOptions($context);
@@ -45,8 +44,10 @@ class ServiceController extends AbstractActionController
             if ($rechercheForm->isValid()){
                 $service->finderByFilterObject($filter, null, $qb);
             }
+            $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut
         }else{
             $rechercheForm = null; // pas de filtrage
+            $action = 'afficher'; // Affichage par défaut
         }
         $errors = null;
 

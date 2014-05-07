@@ -10,14 +10,18 @@ use Application\Entity\Db\Etablissement;
 use Zend\Form\Element\Hidden;
 use Zend\Mvc\Controller\Plugin\Url;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Description of Saisie
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface
+class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
+
     /**
      * etablissement par défaut
      *
@@ -28,13 +32,17 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
 
 
 
-    public function __construct( ServiceLocatorInterface $serviceLocator, Url $url, array $context=array() )
+
+    public function __construct( ServiceLocatorInterface $serviceLocator, Url $url )
     {
         parent::__construct('service');
 
-        $globalContext = $serviceLocator->get('ApplicationContextProvider')->getGlobalContext();
-        
-        $this->etablissement = $globalContext->getEtablissement();
+        $this->setServiceLocator($serviceLocator->get('FormElementManager'));
+
+        $context = $serviceLocator->get('ApplicationContextProvider')->getGlobalContext();
+        $role    = $serviceLocator->get('ApplicationContextProvider')->getSelectedIdentityRole();
+
+        $this->etablissement = $context->getEtablissement();
 
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'service')
@@ -45,7 +53,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         $id = new Hidden('id');
         $this->add($id);
 
-        if (! isset($context['intervenant'])){
+        if (! $role instanceof \Application\Acl\IntervenantRole){
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant ->setRequired(true)
                          ->setSelectionRequired(true)
@@ -120,23 +128,55 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
     {
         $data = array(
             'id'      => $object->getId(),
+            'intervenant' => null,
+            'elementPedagogique' => null,
+            'etablissement' => null,
+            'interne-externe' => 'service-interne'
         );
+
+        /* Peuple le formulaire avec les valeurs par défaut issues du contexte global */
+        $contextProvider = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider');
+        /* @var $contextProvider \Application\Service\ContextProvider */
+        $role = $contextProvider->getSelectedIdentityRole();
+
+        if($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
+            $data['elementPedagogique']['structure'] = $role->getStructure()->getParenteNiv2()->getId();
+        }
+
+        /* Peuple le formulaire avec les valeurs par défaut issues du formulaire de recherche de services */
+        /** @todo à refectoriser en utilisant un hydrateur de formulaire */
+        $rechercheForm = $this->getServiceLocator()->get('ServiceRecherche');
+        $filters = $rechercheForm->hydrateFromSession();
+
+        if (isset($filters->intervenant) && $filters->intervenant){
+            $data['intervenant'] = array(
+                'id' => $filters->intervenant->getSourceCode(),
+                'label' => (string)$filters->intervenant
+            );
+        }
+        if (isset($filters->structureEns) && $filters->structureEns){
+            $data['elementPedagogique']['structure'] = $filters->structureEns->getId();
+        }
+        if (isset($filters->etape) && $filters->etape){
+            $data['elementPedagogique']['etape'] = $filters->etape->getId();
+        }
+        if (isset($filters->elementPedagogique) && $filters->elementPedagogique){
+            $data['elementPedagogique']['element'] = array(
+                'id' => $filters->elementPedagogique->getId(),
+                'label' => (string)$filters->elementPedagogique
+            );
+        }
+
+        /* Issues de l'objet transmis */
         if ($intervenant = $object->getIntervenant()){
             $data['intervenant'] = array( 'id' => $intervenant->getSourceCode(), 'label' => (string)$intervenant );
-        }else{
-            $data['intervenant'] = null;
         }
         if ($elementPedagogique = $object->getElementPedagogique()){
             $data['elementPedagogique']['element'] = array( 'id' => $elementPedagogique->getId(), 'label' => (string)$elementPedagogique );
-        }else{
-            $data['elementPedagogique'] = null;
         }
         if ($etablissement = $object->getEtablissement()){
             $data['etablissement'] = array( 'id' => $etablissement->getId(), 'label' => (string)$etablissement );
             $data['interne-externe'] = ($etablissement === $this->etablissement) ? 'service-interne' : 'service-externe';
-        }else{
-            $data['etablissement'] = null;
-            $data['interne-externe'] = 'service-interne';
         }
         $this->setData($data);
     }

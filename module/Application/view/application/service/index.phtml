@@ -10,40 +10,9 @@
     }
 </style>
 
-<?php if (empty($this->context['intervenant'])): ?>
-<h1>Filtres</h1>
-<div class="well well-sm">
-<?php $rechercheForm->prepare(); ?>
-<?php echo $this->form()->openTag($rechercheForm); ?>
-
-<div class="row">
-  <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('intervenant')->getLabel() ?></label></div>
-  <div class="col-md-8"><?php echo $this->formSelect($rechercheForm->get('intervenant')->setAttribute('class','form-control')); ?></div>
-</div>
-<div class="row">
-  <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('structure-ens')->getLabel() ?></label></div>
-  <div class="col-md-8"><?php echo $this->formSelect($rechercheForm->get('structure-ens')->setAttribute('class','form-control')); ?></div>
-</div>
-<div class="row">
-  <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('etape')->getLabel() ?></label></div>
-  <div class="col-md-8"><?php echo $this->formSelect($rechercheForm->get('etape')->setAttribute('class','form-control')); ?></div>
-</div>
-<div class="row">
-  <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('element-pedagogique')->getLabel() ?></label></div>
-  <div class="col-md-8"><?php echo $this->formSelect($rechercheForm->get('element-pedagogique')->setAttribute('class','form-control')); ?></div>
-</div>
-<div class="row">
-  <div class="col-md-4">&nbsp;</div>
-  <div class="col-md-8"><?php echo $this->formRow($rechercheForm->get('submit')); ?></div>
-</div>
-<?php
-
-echo $this->formHidden( $rechercheForm->get('action'));
-echo $this->form()->closeTag();
-echo $this->formErrors( $rechercheForm );
-if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
-
-?>
+<?php if (! $role instanceof \Application\Acl\IntervenantRole): ?>
+<div id="filtres" data-url="<?php echo $this->url('service/default', array('action'=>'filtres')) ?>">
+<?php echo $this->filtresListe; ?>
 </div>
 <?php endif; ?>
 <?php if ('afficher' === $action ): ?>
@@ -54,14 +23,14 @@ if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\M
 
 <h2>Services prévisionnels</h2>
 
-<?php if (! empty($this->context['intervenant'])): ?>
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
 <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     Les heures à saisir ci-dessous sont les heures réellement effectuées et non les heures payables.
 </div>
 <?php endif; ?>
 
-<?php echo $this->serviceListe( $services, $context )->render(); ?>
+<?php echo $this->serviceListe( $services )->render(); ?>
 
 <?php else:?>
 <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>

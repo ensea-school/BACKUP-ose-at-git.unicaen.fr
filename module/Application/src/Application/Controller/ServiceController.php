@@ -14,7 +14,6 @@ use Application\Exception\DbException;
  * Description of ServiceController
  *
  * @method \Doctrine\ORM\EntityManager em()
- * @method \Application\Controller\Plugin\Context context()
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
@@ -28,30 +27,39 @@ class ServiceController extends AbstractActionController
         return $this->getServiceLocator()->get('ApplicationService');
     }
 
+    /**
+     * @return \Application\Service\ContextProvider
+     */
+    public function getContextProvider()
+    {
+        return $this->getServiceLocator()->get('ApplicationContextProvider');
+    }
+
     public function indexAction()
     {
         $service = $this->getServiceService();
-        $context = $service->getGlobalContext();
-        $qb = $service->finderByFilterArray($context);
-        $annee = $context['annee'];
-        if (empty($context['intervenant'])){
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $qb      = $service->finderByContext();
+        $viewModel = new \Zend\View\Model\ViewModel();
+
+        /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
+        if (! $role instanceof \Application\Acl\IntervenantRole){
+            $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
+            $params           = $this->getEvent()->getRouteMatch()->getParams();
+            $params['action'] = 'filtres';
+            $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
+            $viewModel->addChild($listeViewModel, 'filtresListe');
+
             $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
             /* @var $rechercheForm \Application\Form\Service\Recherche */
-            $rechercheForm->populateOptions($context);
-            $filter = new \StdClass;
-            $rechercheForm->bind($filter);
-            $rechercheForm->setData( $this->getRequest()->getQuery() );
-            if ($rechercheForm->isValid()){
-                $service->finderByFilterObject($filter, null, $qb);
-            }
-            $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut
+            $filter = $rechercheForm->hydrateFromSession();
+            $service->finderByFilterObject($filter, null, $qb);
         }else{
-            $rechercheForm = null; // pas de filtrage
             $action = 'afficher'; // Affichage par défaut
         }
-        $errors = null;
 
-        $viewModel = new \Zend\View\Model\ViewModel();
+        /* Préparation et affichage */
         if ('afficher' === $action){
             $services = $service->getList($qb);
 
@@ -66,8 +74,28 @@ class ServiceController extends AbstractActionController
             $services = array();
         }
 
-        $viewModel->setVariables(compact('action', 'annee', 'services', 'rechercheForm', 'context', 'errors'));
+        $viewModel->setVariables(compact('annee', 'services', 'action', 'role'));
         return $viewModel;
+    }
+
+    public function filtresAction()
+    {
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+
+        /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
+        if (! $role instanceof \Application\Acl\IntervenantRole){
+            $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+            /* @var $rechercheForm \Application\Form\Service\Recherche */
+            $rechercheForm->populateOptions();
+            $rechercheForm->setDataFromSession();
+            $rechercheForm->setData( $this->getRequest()->getQuery() );
+            if ($rechercheForm->isValid()){
+                $rechercheForm->sessionUpdate();
+            }
+        }else{
+            $rechercheForm = null; // pas de filtrage
+        }
+        return compact('rechercheForm', 'role');
     }
 
     public function voirAction()
@@ -86,13 +114,11 @@ class ServiceController extends AbstractActionController
     public function voirLigneAction()
     {
         $id      = (int)$this->params()->fromRoute('id',0);
-        $details = 1 == (int)$this->params()->fromQuery('details',0);
+        $details = 1 == (int)$this->params()->fromQuery('details',(int)$this->params()->fromPost('details',0));
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content',0);
         $service = $this->getServiceService();
         $entity  = $service->getRepo()->find($id);
-        $context = $service->getGlobalContext();
-
-        return compact('entity', 'context', 'details', 'onlyContent');
+        return compact('entity', 'details', 'onlyContent');
     }
 
     public function suppressionAction()
@@ -128,9 +154,8 @@ class ServiceController extends AbstractActionController
     {
         $id = (int)$this->params()->fromRoute('id');
         $service = $this->getServiceService();
-        $context = $service->getGlobalContext();
-
-        $intervenantContext = $context['intervenant'];//$this->context()->intervenantFromContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $context = $this->getContextProvider()->getGlobalContext();
 
         if ($id){
             $entity = $service->getRepo()->find($id);
@@ -139,14 +164,16 @@ class ServiceController extends AbstractActionController
             $entity = new Service;
             $entity->setAnnee( $this->context()->anneeFromContext() );
             $entity->setValiditeDebut(new \DateTime );
-            $entity->setIntervenant( $intervenantContext );
+            if ($role instanceof \Application\Acl\IntervenantRole){
+                $entity->setIntervenant( $context->getIntervenant() );
+            }
             $title   = "Ajout de service";
         }
-        $form = new Saisie( $this->getServiceLocator(), $this->url(), $context );
+        $form = new Saisie( $this->getServiceLocator(), $this->url() );
 
 
         if ($this->getRequest()->isPost()){
-            if(! $intervenantContext){
+            if (! $role instanceof \Application\Acl\IntervenantRole){
                 $entity->setIntervenant( $this->context()->intervenantFromPost("intervenant[id]") );
             }
             $entity->setElementPedagogique( $this->context()->elementPedagogiqueFromPost("elementPedagogique[element][id]") );
@@ -169,6 +196,6 @@ class ServiceController extends AbstractActionController
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
-        return compact('form', 'context','errors','title');
+        return compact('form', 'role','errors','title');
     }
 }

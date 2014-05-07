@@ -25,22 +25,14 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected $service;
 
     /**
-     * Contexte
-     *
-     * @var array
-     */
-    protected $context;
-
-    /**
      * Helper entry point.
      *
      * @param Service $service
      * @return self
      */
-    final public function __invoke( Service $service, array $context=array() )
+    final public function __invoke( Service $service )
     {
         $this->service = $service;
-        $this->context = $context;
         return $this;
     }
 
@@ -71,7 +63,6 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $sid = $this->service->getId();
 
         $out = '';
-//        if (empty($this->context['intervenant'])){
         if (!$role instanceof \Application\Acl\IntervenantRole) {
             $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
             if ($this->service->getIntervenant() instanceof Application\Entity\Db\IntervenantExterieur){
@@ -81,14 +72,12 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             }
             
         }
-//        if ($this->service->getEtablissement() == $this->context['etablissement']){
         if ($this->service->getEtablissement() === $context->getEtablissement()) {
             $out .= '<td>'.$this->renderStructure( $this->service->getStructureEns() )."</td>\n";
             $out .= '<td>'.$this->renderElementPedagogique( $this->service->getElementPedagogique() )."</td>\n";
         }else{
             $out .= '<td colspan="2">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
         }
-//        if (empty($this->context['annee'])){
         if (!$context->getAnnee()) {
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";
         }
@@ -104,7 +93,6 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderIntervenant($intervenant)
     {
-        //$url = $this->getView()->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
         $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getSourceCode()));
         $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
         return $out;
@@ -137,13 +125,9 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderEtablissement($etablissement)
     {
-        if ($etablissement != $this->context['etablissement']){
-            $url = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
-            $pourl = $this->getView()->url('etablissement/default', array('action' => 'apercevoir', 'id' => $etablissement->getId()));
-            $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etablissement.'</a>';
-        }else{
-            $out = '';
-        }
+        $url = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
+        $pourl = $this->getView()->url('etablissement/default', array('action' => 'apercevoir', 'id' => $etablissement->getId()));
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etablissement.'</a>';
         return $out;
     }
 
@@ -191,32 +175,12 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     /**
      *
-     * @return array
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     *
      * @param Service $service
      * @return self
      */
     public function setService(Service $service)
     {
         $this->service = $service;
-        return $this;
-    }
-
-    /**
-     *
-     * @param array $context
-     * @return self
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
         return $this;
     }
 

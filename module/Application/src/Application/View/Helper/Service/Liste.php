@@ -23,13 +23,11 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      * Helper entry point.
      *
      * @param Service[] $services
-     * @param array $context
      * @return self
      */
-    final public function __invoke( array $services, array $context=array() )
+    final public function __invoke( array $services )
     {
         $this->services = $services;
-        $this->context = $context;
         return $this;
     }
 
@@ -59,7 +57,6 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $out .= '<table id="services" class="table service">';
         $out .= '<tr>';
 
-//        if (empty($this->context['intervenant'])){
         if (!$role instanceof \Application\Acl\IntervenantRole) {
             $out .= "<th>Intervenant</th>\n";
             $out .= "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>\n";
@@ -67,7 +64,6 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         }
         $out .= "<th title=\"Structure gestionnaire de l'enseignement\">Structure d'enseignement</th>\n";
         $out .= "<th>Enseignement ou responsabilité</th>\n";
-//        if (empty($this->context['annee'])){
         if (!$context->getAnnee()) {
             $out .= "<th>Année univ.</th>\n";
             $colspan += 1;
@@ -99,7 +95,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $detailsUrl = $this->getView()->url('volume-horaire/default', array('action' => 'liste', 'id' => $service->getId()));
 
         $out  = '<tr id="service-'.$service->getId().'-ligne" data-url="'.$url.'">';
-        $out .= $this->getView()->serviceLigne( $service, $this->context )->render($details);
+        $out .= $this->getView()->serviceLigne( $service )->render($details);
         $out .= '</tr>';
         $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>'
                 .'<td class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-td" data-url="'.$detailsUrl.'" colspan="999">'
@@ -129,32 +125,12 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     /**
      *
-     * @return array
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     *
      * @param Service[] $services
      * @return self
      */
     public function setServices(array $services)
     {
         $this->services = $services;
-        return $this;
-    }
-
-    /**
-     *
-     * @param array $context
-     * @return self
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
         return $this;
     }
 

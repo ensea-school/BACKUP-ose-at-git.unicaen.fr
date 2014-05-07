@@ -20,6 +20,11 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
 {
     use ServiceLocatorAwareTrait;
 
+    /**
+     * @var \Zend\Session\Container
+     */
+    protected $sessionContainer;
+
     public function __construct($name = null, $options = array())
     {
         parent::__construct($name, $options);
@@ -65,7 +70,7 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
      *
      * @param Service[] $services
      */
-    public function populateOptions( array $serviceContext )
+    public function populateOptions()
     {
         $sl = $this->getServiceLocator()->getServiceLocator();
 
@@ -75,24 +80,23 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         $structure          = $sl->get('ApplicationStructure');
         $service            = $sl->get('ApplicationService');
 
-
         $qb = $intervenant->initQuery()[0];
         $intervenant->join( $service, $qb, 'id', 'intervenant' );
-        $service->finderByFilterArray( $serviceContext, $qb );
+        $service->finderByContext( $qb );
         $this->get('intervenant')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
                                                             array( '' => '(Tous)') + $intervenant->getList($qb))
                                                   );
 
         $qb = $elementPedagogique->initQuery()[0];
         $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );
-        $service->finderByFilterArray( $serviceContext, $qb );
+        $service->finderByContext( $qb );
         $this->get('element-pedagogique')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
                                                             array( '' => '(Tous)') + $elementPedagogique->getList($qb))
                                                   );
 
         $qb = $structure->initQuery()[0];
         $structure->join( $service, $qb, 'id', 'structureEns' );
-        $service->finderByFilterArray( $serviceContext, $qb );
+        $service->finderByContext( $qb );
         $this->get('structure-ens')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
                                                             array( '' => '(Toutes)') + $structure->getList($qb))
                                                     );
@@ -100,7 +104,7 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         $qb = $etape->initQuery()[0];
         $etape->join( $elementPedagogique, $qb, 'id', 'etape' );
         $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );
-        $service->finderByFilterArray( $serviceContext, $qb );
+        $service->finderByContext( $qb );
         $this->get('etape')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
                                                             array( '' => '(Tous)') + $etape->getList($qb))
                                             );
@@ -128,5 +132,67 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
                 'required' => false,
             ),
         );
+    }
+
+    /**
+     * Encapsule dans une session les données du formulaire
+     *
+     * @return self
+     */
+    public function sessionUpdate()
+    {
+        $data = $this->getData();
+        if (is_object($data)){ // Si l'objet est bindé, alors il faut l'extraire avec l'hydrateur
+            $data = $this->getHydrator()->extract($data);
+        }
+        if ($data['submit']){
+            $session = $this->getSessionContainer();
+            $session->data = $data;
+        }
+        return $this;
+    }
+
+    /**
+     * Hydrate un objet depuis la session
+     *
+     * Si aucun objet n'est précisé, alors renvoie un objet de type StdClass
+     *
+     * @param StdClass|null $object
+     * @return mixed
+     */
+    public function hydrateFromSession($object=null)
+    {
+        if (! $object) $object = new \stdClass;
+        $session = $this->getSessionContainer();
+        if ($session->offsetExists('data')){
+            $data = $session->data;
+            $this->getHydrator()->hydrate($data, $object);
+        }
+        return $object;
+    }
+
+    /**
+     * Applique au formulaire les données de session
+     * 
+     * @return self
+     */
+    public function setDataFromSession()
+    {
+        $session = $this->getSessionContainer();
+        if ($session->offsetExists('data')){
+            $this->setData( $session->data );
+        }
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Session\Container
+     */
+    protected function getSessionContainer()
+    {
+        if (null === $this->sessionContainer) {
+            $this->sessionContainer = new \Zend\Session\Container(get_class($this));
+        }
+        return $this->sessionContainer;
     }
 }

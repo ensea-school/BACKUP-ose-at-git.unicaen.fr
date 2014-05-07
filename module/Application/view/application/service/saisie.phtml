@@ -5,7 +5,7 @@ $interne = $form->get('interne-externe')->getValue() == 'service-interne';
 $form->prepare();
 
 echo $this->form()->openTag($form);
-if (! isset($context['intervenant'])){
+if (! $role instanceof \Application\Acl\IntervenantRole){
     echo $this->formControlGroup($form->get('intervenant'));
 }
 echo $this->formControlGroup($form->get('interne-externe'), 'formButtonGroup');

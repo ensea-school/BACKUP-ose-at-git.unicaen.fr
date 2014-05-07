@@ -1,7 +1,7 @@
 <?php
 
 if ($onlyContent){
-    echo $this->serviceLigne( $entity, $context )->render($details);
+    echo $this->serviceLigne( $entity )->render($details);
 }else{
-    echo $this->serviceListe( array($entity), $context )->renderLigne( $entity, $details );
+    echo $this->serviceListe( array($entity) )->renderLigne( $entity, $details );
 }

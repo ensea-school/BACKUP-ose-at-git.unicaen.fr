@@ -49,17 +49,20 @@ function Service( id ) {
         $.get( Service.voirLigneUrl+"/"+this.id+'?only-content=0&details=1', function( data ) {
             $( "#service-"+this.id+"-ligne" ).refresh();
             $('#services > tbody:last').append(data);
+            Service.refreshFiltres();
         });
     }
 
     this.onAfterModify = function(){
         var details = $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1';
-        $( "#service-"+this.id+"-ligne" ).refresh( $( "#service-"+this.id+"-ligne" ).data('url')+'&details='+details );
+        $( "#service-"+this.id+"-ligne" ).refresh( {details:details} );
+        Service.refreshFiltres();
     }
 
     this.onAfterDelete = function(){
         $('#service-'+this.id+'-volume-horaire-tr').remove();
         $( "#service-"+this.id+"-ligne" ).remove();
+        Service.refreshFiltres();
     }
 
 }
@@ -107,13 +110,13 @@ Service.init = function( voirLigneUrl ){
                     id = data[i].value;
                 }
             }
-            
+
             if (id){
                 Service.get(id).onAfterAdd();
             }
         }
     });
-    
+
     $("body").on("service-delete-message", function(event, data) {
         event.div.modal('hide'); // ferme la fenêtre modale
         Service.get(event.a.data('id')).onAfterDelete();
@@ -143,6 +146,10 @@ Service.hideAllDetails = function(){
     $('.service-details-button').data('state', 'hide');
     $('.service-details-button').click();
     $('.service-details-button').data('state', '');
+}
+
+Service.refreshFiltres = function(){
+    $( "#filtres" ).refresh();
 }
 
 

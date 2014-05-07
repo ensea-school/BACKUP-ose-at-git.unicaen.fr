@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Etape;
+use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 
 /**
@@ -13,6 +13,8 @@ use Application\Entity\Db\Service as ServiceEntity;
  */
 class Service extends AbstractEntityService
 {
+    use ContextProviderAwareTrait;
+
     /**
      * retourne la classe des entités
      *
@@ -29,18 +31,19 @@ class Service extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 's';
     }
 
     /**
      * Retourne la liste des services selon l'étape donnée
      *
-     * @param Etape $etape
+     * @param EtapeEntity $etape
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByEtape( Etape $etape, QueryBuilder $qb=null, $alias=null )
+    public function finderByEtape( EtapeEntity $etape, QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->join('Application\Entity\Db\ElementPedagogique', 'ep', \Doctrine\ORM\Query\Expr\Join::WITH, 'ep.id = s.elementPedagogique');
@@ -49,18 +52,25 @@ class Service extends AbstractEntityService
     }
 
     /**
-     * Retourne le contexte global des services
+     * Filtre la liste des services selon lecontexte courant
+     * 
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
+     * @return QueryBuilder
      */
-    public function getGlobalContext()
+    public function finderByContext( QueryBuilder $qb=null, $alias=null )
     {
-        $currentUser = $this->getServiceLocator()->get('authUserContext')->getDbUser();
-        $parametres = $this->getServiceLocator()->get('ApplicationParametres');
-        return array(
-            'intervenant'   => $currentUser->getIntervenant(),
-            'personnel'     => $currentUser->getPersonnel(),
-            'annee'         => $this->getEntityManager()->getRepository('Application\Entity\Db\Annee')->find($parametres->annee),
-            'etablissement' => $this->getEntityManager()->getRepository('Application\Entity\Db\Etablissement')->find($parametres->etablissement)
-        );
+        $context = $this->getServiceLocator()->get('ApplicationContextProvider')->getGlobalContext();
+        $role    = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+        if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
+            $this->finderByIntervenant( $context->getIntervenant(), $qb, $alias );
+        }elseif($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
+            $this->finderByStructureEns( $role->getStructure(), $qb, $alias );
+        }
+        return $qb;
     }
 
     /**

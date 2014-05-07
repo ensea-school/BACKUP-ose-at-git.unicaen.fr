@@ -106,7 +106,7 @@ abstract class AbstractEntityService extends AbstractService
     {
         if (null === $this->properties){
             $m = $this->getReflectionClass()->getMethods(\ReflectionMethod::IS_PUBLIC);
-            $p = $this->getReflectionClass()->getProperties(\ReflectionProperty::IS_PRIVATE);
+            $p = $this->getReflectionClass()->getProperties(\ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED);
 
             $methods = array();
             foreach( $m as $method ){
@@ -197,7 +197,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param string $alias                   Alias d'entité à utiliser par défaut. Utile en cas de jointure
      * @return QueryBuilder                   Retourne le QueryBuilder, pour chaîner les filtres au besoin
      */
-    public function finderByFilterObject( \StdClass $object, HydratorInterface $hydrator=null, QueryBuilder $qb=null, $alias=null )
+    public function finderByFilterObject( $object, HydratorInterface $hydrator=null, QueryBuilder $qb=null, $alias=null )
     {
         if (! $hydrator && $object instanceof \Zend\Stdlib\Hydrator\HydratorAwareInterface){
             $hydrator = $object->getHydrator();

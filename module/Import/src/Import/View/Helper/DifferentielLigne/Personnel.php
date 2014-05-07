@@ -11,9 +11,8 @@ class Personnel extends DifferentielLigne
     public function getSujet()
     {
         $format = '%s %s (numéro %s)';
-        if ('insert' == $this->ligne->getAction()){
-            $data = $this->ligne->getChanges();
-            return sprintf( $format, $data['NOM_USUEL'], $data['PRENOM'], $this->ligne->getSourceCode() );
+        if ('insert' == $this->ligne->getAction() || 'undelete' == $this->ligne->getAction()){
+            return sprintf( $format, $this->ligne->get('NOM_USUEL'), $this->ligne->get('PRENOM'), $this->ligne->getSourceCode() );
         }else{
             $entity = $this->ligne->getEntity();
             /* @var $entity \Application\Entity\Db\Personnel */

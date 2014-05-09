@@ -222,7 +222,7 @@ abstract class AbstractEntityService extends AbstractService
         $serviceEntityClass = $this->getEntityClass();
         if ($serviceEntityClass != $entityClass && ! is_subclass_of($entity, $serviceEntityClass)){
             throw new \Common\Exception\RuntimeException('L\'entité transmise n\'est pas de la classe '.$serviceEntityClass.'.');
-        }echo 'prout';
+        }
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush($entity);
     }

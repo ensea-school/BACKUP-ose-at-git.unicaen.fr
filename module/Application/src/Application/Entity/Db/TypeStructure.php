@@ -35,6 +35,11 @@ class TypeStructure implements HistoriqueAwareInterface
     protected $libelle;
 
     /**
+     * @var boolean
+     */
+    protected $enseignement;
+
+    /**
      * @var \DateTime
      */
     protected $validiteDebut;
@@ -178,6 +183,29 @@ class TypeStructure implements HistoriqueAwareInterface
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set enseignement
+     *
+     * @param boolean $enseignement
+     * @return TypeStructure
+     */
+    public function setEnseignement($enseignement)
+    {
+        $this->enseignement = $enseignement;
+
+        return $this;
+    }
+
+    /**
+     * Get enseignement
+     *
+     * @return boolean
+     */
+    public function getEnseignement()
+    {
+        return $this->enseignement;
     }
 
     /**

@@ -6,7 +6,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Form\Service\Saisie;
-use Application\Entity\Db\Service;
 use Application\Exception\DbException;
 
 
@@ -135,8 +134,7 @@ class ServiceController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             $errors = array();
             try {
-                $entity->setHistoDestruction(new \DateTime);
-                $this->em()->flush();
+                $service->delete($entity);
             }
             catch(\Exception $e){
                 $e = DbException::translate($e);
@@ -161,7 +159,7 @@ class ServiceController extends AbstractActionController
             $entity = $service->getRepo()->find($id);
             $title   = "Modification de service";
         }else{
-            $entity = new Service;
+            $entity = $service->newEntity();
             $entity->setAnnee( $this->context()->anneeFromContext() );
             $entity->setValiditeDebut(new \DateTime );
             if ($role instanceof \Application\Acl\IntervenantRole){
@@ -185,8 +183,7 @@ class ServiceController extends AbstractActionController
         if ($this->getRequest()->isPost()){
             if ($form->isValid()){
                 try{
-                    $this->em()->persist($entity);
-                    $this->em()->flush();
+                    $service->save($entity);
                     $form->get('id')->setValue( $entity->getId() ); // transmet le nouvel ID
                 }catch(\Exception $e){
                     $e = DbException::translate($e);

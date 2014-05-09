@@ -188,6 +188,21 @@ abstract class AbstractEntityService extends AbstractService
     }
 
     /**
+     * Retourne une entité à partir de son identifiant unique (ID)
+     * Retourne null si l'identifiant est null ou bien s'il est égal à 0
+     *
+     * @param integer $id
+     * @return mixed|null
+     */
+    public function get($id)
+    {
+        if ((int)$id)
+            return $this->getRepo()->find((int)$id);
+        else
+            return null;
+    }
+
+    /**
      * Supprime (historise par défaut) le service spécifié.
      *
      * @param mixed $entity     Entité à détruire

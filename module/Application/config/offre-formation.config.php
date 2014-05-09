@@ -30,6 +30,39 @@ return array(
                             ),
                         ),
                     ),
+                    'etape' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => '/etape',
+                        ),
+                        'may_terminate' => false,
+                        'child_routes' => array(
+                            'apercevoir' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/apercevoir[/:id]',
+                                    'constraints' => array( 'id' => '[0-9]*' ),
+                                    'defaults' => array( 'action' => 'etapeApercevoir' ),
+                                ),
+                            ),
+                            'saisie' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/saisie[/:id]',
+                                    'constraints' => array( 'id' => '[0-9]*' ),
+                                    'defaults' => array( 'action' => 'etapeSaisie' ),
+                                ),
+                            ),
+                            'suppression' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/suppression[/:id]',
+                                    'constraints' => array( 'id' => '[0-9]*' ),
+                                    'defaults' => array( 'action' => 'etapeSuppression' ),
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -44,7 +77,7 @@ return array(
                         'route'    => 'of',
 //                        'resource' => 'controller/Application\Controller\OffreFormation:index',
                         'pages' => array(
-                            
+
                         ),
                     ),
                 ),
@@ -70,6 +103,7 @@ return array(
         'invokables' => array(
             'ApplicationElementPedagogique'           => 'Application\\Service\\ElementPedagogique',
             'ApplicationEtape'                        => 'Application\\Service\\Etape',
+            'ApplicationTypeFormation'                => 'Application\\Service\\TypeFormation',
             'FormElementPedagogiqueRechercheHydrator' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheHydrator'
         ),
     ),
@@ -77,5 +111,9 @@ return array(
         'factories' => array(
             'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldsetFactory',
         ),
+        'invokables' => array(
+            'EtapeSaisie' => 'Application\Form\OffreFormation\EtapeSaisie',
+        ),
     ),
+
 );

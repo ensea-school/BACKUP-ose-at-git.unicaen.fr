@@ -19,7 +19,8 @@ class DbException extends RuntimeException {
     protected static $messages = array(
         'unique constraint (OSE.SERVICE__UN) violated' =>
             'Vous ne pouvez pas enregistrer ce service car il en existe déjà un de similaire.',
-
+        'ORA-01722' =>
+            'Nombre invalide',
     );
 
 

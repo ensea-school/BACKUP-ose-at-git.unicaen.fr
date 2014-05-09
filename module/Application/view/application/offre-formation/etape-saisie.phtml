@@ -1,0 +1,23 @@
+<h1>&Eacute;dition d'une formation</h1>
+
+<?php
+
+$form->prepare();
+echo $this->form()->openTag($form);
+
+echo $this->formControlGroup($form->get('source-code'));
+echo $this->formControlGroup($form->get('libelle'));
+echo $this->formControlGroup($form->get('type-formation'));
+echo $this->formControlGroup($form->get('niveau'));
+echo $this->formControlGroup($form->get('specifique-echanges'));
+echo $this->formControlGroup($form->get('structure'));
+
+echo $this->formRow($form->get('submit'));
+if ($id = (int)$form->get('id')->getValue()){
+    $suppressionUrl = $this->url('of/etape/suppression', array('id' => $form->get('id')->getValue()));
+    echo ' <a class="ajax-modal btn btn-default" data-event="etape-after-suppression" href="'.$suppressionUrl.'">Supprimer</a>';
+}
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag().'<br />';
+echo $this->formErrors( $form );
+if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));

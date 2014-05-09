@@ -6,6 +6,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Repository\ElementPedagogiqueRepository;
 use Application\Service\OffreFormation as OffreFormationService;
+use Application\Service\Etape as EtapeService;
+use Application\Exception\DbException;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of OffreFormationController
@@ -15,13 +19,24 @@ use Application\Service\OffreFormation as OffreFormationService;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class OffreFormationController extends AbstractActionController
+class OffreFormationController extends AbstractActionController implements ContextProviderAwareInterface
 {
+    use ContextProviderAwareTrait;
+
     /**
      * @var \Zend\Session\Container
      */
     protected $sessionContainer;
-    
+
+
+    /**
+     * @return \Application\Service\ServiceReferentiel
+     */
+    public function getContextProvider()
+    {
+        return $this->getServiceLocator()->get('ApplicationContextProvider');
+    }
+
     /**
      * 
      * @return \Zend\View\Model\ViewModel
@@ -32,7 +47,6 @@ class OffreFormationController extends AbstractActionController
         $serviceOf = $this->getServiceLocator()->get('applicationOffreFormation'); /* @var $serviceOf OffreFormationService */
         $repoOf    = $serviceOf->getRepoElementPedagogique(); /* @var $serviceOf ElementPedagogiqueRepository */
         $criteria  = array_filter($this->params()->fromQuery());
-        
         $em->getFilters()->enable('historique');
 //        $em->getFilters()->enable('validite');
         
@@ -86,17 +100,18 @@ class OffreFormationController extends AbstractActionController
                 'etape' => $etape));
             $entities = $qb->getQuery()->getResult();
         }
-         
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setVariables(array(
-            'entities'   => $entities,
-            'structures' => $structuresDistinctes,
-            'niveaux'    => $niveauxDistincts,
-            'etapes'     => $etapesDistinctes,
-            'structure'  => $structure ? $structure->getId() : null,
-            'niveau'     => $niveau,
-            'etape'      => $etape ? $etape->getId() : null,
-            'form'       => $form,
+            'entities'      => $entities,
+            'structures'    => $structuresDistinctes,
+            'niveaux'       => $niveauxDistincts,
+            'etapes'        => $etapesDistinctes,
+            'structure'     => $structure ? $structure->getId() : null,
+            'niveau'        => $niveau,
+            'etape'         => $etape ? $etape->getId() : null,
+            'form'          => $form,
+            'serviceEtape'  => $this->getServiceEtape() // pour déterminer les droits
         ));
 
         return $viewModel;
@@ -239,6 +254,76 @@ class OffreFormationController extends AbstractActionController
         return new \Zend\View\Model\JsonModel(\UnicaenApp\Util::collectionAsOptions($result));
     }
 
+    public function etapeSaisieAction()
+    {
+        $id = (int)$this->params()->fromRoute('id');
+        $errors = array();
+        if ($id){
+            $entity = $this->getServiceEtape()->getRepo()->find($id);
+        }else{
+            $entity = $this->getServiceEtape()->newEntity();
+        }
+        $form = $this->getServiceLocator()->get('FormElementManager')->get('EtapeSaisie');
+        /* @var $form \Application\Form\OffreFormation\EtapeSaisie */
+        $form->bind($entity);
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                try{
+                    $this->getServiceEtape()->save($entity);
+                    $form->get('id')->setValue( $entity->getId() ); // transmet le nouvel ID
+                }catch(\Exception $e){
+                    $e = DbException::translate($e);
+                    $errors[] = $e->getMessage();
+                }
+            }
+        }
+
+        return compact('form','errors');
+    }
+
+    public function etapeSuppressionAction()
+    {
+        $id        = (int) $this->params()->fromRoute('id', 0);
+        if (! $id){
+            throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
+        }
+        $service   = $this->getServiceEtape();
+        $entity    = $service->getRepo()->find($id);
+        $title     = "Suppression d'étape";
+        $form      = new \Application\Form\Supprimer('suppr');
+        $errors = array();
+        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+
+        if ($this->getRequest()->isPost()) {
+            try {
+                $service->delete($entity);
+            }catch(\Exception $e){
+                $e = DbException::translate($e);
+                $errors[] = $e->getMessage();
+            }
+        }
+        return compact('entity', 'title', 'form', 'errors');
+    }
+
+    public function etapeApercevoirAction()
+    {
+        if (!($id = $this->params()->fromRoute('id'))) {
+            throw new LogicException("Aucune étape spécifiée.");
+        }
+
+        $em      = $this->em();
+        $repoEp  = $em->getRepository('Application\Entity\Db\Etape');
+        $etape = $repoEp->find($id);
+        $import = $this->getServiceLocator()->get('ImportProcessusImport');
+        $changements = $import->etapeGetDifferentiel($etape);
+        $short = $this->params()->fromQuery('short', false);
+
+        return compact('etape','short','changements');
+    }
+
     /**
      * Retourne le service OffreFormation.
      * 
@@ -247,6 +332,16 @@ class OffreFormationController extends AbstractActionController
     protected function getServiceOffreFormation()
     {
         return $this->getServiceLocator()->get('applicationOffreFormation');
+    }
+
+    /**
+     * Retourne le service Etape
+     *
+     * @return EtapeService
+     */
+    protected function getServiceEtape()
+    {
+        return $this->getServiceLocator()->get('applicationEtape');
     }
 
     /**

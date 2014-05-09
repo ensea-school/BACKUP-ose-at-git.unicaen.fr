@@ -178,7 +178,16 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
                 <?php foreach ($entities as $entity): /* @var $entity \Application\Entity\Db\ElementPedagogique */ ?>
                 <tr id="<?php echo $entity->getId() ?>">
                     <td class=""   ><?php echo $entity->getEtape()->getNiveauToString() ?></td>
-                    <td class="etape"><?php echo $entity->getEtape() ?></td>
+                    <?php
+                    $etape = $entity->getEtape();
+                    if ($serviceEtape->canSave($etape)){
+                        $link = '<a href="'.$this->url('of/etape/saisie', array('id' => $etape->getId())).'">';
+                    }else{
+                        $link = '<a class="ajax-modal" href="'.$this->url('of/etape/apercevoir', array('id' => $etape->getId())).'">';
+                    }
+
+                    ?>
+                    <td class="etape"><?php echo $link ?><?php echo $etape ?></a></td>
                     <td class="periode"><?php echo $entity->getPeriode() ?></td>
                     <td class="element"><?php echo $entity->getSourceCode() ?></td>
                     <td class="element"><?php echo $entity->getLibelle() ?></td>
@@ -193,9 +202,13 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
                 <?php endforeach; ?>
             </tbody>
         </table>
-        
+
+        <!--------------- Boutons d'ajout d'ODF --------------->
+        <?php if ($serviceEtape->canAdd()): ?>
+        <a class="btn btn-default" href="<?php echo $this->url('of/etape/saisie') ?>">Ajout d'une nouvelle étape</a>
         <?php endif; ?>
-        
+        <?php endif; ?>
+
     </div>
-    
+
 </div>

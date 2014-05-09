@@ -143,6 +143,7 @@ $main =  array(
             'ApplicationContextProvider'                     => 'Application\\Service\\ContextProvider',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
+            'ApplicationSource'                              => 'Application\\Service\\Source',
         ),
         'factories' => array(
             'ApplicationRoleProvider'     => 'Application\Provider\Role\RoleProviderFactory',

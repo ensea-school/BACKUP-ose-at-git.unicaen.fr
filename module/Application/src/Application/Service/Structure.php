@@ -71,7 +71,7 @@ class Structure extends AbstractEntityService
      * Recherche par nom
      *
      * @param string $term
-     * @param QueryBuilder|null $queryBuilder
+     * @param QueryBuilder|null $qb
      * @return QueryBuilder
      */
     public function finderByNom($term, QueryBuilder $qb=null, $alias=null)
@@ -97,29 +97,42 @@ class Structure extends AbstractEntityService
     }
 
     /**
-     * Retourne le chercheur des structures distinctes.
+     * Ne recherche que les structures où il y a des enseignements
      *
-     * @param int $niveau
-     * @param QueryBuilder|null $queryBuilder
+     * @todo à corriger pour palier au cas où une structure destinée à assurer des enseignements n'ai encore aucun enseignement
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
      * @return QueryBuilder
      */
-    public function finderDistinctStructures($niveau = null, QueryBuilder $qb=null, $alias=null)
+    public function finderByEnseignement(QueryBuilder $qb=null, $alias=null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-                $qb->select("partial $alias.{id, libelleCourt}")
-                ->distinct()
-                ->from($this->getEntityClass(), $alias)
-//                ->innerJoin("$alias.elementPedagogique", 'ep')
-                ->orderBy("$alias.libelleCourt");
+        /* Recherche par le type de structure /
+        $serviceTypeStructure = $this->getServiceLocator()->get('ApplicationTypeStructure');
+        $this->join( $serviceTypeStructure, $qb, 'type');
+        $serviceTypeStructure->finderByEnseignement('1', $qb);
+        */
 
-        if (null !== $niveau) {
-            $qb->where("$alias.niveau = ?", $niveau);
-        }
-
-        // provisoire
-        $qb->where("$alias.parente = :ucbn")->setParameter('ucbn', $this->getEntityManager()->find('Application\Entity\Db\Structure', 8464));
+        /* recherche par éléments trouvés ou non */
+        $serviceElementPedagogique = $this->getServiceLocator()->get('ApplicationElementPedagogique');
+        $this->join( $serviceElementPedagogique, $qb, 'id', 'structure');
+        $qb->distinct();
 
         return $qb;
+    }
+
+    /**
+     * Retourne la liste des structures
+     *
+     * @param QueryBuilder|null $queryBuilder
+     * @return Application\Entity\Db\TypeFormation[]
+     */
+    public function getList( QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.libelleCourt");
+        return parent::getList($qb, $alias);
     }
 }

@@ -7,6 +7,7 @@ use Zend\Stdlib\Hydrator\ObjectProperty;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Exception\RuntimeException;
 use Doctrine\ORM\Query\Expr;
+use \Application\Entity\Db\HistoriqueAwareInterface;
 
 /**
  *
@@ -184,6 +185,57 @@ abstract class AbstractEntityService extends AbstractService
             $result[$entity->getId()] = $entity;
         }
         return $result;
+    }
+
+    /**
+     * Supprime (historise par défaut) le service spécifié.
+     *
+     * @param mixed $entity     Entité à détruire
+     * @param bool $softDelete
+     * @return self
+     */
+    public function delete($entity, $softDelete = true)
+    {
+        $entityClass = get_class($entity);
+        $serviceEntityClass = $this->getEntityClass();
+        if ($serviceEntityClass != $entityClass && ! is_subclass_of($entity, $serviceEntityClass)){
+            throw new \Common\Exception\RuntimeException('L\'entité transmise n\'est pas de la classe '.$serviceEntityClass.'.');
+        }
+        if ($softDelete && $entity instanceof HistoriqueAwareInterface ) {
+            $entity->setHistoDestruction(new \DateTime);
+        }else{
+            $this->getEntityManager()->remove($entity);
+        }
+        $this->getEntityManager()->flush($entity);
+        return $this;
+    }
+
+    /**
+     * Suvegarde une entité
+     *
+     * @param mixed $entity
+     * @throws \Common\Exception\RuntimeException
+     */
+    public function save($entity)
+    {
+        $entityClass = get_class($entity);
+        $serviceEntityClass = $this->getEntityClass();
+        if ($serviceEntityClass != $entityClass && ! is_subclass_of($entity, $serviceEntityClass)){
+            throw new \Common\Exception\RuntimeException('L\'entité transmise n\'est pas de la classe '.$serviceEntityClass.'.');
+        }echo 'prout';
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush($entity);
+    }
+
+    /**
+     * Retourne une nouvelle entité de la classe donnée
+     * 
+     * @return mixed
+     */
+    public function newEntity()
+    {
+        $class = $this->getEntityClass();
+        return new $class;
     }
 
     /**

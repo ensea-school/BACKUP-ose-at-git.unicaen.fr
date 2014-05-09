@@ -78,7 +78,10 @@ class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterfac
         if (null === $entity->getHistoCreateur()) {
             $entity->setHistoCreateur($user);
         }
-        
+
+        $entity->setHistoModificateur($user);
+        $entity->setHistoModification($now);
+
         if (null === $entity->getHistoDestruction() && null === $entity->getHistoDestructeur()) {
             $entity->setHistoModification($now)
                     ->setHistoModificateur($user);

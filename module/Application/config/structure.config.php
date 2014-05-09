@@ -99,6 +99,7 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'ApplicationStructure'       => 'Application\\Service\\Structure',
+            'ApplicationTypeStructure'   => 'Application\\Service\\TypeStructure',
         )
     ),
     'view_helpers' => array(

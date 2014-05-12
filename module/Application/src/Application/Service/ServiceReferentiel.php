@@ -61,11 +61,11 @@ class ServiceReferentiel extends AbstractService implements ContextProviderAware
      */
     public function applyLocalContext(QueryBuilder $qb, array $criteria = array())
     {
-        if (isset($criteria['intervenant'])) {
+        if (!empty($criteria['intervenant'])) {
             $qb->andWhere("sr.intervenant = :intervenant")->setParameter('intervenant', $criteria['intervenant']);
         }
-        if (isset($criteria['structure'])) {
-            $qb->andWhere("sr.structure = :structure")->setParameter('structure', $criteria['structure']);
+        if (!empty($criteria['structure-ens'])) {
+            $qb->andWhere("sr.structure = :structure")->setParameter('structure', $criteria['structure-ens']);
         }
         
         return $this;

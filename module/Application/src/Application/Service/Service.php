@@ -5,6 +5,7 @@ namespace Application\Service;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
+use Application\Entity\Db\Structure as StructureEntity;
 
 /**
  * Description of Service
@@ -52,6 +53,42 @@ class Service extends AbstractEntityService
     }
 
     /**
+     * Retourne le query builder permettant de rechercher les services prévisionnels
+     * selon la structure de responsabilité spécifiée. 
+     * 
+     * Càd les services prévisionnels satisfaisant au moins l'un des critères suivants :
+     * - la structure d'enseignement (champ 'structure_ens') est la structure spécifiée OU l'une de ses filles ;
+     * - la structure d'affectation (champ 'structure_aff')  est la structure spécifiée OU l'une de ses filles ;
+     * - la structure d'affectation de l'intervenant         est la structure spécifiée OU l'une de ses filles.
+     *
+     * @param StructureEntity $structure
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByStructureResp(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        
+        $or = $qb->expr()->orX(
+                "$alias.structureEns = :structure", 
+                "se.structureNiv2    = :structure",
+                "$alias.structureAff = :structure", 
+                "sa.structureNiv2    = :structure",
+                "i.structure         = :structure", 
+                "si.structureNiv2    = :structure"
+        );
+        $qb
+                ->join("$alias.structureEns", 'se')
+                ->join("$alias.structureAff", 'sa')
+                ->join("$alias.intervenant",  'i')
+                ->join("i.structure",         'si')
+                ->andWhere($or)
+                ->setParameter('structure', $structure);
+        
+        return $qb;
+    }
+
+    /**
      * Filtre la liste des services selon lecontexte courant
      * 
      * @param QueryBuilder|null $qb
@@ -64,12 +101,17 @@ class Service extends AbstractEntityService
         $role    = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
+        
         $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+        
         if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
             $this->finderByIntervenant( $context->getIntervenant(), $qb, $alias );
-        }elseif($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
-            $this->finderByStructureEns( $role->getStructure(), $qb, $alias );
         }
+        elseif ($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
+//            $this->finderByStructureEns( $role->getStructure(), $qb, $alias );
+            $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
+        }
+        
         return $qb;
     }
 

@@ -19,6 +19,9 @@ class FinderServiceReferentiel extends AbstractFinder
      */
     protected function createQuery()
     {
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        
         $this
                 ->select('sr')
                 ->from("Application\Entity\Db\ServiceReferentiel", 'sr')
@@ -26,18 +29,6 @@ class FinderServiceReferentiel extends AbstractFinder
                 ->join("sr.intervenant", 'i')
                 ->join("sr.fonction", 'f')
                 ->orderBy("i.nomUsuel, s.libelleCourt");
-        
-        return $this;
-    }
-    
-    /**
-     * 
-     * @return self
-     */
-    protected function applyGlobalContext()
-    {
-        $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof IntervenantRole) {
             $this
@@ -62,5 +53,5 @@ class FinderServiceReferentiel extends AbstractFinder
         }
         
         return $this;
-    }   
+    }
 }

@@ -17,8 +17,7 @@ abstract class AbstractFinder extends QueryBuilder
 {
     use ContextProviderAwareTrait;
     
-    protected $queryCreated         = false;
-    protected $globalContextApplied = false;
+    protected $queryCreated = false;
     
     /**
      * 
@@ -40,12 +39,6 @@ abstract class AbstractFinder extends QueryBuilder
     
     /**
      * 
-     * @return self
-     */
-    abstract protected function applyGlobalContext();
-    
-    /**
-     * 
      * @return Query
      */
     public function getQuery()
@@ -53,10 +46,6 @@ abstract class AbstractFinder extends QueryBuilder
         if (!$this->queryCreated) {
             $this->createQuery();
             $this->queryCreated = true;
-        }
-        if (!$this->globalContextApplied) {
-            $this->applyGlobalContext();
-            $this->globalContextApplied = true;
         }
         
         return parent::getQuery();

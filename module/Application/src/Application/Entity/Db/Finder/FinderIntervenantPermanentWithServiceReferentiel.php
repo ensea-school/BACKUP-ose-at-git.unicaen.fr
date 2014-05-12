@@ -38,29 +38,19 @@ class FinderIntervenantPermanentWithServiceReferentiel extends AbstractFinder
      */
     protected function createQuery()
     {
-        $this
-                ->select('i')
-                ->from('Application\Entity\Db\IntervenantPermanent', 'i')
-                ->leftJoin('i.serviceReferentiel', 'sr')
-                ->leftJoin('sr.fonction', 'fr')
-                ->leftJoin('sr.structure', 's')
-                ->orderBy('s.libelleCourt');
-        
-        return $this;
-    }
-    
-    /**
-     * 
-     * @return self
-     */
-    protected function applyGlobalContext()
-    {
-        if (!$this->getContextProvider()) {
-            return $this;
-        }
-        
         $context = $this->getContextProvider()->getGlobalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        $this
+                ->select('i')
+                ->from('Application\Entity\Db\IntervenantPermanent', 'i');
+        
+        $condition = $this->expr()->eq('sr.intervenant', 'i');
+                
+        if (($annee = $context->getAnnee())) {
+            $condition = $this->expr()->andX($condition, $this->expr()->eq('sr.annee', ':annee'));
+            $this->setParameter('annee', $annee);
+        }
         
         if ($role instanceof IntervenantRole) {
 //            $this
@@ -68,17 +58,23 @@ class FinderIntervenantPermanentWithServiceReferentiel extends AbstractFinder
 //                    ->setParameter('intervenant', $context->getIntervenant());
         }
         elseif ($role instanceof DbRole) {
+            $or = $this->expr()->orX(
+                    "sr.structure       = :structureResp", 
+                    "stmp.structureNiv2 = :structureResp"
+            );
+            $condition = $this->expr()->andX($condition, $or);
             $this
-                    ->andWhere("sr.structure = :structureResp")
+                    ->leftJoin('i.serviceReferentiel', 'srtmp')
+                    ->leftJoin('srtmp.structure',      'stmp')
                     ->setParameter('structureResp', $role->getStructure());
         }
         
-        if (($annee = $context->getAnnee())) {
-            $this
-                    ->andWhere("sr.annee = :annee or sr.annee is null") // because left join
-                    ->setParameter('annee', $annee);
-        }
-        
+        $this
+                ->leftJoin('i.serviceReferentiel', 'sr', \Doctrine\ORM\Query\Expr\Join::WITH, $condition)
+                ->leftJoin('sr.fonction', 'fr')
+                ->leftJoin('sr.structure', 's')
+                ->orderBy('s.libelleCourt');
+
         return $this;
-    }   
+    }
 }

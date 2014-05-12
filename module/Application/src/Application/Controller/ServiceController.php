@@ -62,13 +62,13 @@ class ServiceController extends AbstractActionController
         if ('afficher' === $action){
             $services = $service->getList($qb);
 
-            /* Bertrand: services référentiels */
+            // services référentiels : délégation au contrôleur
             $controller       = 'Application\Controller\ServiceReferentiel';
             $params           = $this->getEvent()->getRouteMatch()->getParams();
             $params['action'] = 'voirListe';
+            $params['query']  = $this->params()->fromQuery();
             $listeViewModel   = $this->forward()->dispatch($controller, $params);
             $viewModel->addChild($listeViewModel, 'servicesRefListe');
-            /* */
         }else{
             $services = array();
         }

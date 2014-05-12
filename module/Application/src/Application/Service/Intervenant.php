@@ -2,10 +2,15 @@
 
 namespace Application\Service;
 
-use Doctrine\ORM\QueryBuilder;
+use Application\Acl\DbRole;
+use Application\Acl\IntervenantRole;
+use Application\Entity\Db\Finder\FinderIntervenantPermanentWithServiceReferentiel;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\IntervenantPermanent;
-use Application\Entity\Db\Finder\FinderIntervenantPermanentWithServiceReferentiel;
+use Common\Exception\DomainException;
+use Common\Exception\RuntimeException;
+use Doctrine\ORM\QueryBuilder;
+use Import\Processus\Import;
 
 /**
  * Description of Intervenant
@@ -18,7 +23,7 @@ class Intervenant extends AbstractEntityService
     
     /**
      * 
-     * @return \Application\Entity\Db\Finder\FinderIntervenantPermanentWithServiceReferentiel
+     * @return FinderIntervenantPermanentWithServiceReferentiel
      */
     public function getFinderIntervenantPermanentWithServiceReferentiel()
     {
@@ -30,24 +35,29 @@ class Intervenant extends AbstractEntityService
     /**
      * 
      * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return \Application\Service\Intervenant
-     * @throws \Common\Exception\DomainException
+     * @return Intervenant
+     * @throws DomainException
      */
     public function checkIntervenantForServiceReferentiel(IntervenantEntity $intervenant)
     {
-        // verif type d'intervenant
-        if (!$intervenant instanceof IntervenantPermanent) {
-            throw new \Common\Exception\DomainException(
-                    "La saisie de service référentiel n'est possible que pour les intervenants permanents.");
-        }
-        
         $context = $this->getContextProvider()->getGlobalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof \Application\Acl\DbRole) {
+        // verif type d'intervenant
+        if (!$intervenant instanceof IntervenantPermanent) {
+            $message = "$intervenant n'est pas un intervenant permanent. " . 
+                       "La saisie de service référentiel n'est possible que pour les intervenants permanents.";
+            if ($role instanceof IntervenantRole) {
+                $message = "Vous n'êtes pas intervenant permanent et " . 
+                           "ne pouvez donc pas saisir de service référentiel.";
+            }
+            throw new DomainException($message);
+        }
+        
+        if ($role instanceof DbRole) {
             if ($intervenant->getStructure() !== $role->getStructure() 
                     && $intervenant->getStructure()->getParenteNiv2() !== $role->getStructure()->getParenteNiv2()) {
-                throw new \Common\Exception\DomainException(
+                throw new DomainException(
                         sprintf("L'intervenant %s n'est pas affecté à votre structure de responsabilité (%s) ni à l'une de ses sous-structures.",
                                 $intervenant,
                                 $role->getStructure()));
@@ -94,7 +104,7 @@ class Intervenant extends AbstractEntityService
             throw new RuntimeException("L'intervenant spécifié a déjà été importé : sourceCode = $sourceCode.");
         }
         
-        $import = $this->getServiceLocator()->get('importProcessusImport'); /* @var $import \Import\Processus\Import */
+        $import = $this->getServiceLocator()->get('importProcessusImport'); /* @var $import Import */
         $import->intervenant($sourceCode);
 
         if (!($intervenant = $repo->findOneBySourceCode($sourceCode))) {

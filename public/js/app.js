@@ -232,7 +232,6 @@ function ServiceReferentiel( id ) {
     }
 
     this.onAfterDelete = function() {
-        console.log(this.id);
         $( "#service-ref-" + this.id + "-ligne" ).fadeOut().remove();
     }
 }

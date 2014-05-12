@@ -9,8 +9,6 @@ use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Form\Service\Saisie;
-use Application\Entity\Db\ServiceReferentiel;
 use Application\Exception\DbException;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Form\ServiceReferentiel\FonctionServiceReferentielFieldset;
@@ -92,6 +90,19 @@ class ServiceReferentielController extends AbstractActionController implements C
     {
         $service  = $this->getServiceServiceReferentiel();
         $criteria = array();
+        
+        // récupère l'éventuel intervenant sélectionné dans le formulaire de filtrage des services
+        $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+        $filters = $rechercheForm->hydrateFromSession();
+        if (isset($filters->intervenant) && $filters->intervenant) {
+            $criteria['intervenant'] = $filters->intervenant;
+        }
+        if (isset($filters->structureEns) && $filters->structureEns) {
+            $criteria['structure-ens'] = $filters->structureEns;
+        }
+        
+        $criteria = array_merge($criteria, $this->params()->fromQuery());
+        
 //        $criteria = array('structure' => $this->em()->find('Application\Entity\Db\Structure', 8474));
         $services = $service->getFinder($criteria)
                 ->orderBy("i.nomUsuel, s.libelleCourt")
@@ -172,6 +183,15 @@ class ServiceReferentielController extends AbstractActionController implements C
             $intervenant = $context->getIntervenant();
         }
         
+        if ($role instanceof \Application\Acl\DbRole) {
+            // récupère l'éventuel intervenant sélectionné dans le formulaire de filtrage des services
+            $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+            $filters = $rechercheForm->hydrateFromSession();
+            if (isset($filters->intervenant) && $filters->intervenant) {
+                $intervenant = $filters->intervenant;
+            }
+        }
+        
         return $intervenant;
     }
     
@@ -181,6 +201,7 @@ class ServiceReferentielController extends AbstractActionController implements C
      * 
      * @param \Application\Entity\Db\Intervenant $intervenant Intervenant pré-choisi
      * @return \Zend\Http\Response
+     * @see IntervenantController
      */
     protected function redirectToChoisirIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
@@ -211,6 +232,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         $context     = $this->getContextProvider()->getGlobalContext();
         $isAjax      = $this->getRequest()->isXmlHttpRequest();
         $intervenant = $this->getIntervenant($import);
+        $role        = $this->getContextProvider()->getSelectedIdentityRole();
         
         // si aucun intervenant spécifié, redirection vers le choix d'un intervenant (action qui redirigera ici une fois l'intervenant choisi)
         if (!$intervenant) {
@@ -223,25 +245,32 @@ class ServiceReferentielController extends AbstractActionController implements C
         }
         catch (\Common\Exception\DomainException $exc) {
             $message = $exc->getMessage();
-            $this->flashMessenger()->addErrorMessage($message);
-            
-            return $this->redirectToChoisirIntervenant($intervenant);
+            if ($role instanceof \Application\Acl\DbRole) {
+                $this->flashMessenger()->addErrorMessage($message);
+                return $this->redirectToChoisirIntervenant($intervenant);
+            }
+            throw new MessageException($message);
         }
         
         $this->em()->getFilters()->enable("historique");
-//        var_dump(get_class($intervenant));
         
         // fetch intervenant avec jointures
         $qb = $this->getServiceIntervenant()->getFinderIntervenantPermanentWithServiceReferentiel();
         $qb->setIntervenant($intervenant);
-        $intervenant = $qb->getQuery()->getOneOrNullResult();
-//                var_dump($qb->getQuery()->getDQL(), $qb->getQuery()->getParameters());
+        $intervenant = $qb->getQuery()->getOneOrNullResult(); /* @var $intervenant IntervenantPermanent */
+//        print_r($qb->getQuery()->getSQL());
+//        var_dump($qb->getQuery()->getParameters());
+        if (!$intervenant) {
+            
+        }
         
         $repoFonctionReferentiel = $this->em()->getRepository('Application\Entity\Db\FonctionReferentiel'); /* @var $repoFonctionReferentiel \Doctrine\ORM\EntityRepository */
         $repoElementPedagogique  = $this->em()->getRepository('Application\Entity\Db\ElementPedagogique');  /* @var $repoElementPedagogique \Application\Entity\Db\Repository\ElementPedagogiqueRepository */
 
         $annee = $context->getAnnee();
-
+        
+//        var_dump(get_class($intervenant), "".$annee, count($intervenant->getServiceReferentiel($annee)));
+        
         $structures = $repoElementPedagogique->finderDistinctStructures(array('niveau' => 2))->getQuery()->getResult();
         $fonctions  = $repoFonctionReferentiel->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
         FonctionServiceReferentielFieldset::setStructuresPossibles(new ArrayCollection($structures));

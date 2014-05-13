@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <!-- NB: repository-class ajouté manuellement sur <entity> -->
-  <entity name="Application\Entity\Db\ServiceReferentiel" table="SERVICE_REFERENTIEL" repository-class="Application\Entity\Db\Repository\ServiceReferentielRepository">
+  <entity name="Application\Entity\Db\ServiceReferentiel" table="SERVICE_REFERENTIEL">
     <indexes>
       <index name="IDX_42741E7DAA401F5C" columns="ANNEE_ID"/>
       <index name="IDX_42741E7D59860CDC" columns="HISTO_CREATEUR_ID"/>

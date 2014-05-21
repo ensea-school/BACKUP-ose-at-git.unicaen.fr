@@ -113,10 +113,11 @@ class IntervenantController extends AbstractActionController
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->intervenantGetDifferentiel($intervenant);
+        $title = "Détails d'un intervenant";
         $short = $this->params()->fromQuery('short', false);
 
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('intervenant', 'changements', 'short'));
+        $view->setVariables(compact('intervenant', 'changements', 'title', 'short'));
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         
         return $view;
@@ -130,10 +131,11 @@ class IntervenantController extends AbstractActionController
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->intervenantGetDifferentiel($intervenant);
+        $title = "Aperçu d'un intervenant";
         $short = $this->params()->fromQuery('short', false);
 
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('intervenant', 'changements', 'short'));
+        $view->setVariables(compact('intervenant', 'changements', 'title', 'short'));
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
         
         return $view;

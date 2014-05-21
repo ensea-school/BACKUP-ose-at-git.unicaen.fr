@@ -52,6 +52,35 @@ class FinderServiceReferentiel extends AbstractFinder
                     ->setParameter('annee', $annee);
         }
         
+        $this->applyLocalContext();
+        
+        return $this;
+    }
+    
+    /**
+     * Applique le contexte local (filtres).
+     * 
+     * @return self
+     */
+    public function applyLocalContext()
+    {
+        $filter = $this->getContextProvider()->getLocalContext();
+//        $filter->debug();
+        
+        if (($intervenant = $filter->getIntervenant())) {
+            $this
+                    ->andWhere("sr.intervenant = :intervenant")
+                    ->setParameter('intervenant', $intervenant);
+        }
+        if (($structureEns = $filter->getStructure())) {
+            $this
+                    ->andWhere("sr.structure = :structure")
+                    ->setParameter('structure', $structureEns);
+        }
+        if (($statutInterv = $filter->getStatutInterv()) && $statutInterv !== "Application\Entity\Db\IntervenantPermanent") {
+            $this->andWhere("0 = 1");
+        }
+        
         return $this;
     }
 }

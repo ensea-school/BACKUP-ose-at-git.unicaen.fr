@@ -36,8 +36,16 @@ class RechercheHydrator implements HydratorInterface, ServiceLocatorAwareInterfa
         $id = isset($data['structure-ens']) ? (int)$data['structure-ens'] : null;
         $object->structureEns = $id ? $em->find('Application\Entity\Db\Structure', $id) : null;
 
+        $id = isset($data['statut-interv']) ? $data['statut-interv'] : null;
+        $object->statutInterv = $id ?: null;
+
+        // l'intervenant provient d'un SearchAndSelect
+        if (isset($data['intervenant']['id'])) {
+            $data['intervenant'] = $data['intervenant']['id'];
+        }
         $id = isset($data['intervenant']) ? (int)$data['intervenant'] : null;
-        $object->intervenant = $id ? $em->find('Application\Entity\Db\Intervenant', $id) : null;
+        $object->intervenant = $id ? $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($id) : null;
+        
         return $object;
     }
 
@@ -54,6 +62,7 @@ class RechercheHydrator implements HydratorInterface, ServiceLocatorAwareInterfa
             'element-pedagogique' => isset($object->elementPedagogique) && $object->elementPedagogique ? $object->elementPedagogique->getId() : null,
             'etape' => isset($object->etape) && $object->etape ? $object->etape->getId() : null,
             'structure-ens' => isset($object->structureEns) && $object->structureEns ? $object->structureEns->getId() : null,
+            'statut-interv' => isset($object->statutInterv) && $object->statutInterv ? $object->statutInterv : null,
         );
         return $data;
     }

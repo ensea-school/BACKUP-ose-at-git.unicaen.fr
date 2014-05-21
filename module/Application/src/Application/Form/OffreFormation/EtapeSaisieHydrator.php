@@ -31,7 +31,9 @@ class EtapeSaisieHydrator implements HydratorInterface, ServiceLocatorAwareInter
             $object->setNiveau( $data['niveau'] );
         }
         $object->setSpecifiqueEchanges( $data['specifique-echanges'] );
-        $object->setStructure( $this->getServiceLocator()->get('ApplicationStructure')->get( $data['structure'] ) );
+        if (array_key_exists('structure', $data)) {
+            $object->setStructure( $this->getServiceLocator()->get('ApplicationStructure')->get( $data['structure'] ) );
+        }
         return $object;
     }
 

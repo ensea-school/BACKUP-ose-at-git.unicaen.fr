@@ -58,7 +58,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         $parts = array();
         
-        $parts['intervenant'] = '<td>' . $this->service->getIntervenant() . "</td>\n";
+        $parts['intervenant'] = '<td>' . $this->renderIntervenant($this->service->getIntervenant()) . "</td>\n";
         $parts[]              = '<td>' . $this->renderStructure($this->service->getStructure()) . "</td>\n";
         $parts['annee']       = '<td>' . $this->renderAnnee($this->service->getAnnee()) . "</td>\n";
         $parts[]              = '<td>' . $this->renderFonction($this->service->getFonction()) . "</td>\n";
@@ -90,6 +90,14 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         }
         
         return $this;
+    }
+
+    protected function renderIntervenant($intervenant)
+    {
+        $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getSourceCode()));
+        $out   = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
+        
+        return $out;
     }
 
     protected function renderStructure($structure)

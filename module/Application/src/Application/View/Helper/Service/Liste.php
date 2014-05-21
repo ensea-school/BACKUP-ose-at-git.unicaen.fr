@@ -54,7 +54,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
         $colspan = 4;
         $out = $this->renderShowHide();
-        $out .= '<table id="services" class="table service">';
+        $out .= '<table id="services" class="table table-bordered service">';
         $out .= '<tr>';
 
         if (!$role instanceof \Application\Acl\IntervenantRole) {
@@ -80,9 +80,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         }
         $out .= '</table>'."\n";
         $out .= $this->renderShowHide();
-
-        $url = $this->getView()->url('service/default', array('action' => 'saisie'));
-        $out .= '<br /><a class="ajax-modal services btn btn-default" data-event="service-add-message" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
+//
+//        $url = $this->getView()->url('service/default', array('action' => 'saisie'));
+//        $out .= '<br /><a class="ajax-modal services btn btn-default" data-event="service-add-message" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
         $out .= '<script type="text/javascript">';
         $out .= '$(function() { Service.init("'.$this->getView()->url('service/default', array('action' => 'voirLigne') ).'"); });';
         $out .= '</script>';

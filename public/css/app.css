@@ -32,6 +32,10 @@ span.element-rech.periode {
  * Autre
  */
 
+h1.page-header { 
+    margin-top: 10px;
+}
+
 /* Autocomplete jQuery */
 .ui-autocomplete {
     max-height: 300px;

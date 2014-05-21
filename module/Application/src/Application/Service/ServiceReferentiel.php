@@ -11,10 +11,8 @@ use Application\Entity\Db\Finder\FinderServiceReferentiel;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentiel extends AbstractService implements ContextProviderAwareInterface
+class ServiceReferentiel extends AbstractService
 {
-    use ContextProviderAwareTrait;
-
     /**
      * Supprime (historise par défaut) le service spécifié.
      *
@@ -39,41 +37,18 @@ class ServiceReferentiel extends AbstractService implements ContextProviderAware
     /**
      * Retourne le requêteur des services référentiels contraint par les critères spécifiés.
      *
-     * @param array $criteria
+     * @param array $filter
      * @return FinderServiceReferentiel
      */
-    public function getFinder(array $criteria = array())
+    public function getFinder(array $filter = array())
     {
-        $qb = new FinderServiceReferentiel($this->getEntityManager(), $this->getContextProvider());
-        
-        // application des critères locaux (filtrage par ex)
-        $this->applyLocalContext($qb, $criteria);
+        $qb = new FinderServiceReferentiel(
+                $this->getEntityManager(), 
+                $this->getContextProvider(),
+                $filter);
 
         return $qb;
     } 
-    
-    /**
-     * Applique le contexte local (filtres).
-     * 
-     * @param QueryBuilder $qb
-     * @param array $criteria
-     * @return self
-     */
-    public function applyLocalContext(QueryBuilder $qb, array $criteria = array())
-    {
-        if (!empty($criteria['intervenant'])) {
-            $qb->andWhere("sr.intervenant = :intervenant")->setParameter('intervenant', $criteria['intervenant']);
-        }
-        if (!empty($criteria['structure-ens'])) {
-            $qb->andWhere("sr.structure = :structure")->setParameter('structure', $criteria['structure-ens']);
-        }
-        
-        return $this;
-    }
-    
-    
-    
-    
     
     
     

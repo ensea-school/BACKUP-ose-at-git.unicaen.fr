@@ -1,37 +1,52 @@
-<div class="jumbotron">
-    <h1>Services <small>Année universitaire <?php echo $annee; ?></small></h1>
-</div>
+<h1 class="page-header">Services <small>Année universitaire <?php echo $annee; ?></small></h1>
 
 <style>
-    .modal-dialog { width: 60%; }
-
-    div.row{
+    .modal-dialog { 
+        width: 70%;
+    }
+    div.row {
         padding:1px;
     }
 </style>
 
+<?php if ($role instanceof \Application\Acl\DbRole): ?>
+<?php echo $this->messenger()->setMessages(array('warning' => "Sont visibles ici les référentiels et les services prévisionnels des intervenants affectés "
+        . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures.")); ?>
+<?php endif; ?>
+
 <?php if (! $role instanceof \Application\Acl\IntervenantRole): ?>
 <div id="filtres" data-url="<?php echo $this->url('service/default', array('action'=>'filtres')) ?>">
-<?php echo $this->filtresListe; ?>
+    <?php echo $this->filtresListe; ?>
 </div>
 <?php endif; ?>
+
 <?php if ('afficher' === $action ): ?>
-<h2>Services référentiels</h2>
+
+<?php if (!$role instanceof \Application\Acl\IntervenantExterieurRole): ?>
+<h2>Référentiel
+    <?php 
+    $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir'));
+    ?>
+    <a class="ajax-modal services-ref btn btn-default pull-right" data-event="service-ref-add-message" href="<?php echo $urlSaisir ?>" title="Ajouter un service référentiel"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
+</h2>
 <?php echo $this->servicesRefListe; ?>
-
 <hr />
+<?php endif; ?>
 
-<h2>Services prévisionnels</h2>
+<h2>Service prévisionnel 
+    <?php
+    $url = $this->url('service/default', array('action' => 'saisie'));
+    ?>
+    <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
+</h2>
 
 <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
-<div class="alert alert-info">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    Les heures à saisir ci-dessous sont les heures réellement effectuées et non les heures payables.
-</div>
+<?php echo $this->messenger()->setMessage("Les heures à saisir ci-dessous sont les heures réellement effectuées et non les heures payables."); ?>
 <?php endif; ?>
 
 <?php echo $this->serviceListe( $services )->render(); ?>
 
 <?php else:?>
 <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
+
 <?php endif; ?>

@@ -1,14 +1,30 @@
 <?php
-$structuresOptions = array('' => "(Sélectionnez une structure)") + \UnicaenApp\Util::collectionAsOptions($structures);
-$niveauxOptions    = $niveaux;
-$etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
-
+$structuresOptions = array('' => "(Sélectionnez...)") + \UnicaenApp\Util::collectionAsOptions($structures);
+$niveauxOptions    = \UnicaenApp\Util::collectionAsOptions($niveaux);
+$etapesOptions     = \UnicaenApp\Util::collectionAsOptions(
+        $etapes, 
+        false, 
+        function($e) { return sprintf("%s (%s EP)", $e, count($e->getElementPedagogique())); /* @var $e \Application\Entity\Db\Etape */ }
+);
+$etapesOrphelinesOptions = \UnicaenApp\Util::collectionAsOptions(
+        $etapesOrphelines, 
+        false, 
+        function($e) { return sprintf("%s (%s EP)", $e, count($e->getElementPedagogique())); /* @var $e \Application\Entity\Db\Etape */ }
+);
+$mc = $this->navigation('navigation')->menuContextuel(); /* @var $mc \UnicaenApp\View\Helper\Navigation\MenuContextuel */
+$mc->setUlClass('navigation navigation-etape pull-right');
 ?>
 
-<div class="jumbotron">
-    <h1>Offre de formation <?php echo $structure ? '<small>' . $structuresOptions[$structure] . '</small>' : null ?></h1>
-    <!--<p>L'offre de formation est constituée de ses éléments constitutifs les plus précis, correspondant aux cours TD et TP.</p>-->
-</div>
+<style>
+    ul.navigation-etape { padding: 0 0 3px 5px; }
+    ul.navigation-etape li { list-style: none; display: inline; }
+    /*th.action, td.action { min-width: 70px; }*/
+    div.element-rech div.panel-body label,
+    div.element-rech div.panel-body input { display: inline; }
+    div.element-rech div.panel-body input.form-control { width: 75% }
+</style>
+
+<h1 class="page-header">Offre de formation <?php echo $structure ? '<small>' . $structure . '</small>' : null ?></h1>
 
 <div class="row">
     
@@ -22,7 +38,7 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
                 $selectStructure = new \Zend\Form\Element\Select('structure');
                 $selectStructure
                         ->setValueOptions($structuresOptions)
-                        ->setValue($structure)
+                        ->setValue($structure ? $structure->getId() : null)
                         ->setAttributes(array('class' => 'struct'));
                 echo $this->formSelect($selectStructure);
                 ?>
@@ -31,100 +47,157 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
                         $("*").css('cursor', 'wait');
                         var id = $(this).val();
                         var url = '<?php echo $this->url('of', 
-                                 array('action' => 'of'), 
+                                 array(), 
                                  array('query' => array(
-                                     'structure' => '__structure__', 
-                                     /*'niveau' => $niveau, 
-                                     'etape' => $etape*/))) ?>';
+                                     'structure' => '__structure__'))) ?>';
                         $(location).attr('href', url.replace('__structure__', id));
                     });
                 </script>
             </div>
         </div>
 
-        <!---------------- Champ de sélection d'un niveau --------------->
+        <!---------------- Filtre niveau --------------->
         <div class="panel panel-default">
             <div class="panel-heading">Niveau</div>
             <div class="panel-body">
-                <?php
-                $niveauxOptions = array_combine(
-                        $tmp = array_map(function($v) { return $v['libelleCourt'] . $v['niveau']; }, $niveaux), 
-                        $tmp); 
-                ?>
-                <ul>
-                    <li>
-                    <?php if (null !== $niveau): ?> 
-                         <a class="niveau" href="<?php echo $this->url('of', 
-                                 array('action' => 'of'), 
-                                 array('query' => array(
-                                     'structure' => $structure, 
-                                     'niveau' => null,
-                                     /*'etape' => $etape*/))) ?>">Tous</a>
-                    <?php else: ?>
-                        <strong>Tous</strong>
-                    <?php endif; ?>
-                    </li>
-                    <?php foreach ($niveauxOptions as $code => $lib): ?>
-                    <li>
-                    <?php if ($code != $niveau): ?> 
-                         <a class="niveau" href="<?php echo $this->url('of', 
-                                 array('action' => 'of'), 
-                                 array('query' => array(
-                                     'structure' => $structure, 
-                                     'niveau' => $code, 
-                                     /*'etape' => $etape*/))) ?>"><?php echo $lib ?></a>
-                    <?php else: ?>
-                        <strong><?php echo $lib ?></strong>
-                    <?php endif; ?>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-                <script>
-                    $("body").on("click", "a.niveau", function(event) {
-                        $("*").css('cursor', 'wait');
-                    });
-                </script>
+                Cliquez sur le niveau dont vous voulez voir les étapes et éléments pédagogiques...
             </div>
+            <?php if (count($niveauxOptions)): ?>
+            <ul class="list-group">
+                <?php if (null !== $niveau): ?> 
+                     <li class="list-group-item">
+                         <a class="niveau" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null, 
+                                    'niveau' => null))) ?>">Tous niveaux confondus</a>
+                     </li>
+                <?php else: ?>
+                     <li class="list-group-item active"><strong>Tous niveaux confondus</strong></li>
+                <?php endif; ?>
+                
+                <?php foreach ($niveauxOptions as $code => $lib): ?>
+                <?php if ($code != $niveau): ?> 
+                     <li class="list-group-item">
+                         <a class="niveau" title="Cliquez pour afficher les étapes et les éléments pédagogiques de ce niveau" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null, 
+                                    'niveau' => $code))) ?>"><?php echo $lib ?></a>
+                     </li>
+                <?php else: ?>
+                     <li class="list-group-item active"><strong><?php echo $lib ?></strong></li>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+            <?php endif; ?>
+            <script>
+                $("body").on("click", "a.niveau", function(event) {
+                    $("*").css('cursor', 'wait');
+                });
+            </script>
         </div>
 
-        <!---------------- Champ de sélection d'une étape --------------->
+        <!---------------- Filtre étape --------------->
         <div class="panel panel-default">
-            <div class="panel-heading">Étape</div>
-            <div class="panel-body">
-                <ul>
-                    <li>
-                    <?php if (null !== $etape): ?> 
-                         <a class="etape" href="<?php echo $this->url('of', 
-                                 array('action' => 'of'), 
-                                 array('query' => array(
-                                     'structure' => $structure, 
-                                     'niveau' => $niveau, 
-                                     'etape' => null))) ?>">Toutes</a>
-                    <?php else: ?>
-                        <strong>Toutes</strong>
-                    <?php endif; ?>
-                    </li>
-                    <?php foreach ($etapesOptions as $code => $lib): ?>
-                    <li>
-                    <?php if ($code != $etape): ?> 
-                         <a class="etape" href="<?php echo $this->url('of', 
-                                 array('action' => 'of'), 
-                                 array('query' => array(
-                                     'structure' => $structure,
-                                     'niveau' => $niveau, 
-                                     'etape' => $code))) ?>"><?php echo $lib ?></a>
-                    <?php else: ?>
-                        <strong><?php echo $lib ?></strong>
-                    <?php endif; ?>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-                <script>
-                    $("body").on("click", "a.etape", function(event) {
-                        $("*").css('cursor', 'wait');
-                    });
-                </script>
+            <div class="panel-heading">
+                Étape
+                <!--------------- Bouton d'ajout d'étape --------------->
+                <?php if (null !== $entities): ?>
+                <?php if ($serviceEtape->canAdd()): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                <?php echo $mc
+                        ->withoutTarget()
+                        ->addParam('structure', $structure ? $structure->getId() : null)
+                        ->withProp('category', 'etape')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+                <?php endif; ?>
             </div>
+            <div class="panel-body">
+                Cliquez sur l'étape dont vous voulez voir les éléments pédagogiques...
+            </div>
+            
+            <?php if (count($etapesOptions)): ?>
+            <ul class="list-group">
+                <?php if (null !== $etape): ?> 
+                    <li class="list-group-item">
+                        <a class="etape" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null, 
+                                    'niveau' => $niveau, 
+                                    'etape' => null))) ?>">Toutes étapes confondues</a>
+                    </li>
+                <?php else: ?>
+                    <li class="list-group-item active"><strong>Toutes étapes confondues</strong></li>
+                <?php endif; ?>
+                </li>
+                
+                <!-- Etapes sans EP -->
+                <?php foreach ($etapesOrphelinesOptions as $code => $lib): ?>
+                <!--------------- Boutons de modif d'étape --------------->
+                <?php $actions = null; ?>
+                <?php if ($serviceEtape->canSave($code)): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                <?php $actions = (string) $mc
+                        ->withTarget($code)
+                        ->withProp('category', 'etape')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+                <?php if (!$etape || $code != $etape->getId()): ?> 
+                     <li class="list-group-item">
+                         <?php echo $actions ?>
+                         <a class="etape text-danger" title="Cliquez pour afficher les éléments pédagogiques de cette étape" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null,
+                                    'niveau' => $niveau, 
+                                    'etape' => $code))) ?>"><?php echo $lib ?></a>
+                     </li>
+                <?php else: ?>
+                    <li class="list-group-item active">
+                        <?php echo $actions ?>
+                        <strong><?php echo $lib ?></strong>
+                    </li>
+                <?php endif; ?>
+                <?php endforeach; ?>
+                
+                <!-- Etapes avec EP -->
+                <?php foreach ($etapesOptions as $code => $lib): ?>
+                <!--------------- Boutons de modif d'étape --------------->
+                <?php $actions = null; ?>
+                <?php if ($serviceEtape->canSave($code)): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                <?php $actions = (string) $mc
+                        ->withTarget($code)
+                        ->addParam('structure', $structure ? $structure->getId() : null)
+                        ->withProp('category', 'etape')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+                <?php if (!$etape || $code != $etape->getId()): ?> 
+                     <li class="list-group-item">
+                         <?php echo $actions ?>
+                         <a class="etape" title="Cliquez pour afficher les éléments pédagogiques de cette étape" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null,
+                                    'niveau' => $niveau, 
+                                    'etape' => $code))) ?>"><?php echo $lib ?></a>
+                     </li>
+                <?php else: ?>
+                    <li class="list-group-item active">
+                         <?php echo $actions ?>
+                        <strong><?php echo $lib ?></strong>
+                    </li>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+            <?php endif; ?>
+
+            <script>
+                $("body").on("click", "a.etape", function(event) {
+                    $("*").css('cursor', 'wait');
+                });
+            </script>
+            
         </div>
         
     </div>
@@ -138,77 +211,108 @@ $etapesOptions     = \UnicaenApp\Util::collectionAsOptions($etapes);
         <?php else: ?>
         
         <!---------------- Champ de recherche d'un élément pédagogique --------------->
-        <div class="panel panel-default">
-            <div class="panel-heading">Élément</div>
-            <div class="panel-body">
-                <?php echo $this->form()->openTag($form) ?> 
-                <?php echo $this->formControlGroup($form->get('element')); ?>
-                <input id="filter" class="btn btn-primary" type="submit" value="Y aller..." name="submit" />
-                <?php echo $this->form()->closeTag() ?> 
+        <div class="element-rech panel panel-default">
+            <div class="panel-heading">
+                <?php $compl = $etape ? "de l'étape <strong>$etape</strong>" : "toutes étapes confondues"; ?>
+                Éléments pédagogiques <?php echo $compl ?> 
+                <!--------------- Bouton d'ajout d'élément pédagogique --------------->
+                <?php if ($etape): ?>
+                    <?php echo $mc
+                            ->withoutTarget()
+                            ->withProp('category', 'element')
+                            ->addParam('etape', $etape->getId())
+                            ->addParam('etape', $etape->getId())
+                            ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
             </div>
-            <script>
-                $("body").on("submit", "form.element-rech", function(event) {
-                    var form = $(event.target);
-                    var id = $("input.sas", form).val();
-                    if (id && $("#" + id).offset()) {
-                        $('html, body').animate({
-                            scrollTop: $("#" + id).offset().top - $(window).height() / 2
-                        }, 500, 'swing', function() { $("#" + id).effect("highlight"); });
-                    }
-                    event.preventDefault();
-                });
-            </script>
+            <div class="panel-body">
+                <p>
+                    <?php echo $this->form()->openTag($form) ?> 
+                    <label class="control-label"><?php echo $form->get('element')->getLabel() ?></label>
+                    <?php echo $this->formSearchAndSelect($form->get('element')); ?>
+                    <input id="filter" class="btn btn-primary element-rech-submit" type="submit" value="Y aller..." name="submit" />
+                    <?php echo $this->form()->closeTag() ?> 
+                </p>
+                <script>
+                    $("body").on("submit", "form.element-rech", function(event) {
+                        var form = $(event.target);
+                        var id = $("input.sas", form).val();
+                        if (id && $("#" + id).offset()) {
+                            $('html, body').animate({
+                                scrollTop: $("#" + id).offset().top - $(window).height() / 2
+                            }, 500, 'swing', function() { $("#" + id).effect("highlight"); });
+                        }
+                        event.preventDefault();
+                    });
+                </script>
+                
+                <p><?php echo count($entities) ?> élément(s) pédagogique(s) trouvé(s).</p>
+                
+            </div>
+                
+            <!---------------- Tableau des éléments pédagogiques --------------->
+            <table class="table table-bordered table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="3">Étape</th>
+                        <th colspan="2">Élément pédagogique</th>
+                        <th class="action" rowspan="2"></th>
+                    </tr>
+                    <tr>
+                        <th>Niveau</th>
+                        <th>Libellé</th>
+                        <th>Période</th>
+                        <th>Code</th>
+                        <th>Libellé</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($entities as $ep): /* @var $ep \Application\Entity\Db\ElementPedagogique */ ?>
+                    <tr id="<?php echo $ep->getId() ?>">
+                        <td><?php echo $ep->getEtape()->getNiveauToString() ?></td>
+                        <?php
+                        $etapeEp  = $ep->getEtape();
+                        $urlEtape = $this->url('of/etape/apercevoir', array('id' => $etapeEp->getId()));
+                        $urlElem  = $this->url('of/element/apercevoir', array('id' => $ep->getId()));
+                        ?>
+                        <td class="etape">
+                            <a class="ajax-modal" title="Cliquez pour voir le détail de cette étape" 
+                               href="<?php echo $urlEtape ?>"><?php echo $etapeEp ?></a>
+                        </td>
+                        <td class="periode"><?php echo $ep->getPeriode() ?: '-' ?></td>
+                        <td class="element"><?php echo $ep->getSourceCode() ?></td>
+                        <td class="element">
+                            <a class="ajax-modal" title="Cliquez pour voir le détail de cet élément" 
+                               href="<?php echo $urlElem ?>"><?php echo $ep->getLibelle() ?></a>
+                        </td>
+                        <td class="action">
+                            <!--------------- Boutons de modif d'élément --------------->
+                            <?php if ($etape): ?>
+                            <?php if ($serviceEtape->canSave($etape)): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                            <?php echo $mc
+                                    ->withTarget($ep)
+                                    ->withProp('category', 'element')
+                                    ->addParam('etape', $etapeEp->getId())
+                                    ->addProp('class', 'btn btn-default btn-xs iconify ajax-modal'); ?>
+                            <?php endif; ?>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            
         </div>
         
-        <p><?php echo count($entities) ?> éléments trouvés.</p>
-        
-        <!---------------- Tableau des éléments pédagogiques --------------->
-        <table class="table table-bordered table-condensed table-hover">
-            <thead>
-                <tr>
-                    <th>Niveau</th>
-                    <th>Étape</th>
-                    <th>Période</th>
-                    <th>Code élément</th>
-                    <th>Libellé élément</th>
-                    <th class="action"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($entities as $entity): /* @var $entity \Application\Entity\Db\ElementPedagogique */ ?>
-                <tr id="<?php echo $entity->getId() ?>">
-                    <td class=""   ><?php echo $entity->getEtape()->getNiveauToString() ?></td>
-                    <?php
-                    $etape = $entity->getEtape();
-                    if ($serviceEtape->canSave($etape)){
-                        $link = '<a href="'.$this->url('of/etape/saisie', array('id' => $etape->getId())).'">';
-                    }else{
-                        $link = '<a class="ajax-modal" href="'.$this->url('of/etape/apercevoir', array('id' => $etape->getId())).'">';
-                    }
-
-                    ?>
-                    <td class="etape"><?php echo $link ?><?php echo $etape ?></a></td>
-                    <td class="periode"><?php echo $entity->getPeriode() ?></td>
-                    <td class="element"><?php echo $entity->getSourceCode() ?></td>
-                    <td class="element"><?php echo $entity->getLibelle() ?></td>
-                    <td class="action">
-                        <?php $url = $this->url('of/default', 
-                                array('action' => 'voir-element'), 
-                                array('query' => array('id' => $entity->getId()))) ?>
-                        <a class="ajax-modal" title="Voir le détails de cet élément" 
-                           href="<?php echo $url ?>"><span class="glyphicon glyphicon-eye-open"></span></a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-
-        <!--------------- Boutons d'ajout d'ODF --------------->
-        <?php if ($serviceEtape->canAdd()): ?>
-        <a class="btn btn-default" href="<?php echo $this->url('of/etape/saisie') ?>">Ajout d'une nouvelle étape</a>
-        <?php endif; ?>
         <?php endif; ?>
 
     </div>
 
 </div>
+
+<script type="text/javascript">
+    $(function() { 
+        Etape.init("<?php echo $this->url('of/default', array('action' => 'voirLigne')) ?>"); 
+        ElementPedagogique.init("<?php echo $this->url('of/default', array('action' => 'voirLigne')) ?>"); 
+    });
+</script>

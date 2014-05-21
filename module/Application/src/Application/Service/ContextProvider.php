@@ -24,6 +24,11 @@ class ContextProvider extends AbstractService
     protected $globalContext;
     
     /**
+     * @var LocalContext
+     */
+    protected $localContext;
+    
+    /**
      * Retourne le contexte global.
      * 
      * @return GlobalContext
@@ -41,7 +46,7 @@ class ContextProvider extends AbstractService
 
             if (null === $intervenant) {
                 $ldapUser = $authUserContext->getLdapUser();
-                $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer($ldapUser->getSupannEmpId());
+                $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer((int) $ldapUser->getSupannEmpId());
             }
             
             $this->globalContext = new GlobalContext();
@@ -54,6 +59,20 @@ class ContextProvider extends AbstractService
         }
         
         return $this->globalContext;
+    }
+    
+    /**
+     * Retourne le contexte local (filtres, etc.)
+     * 
+     * @return LocalContext
+     */
+    public function getLocalContext()
+    {
+        if (null === $this->localContext) {
+            $this->localContext = new LocalContext($this->getEntityManager());
+        }
+        
+        return $this->localContext;
     }
     
     /**

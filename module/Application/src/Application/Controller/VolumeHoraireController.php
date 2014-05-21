@@ -66,7 +66,7 @@ class VolumeHoraireController extends AbstractActionController
             $entity->setTypeIntervention( $this->context()->typeInterventionFromQueryPost() );
         }
 
-        $form = new Saisie( $this->getServiceLocator() );
+        $form = $this->getForm();
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
 
         $request = $this->getRequest();
@@ -107,5 +107,15 @@ class VolumeHoraireController extends AbstractActionController
             return $this->popoverInnerViewModel($viewModel, "Saisie d'heures de service", false);
         }
         return $viewModel;
+    }
+
+    /**
+     * Retourne le formulaire de modif de Volume Horaire.
+     * 
+     * @return \Application\Form\VolumeHoraire\Saisie
+     */
+    protected function getForm()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('VolumeHoraireSaisie');
     }
 }

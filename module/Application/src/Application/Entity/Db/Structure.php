@@ -563,4 +563,15 @@ class Structure implements HistoriqueAwareInterface
     {
         return $this->getSource()->getLibelle();
     }
+
+    /**
+     * Teste si cette structure est une structure fille de la structure de niveau 2 spécifiée.
+     *
+     * @param \Application\Entity\Db\Structure $structureDeNiv2 
+     * @return bool 
+     */
+    public function estFilleDeLaStructureDeNiv2(\Application\Entity\Db\Structure $structureDeNiv2)
+    {
+        return $this->getParenteNiv2()->getId() === $structureDeNiv2->getId();
+    }
 }

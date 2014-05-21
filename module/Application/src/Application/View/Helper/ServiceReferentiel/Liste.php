@@ -53,7 +53,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function render($details = false)
     {
-        $urlSaisir    = $this->getView()->url('service-ref/default', array('action' => 'saisir'));
+//        $urlSaisir    = $this->getView()->url('service-ref/default', array('action' => 'saisir'));
         $urlVoirListe = $this->getView()->url('service-ref/default', array('action' => 'voirListe'));
         $parts        = array();
         
@@ -75,7 +75,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         
         $parts[] = '</table>';
 
-        $parts[] = '<a class="ajax-modal services-ref btn btn-default" data-event="service-ref-add-message" href="' . $urlSaisir . '" title="Ajouter un service référentiel"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
+//        $parts[] = '<a class="ajax-modal services-ref btn btn-default" data-event="service-ref-add-message" href="' . $urlSaisir . '" title="Ajouter un service référentiel"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
         
         $parts[] = '<script type="text/javascript">';
         $parts[] = '$(function() { ServiceReferentiel.init("' . $urlVoirListe . '"); });';

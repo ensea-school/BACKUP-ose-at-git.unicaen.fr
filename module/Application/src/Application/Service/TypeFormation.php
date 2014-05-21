@@ -31,6 +31,18 @@ class TypeFormation extends AbstractEntityService
     public function getAlias(){
         return 'typefor';
     }
+    
+    public function finderByNiveau(\Application\Entity\NiveauEtape $niveau, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        $qb
+                ->join("$alias.groupe", "gtf")
+                ->andWhere("gtf.libelleCourt = :lib")
+                ->setParameter('lib', $niveau->getLib());
+        
+        return $qb;
+    }
 
     /**
      * Retourne la liste des types de formation

@@ -76,7 +76,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
      * @return string
      */
     public function render(){
-        $out = '<table class="table volume-horaire">';
+        $out = '<table class="table table-condensed volume-horaire">';
         $out .= '<tr>';
         $out .= "<th style=\"width:10%\">Période</th>\n";
         foreach( $this->typesIntervention as $ti ){

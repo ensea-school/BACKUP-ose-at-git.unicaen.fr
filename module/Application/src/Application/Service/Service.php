@@ -14,8 +14,6 @@ use Application\Entity\Db\Structure as StructureEntity;
  */
 class Service extends AbstractEntityService
 {
-    use ContextProviderAwareTrait;
-
     /**
      * retourne la classe des entités
      *
@@ -97,8 +95,8 @@ class Service extends AbstractEntityService
      */
     public function finderByContext( QueryBuilder $qb=null, $alias=null )
     {
-        $context = $this->getServiceLocator()->get('ApplicationContextProvider')->getGlobalContext();
-        $role    = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
         
@@ -112,6 +110,25 @@ class Service extends AbstractEntityService
             $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
         }
         
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services selon l'étape donnée
+     *
+     * @param string $statutInterv "Application\Entity\Db\IntervenantPermanent" ou "Application\Entity\Db\IntervenantExterieur"
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByStatutInterv($statutInterv, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if (!in_array((string)$statutInterv, array("Application\Entity\Db\IntervenantPermanent", "Application\Entity\Db\IntervenantExterieur"))) {
+            return $qb;
+        }
+        $qb
+                ->join("$alias.intervenant", 'i2')
+                ->andWhere("i2 INSTANCE OF $statutInterv");
         return $qb;
     }
 

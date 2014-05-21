@@ -129,14 +129,14 @@ return array(
                             'action' => 'index',
                         ),
                         'pages' => array(
-                            'consultation' => array(
-                                'label'  => "Consultation",
-                                'title'  => "Consultation des services",
-                                'route'  => 'service',
-                                'visible' => true,
-                                'withtarget' => true,
-                                'pages' => array(),
-                            ),
+//                            'consultation' => array(
+//                                'label'  => "Consultation",
+//                                'title'  => "Consultation des services",
+//                                'route'  => 'service',
+//                                'visible' => true,
+//                                'withtarget' => true,
+//                                'pages' => array(),
+//                            ),
                         ),
                     ),
                 ),
@@ -164,13 +164,13 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'ApplicationService'            => 'Application\\Service\\Service',
+            'ApplicationServiceReferentiel' => 'Application\\Service\\ServiceReferentiel',
             'ApplicationServiceValidation'  => 'Application\\Service\\ServiceValidation',
             'ApplicationPeriode'            => 'Application\\Service\\Periode',
             'ApplicationMotifNonPaiement'   => 'Application\\Service\\MotifNonPaiement',
             'FormServiceRechercheHydrator'  => 'Application\Form\Service\RechercheHydrator',
         ),
         'factories' => array(
-            'ApplicationServiceReferentiel' => 'Application\\Service\\ServiceReferentielFactory',
         ),
     ),
     'form_elements' => array(

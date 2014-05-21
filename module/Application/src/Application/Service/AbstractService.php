@@ -16,10 +16,11 @@ use BjyAuthorize\Exception\UnAuthorizedException;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwareInterface
+class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwareInterface, ContextProviderAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;
+    use ContextProviderAwareTrait;
 
     /**
      * Retourne le gestionnaire d'entités Doctrine
@@ -44,8 +45,13 @@ class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwar
      */
     public function cannotDoThat($why, $runEx=false)
     {
-        if ($runEx){
-            throw new UnAuthorizedException($why);
+        if ($runEx) {
+            /**
+             * @todo: pb avec UnAuthorizedException : le code 403 est interprêté en AJAX comme une fin de session 
+             * (cf. unicaen.js)
+             */
+//            throw new UnAuthorizedException($why);
+            throw new \Common\Exception\MessageException($why);
         }
         return false;
     }

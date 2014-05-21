@@ -149,6 +149,9 @@ $main =  array(
             'ApplicationRoleProvider'     => 'Application\Provider\Role\RoleProviderFactory',
             'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
         ),
+        'initializers' => array(
+            'Application\Service\ContextProviderAwareInitializer',
+        ),
     ),
     'view_helpers' => array(
         'invokables' => array(

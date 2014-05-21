@@ -2,8 +2,12 @@
 
 namespace Application\Controller\Plugin;
 
+use Zend\Mvc\Controller\Plugin\Params;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Session\Container;
+use Application\Service\LocalContext;
+use Application\Service\GlobalContext;
 use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
 
@@ -19,9 +23,9 @@ use Common\Exception\RuntimeException;
  * @method mixed *FromQueryPost($name = null, $default = null) Description
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
- * @see \Zend\Mvc\Controller\Plugin\Params
+ * @see Params
  */
-class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocatorAwareInterface
+class Context extends Params implements ServiceLocatorAwareInterface
 {
     /**
      * @var ServiceLocatorInterface
@@ -34,12 +38,17 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
     protected $mandatory = false;
     
     /**
-     * @var \Application\Service\Context
+     * @var GlobalContext
      */
-    protected $context;
+    protected $globalContext;
     
     /**
-     * @var \Zend\Session\Container
+     * @var LocalContext
+     */
+    protected $localContext;
+    
+    /**
+     * @var Container
      */
     protected $sessionContainer;
     
@@ -61,8 +70,8 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
      * 1 : $argDefault : Valeur de retour par défaut
      * 2 : $argSources : Utile dans certains cas seulement : liste des sources où rechercher (post, query, context, etc.)
      *
-     * @param type $name
-     * @param type $arguments
+     * @param string $name
+     * @param array $arguments
      * @throws LogicException
      */
     public function __call($name, $arguments)
@@ -82,7 +91,9 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
                 break;
             case ($method = 'FromSession') === substr($name, $length = -11):
                 break;
-            case ($method = 'FromContext') === substr($name, $length = -11):
+            case ($method = 'FromGlobalContext') === substr($name, $length = -17):
+                break;
+            case ($method = 'FromLocalContext') === substr($name, $length = -16):
                 break;
             case ($method = 'FromSources') === substr($name, $length = -11):
                 break;
@@ -108,7 +119,7 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
         if (! $argName) $argName = $target;
 
         /* Récupération de la valeur */
-        if ('fromSources' === $method){
+        if ('FromSources' === $method){
             $value = $this->fromSources($argName, $argDefault, $argSources);
         }else{
             $value = call_user_func_array(array($this, lcfirst($method)), array($argName,$argDefault));
@@ -150,7 +161,8 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
             if (!is_object($value) && ! is_array($value)){
                 $id = (int)$value;
                 if ($id){
-                    if (!($value = $em->find($className, $id))) {
+                    $value = $em->find($className, $id);
+                    if (!$value && $this->mandatory) {
                         throw new RuntimeException($className." introuvable avec cet id : $id.");
                     }
                 }else{
@@ -203,13 +215,32 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
     }
     
     /**
+     * Return a single local context parameter.
+     *
+     * @param  string $name Parameter name to retrieve.
+     * @param  mixed $default Default value to use when the requested parameter is not set.
+     * @return mixed
+     */
+    public function fromLocalContext($name, $default = null)
+    {
+        try {
+            $value = $this->getLocalContext()->get($name);
+        }
+        catch (LogicException $exc) {
+            $value = $default;
+        }
+
+        return $value;
+    }
+    
+    /**
      * Return a single global context parameter.
      *
      * @param  string $name Parameter name to retrieve.
      * @param  mixed $default Default value to use when the requested parameter is not set.
      * @return mixed
      */
-    public function fromContext($name, $default = null)
+    public function fromGlobalContext($name, $default = null)
     {
         try {
             $value = $this->getGlobalContext()->get($name);
@@ -222,23 +253,34 @@ class Context extends \Zend\Mvc\Controller\Plugin\Params implements ServiceLocat
     }
     
     /**
-     * @return \Application\Service\GlobalContext
+     * @return GlobalContext
      */
     public function getGlobalContext()
     {
-        if (null === $this->context) {
-            $this->context = $this->sl->get('ApplicationContextProvider')->getGlobalContext();
+        if (null === $this->globalContext) {
+            $this->globalContext = $this->sl->get('ApplicationContextProvider')->getGlobalContext();
         }
-        return $this->context;
+        return $this->globalContext;
     }
     
     /**
-     * @return \Zend\Session\Container
+     * @return LocalContext
+     */
+    public function getLocalContext()
+    {
+        if (null === $this->localContext) {
+            $this->localContext = $this->sl->get('ApplicationContextProvider')->getLocalContext();
+        }
+        return $this->localContext;
+    }
+    
+    /**
+     * @return Container
      */
     protected function getSessionContainer()
     {
         if (null === $this->sessionContainer) {
-            $this->sessionContainer = new \Zend\Session\Container(get_class($this->getController()));
+            $this->sessionContainer = new Container(get_class($this->getController()));
         }
         return $this->sessionContainer;
     }

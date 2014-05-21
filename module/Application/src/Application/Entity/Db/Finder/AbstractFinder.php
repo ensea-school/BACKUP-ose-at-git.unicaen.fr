@@ -17,18 +17,29 @@ abstract class AbstractFinder extends QueryBuilder
 {
     use ContextProviderAwareTrait;
     
+    /**
+     * @var array
+     */
+    protected $filter = array();
+
+    /**
+     * @var bool
+     */
     protected $queryCreated = false;
     
     /**
      * 
      * @param EntityManager $em
      * @param ContextProvider $contextProvider
+     * @param array $filter
      */
-    public function __construct(EntityManager $em, ContextProvider $contextProvider = null)
+    public function __construct(EntityManager $em, ContextProvider $contextProvider = null, array $filter = array())
     {
         parent::__construct($em);
         
-        $this->setContextProvider($contextProvider);
+        $this
+                ->setContextProvider($contextProvider)
+                ->setFilter($filter);
     }
     
     /**
@@ -49,5 +60,25 @@ abstract class AbstractFinder extends QueryBuilder
         }
         
         return parent::getQuery();
+    }
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
+     * 
+     * @param array $filter
+     * @return self
+     */
+    public function setFilter(array $filter = array())
+    {
+        $this->filter = $filter;
+        return $this;
     }
 }

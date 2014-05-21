@@ -9,7 +9,6 @@ namespace Application\Service;
  */
 class ElementPedagogique extends AbstractEntityService
 {
-
     /**
      * retourne la classe des entités
      *
@@ -26,7 +25,376 @@ class ElementPedagogique extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias() 
+    {
         return 'ep';
+    }
+    
+    /**
+     * Retourne le chercheur des structures distinctes.
+     * 
+     * @param array $filters
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function finder(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    {
+        if (null === $qb) {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+        }
+
+        $qb
+                ->select('ep, e, tf, gtf, p')
+                ->from('Application\Entity\Db\ElementPedagogique', 'ep')
+                ->leftJoin('ep.periode', 'p')
+                ->innerJoin('ep.etape', 'e')
+                ->innerJoin('e.typeFormation', 'tf')
+                ->innerJoin('tf.groupe', 'gtf')
+                ->innerJoin('ep.structure', 's')
+                ->orderBy('gtf.ordre, e.niveau, e.sourceCode, ep.libelle');
+        
+        if (isset($filters['structure'])) {
+            $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
+        }
+        
+        if (isset($filters['niveau']) && $filters['niveau']) {
+            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
+                $filters['niveau'] = $filters['niveau']->getId();
+            }
+            $niveau = str_replace('-', '', $filters['niveau']);
+            $qb->andWhere('CONCAT(gtf.libelleCourt, e.niveau) = :niveau')->setParameter('niveau', $niveau);
+        }
+        
+        if (isset($filters['etape'])) {
+            if (!$filters['etape'] instanceof \Application\Entity\Db\Etape) {
+                throw new \Common\Exception\LogicException("L'étape spécifiée dans le contexte n'est pas du type attendu.");
+            }
+            $qb->andWhere('ep.etape = :etape')->setParameter('etape', $filters['etape']);
+        }
+        
+        return $qb;
+    }
+    
+    /**
+     * Retourne le chercheur des structures distinctes.
+     * 
+     * @param array $filters
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function finderDistinctStructures(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    {
+        if (null === $qb) {
+            $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
+        }
+        
+        $qb
+                ->select('s')
+                ->distinct()
+                ->from('Application\Entity\Db\Structure', 's')
+                ->innerJoin('s.elementPedagogique', 'ep')
+                ->innerJoin('ep.etape', 'e')
+                ->innerJoin('e.typeFormation', 'tf')
+                ->innerJoin('tf.groupe', 'gtf')
+                ->orderBy('s.libelleCourt');
+        
+        if (isset($filters['niveau']) && is_numeric($filters['niveau'])) {
+            $qb->where('s.niveau = :niv')->setParameter('niv', $filters['niveau']);
+        }
+        
+        return $qb;
+    }
+    
+    /**
+     * Retourne le chercheur des niveaux distincts.
+     * 
+     * @param array $filters
+     * @param \Doctrine\ORM\QueryBuilder $qbWithEp
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function finderDistinctNiveaux(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    {
+        $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
+        $qb
+                ->select('e, tf, gtf')
+                ->distinct()
+                ->from('Application\Entity\Db\Etape', 'e')
+                ->innerJoin('e.typeFormation', 'tf')
+                ->innerJoin('tf.groupe', 'gtf')
+                ->innerJoin('e.elementPedagogique', 'ep')
+//                ->innerJoin('ep.structure', 's')
+                ->orderBy('gtf.ordre, e.niveau');
+        
+        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
+            $qb
+                    ->andWhere('ep.structure = :struct')
+                    ->setParameter('struct', $filters['structure']);
+        }
+        
+//        var_dump($qb->getQuery()->getSQL());
+        return $qb;
+    }
+    
+    /**
+     * Retourne le chercheur d'étapes distinctes.
+     * 
+     * @param array $filters
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function finderDistinctEtapes(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    {
+        $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
+        $qb
+                ->select('e, tf, gtf')
+                ->distinct()
+                ->from('Application\Entity\Db\Etape', 'e')
+                ->innerJoin('e.elementPedagogique', 'ep')
+                ->leftJoin('ep.periode', 'p')
+                ->innerJoin('e.typeFormation', 'tf')
+                ->innerJoin('tf.groupe', 'gtf')
+                ->innerJoin('ep.structure', 's')
+                ->orderBy('gtf.ordre, e.niveau, e.sourceCode');
+        
+//        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
+//            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $filters['structure']);
+//        }
+        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
+            $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
+        }
+        if (isset($filters['niveau']) && $filters['niveau']) {
+            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
+                $filters['niveau'] = $filters['niveau']->getId();
+            }
+            $niveau = str_replace('-', '', $filters['niveau']);
+            $qb->andWhere('CONCAT(gtf.libelleCourt, e.niveau) = :niveau')->setParameter('niveau', $niveau);
+        }
+//        print_r($qb->getQuery()->getSQL());die;
+        return $qb;
+    }
+    
+    /**
+     * Retourne le chercheur d'étapes orphelines (i.e. sans EP).
+     * 
+     * @param array $filters
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function finderDistinctEtapesOrphelines(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    {
+        $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
+        $qb
+                ->select('e, tf, gtf')
+                ->distinct()
+                ->from('Application\Entity\Db\Etape', 'e')
+//                ->innerJoin('e.elementPedagogique', 'ep')
+//                ->leftJoin('ep.periode', 'p')
+                ->innerJoin('e.typeFormation', 'tf')
+                ->innerJoin('tf.groupe', 'gtf')
+                ->innerJoin('e.structure', 's')
+                ->andWhere('SIZE (e.elementPedagogique) < 1')
+                ->orderBy('gtf.ordre, e.niveau, e.sourceCode');
+        
+//        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
+//            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $filters['structure']);
+//        }
+        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
+            $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
+        }
+        if (isset($filters['niveau']) && $filters['niveau']) {
+            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
+                $filters['niveau'] = $filters['niveau']->getId();
+            }
+            $niveau = str_replace('-', '', $filters['niveau']);
+            $qb->andWhere('CONCAT(gtf.libelleCourt, e.niveau) = :niveau')->setParameter('niveau', $niveau);
+        }
+        
+        return $qb;
+    }
+    
+    /**
+     * Recherche textuelle d'element pédagogique.
+     * 
+     * @param array $filters
+     * <p>Paramètres possibles :</p>
+     * <i>term</i>         : Texte recherché <b>obligatoire</b><br />
+     * <i>limit</i>        : Nombre de résultats maxi<br />
+     * <i>structure</i>    : Structure concernée sous forme d'une entité<br />
+     * <i>niveau</i>       : Niveau, i.e. CONCAT(gtf.libelle_court, e.niveau), ex: L1, M2<br />
+     * <i>etape</i>        : Etape concernée sous forme d'une entité<br />
+     * @return array
+     */
+    public function finderByTerm(array $filters = array())
+    {
+        if (!isset($filters['term'])) {
+            return array();
+        }
+        if (!isset($filters["limit"])) {
+            $filters["limit"] = 100;
+        }
+        
+        $term      = preg_replace('#\s{2,}#', ' ', trim($filters['term']));
+        $criterion = explode(' ', $term);
+
+        $concat = "ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT";
+        $parts  = $params = array();
+        for ($i = 0; $i < count($criterion); $i++) {
+            $parts[] = "(UPPER(CONVERT($concat, 'US7ASCII')) LIKE UPPER(CONVERT(:criterionStr$i, 'US7ASCII'))) ";
+            $params["criterionStr$i"] = '%' . $criterion[$i] . '%';
+        }
+        $whereTerm = implode(' AND ', $parts);
+        
+        $whereContext = array();
+        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
+            $whereContext[] = 's.structure_niv2_id = :structure';
+            $params['structure'] = $filters['structure']->getId();
+        }
+        if (isset($filters['niveau']) && $filters['niveau']) {
+            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
+                $filters['niveau'] = $filters['niveau']->getId();
+            }
+            $niveau = str_replace('-', '', $filters['niveau']);
+            $whereContext[] = 'CONCAT(gtf.libelle_court, e.niveau) = :niveau';
+            $params['niveau'] = $niveau;
+        }
+        if (isset($filters['etape']) && $filters['etape'] instanceof \Application\Entity\Db\Etape) {
+            $whereContext[] = 'ep.etape_id = :etape';
+            $params['etape'] = $filters['etape']->getId();
+        }
+        $whereContext = implode(PHP_EOL . 'AND ', array_filter($whereContext));
+        $whereContext = $whereContext ? 'AND ' . $whereContext : null;
+        
+        $sql = <<<EOS
+select * from (
+  select ep.id,
+    rank() over (partition by ep.id order by cp.ordre) rang,
+    ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle_long libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf,
+    ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
+  from chemin_pedagogique cp
+  JOIN element_pedagogique ep ON cp.element_pedagogique_id = ep.id  and  ep.HISTO_DESTRUCTEUR_ID is null and sysdate between ep.VALIDITE_DEBUT and nvl(ep.VALIDITE_FIN, sysdate)
+  JOIN etape e ON cp.etape_id = e.id                                and   e.HISTO_DESTRUCTEUR_ID is null and sysdate between  e.VALIDITE_DEBUT and nvl( e.VALIDITE_FIN, sysdate)
+  JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID             and  tf.HISTO_DESTRUCTEUR_ID is null and sysdate between tf.VALIDITE_DEBUT and nvl(tf.VALIDITE_FIN, sysdate)
+  JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID           and gtf.HISTO_DESTRUCTEUR_ID is null
+  JOIN structure s ON ep.structure_id = s.id
+  LEFT JOIN periode pe ON ep.periode_id = pe.id
+  where cp.HISTO_DESTRUCTEUR_ID is null and sysdate between cp.VALIDITE_DEBUT and nvl(cp.VALIDITE_FIN, sysdate)
+  and $whereTerm
+  $whereContext
+  order by gtf.ordre, e.niveau, ep.libelle
+)
+where rang = 1
+EOS;
+        
+        $params["limit"] = $filters["limit"];
+        
+        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
+//        var_dump($sql, $params);die;
+
+        return $result->fetchAll();
+    }
+
+    /**
+     * 
+     * @param array $result
+     * @param integer $length
+     * @return array
+     */
+    protected function truncateResult($result, $length = 15)
+    {
+        if ($length && ($remain = count($result) - $length) > 0) {
+            $result   = array_slice($result, 0, $length);
+            $result[] = array('id'    => null, 'label' => "<em><small>$remain résultats restant, affinez vos critères, svp.</small></em>");
+        }
+        return $result;
+    }
+    
+    /**
+     * Détermine si on peut ajouter une étape ou non
+     *
+     * @return boolean
+     */
+    public function canAdd($runEx = false)
+    {
+        $localContext = $this->getContextProvider()->getLocalContext();
+        $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        
+        if ($role instanceof \Application\Acl\DbRole) { 
+            if (!$localContext->getStructure()) {
+                throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
+            }
+            if ($localContext->getStructure()->getId() === $role->getStructure()->getId()
+                    || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())) {
+                return true;
+            }
+            
+            $this->cannotDoThat(
+                    "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier d'élément pédagogique"
+                    . "pour la structure '{$localContext->getStructure()}'", $runEx);
+        }
+
+        return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter/modifier un élément pédagogique', $runEx);
+    }
+
+    /**
+     * Retourne une nouvelle entité, initialisée avec les bons paramètres
+     * @return EtapeEntity
+     */
+    public function newEntity()
+    {
+        $this->canAdd(true);
+        $entity = parent::newEntity();
+        // toutes les entités créées ont OSE pour source!!
+        $entity->setSource( $this->getServiceLocator()->get('ApplicationSource')->getOse() );
+        return $entity;
+    }
+
+    /**
+     * Sauvegarde une entité
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $entity
+     * @throws \Common\Exception\RuntimeException
+     */
+    public function save($entity)
+    {
+        // si absence de chemin pédagogique, création du chemin
+        if (!$entity->getCheminPedagogique()->count()) {
+            $cp = $this->getServiceCheminPedagogique()->newEntity(); /* @var $cp \Application\Entity\Db\CheminPedagogique */
+            $cp
+                    ->setEtape($entity->getEtape())
+                    ->setElementPedagogique($entity);
+            
+            $entity->addCheminPedagogique($cp);
+            
+            $this->getEntityManager()->persist($cp);
+        }
+        
+        parent::save($entity);
+    }
+
+    /**
+     * Supprime (historise par défaut) le service spécifié.
+     *
+     * @param \Application\Entity\Db\ElementPedagogique $entity Entité à détruire
+     * @param bool $softDelete
+     * @return self
+     */
+    public function delete($entity, $softDelete = true)
+    {
+        foreach ($entity->getCheminPedagogique() as $cp) { /* @var $cp \Application\Entity\Db\CheminPedagogique */
+            $cp->getEtape()->removeCheminPedagogique($cp);
+            $entity->removeCheminPedagogique($cp);
+            $this->getServiceCheminPedagogique()->delete($cp);
+        }
+        
+        return parent::delete($entity, $softDelete);
+    }
+    
+    /**
+     * 
+     * @return CheminPedagogique
+     */
+    protected function getServiceCheminPedagogique()
+    {
+        return $this->getServiceLocator()->get('ApplicationCheminPedagogique');
     }
 }

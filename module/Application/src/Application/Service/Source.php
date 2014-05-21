@@ -12,8 +12,6 @@ use Application\Entity\Db\Source as SourceEntity;
  */
 class Source extends AbstractEntityService
 {
-    use ContextProviderAwareTrait;
-
     /**
      * retourne la classe des entités
      *

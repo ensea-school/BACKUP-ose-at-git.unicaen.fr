@@ -50,40 +50,40 @@ return array(
         'default' => array(
             'home' => array(
                 'pages' => array(
-                    'intervenant' => array(
-                        'label'    => 'Intervenant',
-                        'title'    => "Gestion des intervenants",
-                        'route'    => 'intervenant',
-                        'resource' => 'controller/Application\Controller\Intervenant:index',
-                        'pages' => array(
-//                            'rechercher' => array(
-//                                'label'  => "Rechercher",
-//                                'title'  => "Rechercher un intervenant",
+//                    'intervenant' => array(
+//                        'label'    => 'Intervenant',
+//                        'title'    => "Gestion des intervenants",
+//                        'route'    => 'intervenant',
+//                        'resource' => 'controller/Application\Controller\Intervenant:index',
+//                        'pages' => array(
+////                            'rechercher' => array(
+////                                'label'  => "Rechercher",
+////                                'title'  => "Rechercher un intervenant",
+////                                'route'  => 'intervenant/default',
+////                                'params' => array(
+////                                    'action' => 'rechercher',
+////                                ),
+////                                'visible' => true,
+////                                'pages' => array(),
+////                            ),
+//                            'voir' => array(
+//                                'label'  => "Voir",
+//                                'title'  => "Voir l'intervenant {id}",
 //                                'route'  => 'intervenant/default',
-//                                'params' => array(
-//                                    'action' => 'rechercher',
-//                                ),
-//                                'visible' => true,
-//                                'pages' => array(),
-//                            ),
-                            'voir' => array(
-                                'label'  => "Voir",
-                                'title'  => "Voir l'intervenant {id}",
-                                'route'  => 'intervenant/default',
-                                'visible' => false,
-                                'withtarget' => true,
-                                'pages' => array(),
-                            ),
-//                            'modifier' => array(
-//                                'label'  => "Modifier",
-//                                'title'  => "Modifier l'intervenant {id}",
-//                                'route'  => 'intervenant/modifier',
 //                                'visible' => false,
 //                                'withtarget' => true,
 //                                'pages' => array(),
 //                            ),
-                        ),
-                    ),
+////                            'modifier' => array(
+////                                'label'  => "Modifier",
+////                                'title'  => "Modifier l'intervenant {id}",
+////                                'route'  => 'intervenant/modifier',
+////                                'visible' => false,
+////                                'withtarget' => true,
+////                                'pages' => array(),
+////                            ),
+//                        ),
+//                    ),
                 ),
             ),
         ),
@@ -106,9 +106,9 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'ApplicationOffreFormation' => 'Application\\Service\\OffreFormation',
+            'ApplicationIntervenant'    => 'Application\\Service\\Intervenant',
         ),
         'factories' => array(
-            'ApplicationIntervenant' => 'Application\\Service\\IntervenantFactory',
         ),
     ),
 );

@@ -41,7 +41,8 @@ class ServiceController extends AbstractActionController
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $qb      = $service->finderByContext();
         $viewModel = new \Zend\View\Model\ViewModel();
-
+        $filter    = new \stdClass();
+        
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
@@ -54,10 +55,16 @@ class ServiceController extends AbstractActionController
             /* @var $rechercheForm \Application\Form\Service\Recherche */
             $filter = $rechercheForm->hydrateFromSession();
             $service->finderByFilterObject($filter, null, $qb);
-        }else{
+        }
+        else {
             $action = 'afficher'; // Affichage par défaut
         }
 
+        // sauvegarde des filtres dans le contexte local
+        $this->getContextProvider()->getLocalContext()->fromArray(
+                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
+        );
+            
         /* Préparation et affichage */
         if ('afficher' === $action){
             $services = $service->getList($qb);
@@ -69,7 +76,8 @@ class ServiceController extends AbstractActionController
             $params['query']  = $this->params()->fromQuery();
             $listeViewModel   = $this->forward()->dispatch($controller, $params);
             $viewModel->addChild($listeViewModel, 'servicesRefListe');
-        }else{
+        }
+        else {
             $services = array();
         }
 
@@ -91,7 +99,8 @@ class ServiceController extends AbstractActionController
             if ($rechercheForm->isValid()){
                 $rechercheForm->sessionUpdate();
             }
-        }else{
+        }
+        else {
             $rechercheForm = null; // pas de filtrage
         }
         return compact('rechercheForm', 'role');
@@ -160,7 +169,7 @@ class ServiceController extends AbstractActionController
             $title   = "Modification de service";
         }else{
             $entity = $service->newEntity();
-            $entity->setAnnee( $this->context()->anneeFromContext() );
+            $entity->setAnnee( $this->context()->anneeFromGlobalContext() );
             $entity->setValiditeDebut(new \DateTime );
             if ($role instanceof \Application\Acl\IntervenantRole){
                 $entity->setIntervenant( $context->getIntervenant() );
@@ -176,7 +185,7 @@ class ServiceController extends AbstractActionController
             }
             $entity->setElementPedagogique( $this->context()->elementPedagogiqueFromPost("elementPedagogique[element][id]") );
             $entity->setEtablissement( $this->context()->etablissementFromPost("etablissement[id]") );
-            if (! $entity->getEtablissement()) $entity->setEtablissement( $this->context()->etablissementFromContext() );
+            if (! $entity->getEtablissement()) $entity->setEtablissement( $this->context()->etablissementFromGlobalContext() );
         }
         $errors  = array();
         $form->bind( $entity );

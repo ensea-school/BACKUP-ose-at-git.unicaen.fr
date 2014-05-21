@@ -25,16 +25,28 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
      */
     protected $sessionContainer;
 
-    public function __construct($name = null, $options = array())
+    /**
+     * @var \Zend\Mvc\Controller\Plugin\Url
+     */
+    protected $urlPlugin;
+
+    /**
+     * 
+     */
+    public function init()
     {
-        parent::__construct($name, $options);
-
         $this   ->setAttribute('method', 'get')
-                ->setAttribute('class', 'service-recherche')
-         ;
+                ->setAttribute('class', 'service-recherche');
 
-        $intervenant = new Select('intervenant');
-        $intervenant->setLabel('Intervenant :');
+        $intervenantUrl = $this->getUrlPlugin()->fromRoute(
+                'recherche', 
+                array('action' => 'intervenantFind'),
+                array('query' => array('having-services' => 1)));
+        
+        $intervenant = new \UnicaenApp\Form\Element\SearchAndSelect('intervenant');
+        $intervenant
+                ->setAutocompleteSource($intervenantUrl)
+                ->setLabel('Intervenant :');
         $this->add($intervenant);
 
         $element = new Select('element-pedagogique');
@@ -48,6 +60,16 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         $structureEns = new Select('structure-ens');
         $structureEns->setLabel('Structure d\'enseignement :');
         $this->add($structureEns);
+
+        $statutInterv = new \Zend\Form\Element\Radio('statut-interv');
+        $statutInterv
+                ->setValueOptions(array(
+                    '' => "Peu importe",
+                    'Application\Entity\Db\IntervenantPermanent' => "Permanent",
+                    'Application\Entity\Db\IntervenantExterieur' => "Vacataire"))
+                ->setValue('')
+                ->setLabel("Statut de l'intervenant :");
+        $this->add($statutInterv);
 
         $action = new Hidden('action');
         $action->setValue('afficher');
@@ -67,6 +89,18 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
     }
 
     /**
+     * 
+     * @return \Zend\Mvc\Controller\Plugin\Url
+     */
+    protected function getUrlPlugin()
+    {
+        if (null === $this->urlPlugin) {
+            $this->urlPlugin = $this->getServiceLocator()->getServiceLocator()->get('ControllerPluginManager')->get('url');
+        }
+        return $this->urlPlugin;
+    }
+    
+    /**
      *
      * @param Service[] $services
      */
@@ -80,12 +114,12 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         $structure          = $sl->get('ApplicationStructure');
         $service            = $sl->get('ApplicationService');
 
-        $qb = $intervenant->initQuery()[0];
-        $intervenant->join( $service, $qb, 'id', 'intervenant' );
-        $service->finderByContext( $qb );
-        $this->get('intervenant')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
-                                                            array( '' => '(Tous)') + $intervenant->getList($qb))
-                                                  );
+//        $qb = $intervenant->initQuery()[0];
+//        $intervenant->join( $service, $qb, 'id', 'intervenant' );
+//        $service->finderByContext( $qb );
+//        $this->get('intervenant')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
+//                                                            array( '' => '(Tous)') + $intervenant->getList($qb))
+//                                                  );
 
         $qb = $elementPedagogique->initQuery()[0];
         $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );
@@ -119,6 +153,9 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
     public function getInputFilterSpecification()
     {
         return array(
+            'statut-interv' => array(
+                'required' => false
+            ),
             'intervenant' => array(
                 'required' => false
             ),
@@ -162,7 +199,9 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
      */
     public function hydrateFromSession($object=null)
     {
-        if (! $object) $object = new \stdClass;
+        if (! $object) {
+            $object = new \stdClass;
+        }
         $session = $this->getSessionContainer();
         if ($session->offsetExists('data')){
             $data = $session->data;

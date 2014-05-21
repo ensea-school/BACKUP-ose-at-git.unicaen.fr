@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
+use Application\Service\Intervenant as IntervenantService;
 
 /**
  * Description of RechercheController
@@ -39,11 +40,11 @@ class RechercheController extends AbstractActionController
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel(array());
         }
-           
-        $repo      = $this->intervenant()->getRepo();
-        $entities  = $repo->findByNomPrenomId($term);
+        
         $template  = "{label} <small>{extra}</small>";
         $resultOSE = array();
+        $qb        = $this->getServiceIntervenant()->finderByNomPrenomId($term);
+        $entities  = $qb->getQuery()->execute();
 
         $f = new \Common\Filter\IntervenantTrouveFormatter();
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Intervenant */
@@ -83,5 +84,15 @@ class RechercheController extends AbstractActionController
 //        var_dump($result);
         
         return new JsonModel($result);
+    }
+
+    /**
+     * Retourne le service Intervenant.
+     * 
+     * @return IntervenantService
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->get('applicationIntervenant');
     }
 }

@@ -5,13 +5,13 @@ namespace Application\Acl;
 use UnicaenAuth\Acl\NamedRole;
 
 /**
- * Description of IntervenantRole
+ * Description of IntervenantPermanentRole
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantRole extends NamedRole
+class IntervenantPermanentRole extends IntervenantRole
 {
-    const ROLE_ID = "intervenant";
+    const ROLE_ID = "intervenant-permanent";
     
     /**
      * Constructeur.
@@ -26,8 +26,8 @@ class IntervenantRole extends NamedRole
     {
         NamedRole::__construct(
                 $id = static::ROLE_ID, 
-                $parent = 'user', 
-                $name = "Intervenant", 
+                $parent = IntervenantRole::ROLE_ID, 
+                $name = "Intervenant (permanent)", 
                 $description, 
                 $selectable);
     }

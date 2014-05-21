@@ -11,7 +11,8 @@
         "unicaen/unicaen-app":                  "dev-trunk",
         "unicaen/unicaen-auth":                 "dev-trunk",
         "unicaen/unicaen-ldap":                 "dev-trunk",
-        "zendframework/zend-code":              ">=2.3"
+        "zendframework/zend-code":              ">=2.3",
+        "bjyoungblood/bjy-authorize":           "dev-master"
     },
     "require-dev": {
         "zendframework/zend-test":              ">=2.3",

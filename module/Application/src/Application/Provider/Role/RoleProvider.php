@@ -7,7 +7,11 @@ use Doctrine\ORM\EntityManager;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Acl\IntervenantRole;
+use Application\Acl\IntervenantPermanentRole;
+use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\DbRole;
+use Application\Acl\ComposanteRole;
+use Application\Entity\Db\Role as RoleEntity;
 
 /**
  * Fournisseur des rôles utilisateurs de l'application :
@@ -52,12 +56,14 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     {
         if (null === $this->roles) {            
             /**
-             * Rôle de base "intervenant"
+             * Rôles "intervenant"
              */
-            $roleIntervenant = new IntervenantRole();
+            $roleIntervenant          = new IntervenantRole();
+            $roleIntervenantPermanent = new IntervenantPermanentRole();
+            $roleIntervenantExterieur = new IntervenantExterieurRole();
             
             /**
-             * Rôles exercés sur une structure de niveau 2 porteuse d'éléments pédagogiques
+             * Rôles "composante" : exercés sur une structure de niveau 2 PORTEUSE d'éléments pédagogiques
              */
             $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Role')->createQueryBuilder('r')
                     ->select('r, tr, s')
@@ -67,23 +73,64 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     ->innerJoin('s.elementPedagogique', 'ep')
                     ->where('tr.code <> :code')->setParameter('code', 'IND')
                     ->andWhere('s.niveau = :niv')->setParameter('niv', 2);
-            $dbRoles = $qb->getQuery()->getResult();
-
+            $rolesComposante = $qb->getQuery()->getResult();
+            
+            /**
+             * Rôles "autres" : exercés sur une structure de niveau 2 NON PORTEUSE d'éléments pédagogiques
+             */
+            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Role')->createQueryBuilder('r')
+                    ->select('r, tr, s')
+                    ->distinct()
+                    ->innerJoin('r.type', 'tr')
+                    ->innerJoin('r.structure', 's')
+                    ->where('tr.code <> :code')->setParameter('code', 'IND')
+                    ->andWhere('s.niveau = :niv')->setParameter('niv', 2)
+                    ->andWhere('SIZE(s.elementPedagogique) = 0');
+            $rolesAutres = $qb->getQuery()->getResult();
+            
+//            var_dump($qb->getQuery()->getSQL());
+//            foreach ($dbRoles as $r) { /* @var $r \Application\Entity\Db\Role */
+//                var_dump($r->getType() . "", "" . $r->getStructure() );
+//            }
+            
             /**
              * Collecte des rôles
              */
-            $this->roles = array();
-            $this->roles[$roleIntervenant->getRoleId()] = $roleIntervenant;
-            foreach ($dbRoles as $r) { /* @var $r \Application\Entity\Db\Role */
-                $role = new DbRole($r->getType(), $r->getStructure(), null);
-                $this->roles[$role->getRoleId()] = $role;
+            $roles = array();
+            $roles[$roleIntervenant->getRoleId()]          = $roleIntervenant;
+            $roles[$roleIntervenantPermanent->getRoleId()] = $roleIntervenantPermanent;
+            $roles[$roleIntervenantExterieur->getRoleId()] = $roleIntervenantExterieur;
+            foreach ($rolesComposante as $r) { /* @var $r \Application\Entity\Db\Role */
+                $role = new ComposanteRole($r->getType(), $r->getStructure(), null);
+                $roles[$role->getRoleId()] = $role;
             }
+            foreach ($rolesAutres as $r) { /* @var $r \Application\Entity\Db\Role */
+                $role = new DbRole($r->getType(), $r->getStructure(), null);
+                $roles[$role->getRoleId()] = $role;
+            }
+            
+            $this->roles = $roles;
         }
         
-//        foreach ($this->roles as $r) { /* @var $r \Zend\Permissions\Acl\Role\RoleInterface */
-//            var_dump($r->getRoleId());
-//        }
+//        var_dump(array_keys($this->roles));
         
         return $this->roles;
+    }
+    
+    /**
+     * 
+     * @param \Application\Entity\Db\Role $roleEntity
+     * @return \Zend\Permissions\Acl\Role\GenericRole
+     */
+    public function getRoleFromRoleEntity(RoleEntity $roleEntity)
+    {
+        $roles  = $this->getRoles();
+        $roleId = DbRole::createRoleId($roleEntity->getType(), $roleEntity->getStructure());
+        
+        if (isset($roles[$roleId])) {
+            return $roles[$roleId];
+        }
+        
+        return new \Zend\Permissions\Acl\Role\GenericRole($roleId);
     }
 }

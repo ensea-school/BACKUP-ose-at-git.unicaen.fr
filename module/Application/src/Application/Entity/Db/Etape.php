@@ -20,7 +20,7 @@ class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
     }
     
     /**
-     * Retourne la représentation littérale de cet objet.
+     * Retourne la représentation littérale du niveau corresponadnt à cette étape.
      *
      * @return string
      */

@@ -98,4 +98,9 @@ return array(
             'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\Liste'            
         ),
     ),
+    'form_elements' => array(
+        'invokables' => array(
+            'VolumeHoraireSaisie' => 'Application\Form\VolumeHoraire\Saisie',
+        ),
+    ),
 );

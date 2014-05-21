@@ -1,14 +1,23 @@
 <?php
 namespace Application\Provider\Identity;
 
+use Application\Acl\DbRole;
+use Application\Acl\IntervenantExterieurRole;
+use Application\Acl\IntervenantPermanentRole;
+use Application\Acl\IntervenantRole;
+use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\IntervenantPermanent;
+use Application\Entity\Db\Role;
+use Application\Entity\Db\Utilisateur;
+use Common\Exception\RuntimeException;
+use Doctrine\ORM\EntityManager;
+use UnicaenApp\Service\EntityManagerAwareInterface;
+use UnicaenApp\Service\EntityManagerAwareTrait;
+use UnicaenAuth\Provider\Identity\ChainableProvider;
+use UnicaenAuth\Provider\Identity\ChainEvent;
+use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Doctrine\ORM\EntityManager;
-use UnicaenAuth\Provider\Identity\ChainableProvider;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use Application\Acl\IntervenantRole;
-use Application\Acl\DbRole;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 
 /**
  * Classe chargée de fournir les rôles que possède l'identité authentifiée.
@@ -39,7 +48,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
     /**
      * {@inheritDoc}
      */
-    public function injectIdentityRoles(\UnicaenAuth\Provider\Identity\ChainEvent $event)
+    public function injectIdentityRoles(ChainEvent $event)
     {
         $event->addRoles($this->getIdentityRoles());
     }
@@ -62,9 +71,9 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
             $this->roles = array_merge($this->roles, $this->getDbRoles());
             
             /**
-             * Tout le monde possède le rôle "intervenant"
+             * Rôle correspondant au type d'intervenant auquel appartient l'utilisateur
              */
-            $this->roles[] = new IntervenantRole();
+            $this->roles[] = $this->getIntervenantRole();
         }
         
 //        var_dump($this->roles);
@@ -79,17 +88,49 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
      */
     protected function getDbRoles()
     {
-        $dbUser = $this->getServiceLocator()->get('AuthUserContext')->getDbUser(); /* @var $dbUser \Application\Entity\Db\Utilisateur */
+        $dbUser = $this->getServiceLocator()->get('AuthUserContext')->getDbUser(); /* @var $dbUser Utilisateur */
         
         if (!$dbUser) {
             return array();
         }
         
         $roles = array();
-        foreach ($dbUser->getPersonnel()->getRole() as $role) { /* @var $role \Application\Entity\Db\Role */
-            $roles[] = new DbRole($role->getType(), $role->getStructure());
+        foreach ($dbUser->getPersonnel()->getRole() as $role) { /* @var $role Role */
+            $roles[] = DbRole::createRoleId($role->getType(), $role->getStructure()); // le role id suffit, pas besoin d'instance
         }
         
         return $roles;
+    }
+    
+    /**
+     * Retourne le rôle correspondant au type d'intervenant auquel appartient l'utilisateur.
+     * 
+     * @return RoleInterface
+     */
+    protected function getIntervenantRole()
+    {
+        $dbUser = $this->getServiceLocator()->get('AuthUserContext')->getDbUser(); /* @var $dbUser Utilisateur */
+        
+        if (!$dbUser) {
+            return array();
+        }
+        
+        $intervenant = $dbUser->getIntervenant();
+        
+        if (!$intervenant) {
+            return IntervenantRole::ROLE_ID;
+        }
+        
+        if ($intervenant instanceof IntervenantPermanent) {
+            $role = IntervenantPermanentRole::ROLE_ID;
+        }
+        elseif ($intervenant instanceof IntervenantExterieur) {
+            $role = IntervenantExterieurRole::ROLE_ID;
+        }
+        else {
+            throw new RuntimeException("Type d'intervenant inattendu : " . get_class($intervenant));
+        }
+        
+        return $role;
     }
 }

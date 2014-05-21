@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * ElementPedagogique
  */
-class ElementPedagogique
+class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     public function __toString()
     {

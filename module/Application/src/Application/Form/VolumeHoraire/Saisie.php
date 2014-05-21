@@ -3,24 +3,28 @@
 namespace Application\Form\VolumeHoraire;
 
 use Zend\Form\Form;
-use Zend\InputFilter\InputFilter;
-use Zend\Form\Element\Csrf;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Form\Element\Hidden;
-use Application\Entity\Db\VolumeHoraire;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of Saisie
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface
+class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
-    public function __construct( ServiceLocatorInterface $serviceLocator )
+    use ServiceLocatorAwareTrait;
+    use ContextProviderAwareTrait;
+    
+    /**
+     * 
+     */
+    public function init()
     {
-        parent::__construct('volume-horaire');
-        
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'volume-horaire')
 //                ->setHydrator(new ClassMethods(false))
@@ -54,13 +58,21 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             'type' => 'Select'
         ));
 
-        $motifsNonPaiement = $serviceLocator->get('ApplicationMotifNonPaiement')->getMotifsNonPaiement();
-        foreach( $motifsNonPaiement as $id => $motifNonPaiement ){
-            $motifsNonPaiement[$id] = (string)$motifNonPaiement;
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof \Application\Acl\DbRole) {
+            $motifsNonPaiement = $this->getServiceLocator()->getServiceLocator()->get('ApplicationMotifNonPaiement')
+                    ->getMotifsNonPaiement();
+            foreach( $motifsNonPaiement as $id => $motifNonPaiement ){
+                $motifsNonPaiement[$id] = (string)$motifNonPaiement;
+            }
+            $motifsNonPaiement[0] = 'Aucun motif : paiement prévu';
+            $this->get('motifNonPaiement')->setValueOptions( $motifsNonPaiement );
         }
-        $motifsNonPaiement[0] = 'Aucun motif : paiement prévu';
-        $this->get('motifNonPaiement')->setValueOptions( $motifsNonPaiement );
-
+        else {
+            $this->remove('motifNonPaiement');
+        }
+        
         $this->add( new Hidden('id') );
         $this->add( new Hidden('service') );
         $this->add( new Hidden('periode') );
@@ -90,7 +102,8 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
     }
 
     /* Associe une entity VolumeHoraire au formulaire */
-    public function bind( $object, $flags=17){
+    public function bind( $object, $flags=17)
+    {
         /* @var $object \Application\Entity\Db\VolumeHoraire */
         $data = array(
             'id'               => $object->getId(),
@@ -109,7 +122,8 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
      *
      * @return array
      */
-    public function getInputFilterSpecification(){
+    public function getInputFilterSpecification()
+    {
         return array(
             'motifNonPaiement' => array(
                 'required' => false

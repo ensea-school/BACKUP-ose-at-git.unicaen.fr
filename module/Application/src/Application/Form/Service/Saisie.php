@@ -74,11 +74,14 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         ));
         $this->add($interneExterne);
 
+        /**
+         * @todo : fourrer l'init des URL dans la classe ElementPedagogiqueRechercheFieldset
+         */
         $queryTemplate = array('structure' => '__structure__', 'niveau' => '__niveau__', 'etape' => '__etape__');
-        $urlStructures = $url->fromRoute('of/default', array('action' => 'search-structures'), array('query' => $queryTemplate));
-        $urlNiveaux    = $url->fromRoute('of/default', array('action' => 'search-niveaux'), array('query' => $queryTemplate));
-        $urlEtapes     = $url->fromRoute('of/default', array('action' => 'search-etapes'), array('query' => $queryTemplate));
-        $urlElements   = $url->fromRoute('of/default', array('action' => 'search-element'), array('query' => $queryTemplate));
+        $urlStructures = $url->fromRoute('of/default',         array('action' => 'search-structures'), array('query' => $queryTemplate));
+        $urlNiveaux    = $url->fromRoute('of/default',         array('action' => 'search-niveaux'),    array('query' => $queryTemplate));
+        $urlEtapes     = $url->fromRoute('of/etape/default',   array('action' => 'search'),            array('query' => $queryTemplate));
+        $urlElements   = $url->fromRoute('of/element/default', array('action' => 'search'),            array('query' => $queryTemplate));
 
         $fs = new \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset('elementPedagogique');
         $fs

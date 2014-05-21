@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
+use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Exception\DbException;
@@ -55,7 +56,6 @@ class ServiceReferentielController extends AbstractActionController implements C
         $cp       = $this->getContextProvider();
         $annee    = $cp->getGlobalContext()->getAnnee();
         $criteria = array();
-//        $criteria = array('structure' => $this->em()->find('Application\Entity\Db\Structure', 8494));
         $services = $service->getFinder($criteria)
                 ->orderBy("i.nomUsuel, s.libelleCourt")
                 ->getQuery()->execute();
@@ -89,25 +89,9 @@ class ServiceReferentielController extends AbstractActionController implements C
     public function voirListeAction()
     {
         $service  = $this->getServiceServiceReferentiel();
-        $criteria = array();
-        
-        // récupère l'éventuel intervenant sélectionné dans le formulaire de filtrage des services
-        $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
-        $filters = $rechercheForm->hydrateFromSession();
-        if (isset($filters->intervenant) && $filters->intervenant) {
-            $criteria['intervenant'] = $filters->intervenant;
-        }
-        if (isset($filters->structureEns) && $filters->structureEns) {
-            $criteria['structure-ens'] = $filters->structureEns;
-        }
-        
-        $criteria = array_merge($criteria, $this->params()->fromQuery());
-        
-//        $criteria = array('structure' => $this->em()->find('Application\Entity\Db\Structure', 8474));
-        $services = $service->getFinder($criteria)
-                ->orderBy("i.nomUsuel, s.libelleCourt")
-                ->getQuery()->execute();
-        
+        $qb       = $service->getFinder()->orderBy("i.nomUsuel, s.libelleCourt");
+        $services = $qb->getQuery()->execute();
+
         return compact('services');
     }
 
@@ -265,13 +249,13 @@ class ServiceReferentielController extends AbstractActionController implements C
         }
         
         $repoFonctionReferentiel = $this->em()->getRepository('Application\Entity\Db\FonctionReferentiel'); /* @var $repoFonctionReferentiel \Doctrine\ORM\EntityRepository */
-        $repoElementPedagogique  = $this->em()->getRepository('Application\Entity\Db\ElementPedagogique');  /* @var $repoElementPedagogique \Application\Entity\Db\Repository\ElementPedagogiqueRepository */
-
+        $serviceEp = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
+        
         $annee = $context->getAnnee();
         
 //        var_dump(get_class($intervenant), "".$annee, count($intervenant->getServiceReferentiel($annee)));
         
-        $structures = $repoElementPedagogique->finderDistinctStructures(array('niveau' => 2))->getQuery()->getResult();
+        $structures = $serviceEp->finderDistinctStructures(array('niveau' => 2))->getQuery()->getResult();
         $fonctions  = $repoFonctionReferentiel->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
         FonctionServiceReferentielFieldset::setStructuresPossibles(new ArrayCollection($structures));
         FonctionServiceReferentielFieldset::setFonctionsPossibles(new ArrayCollection($fonctions));

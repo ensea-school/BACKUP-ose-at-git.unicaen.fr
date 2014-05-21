@@ -24,42 +24,42 @@ return array(
         'default' => array(
             'home' => array(
                 'pages' => array(
-                    'demo' => array(
-                        'label'    => 'Démo',
-                        'route'    => 'demo',
-                        'params' => array(
-                            'action' => 'index',
-                        ),
-                        'pages' => array(
-//                            'of' => array(
-//                                'label'  => "Offre de formation",
+//                    'demo' => array(
+//                        'label'    => 'Démo',
+//                        'route'    => 'demo',
+//                        'params' => array(
+//                            'action' => 'index',
+//                        ),
+//                        'pages' => array(
+////                            'of' => array(
+////                                'label'  => "Offre de formation",
+////                                'route'  => 'demo',
+////                                'params' => array(
+////                                    'action' => 'of',
+////                                ),
+////                                'visible' => true,
+////                                'pages' => array(),
+////                            ),
+//                            'intervenant' => array(
+//                                'label'  => "Intervenants",
 //                                'route'  => 'demo',
 //                                'params' => array(
-//                                    'action' => 'of',
+//                                    'action' => 'intervenant',
 //                                ),
 //                                'visible' => true,
 //                                'pages' => array(),
 //                            ),
-                            'intervenant' => array(
-                                'label'  => "Intervenants",
-                                'route'  => 'demo',
-                                'params' => array(
-                                    'action' => 'intervenant',
-                                ),
-                                'visible' => true,
-                                'pages' => array(),
-                            ),
-                            'service-ref' => array(
-                                'label'  => "Service référentiel",
-                                'route'  => 'demo',
-                                'params' => array(
-                                    'action' => 'saisir-service-referentiel-intervenant',
-                                ),
-                                'visible' => true,
-                                'pages' => array(),
-                            ),
-                        ),
-                    ),
+//                            'service-ref' => array(
+//                                'label'  => "Service référentiel",
+//                                'route'  => 'demo',
+//                                'params' => array(
+//                                    'action' => 'saisir-service-referentiel-intervenant',
+//                                ),
+//                                'visible' => true,
+//                                'pages' => array(),
+//                            ),
+//                        ),
+//                    ),
                 ),
             ),
         ),

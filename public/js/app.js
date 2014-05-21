@@ -187,39 +187,6 @@ VolumeHoraire.init = function(){
 }
 
 
-/***************************************************************************************************************************************************
-    Etapes
-/***************************************************************************************************************************************************/
-
-$("body").on("etape-after-suppression", function(event, data) {
-    window.history.back();
-});
-
-
-/***************************************************************************************************************************************************
-    Divers
-/***************************************************************************************************************************************************/
-
-/* Initialisation des popovers ajax de liens "a" (utilisés dans les services) */
-$(document).ready(function() {
-/*
-    $("*[data-po-href]").popover({
-        html: true,
-        trigger: 'hover',
-        content: function(e){
-            return $.ajax({
-                type: "GET",
-                url: $($(this).context).data('po-href'),
-                async: false
-            }).responseText;
-        },
-        delay: {show:1000, hide:100}
-    });
-*/
-});
-
-
-
 
 /*************** Propre à l'affichage des services référentiels ***************/
 
@@ -257,5 +224,137 @@ ServiceReferentiel.init = function( voirLigneUrl )
         event.div.modal('hide'); // ferme la fenêtre modale
         console.log(event.a.data('id'));
         ServiceReferentiel.get(event.a.data('id')).onAfterDelete();
+    });
+}
+
+
+/***************************************************************************************************************************************************
+    Offre de formation
+/***************************************************************************************************************************************************/
+
+//$("body").on("etape-after-suppression", function(event, data) {
+//    window.history.back();
+//});
+
+function Etape( id ) {
+
+    this.id = id;
+
+    this.onAfterAdd = function(){
+//        $.get( Etape.voirLigneUrl + "/" + this.id, function( data ) {
+//            $("#etape-" + this.id + "-ligne").refresh();
+//            $('#etapes > tbody:last').append(data);
+//        });
+        window.location.replace(window.location.toString() + "&etape=" + this.id);
+    }
+
+    this.onAfterModify = function(){
+//        $( "#etape-"+this.id+"-ligne" ).refresh( {details:details} );
+        window.location.replace(window.location.toString() + "&etape=" + this.id);
+    }
+
+    this.onAfterDelete = function(){
+//        $( "#etape-"+this.id+"-ligne" ).fadeOut().remove();
+        window.location.reload();
+    }
+}
+
+Etape.get = function( id )
+{
+    if (null == Etape.services) Etape.services = new Array();
+    if (null == Etape.services[id]) Etape.services[id] = new Etape(id);
+    return Etape.services[id];
+}
+
+Etape.init = function( voirLigneUrl )
+{
+    Etape.voirLigneUrl = voirLigneUrl;
+    
+    $("body").on("event-of-etape-ajouter", function(event, data) {
+        var id = null;
+        event.div.modal('hide'); // ferme la fenêtre modale
+        for (i in data){
+            if (data[i].name === 'id') {
+                id = data[i].value;
+                break;
+            }
+        }
+        if (id) {
+            Etape.get(id).onAfterAdd();
+        }
+    });
+    
+    $("body").on("event-of-etape-modifier", function(event, data) {
+        var id = null;
+        event.div.modal('hide'); // ferme la fenêtre modale
+        for (i in data){
+            if (data[i].name === 'id'){
+                id = data[i].value;
+                break;
+            }
+        }
+        if (id) {
+            Etape.get(id).onAfterModify();
+        }
+    });
+    
+    $("body").on("event-of-etape-supprimer", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        Etape.get(event.a.data('id')).onAfterDelete();
+    });
+}
+
+
+function ElementPedagogique( id ) {
+
+    this.id = id;
+
+    this.onAfterAdd = function(){
+//        $.get( Etape.voirLigneUrl + "/" + this.id, function( data ) {
+//            $("#etape-" + this.id + "-ligne").refresh();
+//            $('#etapes > tbody:last').append(data);
+//        });
+            window.location.reload();
+    }
+
+    this.onAfterModify = function(){
+//        $( "#etape-"+this.id+"-ligne" ).refresh( {details:details} );
+            window.location.reload();
+    }
+
+    this.onAfterDelete = function(){
+//        $( "#etape-"+this.id+"-ligne" ).fadeOut().remove();
+            window.location.reload();
+    }
+}
+
+ElementPedagogique.get = function( id )
+{
+    if (null == ElementPedagogique.services) ElementPedagogique.services = new Array();
+    if (null == ElementPedagogique.services[id]) ElementPedagogique.services[id] = new ElementPedagogique(id);
+    return ElementPedagogique.services[id];
+}
+
+ElementPedagogique.init = function( voirLigneUrl )
+{
+    ElementPedagogique.voirLigneUrl = voirLigneUrl;
+
+    $("body").on("event-of-element-ajouter", function(event, data) {
+        console.log(event, data);
+        var id = null;
+        event.div.modal('hide'); // ferme la fenêtre modale
+        ElementPedagogique.get(id).onAfterAdd();
+    });
+    
+    $("body").on("event-of-element-modifier", function(event, data) {
+        console.log(event, data);
+        var id = null;
+        event.div.modal('hide'); // ferme la fenêtre modale
+        ElementPedagogique.get(id).onAfterModify();
+    });
+    
+    $("body").on("event-of-element-supprimer", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        ElementPedagogique.get(event.a.data('id')).onAfterDelete();
     });
 }

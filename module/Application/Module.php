@@ -99,3 +99,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         );
     }
 }
+
+
+class Listener extends \BjyAuthorize\Guard\Controller
+{
+    
+}

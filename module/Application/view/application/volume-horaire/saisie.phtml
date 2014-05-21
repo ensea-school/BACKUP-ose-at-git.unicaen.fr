@@ -4,7 +4,9 @@ $form->prepare();
 
 echo $this->form()->openTag($form);
 echo $this->formControlGroup( $form->get('heures') );
-echo $this->formControlGroup( $form->get('motifNonPaiement') );
+if ($form->has('motifNonPaiement')) {
+    echo $this->formControlGroup( $form->get('motifNonPaiement') );
+}
 echo '<hr /><div style="text-align:right">';
 echo $this->formRow($form->get('submit'));
 echo ' ';

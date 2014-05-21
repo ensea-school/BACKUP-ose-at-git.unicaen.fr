@@ -34,33 +34,75 @@ class Etape extends AbstractEntityService
     }
 
     /**
+     * 
+     * @param \Application\Entity\NiveauEtape $niveau
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string $alias
+     * @return QueryBuilder
+     */
+    public function finderByNiveau(\Application\Entity\NiveauEtape $niveau, QueryBuilder $qb=null, $alias=null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        $qb
+                ->innerJoin("$alias.typeFormation", 'tf')
+                ->innerJoin("tf.groupe", 'gtf')
+                ->andWhere("$alias.niveau = :niv AND gtf.libelleCourt = :lib")
+                ->setParameter('niv', $niveau->getNiv())
+                ->setParameter('lib', $niveau->getLib());
+        
+        return parent::getList($qb, $alias);
+    }
+    
+    /**
      * Détermine si on peut ajouter une étape ou non
      *
      * @return boolean
      */
-    public function canAdd($runEx=false)
+    public function canAdd($runEx = false)
     {
-        $role = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
-        if ($role instanceof \Application\Acl\IntervenantRole){ /** @todo refactoriser car pas très sûr */
-            return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter ou modifier une formation', $runEx);
+        $localContext = $this->getContextProvider()->getLocalContext();
+        $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        
+        if ($role instanceof \Application\Acl\DbRole) { 
+            if (!$localContext->getStructure()) {
+                throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
+            }
+            if ($localContext->getStructure()->getId() === $role->getStructure()->getId()
+                    || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())) {
+                return true;
+            }
+            
+            $this->cannotDoThat(
+                    "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier d'étape"
+                    . "pour la structure '{$localContext->getStructure()}'", $runEx);
         }
-        return true;
+
+        return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter ou modifier une étape', $runEx);
     }
 
     /**
      * Détermine si l'étape peut être éditée ou non
      * 
-     * @param \Application\Entity\Db\Etape $etape
+     * @param int|\Application\Entity\Db\Etape $etape
      * @return boolean
      */
-    public function canSave(EtapeEntity $etape, $runEx=false)
+    public function canSave($etape, $runEx = false)
     {
-        if (! $this->canAdd($runEx)) return false;
+        if (! $this->canAdd($runEx)) {
+            return false;
+        }
+        
+        if (!$etape instanceof EtapeEntity) {
+            $etape = $this->get($etape);
+        }
+        
         if ($etape->getSource()->getCode() !== \Application\Entity\Db\Source::CODE_SOURCE_OSE){
             $errStr = 'Cette formation n\'est pas modifiable dans OSE car elle provient du logiciel '.$etape->getSource();
             $errStr .= '. Si vous souhaitez mettre à jour ces informations, nous vous invitons donc à les modifier directement dans '.$etape->getSource().'.';
+            
             return $this->cannotDoThat($errStr, $runEx);
         }
+        
         return true;
     }
 

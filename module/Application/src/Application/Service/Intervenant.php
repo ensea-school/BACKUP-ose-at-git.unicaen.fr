@@ -132,7 +132,7 @@ class Intervenant extends AbstractEntityService
     }
     
     /**
-     * Importe un intervenant non encore importé.
+     * Importe un intervenant si besoin.
      * 
      * @param string $sourceCode Code source
      * @return IntervenantEntity
@@ -142,8 +142,8 @@ class Intervenant extends AbstractEntityService
     {
         $repo = $this->getEntityManager()->getRepository($this->getEntityClass());
         
-        if (($intervenant = $repo->findBySourceCode($sourceCode))) {
-            throw new RuntimeException("L'intervenant spécifié a déjà été importé : sourceCode = $sourceCode.");
+        if (($intervenant = $repo->findOneBySourceCode($sourceCode))) {
+            return $intervenant;
         }
         
         $import = $this->getServiceLocator()->get('importProcessusImport'); /* @var $import Import */

@@ -14,6 +14,11 @@ class IntervenantRole extends NamedRole
     const ROLE_ID = "intervenant";
     
     /**
+     * @var \Application\Entity\Db\Intervenant
+     */
+    protected $intervenant;
+    
+    /**
      * Constructeur.
      * 
      * @param string|null               $id
@@ -30,5 +35,25 @@ class IntervenantRole extends NamedRole
                 $name = "Intervenant", 
                 $description, 
                 $selectable);
+    }
+    
+    /**
+     * 
+     * @return \Application\Entity\Db\Intervenant
+     */
+    public function getIntervenant()
+    {
+        return $this->intervenant;
+    }
+
+    /**
+     * 
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return \Application\Acl\IntervenantRole
+     */
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    {
+        $this->intervenant = $intervenant;
+        return $this;
     }
 }

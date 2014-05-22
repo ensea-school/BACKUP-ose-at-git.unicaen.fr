@@ -29,6 +29,11 @@ class ContextProvider extends AbstractService
     protected $localContext;
     
     /**
+     * @var \Zend\Permissions\Acl\Role\RoleInterface
+     */
+    protected $selectedIdentityRole;
+    
+    /**
      * Retourne le contexte global.
      * 
      * @return GlobalContext
@@ -81,7 +86,15 @@ class ContextProvider extends AbstractService
      */
     public function getSelectedIdentityRole()
     {
-        return $this->getServiceLocator()->get('AuthUserContext')->getSelectedIdentityRole();
+        if (null === $this->selectedIdentityRole) {
+            $this->selectedIdentityRole = $this->getServiceLocator()->get('AuthUserContext')->getSelectedIdentityRole();
+            
+            if ($this->selectedIdentityRole instanceof IntervenantRole) {
+                $this->selectedIdentityRole->setIntervenant($this->getGlobalContext()->getIntervenant());
+            }
+        }
+        
+        return $this->selectedIdentityRole;
     }
     
     /**

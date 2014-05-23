@@ -85,13 +85,13 @@ class GlobalContext
         return $this;
     }
 
-    public function setIntervenant(EntityIntervenant $intervenant)
+    public function setIntervenant(EntityIntervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
         return $this;
     }
 
-    public function setPersonnel(Personnel $personnel)
+    public function setPersonnel(Personnel $personnel = null)
     {
         $this->personnel = $personnel;
         return $this;

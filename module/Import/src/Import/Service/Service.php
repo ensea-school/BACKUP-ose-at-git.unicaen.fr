@@ -8,6 +8,7 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Import\Exception\Exception;
 use ZfcUser\Entity\UserInterface;
 use UnicaenAuth\Service\DbUserAwareInterface;
+use Application\Entity\Db\Utilisateur;
 
 /**
  * Classe mère des services
@@ -150,6 +151,9 @@ class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
      */
     public function getDbUser()
     {
+        if (null === $this->currentUser) {
+            $this->currentUser = $this->getOSEDbUser();
+        }
         return $this->currentUser;
     }
 
@@ -163,4 +167,12 @@ class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
         $this->currentUser = $currentUser;
     }
 
+    /**
+     *
+     * @return Utilisateur
+     */
+    public function getOSEDbUser()
+    {
+        return $this->getEntityManager()->find('Application\Entity\Db\Utilisateur', Utilisateur::OSE_UTILISATEUR_ID);
+    }
 }

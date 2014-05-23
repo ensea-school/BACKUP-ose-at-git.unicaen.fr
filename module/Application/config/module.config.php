@@ -138,6 +138,7 @@ $main =  array(
     ),
     'service_manager' => array(
         'invokables' => array(
+            'AuthenticatedUserSavedListener'                 => 'Application\AuthenticatedUserSavedListener',
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
             'ApplicationContextProvider'                     => 'Application\\Service\\ContextProvider',

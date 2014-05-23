@@ -24,7 +24,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
-        $eventManager->attach(new AuthenticatedUserSavedListener($sm->get('doctrine.entitymanager.orm_default')));
+        $eventManager->attach($sm->get('AuthenticatedUserSavedListener'));
         
         /* Déclare la dernière vue transmise comme terminale si on est en AJAX */
         $sharedEvents = $eventManager->getSharedManager();

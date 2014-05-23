@@ -95,8 +95,10 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
         }
         
         $roles = array();
-        foreach ($dbUser->getPersonnel()->getRole() as $role) { /* @var $role Role */
-            $roles[] = DbRole::createRoleId($role->getType(), $role->getStructure()); // le role id suffit, pas besoin d'instance
+        if ($dbUser->getPersonnel()) {
+            foreach ($dbUser->getPersonnel()->getRole() as $role) { /* @var $role Role */
+                $roles[] = DbRole::createRoleId($role->getType(), $role->getStructure()); // le role id suffit, pas besoin d'instance
+            }
         }
         
         return $roles;

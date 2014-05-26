@@ -240,20 +240,23 @@ function Etape( id ) {
 
     this.id = id;
 
-    this.onAfterAdd = function(){
+    this.onAfterAdd = function()
+    {
 //        $.get( Etape.voirLigneUrl + "/" + this.id, function( data ) {
 //            $("#etape-" + this.id + "-ligne").refresh();
 //            $('#etapes > tbody:last').append(data);
 //        });
-        window.location.replace(window.location.toString() + "&etape=" + this.id);
+        window.location = updateQueryStringParameter(window.location.href, "etape", this.id);
     }
 
-    this.onAfterModify = function(){
+    this.onAfterModify = function()
+    {
 //        $( "#etape-"+this.id+"-ligne" ).refresh( {details:details} );
-        window.location.replace(window.location.toString() + "&etape=" + this.id);
+        window.location = updateQueryStringParameter(window.location.href, "etape", this.id);
     }
 
-    this.onAfterDelete = function(){
+    this.onAfterDelete = function()
+    {
 //        $( "#etape-"+this.id+"-ligne" ).fadeOut().remove();
         window.location.reload();
     }

@@ -195,9 +195,6 @@ class IntervenantController extends AbstractActionController implements \Applica
                 $this->flashMessenger()->addSuccessMessage("Dossier enregistré avec succès.");
                 return $this->redirect()->toUrl($this->url()->fromRoute('intervenant'));
             }
-            else {
-                var_dump('not valid');
-            }
         }
         
         return compact('intervenant', 'form');

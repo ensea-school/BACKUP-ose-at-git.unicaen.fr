@@ -49,9 +49,6 @@ class ImportController extends AbstractActionController
 
             $queries[$table] = $q;
         }
-        if (isset($queries['CHEMIN_PEDAGOGIQUE'])){
-            $queries['CHEMIN_PEDAGOGIQUE']->setColChanged(array('ELEMENT_PEDAGOGIQUE_ID','ETAPE_ID','VALIDITE_DEBUT','VALIDITE_FIN'));
-        }
         return $queries;
     }
 

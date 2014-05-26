@@ -9,6 +9,7 @@ use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
 use Common\Exception\RuntimeException;
 use Application\Entity\Db\HistoriqueAwareInterface;
+use Application\Entity\Db\ValiditeAwareInterface;
 
 /**
  * Listener Doctrine permettant l'ajout automatique de l'heure de création/modification 
@@ -63,8 +64,11 @@ class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterfac
          * Validité
          */
         
-        if (null === $entity->getValiditeDebut()) {
-            $entity->setValiditeDebut($now);
+        // l'entité doit implémenter l'interface requise
+        if ($entity instanceof ValiditeAwareInterface) {
+            if (null === $entity->getValiditeDebut()) {
+                $entity->setValiditeDebut($now);
+            }
         }
         
         /**

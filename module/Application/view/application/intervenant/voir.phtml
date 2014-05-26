@@ -1,13 +1,7 @@
-<h3><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h3>
+<h3 class="page-header"><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h3>
 
 <?php echo $this->intervenantDl($intervenant, true) ?>
 
 <br /><?php foreach( $changements as $changement ) { echo $this->differentielLigne( $changement ); } ?>
 
-<?php echo $this->navigation('navigation')->menuContextuel()->withTarget($intervenant->getId()) ?>
-
-<ul>
-    <li><a href="<?php echo $this->url('intervenant/default', 
-        array('action' => 'saisirServiceReferentiel'), 
-        array('query' => array('sourceCode' => $intervenant->getSourceCode()))) ?>">Service référentiel</a></li>
-</ul>
+<?php echo $this->navigation('navigation')->menuContextuel()->withTarget($intervenant->getId())->except('voir') ?>

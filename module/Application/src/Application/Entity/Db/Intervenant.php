@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 use Common\Constants;
 
@@ -1134,5 +1133,22 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getDateNaissanceToString()
     {
         return $this->dateNaissance->format(Constants::DATE_FORMAT);
+    }
+
+    /**
+     * Get adresse principale
+     *
+     * @param bool $returnFirstIfNoneFound
+     * @return AdresseIntervenant
+     */
+    public function getAdressePrincipale($returnFirstIfNoneFound = false)
+    {
+        foreach ($this->getAdresse() as $a) { /* @var $a AdresseIntervenant */
+            if ($a->getPrincipale()) {
+                return $a;
+            }
+        }
+        
+        return $returnFirstIfNoneFound ? reset($this->getAdresse()) : null;
     }
 }

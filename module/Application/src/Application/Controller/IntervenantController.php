@@ -4,40 +4,35 @@ namespace Application\Controller;
 
 use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
-use Doctrine\Common\Collections\ArrayCollection;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
-use Application\Form\ServiceReferentiel\FonctionServiceReferentielFieldset;
-use Application\Entity\Db\IntervenantPermanent;
 
 /**
  * Description of IntervenantController
  *
  * @method \Doctrine\ORM\EntityManager                em()
  * @method \Application\Controller\Plugin\Intervenant intervenant()
+ * @method \Application\Controller\Plugin\Context     context()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantController extends AbstractActionController
+class IntervenantController extends AbstractActionController implements \Application\Service\ContextProviderAwareInterface
 {
+    use \Application\Service\ContextProviderAwareTrait;
+    
     public function indexAction()
     {
-//        var_dump($this->identity());
-//        $em = $this->intervenant()->getEntityManager();
-//        $e = new \Application\Entity\Db\Etablissement();
-//        $e
-//                ->setLibelle('Établissement de test')
-//                ->setSource($em->find('Application\Entity\Db\Source', 'Harpege'))
-//                ->setSourceCode(rand(1, 999))
-////                ->setHistoCreateur($user = $em->find('Application\Entity\Db\Utilisateur', 2))
-////                ->setHistoModificateur($user)
-//                ;
-//        $em->persist($e);
-//        $em->flush();
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            $this->getEvent()->getRouteMatch()->setParam('id', $role->getIntervenant()->getId());
+            $this->voirAction();
+            return $this->forward()->dispatch('IntervenantController', array('action' => 'voir', 'id' => $role->getIntervenant()->getId()));
+        }
         
         $view = new \Zend\View\Model\ViewModel();
-//        $view->setVariables(array('form' => $form, 'intervenant' => $intervenant));
-        $this->getEvent()->setParam('modal', true);
+        $view->setVariables(array());
+
         return $view;
     }
 
@@ -168,6 +163,46 @@ class IntervenantController extends AbstractActionController
         return $view;
     }
     
+    public function saisirDossierAction()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $form = $this->getFormDossier();
+        
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            $intervenant = $role->getIntervenant();
+        }
+        else {
+            $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        }
+        
+        if (!$intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
+            throw new RuntimeException("La saisie de dossier n'est possible pour un intervenant extérieur.");
+        }
+        
+        if (!($dossier = $intervenant->getDossier())) {
+            $dossier = $this->getDossierService()->newEntity()->fromIntervenant($intervenant);
+            $intervenant->setDossier($dossier);
+        }
+        
+        $form->bind($dossier);
+        
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $this->getDossierService()->save($dossier);
+                $this->getIntervenantService()->save($intervenant);
+                $this->flashMessenger()->addSuccessMessage("Dossier enregistré avec succès.");
+                return $this->redirect()->toUrl($this->url()->fromRoute('intervenant'));
+            }
+            else {
+                var_dump('not valid');
+            }
+        }
+        
+        return compact('intervenant', 'form');
+    }
+    
     protected function getFormModifier()
     {
         $builder = new AnnotationBuilder();
@@ -175,5 +210,29 @@ class IntervenantController extends AbstractActionController
         $form->getHydrator()->setUnderscoreSeparatedKeys(false);
         
         return $form;
+    }
+    
+    /**
+     * @return \Application\Form\Intervenant\Dossier
+     */
+    protected function getFormDossier()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier');
+    }
+    
+    /**
+     * @return \Application\Service\Intervenant
+     */
+    protected function getIntervenantService()
+    {
+        return $this->getServiceLocator()->get('ApplicationIntervenant');
+    }
+    
+    /**
+     * @return \Application\Service\Dossier
+     */
+    protected function getDossierService()
+    {
+        return $this->getServiceLocator()->get('ApplicationDossier');
     }
 }

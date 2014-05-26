@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * AdresseIntervenant
  */
@@ -639,5 +637,32 @@ class AdresseIntervenant
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        $part1 = array();
+        $part1[] = $this->getNoVoie();
+        $part1[] = $this->getNomVoie();
+        $part1[] = $this->getBatiment();
+        $part1[] = $this->getMentionComplementaire();
+        $part1 = implode(', ', array_filter($part1));
+
+        $part2 = array();
+        $part2[] = $this->getLocalite();
+        $part2[] = $this->getCodePostal();
+        $part2[] = $this->getVille();
+        $part2[] = $this->getPaysLibelle();
+        $part2 = implode(', ', array_filter($part2));
+        
+        $parts = array();
+        $parts[] = $part1;
+        $parts[] = $part2;
+        
+        return implode(PHP_EOL, array_filter($parts));
     }
 }

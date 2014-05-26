@@ -17,18 +17,6 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-//                    'modifier' => array(
-//                        'type'    => 'Segment',
-//                        'options' => array(
-//                            'route'    => '/modifier/:id',
-//                            'constraints' => array(
-//                                'id' => '[0-9]*',
-//                            ),
-//                            'defaults' => array(
-//                                'action' => 'modifier',
-//                            ),
-//                        ),
-//                    ),
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -42,6 +30,19 @@ return array(
                             ),
                         ),
                     ),
+                    'saisir-dossier' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/saisir-dossier/:id',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'saisir-dossier',
+                                'id'     => 0,
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -50,25 +51,15 @@ return array(
         'default' => array(
             'home' => array(
                 'pages' => array(
-//                    'intervenant' => array(
-//                        'label'    => 'Intervenant',
+//                    'intervenants' => array(
+//                        'label'    => 'Intervenants',
 //                        'title'    => "Gestion des intervenants",
 //                        'route'    => 'intervenant',
 //                        'resource' => 'controller/Application\Controller\Intervenant:index',
 //                        'pages' => array(
-////                            'rechercher' => array(
-////                                'label'  => "Rechercher",
-////                                'title'  => "Rechercher un intervenant",
-////                                'route'  => 'intervenant/default',
-////                                'params' => array(
-////                                    'action' => 'rechercher',
-////                                ),
-////                                'visible' => true,
-////                                'pages' => array(),
-////                            ),
 //                            'voir' => array(
-//                                'label'  => "Voir",
-//                                'title'  => "Voir l'intervenant {id}",
+//                                'label'  => "Consultation",
+//                                'title'  => "Consultation de la fiche de l'intervenant {id}",
 //                                'route'  => 'intervenant/default',
 //                                'visible' => false,
 //                                'withtarget' => true,
@@ -84,6 +75,29 @@ return array(
 ////                            ),
 //                        ),
 //                    ),
+                    'intervenant' => array(
+                        'label'    => 'Intervenant',
+                        'title'    => "Intervenant",
+                        'route'    => 'intervenant',
+                        'resource' => 'controller/Application\Controller\Intervenant:index',
+                        'pages' => array(
+                            'dossier' => array(
+                                'label'  => "Saisir un dossier",
+                                'title'  => "Saisir un dossier d'intervenant vacataire",
+                                'route'  => 'intervenant/saisir-dossier',
+                                'visible' => false,
+                                'withtarget' => true,
+                            ),
+                            'voir' => array(
+                                'label'  => "Fiche intervenant",
+                                'title'  => "Consultation de la fiche de l'intervenant {id}",
+                                'route'  => 'intervenant/default',
+                                'action' => 'voir',
+                                'visible' => false,
+                                'withtarget' => true,
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -93,8 +107,9 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'apercevoir', 'saisirServiceReferentiel', 'search'),
-                    'roles' => array('user')),
+                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'apercevoir', 'search', 'saisir-dossier'),
+                    'roles' => array('user'),
+                ),
             ),
         ),
     ),
@@ -102,13 +117,23 @@ return array(
         'invokables' => array(
             'Application\Controller\Intervenant' => 'Application\Controller\IntervenantController',
         ),
+        'aliases' => array(
+            'IntervenantController' => 'Application\Controller\Intervenant',
+        ),
     ),
     'service_manager' => array(
         'invokables' => array(
             'ApplicationOffreFormation' => 'Application\\Service\\OffreFormation',
             'ApplicationIntervenant'    => 'Application\\Service\\Intervenant',
+            'ApplicationDossier'        => 'Application\\Service\\Dossier',
         ),
-        'factories' => array(
+        'initializers' => array(
+            'Application\Service\Initializer\IntervenantServiceAwareInitializer',
+        ),
+    ),
+    'form_elements' => array(
+        'invokables' => array(
+            'IntervenantDossier' => 'Application\Form\Intervenant\Dossier',
         ),
     ),
 );

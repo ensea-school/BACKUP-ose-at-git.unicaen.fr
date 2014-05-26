@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Dossier" table="DOSSIER">
+    <indexes>
+      <index name="IDX_20D1E2D59860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_20D1E2D7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_20D1E2D63F06898" columns="HISTO_MODIFICATEUR_ID"/>
+    </indexes>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="adresse" type="string" column="ADRESSE" length="1024" nullable="false"/>
+    <field name="civilite" type="string" column="CIVILITE" length="10" nullable="false"/>
+    <field name="email" type="string" column="EMAIL" length="128" nullable="false"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="128" nullable="true"/>
+    <field name="nomUsuel" type="string" column="NOM_USUEL" length="128" nullable="false"/>
+    <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="10" nullable="false"/>
+    <field name="prenom" type="string" column="PRENOM" length="128" nullable="false"/>
+    <field name="rib" type="string" column="RIB" length="23" nullable="false"/>
+    <field name="statut" type="string" column="STATUT" length="10" nullable="false"/>
+    <field name="typeEmployeur" type="string" column="TYPE_EMPLOYEUR" length="10" nullable="false"/>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

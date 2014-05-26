@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * IntervenantExterieur
  */
@@ -38,6 +36,11 @@ class IntervenantExterieur extends Intervenant
      * @var \Application\Entity\Db\SituationFamiliale
      */
     protected $situationFamiliale;
+
+    /**
+     * @var \Application\Entity\Db\Dossier
+     */
+    protected $dossier;
 
 
     /**
@@ -176,5 +179,28 @@ class IntervenantExterieur extends Intervenant
     public function getSituationFamiliale()
     {
         return $this->situationFamiliale;
+    }
+
+    /**
+     * Set dossier
+     *
+     * @param \Application\Entity\Db\Dossier $dossier
+     * @return IntervenantExterieur
+     */
+    public function setDossier(\Application\Entity\Db\Dossier $dossier = null)
+    {
+        $this->dossier = $dossier;
+
+        return $this;
+    }
+
+    /**
+     * Get dossier
+     *
+     * @return \Application\Entity\Db\Dossier 
+     */
+    public function getDossier()
+    {
+        return $this->dossier;
     }
 }

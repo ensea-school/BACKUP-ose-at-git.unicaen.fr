@@ -37,5 +37,10 @@
         <join-column name="SITUATION_FAMILIALE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-one field="dossier" target-entity="Application\Entity\Db\Dossier">
+      <join-columns>
+        <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

@@ -1,0 +1,43 @@
+<h2 class="page-header">Saisie de dossier <small><?php echo $intervenant ?></small></h2>
+
+<style>
+    div.rib-part { display: inline-block; vertical-align: top; }
+    div.rib-part input { width: auto; }
+</style>
+
+<?php echo $this->form()->openTag($form->prepare()) ?> 
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('nomUsuel')); ?>
+        <?php echo $this->formControlGroup($form->get('nomPatronymique')); ?>
+        <?php echo $this->formControlGroup($form->get('prenom')); ?>
+        <?php echo $this->formControlGroup($form->get('civilite')); ?>
+    </div>
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('numeroInsee')); ?>
+        <?php echo $this->formControlGroup($form->get('adresse')); ?>
+        <?php echo $this->formControlGroup($form->get('email')); ?>
+    </div>
+    <div class="col-md-6">
+        <?php echo $this->formControlGroup($form->get('typeEmployeur')); ?>
+        <?php echo $this->formControlGroup($form->get('statut')); ?>
+        <fieldset class="rib">
+            <legend>RIB</legend>
+            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('banque')); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('guichet')); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('compte')); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('cle')); ?></div>
+            <?php echo $this->formControlGroup($form->get('rib')->get('hidden')); ?>
+        </fieldset>
+    </div>
+</div>
+<?php echo $this->formHidden($form->get('id')); ?>
+<hr />
+<input class="btn btn-primary" type="submit" value="Enregistrer" name="submit">
+<?php echo $this->form()->closeTag() ?> 
+
+<script>
+    $(function() {
+        $(":input").tooltip({ placement: 'bottom' });
+    });
+</script>

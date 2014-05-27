@@ -74,6 +74,11 @@ class TypeIntervention
      */
     protected $histoCreateur;
 
+    public function __toString()
+    {
+        return $this->getCode();
+    }
+
 
     /**
      * Set code

@@ -1,0 +1,44 @@
+<h1 class="page-header">Services <small>Année universitaire <?php echo $annee; ?></small></h1>
+
+<?php
+    echo $this->messenger()->setMessages(array('warning' => "Sont visibles ici les référentiels et les services prévisionnels des intervenants affectés "
+        . "ou enseignant dans votre structure de responsabilité ou l'une de ses sous-structures."));
+?>
+
+<div id="filtres" data-url="<?php echo $this->url('service/default', array('action'=>'filtres')) ?>">
+    <?php echo $this->filtresListe; ?>
+</div>
+
+<?php if ('afficher' === $action ): ?>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th style="width:40%" rowspan="2">Intervenant</th>
+            <th style="width:40%" colspan="<?php echo count($typesIntervention ); ?>">Services</th>
+            <th style="width:10%" rowspan="2">Heures &Eacute;q. TD</th>
+            <th style="width:10%" rowspan="2">Fonctions référentielles</th>
+        </tr>
+        <tr>
+            <?php foreach( $typesIntervention as $ti ): ?>
+                <th title="<?php echo $ti->getLibelle() ?>"><?php echo $ti ?></th>
+            <?php endforeach; ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach( $data as $line ): ?>
+        <tr>
+            <td><?php echo $line['intervenant']; ?></td>
+            <?php foreach( $typesIntervention as $ti ): ?>
+                <td><?php echo $line[$ti->getId()]; ?></td>
+            <?php endforeach; ?>
+            <td><?php echo $line['hetd'] ?></td>
+            <td><?php echo $line['sr'] ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php else: ?>
+<?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
+<?php endif; ?>

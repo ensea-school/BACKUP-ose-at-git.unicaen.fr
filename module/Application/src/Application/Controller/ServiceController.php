@@ -42,7 +42,7 @@ class ServiceController extends AbstractActionController
         $qb      = $service->finderByContext();
         $viewModel = new \Zend\View\Model\ViewModel();
         $filter    = new \stdClass();
-        
+
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
@@ -64,7 +64,7 @@ class ServiceController extends AbstractActionController
         $this->getContextProvider()->getLocalContext()->fromArray(
                 (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
         );
-            
+
         /* Préparation et affichage */
         if ('afficher' === $action){
             $services = $service->getList($qb);
@@ -82,6 +82,28 @@ class ServiceController extends AbstractActionController
         }
 
         $viewModel->setVariables(compact('annee', 'services', 'action', 'role'));
+        return $viewModel;
+    }
+
+    public function resumeAction()
+    {
+        $viewModel = new \Zend\View\Model\ViewModel();
+        
+        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $action = $this->getRequest()->getQuery('action', null);
+        $params = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'filtres';
+        $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
+        $viewModel->addChild($listeViewModel, 'filtresListe');
+        $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+        /* @var $rechercheForm \Application\Form\Service\Recherche */
+        $filter = $rechercheForm->hydrateFromSession();
+
+        $typesIntervention = $this->getServiceLocator()->get('ApplicationTypeIntervention')->getList();
+
+        $data = array();
+
+        $viewModel->setVariables( compact('annee','action','data','typesIntervention') );
         return $viewModel;
     }
 

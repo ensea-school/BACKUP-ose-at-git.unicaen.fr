@@ -4,8 +4,8 @@ namespace Application\Service;
 
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Application\Entity\Db\Structure;
-use Application\Entity\Db\Etape;
+use Application\Entity\Db\Structure as EntityStructure;
+use Application\Entity\Db\Etape as EntityEtape;
 use Application\Entity\NiveauEtape;
 
 /**
@@ -28,7 +28,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
     protected $statutInterv;
     
     /**
-     * @var Structure
+     * @var EntityStructure
      */
     protected $structure;
     
@@ -38,7 +38,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
     protected $niveau;
     
     /**
-     * @var Etape
+     * @var EntityEtape
      */
     protected $etape;
 
@@ -62,13 +62,13 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
     }
     
     /**
-     * @return Structure
+     * @return EntityStructure
      */
     public function getStructure()
     {
         if (null === $this->structure) {
             $this->structure = $this->getSessionContainer()->structure;
-            if ($this->structure && !$this->structure instanceof Structure) {
+            if ($this->structure && !$this->structure instanceof EntityStructure) {
                 $this->structure = $this->getEntityManager()->find("Application\Entity\Db\Structure", $this->structure);
             }
         }
@@ -92,13 +92,13 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
     }
 
     /**
-     * @return Etape
+     * @return EntityEtape
      */
     public function getEtape()
     {
         if (null === $this->etape) {
             $this->etape = $this->getSessionContainer()->etape;
-            if ($this->etape && !$this->etape instanceof Etape) {
+            if ($this->etape && !$this->etape instanceof EntityEtape) {
                 $this->etape = $this->getEntityManager()->find("Application\Entity\Db\Etape", $this->etape);
             }
         }
@@ -112,7 +112,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         return $this;
     }
 
-    public function setStructure(Structure $structure = null)
+    public function setStructure(EntityStructure $structure = null)
     {
         $this->structure = $structure;
         $this->getSessionContainer()->structure = $structure ? $structure->getId() : null;
@@ -126,7 +126,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         return $this;
     }
 
-    public function setEtape(Etape $etape = null)
+    public function setEtape(EntityEtape $etape = null)
     {
         $this->etape = $etape;
         $this->getSessionContainer()->etape = $etape ? $etape->getId() : null;

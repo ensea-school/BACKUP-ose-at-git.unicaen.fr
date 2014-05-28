@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Zend\Session\Container;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
@@ -17,6 +18,11 @@ use Application\Entity\NiveauEtape;
 class LocalContext extends AbstractContext implements EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
+    
+    /**
+     * @var Container
+     */
+    protected $sessionContainer;
     
     /**
      * @var string

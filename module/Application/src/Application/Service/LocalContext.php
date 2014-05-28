@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
+use Application\Entity\Db\Intervenant as EntityIntervenant;
 use Application\Entity\Db\Structure as EntityStructure;
 use Application\Entity\Db\Etape as EntityEtape;
 use Application\Entity\NiveauEtape;
@@ -16,11 +17,6 @@ use Application\Entity\NiveauEtape;
 class LocalContext extends AbstractContext implements EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
-    
-    /**
-     * @var \Zend\Session\Container
-     */
-    protected $sessionContainer;
     
     /**
      * @var string
@@ -48,6 +44,20 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
     public function __construct(\Doctrine\ORM\EntityManager $entityManager)
     {
         $this->setEntityManager($entityManager);
+    }
+
+    /**
+     * @return EntityIntervenant
+     */
+    public function getIntervenant()
+    {
+        if (null === $this->intervenant) {
+            $this->intervenant = $this->getSessionContainer()->intervenant;
+            if ($this->intervenant && !$this->intervenant instanceof EntityIntervenant) {
+                $this->intervenant = $this->getEntityManager()->find("Application\Entity\Db\Intervenant", $this->intervenant);
+            }
+        }
+        return $this->structure;
     }
     
     /**
@@ -103,6 +113,18 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
             }
         }
         return $this->etape;
+    }
+
+    /**
+     * 
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return \Application\Service\LocalContext
+     */
+    public function setIntervenant(EntityIntervenant $intervenant = null)
+    {
+        $this->intervenant = $intervenant;
+        $this->getSessionContainer()->intervenant = $intervenant ? $intervenant->getId() : null;
+        return $this;
     }
 
     public function setStatutInterv($statutInterv = null)

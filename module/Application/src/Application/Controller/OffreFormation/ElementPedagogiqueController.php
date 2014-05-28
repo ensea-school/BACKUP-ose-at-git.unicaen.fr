@@ -178,8 +178,12 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         $result = array();
         foreach ($found as $item) {
             $extra = '';
-            $extra .= sprintf('<span class="element-rech niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
-            $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Étape", $item['LIBELLE_ETAPE']);
+            if (!$niveau) {
+                $extra .= sprintf('<span class="element-rech niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
+            }
+            if (!$etape) {
+                $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Étape", $item['LIBELLE_ETAPE']);
+            }
             $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
             $template = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Élément pédagogique");
             $result[$item['ID']] = array(

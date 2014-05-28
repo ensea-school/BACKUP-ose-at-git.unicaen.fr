@@ -20,7 +20,7 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:action[/:id]',
+                            'route'    => '/:action[/:id][?page=:page]',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
@@ -39,6 +39,19 @@ return array(
                             ),
                             'defaults' => array(
                                 'action' => 'saisir-dossier',
+                                'id'     => 0,
+                            ),
+                        ),
+                    ),
+                    'voir-services' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/voir-services/:id',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'voir-services',
                                 'id'     => 0,
                             ),
                         ),
@@ -107,7 +120,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'apercevoir', 'search', 'saisir-dossier'),
+                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'apercevoir', 'search', 'saisir-dossier', 'voir-services'),
                     'roles' => array('user'),
                 ),
             ),

@@ -94,11 +94,12 @@ class IntervenantController extends AbstractActionController implements \Applica
         
         return $view;
     }
-    
+
     public function voirAction()
     {
         $this->em()->getFilters()->enable('historique');
-        
+        $page = $this->params()->fromQuery('page', 'fiche');
+
         if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
             throw new LogicException("Aucun identifiant d'intervenant spécifié.");
         }
@@ -112,16 +113,21 @@ class IntervenantController extends AbstractActionController implements \Applica
         $short = $this->params()->fromQuery('short', false);
 
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(compact('intervenant', 'changements', 'title', 'short'));
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        
+        if ('services' == $page){
+            $params = $this->getEvent()->getRouteMatch()->getParams();
+            $params['action'] = 'intervenant';
+            $params['intervenant'] = $intervenant->getId();
+            $servicesViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
+            $view->addChild($servicesViewModel, 'services');
+        }
+        $view->setVariables(compact('intervenant', 'changements', 'title', 'short', 'page'));
         return $view;
     }
-    
+
     public function apercevoirAction()
     {
         $this->em()->getFilters()->enable('historique');
-        
+
         $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
@@ -132,10 +138,10 @@ class IntervenantController extends AbstractActionController implements \Applica
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(compact('intervenant', 'changements', 'title', 'short'));
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        
+
         return $view;
     }
-    
+
     public function modifierAction()
     {
         if (!($id = $this->params()->fromRoute('id'))) {

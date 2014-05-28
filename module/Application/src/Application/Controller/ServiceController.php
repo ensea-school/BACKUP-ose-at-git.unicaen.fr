@@ -46,17 +46,22 @@ class ServiceController extends AbstractActionController
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
-            $params           = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action'] = 'filtres';
-            $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-            $viewModel->addChild($listeViewModel, 'filtresListe');
-
-            $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
-            /* @var $rechercheForm \Application\Form\Service\Recherche */
-            $filter = $rechercheForm->hydrateFromSession();
+            $intervenant = (int)$this->params()->fromRoute('intervenant'); // N'afficher qu'un seul intervenant
+            $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->get($intervenant);
+            if ($intervenant){
+                $service->finderByIntervenant( $intervenant, $qb );
+                $action = 'afficher'; // Affichage par défaut
+            }else{
+                $params = $this->getEvent()->getRouteMatch()->getParams();
+                $params['action'] = 'filtres';
+                $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
+                $viewModel->addChild($listeViewModel, 'filtresListe');
+                $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+                /* @var $rechercheForm \Application\Form\Service\Recherche */
+                $filter = $rechercheForm->hydrateFromSession();
+            }
             $service->finderByFilterObject($filter, null, $qb);
-        }
-        else {
+        }else {
             $action = 'afficher'; // Affichage par défaut
         }
 
@@ -82,6 +87,42 @@ class ServiceController extends AbstractActionController
         }
 
         $viewModel->setVariables(compact('annee', 'services', 'action', 'role'));
+        return $viewModel;
+    }
+
+    public function intervenantAction()
+    {
+        $service = $this->getServiceService();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $qb      = $service->finderByContext();
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $filter    = new \stdClass();
+
+        $action = 'afficher';
+        $intervenant = (int)$this->params()->fromRoute('intervenant'); // N'afficher qu'un seul intervenant
+        $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->get($intervenant);
+        $service->finderByIntervenant( $intervenant, $qb );
+        $service->finderByFilterObject($filter, null, $qb);
+
+        // sauvegarde des filtres dans le contexte local
+        $this->getContextProvider()->getLocalContext()->fromArray(
+                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
+        );
+
+        /* Préparation et affichage */
+        $services = $service->getList($qb);
+
+        // services référentiels : délégation au contrôleur
+        $controller       = 'Application\Controller\ServiceReferentiel';
+        $params           = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'voirListe';
+        $params['query']  = $this->params()->fromQuery();
+        $listeViewModel   = $this->forward()->dispatch($controller, $params);
+        $viewModel->addChild($listeViewModel, 'servicesRefListe');
+
+        $viewModel->setVariables(compact('annee', 'services', 'action', 'role'));
+        $viewModel->setTemplate('application/service/index');
         return $viewModel;
     }
 

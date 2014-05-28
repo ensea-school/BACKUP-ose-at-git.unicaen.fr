@@ -65,6 +65,18 @@ return array(
                             ),
                         ),
                     ),
+                    'intervenant' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/intervenant/:intervenant',
+                            'constraints' => array(
+                                'intervenant'     => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'intervenant',
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'service-ref' => array(

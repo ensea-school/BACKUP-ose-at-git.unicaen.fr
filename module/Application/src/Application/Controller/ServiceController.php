@@ -117,8 +117,8 @@ class ServiceController extends AbstractActionController
         // services référentiels : délégation au contrôleur
         $controller       = 'Application\Controller\ServiceReferentiel';
         $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'voirListe';
-        $params['query']  = $this->params()->fromQuery();
+//        $params['action'] = 'voirListe';
+//        $params['query']  = $this->params()->fromQuery();
         $listeViewModel   = $this->forward()->dispatch($controller, $params);
         $viewModel->addChild($listeViewModel, 'servicesRefListe');
 
@@ -129,6 +129,11 @@ class ServiceController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * Totaux de services et de référentiel par intervenant.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function resumeAction()
     {
         $viewModel = new \Zend\View\Model\ViewModel();
@@ -144,10 +149,10 @@ class ServiceController extends AbstractActionController
         $filter = $rechercheForm->hydrateFromSession();
 
         $typesIntervention = $this->getServiceLocator()->get('ApplicationTypeIntervention')->getList();
-
-        $data = array();
-
+        $data              = $this->getServiceService()->getResumeService($filter);
+        
         $viewModel->setVariables( compact('annee','action','data','typesIntervention') );
+        
         return $viewModel;
     }
 

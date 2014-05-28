@@ -11,13 +11,13 @@
 
 <?php if ('afficher' === $action ): ?>
 
-<table class="table table-striped table-bordered">
+<table class="table table-hover table-bordered">
     <thead>
         <tr>
             <th style="width:40%" rowspan="2">Intervenant</th>
-            <th style="width:40%" colspan="<?php echo count($typesIntervention ); ?>">Services</th>
+            <th style="width:40%" colspan="<?php echo count($typesIntervention); ?>">Services</th>
+            <th style="width:10%" rowspan="2">Référentiel</th>
             <th style="width:10%" rowspan="2">Heures &Eacute;q. TD</th>
-            <th style="width:10%" rowspan="2">Fonctions référentielles</th>
         </tr>
         <tr>
             <?php foreach( $typesIntervention as $ti ): ?>
@@ -26,14 +26,19 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach( $data as $line ): ?>
+        <?php foreach( $data as $intervenantId => $line ): ?>
         <tr>
-            <td><?php echo $line['intervenant']; ?></td>
+            <?php
+            $url = $this->url('service/intervenant', array('intervenant' => $line['intervenant']['SOURCE_CODE']));
+            $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
+            $na = '<span title="Non applicable (intervenant vacataire))">NA</span>';
+            ?>
+            <td><a href="<?php echo $url ?>"><?php echo strtoupper($line['intervenant']['NOM_USUEL']) . ' ' . $line['intervenant']['PRENOM']; ?></a></td>
             <?php foreach( $typesIntervention as $ti ): ?>
-                <td><?php echo $line[$ti->getId()]; ?></td>
+            <td><?php echo isset($line['service'][$ti->getId()]) ? $line['service'][$ti->getId()] : 0 ?></td>
             <?php endforeach; ?>
-            <td><?php echo $line['hetd'] ?></td>
-            <td><?php echo $line['sr'] ?></td>
+            <td><?php echo array_key_exists('referentiel', $line) ? $line['referentiel'] : ($intervenantPermanent ? 0 : $na) ?></td>
+            <td><?php echo $line['hetd'] = 'NC' ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

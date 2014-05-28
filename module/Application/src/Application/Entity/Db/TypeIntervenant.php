@@ -2,13 +2,16 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * TypeIntervenant
  */
 class TypeIntervenant implements HistoriqueAwareInterface
 {    
+    static public $classToCode = array(
+        'Application\Entity\Db\IntervenantPermanent' => 'P',
+        'Application\Entity\Db\IntervenantExterieur' => 'E',
+    );
+    
     /**
      * @var string
      */
@@ -310,6 +313,8 @@ class TypeIntervenant implements HistoriqueAwareInterface
 	 * 										Début ajout
 	 **************************************************************************************************/
 
+    CONST CODE_PERMANENT = 'P';
+    CONST CODE_EXTERIEUR = 'E';
     CONST TYPE_PERMANENT = 1;
     CONST TYPE_EXTERIEUR = 2;
 

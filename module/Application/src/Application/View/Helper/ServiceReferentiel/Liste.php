@@ -51,9 +51,8 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      *
      * @return string
      */
-    public function render($details = false)
+    public function render()
     {
-//        $urlSaisir    = $this->getView()->url('service-ref/default', array('action' => 'saisir'));
         $urlVoirListe = $this->getView()->url('service-ref/default', array('action' => 'voirListe'));
         $parts        = array();
         
@@ -69,13 +68,11 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
         foreach ($this->services as $service) {
             $parts[] = '<tr id="service-ref-' . $service->getId() . '-ligne">';
-            $parts[] = $this->getView()->serviceReferentielLigne($service)->render($details);
+            $parts[] = $this->renderLigne($service);
             $parts[] = '</tr>';
         }
         
         $parts[] = '</table>';
-
-//        $parts[] = '<a class="ajax-modal services-ref btn btn-default" data-event="service-ref-add-message" href="' . $urlSaisir . '" title="Ajouter un service référentiel"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
         
         $parts[] = '<script type="text/javascript">';
         $parts[] = '$(function() { ServiceReferentiel.init("' . $urlVoirListe . '"); });';
@@ -84,6 +81,14 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $this->applyGlobalContext($parts);
         
         return implode(PHP_EOL, $parts);
+    }
+    
+    protected function renderLigne($service)
+    {
+        $helper = $this->getView()->serviceReferentielLigne($service); /* @var $helper Ligne */
+        $helper->setRenderIntervenants($this->getRenderIntervenants());
+        
+        return $helper->render();
     }
 
     /**
@@ -96,7 +101,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $context = $this->getContextProvider()->getGlobalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof IntervenantRole) {
+        if ($role instanceof IntervenantRole && !$this->getRenderIntervenants()) {
             unset($parts['intervenant']);
         }
         if ($context->getAnnee()) {
@@ -123,6 +128,22 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function setServices(array $services)
     {
         $this->services = $services;
+        return $this;
+    }
+    
+    /**
+     * @var boolean
+     */
+    protected $renderIntervenants = true;
+
+    public function getRenderIntervenants()
+    {
+        return $this->renderIntervenants;
+    }
+
+    public function setRenderIntervenants($renderIntervenants)
+    {
+        $this->renderIntervenants = $renderIntervenants;
         return $this;
     }
 }

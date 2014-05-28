@@ -73,6 +73,27 @@ class ServiceReferentielController extends AbstractActionController implements C
         return $viewModel;
     }
 
+    public function intervenantAction()
+    {
+        $service = $this->getServiceServiceReferentiel();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $viewModel = new \Zend\View\Model\ViewModel();
+
+        $intervenant = $this->context()->intervenantFromRoute(); // N'afficher qu'un seul intervenant
+
+        // sauvegarde des filtres dans le contexte local
+        $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
+
+        $qb       = $service->getFinder();
+        $services = $qb->getQuery()->execute();
+        
+        $viewModel->setVariables(compact('annee', 'services', 'action', 'role'));
+        $viewModel->setTemplate('application/service-referentiel/voir-liste');
+        
+        return $viewModel;
+    }
+
     public function voirAction()
     {
         $service = $this->getServiceServiceReferentiel();
@@ -91,7 +112,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         $service  = $this->getServiceServiceReferentiel();
         $qb       = $service->getFinder()->orderBy("i.nomUsuel, s.libelleCourt");
         $services = $qb->getQuery()->execute();
-
+        
         return compact('services');
     }
 

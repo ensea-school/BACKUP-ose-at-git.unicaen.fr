@@ -51,10 +51,9 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     /**
      * Génère le code HTML.
      *
-     * @param boolean $details
      * @return string
      */
-    public function render($details = false)
+    public function render()
     {
         $parts = array();
         
@@ -94,8 +93,15 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderIntervenant($intervenant)
     {
-        $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getSourceCode()));
-        $out   = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $out  = '';
+        
+        if (!$role instanceof \Application\Acl\IntervenantRole) {
+            if ($this->getRenderIntervenants()) {
+                $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getSourceCode()));
+                $out   = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
+            }
+        }
         
         return $out;
     }
@@ -168,6 +174,22 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function setService(ServiceReferentiel $service)
     {
         $this->service = $service;
+        return $this;
+    }
+    
+    /**
+     * @var boolean
+     */
+    protected $renderIntervenants = true;
+
+    public function getRenderIntervenants()
+    {
+        return $this->renderIntervenants;
+    }
+
+    public function setRenderIntervenants($renderIntervenants)
+    {
+        $this->renderIntervenants = $renderIntervenants;
         return $this;
     }
 }

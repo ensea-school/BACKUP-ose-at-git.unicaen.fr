@@ -45,6 +45,7 @@ class ServiceController extends AbstractActionController
 
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
+            $renderIntervenants = true;
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
             $intervenant = (int)$this->params()->fromRoute('intervenant'); // N'afficher qu'un seul intervenant
             $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->get($intervenant);
@@ -62,6 +63,7 @@ class ServiceController extends AbstractActionController
             }
             $service->finderByFilterObject($filter, null, $qb);
         }else {
+            $renderIntervenants = false;
             $action = 'afficher'; // Affichage par défaut
         }
 
@@ -86,7 +88,7 @@ class ServiceController extends AbstractActionController
             $services = array();
         }
 
-        $viewModel->setVariables(compact('annee', 'services', 'action', 'role'));
+        $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'renderIntervenants'));
         return $viewModel;
     }
 
@@ -100,8 +102,7 @@ class ServiceController extends AbstractActionController
         $filter    = new \stdClass();
 
         $action = 'afficher';
-        $intervenant = (int)$this->params()->fromRoute('intervenant'); // N'afficher qu'un seul intervenant
-        $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->get($intervenant);
+        $intervenant = $this->context()->intervenantFromRoute();
         $service->finderByIntervenant( $intervenant, $qb );
         $service->finderByFilterObject($filter, null, $qb);
 
@@ -121,7 +122,9 @@ class ServiceController extends AbstractActionController
         $listeViewModel   = $this->forward()->dispatch($controller, $params);
         $viewModel->addChild($listeViewModel, 'servicesRefListe');
 
-        $viewModel->setVariables(compact('annee', 'services', 'action', 'role'));
+        $renderIntervenants = false;
+
+        $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'renderIntervenants'));
         $viewModel->setTemplate('application/service/index');
         return $viewModel;
     }

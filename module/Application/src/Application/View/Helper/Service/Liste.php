@@ -20,6 +20,28 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     use ContextProviderAwareTrait;
 
     /**
+     * description
+     *
+     * @var boolean
+     */
+    protected $renderIntervenants = true;
+
+
+    public function getRenderIntervenants()
+    {
+        return $this->renderIntervenants;
+    }
+
+    public function setRenderIntervenants($renderIntervenants)
+    {
+        $this->renderIntervenants = $renderIntervenants;
+        return $this;
+    }
+
+
+
+
+    /**
      * Helper entry point.
      *
      * @param Service[] $services
@@ -57,7 +79,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $out .= '<table id="services" class="table table-bordered service">';
         $out .= '<tr>';
 
-        if (!$role instanceof \Application\Acl\IntervenantRole) {
+        if ($this->getRenderIntervenants()) {
             $out .= "<th>Intervenant</th>\n";
             $out .= "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>\n";
             $colspan += 2;
@@ -95,7 +117,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $detailsUrl = $this->getView()->url('volume-horaire/default', array('action' => 'liste', 'id' => $service->getId()));
 
         $out  = '<tr id="service-'.$service->getId().'-ligne" data-url="'.$url.'">';
-        $out .= $this->getView()->serviceLigne( $service )->render($details);
+        $out .= $this->getView()->serviceLigne( $service )->setRenderIntervenants($this->getRenderIntervenants())->render($details);
         $out .= '</tr>';
         $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>'
                 .'<td class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-td" data-url="'.$detailsUrl.'" colspan="999">'

@@ -25,6 +25,25 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected $service;
 
     /**
+     * description
+     *
+     * @var boolean
+     */
+    protected $renderIntervenants = true;
+
+
+    public function getRenderIntervenants()
+    {
+        return $this->renderIntervenants;
+    }
+
+    public function setRenderIntervenants($renderIntervenants)
+    {
+        $this->renderIntervenants = $renderIntervenants;
+        return $this;
+    }
+
+    /**
      * Helper entry point.
      *
      * @param Service $service
@@ -55,15 +74,12 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function render( $details=false )
     {
         $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
         $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeures($this->service);
 
-        $sid = $this->service->getId();
-
         $out = '';
-        if (!$role instanceof \Application\Acl\IntervenantRole) {
+        if ($this->getRenderIntervenants()) {
             $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
             if ($this->service->getIntervenant() instanceof Application\Entity\Db\IntervenantExterieur){
                 $out .= '<td>'.$this->renderStructure( $this->service->getStructureAff() )."</td>\n";

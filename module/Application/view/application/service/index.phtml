@@ -44,7 +44,7 @@
 <?php echo $this->messenger()->setMessage("Les heures à saisir ci-dessous sont les heures réellement effectuées et non les heures payables."); ?>
 <?php endif; ?>
 
-<?php echo $this->serviceListe( $services )->render(); ?>
+<?php echo $this->serviceListe( $services )->setRenderIntervenants($renderIntervenants)->render(); ?>
 
 <?php else:?>
 <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>

@@ -116,7 +116,7 @@ class IntervenantController extends AbstractActionController implements \Applica
         if ('services' == $page){
             $params = $this->getEvent()->getRouteMatch()->getParams();
             $params['action'] = 'intervenant';
-            $params['intervenant'] = $intervenant->getId();
+            $params['intervenant'] = $intervenant->getSourceCode();
             $servicesViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
             $view->addChild($servicesViewModel, 'services');
         }

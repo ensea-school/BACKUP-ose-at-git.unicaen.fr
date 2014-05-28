@@ -1,7 +1,7 @@
--- totaux des heures de référentiel
 create or replace view v_resume_referentiel as
+-- totaux des heures de référentiel
   select 
-    i.NOM_USUEL, i.PRENOM, i.id intervenant_id, i.SOURCE_CODE, ti.CODE,
+    i.NOM_USUEL, i.PRENOM, i.id intervenant_id, i.SOURCE_CODE, ti.CODE type_intervenant_code,
     s.STRUCTURE_ID STRUCTURE_ENS_ID, i.STRUCTURE_ID STRUCTURE_AFF_ID,
     s.id service_id, s.annee_id,
     sum(nvl(s.HEURES, 0)) as total_heures
@@ -15,22 +15,23 @@ create or replace view v_resume_referentiel as
     s.id, s.annee_id
   order by i.NOM_USUEL, i.PRENOM;
 
--- totaux des heures de services prévisionnels
 create or replace view v_resume_service as
+-- totaux des heures de services prévisionnels
   select 
-    i.NOM_USUEL, i.PRENOM, i.id intervenant_id, i.SOURCE_CODE, 
+    i.NOM_USUEL, i.PRENOM, i.id intervenant_id, i.SOURCE_CODE, ti.CODE type_intervenant_code,
     vh.TYPE_INTERVENTION_ID, 
     s.STRUCTURE_ENS_ID STRUCTURE_ENS_ID,
     s.STRUCTURE_AFF_ID STRUCTURE_AFF_ID,
     s.id service_id, ep.id element_pedagogique_id, e.id etape_id, s.annee_id,
     sum(nvl(vh.HEURES, 0)) as total_heures
   from INTERVENANT i 
+  join TYPE_INTERVENANT ti on i.TYPE_ID = ti.id 
   join SERVICE s on s.INTERVENANT_ID = i.id                                   and s.HISTO_DESTRUCTEUR_ID is null and sysdate between s.VALIDITE_DEBUT and nvl(s.VALIDITE_FIN, sysdate)
   left join VOLUME_HORAIRE vh on vh.SERVICE_ID = s.id                         and vh.HISTO_DESTRUCTEUR_ID is null and sysdate between vh.VALIDITE_DEBUT and nvl(vh.VALIDITE_FIN, sysdate)
   left join ELEMENT_PEDAGOGIQUE ep on s.ELEMENT_PEDAGOGIQUE_ID = ep.id        and ep.HISTO_DESTRUCTEUR_ID is null and sysdate between ep.VALIDITE_DEBUT and nvl(ep.VALIDITE_FIN, sysdate)
   left join ETAPE e on ep.ETAPE_ID = e.id and e.HISTO_DESTRUCTEUR_ID is null  and sysdate between e.VALIDITE_DEBUT and nvl(e.VALIDITE_FIN, sysdate)
   where i.HISTO_DESTRUCTEUR_ID is null
-  group by vh.TYPE_INTERVENTION_ID, s.STRUCTURE_ENS_ID, s.STRUCTURE_AFF_ID, ep.id, e.id, s.annee_id, i.NOM_USUEL, i.PRENOM, i.id, i.SOURCE_CODE, s.id
+  group by vh.TYPE_INTERVENTION_ID, s.STRUCTURE_ENS_ID, s.STRUCTURE_AFF_ID, ep.id, e.id, s.annee_id, i.NOM_USUEL, i.PRENOM, i.id, i.SOURCE_CODE, ti.CODE, s.id
   order by i.NOM_USUEL, i.PRENOM;
 
 

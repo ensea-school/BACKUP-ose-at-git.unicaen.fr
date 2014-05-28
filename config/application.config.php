@@ -4,7 +4,7 @@ $env = getenv('APP_ENV') ?: 'production';
 
 $modules = array(
     'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
-    'UnicaenApp', 'AssetManager',
+    'UnicaenApp', //'AssetManager',
     'UnicaenAuth',
     'UnicaenLdap',
     'Common',

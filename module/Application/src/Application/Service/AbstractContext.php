@@ -78,7 +78,7 @@ abstract class AbstractContext
 
     public function fromArray(array $context = array())
     {
-        $h = new \Zend\Stdlib\Hydrator\ObjectProperty();
+        $h = new \Zend\Stdlib\Hydrator\ClassMethods(false);
         $h->hydrate($context, $this);
         return $this;
     }

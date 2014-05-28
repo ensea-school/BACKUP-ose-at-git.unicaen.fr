@@ -3,6 +3,8 @@
 <style>
     div.rib-part { display: inline-block; vertical-align: top; }
     div.rib-part input { width: auto; }
+    div.ouinon label { font-weight: normal ; }
+    input[type=radio] { margin-left: 2em; margin-right: 3px; }
 </style>
 
 <?php echo $this->form()->openTag($form->prepare()) ?> 
@@ -20,8 +22,12 @@
         <?php echo $this->formControlGroup($form->get('telephone')); ?>
     </div>
     <div class="col-md-6">
-        <?php echo $this->formControlGroup($form->get('statut')); ?>
         <?php echo $this->formControlGroup($form->get('typeEmployeur')); ?>
+        <label class="control-label"><?php echo $form->get('premierRecrutement')->getLabel() ?></label><br />
+        <div class="ouinon"><?php echo $this->formRadio($form->get('premierRecrutement')); ?></div>
+        <label class="control-label"><?php echo $form->get('perteEmploi')->getLabel() ?></label><br />
+        <div class="ouinon"><?php echo $this->formRadio($form->get('perteEmploi')); ?></div>
+        <?php echo $this->formControlGroup($form->get('statut')); ?>
         <fieldset class="rib">
             <legend>RIB</legend>
             <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('bic')); ?></div>

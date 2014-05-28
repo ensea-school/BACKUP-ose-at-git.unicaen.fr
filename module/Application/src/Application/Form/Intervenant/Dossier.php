@@ -6,31 +6,41 @@ use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of Dossier
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterProviderInterface
+class Dossier extends Form implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, InputFilterProviderInterface
 {
     use ServiceLocatorAwareTrait;
+    use ContextProviderAwareTrait;
     
     static public $typesEmployeur = array(
         'salarie' => array(
             'label' => "Salarié",
             'options' => array(
-                'privé'  => "Secteur privé",
-                'public' => "Secteur public",
+                'salarie_privé'        => "Salarié secteur privé",
+                'salarie_public_ucbn'  => "Salarié secteur public UCBN",
+                'salarie_public_autre' => "Salarié secteur public hors UCBN",
             ),
         ),
         'non_salarie' => "Non salarié",
-        'retraite' => "Retraité",
+        'retraite' => array(
+            'label' => "Retraité",
+            'options' => array(
+                'retraite_privé'  => "Retraité UCBN",
+                'retraite_public' => "Retraité hors UCBN",
+            ),
+        ),
         'etudiant' => array(
             'label' => "Étudiant",
             'options' => array(
-                'privé'  => "UCBN",
-                'public' => "Autre établissement",
+                'etudiant_privé'  => "Étudiant UCBN",
+                'etudiant_public' => "Étudiant Hors UCBN",
             ),
         ),
     );
@@ -57,6 +67,8 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterP
      */
     public function init()
     {
+        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        
         $this->add( array(
             'name' => 'id',
             'type' => 'Hidden'
@@ -166,9 +178,33 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterP
         ) );
 
         $this->add( array(
+            'name' => 'premierRecrutement',
+            'options' => array(
+                'label' => "S'agit-il d'un premier recrutement à l'Université de Caen ?",
+                'value_options' => array('1' => "Oui", '0' => "Non"),
+                'empty_option'  => "(Sélectionnez...)",
+            ),
+            'attributes' => array(
+            ),
+            'type' => 'Radio',
+        ) );
+
+        $this->add( array(
+            'name' => 'perteEmploi',
+            'options' => array(
+                'label' => "Avez-vous perdu votre emploi en $annee ?",
+                'value_options' => array('1' => "Oui", '0' => "Non"),
+                'empty_option'  => "(Sélectionnez...)",
+            ),
+            'attributes' => array(
+            ),
+            'type' => 'Radio',
+        ) );
+
+        $this->add( array(
             'name' => 'statut',
             'options' => array(
-                'label' => "Statut",
+                'label' => "Quel est votre statut ?",
                 'value_options' => self::$statuts,
                 'empty_option'  => "(Sélectionnez...)",
             ),
@@ -231,6 +267,12 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterP
                 'required' => true,
             ),
             'statut' => array(
+                'required' => true,
+            ),
+            'premierRecrutement' => array(
+                'required' => true,
+            ),
+            'perteEmploi' => array(
                 'required' => true,
             ),
         );

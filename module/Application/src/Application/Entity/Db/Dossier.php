@@ -78,6 +78,16 @@ class Dossier implements HistoriqueAwareInterface
     private $typeEmployeur;
 
     /**
+     * @var boolean
+     */
+    private $premierRecrutement;
+
+    /**
+     * @var boolean
+     */
+    private $perteEmploi;
+
+    /**
      * @var integer
      */
     private $id;
@@ -418,6 +428,52 @@ class Dossier implements HistoriqueAwareInterface
     public function getTypeEmployeur()
     {
         return $this->typeEmployeur;
+    }
+
+    /**
+     * Set premierRecrutement
+     *
+     * @param boolean $premierRecrutement
+     * @return Dossier
+     */
+    public function setPremierRecrutement($premierRecrutement)
+    {
+        $this->premierRecrutement = $premierRecrutement;
+
+        return $this;
+    }
+
+    /**
+     * Get premierRecrutement
+     *
+     * @return boolean 
+     */
+    public function getPremierRecrutement()
+    {
+        return $this->premierRecrutement;
+    }
+
+    /**
+     * Set perteEmploi
+     *
+     * @param boolean $perteEmploi
+     * @return Dossier
+     */
+    public function setPerteEmploi($perteEmploi)
+    {
+        $this->perteEmploi = $perteEmploi;
+
+        return $this;
+    }
+
+    /**
+     * Get perteEmploi
+     *
+     * @return boolean 
+     */
+    public function getPerteEmploi()
+    {
+        return $this->perteEmploi;
     }
 
     /**

@@ -63,7 +63,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
                 $this->intervenant = $this->getEntityManager()->find("Application\Entity\Db\Intervenant", $this->intervenant);
             }
         }
-        return $this->structure;
+        return $this->intervenant;
     }
     
     /**

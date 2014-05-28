@@ -99,17 +99,9 @@ class ServiceController extends AbstractActionController
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $qb      = $service->finderByContext();
         $viewModel = new \Zend\View\Model\ViewModel();
-        $filter    = new \stdClass();
 
-        $action = 'afficher';
         $intervenant = $this->context()->intervenantFromRoute();
         $service->finderByIntervenant( $intervenant, $qb );
-        $service->finderByFilterObject($filter, null, $qb);
-
-        // sauvegarde des filtres dans le contexte local
-        $this->getContextProvider()->getLocalContext()->fromArray(
-                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
-        );
 
         /* Préparation et affichage */
         $services = $service->getList($qb);
@@ -117,12 +109,11 @@ class ServiceController extends AbstractActionController
         // services référentiels : délégation au contrôleur
         $controller       = 'Application\Controller\ServiceReferentiel';
         $params           = $this->getEvent()->getRouteMatch()->getParams();
-//        $params['action'] = 'voirListe';
-//        $params['query']  = $this->params()->fromQuery();
         $listeViewModel   = $this->forward()->dispatch($controller, $params);
         $viewModel->addChild($listeViewModel, 'servicesRefListe');
 
         $renderIntervenants = false;
+        $action = 'afficher';
 
         $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'renderIntervenants'));
         $viewModel->setTemplate('application/service/index');

@@ -6,6 +6,8 @@ use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
+use Application\Entity\Db\Dossier;
+use Application\Entity\Db\Listener\DossierListener;
 
 /**
  * Description of IntervenantController
@@ -178,7 +180,7 @@ class IntervenantController extends AbstractActionController implements \Applica
             $intervenant = $role->getIntervenant();
         }
         else {
-            $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+            $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
         }
         
         if (!$intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
@@ -197,13 +199,22 @@ class IntervenantController extends AbstractActionController implements \Applica
             $form->setData($data);
             if ($form->isValid()) {
                 $this->getDossierService()->save($dossier);
+                $this->notifyDossier($dossier);
                 $this->getIntervenantService()->save($intervenant);
                 $this->flashMessenger()->addSuccessMessage("Dossier enregistré avec succès.");
-                return $this->redirect()->toUrl($this->url()->fromRoute('intervenant'));
+//                return $this->redirect()->toUrl($this->url()->fromRoute('intervenant'));
             }
         }
         
         return compact('intervenant', 'form');
+    }
+    
+    protected function notifyDossier(Dossier $dossier)
+    {
+        if (DossierListener::$created || DossierListener::$modified) {
+            // envoyer un mail au gestionnaire
+            var_dump('Envoi de mail "dossier créé ou modifié"...');
+        }
     }
     
     protected function getFormModifier()

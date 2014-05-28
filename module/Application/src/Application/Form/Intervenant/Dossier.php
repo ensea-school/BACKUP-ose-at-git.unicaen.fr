@@ -17,8 +17,22 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterP
     use ServiceLocatorAwareTrait;
     
     static public $typesEmployeur = array(
-        'privé'  => "Secteur privé",
-        'public' => "Secteur public",
+        'salarie' => array(
+            'label' => "Salarié",
+            'options' => array(
+                'privé'  => "Secteur privé",
+                'public' => "Secteur public",
+            ),
+        ),
+        'non_salarie' => "Non salarié",
+        'retraite' => "Retraité",
+        'etudiant' => array(
+            'label' => "Étudiant",
+            'options' => array(
+                'privé'  => "UCBN",
+                'public' => "Autre établissement",
+            ),
+        ),
     );
     static public $statuts = array(
         'ens_1er' => "Enseignant du 1er degré",
@@ -90,7 +104,7 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterP
         $this->add( array(
             'name' => 'numeroInsee',
             'options' => array(
-                'label' => 'Numéro sécu',
+                'label' => 'Numéro sécu (clé incluse)',
             ),
             'attributes' => array(
             ),
@@ -118,17 +132,26 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterP
             'type' => 'Text',
         ) );
 
-        $rib = $this->add( array(
+        $this->add( array(
+            'name' => 'telephone',
+            'options' => array(
+                'label' => 'Téléphone',
+            ),
+            'attributes' => array(
+                'size' => 13,
+            ),
+            'type' => 'Text',
+        ) );
+
+        $this->add( array(
             'name' => 'rib',
             'options' => array(
                 'label' => 'RIB',
             ),
             'attributes' => array(
             ),
-//            'type' => 'UnicaenApp\Form\Element\RIB',
             'type' => 'UnicaenApp\Form\Element\RIBFieldset',
         ) );
-        /* @var $rib \UnicaenApp\Form\Element\RIB */
 
         $this->add( array(
             'name' => 'typeEmployeur',
@@ -153,22 +176,6 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterP
             ),
             'type' => 'Select',
         ) );
-    }
-    
-    public function isValid()
-    {
-        if (!parent::isValid()) {
-            return false;
-        }
-        
-        // validation globale du RIB
-//        $v = \UnicaenApp\Form\Element\RIBFieldset::getDefaultValidator();
-//        if (!$v->isValid($this->get('rib')->getValue())) {
-//            $this->get('rib')->setMessages(array('hidden' => array('notvalid' => "Le RIB n'est pas valide")));
-//            return false;
-//        }
-        
-        return true;
     }
     
     /**
@@ -203,14 +210,27 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, InputFilterP
             ),
             'email' => array(
                 'required' => true,
+                'filters' => array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array('name' => 'EmailAddress')
+                ),
+            ),
+            'telephone' => array(
+                'required' => false,
+                'filters' => array(
+                    array('name' => 'StringTrim'),
+                    array('name' => 'StringToUpper'),
+                ),
+                'validators' => array(
+//                    new \Zend\I18n\Validator\PhoneNumber(), // les formats de numéros ne tolèrent pas le 0 de tête!!
+                ),
             ),
             'typeEmployeur' => array(
                 'required' => true,
             ),
             'statut' => array(
-                'required' => true,
-            ),
-            'rib' => array(
                 'required' => true,
             ),
         );

@@ -46,6 +46,9 @@ class Dossier extends AbstractEntityService
         if ($role instanceof \Application\Acl\IntervenantExterieurRole) { 
             return true;
         }
+        if ($role instanceof \Application\Acl\DbRole) { 
+            return true;
+        }
 
         return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour saisir un dossier.', $runEx);
     }

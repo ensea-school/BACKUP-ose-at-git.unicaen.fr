@@ -23,6 +23,11 @@ class Dossier implements HistoriqueAwareInterface
     private $email;
 
     /**
+     * @var string
+     */
+    private $telephone;
+
+    /**
      * @var \DateTime
      */
     private $histoCreation;
@@ -160,6 +165,29 @@ class Dossier implements HistoriqueAwareInterface
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set telephone
+     *
+     * @param string $telephone
+     * @return Dossier
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * Get telephone
+     *
+     * @return string 
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
     }
 
     /**
@@ -485,7 +513,8 @@ class Dossier implements HistoriqueAwareInterface
                 ->setCivilite($intervenant->getCiviliteToString())
                 ->setNumeroInsee($intervenant->getNumeroInsee())
                 ->setAdresse((string) $intervenant->getAdressePrincipale(true))
-                ->setEmail($intervenant->getEmail());
+                ->setEmail($intervenant->getEmail())
+                ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile());
 //                ->setTypeEmployeur(null)
 //                ->setStatut(null)
 //                ->setRib(null);

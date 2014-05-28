@@ -32,7 +32,7 @@ class DossierHydrator extends \Zend\Stdlib\Hydrator\ClassMethods
         $data = parent::extract($object);
         
         if ($object->getRib()) {
-            $data['rib'] = array_combine(array('banque', 'guichet', 'compte', 'cle'), explode('-', $object->getRib()));
+            $data['rib'] = array_combine(array('bic', 'iban'), explode('-', $object->getRib()));
         }
         
         return $data;

@@ -12,21 +12,20 @@
         <?php echo $this->formControlGroup($form->get('nomPatronymique')); ?>
         <?php echo $this->formControlGroup($form->get('prenom')); ?>
         <?php echo $this->formControlGroup($form->get('civilite')); ?>
+        <?php echo $this->formControlGroup($form->get('numeroInsee')); ?>
     </div>
     <div class="col-md-3">
-        <?php echo $this->formControlGroup($form->get('numeroInsee')); ?>
         <?php echo $this->formControlGroup($form->get('adresse')); ?>
         <?php echo $this->formControlGroup($form->get('email')); ?>
+        <?php echo $this->formControlGroup($form->get('telephone')); ?>
     </div>
     <div class="col-md-6">
-        <?php echo $this->formControlGroup($form->get('typeEmployeur')); ?>
         <?php echo $this->formControlGroup($form->get('statut')); ?>
+        <?php echo $this->formControlGroup($form->get('typeEmployeur')); ?>
         <fieldset class="rib">
             <legend>RIB</legend>
-            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('banque')); ?></div>
-            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('guichet')); ?></div>
-            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('compte')); ?></div>
-            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('cle')); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('bic')); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('iban')); ?></div>
             <?php echo $this->formControlGroup($form->get('rib')->get('hidden')); ?>
         </fieldset>
     </div>

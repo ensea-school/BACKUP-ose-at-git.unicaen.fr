@@ -1,14 +1,14 @@
 <?php if ($rechercheForm): ?>
 
+<style>
+    div.filter input[type=radio] { margin-left: 1em; margin-right: 3px; } 
+</style>
+
 <div class="panel panel-default filter">
     
     <div class="panel-heading">Filtres</div>
     <div class="panel-body">
         <?php echo $this->form()->openTag($rechercheForm->prepare()); ?>
-<!--        <div class="row">
-          <div class="col-md-4"><label class="control-label"><?php//echo $rechercheForm->get('intervenant')->getLabel() ?></label></div>
-          <div class="col-md-8"><?php //echo $this->formSelect($rechercheForm->get('intervenant')->setAttribute('class','form-control')); ?></div>
-        </div>-->
         <div class="row">
           <div class="col-md-4"><label class="control-label"><?php echo $rechercheForm->get('intervenant')->getLabel() ?></label></div>
           <div class="col-md-8"><?php echo $this->formSearchAndSelect($rechercheForm->get('intervenant')); ?></div>

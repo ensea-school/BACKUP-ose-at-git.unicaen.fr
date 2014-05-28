@@ -29,7 +29,10 @@
         <?php foreach( $data as $intervenantId => $line ): ?>
         <tr>
             <?php
-            $url = $this->url('service/intervenant', array('intervenant' => $line['intervenant']['SOURCE_CODE']));
+            $url = $this->url('intervenant/default', array(
+                'action' => 'voir',
+                'id'     => $line['intervenant']['INTERVENANT_ID'],
+                'page'   => 'services'));
             $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
             $na = '<span title="Non applicable (intervenant vacataire))">NA</span>';
             ?>

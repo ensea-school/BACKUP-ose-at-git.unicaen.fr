@@ -26,24 +26,16 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
 
         $eventManager->attach($sm->get('AuthenticatedUserSavedListener'));
         
-        /* Déclare la dernière vue transmise comme terminale si on est en AJAX */
-        $sharedEvents = $eventManager->getSharedManager();
-        $sharedEvents->attach('Zend\Mvc\Controller\AbstractActionController','dispatch',
-             function($e) {
-                $result = $e->getResult();
-                if(is_array($result)){
-                    $result = new \Zend\View\Model\ViewModel($result);
-                    $e->setResult($result);
-                }elseif(empty($result)){
-                    $result = new \Zend\View\Model\ViewModel();
-                    $e->setResult($result);
+        /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
+        $eventManager->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController','dispatch',
+            function( \Zend\Mvc\MvcEvent $e) {
+                if ($e->getRequest()->isXmlHttpRequest()){
+                    $e->getTarget()->layout('application/ajax-layout.phtml');
                 }
-                if ($result instanceof \Zend\View\Model\ViewModel) {
-                    $result->setTerminal($e->getRequest()->isXmlHttpRequest());
-                }
-        });
+            }
+        );
     }
-    
+
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';

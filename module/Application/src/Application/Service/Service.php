@@ -14,6 +14,7 @@ use Application\Entity\Db\Structure as StructureEntity;
  */
 class Service extends AbstractEntityService
 {
+
     /**
      * retourne la classe des entités
      *
@@ -33,6 +34,36 @@ class Service extends AbstractEntityService
     public function getAlias()
     {
         return 's';
+    }
+
+    /**
+     * Retourne une nouvelle entité de la classe donnée
+     *
+     * @return mixed
+     */
+    public function newEntity()
+    {
+        $entity = parent::newEntity();
+        $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
+        $entity->setValiditeDebut(new \DateTime );
+        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+            $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+        }
+        return $entity;
+    }
+
+    /**
+     * Suvegarde une entité
+     *
+     * @param mixed $entity
+     * @throws \Common\Exception\RuntimeException
+     */
+    public function save($entity)
+    {
+        if (! $entity->getEtablissement()){
+            $entity->setEtablissement( $this->getContextProvider()->getGlobalContext()->getEtablissement() );
+        }
+        return parent::save($entity);
     }
 
     /**

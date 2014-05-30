@@ -5,26 +5,6 @@ namespace Import;
 class Module
 {
 
-    public function onBootstrap(\Zend\Mvc\MvcEvent $e)
-    {
-        /* Déclare la dernière vue transmise comme terminale si on est en AJAX */
-        $sharedEvents = $e->getApplication()->getEventManager()->getSharedManager();
-        $sharedEvents->attach('Zend\Mvc\Controller\AbstractActionController','dispatch',
-             function($e) {
-                $result = $e->getResult();
-                if(is_array($result)){
-                    $result = new \Zend\View\Model\ViewModel($result);
-                    $e->setResult($result);
-                }elseif(empty($result)){
-                    $result = new \Zend\View\Model\ViewModel();
-                    $e->setResult($result);
-                }
-                if ($result instanceof \Zend\View\Model\ViewModel) {
-                    $result->setTerminal($e->getRequest()->isXmlHttpRequest());
-                }
-        });
-    }
-
     public function getAutoloaderConfig()
     {
         return array(

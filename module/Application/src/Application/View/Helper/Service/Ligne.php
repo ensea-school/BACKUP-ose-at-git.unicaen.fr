@@ -74,7 +74,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function render( $details=false )
     {
         $context = $this->getContextProvider()->getGlobalContext();
-        
+
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
         $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeures($this->service);
 
@@ -109,7 +109,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderIntervenant($intervenant)
     {
-        $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getSourceCode()));
+        $pourl = $this->getView()->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
         $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
         return $out;
     }

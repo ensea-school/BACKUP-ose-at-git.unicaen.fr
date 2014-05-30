@@ -2,21 +2,26 @@
 
 namespace Application\Form\Service;
 
-use Zend\Form\Form;
+use Zend\Form\Fieldset;
+use UnicaenApp\Form\Element\SearchAndSelect;
 use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\InputFilter\InputFilter;
 use Application\Entity\Db\Etablissement;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
+use Zend\InputFilter\InputFilterProviderInterface;
 
 /**
- * Description of Saisie
+ * Description of SaisieFieldset
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface, ServiceLocatorAwareInterface
+class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use ContextProviderAwareTrait;
 
     /**
      * etablissement par défaut
@@ -26,6 +31,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
     protected $etablissement;
 
 
+    
     public function __construct($name = null, $options = array())
     {
         parent::__construct('service', $options);
@@ -36,127 +42,103 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
         /* @var $url Zend\View\Helper\Url */
 
-        $this->setHydrator(new ClassMethods());
+        $this->etablissement = $this->getContextProvider()->getGlobalContext()->getEtablissement();
 
-        // Product Fieldset
-        // Here, we define Product fieldset as base fieldset
-        $saisie = $this->getServiceLocator()->get('ServiceSaisieFieldset');
-//                new SaisieFieldset('saisie');
-        $saisie->setUseAsBaseFieldset(true);
-        $this->add($saisie);
+        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieFieldsetHydrator'));
 
         $this->add(array(
-            'name' => 'submit',
-            'type'  => 'Submit',
-            'attributes' => array(
-                'value' => 'Enregistrer',
-                'class' => 'btn btn-primary',
-            ),
+            'name' => 'id',
+            'type' => 'Hidden',
         ));
 
-        $this->setAttribute('action', $url(null, array(), array(), true));
-    }
-
-    public function initFromContext()
-    {
-        $this->get('service')->initFromContext();
-    }
-
-    /**
-     * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
-     */
-    public function getInputFilterSpecification(){
-        return array();
-    }
-
-
-/*
-
-    public function __construct( ServiceLocatorInterface $serviceLocator, Url $url )
-    {
-        parent::__construct('service');
-
-        $this->setServiceLocator($serviceLocator->get('FormElementManager'));
-
-        $context = $serviceLocator->get('ApplicationContextProvider')->getGlobalContext();
-        $role    = $serviceLocator->get('ApplicationContextProvider')->getSelectedIdentityRole();
-
-        $this->etablissement = $context->getEtablissement();
-
-        $this   ->setAttribute('method', 'post')
-                ->setAttribute('class', 'service')
-                ->setHydrator(new ClassMethods(false))
-                ->setInputFilter(new InputFilter())
-        ;
-
-        $id = new Hidden('id');
-        $this->add($id);
-
-        if (! $role instanceof \Application\Acl\IntervenantRole){
+        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant ->setRequired(true)
                          ->setSelectionRequired(true)
                          ->setAutocompleteSource(
-                            $url->fromRoute('recherche', array('action' => 'intervenantFind'))
+                            $url('recherche', array('action' => 'intervenantFind'))
                          )
                          ->setLabel("Intervenant :")
                          ->setAttributes(array('title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"));
             $this->add($intervenant);
         }
 
-        $interneExterne = new \Zend\Form\Element\Radio;
-        $interneExterne->setLabel('Service effectué : ');
-        $interneExterne->setName('interne-externe');
-        $interneExterne->setValueOptions(array(
-                     'service-interne' => 'en interne',
-                     'service-externe' => 'hors '.$this->etablissement,
+        $this->add(array(
+            'type'       => 'Radio',
+            'name'       => 'interne-externe',
+            'options'    => array(
+                'label'  => "Service effectué :",
+                'value_options' => array(
+                    'service-interne' => 'en interne',
+                    'service-externe' => 'hors '.$this->etablissement,
+                ),
+            ),
+            'attributes' => array(
+                'value' => 'service-interne'
+            )
         ));
-        $this->add($interneExterne);
 
         /**
          * @todo : fourrer l'init des URL dans la classe ElementPedagogiqueRechercheFieldset
-         *
+         */
         $queryTemplate = array('structure' => '__structure__', 'niveau' => '__niveau__', 'etape' => '__etape__');
-        $urlStructures = $url->fromRoute('of/default',         array('action' => 'search-structures'), array('query' => $queryTemplate));
-        $urlNiveaux    = $url->fromRoute('of/default',         array('action' => 'search-niveaux'),    array('query' => $queryTemplate));
-        $urlEtapes     = $url->fromRoute('of/etape/default',   array('action' => 'search'),            array('query' => $queryTemplate));
-        $urlElements   = $url->fromRoute('of/element/default', array('action' => 'search'),            array('query' => $queryTemplate));
+        $urlStructures = $url('of/default',         array('action' => 'search-structures'), array('query' => $queryTemplate));
+        $urlNiveaux    = $url('of/default',         array('action' => 'search-niveaux'),    array('query' => $queryTemplate));
+        $urlEtapes     = $url('of/etape/default',   array('action' => 'search'),            array('query' => $queryTemplate));
+        $urlElements   = $url('of/element/default', array('action' => 'search'),            array('query' => $queryTemplate));
 
-        $fs = new \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset('elementPedagogique');
+        $fs = new \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset('element-pedagogique');
         $fs
                 ->setStructuresSourceUrl($urlStructures)
                 ->setNiveauxSourceUrl($urlNiveaux)
                 ->setEtapesSourceUrl($urlEtapes)
                 ->setElementsSourceUrl($urlElements)
         ;
-        $this->add($fs);
+        $this->add( $fs );
 
         $etablissement = new SearchAndSelect('etablissement');
         $etablissement ->setRequired(true)
                        ->setSelectionRequired(true)
                        ->setAutocompleteSource(
-                           $url->fromRoute('etablissement/recherche')
+                           $url('etablissement/recherche')
                        )
                        ->setLabel("Etablissement :")
                        ->setAttributes(array('title' => "Saisissez le libellé (2 lettres au moins)"));
         $this->add($etablissement);
+    }
 
-        /**
-         * Submit
-         *
-        $this->add(array(
-            'name' => 'submit',
-            'type'  => 'Submit',
-            'attributes' => array(
-                'value' => 'Enregistrer',
-                'class' => 'btn btn-primary',
-            ),
-        ));
+    public function initFromContext()
+    {
+        /* Peuple le formulaire avec les valeurs par défaut issues du contexte global */
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $fs = $this->get('element-pedagogique');
 
-        $this->setAttribute('action', $url->fromRoute(null, array(), array(), true));
+        if($role instanceof \Application\Acl\ComposanteRole){ // Si c'est un membre d'une composante
+            $fs->get('structure')->setValue( $role->getStructure()->getParenteNiv2()->getId() );
+        }
+
+        /* Peuple le formulaire avec les valeurs issues du contexte local */
+        $cl = $this->getContextProvider()->getLocalContext();
+
+        if ($cl->getIntervenant()){
+            $this->get('intervenant')->setValue(array(
+                'id' => $cl->getIntervenant()->getSourceCode(),
+                'label' => (string)$cl->getIntervenant()
+            ));
+        }
+        if ($cl->getStructure()){
+            $fs->get('structure')->setValue( $cl->getStructure()->getParenteNiv2()->getId() );
+        }
+        if ($cl->getEtape()){
+            $fs->get('etape')->setValue( $cl->getEtape()->getId() );
+        }
+        if ($cl->getElementPedagogique()){
+            $fs->get('element')->setValue( array(
+                'id' => $cl->getElementPedagogique()->getId(),
+                'label' => (string)$cl->getElementPedagogique()
+            ));
+        }
+        $this->get('interne-externe')->setValue('service-interne');
     }
 
     /**
@@ -179,9 +161,9 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             'interne-externe' => 'service-interne'
         );
 
-        /* Peuple le formulaire avec les valeurs par défaut issues du contexte global *
+        /* Peuple le formulaire avec les valeurs par défaut issues du contexte global /
         $contextProvider = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider');
-        /* @var $contextProvider \Application\Service\ContextProvider *
+        /* @var $contextProvider \Application\Service\ContextProvider /
         $role = $contextProvider->getSelectedIdentityRole();
 
         if($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
@@ -189,7 +171,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         }
 
         /* Peuple le formulaire avec les valeurs par défaut issues du formulaire de recherche de services */
-        /** @todo à refectoriser en utilisant un hydrateur de formulaire *
+        /** @todo à refectoriser en utilisant un hydrateur de formulaire /
         $rechercheForm = $this->getServiceLocator()->get('ServiceRecherche');
         $filters = $rechercheForm->hydrateFromSession();
 
@@ -212,7 +194,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             );
         }
 
-        /* Issues de l'objet transmis *
+        /* Issues de l'objet transmis /
         if ($intervenant = $object->getIntervenant()){
             $data['intervenant'] = array( 'id' => $intervenant->getSourceCode(), 'label' => (string)$intervenant );
         }
@@ -224,14 +206,14 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             $data['interne-externe'] = ($etablissement === $this->etablissement) ? 'service-interne' : 'service-externe';
         }
         $this->setData($data);
-    }
+    }*/
 
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
      *
      * @return array
-     *
+     */
     public function getInputFilterSpecification(){
         return array(
             'interne-externe' => array(
@@ -240,9 +222,9 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             'etablissement' => array(
                 'required' => false
             ),
-            'elementPedagogique' => array(
+            'element-pedagogique' => array(
                 'required' => false
             ),
         );
-    }*/
+    }
 }

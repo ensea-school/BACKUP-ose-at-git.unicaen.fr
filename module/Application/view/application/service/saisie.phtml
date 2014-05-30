@@ -1,18 +1,20 @@
 <?php
 
-$interne = $form->get('interne-externe')->getValue() == 'service-interne';
+$fservice = $form->get('service');
+
+$interne = $fservice->get('interne-externe')->getValue() == 'service-interne';
 
 $form->prepare();
 
 echo $this->form()->openTag($form);
 if (! $role instanceof \Application\Acl\IntervenantRole){
-    echo $this->formControlGroup($form->get('intervenant'));
+    echo $this->formControlGroup($fservice->get('intervenant'));
 }
-echo $this->formControlGroup($form->get('interne-externe'), 'formButtonGroup');
-echo '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->fieldsetElementPedagogiqueRecherche($form->get('elementPedagogique')).'</div>';
-echo '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->formControlGroup($form->get('etablissement')).'</div>';
+echo $this->formControlGroup($fservice->get('interne-externe'), 'formButtonGroup');
+echo '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
+echo '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->formControlGroup($fservice->get('etablissement')).'</div>';
 echo $this->formRow($form->get('submit'));
-echo $this->formHidden($form->get('id'));
+echo $this->formHidden($fservice->get('id'));
 echo $this->form()->closeTag().'<br />';
 
 echo $this->formErrors( $form );

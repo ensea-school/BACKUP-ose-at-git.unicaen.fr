@@ -41,14 +41,13 @@ return array(
                     'voirLigne' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/voirLigne[/:id][?only-content=:only-content]',
+                            'route'    => '/voirLigne[/:id]',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'voirLigne',
-                                'only-content' => 0
                             ),
                         ),
                     ),
@@ -175,17 +174,22 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationService'            => 'Application\\Service\\Service',
-            'ApplicationServiceReferentiel' => 'Application\\Service\\ServiceReferentiel',
-            'ApplicationServiceValidation'  => 'Application\\Service\\ServiceValidation',
-            'ApplicationPeriode'            => 'Application\\Service\\Periode',
-            'ApplicationMotifNonPaiement'   => 'Application\\Service\\MotifNonPaiement',
-            'FormServiceRechercheHydrator'  => 'Application\Form\Service\RechercheHydrator',
+            'ApplicationService'                => 'Application\\Service\\Service',
+            'ApplicationServiceReferentiel'     => 'Application\\Service\\ServiceReferentiel',
+            'ApplicationServiceValidation'      => 'Application\\Service\\ServiceValidation',
+            'ApplicationPeriode'                => 'Application\\Service\\Periode',
+            'ApplicationMotifNonPaiement'       => 'Application\\Service\\MotifNonPaiement',
+            'FormServiceRechercheHydrator'      => 'Application\Form\Service\RechercheHydrator',
+            'FormServiceSaisieFieldsetHydrator' => 'Application\Form\Service\SaisieFieldsetHydrator',
         ),
         'factories' => array(
         ),
     ),
     'form_elements' => array(
+        'invokables' => array(
+            'ServiceSaisie'         => 'Application\\Form\\Service\\Saisie',
+            'ServiceSaisieFieldset' => 'Application\\Form\\Service\\SaisieFieldset',
+        ),
         'factories' => array(
             'ServiceRecherche' => 'Application\\Form\\Service\\RechercheFactory',
         ),

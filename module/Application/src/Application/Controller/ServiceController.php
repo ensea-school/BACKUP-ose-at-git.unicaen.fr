@@ -5,7 +5,6 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
-use Application\Form\Service\Saisie;
 use Application\Exception\DbException;
 
 
@@ -71,7 +70,7 @@ class ServiceController extends AbstractActionController
         $this->getContextProvider()->getLocalContext()->fromArray(
                 (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
         );
-
+        
         /* Préparation et affichage */
         if ('afficher' === $action){
             $services = $service->getList($qb);
@@ -183,12 +182,13 @@ class ServiceController extends AbstractActionController
 
     public function voirLigneAction()
     {
-        $id      = (int)$this->params()->fromRoute('id',0);
+        $id      = (int)$this->params()->fromRoute('id');
         $details = 1 == (int)$this->params()->fromQuery('details',(int)$this->params()->fromPost('details',0));
+        $renderIntervenants = 1 == (int)$this->params()->fromQuery('render-intervenants',(int)$this->params()->fromPost('render-intervenants',0));
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content',0);
         $service = $this->getServiceService();
         $entity  = $service->getRepo()->find($id);
-        return compact('entity', 'details', 'onlyContent');
+        return compact('entity', 'details', 'onlyContent', 'renderIntervenants');
     }
 
     public function suppressionAction()
@@ -224,40 +224,30 @@ class ServiceController extends AbstractActionController
         $id = (int)$this->params()->fromRoute('id');
         $service = $this->getServiceService();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
-        $context = $this->getContextProvider()->getGlobalContext();
+        $form    = $this->getFormSaisie();
+        $errors  = array();
 
-        if ($id){
-            $entity = $service->getRepo()->find($id);
+        if ($id) {
+            $entity = $service->get($id);
+            $form->bind($entity);
             $title   = "Modification de service";
-        }else{
+        } else {
             $entity = $service->newEntity();
-            $entity->setAnnee( $this->context()->anneeFromGlobalContext() );
-            $entity->setValiditeDebut(new \DateTime );
-            if ($role instanceof \Application\Acl\IntervenantRole){
-                $entity->setIntervenant( $context->getIntervenant() );
-            }
+            $form->bind($entity);
+            $form->initFromContext();
             $title   = "Ajout de service";
         }
-        $form = new Saisie( $this->getServiceLocator(), $this->url() );
 
-
-        if ($this->getRequest()->isPost()){
-            if (! $role instanceof \Application\Acl\IntervenantRole){
-                $entity->setIntervenant( $this->context()->intervenantFromPost("intervenant[id]") );
-            }
-            $entity->setElementPedagogique( $this->context()->elementPedagogiqueFromPost("elementPedagogique[element][id]") );
-            $entity->setEtablissement( $this->context()->etablissementFromPost("etablissement[id]") );
-            if (! $entity->getEtablissement()) $entity->setEtablissement( $this->context()->etablissementFromGlobalContext() );
-        }
-        $errors  = array();
-        $form->bind( $entity );
-        if ($this->getRequest()->isPost()){
-            if ($form->isValid()){
-                try{
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                try {
                     $service->save($entity);
-                    $form->get('id')->setValue( $entity->getId() ); // transmet le nouvel ID
-                }catch(\Exception $e){
-                    $e = DbException::translate($e);
+                    $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
+                }
+                catch (\Exception $e) {
+                    $e        = DbException::translate($e);
                     $errors[] = $e->getMessage();
                 }
             }else{
@@ -265,5 +255,14 @@ class ServiceController extends AbstractActionController
             }
         }
         return compact('form', 'role','errors','title');
+    }
+
+    /**
+     *
+     * @return \Application\Form\Service\Saisie
+     */
+    protected function getFormSaisie()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('ServiceSaisie');
     }
 }

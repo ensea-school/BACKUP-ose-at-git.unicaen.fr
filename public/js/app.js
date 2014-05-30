@@ -1,3 +1,26 @@
+$( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+    errorDialog.show( 'Une erreur '+jqxhr.status + '('+jqxhr.statusText+') est survenue', jqxhr.responseText );
+    console.log( jqxhr );
+});
+
+function errorDialog() {}
+errorDialog.show = function( title, text ){
+    if (undefined === errorDialog.sequence){
+        errorDialog.sequence = 1;
+    }else{
+        errorDialog.sequence += 1;
+    }
+
+    $(document.body).append(
+        '<div id="error-dialog-'+errorDialog.sequence+'" class="scr-center">'
+        +'<div class="alert alert-danger alert-dismissable">'
+            +'<button type="button" class="close" onclick="document.getElementById(\'error-dialog-'+errorDialog.sequence+'\').style.display=\'none\';" data-dismiss="alert" aria-hidden="true">&times;</button>'
+            +'<h1>'+title+'</h1>'+text
+            +'<br /><hr /><button type="button" onclick="document.getElementById(\'error-dialog-'+errorDialog.sequence+'\').style.display=\'none\';" class="btn btn-danger">Fermer</button>'
+            +'</div>'
+       +'</div>');
+}
+
 
 
 
@@ -35,18 +58,18 @@ function Service( id ) {
         if ('service-interne' == this.id){
             $('#element-interne').show();
             $('#element-externe').hide();
-            $("input[name='etablissement\\[label\\]']").val('');
-            $("input[name='etablissement\\[id\\]']").val('');
+            $("input[name='service\\[etablissement\\]\\[label\\]']").val('');
+            $("input[name='service\\[etablissement\\]\\[id\\]']").val('');
         }else{
             $('#element-interne').hide();
-            $("input[name='elementPedagogique\\[label\\]']").val('');
-            $("input[name='elementPedagogique\\[id\\]']").val('');
+            $("input[name='service\\[element-pedagogique\\]\\[label\\]']").val('');
+            $("input[name='service\\[element-pedagogique\\]\\[id\\]']").val('');
             $('#element-externe').show();
         }
     }
 
     this.onAfterAdd = function(){
-        $.get( Service.voirLigneUrl+"/"+this.id+'?only-content=0&details=1', function( data ) {
+        $.get( Service.voirLigneUrl+"/"+this.id+'?only-content=0&details=1&render-intervenants='+Service.getRenderIntervenants(), function( data ) {
             $( "#service-"+this.id+"-ligne" ).refresh();
             $('#services > tbody:last').append(data);
             Service.refreshFiltres();
@@ -75,13 +98,14 @@ Service.get = function( id ){
 
 Service.init = function( voirLigneUrl ){
     Service.voirLigneUrl = voirLigneUrl;
+    Service.renderIntervenants = 1; // par défaut
 
     $("body").on("service-modify-message", function(event, data) {
         var id = null;
         if ($("div .messenger, div .alert", event.div).length ? false : true){
             event.div.modal('hide'); // ferme la fenêtre modale
             for( i in data ){
-                if (data[i].name == 'id'){
+                if (data[i].name == 'service[id]'){
                     id = data[i].value;
                 }
             }
@@ -106,7 +130,7 @@ Service.init = function( voirLigneUrl ){
         if ($("div .messenger, div .alert", event.div).length ? false : true){
             event.div.modal('hide'); // ferme la fenêtre modale
             for( i in data ){
-                if (data[i].name == 'id'){
+                if (data[i].name == 'service[id]'){
                     id = data[i].value;
                 }
             }
@@ -122,7 +146,7 @@ Service.init = function( voirLigneUrl ){
         Service.get(event.a.data('id')).onAfterDelete();
     });
 
-    $("body").on('change', 'form#service input[name="interne-externe"]', function(){
+    $("body").on('change', 'form#service input[name="service\\[interne-externe\\]"]', function(){
         Service.get(this.value).showInterneExterne( $( this ).val() );
     });
 
@@ -150,6 +174,14 @@ Service.hideAllDetails = function(){
 
 Service.refreshFiltres = function(){
     $( "#filtres" ).refresh();
+}
+
+Service.setRenderIntervenants = function( renderIntervenants ){
+    Service.renderIntervenants = renderIntervenants;
+}
+
+Service.getRenderIntervenants = function(){
+    return Service.renderIntervenants;
 }
 
 

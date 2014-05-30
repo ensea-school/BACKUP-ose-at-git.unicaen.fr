@@ -43,7 +43,7 @@ class EtapeController extends AbstractActionController implements ContextProvide
         $service->canAdd(true);
         
         if ($id) {
-            $entity = $service->getRepo()->find($id);
+            $entity = $service->get($id);
             $form->bind($entity);
         }
         else {

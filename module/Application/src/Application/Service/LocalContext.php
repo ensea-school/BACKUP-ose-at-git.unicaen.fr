@@ -8,6 +8,7 @@ use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
 use Application\Entity\Db\Structure as EntityStructure;
 use Application\Entity\Db\Etape as EntityEtape;
+use Application\Entity\Db\ElementPedagogique as EntityElementPedagogique;
 use Application\Entity\NiveauEtape;
 
 /**
@@ -43,6 +44,11 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
      * @var EntityEtape
      */
     protected $etape;
+
+    /**
+     * @var EntityElementPedagogique
+     */
+    protected $elementPedagogique;
 
     /**
      * Constructeur!
@@ -122,6 +128,20 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
     }
 
     /**
+     * @return EntityElementPedagogique
+     */
+    public function getElementPedagogique()
+    {
+        if (null === $this->elementPedagogique) {
+            $this->elementPedagogique = $this->getSessionContainer()->elementPedagogique;
+            if ($this->elementPedagogique && !$this->elementPedagogique instanceof EntityElementPedagogique) {
+                $this->elementPedagogique = $this->getEntityManager()->find("Application\Entity\Db\ElementPedagogique", $this->elementPedagogique);
+            }
+        }
+        return $this->elementPedagogique;
+    }
+
+    /**
      * 
      * @param \Application\Entity\Db\Intervenant $intervenant
      * @return \Application\Service\LocalContext
@@ -160,7 +180,14 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         $this->getSessionContainer()->etape = $etape ? $etape->getId() : null;
         return $this;
     }
-    
+
+    public function setElementPedagogique(EntityElementPedagogique $elementPedagogique = null)
+    {
+        $this->elementPedagogique = $elementPedagogique;
+        $this->getSessionContainer()->elementPedagogique = $elementPedagogique ? $elementPedagogique->getId() : null;
+        return $this;
+    }
+
     /**
      * @return \Zend\Session\Container
      */
@@ -186,5 +213,6 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         var_dump("structure = " . $this->getStructure());
         var_dump("niveau = " . $this->getNiveau());
         var_dump("etape = " . $this->getEtape());
+        var_dump("élément pédagogique = " . $this->getElementPedagogique());
     }
 }

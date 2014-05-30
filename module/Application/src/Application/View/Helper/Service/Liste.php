@@ -106,14 +106,15 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 //        $url = $this->getView()->url('service/default', array('action' => 'saisie'));
 //        $out .= '<br /><a class="ajax-modal services btn btn-default" data-event="service-add-message" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
         $out .= '<script type="text/javascript">';
-        $out .= '$(function() { Service.init("'.$this->getView()->url('service/default', array('action' => 'voirLigne') ).'"); });';
+        $out .= '$(function() { Service.init("'.$this->getView()->url('service/default', array('action' => 'voirLigne') ).'");
+            Service.setRenderIntervenants('.$this->getRenderIntervenants().')});';
         $out .= '</script>';
         return $out;
     }
 
     public function renderLigne( Service $service, $details=false )
     {
-        $url = $this->getView()->url('service/voirLigne', array('id' => $service->getId(), 'only-content' => 1));
+        $url = $this->getView()->url('service/voirLigne', array('id' => $service->getId()), array('query' => array('only-content' => 1, 'render-intervenants' => $this->getRenderIntervenants())));
         $detailsUrl = $this->getView()->url('volume-horaire/default', array('action' => 'liste', 'id' => $service->getId()));
 
         $out  = '<tr id="service-'.$service->getId().'-ligne" data-url="'.$url.'">';

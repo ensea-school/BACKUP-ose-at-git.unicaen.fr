@@ -117,6 +117,24 @@ function AjaxModalListener(dialogDivId)
         e.preventDefault();
     };
     
+    /**
+     * Interception des clics sur les liens inclus dans les modales pour rafraichir la modale au lieu de la page
+     */
+    this.innerAnchorClickListener = function(e)
+    {
+        var anchor      = $(e.currentTarget);
+        var modalDialog = this.getModalDialog();
+
+        // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
+        $.get(anchor.attr('href'), { modal: 1 }, $.proxy(function(data) {
+            // remplacement du contenu de la fenêtre modale
+            $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
+        }, this));
+
+        e.preventDefault();
+        //e.stopPopagation();
+    };
+
     this.btnPrimaryClickListener = function(e) 
     {
         var form = this.getForm();
@@ -194,6 +212,9 @@ AjaxModalListener.prototype.start = function()
     // interception des clics sur les liens adéquats pour affichage de la fenêtre modale
     this.eventListener.on("click", "a.ajax-modal", $.proxy(this.anchorClickListener, this));
     
+    // interception des clics sur les liens adéquats pour affichage de la fenêtre modale
+    this.eventListener.on("click", "#" + this.modalContainerId + " a", $.proxy(this.innerAnchorClickListener, this));
+
     // le formulaire éventuel est soumis lorsque le bouton principal de la fenêtre modale est cliqué
     this.eventListener.on("click", "#" + this.modalContainerId + " .btn-primary", $.proxy(this.btnPrimaryClickListener, this));
 

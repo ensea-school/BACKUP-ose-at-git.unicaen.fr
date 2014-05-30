@@ -92,8 +92,6 @@ class IntervenantController extends AbstractActionController implements \Applica
         
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(array('intervenant' => $intervenant));
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        
         return $view;
     }
 
@@ -139,8 +137,6 @@ class IntervenantController extends AbstractActionController implements \Applica
 
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(compact('intervenant', 'changements', 'title', 'short'));
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-
         return $view;
     }
 
@@ -166,8 +162,6 @@ class IntervenantController extends AbstractActionController implements \Applica
         
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(array('form' => $form, 'intervenant' => $intervenant));
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        
         return $view;
     }
     

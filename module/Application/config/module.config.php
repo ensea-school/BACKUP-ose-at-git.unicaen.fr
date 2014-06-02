@@ -147,6 +147,7 @@ $main =  array(
             'ApplicationSource'                              => 'Application\\Service\\Source',
         ),
         'factories' => array(
+            'navigation'                  => 'Application\Service\NavigationFactoryFactory',
             'ApplicationRoleProvider'     => 'Application\Provider\Role\RoleProviderFactory',
             'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
         ),

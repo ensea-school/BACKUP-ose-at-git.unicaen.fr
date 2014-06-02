@@ -158,6 +158,14 @@ $main =  array(
         'invokables' => array(
             'historiqueDl'      => 'Application\View\Helper\HistoriqueDl',
         ),
+        'initializers' => array(
+            'Application\Service\ContextProviderAwareInitializer',
+        ),
+    ),
+    'form_elements' => array(
+        'initializers' => array(
+            'Application\Service\ContextProviderAwareInitializer',
+        ),
     ),
     'translator' => array(
         'translation_file_patterns' => array(

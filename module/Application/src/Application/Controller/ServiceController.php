@@ -6,7 +6,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Exception\DbException;
-
+use Application\Acl\IntervenantExterieurRole;
+use Application\Entity\Db\IntervenantExterieur;
 
 /**
  * Description of ServiceController
@@ -17,22 +18,6 @@ use Application\Exception\DbException;
  */
 class ServiceController extends AbstractActionController
 {
-    /**
-     * @return \Application\Service\Service
-     */
-    public function getServiceService()
-    {
-        return $this->getServiceLocator()->get('ApplicationService');
-    }
-
-    /**
-     * @return \Application\Service\ContextProvider
-     */
-    public function getContextProvider()
-    {
-        return $this->getServiceLocator()->get('ApplicationContextProvider');
-    }
-
     public function indexAction()
     {
         $service = $this->getServiceService();
@@ -41,6 +26,7 @@ class ServiceController extends AbstractActionController
         $qb      = $service->finderByContext();
         $viewModel = new \Zend\View\Model\ViewModel();
         $filter    = new \stdClass();
+        $title     = "Services et référentiel <small>$annee</small>";
 
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
@@ -87,7 +73,7 @@ class ServiceController extends AbstractActionController
             $services = array();
         }
 
-        $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'renderIntervenants'));
+        $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'title', 'renderIntervenants'));
         return $viewModel;
     }
 
@@ -99,23 +85,27 @@ class ServiceController extends AbstractActionController
         $qb      = $service->finderByContext();
         $viewModel = new \Zend\View\Model\ViewModel();
 
-        $intervenant = $this->context()->intervenantFromRoute();
+        $intervenant = $this->context()->intervenantFromRoute('id'); /* @var $intervenant \Application\Entity\Db\Intervenant */
         $service->finderByIntervenant( $intervenant, $qb );
 
         /* Préparation et affichage */
         $services = $service->getList($qb);
 
         // services référentiels : délégation au contrôleur
+        $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // sauvegarde des filtres dans le contexte local
         $controller       = 'Application\Controller\ServiceReferentiel';
         $params           = $this->getEvent()->getRouteMatch()->getParams();
         $listeViewModel   = $this->forward()->dispatch($controller, $params);
         $viewModel->addChild($listeViewModel, 'servicesRefListe');
 
         $renderIntervenants = false;
+        $renderReferentiel  = !$role instanceof IntervenantExterieurRole && !$intervenant instanceof IntervenantExterieur;
         $action = 'afficher';
+        $title = "Services <small>$intervenant</small>";
 
-        $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'renderIntervenants'));
+        $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'title', 'renderIntervenants', 'renderReferentiel'));
         $viewModel->setTemplate('application/service/index');
+        
         return $viewModel;
     }
 
@@ -264,5 +254,21 @@ class ServiceController extends AbstractActionController
     protected function getFormSaisie()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('ServiceSaisie');
+    }
+    
+    /**
+     * @return \Application\Service\Service
+     */
+    public function getServiceService()
+    {
+        return $this->getServiceLocator()->get('ApplicationService');
+    }
+
+    /**
+     * @return \Application\Service\ContextProvider
+     */
+    public function getContextProvider()
+    {
+        return $this->getServiceLocator()->get('ApplicationContextProvider');
     }
 }

@@ -1,4 +1,4 @@
-<h1 class="page-header">Services <small>Année universitaire <?php echo $annee; ?></small></h1>
+<h1 class="page-header"><?php echo $title; ?></h1>
 
 <style>
     .modal-dialog { 
@@ -22,7 +22,7 @@
 
 <?php if ('afficher' === $action ): ?>
 
-<?php if (!$role instanceof \Application\Acl\IntervenantExterieurRole): ?>
+<?php if ($renderReferentiel): ?>
 <h2>Référentiel
     <?php 
     $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir'));

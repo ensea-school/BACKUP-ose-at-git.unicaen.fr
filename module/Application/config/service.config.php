@@ -17,6 +17,15 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
+                    'resume' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/resume',
+                            'defaults' => array(
+                                'action' => 'resume',
+                            ),
+                        ),
+                    ),
                     'modifier' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -134,11 +143,8 @@ return array(
                 'pages' => array(
                     'service' => array(
                         'label'    => 'Services',
-                        'title'    => "Gestion des services",
-                        'route'    => 'service',
-                        'params' => array(
-                            'action' => 'index',
-                        ),
+                        'title'    => "Résumé des services",
+                        'route'    => 'service/resume',
                         'pages' => array(
 //                            'consultation' => array(
 //                                'label'  => "Consultation",

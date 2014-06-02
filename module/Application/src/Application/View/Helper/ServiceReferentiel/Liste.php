@@ -101,7 +101,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $context = $this->getContextProvider()->getGlobalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof IntervenantRole && !$this->getRenderIntervenants()) {
+        if (!$this->getRenderIntervenants()) {
             unset($parts['intervenant']);
         }
         if ($context->getAnnee()) {

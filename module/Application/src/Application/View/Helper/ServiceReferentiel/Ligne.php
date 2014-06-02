@@ -81,7 +81,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $context = $this->getContextProvider()->getGlobalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof IntervenantRole) {
+        if (!$this->getRenderIntervenants()) {
             unset($parts['intervenant']);
         }
         if ($context->getAnnee()) {

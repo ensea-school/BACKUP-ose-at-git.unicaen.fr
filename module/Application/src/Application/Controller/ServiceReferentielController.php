@@ -80,15 +80,18 @@ class ServiceReferentielController extends AbstractActionController implements C
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel = new \Zend\View\Model\ViewModel();
 
-        $intervenant = $this->context()->intervenantFromRoute(); // N'afficher qu'un seul intervenant
-
+        $intervenant = $this->context()->intervenantFromRoute('id');
+        
         // sauvegarde des filtres dans le contexte local
         $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
 
         $qb       = $service->getFinder();
         $services = $qb->getQuery()->execute();
         
-        $viewModel->setVariables(compact('annee', 'services', 'action', 'role'));
+        $renderIntervenants = false;
+        $renderReferentiel  = !$role instanceof IntervenantExterieurRole && !$intervenant instanceof IntervenantExterieur;
+        
+        $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'renderIntervenants', 'renderReferentiel'));
         $viewModel->setTemplate('application/service-referentiel/voir-liste');
         
         return $viewModel;
@@ -181,20 +184,16 @@ class ServiceReferentielController extends AbstractActionController implements C
             return $intervenant;
         }
         
-        $context = $this->getContextProvider()->getGlobalContext();
+        $context = $this->getContextProvider()->getLocalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
-            $intervenant = $context->getIntervenant();
+            $intervenant = $role->getIntervenant();
         }
         
         if ($role instanceof \Application\Acl\DbRole) {
-            // récupère l'éventuel intervenant sélectionné dans le formulaire de filtrage des services
-            $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
-            $filters = $rechercheForm->hydrateFromSession();
-            if (isset($filters->intervenant) && $filters->intervenant) {
-                $intervenant = $filters->intervenant;
-            }
+            // récupère l'éventuel intervenant du contexte local
+            $intervenant = $context->getIntervenant();
         }
         
         return $intervenant;

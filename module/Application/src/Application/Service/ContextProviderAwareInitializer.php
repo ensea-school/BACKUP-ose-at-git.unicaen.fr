@@ -23,9 +23,12 @@ class ContextProviderAwareInitializer implements InitializerInterface
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)
     {
-        if ($serviceLocator instanceof ControllerManager || $serviceLocator instanceof FormElementManager) {
+        if (method_exists($serviceLocator, 'getServiceLocator')) {
             $serviceLocator = $serviceLocator->getServiceLocator();
         }
+//        if ($serviceLocator instanceof ControllerManager || $serviceLocator instanceof FormElementManager) {
+//            $serviceLocator = $serviceLocator->getServiceLocator();
+//        }
         if ($instance instanceof ContextProviderAwareInterface && !$instance instanceof ContextProvider) {
             $instance->setContextProvider($serviceLocator->get('applicationContextProvider'));
         }

@@ -77,4 +77,6 @@ div.scr-center div.alert{
     margin: none;
     margin-left: auto;
     margin-right: auto;
+    max-height: 600px;
+    overflow:auto;
 }

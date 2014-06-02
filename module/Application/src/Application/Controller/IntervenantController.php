@@ -6,6 +6,7 @@ use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Listener\DossierListener;
 
@@ -22,22 +23,39 @@ class IntervenantController extends AbstractActionController implements \Applica
 {
     use \Application\Service\ContextProviderAwareTrait;
     
+    /**
+     * @var Intervenant
+     */
+    private $intervenant;
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
-            $this->getEvent()->getRouteMatch()->setParam('id', $role->getIntervenant()->getId());
-            $this->voirAction();
-            return $this->forward()->dispatch('IntervenantController', array('action' => 'voir', 'id' => $role->getIntervenant()->getId()));
+            return $this->redirect()->toRoute('intervenant/fiche', array('id' => $role->getIntervenant()->getSourceCode()));
         }
         
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(array());
+        return $this->redirect()->toRoute('intervenant/rechercher');
+    }
+    
+    public function rechercherAction()
+    {
+        $view = $this->choisirAction();
+        
+        if ($this->intervenant) {
+            $this->redirect()->toRoute('intervenant/fiche', array('id' => $this->intervenant->getSourceCode()));
+        }
+        
+        $view->setTemplate('application/intervenant/choisir');
 
         return $view;
     }
-
+    
     /**
      * 
      * @return \Zend\View\Model\ViewModel
@@ -67,8 +85,10 @@ class IntervenantController extends AbstractActionController implements \Applica
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
+                $sourceCode = $form->get('interv')->getValueId();
+                $this->intervenant = $this->getIntervenantService()->getRepo()->findOneBySourceCode($sourceCode);
                 if (($redirect = $this->params()->fromQuery('redirect'))) {
-                    $redirect = str_replace('__sourceCode__', $form->get('interv')->getValueId(), $redirect);
+                    $redirect = str_replace('__sourceCode__', $sourceCode, $redirect);
                     return $this->redirect()->toUrl($redirect);
                 }
             }
@@ -77,7 +97,7 @@ class IntervenantController extends AbstractActionController implements \Applica
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/intervenant/choisir')
-                ->setVariables(array('form' => $form, 'title' => "Choisir un intervenant"));
+                ->setVariables(array('form' => $form, 'title' => "Rechercher un intervenant"));
         
         return $viewModel;
     }
@@ -97,29 +117,31 @@ class IntervenantController extends AbstractActionController implements \Applica
 
     public function voirAction()
     {
+//        $page = $this->params()->fromQuery('page', 'fiche');
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
         $this->em()->getFilters()->enable('historique');
-        $page = $this->params()->fromQuery('page', 'fiche');
 
-        if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
-            throw new LogicException("Aucun identifiant d'intervenant spécifié.");
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            $intervenant = $role->getIntervenant();
         }
-        if (!($intervenant = $intervenant = $this->intervenant()->getRepo()->find($id))) {
-            throw new RuntimeException("Intervenant '$id' spécifié introuvable.");
+        else {
+            $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
         }
-
+        
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->intervenantGetDifferentiel($intervenant);
         $title = "Détails d'un intervenant";
         $short = $this->params()->fromQuery('short', false);
 
         $view = new \Zend\View\Model\ViewModel();
-        if ('services' == $page){
-            $params = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action'] = 'intervenant';
-            $params['intervenant'] = $intervenant->getSourceCode();
-            $servicesViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
-            $view->addChild($servicesViewModel, 'services');
-        }
+//        if ('services' == $page){
+//            $params = $this->getEvent()->getRouteMatch()->getParams();
+//            $params['action'] = 'intervenant';
+//            $params['intervenant'] = $intervenant->getSourceCode();
+//            $servicesViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
+//            $view->addChild($servicesViewModel, 'services');
+//        }
         $view->setVariables(compact('intervenant', 'changements', 'title', 'short', 'page'));
         return $view;
     }

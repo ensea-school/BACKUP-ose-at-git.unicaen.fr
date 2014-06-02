@@ -20,7 +20,7 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:action[/:id][?page=:page]',
+                            'route'    => '/:action[/:id]',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
@@ -30,10 +30,35 @@ return array(
                             ),
                         ),
                     ),
+                    'rechercher' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/rechercher[/:id]',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'rechercher',
+                            ),
+                        ),
+                    ),
+                    'fiche' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:id',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'voir',
+                                'id'     => 0,
+                            ),
+                        ),
+                    ),
                     'saisir-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/saisir-dossier/:id',
+                            'route'    => '/:id/saisir-dossier',
                             'constraints' => array(
                                 'id' => '[0-9]*',
                             ),
@@ -43,15 +68,16 @@ return array(
                             ),
                         ),
                     ),
-                    'voir-services' => array(
+                    'services' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/voir-services/:id',
+                            'route'    => '/:id/services',
                             'constraints' => array(
                                 'id' => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action' => 'voir-services',
+                                'controller' => 'Application\Controller\Service',
+                                'action' => 'intervenant',
                                 'id'     => 0,
                             ),
                         ),
@@ -64,49 +90,36 @@ return array(
         'default' => array(
             'home' => array(
                 'pages' => array(
-//                    'intervenants' => array(
-//                        'label'    => 'Intervenants',
-//                        'title'    => "Gestion des intervenants",
-//                        'route'    => 'intervenant',
-//                        'resource' => 'controller/Application\Controller\Intervenant:index',
-//                        'pages' => array(
-//                            'voir' => array(
-//                                'label'  => "Consultation",
-//                                'title'  => "Consultation de la fiche de l'intervenant {id}",
-//                                'route'  => 'intervenant/default',
-//                                'visible' => false,
-//                                'withtarget' => true,
-//                                'pages' => array(),
-//                            ),
-////                            'modifier' => array(
-////                                'label'  => "Modifier",
-////                                'title'  => "Modifier l'intervenant {id}",
-////                                'route'  => 'intervenant/modifier',
-////                                'visible' => false,
-////                                'withtarget' => true,
-////                                'pages' => array(),
-////                            ),
-//                        ),
-//                    ),
                     'intervenant' => array(
                         'label'    => 'Intervenant',
                         'title'    => "Intervenant",
                         'route'    => 'intervenant',
                         'resource' => 'controller/Application\Controller\Intervenant:index',
                         'pages' => array(
-                            'dossier' => array(
-                                'label'  => "Saisir un dossier",
-                                'title'  => "Saisir un dossier d'intervenant vacataire",
-                                'route'  => 'intervenant/saisir-dossier',
-                                'visible' => false,
+                            'rechercher' => array(
+                                'label'  => "Rechercher",
+                                'title'  => "Rechercher un intervenant",
+                                'route'  => 'intervenant/rechercher',
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Intervenant:rechercher',
+                            ),
+                            'fiche' => array(
+                                'label'  => "Fiche",
+                                'title'  => "Consultation de la fiche de l'intervenant {id}",
+                                'route'  => 'intervenant/fiche',
+                                'action' => 'voir',
                                 'withtarget' => true,
                             ),
-                            'voir' => array(
-                                'label'  => "Fiche intervenant",
-                                'title'  => "Consultation de la fiche de l'intervenant {id}",
-                                'route'  => 'intervenant/default',
-                                'action' => 'voir',
-                                'visible' => false,
+                            'dossier' => array(
+                                'label'  => "Dossier",
+                                'title'  => "Saisir/modifier un dossier d'intervenant vacataire",
+                                'route'  => 'intervenant/saisir-dossier',
+                                'withtarget' => true,
+                            ),
+                            'service' => array(
+                                'label'  => "Services",
+                                'title'  => "Services et référentiel de l'intervenant",
+                                'route'  => 'intervenant/services',
                                 'withtarget' => true,
                             ),
                         ),

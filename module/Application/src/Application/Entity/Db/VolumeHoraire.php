@@ -79,6 +79,27 @@ class VolumeHoraire implements HistoriqueAwareInterface
      */
     protected $typeIntervention;
 
+    /**
+     * remove
+     *
+     * @var boolean
+     */
+    protected $remove=false;
+
+
+    /**
+     * Détermine si le volume horaire a vocation à être supprimé ou non
+     */
+    public function setRemove($remove)
+    {
+        $this->remove = (boolean)$remove;
+        return $this;
+    }
+
+    public function getRemove()
+    {
+        return $this->remove;
+    }
 
     /**
      * Set heures

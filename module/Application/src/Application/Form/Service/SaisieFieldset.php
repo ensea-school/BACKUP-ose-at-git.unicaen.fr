@@ -4,8 +4,6 @@ namespace Application\Form\Service;
 
 use Zend\Form\Fieldset;
 use UnicaenApp\Form\Element\SearchAndSelect;
-use Zend\Stdlib\Hydrator\ClassMethods;
-use Zend\InputFilter\InputFilter;
 use Application\Entity\Db\Etablissement;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -44,7 +42,8 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
 
         $this->etablissement = $this->getContextProvider()->getGlobalContext()->getEtablissement();
 
-        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieFieldsetHydrator'));
+        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieFieldsetHydrator'))
+              ->setAllowedObjectBindingClass('Application\Entity\Db\Service');
 
         $this->add(array(
             'name' => 'id',

@@ -32,4 +32,15 @@ class VolumeHoraire extends AbstractEntityService
         return 'vh';
     }
 
+    /**
+     * 
+     * @return \Application\Entity\Db\VolumeHoraire
+     */
+    public function newEntity()
+    {
+        $entity = parent::newEntity();
+        $entity->setValiditeDebut( new \DateTime);
+        return $entity;
+    }
+
 }

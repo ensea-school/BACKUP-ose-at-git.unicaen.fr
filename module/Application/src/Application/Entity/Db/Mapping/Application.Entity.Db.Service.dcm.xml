@@ -69,7 +69,11 @@
       </join-columns>
     </many-to-one>
     <!-- NB: Ajout de relations à la main -->
-    <one-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire" mapped-by="service" />
+    <one-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire" mapped-by="service">
+        <cascade>
+            <cascade-all/>
+        </cascade>
+    </one-to-many>
     <one-to-many field="validationService" target-entity="Application\Entity\Db\ValidationService" mapped-by="service" />
   </entity>
 </doctrine-mapping>

@@ -71,6 +71,7 @@ function Service( id ) {
     this.onAfterAdd = function(){
         $.get( Service.voirLigneUrl+"/"+this.id+'?only-content=0&details=1&render-intervenants='+Service.getRenderIntervenants(), function( data ) {
             $( "#service-"+this.id+"-ligne" ).refresh();
+            $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
             $('#services > tbody:last').append(data);
             Service.refreshFiltres();
         });
@@ -79,6 +80,7 @@ function Service( id ) {
     this.onAfterModify = function(){
         var details = $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1';
         $( "#service-"+this.id+"-ligne" ).refresh( {details:details} );
+        $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
         Service.refreshFiltres();
     }
 

@@ -45,6 +45,11 @@ class Periode
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $code;
+
+    /**
      * @var \Application\Entity\Db\TypeIntervenant
      */
     protected $typeIntervenant;
@@ -152,6 +157,17 @@ class Periode
     public function getHistoModification()
     {
         return $this->histoModification;
+    }
+
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
     }
 
     /**

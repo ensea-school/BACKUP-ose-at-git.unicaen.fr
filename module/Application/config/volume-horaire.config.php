@@ -84,23 +84,26 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\VolumeHoraire'   => 'Application\Controller\VolumeHoraireController',
+            'Application\Controller\VolumeHoraire'      => 'Application\Controller\VolumeHoraireController',
         ),
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationVolumeHoraire' => 'Application\\Service\\VolumeHoraire',
+            'ApplicationVolumeHoraire'                  => 'Application\\Service\\VolumeHoraire',
+            'FormVolumeHoraireSaisieMultipleHydrator'   => 'Application\Form\VolumeHoraire\SaisieMultipleHydrator',
         )
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'volumeHoraireDl'      => 'Application\View\Helper\VolumeHoraire\Dl',
-            'volumeHoraireListe'   => 'Application\View\Helper\VolumeHoraire\Liste'            
+            'volumeHoraireDl'                           => 'Application\View\Helper\VolumeHoraire\Dl',
+            'volumeHoraireListe'                        => 'Application\View\Helper\VolumeHoraire\Liste',
+            'volumeHoraireSaisieMultipleFieldset'       => 'Application\View\Helper\VolumeHoraire\SaisieMultipleFieldset',
         ),
     ),
     'form_elements' => array(
         'invokables' => array(
-            'VolumeHoraireSaisie' => 'Application\Form\VolumeHoraire\Saisie',
+            'VolumeHoraireSaisie'                       => 'Application\Form\VolumeHoraire\Saisie',
+            'VolumeHoraireSaisieMultipleFieldset'       => 'Application\Form\VolumeHoraire\SaisieMultipleFieldset', // Nécessite plusieurs instances
         ),
     ),
 );

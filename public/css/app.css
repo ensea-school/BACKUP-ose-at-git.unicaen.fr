@@ -80,3 +80,8 @@ div.scr-center div.alert{
     max-height: 600px;
     overflow:auto;
 }
+
+
+form#service div#element-interne div.col-md-5 {
+    clear: both;
+}

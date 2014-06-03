@@ -187,6 +187,7 @@ return array(
             'ApplicationMotifNonPaiement'       => 'Application\\Service\\MotifNonPaiement',
             'FormServiceRechercheHydrator'      => 'Application\Form\Service\RechercheHydrator',
             'FormServiceSaisieFieldsetHydrator' => 'Application\Form\Service\SaisieFieldsetHydrator',
+            'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',
         ),
         'factories' => array(
         ),
@@ -204,6 +205,7 @@ return array(
         'invokables' => array(
             'serviceDl'               => 'Application\View\Helper\Service\Dl',
             'serviceReferentielDl'    => 'Application\View\Helper\ServiceReferentiel\Dl',
+            'serviceSaisieForm'       => 'Application\View\Helper\Service\SaisieForm',
         ),
         'factories' => array(
             'serviceListe'            => 'Application\View\Helper\Service\ListeFactory',

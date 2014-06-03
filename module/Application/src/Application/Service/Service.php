@@ -55,7 +55,7 @@ class Service extends AbstractEntityService
     /**
      * Suvegarde une entité
      *
-     * @param mixed $entity
+     * @param ServiceEntity $entity
      * @throws \Common\Exception\RuntimeException
      */
     public function save($entity)
@@ -63,7 +63,18 @@ class Service extends AbstractEntityService
         if (! $entity->getEtablissement()){
             $entity->setEtablissement( $this->getContextProvider()->getGlobalContext()->getEtablissement() );
         }
-        return parent::save($entity);
+        $result = parent::save($entity);
+        /* Sauvegarde automatique des volumes horaires associés */
+        $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
+        /* @var $serviceVolumeHoraire VolumeHoraire */
+        foreach( $entity->getVolumeHoraire() as $volumeHoraire ){
+            if ($volumeHoraire->getRemove()){
+                $serviceVolumeHoraire->delete($volumeHoraire);
+            }else{
+                $serviceVolumeHoraire->save( $volumeHoraire );
+            }
+        }
+        return $result;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Application\Entity\Db;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Entity\VolumeHoraireListe;
 
 /**
  * Service
@@ -95,6 +96,14 @@ class Service implements HistoriqueAwareInterface
     protected $annee;
 
     /**
+     * liste de volumes horaires
+     *
+     * @var VolumeHoraireListe
+     */
+    protected $volumeHoraireListes = array();
+
+
+        /**
      * Constructor
      */
     public function __construct()
@@ -259,6 +268,19 @@ class Service implements HistoriqueAwareInterface
     public function getVolumeHoraire()
     {
         return $this->volumeHoraire;
+    }
+
+    /**
+     * 
+     * @param \Application\Entity\Db\Periode $periode
+     * @return VolumeHoraireListe
+     */
+    public function getVolumeHoraireListe( Periode $periode )
+    {
+        if (! isset($this->volumeHoraireListes[$periode->getCode()])){
+            $this->volumeHoraireListes[$periode->getCode()] = new VolumeHoraireListe( $this, $periode );
+        }
+        return $this->volumeHoraireListes[$periode->getCode()];
     }
 
     /**

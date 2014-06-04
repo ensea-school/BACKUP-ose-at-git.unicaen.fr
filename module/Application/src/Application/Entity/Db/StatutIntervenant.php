@@ -13,7 +13,7 @@ class StatutIntervenant
     const ATER           = 'ATER';
     const ATER_MI_TPS    = 'ATER_MI_TPS';
     const DOCTOR         = 'DOCTOR';
-    const ENS_CDI        = 'ENS_CDI';
+    const ENS_CONTRACT   = 'ENS_CONTRACT';
     const LECTEUR        = 'LECTEUR';
     const MAITRE_LANG    = 'MAITRE_LANG';
     const BIATSS         = 'BIATSS';

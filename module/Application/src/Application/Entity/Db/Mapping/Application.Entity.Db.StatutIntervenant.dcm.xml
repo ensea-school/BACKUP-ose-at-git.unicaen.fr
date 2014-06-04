@@ -19,8 +19,10 @@
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="libelle" type="string" column="LIBELLE" length="30" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="128" nullable="false"/>
     <field name="serviceStatutaire" type="float" column="SERVICE_STATUTAIRE" precision="126" scale="0" nullable="false"/>
+    <field name="plafondReferentiel" type="float" column="PLAFOND_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+    <field name="maximumHETD" type="float" column="MAXIMUM_HETD" precision="126" scale="0" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>

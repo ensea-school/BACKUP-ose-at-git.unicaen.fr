@@ -13,7 +13,7 @@ class Dossier implements HistoriqueAwareInterface
     private $adresse;
 
     /**
-     * @var string
+     * @var Civilite
      */
     private $civilite;
 
@@ -68,14 +68,9 @@ class Dossier implements HistoriqueAwareInterface
     private $rib;
 
     /**
-     * @var string
+     * @var StatutIntervenant
      */
     private $statut;
-
-    /**
-     * @var string
-     */
-    private $typeEmployeur;
 
     /**
      * @var boolean
@@ -134,10 +129,10 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Set civilite
      *
-     * @param string $civilite
+     * @param Civilite $civilite
      * @return Dossier
      */
-    public function setCivilite($civilite)
+    public function setCivilite(Civilite $civilite)
     {
         $this->civilite = $civilite;
 
@@ -147,7 +142,7 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get civilite
      *
-     * @return string 
+     * @return Civilite 
      */
     public function getCivilite()
     {
@@ -387,10 +382,10 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Set statut
      *
-     * @param string $statut
+     * @param StatutIntervenant $statut
      * @return Dossier
      */
-    public function setStatut($statut)
+    public function setStatut(StatutIntervenant $statut = null)
     {
         $this->statut = $statut;
 
@@ -400,34 +395,11 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * Get statut
      *
-     * @return string 
+     * @return StatutIntervenant 
      */
     public function getStatut()
     {
         return $this->statut;
-    }
-
-    /**
-     * Set typeEmployeur
-     *
-     * @param string $typeEmployeur
-     * @return Dossier
-     */
-    public function setTypeEmployeur($typeEmployeur)
-    {
-        $this->typeEmployeur = $typeEmployeur;
-
-        return $this;
-    }
-
-    /**
-     * Get typeEmployeur
-     *
-     * @return string 
-     */
-    public function getTypeEmployeur()
-    {
-        return $this->typeEmployeur;
     }
 
     /**
@@ -566,14 +538,12 @@ class Dossier implements HistoriqueAwareInterface
                 ->setNomUsuel($intervenant->getNomUsuel())
                 ->setNomPatronymique($intervenant->getNomPatronymique())
                 ->setPrenom($intervenant->getPrenom())
-                ->setCivilite($intervenant->getCiviliteToString())
+                ->setCivilite($intervenant->getCivilite())
                 ->setNumeroInsee($intervenant->getNumeroInsee())
                 ->setAdresse((string) $intervenant->getAdressePrincipale(true))
                 ->setEmail($intervenant->getEmail())
-                ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile());
-//                ->setTypeEmployeur(null)
-//                ->setStatut(null)
-//                ->setRib(null);
+                ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile())
+                ->setStatut($intervenant->getStatut());
         
         return $this;
     }

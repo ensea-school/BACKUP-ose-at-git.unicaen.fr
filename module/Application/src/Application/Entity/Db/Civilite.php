@@ -30,7 +30,11 @@ class Civilite
      */
     protected $id;
 
-
+    public function __toString()
+    {
+        return $this->getLibelleCourt();
+    }
+    
     /**
      * Set libelleCourt
      *

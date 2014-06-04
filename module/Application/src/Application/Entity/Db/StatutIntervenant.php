@@ -2,16 +2,83 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * StatutIntervenant
  */
 class StatutIntervenant
 {
+    const ENS_2ND_DEG    = 'ENS_2ND_DEG';
+    const ENS_CH         = 'ENS_2ND_DEG';
+    const ASS_MI_TPS     = 'ASS_MI_TPS';
+    const ATER           = 'ATER';
+    const ATER_MI_TPS    = 'ATER_MI_TPS';
+    const DOCTOR         = 'DOCTOR';
+    const ENS_CDI        = 'ENS_CDI';
+    const LECTEUR        = 'LECTEUR';
+    const MAITRE_LANG    = 'MAITRE_LANG';
+    const BIATSS         = 'BIATSS';
+    const SALAR_PRIVE    = 'SALAR_PRIVE';
+    const SALAR_PUBLIC   = 'SALAR_PUBLIC';
+    const NON_SALAR      = 'NON_SALAR';
+    const RETR_UCBN      = 'RETR_UCBN';
+    const RETR_HORS_UCBN = 'RETR_HORS_UCBN';
+    const ETUD_UCBN      = 'ETUD_UCBN';
+    const ETUD_HORS_UCBN = 'ETUD_HORS_UCBN';
+    const CHARG_ENS_1AN  = 'CHARG_ENS_1AN';
+    const AUTRES         = 'AUTRES';
+
+    static public $vacatairesNonBiatss = array(
+        self::SALAR_PRIVE,
+        self::SALAR_PUBLIC,
+        self::NON_SALAR,
+        self::RETR_UCBN,
+        self::RETR_HORS_UCBN,
+        self::ETUD_UCBN,
+        self::ETUD_HORS_UCBN,
+        self::CHARG_ENS_1AN,
+    );
+    
+    /**
+     * 
+     * @return string
+     */
     public function __toString()
     {
         return $this->getLibelle();
+    }
+    
+    /**
+     * Indique si ce statut correspond aux vacataires non-BIATSS.
+     * Déterminant pour la saisie de dossier vacataire.
+     * 
+     * @return bool
+     */
+    public function estVacataireNonBiatss()
+    {
+        return in_array($this->getSourceCode(), self::$vacatairesNonBiatss);
+    }
+    
+    /**
+     * Indique si ce statut requiert la saisie d'un dossier vacataire.
+     * 
+     * @return bool
+     */
+    public function requiertDossier()
+    {
+        return in_array($this->getSourceCode(), self::$vacatairesNonBiatss);
+    }
+    
+    /**
+     * Indique si ce statut permet la saisie de service prévisionnel ou de référentiel.
+     * 
+     * @return bool
+     */
+    public function permetSaisieService()
+    {
+        return !in_array($this->getSourceCode(), array(
+            self::RETR_UCBN,
+            self::AUTRES,
+        ));
     }
     
     /**
@@ -58,6 +125,16 @@ class StatutIntervenant
      * @var float
      */
     protected $serviceStatutaire;
+
+    /**
+     * @var float
+     */
+    protected $plafondReferentiel;
+
+    /**
+     * @var float
+     */
+    protected $maximumHETD;
 
     /**
      * @var \DateTime
@@ -254,6 +331,52 @@ class StatutIntervenant
     public function getServiceStatutaire()
     {
         return $this->serviceStatutaire;
+    }
+
+    /**
+     * Set plafondReferentiel
+     *
+     * @param float $plafondReferentiel
+     * @return StatutIntervenant
+     */
+    public function setPlafondReferentiel($plafondReferentiel)
+    {
+        $this->plafondReferentiel = $plafondReferentiel;
+
+        return $this;
+    }
+
+    /**
+     * Get plafondReferentiel
+     *
+     * @return float 
+     */
+    public function getPlafondReferentiel()
+    {
+        return $this->plafondReferentiel;
+    }
+
+    /**
+     * Set maximumHETD
+     *
+     * @param float $maximumHETD
+     * @return StatutIntervenant
+     */
+    public function setMaximumHETD($maximumHETD)
+    {
+        $this->maximumHETD = $maximumHETD;
+
+        return $this;
+    }
+
+    /**
+     * Get maximumHETD
+     *
+     * @return float 
+     */
+    public function getMaximumHETD()
+    {
+        return $this->maximumHETD;
     }
 
     /**

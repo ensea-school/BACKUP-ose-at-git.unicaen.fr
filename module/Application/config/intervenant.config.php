@@ -149,9 +149,11 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationOffreFormation' => 'Application\\Service\\OffreFormation',
-            'ApplicationIntervenant'    => 'Application\\Service\\Intervenant',
-            'ApplicationDossier'        => 'Application\\Service\\Dossier',
+            'ApplicationOffreFormation'    => 'Application\\Service\\OffreFormation',
+            'ApplicationIntervenant'       => 'Application\\Service\\Intervenant',
+            'ApplicationCivilite'          => 'Application\\Service\\Civilite',
+            'ApplicationStatutIntervenant' => 'Application\\Service\\StatutIntervenant',
+            'ApplicationDossier'           => 'Application\\Service\\Dossier',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',

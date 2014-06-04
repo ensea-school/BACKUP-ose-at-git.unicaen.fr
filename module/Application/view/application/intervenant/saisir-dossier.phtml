@@ -1,49 +1,105 @@
 <h2 class="page-header">Saisie de dossier <small><?php echo $intervenant ?></small></h2>
 
+<?php echo $this->messenger(true) ?>
+
 <style>
     div.rib-part { display: inline-block; vertical-align: top; }
     div.rib-part input { width: auto; }
-    div.ouinon label { font-weight: normal ; }
-    input[type=radio] { margin-left: 2em; margin-right: 3px; }
+    div.multicheckbox label { margin-left: 2em; font-weight: normal ; }
+    /*input[type=radio] { margin-left: 2em; margin-right: 3px; }*/
 </style>
 
-<?php echo $this->form()->openTag($form->prepare()) ?> 
+<?php 
+$form->prepare();
+$dossier = $form->get('dossier');
+?>
+
+<?php echo $this->form()->openTag($form) ?> 
 <div class="row">
     <div class="col-md-3">
-        <?php echo $this->formControlGroup($form->get('nomUsuel')); ?>
-        <?php echo $this->formControlGroup($form->get('nomPatronymique')); ?>
-        <?php echo $this->formControlGroup($form->get('prenom')); ?>
-        <?php echo $this->formControlGroup($form->get('civilite')); ?>
-        <?php echo $this->formControlGroup($form->get('numeroInsee')); ?>
+        <?php echo $this->formControlGroup($dossier->get('nomUsuel')); ?>
+        <?php echo $this->formControlGroup($dossier->get('nomPatronymique')); ?>
+        <?php echo $this->formControlGroup($dossier->get('prenom')); ?>
+        <?php echo $this->formControlGroup($dossier->get('civilite')->get('id')); ?>
+        <?php echo $this->formControlGroup($dossier->get('numeroInsee')); ?>
     </div>
-    <div class="col-md-3">
-        <?php echo $this->formControlGroup($form->get('adresse')); ?>
-        <?php echo $this->formControlGroup($form->get('email')); ?>
-        <?php echo $this->formControlGroup($form->get('telephone')); ?>
-    </div>
-    <div class="col-md-6">
-        <?php echo $this->formControlGroup($form->get('typeEmployeur')); ?>
-        <label class="control-label"><?php echo $form->get('premierRecrutement')->getLabel() ?></label><br />
-        <div class="ouinon"><?php echo $this->formRadio($form->get('premierRecrutement')); ?></div>
-        <label class="control-label"><?php echo $form->get('perteEmploi')->getLabel() ?></label><br />
-        <div class="ouinon"><?php echo $this->formRadio($form->get('perteEmploi')); ?></div>
-        <?php echo $this->formControlGroup($form->get('statut')); ?>
+    <div class="col-md-4">
+        <?php echo $this->formControlGroup($dossier->get('adresse')); ?>
+        <?php echo $this->formControlGroup($dossier->get('email')); ?>
+        <?php echo $this->formControlGroup($dossier->get('telephone')); ?>
         <fieldset class="rib">
             <legend>RIB</legend>
-            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('bic')); ?></div>
-            <div class="rib-part"><?php echo $this->formControlGroup($form->get('rib')->get('iban')); ?></div>
-            <?php echo $this->formControlGroup($form->get('rib')->get('hidden')); ?>
+            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('bic')); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('iban')); ?></div>
+            <?php echo $this->formControlGroup($dossier->get('rib')->get('hidden')); ?>
         </fieldset>
     </div>
+    <div class="col-md-5">
+        <?php echo $this->formControlGroup($dossier->get('premierRecrutement')); ?>
+        <div class="perteEmploi"><?php echo $this->formControlGroup($dossier->get('perteEmploi')); ?></div>
+        <div class="statut"><?php echo $this->formControlGroup($dossier->get('statut')->get('id')); ?></div>
+    </div>
 </div>
-<?php echo $this->formHidden($form->get('id')); ?>
-<hr />
+<?php echo $this->formHidden($dossier->get('id')); ?>
+
 <input class="btn btn-primary" type="submit" value="Enregistrer" name="submit">
 <?php echo $this->form()->closeTag() ?> 
 
 <script>
     $(function() {
         $(":input").tooltip({ placement: 'bottom' });
+        
+        var divPerteEmploi    = $("div.perteEmploi");
+        var divStatut         = $("div.statut");
+        var radios1erRecrut   = $("input[name='dossier[premierRecrutement]']"); // NB: 2 radios
+        var radiosPerteEmploi = $("input[name='dossier[perteEmploi]']"); // NB: 2 radios
+        
+        radios1erRecrut.change(function () {
+            updatePerteEmploi();
+        });
+        radiosPerteEmploi.change(function () {
+            updateStatut();
+        });
+        
+        function getRadioValue(radioInputs)
+        {
+            var checkedRadio = radioInputs.filter(":checked");
+            if (checkedRadio.length === 0) {
+                return null;
+            }
+            return checkedRadio.attr('value');
+        }
+        
+        function updatePerteEmploi()
+        {
+            var valuePremierRecrutement = getRadioValue(radios1erRecrut);
+            if (valuePremierRecrutement === '0') {
+                divPerteEmploi.show();
+                divPerteEmploi.find("input[type=radio]").attr('disabled', false);
+            }
+            else {
+                divPerteEmploi.hide();
+                divPerteEmploi.find("input[type=radio]").attr('disabled', true);
+            }
+            updateStatut();
+        }
+        
+        function updateStatut()
+        {
+            var valuePremierRecrutement = getRadioValue(radios1erRecrut);
+            var valuePerteEmploi        = getRadioValue(radiosPerteEmploi);
+            if (valuePremierRecrutement === '1' || valuePerteEmploi === '0') {
+                divStatut.show();
+                divStatut.find("select").attr('disabled', false);
+            }
+            else {
+                divStatut.hide();
+                divStatut.find("select").attr('disabled', true);
+            }
+        }
+        
+        updatePerteEmploi();
+        updateStatut();
     });
 </script>
 

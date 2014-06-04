@@ -208,18 +208,22 @@ class IntervenantController extends AbstractActionController implements \Applica
             $intervenant->setDossier($dossier);
         }
         
-        $form->bind($dossier);
+        $form->bind($intervenant);
         
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
                 $this->getDossierService()->save($dossier);
-                $this->notifyDossier($dossier);
+                $notified = $this->notifyDossier($dossier);
                 $this->getIntervenantService()->save($intervenant);
                 $this->flashMessenger()->addSuccessMessage("Dossier enregistré avec succès.");
-//                return $this->redirect()->toUrl($this->url()->fromRoute('intervenant'));
+                if ($notified) {
+                    $this->flashMessenger()->addInfoMessage("Un mail doit être envoyé pour informer la composante de la modification du dossier...");
+                }
+                return $this->redirect()->toUrl($this->url()->fromRoute(null, array(), array(), true));
             }
+//            var_dump('not valid', $form->getMessages());
         }
         
         return compact('intervenant', 'form');
@@ -230,7 +234,11 @@ class IntervenantController extends AbstractActionController implements \Applica
         if (DossierListener::$created || DossierListener::$modified) {
             // envoyer un mail au gestionnaire
             var_dump('Envoi de mail "dossier créé ou modifié"...');
+            
+            return true;
         }
+        
+        return false;
     }
     
     protected function getFormModifier()

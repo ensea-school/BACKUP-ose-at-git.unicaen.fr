@@ -37,6 +37,10 @@ class NavigationFactory extends DefaultNavigationFactory
      */
     protected function injectEntity(array &$page, RouteMatch $routeMatch = null, Router $router = null, $request = null)
     {
+        if (!$routeMatch) {
+            return;
+        }
+        
         if (isset($page['withtarget'])) {
             if (($id = $routeMatch->getParam('id'))) {
                 $page['params']['id'] = $id;

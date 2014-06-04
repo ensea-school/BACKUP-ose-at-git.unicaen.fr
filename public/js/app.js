@@ -1,3 +1,7 @@
+/***************************************************************************************************************************************************
+    Divers
+/***************************************************************************************************************************************************/
+
 $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
     errorDialog.show( 'Une erreur '+jqxhr.status + '('+jqxhr.statusText+') est survenue', jqxhr.responseText );
     console.log( jqxhr );
@@ -21,6 +25,21 @@ errorDialog.show = function( title, text ){
        +'</div>');
 }
 
+function Url( route, data ){
+    var getArgs = data ? $.param( data ) : null;
+    return Url.getBase() + route + (getArgs ? '?'+getArgs : '');
+}
+
+Url.getBase = function(){
+    sc = document.getElementsByTagName("script");
+    for(idx = 0; idx < sc.length; idx++)
+    {
+        s = sc.item(idx);
+        if(s.src && s.src.match(/js\/app\.js$/)){
+            return s.src.replace( /()js\/app\.js$/, '$1');;
+        }
+    }
+}
 
 
 
@@ -60,11 +79,27 @@ function Service( id ) {
             $('#element-externe').hide();
             $("input[name='service\\[etablissement\\]\\[label\\]']").val('');
             $("input[name='service\\[etablissement\\]\\[id\\]']").val('');
+            
+            var serviceId = $('form#service input[name="service\\[id\\]"]').val();
+            var elementId = $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val();
+            if (elementId && serviceId){
+                ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
+            }
         }else{
             $('#element-interne').hide();
-            $("input[name='service\\[element-pedagogique\\]\\[label\\]']").val('');
-            $("input[name='service\\[element-pedagogique\\]\\[id\\]']").val('');
+            $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']").val('');
+            $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']").val('');
             $('#element-externe').show();
+            this.formShowHidePeriodes({periode: {code:null}});
+        }
+    }
+
+    this.formShowHidePeriodes = function( data ){
+        if (data.periode.code){
+            $('form#service div.periode').hide();
+            $('form#service div#'+data.periode.code).show();
+        }else{
+            $('form#service div.periode').show();
         }
     }
 
@@ -148,9 +183,17 @@ Service.init = function( voirLigneUrl ){
         Service.get(event.a.data('id')).onAfterDelete();
     });
 
+    /* Détection de changement d'état du radio interne-externe */
     $("body").on('change', 'form#service input[name="service\\[interne-externe\\]"]', function(){
         Service.get(this.value).showInterneExterne( $( this ).val() );
     });
+
+    /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
+    $( "body" ).on( "autocompleteselect", 'form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[label\\]"]', function( event, ui ) {
+        var serviceId = $('form#service input[name="service\\[id\\]"]').val();
+        var elementId = ui.item.id;
+        ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
+    } );
 
     $(".service-show-all-details").on('click', function(){ Service.showAllDetails(); });
     $(".service-hide-all-details").on('click', function(){ Service.hideAllDetails(); });
@@ -363,8 +406,22 @@ function ElementPedagogique( id ) {
 //        $( "#etape-"+this.id+"-ligne" ).fadeOut().remove();
             window.location.reload();
     }
+
+    this.getPeriode = function( func ){
+        var getPeriodeUrl = Url('offre-de-formation/element/get-periode/'+this.id);
+        $.ajax({
+            dataType: "json",
+            url: getPeriodeUrl,
+        //    async: false,
+        }).done(func);
+    }
 }
 
+/**
+ *
+ * @param integer id
+ * @returns ElementPedagogique
+ */
 ElementPedagogique.get = function( id )
 {
     if (null == ElementPedagogique.services) ElementPedagogique.services = new Array();

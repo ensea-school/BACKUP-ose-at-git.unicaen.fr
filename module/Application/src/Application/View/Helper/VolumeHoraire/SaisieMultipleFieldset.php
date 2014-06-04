@@ -35,28 +35,33 @@ class SaisieMultipleFieldset extends AbstractHelper implements ServiceLocatorAwa
     /**
      *
      * @param SMFieldset $fieldset
+     * @param \Application\Entity\Db\Periode|null $periode
      * @return SaisieMultipleFieldset|string
      */
-    public function __invoke(SMFieldset $fieldset = null)
+    public function __invoke(SMFieldset $fieldset = null, $periode=null)
     {
         if (null === $fieldset) {
             return $this;
         }
 
-        return $this->render($fieldset);
+        return $this->render($fieldset, $periode);
     }
 
     /**
      * Rendu du Fieldset
      *
      * @param SMFieldset $fieldset
+     * @param \Application\Entity\Db\Periode|null $periode
      * @return string
      */
-    public function render(SMFieldset $fieldset)
+    public function render(SMFieldset $fieldset, $periode=null)
     {
         $res = $this->getView()->formHidden($fieldset->get('service'));
         $res .= $this->getView()->formHidden($fieldset->get('periode'));
 
+        $visible = (($periode === $fieldset->getObject()->getPeriode()) || (! $periode));
+
+        $res .= '<div class="periode" id="'.$fieldset->getObject()->getPeriode()->getCode().'" style="display:'.($visible ? 'block' : 'none').'">';
         $res .= '<h3>'.$fieldset->getObject()->getPeriode().'</h3>';
         $res .= '<div class="row">';
         foreach( $this->getTypesInterventions() as $typeIntervention ){
@@ -71,6 +76,7 @@ class SaisieMultipleFieldset extends AbstractHelper implements ServiceLocatorAwa
             //$res .= $this->getView()->formControlGroup( $fieldset->get($typeIntervention->getCode()) );
             $res .= '</div>';
         }
+        $res .= '</div>';
         $res .= '</div>';
 
         return $res;

@@ -199,6 +199,19 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         return new \Zend\View\Model\JsonModel($result);
     }
 
+    public function getPeriodeAction()
+    {
+        $elementPedagogique = $this->context()->elementPedagogiqueFromRoute();
+        $code = null;
+        if ($elementPedagogique){
+            if ($periode = $elementPedagogique->getPeriode()){
+                $code = $periode->getCode();
+            }
+        }
+        $result = array('periode' => array( 'code' => $code ) );
+        return new \Zend\View\Model\JsonModel($result);
+    }
+
     /**
      * Retourne le formulaire d'ajout/modif d'ElementPedagogique.
      * 

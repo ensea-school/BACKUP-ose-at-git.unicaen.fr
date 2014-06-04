@@ -94,6 +94,14 @@ return array(
                                     'defaults' => array( 'action' => 'supprimer' ),
                                 ),
                             ),
+                            'get-periode' => array(
+                                'type'  => 'Segment',
+                                'options' => array(
+                                    'route' => '/get-periode/:elementPedagogique',
+                                    'constraints' => array( 'elementPedagogique' => '[0-9]*' ),
+                                    'defaults' => array( 'action' => 'getPeriode' ),
+                                ),
+                            ),
                         ),
                     ),
                     'etape' => array(
@@ -252,7 +260,7 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
-                    'action' => array('voir',   'apercevoir',   'ajouter',   'modifier',   'supprimer', 'search'),
+                    'action' => array('voir',   'apercevoir',   'ajouter',   'modifier',   'supprimer', 'search', 'getPeriode'),
                     'roles' => array('user')
                 ),
             ),

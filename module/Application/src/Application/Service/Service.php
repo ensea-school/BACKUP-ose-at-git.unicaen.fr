@@ -325,4 +325,31 @@ EOS;
         }
         return $result;
     }
+
+
+    /**
+     * Détermine si un service est assuré localement (c'est-à-dire dans l'université) ou sur un autre établissement
+     *
+     * @param \Application\Entity\Db\Service $service
+     * @return boolean
+     */
+    public function isLocal( ServiceEntity $service )
+    {
+        if (! $service->getEtablissement()) return true; // par défaut
+        if ($service->getEtablissement() === $this->getContextProvider()->getGlobalContext()->getEtablissement()) return true;
+        return false;
+    }
+
+    /**
+     * Retourne la période courante d'un service
+     * @param \Application\Entity\Db\Service $service
+     * @return \Application\Entity\Db\Periode
+     */
+    public function getPeriode(ServiceEntity $service)
+    {
+        if (! $this->isLocal($service)) return null;
+        if (! $service->getElementPedagogique()) return null;
+        if (! $service->getElementPedagogique()->getPeriode()) return null;
+        return $service->getElementPedagogique()->getPeriode();
+    }
 }

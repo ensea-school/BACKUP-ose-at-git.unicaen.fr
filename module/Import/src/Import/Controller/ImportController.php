@@ -22,6 +22,11 @@ class ImportController extends AbstractActionController
             'AFFECTATION_RECHERCHE',
             'ADRESSE_INTERVENANT',
         );
+        /* Liste des tables pour lesquelles les insertions doivent tout de même être scrutées si un intervenant existe déjà dans OSE */
+        $inTable = array(
+            'INTERVENANT_PERMANENT',
+            'INTERVENANT_EXTERIEUR',
+        );
 
         $sc = $this->getServiceLocator()->get('ImportServiceSchema');
         /* @var $sc \Import\Service\Schema */
@@ -43,10 +48,13 @@ class ImportController extends AbstractActionController
             $q = new Query($table);
             if (in_array($table,$noInsertTables)){
                 $q->setAction(array(Query::ACTION_DELETE, Query::ACTION_UPDATE, Query::ACTION_UNDELETE));
+                if (in_array($table, $inTable)){
+                    $q->setInTable('INTERVENANT');
+                }
             }else{
                 $q->setAction(null);
             }
-
+            
             $queries[$table] = $q;
         }
         return $queries;

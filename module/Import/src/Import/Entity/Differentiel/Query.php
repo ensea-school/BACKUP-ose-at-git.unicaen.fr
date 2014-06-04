@@ -55,6 +55,13 @@ class Query
     protected $sourceCode;
 
     /**
+     * inTable
+     *
+     * @var string
+     */
+    protected $inTable;
+
+    /**
      * Liste des colonnes ayant changé à filtrer
      *
      * @var string|string[]|null
@@ -249,6 +256,29 @@ class Query
     }
 
     /**
+     * Retourne la table pour laquelle l'enregistrement doit ou peut être présent
+     * 
+     * @return string
+     */
+    public function getInTable()
+    {
+        return $this->inTable;
+    }
+
+    /**
+     * Détermine si l'enregistrement doit ou peut être présent dans la table nommée ou non
+     *
+     * @param string $inTable
+     * @return self
+     */
+    public function setInTable($inTable)
+    {
+        $this->inTable = $inTable;
+        return $this;
+    }
+
+
+    /**
      * Retourne la liste des colonnes scrutées
      *
      * @return string|string[]|null
@@ -351,7 +381,11 @@ class Query
         }
 
         if (! empty($this->action)){
-            $where[] = $viewName.'.IMPORT_ACTION'.Service::equals($this->action);
+            $w = $viewName.'.IMPORT_ACTION'.Service::equals($this->action);
+            if (! empty($this->inTable)){
+                $w = '('.$w.' OR '.$viewName.'.SOURCE_CODE IN (SELECT SOURCE_CODE FROM '.Service::escapeKW($this->inTable).')'.')';
+            }
+            $where[] = $w;
         }
 
         if (! empty($this->source)){

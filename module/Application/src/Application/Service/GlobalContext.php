@@ -41,6 +41,16 @@ class GlobalContext
     protected $annee;
     
     /**
+     * @var Annee
+     */
+    protected $anneePrecedente;
+    
+    /**
+     * @var Annee
+     */
+    protected $anneeSuivante;
+    
+    /**
      * @var EntityEtablissement
      */
     protected $etablissement;
@@ -74,6 +84,16 @@ class GlobalContext
         return $this->annee;
     }
 
+    public function getAnneePrecedente()
+    {
+        return $this->anneePrecedente;
+    }
+
+    public function getAnneeSuivante()
+    {
+        return $this->anneeSuivante;
+    }
+
     public function getEtablissement()
     {
         return $this->etablissement;
@@ -100,6 +120,18 @@ class GlobalContext
     public function setAnnee(Annee $annee)
     {
         $this->annee = $annee;
+        return $this;
+    }
+
+    public function setAnneePrecedente(Annee $annee)
+    {
+        $this->anneePrecedente = $annee;
+        return $this;
+    }
+
+    public function setAnneeSuivante(Annee $annee)
+    {
+        $this->anneeSuivante = $annee;
         return $this;
     }
 

@@ -47,6 +47,8 @@ class ContextProvider extends AbstractService
             $intervenant = $utilisateur->getIntervenant();
             $personnel   = $utilisateur->getPersonnel();
             $annee       = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee);
+            $anneePrec   = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee - 1);
+            $anneeSuiv   = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee + 1);
             $etab        = $this->getEntityManager()->find('Application\Entity\Db\Etablissement', $this->getParametres()->etablissement);
 
             if (null === $intervenant) {
@@ -60,6 +62,8 @@ class ContextProvider extends AbstractService
                     ->setIntervenant($intervenant)
                     ->setPersonnel($personnel)
                     ->setAnnee($annee)
+                    ->setAnneePrecedente($anneePrec)
+                    ->setAnneeSuivante($anneeSuiv)
                     ->setEtablissement($etab);
         }
         

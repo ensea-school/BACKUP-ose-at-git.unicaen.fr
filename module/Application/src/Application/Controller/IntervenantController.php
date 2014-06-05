@@ -187,60 +187,6 @@ class IntervenantController extends AbstractActionController implements \Applica
         return $view;
     }
     
-    public function saisirDossierAction()
-    {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        $form = $this->getFormDossier();
-        
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            $intervenant = $role->getIntervenant();
-        }
-        else {
-            $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
-        }
-        
-        if (!$intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
-            throw new RuntimeException("La saisie de dossier n'est possible pour un intervenant extérieur.");
-        }
-        
-        if (!($dossier = $intervenant->getDossier())) {
-            $dossier = $this->getDossierService()->newEntity()->fromIntervenant($intervenant);
-            $intervenant->setDossier($dossier);
-        }
-        
-        $form->bind($intervenant);
-        
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $this->getDossierService()->save($dossier);
-                $notified = $this->notifyDossier($dossier);
-                $this->getIntervenantService()->save($intervenant);
-                $this->flashMessenger()->addSuccessMessage("Dossier enregistré avec succès.");
-                if ($notified) {
-                    $this->flashMessenger()->addInfoMessage("Un mail doit être envoyé pour informer la composante de la modification du dossier...");
-                }
-                return $this->redirect()->toUrl($this->url()->fromRoute(null, array(), array(), true));
-            }
-//            var_dump('not valid', $form->getMessages());
-        }
-        
-        return compact('intervenant', 'form');
-    }
-    
-    protected function notifyDossier(Dossier $dossier)
-    {
-        if (DossierListener::$created || DossierListener::$modified) {
-            // envoyer un mail au gestionnaire
-            var_dump('Envoi de mail "dossier créé ou modifié"...');
-            
-            return true;
-        }
-        
-        return false;
-    }
-    
     protected function getFormModifier()
     {
         $builder = new AnnotationBuilder();
@@ -251,26 +197,10 @@ class IntervenantController extends AbstractActionController implements \Applica
     }
     
     /**
-     * @return \Application\Form\Intervenant\Dossier
-     */
-    protected function getFormDossier()
-    {
-        return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier');
-    }
-    
-    /**
      * @return \Application\Service\Intervenant
      */
     protected function getIntervenantService()
     {
         return $this->getServiceLocator()->get('ApplicationIntervenant');
-    }
-    
-    /**
-     * @return \Application\Service\Dossier
-     */
-    protected function getDossierService()
-    {
-        return $this->getServiceLocator()->get('ApplicationDossier');
     }
 }

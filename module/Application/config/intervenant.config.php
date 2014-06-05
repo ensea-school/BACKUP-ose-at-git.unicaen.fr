@@ -63,7 +63,8 @@ return array(
                                 'id' => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action' => 'saisir-dossier',
+                                'controller' => 'Dossier',
+                                'action' => 'modifier',
                                 'id'     => 0,
                             ),
                         ),
@@ -136,12 +137,18 @@ return array(
                     'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'apercevoir', 'search', 'saisir-dossier', 'voir-services'),
                     'roles' => array('user'),
                 ),
+                array(
+                    'controller' => 'Application\Controller\Dossier',
+                    'action' => array('modifier', 'voir'),
+                    'roles' => array('user'),
+                ),
             ),
         ),
     ),
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Intervenant' => 'Application\Controller\IntervenantController',
+            'Application\Controller\Dossier'     => 'Application\Controller\DossierController',
         ),
         'aliases' => array(
             'IntervenantController' => 'Application\Controller\Intervenant',

@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * Description of ElementPedagogique
  *
@@ -37,7 +39,7 @@ class ElementPedagogique extends AbstractEntityService
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finder(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    public function finder(array $filters = array(), QueryBuilder $qb=null, $alias=null)
     {
         if (null === $qb) {
             $qb = $this->getEntityManager()->createQueryBuilder();
@@ -76,43 +78,13 @@ class ElementPedagogique extends AbstractEntityService
     }
     
     /**
-     * Retourne le chercheur des structures distinctes.
-     * 
-     * @param array $filters
-     * @param \Doctrine\ORM\QueryBuilder $qb
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function finderDistinctStructures(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
-    {
-        if (null === $qb) {
-            $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
-        }
-        
-        $qb
-                ->select('s')
-                ->distinct()
-                ->from('Application\Entity\Db\Structure', 's')
-                ->innerJoin('s.elementPedagogique', 'ep')
-                ->innerJoin('ep.etape', 'e')
-                ->innerJoin('e.typeFormation', 'tf')
-                ->innerJoin('tf.groupe', 'gtf')
-                ->orderBy('s.libelleCourt');
-        
-        if (isset($filters['niveau']) && is_numeric($filters['niveau'])) {
-            $qb->where('s.niveau = :niv')->setParameter('niv', $filters['niveau']);
-        }
-        
-        return $qb;
-    }
-    
-    /**
      * Retourne le chercheur des niveaux distincts.
      * 
      * @param array $filters
      * @param \Doctrine\ORM\QueryBuilder $qbWithEp
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderDistinctNiveaux(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    public function finderDistinctNiveaux(array $filters = array(), QueryBuilder $qb=null, $alias=null)
     {
         $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
         $qb
@@ -142,7 +114,7 @@ class ElementPedagogique extends AbstractEntityService
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderDistinctEtapes(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    public function finderDistinctEtapes(array $filters = array(), QueryBuilder $qb=null, $alias=null)
     {
         $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
         $qb
@@ -180,7 +152,7 @@ class ElementPedagogique extends AbstractEntityService
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderDistinctEtapesOrphelines(array $filters = array(), \Doctrine\ORM\QueryBuilder $qb = null)
+    public function finderDistinctEtapesOrphelines(array $filters = array(), QueryBuilder $qb=null, $alias=null)
     {
         $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
         $qb

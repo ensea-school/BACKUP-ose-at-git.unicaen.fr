@@ -270,12 +270,12 @@ class ServiceReferentielController extends AbstractActionController implements C
         
         $repoFonctionReferentiel = $this->em()->getRepository('Application\Entity\Db\FonctionReferentiel'); /* @var $repoFonctionReferentiel \Doctrine\ORM\EntityRepository */
         $serviceEp = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
-        
+        $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $annee = $context->getAnnee();
         
 //        var_dump(get_class($intervenant), "".$annee, count($intervenant->getServiceReferentiel($annee)));
         
-        $structures = $serviceEp->finderDistinctStructures(array('niveau' => 2))->getQuery()->getResult();
+        $structures = $serviceStructure->getList($serviceStructure->finderByEnseignement());
         $fonctions  = $repoFonctionReferentiel->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
         FonctionServiceReferentielFieldset::setStructuresPossibles(new ArrayCollection($structures));
         FonctionServiceReferentielFieldset::setFonctionsPossibles(new ArrayCollection($fonctions));

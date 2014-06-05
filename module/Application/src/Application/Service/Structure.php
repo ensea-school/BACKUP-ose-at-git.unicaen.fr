@@ -109,17 +109,12 @@ class Structure extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        /* Recherche par le type de structure /
-        $serviceTypeStructure = $this->getServiceLocator()->get('ApplicationTypeStructure');
-        $this->join( $serviceTypeStructure, $qb, 'type');
-        $serviceTypeStructure->finderByEnseignement('1', $qb);
-        */
-
         /* recherche par éléments trouvés ou non */
         $serviceElementPedagogique = $this->getServiceLocator()->get('ApplicationElementPedagogique');
-        $this->join( $serviceElementPedagogique, $qb, 'id', 'structure');
-        $qb->distinct();
+        $this->join( $this, $qb, 'id', 'structureNiv2', $this->getAlias(), 'strniv2' );
+        $this->join( $serviceElementPedagogique, $qb, 'id', 'structure', 'strniv2' );
 
+        $qb->distinct();
         return $qb;
     }
 

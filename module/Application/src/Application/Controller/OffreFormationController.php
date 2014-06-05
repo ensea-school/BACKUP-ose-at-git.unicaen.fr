@@ -34,6 +34,7 @@ class OffreFormationController extends AbstractActionController implements Conte
     {
         $em           = $this->em(); /* @var $em \Doctrine\ORM\EntityManager */
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
+        $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $localContext = $this->getContextProvider()->getLocalContext();
         $role         = $this->getContextProvider()->getSelectedIdentityRole();
 
@@ -57,7 +58,7 @@ class OffreFormationController extends AbstractActionController implements Conte
                 ->setEtape($etape);
         
         // liste des structures distinctes
-        $structuresDistinctes = $serviceEp->finderDistinctStructures(array('niveau' => 2))->getQuery()->getResult();
+        $structuresDistinctes = $serviceStructure->getList( $serviceStructure->finderByEnseignement() );
         // niveaux distincts pour la structure spécifiée
         $niveauxDistincts = $structure ? 
                 $serviceEp->finderDistinctNiveaux(array('structure' => $structure))->getQuery()->getResult() :
@@ -127,9 +128,8 @@ class OffreFormationController extends AbstractActionController implements Conte
      */
     public function searchStructuresAction()
     {
-        $params = array('niveau' => 2);
-        
-        $result = $this->getServiceElementPedagogique()->finderDistinctStructures($params)->getQuery()->getResult();
+        $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
+        $result = $serviceStructure->getList( $serviceStructure->finderByEnseignement() );
         
         return new \Zend\View\Model\JsonModel(\UnicaenApp\Util::collectionAsOptions($result));
     }

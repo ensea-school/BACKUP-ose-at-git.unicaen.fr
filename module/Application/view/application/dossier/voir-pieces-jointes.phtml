@@ -1,0 +1,9 @@
+<h2 class="page-header"><?php echo $title ?></h2>
+
+<?php $form->prepare(); ?>
+
+<style>
+    div.multicheckbox label { display: block; font-weight: normal; width: 200px; text-align: center; }
+</style>
+
+<?php echo $this->formControlGroup($form->get('pj')) ?>

@@ -1,0 +1,16 @@
+<h2 class="page-header"><?php echo $title ?></h2>
+
+<?php echo $this->messenger(true) ?>
+
+<?php $form->prepare(); ?>
+
+<style>
+    div.multicheckbox label { display: block; font-weight: normal; width: 250px; text-align: center; }
+</style>
+
+<?php echo $this->form()->openTag($form) ?>
+<?php echo $this->formControlGroup($form->get('pj')) ?>
+<?php echo $this->formElement($form->get('security')) ?>
+<hr />
+<?php echo $form->has('submit') ? $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')) : null ?>
+<?php echo $this->form()->closeTag() ?>

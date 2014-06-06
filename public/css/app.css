@@ -1,3 +1,23 @@
+/***** verrue pour le menu de niveau 3 : à déplacer vers unicaen.css...? */
+.nav-pills>li.active li.active>a/*, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus*/ {
+    color: #fff;
+    background-color: #428bca;
+    opacity: 0.75;
+    font-size: 90%;
+}
+.nav-pills>li li>a {
+    border-radius: 4px;
+}
+.nav>li li>a {
+    position: relative;
+    display: block;
+    padding: 2px 5px;
+    margin-top: 2px;
+}
+/*****/
+
+
+
 /* Services */
 table.service td.volume-horaire {
     padding-left:10em;

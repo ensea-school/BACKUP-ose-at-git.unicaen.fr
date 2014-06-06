@@ -83,6 +83,20 @@ return array(
                             ),
                         ),
                     ),
+                    'pieces-jointes' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:id/pieces-jointes',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Dossier',
+                                'action' => 'pieces-jointes',
+                                'id'     => 0,
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -116,6 +130,14 @@ return array(
                                 'title'  => "Saisir/modifier un dossier d'intervenant vacataire",
                                 'route'  => 'intervenant/saisir-dossier',
                                 'withtarget' => true,
+                                'pages' => array(
+                                    'pieces-jointes' => array(
+                                        'label'  => "Pièces jointes",
+                                        'title'  => "Pièces jointes du dossier de l'intervenant",
+                                        'route'  => 'intervenant/pieces-jointes',
+                                        'withtarget' => true,
+                                    ),
+                                ),
                             ),
                             'service' => array(
                                 'label'  => "Services",
@@ -139,7 +161,7 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
-                    'action' => array('modifier', 'voir'),
+                    'action' => array('modifier', 'voir', 'pieces-jointes'),
                     'roles' => array('user'),
                 ),
             ),
@@ -156,11 +178,15 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationOffreFormation'    => 'Application\\Service\\OffreFormation',
-            'ApplicationIntervenant'       => 'Application\\Service\\Intervenant',
-            'ApplicationCivilite'          => 'Application\\Service\\Civilite',
-            'ApplicationStatutIntervenant' => 'Application\\Service\\StatutIntervenant',
-            'ApplicationDossier'           => 'Application\\Service\\Dossier',
+            'ApplicationOffreFormation'        => 'Application\\Service\\OffreFormation',
+            'ApplicationIntervenant'           => 'Application\\Service\\Intervenant',
+            'ApplicationCivilite'              => 'Application\\Service\\Civilite',
+            'ApplicationStatutIntervenant'     => 'Application\\Service\\StatutIntervenant',
+            'ApplicationDossier'               => 'Application\\Service\\Dossier',
+            'ApplicationPieceJointe'           => 'Application\\Service\\PieceJointe',
+            'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
+            'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
+            'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',

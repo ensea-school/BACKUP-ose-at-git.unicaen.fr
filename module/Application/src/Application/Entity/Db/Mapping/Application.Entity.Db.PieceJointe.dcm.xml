@@ -5,8 +5,8 @@
       <index name="IDX_F1DE615859860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_F1DE61587E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_F1DE615863F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_F1DE615878FF2BCB" columns="INTERVENANT_ID"/>
-      <index name="IDX_F1DE6158C2443469" columns="TYPE_ID"/>
+      <index name="IDX_F1DE615852CE5789" columns="DOSSIER_ID"/>
+      <index name="IDX_F1DE6158F202337" columns="TYPE_PIECE_JOINTE_ID"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
@@ -14,17 +14,17 @@
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <field name="nom" type="string" column="NOM" length="250" nullable="false"/>
+    <field name="url" type="string" column="URL" length="255" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="type" target-entity="Application\Entity\Db\TypePieceJointe">
       <join-columns>
-        <join-column name="TYPE_ID" referenced-column-name="ID"/>
+        <join-column name="TYPE_PIECE_JOINTE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+    <many-to-one field="dossier" target-entity="Application\Entity\Db\Dossier">
       <join-columns>
-        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+        <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">

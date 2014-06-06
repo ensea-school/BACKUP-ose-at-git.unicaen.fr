@@ -2,72 +2,70 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * PieceJointe
  */
-class PieceJointe
+class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
      * @var \DateTime
      */
-    protected $histoCreation;
+    private $histoCreation;
 
     /**
      * @var \DateTime
      */
-    protected $histoDestruction;
+    private $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    protected $histoModification;
+    private $histoModification;
 
     /**
      * @var string
      */
-    protected $nom;
+    private $url;
 
     /**
      * @var \DateTime
      */
-    protected $validiteDebut;
+    private $validiteDebut;
 
     /**
      * @var \DateTime
      */
-    protected $validiteFin;
+    private $validiteFin;
 
     /**
      * @var integer
      */
-    protected $id;
+    private $id;
 
     /**
      * @var \Application\Entity\Db\TypePieceJointe
      */
-    protected $type;
+    private $type;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Application\Entity\Db\Dossier
      */
-    protected $intervenant;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
+    private $dossier;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    protected $histoDestructeur;
+    private $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    protected $histoCreateur;
+    private $histoDestructeur;
+
+    /**
+     * @var \Application\Entity\Db\Utilisateur
+     */
+    private $histoCreateur;
 
 
     /**
@@ -140,26 +138,26 @@ class PieceJointe
     }
 
     /**
-     * Set nom
+     * Set url
      *
-     * @param string $nom
+     * @param string $url
      * @return PieceJointe
      */
-    public function setNom($nom)
+    public function setUrl($url)
     {
-        $this->nom = $nom;
+        $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Get nom
+     * Get url
      *
      * @return string 
      */
-    public function getNom()
+    public function getUrl()
     {
-        return $this->nom;
+        return $this->url;
     }
 
     /**
@@ -242,26 +240,26 @@ class PieceJointe
     }
 
     /**
-     * Set intervenant
+     * Set dossier
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param \Application\Entity\Db\Dossier $dossier
      * @return PieceJointe
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    public function setDossier(\Application\Entity\Db\Dossier $dossier = null)
     {
-        $this->intervenant = $intervenant;
+        $this->dossier = $dossier;
 
         return $this;
     }
 
     /**
-     * Get intervenant
+     * Get dossier
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Application\Entity\Db\Dossier 
      */
-    public function getIntervenant()
+    public function getDossier()
     {
-        return $this->intervenant;
+        return $this->dossier;
     }
 
     /**

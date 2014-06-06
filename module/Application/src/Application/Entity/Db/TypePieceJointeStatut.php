@@ -2,31 +2,13 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * TypePieceJointe
+ * TypePieceJointeStatut
  */
-class TypePieceJointe
+class TypePieceJointeStatut
 {
-    const CV               = "CV";
-    const RIB              = "RIB";
-    const CARTE_VITALE     = "CARTE_VITALE";
-    const DERN_BUL_SALAIR  = "DERN_BUL_SALAIR";
-    const ATT_ACT_SAL_900  = "ATT_ACT_SAL_900";
-    const AUTORIS_CUMUL    = "AUTORIS_CUMUL";
-    const CONT_TER_ATT_HON = "CONT_TER_ATT_HON";
-    const TITRE_PENSION    = "TITRE_PENSION";
-    const CARTE_ETUD       = "CARTE_ETUD";
-
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
-    
-    /**
-     * @var string
-     */
-    private $code;
-
     /**
      * @var \DateTime
      */
@@ -43,9 +25,19 @@ class TypePieceJointe
     private $histoModification;
 
     /**
-     * @var string
+     * @var boolean
      */
-    private $libelle;
+    private $premierRecrutement;
+
+    /**
+     * @var boolean
+     */
+    private $obligatoire;
+
+    /**
+     * @var integer
+     */
+    private $seuilHetd;
 
     /**
      * @var \DateTime
@@ -77,35 +69,22 @@ class TypePieceJointe
      */
     private $histoCreateur;
 
+    /**
+     * @var \Application\Entity\Db\TypePieceJointe
+     */
+    private $type;
 
     /**
-     * Set code
-     *
-     * @param string $code
-     * @return TypePieceJointe
+     * @var \Application\Entity\Db\StatutIntervenant
      */
-    public function setCode($code)
-    {
-        $this->code = $code;
+    private $statut;
 
-        return $this;
-    }
-
-    /**
-     * Get code
-     *
-     * @return string 
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return TypePieceJointe
+     * @return TypePieceJointeStatut
      */
     public function setHistoCreation($histoCreation)
     {
@@ -128,7 +107,7 @@ class TypePieceJointe
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return TypePieceJointe
+     * @return TypePieceJointeStatut
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -151,7 +130,7 @@ class TypePieceJointe
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return TypePieceJointe
+     * @return TypePieceJointeStatut
      */
     public function setHistoModification($histoModification)
     {
@@ -171,33 +150,79 @@ class TypePieceJointe
     }
 
     /**
-     * Set libelle
+     * Set premierRecrutement
      *
-     * @param string $libelle
-     * @return TypePieceJointe
+     * @param boolean $premierRecrutement
+     * @return TypePieceJointeStatut
      */
-    public function setLibelle($libelle)
+    public function setPremierRecrutement($premierRecrutement)
     {
-        $this->libelle = $libelle;
+        $this->premierRecrutement = $premierRecrutement;
 
         return $this;
     }
 
     /**
-     * Get libelle
+     * Get premierRecrutement
      *
-     * @return string 
+     * @return boolean 
      */
-    public function getLibelle()
+    public function getPremierRecrutement()
     {
-        return $this->libelle;
+        return $this->premierRecrutement;
+    }
+
+    /**
+     * Set obligatoire
+     *
+     * @param boolean $obligatoire
+     * @return TypePieceJointeStatut
+     */
+    public function setObligatoire($obligatoire)
+    {
+        $this->obligatoire = $obligatoire;
+
+        return $this;
+    }
+
+    /**
+     * Get obligatoire
+     *
+     * @return boolean 
+     */
+    public function getObligatoire()
+    {
+        return $this->obligatoire;
+    }
+
+    /**
+     * Set seuilHetd
+     *
+     * @param integer $seuilHetd
+     * @return TypePieceJointeStatut
+     */
+    public function setSeuilHetd($seuilHetd)
+    {
+        $this->seuilHetd = $seuilHetd;
+
+        return $this;
+    }
+
+    /**
+     * Get seuilHetd
+     *
+     * @return integer 
+     */
+    public function getSeuilHetd()
+    {
+        return $this->seuilHetd;
     }
 
     /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
-     * @return TypePieceJointe
+     * @return TypePieceJointeStatut
      */
     public function setValiditeDebut($validiteDebut)
     {
@@ -220,7 +245,7 @@ class TypePieceJointe
      * Set validiteFin
      *
      * @param \DateTime $validiteFin
-     * @return TypePieceJointe
+     * @return TypePieceJointeStatut
      */
     public function setValiditeFin($validiteFin)
     {
@@ -253,7 +278,7 @@ class TypePieceJointe
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return TypePieceJointe
+     * @return TypePieceJointeStatut
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -276,7 +301,7 @@ class TypePieceJointe
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return TypePieceJointe
+     * @return TypePieceJointeStatut
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -299,7 +324,7 @@ class TypePieceJointe
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return TypePieceJointe
+     * @return TypePieceJointeStatut
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -316,5 +341,87 @@ class TypePieceJointe
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \Application\Entity\Db\TypePieceJointe $type
+     * @return TypePieceJointeStatut
+     */
+    public function setType(\Application\Entity\Db\TypePieceJointe $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \Application\Entity\Db\TypePieceJointe 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set statutIntervenant
+     *
+     * @param \Application\Entity\Db\StatutIntervenant $statut
+     * @return TypePieceJointeStatut
+     */
+    public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * Get statutIntervenant
+     *
+     * @return \Application\Entity\Db\StatutIntervenant 
+     */
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+    
+    
+    /**
+     * Indique si le type de pièce jointe est obligatoire.
+     * NB: prend en compte le seil HETD éventuellement spécifié.
+     * 
+     * @param \Application\Entity\Db\TypePieceJointeStatut $typePieceJointeStatut
+     * @param integer $totalHETDIntervenant Total d'HETD de l'intervenant, exploité dans le cas où le caractère
+     * obligatoire dépend d'un seuil d'HETD
+     * @return boolean
+     */
+    public function isObligatoire($totalHETDIntervenant)
+    {
+        $obligatoire = $this->getObligatoire();
+
+        if ($obligatoire && $this->getSeuilHetd() && !$this->isSeuilHETDDepasse($totalHETDIntervenant)) {
+            $obligatoire = false;
+        }
+        
+        return $obligatoire;
+    }
+    
+    /**
+     * Indique si le seuil d'HETD est dépassé.
+     * 
+     * @param float $totalHETDIntervenant Total d'HETD de l'intervenant à tester
+     * @return boolean
+     */
+    public function isSeuilHETDDepasse($totalHETDIntervenant)
+    {
+        if (!$this->getSeuilHetd()) {
+            return false;
+        }
+        
+        return (float)$this->getSeuilHetd() < (float)$totalHETDIntervenant;
     }
 }

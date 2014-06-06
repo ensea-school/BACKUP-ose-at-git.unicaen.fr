@@ -116,6 +116,12 @@ class ServiceController extends AbstractActionController
      */
     public function resumeAction()
     {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            return $this->redirect()->toRoute('intervenant/services', array('id' => $role->getIntervenant()->getSourceCode()));
+        }
+        
         $viewModel = new \Zend\View\Model\ViewModel();
         
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();

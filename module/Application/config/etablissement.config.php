@@ -2,6 +2,9 @@
 
 namespace Application;
 
+use Application\Acl\IntervenantRole;
+use Application\Acl\ComposanteRole;
+
 return array(
     'router' => array(
         'routes' => array(

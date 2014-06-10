@@ -84,8 +84,11 @@ class QueryGenerator extends Service
             $conditions = 'NULL';
         }
         $ignoreFields = $query->getIgnoreFields();
-        if (empty($ignoreFields)) $ignoreFields = 'NULL';
-        $ignoreFields = $this->escape(implode(',',$ignoreFields));
+        if (empty($ignoreFields)){
+            $ignoreFields = 'NULL';
+        }else{
+            $ignoreFields = $this->escape(implode(',',$ignoreFields));
+        }
 
         $sql = "BEGIN OSE_IMPORT.SET_CURRENT_USER($userId);OSE_IMPORT.$procName($conditions,$ignoreFields); END;";
         try{

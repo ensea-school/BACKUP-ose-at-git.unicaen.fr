@@ -168,6 +168,20 @@ return array(
                                     'defaults' => array( 'action' => 'supprimer' ),
                                 ),
                             ),
+                            'modulateurs' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/:etape/modulateurs',
+                                    'constraints' => array(
+                                        'etape' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        '__NAMESPACE__' => 'Application\Controller\OffreFormation',
+                                        'controller'    => 'Modulateur',
+                                        'action'        => 'saisir'
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                 ),
@@ -285,6 +299,14 @@ return array(
                     'action'     => array('ajouter', 'modifier', 'supprimer'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
+                /**
+                 * Modulateur
+                 */
+                array(
+                    'controller' => 'Application\Controller\OffreFormation\Modulateur',
+                    'action'     => array('saisir'),
+                    'roles'      => array(ComposanteRole::ROLE_ID),
+                ),
             ),
         ),
     ),
@@ -292,6 +314,7 @@ return array(
         'invokables' => array(
             'Application\Controller\OffreFormation'                    => 'Application\Controller\OffreFormationController',
             'Application\Controller\OffreFormation\Etape'              => 'Application\Controller\OffreFormation\EtapeController',
+            'Application\Controller\OffreFormation\Modulateur'         => 'Application\Controller\OffreFormation\ModulateurController',
             'Application\Controller\OffreFormation\ElementPedagogique' => 'Application\Controller\OffreFormation\ElementPedagogiqueController',
         ),
         'initializers' => array(
@@ -306,6 +329,7 @@ return array(
             'ApplicationTypeFormation'                => 'Application\\Service\\TypeFormation',
             'FormElementPedagogiqueRechercheHydrator' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheHydrator',
             'OffreFormationAssertion'                 => 'Application\\Service\\OffreFormationAssertion',
+            'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
         ),
     ),
     'form_elements' => array(

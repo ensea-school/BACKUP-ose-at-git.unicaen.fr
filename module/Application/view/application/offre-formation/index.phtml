@@ -57,6 +57,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
         </div>
 
         <!---------------- Filtre niveau --------------->
+        <?php if (count($niveauxOptions)): ?>
         <div class="panel panel-default">
             <div class="panel-heading">Niveau</div>
             <div class="panel-body">
@@ -97,8 +98,10 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 });
             </script>
         </div>
+        <?php endif; ?>
 
         <!---------------- Filtre étape --------------->
+        <?php if (count($etapesOptions)): ?>
         <div class="panel panel-default">
             <div class="panel-heading">
                 Étape
@@ -199,6 +202,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
             </script>
             
         </div>
+        <?php endif; ?>
         
     </div>
     

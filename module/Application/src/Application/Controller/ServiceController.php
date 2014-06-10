@@ -123,23 +123,31 @@ class ServiceController extends AbstractActionController
         }
         
         $viewModel = new \Zend\View\Model\ViewModel();
-        
+
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $action = $this->getRequest()->getQuery('action', null);
         $params = $this->getEvent()->getRouteMatch()->getParams();
         $params['action'] = 'filtres';
         $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
         $viewModel->addChild($listeViewModel, 'filtresListe');
+
         $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
         /* @var $rechercheForm \Application\Form\Service\Recherche */
         $filter = $rechercheForm->hydrateFromSession();
 
-        $typesIntervention = $this->getServiceLocator()->get('ApplicationTypeIntervention')->getList();
-        $data              = $this->getServiceService()->getResumeService($filter);
-        
-        $viewModel->setVariables( compact('annee','action','data','typesIntervention') );
-        
+        $canAdd = $this->getServiceService()->canAdd();
+
+        $viewModel->setVariables( compact('annee','action','filter','canAdd') );
         return $viewModel;
+    }
+
+    public function resumeRefreshAction()
+    {
+        $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+        /* @var $rechercheForm \Application\Form\Service\Recherche */
+        $filter = $rechercheForm->hydrateFromSession();
+
+        return compact('filter');
     }
 
     public function filtresAction()

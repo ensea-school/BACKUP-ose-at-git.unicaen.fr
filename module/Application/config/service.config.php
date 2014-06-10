@@ -26,6 +26,15 @@ return array(
                             ),
                         ),
                     ),
+                    'resume-refresh' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/resume-refresh',
+                            'defaults' => array(
+                                'action' => 'resumeRefresh',
+                            ),
+                        ),
+                    ),
                     'modifier' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -206,6 +215,7 @@ return array(
             'serviceDl'               => 'Application\View\Helper\Service\Dl',
             'serviceReferentielDl'    => 'Application\View\Helper\ServiceReferentiel\Dl',
             'serviceSaisieForm'       => 'Application\View\Helper\Service\SaisieForm',
+            'serviceResume'           => 'Application\View\Helper\Service\Resume',
         ),
         'factories' => array(
             'serviceListe'            => 'Application\View\Helper\Service\ListeFactory',

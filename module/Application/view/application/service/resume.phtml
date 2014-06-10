@@ -10,40 +10,30 @@
 </div>
 
 <?php if ('afficher' === $action ): ?>
+<?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
 
-<table class="table table-hover table-bordered">
-    <thead>
-        <tr>
-            <th style="width:40%" rowspan="2">Intervenant</th>
-            <th style="width:40%" colspan="<?php echo count($typesIntervention); ?>">Services</th>
-            <th style="width:10%" rowspan="2">Référentiel</th>
-            <th style="width:10%" rowspan="2">Heures &Eacute;q. TD</th>
-        </tr>
-        <tr>
-            <?php foreach( $typesIntervention as $ti ): ?>
-                <th title="<?php echo $ti->getLibelle() ?>"><?php echo $ti ?></th>
-            <?php endforeach; ?>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach( $data as $intervenantId => $line ): ?>
-        <tr>
-            <?php
-            $url = $this->url('intervenant/services', array('id' => $line['intervenant']['SOURCE_CODE']));
-            $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
-            $na = '<span title="Non applicable (intervenant vacataire))">NA</span>';
-            ?>
-            <td><a href="<?php echo $url ?>"><?php echo strtoupper($line['intervenant']['NOM_USUEL']) . ' ' . $line['intervenant']['PRENOM']; ?></a></td>
-            <?php foreach( $typesIntervention as $ti ): ?>
-            <td><?php echo isset($line['service'][$ti->getId()]) ? $line['service'][$ti->getId()] : 0 ?></td>
-            <?php endforeach; ?>
-            <td><?php echo array_key_exists('referentiel', $line) ? $line['referentiel'] : ($intervenantPermanent ? 0 : $na) ?></td>
-            <td><?php echo $line['hetd'] = 'NC' ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+<?php if ($canAdd): ?>
+<a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
+<br /><br />
+<?php endif; ?>
 
+<div data-url="<?php echo $this->url('service/resume-refresh'); ?>" id="service-resume">
+    <?php echo $this->serviceResume()->setFilter($filter)->render(); ?>
+</div>
 <?php else: ?>
 <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
 <?php endif; ?>
+<script type="text/javascript">
+    $(function() {
+            Service.init("<?php echo $this->url('service/default', array('action' => 'voirLigne') ) ?>");
+            Service.setRenderIntervenants(true);
+    });
+</script>
+<style>
+    .modal-dialog {
+        width: 70%;
+    }
+    div.row {
+        padding:1px;
+    }
+</style>

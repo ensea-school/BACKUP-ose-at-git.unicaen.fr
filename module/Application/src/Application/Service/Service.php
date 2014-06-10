@@ -352,4 +352,14 @@ EOS;
         if (! $service->getElementPedagogique()->getPeriode()) return null;
         return $service->getElementPedagogique()->getPeriode();
     }
+
+    /**
+     * Détermine si on peut ajouter un nouveau service ou non
+     *
+     * @return boolean
+     */
+    public function canAdd($runEx = false)
+    {
+        return true;
+    }
 }

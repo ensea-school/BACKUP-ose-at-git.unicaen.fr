@@ -10,97 +10,97 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * @var string
      */
-    private $adresse;
+    protected $adresse;
 
     /**
      * @var Civilite
      */
-    private $civilite;
+    protected $civilite;
 
     /**
      * @var string
      */
-    private $email;
+    protected $email;
 
     /**
      * @var string
      */
-    private $telephone;
+    protected $telephone;
 
     /**
      * @var \DateTime
      */
-    private $histoCreation;
+    protected $histoCreation;
 
     /**
      * @var \DateTime
      */
-    private $histoDestruction;
+    protected $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    private $histoModification;
+    protected $histoModification;
 
     /**
      * @var string
      */
-    private $nomPatronymique;
+    protected $nomPatronymique;
 
     /**
      * @var string
      */
-    private $nomUsuel;
+    protected $nomUsuel;
 
     /**
      * @var string
      */
-    private $numeroInsee;
+    protected $numeroInsee;
 
     /**
      * @var string
      */
-    private $prenom;
+    protected $prenom;
 
     /**
      * @var string
      */
-    private $rib;
+    protected $rib;
 
     /**
      * @var StatutIntervenant
      */
-    private $statut;
+    protected $statut;
 
     /**
      * @var boolean
      */
-    private $premierRecrutement;
+    protected $premierRecrutement;
 
     /**
      * @var boolean
      */
-    private $perteEmploi;
+    protected $perteEmploi;
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoModificateur;
+    protected $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    protected $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
+    protected $histoCreateur;
 
 
     /**

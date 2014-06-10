@@ -25,7 +25,7 @@ class DbRole implements RoleInterface, HierarchicalRoleInterface
     protected $roleId;
     
     /**
-     * @var DbRole
+     * @var string|RoleInterface|null
      */
     protected $parent;
     
@@ -34,8 +34,9 @@ class DbRole implements RoleInterface, HierarchicalRoleInterface
      * 
      * @param TypeRole $typeRole
      * @param Structure $structure
+     * @param string|RoleInterface|null $parent
      */
-    public function __construct(TypeRole $typeRole, Structure $structure, DbRole $parent = null)
+    public function __construct(TypeRole $typeRole, Structure $structure, $parent = null)
     {
         $this->typeRole  = $typeRole;
         $this->structure = $structure;
@@ -80,7 +81,7 @@ class DbRole implements RoleInterface, HierarchicalRoleInterface
     /**
      * Get the parent role
      *
-     * @return \Zend\Permissions\Acl\Role\RoleInterface|null
+     * @return string|RoleInterface|null
      */
     public function getParent()
     {

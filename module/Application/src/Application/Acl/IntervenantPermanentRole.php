@@ -5,7 +5,7 @@ namespace Application\Acl;
 use UnicaenAuth\Acl\NamedRole;
 
 /**
- * Description of IntervenantPermanentRole
+ * Rôle correspondant à un intervenant permanent.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -27,7 +27,7 @@ class IntervenantPermanentRole extends IntervenantRole
         NamedRole::__construct(
                 $id = static::ROLE_ID, 
                 $parent = IntervenantRole::ROLE_ID, 
-                $name = "Intervenant (permanent)", 
+                $name = "Intervenant permanent", 
                 $description, 
                 $selectable);
     }

@@ -2,20 +2,35 @@
 
 namespace Application\Acl;
 
+use Zend\Permissions\Acl\Role\RoleInterface;
+use BjyAuthorize\Acl\HierarchicalRoleInterface;
+
 /**
- * Description of IntervenantRole
+ * Rôle père de tous les rôles "composante".
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ComposanteRole extends DbRole
+class ComposanteRole implements RoleInterface, HierarchicalRoleInterface
 {
+    const ROLE_ID = 'composante';
+        
     /**
-     * Retourne la représentation littérale de cet objet.
-     * 
+     * Returns the string identifier of the Role
+     *
      * @return string
      */
-    public function __toString()
+    public function getRoleId()
     {
-        return sprintf("%s (%s)", "Composante", $this->getStructure());
+        return self::ROLE_ID;
+    }
+    
+    /**
+     * Get the parent role
+     *
+     * @return \Zend\Permissions\Acl\Role\RoleInterface|null
+     */
+    public function getParent()
+    {
+        return 'user';
     }
 }

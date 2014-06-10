@@ -78,7 +78,8 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\VolumeHoraire',
-                    'roles' => array('user')),
+                    'action' => array('voir', 'liste', 'saisie'),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
             ),
         ),
     ),

@@ -3,15 +3,16 @@
 namespace Application\Provider\Role;
 
 use BjyAuthorize\Provider\Role\ProviderInterface;
-use Doctrine\ORM\EntityManager;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\DbRole;
 use Application\Acl\ComposanteRole;
+use Application\Acl\ComposanteDbRole;
 use Application\Entity\Db\Role as RoleEntity;
+use Application\Service\Role as RoleService;
+use Application\Service\RoleUtilisateur as RoleUtilisateurService;
+use Zend\Permissions\Acl\Role\GenericRole;
 
 /**
  * Fournisseur des rôles utilisateurs de l'application :
@@ -20,10 +21,8 @@ use Application\Entity\Db\Role as RoleEntity;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
+class RoleProvider implements ProviderInterface
 {
-    use EntityManagerAwareTrait;
-    
     /**
      * @var array
      */
@@ -37,13 +36,15 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     /**
      * Constructeur.
      * 
-     * @param EntityManager $entityManager
+     * @param RoleService $serviceRole
+     * @param RoleUtilisateurService $serviceRoleUtilisateur
      * @param array $config
      */
-    public function __construct(EntityManager $entityManager, $config = null)
+    public function __construct(RoleService $serviceRole, RoleUtilisateurService $serviceRoleUtilisateur, $config = null)
     {
-        $this->setEntityManager($entityManager);
-        $this->getEntityManager()->getFilters()->enable('historique');
+        $this
+                ->setServiceRole($serviceRole)
+                ->setServiceRoleUtilisateur($serviceRoleUtilisateur);
         
         $this->config = $config;
     }
@@ -65,33 +66,13 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             /**
              * Rôles "composante" : exercés sur une structure de niveau 2 PORTEUSE d'éléments pédagogiques
              */
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Role')->createQueryBuilder('r')
-                    ->select('r, tr, s')
-                    ->distinct()
-                    ->innerJoin('r.type', 'tr')
-                    ->innerJoin('r.structure', 's')
-                    ->innerJoin('s.elementPedagogique', 'ep')
-                    ->where('tr.code <> :code')->setParameter('code', 'IND')
-                    ->andWhere('s.niveau = :niv')->setParameter('niv', 2);
-            $rolesComposante = $qb->getQuery()->getResult();
+            $roleComposante = new ComposanteRole();
+            $rolesComposante = $this->serviceRole->getList();
             
             /**
-             * Rôles "autres" : exercés sur une structure de niveau 2 NON PORTEUSE d'éléments pédagogiques
+             * Rôles utilisateurs au sein de l'application (tables UTILISATEUR, ROLE_UTILISATEUR et ROLE_UTILISATEUR_LINKER)
              */
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Role')->createQueryBuilder('r')
-                    ->select('r, tr, s')
-                    ->distinct()
-                    ->innerJoin('r.type', 'tr')
-                    ->innerJoin('r.structure', 's')
-                    ->where('tr.code <> :code')->setParameter('code', 'IND')
-                    ->andWhere('s.niveau = :niv')->setParameter('niv', 2)
-                    ->andWhere('SIZE(s.elementPedagogique) = 0');
-            $rolesAutres = $qb->getQuery()->getResult();
-            
-//            var_dump($qb->getQuery()->getSQL());
-//            foreach ($dbRoles as $r) { /* @var $r \Application\Entity\Db\Role */
-//                var_dump($r->getType() . "", "" . $r->getStructure() );
-//            }
+            $rolesAppli = $this->serviceRoleUtilisateur->getList();
             
             /**
              * Collecte des rôles
@@ -100,12 +81,13 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             $roles[$roleIntervenant->getRoleId()]          = $roleIntervenant;
             $roles[$roleIntervenantPermanent->getRoleId()] = $roleIntervenantPermanent;
             $roles[$roleIntervenantExterieur->getRoleId()] = $roleIntervenantExterieur;
+            $roles[$roleComposante->getRoleId()]           = $roleComposante;
             foreach ($rolesComposante as $r) { /* @var $r \Application\Entity\Db\Role */
-                $role = new ComposanteRole($r->getType(), $r->getStructure(), null);
+                $role = new ComposanteDbRole($r->getType(), $r->getStructure(), $roleComposante);
                 $roles[$role->getRoleId()] = $role;
             }
-            foreach ($rolesAutres as $r) { /* @var $r \Application\Entity\Db\Role */
-                $role = new DbRole($r->getType(), $r->getStructure(), null);
+            foreach ($rolesAppli as $r) { /* @var $r \Application\Entity\Db\RoleUtilisateur */
+                $role = new \UnicaenAuth\Acl\NamedRole($r->getRoleId());
                 $roles[$role->getRoleId()] = $role;
             }
             
@@ -131,6 +113,28 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             return $roles[$roleId];
         }
         
-        return new \Zend\Permissions\Acl\Role\GenericRole($roleId);
+        return new GenericRole($roleId);
+    }
+    
+    /**
+     * @var RoleService
+     */
+    private $serviceRole;
+    
+    /**
+     * @var RoleUtilisateurService
+     */
+    private $serviceRoleUtilisateur;
+    
+    public function setServiceRole(RoleService $serviceRole)
+    {
+        $this->serviceRole = $serviceRole;
+        return $this;
+    }
+
+    public function setServiceRoleUtilisateur(RoleUtilisateurService $serviceRoleUtilisateur)
+    {
+        $this->serviceRoleUtilisateur = $serviceRoleUtilisateur;
+        return $this;
     }
 }

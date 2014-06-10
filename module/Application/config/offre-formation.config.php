@@ -2,6 +2,9 @@
 
 namespace Application;
 
+use Application\Acl\ComposanteRole;
+use Application\Acl\IntervenantRole;
+
 return array(
     'router' => array(
         'routes' => array(
@@ -248,20 +251,39 @@ return array(
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
+                /**
+                 * OffreFormation
+                 */
                 array(
                     'controller' => 'Application\Controller\OffreFormation',
-                    'action' => array('index', 'search-structures', 'search-niveaux', 'search-element'),
-                    'roles' => array('user')
+                    'action'     => array('index', 'search-structures', 'search-niveaux'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                ),
+                /**
+                 * Etape
+                 */
+                array(
+                    'controller' => 'Application\Controller\OffreFormation\Etape',
+                    'action'     => array('voir', 'apercevoir', 'search'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Etape',
-                    'action' => array('voir',   'apercevoir',   'ajouter',   'modifier',   'supprimer', 'search'),
-                    'roles' => array('user')
+                    'action'     => array('ajouter', 'modifier', 'supprimer'),
+                    'roles'      => array(ComposanteRole::ROLE_ID),
+                ),
+                /**
+                 * ElementPedagogique
+                 */
+                array(
+                    'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
+                    'action'     => array('voir', 'apercevoir', 'search', 'getPeriode'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
-                    'action' => array('voir',   'apercevoir',   'ajouter',   'modifier',   'supprimer', 'search', 'getPeriode'),
-                    'roles' => array('user')
+                    'action'     => array('ajouter', 'modifier', 'supprimer'),
+                    'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
             ),
         ),

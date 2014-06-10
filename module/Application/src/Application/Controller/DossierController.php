@@ -2,16 +2,12 @@
 
 namespace Application\Controller;
 
-use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Dossier;
-use Application\Entity\Db\TypePieceJointe;
-use Application\Entity\Db\TypePieceJointeStatut;
-use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\Listener\DossierListener;
+use Application\Acl\ComposanteDbRole;
+use Application\Acl\IntervenantRole;
 
 /**
  * Description of DossierController
@@ -84,7 +80,7 @@ class DossierController extends AbstractActionController implements \Application
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         $form = $this->getFormModifier();
         
-        if ($role instanceof \Application\Acl\DossierRole) {
+        if ($role instanceof IntervenantRole) {
             $intervenant = $role->getIntervenant();
         }
         else {
@@ -130,7 +126,7 @@ class DossierController extends AbstractActionController implements \Application
     { 
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof \Application\Acl\ComposanteRole) {
+        if ($role instanceof ComposanteDbRole) {
             return $this->modifierPiecesJointesAction();
         }
         else {

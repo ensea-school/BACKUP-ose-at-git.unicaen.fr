@@ -1,4 +1,13 @@
 <?php
+
+namespace Import;
+
+/**
+ * @todo Impossible de faire le use ci-dessous!
+ */
+//use Application\Entity\Db\RoleUtilisateur;
+const ROLE_ID_ADMIN = 'Administrateur';
+
 return array(
     'bjyauthorize' => array(
         'guards' => array(
@@ -38,6 +47,7 @@ return array(
                     'import' => array(
                         'label'    => 'Import',
                         'route'    => 'import',
+                        'resource' => 'controller/Import\Controller\Import:index',
                         'pages' => array(
                             'admin' => array(
                                 'label'  => "Tableau de bord principal",
@@ -65,6 +75,17 @@ return array(
         ),
     ),
 
+    'bjyauthorize' => array(
+        'guards' => array(
+            'BjyAuthorize\Guard\Controller' => array(
+                array(
+                    'controller' => 'Import\Controller\Import',
+                    'roles' => array(ROLE_ID_ADMIN),
+                ),
+            ),
+        ),
+    ),
+    
     'view_manager' => array(
         'template_path_stack' => array(
             'import' => __DIR__ . '/../view',

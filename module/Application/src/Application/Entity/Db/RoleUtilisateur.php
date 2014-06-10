@@ -2,13 +2,13 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * RoleUtilisateur
  */
 class RoleUtilisateur implements \BjyAuthorize\Acl\HierarchicalRoleInterface
 {
+    const ROLE_ID_ADMIN = 'Administrateur'; // idem table ROLE_UTILISATEUR
+    
     /**
      * @var integer
      */

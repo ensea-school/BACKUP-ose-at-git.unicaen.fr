@@ -60,7 +60,8 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Etablissement',
-                    'roles' => array('user')),
+                    'action' => array('index', 'choisir', 'recherche', 'voir', 'apercevoir'),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
             ),
         ),
     ),

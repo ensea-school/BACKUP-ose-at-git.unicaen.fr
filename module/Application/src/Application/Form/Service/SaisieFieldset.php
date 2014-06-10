@@ -9,6 +9,8 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Application\Acl\ComposanteDbRole;
+use Application\Acl\IntervenantRole;
 use Zend\InputFilter\InputFilterProviderInterface;
 
 /**
@@ -50,7 +52,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             'type' => 'Hidden',
         ));
 
-        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof IntervenantRole){
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant ->setRequired(true)
                          ->setSelectionRequired(true)
@@ -112,7 +114,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         $fs = $this->get('element-pedagogique');
 
-        if($role instanceof \Application\Acl\ComposanteRole){ // Si c'est un membre d'une composante
+        if($role instanceof ComposanteDbRole) { // Si c'est un membre d'une composante
             $fs->get('structure')->setValue( $role->getStructure()->getParenteNiv2()->getId() );
         }
 

@@ -2,6 +2,9 @@
 
 namespace Application;
 
+use Application\Acl\ComposanteRole;
+use Application\Acl\IntervenantRole;
+
 return array(
     'router' => array(
         'routes' => array(
@@ -154,6 +157,7 @@ return array(
                         'label'    => 'Services',
                         'title'    => "Résumé des services",
                         'route'    => 'service/resume',
+                        'resource' => 'controller/Application\Controller\Service:index',
                         'pages' => array(
 //                            'consultation' => array(
 //                                'label'  => "Consultation",
@@ -174,10 +178,16 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'roles' => array('user')),
+                    'action' => array('index', 'intervenant', 'saisie', 'suppression', 'voir', 'voirLigne'),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
                 array(
+                    'controller' => 'Application\Controller\Service',
+                    'action' => array('resume'),
+                    'roles' => array(ComposanteRole::ROLE_ID)),
+                array( 
                     'controller' => 'Application\Controller\ServiceReferentiel',
-                    'roles' => array('user')),
+                    'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
             ),
         ),
     ),

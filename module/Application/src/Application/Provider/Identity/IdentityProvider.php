@@ -88,15 +88,25 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
      */
     protected function getDbRoles()
     {
-        $dbUser = $this->getServiceLocator()->get('AuthUserContext')->getDbUser(); /* @var $dbUser Utilisateur */
+        $utilisateur = $this->getDbUser();
+        $roles       = array();
         
-        if (!$dbUser) {
-            return array();
+        if (!$utilisateur) {
+            return $roles;
         }
         
-        $roles = array();
-        if ($dbUser->getPersonnel()) {
-            foreach ($dbUser->getPersonnel()->getRole() as $role) { /* @var $role Role */
+        /**
+         * Rôles utilisateurs au sein de l'application (tables UTILISATEUR, ROLE_UTILISATEUR et ROLE_UTILISATEUR_LINKER)
+         */
+        foreach ($utilisateur->getRoleUtilisateur() as $roleUtilisateur) { /* @var $roleUtilisateur \Application\Entity\Db\RoleUtilisateur */
+            $roles[] = $roleUtilisateur->getRoleId();
+        }
+        
+        /**
+         * Responsabilités métier importées (tables ROLE et TYPE_ROLE)
+         */
+        if ($utilisateur->getPersonnel()) {
+            foreach ($utilisateur->getPersonnel()->getRole() as $role) { /* @var $role Role */
                 $roles[] = DbRole::createRoleId($role->getType(), $role->getStructure()); // le role id suffit, pas besoin d'instance
             }
         }
@@ -111,13 +121,13 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
      */
     protected function getIntervenantRole()
     {
-        $dbUser = $this->getServiceLocator()->get('AuthUserContext')->getDbUser(); /* @var $dbUser Utilisateur */
+        $utilisateur = $this->getDbUser();
         
-        if (!$dbUser) {
+        if (!$utilisateur) {
             return array();
         }
         
-        $intervenant = $dbUser->getIntervenant();
+        $intervenant = $utilisateur->getIntervenant();
         
         if (!$intervenant) {
             return IntervenantRole::ROLE_ID;
@@ -134,5 +144,15 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
         }
         
         return $role;
+    }
+    
+    /**
+     * Retourne l'utilisateur connecté.
+     * 
+     * @return Utilisateur
+     */
+    private function getDbUser()
+    {
+        return $this->getServiceLocator()->get('AuthUserContext')->getDbUser(); /* @var $dbUser Utilisateur */
     }
 }

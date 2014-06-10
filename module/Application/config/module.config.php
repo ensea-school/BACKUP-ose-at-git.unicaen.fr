@@ -145,6 +145,8 @@ $main =  array(
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
             'ApplicationSource'                              => 'Application\\Service\\Source',
+            'ApplicationRole'                                => 'Application\\Service\\Role',
+            'ApplicationRoleUtilisateur'                     => 'Application\\Service\\RoleUtilisateur',
         ),
         'factories' => array(
             'navigation'                  => 'Application\Service\NavigationFactoryFactory',

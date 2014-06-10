@@ -2,6 +2,11 @@
 
 namespace Application;
 
+use Application\Acl\ComposanteRole;
+use Application\Acl\IntervenantRole;
+use Application\Acl\IntervenantPermanentRole;
+use Application\Acl\IntervenantExterieurRole;
+
 return array(
     'router' => array(
         'routes' => array(
@@ -156,13 +161,18 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action' => array('index', 'choisir', 'modifier', 'rechercher', 'voir', 'apercevoir', 'search', 'saisir-dossier', 'voir-services'),
-                    'roles' => array('user'),
+                    'action'     => array('index', 'voir', 'apercevoir'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => array('choisir', 'rechercher', 'search'),
+                    'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
-                    'action' => array('modifier', 'voir', 'pieces-jointes'),
-                    'roles' => array('user'),
+                    'action'     => array('voir', 'modifier', 'pieces-jointes'),
+                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
             ),
         ),

@@ -21,9 +21,9 @@ class RoleProviderFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $em = $serviceLocator->get('doctrine.entitymanager.orm_default'); /* @var $em \Doctrine\ORM\EntityManager */
-        
-        $config = $serviceLocator->get('BjyAuthorize\Config');
+        $serviceRole            = $serviceLocator->get('applicationRole'); /* @var $serviceRole \Application\Service\Role */
+        $serviceUtilisateurRole = $serviceLocator->get('applicationRoleUtilisateur'); /* @var $serviceRole \Application\Service\RoleUtilisateur */
+        $config                 = $serviceLocator->get('BjyAuthorize\Config');
 
         if (! isset($config['role_providers']['ApplicationRoleProvider'])) {
             throw new InvalidArgumentException(
@@ -33,6 +33,6 @@ class RoleProviderFactory implements FactoryInterface
 
         $providerConfig = $config['role_providers']['ApplicationRoleProvider'];
         
-        return new RoleProvider($em, $providerConfig);
+        return new RoleProvider($serviceRole, $serviceUtilisateurRole, $providerConfig);
     }
 }

@@ -5,7 +5,7 @@ namespace Application\Acl;
 use UnicaenAuth\Acl\NamedRole;
 
 /**
- * Description of IntervenantExterieurRole
+ * Rôle correspondant à un intervenant vacataire.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -27,7 +27,7 @@ class IntervenantExterieurRole extends IntervenantRole
         NamedRole::__construct(
                 $id = static::ROLE_ID, 
                 $parent = IntervenantRole::ROLE_ID, 
-                $name = "Intervenant (vacataire)", 
+                $name = "Intervenant vacataire", 
                 $description, 
                 $selectable);
     }

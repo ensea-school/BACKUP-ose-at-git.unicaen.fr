@@ -7,7 +7,7 @@ namespace Application\Entity\Db;
  */
 class TypeIntervenant implements HistoriqueAwareInterface
 {    
-    static public $classToCode = array(
+    public $classToCode = array(
         'Application\Entity\Db\IntervenantPermanent' => 'P',
         'Application\Entity\Db\IntervenantExterieur' => 'E',
     );

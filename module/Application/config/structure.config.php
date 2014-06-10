@@ -2,6 +2,9 @@
 
 namespace Application;
 
+use Application\Acl\IntervenantRole;
+use Application\Acl\ComposanteRole;
+
 return array(
     'router' => array(
         'routes' => array(
@@ -87,7 +90,8 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Structure',
-                    'roles' => array('user')),
+                    'action' => array('index', 'choisir', 'recherche', 'voir', 'apercevoir'),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
             ),
         ),
     ),

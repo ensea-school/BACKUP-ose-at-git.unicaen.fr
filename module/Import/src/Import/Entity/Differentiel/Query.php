@@ -82,6 +82,13 @@ class Query
      */
     protected $limit;
 
+    /**
+     * ignoreFields
+     *
+     * @var string[]
+     */
+    protected $ignoreFields;
+
 
 
 
@@ -358,6 +365,43 @@ class Query
     public function setLimit($limit)
     {
         $this->limit = (int)$limit;
+        return $this;
+    }
+
+    /**
+     * Retourne la liste des champs à ignorer pour la MAJ
+     *
+     * @return string[]
+     */
+    public function getIgnoreFields()
+    {
+        return $this->ignoreFields;
+    }
+
+    /**
+     * Modifie la liste des champs à ignorer pour la MAJ
+     *
+     * @param string[] $ignoreFields
+     * @return self
+     */
+    public function setIgnoreFields(array $ignoreFields)
+    {
+        $this->ignoreFields = $ignoreFields;
+        return $this;
+    }
+
+    /**
+     * Ajoute un champ à la liste des champs à ignorer pour la MAJ
+     *
+     * @param string $ignoreField
+     * @return self
+     */
+    public function addIgnoreField($ignoreField)
+    {
+        if (! is_array($this->ignoreFields)) $this->ignoreFields = array();
+        if (! in_array($ignoreField, $this->ignoreFields)){
+            $this->ignoreFields[] = $ignoreField;
+        }
         return $this;
     }
 

@@ -83,8 +83,11 @@ class QueryGenerator extends Service
         }else{
             $conditions = 'NULL';
         }
+        $ignoreFields = $query->getIgnoreFields();
+        if (empty($ignoreFields)) $ignoreFields = 'NULL';
+        $ignoreFields = $this->escape(implode(',',$ignoreFields));
 
-        $sql = "BEGIN OSE_IMPORT.SET_CURRENT_USER($userId);OSE_IMPORT.$procName($conditions); END;";
+        $sql = "BEGIN OSE_IMPORT.SET_CURRENT_USER($userId);OSE_IMPORT.$procName($conditions,$ignoreFields); END;";
         try{
             $this->getEntityManager()->getConnection()->exec($sql);
         }catch(\Doctrine\DBAL\DBALException $e){
@@ -322,7 +325,7 @@ WHERE
      */
     protected function makeProcDeclaration( $tableName )
     {
-        return "  PROCEDURE MAJ_$tableName(SQL_CRITERION CLOB DEFAULT '');";
+        return "  PROCEDURE MAJ_$tableName(SQL_CRITERION CLOB DEFAULT '', IGNORE_UPD_COLS CLOB DEFAULT '');";
     }
 
 
@@ -337,7 +340,7 @@ WHERE
     {
         $cols = $this->getCols($tableName);
 
-        $sql = "  PROCEDURE MAJ_$tableName(SQL_CRITERION CLOB DEFAULT '') IS
+        $sql = "  PROCEDURE MAJ_$tableName(SQL_CRITERION CLOB DEFAULT '', IGNORE_UPD_COLS CLOB DEFAULT '') IS
     TYPE r_cursor IS REF CURSOR;
     sql_query CLOB;
     diff_cur r_cursor;
@@ -359,7 +362,7 @@ WHERE
         WHEN 'update' THEN
           ".$this->formatColQuery(
                     $cols,
-                    "IF (diff_row.u_:column = 1) THEN UPDATE OSE.$tableName SET :column = diff_row.:column WHERE ID = diff_row.id; END IF;"
+                    "IF (diff_row.u_:column = 1 AND IN_COLUMN_LIST(':column',IGNORE_UPD_COLS) = 0) THEN UPDATE OSE.$tableName SET :column = diff_row.:column WHERE ID = diff_row.id; END IF;"
                     ,"\n          "
             )."
 
@@ -369,7 +372,7 @@ WHERE
         WHEN 'undelete' THEN
           ".$this->formatColQuery(
                     $cols,
-                    "IF (diff_row.u_:column = 1) THEN UPDATE OSE.$tableName SET :column = diff_row.:column WHERE ID = diff_row.id; END IF;"
+                    "IF (diff_row.u_:column = 1 AND IN_COLUMN_LIST(':column',IGNORE_UPD_COLS) = 0) THEN UPDATE OSE.$tableName SET :column = diff_row.:column WHERE ID = diff_row.id; END IF;"
                     ,"\n          "
             )."
           UPDATE OSE.$tableName SET histo_destruction = NULL, histo_destructeur_id = NULL WHERE ID = diff_row.id;

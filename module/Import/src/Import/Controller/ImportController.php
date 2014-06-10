@@ -27,6 +27,9 @@ class ImportController extends AbstractActionController
             'INTERVENANT_PERMANENT',
             'INTERVENANT_EXTERIEUR',
         );
+        $ignoreFields = array(
+            'INTERVENANT' => array('STATUT_ID')
+        );
 
         $sc = $this->getServiceLocator()->get('ImportServiceSchema');
         /* @var $sc \Import\Service\Schema */
@@ -54,7 +57,11 @@ class ImportController extends AbstractActionController
             }else{
                 $q->setAction(null);
             }
-            
+
+            if (isset($ignoreFields[$table])){
+                $q->setIgnoreFields($ignoreFields[$table]);
+            }
+
             $queries[$table] = $q;
         }
         return $queries;

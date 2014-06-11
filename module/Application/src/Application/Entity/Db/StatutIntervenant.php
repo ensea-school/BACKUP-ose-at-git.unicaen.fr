@@ -27,7 +27,7 @@ class StatutIntervenant
     const CHARG_ENS_1AN  = 'CHARG_ENS_1AN';
     const AUTRES         = 'AUTRES';
 
-    static public $vacatairesNonBiatss = array(
+    public $vacatairesNonBiatss = array(
         self::SALAR_PRIVE,
         self::SALAR_PUBLIC,
         self::NON_SALAR,
@@ -37,7 +37,7 @@ class StatutIntervenant
         self::ETUD_HORS_UCBN,
         self::CHARG_ENS_1AN,
     );
-    
+
     /**
      * 
      * @return string
@@ -55,7 +55,7 @@ class StatutIntervenant
      */
     public function estVacataireNonBiatss()
     {
-        return in_array($this->getSourceCode(), self::$vacatairesNonBiatss);
+        return in_array($this->getSourceCode(), $this->vacatairesNonBiatss);
     }
     
     /**
@@ -65,7 +65,7 @@ class StatutIntervenant
      */
     public function requiertDossier()
     {
-        return in_array($this->getSourceCode(), self::$vacatairesNonBiatss);
+        return in_array($this->getSourceCode(), $this->vacatairesNonBiatss);
     }
     
     /**

@@ -178,11 +178,11 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('index', 'intervenant', 'saisie', 'suppression', 'voir', 'voirLigne'),
+                    'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'voirLigne'),
                     'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('resume'),
+                    'action' => array('index', 'resume'),
                     'roles' => array(ComposanteRole::ROLE_ID)),
                 array( 
                     'controller' => 'Application\Controller\ServiceReferentiel',

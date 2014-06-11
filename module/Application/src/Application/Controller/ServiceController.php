@@ -135,6 +135,11 @@ class ServiceController extends AbstractActionController
         /* @var $rechercheForm \Application\Form\Service\Recherche */
         $filter = $rechercheForm->hydrateFromSession();
 
+        // sauvegarde des filtres dans le contexte local
+        $this->getContextProvider()->getLocalContext()->fromArray(
+                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
+        );
+
         $canAdd = $this->getServiceService()->canAdd();
 
         $viewModel->setVariables( compact('annee','action','filter','canAdd') );

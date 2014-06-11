@@ -63,6 +63,9 @@ class Service extends AbstractEntityService
         if (! $entity->getEtablissement()){
             $entity->setEtablissement( $this->getContextProvider()->getGlobalContext()->getEtablissement() );
         }
+        if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+            $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+        }
         $result = parent::save($entity);
         /* Sauvegarde automatique des volumes horaires associés */
         $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');

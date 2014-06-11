@@ -62,7 +62,7 @@ class Modulateur
     /**
      * @var \Application\Entity\Db\TypeModulateur
      */
-    protected $type;
+    protected $typeModulateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -303,9 +303,9 @@ class Modulateur
      * @param \Application\Entity\Db\TypeModulateur $type
      * @return Modulateur
      */
-    public function setType(\Application\Entity\Db\TypeModulateur $type = null)
+    public function setTypeModulateur(\Application\Entity\Db\TypeModulateur $typeModulateur = null)
     {
-        $this->type = $type;
+        $this->typeModulateur = $typeModulateur;
 
         return $this;
     }
@@ -315,9 +315,9 @@ class Modulateur
      *
      * @return \Application\Entity\Db\TypeModulateur 
      */
-    public function getType()
+    public function getTypeModulateur()
     {
-        return $this->type;
+        return $this->typeModulateur;
     }
 
     /**

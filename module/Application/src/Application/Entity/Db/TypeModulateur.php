@@ -65,6 +65,11 @@ class TypeModulateur
     protected $id;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $modulateur;
+
+    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoModificateur;
@@ -79,6 +84,13 @@ class TypeModulateur
      */
     protected $histoCreateur;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->modulateur = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set code
@@ -318,6 +330,39 @@ class TypeModulateur
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add modulateur
+     *
+     * @param \Application\Entity\Db\Modulateur $modulateur
+     * @return TypeModulateur
+     */
+    public function addModulateur(\Application\Entity\Db\Modulateur $modulateur)
+    {
+        $this->modulateur[] = $modulateur;
+
+        return $this;
+    }
+
+    /**
+     * Remove modulateur
+     *
+     * @param \Application\Entity\Db\Modulateur $modulateur
+     */
+    public function removeModulateur(\Application\Entity\Db\Modulateur $modulateur)
+    {
+        $this->modulateur->removeElement($modulateur);
+    }
+
+    /**
+     * Get modulateur
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getModulateur()
+    {
+        return $this->modulateur;
     }
 
     /**

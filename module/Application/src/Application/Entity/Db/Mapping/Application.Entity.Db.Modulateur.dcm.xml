@@ -22,9 +22,9 @@
     <field name="ponderationServiceDu" type="float" column="PONDERATION_SERVICE_DU" precision="126" scale="0" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
-    <many-to-one field="type" target-entity="Application\Entity\Db\TypeModulateur">
+    <many-to-one field="typeModulateur" target-entity="Application\Entity\Db\TypeModulateur">
       <join-columns>
-        <join-column name="TYPE_ID" referenced-column-name="ID"/>
+        <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">

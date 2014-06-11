@@ -34,5 +34,7 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <!-- NB: Ajout de relations à la main -->
+    <one-to-many field="modulateur" target-entity="Application\Entity\Db\Modulateur" mapped-by="typeModulateur" />
   </entity>
 </doctrine-mapping>

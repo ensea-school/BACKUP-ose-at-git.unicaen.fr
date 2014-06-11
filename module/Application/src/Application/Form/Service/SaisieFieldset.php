@@ -30,8 +30,15 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
      */
     protected $etablissement;
 
+    /**
+     * hasIntervenant
+     *
+     * @var boolean
+     */
+    protected $hasIntervenant;
 
-    
+
+
     public function __construct($name = null, $options = array())
     {
         parent::__construct('service', $options);
@@ -52,7 +59,9 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             'type' => 'Hidden',
         ));
 
-        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof IntervenantRole){
+        $this->hasIntervenant = ! $this->getContextProvider()->getSelectedIdentityRole() instanceof IntervenantRole;
+
+        if ($this->hasIntervenant){
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant ->setRequired(true)
                          ->setSelectionRequired(true)
@@ -121,7 +130,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         $cl = $this->getContextProvider()->getLocalContext();
 
-        if ($cl->getIntervenant()){
+        if ($this->hasIntervenant && $cl->getIntervenant()){
             $this->get('intervenant')->setValue(array(
                 'id' => $cl->getIntervenant()->getSourceCode(),
                 'label' => (string)$cl->getIntervenant()

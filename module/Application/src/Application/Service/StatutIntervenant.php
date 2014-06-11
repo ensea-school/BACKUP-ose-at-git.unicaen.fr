@@ -42,7 +42,7 @@ class StatutIntervenant extends AbstractEntityService
     public function finderVacatairesNonBiatss(QueryBuilder $qb = null, $alias = null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-    $qb->andWhere($qb->expr()->in('si.sourceCode', (new StatutIntervenantEntity)->$vacatairesNonBiatss));
+    $qb->andWhere($qb->expr()->in('si.sourceCode', (new StatutIntervenantEntity)->vacatairesNonBiatss));
         return $qb;
     }
 

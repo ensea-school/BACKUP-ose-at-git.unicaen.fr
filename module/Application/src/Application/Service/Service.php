@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\IntervenantExterieur;
 
 /**
  * Description of Service
@@ -14,7 +15,6 @@ use Application\Entity\Db\Structure as StructureEntity;
  */
 class Service extends AbstractEntityService
 {
-
     /**
      * retourne la classe des entités
      *
@@ -359,10 +359,32 @@ EOS;
     /**
      * Détermine si on peut ajouter un nouveau service ou non
      *
+     * @param \Application\Entity\Db\Intervenant $intervenant Eventuel intervenant concerné
      * @return boolean
      */
-    public function canAdd($runEx = false)
+    public function canAdd($intervenant = null, $runEx = false)
     {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            $intervenant = $role->getIntervenant();
+        }
+        if (!$intervenant) {
+            return $this->cannotDoThat("Anomalie : aucun intervenant spécifié.", $runEx);
+        }
+        
+        $rulesEvaluator = new \Application\Rule\Service\SaisieServiceRulesEvaluator($intervenant);
+        if (!$rulesEvaluator->execute()) {
+            $message = "?";
+            if ($role instanceof \Application\Acl\IntervenantRole) {
+                $message = "Vous ne pouvez pas saisir de service. ";
+            }
+            elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+                $message = "Vous ne pouvez pas saisir de service pour $intervenant. ";
+            }
+            return $this->cannotDoThat($message . $rulesEvaluator->getMessage(), $runEx);
+        }
+        
         return true;
     }
 }

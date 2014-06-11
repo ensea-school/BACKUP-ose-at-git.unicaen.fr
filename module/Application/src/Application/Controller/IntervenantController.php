@@ -7,8 +7,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Dossier;
-use Application\Entity\Db\Listener\DossierListener;
 
 /**
  * Description of IntervenantController
@@ -37,7 +35,7 @@ class IntervenantController extends AbstractActionController implements \Applica
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
-            return $this->redirect()->toRoute('intervenant/fiche', array('id' => $role->getIntervenant()->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/services', array('id' => $role->getIntervenant()->getSourceCode()));
         }
         
         return $this->redirect()->toRoute('intervenant/rechercher');

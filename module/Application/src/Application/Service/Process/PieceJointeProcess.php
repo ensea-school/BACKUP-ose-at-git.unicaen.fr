@@ -124,7 +124,7 @@ class PieceJointeProcess extends AbstractService
             'name' => "pj",
             'type'  => 'MultiCheckbox',
             'options' => array(
-                'label' => "Les pièces jointes cochées ont été fournies :",
+                'label' => "Les pièces justificatives cochées ont été fournies :",
                 'value_options' => $valueOptions,
             ),
             'attributes' => array(
@@ -341,7 +341,7 @@ class PieceJointeProcess extends AbstractService
         
         if (!$this->getTypesPieceJointeStatut()) {
             throw new \Common\Exception\PieceJointe\AucuneAFournirException(
-                    "Aucun type de pièce jointe à fournir n'a été trouvé pour l'intervenant {$this->getIntervenant()} "
+                    "Aucun type de pièce justificative à fournir n'a été trouvé pour l'intervenant {$this->getIntervenant()} "
                     . "(dont le statut est '{$this->getStatut()}').");
         }
         

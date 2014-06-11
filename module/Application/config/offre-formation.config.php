@@ -270,8 +270,13 @@ return array(
                  */
                 array(
                     'controller' => 'Application\Controller\OffreFormation',
-                    'action'     => array('index', 'search-structures', 'search-niveaux'),
+                    'action'     => array('search-structures', 'search-niveaux'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\OffreFormation',
+                    'action'     => array('index'),
+                    'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
                 /**
                  * Etape

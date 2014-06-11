@@ -84,9 +84,11 @@ class ServiceController extends AbstractActionController
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $qb      = $service->finderByContext();
         $viewModel = new \Zend\View\Model\ViewModel();
-
+        
         $intervenant = $this->context()->intervenantFromRoute('id'); /* @var $intervenant \Application\Entity\Db\Intervenant */
         $service->finderByIntervenant( $intervenant, $qb );
+
+        $service->canAdd($intervenant, true);
 
         /* Préparation et affichage */
         $services = $service->getList($qb);

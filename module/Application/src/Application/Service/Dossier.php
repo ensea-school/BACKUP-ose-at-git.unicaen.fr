@@ -34,34 +34,35 @@ class Dossier extends AbstractEntityService
     }
     
     /**
-     * Détermine si on peut ajouter une entité ou non
+     * Détermine si on peut saisir un dossier
      *
+     * @param \Application\Entity\Db\Intervenant $intervenant Eventuel intervenant concerné
      * @return boolean
      */
-    public function canAdd($runEx = false)
+    public function canAdd($intervenant = null, $runEx = false)
     {
-        $localContext = $this->getContextProvider()->getLocalContext();
-        $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof \Application\Acl\IntervenantExterieurRole) { 
-            return true;
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            $intervenant = $role->getIntervenant();
         }
-        if ($role instanceof \Application\Acl\DbRole) { 
-            return true;
+        if (!$intervenant) {
+            return $this->cannotDoThat("Anomalie : aucun intervenant spécifié.", $runEx);
         }
-
-        return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour saisir un dossier.', $runEx);
-    }
-
-    /**
-     * Détermine si l'entité peut être éditée ou non
-     * 
-     * @param int|\Application\Entity\Db\Dossier $entity
-     * @return boolean
-     */
-    public function canSave(DossierEntity $entity, $runEx = false)
-    {
-        return $this->canAdd($runEx);
+        
+        $rule = new \Application\Rule\Intervenant\PeutSaisirDossierRule($intervenant);
+        if (!$rule->execute()) {
+            $message = "?";
+            if ($role instanceof \Application\Acl\IntervenantRole) {
+                $message = "Vous ne pouvez pas saisir de dossier. ";
+            }
+            elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+                $message = "Vous ne pouvez pas saisir de dossier pour $intervenant. ";
+            }
+            return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
+        }
+        
+        return true;
     }
 
     /**
@@ -90,27 +91,9 @@ class Dossier extends AbstractEntityService
         return parent::getList($qb, $alias);
     }
 
-    public function save($entity)
-    {
-        $this->canSave($entity,true);
-        parent::save($entity);
-    }
-
     public function delete($entity, $softDelete = true)
     {
         $this->canDelete($entity,true);
         return parent::delete($entity, $softDelete);
     }
-
-    /**
-     * Retourne une nouvelle entité, initialisée avec les bons paramètres
-     * @return DossierEntity
-     */
-    public function newEntity()
-    {
-        $this->canAdd(true);
-        $entity = parent::newEntity(); /* @var $entity DossierEntity */
-        return $entity;
-    }
-
 }

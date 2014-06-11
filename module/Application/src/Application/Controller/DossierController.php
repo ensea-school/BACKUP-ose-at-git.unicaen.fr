@@ -77,9 +77,10 @@ class DossierController extends AbstractActionController implements \Application
      */
     public function modifierAction()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        $form = $this->getFormModifier();
-        
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $service = $this->getDossierService();
+        $form    = $this->getFormModifier();
+
         if ($role instanceof IntervenantRole) {
             $intervenant = $role->getIntervenant();
         }
@@ -87,12 +88,10 @@ class DossierController extends AbstractActionController implements \Application
             $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
         }
         
-        if (!$intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
-            throw new \Common\Exception\MessageException("La saisie de dossier n'est possible que pour un vacataire non-BIATSS.");
-        }
+        $service->canAdd($intervenant, true);
         
         if (!($dossier = $intervenant->getDossier())) {
-            $dossier = $this->getDossierService()->newEntity()->fromIntervenant($intervenant);
+            $dossier = $service->newEntity()->fromIntervenant($intervenant);
             $intervenant->setDossier($dossier);
         }
         
@@ -102,7 +101,7 @@ class DossierController extends AbstractActionController implements \Application
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $this->getDossierService()->save($dossier);
+                $service->save($dossier);
                 $notified = $this->notify($intervenant);
                 $this->getIntervenantService()->save($intervenant);
                 $this->flashMessenger()->addSuccessMessage("Dossier enregistré avec succès.");
@@ -194,10 +193,13 @@ class DossierController extends AbstractActionController implements \Application
     
     private function commonPiecesJointes()
     {
+        $service = $this->getPieceJointeService();
         $this->intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
-        if (!$this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
-            throw new \Common\Exception\MessageException("La gestion de pièce jointe n'est possible que pour un vacataire non-BIATSS.");
-        }
+        
+        $service->canAdd($this->intervenant, true);
+//        if (!$this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
+//            throw new \Common\Exception\MessageException("La gestion de pièce justificative n'est possible que pour un vacataire non-BIATSS.");
+//        }
         
         $this->dossier     = $this->intervenant->getDossier();
         $this->process     = $this->getPieceJointeProcess();
@@ -206,11 +208,11 @@ class DossierController extends AbstractActionController implements \Application
         }
         catch (\Common\Exception\PieceJointe\AucuneAFournirException $exc) {
             throw new \Common\Exception\MessageException(
-                    "L'intervenant $this->intervenant n'est pas sensé fournir de pièce jointe.", null, $exc);
+                    "L'intervenant $this->intervenant n'est pas sensé fournir de pièce justificative.", null, $exc);
         }
         catch (\Common\Exception\PieceJointe\PieceJointeException $exc) {
             throw new \Common\Exception\MessageException(
-                    "Gestion des pièces jointes impossible pour l'intervenant $this->intervenant.", null, $exc);
+                    "Gestion des pièces justificatives impossible pour l'intervenant $this->intervenant.", null, $exc);
         }
         $this->form = $this->process->getFormPiecesJointes();
 
@@ -245,6 +247,14 @@ class DossierController extends AbstractActionController implements \Application
     protected function getPieceJointeProcess()
     {
         return $this->getServiceLocator()->get('ApplicationPieceJointeProcess');
+    }
+    
+    /**
+     * @return \Application\Service\PieceJointe
+     */
+    protected function getPieceJointeService()
+    {
+        return $this->getServiceLocator()->get('ApplicationPieceJointe');
     }
     
     /**

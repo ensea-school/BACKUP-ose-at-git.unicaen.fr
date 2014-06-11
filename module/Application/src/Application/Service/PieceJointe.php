@@ -76,4 +76,29 @@ class PieceJointe extends AbstractEntityService
         $qb->addOrderBy("$alias.id");
         return parent::getList($qb, $alias);
     }
+    
+    /**
+     * Détermine si on peut saisir les pièces justificatives.
+     *
+     * @param \Application\Entity\Db\Intervenant $intervenant Intervenant concerné
+     * @return boolean
+     */
+    public function canAdd($intervenant, $runEx = false)
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        $rule = new \Application\Rule\Intervenant\PeutSaisirPieceJointeRule($intervenant);
+        if (!$rule->execute()) {
+            $message = "?";
+            if ($role instanceof \Application\Acl\IntervenantRole) {
+                $message = "Vous ne pouvez pas saisir de pièce justificative. ";
+            }
+            elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+                $message = "Vous ne pouvez pas saisir de pièce justificative pour $intervenant. ";
+            }
+            return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
+        }
+        
+        return true;
+    }
 }

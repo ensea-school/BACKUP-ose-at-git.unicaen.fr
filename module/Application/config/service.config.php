@@ -182,7 +182,7 @@ return array(
                     'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('index', 'resume'),
+                    'action' => array('index', 'resume','resume-refresh','filtres'),
                     'roles' => array(ComposanteRole::ROLE_ID)),
                 array( 
                     'controller' => 'Application\Controller\ServiceReferentiel',

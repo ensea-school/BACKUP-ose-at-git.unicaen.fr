@@ -100,7 +100,9 @@ class PieceJointeProcess extends AbstractService
             $obligatoire = $ligne->isObligatoire($totalHETD);
             if ($obligatoire) {
                 $obligatoire = "Obligatoire";
-                $obligatoire .= $ligne->isSeuilHETDDepasse($totalHETD) ? " car <abbr title=\"Total d'heures de service réelles de l'intervenant\">{$totalHETD}h</abbr> > {$seuilHETD}h" : null;
+                $obligatoire .= $ligne->isSeuilHETDDepasse($totalHETD) ? 
+                        " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">{$totalHETD}h</abbr> > {$seuilHETD}h" : 
+                        null;
             }
             else {
                 $obligatoire = "Facultatif";

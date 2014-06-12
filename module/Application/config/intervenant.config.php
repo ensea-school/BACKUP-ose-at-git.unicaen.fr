@@ -129,24 +129,28 @@ return array(
                                 'route'  => 'intervenant/fiche',
                                 'action' => 'voir',
                                 'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Intervenant:voir',
                             ),
                             'dossier' => array(
                                 'label'  => "Dossier",
                                 'title'  => "Saisir/modifier un dossier d'intervenant vacataire",
                                 'route'  => 'intervenant/saisir-dossier',
                                 'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Intervenant:saisir-dossier',
                             ),
                             'service' => array(
                                 'label'  => "Services",
                                 'title'  => "Services et référentiel de l'intervenant",
                                 'route'  => 'intervenant/services',
                                 'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Service:intervenant',
                             ),
                             'pieces-jointes' => array(
                                 'label'  => "Pièces jointes",
                                 'title'  => "Pièces jointes du dossier de l'intervenant",
                                 'route'  => 'intervenant/pieces-jointes',
                                 'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Dossier:pieces-jointes',
                             ),
                         ),
                     ),
@@ -159,12 +163,12 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('index', 'voir', 'apercevoir'),
+                    'action'     => array('index', 'apercevoir'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('choisir', 'rechercher', 'search'),
+                    'action'     => array('voir', 'choisir', 'rechercher', 'search'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
                 array(

@@ -100,7 +100,7 @@ class PieceJointeProcess extends AbstractService
             $obligatoire = $ligne->isObligatoire($totalHETD);
             if ($obligatoire) {
                 $obligatoire = "Obligatoire";
-                $obligatoire .= $ligne->isSeuilHETDDepasse($totalHETD) ? " car HETD = {$totalHETD}h > {$seuilHETD}h" : null;
+                $obligatoire .= $ligne->isSeuilHETDDepasse($totalHETD) ? " car <abbr title=\"Total d'heures de service réelles de l'intervenant\">{$totalHETD}h</abbr> > {$seuilHETD}h" : null;
             }
             else {
                 $obligatoire = "Facultatif";
@@ -291,12 +291,11 @@ class PieceJointeProcess extends AbstractService
     }
     
     /**
-     * @deprecated Implémenter le vrai calcul d'HETD 
+     * @deprecated Implémenter le vrai calcul d'HETD ?
      */
     private function getTotalHETDIntervenant()
     {
-        $values = array(10.6, 20.0, 30.7);
-        return $values[rand(0, 2)];
+        return $this->getServiceService()->getTotalHeuresReelles($this->getIntervenant());
     }
     
     /**
@@ -329,6 +328,14 @@ class PieceJointeProcess extends AbstractService
     private function getServicePieceJointe()
     {
         return $this->getServiceLocator()->get('applicationPieceJointe');
+    }
+    
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->get('ApplicationService');
     }
     
     /**

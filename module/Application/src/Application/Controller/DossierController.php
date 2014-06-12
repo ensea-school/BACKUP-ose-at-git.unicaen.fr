@@ -47,6 +47,11 @@ class DossierController extends AbstractActionController implements \Application
     private $title;
     
     /**
+     * @var \Zend\View\Model\ViewModel
+     */
+    private $view;
+    
+    /**
      * 
      * @return \Zend\View\Model\ViewModel
      * @throws \Common\Exception\MessageException
@@ -155,15 +160,11 @@ class DossierController extends AbstractActionController implements \Application
                 ->remove('submit')
                 ->get('pj')->setAttribute('disabled', true);
         
-        $view = new \Zend\View\Model\ViewModel(array(
-            'intervenant'            => $this->intervenant,
-            'dossier'                => $this->dossier,
-            'form'                   => $this->form,
-            'title'                  => $this->title,
-        ));
-        $view->setTemplate('application/dossier/pieces-jointes');
-
-        return $view;
+        $this->view
+                ->setTemplate('application/dossier/pieces-jointes')
+                ->setVariables(array('title' => $this->title));
+        
+        return $this->view;
     }
     
     /**
@@ -188,23 +189,20 @@ class DossierController extends AbstractActionController implements \Application
             }
         }
         
-        $view = new \Zend\View\Model\ViewModel(array(
-            'intervenant'            => $this->intervenant,
-            'dossier'                => $this->dossier,
-            'form'                   => $this->form,
-            'title'                  => $this->title,
-        ));
-        $view->setTemplate('application/dossier/pieces-jointes');
+        $this->view
+                ->setTemplate('application/dossier/pieces-jointes')
+                ->setVariables(array('title' => $this->title));
 
-        return $view;
+        return $this->view;
     }
     
     private function commonPiecesJointes()
     {
-        $service = $this->getPieceJointeService();
-        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        $serviceService     = $this->getServiceService();
+        $servicePieceJointe = $this->getPieceJointeService();
+        $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute('id');
         
-        $service->canAdd($this->intervenant, true);
+        $servicePieceJointe->canAdd($this->intervenant, true);
 //        if (!$this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
 //            throw new \Common\Exception\MessageException("La gestion de pièce justificative n'est possible que pour un vacataire non-BIATSS.");
 //        }
@@ -227,6 +225,13 @@ class DossierController extends AbstractActionController implements \Application
         if (!$this->dossier) {
             throw new \Common\Exception\MessageException("L'intervenant $this->intervenant n'a aucun dossier.");
         }
+        
+        $this->view = new \Zend\View\Model\ViewModel(array(
+            'intervenant'        => $this->intervenant,
+            'totalHeuresReelles' => $serviceService->getTotalHeuresReelles($this->intervenant),
+            'dossier'            => $this->dossier,
+            'form'               => $this->form,
+        ));
     }
     
     protected function notify(Intervenant $intervenant)
@@ -277,5 +282,13 @@ class DossierController extends AbstractActionController implements \Application
     protected function getDossierService()
     {
         return $this->getServiceLocator()->get('ApplicationDossier');
+    }
+    
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->get('ApplicationService');
     }
 }

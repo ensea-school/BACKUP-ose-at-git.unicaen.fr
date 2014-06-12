@@ -305,7 +305,7 @@ EOS;
      * @param integer|ServiceEntity|null $service
      * @return array
      */
-    public function getTotalHeures($service)
+    public function getTotalHeuresParTypeIntervention($service = null)
     {
         if ($service instanceof ServiceEntity) $service = $service->getId();
 
@@ -328,7 +328,47 @@ EOS;
         }
         return $result;
     }
+    
+    /**
+     * Retourne le total des heures RÉELLES de référentiel et de service d'un intervenant.
+     *
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return float
+     */
+    public function getTotalHeuresReelles(\Application\Entity\Db\Intervenant $intervenant)
+    {
+        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        
+        /**
+         * Service
+         */
+        $sql = <<<EOS
+select sum(v.TOTAL_HEURES) as TOTAL_HEURES
+from V_RESUME_SERVICE v
+where v.INTERVENANT_ID = :intervenant and v.ANNEE_ID = :annee
+EOS;
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, array(
+            'intervenant' => $intervenant->getId(),
+            'annee' => $annee->getId()));
+        $r = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $totalService = isset($r[0]) ? (float)$r[0] : 0.0;
+        
+        /**
+         * Référentiel
+         */
+        $sql = <<<EOS
+select sum(v.TOTAL_HEURES) as TOTAL_HEURES
+from V_RESUME_REFERENTIEL v
+where v.INTERVENANT_ID = :intervenant and v.ANNEE_ID = :annee
+EOS;
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, array(
+            'intervenant' => $intervenant->getId(),
+            'annee' => $annee->getId()));
+        $r = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $totalRef = isset($r[0]) ? (float)$r[0] : 0.0;
 
+        return $totalService + $totalRef;
+    }
 
     /**
      * Détermine si un service est assuré localement (c'est-à-dire dans l'université) ou sur un autre établissement

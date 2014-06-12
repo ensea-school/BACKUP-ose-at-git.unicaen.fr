@@ -76,7 +76,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $context = $this->getContextProvider()->getGlobalContext();
 
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-        $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeures($this->service);
+        $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeuresParTypeIntervention($this->service);
 
         $out = '';
         if ($this->getRenderIntervenants()) {

@@ -106,7 +106,14 @@ class PieceJointeProcess extends AbstractService
                 $obligatoire = "Facultatif";
             }
             
-            $label = sprintf('%s<br /><span class="text-warning">%s</span>', $ligne->getType(), $obligatoire);
+            $link = null;
+            if (($url = $ligne->getType()->getUrlModeleDoc())) {
+                $href = $this->getServiceLocator()->get('ViewHelperManager')->get('basePath')->__invoke($url);
+                $fileName = ltrim(strrchr($href, '/'), '/');
+                $link = '<br /><a title="Cliquez pour télécharger le document à remplir" href="' . $href . '"><span class="glyphicon glyphicon-file"></span> ' . $fileName . '</a>';
+            }
+    
+            $label = sprintf('%s<br /><span class="text-warning">%s</span>%s', $ligne->getType(), $obligatoire, $link);
             $valueOptions[] = array(
                 'value' => $ligne->getType()->getId(),
                 'label' => $label,

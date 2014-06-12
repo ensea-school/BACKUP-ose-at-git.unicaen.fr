@@ -2,13 +2,36 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * ModificationServiceDu
  */
-class ModificationServiceDu
+class ModificationServiceDu implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
+        
+        return sprintf("%s : %s (%sh)", 
+                $this->getAnnee(), 
+                $this->getMotif(), 
+                $heures);
+    }
+
+    /**
+     * 
+     * @param \Application\Entity\Db\Annee $annee
+     */
+    public function __construct(Annee $annee = null)
+    {
+        $this->setValiditeDebut(new \DateTime());
+        $this->setAnnee($annee);
+    }
+    
     /**
      * @var float
      */

@@ -48,6 +48,11 @@ class TypePieceJointe
     private $libelle;
 
     /**
+     * @var string
+     */
+    private $urlModeleDoc;
+
+    /**
      * @var \DateTime
      */
     private $validiteDebut;
@@ -191,6 +196,29 @@ class TypePieceJointe
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set urlModeleDoc
+     *
+     * @param string $urlModeleDoc
+     * @return TypePieceJointe
+     */
+    public function setUrlModeleDoc($urlModeleDoc)
+    {
+        $this->urlModeleDoc = $urlModeleDoc;
+
+        return $this;
+    }
+
+    /**
+     * Get urlModeleDoc
+     *
+     * @return string 
+     */
+    public function getUrlModeleDoc()
+    {
+        return $this->urlModeleDoc;
     }
 
     /**

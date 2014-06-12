@@ -24,5 +24,6 @@
         <join-column name="CORPS_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

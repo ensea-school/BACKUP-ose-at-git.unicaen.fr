@@ -1,0 +1,114 @@
+<h1><?php echo $title ?></h1>
+
+<style>
+    form.modification-service-du .form-group { float: left; }
+    form.modification-service-du input { width: 100px; }
+    form.modification-service-du input[type=submit] { margin-top: 2em; }
+    button.modification-service-du-ajouter   { display: block; margin-top: 0.5em; }
+    button.modification-service-du-supprimer { margin: 2em 0 0 1em; }
+</style>
+
+<?php if (isset($exception)) { echo $this->messenger()->setException($exception); } ?>
+
+<?php
+$form->setAttribute('id', $formId = uniqid('form-'))->prepare();
+$modificationServiceDu = $form->get('intervenant');
+?>
+
+<?php 
+echo $this->form()->openTag($form);
+echo $this->formCollection()->setElementHelper($this->formControlGroup())->render($modificationServiceDu->get('modificationServiceDu'));
+?> 
+<div id="modification-service-du-comptage"></div>
+<?php 
+echo $this->formButton($form->get('ajouter'));
+echo $this->formHidden($form->get('security'));
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+echo $this->form()->closeTag();
+?>
+
+<script>
+    var formId = "<?php echo $form->getAttribute('id') ?>";
+    var form   = $("#" + formId);
+    
+    $("body").on('click', "#" + formId + " button.modification-service-du-ajouter", function() {
+        addLigne();
+        return false;
+    });
+    $("body").on('click', "#" + formId + " button.modification-service-du-supprimer", function() {
+        if (getLigneCurrentCount() > 0) {
+            removeFonction($(this));
+        }  
+        return false; 
+    });
+        
+    $(function() {
+        updateFonctionCounter();
+        $(":input").tooltip();
+        
+        $('body').on('change', "#" + formId + " select.modification-service-du-motif", function() {
+            var select = $(this); // select de référence, dont la valeur a changé
+            if (select.val() === '') {
+                return;
+            }
+            applySelectUnicity(select);
+        });
+    });
+    
+    /**
+     * 
+     * @param object changedSelect Select de référence, dont la valeur a changé
+     * @param object targetSelect  Si spécifié, seul select cible à mettre à jour
+     * @returns void
+     */
+    function applySelectUnicity(changedSelect, targetSelect)
+    {
+        if (!targetSelect) {
+            targetSelect = $("#" + formId + " select");
+        }
+        // parcours des select (autre que celui de référence)
+        targetSelect.not(changedSelect).each(function() {
+            $("option", this).each(function() {
+                // cache les items identiques à celui sélectionné dans le select de référence
+                if ($(this).val() === changedSelect.val()) {
+                    $(this).data('from', changedSelect).hide();
+                    //console.log('hide ' + $(this).text(), $(this).data('from'));
+                }
+                // fait réapparaître les items ayant été cachés précédemment
+                else if ($(this).is(":hidden") && $(this).data() && $(this).data('from').is(changedSelect)) {
+                    $(this).removeData('from').show();
+                    //console.log('show ' + $(this).text(), $(this).data('from'));
+                }
+            });
+        });
+    }
+    
+    function addLigne() 
+    {
+        var currentCount = getLigneCurrentCount();
+        var template = $('> fieldset > span', form).data('template');
+        var element = $(template.replace(/__index__/g, currentCount));console.log(template, element, currentCount);
+        $('> fieldset', form).append(element.fadeIn());
+        $("select.modification-service-du-motif").not($("select", element)).each(function() { applySelectUnicity($(this), $("select", element)); });
+        updateFonctionCounter();
+        return element;
+    }
+    
+    function removeFonction(button) 
+    {
+        $(button).parentsUntil('fieldset').parent().remove();
+        updateFonctionCounter();
+        return false;
+    }
+    
+    function getLigneCurrentCount()
+    {
+        return $('> fieldset > fieldset', form).length;;
+    }
+    
+    function updateFonctionCounter() 
+    {
+        var currentCount = getLigneCurrentCount();
+        $("#modification-service-du-comptage").html(currentCount ? "" : "Aucune modification de service dû.");
+    }
+</script>

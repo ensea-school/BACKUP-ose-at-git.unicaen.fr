@@ -12,10 +12,8 @@
 <?php if ('afficher' === $action ): ?>
 <?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
 
-<?php if ($canAdd): ?>
 <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
 <br /><br />
-<?php endif; ?>
 
 <div data-url="<?php echo $this->url('service/resume-refresh'); ?>" id="service-resume">
     <?php echo $this->serviceResume()->setFilter($filter)->render(); ?>

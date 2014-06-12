@@ -2,13 +2,21 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * MotifModificationService
  */
 class MotifModificationService
 {
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+    
     /**
      * @var string
      */

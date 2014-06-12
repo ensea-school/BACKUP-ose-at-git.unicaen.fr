@@ -80,6 +80,11 @@ class ElementPedagogiqueDl extends AbstractDl
             );
         }
         
+        $details[] = sprintf($tplDtdd,
+            "<span title=\"Formation ouverte à distance\">FOAD</span> :", 
+            (bool)$this->entity->getTauxFoad() ? "Oui" : "Non"
+        );
+        
         $html .= sprintf($this->getTemplateDl('element element-details'), implode(PHP_EOL, $details)) . PHP_EOL;
         
         /**

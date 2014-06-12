@@ -83,16 +83,21 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
             if ($this->service->getIntervenant() instanceof Application\Entity\Db\IntervenantExterieur){
                 $out .= '<td>'.$this->renderStructure( $this->service->getStructureAff() )."</td>\n";
-            }else{
+            }
+            else {
                 $out .= "<td>&nbsp;</td>\n";
             }
             
         }
         if ($this->service->getEtablissement() === $context->getEtablissement()) {
-            $out .= '<td>'.$this->renderStructure( $this->service->getStructureEns() )."</td>\n";
-            $out .= '<td>'.$this->renderElementPedagogique( $this->service->getElementPedagogique() )."</td>\n";
-        }else{
-            $out .= '<td colspan="2">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
+            $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
+            $out .= '<td>'.$this->renderEtape($this->service->getElementPedagogique()->getEtape())."</td>\n";
+            $out .= '<td>'.$this->renderElementPedagogique($this->service->getElementPedagogique())."</td>\n";
+            $out .= '<td>'.$this->renderFOAD($this->service->getElementPedagogique())."</td>\n";
+            $out .= '<td>'.$this->renderRegimeInscription($this->service->getElementPedagogique())."</td>\n";
+        }
+        else {
+            $out .= '<td colspan="5">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
         }
         if (!$context->getAnnee()) {
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";
@@ -124,12 +129,35 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $out;
     }
 
+    protected function renderEtape($etape)
+    {
+        if (! $etape) return '';
+        $url = $this->getView()->url('of/etape/voir', array('id' => $etape->getId()));
+        $pourl = $this->getView()->url('of/etape/apercevoir', array('id' => $etape->getId()));
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etape.'</a>';
+        return $out;
+    }
+
     protected function renderElementPedagogique($element)
     {
         if (! $element) return '';
         $url = $this->getView()->url('of/element/voir', array('id' => $element->getId()));
         $pourl = $this->getView()->url('of/element/apercevoir', array('id' => $element->getId()));
         $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$element.'</a>';
+        return $out;
+    }
+
+    protected function renderFOAD($element)
+    {
+        if (! $element) return '';
+        $out = (bool)$element->getTauxFoad() ? "Oui" : "Non";
+        return $out;
+    }
+
+    protected function renderRegimeInscription($element)
+    {
+        if (! $element) return '';
+        $out = '';
         return $out;
     }
 
@@ -149,7 +177,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderTypeIntervention( \Application\Entity\Db\TypeIntervention $typeIntervention, $heures )
     {
-        $out = '<td id="service-'.$this->service->getId().'-ti-'.$typeIntervention->getId().'">'
+        $out = '<td class=\"heures\" id="service-'.$this->service->getId().'-ti-'.$typeIntervention->getId().'">'
                    .(array_key_exists($typeIntervention->getId(),$heures)
                         ? \UnicaenApp\Util::formattedFloat($heures[$typeIntervention->getId()], \NumberFormatter::DECIMAL, -1)
                         : ''

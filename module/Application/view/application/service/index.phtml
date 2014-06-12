@@ -1,5 +1,7 @@
 <h1 class="page-header"><?php echo $title; ?></h1>
 
+<?php echo $this->messenger(true) ?>
+
 <style>
     .modal-dialog { 
         width: 70%;
@@ -45,6 +47,11 @@
 <?php endif; ?>
 
 <?php echo $this->serviceListe( $services )->setRenderIntervenants($renderIntervenants)->render(); ?>
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+<a class="btn btn-primary" href="<?php echo $this->url('intervenant/pieces-jointes', array('id' => $role->getIntervenant()->getSourceCode())) ?>">
+    Pièces justificatives à fournir...</a>
+<?php endif; ?>
 
 <?php else:?>
 <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>

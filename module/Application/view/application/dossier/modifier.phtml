@@ -42,7 +42,8 @@ $dossier = $form->get('dossier');
 </div>
 <?php echo $this->formHidden($dossier->get('id')); ?>
 
-<input class="btn btn-primary" type="submit" value="Enregistrer" name="submit">
+<?php echo $this->formHidden($form->get('security')); ?>
+<?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
 <?php echo $this->form()->closeTag() ?> 
 
 <script>

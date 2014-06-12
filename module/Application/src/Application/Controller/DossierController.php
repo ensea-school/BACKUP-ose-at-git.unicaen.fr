@@ -83,6 +83,7 @@ class DossierController extends AbstractActionController implements \Application
 
         if ($role instanceof IntervenantRole) {
             $intervenant = $role->getIntervenant();
+            $form->get('submit')->setAttribute('value', "Enregistrer et passer à la saisie de services...");
         }
         else {
             $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
@@ -101,14 +102,21 @@ class DossierController extends AbstractActionController implements \Application
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $service->save($dossier);
+                $this->em()->persist($dossier);
                 $notified = $this->notify($intervenant);
-                $this->getIntervenantService()->save($intervenant);
+                $this->em()->persist($intervenant);
+                $this->em()->flush();
                 $this->flashMessenger()->addSuccessMessage("Dossier enregistré avec succès.");
                 if ($notified) {
                     $this->flashMessenger()->addInfoMessage("Un mail doit être envoyé pour informer la composante de la modification du dossier...");
                 }
-                return $this->redirect()->toUrl($this->url()->fromRoute(null, array(), array(), true));
+                if ($role instanceof IntervenantRole) {
+                    $url = $this->url()->fromRoute('intervenant/services', array('id' => $intervenant->getSourceCode()));
+                }
+                else {
+                    $url = $this->url()->fromRoute(null, array(), array(), true);
+                }
+                return $this->redirect()->toUrl($url);
             }
 //            var_dump('not valid', $form->getMessages());
         }
@@ -142,7 +150,7 @@ class DossierController extends AbstractActionController implements \Application
     { 
         $this->commonPiecesJointes();
         
-        $this->title = "Liste des pièces à joindre <small>$this->intervenant</small>";
+        $this->title = "Liste des pièces justificatives à joindre <small>$this->intervenant</small>";
         $this->form
                 ->remove('submit')
                 ->get('pj')->setAttribute('disabled', true);
@@ -225,8 +233,6 @@ class DossierController extends AbstractActionController implements \Application
     {
         if (DossierListener::$created || DossierListener::$modified) {
             // envoyer un mail au gestionnaire
-            var_dump('Envoi de mail "dossier créé ou modifié"...');
-            
             return true;
         }
         

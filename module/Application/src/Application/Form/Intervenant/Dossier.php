@@ -37,6 +37,22 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, ContextProvi
                 ->init();
         
         $this->add($fs);
+        
+        /**
+         * Csrf
+         */
+        $this->add(new \Zend\Form\Element\Csrf('security'));
+        
+        /**
+         * Submit
+         */
+        $this->add(array(
+            'name' => 'submit',
+            'type'  => 'Submit',
+            'attributes' => array(
+                'value' => "Enregistrer",
+            ),
+        ));
     }
     
     /**

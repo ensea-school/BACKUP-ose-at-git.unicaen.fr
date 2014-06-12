@@ -135,19 +135,17 @@ return array(
                                 'title'  => "Saisir/modifier un dossier d'intervenant vacataire",
                                 'route'  => 'intervenant/saisir-dossier',
                                 'withtarget' => true,
-                                'pages' => array(
-                                    'pieces-jointes' => array(
-                                        'label'  => "Pièces jointes",
-                                        'title'  => "Pièces jointes du dossier de l'intervenant",
-                                        'route'  => 'intervenant/pieces-jointes',
-                                        'withtarget' => true,
-                                    ),
-                                ),
                             ),
                             'service' => array(
                                 'label'  => "Services",
                                 'title'  => "Services et référentiel de l'intervenant",
                                 'route'  => 'intervenant/services',
+                                'withtarget' => true,
+                            ),
+                            'pieces-jointes' => array(
+                                'label'  => "Pièces jointes",
+                                'title'  => "Pièces jointes du dossier de l'intervenant",
+                                'route'  => 'intervenant/pieces-jointes',
                                 'withtarget' => true,
                             ),
                         ),

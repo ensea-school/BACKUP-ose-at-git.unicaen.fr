@@ -109,6 +109,6 @@ echo $this->form()->closeTag();
     function updateFonctionCounter() 
     {
         var currentCount = getFonctionCurrentCount();
-        $("#fonction-comptage").html(currentCount ? "" : "Aucune fonction.");
+        $("#fonction-comptage").html(currentCount ? currentCount + " fonction(s)." : "Aucune fonction.");
     }
 </script>

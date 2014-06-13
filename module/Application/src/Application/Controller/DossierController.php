@@ -230,6 +230,7 @@ class DossierController extends AbstractActionController implements \Application
             'intervenant'        => $this->intervenant,
             'totalHeuresReelles' => $serviceService->getTotalHeuresReelles($this->intervenant),
             'dossier'            => $this->dossier,
+            'destinataires'      => $this->process->getRolesDestinatairesPiecesJointes(),
             'form'               => $this->form,
         ));
     }

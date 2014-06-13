@@ -301,6 +301,23 @@ class PieceJointeProcess extends AbstractService
     }
     
     /**
+     * Recherche les destinataires des pièces justificatives : ce sont les responsables admins
+     * de la structure d'affectation principale de l'intervenant.
+     * 
+     * NB: on retourne des entités Role et non des entités Personnel : cela permet de disposer
+     * ultérieurement du type de rôle.
+     * 
+     * @return \Application\Entity\Db\Role[]
+     */
+    public function getRolesDestinatairesPiecesJointes()
+    {
+        $qb = $this->getServiceRole()->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RA);
+        $qb = $this->getServiceRole()->finderByStructure($this->getIntervenant()->getStructure(), $qb);
+        
+        return $this->getServiceRole()->getList($qb);
+    }
+    
+    /**
      * @return StatutIntervenantService
      */
     private function getServiceStatut()
@@ -338,6 +355,14 @@ class PieceJointeProcess extends AbstractService
     protected function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
+    }
+    
+    /**
+     * @return \Application\Service\Role
+     */
+    private function getServiceRole()
+    {
+        return $this->getServiceLocator()->get('applicationRole');
     }
     
     /**

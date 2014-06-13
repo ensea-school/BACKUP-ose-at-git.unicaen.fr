@@ -349,4 +349,25 @@ class Personnel implements HistoriqueAwareInterface
     {
         return $this->role;
     }
+    
+    /**
+     * Get civilite
+     *
+     * @return string 
+     */
+    public function getCiviliteToString()
+    {
+        return $this->getCivilite()->getLibelleCourt();
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        $f = new \Common\Filter\NomCompletFormatter();
+        
+        return $f->filter($this);
+    }
 }

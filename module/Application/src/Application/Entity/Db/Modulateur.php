@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Modulateur
  */
-class Modulateur
+class Modulateur implements HistoriqueAwareInterface
 {
     /**
      * @var string
@@ -78,6 +78,12 @@ class Modulateur
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoCreateur;
+
+    
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
 
 
     /**

@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * ElementModulateur
  */
-class ElementModulateur
+class ElementModulateur implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime

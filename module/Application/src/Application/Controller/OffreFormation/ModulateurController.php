@@ -22,7 +22,34 @@ class ModulateurController extends AbstractActionController implements ContextPr
 
     protected function saisirAction()
     {
+        $etape = $this->context()->etapeFromRoute();
 
+        if (! $etape){
+            throw new \Common\Exception\RuntimeException('L\'étape n\'a pas été spécifiée ou bien elle est invalide.');
+        }
+
+        $form    = $this->getFormSaisie();
+        $errors  = array();
+
+        $form->bind($etape);
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                try {
+                    //$service->save($entity);
+                }
+                catch (\Exception $e) {
+                    $e        = DbException::translate($e);
+                    $errors[] = $e->getMessage();
+                }
+            }else{
+                $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
+            }
+        }
+        $title = 'Saisie des modulateurs';
+        return compact('title', 'form', 'errors');
     }
 
     /**
@@ -43,5 +70,14 @@ class ModulateurController extends AbstractActionController implements ContextPr
     protected function getServiceEtape()
     {
         return $this->getServiceLocator()->get('applicationEtape');
+    }
+
+    /**
+     *
+     * @return \Application\Form\Service\Saisie
+     */
+    protected function getFormSaisie()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('EtapeModulateursSaisie');
     }
 }

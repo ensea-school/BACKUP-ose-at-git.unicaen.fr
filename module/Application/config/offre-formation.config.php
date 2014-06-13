@@ -332,9 +332,13 @@ return array(
             'ApplicationCheminPedagogique'            => 'Application\\Service\\CheminPedagogique',
             'ApplicationEtape'                        => 'Application\\Service\\Etape',
             'ApplicationTypeFormation'                => 'Application\\Service\\TypeFormation',
-            'FormElementPedagogiqueRechercheHydrator' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheHydrator',
-            'OffreFormationAssertion'                 => 'Application\\Service\\OffreFormationAssertion',
             'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
+            'ApplicationElementModulateur'            => 'Application\\Service\\ElementModulateur',
+            'ApplicationTypeModulateur'               => 'Application\\Service\\TypeModulateur',
+            'FormElementPedagogiqueRechercheHydrator' => 'Application\\Form\\OffreFormation\\ElementPedagogiqueRechercheHydrator',
+            'ElementModulateursFormHydrator'          => 'Application\\Form\\OffreFormation\\ElementModulateursHydrator',
+            'EtapeModulateursFormHydrator'            => 'Application\\Form\\OffreFormation\\EtapeModulateursHydrator',
+            'OffreFormationAssertion'                 => 'Application\\Service\\OffreFormationAssertion',
         ),
     ),
     'form_elements' => array(
@@ -342,11 +346,19 @@ return array(
             'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldsetFactory',
         ),
         'invokables' => array(
-            'EtapeSaisie'              => 'Application\Form\OffreFormation\EtapeSaisie',
-            'ElementPedagogiqueSaisie' => 'Application\Form\OffreFormation\ElementPedagogiqueSaisie',
+            'EtapeSaisie'                   => 'Application\Form\OffreFormation\EtapeSaisie',
+            'ElementPedagogiqueSaisie'      => 'Application\Form\OffreFormation\ElementPedagogiqueSaisie',
+            'EtapeModulateursSaisie'        => 'Application\Form\OffreFormation\EtapeModulateursSaisie',
+            'ElementModulateursFieldset'    => 'Application\Form\OffreFormation\ElementModulateursFieldset',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',
+        ),
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'EtapeModulateursSaisieForm'       => 'Application\View\Helper\OffreFormation\EtapeModulateursSaisieForm',
+            'ElementModulateursSaisieFieldset' => 'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset',
         ),
     ),
 

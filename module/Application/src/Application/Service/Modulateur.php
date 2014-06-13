@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Modulateur as ModulateurEntity;
+use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -41,6 +42,22 @@ class Modulateur extends AbstractEntityService
      */
     public function getAlias(){
         return 'modu';
+    }
+
+
+    public function finderByElementPedagogique(ElementPedagogiqueEntity $element, QueryBuilder $qb=null, $alias=null)
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $serviceElementPedagogique = $this->getServiceLocator()->get('ApplicationElementPedagogique');
+        $serviceElementModulateur = $this->getServiceLocator()->get('ApplicationElementModulateur');
+//        $serviceTypeModulateur = $this->getServiceLocator()->get('ApplicationTypeModulateur');
+
+        $this->join( $serviceElementModulateur, $qb, 'id', 'modulateur' );
+//        $this->join( $serviceTypeModulateur, $qb, 'typeModulateur' ); // pour éviter des sous-reqûetes intempestives par la suite !!
+        $serviceElementModulateur->join( $serviceElementPedagogique, $qb, 'element' );
+
+        return $qb;
     }
 
     /**

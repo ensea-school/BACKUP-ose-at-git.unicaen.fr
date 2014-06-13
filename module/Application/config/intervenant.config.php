@@ -136,7 +136,7 @@ return array(
                                 'title'  => "Saisir/modifier un dossier d'intervenant vacataire",
                                 'route'  => 'intervenant/saisir-dossier',
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Intervenant:saisir-dossier',
+                                'resource' => 'controller/Application\Controller\Dossier:modifier',
                             ),
                             'service' => array(
                                 'label'  => "Services",

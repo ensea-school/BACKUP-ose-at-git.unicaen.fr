@@ -49,7 +49,7 @@ class IntervenantController extends AbstractActionController implements \Applica
         $view = $this->choisirAction();
         
         if ($this->intervenant) {
-            $this->redirect()->toRoute('intervenant/fiche', array('id' => $this->intervenant->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/fiche', array('id' => $this->intervenant->getSourceCode()));
         }
         
         $view->setTemplate('application/intervenant/choisir');

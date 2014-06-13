@@ -87,7 +87,8 @@ class IntervenantController extends AbstractActionController implements \Applica
             $form->setData($data);
             if ($form->isValid()) {
                 $sourceCode = $form->get('interv')->getValueId();
-                $this->intervenant = $this->getIntervenantService()->getRepo()->findOneBySourceCode($sourceCode);
+                $this->getRequest()->getQuery()->set('sourceCode', $sourceCode);
+                $this->intervenant = $this->importerAction()->getVariable('intervenant');
                 if (($redirect = $this->params()->fromQuery('redirect'))) {
                     $redirect = str_replace('__sourceCode__', $sourceCode, $redirect);
                     return $this->redirect()->toUrl($redirect);

@@ -12,11 +12,26 @@ use Application\Entity\Db\Intervenant;
  */
 abstract class IntervenantRule extends AbstractRule
 {
+    /**
+     * @var Intervenant 
+     */
     protected $intervenant;
+    
+    /**
+     * Constructeur.
+     * 
+     * @param Intervenant $intervenant Intervenant concerné
+     */
     public function __construct(Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
     }
+    
+    /**
+     * Retourne l'intervenant concerné.
+     * 
+     * @return Intervenant
+     */
     public function getIntervenant()
     {
         return $this->intervenant;

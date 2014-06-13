@@ -8,7 +8,7 @@ namespace Application\Entity\Db;
 class StatutIntervenant
 {
     const ENS_2ND_DEG    = 'ENS_2ND_DEG';
-    const ENS_CH         = 'ENS_2ND_DEG';
+    const ENS_CH         = 'ENS_CH';
     const ASS_MI_TPS     = 'ASS_MI_TPS';
     const ATER           = 'ATER';
     const ATER_MI_TPS    = 'ATER_MI_TPS';
@@ -26,6 +26,18 @@ class StatutIntervenant
     const ETUD_HORS_UCBN = 'ETUD_HORS_UCBN';
     const CHARG_ENS_1AN  = 'CHARG_ENS_1AN';
     const AUTRES         = 'AUTRES';
+
+    public $permanents = array(
+        self::ENS_2ND_DEG,
+        self::ENS_CH,
+        self::ASS_MI_TPS,
+        self::ATER,
+        self::ATER_MI_TPS,
+        self::DOCTOR,
+        self::ENS_CONTRACT,
+        self::LECTEUR,
+        self::MAITRE_LANG,
+    );
 
     public $vacatairesNonBiatss = array(
         self::SALAR_PRIVE,
@@ -45,6 +57,16 @@ class StatutIntervenant
     public function __toString()
     {
         return $this->getLibelle();
+    }
+    
+    /**
+     * Indique si ce statut correspond à un intervenant permanent.
+     * 
+     * @return bool
+     */
+    public function estPermanent()
+    {
+        return in_array($this->getSourceCode(), $this->permanents);
     }
     
     /**

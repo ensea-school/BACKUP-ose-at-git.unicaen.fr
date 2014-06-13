@@ -144,13 +144,13 @@ return array(
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:voir',
                             ),
-//                            'modification-service-du' => array(
-//                                'label'  => "Modification de service dû",
-//                                'title'  => "Modification de service dû de l'intervenant {id}",
-//                                'route'  => 'intervenant/modification-service-du',
-//                                'withtarget' => true,
-//                                'resource' => 'controller/Application\Controller\ModificationServiceDu:saisir',
-//                            ),
+                            'modification-service-du' => array(
+                                'label'  => "Modification de service dû",
+                                'title'  => "Modification de service dû de l'intervenant {id}",
+                                'route'  => 'intervenant/modification-service-du',
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\ModificationServiceDu:saisir',
+                            ),
                             'dossier' => array(
                                 'label'  => "Dossier",
                                 'title'  => "Saisir/modifier un dossier d'intervenant vacataire",

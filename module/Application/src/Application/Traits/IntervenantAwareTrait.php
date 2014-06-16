@@ -1,0 +1,38 @@
+<?php
+
+namespace Application\Traits;
+
+use Application\Entity\Db\Intervenant;
+
+/**
+ * Description of IntervenantAwareTrait
+ *
+ * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ */
+trait IntervenantAwareTrait
+{
+    /**
+     * @var Intervenant 
+     */
+    protected $intervenant;
+    
+    /**
+     * Spécifie l'intervenant concerné.
+     * 
+     * @param Intervenant $intervenant Intervenant concerné
+     */
+    public function setIntervenant(Intervenant $intervenant)
+    {
+        $this->intervenant = $intervenant;
+    }
+    
+    /**
+     * Retourne l'intervenant concerné.
+     * 
+     * @return Intervenant
+     */
+    public function getIntervenant()
+    {
+        return $this->intervenant;
+    }
+}

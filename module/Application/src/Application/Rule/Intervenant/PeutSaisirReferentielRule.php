@@ -6,16 +6,16 @@ use Application\Entity\Db\Intervenant;
 use Application\Acl\ComposanteDbRole;
 
 /**
- * Description of PeutSaisirModificationServiceDuRule
+ * Description of PeutSaisirReferentielRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutSaisirModificationServiceDuRule extends IntervenantRule
+class PeutSaisirReferentielRule extends IntervenantRule
 {
     /**
      * Constructeur.
      * 
-     * @param Intervenant      $intervenant Intervenant dont on modifie le service dû
+     * @param Intervenant      $intervenant Intervenant dont on saisit du référentiel
      * @param ComposanteDbRole $role        Role auteur de la modification
      */
     public function __construct(Intervenant $intervenant, ComposanteDbRole $role)

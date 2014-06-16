@@ -244,16 +244,9 @@ class ServiceReferentielController extends AbstractActionController implements C
         }
         
         // verifications concernant l'intervenant
-        try {
-            $this->getServiceIntervenant()->checkIntervenantForServiceReferentiel($intervenant);
-        }
-        catch (\Common\Exception\DomainException $exc) {
-            $message = $exc->getMessage();
-            if ($role instanceof \Application\Acl\DbRole) {
-                $this->flashMessenger()->addErrorMessage($message);
-                return $this->redirectToChoisirIntervenant($intervenant);
-            }
-            throw new MessageException($message);
+        $rule = new \Application\Rule\Intervenant\PeutSaisirReferentielRule($intervenant, $role);
+        if (!$rule->execute()) {
+            throw new MessageException("La saisie de référentiel n'est pas possible. ", null, new \Exception($rule->getMessage()));
         }
         
         $this->em()->getFilters()->enable("historique");

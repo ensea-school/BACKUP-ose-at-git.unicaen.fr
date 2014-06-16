@@ -52,22 +52,6 @@ class ServiceReferentiel extends AbstractService
     } 
     
     /**
-     * Retourne le requêteur de sommage des services référentiels contraint par les critères spécifiés.
-     *
-     * @param array $filter
-     * @return FinderServiceReferentielSum
-     */
-    public function getFinderSum(array $filter = array())
-    {
-        $qb = new FinderServiceReferentielSum(
-                $this->getEntityManager(), 
-                $this->getContextProvider(),
-                $filter);
-
-        return $qb;
-    } 
-    
-    /**
      * Retourne la classe des entités
      *
      * @return string

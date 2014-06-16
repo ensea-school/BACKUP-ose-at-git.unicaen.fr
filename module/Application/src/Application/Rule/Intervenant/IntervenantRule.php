@@ -4,6 +4,7 @@ namespace Application\Rule\Intervenant;
 
 use Application\Rule\AbstractRule;
 use Application\Entity\Db\Intervenant;
+use Application\Traits\IntervenantAwareTrait;
 
 /**
  * Description of ServiceRule
@@ -12,10 +13,7 @@ use Application\Entity\Db\Intervenant;
  */
 abstract class IntervenantRule extends AbstractRule
 {
-    /**
-     * @var Intervenant 
-     */
-    protected $intervenant;
+    use IntervenantAwareTrait;
     
     /**
      * Constructeur.
@@ -24,16 +22,6 @@ abstract class IntervenantRule extends AbstractRule
      */
     public function __construct(Intervenant $intervenant)
     {
-        $this->intervenant = $intervenant;
-    }
-    
-    /**
-     * Retourne l'intervenant concerné.
-     * 
-     * @return Intervenant
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
+        $this->setIntervenant($intervenant);
     }
 }

@@ -2,13 +2,9 @@
 
 namespace Application\Service;
 
-use Application\Acl\DbRole;
-use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Finder\FinderIntervenantPermanentWithServiceReferentiel;
 use Application\Entity\Db\Finder\FinderIntervenantPermanentWithModificationServiceDu;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\IntervenantPermanent;
-use Common\Exception\DomainException;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Import\Processus\Import;
@@ -85,43 +81,6 @@ class Intervenant extends AbstractEntityService
 
         return $qb;
     }
-    
-    /**
-     * 
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return Intervenant
-     * @throws DomainException
-     */
-    public function checkIntervenantForServiceReferentiel(IntervenantEntity $intervenant)
-    {
-        $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
-        
-        // verif type d'intervenant
-        if (!$intervenant instanceof IntervenantPermanent) {
-            $message = "$intervenant n'est pas un intervenant permanent. " . 
-                       "La saisie de service référentiel n'est possible que pour les intervenants permanents.";
-            if ($role instanceof IntervenantRole) {
-                $message = "Vous n'êtes pas intervenant permanent et " . 
-                           "ne pouvez donc pas saisir de service référentiel.";
-            }
-            throw new DomainException($message);
-        }
-        
-        if ($role instanceof DbRole) {
-            if ($intervenant->getStructure() !== $role->getStructure() 
-                    && $intervenant->getStructure()->getParenteNiv2() !== $role->getStructure()->getParenteNiv2()) {
-                throw new DomainException(
-                        sprintf("L'intervenant %s n'est pas affecté à votre structure de responsabilité (%s) ni à l'une de ses sous-structures.",
-                                $intervenant,
-                                $role->getStructure()));
-            }
-        }
-        
-        return $this;
-    }
-    
-    
 
     /**
      * retourne la classe des entités

@@ -171,7 +171,7 @@ return array(
                             'modulateurs' => array(
                                 'type'    => 'Segment',
                                 'options' => array(
-                                    'route'    => '/:etape/modulateurs',
+                                    'route'    => '/modulateurs/:id',
                                     'constraints' => array(
                                         'etape' => '[0-9]*',
                                     ),
@@ -256,6 +256,16 @@ return array(
                                 'withtarget' => true,
                                 'category' => 'etape',
                             ),
+                            'etape-modulateurs' => array(
+                                'label'    => "Editer les modulateurs liés à cette étape",
+                                'title'    => "Editer les modulateurs liés à cette étape",
+                                'route'    => 'of/etape/modulateurs',
+                                'resource' => 'controller/Application\Controller\OffreFormation\Modulateur:saisir',
+                                'visible'  => false,
+                                'icon'     => 'glyphicon glyphicon-list-alt',
+                                'withtarget' => true,
+                                'category' => 'modulateur',
+                            ),
                         ),
                     ),
                 ),
@@ -335,6 +345,7 @@ return array(
             'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
             'ApplicationElementModulateur'            => 'Application\\Service\\ElementModulateur',
             'ApplicationTypeModulateur'               => 'Application\\Service\\TypeModulateur',
+            'ProcessModulateur'                       => 'Application\\Service\\Process\\Modulateur',
             'FormElementPedagogiqueRechercheHydrator' => 'Application\\Form\\OffreFormation\\ElementPedagogiqueRechercheHydrator',
             'ElementModulateursFormHydrator'          => 'Application\\Form\\OffreFormation\\ElementModulateursHydrator',
             'EtapeModulateursFormHydrator'            => 'Application\\Form\\OffreFormation\\EtapeModulateursHydrator',

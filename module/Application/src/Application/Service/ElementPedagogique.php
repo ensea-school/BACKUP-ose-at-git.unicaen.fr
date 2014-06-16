@@ -341,6 +341,16 @@ EOS;
         }
         
         parent::save($entity);
+        /* Sauvegarde automatique des éléments-modulateurs associés */
+        $serviceElementModulateur = $this->getServiceLocator()->get('applicationElementModulateur');
+        /* @var $serviceElementModulateur ElementModulateur */
+        foreach( $entity->getElementModulateur() as $elementModulateur ){
+            if ($elementModulateur->getRemove()){
+                $serviceElementModulateur->delete($elementModulateur);
+            }else{
+                $serviceElementModulateur->save( $elementModulateur );
+            }
+        }
     }
 
     /**
@@ -368,5 +378,12 @@ EOS;
     protected function getServiceCheminPedagogique()
     {
         return $this->getServiceLocator()->get('ApplicationCheminPedagogique');
+    }
+
+    public function getList(QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy($this->getAlias().'.libelle');
+        return parent::getList($qb, $alias);
     }
 }

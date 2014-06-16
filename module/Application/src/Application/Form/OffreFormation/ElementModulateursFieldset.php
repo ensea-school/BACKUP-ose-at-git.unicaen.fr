@@ -38,6 +38,22 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
     }
 
     /**
+     * Retourne le nombre total de modulateurs que l'on peut renseigner
+     *
+     * @return integer
+     */
+    public function countModulateurs()
+    {
+        $count = 0;
+        foreach( $this->getElements() as $element ){
+            if ($element instanceof Select){
+                $count ++;
+            }
+        }
+        return $count;
+    }
+
+    /**
      * Retourne la liste des types de modulateurs
      *
      * @return \Application\Entity\Db\Modulateur[]
@@ -65,7 +81,12 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
         foreach( $typesModulateurs as $typeModulateur ){
             $element = new Select($typeModulateur->getCode());
             $element->setLabel($typeModulateur->getLibelle());
-            $element->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $typeModulateur->getModulateur() ) );
+            $values = array('' => '');
+            foreach( $typeModulateur->getModulateur() as $modulateur ){
+                $values[$modulateur->getId()] = (string)$modulateur;
+            }
+
+            $element->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $values ) );
             $this->add($element);
         }
     }

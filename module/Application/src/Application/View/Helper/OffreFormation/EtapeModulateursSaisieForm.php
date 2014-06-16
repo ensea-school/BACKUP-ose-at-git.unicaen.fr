@@ -47,10 +47,30 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
      */
     public function render(EtapeModulateursSaisie $form)
     {
-        $elements = $form->getEtape()->getElementPedagogique();
+        $sel = $this->getServiceLocator()->getServiceLocator()->get('applicationElementPedagogique');
+        /* @var $sel \Application\Service\ElementPedagogique */
+
+        $elements = $sel->getList( $sel->finderByEtape($form->getEtape() ) );
         $typesModulateurs = $form->getTypesModulateurs();
-        $res = '<table class="table">';
+
+        if (empty($elements)){
+            return 'Aucun élément n\'est associé à cette étape. Il est donc impossible d\'y associer des modulateurs';
+        }
+        if (0 == $form->countModulateurs()){
+            return 'Aucun modulateur ne correspond aux éléments de cette étape';
+        }
+        if (empty($typesModulateurs)){
+            return 'Aucun modulateur ne peut être associé à cette étape car ils ne sont pas activés pour la structure d\'enseignement correspondante.';
+        }
+
+        $form->prepare();
+        $res = $this->getView()->form()->openTag($form);
+        $res .= '<style>';
+        $res .= '.modal-dialog { width: 60%; }';
+        $res .= '</style>';
+        $res .= '<table class="table table-bordered table-condensed">';
         $res .= '<tr>';
+        $res .= '<th>Elément</th>';
         foreach( $typesModulateurs as $typeModulateur ){
             $res .= '<th>';
             $res .= $typeModulateur->getLibelle();
@@ -59,35 +79,15 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
         $res .= '</tr>';
         foreach( $elements as $element ){
             $res .= '<tr>';
+            $res .= '<th>'.$element.'</th>';
             $formElement = $form->get('EL'.$element->getId());
-            $res .= $this->getView()->elementModulateursSaisieFieldset()->render( $formElement, $typesModulateurs );
+            $res .= $this->getView()->elementModulateursSaisieFieldset()->render( $formElement, $typesModulateurs, true );
             $res .= '</tr>';
         }
-
-        /*$fservice = $form->get('service');
-
-        $interne = $fservice->get('interne-externe')->getValue() == 'service-interne';
-
-        $form->prepare();
-
-        $res = $this->getView()->form()->openTag($form);
-        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
-        }
-        $res .= $this->getView()->formControlGroup($fservice->get('interne-externe'), 'formButtonGroup');
-        $res .= '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
-        $res .= '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->getView()->formControlGroup($fservice->get('etablissement')).'</div>';
-        foreach( $this->getPeriodes() as $periode ){
-            $res .= $this->getView()->volumeHoraireSaisieMultipleFieldset(
-                                            $form->get($periode->getCode()),
-                                            $this->getServiceLocator()->getServiceLocator()->get('applicationService')->getPeriode($fservice->getObject())
-                    );
-        }
-        $res .= '<br />';
-        $res .= $this->getView()->formRow($form->get('submit'));
-        $res .= $this->getView()->formHidden($fservice->get('id'));
-        $res .= $this->getView()->form()->closeTag().'<br />';*/
         $res .= '</table>';
+        $res .= $this->getView()->formHidden($form->get('id'));
+        $res .= $this->getView()->formRow($form->get('submit'));
+        $res .= $this->getView()->form()->closeTag();
         return $res;
     }
 }

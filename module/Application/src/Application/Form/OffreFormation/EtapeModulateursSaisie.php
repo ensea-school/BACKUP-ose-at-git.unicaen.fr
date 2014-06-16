@@ -26,11 +26,14 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
      */
     protected $etape;
 
-
     public function init()
     {
         $hydrator = $this->getServiceLocator()->getServiceLocator()->get('EtapeModulateursFormHydrator');
         $this->setHydrator($hydrator);
+
+        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
+        /* @var $url Zend\View\Helper\Url */
+        $this->setAttribute('action', $url(null, array(), array(), true));
      }
 
     /**
@@ -46,6 +49,22 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
         }
         $serviceTypeModulateur = $this->getServiceLocator()->getServiceLocator()->get('applicationTypeModulateur');
         return $serviceTypeModulateur->getList( $serviceTypeModulateur->finderByStructure($etape->getStructure()) );
+    }
+
+    /**
+     * Retourne le nombre total de modulateurs que l'on peut renseigner
+     *
+     * @return integer
+     */
+    public function countModulateurs()
+    {
+        $count = 0;
+        foreach( $this->getFieldsets() as $fieldset ){
+            if ($fieldset instanceof ElementModulateursFieldset){
+                $count += $fieldset->countModulateurs();
+            }
+        }
+        return $count;
     }
 
     public function getEtape()
@@ -72,6 +91,20 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
             $mf->setName('EL'.$element->getId());
             $this->add($mf);
         }
+
+        $this->add( array(
+            'name' => 'id',
+            'type' => 'Hidden'
+        ) );
+
+        $this->add(array(
+            'name' => 'submit',
+            'type'  => 'Submit',
+            'attributes' => array(
+                'value' => 'Enregistrer',
+                'class' => 'btn btn-primary',
+            ),
+        ));
     }
 
     /**
@@ -102,6 +135,7 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
         }
 
         $elements = $etape->getElementPedagogique();
+        $filters = array();
         foreach( $elements as $element ){
             $filters['EL'.$element->getId()] = array(
                 'required' => false

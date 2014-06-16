@@ -118,6 +118,15 @@ class Etape extends AbstractEntityService
         return $this->canSave($etape,$runEx);
     }
 
+    public function canEditModulateurs($etape, $runEx=false)
+    {
+        if (!$etape instanceof EtapeEntity) {
+            $etape = $this->get($etape);
+        }
+
+        return true; /** @todo à sécuriser!! */
+    }
+
     /**
      * Retourne la liste des étapes
      *

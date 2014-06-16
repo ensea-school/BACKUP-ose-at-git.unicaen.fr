@@ -168,8 +168,15 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php foreach ($etapesOptions as $code => $lib): ?>
                 <!--------------- Boutons de modif d'étape --------------->
                 <?php $actions = null; ?>
-                <?php if ($serviceEtape->canSave($code)): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                <?php if ($serviceEtape->canEditModulateurs($code)): ?>
                 <?php $actions = (string) $mc
+                        ->withTarget($code)
+                        ->addParam('structure', $structure ? $structure->getId() : null)
+                        ->withProp('category', 'modulateur')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+                <?php if ($serviceEtape->canSave($code)): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                <?php $actions .= (string) $mc
                         ->withTarget($code)
                         ->addParam('structure', $structure ? $structure->getId() : null)
                         ->withProp('category', 'etape')
@@ -321,6 +328,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
 <script type="text/javascript">
     $(function() { 
         Etape.init("<?php echo $this->url('of/default', array('action' => 'voirLigne')) ?>"); 
-        ElementPedagogique.init("<?php echo $this->url('of/default', array('action' => 'voirLigne')) ?>"); 
+        ElementPedagogique.init("<?php echo $this->url('of/default', array('action' => 'voirLigne')) ?>");
+        Modulateur.init();
     });
 </script>

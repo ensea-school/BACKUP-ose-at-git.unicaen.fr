@@ -45,7 +45,7 @@ class ElementModulateursSaisieFieldset extends AbstractHelper implements Service
      * @param ElementModulateursFieldset $fieldset
      * @return string
      */
-    public function render(ElementModulateursFieldset $fieldset, array $typesModulateurs)
+    public function render(ElementModulateursFieldset $fieldset, array $typesModulateurs, $inTable=false)
     {
         $element = $fieldset->getElementPedagogique();
         $stm = $this->getServiceTypeModulateur();
@@ -54,33 +54,19 @@ class ElementModulateursSaisieFieldset extends AbstractHelper implements Service
         $elementTypesModulateurs = $stm->getList( $stm->finderByElementPedagogique($element) );
         foreach( $typesModulateurs as $typeModulateur ){
             if (isset($elementTypesModulateurs[$typeModulateur->getId()])){
-                $res .= '<td>'.$typeModulateur->getCode().'</td>';
+                $vh = $this->getView()->formControlGroup();
+                if ($inTable){
+                    $vh->setIncludeLabel(false);
+                    $res .= '<td>';
+                }
+                $res .= $vh->render( $fieldset->get($typeModulateur->getCode()) );
+                if ($inTable){
+                    $res .= '</td>';
+                }
+            }else{
+                $res .= '<td>&nbsp;</td>';
             }
         }
-
-        /*$fservice = $form->get('service');
-
-        $interne = $fservice->get('interne-externe')->getValue() == 'service-interne';
-
-        $form->prepare();
-
-        $res = $this->getView()->form()->openTag($form);
-        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
-        }
-        $res .= $this->getView()->formControlGroup($fservice->get('interne-externe'), 'formButtonGroup');
-        $res .= '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
-        $res .= '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->getView()->formControlGroup($fservice->get('etablissement')).'</div>';
-        foreach( $this->getPeriodes() as $periode ){
-            $res .= $this->getView()->volumeHoraireSaisieMultipleFieldset(
-                                            $form->get($periode->getCode()),
-                                            $this->getServiceLocator()->getServiceLocator()->get('applicationService')->getPeriode($fservice->getObject())
-                    );
-        }
-        $res .= '<br />';
-        $res .= $this->getView()->formRow($form->get('submit'));
-        $res .= $this->getView()->formHidden($fservice->get('id'));
-        $res .= $this->getView()->form()->closeTag().'<br />';*/
         return $res;
     }
 

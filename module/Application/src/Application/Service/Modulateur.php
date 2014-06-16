@@ -56,6 +56,7 @@ class Modulateur extends AbstractEntityService
         $this->join( $serviceElementModulateur, $qb, 'id', 'modulateur' );
 //        $this->join( $serviceTypeModulateur, $qb, 'typeModulateur' ); // pour éviter des sous-reqûetes intempestives par la suite !!
         $serviceElementModulateur->join( $serviceElementPedagogique, $qb, 'element' );
+        $qb->andWhere($serviceElementPedagogique->getAlias().'.id = '.$element->getId());
 
         return $qb;
     }

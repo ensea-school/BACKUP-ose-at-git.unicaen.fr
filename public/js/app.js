@@ -453,3 +453,29 @@ ElementPedagogique.init = function( voirLigneUrl )
         ElementPedagogique.get(event.a.data('id')).onAfterDelete();
     });
 }
+
+
+
+
+function Modulateur( id ) {
+
+    this.id = id;
+
+}
+
+Modulateur.get = function( id )
+{
+    if (null == Modulateur.modulateurs) Modulateur.modulateurs = new Array();
+    if (null == Modulateur.modulateurs[id]) Modulateur.modulateurs[id] = new Etape(id);
+    return Modulateur.modulateurs[id];
+}
+
+Modulateur.init = function()
+{
+    $("body").on("event-of-etape-modulateurs", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+    });
+}
+
+
+

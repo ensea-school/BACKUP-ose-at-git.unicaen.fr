@@ -75,6 +75,8 @@ class TypeModulateur extends AbstractEntityService
                 $or->add($alias.'.id = '.(int)$row['TMID']);
             }
             $qb->andWhere($or);
+        }else{
+            $qb->andWhere( '1 = 2' ); // Pas de types de modulateurs trouvés
         }
         return $qb;
     }
@@ -97,16 +99,15 @@ class TypeModulateur extends AbstractEntityService
         }
 
         /* Filtre par les paramètres intrinsèques à l'élément pédagogique */
-        $codes = array();
-        if (1 == $element->getTauxFoad()){
-            $codes[] = TypeModulateurEntity::FOAD;
-        }
+        $codes = $this->getServiceLocator()->get('ProcessModulateur')->getTypeModulateurCodes($element);
         if (! empty($codes)){
             $or = $qb->expr()->orX();
             foreach( $codes as $code ){
                 $or->add($alias.'.code = \''.(string)$code."'");
             }
             $qb->andWhere($or);
+        }else{
+            $qb->andWhere( '1 = 2' ); // Aucun modulateur ne doit être trouvé
         }
         return $qb;
     }

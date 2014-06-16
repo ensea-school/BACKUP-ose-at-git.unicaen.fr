@@ -23,6 +23,9 @@
     <field name="libelle" type="string" column="LIBELLE" length="120" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
     <field name="tauxFoad" type="integer" column="TAUX_FOAD" nullable="true"/>
+    <field name="fi" type="boolean" column="FI" nullable="true"/>
+    <field name="fc" type="boolean" column="FC" nullable="true"/>
+    <field name="fa" type="boolean" column="FA" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
@@ -62,5 +65,11 @@
       </join-columns>
     </many-to-one>
     <one-to-many field="cheminPedagogique" target-entity="Application\Entity\Db\CheminPedagogique" mapped-by="elementPedagogique" />
+    <!-- NB: Ajout de relations à la main -->
+    <one-to-many field="elementModulateur" target-entity="Application\Entity\Db\ElementModulateur" mapped-by="element">
+        <cascade>
+            <cascade-all/>
+        </cascade>
+    </one-to-many>
   </entity>
 </doctrine-mapping>

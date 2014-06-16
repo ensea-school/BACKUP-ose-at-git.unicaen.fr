@@ -20,12 +20,78 @@ class ElementModulateursHydrator implements HydratorInterface, ServiceLocatorAwa
      * Hydrate $object with the provided $data.
      *
      * @param  array $data
-     * @param  ModulateursListe $object
+     * @param  ElementPedagogique $object
      * @return object
      */
     public function hydrate(array $data, $object)
     {
+        $old = array();
+        $new = array();
 
+        /* Détection des anciennes valeurs */
+        $oldEm = array();
+        foreach( $object->getElementModulateur() as $elementModulateur ){
+            $modulateur = $elementModulateur->getModulateur();
+            $old[] = (int)$modulateur->getId();
+            $oldEm[(int)$modulateur->getId()] = $elementModulateur;
+        }
+        /* Détection des nouvelles valeurs */
+        foreach( $data as $typeModulateurCode => $modulateurId ){
+            if ($modulateurId){
+                $new[] = (int)$modulateurId;
+            }
+        }
+
+        /* Détermination des changements à effectuer */
+        sort($old);
+        sort($new);
+        $insert = array_diff($new,$old);
+        $delete = array_diff($old, $new);
+
+        /* Suppressions */
+        foreach( $delete as $mid ){
+            $oldEm[$mid]->setRemove(true); // Flag de suppression pour les anciens à retirer
+            $object->setHasChanged(true);
+        }
+        /* Créations */
+        foreach( $insert as $mid ){
+            $elementModulateur = $this->getServiceLocator()->get('applicationElementModulateur')->newEntity();
+            $elementModulateur->setElement($object);
+            $elementModulateur->setModulateur( $this->getServiceLocator()->get('applicationModulateur')->get($mid) );
+            $object->addElementModulateur($elementModulateur);
+            $object->setHasChanged(true);
+        }
+
+        
+        /*if (! empty($old) || ! empty($new)){
+            var_dump($object->getLibelle());
+            var_dump($old,$new);
+            var_dump($delete, $insert);
+        }*/
+
+
+
+            /* Création des nouveaux éléments modulateurs *
+
+            if (isset($data[$typeIntervention->getCode()])){
+                $heures = (int)$data[$typeIntervention->getCode()];
+            }else{
+                $heures = 0;
+            }
+
+            $volumeHoraire = $object->getWithTypeIntervention($typeIntervention);
+            if ($heures && $volumeHoraire){
+                $volumeHoraire->setHeures($heures);
+            }elseif( $heures && ! $volumeHoraire){
+                $volumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire')->newEntity();
+                $volumeHoraire->setPeriode($periode);
+                $volumeHoraire->setTypeIntervention($typeIntervention);
+                $volumeHoraire->setHeures($heures);
+                $object->add($volumeHoraire);
+            }elseif( ! $heures && $volumeHoraire ){
+                $object->remove($volumeHoraire);
+            }
+        }*/
         return $object;
     }
 
@@ -44,8 +110,9 @@ class ElementModulateursHydrator implements HydratorInterface, ServiceLocatorAwa
         $qb = $sm->finderByElementPedagogique($object);
         $modulateurs = $sm->getList( $qb );
         foreach( $modulateurs as $modulateur ){
-            $data[$modulateur->getTypeModulateur()->getCode()] = $modulateur->getCode();
+            $data[$modulateur->getTypeModulateur()->getCode()] = $modulateur->getId();
         }
+        
         return $data;
     }
 

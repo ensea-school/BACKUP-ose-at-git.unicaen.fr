@@ -67,6 +67,27 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     protected $tauxFoad;
 
     /**
+     * FI
+     *
+     * @var boolean
+     */
+    protected $fi;
+
+    /**
+     * FC
+     *
+     * @var boolean
+     */
+    protected $fc;
+
+    /**
+     * FA
+     *
+     * @var boolean
+     */
+    protected $fa;
+
+    /**
      * @var \DateTime
      */
     protected $validiteDebut;
@@ -120,6 +141,29 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
      * @var \Application\Entity\Db\Etape
      */
     protected $etape;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $elementModulateur;
+
+    /**
+     * haschanged
+     *
+     * @var boolean
+     */
+    protected $hasChanged;
+
+    public function getHasChanged()
+    {
+        return $this->hasChanged;
+    }
+
+    public function setHasChanged($hasChanged)
+    {
+        $this->hasChanged = $hasChanged;
+        return $this;
+    }
 
     /**
      * Constructor
@@ -265,6 +309,66 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getTauxFoad()
     {
         return $this->tauxFoad;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getFi()
+    {
+        return $this->fi;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getFc()
+    {
+        return $this->fc;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getFa()
+    {
+        return $this->fa;
+    }
+
+    /**
+     *
+     * @param boolean $fi
+     * @return self
+     */
+    public function setFi($fi)
+    {
+        $this->fi = $fi;
+        return $this;
+    }
+
+    /**
+     *
+     * @param boolean $fc
+     * @return self
+     */
+    public function setFc($fc)
+    {
+        $this->fc = $fc;
+        return $this;
+    }
+
+    /**
+     *
+     * @param boolean $fa
+     * @return self
+     */
+    public function setFa($fa)
+    {
+        $this->fa = $fa;
+        return $this;
     }
 
     /**
@@ -515,5 +619,38 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getCheminPedagogique()
     {
         return $this->cheminPedagogique;
+    }
+
+    /**
+     * Add elementModulateur
+     *
+     * @param ElementModulateur $elementModulateur
+     * @return ElementPedagogique
+     */
+    public function addElementModulateur(ElementModulateur $elementModulateur)
+    {
+        $this->elementModulateur[] = $elementModulateur;
+
+        return $this;
+    }
+
+    /**
+     * Remove elementModulateur
+     *
+     * @param ElementModulateur $elementModulateur
+     */
+    public function removeElementModulateur(ElementModulateur $elementModulateur)
+    {
+        $this->elementModulateur->removeElement($elementModulateur);
+    }
+
+    /**
+     * Get elementModulateur
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getElementModulateur()
+    {
+        return $this->elementModulateur;
     }
 }

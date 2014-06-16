@@ -47,7 +47,7 @@ class EtapeModulateursHydrator implements HydratorInterface, ServiceLocatorAware
 
         $data = array();
 
-        $elements = $object->getElementPedagogique();
+        $elements = $sel->getList( $sel->finderByEtape($object) );
         foreach( $elements as $element ){
             $data['EL'.$element->getId()] = $element;
         }

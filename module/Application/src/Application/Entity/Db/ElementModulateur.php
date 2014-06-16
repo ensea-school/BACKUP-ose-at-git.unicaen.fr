@@ -28,6 +28,11 @@ class ElementModulateur implements HistoriqueAwareInterface
     protected $id;
 
     /**
+     * @var \Application\Entity\Db\Annee
+     */
+    protected $annee;
+
+    /**
      * @var \Application\Entity\Db\Modulateur
      */
     protected $modulateur;
@@ -52,6 +57,27 @@ class ElementModulateur implements HistoriqueAwareInterface
      */
     protected $histoCreateur;
 
+    /**
+     * remove
+     *
+     * @var boolean
+     */
+    protected $remove=false;
+
+
+    /**
+     * Détermine si le volume horaire a vocation à être supprimé ou non
+     */
+    public function setRemove($remove)
+    {
+        $this->remove = (boolean)$remove;
+        return $this;
+    }
+
+    public function getRemove()
+    {
+        return $this->remove;
+    }
 
     /**
      * Set histoCreation
@@ -130,6 +156,29 @@ class ElementModulateur implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set annee
+     *
+     * @param \Application\Entity\Db\Annee $annee
+     * @return ElementModulateur
+     */
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get annee
+     *
+     * @return \Application\Entity\Db\Annee
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
     }
 
     /**

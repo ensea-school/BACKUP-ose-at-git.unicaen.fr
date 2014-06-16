@@ -29,4 +29,16 @@ class ElementModulateur extends AbstractEntityService
     {
         return 'epmod';
     }
+
+    /**
+     * Retourne une nouvelle entité, initialisée avec les bons paramètres
+     * @return \Application\Entity\Db\ElementModulateur
+     */
+    public function newEntity()
+    {
+        $entity = parent::newEntity();
+        // Initialisation de l'année en cours
+        $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
+        return $entity;
+    }
 }

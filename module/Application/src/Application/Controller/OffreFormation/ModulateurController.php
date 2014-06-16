@@ -4,7 +4,7 @@ namespace Application\Controller\OffreFormation;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\ElementPedagogique as ElementPedagogiqueService;
-use Application\Service\Etape as EtapeService;
+use Application\Exception\DbException;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 
@@ -22,7 +22,8 @@ class ModulateurController extends AbstractActionController implements ContextPr
 
     protected function saisirAction()
     {
-        $etape = $this->context()->etapeFromRoute();
+        $etape = $this->context()->etapeFromRoute('id');
+        /* @var $etape \Application\Entity\Db\Etape */
 
         if (! $etape){
             throw new \Common\Exception\RuntimeException('L\'étape n\'a pas été spécifiée ou bien elle est invalide.');
@@ -38,7 +39,12 @@ class ModulateurController extends AbstractActionController implements ContextPr
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 try {
-                    //$service->save($entity);
+                    $elements = $etape->getElementPedagogique();
+                    foreach( $elements as $element ){
+                        if ($element->getHasChanged()){
+                            $this->getServiceElementPedagogique()->save($element);
+                        }
+                    }
                 }
                 catch (\Exception $e) {
                     $e        = DbException::translate($e);
@@ -60,16 +66,6 @@ class ModulateurController extends AbstractActionController implements ContextPr
     protected function getServiceElementPedagogique()
     {
         return $this->getServiceLocator()->get('applicationElementPedagogique');
-    }
-
-    /**
-     * Retourne le service Etape
-     *
-     * @return EtapeService
-     */
-    protected function getServiceEtape()
-    {
-        return $this->getServiceLocator()->get('applicationEtape');
     }
 
     /**

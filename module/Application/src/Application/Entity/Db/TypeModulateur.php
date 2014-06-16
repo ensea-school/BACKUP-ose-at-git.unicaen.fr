@@ -7,8 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeModulateur
  */
-class TypeModulateur
+class TypeModulateur implements HistoriqueAwareInterface
 {
+    const FOAD = 'FOAD'; // Code du modulateur FOAD
+    const FC = 'FC'; // Code du modulateur FC
+
     /**
      * @var string
      */
@@ -90,6 +93,11 @@ class TypeModulateur
     public function __construct()
     {
         $this->modulateur = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getLibelle();
     }
 
     /**

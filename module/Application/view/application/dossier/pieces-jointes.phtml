@@ -9,9 +9,36 @@
     div.multicheckbox label { display: block; font-weight: normal; width: 250px; text-align: center; }
 </style>
 
-<?php echo $this->form()->openTag($form) ?>
-<?php echo $this->formControlGroup($form->get('pj')) ?>
-<?php echo $this->formElement($form->get('security')) ?>
-<hr />
-<?php echo $form->has('submit') ? $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')) : null ?>
-<?php echo $this->form()->closeTag() ?>
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $this->form()->openTag($form) ?>
+        <?php echo $this->formControlGroup($form->get('pj')) ?>
+        <?php echo $this->formElement($form->get('security')) ?>
+        <hr />
+        <?php echo $form->has('submit') ? $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')) : null ?>
+        <?php echo $this->form()->closeTag() ?>
+    </div>
+    
+    <div class="col-md-6">
+        <h3>Destinataires des pièces justificatives</h3>
+        <?php if (!count($destinataires)): ?>
+            <?php 
+            $contact = '<a href="' . $this->url('contact') . '">Contact</a>';
+            echo $this->messenger()->setMessage(
+                    "<strong>Oups!</strong> L'application n'a pas été en mesure de déterminer la liste des destinataires compétents, "
+                    . "merci d'utiliser la rubrique $contact en bas de cette page pour signaler cette anomalie.", 'danger');
+            ?>
+        <?php else: ?>
+            <ul>
+            <?php foreach ($destinataires as $role): /* @var $role \Application\Entity\Db\Role */ ?>
+                <li>
+                    <?php 
+                    $mailto = sprintf('<a href="mailto:%s">%s</a>', $mail = $role->getPersonnel()->getEmail(), $mail);
+                    echo sprintf("%s : %s", $role->getPersonnel(), $mailto);
+                    ?>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+</div>

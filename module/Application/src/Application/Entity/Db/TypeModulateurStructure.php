@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeModulateurStructure
  */
-class TypeModulateurStructure
+class TypeModulateurStructure implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime

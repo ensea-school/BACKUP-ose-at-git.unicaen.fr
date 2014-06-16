@@ -100,7 +100,9 @@ class PieceJointeProcess extends AbstractService
             $obligatoire = $ligne->isObligatoire($totalHETD);
             if ($obligatoire) {
                 $obligatoire = "Obligatoire";
-                $obligatoire .= $ligne->isSeuilHETDDepasse($totalHETD) ? " car HETD = {$totalHETD}h > {$seuilHETD}h" : null;
+                $obligatoire .= $ligne->isSeuilHETDDepasse($totalHETD) ? 
+                        " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">{$totalHETD}h</abbr> > {$seuilHETD}h" : 
+                        null;
             }
             else {
                 $obligatoire = "Facultatif";
@@ -291,12 +293,28 @@ class PieceJointeProcess extends AbstractService
     }
     
     /**
-     * @deprecated Implémenter le vrai calcul d'HETD 
+     * @deprecated Implémenter le vrai calcul d'HETD ?
      */
     private function getTotalHETDIntervenant()
     {
-        $values = array(10.6, 20.0, 30.7);
-        return $values[rand(0, 2)];
+        return $this->getServiceService()->getTotalHeuresReelles($this->getIntervenant());
+    }
+    
+    /**
+     * Recherche les destinataires des pièces justificatives : ce sont les responsables admins
+     * de la structure d'affectation principale de l'intervenant.
+     * 
+     * NB: on retourne des entités Role et non des entités Personnel : cela permet de disposer
+     * ultérieurement du type de rôle.
+     * 
+     * @return \Application\Entity\Db\Role[]
+     */
+    public function getRolesDestinatairesPiecesJointes()
+    {
+        $qb = $this->getServiceRole()->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RA);
+        $qb = $this->getServiceRole()->finderByStructure($this->getIntervenant()->getStructure(), $qb);
+        
+        return $this->getServiceRole()->getList($qb);
     }
     
     /**
@@ -329,6 +347,22 @@ class PieceJointeProcess extends AbstractService
     private function getServicePieceJointe()
     {
         return $this->getServiceLocator()->get('applicationPieceJointe');
+    }
+    
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->get('ApplicationService');
+    }
+    
+    /**
+     * @return \Application\Service\Role
+     */
+    private function getServiceRole()
+    {
+        return $this->getServiceLocator()->get('applicationRole');
     }
     
     /**

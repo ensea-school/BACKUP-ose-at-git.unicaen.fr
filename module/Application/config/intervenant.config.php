@@ -170,6 +170,7 @@ return array(
                                 'title'  => "Pièces justificatives du dossier de l'intervenant",
                                 'route'  => 'intervenant/pieces-jointes',
                                 'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Dossier:pieces-jointes',
                             ),
                         ),
                     ),

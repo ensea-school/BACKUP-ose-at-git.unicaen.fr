@@ -10,6 +10,8 @@ use Zend\Permissions\Acl\Role\RoleInterface;
 class TypeRole implements HistoriqueAwareInterface, RoleInterface
 {
     use HistoriqueAwareTrait;
+ 
+    const CODE_RA = 'RA';
     
     /**
      * @var string

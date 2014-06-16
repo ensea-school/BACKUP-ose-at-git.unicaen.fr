@@ -6,6 +6,7 @@ use Zend\Filter\AbstractFilter;
 use UnicaenApp\Entity\Ldap\People;
 use Application\Entity\Db\IntervenantInterface;
 use Application\Entity\Db\Utilisateur;
+use Application\Entity\Db\Personnel;
 
 /**
  * Formatte le nom complet d'un individu (nom usuel, patronymique, etc.)
@@ -65,6 +66,13 @@ class NomCompletFormatter extends AbstractFilter
             $nomPatro = $value->getDisplayName();
             $prenom   = '';
             $civilite = '';
+        }
+        else if ($value instanceof Personnel) {
+            /* @var $value Personnel */
+            $nomUsuel = $value->getNomUsuel();
+            $nomPatro = $value->getNomPatronymique();
+            $prenom   = $value->getPrenom();
+            $civilite = $value->getCiviliteToString();
         }
         else if ($value instanceof \stdClass) {
             foreach (array('nomUsuel', 'nomPatronymique', 'prenom', 'civilite') as $prop) {

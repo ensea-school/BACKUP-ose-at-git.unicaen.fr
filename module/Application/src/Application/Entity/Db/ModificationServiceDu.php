@@ -2,17 +2,46 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * ModificationServiceDu
  */
-class ModificationServiceDu
+class ModificationServiceDu implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
+        
+        return sprintf("%s : %s (%sh)%s", 
+                $this->getAnnee(), 
+                $this->getMotif(), 
+                $heures, 
+                ($com = $this->getCommentaires()) ? " - $com" : null);
+    }
+
+    /**
+     * 
+     * @param \Application\Entity\Db\Annee $annee
+     */
+    public function __construct(Annee $annee = null)
+    {
+        $this->setValiditeDebut(new \DateTime());
+        $this->setAnnee($annee);
+    }
+    
     /**
      * @var float
      */
     protected $heures;
+    
+    /**
+     * @var string
+     */
+    protected $commentaires;
 
     /**
      * @var \DateTime
@@ -60,7 +89,7 @@ class ModificationServiceDu
     protected $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\MotifModificationService
+     * @var \Application\Entity\Db\MotifModificationServiceDu
      */
     protected $motif;
 
@@ -96,6 +125,29 @@ class ModificationServiceDu
     public function getHeures()
     {
         return $this->heures;
+    }
+
+    /**
+     * Set commentaires
+     *
+     * @param string $commentaires
+     * @return ModificationServiceDu
+     */
+    public function setCommentaires($commentaires)
+    {
+        $this->commentaires = $commentaires;
+
+        return $this;
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return string 
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
     }
 
     /**
@@ -295,10 +347,10 @@ class ModificationServiceDu
     /**
      * Set motif
      *
-     * @param \Application\Entity\Db\MotifModificationService $motif
+     * @param \Application\Entity\Db\MotifModificationServiceDu $motif
      * @return ModificationServiceDu
      */
-    public function setMotif(\Application\Entity\Db\MotifModificationService $motif = null)
+    public function setMotif(\Application\Entity\Db\MotifModificationServiceDu $motif = null)
     {
         $this->motif = $motif;
 
@@ -308,7 +360,7 @@ class ModificationServiceDu
     /**
      * Get motif
      *
-     * @return \Application\Entity\Db\MotifModificationService 
+     * @return \Application\Entity\Db\MotifModificationServiceDu 
      */
     public function getMotif()
     {

@@ -188,8 +188,11 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
                     array(
                         'name' => 'Zend\Validator\NotEmpty',
                         'options' => array(
+                            'string',
+                            'integer',
+                            'zero',
                             'messages' => array(
-                                \Zend\Validator\NotEmpty::IS_EMPTY => "Le nombre d'heures est requis",
+                                \Zend\Validator\NotEmpty::IS_EMPTY => "Un nombre d'heures non nul est requis",
                             ),
                         ),
                     ),

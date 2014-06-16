@@ -60,6 +60,19 @@ return array(
                             ),
                         ),
                     ),
+                    'modification-service-du' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:id/modification-service-du',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'ModificationServiceDu',
+                                'action'     => 'saisir',
+                            ),
+                        ),
+                    ),
                     'saisir-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -131,6 +144,13 @@ return array(
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:voir',
                             ),
+                            'modification-service-du' => array(
+                                'label'  => "Modification de service dû",
+                                'title'  => "Modification de service dû de l'intervenant {id}",
+                                'route'  => 'intervenant/modification-service-du',
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\ModificationServiceDu:saisir',
+                            ),
                             'dossier' => array(
                                 'label'  => "Dossier",
                                 'title'  => "Saisir/modifier un dossier d'intervenant vacataire",
@@ -146,8 +166,8 @@ return array(
                                 'resource' => 'controller/Application\Controller\Service:intervenant',
                             ),
                             'pieces-jointes' => array(
-                                'label'  => "Pièces jointes",
-                                'title'  => "Pièces jointes du dossier de l'intervenant",
+                                'label'  => "Pièces justificatives",
+                                'title'  => "Pièces justificatives du dossier de l'intervenant",
                                 'route'  => 'intervenant/pieces-jointes',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Dossier:pieces-jointes',
@@ -176,13 +196,19 @@ return array(
                     'action'     => array('voir', 'modifier', 'pieces-jointes'),
                     'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
+                array(
+                    'controller' => 'Application\Controller\ModificationServiceDu',
+                    'action'     => array('saisir'),
+                    'roles'      => array(ComposanteRole::ROLE_ID),
+                ),
             ),
         ),
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Intervenant' => 'Application\Controller\IntervenantController',
-            'Application\Controller\Dossier'     => 'Application\Controller\DossierController',
+            'Application\Controller\Intervenant'           => 'Application\Controller\IntervenantController',
+            'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
+            'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
         ),
         'aliases' => array(
             'IntervenantController' => 'Application\Controller\Intervenant',
@@ -207,6 +233,9 @@ return array(
     'form_elements' => array(
         'invokables' => array(
             'IntervenantDossier' => 'Application\Form\Intervenant\Dossier',
+            'IntervenantModificationServiceDuForm'          => 'Application\Form\Intervenant\ModificationServiceDuForm',
+            'IntervenantModificationServiceDuFieldset'      => 'Application\Form\Intervenant\ModificationServiceDuFieldset',
+            'IntervenantMotifModificationServiceDuFieldset' => 'Application\Form\Intervenant\MotifModificationServiceDuFieldset',
         ),
     ),
 );

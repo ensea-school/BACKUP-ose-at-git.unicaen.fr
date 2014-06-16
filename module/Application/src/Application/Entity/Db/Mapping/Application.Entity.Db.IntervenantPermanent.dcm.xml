@@ -24,6 +24,10 @@
         <join-column name="CORPS_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu" mapped-by="intervenant" />
+    <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu" mapped-by="intervenant">
+        <cascade>
+            <cascade-persist/>
+        </cascade>
+    </one-to-many>
   </entity>
 </doctrine-mapping>

@@ -37,10 +37,7 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
     {
 //        var_dump(get_class($intervenant), "".$annee, count($intervenant->getServiceReferentiel($annee)));
         
-        $repoMotif = $this->getEntityManager()->getRepository('Application\Entity\Db\MotifModificationServiceDu'); /* @var $repoMotif \Doctrine\ORM\EntityRepository */
-        $motifs    = $repoMotif->findBy(array('validiteFin' => null), array('libelle' => 'asc'));
-        
-        $this->setHydrator(new MotifModificationServiceDuHydrator($motifs))
+        $this->setHydrator(new MotifModificationServiceDuHydrator($this->getMotifs()))
              ->setObject(new ModificationServiceDu());
 
 //        $this->setLabel("Motif");
@@ -48,11 +45,11 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
         $this->add(array(
             'name'       => 'motif',
             'options'    => array(
-                'label' => "Motif :",
+                'label' => "Motif",
             ),
             'attributes' => array(
                 'title' => "Motif",
-                'class' => 'modification-service-du modification-service-du-motif input-sm',
+                'class' => 'modification-service-du modification-service-du-motif',
             ),
             'type'       => 'Select',
         ));
@@ -60,14 +57,26 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
         $this->add(array(
             'name'       => 'heures',
             'options'    => array(
-                'label' => "Nombre d'heures :",
+                'label' => "Nombre d'heures",
             ),
             'attributes' => array(
                 'value' => "0",
                 'title' => "Nombre d'heures",
-                'class' => 'modification-service-du modification-service-du-heures input-sm'
+                'class' => 'modification-service-du modification-service-du-heures'
             ),
             'type'       => 'Text',
+        ));
+
+        $this->add(array(
+            'name'       => 'commentaires',
+            'options'    => array(
+                'label' => "Commentaires",
+            ),
+            'attributes' => array(
+                'title' => "Commentaires éventuels",
+                'class' => 'modification-service-du modification-service-du-commentaires'
+            ),
+            'type'       => 'Textarea',
         ));
 
         $this->add(array(
@@ -85,7 +94,7 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
         // liste déroulante des motifs
         $options = array();
         $options[''] = "(Sélectionnez un motif...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
-        foreach ($this->motifsPossibles as $item) {
+        foreach ($this->getMotifs() as $item) {
             $options[$item->getId()] = "" . $item;
         }
         $this->get('motif')->setValueOptions($options);//->setEmptyOption("(Sélectionnez une motif...)");
@@ -93,6 +102,18 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
         return $this;
     }
 
+    protected function getMotifs()
+    {
+        if (null === $this->motifsPossibles) {
+            $repoMotif = $this->getEntityManager()->getRepository('Application\Entity\Db\MotifModificationServiceDu'); /* @var $repoMotif \Doctrine\ORM\EntityRepository */
+            $this->motifsPossibles = $repoMotif->findBy(array('validiteFin' => null), array('libelle' => 'asc'));
+            if (!$this->motifsPossibles) {
+                throw new \Common\Exception\RuntimeException("Aucun motif de modification de service dû trouvé dans la base.");
+            }
+        }
+        return $this->motifsPossibles;
+    }
+    
     /**
      * 
      * @return \Zend\Validator\LessThan|null
@@ -105,7 +126,7 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
         $p  = function($item) use ($id) {
             return $id == $item->getId();
         };
-        $motif = $this->motifsPossibles->filter($p)->first(); /* @var $motif MotifModificationService */
+        $motif = current(array_filter($this->getMotifs(), $p)); /* @var $motif MotifModificationService */
         if ($motif) {
             $v = new LessThan(array('max' => $max = (float)$motif->getPlafond(), 'inclusive' => true));
             $v->setMessages(array(LessThan::NOT_LESS_INCLUSIVE => "Le plafond pour ce motif est de $max"));
@@ -146,8 +167,11 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
                     array(
                         'name' => 'Zend\Validator\NotEmpty',
                         'options' => array(
+                            'string',
+                            'integer',
+                            'zero',
                             'messages' => array(
-                                \Zend\Validator\NotEmpty::IS_EMPTY => "Le nombre d'heures est requis",
+                                \Zend\Validator\NotEmpty::IS_EMPTY => "Un nombre d'heures non nul est requis",
                             ),
                         ),
                     ),
@@ -155,9 +179,9 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
             ),
         );
         
-        if (($validator = $this->getValidatorHeures())) {
-            $specs['heures']['validators'][] = $validator;
-        }
+//        if (($validator = $this->getValidatorHeures())) {
+//            $specs['heures']['validators'][] = $validator;
+//        }
         
         return $specs;
     }
@@ -191,8 +215,9 @@ class MotifModificationServiceDuHydrator implements HydratorInterface
     public function extract($object)
     {
         return array(
-            'motif'  => $object->getMotif()->getId(),
-            'heures'    => floatval($object->getHeures()),
+            'motif'        => $object->getMotif()->getId(),
+            'heures'       => floatval($object->getHeures()),
+            'commentaires' => $object->getCommentaires(),
         );
     }
 
@@ -207,7 +232,8 @@ class MotifModificationServiceDuHydrator implements HydratorInterface
     {
         $object
                 ->setMotif($this->motifsPossibles[intval($data['motif'])])
-                ->setHeures(floatval($data['heures']));
+                ->setHeures(floatval($data['heures']))
+                ->setCommentaires($data['commentaires'] ?: null);
         
         return $object;
     }

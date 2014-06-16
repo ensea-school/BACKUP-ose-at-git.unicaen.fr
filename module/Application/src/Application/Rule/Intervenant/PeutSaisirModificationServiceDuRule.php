@@ -27,7 +27,7 @@ class PeutSaisirModificationServiceDuRule extends IntervenantRule
         $statut = $this->getIntervenant()->getStatut();
         
         if (!$this->getIntervenant() instanceof IntervenantPermanent || !$statut->estPermanent()) {
-            $this->setMessage(sprintf("%s n'est pas un intervenant permanent."));
+            $this->setMessage(sprintf("%s n'est pas un intervenant permanent.", $this->getIntervenant()));
             return false;
         }
         

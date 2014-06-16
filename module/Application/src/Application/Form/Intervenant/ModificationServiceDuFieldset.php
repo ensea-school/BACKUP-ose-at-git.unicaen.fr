@@ -11,20 +11,18 @@ use Application\Entity\Db\IntervenantPermanent;
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see FonctionModificationServiceDuFieldset
  */
-class ModificationServiceDuFieldset extends Fieldset
+class ModificationServiceDuFieldset extends Fieldset implements \Zend\ServiceManager\ServiceLocatorAwareInterface
 {
-    /**
-     * @param  null|int|string  $name    Optional name for the element
-     * @param  array            $options Optional options for the element
-     */
-    public function __construct($name = null, $options = array())
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    
+    public function init()
     {
-        parent::__construct($name, $options);
-        
         $this
                 ->setHydrator(new ModificationServiceDuFieldsetHydrator())
                 ->setObject(new IntervenantPermanent());
 
+        $targetElement = $this->getServiceLocator()->get('IntervenantMotifModificationServiceDuFieldset');
+        
         $this->add(array(
             'type' => 'Zend\Form\Element\Collection',
             'name' => 'modificationServiceDu',
@@ -34,9 +32,7 @@ class ModificationServiceDuFieldset extends Fieldset
                 'should_create_template' => true,
                 'allow_add' => true,
                 'allow_remove' => true,
-                'target_element' => array(
-                    'type' => 'Application\Form\Intervenant\MotifModificationServiceDuFieldset',
-                ),
+                'target_element' => $targetElement,
             ),
         ));   
     }

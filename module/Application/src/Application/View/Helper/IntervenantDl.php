@@ -196,7 +196,7 @@ class IntervenantDl extends AbstractDl
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-metier'), implode(PHP_EOL, $metier)) . PHP_EOL;
  
         /**
-         * Fonctions référentiel
+         * Référentiel
          */
         
         $fonctions = array();
@@ -215,6 +215,27 @@ class IntervenantDl extends AbstractDl
         }
         
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-fonction'), implode(PHP_EOL, $fonctions)) . PHP_EOL;
+ 
+        /**
+         * Modification de service dû
+         */
+        
+        $modificationsServiceDu = array();
+        
+        if (!$this->short) {
+            if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
+                $msd = "Aucune";
+                if (($modifs = $this->entity->getModificationServiceDuToStrings())) {
+                    $msd = $this->getView()->htmlList($modifs);
+                }
+                $modificationsServiceDu[] = sprintf($tplDtdd,
+                    'Modif. de service dû :', 
+                    $msd
+                );
+            }
+        }
+        
+        $html .= sprintf($this->getTemplateDl('intervenant intervenant-modif-servie-du'), implode(PHP_EOL, $modificationsServiceDu)) . PHP_EOL;
         
         /**
          * Historique

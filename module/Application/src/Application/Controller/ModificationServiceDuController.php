@@ -55,7 +55,7 @@ class ModificationServiceDuController extends AbstractActionController implement
         // NB: patch pour permettre de vider toutes les modifs de service dû
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
-            if (empty($data['intervenant']['modificationServiceDu'])) {
+            if (empty($data['fs']['modificationServiceDu'])) {
                 foreach ($intervenant->getModificationServiceDu($annee) as $sr) {
                     $sr->setHistoDestruction(new \DateTime());
                     $this->em()->persist($sr);
@@ -66,6 +66,7 @@ class ModificationServiceDuController extends AbstractActionController implement
         }
         
         $form = $this->getServiceLocator()->get('form_element_manager')->get('IntervenantModificationServiceDuForm');
+        /* @var $form \Application\Form\Intervenant\ModificationServiceDuForm */
         $form->setAttribute('action', $this->getRequest()->getRequestUri());
         $form->getBaseFieldset()->getHydrator()->setAnnee($annee);
         $form->bind($intervenant);
@@ -79,8 +80,8 @@ class ModificationServiceDuController extends AbstractActionController implement
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost()->toArray();
-            if (empty($data['intervenant']['modificationServiceDu'])) {
-                $data['intervenant']['modificationServiceDu'] = array();
+            if (empty($data['fs']['modificationServiceDu'])) {
+                $data['fs']['modificationServiceDu'] = array();
             }
 //            var_dump($data);
             $form->setData($data);
@@ -91,7 +92,7 @@ class ModificationServiceDuController extends AbstractActionController implement
                         exit;
                     }
                     $this->flashMessenger()->addSuccessMessage(sprintf("Modifications de service dû de $intervenant enregistrées avec succès."));
-                    $this->redirect()->toRoute('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
+                    $this->redirect()->toRoute(null, array(), array(), true);
                 }
                 catch (\Doctrine\DBAL\DBALException $exc) {
                     $exception = new RuntimeException("Impossible d'enregistrer les modifications de service dû.", null, $exc->getPrevious());
@@ -107,9 +108,7 @@ class ModificationServiceDuController extends AbstractActionController implement
         $variables['context'] = $context;
                 
         $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setTemplate('application/modification-service-du/saisir')
-                ->setVariables($variables);
+        $viewModel->setVariables($variables);
         
         return $viewModel;
     }

@@ -13,6 +13,7 @@
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="commentaires" type="string" column="COMMENTAIRES" length="1024" nullable="true"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
@@ -33,7 +34,7 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="motif" target-entity="Application\Entity\Db\MotifModificationService">
+    <many-to-one field="motif" target-entity="Application\Entity\Db\MotifModificationServiceDu">
       <join-columns>
         <join-column name="MOTIF_ID" referenced-column-name="ID"/>
       </join-columns>

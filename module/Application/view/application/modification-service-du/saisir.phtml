@@ -1,7 +1,9 @@
 <h1><?php echo $title ?></h1>
 
+<?php echo $this->messenger(true) ?>
+
 <style>
-    form.modification-service-du .form-group { float: left; }
+    form.modification-service-du .form-group { float: left; margin-right: 1em; }
     form.modification-service-du input { width: 100px; }
     form.modification-service-du input[type=submit] { margin-top: 2em; }
     button.modification-service-du-ajouter   { display: block; margin-top: 0.5em; }
@@ -12,14 +14,14 @@
 
 <?php
 $form->setAttribute('id', $formId = uniqid('form-'))->prepare();
-$modificationServiceDu = $form->get('intervenant');
+$modificationServiceDu = $form->get('fs');
 ?>
 
 <?php 
 echo $this->form()->openTag($form);
 echo $this->formCollection()->setElementHelper($this->formControlGroup())->render($modificationServiceDu->get('modificationServiceDu'));
 ?> 
-<div id="modification-service-du-comptage"></div>
+<div class="text-info" id="modification-service-du-comptage"></div>
 <?php 
 echo $this->formButton($form->get('ajouter'));
 echo $this->formHidden($form->get('security'));
@@ -37,78 +39,68 @@ echo $this->form()->closeTag();
     });
     $("body").on('click', "#" + formId + " button.modification-service-du-supprimer", function() {
         if (getLigneCurrentCount() > 0) {
-            removeFonction($(this));
+            removeLigne($(this));
         }  
         return false; 
     });
         
     $(function() {
-        updateFonctionCounter();
+        updateLigneCounter();
         $(":input").tooltip();
-        
-        $('body').on('change', "#" + formId + " select.modification-service-du-motif", function() {
-            var select = $(this); // select de référence, dont la valeur a changé
-            if (select.val() === '') {
-                return;
-            }
-            applySelectUnicity(select);
-        });
+        $('body')
+                .on('change', "#" + formId + " select.modification-service-du-motif", function() {
+                    var select = $(this); // select de référence, dont la valeur a changé
+                    if (select.val() === '') {
+                        return;
+                    }
+                })
+                .on('change', "#" + formId + " input.modification-service-du-heures", function() {
+                    updateLigneCounter();
+                });
     });
-    
-    /**
-     * 
-     * @param object changedSelect Select de référence, dont la valeur a changé
-     * @param object targetSelect  Si spécifié, seul select cible à mettre à jour
-     * @returns void
-     */
-    function applySelectUnicity(changedSelect, targetSelect)
-    {
-        if (!targetSelect) {
-            targetSelect = $("#" + formId + " select");
-        }
-        // parcours des select (autre que celui de référence)
-        targetSelect.not(changedSelect).each(function() {
-            $("option", this).each(function() {
-                // cache les items identiques à celui sélectionné dans le select de référence
-                if ($(this).val() === changedSelect.val()) {
-                    $(this).data('from', changedSelect).hide();
-                    //console.log('hide ' + $(this).text(), $(this).data('from'));
-                }
-                // fait réapparaître les items ayant été cachés précédemment
-                else if ($(this).is(":hidden") && $(this).data() && $(this).data('from').is(changedSelect)) {
-                    $(this).removeData('from').show();
-                    //console.log('show ' + $(this).text(), $(this).data('from'));
-                }
-            });
-        });
-    }
     
     function addLigne() 
     {
         var currentCount = getLigneCurrentCount();
         var template = $('> fieldset > span', form).data('template');
-        var element = $(template.replace(/__index__/g, currentCount));console.log(template, element, currentCount);
+        var element = $(template.replace(/__index__/g, currentCount));
         $('> fieldset', form).append(element.fadeIn());
-        $("select.modification-service-du-motif").not($("select", element)).each(function() { applySelectUnicity($(this), $("select", element)); });
-        updateFonctionCounter();
+        updateLigneCounter();
         return element;
     }
     
-    function removeFonction(button) 
+    function removeLigne(button) 
     {
         $(button).parentsUntil('fieldset').parent().remove();
-        updateFonctionCounter();
+        updateLigneCounter();
         return false;
+    }
+    
+    function getLignes()
+    {
+        return $('> fieldset > fieldset', form);
     }
     
     function getLigneCurrentCount()
     {
-        return $('> fieldset > fieldset', form).length;;
+        return getLignes().length;
     }
     
-    function updateFonctionCounter() 
+    function getLigneCurrentTotal()
     {
+        var total = 0;
+        $.each(getLignes(), function(index, ligne) { total = total + parseFloat($(".modification-service-du-heures", ligne).val()); });
+        return total;
+    }
+    
+    function updateLigneCounter() 
+    {
+        var msg = "Aucune modification de service dû.";
         var currentCount = getLigneCurrentCount();
-        $("#modification-service-du-comptage").html(currentCount ? "" : "Aucune modification de service dû.");
+        if (currentCount) {
+            var total = getLigneCurrentTotal();
+            msg = currentCount + " modification(s) de service dû (total = " + total + ").";
+        }
+        $("#modification-service-du-comptage").html(msg);
     }
 </script>

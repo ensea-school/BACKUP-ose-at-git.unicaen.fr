@@ -14,10 +14,11 @@ use Application\Entity\Db\IntervenantPermanent;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, \UnicaenApp\Service\EntityManagerAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
+    use \UnicaenApp\Service\EntityManagerAwareTrait;
 
     /**
      * @param  null|int|string  $name    Optional name for the element
@@ -28,7 +29,7 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
         parent::__construct($name, $options);
         
         $this   ->setAttribute('method', 'post')
-                ->setAttribute('class', 'modif-service-du')
+                ->setAttribute('class', 'modification-service-du')
                 ->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods(false))
                 ->setInputFilter(new \Zend\InputFilter\InputFilter())
 //                ->setPreferFormInputFilter(false)
@@ -41,9 +42,9 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
      */
     public function init()
     {
-        $fsIntervenant = new ModificationServiceDuFieldset('intervenant');
-        $fsIntervenant->setUseAsBaseFieldset(true);
-        $this->add($fsIntervenant);
+        $fs = $this->getServiceLocator()->get("IntervenantModificationServiceDuFieldset"); /* @var $fs ModificationServiceDuFieldset */
+        $fs->setUseAsBaseFieldset(true);
+        $this->add($fs, array('name' => 'fs'));
         
         $this->add(array(
             'type' => 'Button',
@@ -53,7 +54,7 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
             ),
             'attributes' => array(
                 'title' => "Ajouter une modification de service dû",
-                'class' => 'modif-service-du modif-service-du-ajouter btn btn-default btn-xs'
+                'class' => 'modification-service-du modification-service-du-ajouter btn btn-default btn-xs'
             ),
         ));
          

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * MotifModificationService
  */
-class MotifModificationService
+class MotifModificationServiceDu
 {
     /**
      * Retourne la représentation littérale de cet objet.

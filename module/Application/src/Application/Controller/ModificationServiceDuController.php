@@ -38,8 +38,8 @@ class ModificationServiceDuController extends AbstractActionController implement
         
         $this->em()->getFilters()->enable("historique");
         
-        // fetch intervenant avec jointures
-        $qb = $this->getServiceIntervenant()->getFinderIntervenantPermanentWithServiceReferentiel();
+        // fetch intervenant avec jointure sur les modifs de service dû
+        $qb = $this->getServiceIntervenant()->getFinderIntervenantPermanentWithModificationServiceDu();
         $qb->setIntervenant($intervenant);
         $intervenant = $qb->getQuery()->getOneOrNullResult(); /* @var $intervenant IntervenantPermanent */
 //        print_r($qb->getQuery()->getSQL());

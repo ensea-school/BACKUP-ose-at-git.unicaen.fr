@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Acl\DbRole;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Finder\FinderIntervenantPermanentWithServiceReferentiel;
+use Application\Entity\Db\Finder\FinderIntervenantPermanentWithModificationServiceDu;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\IntervenantPermanent;
 use Common\Exception\DomainException;
@@ -70,6 +71,17 @@ class Intervenant extends AbstractEntityService
     public function getFinderIntervenantPermanentWithServiceReferentiel()
     {
         $qb = new FinderIntervenantPermanentWithServiceReferentiel($this->getEntityManager(), $this->getContextProvider());
+
+        return $qb;
+    }
+    
+    /**
+     * 
+     * @return FinderIntervenantPermanentWithModificationServiceDu
+     */
+    public function getFinderIntervenantPermanentWithModificationServiceDu()
+    {
+        $qb = new FinderIntervenantPermanentWithModificationServiceDu($this->getEntityManager(), $this->getContextProvider());
 
         return $qb;
     }

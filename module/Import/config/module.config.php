@@ -80,6 +80,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Import\Controller\Import',
+                    'action' => array('index','updateViewsAndPackages','showImportTbl','showDiff','update','updateTables'),
                     'roles' => array(ROLE_ID_ADMIN),
                 ),
             ),

@@ -26,6 +26,12 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
      */
     protected $etape;
 
+    public function __construct($name = null, $options = array())
+    {
+        if (! $name) $name = "modulateurs-saisie";
+        parent::__construct($name, $options);
+    }
+
     public function init()
     {
         $hydrator = $this->getServiceLocator()->getServiceLocator()->get('EtapeModulateursFormHydrator');
@@ -54,14 +60,15 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
     /**
      * Retourne le nombre total de modulateurs que l'on peut renseigner
      *
+     * @param string $typeCode
      * @return integer
      */
-    public function countModulateurs()
+    public function countModulateurs( $typeCode=null )
     {
         $count = 0;
         foreach( $this->getFieldsets() as $fieldset ){
             if ($fieldset instanceof ElementModulateursFieldset){
-                $count += $fieldset->countModulateurs();
+                $count += $fieldset->countModulateurs( $typeCode );
             }
         }
         return $count;

@@ -25,6 +25,21 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
      */
     protected $elementPedagogique;
 
+    /**
+     * nombre de modulateurs total
+     *
+     * @var integer
+     */
+    protected $countModulateurs = 0;
+
+    /**
+     * nombre de modulateurs par code de type
+     *
+     * @var integer[]
+     */
+    protected $countModulateursByType = array();
+
+
 
     public function getElementPedagogique()
     {
@@ -40,17 +55,18 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
     /**
      * Retourne le nombre total de modulateurs que l'on peut renseigner
      *
+     * @param string|null $typeCode
      * @return integer
      */
-    public function countModulateurs()
+    public function countModulateurs( $typeCode=null )
     {
-        $count = 0;
-        foreach( $this->getElements() as $element ){
-            if ($element instanceof Select){
-                $count ++;
-            }
+        if (empty($typeCode)){
+            return $this->countModulateurs;
+        }elseif(isset($this->countModulateursByType[$typeCode])){
+            return $this->countModulateursByType[$typeCode];
+        }else{
+            return 0;
         }
-        return $count;
     }
 
     /**
@@ -88,6 +104,11 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
 
             $element->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $values ) );
             $this->add($element);
+            $this->countModulateurs++;
+            if (! isset($this->countModulateursByType[$typeModulateur->getCode()])){
+                $this->countModulateursByType[$typeModulateur->getCode()] = 0;
+            }
+            $this->countModulateursByType[$typeModulateur->getCode()] ++;
         }
     }
 

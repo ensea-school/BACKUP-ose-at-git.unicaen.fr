@@ -8,6 +8,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Zend\Form\Element\Select;
 
 /**
  * Description of EtapeModulateursSaisieForm
@@ -63,17 +64,44 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
             return 'Aucun modulateur ne peut être associé à cette étape car ils ne sont pas activés pour la structure d\'enseignement correspondante.';
         }
 
+        $displayTypesModulateurs = array();
+        foreach( $typesModulateurs as $typeModulateur ){
+            if (0 < $form->countModulateurs($typeModulateur->getCode())){
+                $displayTypesModulateurs[] = $typeModulateur;
+            }
+        }
+
         $form->prepare();
         $res = $this->getView()->form()->openTag($form);
         $res .= '<style>';
         $res .= '.modal-dialog { width: 60%; }';
         $res .= '</style>';
+        $res .= '<script type="text/javascript">';
+        $res .= ' $(function() { Modulateur.init(); });';
+        $res .= '</script>';
         $res .= '<table class="table table-bordered table-condensed">';
         $res .= '<tr>';
-        $res .= '<th>Elément</th>';
-        foreach( $typesModulateurs as $typeModulateur ){
+        $res .= '<th rowspan="2">Elément</th>';
+        foreach( $displayTypesModulateurs as $typeModulateur ){
             $res .= '<th>';
             $res .= $typeModulateur->getLibelle();
+            $res .= '</th>';
+        }
+        $res .= '</tr>';
+        $res .= '<tr>';
+        foreach( $displayTypesModulateurs as $typeModulateur ){
+            $typeModulateurElement = new Select($typeModulateur->getCode());
+            //$typeModulateurElement->setLabel($typeModulateur->getLibelle());
+            $values = array('' => '');
+            foreach( $typeModulateur->getModulateur() as $modulateur ){
+                $values[$modulateur->getId()] = (string)$modulateur;
+            }
+            $typeModulateurElement->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $values ) );
+            $typeModulateurElement->setAttribute('class', 'form-control');
+            $res .= '<th>';
+            $res .= $this->getView()->formSelect( $typeModulateurElement );
+//href="javascript:return false;" onclick="Modulateur.setFormValues($(this).data(\'code\'), $($(this).data(\'code\')).val())
+            $res .= ' <a class="btn btn-default form-set-value" data-code="'.$typeModulateur->getCode().'" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span><a>';
             $res .= '</th>';
         }
         $res .= '</tr>';
@@ -81,7 +109,7 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
             $res .= '<tr>';
             $res .= '<th>'.$element.'</th>';
             $formElement = $form->get('EL'.$element->getId());
-            $res .= $this->getView()->elementModulateursSaisieFieldset()->render( $formElement, $typesModulateurs, true );
+            $res .= $this->getView()->elementModulateursSaisieFieldset()->render( $formElement, $displayTypesModulateurs, true );
             $res .= '</tr>';
         }
         $res .= '</table>';

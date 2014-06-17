@@ -58,8 +58,11 @@ class Modulateur extends AbstractEntityService
         $serviceElementModulateur->join( $serviceElementPedagogique, $qb, 'element' );
         $qb->andWhere($serviceElementPedagogique->getAlias().'.id = '.$element->getId());
 
+        $serviceElementModulateur->finderByContext( $qb );
+
         return $qb;
     }
+
 
     /**
      * Retourne la liste des modulateurs

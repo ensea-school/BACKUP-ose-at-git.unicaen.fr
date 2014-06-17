@@ -110,3 +110,8 @@ form#service div#element-interne div.col-md-5 {
 td .form-group{
     margin-bottom: 0px;
 }
+
+form#modulateurs-saisie th select{
+    display: inline;
+    width:auto;
+}

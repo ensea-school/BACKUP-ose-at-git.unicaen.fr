@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * Description of ElementModulateur
  *
@@ -28,6 +30,22 @@ class ElementModulateur extends AbstractEntityService
     public function getAlias()
     {
         return 'epmod';
+    }
+
+    /**
+     * Filtre la liste des services selon lecontexte courant
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
+     * @return QueryBuilder
+     */
+    public function finderByContext( QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $this->finderByAnnee( $this->getContextProvider()->getGlobalContext()->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+
+        return $qb;
     }
 
     /**

@@ -475,7 +475,17 @@ Modulateur.init = function()
     $("body").on("event-of-etape-modulateurs", function(event, data) {
         event.div.modal('hide'); // ferme la fenêtre modale
     });
+
+    $("body").on("click", "form#modulateurs-saisie a.form-set-value", function(e){
+        typeModulateurCode = $(this).data('code');
+        value = $('form#modulateurs-saisie select[name="'+typeModulateurCode+'"]').val();
+        Modulateur.setFormValues(typeModulateurCode, value);
+        e.stopPopagation();
+    });
 }
 
+Modulateur.setFormValues = function( typeModulateurCode, value )
+{
 
-
+    $('form#modulateurs-saisie select[name$="\\['+typeModulateurCode+'\\]"]').val(value);
+}

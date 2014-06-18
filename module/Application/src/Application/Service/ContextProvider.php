@@ -41,20 +41,27 @@ class ContextProvider extends AbstractService
     public function getGlobalContext()
     {
         if (null === $this->globalContext) {
-            $authUserContext = $this->getServiceLocator()->get('authUserContext');
+            $authUserContext = $this->getServiceLocator()->get('authUserContext'); /* @var $authUserContext \UnicaenAuth\Service\UserContext */
             
-            $utilisateur = $authUserContext->getDbUser();
-            $intervenant = $utilisateur->getIntervenant();
-            $personnel   = $utilisateur->getPersonnel();
             $annee       = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee);
             $anneePrec   = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee - 1);
             $anneeSuiv   = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee + 1);
             $etab        = $this->getEntityManager()->find('Application\Entity\Db\Etablissement', $this->getParametres()->etablissement);
-
-            if (null === $intervenant) {
-                $ldapUser = $authUserContext->getLdapUser();
-                $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer((int) $ldapUser->getSupannEmpId());
+            $utilisateur = null;
+            $intervenant = null;
+            $personnel   = null;
+            
+            if ($authUserContext->getIdentity()) {
+                $utilisateur = $authUserContext->getDbUser();
+                $intervenant = $utilisateur->getIntervenant();
+                $personnel   = $utilisateur->getPersonnel();
+                
+                if (null === $intervenant) {
+                    $ldapUser = $authUserContext->getLdapUser();
+                    $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer((int) $ldapUser->getSupannEmpId());
+                }
             }
+
             
             $this->globalContext = new GlobalContext();
             $this->globalContext

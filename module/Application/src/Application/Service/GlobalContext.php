@@ -99,7 +99,7 @@ class GlobalContext
         return $this->etablissement;
     }
 
-    public function setUtilisateur(Utilisateur $utilisateur)
+    public function setUtilisateur(Utilisateur $utilisateur = null)
     {
         $this->utilisateur = $utilisateur;
         return $this;

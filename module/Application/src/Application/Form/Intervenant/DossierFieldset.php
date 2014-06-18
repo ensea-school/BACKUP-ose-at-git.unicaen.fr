@@ -52,7 +52,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
         $this->add( array(
             'name' => 'nomPatronymique',
             'options' => array(
-                'label' => 'Nom patronymique',
+                'label' => 'Nom de naissance',
             ),
             'type' => 'Text'
         ) );

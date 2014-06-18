@@ -77,7 +77,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             'type'       => 'Radio',
             'name'       => 'interne-externe',
             'options'    => array(
-                'label'  => "Service effectué :",
+                'label'  => "Enseignement effectué :",
                 'value_options' => array(
                     'service-interne' => 'en interne',
                     'service-externe' => 'hors '.$this->etablissement,
@@ -112,7 +112,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
                        ->setAutocompleteSource(
                            $url('etablissement/recherche')
                        )
-                       ->setLabel("Etablissement :")
+                       ->setLabel("Établissement :")
                        ->setAttributes(array('title' => "Saisissez le libellé (2 lettres au moins)"));
         $this->add($etablissement);
     }

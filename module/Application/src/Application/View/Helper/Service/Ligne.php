@@ -74,6 +74,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function render( $details=false )
     {
         $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
 
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
         $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeuresParTypeIntervention($this->service);
@@ -93,8 +94,10 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
             $out .= '<td>'.$this->renderEtape($this->service->getElementPedagogique()->getEtape())."</td>\n";
             $out .= '<td>'.$this->renderElementPedagogique($this->service->getElementPedagogique())."</td>\n";
-            $out .= '<td>'.$this->renderFOAD($this->service->getElementPedagogique())."</td>\n";
-            $out .= '<td>'.$this->renderRegimeInscription($this->service->getElementPedagogique())."</td>\n";
+            if ($role instanceof \Application\Acl\ComposanteDbRole) {
+                $out .= '<td>'.$this->renderFOAD($this->service->getElementPedagogique())."</td>\n";
+                $out .= '<td>'.$this->renderRegimeInscription($this->service->getElementPedagogique())."</td>\n";
+            }
         }
         else {
             $out .= '<td colspan="5">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";

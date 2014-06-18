@@ -84,11 +84,13 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $out .= "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>\n";
             $colspan += 2;
         }
-        $out .= "<th title=\"Structure gestionnaire de l'enseignement\">Structure d'enseignement</th>\n";
-        $out .= "<th>Étape</th>\n";
-        $out .= "<th>Enseignement ou responsabilité</th>\n";
-        $out .= "<th title=\"Formation ouverte à distance\">FOAD</th>\n";
-        $out .= "<th title=\"Régime d'inscription\">Rég. d'insc.</th>\n";
+        $out .= "<th title=\"Structure gestionnaire de l'enseignement\">Composante d'enseignement</th>\n";
+        $out .= "<th title=\"Formation\">Formation</th>\n";
+        $out .= "<th title=\">Enseignement ou responsabilité\">Enseignement ou responsabilité</th>\n";
+        if ($role instanceof \Application\Acl\ComposanteDbRole) {
+            $out .= "<th title=\"Formation ouverte à distance\">FOAD</th>\n";
+            $out .= "<th title=\"Régime d'inscription\">Rég. d'insc.</th>\n";
+        }
         if (!$context->getAnnee()) {
             $out .= "<th>Année univ.</th>\n";
             $colspan += 1;
@@ -97,6 +99,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $colspan++;
             $out .= "<th class=\"heures\" style=\"width:8%\" title=\"".$ti->getLibelle()."\">".$ti->getCode()."</th>\n";
         }
+        $out .= "<th>&nbsp;</th>\n";
         $out .= "<th>&nbsp;</th>\n";
         $out .= "<th>&nbsp;</th>\n";
         $out .= "</tr>\n";

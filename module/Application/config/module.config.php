@@ -147,6 +147,7 @@ $main =  array(
             'ApplicationSource'                              => 'Application\\Service\\Source',
             'ApplicationRole'                                => 'Application\\Service\\Role',
             'ApplicationRoleUtilisateur'                     => 'Application\\Service\\RoleUtilisateur',
+            'NavigationPageVisibility'                       => 'Application\\Service\\NavigationPageVisibility',
         ),
         'factories' => array(
             'navigation'                  => 'Application\Service\NavigationFactoryFactory',

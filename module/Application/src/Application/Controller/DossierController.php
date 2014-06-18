@@ -61,7 +61,7 @@ class DossierController extends AbstractActionController implements \Application
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
         $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
         $dossier     = $intervenant->getDossier();
-        $title       = "Détails d'un dossier <small>$intervenant</small>";
+        $title       = "Données personnelles <small>$intervenant</small>";
         $short       = $this->params()->fromQuery('short', false);
         $view        = new \Zend\View\Model\ViewModel();
 
@@ -88,7 +88,7 @@ class DossierController extends AbstractActionController implements \Application
 
         if ($role instanceof IntervenantRole) {
             $intervenant = $role->getIntervenant();
-            $form->get('submit')->setAttribute('value', "Enregistrer et passer à la saisie de services...");
+            $form->get('submit')->setAttribute('value', "J'enregistre et je saisis mes enseignements...");
         }
         else {
             $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
@@ -111,9 +111,10 @@ class DossierController extends AbstractActionController implements \Application
                 $notified = $this->notify($intervenant);
                 $this->em()->persist($intervenant);
                 $this->em()->flush();
-                $this->flashMessenger()->addSuccessMessage("Dossier enregistré avec succès.");
+                $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
                 if ($notified) {
-                    $this->flashMessenger()->addInfoMessage("Un mail doit être envoyé pour informer la composante de la modification du dossier...");
+                    $this->flashMessenger()->addInfoMessage(
+                            "Un mail doit être envoyé pour informer la composante de la modification des données personnelles...");
                 }
                 if ($role instanceof IntervenantRole) {
                     $url = $this->url()->fromRoute('intervenant/services', array('id' => $intervenant->getSourceCode()));

@@ -389,12 +389,10 @@ class TypePieceJointeStatut
         return $this->statut;
     }
     
-    
     /**
      * Indique si le type de pièce jointe est obligatoire.
      * NB: prend en compte le seil HETD éventuellement spécifié.
      * 
-     * @param \Application\Entity\Db\TypePieceJointeStatut $typePieceJointeStatut
      * @param integer $totalHETDIntervenant Total d'HETD de l'intervenant, exploité dans le cas où le caractère
      * obligatoire dépend d'un seuil d'HETD
      * @return boolean
@@ -402,12 +400,38 @@ class TypePieceJointeStatut
     public function isObligatoire($totalHETDIntervenant)
     {
         $obligatoire = $this->getObligatoire();
-
+        
         if ($obligatoire && $this->getSeuilHetd() && !$this->isSeuilHETDDepasse($totalHETDIntervenant)) {
             $obligatoire = false;
         }
         
         return $obligatoire;
+    }
+    
+    /**
+     * Retourne le libellé du caractère obligatoire ou non du type de pièce jointe.
+     * NB: prend en compte le seil HETD éventuellement spécifié.
+     * 
+     * @param integer $totalHETDIntervenant Total d'HETD de l'intervenant, exploité dans le cas où le caractère
+     * obligatoire dépend d'un seuil d'HETD
+     * @return string
+     */
+    public function getObligatoireToString($totalHETDIntervenant)
+    {
+        if ($this->isObligatoire($totalHETDIntervenant)) {
+            $seuilHETD   = $this->getSeuilHetd();
+            $obligatoire = "Obligatoire";
+            $obligatoire .= $this->isSeuilHETDDepasse($totalHETDIntervenant) ? 
+                    " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total HETD</abbr> > {$seuilHETD}h" : 
+                    null;
+            return $obligatoire;
+        }
+        
+        if ($this->getType()->getCode() === TypePieceJointe::RIB) {
+            return "En cas de changement";
+        }
+        
+        return "Facultatif";
     }
     
     /**

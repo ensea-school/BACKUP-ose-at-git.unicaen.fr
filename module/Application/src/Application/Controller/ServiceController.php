@@ -26,7 +26,7 @@ class ServiceController extends AbstractActionController
         $qb      = $service->finderByContext();
         $viewModel = new \Zend\View\Model\ViewModel();
         $filter    = new \stdClass();
-        $title     = "Services et référentiel <small>$annee</small>";
+        $title     = "Enseignements et référentiel <small>$annee</small>";
 
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
@@ -103,7 +103,7 @@ class ServiceController extends AbstractActionController
         $renderIntervenants = false;
         $renderReferentiel  = !$role instanceof IntervenantExterieurRole && !$intervenant instanceof IntervenantExterieur;
         $action = 'afficher';
-        $title = "Services <small>$intervenant</small>";
+        $title = "Enseignements <small>$intervenant</small>";
 
         $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'title', 'renderIntervenants', 'renderReferentiel'));
         $viewModel->setTemplate('application/service/index');
@@ -241,12 +241,12 @@ class ServiceController extends AbstractActionController
         if ($id) {
             $entity = $service->get($id);
             $form->bind($entity);
-            $title   = "Modification de service";
+            $title   = "Modification d'enseignement";
         } else {
             $entity = $service->newEntity();
             $form->bind($entity);
             $form->initFromContext();
-            $title   = "Ajout de service";
+            $title   = "Ajout d'enseignement";
         }
 
         $request = $this->getRequest();

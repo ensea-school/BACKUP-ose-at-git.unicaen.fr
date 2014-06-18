@@ -20,11 +20,6 @@ use Application\Entity\Db\PieceJointe;
 class PieceJointeProcess extends AbstractService
 {
     /**
-     * @var bool
-     */
-    private $initialized = false;
-    
-    /**
      * @var array
      */
     private $typesPieceJointeStatut;
@@ -96,17 +91,7 @@ class PieceJointeProcess extends AbstractService
         $valueOptions = array();
         foreach ($this->getTypesPieceJointeStatut() as $ligne) { /* @var $ligne TypePieceJointeStatut */
             $totalHETD   = $this->getTotalHETDIntervenant();
-            $seuilHETD   = $ligne->getSeuilHetd();
-            $obligatoire = $ligne->isObligatoire($totalHETD);
-            if ($obligatoire) {
-                $obligatoire = "Obligatoire";
-                $obligatoire .= $ligne->isSeuilHETDDepasse($totalHETD) ? 
-                        " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">{$totalHETD}h</abbr> > {$seuilHETD}h" : 
-                        null;
-            }
-            else {
-                $obligatoire = "Facultatif";
-            }
+            $obligatoire = $ligne->getObligatoireToString($totalHETD);
             
             $link = null;
             if (($url = $ligne->getType()->getUrlModeleDoc())) {
@@ -115,7 +100,12 @@ class PieceJointeProcess extends AbstractService
                 $link = '<br /><a title="Cliquez pour télécharger le document à remplir" href="' . $href . '"><span class="glyphicon glyphicon-file"></span> ' . $fileName . '</a>';
             }
     
-            $label = sprintf('%s<br /><span class="text-warning">%s</span>%s', $ligne->getType(), $obligatoire, $link);
+            $type = (string) $ligne->getType();
+            if ($ligne->getType()->getCode() === TypePieceJointe::CARTE_ETUD) {
+                $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+                $type .= " $annee";
+            }
+            $label = sprintf('%s<br /><span class="text-warning">%s</span>%s', $type, $obligatoire, $link);
             $valueOptions[] = array(
                 'value' => $ligne->getType()->getId(),
                 'label' => $label,

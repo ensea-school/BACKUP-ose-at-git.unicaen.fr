@@ -13,7 +13,7 @@
 </style>
 
 <?php if ($role instanceof \Application\Acl\DbRole): ?>
-<?php echo $this->messenger()->setMessages(array('warning' => "Sont visibles ici les référentiels et les services prévisionnels des intervenants affectés "
+<?php echo $this->messenger()->setMessages(array('warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
         . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures.")); ?>
 <?php endif; ?>
 
@@ -25,36 +25,39 @@
 
 <?php if ('afficher' === $action ): ?>
 
-<?php if ($renderReferentiel): ?>
-<h2>Référentiel
-    <?php 
-    $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir'));
-    ?>
-    <a class="ajax-modal services-ref btn btn-default pull-right" data-event="service-ref-add-message" href="<?php echo $urlSaisir ?>" title="Ajouter/modifier les fonctions référentiel"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau référentiel</a>
-</h2>
-<?php echo $this->servicesRefListe; ?>
-<hr />
-<?php endif; ?>
+    <?php if ($renderReferentiel): ?>
+    <h2>Référentiel
+        <?php 
+        $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir'));
+        ?>
+        <a class="ajax-modal services-ref btn btn-default pull-right" data-event="service-ref-add-message" href="<?php echo $urlSaisir ?>" title="Ajouter/modifier les fonctions référentiel"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau référentiel</a>
+    </h2>
+    <?php echo $this->servicesRefListe; ?>
+    <hr />
+    <?php endif; ?>
 
-<h2>Service prévisionnel 
-    <?php
-    $url = $this->url('service/default', array('action' => 'saisie'));
-    ?>
-    <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
-</h2>
+    <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <?php echo $this->messenger()->setMessage("Merci de saisir les heures effectuées (sans majoration)."); ?>
+    <?php endif; ?>
 
-<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
-<?php echo $this->messenger()->setMessage("Les heures à saisir ci-dessous sont les heures réellement effectuées et non les heures payables."); ?>
-<?php endif; ?>
+    <?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
+    <?php if ($role instanceof \Application\Acl\IntervenantExterieurRole): ?>
+        <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
+    <?php else: ?>
+    <h2>Service prévisionnel 
+        <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
+    </h2>
+    <?php endif; ?>
 
-<?php echo $this->serviceListe( $services )->setRenderIntervenants($renderIntervenants)->render(); ?>
+    <?php echo $this->serviceListe( $services )->setRenderIntervenants($renderIntervenants)->render(); ?>
 
-<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
-<a class="btn btn-primary" href="<?php echo $this->url('intervenant/pieces-jointes', array('id' => $role->getIntervenant()->getSourceCode())) ?>">
-    Pièces justificatives à fournir...</a>
-<?php endif; ?>
-
+    <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <a href="<?php echo $this->url('intervenant/pieces-jointes', array('id' => $role->getIntervenant()->getSourceCode())) ?>" 
+       class="btn btn-primary">J'ai terminé ma saisie</a>
+    <?php endif; ?>
+    
 <?php else:?>
-<?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
+        
+    <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
 
 <?php endif; ?>

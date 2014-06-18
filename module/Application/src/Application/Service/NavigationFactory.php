@@ -6,9 +6,24 @@ use Zend\Http\Request;
 use Zend\Mvc\Router\RouteStackInterface as Router;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Navigation\Service\DefaultNavigationFactory;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 class NavigationFactory extends DefaultNavigationFactory
 {
+    use ServiceLocatorAwareTrait;
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return \Zend\Navigation\Navigation
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->setServiceLocator($serviceLocator);
+        
+        return parent::createService($serviceLocator);
+    }
+    
     /**
      * @param array $pages
      * @param RouteMatch $routeMatch
@@ -20,7 +35,21 @@ class NavigationFactory extends DefaultNavigationFactory
     {
         $pages = parent::injectComponents($pages, $routeMatch, $router, $request);
         
+        if (!$routeMatch) {
+            return $pages;
+        }
+        
         foreach ($pages as &$page) {
+            // l'attribut 'visible' d'une page peut être le nom d'un service
+            if (isset($page['visible']) && is_string($page['visible']) && $this->getServiceLocator()->has($page['visible'])) {
+                $visible = $this->getServiceLocator()->get($page['visible']);
+                if (!is_callable($visible)) {
+                    throw new \Common\Exception\LogicException(
+                            "Service spécifié pour l'attribut de page 'visible' non valide : " . get_called_class($visible));
+                }
+                $page['visible'] = $visible($page);
+            }
+            
             $this->injectEntity($page, $routeMatch, $router, $request);
         }
         

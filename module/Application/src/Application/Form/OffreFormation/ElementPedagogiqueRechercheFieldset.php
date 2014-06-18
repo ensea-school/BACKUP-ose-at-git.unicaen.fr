@@ -23,12 +23,12 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         $this->add(array(
             'name'       => $this->getStructureName(),
             'options'    => array(
-                'label' => "Structure :",
+                'label' => "Composante :",
                 'empty_option' => "(Toutes)",
                 'disable_inarray_validator' => true,
             ),
             'attributes' => array(
-                'title' => "Structure",
+                'title' => "Composante",
                 'class' => 'element-pedagogique element-pedagogique-structure input-sm',
             ),
             'type' => 'Select',
@@ -51,12 +51,12 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         $this->add(array(
             'name'       => $this->getEtapeName(),
             'options'    => array(
-                'label' => "Étape :",
+                'label' => "Formation :",
                 'empty_option' => "(Toutes)",
                 'disable_inarray_validator' => true,
             ),
             'attributes' => array(
-                'title' => "Étape",
+                'title' => "Formation",
                 'class' => 'element-pedagogique element-pedagogique-etape input-sm',
             ),
             'type' => 'Select',

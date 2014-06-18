@@ -224,6 +224,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $type;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $service;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1044,6 +1049,43 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->discipline;
     }
 
+    /**
+     * Add service
+     *
+     * @param \Application\Entity\Db\Service $service
+     * @return Intervenant
+     */
+    public function addService(\Application\Entity\Db\Service $service)
+    {
+        $this->service[] = $service;
+
+        return $this;
+    }
+
+    /**
+     * Remove service
+     *
+     * @param \Application\Entity\Db\Service $service
+     */
+    public function removeService(\Application\Entity\Db\Service $service)
+    {
+        $this->service->removeElement($service);
+    }
+
+    /**
+     * Get service
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getService(Annee $annee = null)
+    {
+        if (null === $annee) {
+            return $this->service;
+        }
+        $filter = function(Service $service) use ($annee) { return $annee === $service->getAnnee(); };
+        return $this->service->filter($filter);
+    }
+
 
     /*******************************************************************************************************
      *                                        Début ajout
@@ -1143,6 +1185,10 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function getAdressePrincipale($returnFirstIfNoneFound = false)
     {
+        if (!count($this->getAdresse())) {
+            return null;
+        }
+        
         foreach ($this->getAdresse() as $a) { /* @var $a AdresseIntervenant */
             if ($a->getPrincipale()) {
                 return $a;

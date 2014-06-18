@@ -16,7 +16,7 @@ class PossedeDossierRule extends IntervenantRule
     {
         // un vacataire non-BIATSS doit avoir saisi un dossier
         $dossier = $this->getIntervenant()->getDossier();
-        if (!$dossier) {
+        if (null === $dossier || !$dossier->getId()) {
             $this->setMessage(static::REASON);
             return false;
         }

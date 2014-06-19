@@ -100,7 +100,8 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             }
         }
         else {
-            $out .= '<td colspan="5">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
+            $colspan = $role instanceof \Application\Acl\ComposanteDbRole ? 5 : 3;
+            $out .= '<td colspan="' . $colspan . '">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
         }
         if (!$context->getAnnee()) {
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";

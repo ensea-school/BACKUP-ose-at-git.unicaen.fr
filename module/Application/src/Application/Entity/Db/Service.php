@@ -46,11 +46,6 @@ class Service implements HistoriqueAwareInterface
     protected $volumeHoraire;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $validationService;
-
-    /**
      * @var \Application\Entity\Db\Intervenant
      */
     protected $intervenant;
@@ -281,39 +276,6 @@ class Service implements HistoriqueAwareInterface
             $this->volumeHoraireListes[$periode->getCode()] = new VolumeHoraireListe( $this, $periode );
         }
         return $this->volumeHoraireListes[$periode->getCode()];
-    }
-
-    /**
-     * Add validationService
-     *
-     * @param \Application\Entity\Db\ValidationService $validationService
-     * @return Service
-     */
-    public function addValidationService(\Application\Entity\Db\ValidationService $validationService)
-    {
-        $this->validationService[] = $validationService;
-
-        return $this;
-    }
-
-    /**
-     * Remove validationService
-     *
-     * @param \Application\Entity\Db\ValidationService $validationService
-     */
-    public function removeValidationService(\Application\Entity\Db\ValidationService $validationService)
-    {
-        $this->validationService->removeElement($validationService);
-    }
-
-    /**
-     * Get validationService
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getValidationService()
-    {
-        return $this->validationService;
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-
+use Application\Entity\Db\TypeVolumeHoraire;
 
 /**
  * Description of VolumeHoraire
@@ -38,9 +38,15 @@ class VolumeHoraire extends AbstractEntityService
      */
     public function newEntity()
     {
+        // type de volume horaire par défaut
+        $qb = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->finderByCode(TypeVolumeHoraire::CODE_PREVU);
+        $type = $qb->getQuery()->getOneOrNullResult();
+        
         $entity = parent::newEntity();
-        $entity->setValiditeDebut( new \DateTime);
+        $entity
+                ->setValiditeDebut(new \DateTime())
+                ->setTypeVolumeHoraire($type);
+        
         return $entity;
     }
-
 }

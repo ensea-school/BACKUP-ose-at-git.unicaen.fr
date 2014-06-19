@@ -1082,8 +1082,14 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         if (null === $annee) {
             return $this->service;
         }
-        $filter = function(Service $service) use ($annee) { return $annee === $service->getAnnee(); };
-        return $this->service->filter($filter);
+        if (null === $this->service) {
+            return null;
+        }
+        
+        $filter   = function(Service $service) use ($annee) { return $annee === $service->getAnnee(); };
+        $services = $this->service->filter($filter);
+        
+        return $services;
     }
 
 

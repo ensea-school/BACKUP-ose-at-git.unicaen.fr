@@ -89,6 +89,7 @@ class IntervenantController extends AbstractActionController implements \Applica
                 $sourceCode = $form->get('interv')->getValueId();
                 $this->getRequest()->getQuery()->set('sourceCode', $sourceCode);
                 $this->intervenant = $this->importerAction()->getVariable('intervenant');
+                $this->addIntervenantChoisiRecent($this->intervenant);
                 if (($redirect = $this->params()->fromQuery('redirect'))) {
                     $redirect = str_replace('__sourceCode__', $sourceCode, $redirect);
                     return $this->redirect()->toUrl($redirect);
@@ -99,7 +100,10 @@ class IntervenantController extends AbstractActionController implements \Applica
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/intervenant/choisir')
-                ->setVariables(array('form' => $form, 'title' => "Rechercher un intervenant"));
+                ->setVariables(array(
+                    'form'    => $form, 
+                    'title'   => "Rechercher un intervenant",
+                    'recents' => $this->getIntervenantsChoisisRecents()));
         
         return $viewModel;
     }
@@ -204,5 +208,60 @@ class IntervenantController extends AbstractActionController implements \Applica
     protected function getIntervenantService()
     {
         return $this->getServiceLocator()->get('ApplicationIntervenant');
+    }
+    
+    private $intervenantsChoisisRecentsSessionContainer;
+    
+    /**
+     * @return \Zend\Session\Container
+     */
+    protected function getIntervenantsChoisisRecentsSessionContainer()
+    {
+        if (null === $this->intervenantsChoisisRecentsSessionContainer) {
+            $container = new \Zend\Session\Container(get_class() . '_IntervenantsChoisisRecents');
+            $container->setExpirationSeconds(60*60*1/2); // 1/2 heure
+            $this->intervenantsChoisisRecentsSessionContainer = $container;
+        }
+        return $this->intervenantsChoisisRecentsSessionContainer;
+    }
+    
+    /**
+     * 
+     * @param bool $clear
+     * @return array
+     */
+    protected function getIntervenantsChoisisRecents($clear = false)
+    {
+        $container = $this->getIntervenantsChoisisRecentsSessionContainer();
+        if ($clear) {
+            unset($container->intervenants);
+        }
+        if (!isset($container->intervenants)) {
+            $container->intervenants = array();
+        }
+        return $container->intervenants;
+    }
+    
+    /**
+     * 
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return \Application\Controller\IntervenantController
+     */
+    protected function addIntervenantChoisiRecent(Intervenant $intervenant)
+    {
+        $container    = $this->getIntervenantsChoisisRecentsSessionContainer();
+        $intervenants = (array) $container->intervenants;
+        
+        if (!array_key_exists($intervenant->getId(), $intervenants)) {
+            $intervenants["" . $intervenant] = array(
+                'id'         => $intervenant->getId(),
+                'sourceCode' => $intervenant->getSourceCode(),
+                'nom'        => "" . $intervenant,
+            );
+            ksort($intervenants);
+        }
+        $container->intervenants = $intervenants;
+        
+        return $this;
     }
 }

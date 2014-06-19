@@ -9,9 +9,29 @@
 <input class="btn btn-primary" type="submit" value="Choisir" name="submit">
 <?php echo $this->form()->closeTag() ?> 
 
+<hr />
+
+<?php if ($recents): ?>
+<h3>Vos recherches récentes :</h3>
+<ul>
+    <?php foreach($recents as $data): ?>
+    <li><a class="choisir-recent" 
+                   data-id="<?php echo $data['sourceCode'] ?>" 
+                   data-label="<?php echo $data['nom'] ?>" 
+                   title="Cliquez pour choisir cet intervenant" 
+                   href="#"><?php echo $data['nom'] ?></a></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+
 <script>
     $(function() {
-        $("form.intervenant-rech :input").tooltip({ placement: 'bottom' });
-        $("input[name='interv[label]']").focus();
+        var form = $("form.intervenant-rech");
+        $("input[name='interv[label]']", form).tooltip({ placement: 'bottom' }).focus();
+        $("a.choisir-recent").click(function() {
+            $("input[name='interv[id]']", form).val($(this).data('id'));
+            $(":submit", form).click();
+            return false;
+        });
     });
 </script>

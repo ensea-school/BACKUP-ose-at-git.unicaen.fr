@@ -3,7 +3,6 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\IntervenantExterieur;
-use Application\Entity\Db\StatutIntervenant;
 
 /**
  * Description of PeutSaisirServiceRule
@@ -23,12 +22,11 @@ class PeutSaisirPieceJointeRule extends IntervenantRule
             return false;
         }
         
-        $statut = $dossier->getStatut();
-        if ($statut->getSourceCode() === StatutIntervenant::RETR_UCBN) {
-            $this->setMessage(sprintf("Le statut '%s' n'autorise pas la saisie de pièce justificative.", $statut));
+        $statut = $this->getIntervenant()->getStatut();
+        if (!$statut->estVacataireNonBiatss()) {
+            $this->setMessage(sprintf("Le statut '%s' ne nécessite pas la fourniture de pièces justificatives.", $statut));
             return false;
         }
-        
         
         return true;
     }

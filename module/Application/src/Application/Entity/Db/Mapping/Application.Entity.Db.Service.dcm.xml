@@ -74,6 +74,5 @@
             <cascade-all/>
         </cascade>
     </one-to-many>
-    <one-to-many field="validationService" target-entity="Application\Entity\Db\ValidationService" mapped-by="service" />
   </entity>
 </doctrine-mapping>

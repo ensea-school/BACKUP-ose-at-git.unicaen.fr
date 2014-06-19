@@ -66,7 +66,7 @@ class DossierController extends AbstractActionController implements \Application
         $view        = new \Zend\View\Model\ViewModel();
 
         if (!$dossier) {
-            throw new \Common\Exception\MessageException("L'intervenant $intervenant n'a aucun dossier.");
+            throw new \Common\Exception\MessageException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
         }
         
         $view->setVariables(compact('intervenant', 'dossier', 'title', 'short'));
@@ -224,7 +224,7 @@ class DossierController extends AbstractActionController implements \Application
         $this->form = $this->process->getFormPiecesJointes();
 
         if (!$this->dossier) {
-            throw new \Common\Exception\MessageException("L'intervenant $this->intervenant n'a aucun dossier.");
+            throw new \Common\Exception\MessageException("L'intervenant $this->intervenant n'a aucune donnée personnelle enregistrée.");
         }
         
         $this->view = new \Zend\View\Model\ViewModel(array(

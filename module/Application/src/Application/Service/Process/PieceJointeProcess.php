@@ -394,7 +394,7 @@ class PieceJointeProcess extends AbstractService
     {
         $dossier = $this->getIntervenant()->getDossier();
         if (!$dossier) {
-            throw new \Common\Exception\LogicException("L'intervenant spécifié n'a pas de dossier.");
+            throw new \Common\Exception\LogicException("L'intervenant spécifié n'a pas de données personnelles enregistrées.");
         }
         return $dossier;
     }

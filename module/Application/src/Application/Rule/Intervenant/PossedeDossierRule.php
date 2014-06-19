@@ -11,7 +11,7 @@ use Application\Entity\Db\IntervenantExterieur;
  */
 class PossedeDossierRule extends IntervenantRule
 {
-    const REASON = "Un vacataire non-BIATSS doit avoir saisi un dossier.";
+    const REASON = "Un vacataire non-BIATSS doit avoir saisi ses données personnelles.";
     public function execute()
     {
         // un vacataire non-BIATSS doit avoir saisi un dossier

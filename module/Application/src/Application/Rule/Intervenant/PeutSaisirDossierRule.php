@@ -19,7 +19,7 @@ class PeutSaisirDossierRule extends IntervenantRule
                 && ($statut->estVacataireNonBiatss() || $statut->getSourceCode() === StatutIntervenant::AUTRES);
         
         if (!$ok) {
-            $this->setMessage(sprintf("Le statut '%s' n'autorise pas la saisie de dossier.", $statut));
+            $this->setMessage(sprintf("Le statut '%s' n'autorise pas la saisie de données personnelles.", $statut));
             return false;
         }
         

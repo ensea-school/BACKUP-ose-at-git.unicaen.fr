@@ -54,10 +54,10 @@ class Dossier extends AbstractEntityService
         if (!$rule->execute()) {
             $message = "?";
             if ($role instanceof \Application\Acl\IntervenantRole) {
-                $message = "Vous ne pouvez pas saisir de dossier. ";
+                $message = "Vous ne pouvez pas saisir de données personnelles. ";
             }
             elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
-                $message = "Vous ne pouvez pas saisir de dossier pour $intervenant. ";
+                $message = "Vous ne pouvez pas saisir de données personnelles pour $intervenant. ";
             }
             return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
         }

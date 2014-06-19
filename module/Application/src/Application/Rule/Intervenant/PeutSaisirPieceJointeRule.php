@@ -19,7 +19,7 @@ class PeutSaisirPieceJointeRule extends IntervenantRule
             $dossier = $this->getIntervenant()->getDossier();
         }
         if (!$dossier) {
-            $this->setMessage("La saisie de pièce justificative requiert la saisie d'un dossier.");
+            $this->setMessage("La saisie de pièce justificative requiert au préalable la saisie des données personnelles.");
             return false;
         }
         

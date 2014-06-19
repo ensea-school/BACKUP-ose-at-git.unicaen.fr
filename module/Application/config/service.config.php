@@ -204,6 +204,7 @@ return array(
             'ApplicationServiceValidation'      => 'Application\\Service\\ServiceValidation',
             'ApplicationPeriode'                => 'Application\\Service\\Periode',
             'ApplicationMotifNonPaiement'       => 'Application\\Service\\MotifNonPaiement',
+            'ApplicationTypeVolumeHoraire'      => 'Application\\Service\\TypeVolumeHoraire',
             'FormServiceRechercheHydrator'      => 'Application\Form\Service\RechercheHydrator',
             'FormServiceSaisieFieldsetHydrator' => 'Application\Form\Service\SaisieFieldsetHydrator',
             'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',

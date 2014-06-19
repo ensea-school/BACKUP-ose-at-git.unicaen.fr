@@ -26,9 +26,12 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 'label' => "Composante :",
                 'empty_option' => "(Toutes)",
                 'disable_inarray_validator' => true,
+                'label_attributes' => array(
+                    'title' => "Structure gestionnaire de l'enseignement",
+                ),
             ),
             'attributes' => array(
-                'title' => "Composante",
+                'title' => "Structure gestionnaire de l'enseignement",
                 'class' => 'element-pedagogique element-pedagogique-structure input-sm',
             ),
             'type' => 'Select',
@@ -40,6 +43,9 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 'label' => "Niveau :",
                 'empty_option' => "(Tous)",
                 'disable_inarray_validator' => true,
+                'label_attributes' => array(
+                    'title' => "Niveau",
+                ),
             ),
             'attributes' => array(
                 'title' => "Niveau",
@@ -54,6 +60,9 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 'label' => "Formation :",
                 'empty_option' => "(Toutes)",
                 'disable_inarray_validator' => true,
+                'label_attributes' => array(
+                    'title' => "Formation",
+                ),
             ),
             'attributes' => array(
                 'title' => "Formation",
@@ -66,6 +75,9 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             'name'       => 'element',
             'options'    => array(
                 'label' => "Enseignement ou responsabilité :",
+                'label_attributes' => array(
+                    'title' => "Enseignement ou responsabilité",
+                ),
             ),
             'attributes' => array(
                 'title' => "Saisissez 2 lettres au moins",

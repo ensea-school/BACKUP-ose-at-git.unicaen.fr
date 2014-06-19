@@ -22,6 +22,16 @@
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire">
+      <join-columns>
+        <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="contrat" target-entity="Application\Entity\Db\Contrat">
+      <join-columns>
+        <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>

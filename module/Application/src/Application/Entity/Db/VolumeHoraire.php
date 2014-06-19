@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * VolumeHoraire
  */
-class VolumeHoraire implements HistoriqueAwareInterface
+class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
      * @var float
@@ -78,6 +76,16 @@ class VolumeHoraire implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\TypeIntervention
      */
     protected $typeIntervention;
+    
+    /**
+     * @var \Application\Entity\Db\TypeVolumeHoraire
+     */
+    protected $typeVolumeHoraire;
+    
+    /**
+     * @var \Application\Entity\Db\Contrat
+     */
+    protected $contrat;
 
     /**
      * remove
@@ -408,5 +416,51 @@ class VolumeHoraire implements HistoriqueAwareInterface
     public function getTypeIntervention()
     {
         return $this->typeIntervention;
+    }
+
+    /**
+     * Set typeVolumeHoraire
+     *
+     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
+     * @return VolumeHoraire
+     */
+    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
+    {
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+
+        return $this;
+    }
+
+    /**
+     * Get typeVolumeHoraire
+     *
+     * @return \Application\Entity\Db\TypeVolumeHoraire 
+     */
+    public function getTypeVolumeHoraire()
+    {
+        return $this->typeVolumeHoraire;
+    }
+
+    /**
+     * Set contrat
+     *
+     * @param \Application\Entity\Db\Contrat $contrat
+     * @return VolumeHoraire
+     */
+    public function setContrat(\Application\Entity\Db\Contrat $contrat = null)
+    {
+        $this->contrat = $contrat;
+
+        return $this;
+    }
+
+    /**
+     * Get contrat
+     *
+     * @return \Application\Entity\Db\Contrat 
+     */
+    public function getContrat()
+    {
+        return $this->contrat;
     }
 }

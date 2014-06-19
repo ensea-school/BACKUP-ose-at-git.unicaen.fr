@@ -2,148 +2,57 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * ValidationService
+ * Contrat
  */
-class ValidationService implements HistoriqueAwareInterface
+class Contrat implements HistoriqueAwareInterface
 {
     /**
-     * @var string
+     * @var \DateTime
      */
-    protected $commentaires;
+    private $histoCreation;
 
     /**
      * @var \DateTime
      */
-    protected $dateConseil;
-
-    /**
-     * @var string
-     */
-    protected $description;
+    private $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
+    private $histoModification;
 
     /**
      * @var integer
      */
-    protected $ordre;
+    private $id;
 
     /**
-     * @var integer
+     * @var \Application\Entity\Db\TypeContrat
      */
-    protected $id;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
+    private $typeContrat;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    protected $histoDestructeur;
+    private $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    protected $histoCreateur;
+    private $histoDestructeur;
 
     /**
-     * @var \Application\Entity\Db\Service
+     * @var \Application\Entity\Db\Utilisateur
      */
-    protected $service;
+    private $histoCreateur;
 
-
-    /**
-     * Set commentaires
-     *
-     * @param string $commentaires
-     * @return ValidationService
-     */
-    public function setCommentaires($commentaires)
-    {
-        $this->commentaires = $commentaires;
-
-        return $this;
-    }
-
-    /**
-     * Get commentaires
-     *
-     * @return string 
-     */
-    public function getCommentaires()
-    {
-        return $this->commentaires;
-    }
-
-    /**
-     * Set dateConseil
-     *
-     * @param \DateTime $dateConseil
-     * @return ValidationService
-     */
-    public function setDateConseil($dateConseil)
-    {
-        $this->dateConseil = $dateConseil;
-
-        return $this;
-    }
-
-    /**
-     * Get dateConseil
-     *
-     * @return \DateTime 
-     */
-    public function getDateConseil()
-    {
-        return $this->dateConseil;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return ValidationService
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return ValidationService
+     * @return Contrat
      */
     public function setHistoCreation($histoCreation)
     {
@@ -166,7 +75,7 @@ class ValidationService implements HistoriqueAwareInterface
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return ValidationService
+     * @return Contrat
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -189,7 +98,7 @@ class ValidationService implements HistoriqueAwareInterface
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return ValidationService
+     * @return Contrat
      */
     public function setHistoModification($histoModification)
     {
@@ -209,29 +118,6 @@ class ValidationService implements HistoriqueAwareInterface
     }
 
     /**
-     * Set ordre
-     *
-     * @param integer $ordre
-     * @return ValidationService
-     */
-    public function setOrdre($ordre)
-    {
-        $this->ordre = $ordre;
-
-        return $this;
-    }
-
-    /**
-     * Get ordre
-     *
-     * @return integer 
-     */
-    public function getOrdre()
-    {
-        return $this->ordre;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -242,10 +128,33 @@ class ValidationService implements HistoriqueAwareInterface
     }
 
     /**
+     * Set typeContrat
+     *
+     * @param \Application\Entity\Db\TypeContrat $typeContrat
+     * @return Contrat
+     */
+    public function setTypeContrat(\Application\Entity\Db\TypeContrat $typeContrat = null)
+    {
+        $this->typeContrat = $typeContrat;
+
+        return $this;
+    }
+
+    /**
+     * Get typeContrat
+     *
+     * @return \Application\Entity\Db\TypeContrat 
+     */
+    public function getTypeContrat()
+    {
+        return $this->typeContrat;
+    }
+
+    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return ValidationService
+     * @return Contrat
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -268,7 +177,7 @@ class ValidationService implements HistoriqueAwareInterface
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return ValidationService
+     * @return Contrat
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -291,7 +200,7 @@ class ValidationService implements HistoriqueAwareInterface
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return ValidationService
+     * @return Contrat
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -308,28 +217,5 @@ class ValidationService implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set service
-     *
-     * @param \Application\Entity\Db\Service $service
-     * @return ValidationService
-     */
-    public function setService(\Application\Entity\Db\Service $service = null)
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
-    /**
-     * Get service
-     *
-     * @return \Application\Entity\Db\Service 
-     */
-    public function getService()
-    {
-        return $this->service;
     }
 }

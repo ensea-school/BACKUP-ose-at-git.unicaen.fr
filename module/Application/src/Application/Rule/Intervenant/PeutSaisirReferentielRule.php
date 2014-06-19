@@ -2,6 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
+use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Entity\Db\Intervenant;
 use Application\Acl\ComposanteDbRole;
 
@@ -15,13 +16,13 @@ class PeutSaisirReferentielRule extends IntervenantRule
     /**
      * Constructeur.
      * 
-     * @param Intervenant      $intervenant Intervenant dont on saisit du référentiel
-     * @param ComposanteDbRole $role        Role auteur de la modification
+     * @param Intervenant   $intervenant Intervenant dont on saisit du référentiel
+     * @param RoleInterface $role        Role auteur de la modification
      */
-    public function __construct(Intervenant $intervenant, ComposanteDbRole $role)
+    public function __construct(Intervenant $intervenant, RoleInterface $role)
     {
         parent::__construct($intervenant);
-        $this->role = $role;
+        $this->setRole($role);
     }
     
     public function execute()
@@ -30,6 +31,10 @@ class PeutSaisirReferentielRule extends IntervenantRule
         if (!$estPermanent->execute()) {
             $this->setMessage($estPermanent->getMessage());
             return false;
+        }
+        
+        if (!$this->getRole() instanceof ComposanteDbRole) {
+            return true;
         }
         
         $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getRole()->getStructure());
@@ -47,11 +52,21 @@ class PeutSaisirReferentielRule extends IntervenantRule
     }
     
     /**
-     * @var \Application\Acl\ComposanteDbRole
+     * @var RoleInterface
      */
     protected $role;
     /**
-     * @return \Application\Acl\ComposanteDbRole
+     * 
+     * @param RoleInterface $role
+     * @return self
+     */
+    public function setRole(RoleInterface $role)
+    {
+        $this->role = $role;
+        return $this;
+    }
+    /**
+     * @return RoleInterface
      */
     public function getRole()
     {

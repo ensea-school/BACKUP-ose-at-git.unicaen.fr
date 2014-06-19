@@ -164,14 +164,24 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
                     new \Zend\Filter\PregReplace(array('pattern' => '/,/', 'replacement' => '.')),
                 ),
                 'validators' => array(
+//                    array(
+//                        'name' => 'Zend\Validator\NotEmpty',
+//                        'options' => array(
+//                            'string',
+//                            'integer',
+//                            'zero',
+//                            'messages' => array(
+//                                \Zend\Validator\NotEmpty::IS_EMPTY => "Un nombre d'heures non nul est requis",
+//                            ),
+//                        ),
+//                    ),
                     array(
-                        'name' => 'Zend\Validator\NotEmpty',
+                        'name' => 'Zend\Validator\GreaterThan',
                         'options' => array(
-                            'string',
-                            'integer',
-                            'zero',
+                            'min' => 0,
+                            'inclusive' => false,
                             'messages' => array(
-                                \Zend\Validator\NotEmpty::IS_EMPTY => "Un nombre d'heures non nul est requis",
+                                \Zend\Validator\GreaterThan::NOT_GREATER => "Le nombre d'heures doit être strictement supérieur à 0",
                             ),
                         ),
                     ),

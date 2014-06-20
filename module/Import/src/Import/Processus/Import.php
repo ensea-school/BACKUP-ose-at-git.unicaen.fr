@@ -377,6 +377,9 @@ class Import extends Processus
      */
     protected function execMaj( $tableName, $name, $value=null, $action=self::A_ALL )
     {
+        if ('source_code' == $name && $value !== null){
+            $value = (string)$value;
+        }
         $query = new Query($tableName);
         if (null !== $value) $query->addColValue($name, $value);
         switch( $action ){

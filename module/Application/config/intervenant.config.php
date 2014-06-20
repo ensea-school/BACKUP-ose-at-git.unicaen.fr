@@ -115,6 +115,19 @@ return array(
                             ),
                         ),
                     ),
+                    'validation' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:id/validation',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Validation',
+                                'action' => 'ajouter',
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -174,6 +187,14 @@ return array(
                                 'resource' => 'controller/Application\Controller\Dossier:pieces-jointes',
                                 'visible' => 'NavigationPageVisibility',
                             ),
+                            'validation' => array(
+                                'label'  => "Validation",
+                                'title'  => "Validation du dossier de l'intervenant",
+                                'route'  => 'intervenant/validation',
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Validation:ajouter',
+                                'visible' => 'NavigationPageVisibility',
+                            ),
                         ),
                     ),
                 ),
@@ -203,6 +224,11 @@ return array(
                     'action'     => array('saisir'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
+                array(
+                    'controller' => 'Application\Controller\Validation',
+                    'action'     => array('ajouter'),
+                    'roles'      => array(ComposanteRole::ROLE_ID),
+                ),
             ),
         ),
     ),
@@ -211,6 +237,7 @@ return array(
             'Application\Controller\Intervenant'           => 'Application\Controller\IntervenantController',
             'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
             'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
+            'Application\Controller\Validation'            => 'Application\Controller\ValidationController',
         ),
         'aliases' => array(
             'IntervenantController' => 'Application\Controller\Intervenant',
@@ -227,6 +254,8 @@ return array(
             'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
             'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
             'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
+            'ApplicationTypeValidation'        => 'Application\\Service\\TypeValidation',
+            'ApplicationValidation'            => 'Application\\Service\\Validation',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',

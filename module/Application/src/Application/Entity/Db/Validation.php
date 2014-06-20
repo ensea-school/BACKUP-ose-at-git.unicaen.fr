@@ -10,6 +10,11 @@ class Validation implements HistoriqueAwareInterface
     /**
      * @var \DateTime
      */
+    private $dateCommission;
+    
+    /**
+     * @var \DateTime
+     */
     private $histoCreation;
 
     /**
@@ -250,6 +255,29 @@ class Validation implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Set dateCommission
+     *
+     * @param \DateTime $dateCommission
+     * @return Validation
+     */
+    public function setDateCommission(\DateTime $dateCommission = null)
+    {
+        $this->dateCommission = $dateCommission;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCommission
+     *
+     * @return \DateTime
+     */
+    public function getDateCommission()
+    {
+        return $this->dateCommission;
     }
 
     /**

@@ -33,23 +33,61 @@ class Validation extends AbstractEntityService
     {
         return 'v';
     }
+
+    /**
+     * Retourne une nouvelle entité de la classe donnée
+     * 
+     * @param TypeValidation|string $type
+     * @return \Application\Entity\Db\Validation
+     */
+    public function newEntity($type = null)
+    {
+        $entity = parent::newEntity();
+        $entity->setTypeValidation($this->normalizeTypeValidation($type));
+        
+        return $entity;
+    }
     
     /**
      * Recherche par type 
      *
-     * @param TypeValidation $type
+     * @param TypeValidation|string $type
      * @param QueryBuilder|null $qb
      * @return QueryBuilder
      */
-    public function finderByType(TypeValidation $type, QueryBuilder $qb = null, $alias = null)
+    public function finderByType($type, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
         $qb
                 ->join("$alias.typeValidation", 'tv')
                 ->andWhere("tv = :tv")
-                ->setParameter('tv', $type);
+                ->setParameter('tv', $this->normalizeTypeValidation($type));
 
         return $qb;
+    }
+    
+    /**
+     * 
+     * @param TypeValidation|string $type
+     * @return \Application\Entity\Db\TypeValidation
+     * @throws RuntimeException
+     */
+    protected function normalizeTypeValidation($type)
+    {
+        if (null === $type) {
+            return null;
+        }
+        if ($type instanceof TypeValidation) {
+            return $type;
+        }
+        
+        $qb = $this->getServiceLocator()->get('ApplicationTypeValidation')->finderByCode($code = $type);
+        $type = $qb->getQuery()->getOneOrNullResult();
+        if (!$type) {
+            throw new RuntimeException("Aucun type de validation trouvé avec le code '$code'.");
+        }
+        
+        return $type;
     }
 }

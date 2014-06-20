@@ -168,6 +168,14 @@ class IntervenantController extends AbstractActionController implements \Applica
         return $view;
     }
 
+    public function voirHeuresCompAction()
+    {
+        $intervenant = $this->context()->intervenantFromRoute('id');
+        $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
+
+        return compact('intervenant', 'formule');
+    }
+
     public function modifierAction()
     {
         if (!($id = $this->params()->fromRoute('id'))) {

@@ -58,4 +58,24 @@ class Periode extends AbstractEntityService
         $qb->orderBy("$alias.ordre");
         return parent::getList($qb, $alias);
     }
+
+    /**
+     * Retourne le semestre 1
+     *
+     * @return \Application\Entity\Db\Periode
+     */
+    public function getSemestre1()
+    {
+        return $this->getRepo()->findOneBy(array('code' => PeriodeEntity::SEMESTRE_1));
+    }
+
+    /**
+     * Retourne le semestre 2
+     *
+     * @return \Application\Entity\Db\Periode
+     */
+    public function getSemestre2()
+    {
+        return $this->getRepo()->findOneBy(array('code' => PeriodeEntity::SEMESTRE_2));
+    }
 }

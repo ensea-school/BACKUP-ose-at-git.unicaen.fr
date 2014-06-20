@@ -42,4 +42,14 @@ class Source extends AbstractEntityService
     {
         return $this->getRepo()->findOneBy(array('code' => SourceEntity::CODE_SOURCE_OSE));
     }
+
+    /**
+     * Retourne l'entité de test OSE
+     *
+     * @return SourceEntity
+     */
+    public function getTest()
+    {
+        return $this->getRepo()->findOneBy(array('code' => SourceEntity::CODE_SOURCE_TEST));
+    }
 }

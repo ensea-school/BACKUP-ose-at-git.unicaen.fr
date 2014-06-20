@@ -204,10 +204,12 @@ return array(
             'ApplicationServiceValidation'      => 'Application\\Service\\ServiceValidation',
             'ApplicationPeriode'                => 'Application\\Service\\Periode',
             'ApplicationMotifNonPaiement'       => 'Application\\Service\\MotifNonPaiement',
+            'ApplicationModificationServiceDu'  => 'Application\\Service\\ModificationServiceDu',
             'ApplicationTypeVolumeHoraire'      => 'Application\\Service\\TypeVolumeHoraire',
             'FormServiceRechercheHydrator'      => 'Application\Form\Service\RechercheHydrator',
             'FormServiceSaisieFieldsetHydrator' => 'Application\Form\Service\SaisieFieldsetHydrator',
             'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',
+            'ProcessFormuleHetd'                => 'Application\\Service\\Process\\FormuleHetd',
         ),
         'factories' => array(
         ),

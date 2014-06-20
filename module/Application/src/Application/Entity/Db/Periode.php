@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Periode
 {
+    const SEMESTRE_1 = 'S1';
+    const SEMESTRE_2 = 'S2';
+
     /**
      * @var \DateTime
      */

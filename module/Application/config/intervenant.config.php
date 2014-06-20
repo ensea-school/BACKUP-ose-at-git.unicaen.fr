@@ -60,6 +60,19 @@ return array(
                             ),
                         ),
                     ),
+                    'voir-heures-comp' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/voir-heures-comp[/:id]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'voir-heures-comp',
+                            ),
+                        ),
+                    ),
                     'modification-service-du' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -157,6 +170,14 @@ return array(
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:voir',
                             ),
+                            'voir-heures-comp' => array(
+                                'label'  => "Heures compplémentaires",
+                                'title'  => "Calcul des heures complémentaires {id}",
+                                'route'  => 'intervenant/voir-heures-comp',
+                                'action' => 'voir-heures-comp',
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Intervenant:voir-heures-comp',
+                            ),
                             'modification-service-du' => array(
                                 'label'  => "Modification de service dû",
                                 'title'  => "Modification de service dû de l'intervenant {id}",
@@ -211,7 +232,7 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('voir', 'choisir', 'rechercher', 'search'),
+                    'action'     => array('voir', 'choisir', 'rechercher', 'search', 'voir-heures-comp'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
                 array(

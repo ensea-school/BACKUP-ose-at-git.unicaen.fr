@@ -19,6 +19,9 @@
         </whitelist>
     </filter>
 
+    <groups>
+        
+    </groups>
     <!--
     <groups>
         <exclude>

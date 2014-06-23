@@ -73,20 +73,22 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             $this->add($intervenant);
         }
 
-        $this->add(array(
-            'type'       => 'Radio',
-            'name'       => 'interne-externe',
-            'options'    => array(
-                'label'  => "Enseignement effectué :",
-                'value_options' => array(
-                    'service-interne' => 'en interne',
-                    'service-externe' => 'hors '.$this->etablissement,
+        if ((! $this->hasIntervenant) && $this->getContextProvider()->getGlobalContext()->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
+            $this->add(array(
+                'type'       => 'Radio',
+                'name'       => 'interne-externe',
+                'options'    => array(
+                    'label'  => "Enseignement effectué :",
+                    'value_options' => array(
+                        'service-interne' => 'en interne',
+                        'service-externe' => 'hors '.$this->etablissement,
+                    ),
                 ),
-            ),
-            'attributes' => array(
-                'value' => 'service-interne'
-            )
-        ));
+                'attributes' => array(
+                    'value' => 'service-interne'
+                )
+            ));
+        }
 
         /**
          * @todo : fourrer l'init des URL dans la classe ElementPedagogiqueRechercheFieldset
@@ -148,7 +150,9 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
                 'label' => (string)$cl->getElementPedagogique()
             ));
         }
-        $this->get('interne-externe')->setValue('service-interne');
+        if ($this->has('interne-externe')){
+            $this->get('interne-externe')->setValue('service-interne');
+        }
     }
 
     /**

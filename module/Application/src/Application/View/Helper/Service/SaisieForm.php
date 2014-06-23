@@ -59,17 +59,20 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
     {
         $fservice = $form->get('service');
 
-        $interne = $fservice->get('interne-externe')->getValue() == 'service-interne';
-
         $form->prepare();
 
         $res = $this->getView()->form()->openTag($form);
         if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
         }
-        $res .= $this->getView()->formControlGroup($fservice->get('interne-externe'), 'formButtonGroup');
-        $res .= '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
-        $res .= '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->getView()->formControlGroup($fservice->get('etablissement')).'</div>';
+        if ($fservice->has('interne-externe')){
+            $interne = $fservice->get('interne-externe')->getValue() == 'service-interne';
+            $res .= $this->getView()->formControlGroup($fservice->get('interne-externe'), 'formButtonGroup');
+            $res .= '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
+            $res .= '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->getView()->formControlGroup($fservice->get('etablissement')).'</div>';
+        }else{
+            $res .= '<div id="element-interne">'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
+        }
         foreach( $this->getPeriodes() as $periode ){
             $res .= $this->getView()->volumeHoraireSaisieMultipleFieldset(
                                             $form->get($periode->getCode()),

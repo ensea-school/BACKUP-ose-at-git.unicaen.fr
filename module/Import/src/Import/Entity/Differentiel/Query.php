@@ -76,6 +76,13 @@ class Query
     protected $colValues = array();
 
     /**
+     * Liste des colonnes ne devant pas être nulles
+     *
+     * @var string[]
+     */
+    protected $notNull = array();
+
+    /**
      * Limite au nombre d'enregistrements retournés
      *
      * @var integer
@@ -349,6 +356,39 @@ class Query
     }
 
     /**
+     * Retourne la liste des colonnes ne devant pas être nulles
+     *
+     * @return string[]
+     */
+    public function getNotNull()
+    {
+        return $this->notNull;
+    }
+
+    /**
+     * Applique une liste de colonnes ne devant pas être nulles
+     *
+     *
+     * @param string[] $notNull
+     * @return self
+     */
+    public function setNotNull( array $notNull )
+    {
+        $this->notNull = $notNull;
+    }
+
+    /**
+     * Ajoute une colonne ne devant pas être nulle
+     *
+     * @param string $column
+     */
+    public function addNotNull( $column )
+    {
+        $this->notNull[] = $column;
+        return $this;
+    }
+
+    /**
      * 
      * @return integer
      */
@@ -458,6 +498,12 @@ class Query
         if (! empty($this->colValues)){
             foreach( $this->colValues as $column => $value ){
                 $where[] = $viewName.'.'.Service::escapeKW($column).Service::equals($value);
+            }
+        }
+
+        if (! empty($this->notNull)){
+            foreach( $this->notNull as $column ){
+                $where[] = $viewName.'.'.Service::escapeKW($column).' IS NOT NULL';
             }
         }
 

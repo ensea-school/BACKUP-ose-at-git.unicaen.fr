@@ -12,7 +12,7 @@ use Common\Exception\LogicException;
  */
 class ImportController extends AbstractActionController
 {
-    protected function makeQueries( $tableName=null )
+    protected function makeQueries( $tableName=null, $import=false )
     {
         /* Liste des tables pour lesquelles les insertions ne doivent pas être scrutées */
         $noInsertTables = array(
@@ -64,6 +64,13 @@ class ImportController extends AbstractActionController
 
             $queries[$table] = $q;
         }
+
+        if ($import){
+            if (isset($queries['ELEMENT_PEDAGOGIQUE'])){
+                $queries['ELEMENT_PEDAGOGIQUE']->addNotNull('ETAPE_ID');
+            }
+        }
+
         return $queries;
     }
 
@@ -126,7 +133,7 @@ class ImportController extends AbstractActionController
         $lignes = array();
         $tableName = $this->params()->fromRoute('table');
 
-        $query = $this->makeQueries($tableName);
+        $query = $this->makeQueries($tableName, true);
 
         if (! isset($query[$tableName])){
             $errors[] = 'La table "'.$tableName.'" n\'est pas correste ou n\'est pas importable.';
@@ -145,7 +152,7 @@ class ImportController extends AbstractActionController
             }catch(\Exception $e){
                 $errors = array($e->getMessage());
             }
-
+            $query->setNotNull(array()); // Aucune colonne ne doit être non nulle !!
             $query->setLimit(101);
             $lignes = $sd->make($query)->fetchAll();
         }

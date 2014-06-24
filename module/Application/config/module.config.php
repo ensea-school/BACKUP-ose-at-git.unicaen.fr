@@ -9,6 +9,7 @@ $main =  array(
                 'string_functions' => array(
                     'CONVERT'  => 'Common\ORM\Query\Functions\Convert',
                     'CONTAINS' => 'Common\ORM\Query\Functions\Contains',
+                    'OSE_DIVERS.STRUCTURE_DANS_STRUCTURE' => 'Common\ORM\Query\Functions\OseDivers\StructureDansStructure',
                 ),
                 'filters' => array(
                     'historique' => 'Common\ORM\Filter\HistoriqueFilter',

@@ -68,6 +68,45 @@ class Structure extends AbstractEntityService
     }
 
     /**
+     * Retourne la liste des structures pour lesquelles le rôle est autorisé à officier
+     *
+     * @param \Application\Acl\DbRole $role
+     */
+    public function finderByRole( $role, QueryBuilder $qb=null, $alias=null)
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        if (! $role instanceof \Application\Acl\DbRole) return $qb;
+        $this->finderByStructure( $role->getStructure(), $qb, $alias );
+        
+        return $qb;
+    }
+
+    /**
+     * Filtre par la structure et ses filles
+     *
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string $alias
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function finderByStructure( EntityStructure $structure, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        //$f = new Func('OSE_DIVERS.STRUCTURE_DANS_STRUCTURE', array("$alias.id", ":structure_cible"));
+
+        $qb->andWhere( $alias.'.structureNiv2 = :structure_cible')->setParameter('structure_cible', $structure->getParenteNiv2()->getId());
+        //$qb->andWhere( "OSE_DIVERS.STRUCTURE_DANS_STRUCTURE($alias.id, :structure_cible) = 1")->setParameter('structure_cible', $structure->getParenteNiv2()->getId());
+        //$qb->andWhere($qb->expr()->eq($f, 1));
+        //$qb->setParameter('structure_cible', $structure->getParenteNiv2()->getId());
+        //$this->join( $this, $qb, 'id', 'structureNiv2', $this->getAlias(), 'strniv2' );
+
+        return $qb;
+    }
+
+    /**
      * Recherche par nom
      *
      * @param string $term

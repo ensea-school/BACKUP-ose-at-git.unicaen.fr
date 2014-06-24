@@ -119,15 +119,20 @@ class ValidationController extends AbstractActionController implements ContextPr
     private function commonDossier()
     {
         $role              = $this->getContextProvider()->getSelectedIdentityRole();
-        $service           = $this->getServiceValidation();
+        $serviceValidation = $this->getServiceValidation();
         $this->intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
-        $this->form        = $this->getFormDossier()->setIntervenant($this->intervenant)->init();
+        $typeValidation    = TypeValidation::CODE_DONNEES_PERSO_PAR_COMP;
+        
+        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
 
+        $this->form = $this->getFormDossier()->setIntervenant($this->intervenant)->init();
+        
         $this->em()->getFilters()->enable('historique');
         
-        $this->validation = $service->finderByType($code = TypeValidation::CODE_DONNEES_PERSO_PAR_COMP)->getQuery()->getOneOrNullResult();
+        $qb = $serviceValidation->finderByType($typeValidation);
+        $this->validation = $serviceValidation->finderByIntervenant($this->intervenant, $qb)->getQuery()->getOneOrNullResult();
         if (!$this->validation) {
-            $this->validation = $service->newEntity($code)->setIntervenant($this->intervenant);
+            $this->validation = $serviceValidation->newEntity($typeValidation)->setIntervenant($this->intervenant);
         }
         else {
             $this->form->get('valide')->setValue(true);
@@ -191,6 +196,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         foreach ($structures as $key => $structure) {
             $this->validation[$key] = array('validation' => null, 'structure' => $structure);
             $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
+            $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
             $validation = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getOneOrNullResult();
             if ($validation) {
                 $this->validation[$key]['validation'] = $validation;
@@ -219,7 +225,7 @@ class ValidationController extends AbstractActionController implements ContextPr
     public function modifierServiceAction()
     {
         $this->readonly = false;
-            
+        
         $serviceValidation    = $this->getServiceValidation();
         $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
         $role                 = $this->getContextProvider()->getSelectedIdentityRole();
@@ -227,13 +233,17 @@ class ValidationController extends AbstractActionController implements ContextPr
         $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute('id');
         $this->form           = $this->getFormService()->setIntervenant($this->intervenant)->init();
         $this->title          = "Validation des enseignements au sein de la structure '$structure' <small>$this->intervenant</small>";
+        $typeValidation       = TypeValidation::CODE_SERVICES_PAR_COMP;
+        
+        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
 
         $this->em()->getFilters()->enable('historique');
         
-        $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
+        $qb = $serviceValidation->finderByType($typeValidation);
+        $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
         $this->validation = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getOneOrNullResult();
         if (!$this->validation) {
-            $this->validation = $serviceValidation->newEntity($code)->setIntervenant($this->intervenant);
+            $this->validation = $serviceValidation->newEntity($typeValidation)->setIntervenant($this->intervenant);
             $volumesHoraires = $serviceVolumeHoraire->finderByStructureIntervention($structure)->getQuery()->getResult();
             foreach ($volumesHoraires as $volumeHoraire) {
                 $this->validation->addVolumeHoraire($volumeHoraire);

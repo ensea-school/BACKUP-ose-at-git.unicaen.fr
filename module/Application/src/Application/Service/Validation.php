@@ -5,6 +5,7 @@ namespace Application\Service;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
 
 /**
  * Description of Validation
@@ -69,6 +70,25 @@ class Validation extends AbstractEntityService
     }
     
     /**
+     * Recherche par intervenant concerné. 
+     *
+     * @param IntervenantEntity $intervenant
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    public function finderByIntervenant(IntervenantEntity $intervenant, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $qb
+                ->join("$alias.intervenant", 'i')
+                ->andWhere("i = :intervenant")
+                ->setParameter('intervenant', $intervenant);
+
+        return $qb;
+    }
+    
+    /**
      * Recherche par structure d'intervention (i.e. structure où sont effectués les enseignements). 
      *
      * @param StructureEntity $structure
@@ -110,5 +130,31 @@ class Validation extends AbstractEntityService
         }
         
         return $type;
+    }
+    
+    /**
+     * Détermine si on peut saisir une validation de services.
+     *
+     * @param \Application\Entity\Db\Intervenant $intervenant Intervenant concerné
+     * @param \Application\Entity\Db\TypeValidation|string $type Type de validation concerné
+     * @return boolean
+     */
+    public function canAdd($intervenant, $type, $runEx = false)
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        $rule = new \Application\Rule\Intervenant\PeutValiderServiceRule($intervenant, $this->normalizeTypeValidation($type));
+        if (!$rule->execute()) {
+            $message = "?";
+            if ($role instanceof \Application\Acl\IntervenantRole) {
+                $message = "Vous ne pouvez pas valider. ";
+            }
+            elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+                $message = "Vous ne pouvez pas valider pour $intervenant. ";
+            }
+            return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
+        }
+        
+        return true;
     }
 }

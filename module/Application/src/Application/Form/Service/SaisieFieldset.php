@@ -12,6 +12,7 @@ use Application\Service\ContextProviderAwareTrait;
 use Application\Acl\ComposanteDbRole;
 use Application\Acl\IntervenantRole;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Application\Entity\Db\IntervenantExterieur;
 
 /**
  * Description of SaisieFieldset
@@ -30,14 +31,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
      */
     protected $etablissement;
 
-    /**
-     * hasIntervenant
-     *
-     * @var boolean
-     */
-    protected $hasIntervenant;
-
-
+    
 
     public function __construct($name = null, $options = array())
     {
@@ -59,9 +53,10 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             'type' => 'Hidden',
         ));
 
-        $this->hasIntervenant = ! $this->getContextProvider()->getSelectedIdentityRole() instanceof IntervenantRole;
+        $identityRole = $this->getContextProvider()->getSelectedIdentityRole();
+        $contextIntervenant = $this->getContextProvider()->getGlobalContext()->getIntervenant();
 
-        if ($this->hasIntervenant){
+        if (! $identityRole instanceof IntervenantRole){
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant ->setRequired(true)
                          ->setSelectionRequired(true)
@@ -73,7 +68,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             $this->add($intervenant);
         }
 
-        if ((! $this->hasIntervenant) && $this->getContextProvider()->getGlobalContext()->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
+        if (!($identityRole instanceof IntervenantRole && $contextIntervenant instanceof IntervenantExterieur)){
             $this->add(array(
                 'type'       => 'Radio',
                 'name'       => 'interne-externe',
@@ -132,7 +127,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         $cl = $this->getContextProvider()->getLocalContext();
 
-        if ($this->hasIntervenant && $cl->getIntervenant()){
+        if ($this->has('intervenant') && $cl->getIntervenant()){
             $this->get('intervenant')->setValue(array(
                 'id' => $cl->getIntervenant()->getSourceCode(),
                 'label' => (string)$cl->getIntervenant()

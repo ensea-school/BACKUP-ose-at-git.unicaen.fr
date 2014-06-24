@@ -318,7 +318,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Validation',
                     'action'     => array('service'),
-                    'roles'      => array(IntervenantPermanentRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Contrat',

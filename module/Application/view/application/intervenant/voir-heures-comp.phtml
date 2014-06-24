@@ -1,3 +1,109 @@
 <?php
 
-echo 'EN COURS DE REALISATION...';
+/* @var $formule \Application\Service\Process\FormuleHetd */
+/* @var $intervenant \Application\Entity\Db\Intervenant */
+
+function fh( $heures ){
+    $formated = number_format($heures,2, ',', ' ');
+
+    if (0 == (int)$heures){
+        $formated = '<span style="color:#bbb">'.$formated.'</span>';
+    }
+
+    echo $formated;
+}
+
+function fp( $pourcentage )
+{
+    echo number_format($pourcentage * 100,2, ',', ' '). '%';
+}
+
+$serviceDu = $formule->getServiceDu($intervenant);
+$modifServiceDu = $formule->getModifServiceDu($intervenant);
+$serviceReferentiel = $formule->getServiceReferentiel($intervenant);
+$serviceRestant = $formule->getServiceRestant($intervenant);
+$service = $formule->getService($intervenant);
+$ventilation = $formule->getVentilation($intervenant);
+$reevalReste = $formule->getReevalResteAPayer($intervenant);
+$heures = $formule->getHeuresComplementaires($intervenant);
+
+$typesInterventions = $formule->getServiceLocator()->get('applicationTypeIntervention')->getTypesIntervention();
+
+?>
+<h2 class="page-header">Détail du calcul des heures équivalent TD et complémentaires</h2>
+<table class="table table-bordered">
+    <tr><th>&nbsp;</th><th>Heures</th></tr>
+    <tr><th>Service dû</th><td class="bg-info" style="text-align:right"><?php fh($serviceDu) ?></td></tr>
+    <tr><th>Modifications de service dû</th><td class="bg-info" style="text-align:right"><?php fh($modifServiceDu) ?></td></tr>
+    
+    <tr><th>Fonctions référentielles</th><td class="bg-info" style="text-align:right"><?php fh($serviceReferentiel) ?></td></tr>
+    <tr><th>Service restant à effectuer</th><td class="bg-success" style="text-align:right"><?php fh($serviceRestant) ?></td></tr>
+</table>
+
+<table class="table table-bordered">
+<tr>
+    <th rowspan="2">Enseignement</th>
+    <th class="bg-info" rowspan="2">Coefficient modulateur heures comp.</th>
+    <?php foreach( $typesInterventions as $typeIntervention ): ?>
+        <th class="bg-info" colspan="3"><?php echo (string)$typeIntervention.'<br />(x'.number_format($typeIntervention->getTauxHetdService(),2,',',' ').' service, x'.number_format($typeIntervention->getTauxHetdComplementaire(),2,',',' ').' compl.)' ?></th>
+    <?php endforeach; ?>
+    <th class="bg-success" rowspan="2">Heures</th>
+</tr>
+<tr>
+    <?php foreach( $typesInterventions as $typeIntervention ): ?>
+        <th class="bg-info">Heures</th>
+        <th>HETD (service)</th>
+        <th>HETD (compl.)</th>
+    <?php endforeach; ?>
+</tr>
+<?php foreach( $service as $sid => $ligne ): ?>
+    <tr>
+        <th><?php
+            if ($ligne['element_pedagogique']){
+                echo $ligne['element_pedagogique']->getSourceCode().' - '.$ligne['element_pedagogique']->getLibelle();
+            }else{
+                echo $ligne['etablissement'];
+            }
+        ?></th>
+        <td class="bg-info" style="text-align:right">x<?php fh($ligne['ponderation_service_compl']) ?></td>
+        <?php foreach( $typesInterventions as $typeIntervention ): $tid = $typeIntervention->getId(); ?>
+            <td class="bg-info" style="text-align:right"><?php fh(isset($ligne['volumes_horaires'][$tid]) ? $ligne['volumes_horaires'][$tid]['heures'] : 0) ?></td>
+            <td style="text-align:right"><?php fh(isset($ligne['volumes_horaires'][$tid]) ? $ligne['volumes_horaires'][$tid]['hetd_serv'] : 0) ?></td>
+            <td style="text-align:right"><?php fh(isset($ligne['volumes_horaires'][$tid]) ? $ligne['volumes_horaires'][$tid]['hetd_comp'] : 0) ?></td>
+        <?php endforeach; ?>
+        <td class="bg-success" style="text-align:right"><?php fh($ligne['heures']) ?></td>
+    </tr>
+<?php endforeach; ?>
+<tr>
+    <th>Ventilation</th>
+    <td class="bg-success">&nbsp;</td>
+    <?php foreach( $typesInterventions as $typeIntervention ): $tid = $typeIntervention->getId(); ?>
+        <td class="bg-success" style="text-align:right"><?php fh(isset($ventilation[$tid]) ? $ventilation[$tid]['heures'] : 0) ?></td>
+        <td class="bg-warning" style="text-align:right"><?php fp(isset($ventilation[$tid]) ? $ventilation[$tid]['pourc_serv'] : 0) ?></td>
+        <td class="bg-warning" style="text-align:right"><?php fp(isset($ventilation[$tid]) ? $ventilation[$tid]['pourc_comp'] : 0) ?></td>
+    <?php endforeach; ?>
+    <td class="bg-success" style="text-align:right"><?php fh($ventilation['heures']) ?></td>
+</tr>
+</table>
+
+<table class="table table-bordered">
+    <tr>
+        <th colspan="2" style="text-align:right">Pondération moyenne des enseignements</th>
+        <th style="text-align:right">Rééval. du service effectué</th>
+        <th style="text-align:right">Reste à payer</th>
+    </tr>
+    <tr>
+        <th style="text-align:right">Dans le service statutaire, coût horaire HETD =</th>
+        <td class="bg-warning" style="text-align:right"><?php fp($reevalReste['sum_pourc_serv']) ?></td>
+        <td class="bg-success" style="text-align:right"><?php fh($reevalReste['reeval_serv']) ?></td>
+        <td class="bg-success" style="text-align:right"><?php fh($reevalReste['reste_a_payer']) ?></td>
+    </tr>
+    <tr>
+        <th style="text-align:right">Pour les heures complémentaires, coût horaire HETD =</th>
+        <td class="bg-warning" style="text-align:right"><?php fp($reevalReste['sum_pourc_comp']) ?></td>
+        <td style="text-align:right">&nbsp;</td>
+        <td style="text-align:right">&nbsp;</td>
+    </tr>
+</table>
+
+<p style="font-size:16pt">Heures complémentaires : <span class="label label-success"><?php fh( $heures ); ?></span></p>

@@ -60,6 +60,18 @@ class TypeIntervention
     protected $id;
 
     /**
+     *
+     * @var float
+     */
+    protected $tauxHetdService;
+
+    /**
+     *
+     * @var float
+     */
+    protected $tauxHetdComplementaire;
+
+    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoModificateur;
@@ -295,6 +307,28 @@ class TypeIntervention
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getTauxHetdService()
+    {
+        return $this->tauxHetdService;
+    }
+
+    public function getTauxHetdComplementaire()
+    {
+        return $this->tauxHetdComplementaire;
+    }
+
+    public function setTauxHetdService($tauxHetdService)
+    {
+        $this->tauxHetdService = $tauxHetdService;
+        return $this;
+    }
+
+    public function setTauxHetdComplementaire($tauxHetdComplementaire)
+    {
+        $this->tauxHetdComplementaire = $tauxHetdComplementaire;
+        return $this;
     }
 
     /**

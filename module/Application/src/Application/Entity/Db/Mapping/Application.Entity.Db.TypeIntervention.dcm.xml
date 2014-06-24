@@ -18,6 +18,8 @@
     <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <field name="tauxHetdService" type="float" column="TAUX_HETD_SERVICE" nullable="false"/>
+    <field name="tauxHetdComplementaire" type="float" column="TAUX_HETD_Complementaire" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

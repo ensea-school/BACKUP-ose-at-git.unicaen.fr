@@ -171,7 +171,7 @@ return array(
                                 'resource' => 'controller/Application\Controller\Intervenant:voir',
                             ),
                             'voir-heures-comp' => array(
-                                'label'  => "Heures compplémentaires",
+                                'label'  => "Heures complémentaires",
                                 'title'  => "Calcul des heures complémentaires {id}",
                                 'route'  => 'intervenant/voir-heures-comp',
                                 'action' => 'voir-heures-comp',

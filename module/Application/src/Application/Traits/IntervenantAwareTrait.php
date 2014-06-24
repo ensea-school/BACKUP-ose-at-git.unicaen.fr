@@ -24,6 +24,8 @@ trait IntervenantAwareTrait
     public function setIntervenant(Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
+        
+        return $this;
     }
     
     /**

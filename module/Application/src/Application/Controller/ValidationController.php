@@ -4,12 +4,12 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
-use Application\Entity\Db\Validation;
-use Application\Entity\Db\TypeValidation;
 use Application\Acl\ComposanteDbRole;
-use Application\Acl\IntervenantRole;
+use Application\Entity\Db\TypeValidation;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Application\Form\Intervenant\DossierValidation;
+use Application\Form\Intervenant\ServiceValidation;
 
 /**
  * Description of ValidationController
@@ -24,157 +24,304 @@ class ValidationController extends AbstractActionController implements ContextPr
     use ContextProviderAwareTrait;
 
     private $validation;
+    private $readonly = false;
+    
+    /**
+     * @var \Application\Entity\Db\IntervenantExterieur
+     */
+    private $intervenant;
+    
+    /**
+     * @var \Application\Entity\Db\Dossier
+     */
+    private $dossier;
+    
+    /**
+     * @var \Application\Service\Process\PieceJointeProcess
+     */
+    private $process;
+    
+    /**
+     * @var \Zend\Form\Form
+     */
     private $form;
     
     /**
-     * Ajout d'une validation.
+     * @var string
+     */
+    private $title;
+    
+    /**
+     * @var \Zend\View\Model\ViewModel
+     */
+    private $view;
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws \Common\Exception\MessageException
+     */
+    public function dossierAction()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof ComposanteDbRole) {
+            return $this->modifierDossierAction();
+        }
+        else {
+            return $this->voirDossierAction();
+        }
+    }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws \Common\Exception\MessageException
+     */
+    public function voirDossierAction()
+    { 
+        $this->title    = "Validation des données personnelles <small>$this->intervenant</small>";
+        $this->readonly = true;
+            
+        $this->commonDossier();
+        
+        return $this->view;
+    }
+    
+    /**
+     * (Dé)Validation des données personnelles vacataires.
+     * NB : une seule validation pour toutes les composantes.
      * 
      * @return \Zend\View\Model\ViewModel
      * @throws RuntimeException
      */
-    public function ajouterAction()
+    public function modifierDossierAction()
     {
-        $service = $this->getServiceValidation();
-        $form    = $this->getForm();
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        $this->title    = "Validation des données personnelles <small>$this->intervenant</small>";
+        $this->readonly = false;
+            
+        $this->commonDossier();
         
-        $this->em()->getFilters()->enable('historique');
-        $this->validation = $service->finderByType($code = TypeValidation::CODE_DOSSIER_PAR_COMP)->getQuery()->getOneOrNullResult();
-        if (!$this->validation) {
-            $this->validation = $service->newEntity($code)->setIntervenant($intervenant);
-        }
-        else {
-            $form->get('complet')->setValue(true);
-        }
-        $form->bind($this->validation);
-        
-        if ($this->getRequest()->isPost()) {
+        if (!$this->readonly && $this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $complet = (bool) $data['complet'];
+            $this->form->setData($data);
+            if ($this->form->isValid()) {
+                $complet = (bool) $data['valide'];
                 $this->updateValidation($complet);
-                $this->notify($complet);
-                $this->flashMessenger()->addSuccessMessage(sprintf("Validation %s avec succès.", $complet ? "enregistrée" : "supprimée"));
-                $this->flashMessenger()->addInfoMessage("Un mail doit être envoyé pour informer l'intervenant, non ?...");
                 
                 return $this->redirect()->toRoute(null, array(), array(), true);
             }
         }
         
-        return compact('intervenant', 'form');
+        return $this->view;
+    }
+    
+    private function commonDossier()
+    {
+        $role              = $this->getContextProvider()->getSelectedIdentityRole();
+        $service           = $this->getServiceValidation();
+        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        $this->form        = $this->getFormDossier()->setIntervenant($this->intervenant)->init();
+
+        $this->em()->getFilters()->enable('historique');
+        
+        $this->validation = $service->finderByType($code = TypeValidation::CODE_DONNEES_PERSO_PAR_COMP)->getQuery()->getOneOrNullResult();
+        if (!$this->validation) {
+            $this->validation = $service->newEntity($code)->setIntervenant($this->intervenant);
+        }
+        else {
+            $this->form->get('valide')->setValue(true);
+        }
+        $this->form->bind($this->validation);
+        
+        $this->view = new \Zend\View\Model\ViewModel(array(
+            'intervenant' => $this->intervenant,
+            'form'        => $this->form,
+            'role'        => $role,
+            'readonly'    => $this->readonly,
+            'title'       => $this->title,
+        ));
+        $this->view->setTemplate('application/validation/dossier');
     }
     
     /**
      * 
-     * @param bool $complet
+     * @return \Zend\View\Model\ViewModel
+     * @throws \Common\Exception\MessageException
+     */
+    public function serviceAction()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof ComposanteDbRole) {
+            return $this->modifierServiceAction();
+        }
+        else {
+            return $this->voirServiceAction();
+        }
+    }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws \Common\Exception\MessageException
+     */
+    public function voirServiceAction()
+    { 
+        $this->readonly = true;
+          
+        $serviceStructure     = $this->getServiceStructure();
+        $serviceValidation    = $this->getServiceValidation();
+        $serviceService       = $this->getServiceService();
+        $role                 = $this->getContextProvider()->getSelectedIdentityRole();
+        $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute('id');
+        $this->form           = $this->getFormService()->setIntervenant($this->intervenant)->init();
+        $this->title          = "Validation des enseignements <small>$this->intervenant</small>";
+        
+        $this->em()->getFilters()->enable('historique');
+        
+        // fetch des structures d'intervenation
+        $qb = $serviceStructure->initQuery()[0];
+        $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
+        $serviceService->finderByContext($qb);
+        $structures = $serviceStructure->getList($qb);
+        
+        // collecte des validation de services pour chaque structure d'intervention
+        $this->validation = array();
+        foreach ($structures as $key => $structure) {
+            $this->validation[$key] = array('validation' => null, 'structure' => $structure);
+            $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
+            $validation = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getOneOrNullResult();
+            if ($validation) {
+                $this->validation[$key]['validation'] = $validation;
+            }
+        }
+        
+        $this->view = new \Zend\View\Model\ViewModel(array(
+            'intervenant' => $this->intervenant,
+            'validations' => $this->validation,
+            'role'        => $role,
+            'title'       => $this->title,
+            'readonly'    => $this->readonly,
+        ));
+        $this->view->setTemplate('application/validation/voir-service');
+        
+        return $this->view;
+    }
+    
+    /**
+     * (Dé)Validation des enseignements.
+     * NB : une validation par composante d'intervention.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws RuntimeException
+     */
+    public function modifierServiceAction()
+    {
+        $this->readonly = false;
+            
+        $serviceValidation    = $this->getServiceValidation();
+        $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
+        $role                 = $this->getContextProvider()->getSelectedIdentityRole();
+        $structure            = $role->getStructure();
+        $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute('id');
+        $this->form           = $this->getFormService()->setIntervenant($this->intervenant)->init();
+        $this->title          = "Validation des enseignements au sein de la structure '$structure' <small>$this->intervenant</small>";
+
+        $this->em()->getFilters()->enable('historique');
+        
+        $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
+        $this->validation = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getOneOrNullResult();
+        if (!$this->validation) {
+            $this->validation = $serviceValidation->newEntity($code)->setIntervenant($this->intervenant);
+            $volumesHoraires = $serviceVolumeHoraire->finderByStructureIntervention($structure)->getQuery()->getResult();
+            foreach ($volumesHoraires as $volumeHoraire) {
+                $this->validation->addVolumeHoraire($volumeHoraire);
+            }
+        }
+        else {
+            $this->form->get('valide')->setValue(true);
+        }
+        $this->form->bind($this->validation);
+        
+        $this->view = new \Zend\View\Model\ViewModel(array(
+            'intervenant' => $this->intervenant,
+            'form'        => $this->form,
+            'role'        => $role,
+            'title'       => $this->title,
+            'readonly'    => $this->readonly,
+        ));
+        $this->view->setTemplate('application/validation/service');
+        
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            $this->form->setData($data);
+            if ($this->form->isValid()) {
+                $valide = (bool) $data['valide'];
+                $this->updateValidation($valide);
+                
+                return $this->redirect()->toRoute(null, array(), array(), true);
+            }
+        }
+        
+        return $this->view;
+    }
+    
+    /**
+     * 
+     * @param bool $valide
      * @return boolean
      */
-    protected function updateValidation($complet)
+    protected function updateValidation($valide)
     {
-        if ($complet) {
+        if ($valide) {
             $this->em()->persist($this->validation);
         }
         else {
             $this->validation->setHistoDestruction(new \DateTime());
         }
         $this->em()->flush();
+
+        $this->notify($valide);
+        $this->flashMessenger()->addSuccessMessage(sprintf("Validation <strong>%s</strong> avec succès.", $valide ? "enregistrée" : "supprimée"));
+//        $this->flashMessenger()->addInfoMessage("Un mail doit être envoyé pour informer l'intervenant, non ?...");
         
         return $this;
     }
     
     protected function notify($complet)
     {
+        
     }
     
     /**
-     * @return \Zend\Form\Form
+     * @return DossierValidation
      */
-    protected function getForm()
+    protected function getFormDossier()
     {
         if (null === $this->form) {
-            $this->form = new \Zend\Form\Form();
-            $this->form->setAttribute('method', 'POST');
-            $this->form->add(array(
-                'name' => 'complet',
-                'type'  => 'Checkbox',
-                'options' => array(
-                    'label' => "Cochez pour déclarer le dossier complet :",
-                ),
-                'attributes' => array(
-                ),
-            ));
-            $this->form->add(array(
-                'name' => 'dateCommission',
-                'type'  => 'UnicaenApp\Form\Element\DateInfSup',
-                'options' => array(
-                    'date_inf_label' => "Date de passage en commision (facultative) :",
-                    'date_sup_activated' => false,
-                ),
-                'attributes' => array(
-                ),
-            ));
-            $this->form->add(new \Zend\Form\Element\Csrf('security'));
-            $this->form->add(array(
-                'name' => 'submit',
-                'type'  => 'Submit',
-                'attributes' => array(
-                    'value' => "Enregistrer",
-                ),
-            ));
-            
-            $if = new \Zend\InputFilter\InputFilter();
-            $if->add(array(
-                'name' => 'complet',
-                'required' => false,
-            ));
-            $if->add(array(
-                'name' => 'dateCommission',
-                'required' => false,
-                'filters' => array(
-                    new \Zend\Filter\Callback(function($value) {
-                        return current($this->form->get('dateCommission')->getValue());
-                    }),
-                ),
-            ));
-            $this->form->setInputFilter($if);
-            
-            $h = new \Zend\Stdlib\Hydrator\ClassMethods(false);
-            $h->addStrategy('dateCommission', new \Application\Entity\Db\Hydrator\DateInfSupStrategy());
-            $this->form->setHydrator($h);
+            $this->form = new DossierValidation();
         }
         
         return $this->form;
     }
     
     /**
-     * @return \Application\Service\PieceJointe
+     * @return ServiceValidation
      */
-    protected function getServicePieceJointe()
+    protected function getFormService()
     {
-        return $this->getServiceLocator()->get('ApplicationPieceJointe');
-    }
-    
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
-    }
-    
-    /**
-     * @return \Application\Service\TypeValidation
-     */
-    protected function getServiceTypeValidation()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeValidation');
+        if (null === $this->form) {
+            $this->form = new ServiceValidation();
+        }
+        
+        return $this->form;
     }
     
     /**
      * @return \Application\Service\Validation
      */
-    protected function getServiceValidation()
+    private function getServiceValidation()
     {
         return $this->getServiceLocator()->get('ApplicationValidation');
     }
@@ -182,8 +329,24 @@ class ValidationController extends AbstractActionController implements ContextPr
     /**
      * @return \Application\Service\Service
      */
-    protected function getServiceService()
+    private function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
+    }
+    
+    /**
+     * @return \Application\Service\VolumeHoraire
+     */
+    private function getServiceVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
+    }
+    
+    /**
+     * @return \Application\Service\Structure
+     */
+    private function getServiceStructure()
+    {
+        return $this->getServiceLocator()->get('ApplicationStructure');
     }
 }

@@ -11,16 +11,19 @@ use Application\Rule\Intervenant\Navigation\VoitPageRule;
  */
 class NavigationPageVisibility extends AbstractService
 {
+    use \Application\Traits\WorkflowIntervenantAwareTrait;
+    
     public function __invoke(array &$page)
     {
         $role  = $this->getContextProvider()->getSelectedIdentityRole();
         $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
-            $intervenant    = $role->getIntervenant();
-            $voitPage = new VoitPageRule($intervenant, $page);
+            $intervenant = $role->getIntervenant();
+            $wf = $this->getWorkflowIntervenant($intervenant, $this->getServiceLocator());
+            $voitPage = new VoitPageRule($intervenant, $page, $wf);
             $voitPage->setAnnee($annee);
-            if (!$voitPage->execute()) {
+            if ($voitPage->isRelevant() && !$voitPage->execute()) {
                 return false;
             }
         }

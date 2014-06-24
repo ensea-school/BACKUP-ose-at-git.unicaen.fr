@@ -4,9 +4,7 @@ namespace Application\Rule\Intervenant\Navigation;
 
 use Application\Rule\Intervenant\IntervenantRule;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantExterieur;
-use Application\Rule\Intervenant\PossedeDossierRule;
-use Application\Rule\Intervenant\PossedeServicesRule;
+use Application\Service\Workflow\AbstractWorkflow;
 
 /**
  * Description of VoitPageRule
@@ -17,53 +15,56 @@ class VoitPageRule extends IntervenantRule
 {
     use \Application\Traits\AnneeAwareTrait;
     
-    const ROUTE_SERVICE        = 'intervenant/services';
-    const ROUTE_PIECES_JOINTES = 'intervenant/pieces-jointes';
-    
+    /**
+     * @var array
+     */
     private $page;
     
-    public function __construct(Intervenant $intervenant, array $page)
+    /**
+     * @var AbstractWorkflow
+     */
+    private $wf;
+    
+    /**
+     * 
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @param array $page
+     * @param \Application\Service\Workflow\AbstractWorkflow $wf
+     */
+    public function __construct(Intervenant $intervenant, array $page, AbstractWorkflow $wf)
     {
         parent::__construct($intervenant);
+        
         $this->page = $page;
+        $this->wf   = $wf;
     }
     
+    /**
+     * @see \Application\Rule\AbstractRule
+     */
     public function execute()
     {
-        if (!isset($this->page['route']) || !in_array($this->page['route'], array(self::ROUTE_SERVICE, self::ROUTE_PIECES_JOINTES))) {
-            return true;
-        }
-        if (!$this->getIntervenant() instanceof IntervenantExterieur) {
+        if (!isset($this->page['route'])) {
             return true;
         }
         
-        switch ($this->page['route']) {
-            /**
-             * Page des enseignements
-             */
-            case self::ROUTE_SERVICE:
-                $possedeDossier = new PossedeDossierRule($this->getIntervenant());
-                if (!$possedeDossier->execute()) {
-                    $this->setMessage("%s n'a pas encore enregistré ses données personnelles.");
-                    return false;
-                }
-                break;
-            /**
-             * Page des pièces justificatives
-             */
-            case self::ROUTE_PIECES_JOINTES:
-                $possedeServices = new PossedeServicesRule($this->getIntervenant());
-                $possedeServices->setAnnee($this->getAnnee());
-                if (!$possedeServices->execute()) {
-                    $this->setMessage("%s n'a pas encore enregistré ses enseignements.");
-                    return false;
-                }
-                break;
-                
-            default:
-                break;
-        }
+        $route = $this->page['route'];
 
+        // recherche dans le workflow de l'étape correspondant à la route de la page
+        $step = $this->wf->getStepForRoute($route);
+        if (null === $step) {
+            // si aucune étape correspondante n'est trouvée, on masque la page
+            $this->setMessage("Aucune étape trouvée correspondant à la route '$route'.");
+            return false;
+        }
+        
+        // la page est masquée si elle correspond à une étape située après l'étape courante
+//        if ($step !== $this->wf->getCurrentStep() && !$this->wf->isStepBeforeCurrentStep($step)) {
+        if ($this->wf->isStepAfterCurrentStep($step)) {
+            $this->setMessage("%s ne peut pas encore accéder à cette étape.");
+            return false;
+        }
+        
         return true;
     }
     

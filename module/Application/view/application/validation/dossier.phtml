@@ -1,0 +1,25 @@
+<h2 class="page-header"><?php echo $title ?></h2>
+
+<?php echo $this->messenger(true) ?>
+
+<?php $form->prepare(); ?>
+<?php echo $this->form()->openTag($form); ?>
+<div class="row">
+    <div class="col-md-4">
+        <?php 
+        echo $this->formControlGroup($form->get('valide')->setAttribute('disabled', $readonly));
+        echo $this->formControlGroup($form->get('dateCommission')->setAttribute('disabled', $readonly));
+        echo $this->formHidden($form->get('security'));
+        ?>
+    </div>
+</div>
+<hr />
+<?php if (!$readonly) echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
+<?php echo $this->form()->closeTag(); ?>
+
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>
+    

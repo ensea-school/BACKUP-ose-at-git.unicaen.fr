@@ -161,7 +161,9 @@ $main =  array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'historiqueDl'      => 'Application\View\Helper\HistoriqueDl',
+            'historiqueDl' => 'Application\View\Helper\HistoriqueDl',
+            'validationDl' => 'Application\View\Helper\ValidationDl',
+            'mailto'       => 'Application\View\Helper\Mailto',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',
@@ -183,7 +185,8 @@ $main =  array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index'       => 'Application\Controller\IndexController',
+            'Application\Controller\Index'   => 'Application\Controller\IndexController',
+            'Application\Controller\Contrat' => 'Application\Controller\ContratController',
         ),
     ),
     'view_manager' => array(

@@ -7,6 +7,10 @@ use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
 
+define('ROUTE_DOSSIER',        'intervenant/saisir-dossier');
+define('ROUTE_SERVICE',        'intervenant/services');
+define('ROUTE_PIECES_JOINTES', 'intervenant/pieces-jointes');
+    
 return array(
     'router' => array(
         'routes' => array(
@@ -73,6 +77,18 @@ return array(
                             ),
                         ),
                     ),
+                    'feuille-de-route' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:id/feuille-de-route',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'feuille-de-route',
+                            ),
+                        ),
+                    ),
                     'modification-service-du' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -128,16 +144,42 @@ return array(
                             ),
                         ),
                     ),
-                    'validation' => array(
+                    'validation-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:id/validation',
+                            'route' => '/:id/validation/dossier',
                             'constraints' => array(
                                 'id' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Validation',
-                                'action' => 'ajouter',
+                                'action'     => 'dossier',
+                            ),
+                        ),
+                    ),
+                    'validation-service' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:id/validation/service',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Validation',
+                                'action' => 'service',
+                            ),
+                        ),
+                    ),
+                    'contrat' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:id/contrat',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Contrat',
+                                'action' => 'voir',
                             ),
                         ),
                     ),
@@ -166,7 +208,6 @@ return array(
                                 'label'  => "Fiche",
                                 'title'  => "Consultation de la fiche de l'intervenant {id}",
                                 'route'  => 'intervenant/fiche',
-                                'action' => 'voir',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:voir',
                             ),
@@ -185,17 +226,25 @@ return array(
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\ModificationServiceDu:saisir',
                             ),
+//                            'feuille-de-route' => array(
+//                                'label'  => "Feuille de route",
+//                                'title'  => "Feuille de route de l'intervenant {id}",
+//                                'route'  => 'intervenant/feuille-de-route',
+//                                'withtarget' => true,
+//                                'resource' => 'controller/Application\Controller\Intervenant:feuille-de-route',
+//                            ),
                             'dossier' => array(
                                 'label'  => "Données personnelles",
                                 'title'  => "Saisir les données personnelles d'un intervenant vacataire",
-                                'route'  => 'intervenant/saisir-dossier',
+                                'route'  => ROUTE_DOSSIER,
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Dossier:modifier',
+                                'visible' => 'NavigationPageVisibility',
                             ),
                             'service' => array(
-                                'label'  => "Enseignement",
-                                'title'  => "Enseignement de l'intervenant",
-                                'route'  => 'intervenant/services',
+                                'label'  => "Enseignements",
+                                'title'  => "Enseignements de l'intervenant",
+                                'route'  => ROUTE_SERVICE,
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Service:intervenant',
                                 'visible' => 'NavigationPageVisibility',
@@ -203,17 +252,33 @@ return array(
                             'pieces-jointes' => array(
                                 'label'  => "Pièces justificatives",
                                 'title'  => "Pièces justificatives du dossier de l'intervenant",
-                                'route'  => 'intervenant/pieces-jointes',
+                                'route'  => ROUTE_PIECES_JOINTES,
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Dossier:pieces-jointes',
                                 'visible' => 'NavigationPageVisibility',
                             ),
-                            'validation' => array(
-                                'label'  => "Validation",
-                                'title'  => "Validation du dossier de l'intervenant",
-                                'route'  => 'intervenant/validation',
+                            'validation-dossier' => array(
+                                'label'  => "Validation des données personnelles",
+                                'title'  => "Validation des données personnelles de l'intervenant",
+                                'route'  => 'intervenant/validation-dossier',
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Validation:ajouter',
+                                'resource' => 'controller/Application\Controller\Validation:dossier',
+                                'visible' => 'NavigationPageVisibility',
+                            ),
+                            'validation-service' => array(
+                                'label'  => "Validation des enseignements",
+                                'title'  => "Validation des enseignements de l'intervenant",
+                                'route'  => 'intervenant/validation-service',
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Validation:service',
+                                'visible' => 'NavigationPageVisibility',
+                            ),
+                            'contrat' => array(
+                                'label'  => "Contrat",
+                                'title'  => "Contrat de l'intervenant",
+                                'route'  => 'intervenant/contrat',
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Contrat:voir',
                                 'visible' => 'NavigationPageVisibility',
                             ),
                         ),
@@ -227,7 +292,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('index', 'apercevoir'),
+                    'action'     => array('index', 'apercevoir', 'feuille-de-route'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
                 array(
@@ -247,8 +312,13 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => array('ajouter'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'action'     => array('dossier', 'service'),
+                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Contrat',
+                    'action'     => array('voir'),
+                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
             ),
         ),
@@ -277,9 +347,16 @@ return array(
             'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
             'ApplicationTypeValidation'        => 'Application\\Service\\TypeValidation',
             'ApplicationValidation'            => 'Application\\Service\\Validation',
+            'ApplicationWorkflowIntervenantExterieur' => 'Application\\Service\\Workflow\\WorkflowIntervenantExterieur',
+            'ApplicationWorkflowIntervenantPermanent' => 'Application\\Service\\Workflow\\WorkflowIntervenantPermanent',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',
+        ),
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'Workflow' => 'Application\View\Helper\Workflow',
         ),
     ),
     'form_elements' => array(

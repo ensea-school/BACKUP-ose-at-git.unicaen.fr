@@ -17,17 +17,19 @@ trait AnneeAwareTrait
     protected $annee;
     
     /**
-     * Spécifie l'année concernée.
+     * Spécifie l'annee concerné.
      * 
      * @param Annee $annee Annee concerné
      */
-    public function setAnnee(Annee $annee = null)
+    public function setAnnee(Annee $annee)
     {
         $this->annee = $annee;
+        
+        return $this;
     }
     
     /**
-     * Retourne l'année concernée.
+     * Retourne l'annee concerné.
      * 
      * @return Annee
      */

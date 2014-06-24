@@ -3,7 +3,8 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+use Application\Entity\Db\Structure as StructureEntity;
 
 /**
  * Description of Validation
@@ -68,9 +69,29 @@ class Validation extends AbstractEntityService
     }
     
     /**
+     * Recherche par structure d'intervention (i.e. structure où sont effectués les enseignements). 
+     *
+     * @param StructureEntity $structure
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    public function finderByStructureIntervention(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $qb
+                ->join("$alias.volumeHoraire", 'vh')
+                ->join("vh.service", 'vhs')
+                ->andWhere("vhs.structureEns = :structure")
+                ->setParameter('structure', $structure);
+
+        return $qb;
+    }
+    
+    /**
      * 
      * @param TypeValidation|string $type
-     * @return \Application\Entity\Db\TypeValidation
+     * @return TypeValidationEntity
      * @throws RuntimeException
      */
     protected function normalizeTypeValidation($type)
@@ -78,7 +99,7 @@ class Validation extends AbstractEntityService
         if (null === $type) {
             return null;
         }
-        if ($type instanceof TypeValidation) {
+        if ($type instanceof TypeValidationEntity) {
             return $type;
         }
         

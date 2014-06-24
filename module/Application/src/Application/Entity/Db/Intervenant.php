@@ -229,6 +229,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $service;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $validation;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1090,6 +1095,27 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $services = $this->service->filter($filter);
         
         return $services;
+    }
+
+    /**
+     * Get validation
+     * 
+     * @param \Application\Entity\Db\TypeValidation $type
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getValidation(TypeValidation $type = null)
+    {
+        if (null === $type) {
+            return $this->validation;
+        }
+        if (null === $this->validation) {
+            return null;
+        }
+        
+        $filter      = function(Validation $validation) use ($type) { return $type === $validation->getTypeValidation(); };
+        $validations = $this->validation->filter($filter);
+        
+        return $validations;
     }
 
 

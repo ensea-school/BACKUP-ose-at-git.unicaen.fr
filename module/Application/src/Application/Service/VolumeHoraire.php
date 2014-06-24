@@ -2,7 +2,9 @@
 
 namespace Application\Service;
 
+use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\Structure;
 
 /**
  * Description of VolumeHoraire
@@ -48,5 +50,24 @@ class VolumeHoraire extends AbstractEntityService
                 ->setTypeVolumeHoraire($type);
         
         return $entity;
+    }
+    
+    /**
+     * Recherche par structure d'intervention (i.e. structure où sont effectués les enseignements). 
+     *
+     * @param Structure $structure
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    public function finderByStructureIntervention(Structure $structure, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $qb
+                ->join("$alias.service", 'vhs')
+                ->andWhere("vhs.structureEns = :structure")
+                ->setParameter('structure', $structure);
+
+        return $qb;
     }
 }

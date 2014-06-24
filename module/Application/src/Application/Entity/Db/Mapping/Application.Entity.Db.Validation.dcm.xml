@@ -41,7 +41,7 @@
       </join-columns>
     </many-to-one>
     <many-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire">
-        <join-table name="VALIDATION_VOLUME_HORAIRE">
+        <join-table name="VALIDATION_VOL_HORAIRE">
             <join-columns>
                 <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
             </join-columns>

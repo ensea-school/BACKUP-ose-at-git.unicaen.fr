@@ -2,8 +2,6 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\IntervenantExterieur;
-
 /**
  * Description of PeutSaisirServiceRule
  *
@@ -13,7 +11,7 @@ class PeutSaisirServiceRule extends IntervenantRule
 {
     public function execute()
     {
-        $statut = $this->getIntervenant()->getDossier()->getStatut();
+        $statut = $this->getIntervenant()->getStatut();
         
         if (!$statut->permetSaisieService()) {
             $this->setMessage(sprintf("Le statut '%s' n'autorise pas la saisie de services.", $statut));
@@ -22,8 +20,22 @@ class PeutSaisirServiceRule extends IntervenantRule
         
         return true;
     }
+    
     public function isRelevant()
     {
-        return $this->getIntervenant()->getStatut()->estVacataireNonBiatss() && $this->getIntervenant() instanceof IntervenantExterieur;
+        // NB: pour un intervenant non-BIATSS qui n'a pas encore saisi ses données perso, 
+        // cette règle n'est pas pertinente (car il peut changer de statut à l'issu de la
+        // saisie de ses données perso)
+        if (!$this->getIntervenant()->getStatut()->estBiatss()) {
+            $aucunDossier = new PossedeDossierRule($this->getIntervenant());
+            if (!$aucunDossier->isRelevant()) {
+                return true;
+            }
+            if (!$aucunDossier->execute()) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }

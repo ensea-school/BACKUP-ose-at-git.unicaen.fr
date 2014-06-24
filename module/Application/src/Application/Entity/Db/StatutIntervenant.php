@@ -81,6 +81,26 @@ class StatutIntervenant
     }
     
     /**
+     * Indique si ce statut correspond aux vacataires BIATSS.
+     * 
+     * @return bool
+     */
+    public function estBiatss()
+    {
+        return self::BIATSS === $this->getSourceCode();
+    }
+    
+    /**
+     * Indique si ce statut correspond aux "Autres cas".
+     * 
+     * @return bool
+     */
+    public function estAutre()
+    {
+        return self::AUTRES === $this->getSourceCode();
+    }
+    
+    /**
      * Indique si ce statut requiert la saisie d'un dossier vacataire.
      * 
      * @return bool

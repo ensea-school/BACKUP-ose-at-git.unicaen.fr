@@ -1,0 +1,31 @@
+<h2 class="page-header"><?php echo $title ?></small></h2>
+
+<?php echo $this->messenger(true) ?>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Composante d'enseignement</th>
+            <th>Validation</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($validations as $data): ?>
+        <?php 
+        $structure  = $data['structure'];
+        $validation = $data['validation'];
+        ?>
+        <tr>
+            <td><?php echo $structure ?></td>
+            <td><?php echo $validation ? $this->validationDl($validation) : "Aucune"; ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>
+    

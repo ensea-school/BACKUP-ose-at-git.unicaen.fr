@@ -95,5 +95,6 @@
     <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant" />
     <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant" />
     <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant" />
+    <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

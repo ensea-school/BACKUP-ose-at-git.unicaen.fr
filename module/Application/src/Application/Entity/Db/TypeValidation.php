@@ -7,8 +7,9 @@ namespace Application\Entity\Db;
  */
 class TypeValidation implements HistoriqueAwareInterface
 {
-    const CODE_DOSSIER_PAR_COMP   = 'DOSSIER_PAR_COMP';
-    const CODE_FICH_SERV_PAR_COMP = 'FICH_SERV_PAR_COMP';
+    const CODE_DONNEES_PERSO_PAR_COMP = 'DONNEES_PERSO_PAR_COMP';
+    const CODE_SERVICES_PAR_COMP      = 'SERVICES_PAR_COMP';
+    const CODE_CONTRAT_PAR_COMP       = 'CONTRAT_PAR_COMP';
 
     /**
      * @var string

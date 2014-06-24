@@ -30,11 +30,11 @@
             ?>
         <?php else: ?>
             <ul>
-            <?php foreach ($destinataires as $role): /* @var $role \Application\Entity\Db\Role */ ?>
+            <?php foreach ($destinataires as $r): /* @var $r \Application\Entity\Db\Role */ ?>
                 <li>
                     <?php 
-                    $mailto = sprintf('<a href="mailto:%s">%s</a>', $mail = $role->getPersonnel()->getEmail(), $mail);
-                    echo sprintf("%s : %s", $role->getPersonnel(), $mailto);
+                    $mailto = sprintf('<a href="mailto:%s">%s</a>', $mail = $r->getPersonnel()->getEmail(), $mail);
+                    echo sprintf("%s : %s", $r->getPersonnel(), $mailto);
                     ?>
                 </li>
             <?php endforeach; ?>
@@ -51,3 +51,9 @@ Aucun enseignement ne pourra avoir lieu avant la signature du contrat.</p>
 EOS;
 echo $this->messenger()->setMessage($message, 'warning');
 ?>
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>
+    

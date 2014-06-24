@@ -3,24 +3,24 @@
 namespace Application\Rule\Intervenant;
 
 /**
- * Description of PeutSaisirServiceRule
+ * Description of NecessiteContratRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutSaisirDossierRule extends IntervenantRule
+class NecessiteContratRule extends IntervenantRule
 {
     public function execute()
     {
         $statut = $this->getIntervenant()->getStatut();
-        $ok = $statut->estVacataireNonBiatss() || $statut->estAutre();
         
-        if (!$ok) {
-            $this->setMessage(sprintf("Le statut '%s' n'autorise pas la saisie de données personnelles.", $statut));
+        if (!$statut->estVacataireNonBiatss()) {
+            $this->setMessage(sprintf("Le statut '%s' ne nécessite pas l'édition d'un contrat.", $statut));
             return false;
         }
-        
+
         return true;
     }
+    
     public function isRelevant()
     {
         return true;

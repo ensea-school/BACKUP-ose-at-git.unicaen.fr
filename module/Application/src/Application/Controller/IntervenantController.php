@@ -20,6 +20,7 @@ use Application\Entity\Db\Intervenant;
 class IntervenantController extends AbstractActionController implements \Application\Service\ContextProviderAwareInterface
 {
     use \Application\Service\ContextProviderAwareTrait;
+    use \Application\Traits\WorkflowIntervenantAwareTrait;
     
     /**
      * @var Intervenant
@@ -176,6 +177,38 @@ class IntervenantController extends AbstractActionController implements \Applica
         return compact('intervenant', 'formule');
     }
 
+    public function feuilleDeRouteAction()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        $this->em()->getFilters()->enable('historique');
+
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            $intervenant = $role->getIntervenant();
+        }
+        else {
+            $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        }
+        
+        if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
+            throw new \Common\Exception\MessageException("Pas encore implémenté pour IntervenantPermanent");
+        }
+        
+        $title = sprintf("Feuille de route <small>%s</small>", $intervenant);
+        
+        $wf = $this->getWorkflowIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
+        $wf->init();
+        
+        $view = new \Zend\View\Model\ViewModel();
+        $view->setVariables(compact('intervenant', 'title', 'wf', 'role'));
+        
+        if ($wf->getCurrentStep()) {
+//            var_dump($wf->getStepUrl($wf->getCurrentStep()));
+        }
+        
+        return $view;
+    }
+    
     public function modifierAction()
     {
         if (!($id = $this->params()->fromRoute('id'))) {

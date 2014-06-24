@@ -8,6 +8,9 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Listener\DossierListener;
 use Application\Acl\ComposanteDbRole;
 use Application\Acl\IntervenantRole;
+use Application\Service\ContextProviderAwareTrait;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Traits\WorkflowIntervenantAwareTrait;
 
 /**
  * Description of DossierController
@@ -17,10 +20,11 @@ use Application\Acl\IntervenantRole;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierController extends AbstractActionController implements \Application\Service\ContextProviderAwareInterface
+class DossierController extends AbstractActionController implements ContextProviderAwareInterface
 {
-    use \Application\Service\ContextProviderAwareTrait;
-
+    use ContextProviderAwareTrait;
+    use WorkflowIntervenantAwareTrait;
+    
     /**
      * @var \Application\Entity\Db\IntervenantExterieur
      */
@@ -88,10 +92,20 @@ class DossierController extends AbstractActionController implements \Application
 
         if ($role instanceof IntervenantRole) {
             $intervenant = $role->getIntervenant();
-            $form->get('submit')->setAttribute('value', "J'enregistre et je saisis mes enseignements...");
         }
         else {
             $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        }
+        
+        $wf    = $this->getWorkflowIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */
+        $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
+        $url   = $step ? $wf->getStepUrl($step) : $this->url('home');
+        if ($role instanceof IntervenantRole) {
+            $label = $step ? ' et ' . lcfirst($step->getLabel($role)) . '...' : null;
+            $form->get('submit')->setAttribute('value', "J'enregistre" . $label);
+        }
+        else {
+            $url = $this->url()->fromRoute(null, array(), array(), true);
         }
         
         $service->canAdd($intervenant, true);
@@ -116,15 +130,9 @@ class DossierController extends AbstractActionController implements \Application
                     $this->flashMessenger()->addInfoMessage(
                             "Un mail doit être envoyé pour informer la composante de la modification des données personnelles...");
                 }
-                if ($role instanceof IntervenantRole) {
-                    $url = $this->url()->fromRoute('intervenant/services', array('id' => $intervenant->getSourceCode()));
-                }
-                else {
-                    $url = $this->url()->fromRoute(null, array(), array(), true);
-                }
+                
                 return $this->redirect()->toUrl($url);
             }
-//            var_dump('not valid', $form->getMessages());
         }
         
         return compact('intervenant', 'form');
@@ -199,6 +207,7 @@ class DossierController extends AbstractActionController implements \Application
     
     private function commonPiecesJointes()
     {
+        $role               = $this->getContextProvider()->getSelectedIdentityRole();
         $serviceService     = $this->getServiceService();
         $servicePieceJointe = $this->getPieceJointeService();
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute('id');
@@ -233,6 +242,7 @@ class DossierController extends AbstractActionController implements \Application
             'dossier'            => $this->dossier,
             'destinataires'      => $this->process->getRolesDestinatairesPiecesJointes(),
             'form'               => $this->form,
+            'role'               => $role,
         ));
     }
     

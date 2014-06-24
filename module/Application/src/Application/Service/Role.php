@@ -84,8 +84,8 @@ class Role extends AbstractEntityService
                 ->distinct()
                 ->innerJoin('r.type', 'tr')
                 ->innerJoin('r.structure', 's')
-                ->andWhere('tr.code <> :codeExclu')->setParameter('codeExclu', 'IND')
-                ->andWhere('s.niveau = :niv')->setParameter('niv', 2);
+                ->andWhere('tr.code <> :codeExclu')->setParameter('codeExclu', 'IND')/*
+                ->andWhere('s.niveau = :niv')->setParameter('niv', 2)*/;
         
         return parent::getList($qb);
     }

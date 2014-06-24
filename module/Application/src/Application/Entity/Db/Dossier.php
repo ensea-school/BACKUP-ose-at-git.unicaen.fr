@@ -83,6 +83,11 @@ class Dossier implements HistoriqueAwareInterface
     protected $perteEmploi;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $pieceJointe;
+
+    /**
      * @var integer
      */
     protected $id;
@@ -527,6 +532,15 @@ class Dossier implements HistoriqueAwareInterface
         return $this->histoCreateur;
     }
     
+    /**
+     * 
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPieceJointe()
+    {
+        return $this->pieceJointe;
+    }
+        
     /**
      * 
      * @param \Application\Entity\Db\IntervenantExterieur $intervenant

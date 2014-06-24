@@ -312,8 +312,13 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => array('dossier', 'service'),
+                    'action'     => array('dossier'),
                     'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Validation',
+                    'action'     => array('service'),
+                    'roles'      => array(IntervenantPermanentRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Contrat',

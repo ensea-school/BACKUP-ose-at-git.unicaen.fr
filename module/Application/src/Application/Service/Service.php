@@ -6,7 +6,6 @@ use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Entity\Db\IntervenantExterieur;
 
 /**
  * Description of Service
@@ -102,7 +101,6 @@ class Service extends AbstractEntityService
      * Càd les services prévisionnels satisfaisant au moins l'un des critères suivants :
      * - la structure d'enseignement (champ 'structure_ens') est la structure spécifiée OU l'une de ses filles ;
      * - la structure d'affectation (champ 'structure_aff')  est la structure spécifiée OU l'une de ses filles ;
-     * - la structure d'affectation de l'intervenant         est la structure spécifiée OU l'une de ses filles.
      *
      * @param StructureEntity $structure
      * @param QueryBuilder|null $queryBuilder
@@ -111,23 +109,15 @@ class Service extends AbstractEntityService
     public function finderByStructureResp(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        
-        $or = $qb->expr()->orX(
-                "$alias.structureEns = :structure", 
-                "se.structureNiv2    = :structure",
-                "$alias.structureAff = :structure", 
-                "sa.structureNiv2    = :structure",
-                "i.structure         = :structure", 
-                "si.structureNiv2    = :structure"
-        );
+
+        $filter = "(si.structureNiv2 = :structure OR NOT (sa.structureNiv2 <> :structure AND se.structureNiv2 <> :structure))";
         $qb
-                ->join("$alias.structureEns", 'se')
-                ->join("$alias.structureAff", 'sa')
-                ->join("$alias.intervenant",  'i')
-                ->join("i.structure",         'si')
-                ->andWhere($or)
-                ->setParameter('structure', $structure);
-        
+                ->leftJoin("$alias.structureEns", 'se')
+                ->leftJoin("$alias.structureAff", 'sa')
+                ->leftJoin("$alias.intervenant", 'i')
+                ->leftJoin("i.structure", 'si')
+                ->andWhere($filter)
+                ->setParameter('structure', $structure->getParenteNiv2());
         return $qb;
     }
 

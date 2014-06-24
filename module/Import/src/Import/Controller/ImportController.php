@@ -69,6 +69,9 @@ class ImportController extends AbstractActionController
             if (isset($queries['ELEMENT_PEDAGOGIQUE'])){
                 $queries['ELEMENT_PEDAGOGIQUE']->addNotNull('ETAPE_ID');
             }
+            if (isset($queries['CHEMIN_PEDAGOGIQUE'])){
+                $queries['CHEMIN_PEDAGOGIQUE']->addNotNull('ELEMENT_PEDAGOGIQUE_ID');
+            }
         }
 
         return $queries;

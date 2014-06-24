@@ -191,15 +191,20 @@ abstract class AbstractEntityService extends AbstractService
      * Retourne une entité à partir de son identifiant unique (ID)
      * Retourne null si l'identifiant est null ou bien s'il est égal à 0
      *
-     * @param integer $id
+     * @param integer|integer[] $id
      * @return mixed|null
      */
     public function get($id)
     {
-        if ((int)$id)
+        if(is_array($id)){
+            list($qb,$alias) = $this->initQuery();
+            foreach( $id as $idi ) $qb->orWhere($alias.'.id = '.(int)$idi);
+            return $this->getList( $qb );
+        }elseif ((int)$id){
             return $this->getRepo()->find((int)$id);
-        else
+        }else{
             return null;
+        }
     }
 
     /**

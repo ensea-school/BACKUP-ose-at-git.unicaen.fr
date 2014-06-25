@@ -27,6 +27,9 @@ class Modulateur extends AbstractService
         if ($element->getFc()){
             $codes[] = TypeModulateur::FC;
         }
+        if ($element->getFc() && $element->getFi()){
+            $codes[] = TypeModulateur::FIFC;
+        }
         return $codes;
     }
 

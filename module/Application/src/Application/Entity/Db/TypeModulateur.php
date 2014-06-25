@@ -11,6 +11,7 @@ class TypeModulateur implements HistoriqueAwareInterface
 {
     const FOAD = 'FOAD'; // Code du modulateur FOAD
     const FC = 'FC'; // Code du modulateur FC
+    const FIFC = 'FIFC'; // Code du modulateur mixte FI/FC
 
     /**
      * @var string

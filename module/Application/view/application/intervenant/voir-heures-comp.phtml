@@ -37,8 +37,17 @@ $payer = $formule->getAPayer($intervenant);
 
 $typesInterventions = $formule->getServiceLocator()->get('applicationTypeIntervention')->getTypesIntervention();
 
+$affModulateurs = false;
+foreach( $service as $sid => $ligne ){
+    if ((float)$ligne['ponderation_service_compl'] !== 1.0){
+        $affModulateurs = true;
+        break;
+    }
+}
+
 ?>
-<h2 class="page-header">Détail du calcul des heures équivalent TD et complémentaires</h2>
+<h2 class="page-header"><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h2>
+<h3>Détail du calcul des heures équivalent TD et complémentaires</h3>
 <table class="table table-bordered">
     <tr><th>&nbsp;</th><th>Heures</th></tr>
     <tr><th>Service dû</th><td class="bg-info" style="text-align:right"><?php fh($serviceDu) ?></td></tr>
@@ -51,9 +60,11 @@ $typesInterventions = $formule->getServiceLocator()->get('applicationTypeInterve
 <table class="table table-bordered">
 <tr>
     <th rowspan="2">Enseignement</th>
+    <?php if ($affModulateurs): ?>
     <th class="bg-info" rowspan="2">Coefficient modulateur heures comp.</th>
+    <?php endif; ?>
     <?php foreach( $typesInterventions as $typeIntervention ): ?>
-        <th class="bg-info" colspan="3"><?php echo (string)$typeIntervention.'<br />(x'.number_format($typeIntervention->getTauxHetdService(),2,',',' ').' service, x'.number_format($typeIntervention->getTauxHetdComplementaire(),2,',',' ').' compl.)' ?></th>
+        <th class="bg-info" colspan="3"><?php echo (string)$typeIntervention ?></th>
     <?php endforeach; ?>
     <th class="bg-success" rowspan="2">Heures</th>
 </tr>
@@ -73,7 +84,9 @@ $typesInterventions = $formule->getServiceLocator()->get('applicationTypeInterve
                 echo $ligne['etablissement'];
             }
         ?></th>
+        <?php if ($affModulateurs): ?>
         <td class="bg-info" style="text-align:right">x<?php fh($ligne['ponderation_service_compl']) ?></td>
+        <?php endif; ?>
         <?php foreach( $typesInterventions as $typeIntervention ): $tid = $typeIntervention->getId(); ?>
             <td class="bg-info" style="text-align:right"><?php fh(isset($ligne['volumes_horaires'][$tid]) ? $ligne['volumes_horaires'][$tid]['heures'] : 0) ?></td>
             <td style="text-align:right"><?php fh(isset($ligne['volumes_horaires'][$tid]) ? $ligne['volumes_horaires'][$tid]['hetd_serv'] : 0) ?></td>
@@ -84,7 +97,9 @@ $typesInterventions = $formule->getServiceLocator()->get('applicationTypeInterve
 <?php endforeach; ?>
 <tr>
     <th>Ventilation</th>
+    <?php if ($affModulateurs): ?>
     <td class="bg-success">&nbsp;</td>
+    <?php endif; ?>
     <?php foreach( $typesInterventions as $typeIntervention ): $tid = $typeIntervention->getId(); ?>
         <td class="bg-success" style="text-align:right"><?php fh(isset($ventilation[$tid]) ? $ventilation[$tid]['heures'] : 0) ?></td>
         <td class="bg-warning" style="text-align:right"><?php fp(isset($ventilation[$tid]) ? $ventilation[$tid]['pourc_serv'] : 0) ?></td>

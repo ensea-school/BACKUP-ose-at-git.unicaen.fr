@@ -5,8 +5,6 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
-use Application\Form\VolumeHoraire\Saisie;
-use Application\Entity\Db\VolumeHoraire;
 use Application\Exception\DbException;
 
 /**
@@ -58,7 +56,7 @@ class VolumeHoraireController extends AbstractActionController
         if ($id){
             $entity = $this->getServiceVolumeHoraire()->getRepo()->find($id);
         }else{
-            $entity = new VolumeHoraire;
+            $entity = $this->getServiceVolumeHoraire()->newEntity();
             $entity->setValiditeDebut(new \DateTime);
             $entity->setService( $this->context()->serviceFromQueryPost() );
             $entity->setPeriode( $this->context()->periodeFromQueryPost() );

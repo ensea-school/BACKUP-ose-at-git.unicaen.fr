@@ -18,6 +18,12 @@ function fp( $pourcentage )
     echo number_format($pourcentage * 100,2, ',', ' '). '%';
 }
 
+function fc( $montant )
+{
+    fh( $montant );
+    echo ' €';
+}
+
 $serviceDu = $formule->getServiceDu($intervenant);
 $modifServiceDu = $formule->getModifServiceDu($intervenant);
 $serviceReferentiel = $formule->getServiceReferentiel($intervenant);
@@ -27,6 +33,7 @@ $ventilation = $formule->getVentilation($intervenant);
 $reevalReste = $formule->getReevalResteAPayer($intervenant);
 $hetd = $formule->getHetd($intervenant);
 $heures = $formule->getHeuresComplementaires($intervenant);
+$payer = $formule->getAPayer($intervenant);
 
 $typesInterventions = $formule->getServiceLocator()->get('applicationTypeIntervention')->getTypesIntervention();
 
@@ -112,6 +119,10 @@ $typesInterventions = $formule->getServiceLocator()->get('applicationTypeInterve
   <div class="col-md-4"><span class="label label-success"><?php fh( $hetd ); ?></span></div>
 </div>
 <div class="row" style="font-size:16pt">
-  <div class="col-md-5">Heures complémentaires :</div>
+  <div class="col-md-5">Dont heures complémentaires :</div>
   <div class="col-md-4"><span class="label label-success"><?php fh( $heures ); ?></span></div>
+</div>
+<div class="row" style="font-size:16pt">
+  <div class="col-md-5">A payer :</div>
+  <div class="col-md-4"><span class="label label-success"><?php fc( $payer ); ?></span></div>
 </div>

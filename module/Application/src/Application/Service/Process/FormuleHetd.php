@@ -207,6 +207,32 @@ class FormuleHetd extends AbstractService
     }
 
     /**
+     * Retourne le montant en euros à payer des heures complémentaires
+     *
+     * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant
+     * @return float[]|float
+     */
+    public function getAPayer( $intervenant )
+    {
+        $sql = 'SELECT * FROM V_FORMULE_A_PAYER WHERE '.$this->makeWhere($intervenant);
+        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, array())->fetchAll();
+
+        if (is_array($intervenant)){
+            $return = array();
+            foreach( $result as $r ){
+                $return[(int)$r['INTERVENANT_ID']] = (float)$r['MONTANT'];
+            }
+            return $return;
+        }else{
+            if (isset($result[0])){
+                return (float)$result[0]['MONTANT'];
+            }else{
+                return 0;
+            }
+        }
+    }
+
+    /**
      * Retourne lac partie WHERE d'une requête SQL
      *
      * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant

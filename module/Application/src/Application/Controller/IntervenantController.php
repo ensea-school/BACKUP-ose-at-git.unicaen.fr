@@ -260,7 +260,7 @@ class IntervenantController extends AbstractActionController implements \Applica
     {
         if (null === $this->intervenantsChoisisRecentsSessionContainer) {
             $container = new \Zend\Session\Container(get_class() . '_IntervenantsChoisisRecents');
-            $container->setExpirationSeconds(60*60*1/2); // 1/2 heure
+            $container->setExpirationSeconds(60*60); // 1 heure
             $this->intervenantsChoisisRecentsSessionContainer = $container;
         }
         return $this->intervenantsChoisisRecentsSessionContainer;

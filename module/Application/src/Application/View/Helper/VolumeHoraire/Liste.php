@@ -6,6 +6,8 @@ use Zend\View\Helper\AbstractHelper;
 use Doctrine\ORM\PersistentCollection;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
@@ -16,10 +18,11 @@ use Application\Entity\Db\TypeIntervention;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
 
     use ServiceLocatorAwareTrait;
+    use ContextProviderAwareTrait;
 
     /**
      * Données formattées
@@ -82,7 +85,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         foreach( $this->typesIntervention as $ti ){
             $out .= "<th style=\"width:8%\" title=\"".$ti->getLibelle()."\">".$ti->getCode()."</th>\n";
         }
-        $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
+        if ($this->mustRenderMotifNonPaiement()){
+            $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
+        }
         $out .= "</tr>\n";
         foreach( $this->data as $pid => $motifsNonPaiement ){
             $periode = $motifsNonPaiement['periode'];
@@ -95,7 +100,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
                 foreach( $this->typesIntervention as $tid => $null ){
                     $out .= '<td>'.$this->renderHeures( $typesIntervention[$tid], $pid, $mid, $tid ).'</td>';
                 }
-                $out .= "<td>".$this->renderMotifNonPaiement($motifNonPaiement)."</td>\n";
+                if ($this->mustRenderMotifNonPaiement()){
+                    $out .= "<td>".$this->renderMotifNonPaiement($motifNonPaiement)."</td>\n";
+                }
                 $out .= "</tr>\n";
             }
         }
@@ -110,23 +117,31 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         return $out;
     }
 
-    protected function renderHeures($volumeHoraire, $periodeId, $motifNonPaiementId, $typeInterventionId)
+    protected function renderHeures($volumesHoraires, $periodeId, $motifNonPaiementId, $typeInterventionId)
     {
-        if ($volumeHoraire){
+        $heures = 0;
+        $id = null;
+        foreach( $volumesHoraires as $volumeHoraire ){
+            $heures += $volumeHoraire->getHeures();
             $id = $volumeHoraire->getId();
-            $heures = \UnicaenApp\Util::formattedFloat($volumeHoraire->getHeures(), \NumberFormatter::DECIMAL, -1);
-        }else{
-            $id = null;
-            $heures = 0;
         }
-        $context = array();
-        $params = array('action' => 'saisie');
-        if ($id)                 $params['id'] = $id;
-        if ($this->getService()) $context['service'] = $this->getService()->getId();
-        if ($periodeId)          $context['periode'] = $periodeId;
-        if ($motifNonPaiementId) $context['motifNonPaiement'] = $motifNonPaiementId;
-        if ($typeInterventionId) $context['typeIntervention'] = $typeInterventionId;
-        return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$context['service']."\" href=\"".$this->getView()->url('volume-horaire/default', $params, array('query' => $context ) )."\" >$heures</a>";
+        if (0 !== $heures){
+            $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
+        }
+
+        if (count($volumesHoraires) > 1){
+            /* Pas de moficiation de VH s'il y en a plusieurs */
+            return $heures;
+        }else{
+            $context = array();
+            $params = array('action' => 'saisie');
+            if ($id)                 $params['id'] = $id;
+            if ($this->getService()) $context['service'] = $this->getService()->getId();
+            if ($periodeId)          $context['periode'] = $periodeId;
+            if ($motifNonPaiementId) $context['motifNonPaiement'] = $motifNonPaiementId;
+            if ($typeInterventionId) $context['typeIntervention'] = $typeInterventionId;
+            return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$context['service']."\" href=\"".$this->getView()->url('volume-horaire/default', $params, array('query' => $context ) )."\" >$heures</a>";
+        }
     }
 
     protected function renderMotifNonPaiement($motifNonPaiement)
@@ -137,6 +152,19 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
             $out = '';
         }
         return $out;
+    }
+
+    /**
+     * Détermine si les motifs de non maiement doivent être dessinés ou non
+     *
+     * @return boolean
+     */
+    public function mustRenderMotifNonPaiement()
+    {
+        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -184,23 +212,26 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         $this->data = array();
         foreach( $periodes as $pid => $p ){
             $motifsNonPaiement = array(0 => null);
-            foreach( $volumeHoraires as $vh ){
-                if ($vh->getPeriode() === $p){
-                    if ($motifNonPaiement = $vh->getMotifNonPaiement()){
-                        $motifsNonPaiement[$motifNonPaiement->getId()] = $motifNonPaiement;
+            if ($this->mustRenderMotifNonPaiement()){
+                foreach( $volumeHoraires as $vh ){
+                    if ($vh->getPeriode() === $p){
+                        if ($motifNonPaiement = $vh->getMotifNonPaiement()){
+                            $motifsNonPaiement[$motifNonPaiement->getId()] = $motifNonPaiement;
+                        }
                     }
                 }
+
+                /* Tri des motifs de non paiement */
+                uasort( $motifsNonPaiement, function( $a, $b ){
+                    return ($a ? $a->getLibelleLong() : '') > ($b ? $b->getLibelleLong() : '');
+                });
             }
-            /* Tri des motifs de non paiement */
-            uasort( $motifsNonPaiement, function( $a, $b ){
-                return ($a ? $a->getLibelleLong() : '') > ($b ? $b->getLibelleLong() : '');
-            });
 
             if (! isset($this->data[$pid])) $this->data[$pid] = array('periode' => $p);
             foreach( $motifsNonPaiement as $mid => $m ){
                 if (! isset($this->data[$pid][$mid])) $this->data[$pid][$mid] = array('motifNonPaiement' => $m);
                 foreach( $typesIntervention as $tid => $t ){
-                    $this->data[$pid][$mid][$tid] = null;
+                    $this->data[$pid][$mid][$tid] = [];
                 }
             }
         }
@@ -208,9 +239,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
         /* Affectation des valeurs */
         foreach( $volumeHoraires as $vh ){
             $pid = $vh->getPeriode() ? $vh->getPeriode()->getId() : 0;
-            $mid = $vh->getMotifNonPaiement() ? $vh->getMotifNonPaiement()->getId() : 0;
+            $mid = ($this->mustRenderMotifNonPaiement() && $vh->getMotifNonPaiement()) ? $vh->getMotifNonPaiement()->getId() : 0;
             $tid = $vh->getTypeIntervention()->getId();
-            $this->data[$pid][$mid][$tid] = $vh;
+            $this->data[$pid][$mid][$tid][$vh->getId()] = $vh;
         }
         return $this;
     }

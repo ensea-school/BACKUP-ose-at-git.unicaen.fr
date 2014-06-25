@@ -114,6 +114,12 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</thead>'."\n";
         $res .= '<tbody>'."\n";
         foreach( $data as $intervenantId => $line ) {
+            if (isset($line['intervenant']['TOTAL_HETD'])){
+                $hetd = (float)$line['intervenant']['TOTAL_HETD'];
+            }else{
+                $hetd = 0;
+            }
+
             $res .= '<tr>'."\n";
             $url = $this->getView()->url('intervenant/services', array('id' => $line['intervenant']['SOURCE_CODE']));
             $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
@@ -124,7 +130,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
                 $res .= '<td>'.(isset($line['service'][$ti->getId()]) ? $line['service'][$ti->getId()] : '0').'</td>'."\n";
             }
             $res .= '<td>'.(array_key_exists('referentiel', $line) ? $line['referentiel'] : ($intervenantPermanent ? 0 : $na)).'</td>'."\n";
-            $res .= '<td>'.($line['hetd'] = 'NC').'</td>'."\n";
+            $res .= '<td>'.number_format($hetd,2,',',' ').'</td>'."\n";
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";

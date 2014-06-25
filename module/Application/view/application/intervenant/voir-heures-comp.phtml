@@ -25,6 +25,7 @@ $serviceRestant = $formule->getServiceRestant($intervenant);
 $service = $formule->getService($intervenant);
 $ventilation = $formule->getVentilation($intervenant);
 $reevalReste = $formule->getReevalResteAPayer($intervenant);
+$hetd = $formule->getHetd($intervenant);
 $heures = $formule->getHeuresComplementaires($intervenant);
 
 $typesInterventions = $formule->getServiceLocator()->get('applicationTypeIntervention')->getTypesIntervention();
@@ -106,4 +107,11 @@ $typesInterventions = $formule->getServiceLocator()->get('applicationTypeInterve
     </tr>
 </table>
 
-<p style="font-size:16pt">Heures complémentaires : <span class="label label-success"><?php fh( $heures ); ?></span></p>
+<div class="row" style="font-size:16pt">
+  <div class="col-md-5">Heures équivalent TD :</div>
+  <div class="col-md-4"><span class="label label-success"><?php fh( $hetd ); ?></span></div>
+</div>
+<div class="row" style="font-size:16pt">
+  <div class="col-md-5">Heures complémentaires :</div>
+  <div class="col-md-4"><span class="label label-success"><?php fh( $heures ); ?></span></div>
+</div>

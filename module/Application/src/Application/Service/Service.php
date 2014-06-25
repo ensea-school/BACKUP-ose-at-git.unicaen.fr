@@ -206,7 +206,8 @@ select
   SOURCE_CODE ,
   TYPE_INTERVENANT_CODE ,
   TYPE_INTERVENTION_ID ,
-  sum(TOTAL_HEURES) TOTAL_HEURES
+  sum(TOTAL_HEURES) TOTAL_HEURES,
+  v.total_hetd TOTAL_HETD
 from V_RESUME_SERVICE v
 where (v.STRUCTURE_ENS_ID = $structureEnsId or v.STRUCTURE_AFF_ID = $structureEnsId)
   $whereFilter
@@ -216,7 +217,8 @@ group by
   INTERVENANT_ID ,
   SOURCE_CODE ,
   TYPE_INTERVENANT_CODE ,
-  TYPE_INTERVENTION_ID 
+  TYPE_INTERVENTION_ID ,
+  v.total_hetd
 EOS;
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($queryServices);
         $data = $stmt->fetchAll();
@@ -279,7 +281,7 @@ EOS;
         }
 
         $data = \Zend\Stdlib\ArrayUtils::merge($dataReferentiel, $dataService, true);
-        
+
         uasort($data, function($a, $b) { 
             return strcmp(
                     $a['intervenant']['NOM_USUEL'] . $a['intervenant']['PRENOM'], 

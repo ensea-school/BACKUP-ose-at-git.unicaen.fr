@@ -68,8 +68,7 @@ class ServiceController extends AbstractActionController
             $params['query']  = $this->params()->fromQuery();
             $listeViewModel   = $this->forward()->dispatch($controller, $params);
             $viewModel->addChild($listeViewModel, 'servicesRefListe');
-        }
-        else {
+        }else{
             $services = array();
         }
 

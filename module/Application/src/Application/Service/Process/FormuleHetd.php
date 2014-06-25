@@ -157,17 +157,79 @@ class FormuleHetd extends AbstractService
     /**
      * Retourne les heures complémentaires calculées pour un intervenant à partir de ses services
      * 
-     * @param Intervenant $intervenant
-     * @return float
+     * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant
+     * @return float[]|float
      */
-    public function getHeuresComplementaires( Intervenant $intervenant )
+    public function getHeuresComplementaires( $intervenant )
     {
-        $sql = 'SELECT heures FROM V_FORMULE_HEURES_COMP WHERE intervenant_id = :intervenant';
-        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, array('intervenant' => $intervenant->getId()))->fetchAll();
-        if (isset($result[0])){
-            return (float)$result[0]['HEURES'];
+        $sql = 'SELECT * FROM V_FORMULE_HEURES_COMP WHERE '.$this->makeWhere($intervenant);
+        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, array())->fetchAll();
+
+        if (is_array($intervenant)){
+            $return = array();
+            foreach( $result as $r ){
+                $return[(int)$r['INTERVENANT_ID']] = (float)$r['HEURES'];
+            }
+            return $return;
         }else{
-            return 0;
+            if (isset($result[0])){
+                return (float)$result[0]['HEURES'];
+            }else{
+                return 0;
+            }
         }
+    }
+
+    /**
+     * Retourne les heures éq. TD calculées pour un intervenant à partir de ses services
+     *
+     * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant
+     * @return float[]|float
+     */
+    public function getHetd( $intervenant )
+    {
+        $sql = 'SELECT * FROM V_FORMULE_HEURES_HETD WHERE '.$this->makeWhere($intervenant);
+        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, array())->fetchAll();
+
+        if (is_array($intervenant)){
+            $return = array();
+            foreach( $result as $r ){
+                $return[(int)$r['INTERVENANT_ID']] = (float)$r['HEURES'];
+            }
+            return $return;
+        }else{
+            if (isset($result[0])){
+                return (float)$result[0]['HEURES'];
+            }else{
+                return 0;
+            }
+        }
+    }
+
+    /**
+     * Retourne lac partie WHERE d'une requête SQL
+     *
+     * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant
+     * @return string
+     */
+    protected function makeWhere($intervenant)
+    {
+        if (is_array($intervenant)){
+            foreach( $intervenant as $index => $i ){
+                if ($i instanceof Intervenant){
+                    $intervenant[$index] = $i->getId();
+                }else{
+                    $intervenant[$index] = (int)$i;
+                }
+            }
+            $where = 'intervenant_id IN ('.implode(',',$intervenant).')';
+        }elseif(empty($intervenant)){
+            $where = '1 = 1';
+        }elseif($intervenant instanceof Intervenant){
+            $where = 'intervenant_id = '.$intervenant->getId();
+        }else{
+            $where = 'intervenant_id = '.(int)$intervenant;
+        }
+        return $where;
     }
 }

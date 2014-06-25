@@ -162,6 +162,18 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         if (! $element) return '';
         $out = '';
+        if ($element->getFi()){
+            if ($out != '') $out .= ', ';
+            $out .= '<span title="Formation initiale">FI</span>';
+        }
+        if ($element->getFc()){
+            if ($out != '') $out .= ', ';
+            $out .= '<span title="Formation continue">FC</span>';
+        }
+        if ($element->getFa()){
+            if ($out != '') $out .= ', ';
+            $out .= '<span title="Formation en apprentissage">FA</span>';
+        }
         return $out;
     }
 

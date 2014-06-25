@@ -114,15 +114,31 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</thead>'."\n";
         $res .= '<tbody>'."\n";
         foreach( $data as $intervenantId => $line ) {
+            $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
+
+
             if (isset($line['intervenant']['TOTAL_HETD'])){
                 $hetd = (float)$line['intervenant']['TOTAL_HETD'];
             }else{
                 $hetd = 0;
             }
 
+            if (isset($line['intervenant']['HEURES_COMP'])){
+                $heuresComp = (float)$line['intervenant']['HEURES_COMP'];
+                $msg = '';
+                if ($heuresComp < 0){
+                    $msg = ' class="bg-danger" title="Sous-service ('.number_format($heuresComp*-1,2,',',' ').' heures manquantes)"';
+                }
+                if ($heuresComp > 0 && $intervenantPermanent){
+                    $msg = ' class="bg-warning" title="Sur-service ('.number_format($heuresComp,2,',',' ').' heures complémentaires positionnées)"';;
+                }
+            }else{
+                $heuresComp = 0;
+                $msg = '';
+            }
+
             $res .= '<tr>'."\n";
             $url = $this->getView()->url('intervenant/services', array('id' => $line['intervenant']['SOURCE_CODE']));
-            $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
             $na = '<span title="Non applicable (intervenant vacataire))">NA</span>';
 
             $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant']['NOM_USUEL']) . ' ' . $line['intervenant']['PRENOM'].'</a></td>'."\n";
@@ -130,7 +146,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
                 $res .= '<td>'.(isset($line['service'][$ti->getId()]) ? $line['service'][$ti->getId()] : '0').'</td>'."\n";
             }
             $res .= '<td>'.(array_key_exists('referentiel', $line) ? $line['referentiel'] : ($intervenantPermanent ? 0 : $na)).'</td>'."\n";
-            $res .= '<td>'.number_format($hetd,2,',',' ').'</td>'."\n";
+            $res .= '<td'.$msg.'>'.number_format($hetd,2,',',' ').'</td>'."\n";
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";

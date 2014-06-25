@@ -116,13 +116,13 @@ $typesInterventions = $formule->getServiceLocator()->get('applicationTypeInterve
 
 <div class="row" style="font-size:16pt">
   <div class="col-md-5">Heures équivalent TD :</div>
-  <div class="col-md-4"><span class="label label-success"><?php fh( $hetd ); ?></span></div>
+  <div class="col-md-7"><span class="label label-success"><?php fh( $hetd ); ?></span></div>
 </div>
 <div class="row" style="font-size:16pt">
   <div class="col-md-5">Dont heures complémentaires :</div>
-  <div class="col-md-4"><span class="label label-success"><?php fh( $heures ); ?></span></div>
+  <div class="col-md-7"><span class="label label-<?php echo $heures < 0 ? 'danger' : 'success' ?>"><?php fh( $heures ); ?></span><?php echo $heures < 0 ? ' Sous-service' : '' ?></div>
 </div>
 <div class="row" style="font-size:16pt">
   <div class="col-md-5">A payer :</div>
-  <div class="col-md-4"><span class="label label-success"><?php fc( $payer ); ?></span></div>
+  <div class="col-md-7"><span class="label label-success"><?php fc( $payer ); ?></span></div>
 </div>

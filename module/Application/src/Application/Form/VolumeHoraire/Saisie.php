@@ -45,22 +45,22 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             'type'       => 'Text',
         ));
 
-        $this->add(array(
-            'name' => 'motifNonPaiement',
-            'options'    => array(
-                'label' => "Motif de non paiement :",
-            ),
-            'attributes' => array(
-                'value' => "",
-                'title' => "Motif de non paiement",
-                'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm'
-            ),
-            'type' => 'Select'
-        ));
-
         $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
         if ($role instanceof \Application\Acl\DbRole) {
+
+            $this->add(array(
+                'name' => 'motifNonPaiement',
+                'options'    => array(
+                    'label' => "Motif de non paiement :",
+                ),
+                'attributes' => array(
+                    'value' => "",
+                    'title' => "Motif de non paiement",
+                    'class' => 'volume-horaire volume-horaire-motif-non-paiement input-sm'
+                ),
+                'type' => 'Select'
+            ));
+
             $motifsNonPaiement = $this->getServiceLocator()->getServiceLocator()->get('ApplicationMotifNonPaiement')
                     ->getMotifsNonPaiement();
             foreach( $motifsNonPaiement as $id => $motifNonPaiement ){
@@ -68,9 +68,6 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             }
             $motifsNonPaiement[0] = 'Aucun motif : paiement prévu';
             $this->get('motifNonPaiement')->setValueOptions( $motifsNonPaiement );
-        }
-        else {
-            $this->remove('motifNonPaiement');
         }
         
         $this->add( new Hidden('id') );
@@ -113,6 +110,9 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             'periode'          => $object->getPeriode() ? $object->getPeriode()->getId() : 0,
             'typeIntervention' => $object->getTypeIntervention() ? $object->getTypeIntervention()->getId() : null,
         );
+        if ($object->getService()->getIntervenant() instanceof \Application\Entity\Db\IntervenantExterieur){
+            $this->remove('motifNonPaiement'); // pas de motif de non paiement pour les extérieurs
+        }
         $this->setData($data);
     }
 

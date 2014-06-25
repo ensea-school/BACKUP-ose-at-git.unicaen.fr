@@ -167,7 +167,7 @@ class DossierController extends AbstractActionController implements ContextProvi
         $this->title = "Liste des pièces justificatives à joindre <small>$this->intervenant</small>";
         $this->form
                 ->remove('submit')
-                ->get('pj')->setAttribute('disabled', true);
+                ->get('pj')->setAttribute('disabled', true)->setLabel("Merci d'adresser les pièces justificatives suivantes à l'adresse ci-après...");
         
         $this->view
                 ->setTemplate('application/dossier/pieces-jointes')

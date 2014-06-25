@@ -3,8 +3,9 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
 
 /**
  * Description of VolumeHoraire
@@ -41,7 +42,7 @@ class VolumeHoraire extends AbstractEntityService
     public function newEntity()
     {
         // type de volume horaire par défaut
-        $qb = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->finderByCode(TypeVolumeHoraire::CODE_PREVU);
+        $qb = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->finderByCode(TypeVolumeHoraireEntity::CODE_PREVU);
         $type = $qb->getQuery()->getOneOrNullResult();
         
         $entity = parent::newEntity();
@@ -53,13 +54,33 @@ class VolumeHoraire extends AbstractEntityService
     }
     
     /**
-     * Recherche par structure d'intervention (i.e. structure où sont effectués les enseignements). 
+     * Recherche par intervenant concerné. 
      *
-     * @param Structure $structure
+     * @param IntervenantEntity $intervenant
      * @param QueryBuilder|null $qb
      * @return QueryBuilder
      */
-    public function finderByStructureIntervention(Structure $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByIntervenant(IntervenantEntity $intervenant, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $qb
+                ->join("$alias.service", 'vhs2')
+                ->join("vhs2.intervenant", 'i2')
+                ->andWhere("i2 = :intervenant")
+                ->setParameter('intervenant', $intervenant);
+
+        return $qb;
+    }
+    
+    /**
+     * Recherche par structure d'intervention (i.e. structure où sont effectués les enseignements). 
+     *
+     * @param StructureEntity $structure
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    public function finderByStructureIntervention(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 

@@ -32,16 +32,6 @@ class ValidationController extends AbstractActionController implements ContextPr
     private $intervenant;
     
     /**
-     * @var \Application\Entity\Db\Dossier
-     */
-    private $dossier;
-    
-    /**
-     * @var \Application\Service\Process\PieceJointeProcess
-     */
-    private $process;
-    
-    /**
      * @var \Zend\Form\Form
      */
     private $form;
@@ -132,7 +122,11 @@ class ValidationController extends AbstractActionController implements ContextPr
         $qb = $serviceValidation->finderByType($typeValidation);
         $this->validation = $serviceValidation->finderByIntervenant($this->intervenant, $qb)->getQuery()->getOneOrNullResult();
         if (!$this->validation) {
-            $this->validation = $serviceValidation->newEntity($typeValidation)->setIntervenant($this->intervenant);
+            $this->validation = $serviceValidation->newEntity($typeValidation);
+            $this->validation->setIntervenant($this->intervenant);
+            if ($role instanceof ComposanteDbRole) {
+                $this->validation->setStructure($role->getStructure());
+            }
         }
         else {
             $this->form->get('valide')->setValue(true);
@@ -243,8 +237,11 @@ class ValidationController extends AbstractActionController implements ContextPr
         $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
         $this->validation = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getOneOrNullResult();
         if (!$this->validation) {
-            $this->validation = $serviceValidation->newEntity($typeValidation)->setIntervenant($this->intervenant);
-            $volumesHoraires = $serviceVolumeHoraire->finderByStructureIntervention($structure)->getQuery()->getResult();
+            $this->validation = $serviceValidation->newEntity($typeValidation)
+                    ->setIntervenant($this->intervenant)
+                    ->setStructure($structure);
+            $qb = $serviceVolumeHoraire->finderByIntervenant($this->intervenant);
+            $volumesHoraires = $serviceVolumeHoraire->finderByStructureIntervention($structure, $qb)->getQuery()->getResult();
             foreach ($volumesHoraires as $volumeHoraire) {
                 $this->validation->addVolumeHoraire($volumeHoraire);
             }

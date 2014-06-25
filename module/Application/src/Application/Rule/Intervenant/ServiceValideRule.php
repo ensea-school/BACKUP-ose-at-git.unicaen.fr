@@ -10,6 +10,7 @@ namespace Application\Rule\Intervenant;
 class ServiceValideRule extends IntervenantRule
 {
     use \Application\Traits\TypeValidationAwareTrait;
+    use \Application\Traits\StructureAwareTrait;
     
     public function execute()
     {
@@ -17,6 +18,15 @@ class ServiceValideRule extends IntervenantRule
         if (!count($validations)) {
             return false;
         }
+//        
+//        if (null !== $this->getStructure()) {
+//            $f = function(Validation $validation) use ($this) { return $this->getStructure() === $validation->getStructure(); };
+//        }
+//        
+//        if (!count($validations)) {
+//            return false;
+//        }
+        
         
         return true;
     }

@@ -10,7 +10,12 @@ class Validation implements HistoriqueAwareInterface
     /**
      * @var \DateTime
      */
-    private $dateCommission;
+    private $dateCommissionRecherche;
+    
+    /**
+     * @var \DateTime
+     */
+    private $dateConseilRestreint;
     
     /**
      * @var \DateTime
@@ -36,6 +41,11 @@ class Validation implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\Intervenant
      */
     private $intervenant;
+
+    /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structure;
 
     /**
      * @var \Application\Entity\Db\TypeValidation
@@ -166,6 +176,29 @@ class Validation implements HistoriqueAwareInterface
     }
 
     /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @return Validation
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    {
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructure()
+    {
+        return $this->structure;
+    }
+
+    /**
      * Set typeValidation
      *
      * @param \Application\Entity\Db\TypeValidation $typeValidation
@@ -258,26 +291,49 @@ class Validation implements HistoriqueAwareInterface
     }
 
     /**
-     * Set dateCommission
+     * Set dateCommissionRecherche
      *
-     * @param \DateTime $dateCommission
+     * @param \DateTime $dateCommissionRecherche
      * @return Validation
      */
-    public function setDateCommission(\DateTime $dateCommission = null)
+    public function setDateCommissionRecherche(\DateTime $dateCommissionRecherche = null)
     {
-        $this->dateCommission = $dateCommission;
+        $this->dateCommissionRecherche = $dateCommissionRecherche;
 
         return $this;
     }
 
     /**
-     * Get dateCommission
+     * Get dateCommissionRecherche
      *
      * @return \DateTime
      */
-    public function getDateCommission()
+    public function getDateCommissionRecherche()
     {
-        return $this->dateCommission;
+        return $this->dateCommissionRecherche;
+    }
+
+    /**
+     * Set dateConseilRestreint
+     *
+     * @param \DateTime $dateConseilRestreint
+     * @return Validation
+     */
+    public function setDateConseilRestreint(\DateTime $dateConseilRestreint = null)
+    {
+        $this->dateConseilRestreint = $dateConseilRestreint;
+
+        return $this;
+    }
+
+    /**
+     * Get dateConseilRestreint
+     *
+     * @return \DateTime
+     */
+    public function getDateConseilRestreint()
+    {
+        return $this->dateConseilRestreint;
     }
 
     /**

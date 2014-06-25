@@ -39,6 +39,18 @@ class StatutIntervenant
         self::MAITRE_LANG,
     );
 
+    public $vacataires = array(
+        self::BIATSS,
+        self::SALAR_PRIVE,
+        self::SALAR_PUBLIC,
+        self::NON_SALAR,
+        self::RETR_UCBN,
+        self::RETR_HORS_UCBN,
+        self::ETUD_UCBN,
+        self::ETUD_HORS_UCBN,
+        self::CHARG_ENS_1AN,
+    );
+
     public $vacatairesNonBiatss = array(
         self::SALAR_PRIVE,
         self::SALAR_PUBLIC,
@@ -70,8 +82,17 @@ class StatutIntervenant
     }
     
     /**
-     * Indique si ce statut correspond aux vacataires non-BIATSS.
-     * Déterminant pour la saisie de dossier vacataire.
+     * Indique si ce statut correspond aux vacataires.
+     * 
+     * @return bool
+     */
+    public function estVacataire()
+    {
+        return in_array($this->getSourceCode(), $this->vacataires);
+    }
+    
+    /**
+     * Indique si ce statut correspond à un vacataire non-BIATSS.
      * 
      * @return bool
      */

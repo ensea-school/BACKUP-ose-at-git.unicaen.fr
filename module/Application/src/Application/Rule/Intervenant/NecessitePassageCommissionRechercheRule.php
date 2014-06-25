@@ -2,7 +2,6 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\StatutIntervenant;
 
 /**
@@ -36,6 +35,6 @@ class NecessitePassageCommissionRechercheRule extends IntervenantRule
     
     public function isRelevant()
     {
-        return $this->getIntervenant() instanceof IntervenantExterieur && null !== $this->getIntervenant()->getDossier();
+        return true;
     }
 }

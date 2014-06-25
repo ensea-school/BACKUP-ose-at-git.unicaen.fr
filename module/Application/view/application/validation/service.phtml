@@ -8,7 +8,8 @@
     <div class="col-md-4">
         <?php 
         echo $this->formControlGroup($form->get('valide')->setAttribute('disabled', $readonly));
-//        echo $this->formControlGroup($form->get('dateCommission')->setAttribute('disabled', $readonly));
+        echo $this->formControlGroup($form->get('dateCommissionRecherche')->setAttribute('disabled', $readonly));
+        echo $this->formControlGroup($form->get('dateConseilRestreint')->setAttribute('disabled', $readonly));
         echo $this->formHidden($form->get('security'));
         ?>
     </div>

@@ -188,6 +188,20 @@ abstract class AbstractEntityService extends AbstractService
     }
 
     /**
+     * Retourne le nombre d'entités trouvé
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
+     * @return integer
+     */
+    public function count(QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $entities = $qb->getQuery()->execute();
+        return count($entities);
+    }
+
+    /**
      * Retourne une entité à partir de son identifiant unique (ID)
      * Retourne null si l'identifiant est null ou bien s'il est égal à 0
      *

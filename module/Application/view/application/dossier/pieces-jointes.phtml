@@ -1,6 +1,15 @@
 <h2 class="page-header"><?php echo $title ?></h2>
 
-<?php echo $this->messenger(true) ?>
+<?php
+$messenger = $this->messenger(true);
+if ($complet) {
+    $messenger->addMessage("Toutes les pièces justificatives obligatoires ont été fournies.", 'success');
+}
+else {
+    $messenger->addMessage("Il manque des pièces justificatives obligatoires.", 'danger');
+}
+echo $messenger;
+?>
 
 <?php $form->prepare(); ?>
 
@@ -58,3 +67,10 @@ echo $this->messenger()->setMessage($message, 'warning');
     <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
 <?php endif; ?>
     
+    
+<script>
+$(function() {
+    // interdiction de décocher une case déjà cochée
+    $("input[type=checkbox]:checked").not(":disabled").css('opacity', '0.5').click(function() { return false; });
+});
+</script>

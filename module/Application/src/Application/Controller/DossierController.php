@@ -245,9 +245,6 @@ class DossierController extends AbstractActionController implements ContextProvi
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute('id');
         
         $servicePieceJointe->canAdd($this->intervenant, true);
-//        if (!$this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
-//            throw new \Common\Exception\MessageException("La gestion de pièce justificative n'est possible que pour un vacataire non-BIATSS.");
-//        }
         
         $this->dossier     = $this->intervenant->getDossier();
         $this->process     = $this->getPieceJointeProcess();
@@ -268,14 +265,27 @@ class DossierController extends AbstractActionController implements ContextProvi
             throw new \Common\Exception\MessageException("L'intervenant $this->intervenant n'a aucune donnée personnelle enregistrée.");
         }
         
+        $piecesJointesFournies = new \Application\Rule\Intervenant\PiecesJointesFourniesRule(
+                $this->intervenant, $this->getServiceTypePieceJointeStatut());
+        $complet = $piecesJointesFournies->execute();
+        
         $this->view = new \Zend\View\Model\ViewModel(array(
             'intervenant'        => $this->intervenant,
             'totalHeuresReelles' => $serviceService->getTotalHeuresReelles($this->intervenant),
             'dossier'            => $this->dossier,
+            'complet'            => $complet,
             'destinataires'      => $this->process->getRolesDestinatairesPiecesJointes(),
             'form'               => $this->form,
             'role'               => $role,
         ));
+    }
+    
+    /**
+     * @return \Application\Service\TypePieceJointeStatut
+     */
+    private function getServiceTypePieceJointeStatut()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypePieceJointeStatut');
     }
     
     protected function notify(Intervenant $intervenant)

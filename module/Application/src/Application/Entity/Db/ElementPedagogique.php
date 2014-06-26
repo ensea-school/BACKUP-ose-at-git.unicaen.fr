@@ -312,6 +312,27 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     }
 
     /**
+     * @return string
+     */
+    public function getHtmlRegimeInscription()
+    {
+        $res = '';
+        if ($this->getFi()){
+            if ($res != '') $res .= ', ';
+            $res .= '<abbr title="Formation initiale">FI</abbr>';
+        }
+        if ($this->getFc()){
+            if ($res != '') $res .= ', ';
+            $res .= '<abbr title="Formation continue">FC</abbr>';
+        }
+        if ($this->getFa()){
+            if ($res != '') $res .= ', ';
+            $res .= '<abbr title="Formation en apprentissage">FA</abbr>';
+        }
+        return $res;
+    }
+
+    /**
      *
      * @return boolean
      */

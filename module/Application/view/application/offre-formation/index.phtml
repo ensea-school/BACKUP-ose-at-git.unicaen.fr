@@ -299,7 +299,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                                href="<?php echo $urlElem ?>"><?php echo $ep->getLibelle() ?></a>
                         </td>
                         <td><?php echo (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>
-                        <td><?php echo "" ?></td>
+                        <td><?php echo $ep->getHtmlRegimeInscription() ?></td>
                         <td class="action">
                             <!--------------- Boutons de modif d'élément --------------->
                             <?php if ($etape): ?>

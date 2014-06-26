@@ -77,6 +77,39 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
         ));
 
         $this->add(array(
+            'name'       => 'fc',
+            'options'    => array(
+                'label' => 'FC',
+            ),
+            'attributes' => array(
+                'title' => "Formation continue",
+            ),
+            'type'       => 'Checkbox',
+        ));
+
+        $this->add(array(
+            'name'       => 'fi',
+            'options'    => array(
+                'label' => 'FI',
+            ),
+            'attributes' => array(
+                'title' => "Formation initiale",
+            ),
+            'type'       => 'Checkbox',
+        ));
+
+        $this->add(array(
+            'name'       => 'fa',
+            'options'    => array(
+                'label' => 'FA',
+            ),
+            'attributes' => array(
+                'title' => "Formation en apprentissage",
+            ),
+            'type'       => 'Checkbox',
+        ));
+
+        $this->add(array(
             'name'    => 'structure',
             'options' => array(
                 'label' => 'Structure',
@@ -151,6 +184,15 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
 //                'validators' => array(
 //                    array('name' => 'Float'),
 //                ),
+            ),
+            'fc' => array(
+                'required' => true,
+            ),
+            'fi' => array(
+                'required' => true,
+            ),
+            'fa' => array(
+                'required' => true,
             ),
             'source-code' => array(
                 'required' => true,

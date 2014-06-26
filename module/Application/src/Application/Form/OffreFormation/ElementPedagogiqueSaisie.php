@@ -33,7 +33,7 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
         $this->add(array(
             'name'    => 'etape',
             'options' => array(
-                'label' => 'Étape',
+                'label' => 'Formation',
             ),
             'attributes' => array(
                 'disabled' => true,

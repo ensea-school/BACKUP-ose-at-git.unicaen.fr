@@ -102,7 +102,7 @@ class VolumeHoraireController extends AbstractActionController
                 ->setTemplate('application/volume-horaire/saisie')
                 ->setVariables(compact('form', 'errors'));
         if ($terminal) {
-            return $this->popoverInnerViewModel($viewModel, "Saisie d'heures de service", false);
+            return $this->popoverInnerViewModel($viewModel, "Saisie d'heures d'enseignement", false);
         }
         return $viewModel;
     }

@@ -36,7 +36,7 @@ class EtapeController extends AbstractActionController implements ContextProvide
         $structure = $this->context()->mandatory()->structureFromRoute();
         $id        = $this->params()->fromRoute('id');
         $service   = $this->getServiceEtape();
-        $title     = $id ? "Modification d'une étape" : "Création d'une nouvelle étape";
+        $title     = $id ? "Modification d'une formation" : "Création d'une nouvelle formation";
         $form      = $this->getFormAjouterModifier();
         $errors    = array();
 
@@ -83,7 +83,7 @@ class EtapeController extends AbstractActionController implements ContextProvide
         }
         $service   = $this->getServiceEtape();
         $entity    = $service->getRepo()->find($id);
-        $title     = "Suppression d'étape";
+        $title     = "Suppression de formation";
         $form      = new \Application\Form\Supprimer('suppr');
         $errors = array();
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
@@ -106,7 +106,7 @@ class EtapeController extends AbstractActionController implements ContextProvide
         $etape       = $this->context()->mandatory()->etapeFromRoute('id');
         $import      = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->etapeGetDifferentiel($etape);
-        $title       = "Aperçu d'une étape";
+        $title       = "Aperçu d'une formation";
         $short       = $this->params()->fromQuery('short', false);
 
         return compact('etape','short','title','changements');

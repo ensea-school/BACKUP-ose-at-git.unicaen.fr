@@ -69,7 +69,7 @@ class ElementPedagogique extends AbstractEntityService
         
         if (isset($filters['etape'])) {
             if (!$filters['etape'] instanceof \Application\Entity\Db\Etape) {
-                throw new \Common\Exception\LogicException("L'étape spécifiée dans le contexte n'est pas du type attendu.");
+                throw new \Common\Exception\LogicException("La formation spécifiée dans le contexte n'est pas du type attendu.");
             }
             $qb->andWhere('ep.etape = :etape')->setParameter('etape', $filters['etape']);
         }
@@ -300,11 +300,11 @@ EOS;
             }
             
             $this->cannotDoThat(
-                    "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier d'élément pédagogique"
+                    "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier un enseignement"
                     . "pour la structure '{$localContext->getStructure()}'", $runEx);
         }
 
-        return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter/modifier un élément pédagogique', $runEx);
+        return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter/modifier un enseignement', $runEx);
     }
 
     /**

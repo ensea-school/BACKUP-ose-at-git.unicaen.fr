@@ -50,7 +50,7 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         $this->add($intervenant);
 
         $element = new Select('element-pedagogique');
-        $element->setLabel('Enseignement ou responsabilité :');
+        $element->setLabel('Enseignement :');
         $this->add($element);
 
         $etape = new Select('etape');

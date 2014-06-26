@@ -61,7 +61,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
         <div class="panel panel-default">
             <div class="panel-heading">Niveau</div>
             <div class="panel-body">
-                Cliquez sur le niveau dont vous voulez voir les étapes et éléments pédagogiques...
+                Cliquez sur le niveau dont vous voulez voir les formations et enseignements...
             </div>
             <?php if (count($niveauxOptions)): ?>
             <ul class="list-group">
@@ -80,7 +80,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php foreach ($niveauxOptions as $code => $lib): ?>
                 <?php if ($code != $niveau): ?> 
                      <li class="list-group-item">
-                         <a class="niveau" title="Cliquez pour afficher les étapes et les éléments pédagogiques de ce niveau" href="<?php echo $this->url('of', 
+                         <a class="niveau" title="Cliquez pour afficher les formations et les enseignements de ce niveau" href="<?php echo $this->url('of', 
                                 array(), 
                                 array('query' => array(
                                     'structure' => $structure ? $structure->getId() : null, 
@@ -104,7 +104,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
         <?php if (count($etapesOptions)): ?>
         <div class="panel panel-default">
             <div class="panel-heading">
-                Étape
+                Formation
                 <!--------------- Bouton d'ajout d'étape --------------->
                 <?php if (null !== $entities): ?>
                 <?php if ($serviceEtape->canAdd()): /* @var $serviceEtape \Application\Service\Etape */ ?>
@@ -117,7 +117,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php endif; ?>
             </div>
             <div class="panel-body">
-                Cliquez sur l'étape dont vous voulez voir les éléments pédagogiques...
+                Cliquez sur la formation dont vous voulez voir les enseignements...
             </div>
             
             <?php if (count($etapesOptions)): ?>
@@ -129,10 +129,10 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                                 array('query' => array(
                                     'structure' => $structure ? $structure->getId() : null, 
                                     'niveau' => $niveau, 
-                                    'etape' => null))) ?>">Toutes étapes confondues</a>
+                                    'etape' => null))) ?>">Toutes formations confondues</a>
                     </li>
                 <?php else: ?>
-                    <li class="list-group-item active"><strong>Toutes étapes confondues</strong></li>
+                    <li class="list-group-item active"><strong>Toutes formations confondues</strong></li>
                 <?php endif; ?>
                 </li>
                 
@@ -149,7 +149,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php if (!$etape || $code != $etape->getId()): ?> 
                      <li class="list-group-item">
                          <?php echo $actions ?>
-                         <a class="etape text-danger" title="Cliquez pour afficher les éléments pédagogiques de cette étape" href="<?php echo $this->url('of', 
+                         <a class="etape text-danger" title="Cliquez pour afficher les enseignements de cette formation" href="<?php echo $this->url('of', 
                                 array(), 
                                 array('query' => array(
                                     'structure' => $structure ? $structure->getId() : null,
@@ -185,7 +185,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php if (!$etape || $code != $etape->getId()): ?> 
                      <li class="list-group-item">
                          <?php echo $actions ?>
-                         <a class="etape" title="Cliquez pour afficher les éléments pédagogiques de cette étape" href="<?php echo $this->url('of', 
+                         <a class="etape" title="Cliquez pour afficher les enseignements de cette formation" href="<?php echo $this->url('of', 
                                 array(), 
                                 array('query' => array(
                                     'structure' => $structure ? $structure->getId() : null,
@@ -224,8 +224,8 @@ $mc->setUlClass('navigation navigation-etape pull-right');
         <!---------------- Champ de recherche d'un élément pédagogique --------------->
         <div class="element-rech panel panel-default">
             <div class="panel-heading">
-                <?php $compl = $etape ? "de l'étape <strong>$etape</strong>" : "toutes étapes confondues"; ?>
-                Éléments pédagogiques <?php echo $compl ?> 
+                <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
+                Enseignements <?php echo $compl ?> 
                 <!--------------- Bouton d'ajout d'élément pédagogique --------------->
                 <?php if ($etape): ?>
                     <?php echo $mc
@@ -257,7 +257,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                     });
                 </script>
                 
-                <p><?php echo count($entities) ?> élément(s) pédagogique(s) trouvé(s).</p>
+                <p><?php echo count($entities) ?> enseignement(s) trouvé(s).</p>
                 
             </div>
                 
@@ -265,8 +265,8 @@ $mc->setUlClass('navigation navigation-etape pull-right');
             <table class="table table-bordered table-condensed table-hover">
                 <thead>
                     <tr>
-                        <th colspan="3">Étape</th>
-                        <th colspan="4">Élément pédagogique</th>
+                        <th colspan="3">Formation</th>
+                        <th colspan="4">Enseignement</th>
                         <th class="action" rowspan="2"></th>
                     </tr>
                     <tr>
@@ -289,13 +289,13 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                         $urlElem  = $this->url('of/element/apercevoir', array('id' => $ep->getId()));
                         ?>
                         <td class="etape">
-                            <a class="ajax-modal" title="Cliquez pour voir le détail de cette étape" 
+                            <a class="ajax-modal" title="Cliquez pour voir le détail de cette formation" 
                                href="<?php echo $urlEtape ?>"><?php echo $etapeEp ?></a>
                         </td>
                         <td class="periode"><?php echo $ep->getPeriode() ?: '-' ?></td>
                         <td class="element"><?php echo $ep->getSourceCode() ?></td>
                         <td class="element">
-                            <a class="ajax-modal" title="Cliquez pour voir le détail de cet élément" 
+                            <a class="ajax-modal" title="Cliquez pour voir le détail de cet enseignement" 
                                href="<?php echo $urlElem ?>"><?php echo $ep->getLibelle() ?></a>
                         </td>
                         <td><?php echo (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>

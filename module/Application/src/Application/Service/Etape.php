@@ -73,11 +73,11 @@ class Etape extends AbstractEntityService
             }
             
             $this->cannotDoThat(
-                    "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier d'étape"
+                    "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier de formation"
                     . "pour la structure '{$localContext->getStructure()}'", $runEx);
         }
 
-        return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter ou modifier une étape', $runEx);
+        return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter ou modifier une formation', $runEx);
     }
 
     /**

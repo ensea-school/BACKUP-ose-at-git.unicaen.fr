@@ -102,7 +102,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '<thead>'."\n";
         $res .= '<tr>'."\n";
         $res .= '    <th style="width:40%" rowspan="2">Intervenant</th>'."\n";
-        $res .= '    <th style="width:40%" colspan="'.count($typesIntervention).'">Services</th>'."\n";
+        $res .= '    <th style="width:40%" colspan="'.count($typesIntervention).'">Enseignements</th>'."\n";
         $res .= '    <th style="width:10%" rowspan="2">Référentiel</th>'."\n";
         $res .= '    <th style="width:10%" rowspan="2">Heures &Eacute;q. TD</th>'."\n";
         $res .= '</tr>'."\n";

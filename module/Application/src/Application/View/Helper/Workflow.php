@@ -76,7 +76,7 @@ use WorkflowIntervenantAwareTrait;
         }
 
         $nextStep = $wf->getNextStep($wf->getStepForCurrentRoute());
-        if (!$nextStep || $nextStep->getDone()) {
+        if (!$nextStep) {
             return '';
         }
 

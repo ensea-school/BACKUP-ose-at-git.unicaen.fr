@@ -148,13 +148,13 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         $query = array('sourceCode' => $this->service->getIntervenant()->getSourceCode());
         $url = $this->getView()->url('service-ref/default', array('action' => 'saisir'), array('query' => $query));
-        return '<td><a class="ajax-modal" data-event="service-ref-modify-message" href="' . $url . '" title="Modifier le service référentiel de ' . $this->service->getIntervenant() . '"><span class="glyphicon glyphicon-edit"></span></a></td>';
+        return '<td><a class="ajax-modal" data-event="service-ref-modify-message" href="' . $url . '" title="Modifier le référentiel de ' . $this->service->getIntervenant() . '"><span class="glyphicon glyphicon-edit"></span></a></td>';
     }
 
     protected function renderSupprimer()
     {
         $url = $this->getView()->url('service-ref/default', array('action' => 'supprimer', 'id' => $this->service->getId()));
-        return '<td><a class="ajax-modal" data-event="service-ref-delete-message" data-id="' . $this->service->getId() . '" href="' . $url . '" title="Supprimer ce service référentiel"><span class="glyphicon glyphicon-remove"></span></a></td>';
+        return '<td><a class="ajax-modal" data-event="service-ref-delete-message" data-id="' . $this->service->getId() . '" href="' . $url . '" title="Supprimer ce référentiel"><span class="glyphicon glyphicon-remove"></span></a></td>';
     }
 
     /**

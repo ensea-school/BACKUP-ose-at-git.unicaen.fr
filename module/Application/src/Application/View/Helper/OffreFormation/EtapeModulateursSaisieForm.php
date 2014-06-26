@@ -55,13 +55,13 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
         $typesModulateurs = $form->getTypesModulateurs();
 
         if (empty($elements)){
-            return 'Aucun élément n\'est associé à cette étape. Il est donc impossible d\'y associer des modulateurs';
+            return 'Aucun enseignement n\'est associé à cette formation. Il est donc impossible d\'y associer des modulateurs';
         }
         if (0 == $form->countModulateurs()){
-            return 'Aucun modulateur ne correspond aux éléments de cette étape';
+            return 'Aucun modulateur ne correspond aux enseignements de cette formation';
         }
         if (empty($typesModulateurs)){
-            return 'Aucun modulateur ne peut être associé à cette étape car ils ne sont pas activés pour la structure d\'enseignement correspondante.';
+            return 'Aucun modulateur ne peut être associé à cette formation car ils ne sont pas activés pour la structure d\'enseignement correspondante.';
         }
 
         $displayTypesModulateurs = array();

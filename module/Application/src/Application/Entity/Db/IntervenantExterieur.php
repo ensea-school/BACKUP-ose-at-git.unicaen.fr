@@ -42,6 +42,11 @@ class IntervenantExterieur extends Intervenant
      */
     protected $dossier;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $contrat;
+
 
     /**
      * Set validiteDebut
@@ -202,5 +207,52 @@ class IntervenantExterieur extends Intervenant
     public function getDossier()
     {
         return $this->dossier;
+    }
+
+    /**
+     * Add contrat
+     *
+     * @param \Application\Entity\Db\Contrat $contrat
+     * @return Intervenant
+     */
+    public function addContrat(\Application\Entity\Db\Contrat $contrat)
+    {
+        $this->contrat[] = $contrat;
+
+        return $this;
+    }
+
+    /**
+     * Remove contrat
+     *
+     * @param \Application\Entity\Db\Contrat $contrat
+     */
+    public function removeContrat(\Application\Entity\Db\Contrat $contrat)
+    {
+        $this->contrat->removeElement($contrat);
+    }
+
+    /**
+     * Get contrat
+     *
+     * @param TypeContrat|string $type
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getContrat($type = null)
+    {
+        if (null === $type) {
+            return $this->contrat;
+        }
+        if (null === $this->contrat) {
+            return null;
+        }
+        if ($type instanceof TypeContrat) {
+            $type = $type->getCode();
+        }
+        
+        $filter   = function(Contrat $contrat) use ($type) { return $type === $contrat->getTypeContrat()->getCode(); };
+        $contrats = $this->contrat->filter($filter);
+        
+        return $contrats;
     }
 }

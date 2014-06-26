@@ -154,8 +154,8 @@ return array(
             'home' => array(
                 'pages' => array(
                     'service' => array(
-                        'label'    => 'Services',
-                        'title'    => "Résumé des services",
+                        'label'    => 'Enseignements',
+                        'title'    => "Résumé des enseignements",
                         'route'    => 'service/resume',
                         'resource' => 'controller/Application\Controller\Service:index',
                         'pages' => array(

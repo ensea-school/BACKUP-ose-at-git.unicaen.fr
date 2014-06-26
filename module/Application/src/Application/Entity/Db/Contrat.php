@@ -47,6 +47,16 @@ class Contrat implements HistoriqueAwareInterface
      */
     private $histoCreateur;
 
+    /**
+     * @var \Application\Entity\Db\IntervenantExterieur
+     */
+    private $intervenant;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $volumeHoraire;
+
 
     /**
      * Set histoCreation
@@ -217,5 +227,60 @@ class Contrat implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Set intervenant
+     *
+     * @param \Application\Entity\Db\IntervenantExterieur $intervenant
+     * @return self
+     */
+    public function setIntervenant(\Application\Entity\Db\IntervenantExterieur $intervenant = null)
+    {
+        $this->intervenant = $intervenant;
+        return $this;
+    }
+
+    /**
+     * Get intervenant
+     *
+     * @return \Application\Entity\Db\IntervenantExterieur 
+     */
+    public function getIntervenant()
+    {
+        return $this->intervenant;
+    }
+
+    /**
+     * Add volumeHoraire
+     *
+     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     * @return self
+     */
+    public function addVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
+    {
+        $this->volumeHoraire[] = $volumeHoraire;
+
+        return $this;
+    }
+
+    /**
+     * Remove volumeHoraire
+     *
+     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     */
+    public function removeVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire)
+    {
+        $this->volumeHoraire->removeElement($volumeHoraire);
+    }
+
+    /**
+     * Get volumeHoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVolumeHoraire()
+    {
+        return $this->volumeHoraire;
     }
 }

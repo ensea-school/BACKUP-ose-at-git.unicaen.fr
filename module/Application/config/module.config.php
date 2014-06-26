@@ -186,7 +186,6 @@ $main =  array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index'   => 'Application\Controller\IndexController',
-            'Application\Controller\Contrat' => 'Application\Controller\ContratController',
         ),
     ),
     'view_manager' => array(
@@ -208,5 +207,6 @@ return array_merge_recursive(
     include 'recherche.config.php',
     include 'service.config.php',
     include 'volume-horaire.config.php',
-    include 'offre-formation.config.php'
+    include 'offre-formation.config.php',
+    include 'contrat.config.php'
 );

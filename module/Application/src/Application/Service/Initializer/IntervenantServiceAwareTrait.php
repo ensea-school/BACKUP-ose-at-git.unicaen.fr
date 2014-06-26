@@ -13,17 +13,17 @@ trait IntervenantServiceAwareTrait
     /**
      * @var IntervenantService
      */
-    protected $intervenantService;
+    protected $serviceIntervenant;
     
     /**
      * Spécifie le service Intervenant.
      *
-     * @param IntervenantService $intervenantService
+     * @param IntervenantService $serviceIntervenant
      * @return self
      */
-    public function setIntervenantService(IntervenantService $intervenantService = null)
+    public function setIntervenantService(IntervenantService $serviceIntervenant = null)
     {
-        $this->intervenantService = $intervenantService;
+        $this->serviceIntervenant = $serviceIntervenant;
         
         return $this;
     }
@@ -35,6 +35,6 @@ trait IntervenantServiceAwareTrait
      */
     public function getIntervenantService()
     {
-        return $this->intervenantService;
+        return $this->serviceIntervenant;
     }
 }

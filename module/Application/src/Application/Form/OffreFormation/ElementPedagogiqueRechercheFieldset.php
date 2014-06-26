@@ -74,9 +74,9 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         $this->add(array(
             'name'       => 'element',
             'options'    => array(
-                'label' => "Enseignement ou responsabilité :",
+                'label' => "Enseignement :",
                 'label_attributes' => array(
-                    'title' => "Enseignement ou responsabilité",
+                    'title' => "Enseignement",
                 ),
             ),
             'attributes' => array(

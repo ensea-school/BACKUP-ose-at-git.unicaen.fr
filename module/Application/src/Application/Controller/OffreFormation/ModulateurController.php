@@ -26,7 +26,7 @@ class ModulateurController extends AbstractActionController implements ContextPr
         /* @var $etape \Application\Entity\Db\Etape */
 
         if (! $etape){
-            throw new \Common\Exception\RuntimeException('L\'étape n\'a pas été spécifiée ou bien elle est invalide.');
+            throw new \Common\Exception\RuntimeException('La formation n\'a pas été spécifiée ou bien elle est invalide.');
         }
 
         $form    = $this->getFormSaisie();

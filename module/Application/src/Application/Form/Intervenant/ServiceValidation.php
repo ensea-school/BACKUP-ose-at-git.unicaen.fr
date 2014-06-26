@@ -51,7 +51,7 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
             'name' => 'dateConseilRestreint',
             'type'  => 'UnicaenApp\Form\Element\Date',
             'options' => array(
-                'label' => "Date de passage en Conseil Restreint",
+                'label' => "Date de passage en Conseil Restreint de la composante",
             ),
             'attributes' => array(
                 'id' => uniqid('dateConseilRestreint'),

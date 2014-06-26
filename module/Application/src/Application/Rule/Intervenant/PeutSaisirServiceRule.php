@@ -14,7 +14,7 @@ class PeutSaisirServiceRule extends IntervenantRule
         $statut = $this->getIntervenant()->getStatut();
         
         if (!$statut->permetSaisieService()) {
-            $this->setMessage(sprintf("Le statut '%s' n'autorise pas la saisie de services.", $statut));
+            $this->setMessage(sprintf("Le statut '%s' n'autorise pas la saisie d'enseignement.", $statut));
             return false;
         }
         

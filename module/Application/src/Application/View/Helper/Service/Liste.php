@@ -86,7 +86,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         }
         $out .= "<th title=\"Structure gestionnaire de l'enseignement\">Composante d'enseignement</th>\n";
         $out .= "<th title=\"Formation\">Formation</th>\n";
-        $out .= "<th title=\">Enseignement ou responsabilité\">Enseignement ou responsabilité</th>\n";
+        $out .= "<th title=\">Enseignement\">Enseignement</th>\n";
         if ($role instanceof \Application\Acl\ComposanteDbRole) {
             $out .= "<th title=\"Formation ouverte à distance\">FOAD</th>\n";
             $out .= "<th title=\"Régime d'inscription\">Rég. d'insc.</th>\n";

@@ -199,8 +199,8 @@ return array(
                         'resource' => 'controller/Application\Controller\OffreFormation:index',
                         'pages' => array(
                             'element-ajouter' => array(
-                                'label'    => "Créer un nouvel élément pédagogique",
-                                'title'    => "Créer un nouvel élément pédagogique pour l'étape sélectionnée",
+                                'label'    => "Créer un nouvel enseignement",
+                                'title'    => "Créer un nouvel enseignement pour la formation sélectionnée",
                                 'route'    => 'of/element/ajouter',
                                 'resource' => 'controller/Application\Controller\OffreFormation\ElementPedagogique:ajouter',
                                 'visible'  => false,
@@ -208,8 +208,8 @@ return array(
                                 'category' => 'element',
                             ),
                             'element-modifier' => array(
-                                'label'    => "Modifier cet élément",
-                                'title'    => "Modifier cet élément pédagogique",
+                                'label'    => "Modifier cet enseignement",
+                                'title'    => "Modifier cet enseignement",
                                 'route'    => 'of/element/modifier',
                                 'resource' => 'controller/Application\Controller\OffreFormation\ElementPedagogique:modifier',
                                 'visible'  => false,
@@ -218,8 +218,8 @@ return array(
                                 'category' => 'element',
                             ),
                             'element-supprimer' => array(
-                                'label'    => "Supprimer cette étape",
-                                'title'    => "Supprimer cette étape",
+                                'label'    => "Supprimer cette formation",
+                                'title'    => "Supprimer cette formation",
                                 'route'    => 'of/element/supprimer',
                                 'resource' => 'controller/Application\Controller\OffreFormation\ElementPedagogique:supprimer',
                                 'visible'  => false,
@@ -228,8 +228,8 @@ return array(
                                 'category' => 'element',
                             ),
                             'etape-ajouter' => array(
-                                'label'    => "Créer une nouvelle étape",
-                                'title'    => "Créer une nouvelle étape",
+                                'label'    => "Créer une nouvelle formation",
+                                'title'    => "Créer une nouvelle formation",
                                 'route'    => 'of/etape/ajouter',
                                 'resource' => 'controller/Application\Controller\OffreFormation\Etape:ajouter',
                                 'visible'  => false,
@@ -237,8 +237,8 @@ return array(
                                 'category' => 'etape',
                             ),
                             'etape-modifier' => array(
-                                'label'    => "Modifier cette étape",
-                                'title'    => "Modifier cette étape",
+                                'label'    => "Modifier cette formation",
+                                'title'    => "Modifier cette formation",
                                 'route'    => 'of/etape/modifier',
                                 'resource' => 'controller/Application\Controller\OffreFormation\Etape:modifier',
                                 'visible'  => false,
@@ -247,8 +247,8 @@ return array(
                                 'category' => 'etape',
                             ),
                             'etape-supprimer' => array(
-                                'label'    => "Supprimer cette étape",
-                                'title'    => "Supprimer cette étape",
+                                'label'    => "Supprimer cette formation",
+                                'title'    => "Supprimer cette formation",
                                 'route'    => 'of/etape/supprimer',
                                 'resource' => 'controller/Application\Controller\OffreFormation\Etape:supprimer',
                                 'visible'  => false,
@@ -257,8 +257,8 @@ return array(
                                 'category' => 'etape',
                             ),
                             'etape-modulateurs' => array(
-                                'label'    => "Editer les modulateurs liés à cette étape",
-                                'title'    => "Editer les modulateurs liés à cette étape",
+                                'label'    => "Editer les modulateurs liés à cette formation",
+                                'title'    => "Editer les modulateurs liés à cette formation",
                                 'route'    => 'of/etape/modulateurs',
                                 'resource' => 'controller/Application\Controller\OffreFormation\Modulateur:saisir',
                                 'visible'  => false,

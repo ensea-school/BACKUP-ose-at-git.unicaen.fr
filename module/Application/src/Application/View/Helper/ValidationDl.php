@@ -36,12 +36,20 @@ class ValidationDl extends AbstractDl
                 . ' par ' . $this->getView()->mailto($entity->getHistoModificateur())
         );
         
-        if ($entity->getDateCommission()) {
+        if ($entity->getDateCommissionRecherche()) {
             $dtdds[] = sprintf($tplDtdd,
-                "Date de passage en commission :", 
-                $entity->getDateCommission()->format(\Common\Constants::DATETIME_FORMAT)
+                "Date de passage en Commission de la Recherche :", 
+                $entity->getDateCommissionRecherche()->format(\Common\Constants::DATE_FORMAT)
             );
         }
+        
+        if ($entity->getDateConseilRestreint()) {
+            $dtdds[] = sprintf($tplDtdd,
+                "Date de passage en Conseil Restreint de la composante :", 
+                $entity->getDateConseilRestreint()->format(\Common\Constants::DATE_FORMAT)
+            );
+        }
+        
         
         $html .= sprintf($this->getTemplateDl('validation validation-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
  

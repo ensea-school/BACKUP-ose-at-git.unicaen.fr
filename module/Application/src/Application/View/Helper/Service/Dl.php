@@ -58,7 +58,7 @@ class Dl extends AbstractDl
         );
 
         $identite[] = sprintf($tplDtdd,
-            "Elément pédagogique :",
+            "Enseignement :",
             $this->entity->getElementPedagogique()->getLibelle()
         );
 

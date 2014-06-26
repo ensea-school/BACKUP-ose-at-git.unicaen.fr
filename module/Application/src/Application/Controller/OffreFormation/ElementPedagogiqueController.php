@@ -31,7 +31,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
     public function voirAction()
     {
         $element = $this->context()->mandatory()->elementPedagogiqueFromRoute('id');
-        $title   = "Détails d'un élément pédagogique";
+        $title   = "Détails d'un enseignement";
         $short   = $this->params()->fromQuery('short', false);
         
         $viewModel = new \Zend\View\Model\ViewModel();
@@ -43,7 +43,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
     public function apercevoirAction()
     {
         $element = $this->context()->mandatory()->elementPedagogiqueFromRoute('id');
-        $title   = "Aperçu d'un élément pédagogique";
+        $title   = "Aperçu d'un enseignement";
         $short   = $this->params()->fromQuery('short', false);
         
         $viewModel = new \Zend\View\Model\ViewModel();
@@ -67,7 +67,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         $etape   = $this->context()->mandatory()->etapeFromRoute(); /* @var $etape \Application\Entity\Db\Etape */
         $id      = $this->params()->fromRoute('id');
         $service = $this->getServiceElementPedagogique();
-        $title   = $id ? "Modification d'un élément pédagogique" : "Création d'un élément pédagogique";
+        $title   = $id ? "Modification d'un enseignement" : "Création d'un enseignement";
         $form    = $this->getFormAjouterModifier();
         $errors  = array();
 
@@ -117,7 +117,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         
         $service   = $this->getServiceElementPedagogique();
         $entity    = $service->getRepo()->find($id);
-        $title     = "Suppression d'élément pédagogique";
+        $title     = "Suppression d'enseignement";
         $form      = new \Application\Form\Supprimer('suppr');
         $errors = array();
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
@@ -182,10 +182,10 @@ class ElementPedagogiqueController extends AbstractActionController implements C
                 $extra .= sprintf('<span class="element-rech niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);
             }
             if (!$etape) {
-                $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Étape", $item['LIBELLE_ETAPE']);
+                $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
             }
             $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
-            $template = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Élément pédagogique");
+            $template = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Enseignement");
             $result[$item['ID']] = array(
                 'id'       => $item['ID'],
                 'label'    => $item['SOURCE_CODE'] . ' ' . $item['LIBELLE'],

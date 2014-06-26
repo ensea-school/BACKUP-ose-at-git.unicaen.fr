@@ -88,6 +88,11 @@ class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
     protected $contrat;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $validation;
+
+    /**
      * remove
      *
      * @var boolean
@@ -462,5 +467,38 @@ class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getContrat()
     {
         return $this->contrat;
+    }
+
+    /**
+     * Add validation
+     *
+     * @param \Application\Entity\Db\Validation $validation
+     * @return self
+     */
+    public function addValidation(\Application\Entity\Db\Validation $validation)
+    {
+        $this->validation[] = $validation;
+
+        return $this;
+    }
+
+    /**
+     * Remove validation
+     *
+     * @param \Application\Entity\Db\Validation $validation
+     */
+    public function removeValidation(\Application\Entity\Db\Validation $validation)
+    {
+        $this->validation->removeElement($validation);
+    }
+
+    /**
+     * Get validation
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getValidation()
+    {
+        return $this->validation;
     }
 }

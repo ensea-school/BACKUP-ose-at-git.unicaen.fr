@@ -70,11 +70,14 @@ class ValidationController extends AbstractActionController implements ContextPr
      */
     public function voirDossierAction()
     { 
-        $this->title    = "Validation des données personnelles <small>$this->intervenant</small>";
+        $this->title    = "Validation de vos données personnelles";
         $this->readonly = true;
             
         $this->commonDossier();
         
+        $this->form->get('valide')->setLabel("Si cette case est cochée, cela indique que vos données personnelles ont été validées...");
+        $this->view->setTemplate('application/validation/voir-dossier');
+                
         return $this->view;
     }
     
@@ -135,6 +138,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         
         $this->view = new \Zend\View\Model\ViewModel(array(
             'intervenant' => $this->intervenant,
+            'validation'  => $this->validation,
             'form'        => $this->form,
             'role'        => $role,
             'readonly'    => $this->readonly,

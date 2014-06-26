@@ -37,15 +37,16 @@
     <?php endif; ?>
 
     <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
-    <?php echo $this->messenger()->setMessage("Merci de saisir les heures effectuées (sans majoration)."); ?>
+    <?php echo $this->messenger()->setMessage(
+            "Merci de saisir les heures effectuées <strong>sans majoration</strong>. Exemple: saisissez 1h CM et non 1,5h TD."); ?>
     <?php endif; ?>
 
     <?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
     <?php if ($role instanceof \Application\Acl\IntervenantExterieurRole): ?>
         <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
     <?php else: ?>
-    <h2>Service prévisionnel 
-        <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
+    <h2>Enseignements prévisionnels
+        <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un enseignement"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
     </h2>
     <?php endif; ?>
 
@@ -58,6 +59,6 @@
     
 <?php else:?>
         
-    <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les services.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
+    <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les enseignements.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
 
 <?php endif; ?>

@@ -42,5 +42,6 @@
         <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

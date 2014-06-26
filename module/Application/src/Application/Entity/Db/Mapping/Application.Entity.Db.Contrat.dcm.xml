@@ -18,6 +18,11 @@
         <join-column name="TYPE_CONTRAT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
@@ -33,5 +38,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire" mapped-by="contrat" />
   </entity>
 </doctrine-mapping>

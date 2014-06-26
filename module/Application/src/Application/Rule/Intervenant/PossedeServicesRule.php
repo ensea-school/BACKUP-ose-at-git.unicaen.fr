@@ -16,7 +16,7 @@ class PossedeServicesRule extends IntervenantRule
         $service = $this->getIntervenant()->getService($this->getAnnee());
         
         if (!count($service)) {
-            $this->setMessage(sprintf("Aucun service prévisionnel n'a été saisi concernant %s.", $this->getIntervenant()));
+            $this->setMessage(sprintf("Aucun enseignement prévisionnel n'a été saisi concernant %s.", $this->getIntervenant()));
             return false;
         }
         return true;

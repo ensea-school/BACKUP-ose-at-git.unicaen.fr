@@ -1,2 +1,39 @@
-<h2 class="page-header">Voir contrat</h2>
+<h2 class="page-header">Contrat <small><?php echo $intervenant ?></small></h2>
 
+<?php if (!$contrat): ?>
+
+    <?php echo $this->messenger()->setMessage(sprintf("Le contrat de %s n'a pas encore été créé.", $intervenant)) ?>
+
+<?php else: ?>
+
+<?php echo $this->messenger(true) ?>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Contrat ou avenant</th>
+                <th>Création</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Contrat n°<?php echo $contrat->getId() ?></td>
+                <td><?php echo $contrat->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
+                    <?php echo $contrat->getHistoModificateur() ?></td>
+            </tr>
+            <?php foreach ($avenants as $avenant): ?>
+            <tr>
+                <td>Avenant n°<?php echo $avenant->getId() ?></td>
+                <td></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+<?php endif; ?>
+
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>

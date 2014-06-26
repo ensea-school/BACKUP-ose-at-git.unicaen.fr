@@ -18,7 +18,7 @@
                         $etape .= (!$step->getRoute() || $wf->isStepAfterCurrentStep($step)) ?
                             $step->getLabel($role) : 
                             sprintf('<a title="%s" href="%s">%s</a>', 
-                                "Cliquez sur ce lien pour accéder à la page correspondant à cette étape", 
+                                "Cliquez sur ce lien pour accéder à la page correspondant à cette formation", 
                                 $wf->getStepUrl($step),
                                 $step->getLabel($role));
                         echo $etape;
@@ -44,7 +44,7 @@
     <thead>
         <tr>
             <th class="step status"></th>
-            <th>Étape</th>
+            <th>Formation</th>
         </tr>
     </thead>
     <tbody>
@@ -68,7 +68,7 @@
                     $etape .= !$step->getRoute() || $wf->isStepAfterCurrentStep($step) ?
                         $step->getLabel($role) : 
                         sprintf('<a title="%s" href="%s">%s</a>', 
-                            "Cliquez sur ce lien pour accéder à la page correspondant à cette étape", 
+                            "Cliquez sur ce lien pour accéder à la page correspondant à cette formation", 
                             $wf->getStepUrl($step),
                             $step->getLabel($role));
                     echo $etape;

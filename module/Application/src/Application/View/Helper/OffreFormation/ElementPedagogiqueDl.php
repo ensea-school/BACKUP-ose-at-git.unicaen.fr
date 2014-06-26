@@ -63,19 +63,19 @@ class ElementPedagogiqueDl extends AbstractDl
         
         if (($autresEtapes = $this->entity->getEtapes(false))) {
             $details[] = sprintf($tplDtdd,
-                "Étape principale :", 
+                "Formation principale :", 
                 $this->entity->getEtape()
             );
             if (!$this->short) {
                 $details[] = sprintf($tplDtdd,
-                    "Autre(s) étape(s) :", 
+                    "Autre(s) formation(s) :", 
                     $this->getView()->htmlList($autresEtapes)
                 );
             }
         }
         else {
             $details[] = sprintf($tplDtdd,
-                "Étape :", 
+                "Formation :", 
                 $this->entity->getEtape()
             );
         }

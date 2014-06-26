@@ -25,33 +25,28 @@
 
 <?php if ('afficher' === $action ): ?>
 
-    <?php if ($renderReferentiel): ?>
-    <h2>Référentiel
-        <?php 
-        $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir'));
-        ?>
-        <a class="ajax-modal services-ref btn btn-default pull-right" data-event="service-ref-add-message" href="<?php echo $urlSaisir ?>" title="Ajouter/modifier les fonctions référentiel"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau référentiel</a>
-    </h2>
-    <?php echo $this->servicesRefListe; ?>
-    <hr />
-    <?php endif; ?>
-
     <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
-    <?php echo $this->messenger()->setMessage(
-            "Merci de saisir les heures effectuées <strong>sans majoration</strong>. Exemple: saisissez 1h CM et non 1,5h TD."); ?>
+        <?php echo $this->messenger()->setMessage(
+                "Merci de saisir les heures effectuées <strong>sans majoration</strong>. Exemple: saisissez 1h CM et non 1,5h TD."); ?>
     <?php endif; ?>
 
     <?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
-    <?php if ($role instanceof \Application\Acl\IntervenantExterieurRole): ?>
-        <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
-    <?php else: ?>
-    <h2>Enseignements prévisionnels
-        <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un enseignement"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>
-    </h2>
+    <?php if (!$role instanceof \Application\Acl\IntervenantExterieurRole): ?>
+        <!--<h2>Enseignements prévisionnels</h2>-->
     <?php endif; ?>
-
+    <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>"
+       title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
     <?php echo $this->serviceListe( $services )->setRenderIntervenants($renderIntervenants)->render(); ?>
 
+    <?php if ($renderReferentiel): ?>
+        <h1>Référentiel</h1>
+        <?php $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir')); ?>
+        <a class="ajax-modal services-ref btn btn-primary" data-event="service-ref-add-message" href="<?php echo $urlSaisir ?>"
+           title="Modifier le référentiel"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
+        <?php echo $this->servicesRefListe; ?>
+        <hr />
+    <?php endif; ?>
+        
     <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
         <hr />
         <?php echo $this->workflow($role->getIntervenant(), $role)->navNext("J'ai terminé ma saisie, ") ?>

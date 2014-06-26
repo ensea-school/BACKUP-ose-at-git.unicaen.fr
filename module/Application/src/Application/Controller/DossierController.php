@@ -141,10 +141,10 @@ class DossierController extends AbstractActionController implements ContextProvi
                 $this->em()->persist($this->intervenant);
                 $this->em()->flush();
                 $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
-                if ($notified) {
-                    $this->flashMessenger()->addInfoMessage(
-                            "Un mail doit être envoyé pour informer la composante de la modification des données personnelles...");
-                }
+//                if ($notified) {
+//                    $this->flashMessenger()->addInfoMessage(
+//                            "Un mail doit être envoyé pour informer la composante de la modification des données personnelles...");
+//                }
                 
                 return $this->redirect()->toUrl($url);
             }

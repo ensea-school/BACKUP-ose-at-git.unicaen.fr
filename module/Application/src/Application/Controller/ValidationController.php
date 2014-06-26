@@ -148,6 +148,16 @@ class ValidationController extends AbstractActionController implements ContextPr
     }
     
     /**
+     * @return TypeValidation
+     */
+    private function getTypeValidationDossier() 
+    {
+        $qb = $this->getTypeValidationService()->finderByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    /**
      * 
      * @return \Zend\View\Model\ViewModel
      * @throws \Common\Exception\MessageException
@@ -359,5 +369,13 @@ class ValidationController extends AbstractActionController implements ContextPr
     private function getServiceStructure()
     {
         return $this->getServiceLocator()->get('ApplicationStructure');
+    }
+    
+    /**
+     * @return \Application\Service\TypeValidation
+     */
+    private function getServiceTypeValidation()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
 }

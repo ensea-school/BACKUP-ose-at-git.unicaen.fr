@@ -1,6 +1,14 @@
 <h2 class="page-header"><?php echo $title ?></h2>
 
-<?php echo $this->messenger(true) ?>
+<?php
+$this->messenger(true);
+if ($validation->getId()) {
+    $this->messenger()->addMessage(
+            sprintf("Les données personnelles sont validées. <br /><br />%s", $this->validationDl($validation)), 'success');
+}
+?>
+
+<?php echo $this->messenger() ?>
 
 <?php $form->prepare(); ?>
 <?php echo $this->form()->openTag($form); ?>

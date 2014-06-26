@@ -22,6 +22,8 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
     
     public function init()
     {
+        $this->setHydrator(new ClassMethods(false));
+        
         $this->setAttribute('method', 'POST');
         $this->add(array(
             'name' => 'valide',
@@ -34,30 +36,36 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
         ));
         
         $dateCommissionRechercheRequired = $this->getRuleDateCommissionRecherche()->execute();
-        $this->add(array(
-            'name' => 'dateCommissionRecherche',
-            'type'  => 'UnicaenApp\Form\Element\Date',
-            'options' => array(
-                'label' => "Date de passage en Commission de la Recherche",
-            ),
-            'attributes' => array(
-                'id' => uniqid('dateCommissionRecherche'),
-                'disabled' => !$dateCommissionRechercheRequired,
-            ),
-        ));
+        if ($dateCommissionRechercheRequired) {
+            $this->add(array(
+                'name' => 'dateCommissionRecherche',
+                'type'  => 'UnicaenApp\Form\Element\Date',
+                'options' => array(
+                    'label' => "Date de passage en Commission de la Recherche",
+                ),
+                'attributes' => array(
+                    'id' => uniqid('dateCommissionRecherche'),
+                    'disabled' => !$dateCommissionRechercheRequired,
+                ),
+            ));
+            $this->getHydrator()->addStrategy('dateCommissionRecherche', new DateStrategy($this->get('dateCommissionRecherche')));
+        }
         
         $dateConseilRestreintRequired = $this->getRuleDateConseilRestreint()->execute();
-        $this->add(array(
-            'name' => 'dateConseilRestreint',
-            'type'  => 'UnicaenApp\Form\Element\Date',
-            'options' => array(
-                'label' => "Date de passage en Conseil Restreint de la composante",
-            ),
-            'attributes' => array(
-                'id' => uniqid('dateConseilRestreint'),
-                'disabled' => !$dateConseilRestreintRequired,
-            ),
-        ));
+        if ($dateConseilRestreintRequired) {
+            $this->add(array(
+                'name' => 'dateConseilRestreint',
+                'type'  => 'UnicaenApp\Form\Element\Date',
+                'options' => array(
+                    'label' => "Date de passage en Conseil Restreint de la composante",
+                ),
+                'attributes' => array(
+                    'id' => uniqid('dateConseilRestreint'),
+                    'disabled' => !$dateConseilRestreintRequired,
+                ),
+            ));
+            $this->getHydrator()->addStrategy('dateConseilRestreint', new DateStrategy($this->get('dateConseilRestreint')));
+        }
         
         $this->add(new Csrf('security'));
         
@@ -68,11 +76,6 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
                 'value' => "Enregistrer",
             ),
         ));
-
-        $h = new ClassMethods(false);
-        $h->addStrategy('dateCommissionRecherche', new DateStrategy($this->get('dateCommissionRecherche')));
-        $h->addStrategy('dateConseilRestreint',    new DateStrategy($this->get('dateConseilRestreint')));
-        $this->setHydrator($h);
         
         return $this;
     }

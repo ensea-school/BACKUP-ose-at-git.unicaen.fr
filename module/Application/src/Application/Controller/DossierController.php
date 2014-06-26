@@ -11,6 +11,7 @@ use Application\Acl\IntervenantRole;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Traits\WorkflowIntervenantAwareTrait;
+use Application\Entity\Db\TypeValidation;
 
 /**
  * Description of DossierController
@@ -51,6 +52,11 @@ class DossierController extends AbstractActionController implements ContextProvi
     private $title;
     
     /**
+     * @var bool
+     */
+    private $readonly = false;
+    
+    /**
      * @var \Zend\View\Model\ViewModel
      */
     private $view;
@@ -88,42 +94,51 @@ class DossierController extends AbstractActionController implements ContextProvi
     {
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         $service = $this->getDossierService();
-        $form    = $this->getFormModifier();
+        $this->form    = $this->getFormModifier();
 
         if ($role instanceof IntervenantRole) {
-            $intervenant = $role->getIntervenant();
+            $this->intervenant = $role->getIntervenant();
         }
         else {
-            $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+            $this->intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        }
+     
+        $validation = null;
+        $dossierValide = new \Application\Rule\Intervenant\DossierValideRule($this->intervenant);
+        $dossierValide->setTypeValidation($this->getTypeValidationDossier());
+        if ($dossierValide->isRelevant() && $dossierValide->execute()) {
+            $this->readonly = true;
+            $validation = $dossierValide->getValidation();
         }
         
-        $wf    = $this->getWorkflowIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */
+        $wf    = $this->getWorkflowIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
         $url   = $step ? $wf->getStepUrl($step) : $this->url('home');
         if ($role instanceof IntervenantRole) {
+            $role->getIntervenant();
             $label = $step ? ' et ' . lcfirst($step->getLabel($role)) . '...' : null;
-            $form->get('submit')->setAttribute('value', "J'enregistre" . $label);
+            $this->form->get('submit')->setAttribute('value', "J'enregistre" . $label);
         }
         else {
             $url = $this->url()->fromRoute(null, array(), array(), true);
         }
         
-        $service->canAdd($intervenant, true);
+        $service->canAdd($this->intervenant, true);
         
-        if (!($dossier = $intervenant->getDossier())) {
-            $dossier = $service->newEntity()->fromIntervenant($intervenant);
-            $intervenant->setDossier($dossier);
+        if (!($dossier = $this->intervenant->getDossier())) {
+            $dossier = $service->newEntity()->fromIntervenant($this->intervenant);
+            $this->intervenant->setDossier($dossier);
         }
         
-        $form->bind($intervenant);
+        $this->form->bind($this->intervenant);
         
-        if ($this->getRequest()->isPost()) {
+        if (!$this->readonly && $this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
-            $form->setData($data);
-            if ($form->isValid()) {
+            $this->form->setData($data);
+            if ($this->form->isValid()) {
                 $this->em()->persist($dossier);
-                $notified = $this->notify($intervenant);
-                $this->em()->persist($intervenant);
+                $notified = $this->notify($this->intervenant);
+                $this->em()->persist($this->intervenant);
                 $this->em()->flush();
                 $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
                 if ($notified) {
@@ -135,7 +150,24 @@ class DossierController extends AbstractActionController implements ContextProvi
             }
         }
         
-        return compact('intervenant', 'form');
+        $view = new \Zend\View\Model\ViewModel(array(
+            'intervenant' => $this->intervenant,
+            'form'        => $this->form,
+            'validation'  => $validation,
+            'readonly'    => $this->readonly,
+        ));
+        
+        return $view;
+    }
+    
+    /**
+     * @return TypeValidation
+     */
+    private function getTypeValidationDossier() 
+    {
+        $qb = $this->getTypeValidationService()->finderByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        
+        return $qb->getQuery()->getOneOrNullResult();
     }
     
     /**
@@ -259,7 +291,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     /**
      * @return \Application\Form\Intervenant\Dossier
      */
-    protected function getFormModifier()
+    private function getFormModifier()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier');
     }
@@ -267,7 +299,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     /**
      * @return \Application\Service\Process\PieceJointeProcess
      */
-    protected function getPieceJointeProcess()
+    private function getPieceJointeProcess()
     {
         return $this->getServiceLocator()->get('ApplicationPieceJointeProcess');
     }
@@ -275,23 +307,23 @@ class DossierController extends AbstractActionController implements ContextProvi
     /**
      * @return \Application\Service\PieceJointe
      */
-    protected function getPieceJointeService()
+    private function getPieceJointeService()
     {
         return $this->getServiceLocator()->get('ApplicationPieceJointe');
     }
     
     /**
-     * @return \Application\Service\Intervenant
+     * @return \Application\Service\TypeValidation
      */
-    protected function getIntervenantService()
+    private function getTypeValidationService()
     {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
+        return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
     
     /**
      * @return \Application\Service\Dossier
      */
-    protected function getDossierService()
+    private function getDossierService()
     {
         return $this->getServiceLocator()->get('ApplicationDossier');
     }
@@ -299,7 +331,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     /**
      * @return \Application\Service\Service
      */
-    protected function getServiceService()
+    private function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
     }

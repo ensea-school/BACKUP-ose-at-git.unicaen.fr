@@ -54,7 +54,7 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
             throw new \Common\Exception\RuntimeException('Etape non spécifiée');
         }
         $serviceTypeModulateur = $this->getServiceLocator()->getServiceLocator()->get('applicationTypeModulateur');
-        return $serviceTypeModulateur->getList( $serviceTypeModulateur->finderByStructure($etape->getStructure()) );
+        return $serviceTypeModulateur->getList( $serviceTypeModulateur->finderByEtape($etape) );
     }
 
     /**

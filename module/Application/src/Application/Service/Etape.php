@@ -95,14 +95,14 @@ class Etape extends AbstractEntityService
         if (!$etape instanceof EtapeEntity) {
             $etape = $this->get($etape);
         }
-        
+
         if ($etape->getSource()->getCode() !== \Application\Entity\Db\Source::CODE_SOURCE_OSE){
             $errStr = 'Cette formation n\'est pas modifiable dans OSE car elle provient du logiciel '.$etape->getSource();
             $errStr .= '. Si vous souhaitez mettre à jour ces informations, nous vous invitons donc à les modifier directement dans '.$etape->getSource().'.';
             
             return $this->cannotDoThat($errStr, $runEx);
         }
-        
+
         return true;
     }
 
@@ -124,7 +124,24 @@ class Etape extends AbstractEntityService
             $etape = $this->get($etape);
         }
 
-        return true; /** @todo à sécuriser!! */
+        $ir = $this->getContextProvider()->getSelectedIdentityRole();
+        if ($ir instanceof \Application\Acl\ComposanteDbRole){
+            if ($etape->getStructure() != $ir->getStructure()){
+                return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour éditer les modulateurs de cette structure', $runEx);
+            }
+        }elseif($ir instanceof \Application\Acl\DbRole){
+            return $this->cannotDoThat('Vous n\'êtes pas autorisé à éditer de modulateurs', $runEx);
+        }elseif($ir instanceof \Application\Acl\IntervenantRole){
+            return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité d\'ajouter de modulateur', $runEx);
+        }
+
+        $stm = $this->getServiceLocator()->get('applicationTypeModulateur');
+        /* @var $stm \Application\Service\TypeModulateur */
+        if (0 === $stm->count( $stm->finderByEtape($etape) ) ){
+            return $this->cannotDoThat('Aucun modulateur ne peut être saisi sur cette étape', $runEx);
+        }
+
+        return true;
     }
 
     /**

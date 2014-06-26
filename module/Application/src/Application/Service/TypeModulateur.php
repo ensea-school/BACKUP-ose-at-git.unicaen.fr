@@ -95,7 +95,7 @@ class TypeModulateur extends AbstractEntityService
 
         /* Filtre par la structure de l'élément pédagogique */
         if ($element->getStructure()){
-            $this->finderByStructure($element->getStructure());
+            $qb = $this->finderByStructure($element->getStructure());
         }
 
         /* Filtre par les paramètres intrinsèques à l'élément pédagogique */
@@ -108,6 +108,21 @@ class TypeModulateur extends AbstractEntityService
             $qb->andWhere($or);
         }else{
             $qb->andWhere( '1 = 2' ); // Aucun modulateur ne doit être trouvé
+        }
+        return $qb;
+    }
+
+    public function finderByEtape(\Application\Entity\Db\Etape $etape, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        /* Filtre par la structure de l'étape */
+        if ($etape->getStructure()){
+            $qb = $this->finderByStructure($etape->getStructure());
+        }
+
+        foreach( $etape->getElementPedagogique() as $element ){
+            $qb = $this->finderByElementPedagogique($element, $qb, $alias);
         }
         return $qb;
     }

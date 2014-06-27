@@ -136,7 +136,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderEtape($etape)
     {
         if (! $etape) return '';
-        $url = $this->getView()->url('of/etape/voir', array('id' => $etape->getId()));
+        $url = $this->getView()->url('of/etape/apercevoir', array('id' => $etape->getId()));
         $pourl = $this->getView()->url('of/etape/apercevoir', array('id' => $etape->getId()));
         $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etape.'</a>';
         return $out;

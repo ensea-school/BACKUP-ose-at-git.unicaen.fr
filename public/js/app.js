@@ -235,14 +235,10 @@ Service.getRenderIntervenants = function(){
 
 /**
  * Mise à jour de la div affichant le bouton pointant vers l'étape suivante (workflow).
- * NB: mise à jour uniquement si la div ne contient pas déjà le bouton.
  * @returns void
  */
 Service.refreshWorkflowNavigation = function() {
-    var div = $("#wf-nav-next");
-    if (!$(".wf-nav-next-btn", div).length) {
-        div.refresh();
-    }
+    $("#wf-nav-next").refresh();
 }
 
 

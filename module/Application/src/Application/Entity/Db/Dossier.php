@@ -557,7 +557,8 @@ class Dossier implements HistoriqueAwareInterface
                 ->setAdresse((string) $intervenant->getAdressePrincipale(true))
                 ->setEmail($intervenant->getEmail())
                 ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile())
-                ->setStatut($intervenant->getStatut());
+                ->setStatut($intervenant->getStatut())
+                ->setRib(preg_replace('/\s+/', '', $intervenant->getBIC() . '-' . $intervenant->getIBAN()));
         
         return $this;
     }

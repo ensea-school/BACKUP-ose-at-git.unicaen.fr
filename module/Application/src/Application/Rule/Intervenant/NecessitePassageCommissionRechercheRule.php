@@ -3,6 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\IntervenantPermanent;
 
 /**
  * Description of NecessitePassageCommissionRechercheRule
@@ -13,6 +14,11 @@ class NecessitePassageCommissionRechercheRule extends IntervenantRule
 {
     public function execute()
     {
+        if ($this->getIntervenant() instanceof IntervenantPermanent) {
+            $this->setMessage("Les intervenants permanents ne sont pas concernés par la Commission de la Recherche.");
+            return false;
+        }
+        
         $dossier = $this->getIntervenant()->getDossier(); /* @var $dossier \Application\Entity\Db\Dossier */
         
         if (!$dossier->getPremierRecrutement()) {

@@ -110,6 +110,7 @@ function Service( id ) {
             $( "#service-resume" ).refresh(); // Si on est dans le résumé
             $('#services > tbody:last').append(data);
             Service.refreshFiltres();
+            Service.refreshWorkflowNavigation();
         });
     }
 
@@ -118,12 +119,14 @@ function Service( id ) {
         $( "#service-"+this.id+"-ligne" ).refresh( {details:details} );
         $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
         Service.refreshFiltres();
+        Service.refreshWorkflowNavigation();
     }
 
     this.onAfterDelete = function(){
         $('#service-'+this.id+'-volume-horaire-tr').remove();
         $( "#service-"+this.id+"-ligne" ).remove();
         Service.refreshFiltres();
+        Service.refreshWorkflowNavigation();
     }
 
 }
@@ -228,6 +231,18 @@ Service.setRenderIntervenants = function( renderIntervenants ){
 
 Service.getRenderIntervenants = function(){
     return Service.renderIntervenants;
+}
+
+/**
+ * Mise à jour de la div affichant le bouton pointant vers l'étape suivante (workflow).
+ * NB: mise à jour uniquement si la div ne contient pas déjà le bouton.
+ * @returns void
+ */
+Service.refreshWorkflowNavigation = function() {
+    var div = $("#wf-nav-next");
+    if (!$(".wf-nav-next-btn", div).length) {
+        div.refresh();
+    }
 }
 
 

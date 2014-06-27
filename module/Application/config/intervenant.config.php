@@ -185,6 +185,20 @@ return array(
                     ),
                 ),
             ),
+            'workflow' => array(
+                'type'    => 'Segment',
+                'options' => array(
+                    'route' => '/workflow/:id/:action',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]*',
+                    ),
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller'    => 'Workflow',
+                    ),
+                ),
+            ),
         ),
     ),
     'navigation' => array(
@@ -320,6 +334,11 @@ return array(
                     'action'     => array('service'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
+                array(
+                    'controller' => 'Application\Controller\Workflow',
+                    'action'     => array('nav-next'),
+                    'roles'      => array('user'),
+                ),
             ),
         ),
     ),
@@ -329,6 +348,7 @@ return array(
             'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
             'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
             'Application\Controller\Validation'            => 'Application\Controller\ValidationController',
+            'Application\Controller\Workflow'              => 'Application\Controller\WorkflowController',
         ),
         'aliases' => array(
             'IntervenantController' => 'Application\Controller\Intervenant',

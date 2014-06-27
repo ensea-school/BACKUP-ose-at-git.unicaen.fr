@@ -59,7 +59,7 @@ use WorkflowIntervenantAwareTrait;
             $label = $prependText . lcfirst($label);
         }
 
-        return sprintf('<a href="%s" class="btn btn-primary">%s</a>', $url, $label);
+        return sprintf('<a href="%s" class="wf-nav-current-btn btn btn-primary">%s</a>', $url, $label);
     }
 
     /**
@@ -70,12 +70,12 @@ use WorkflowIntervenantAwareTrait;
     {
         $wf = $this->getWorkflow(); /* @var $wf AbstractWorkflow */
 
-        $step = $wf->getStepForCurrentRoute();
+        $step = ($route = $this->getCurrentRoute()) ? $wf->getStepForRoute($route) : $wf->getStepForCurrentRoute();
         if (!$step || !$step->getDone()) {
             return '';
         }
 
-        $nextStep = $wf->getNextStep($wf->getStepForCurrentRoute());
+        $nextStep = $wf->getNextStep($step);
         if (!$nextStep) {
             return '';
         }
@@ -87,7 +87,23 @@ use WorkflowIntervenantAwareTrait;
             $label = $prependText . lcfirst($label);
         }
 
-        return sprintf('<a href="%s" class="btn btn-primary">%s</a>', $url, $label);
+        return sprintf('<a href="%s" class="wf-nav-next-btn btn btn-primary">%s</a>', $url, $label);
+    }
+
+    /**
+     * @var string
+     */
+    private $currentRoute;
+    
+    public function getCurrentRoute()
+    {
+        return $this->currentRoute;
+    }
+
+    public function setCurrentRoute($currentRoute)
+    {
+        $this->currentRoute = $currentRoute;
+        return $this;
     }
 
     /**

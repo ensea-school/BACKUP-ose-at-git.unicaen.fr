@@ -46,10 +46,15 @@
         <?php echo $this->servicesRefListe; ?>
         <hr />
     <?php endif; ?>
-        
+    
     <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
         <hr />
-        <?php echo $this->workflow($role->getIntervenant(), $role)->navNext("J'ai terminé ma saisie, ") ?>
+        <?php $url = $this->url('workflow', 
+                array('action' => 'nav-next', 'id' => $role->getIntervenant()->getSourceCode()),
+                array('query' => array('route' => 'intervenant/services', 'prepend' => $prepend = "J'ai terminé ma saisie, "))) ?>
+        <div id="wf-nav-next" data-url="<?php echo $url ?>">
+            <?php echo $this->workflow($role->getIntervenant(), $role)->navNext($prepend) ?>
+        </div>
     <?php endif; ?>
     
 <?php else:?>

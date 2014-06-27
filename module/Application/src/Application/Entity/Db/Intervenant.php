@@ -204,6 +204,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $civilite;
 
     /**
+     * @var string
+     */
+    protected $BIC;
+
+    /**
+     * @var string
+     */
+    protected $IBAN;
+
+    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoDestructeur;
@@ -914,6 +924,52 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getCivilite()
     {
         return $this->civilite;
+    }
+
+    /**
+     * Set BIC
+     *
+     * @param string $BIC
+     * @return Intervenant
+     */
+    public function setBIC($BIC = null)
+    {
+        $this->BIC = $BIC;
+
+        return $this;
+    }
+
+    /**
+     * Get BIC
+     *
+     * @return string
+     */
+    public function getBIC()
+    {
+        return $this->BIC;
+    }
+
+    /**
+     * Set IBAN
+     *
+     * @param string $IBAN
+     * @return Intervenant
+     */
+    public function setIBAN($IBAN = null)
+    {
+        $this->IBAN = $IBAN;
+
+        return $this;
+    }
+
+    /**
+     * Get IBAN
+     *
+     * @return string
+     */
+    public function getIBAN()
+    {
+        return $this->IBAN;
     }
 
     /**

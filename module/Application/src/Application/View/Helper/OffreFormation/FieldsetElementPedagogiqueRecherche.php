@@ -85,7 +85,7 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
      */
     protected function getJs()
     {
-        $updateStructuresOnLoad = count($this->fieldset->getStructures()) ? 'false' : 'true';
+        $updateStructuresOnLoad = $this->fieldset->getUpdateStructuresOnLoad() ? 'true' : 'false';
         $updateEtapesOnLoad     = count($this->fieldset->getEtapes())     ? 'false' : 'true';
         
         $js = <<<EOS
@@ -135,7 +135,15 @@ $(function() {
         });
     });
     
-    updateElement(elements[0]);
+    if (elements[0].data('updateOnLoad')) {
+        updateElement(elements[0]);
+    }
+    else if (elements[1] && elements[1].data('updateOnLoad')) {
+        updateElement(elements[1]);
+    }
+    else if (elements[2] && elements[2].data('updateOnLoad')) {
+        updateElement(elements[2]);
+    }
             
     function updateElement(element)
     {

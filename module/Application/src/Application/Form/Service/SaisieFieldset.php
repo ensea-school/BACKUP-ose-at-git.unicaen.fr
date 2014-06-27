@@ -120,10 +120,6 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         $fs = $this->get('element-pedagogique');
 
-        if($role instanceof ComposanteDbRole) { // Si c'est un membre d'une composante
-            $fs->get('structure')->setValue( $role->getStructure()->getParenteNiv2()->getId() );
-        }
-
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         $cl = $this->getContextProvider()->getLocalContext();
 
@@ -134,7 +130,11 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             ));
         }
         if ($cl->getStructure()){
-            $fs->get('structure')->setValue( $cl->getStructure()->getParenteNiv2()->getId() );
+            $structure = $cl->getStructure()->getParenteNiv2();
+            $valueOptions = array($structure->getId() => (string) $structure);
+            $fs->setStructures(array($structure));
+            $fs->get('structure')->setEmptyOption(null)->setValue($structure->getId());
+            $fs->setUpdateStructuresOnLoad(false);
         }
         if ($cl->getEtape()){
             $fs->get('etape')->setValue( $cl->getEtape()->getId() );
@@ -147,6 +147,15 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         }
         if ($this->has('interne-externe')){
             $this->get('interne-externe')->setValue('service-interne');
+        }
+
+        // la structure de responsabilité du gestionnaire écrase celle du contexte local
+        if ($role instanceof ComposanteDbRole) { // Si c'est un membre d'une composante
+            $structure = $role->getStructure()->getParenteNiv2();
+            $valueOptions = array($structure->getId() => (string) $structure);
+            $fs->setStructures(array($structure));
+            $fs->get('structure')->setEmptyOption(null)->setValue($structure->getId());
+            $fs->setUpdateStructuresOnLoad(false);
         }
     }
 

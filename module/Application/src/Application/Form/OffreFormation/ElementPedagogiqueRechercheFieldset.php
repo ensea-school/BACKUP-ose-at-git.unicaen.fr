@@ -241,6 +241,33 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($structures));
         return $this;
     }
+    
+    /**
+     * @var boolean
+     */
+    private $updateStructuresOnLoad = true;
+    
+    /**
+     * La liste des structures doit-elle être peuplées via AJAX au chargement de la page ?
+     * 
+     * @return boolean
+     */
+    public function getUpdateStructuresOnLoad()
+    {
+        return $this->updateStructuresOnLoad;
+    }
+
+    /**
+     * Spécifie si la liste des structures doit être peuplées via AJAX au chargement de la page.
+     * 
+     * @param boolean $updateStructuresOnLoad
+     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
+     */
+    public function setUpdateStructuresOnLoad($updateStructuresOnLoad = true)
+    {
+        $this->updateStructuresOnLoad = $updateStructuresOnLoad;
+        return $this;
+    }
 
     /**
      * Should return an array specification compatible with

@@ -6,6 +6,7 @@ use Zend\Form\Element\Csrf;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
+use Application\Traits\IntervenantAwareTrait;
 
 /**
  * Formulaire de validation des données personnelles d'un intervenant vacataire non-BIATSS.
@@ -14,16 +15,12 @@ use Zend\Stdlib\Hydrator\ClassMethods;
  */
 class DossierValidation extends Form implements InputFilterProviderInterface
 {
-    private $intervenant;
-    
-    public function setIntervenant($intervenant)
-    {
-        $this->intervenant = $intervenant;
-        return $this;
-    }
+    use IntervenantAwareTrait;
     
     public function init()
     {
+        $this->setHydrator(new ClassMethods(false));
+        
         $this->setAttribute('method', 'POST');
         $this->add(array(
             'name' => 'valide',
@@ -43,9 +40,6 @@ class DossierValidation extends Form implements InputFilterProviderInterface
                 'value' => "Enregistrer",
             ),
         ));
-
-        $h = new ClassMethods(false);
-        $this->setHydrator($h);
         
         return $this;
     }

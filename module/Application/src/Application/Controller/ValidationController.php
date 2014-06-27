@@ -95,6 +95,10 @@ class ValidationController extends AbstractActionController implements ContextPr
             
         $this->commonDossier();
         
+        if ($this->validation->getId()) {
+            $this->form->get('valide')->setLabel("Décochez pour dévalider les données personnelles");
+        }
+        
         if (!$this->readonly && $this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $this->form->setData($data);

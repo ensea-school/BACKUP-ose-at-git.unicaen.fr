@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f2d0e4ac21618082b1fd832714225418",
+    "hash": "e4dd991f2d3aa28bc7e7ebab09a86a11",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -705,7 +705,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -905,6 +905,49 @@
             "time": "2013-07-19 00:03:27"
         },
         {
+            "name": "mpdf/mpdf",
+            "version": "v5.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/finwe/mpdf.git",
+                "reference": "1627f9e7d2ef0f635a886f611079216ed2929717"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/finwe/mpdf/zipball/1627f9e7d2ef0f635a886f611079216ed2929717",
+                "reference": "1627f9e7d2ef0f635a886f611079216ed2929717",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=4.3.10"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "mpdf.php",
+                    "classes"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-1.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Ian Back"
+                }
+            ],
+            "description": "A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support",
+            "homepage": "http://www.mpdf1.com/mpdf/index.php",
+            "keywords": [
+                "pdf",
+                "php",
+                "utf-8"
+            ],
+            "time": "2014-05-16 07:18:10"
+        },
+        {
             "name": "rwoverdijk/assetmanager",
             "version": "1.4.1",
             "source": {
@@ -1078,7 +1121,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@481"
+                "reference": "/trunk/@504"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1127,7 +1170,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenAuth",
-                "reference": "/trunk/@201"
+                "reference": "/trunk/@208"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -2998,16 +3041,16 @@
         },
         {
             "name": "zf-commons/zfc-user",
-            "version": "1.1.0",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcUser.git",
-                "reference": "206ead0d5e204fcaba56bbb1f583e0d90172c5a6"
+                "reference": "db5b39df5f640c86299c74f46a91869c09c9a3ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/206ead0d5e204fcaba56bbb1f583e0d90172c5a6",
-                "reference": "206ead0d5e204fcaba56bbb1f583e0d90172c5a6",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/db5b39df5f640c86299c74f46a91869c09c9a3ed",
+                "reference": "db5b39df5f640c86299c74f46a91869c09c9a3ed",
                 "shasum": ""
             },
             "require": {
@@ -3071,26 +3114,26 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2014-06-08 20:38:58"
+            "time": "2014-04-17 10:31:44"
         },
         {
             "name": "zf-commons/zfc-user-doctrine-orm",
-            "version": "1.0.0",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcUserDoctrineORM.git",
-                "reference": "9a2e148c9a5a03ca8592b93ea28a21e37b06e053"
+                "reference": "17efcb024e8f628ba777b5bbbb6201821ac14dfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcUserDoctrineORM/zipball/9a2e148c9a5a03ca8592b93ea28a21e37b06e053",
-                "reference": "9a2e148c9a5a03ca8592b93ea28a21e37b06e053",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUserDoctrineORM/zipball/17efcb024e8f628ba777b5bbbb6201821ac14dfd",
+                "reference": "17efcb024e8f628ba777b5bbbb6201821ac14dfd",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-orm-module": "0.*",
                 "php": ">=5.3.3",
-                "zf-commons/zfc-user": "1.*"
+                "zf-commons/zfc-user": "0.*"
             },
             "type": "library",
             "extra": {
@@ -3127,7 +3170,7 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2014-04-18 10:21:19"
+            "time": "2014-04-17 19:39:44"
         }
     ],
     "packages-dev": [

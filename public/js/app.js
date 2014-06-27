@@ -98,6 +98,7 @@ function Service( id ) {
         if (data.periode.code){
             $('form#service div.periode').hide();
             $('form#service div#'+data.periode.code).show();
+            $('form#service div.periode input:hidden').val('');
         }else{
             $('form#service div.periode').show();
         }

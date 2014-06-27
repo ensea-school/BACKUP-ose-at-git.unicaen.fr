@@ -3,5 +3,3 @@
 <?php echo $this->structureDl($structure, true, $short) ?>
 
 <br /><?php foreach( $changements as $changement ) { echo $this->differentielLigne( $changement ); } ?>
-
-<?php echo $this->navigation('navigation')->menuContextuel()->withTarget($structure->getId()) ?>

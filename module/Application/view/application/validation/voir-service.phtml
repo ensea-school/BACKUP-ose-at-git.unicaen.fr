@@ -17,7 +17,9 @@
         ?>
         <tr>
             <td><?php echo $structure ?></td>
-            <td><?php echo $validation ? $this->validationDl($validation) : "Aucune"; ?></td>
+            <td><?php echo $validation ? 
+                $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(false), 'success') :
+                "Aucune"; ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

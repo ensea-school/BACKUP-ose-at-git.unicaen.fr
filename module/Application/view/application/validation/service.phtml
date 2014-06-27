@@ -2,6 +2,8 @@
 
 <?php echo $this->messenger(true) ?>
 
+<?php echo $this->serviceListe($services)->setRenderIntervenants(false)->render(); ?>
+
 <?php $form->prepare(); ?>
 <?php echo $this->form()->openTag($form); ?>
 <div class="row">

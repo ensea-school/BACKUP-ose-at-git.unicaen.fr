@@ -32,6 +32,11 @@ class ValidationController extends AbstractActionController implements ContextPr
     private $intervenant;
     
     /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structure;
+    
+    /**
      * @var \Zend\Form\Form
      */
     private $form;
@@ -231,25 +236,35 @@ class ValidationController extends AbstractActionController implements ContextPr
         $serviceValidation    = $this->getServiceValidation();
         $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
         $role                 = $this->getContextProvider()->getSelectedIdentityRole();
-        $structure            = $role->getStructure();
+        $this->structure      = $role->getStructure();
         $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute('id');
         $this->form           = $this->getFormService()->setIntervenant($this->intervenant)->init();
-        $this->title          = "Validation des enseignements au sein de la structure '$structure' <small>$this->intervenant</small>";
+        $this->title          = "Validation des enseignements au sein de la structure '$this->structure' <small>$this->intervenant</small>";
         $typeValidation       = TypeValidation::CODE_SERVICES_PAR_COMP;
         
         $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
 
         $this->em()->getFilters()->enable('historique');
         
+        // rappel des enseignements de l'intervenant au sein de la structure du gestionnaire
+        $service = $this->getServiceService();
+        $qb = $service->finderByIntervenant($this->intervenant);
+        $qb = $service->finderByStructureEns($this->structure, $qb);
+        $services = $service->getList($qb);
+        
         $qb = $serviceValidation->finderByType($typeValidation);
         $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
-        $this->validation = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getOneOrNullResult();
+        $this->validation = $serviceValidation->finderByStructureIntervention($this->structure, $qb)->getQuery()->getOneOrNullResult();
         if (!$this->validation) {
             $this->validation = $serviceValidation->newEntity($typeValidation)
                     ->setIntervenant($this->intervenant)
-                    ->setStructure($structure);
+                    ->setStructure($this->structure);
             $qb = $serviceVolumeHoraire->finderByIntervenant($this->intervenant);
-            $volumesHoraires = $serviceVolumeHoraire->finderByStructureIntervention($structure, $qb)->getQuery()->getResult();
+            $volumesHoraires = $serviceVolumeHoraire->finderByStructureIntervention($this->structure, $qb)->getQuery()->getResult();
+            if (!count($volumesHoraires)) {
+                throw new \Common\Exception\MessageException(
+                        sprintf("%s n'a aucun enseignement au sein de la structure '%s'.", $this->intervenant, $this->structure));
+            }
             foreach ($volumesHoraires as $volumeHoraire) {
                 $this->validation->addVolumeHoraire($volumeHoraire);
             }
@@ -261,6 +276,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         
         $this->view = new \Zend\View\Model\ViewModel(array(
             'intervenant' => $this->intervenant,
+            'services'    => $services,
             'form'        => $this->form,
             'role'        => $role,
             'title'       => $this->title,

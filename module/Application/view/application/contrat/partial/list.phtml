@@ -1,0 +1,35 @@
+<?php 
+$contrat  = $this->contrat; /* @var $contrat \Application\Entity\Db\Contrat */
+$avenants = $this->avenants; 
+$intervenant = $this->intervenant; /* @var $intervenant \Application\Entity\Db\Intervenant */
+?>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Contrat ou avenant</th>
+            <th>Composante d'enseignement</th>
+            <th>Création</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-------- Contrat (un seul) ----------->
+        <tr>
+            <?php $url = $this->url('contrat/exporter', array('id' => $intervenant->getSourceCode())); ?>
+            <td><a href="<?php echo $url ?>">Contrat initial</a></td>
+            <td><?php echo $contrat->getStructure() ?></td>
+            <td><?php echo $contrat->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
+                <?php echo $this->mailto($contrat->getHistoModificateur()) ?></td>
+        </tr>
+        <!-------- Avenants ----------->
+        <?php foreach ($avenants as $avenant): /* @var $avenant \Application\Entity\Db\Contrat */ ?>
+        <tr>
+            <?php $url = $this->url('contrat/exporter', array('id' => $intervenant->getSourceCode())); ?>
+            <td><a href="<?php echo $url ?>">Avenant</a></td>
+            <td><?php echo $avenant->getStructure() ?></td>
+            <td><?php echo $avenant->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
+                <?php echo $this->mailto($avenant->getHistoModificateur()) ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>

@@ -31,13 +31,14 @@ class ContratController extends AbstractActionController implements ContextProvi
 {
     use ContextProviderAwareTrait;
     
+    private $view;
+    
     /**
      * 
      * @return array
      */
     public function indexAction()
     {
-        return array();
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof ComposanteDbRole) {
@@ -54,15 +55,15 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function voirAction()
     {
-        $view = new \Zend\View\Model\ViewModel(array(
+        $this->getView()->setVariables(array(
             'role'        => $this->getContextProvider()->getSelectedIdentityRole(),
             'contrat'     => $this->getContrat(),
             'avenants'    => $this->getAvenants(),
             'intervenant' => $this->getIntervenant(),
         ));
-        $view->setTemplate('application/contrat/voir');
+        $this->getView()->setTemplate('application/contrat/voir');
         
-        return $view;
+        return $this->getView();
     }
     
     /**
@@ -90,27 +91,38 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function creerContratAction()
     {
+        $this->voirAction();
+        
         $peutCreerContratRule = new PeutCreerContratRule($this->getIntervenant());
-        if (!$peutCreerContratRule->execute()) {
-            throw new \Common\Exception\MessageException(
-                    sprintf("Impossible de créer le contrat de %s.", $this->getIntervenant()),
-                    null,
-                    new \Exception($peutCreerContratRule->getMessage()));
-        }
+        $peutCreerContratRule
+                ->setStructure($this->getStructure())
+                ->setTypeContrat($this->em()->getRepository('Application\Entity\Db\TypeContrat')->findOneByCode(TypeContrat::CODE_CONTRAT))
+                ->setTypeValidation($this->em()->getRepository('Application\Entity\Db\TypeValidation')->findOneByCode(TypeValidation::CODE_SERVICES_PAR_COMP))
+                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+        $peutCreerContrat = $peutCreerContratRule->execute();
         
         if ($this->getRequest()->isPost()) {
+            if (!$peutCreerContrat) {
+    //            throw new \Common\Exception\MessageException(
+    //                    sprintf("Impossible de créer le contrat de %s.", $this->getIntervenant()),
+    //                    null,
+    //                    new \Exception($peutCreerContratRule->getMessage()));
+            }
+
             $this->creerContrat();
             $this->flashMessenger()->addSuccessMessage(sprintf("Contrat de %s enregistré avec succès.", $this->getIntervenant()));
             
             return $this->redirect()->toRoute('intervenant/contrat', array('id' => $this->getIntervenant()->getSourceCode()));
         }
         
-        $view = new \Zend\View\Model\ViewModel(array(
+        $this->getView()->setVariables(array(
             'intervenant' => $this->getIntervenant(),
+            'title'       => "Création du contrat pour la structure '{$this->getStructure()}' <small>{$this->getIntervenant()}</small>",
+            'action'      => $peutCreerContrat ? "Créer le contrat" : null,
         ));
-        $view->setTemplate('application/contrat/creer');
+        $this->getView()->setTemplate('application/contrat/creer');
         
-        return $view;
+        return $this->getView();
     }
     
     private function creerContrat()
@@ -126,7 +138,9 @@ class ContratController extends AbstractActionController implements ContextProvi
                     "Anomalie : aucun volume horaire rattachés à la validation de services {$validation->getId()} n'a été trouvé.");
         }
 
-        $this->contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)->setIntervenant($this->getIntervenant());
+        $this->contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)
+                ->setIntervenant($this->getIntervenant())
+                ->setStructure($this->getStructure());
         foreach ($volumesHoraires as $volumeHoraire) {
             $this->contrat->addVolumeHoraire($volumeHoraire);
             $volumeHoraire->setContrat($this->contrat);
@@ -146,50 +160,47 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function creerAvenantAction()
     {
+        $this->voirAction();
+        
         $peutCreerAvenantRule = new \Application\Rule\Intervenant\PeutCreerAvenantRule($this->getIntervenant());
         $peutCreerAvenantRule
                 ->setStructure($this->getStructure())
                 ->setTypeContrat($this->em()->getRepository('Application\Entity\Db\TypeContrat')->findOneByCode(TypeContrat::CODE_CONTRAT))
                 ->setTypeValidation($this->em()->getRepository('Application\Entity\Db\TypeValidation')->findOneByCode(TypeValidation::CODE_SERVICES_PAR_COMP))
                 ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
-        if (!$peutCreerAvenantRule->execute()) {
-            throw new \Common\Exception\MessageException(
-                    sprintf("Impossible de créer un avenant pour %s.", $this->getIntervenant()),
-                    null,
-                    new \Exception($peutCreerAvenantRule->getMessage()));
-        }
+        $peutCreerAvenant = $peutCreerAvenantRule->execute();
         
-        $volumesHorairesNonValides = $peutCreerAvenantRule->getVolumesHorairesNonValides();
+        $volumesHorairesDispos = $peutCreerAvenantRule->getVolumesHorairesDispos();
         
         if ($this->getRequest()->isPost()) {
-            $this->creerAvenant($volumesHorairesNonValides);
+            if (!$peutCreerAvenant) {
+    //            throw new \Common\Exception\MessageException(
+    //                    sprintf("Impossible de créer un avenant pour %s.", $this->getIntervenant()),
+    //                    null,
+    //                    new \Exception($peutCreerAvenantRule->getMessage()));
+            }
+            
+            $this->creerAvenant($volumesHorairesDispos);
             $this->flashMessenger()->addSuccessMessage(sprintf("Avenant de %s enregistré avec succès.", $this->getIntervenant()));
             
             return $this->redirect()->toRoute('intervenant/contrat', array('id' => $this->getIntervenant()->getSourceCode()));
         }
         
-        $view = new \Zend\View\Model\ViewModel(array(
+        $this->getView()->setVariables(array(
             'intervenant' => $this->getIntervenant(),
+            'title'       => "Création de l'avenant pour la structure '{$this->getStructure()}' <small>{$this->getIntervenant()}</small>",
+            'action'      => $peutCreerAvenant ? "Créer l'avenant" : null,
         ));
-        $view->setTemplate('application/contrat/creer');
+        $this->getView()->setTemplate('application/contrat/creer');
         
-        return $view;
+        return $this->getView();
     }
     
-    private function creerAvenant($volumesHorairesNonValides)
+    private function creerAvenant($volumesHoraires)
     {
-        // recherche des volumes horaires validés, qui seront rattachés au contrat
-        $serviceValidation = $this->getServiceValidation();
-        $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
-        $qb = $serviceValidation->finderByIntervenant($this->getIntervenant(), $qb);
-        $validation = $serviceValidation->finderByStructureIntervention($this->getStructure(), $qb)->getQuery()->getOneOrNullResult();
-        $volumesHoraires = $validation->getVolumeHoraire();
-        if (!count($volumesHoraires)) {
-            throw new RuntimeException(
-                    "Anomalie : aucun volume horaire rattachés à la validation des enseignements {$validation->getId()} n'a été trouvé.");
-        }
-
-        $this->contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)->setIntervenant($this->getIntervenant());
+        $this->contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_AVENANT)
+                ->setIntervenant($this->getIntervenant())
+                ->setStructure($this->getStructure());
         foreach ($volumesHoraires as $volumeHoraire) {
             $this->contrat->addVolumeHoraire($volumeHoraire);
             $volumeHoraire->setContrat($this->contrat);
@@ -199,6 +210,14 @@ class ContratController extends AbstractActionController implements ContextProvi
         $this->em()->flush();
         
         return $this;
+    }
+    
+    private function getView()
+    {
+        if (null === $this->view) {
+            $this->view = new ViewModel();
+        }
+        return $this->view;
     }
     
     /**
@@ -243,13 +262,9 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getContrat()
     {
         if (null === $this->contrat) {
-//            $qb = $this->getServiceContrat()->finderByType(TypeContrat::CODE_CONTRAT);
-//            $qb = $this->getServiceContrat()->finderByIntervenant($this->intervenant, $qb);
-//            $this->contrat = $qb->getQuery()->getOneOrNullResult();
-            $contrats = $this->getIntervenant()->getContrat(TypeContrat::CODE_CONTRAT);
-            $this->contrat = count($contrats) ? $contrats[0] : null;
+            $this->contrat = $this->getIntervenant()->getContratInitial();
         }
-
+        
         return $this->contrat;
     }
     
@@ -258,10 +273,7 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getAvenants()
     {
         if (null === $this->avenants) {
-//            $qb = $this->getServiceAvenants()->finderByType(TypeAvenants::CODE_AVENANT);
-//            $qb = $this->getServiceAvenants()->finderByIntervenant($this->intervenant, $qb);
-//            $this->avenants = $qb->getQuery()->getOneOrNullResult();
-            $this->avenants = $this->getIntervenant()->getContrat(TypeContrat::CODE_AVENANT);
+            $this->avenants = $this->getIntervenant()->getAvenants();
         }
 
         return $this->avenants;

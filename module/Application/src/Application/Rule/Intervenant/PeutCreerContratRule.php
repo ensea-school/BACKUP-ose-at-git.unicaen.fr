@@ -13,17 +13,18 @@ class PeutCreerContratRule extends IntervenantRule
 {
     use \Application\Traits\TypeValidationAwareTrait;
     use \Application\Traits\TypeContratAwareTrait;
+    use \Application\Traits\StructureAwareTrait;
+    use \Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
     
     public function execute()
     {
-//        $contrats = $this->getIntervenant()->getContrat($this->getTypeContrat());
-//        if (count($contrats)) {
-//            $this->setMessage(sprintf("Un contrat existe déjà pour %s.", $this->getIntervenant()));
-//            return false;
-//        }
+        $contrats = $this->getIntervenant()->getContrat($this->getTypeContrat());
+        if (count($contrats)) {
+            $this->setMessage(sprintf("Un contrat existe déjà pour %s.", $this->getIntervenant()));
+            return false;
+        }
         
-        $serviceValideRule = new ServiceValideRule($this->getIntervenant());
-        if ($serviceValideRule->isRelevant() && !$serviceValideRule->execute()) {
+        if ($this->getServiceValideRule()->isRelevant() && !$this->getServiceValideRule()->execute()) {
             $this->setMessage(sprintf("Les enseignements de %s doivent être validés au préalable.", $this->getIntervenant()));
             return false;
         }
@@ -34,5 +35,23 @@ class PeutCreerContratRule extends IntervenantRule
     public function isRelevant()
     {
         return $this->getIntervenant() instanceof IntervenantExterieur;
+    }
+    
+    private $serviceValideRule;
+    
+    /**
+     * 
+     * @return ServiceValideRule
+     */
+    private function getServiceValideRule()
+    {
+        if (null === $this->serviceValideRule) {
+            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant());
+            $this->serviceValideRule
+                    ->setStructure($this->getStructure())
+                    ->setTypeValidation($this->getTypeValidation())
+                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+        }
+        return $this->serviceValideRule;
     }
 }

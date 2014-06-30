@@ -1,6 +1,12 @@
-<h2 class="page-header">Création du contrat <small><?php echo $intervenant ?></small></h2>
+<h2 class="page-header"><?php echo $title ?></h2>
 
+<?php echo $this->partial('application/contrat/partial/list', array(
+    'contrat'     => $contrat,
+    'avenants'    => $avenants,
+    'intervenant' => $intervenant)); ?>
 
+<?php if ($action): ?>
 <form method="POST">
-    <input class="btn btn-primary" type="submit" name="submi" value="Créer le contrat" />
+    <input class="btn btn-primary" type="submit" name="submi" value="<?php echo $action ?>" />
 </form>
+<?php endif; ?>

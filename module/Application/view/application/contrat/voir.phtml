@@ -1,4 +1,4 @@
-<h2 class="page-header">Contrat <small><?php echo $intervenant ?></small></h2>
+<h2 class="page-header">Contrat et avenants <small><?php echo $intervenant ?></small></h2>
 
 <?php if (!$contrat): ?>
 
@@ -8,19 +8,23 @@
 
 <?php echo $this->messenger(true) ?>
 
-    <table class="table table-bordered table-hover">
+<!--    <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>Contrat ou avenant</th>
+                <th>Composante d'enseignement</th>
                 <th>Création</th>
             </tr>
         </thead>
         <tbody>
+            ------ Contrat (1 seul) ---------
             <tr>
+                <td>Contrat n°<?php echo $contrat->getId() /* @var $contrat \Application\Entity\Db\Contrat */ ?></td>
                 <td>Contrat n°<?php echo $contrat->getId() ?></td>
                 <td><?php echo $contrat->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
                     <?php echo $contrat->getHistoModificateur() ?></td>
             </tr>
+            ------ Avenants ---------
             <?php foreach ($avenants as $avenant): ?>
             <tr>
                 <td>Avenant n°<?php echo $avenant->getId() ?></td>
@@ -28,7 +32,11 @@
             </tr>
             <?php endforeach; ?>
         </tbody>
-    </table>
+    </table>-->
+    <?php echo $this->partial('application/contrat/partial/list', array(
+        'contrat' => $contrat, 
+        'avenants' => $avenants, 
+        'intervenant' => $intervenant)); ?>
 
 <?php endif; ?>
 

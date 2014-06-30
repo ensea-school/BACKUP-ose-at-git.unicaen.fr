@@ -99,7 +99,7 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
             $this->addStep(
                     self::INDEX_VALIDATION_SERVICE,
                     new Step\ValidationServiceStep(),
-                    (new ServiceValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationService())
+                    $this->getServiceValideRule()
             );
         }
         
@@ -130,6 +130,39 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
 //        );
             
         return $this;
+    }
+    
+    private $serviceValideRule;
+    
+    private function getServiceValideRule()
+    {
+        if (null === $this->serviceValideRule) {
+            // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
+            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
+            $this->serviceValideRule
+                    ->setTypeValidation($this->getTypeValidationService())
+                    ->setStructure($this->getStructure())
+                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+//            var_dump(
+//                    $this->serviceValideRule->execute(), 
+//                    $this->serviceValideRule->getMessage(), 
+//                    \UnicaenApp\Util::collectionAsOptions($this->serviceValideRule->getVolumesHorairesNonValides()));
+        }
+        
+        return $this->serviceValideRule;
+    }
+    
+    /**
+     * 
+     * @return \Application\Entity\Db\Structure
+     */
+    protected function getStructure()
+    {
+        if ($this->getRole() instanceof \Application\Acl\ComposanteDbRole) {
+            return $this->getRole()->getStructure();
+        }
+        
+        return null;
     }
     
     /**

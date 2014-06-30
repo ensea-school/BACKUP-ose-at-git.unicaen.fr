@@ -3,11 +3,11 @@
 namespace Application\Rule\Intervenant;
 
 /**
- * Recherche si les enseignements d'un intervenant au sein d'une structure ont été validés :
- * - soit complètement, autrement dit si tous les volumes horaires ont été validés ;
- * - soit partiellement, autrement si une partie seulement des volumes horaires ont été validés.
+ * Recherche si les enseignements d'un intervenant au sein d'une structure ont été validés.
  * 
- * NB: Dans le cas d'une recherche partielle, 2 getters permettent de connaître les volumes horaires
+ * - Si tous les volumes horaires sont validés, cette règle renvoit <code>true</code>.
+ * - Si une partie seulement des volumes horaires ont été validés, cette règle 
+ * renvoie <code>false</code> et 2 getters permettent de connaître les volumes horaires 
  * déjà validés et ceux non encore validés.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
@@ -18,60 +18,83 @@ class ServiceValideRule extends IntervenantRule
     use \Application\Traits\StructureAwareTrait;
     use \Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
     
-    private $completement = false;
+    /**
+     * Flag indiquant si l'on se satisfait d'une validation partielle des services.
+     * Autrement dit, avec ce flag à <code>true</code>, les services seront considérés comme validés
+     * (i.e. cette règle retournera <code>true</code>) si au moins un volume horaire est validé.
+     *  
+     * @var boolean
+     */
+    private $memePartiellement = false;
     
     /**
      * 
      * @param \Application\Entity\Db\Intervenant $intervenant
-     * @param bool $completement
+     * @param bool $memePartiellement Flag indiquant si l'on se satisfait d'une validation partielle des services.
      */
-    public function __construct(\Application\Entity\Db\Intervenant $intervenant, $completement = false)
+    public function __construct(\Application\Entity\Db\Intervenant $intervenant, $memePartiellement = false)
     {
         parent::__construct($intervenant);
-        $this->completement = $completement;
+        
+        $this->memePartiellement = $memePartiellement;
     }
     
     public function execute()
     {
-        $validations = $this->getIntervenant()->getValidation($this->getTypeValidation());
-        if (!count($validations)) {
+        if (!$this->getServiceVolumeHoraire()) {
+            throw new \Common\Exception\LogicException("Anomalie: aucun service VolumeHoraire spécifié.");
+        }
+
+        $qb = $this->getServiceVolumeHoraire()->finderByIntervenant($this->getIntervenant());
+        if ($this->getStructure()) {
+            $qb = $this->getServiceVolumeHoraire()->finderByStructureIntervention($this->getStructure(), $qb);
+        }
+        
+        $this->volumesHorairesNonValides = array();
+        $this->volumesHorairesValides    = array();
+        foreach ($qb->getQuery()->getResult() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            if (!count($vh->getValidation($this->getTypeValidation()))) {
+                $this->volumesHorairesNonValides[] = $vh;
+//                var_dump($vh->getId(), $vh->getHeures(), $vh->getService()->getElementPedagogique() . "");
+            }
+            else {
+                $this->volumesHorairesValides[] = $vh;
+            }
+        }
+//            var_dump($this->volumesHorairesNonValides);
+//            var_dump($this->volumesHorairesValides);
+
+        if (!count($this->volumesHorairesValides)) {
             $this->setMessage(sprintf(
-                    "Les enseignements de %s au sein de la structure '%s' n'ont fait l'objet d'aucune validation.", 
+                    "Les enseignements de %s%s n'ont fait l'objet d'aucune validation.", 
                     $this->getIntervenant(),
-                    $this->getStructure()));
+                    $this->getStructure() ? sprintf(" au sein de la structure '%s'", $this->getStructure()) : null
+            ));
             return false;
         }
         
-        // cas où l'on veut savoir si tous les volumes horaires sont validés
-        if ($this->completement) {
-            
-            if (!$this->getServiceVolumeHoraire()) {
-                throw new \Common\Exception\LogicException("Anomalie: aucun service VolumeHoraire spécifié.");
-            }
-            
-            $qb = $this->getServiceVolumeHoraire()->finderByIntervenant($this->getIntervenant());
-            $qb = $this->getServiceVolumeHoraire()->finderByStructureIntervention($this->getStructure(), $qb);
-            
-            $this->volumesHorairesNonValides = array();
-            $this->volumesHorairesValides    = array();
-            foreach ($qb->getQuery()->getResult() as $vh) {
-                if (!count($vh->getValidation())) {
-                    $this->volumesHorairesNonValides[] = $vh;
-                }
-                else {
-                    $this->volumesHorairesValides[] = $vh;
-                }
-            }
-//            var_dump($this->volumesHorairesNonValides);
-//            var_dump($this->volumesHorairesValides);
-            
-            if (count($this->volumesHorairesNonValides)) {
-                $this->setMessage(sprintf(
-                        "Tous les volumes horaires d'enseignement de %s au sein de la structure '%s' n'ont pas été validés.",
-                        $this->getIntervenant(),
-                        $this->getStructure()));
-                return false;
-            }
+        if (!$this->memePartiellement && count($this->volumesHorairesNonValides)) {
+            $this->setMessage(sprintf(
+                    "Tous les volumes horaires d'enseignement de %s%s n'ont pas été validés.",
+                    $this->getIntervenant(),
+                    $this->getStructure() ? sprintf(" au sein de la structure '%s'", $this->getStructure()) : null
+            ));
+            return false;
+        }
+        
+        if (!count($this->volumesHorairesNonValides)) {
+            $this->setMessage(sprintf(
+                    "Tous les volumes horaires d'enseignement de %s%s ont été validés.",
+                    $this->getIntervenant(),
+                    $this->getStructure() ? sprintf(" au sein de la structure '%s'", $this->getStructure()) : null
+            ));
+        }
+        else {
+            $this->setMessage(sprintf(
+                    "Les enseignements de %s%s ont été validés PARTIELLEMENT.",
+                    $this->getIntervenant(),
+                    $this->getStructure() ? sprintf(" au sein de la structure '%s'", $this->getStructure()) : null
+            ));
         }
         
         return true;

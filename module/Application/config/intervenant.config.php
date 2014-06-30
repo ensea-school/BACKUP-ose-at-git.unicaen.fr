@@ -288,8 +288,8 @@ return array(
                                 'visible' => 'NavigationPageVisibility',
                             ),
                             'contrat' => array(
-                                'label'  => "Contrat",
-                                'title'  => "Contrat de l'intervenant",
+                                'label'  => "Contrat / avenant",
+                                'title'  => "Contrat et avenants de l'intervenant",
                                 'route'  => 'intervenant/contrat',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Contrat:index',

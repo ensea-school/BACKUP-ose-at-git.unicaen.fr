@@ -4,6 +4,7 @@ namespace Application\Service\Workflow;
 
 use Application\Entity\Db\TypeValidation;
 use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\RoleAwareTrait;
 use Application\Service\Workflow\Step\Step;
 
 /**
@@ -14,6 +15,7 @@ use Application\Service\Workflow\Step\Step;
 abstract class WorkflowIntervenant extends AbstractWorkflow
 {
     use IntervenantAwareTrait;
+    use RoleAwareTrait;
     
     /**
      * 
@@ -34,6 +36,15 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     protected function getServiceTypeValidation()
     {
         return $this->getServiceLocator()->get('ApplicationTypeValidation');
+    } 
+    
+    /**
+     * 
+     * @return \Application\Service\VolumeHoraire
+     */
+    protected function getServiceVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
     } 
     
     /**

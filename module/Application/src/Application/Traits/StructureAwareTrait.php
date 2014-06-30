@@ -21,7 +21,7 @@ trait StructureAwareTrait
      * 
      * @param Structure $structure Structure concernée
      */
-    public function setStructure(Structure $structure)
+    public function setStructure(Structure $structure = null)
     {
         $this->structure = $structure;
         

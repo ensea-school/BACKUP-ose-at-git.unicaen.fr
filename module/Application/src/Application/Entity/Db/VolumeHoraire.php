@@ -99,6 +99,24 @@ class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
      */
     protected $remove=false;
 
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return implode(" - ", array(
+                "Id " . $this->getId(),
+                $this->getService()->getStructureEns(),
+                "Service " . $this->getService()->getId(),
+                "EP " . $this->getService()->getElementPedagogique()->getSourceCode() . " ({$this->getService()->getElementPedagogique()->getId()})",
+                $this->getHeures() . "h",
+                $this->getTypeIntervention(),
+                count($this->getValidation()) . " validations",
+                $this->getContrat() ? "Contrat " . $this->getContrat()->getId() : "Aucun contrat",
+                $this->getHistoDestructeur() ? "Supprimé" : $this->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT)
+        ));
+    }
 
     /**
      * Détermine si le volume horaire a vocation à être supprimé ou non

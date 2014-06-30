@@ -57,7 +57,12 @@ class Contrat implements HistoriqueAwareInterface
      */
     private $volumeHoraire;
 
+    /**
+     * @var \Application\Entity\Db\Structure
+     */
+    private $structure;
 
+    
     /**
      * Set histoCreation
      *
@@ -282,5 +287,28 @@ class Contrat implements HistoriqueAwareInterface
     public function getVolumeHoraire()
     {
         return $this->volumeHoraire;
+    }
+
+    /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @return Intervenant
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    {
+        $this->structure = $structure;
+
+        return $this;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructure()
+    {
+        return $this->structure;
     }
 }

@@ -35,22 +35,6 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
             ),
         ));
         
-        $dateCommissionRechercheRequired = $this->getRuleDateCommissionRecherche()->execute();
-        if ($dateCommissionRechercheRequired) {
-            $this->add(array(
-                'name' => 'dateCommissionRecherche',
-                'type'  => 'UnicaenApp\Form\Element\Date',
-                'options' => array(
-                    'label' => "Date de passage en Commission de la Recherche",
-                ),
-                'attributes' => array(
-                    'id' => uniqid('dateCommissionRecherche'),
-                    'disabled' => !$dateCommissionRechercheRequired,
-                ),
-            ));
-            $this->getHydrator()->addStrategy('dateCommissionRecherche', new DateStrategy($this->get('dateCommissionRecherche')));
-        }
-        
         $dateConseilRestreintRequired = $this->getRuleDateConseilRestreint()->execute();
         if ($dateConseilRestreintRequired) {
             $this->add(array(
@@ -65,6 +49,22 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
                 ),
             ));
             $this->getHydrator()->addStrategy('dateConseilRestreint', new DateStrategy($this->get('dateConseilRestreint')));
+        }
+        
+        $dateCommissionRechercheRequired = $this->getRuleDateCommissionRecherche()->execute();
+        if ($dateCommissionRechercheRequired) {
+            $this->add(array(
+                'name' => 'dateCommissionRecherche',
+                'type'  => 'UnicaenApp\Form\Element\Date',
+                'options' => array(
+                    'label' => "Date de passage en Commission de la Recherche",
+                ),
+                'attributes' => array(
+                    'id' => uniqid('dateCommissionRecherche'),
+                    'disabled' => !$dateCommissionRechercheRequired,
+                ),
+            ));
+            $this->getHydrator()->addStrategy('dateCommissionRecherche', new DateStrategy($this->get('dateCommissionRecherche')));
         }
         
         $this->add(new Csrf('security'));

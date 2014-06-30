@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
-use Application\Entity\Db\Utilisateur UtilisateurEntity;
+use Application\Entity\Db\Utilisateur as UtilisateurEntity;
 
 /**
  * Classe mère des classes de contexte.

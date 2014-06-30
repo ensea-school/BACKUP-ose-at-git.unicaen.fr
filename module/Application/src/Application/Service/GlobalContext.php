@@ -2,11 +2,11 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Annee;
+use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
-use Application\Entity\Db\Personnel;
-use Application\Entity\Db\Utilisateur;
+use Application\Entity\Db\Personnel as PersonnelEntity;
+use Application\Entity\Db\Utilisateur as UtilisateurEntity;
 
 /**
  * Classe regroupant les données globales de fonctionnement de l'application.
@@ -21,7 +21,7 @@ class GlobalContext
     protected $parametres;
     
     /**
-     * @var Utilisateur
+     * @var UtilisateurEntity
      */
     protected $utilisateur;
     
@@ -31,7 +31,7 @@ class GlobalContext
     protected $intervenant;
     
     /**
-     * @var Personnel
+     * @var PersonnelEntity
      */
     protected $personnel;
     
@@ -99,7 +99,7 @@ class GlobalContext
         return $this->etablissement;
     }
 
-    public function setUtilisateur(Utilisateur $utilisateur = null)
+    public function setUtilisateur(UtilisateurEntity $utilisateur = null)
     {
         $this->utilisateur = $utilisateur;
         return $this;
@@ -111,25 +111,25 @@ class GlobalContext
         return $this;
     }
 
-    public function setPersonnel(Personnel $personnel = null)
+    public function setPersonnel(PersonnelEntity $personnel = null)
     {
         $this->personnel = $personnel;
         return $this;
     }
 
-    public function setAnnee(Annee $annee)
+    public function setAnnee(AnneeEntity $annee)
     {
         $this->annee = $annee;
         return $this;
     }
 
-    public function setAnneePrecedente(Annee $annee)
+    public function setAnneePrecedente(AnneeEntity $annee)
     {
         $this->anneePrecedente = $annee;
         return $this;
     }
 
-    public function setAnneeSuivante(Annee $annee)
+    public function setAnneeSuivante(AnneeEntity $annee)
     {
         $this->anneeSuivante = $annee;
         return $this;

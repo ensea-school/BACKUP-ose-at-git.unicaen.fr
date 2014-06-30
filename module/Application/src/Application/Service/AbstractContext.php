@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
-use Application\Entity\Db\Utilisateur;
+use Application\Entity\Db\Utilisateur UtilisateurEntity;
 
 /**
  * Classe mère des classes de contexte.
@@ -14,7 +14,7 @@ use Application\Entity\Db\Utilisateur;
 abstract class AbstractContext
 {
     /**
-     * @var Utilisateur
+     * @var UtilisateurEntity
      */
     protected $utilisateur;
     
@@ -58,7 +58,7 @@ abstract class AbstractContext
         return $this->annee;
     }
 
-    public function setUtilisateur(Utilisateur $utilisateur = null)
+    public function setUtilisateur(UtilisateurEntity $utilisateur = null)
     {
         $this->utilisateur = $utilisateur;
         return $this;

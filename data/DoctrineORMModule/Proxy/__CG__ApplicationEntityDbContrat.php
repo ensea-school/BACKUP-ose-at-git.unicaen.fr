@@ -64,10 +64,10 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'structure');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'structure');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire');
     }
 
     /**
@@ -395,28 +395,6 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraire', array());
 
         return parent::getVolumeHoraire();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStructure', array($structure));
-
-        return parent::setStructure($structure);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getStructure()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStructure', array());
-
-        return parent::getStructure();
     }
 
 }

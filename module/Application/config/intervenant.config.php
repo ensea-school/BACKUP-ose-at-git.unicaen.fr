@@ -2,6 +2,8 @@
 
 namespace Application;
 
+const ROLE_ID_DRH = 'DRH';
+
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantPermanentRole;
@@ -311,8 +313,13 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('voir', 'choisir', 'rechercher', 'search', 'voir-heures-comp'),
+                    'action'     => array('voir', 'choisir', 'rechercher', 'search'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => array('voir-heures-comp'),
+                    'roles'      => array(ROLE_ID_DRH),
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',

@@ -86,7 +86,10 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
         $this->add(array(
             'name'       => 'remove',
             'options'    => array(
-                'label' => "Supprimer",
+                'label' => "<span class=\"glyphicon glyphicon-minus\"></span> Supprimer",
+                'label_options' => array(
+                    'disable_html_escape' => true,
+                ),
             ),
             'attributes' => array(
                 'title' => "Supprimer cette fonction",

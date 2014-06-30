@@ -310,9 +310,9 @@ ServiceReferentiel.init = function( voirLigneUrl )
         ServiceReferentiel.get(id).onAfterAdd();
     });
     
-    $("body").on("service-delete-message", function(event, data) {
+    $("body").on("service-ref-delete-message", function(event, data) {
         event.div.modal('hide'); // ferme la fenêtre modale
-        console.log(event.a.data('id'));
+//        console.log(event.a.data('id'));
         ServiceReferentiel.get(event.a.data('id')).onAfterDelete();
     });
 }

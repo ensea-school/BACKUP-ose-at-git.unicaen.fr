@@ -4,7 +4,6 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypePieceJointe as TypePieceJointeEntity;
-use Application\Entity\Db\StatutIntervenant;
 
 /**
  * Description of TypePieceJointe

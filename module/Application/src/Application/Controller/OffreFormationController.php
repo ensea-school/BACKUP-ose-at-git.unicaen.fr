@@ -115,7 +115,8 @@ class OffreFormationController extends AbstractActionController implements Conte
             'niveau'           => $niveau,
             'etape'            => $etape,
             'form'             => $form,
-            'serviceEtape'     => $this->getServiceEtape() // pour déterminer les droits
+            'serviceEtape'     => $this->getServiceEtape(), // pour déterminer les droits
+            'serviceElement'   => $this->getServiceElementPedagogique(), // pour déterminer les droits
         ));
 
         return $viewModel;

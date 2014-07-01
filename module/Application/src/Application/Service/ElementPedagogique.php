@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 
 /**
  * Description of ElementPedagogique
@@ -305,6 +306,32 @@ EOS;
         }
 
         return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter/modifier un enseignement', $runEx);
+    }
+
+    /**
+     * Détermine si l'élément peut être modifié ou non
+     * 
+     * @param int|\Application\Entity\Db\ElementPedagogique $element
+     * @return boolean
+     */
+    public function canSave($element, $runEx = false)
+    {
+        if (! $this->canAdd($runEx)) {
+            return false;
+        }
+        
+        if (!$element instanceof ElementPedagogiqueEntity) {
+            $element = $this->get($element);
+        }
+
+        if ($element->getSource()->getCode() !== \Application\Entity\Db\Source::CODE_SOURCE_OSE){
+            $errStr = 'Cet enseignement n\'est pas modifiable dans OSE car elle provient du logiciel '.$element->getSource();
+            $errStr .= '. Si vous souhaitez mettre à jour ces informations, nous vous invitons donc à les modifier directement dans '.$element->getSource().'.';
+            
+            return $this->cannotDoThat($errStr, $runEx);
+        }
+
+        return true;
     }
 
     /**

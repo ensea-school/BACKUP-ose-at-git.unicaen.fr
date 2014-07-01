@@ -237,6 +237,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php endif; ?>
             </div>
             <div class="panel-body">
+                <?php if (count($entities)): ?>
                 <p>
                     <?php echo $this->form()->openTag($form) ?> 
                     <label class="control-label"><?php echo $form->get('element')->getLabel() ?></label>
@@ -256,6 +257,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                         event.preventDefault();
                     });
                 </script>
+                <?php endif; ?>
                 
                 <p><?php echo count($entities) ?> enseignement(s) trouvé(s).</p>
                 

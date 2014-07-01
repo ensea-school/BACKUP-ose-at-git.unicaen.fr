@@ -26,11 +26,18 @@
 
 <script>
     $(function() {
-        var form = $("form.intervenant-rech");
-        $("input[name='interv[label]']", form).tooltip({ placement: 'bottom' }).focus();
+        var form        = $("form.intervenant-rech");
+        var intervId    = $("input[name='interv[id]']", form);
+        var intervLabel = $("input[name='interv[label]']", form);
+        var submit      = $("input[type=submit]", form).attr('disabled', intervLabel.val() ? false : true);
+        intervLabel
+                .on( "autocompletesearch", function() { submit.attr('disabled', true); } )
+                .on( "autocompleteselect", function() { submit.attr('disabled', false); } )
+                .tooltip({ placement: 'bottom' })
+                .focus();
         $("a.choisir-recent").click(function() {
-            $("input[name='interv[id]']", form).val($(this).data('id'));
-            $(":submit", form).click();
+            intervId.val($(this).data('id'));
+            submit.attr('disabled', false).click();
             return false;
         });
     });

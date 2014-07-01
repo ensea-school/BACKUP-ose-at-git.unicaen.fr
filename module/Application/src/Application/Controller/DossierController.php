@@ -69,7 +69,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     public function voirAction()
     {
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $dossier     = $intervenant->getDossier();
         $title       = "Données personnelles <small>$intervenant</small>";
         $short       = $this->params()->fromQuery('short', false);
@@ -100,7 +100,7 @@ class DossierController extends AbstractActionController implements ContextProvi
             $this->intervenant = $role->getIntervenant();
         }
         else {
-            $this->intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+            $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
      
         $validation = null;
@@ -242,7 +242,7 @@ class DossierController extends AbstractActionController implements ContextProvi
         $role               = $this->getContextProvider()->getSelectedIdentityRole();
         $serviceService     = $this->getServiceService();
         $servicePieceJointe = $this->getPieceJointeService();
-        $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute('id');
+        $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
         
         $servicePieceJointe->canAdd($this->intervenant, true);
         

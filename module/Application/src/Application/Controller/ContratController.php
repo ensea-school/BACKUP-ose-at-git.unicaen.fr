@@ -102,7 +102,7 @@ class ContratController extends AbstractActionController implements ContextProvi
             $this->creerContrat();
             $this->flashMessenger()->addSuccessMessage(sprintf("Contrat de %s enregistré avec succès.", $this->getIntervenant()));
             
-            return $this->redirect()->toRoute('intervenant/contrat', array('id' => $this->getIntervenant()->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/contrat', array('intervenant' => $this->getIntervenant()->getSourceCode()));
         }
         
         $view = new \Zend\View\Model\ViewModel(array(
@@ -165,7 +165,7 @@ class ContratController extends AbstractActionController implements ContextProvi
             $this->creerAvenant($volumesHorairesNonValides);
             $this->flashMessenger()->addSuccessMessage(sprintf("Avenant de %s enregistré avec succès.", $this->getIntervenant()));
             
-            return $this->redirect()->toRoute('intervenant/contrat', array('id' => $this->getIntervenant()->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/contrat', array('intervenant' => $this->getIntervenant()->getSourceCode()));
         }
         
         $view = new \Zend\View\Model\ViewModel(array(
@@ -233,7 +233,7 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getIntervenant()
     {
         if (null === $this->intervenant) {
-            $this->intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+            $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
         return $this->intervenant;
     }

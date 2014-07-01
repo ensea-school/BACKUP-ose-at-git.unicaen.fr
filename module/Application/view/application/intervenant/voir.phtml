@@ -1,9 +1,9 @@
 <h2 class="page-header"><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h2>
 
 <!--<ul class="nav nav-tabs">
-  <li<?php // if ('fiche' == $page) echo ' class="active"' ?>><a href="<?php echo $this->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId(), 'page' => 'fiche')); ?>">Fiche</a></li>
-  <li<?php // if ('dossier' == $page) echo ' class="active"' ?>><a href="<?php echo $this->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId(), 'page' => 'dossier')); ?>">Saisie de dossier</a></li>
-  <li<?php // if ('services' == $page) echo ' class="active"' ?>><a href="<?php echo $this->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId(), 'page' => 'services')); ?>">Services</a></li>
+  <li<?php // if ('fiche' == $page) echo ' class="active"' ?>><a href="<?php echo $this->url('intervenant/default', array('action' => 'voir', 'intervenant' => $intervenant->getId(), 'page' => 'fiche')); ?>">Fiche</a></li>
+  <li<?php // if ('dossier' == $page) echo ' class="active"' ?>><a href="<?php echo $this->url('intervenant/default', array('action' => 'voir', 'intervenant' => $intervenant->getId(), 'page' => 'dossier')); ?>">Saisie de dossier</a></li>
+  <li<?php // if ('services' == $page) echo ' class="active"' ?>><a href="<?php echo $this->url('intervenant/default', array('action' => 'voir', 'intervenant' => $intervenant->getId(), 'page' => 'services')); ?>">Services</a></li>
 </ul>-->
 <div class="tab-content">
         <?php // if ($page=='fiche'): ?>

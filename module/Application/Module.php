@@ -34,8 +34,28 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                 }
             }
         );
+        
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkRouteParams'), -100);
     }
 
+    /**
+     * Si l'utilisateur connecté a le profil "Intervenant", vérification que l'intervenant spécifié dans 
+     * la requête est bien celui connecté.
+     * 
+     * @param \Zend\Mvc\MvcEvent $e
+     */
+    public function checkRouteParams(MvcEvent $e)
+    {
+        $role = $e->getApplication()->getServiceManager()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        $routeMatch = $e->getRouteMatch();
+        if ($role instanceof Acl\IntervenantRole) {
+            if (($value = $routeMatch->getParam($name = 'intervenant')) && $value != $role->getIntervenant()->getSourceCode()) {
+                $routeMatch->setParam($name, $role->getIntervenant()->getSourceCode());
+            }
+            $routeMatch->setParam('intervenant', $role->getIntervenant()->getSourceCode());
+        }
+    }
+    
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';

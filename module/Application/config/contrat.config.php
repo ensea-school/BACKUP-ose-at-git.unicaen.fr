@@ -23,9 +23,9 @@ return array(
                     'creer' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:id',
+                            'route'    => '/:intervenant',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'creer-contrat',
@@ -35,9 +35,9 @@ return array(
                     'creer-avenant' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:id',
+                            'route'    => '/:intervenant',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'creer-avenant',
@@ -47,9 +47,9 @@ return array(
                     'voir' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:id',
+                            'route'    => '/:intervenant',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'voir',
@@ -59,9 +59,9 @@ return array(
                     'exporter' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:id/exporter',
+                            'route' => '/:intervenant/exporter',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'exporter',

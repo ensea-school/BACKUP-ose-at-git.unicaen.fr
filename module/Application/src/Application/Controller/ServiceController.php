@@ -27,7 +27,7 @@ class ServiceController extends AbstractActionController
         $viewModel = new \Zend\View\Model\ViewModel();
         $filter    = new \stdClass();
         $title     = "Enseignements et référentiel <small>$annee</small>";
-
+        
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
             $renderIntervenants = true;
@@ -47,7 +47,10 @@ class ServiceController extends AbstractActionController
                 $filter = $rechercheForm->hydrateFromSession();
             }
             $service->finderByFilterObject($filter, null, $qb);
-        }else {
+        }
+        else {
+            $intervenant = $role->getIntervenant();
+            $service->finderByIntervenant($intervenant, $qb);
             $renderIntervenants = false;
             $action = 'afficher'; // Affichage par défaut
         }
@@ -75,7 +78,7 @@ class ServiceController extends AbstractActionController
         $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'title', 'renderIntervenants'));
         return $viewModel;
     }
-
+    
     public function intervenantAction()
     {
         $service = $this->getServiceService();
@@ -84,7 +87,7 @@ class ServiceController extends AbstractActionController
         $qb      = $service->finderByContext();
         $viewModel = new \Zend\View\Model\ViewModel();
         
-        $intervenant = $this->context()->intervenantFromRoute('id'); /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant \Application\Entity\Db\Intervenant */
         $service->finderByIntervenant( $intervenant, $qb );
 
         $service->canAdd($intervenant, true);
@@ -120,7 +123,7 @@ class ServiceController extends AbstractActionController
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
-            return $this->redirect()->toRoute('intervenant/services', array('id' => $role->getIntervenant()->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/services', array('intervenant' => $role->getIntervenant()->getSourceCode()));
         }
         
         $viewModel = new \Zend\View\Model\ViewModel();

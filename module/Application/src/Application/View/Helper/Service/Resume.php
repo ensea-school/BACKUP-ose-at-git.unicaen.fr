@@ -138,7 +138,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             }
 
             $res .= '<tr>'."\n";
-            $url = $this->getView()->url('intervenant/services', array('id' => $line['intervenant']['SOURCE_CODE']));
+            $url = $this->getView()->url('intervenant/services', array('intervenant' => $line['intervenant']['SOURCE_CODE']));
             $na = '<span title="Non applicable (intervenant vacataire))">NA</span>';
 
             $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant']['NOM_USUEL']) . ' ' . $line['intervenant']['PRENOM'].'</a></td>'."\n";

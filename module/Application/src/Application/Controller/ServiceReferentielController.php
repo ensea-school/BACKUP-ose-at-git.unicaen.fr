@@ -80,7 +80,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel = new \Zend\View\Model\ViewModel();
 
-        $intervenant = $this->context()->intervenantFromRoute('id');
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         
         // sauvegarde des filtres dans le contexte local
         $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
@@ -312,7 +312,7 @@ class ServiceReferentielController extends AbstractActionController implements C
                         exit;
                     }
                     $this->flashMessenger()->addSuccessMessage(sprintf("Service(s) référentiel(s) de $intervenant enregistré(s) avec succès."));
-                    $this->redirect()->toRoute('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
+                    $this->redirect()->toRoute('intervenant/default', array('action' => 'voir', 'intervenant' => $intervenant->getId()));
                 }
                 catch (\Doctrine\DBAL\DBALException $exc) {
                     $exception = new RuntimeException("Impossible d'enregistrer les services référentiels.", null, $exc->getPrevious());

@@ -122,7 +122,7 @@ class ValidationController extends AbstractActionController implements ContextPr
     {
         $role              = $this->getContextProvider()->getSelectedIdentityRole();
         $serviceValidation = $this->getServiceValidation();
-        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $typeValidation    = TypeValidation::CODE_DONNEES_PERSO_PAR_COMP;
         
         $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
@@ -186,7 +186,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         $serviceValidation    = $this->getServiceValidation();
         $serviceService       = $this->getServiceService();
         $role                 = $this->getContextProvider()->getSelectedIdentityRole();
-        $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute('id');
+        $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute();
         $this->form           = $this->getFormService()->setIntervenant($this->intervenant)->init();
         $this->title          = "Validation des enseignements <small>$this->intervenant</small>";
         
@@ -237,7 +237,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
         $role                 = $this->getContextProvider()->getSelectedIdentityRole();
         $this->structure      = $role->getStructure();
-        $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute('id');
+        $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute();
         $this->form           = $this->getFormService()->setIntervenant($this->intervenant)->init();
         $this->title          = "Validation des enseignements au sein de la structure '$this->structure' <small>$this->intervenant</small>";
         $typeValidation       = TypeValidation::CODE_SERVICES_PAR_COMP;

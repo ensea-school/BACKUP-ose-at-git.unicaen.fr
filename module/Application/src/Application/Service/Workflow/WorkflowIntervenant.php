@@ -22,7 +22,7 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
      */
     public function getStepUrl(Step $step)
     {
-        $url = $this->getHelperUrl()->fromRoute($step->getRoute(), array('id' => $this->getIntervenant()->getSourceCode()));
+        $url = $this->getHelperUrl()->fromRoute($step->getRoute(), array('intervenant' => $this->getIntervenant()->getSourceCode()));
         
         return $url;
     }

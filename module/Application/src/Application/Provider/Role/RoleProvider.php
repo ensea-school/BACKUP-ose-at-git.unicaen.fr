@@ -80,6 +80,7 @@ class RoleProvider implements ProviderInterface
             $rolesComposante = array();
             foreach ($qb->getQuery()->getResult() as $trpr) { /* @var $trpr \Application\Entity\Db\TypeRolePhpRole */
                 $qb2 = $this->serviceRole->finderByTypeRole($trpr->getTypeRole());
+                $qb2 = $this->serviceRole->finderByOffreFormationExistante($qb2); // la structure doit avoir une offre de formation
                 $rolesComposante += $this->serviceRole->getList($qb2);
             }
             

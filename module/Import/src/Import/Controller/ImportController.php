@@ -135,6 +135,7 @@ class ImportController extends AbstractActionController
         $errors = array();
         $lignes = array();
         $tableName = $this->params()->fromRoute('table');
+        $typeMaj = $this->params()->fromPost('type-maj');
 
         $query = $this->makeQueries($tableName, true);
 
@@ -151,7 +152,11 @@ class ImportController extends AbstractActionController
 
             /* Mise à jour des données et récupération des éventuelles erreurs */
             try{
-                $sq->execMaj($query);
+                if ('vue-materialisee' == $typeMaj){
+                    $sq->execMajVM($tableName);
+                }else{
+                    $sq->execMaj($query);
+                }
             }catch(\Exception $e){
                 $errors = array($e->getMessage());
             }

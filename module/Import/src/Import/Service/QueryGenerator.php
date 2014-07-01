@@ -63,6 +63,19 @@ class QueryGenerator extends Service
 
 
 
+    public function execMajVM( $tableName )
+    {
+        $mviewName = $this->escape('MV_'.$tableName);
+        $sql = "BEGIN DBMS_MVIEW.REFRESH($mviewName, 'C'); END;";
+        try{
+            $this->getEntityManager()->getConnection()->exec($sql);
+        }catch(\Doctrine\DBAL\DBALException $e){
+            throw Exception::duringMajMVException($e, $tableName);
+        }
+    }
+
+
+
     /**
      * Met à jour des données d'après la requête transmise
      *

@@ -4,6 +4,7 @@ $avenants = $this->avenants;
 $intervenant = $this->intervenant; /* @var $intervenant \Application\Entity\Db\Intervenant */
 ?>
 
+<?php if ($contrat): ?>
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -15,7 +16,7 @@ $intervenant = $this->intervenant; /* @var $intervenant \Application\Entity\Db\I
     <tbody>
         <!-------- Contrat (un seul) ----------->
         <tr>
-            <?php $url = $this->url('contrat/exporter', array('id' => $intervenant->getSourceCode())); ?>
+            <?php $url = $this->url('contrat/exporter', array('intervenant' => $intervenant->getSourceCode())); ?>
             <td><a href="<?php echo $url ?>">Contrat initial</a></td>
             <td><?php echo $contrat->getStructure() ?></td>
             <td><?php echo $contrat->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
@@ -24,7 +25,7 @@ $intervenant = $this->intervenant; /* @var $intervenant \Application\Entity\Db\I
         <!-------- Avenants ----------->
         <?php foreach ($avenants as $avenant): /* @var $avenant \Application\Entity\Db\Contrat */ ?>
         <tr>
-            <?php $url = $this->url('contrat/exporter', array('id' => $intervenant->getSourceCode())); ?>
+            <?php $url = $this->url('contrat/exporter', array('intervenant' => $intervenant->getSourceCode())); ?>
             <td><a href="<?php echo $url ?>">Avenant</a></td>
             <td><?php echo $avenant->getStructure() ?></td>
             <td><?php echo $avenant->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
@@ -33,3 +34,6 @@ $intervenant = $this->intervenant; /* @var $intervenant \Application\Entity\Db\I
         <?php endforeach; ?>
     </tbody>
 </table>
+<?php else: ?>
+<p>Aucun contrat/avenant trouvé.</p>
+<?php endif; ?>

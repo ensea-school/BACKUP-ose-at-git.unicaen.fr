@@ -263,7 +263,7 @@ class ValidationController extends AbstractActionController implements ContextPr
             $volumesHoraires = $serviceVolumeHoraire->finderByStructureIntervention($this->structure, $qb)->getQuery()->getResult();
             if (!count($volumesHoraires)) {
                 throw new \Common\Exception\MessageException(
-                        sprintf("%s n'a aucun enseignement au sein de la structure '%s'.", $this->intervenant, $this->structure));
+                        sprintf("%s n'a aucun enseignement au sein de la structure &laquo; %s &raquo;.", $this->intervenant, $this->structure));
             }
             foreach ($volumesHoraires as $volumeHoraire) {
                 $this->validation->addVolumeHoraire($volumeHoraire);

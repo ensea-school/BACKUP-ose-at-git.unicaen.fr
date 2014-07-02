@@ -76,22 +76,22 @@ return array(
         'default' => array(
             'home' => array(
                 'pages' => array(
-                    'contrat' => array(
-                        'label'    => 'Contrat et avenants',
-                        'title'    => "Contrat et avenants de l'intervenant",
-                        'route'    => 'contrat/voir',
-                        'withtarget' => true,
-                        'resource' => 'controller/Application\Controller\Contrat:voir',
-                        'pages' => array(
-                            'exporter-contrat' => array(
-                                'label'  => "Exporter",
-                                'title'  => "Exporter le contrat de l'intervenant au format PDF",
-                                'route'  => 'contrat/exporter',
-                                'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Contrat:exporter',
-                            ),
-                        ),
-                    ),
+//                    'contrat' => array(
+//                        'label'    => 'Contrat et avenants',
+//                        'title'    => "Contrat et avenants de l'intervenant",
+//                        'route'    => 'contrat/voir',
+//                        'withtarget' => true,
+//                        'resource' => 'controller/Application\Controller\Contrat:voir',
+//                        'pages' => array(
+//                            'exporter-contrat' => array(
+//                                'label'  => "Exporter",
+//                                'title'  => "Exporter le contrat de l'intervenant au format PDF",
+//                                'route'  => 'contrat/exporter',
+//                                'withtarget' => true,
+//                                'resource' => 'controller/Application\Controller\Contrat:exporter',
+//                            ),
+//                        ),
+//                    ),
                 ),
             ),
         ),

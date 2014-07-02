@@ -68,7 +68,7 @@ class ServiceValideRule extends IntervenantRule
             $this->setMessage(sprintf(
                     "Les enseignements de %s%s n'ont fait l'objet d'aucune validation.", 
                     $this->getIntervenant(),
-                    $this->getStructure() ? sprintf(" au sein de la structure '%s'", $this->getStructure()) : null
+                    $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null
             ));
             return false;
         }
@@ -77,7 +77,7 @@ class ServiceValideRule extends IntervenantRule
             $this->setMessage(sprintf(
                     "Tous les volumes horaires d'enseignement de %s%s n'ont pas été validés.",
                     $this->getIntervenant(),
-                    $this->getStructure() ? sprintf(" au sein de la structure '%s'", $this->getStructure()) : null
+                    $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null
             ));
             return false;
         }
@@ -86,14 +86,14 @@ class ServiceValideRule extends IntervenantRule
             $this->setMessage(sprintf(
                     "Tous les volumes horaires d'enseignement de %s%s ont été validés.",
                     $this->getIntervenant(),
-                    $this->getStructure() ? sprintf(" au sein de la structure '%s'", $this->getStructure()) : null
+                    $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null
             ));
         }
         else {
             $this->setMessage(sprintf(
                     "Les enseignements de %s%s ont été validés PARTIELLEMENT.",
                     $this->getIntervenant(),
-                    $this->getStructure() ? sprintf(" au sein de la structure '%s'", $this->getStructure()) : null
+                    $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null
             ));
         }
         

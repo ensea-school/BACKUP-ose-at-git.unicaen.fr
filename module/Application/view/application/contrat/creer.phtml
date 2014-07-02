@@ -8,7 +8,11 @@
     'intervenant' => $intervenant)); ?>
 
 <?php if ($action): ?>
-<form method="POST">
-    <input class="btn btn-primary" type="submit" name="submi" value="<?php echo $action ?>" />
-</form>
+    <?php if (count($servicesDispos)): ?>
+        <h3>Enseignements validés candidats pour la création d'un contrat/avenant :</h3>
+        <?php echo $this->serviceListe($servicesDispos)->setRenderIntervenants(false)->render(); ?>
+    <?php endif; ?>
+    <form method="POST">
+        <input class="btn btn-primary" type="submit" name="submi" value="<?php echo $action ?>" />
+    </form>
 <?php endif; ?>

@@ -29,12 +29,58 @@ class PeutCreerContratRule extends IntervenantRule
             return false;
         }
         
+        $this->getServiceValideRule()->execute();
+        
+        // on s'intéresse à ceux validés mais n'ayant pas faits l'objet d'un contrat
+        $this->volumesHorairesDispos = [];
+        foreach ($this->getServiceValideRule()->getVolumesHorairesValides() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            if (!count($vh->getContrat())) {
+                $this->volumesHorairesDispos[] = $vh;
+            }
+        }
+        if (!count($this->volumesHorairesDispos)) {
+            $this->setMessage(sprintf("Tous les volumes horaires validés de %s ont fait l'objet d'un contrat ou d'un avenant.", $this->getIntervenant()));
+            return false;
+        }
+        
         return true;
     }
     
     public function isRelevant()
     {
         return $this->getIntervenant() instanceof IntervenantExterieur;
+    }
+    
+    /**
+     * @var \Application\Entity\Db\Service[]
+     */
+    private $servicesDispos;
+    
+    /**
+     * @return \Application\Entity\Db\Service[]
+     */
+    public function getServicesDispos()
+    {
+        if (null === $this->servicesDispos) {
+            $this->servicesDispos = [];
+            foreach ($this->getVolumesHorairesDispos() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+                $this->servicesDispos[$vh->getService()->getId()] = $vh->getService();
+            }
+        }
+        return $this->servicesDispos;
+    }
+    
+    /**
+     * @var \Application\Entity\Db\VolumeHoraire[]
+     */
+    private $volumesHorairesDispos;
+    
+    /**
+     * @return \Application\Entity\Db\VolumeHoraire[]
+     */
+    public function getVolumesHorairesDispos()
+    {
+        return $this->volumesHorairesDispos ?: [];
     }
     
     private $serviceValideRule;

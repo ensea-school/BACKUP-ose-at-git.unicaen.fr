@@ -168,6 +168,25 @@ class Service extends AbstractEntityService
     }
 
     /**
+     * Retourne la liste des services selon l'étape donnée
+     *
+     * @param boolean $valides 
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByValidation($valides = true, QueryBuilder $qb = null, $alias = null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if (!in_array((string)$valides, array("Application\Entity\Db\IntervenantPermanent", "Application\Entity\Db\IntervenantExterieur"))) {
+            return $qb;
+        }
+        $qb
+                ->join("$alias.intervenant", 'i2')
+                ->andWhere("i2 INSTANCE OF $valides");
+        return $qb;
+    }
+
+    /**
      * 
      * @param \stdClass $filter
      * @return array

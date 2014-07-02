@@ -239,7 +239,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         $this->structure      = $role->getStructure();
         $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute();
         $this->form           = $this->getFormService()->setIntervenant($this->intervenant)->init();
-        $this->title          = "Validation des enseignements au sein de la structure '$this->structure' <small>$this->intervenant</small>";
+        $this->title          = "Validation des enseignements au sein de la structure &laquo; $this->structure &raquo; <small>$this->intervenant</small>";
         $typeValidation       = TypeValidation::CODE_SERVICES_PAR_COMP;
         
         $serviceValidation->canAdd($this->intervenant, $typeValidation, true);

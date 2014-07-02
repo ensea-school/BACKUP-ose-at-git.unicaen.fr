@@ -11,7 +11,6 @@ use Application\Acl\ComposanteRole;
 use Application\Acl\ComposanteDbRole;
 use Application\Entity\Db\Role as RoleEntity;
 use Application\Service\Role as RoleService;
-use Application\Service\TypeRolePhpRole as TypeRolePhpRoleService;
 use Application\Service\RoleUtilisateur as RoleUtilisateurService;
 use Zend\Permissions\Acl\Role\GenericRole;
 
@@ -37,19 +36,16 @@ class RoleProvider implements ProviderInterface
     /**
      * Constructeur.
      * 
-     * @param TypeRolePhpRoleService $typeRolePhpRole
      * @param RoleService $serviceRole
      * @param RoleUtilisateurService $serviceRoleUtilisateur
      * @param array $config
      */
     public function __construct(
-            TypeRolePhpRoleService $typeRolePhpRole, 
             RoleService $serviceRole, 
             RoleUtilisateurService $serviceRoleUtilisateur, 
             $config = null)
     {
         $this
-                ->setServiceTypeRolePhpRole($typeRolePhpRole)
                 ->setServiceRole($serviceRole)
                 ->setServiceRoleUtilisateur($serviceRoleUtilisateur);
         
@@ -76,14 +72,12 @@ class RoleProvider implements ProviderInterface
             // rôle père
             $roleComposante = new ComposanteRole();
             // rôles métier (importés d'Harpege) correspondant au ROLE_ID PHP
-            $qb = $this->serviceTypeRolePhpRole->finderByPhpRole($roleComposante->getRoleId());
+            $qb = $this->serviceRole->finderRolePersonnelByRole($roleComposante->getRoleId());
             $rolesComposante = array();
-            foreach ($qb->getQuery()->getResult() as $trpr) { /* @var $trpr \Application\Entity\Db\TypeRolePhpRole */
-                $qb2 = $this->serviceRole->finderByTypeRole($trpr->getTypeRole());
-                $qb2 = $this->serviceRole->finderByOffreFormationExistante($qb2); // la structure doit avoir une offre de formation
-                $rolesComposante += $this->serviceRole->getList($qb2);
+            foreach ($qb->getQuery()->getResult() as $vrp) { /* @var $vrp \Application\Entity\Db\VRolePersonnel */
+                $rolesComposante[] = $vrp->getRole();
             }
-            
+
             /**
              * Rôles utilisateurs au sein de l'application (tables UTILISATEUR, ROLE_UTILISATEUR et ROLE_UTILISATEUR_LINKER)
              */
@@ -132,11 +126,6 @@ class RoleProvider implements ProviderInterface
     }
     
     /**
-     * @var TypeRolePhpRoleService
-     */
-    private $serviceTypeRolePhpRole;
-    
-    /**
      * @var RoleService
      */
     private $serviceRole;
@@ -145,12 +134,6 @@ class RoleProvider implements ProviderInterface
      * @var RoleUtilisateurService
      */
     private $serviceRoleUtilisateur;
-    
-    public function setServiceTypeRolePhpRole(TypeRolePhpRoleService $serviceTypeRolePhpRole)
-    {
-        $this->serviceTypeRolePhpRole = $serviceTypeRolePhpRole;
-        return $this;
-    }
     
     public function setServiceRole(RoleService $serviceRole)
     {

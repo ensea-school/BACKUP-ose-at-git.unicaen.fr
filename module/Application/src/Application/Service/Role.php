@@ -71,28 +71,6 @@ class Role extends AbstractEntityService
     }
     
     /**
-     * 
-     * @param QueryBuilder $qb
-     * @param string $alias
-     * @return QueryBuilder
-     */
-    public function finderByOffreFormationExistante(QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        
-        $qb
-                ->select("$alias, tr123, s")
-                ->distinct()
-                ->innerJoin('r.type', 'tr123')
-                ->innerJoin('r.structure', 's')
-                ->innerJoin('s.elementPedagogique', 'ep');
-//                ->where('tr.code <> :code')->setParameter('code', 'IND')
-//                ->andWhere('s.niveau = :niv')->setParameter('niv', 2);
-        
-        return $qb;
-    }
-    
-    /**
      * Retourne une liste d'entités en fonction du QueryBuilder donné
      *
      * La liste de présente sous la forme d'un tableau associatif, dont les clés sont les ID des entités et les valeurs les entités elles-mêmes
@@ -114,5 +92,27 @@ class Role extends AbstractEntityService
                 ->andWhere('s.niveau = :niv')->setParameter('niv', 2)*/;
         
         return parent::getList($qb);
+    }
+    
+    /**
+     * @param \Zend\Permissions\Acl\Role\RoleInterface|string $role
+     * @return QueryBuilder
+     */
+    public function finderRolePersonnelByRole($role)
+    {
+        if ($role instanceof \Zend\Permissions\Acl\Role\RoleInterface) {
+            $role = $role->getRoleId();
+        }
+        
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->from("Application\Entity\Db\VRolePersonnel", "v")
+                ->select("v, tr, s, p")
+                ->join("v.typeRole", "tr")
+                ->join("v.structure", "s")
+                ->join("v.personnel", "p")
+                ->orderBy("v.structure, v.typeRole")
+                ->andWhere("v.phpRoleId = :roleId")->setParameter('roleId', $role);
+        
+        return $qb;
     }
 }

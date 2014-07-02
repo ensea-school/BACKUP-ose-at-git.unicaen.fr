@@ -16,6 +16,7 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     use IntervenantAwareTrait;
     
     /**
+     * Retourne l'URL correspondant à l'étape spécifiée.
      * 
      * @param \Application\Service\Workflow\Step $step
      * @return string
@@ -25,6 +26,16 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
         $url = $this->getHelperUrl()->fromRoute($step->getRoute(), array('intervenant' => $this->getIntervenant()->getSourceCode()));
         
         return $url;
+    }
+    
+    /**
+     * Retourne l'URL correspondant à l'étape courante.
+     * 
+     * @return string
+     */
+    public function getCurrentStepUrl()
+    {
+        return $this->getStepUrl($this->getCurrentStep());
     }
     
     /**

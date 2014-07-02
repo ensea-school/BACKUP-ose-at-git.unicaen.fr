@@ -103,17 +103,6 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
             );
         }
         
-//        $passageCR = new \Application\Rule\Intervenant\NecessitePassageCommissionRechercheRule($this->getIntervenant());
-//        if ($passageCR->isRelevant() && $passageCR->execute()) {
-//            $this->addStep(
-//                    self::INDEX_PASSAGE_CR,
-//                    "Passage en Commission de la Recherche", 
-//                    null,
-//                    null,
-//                    new \Application\Rule\Intervenant\NecessitePassageCommissionRechercheRule($this->getIntervenant())
-//            );
-//        }
-        
         $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
         if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
             $this->addStep(

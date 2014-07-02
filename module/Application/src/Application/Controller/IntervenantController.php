@@ -35,11 +35,12 @@ class IntervenantController extends AbstractActionController implements \Applica
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof \Application\Acl\IntervenantExterieurRole && !$role->getIntervenant()->getDossier()) {
-            return $this->redirect()->toRoute('intervenant/saisir-dossier', array('intervenant' => $role->getIntervenant()->getSourceCode()));
-        }
-        elseif ($role instanceof \Application\Acl\IntervenantRole) {
-            return $this->redirect()->toRoute('intervenant/services', array('intervenant' => $role->getIntervenant()->getSourceCode()));
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            // redirection selon le workflow
+            $intervenant = $role->getIntervenant();
+            $wf  = $this->getWorkflowIntervenant($intervenant);
+            $url = $wf->getCurrentStepUrl();
+            return $this->redirect()->toUrl($url);
         }
         
         return $this->redirect()->toRoute('intervenant/rechercher');

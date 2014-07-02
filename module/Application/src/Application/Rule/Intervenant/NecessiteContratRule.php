@@ -13,7 +13,7 @@ class NecessiteContratRule extends IntervenantRule
     {
         $statut = $this->getIntervenant()->getStatut();
         
-        if (!$statut->estVacataireNonBiatss()) {
+        if (!$statut->estVacataire()) {
             $this->setMessage(sprintf("Le statut '%s' ne nécessite pas l'édition d'un contrat.", $statut));
             return false;
         }

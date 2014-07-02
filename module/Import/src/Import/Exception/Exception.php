@@ -17,6 +17,26 @@ class Exception extends RuntimeException {
      *
      * @return \Doctrine\DBAL\DBALException
      */
+    public static function duringMajMVException(\Exception $exception, $tableName)
+    {
+        if (! $exception->getPrevious() instanceof \Doctrine\DBAL\Driver\OCI8\OCI8Exception){
+            // Non gérée
+            return $exception;
+        }
+
+        $msg = $exception->getPrevious()->getMessage();
+
+        $msg = "Erreur lors de la mise à jour de la vue métarialisée liée à la table $tableName\n\n$msg";
+
+        return new self($msg, 0, $exception);
+    }
+
+    /**
+     * @param \Exception $exception
+     * @param string     $tableName
+     *
+     * @return \Doctrine\DBAL\DBALException
+     */
     public static function duringMajException(\Exception $exception, $tableName)
     {
         if (! $exception->getPrevious() instanceof \Doctrine\DBAL\Driver\OCI8\OCI8Exception){

@@ -1,3 +1,26 @@
+create or replace view v_role_personnel as
+  select r.id, p.id personnel_id, p.NOM_USUEL, p.PRENOM, p.EMAIL, tr.id type_role_id, tr.CODE, tr.LIBELLE, s.id structure_id, s.LIBELLE_COURT, trpr.php_role_id 
+  from ROLE r
+  inner join PERSONNEL p on r.PERSONNEL_ID = p.ID
+  inner join STRUCTURE s on r.STRUCTURE_ID = s.ID
+  inner join TYPE_ROLE tr on r.TYPE_ID = tr.ID
+  inner join TYPE_ROLE_PHP_ROLE trpr on r.TYPE_ID = trpr.TYPE_ROLE_ID 
+  where s.STRUCTURE_NIV2_ID in (
+    -- liste des ids des structures de niveau 2 qui possèdent, elles-mêmes ou l'une de leurs sous-structures, au moins 1 élément pédagogique
+    SELECT DISTINCT sniv2.ID
+    FROM STRUCTURE sniv2
+    INNER JOIN STRUCTURE stmp ON (sniv2.ID = stmp.STRUCTURE_NIV2_ID) AND (stmp.HISTO_DESTRUCTION IS NULL AND stmp.HISTO_DESTRUCTEUR_ID IS NULL)
+    INNER JOIN ELEMENT_PEDAGOGIQUE ep ON (stmp.ID = ep.STRUCTURE_ID) AND (ep.HISTO_DESTRUCTION IS NULL AND ep.HISTO_DESTRUCTEUR_ID IS NULL)
+    WHERE (sniv2.HISTO_DESTRUCTION IS NULL AND sniv2.HISTO_DESTRUCTEUR_ID IS NULL)
+  );
+
+
+
+
+
+
+
+
 
 CREATE TABLE "OSE"."DOSSIER" (	
   "ID" NUMBER(*,0) NOT NULL, 

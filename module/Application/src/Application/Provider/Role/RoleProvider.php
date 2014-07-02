@@ -40,7 +40,10 @@ class RoleProvider implements ProviderInterface
      * @param RoleUtilisateurService $serviceRoleUtilisateur
      * @param array $config
      */
-    public function __construct(RoleService $serviceRole, RoleUtilisateurService $serviceRoleUtilisateur, $config = null)
+    public function __construct(
+            RoleService $serviceRole, 
+            RoleUtilisateurService $serviceRoleUtilisateur, 
+            $config = null)
     {
         $this
                 ->setServiceRole($serviceRole)
@@ -66,9 +69,15 @@ class RoleProvider implements ProviderInterface
             /**
              * Rôles "composante" : exercés sur une structure de niveau 2 PORTEUSE d'éléments pédagogiques
              */
+            // rôle père
             $roleComposante = new ComposanteRole();
-            $rolesComposante = $this->serviceRole->getList();
-            
+            // rôles métier (importés d'Harpege) correspondant au ROLE_ID PHP
+            $qb = $this->serviceRole->finderRolePersonnelByRole($roleComposante->getRoleId());
+            $rolesComposante = array();
+            foreach ($qb->getQuery()->getResult() as $vrp) { /* @var $vrp \Application\Entity\Db\VRolePersonnel */
+                $rolesComposante[] = $vrp->getRole();
+            }
+
             /**
              * Rôles utilisateurs au sein de l'application (tables UTILISATEUR, ROLE_UTILISATEUR et ROLE_UTILISATEUR_LINKER)
              */

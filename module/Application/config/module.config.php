@@ -146,6 +146,7 @@ $main =  array(
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
             'ApplicationSource'                              => 'Application\\Service\\Source',
+            'ApplicationTypeRolePhpRole'                     => 'Application\\Service\\TypeRolePhpRole',
             'ApplicationRole'                                => 'Application\\Service\\Role',
             'ApplicationRoleUtilisateur'                     => 'Application\\Service\\RoleUtilisateur',
             'NavigationPageVisibility'                       => 'Application\\Service\\NavigationPageVisibility',

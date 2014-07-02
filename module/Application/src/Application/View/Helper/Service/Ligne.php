@@ -118,7 +118,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderIntervenant($intervenant)
     {
-        $pourl = $this->getView()->url('intervenant/default', array('action' => 'voir', 'id' => $intervenant->getId()));
+        $pourl = $this->getView()->url('intervenant/default', array('action' => 'voir', 'intervenant' => $intervenant->getId()));
         $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
         return $out;
     }

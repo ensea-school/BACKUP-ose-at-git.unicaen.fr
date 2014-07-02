@@ -2,6 +2,8 @@
 
 namespace Application;
 
+const ROLE_ID_DRH = 'DRH';
+
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantPermanentRole;
@@ -29,10 +31,10 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:action[/:id]',
+                            'route'    => '/:action[/:intervenant]',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'index',
@@ -42,9 +44,9 @@ return array(
                     'rechercher' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/rechercher[/:id]',
+                            'route'    => '/rechercher[/:intervenant]',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'rechercher',
@@ -54,23 +56,23 @@ return array(
                     'fiche' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:id',
+                            'route'    => '/:intervenant',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'voir',
-                                'id'     => 0,
+                                'intervenant' => 0,
                             ),
                         ),
                     ),
                     'voir-heures-comp' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/voir-heures-comp[/:id]',
+                            'route'    => '/voir-heures-comp[/:intervenant]',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'voir-heures-comp',
@@ -80,9 +82,9 @@ return array(
                     'feuille-de-route' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:id/feuille-de-route',
+                            'route'    => '/:intervenant/feuille-de-route',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'feuille-de-route',
@@ -92,9 +94,9 @@ return array(
                     'modification-service-du' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:id/modification-service-du',
+                            'route' => '/:intervenant/modification-service-du',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'ModificationServiceDu',
@@ -105,51 +107,51 @@ return array(
                     'saisir-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:id/saisir-dossier',
+                            'route'    => '/:intervenant/saisir-dossier',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Dossier',
                                 'action' => 'modifier',
-                                'id'     => 0,
+                                'intervenant' => 0,
                             ),
                         ),
                     ),
                     'services' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:id/services',
+                            'route'    => '/:intervenant/services',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
                                 'action' => 'intervenant',
-                                'id'     => 0,
+                                'intervenant' => 0,
                             ),
                         ),
                     ),
                     'pieces-jointes' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:id/pieces-jointes',
+                            'route'    => '/:intervenant/pieces-jointes',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Dossier',
                                 'action' => 'pieces-jointes',
-                                'id'     => 0,
+                                'intervenant' => 0,
                             ),
                         ),
                     ),
                     'validation-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:id/validation/dossier',
+                            'route' => '/:intervenant/validation/dossier',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Validation',
@@ -160,9 +162,9 @@ return array(
                     'validation-service' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:id/validation/service',
+                            'route' => '/:intervenant/validation/service',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Validation',
@@ -173,9 +175,9 @@ return array(
                     'contrat' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:id/contrat',
+                            'route' => '/:intervenant/contrat',
                             'constraints' => array(
-                                'id' => '[0-9]*',
+                                'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Contrat',
@@ -188,10 +190,10 @@ return array(
             'workflow' => array(
                 'type'    => 'Segment',
                 'options' => array(
-                    'route' => '/workflow/:id/:action',
+                    'route' => '/workflow/:intervenant/:action',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]*',
+                        'intervenant' => '[0-9]*',
                     ),
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
@@ -311,8 +313,13 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('voir', 'choisir', 'rechercher', 'search', 'voir-heures-comp'),
+                    'action'     => array('voir', 'choisir', 'rechercher', 'search'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => array('voir-heures-comp'),
+                    'roles'      => array(ROLE_ID_DRH),
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',

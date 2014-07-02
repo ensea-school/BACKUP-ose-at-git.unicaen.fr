@@ -43,16 +43,59 @@ class Etape extends AbstractEntityService
     public function finderByNiveau(\Application\Entity\NiveauEtape $niveau, QueryBuilder $qb=null, $alias=null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $typeFormationService = $this->getServiceLocator()->get('applicationTypeFormation');
+        $typeFormationAlias = $typeFormationService->getAlias();
+
+        $groupeTypeFormationService = $this->getServiceLocator()->get('applicationGroupeTypeFormation');
+        $groupeTypeFormationAlias = $groupeTypeFormationService->getAlias();
+
         $qb
-                ->innerJoin("$alias.typeFormation", 'tf')
-                ->innerJoin("tf.groupe", 'gtf')
-                ->andWhere("$alias.niveau = :niv AND gtf.libelleCourt = :lib")
+                ->innerJoin("$alias.typeFormation", $typeFormationAlias)
+                ->innerJoin("$typeFormationAlias.groupe", $groupeTypeFormationAlias)
+                ->andWhere("$alias.niveau = :niv AND $groupeTypeFormationAlias.libelleCourt = :lib")
                 ->setParameter('niv', $niveau->getNiv())
                 ->setParameter('lib', $niveau->getLib());
         
         return parent::getList($qb, $alias);
     }
-    
+
+    /**
+     * Retourne le chercheur d'étapes orphelines (i.e. sans EP).
+     * 
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function finderByOrphelines(QueryBuilder $qb=null, $alias=null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $qb->andWhere("SIZE ($alias.elementPedagogique) = 0")
+           ->andWhere("SIZE ($alias.cheminPedagogique) = 0");
+
+        return $qb;
+    }
+
+    /**
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string $alias
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function finderByStructure(\Application\Entity\Db\Structure $structure, QueryBuilder $qb=null, $alias=null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $structureService = $this->getServiceLocator()->get('applicationStructure');
+        $structureAlias = $structureService->getAlias();
+
+        $this->join( $structureService, $qb, 'structure');
+
+        $qb->andWhere("$structureAlias.structureNiv2 = :structureNiv2")->setParameter('structureNiv2', $structure->getParenteNiv2());
+        return $qb;
+    }
+
     /**
      * Détermine si on peut ajouter une étape ou non
      *
@@ -62,7 +105,7 @@ class Etape extends AbstractEntityService
     {
         $localContext = $this->getContextProvider()->getLocalContext();
         $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
-        
+
         if ($role instanceof \Application\Acl\DbRole) { 
             if (!$localContext->getStructure()) {
                 throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);

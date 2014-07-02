@@ -74,6 +74,9 @@ class NavigationFactory extends DefaultNavigationFactory
             if (($id = $routeMatch->getParam('id'))) {
                 $page['params']['id'] = $id;
             }
+            elseif (($id = $routeMatch->getParam('intervenant'))) {
+                $page['params']['intervenant'] = $id;
+            }
             else {
                 $page['visible'] = false;
             }

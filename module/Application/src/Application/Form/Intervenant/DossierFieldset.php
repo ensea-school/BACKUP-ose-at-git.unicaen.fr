@@ -98,6 +98,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
                 'label' => 'Adresse mail',
             ),
             'attributes' => array(
+                'readonly' => true
             ),
             'type' => 'Text',
         ) );

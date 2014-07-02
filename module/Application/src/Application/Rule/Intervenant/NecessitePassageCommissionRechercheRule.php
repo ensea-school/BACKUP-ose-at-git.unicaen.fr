@@ -3,7 +3,6 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\StatutIntervenant;
-use Application\Entity\Db\IntervenantPermanent;
 
 /**
  * Description of NecessitePassageCommissionRechercheRule
@@ -14,15 +13,17 @@ class NecessitePassageCommissionRechercheRule extends IntervenantRule
 {
     public function execute()
     {
-        if ($this->getIntervenant() instanceof IntervenantPermanent) {
-            $this->setMessage("Les intervenants permanents ne sont pas concernés par la Commission de la Recherche.");
+        $statut = $this->getIntervenant()->getStatut();
+        
+        if (!$statut->estVacataireNonBiatss()) {
+            $this->setMessage(sprintf("De par son statut '%s', l'intervenant n'est pas concerné par la Commission de la Recherche.", $statut));
             return false;
         }
         
         $dossier = $this->getIntervenant()->getDossier(); /* @var $dossier \Application\Entity\Db\Dossier */
         
         if (!$dossier->getPremierRecrutement()) {
-            $this->setMessage("Il s'agit d'un premier recrutement en qualité de vacataire à l'Université de Caen.");
+            $this->setMessage("Il ne s'agit pas d'un premier recrutement en qualité de vacataire à l'Université de Caen.");
             return false;
         }
         

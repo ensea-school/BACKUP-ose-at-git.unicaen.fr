@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 
 /**
  * Description of ElementPedagogique
@@ -146,45 +147,6 @@ class ElementPedagogique extends AbstractEntityService
     }
     
     /**
-     * Retourne le chercheur d'étapes orphelines (i.e. sans EP).
-     * 
-     * @param array $filters
-     * @param \Doctrine\ORM\QueryBuilder $qb
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function finderDistinctEtapesOrphelines(array $filters = array(), QueryBuilder $qb=null, $alias=null)
-    {
-        $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
-        $qb
-                ->select('e, tf, gtf')
-                ->distinct()
-                ->from('Application\Entity\Db\Etape', 'e')
-//                ->innerJoin('e.elementPedagogique', 'ep')
-//                ->leftJoin('ep.periode', 'p')
-                ->innerJoin('e.typeFormation', 'tf')
-                ->innerJoin('tf.groupe', 'gtf')
-                ->innerJoin('e.structure', 's')
-                ->andWhere('SIZE (e.elementPedagogique) < 1')
-                ->orderBy('gtf.ordre, e.niveau, e.sourceCode');
-        
-//        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-//            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $filters['structure']);
-//        }
-        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-            $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
-        }
-        if (isset($filters['niveau']) && $filters['niveau']) {
-            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
-                $filters['niveau'] = $filters['niveau']->getId();
-            }
-            $niveau = str_replace('-', '', $filters['niveau']);
-            $qb->andWhere('CONCAT(gtf.libelleCourt, e.niveau) = :niveau')->setParameter('niveau', $niveau);
-        }
-        
-        return $qb;
-    }
-    
-    /**
      * Recherche textuelle d'element pédagogique.
      * 
      * @param array $filters
@@ -305,6 +267,32 @@ EOS;
         }
 
         return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter/modifier un enseignement', $runEx);
+    }
+
+    /**
+     * Détermine si l'élément peut être modifié ou non
+     * 
+     * @param int|\Application\Entity\Db\ElementPedagogique $element
+     * @return boolean
+     */
+    public function canSave($element, $runEx = false)
+    {
+        if (! $this->canAdd($runEx)) {
+            return false;
+        }
+        
+        if (!$element instanceof ElementPedagogiqueEntity) {
+            $element = $this->get($element);
+        }
+
+        if ($element->getSource()->getCode() !== \Application\Entity\Db\Source::CODE_SOURCE_OSE){
+            $errStr = 'Cet enseignement n\'est pas modifiable dans OSE car elle provient du logiciel '.$element->getSource();
+            $errStr .= '. Si vous souhaitez mettre à jour ces informations, nous vous invitons donc à les modifier directement dans '.$element->getSource().'.';
+            
+            return $this->cannotDoThat($errStr, $runEx);
+        }
+
+        return true;
     }
 
     /**

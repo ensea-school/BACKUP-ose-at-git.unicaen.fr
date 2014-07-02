@@ -28,7 +28,7 @@ class ModificationServiceDuController extends AbstractActionController implement
     {
         $context     = $this->getContextProvider()->getGlobalContext();
         $isAjax      = $this->getRequest()->isXmlHttpRequest();
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute('id'); /* @var $intervenant IntervenantPermanent */
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant IntervenantPermanent */
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
         
         $rule = new \Application\Rule\Intervenant\PeutSaisirModificationServiceDuRule($intervenant, $role);

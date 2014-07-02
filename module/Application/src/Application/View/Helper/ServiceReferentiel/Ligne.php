@@ -98,7 +98,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         
         if (!$role instanceof \Application\Acl\IntervenantRole) {
             if ($this->getRenderIntervenants()) {
-                $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'id' => $intervenant->getSourceCode()));
+                $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'intervenant' => $intervenant->getSourceCode()));
                 $out   = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
             }
         }

@@ -19,6 +19,8 @@ abstract class AbstractWorkflow extends AbstractService
     abstract protected function createSteps();
     
     /**
+     * Parcourt les étapes pour déterminer l'étape courante (non encore réalisée).
+     * 
      * @return self
      */
     protected function processSteps()
@@ -43,6 +45,7 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Ajoute une étape au workflow, associée à une condition de réalisation.
      * 
      * @param string $index
      * @param string $name
@@ -62,6 +65,8 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Retourne l'étape du workflow associée à la clé spécifiée.
+     * 
      * @return Step
      */
     protected function getStep($key)
@@ -75,6 +80,8 @@ abstract class AbstractWorkflow extends AbstractService
     protected $steps;
     
     /**
+     * Reoutne toutes les étapes du workflow.
+     * 
      * @return Step[]
      */
     public function getSteps()
@@ -86,22 +93,17 @@ abstract class AbstractWorkflow extends AbstractService
     }
 
     /**
+     * Conditions de réalisation (règles métier) associées à chaque étape du workflow.
+     * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
      * 
-     * @param Step[] $steps
-     * @return \Application\Service\Workflow\AbstractWorkflow
-     */
-//    protected function setSteps(array $steps)
-//    {
-//        $this->steps = $steps;
-//        return $this;
-//    }
-
-    /**
      * @var \Application\Rule\RuleInterface[]
      */
     protected $conditions;
     
     /**
+     * Retourne les conditions de réalisation (les règles métier) associées à chaque étape du workflow.
+     * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
+     * 
      * @return \Application\Rule\RuleInterface[]
      */
     public function getConditions()
@@ -110,22 +112,14 @@ abstract class AbstractWorkflow extends AbstractService
     }
 
     /**
-     * 
-     * @param \Application\Rule\RuleInterface[] $conditions
-     * @return \Application\Service\Workflow\AbstractWorkflow
-     */
-//    protected function setConditions(array $conditions)
-//    {
-//        $this->conditions = $conditions;
-//        return $this;
-//    }
-
-    /**
      * @var Step
      */
     private $currentStep;
     
     /**
+     * Retourne l'étape courante du workflow, i.e. l'étape où en est l'intervenant
+     * dans le workflow.
+     * 
      * @return Step
      */
     public function getCurrentStep()
@@ -137,6 +131,7 @@ abstract class AbstractWorkflow extends AbstractService
     }
 
     /**
+     * Spécifie l'étape où en est l'intervenant dans le workflow.
      * 
      * @param \Application\Service\Workflow\Step\Step $currentStep
      * @return \Application\Service\Workflow\AbstractWorkflow
@@ -148,6 +143,8 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Retourne l'étape du workflow située juste après l'étape spécifiée.
+     * 
      * @param \Application\Service\Workflow\Step\Step $step
      * @return Step
      */
@@ -169,6 +166,8 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Retourne la dernière étape du workflow.
+     * 
      * @return Step
      */
     public function getLastStep()
@@ -182,9 +181,10 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Retourne l'étape correspondant à la route spécifiée.
      * 
      * @param string $route
-     * @return Step
+     * @return Step|null
      */
     public function getStepForRoute($route)
     {
@@ -198,8 +198,10 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Retourne l'étape correspondant à la route courante (i.e. la route correspondant
+     * à la requête courante).
      * 
-     * @return Step
+     * @return Step|null
      */
     public function getStepForCurrentRoute()
     {
@@ -210,6 +212,7 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Teste si le workflow contient bien l'étape spécifiée.
      * 
      * @param \Application\Service\Workflow\Step\Step $step
      * @return bool
@@ -226,6 +229,7 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Teste si l'étape spécifiée se situe avant l'étape courante dans le workflow.
      * 
      * @param \Application\Service\Workflow\Step\Step $step
      * @return boolean
@@ -247,6 +251,7 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
+     * Teste si l'étape spécifiée se situe après l'étape courante dans le workflow.
      * 
      * @param \Application\Service\Workflow\Step\Step $step
      * @return boolean

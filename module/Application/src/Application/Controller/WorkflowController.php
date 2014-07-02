@@ -38,7 +38,7 @@ class WorkflowController extends AbstractActionController implements \Applicatio
             exit;
         }
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
-        $intervenant = $this->context()->intervenantFromRoute('id');
+        $intervenant = $this->context()->intervenantFromRoute();
         $route       = $this->context()->routeFromQuery();
         $prepend     = $this->context()->prependFromQuery();
         if (!$intervenant) {
@@ -57,10 +57,10 @@ class WorkflowController extends AbstractActionController implements \Applicatio
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantExterieurRole && !$role->getIntervenant()->getDossier()) {
-            return $this->redirect()->toRoute('intervenant/saisir-dossier', array('id' => $role->getIntervenant()->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/saisir-dossier', array('intervenant' => $role->getIntervenant()->getSourceCode()));
         }
         elseif ($role instanceof \Application\Acl\IntervenantRole) {
-            return $this->redirect()->toRoute('intervenant/services', array('id' => $role->getIntervenant()->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/services', array('intervenant' => $role->getIntervenant()->getSourceCode()));
         }
         
         return $this->redirect()->toRoute('intervenant/rechercher');
@@ -71,7 +71,7 @@ class WorkflowController extends AbstractActionController implements \Applicatio
         $view = $this->choisirAction();
         
         if ($this->intervenant) {
-            return $this->redirect()->toRoute('intervenant/fiche', array('id' => $this->intervenant->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/fiche', array('intervenant' => $this->intervenant->getSourceCode()));
         }
         
         $view->setTemplate('application/intervenant/choisir');
@@ -154,7 +154,7 @@ class WorkflowController extends AbstractActionController implements \Applicatio
             $intervenant = $role->getIntervenant();
         }
         else {
-            $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+            $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
         
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
@@ -178,7 +178,7 @@ class WorkflowController extends AbstractActionController implements \Applicatio
     {
         $this->em()->getFilters()->enable('historique');
 
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->intervenantGetDifferentiel($intervenant);
@@ -192,7 +192,7 @@ class WorkflowController extends AbstractActionController implements \Applicatio
 
     public function voirHeuresCompAction()
     {
-        $intervenant = $this->context()->intervenantFromRoute('id');
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
 
         return compact('intervenant', 'formule');
@@ -208,7 +208,7 @@ class WorkflowController extends AbstractActionController implements \Applicatio
             $intervenant = $role->getIntervenant();
         }
         else {
-            $intervenant = $this->context()->mandatory()->intervenantFromRoute('id');
+            $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
         
         if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {

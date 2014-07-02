@@ -34,6 +34,7 @@ class OffreFormationController extends AbstractActionController implements Conte
     {
         $em           = $this->em(); /* @var $em \Doctrine\ORM\EntityManager */
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
+        $serviceEtape = $this->getServiceLocator()->get('applicationEtape'); /* @var $serviceEtape EtapeService */
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $localContext = $this->getContextProvider()->getLocalContext();
         $role         = $this->getContextProvider()->getSelectedIdentityRole();
@@ -69,8 +70,11 @@ class OffreFormationController extends AbstractActionController implements Conte
                 $serviceEp->finderDistinctEtapes(array('structure' => $structure, 'niveau' => $niveau))->getQuery()->getResult() :
                 array();
         // liste des etapes orphelines (sans ÉP) pour la structure et le niveau spécifiés
+        $qb = $serviceEtape->finderByOrphelines();
+        if ($niveau) $serviceEtape->finderByNiveau($niveau, $qb );
+        if ($structure) $serviceEtape->finderByStructure($structure, $qb);
         $etapesOrphelines = $structure ? 
-                $serviceEp->finderDistinctEtapesOrphelines(array('structure' => $structure, 'niveau' => $niveau))->getQuery()->getResult() :
+                $serviceEtape->getList( $qb ) :
                 array();
         
         $ep = new \UnicaenApp\Form\Element\SearchAndSelect('element');
@@ -115,7 +119,8 @@ class OffreFormationController extends AbstractActionController implements Conte
             'niveau'           => $niveau,
             'etape'            => $etape,
             'form'             => $form,
-            'serviceEtape'     => $this->getServiceEtape() // pour déterminer les droits
+            'serviceEtape'     => $this->getServiceEtape(), // pour déterminer les droits
+            'serviceElement'   => $this->getServiceElementPedagogique(), // pour déterminer les droits
         ));
 
         return $viewModel;

@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypePieceJointeStatut as TypePieceJointeStatutEntity;
-use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
 
 /**
  * Description of TypePieceJointeStatut
@@ -37,11 +37,11 @@ class TypePieceJointeStatut extends AbstractEntityService
     /**
      * Retourne la liste des enregistrements correspondant aux statut intervenant spécifié.
      *
-     * @param StatutIntervenant $statut
+     * @param StatutIntervenantEntity $statut
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByStatutIntervenant(StatutIntervenant $statut, QueryBuilder $qb = null, $alias = null)
+    public function finderByStatutIntervenant(StatutIntervenantEntity $statut, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.statut = :statut")->setParameter('statut', $statut);

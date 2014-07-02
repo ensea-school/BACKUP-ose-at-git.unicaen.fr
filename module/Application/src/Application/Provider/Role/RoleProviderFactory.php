@@ -21,8 +21,8 @@ class RoleProviderFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $serviceRole            = $serviceLocator->get('applicationRole'); /* @var $serviceRole \Application\Service\Role */
-        $serviceUtilisateurRole = $serviceLocator->get('applicationRoleUtilisateur'); /* @var $serviceRole \Application\Service\RoleUtilisateur */
+        $serviceRole            = $serviceLocator->get('applicationRole');            /* @var $serviceRole \Application\Service\Role */
+        $serviceUtilisateurRole = $serviceLocator->get('applicationRoleUtilisateur'); /* @var $serviceUtilisateurRole \Application\Service\RoleUtilisateur */
         $config                 = $serviceLocator->get('BjyAuthorize\Config');
 
         if (! isset($config['role_providers']['ApplicationRoleProvider'])) {

@@ -147,45 +147,6 @@ class ElementPedagogique extends AbstractEntityService
     }
     
     /**
-     * Retourne le chercheur d'étapes orphelines (i.e. sans EP).
-     * 
-     * @param array $filters
-     * @param \Doctrine\ORM\QueryBuilder $qb
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function finderDistinctEtapesOrphelines(array $filters = array(), QueryBuilder $qb=null, $alias=null)
-    {
-        $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
-        $qb
-                ->select('e, tf, gtf')
-                ->distinct()
-                ->from('Application\Entity\Db\Etape', 'e')
-//                ->innerJoin('e.elementPedagogique', 'ep')
-//                ->leftJoin('ep.periode', 'p')
-                ->innerJoin('e.typeFormation', 'tf')
-                ->innerJoin('tf.groupe', 'gtf')
-                ->innerJoin('e.structure', 's')
-                ->andWhere('SIZE (e.elementPedagogique) < 1')
-                ->orderBy('gtf.ordre, e.niveau, e.sourceCode');
-        
-//        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-//            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $filters['structure']);
-//        }
-        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-            $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
-        }
-        if (isset($filters['niveau']) && $filters['niveau']) {
-            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
-                $filters['niveau'] = $filters['niveau']->getId();
-            }
-            $niveau = str_replace('-', '', $filters['niveau']);
-            $qb->andWhere('CONCAT(gtf.libelleCourt, e.niveau) = :niveau')->setParameter('niveau', $niveau);
-        }
-        
-        return $qb;
-    }
-    
-    /**
      * Recherche textuelle d'element pédagogique.
      * 
      * @param array $filters

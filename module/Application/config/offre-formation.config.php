@@ -342,6 +342,7 @@ return array(
             'ApplicationCheminPedagogique'            => 'Application\\Service\\CheminPedagogique',
             'ApplicationEtape'                        => 'Application\\Service\\Etape',
             'ApplicationTypeFormation'                => 'Application\\Service\\TypeFormation',
+            'ApplicationGroupeTypeFormation'          => 'Application\\Service\\GroupeTypeFormation',
             'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
             'ApplicationElementModulateur'            => 'Application\\Service\\ElementModulateur',
             'ApplicationTypeModulateur'               => 'Application\\Service\\TypeModulateur',

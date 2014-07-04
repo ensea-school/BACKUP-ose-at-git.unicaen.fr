@@ -7,6 +7,7 @@ use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 
 /**
  * Description of Service
@@ -187,7 +188,8 @@ class Service extends AbstractEntityService
             $whereFilter[] = 'STRUCTURE_ENS_ID = ' . $filter->structureEns->getId();
         }
         if (isset($filter->statutInterv)) {
-            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . \Application\Entity\Db\TypeIntervenant::$classToCode[$filter->statutInterv] . "'";
+            $e = new TypeIntervenantEntity();
+            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . $e->classToCode[$filter->statutInterv] . "'";
         }
         if (isset($filter->etape)) {
             $whereFilter[] = 'ETAPE_ID = ' . $filter->etape->getId();
@@ -244,7 +246,8 @@ EOS;
             $whereFilter[] = 'STRUCTURE_ENS_ID = ' . $filter->structureEns->getId();
         }
         if (isset($filter->statutInterv)) {
-            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . \Application\Entity\Db\TypeIntervenant::$classToCode[$filter->statutInterv] . "'";
+            $e = new TypeIntervenantEntity();
+            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . $e->classToCode[$filter->statutInterv] . "'";
         }
         $whereFilter = $whereFilter ? ' AND ' . implode(' AND ', $whereFilter) : null;
         

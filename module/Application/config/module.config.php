@@ -165,6 +165,7 @@ $main =  array(
             'historiqueDl' => 'Application\View\Helper\HistoriqueDl',
             'validationDl' => 'Application\View\Helper\ValidationDl',
             'mailto'       => 'Application\View\Helper\Mailto',
+            'contextProvider' => 'Application\View\Helper\ContextProvider',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',

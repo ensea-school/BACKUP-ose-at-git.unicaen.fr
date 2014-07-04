@@ -315,16 +315,26 @@ class ValidationController extends AbstractActionController implements ContextPr
         $this->em()->getFilters()->enable('historique');
         
         // recherche des enseignements de l'intervenant non encore validés
-        $qb = $serviceService->finderByIntervenant($this->intervenant);
-        $serviceService->finderByValidation(false, $qb);
+        $qb = $serviceService->getRepo()->createQueryBuilder('s')
+                ->addSelect("i, vh, strens")
+                ->join("s.intervenant", "i")
+                ->join("s.volumeHoraire", 'vh')
+                ->join("s.structureEns", 'strens')
+                ->leftJoin("vh.validation", 'v')
+                ->leftJoin("v.typeValidation", 'tv')
+                ->andWhere("i = :intervenant")->setParameter('intervenant', $this->intervenant)
+                ->andWhere("tv.code = :tv")->setParameter('tv', $typeValidation)
+                ->andWhere("v is null")
+                ->addOrderBy("strens.libelleCourt", 'asc');
         $servicesNonValides = $serviceService->getList($qb);
         
         // recherche des enseignements de l'intervenant déjà validés par la composante d'affectation
         // mais n'ayant pas fait l'objet d'un contrat/avenant
         $qb = $serviceService->getRepo()->createQueryBuilder('s')
-                ->addSelect("i, vh, v, tv, s")
+                ->addSelect("i, vh, strens, v, tv, s")
                 ->join("s.intervenant", "i")
                 ->join("s.volumeHoraire", 'vh')
+                ->join("s.structureEns", 'strens')
                 ->join("vh.validation", "v")
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str') // validés par la structure d'affectation
@@ -332,7 +342,8 @@ class ValidationController extends AbstractActionController implements ContextPr
                 ->andWhere("tv.code = :tv")->setParameter('tv', $typeValidation)
                 ->andWhere("str = :structure")->setParameter('structure', $this->structure) // validés par la structure d'affectation
                 ->andWhere("vh.contrat is null")
-                ->orderBy("v.histoModification", 'desc');
+                ->orderBy("v.histoModification", 'desc')
+                ->addOrderBy("strens.libelleCourt", 'asc');
 //        var_dump($qb->getQuery()->getSQL(), $qb->getQuery()->getParameter('tv'));
         $servicesValides = $serviceService->getList($qb);
         // collecte des validations correspondantes et mise en forme pour la vue

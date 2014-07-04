@@ -261,20 +261,39 @@ class ValidationController extends AbstractActionController implements ContextPr
         
         $this->em()->getFilters()->enable('historique');
         
-        // fetch des structures d'intervenation
-        $qb = $serviceStructure->initQuery()[0];
-        $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
-        $serviceService->finderByContext($qb);
-        $structures = $serviceStructure->getList($qb);
+        // la validation des services d'un vacataire se fait par chaque structure d'intervention
+        if ($this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
         
-        // collecte des validation de services pour chaque structure d'intervention
-        $this->validation = array();
-        foreach ($structures as $key => $structure) {
+            // fetch des structures d'intervenation
+            $qb = $serviceStructure->initQuery()[0];
+            $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
+            $serviceService->finderByContext($qb);
+            $structures = $serviceStructure->getList($qb);
+
+            // collecte des validations de services pour chaque structure d'intervention
+            $this->validation = array();
+            foreach ($structures as $key => $structure) {
+                $this->validation[$key] = array('validation' => null, 'structure' => $structure);
+                $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
+                $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
+                $validations = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getResult();
+                foreach ($validations as $validation) {
+                    $this->validation[$key]['validation'] = $validation;
+                }
+            }
+        }
+        
+        // la validation des services d'un permanent se fait par la structure d'affectation
+        else {
+
+            // collecte des validations de services 
+            $this->validation = array();
+            $structure = $this->intervenant->getStructure()->getParenteNiv2();
             $this->validation[$key] = array('validation' => null, 'structure' => $structure);
             $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
             $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
-            $validation = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getOneOrNullResult();
-            if ($validation) {
+            $validations = $serviceValidation->finderByStructure($structure, $qb)->getQuery()->getResult();
+            foreach ($validations as $validation) {
                 $this->validation[$key]['validation'] = $validation;
             }
         }

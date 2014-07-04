@@ -103,14 +103,14 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
             );
         }
         
-        $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
-        if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
-            $this->addStep(
-                    self::INDEX_EDITION_CONTRAT,
-                    new Step\EditionContratStep(),
-                    (new ContratEditeRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationContrat())
-            );
-        }
+//        $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
+//        if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
+//            $this->addStep(
+//                    self::INDEX_EDITION_CONTRAT,
+//                    new Step\EditionContratStep(),
+//                    (new ContratEditeRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationContrat())
+//            );
+//        }
         
 //        $this->addStep(
 //                self::INDEX_FINAL,

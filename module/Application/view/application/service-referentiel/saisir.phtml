@@ -69,24 +69,24 @@ echo $this->form()->closeTag();
     function applySelectUnicity(changedSelect, targetSelect)
     {
         // parcours des select à mettre à jour (exclusion de celui de référence par sécurité)
-        targetSelect.not(changedSelect).each(function(index, select) {
-            // parcours des options 
-            $("option", select).each(function(index, option) {
-                if (!option.value) {
-                    return true; // i.e. continue
-                }
-                // cache les items identiques à celui sélectionné dans le select de référence
-                if (option.value === changedSelect.val()) {
-                    $(option).data('from', changedSelect).hide();
-                    //console.log('hide ' + $(this).text(), $(this).data('from'));
-                }
-                // fait réapparaître les items ayant été cachés précédemment
-                else if ($(option).is(":hidden") && $(option).data('from') && $(option).data('from').is(changedSelect)) {
-                    $(option).removeData('from').show();
-                    //console.log('show ' + $(this).text(), $(this).data('from'));
-                }
-            });
-        });
+//        targetSelect.not(changedSelect).each(function(index, select) {
+//            // parcours des options 
+//            $("option", select).each(function(index, option) {
+//                if (!option.value) {
+//                    return true; // i.e. continue
+//                }
+//                // cache les items identiques à celui sélectionné dans le select de référence
+//                if (option.value === changedSelect.val()) {
+//                    $(option).data('from', changedSelect).hide();
+//                    //console.log('hide ' + $(this).text(), $(this).data('from'));
+//                }
+//                // fait réapparaître les items ayant été cachés précédemment
+//                else if ($(option).is(":hidden") && $(option).data('from') && $(option).data('from').is(changedSelect)) {
+//                    $(option).removeData('from').show();
+//                    //console.log('show ' + $(this).text(), $(this).data('from'));
+//                }
+//            });
+//        });
     }
     
     function addLigne() 

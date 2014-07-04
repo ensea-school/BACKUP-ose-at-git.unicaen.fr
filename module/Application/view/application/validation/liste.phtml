@@ -1,0 +1,43 @@
+<h2 class="page-header"><?php echo $title ?></small></h2>
+
+<?php echo $this->messenger(true) ?>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Composante d'enseignement</th>
+            <th>Validation</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($validations as $data): ?>
+        <?php 
+//        $structure  = $data['structure'];
+//        $validation = $data['validation'];
+        $structure  = $data->getStructure();
+        $validation = $data;
+        ?>
+        <tr>
+            <td><?php echo $structure ?></td>
+            <td>
+                <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
+                <a href="#" class="voir-enseignements" data-target="#validation-<?php echo $validation->getId() ?>"
+                   title="Cliquez pour voir/masquer les enseignements concernés par cette validation">Voir/masquer les enseignements concernés</a>
+            </td>
+        </tr>
+        <tr class="details-enseignements" id="validation-<?php echo $validation->getId() ?>">
+            <td colspan="2">
+                <h3>Enseignements concernés :</h3>
+                <?php echo $this->serviceListe($services[$validation->getId()])->setRenderIntervenants(false)->render(); ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<script>
+$(function() {
+    $(".details-enseignements").hide();
+    $("a.voir-enseignements").click(function() { $($(this).data('target')).toggle(); });
+});
+</script>

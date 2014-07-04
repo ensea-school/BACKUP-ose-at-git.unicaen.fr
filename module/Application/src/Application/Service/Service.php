@@ -142,7 +142,7 @@ class Service extends AbstractEntityService
         }
         elseif ($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
 //            $this->finderByStructureEns( $role->getStructure(), $qb, $alias );
-            $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
+//            $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
         }
         
         return $qb;
@@ -168,21 +168,100 @@ class Service extends AbstractEntityService
     }
 
     /**
-     * Retourne la liste des services selon l'étape donnée
+     * Retourne la liste des services dont les volumes horaires sont validés ou non.
      *
-     * @param boolean $valides 
+     * @param boolean|\Application\Entity\Db\Validation $validation <code>true</code>, <code>false</code> ou 
+     * bien une Validation précise
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByValidation($valides = true, QueryBuilder $qb = null, $alias = null )
+    public function finderByValidation($validation, QueryBuilder $qb = null, $alias = null )
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
-        if (!in_array((string)$valides, array("Application\Entity\Db\IntervenantPermanent", "Application\Entity\Db\IntervenantExterieur"))) {
-            return $qb;
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        $qb     ->addSelect('vhv')
+                ->join("$alias.volumeHoraire", 'vhv');
+                
+        if ($validation instanceof \Application\Entity\Db\Validation) {
+            $qb
+                    ->join("vhv.validation", "v")
+                    ->andWhere("v = :validation")->setParameter('validation', $validation);
         }
+        else {
+            $value = $validation ? 'is not null' : 'is null';
+            $qb     ->leftJoin("vhv.validation", 'vv')
+                    ->andWhere("vv $value");
+        }
+        
+        return $qb;
+    }
+    
+    /**
+     * Recherche par type 
+     *
+     * @param TypeValidation|string $type
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    public function finderByTypeValidation($type, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $type = $this->getServiceLocator()->get('ApplicationValidation')->normalizeTypeValidation($type);
+        
         $qb
-                ->join("$alias.intervenant", 'i2')
-                ->andWhere("i2 INSTANCE OF $valides");
+                ->join("$alias.volumeHoraire", 'tvvh')
+                ->join("tvvh.validation", "tvv")
+                ->join("tvv.typeValidation", 'tvtv')
+                ->andWhere("tvtv = :tvtv")->setParameter('tvtv', $type);
+
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services dont les volumes horaires ont été validés par une structure.
+     *
+     * @param \Application\Entity\Db\Structure $structure 
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByStructureValidation(\Application\Entity\Db\Structure $structure, QueryBuilder $qb = null, $alias = null )
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        $qb     ->addSelect("vhs, vs")
+                ->join("$alias.volumeHoraire", 'vhs')
+                ->join("vhs.validation", "vs")
+                ->andWhere("vs.structure = :structurev")->setParameter('structurev', $structure);
+        
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services dont les volumes horaires ont fait ou non l'objet d'un contrat/avenant.
+     *
+     * @param boolean|\Application\Entity\Db\Contrat $contrat <code>true</code>, <code>false</code> ou 
+     * bien un Contrat précis
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByContrat($contrat, QueryBuilder $qb = null, $alias = null )
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        $qb     ->addSelect("vhc")
+                ->join("$alias.volumeHoraire", 'vhc');
+                
+        if ($contrat instanceof \Application\Entity\Db\Contrat) {
+            $qb     ->addSelect("c")
+                    ->join("vhc.contrat", "c")
+                    ->andWhere("c = :contrat")->setParameter('contrat', $contrat);
+        }
+        else {
+            $value = $contrat ? 'is not null' : 'is null';
+            $qb->andWhere("vhc.contrat $value");
+        }
+        
         return $qb;
     }
 

@@ -1,25 +1,92 @@
-<h2 class="page-header"><?php echo $title ?></small></h2>
+<h1 class="page-header"><?php echo $title ?></small></h1>
 
-<?php echo $this->messenger(true) ?>
+<?php if (($validation = reset($validations)) && !$validation->getId()): ?>
+    <?php $this->messenger(true)->addMessage("Des enseignements à valider ont été trouvés...") ?>
+<?php endif ?>
+<?php echo $this->messenger() ?>
 
-<?php echo $this->serviceListe($services)->setRenderIntervenants(false)->render(); ?>
+<?php $formValider->prepare(); ?>
 
-<?php $form->prepare(); ?>
-<?php echo $this->form()->openTag($form); ?>
-<div class="row">
-    <div class="col-md-4">
-        <?php 
-        echo $this->formControlGroup($form->get('valide')->setAttribute('disabled', $readonly));
-        if ($form->has('dateCommissionRecherche')) {
-            echo $this->formControlGroup($form->get('dateCommissionRecherche')->setAttribute('disabled', $readonly));
-        }
-        if ($form->has('dateConseilRestreint')) {
-            echo $this->formControlGroup($form->get('dateConseilRestreint')->setAttribute('disabled', $readonly));
-        }
-        echo $this->formHidden($form->get('security'));
-        ?>
-    </div>
-</div>
-<hr />
-<?php if (!$readonly) echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
-<?php echo $this->form()->closeTag(); ?>
+<style>
+    .structure { width: 100px; }
+</style>
+
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="structure">Composante gestionnaire</th>
+            <th>Validation</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($validations as $validation): ?>
+        
+        <!-- capture -->
+        <?php $this->placeholder('enseignements')->captureStart('SET'); ?>
+        <p>
+            <strong>Enseignements concernés par la validation</strong><br />
+            <small><a title="Cliquez pour afficher/masquer les enseignements concernés par cette validation"
+                href="#" class="voir-enseignements" 
+                data-target="#validation-<?php echo $validation->getId() ?>"
+                >Afficher/masquer</a></small>
+        </p>
+        <?php $display = $validation->getId() ? 'display: none' : ''; ?>
+        <div style="<?php echo $validation->getId() ? 'display: none' : '' ?>" class="details-enseignements" 
+             id="validation-<?php echo $validation->getId() ?>">
+            <?php echo $this->serviceListe($services[$validation->getId()])->setRenderIntervenants(false)->render(); ?>
+        </div>
+        <?php $this->placeholder('enseignements')->captureEnd(); ?>
+        <!-- fin de capture -->
+        
+        <tr>
+            <td class="structure">
+                <p><?php echo $validation->getStructure() ?></p>
+            </td>
+            <td>
+                <?php if ($validation->getId()): ?>
+                    <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
+                    <?php echo $this->placeholder('enseignements') ?>
+                    <a href="<?php echo $this->url('validation/supprimer', array('validation' => $validation->getId())) ?>"
+                       class="validation-delete ajax-modal btn btn-primary" data-event="validation-delete-event">Supprimer cette validation</a>
+                <?php else: ?>
+                <?php // if ($formValider->getObject() === $validation): ?>
+                <?php echo $this->placeholder('enseignements') ?>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <?php 
+                        echo $this->form()->openTag($formValider);
+                        echo $this->formControlGroup($formValider->get('valide')->setAttribute('disabled', $readonly));
+                        if ($formValider->has('dateCommissionRecherche')) {
+                            echo $this->formControlGroup($formValider->get('dateCommissionRecherche')->setAttribute('disabled', $readonly));
+                        }
+                        if ($formValider->has('dateConseilRestreint')) {
+                            echo $this->formControlGroup($formValider->get('dateConseilRestreint')->setAttribute('disabled', $readonly));
+                        }
+                        echo $this->formHidden($formValider->get('security'));
+                        ?>
+                        <br />
+                        <?php if (!$readonly) {
+                            echo $this->formSubmit($formValider->get('submit')->setAttribute('class', 'btn btn-primary'));
+                        } ?>
+                        <?php echo $this->form()->closeTag(); ?>
+                    </div>
+                </div>
+                <?php // endif ?>
+                <?php endif ?>
+            </td>
+        </tr>
+        
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<script>
+$(function() {
+    $("body").on("validation-delete-event", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        window.location.reload();
+    });
+    $("a.voir-enseignements").click(function() { $($(this).data('target')).slideToggle(); return false; });
+});
+</script>

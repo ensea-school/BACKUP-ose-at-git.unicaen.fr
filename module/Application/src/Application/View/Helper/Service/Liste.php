@@ -20,8 +20,23 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     use ContextProviderAwareTrait;
 
     /**
-     * description
-     *
+     * @var boolean
+     */
+    protected $renderStructure = true;
+
+
+    public function getRenderStructure()
+    {
+        return $this->renderStructure;
+    }
+
+    public function setRenderStructure($renderStructure)
+    {
+        $this->renderStructure = $renderStructure;
+        return $this;
+    }
+
+    /**
      * @var boolean
      */
     protected $renderIntervenants = true;
@@ -38,16 +53,13 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $this;
     }
 
-
-
-
     /**
      * Helper entry point.
      *
      * @param Service[] $services
      * @return self
      */
-    final public function __invoke( array $services )
+    final public function __invoke($services)
     {
         $this->services = $services;
         return $this;
@@ -84,7 +96,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $out .= "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>\n";
             $colspan += 2;
         }
-        $out .= "<th title=\"Structure gestionnaire de l'enseignement\">Composante d'enseignement</th>\n";
+        if ($this->getRenderStructure()) {
+            $out .= "<th title=\"Structure gestionnaire de l'enseignement\">Composante d'enseignement</th>\n";
+        }
         $out .= "<th title=\"Formation\">Formation</th>\n";
         $out .= "<th title=\">Enseignement\">Enseignement</th>\n";
         if ($role instanceof \Application\Acl\ComposanteDbRole) {
@@ -124,7 +138,10 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $detailsUrl = $this->getView()->url('volume-horaire/default', array('action' => 'liste', 'id' => $service->getId()));
 
         $out  = '<tr id="service-'.$service->getId().'-ligne" data-url="'.$url.'">';
-        $out .= $this->getView()->serviceLigne( $service )->setRenderIntervenants($this->getRenderIntervenants())->render($details);
+        $out .= $this->getView()->serviceLigne( $service )
+                ->setRenderIntervenants($this->getRenderIntervenants())
+                ->setRenderStructure($this->getRenderStructure())
+                ->render($details);
         $out .= '</tr>';
         $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>'
                 .'<td class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-td" data-url="'.$detailsUrl.'" colspan="999">'

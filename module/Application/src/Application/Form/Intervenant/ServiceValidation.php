@@ -76,6 +76,23 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
                 'value' => "Enregistrer",
             ),
         ));
+
+        return $this;
+    }
+    
+    public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED) 
+    {
+        parent::bind($object, $flags);
+        
+        if ($object->getId()) {
+            if ($this->has($name = 'dateConseilRestreint')) {
+                $this->remove($name);
+            }
+            if ($this->has($name = 'dateCommissionRecherche')) {
+                $this->remove($name);
+            }
+            $this->get('valide')->setLabel("Décochez pour dévalider les enseignements")->setValue(true);
+        }
         
         return $this;
     }

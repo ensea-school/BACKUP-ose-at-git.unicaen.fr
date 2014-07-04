@@ -107,6 +107,36 @@ class Validation extends AbstractEntityService
 
         return $qb;
     }
+
+    /**
+     * Retourne la liste des services dont les volumes horaires sont validés ou non.
+     *
+     * @param boolean|\Application\Entity\Db\Contrat $contrat <code>true</code>, <code>false</code> ou 
+     * bien un Contrat précis
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByContrat($contrat, QueryBuilder $qb = null, $alias = null )
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        $qb     ->addSelect("vh")
+                ->join("$alias.volumeHoraire", 'vh')/*
+                ->join("vh.service", 's')
+                ->join("s.volumeHoraire", 'vh2')*/;
+                
+        if ($contrat instanceof \Application\Entity\Db\Contrat) {
+            $qb
+                    ->join("vh.contrat", "c")
+                    ->andWhere("c = :contrat")->setParameter('contrat', $contrat);
+        }
+        else {
+            $value = $contrat ? 'is not null' : 'is null';
+            $qb->andWhere("vh.contrat $value");
+        }
+        
+        return $qb;
+    }
     
     /**
      * 
@@ -156,5 +186,38 @@ class Validation extends AbstractEntityService
         }
         
         return true;
+    }
+    
+    /**
+     * Détermine si on peut supprimer une validation.
+     *
+     * @param \Application\Entity\Db\Validation $validation Validation concernée
+     * @return boolean
+     */
+    public function canDelete($validation, $runEx = false)
+    {
+        $rule = new \Application\Rule\Validation\PeutSupprimerValidationRule($validation);
+        if (!$rule->execute()) {
+            $message = "Vous ne pouvez pas supprimer la validation. ";
+            return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
+        }
+        
+        return true;
+    }
+
+    /**
+     * Supprime (historise par défaut) le service spécifié.
+     *
+     * @param \Application\Entity\Db\Validation $entity     Entité à détruire
+     * @param bool $softDelete
+     * @return self
+     */
+    public function delete($entity, $softDelete = true)
+    {
+//        foreach ($entity->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+//            $entity->removeVolumeHoraire($vh);
+//        }
+//        
+        return parent::delete($entity, $softDelete);
     }
 }

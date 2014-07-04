@@ -25,8 +25,23 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected $service;
 
     /**
-     * description
-     *
+     * @var boolean
+     */
+    protected $renderStructure = true;
+
+
+    public function getRenderStructure()
+    {
+        return $this->renderStructure;
+    }
+
+    public function setRenderStructure($renderStructure)
+    {
+        $this->renderStructure = $renderStructure;
+        return $this;
+    }
+
+    /**
      * @var boolean
      */
     protected $renderIntervenants = true;
@@ -77,8 +92,15 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
 
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-        $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeuresParTypeIntervention($this->service);
-
+//        $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeuresParTypeIntervention($this->service);
+        $heures = [];
+        foreach ($this->service->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            if (!isset($heures[$vh->getTypeIntervention()->getId()])) {
+                $heures[$vh->getTypeIntervention()->getId()] = 0;
+            }
+            $heures[$vh->getTypeIntervention()->getId()] += $vh->getHeures();
+        }
+        
         $out = '';
         if ($this->getRenderIntervenants()) {
             $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
@@ -91,7 +113,9 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             
         }
         if ($this->service->getEtablissement() === $context->getEtablissement()) {
-            $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
+            if ($this->getRenderStructure()) {
+                $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
+            }
             $out .= '<td>'.$this->renderEtape($this->service->getElementPedagogique()->getEtape())."</td>\n";
             $out .= '<td>'.$this->renderElementPedagogique($this->service->getElementPedagogique())."</td>\n";
             if ($role instanceof \Application\Acl\ComposanteDbRole) {
@@ -100,8 +124,10 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             }
         }
         else {
-            $colspan = $role instanceof \Application\Acl\ComposanteDbRole ? 5 : 3;
-            $out .= '<td colspan="' . $colspan . '">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
+            if ($this->getRenderStructure()) {
+                $colspan = $role instanceof \Application\Acl\ComposanteDbRole ? 5 : 3;
+                $out .= '<td colspan="' . $colspan . '">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
+            }
         }
         if (!$context->getAnnee()) {
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";

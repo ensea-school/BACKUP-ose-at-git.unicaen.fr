@@ -1,0 +1,10 @@
+<h2 class="page-header"><?php echo $title ?></small></h2>
+
+<?php echo $this->messenger(true) ?>
+
+<?php echo $this->validationDl($validation)->setIncludeTypeValidation(true) ?>
+
+<hr />
+
+<h3>Enseignements concernés :</h3>
+<?php echo $this->serviceListe($services)->setRenderIntervenants(false)->render(); ?>

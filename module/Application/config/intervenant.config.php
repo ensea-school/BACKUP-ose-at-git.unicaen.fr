@@ -332,16 +332,6 @@ return array(
                     'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
                 array(
-                    'controller' => 'Application\Controller\Validation',
-                    'action'     => array('dossier'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID),
-                ),
-                array(
-                    'controller' => 'Application\Controller\Validation',
-                    'action'     => array('service'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
-                ),
-                array(
                     'controller' => 'Application\Controller\Workflow',
                     'action'     => array('nav-next'),
                     'roles'      => array('user'),
@@ -354,7 +344,6 @@ return array(
             'Application\Controller\Intervenant'           => 'Application\Controller\IntervenantController',
             'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
             'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
-            'Application\Controller\Validation'            => 'Application\Controller\ValidationController',
             'Application\Controller\Workflow'              => 'Application\Controller\WorkflowController',
         ),
         'aliases' => array(
@@ -372,8 +361,6 @@ return array(
             'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
             'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
             'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
-            'ApplicationTypeValidation'        => 'Application\\Service\\TypeValidation',
-            'ApplicationValidation'            => 'Application\\Service\\Validation',
             'ApplicationWorkflowIntervenantExterieur' => 'Application\\Service\\Workflow\\WorkflowIntervenantExterieur',
             'ApplicationWorkflowIntervenantPermanent' => 'Application\\Service\\Workflow\\WorkflowIntervenantPermanent',
         ),

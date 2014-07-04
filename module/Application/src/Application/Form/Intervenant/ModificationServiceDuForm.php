@@ -50,7 +50,10 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
             'type' => 'Button',
             'name' => 'ajouter',
             'options' => array(
-                'label' => 'Ajouter',
+                'label' => '<span class="glyphicon glyphicon-plus"></span> Ajouter',
+                'label_options' => array(
+                    'disable_html_escape' => true,
+                ),
             ),
             'attributes' => array(
                 'title' => "Ajouter une modification de service dû",

@@ -127,8 +127,10 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
         $this->add( array(
             'name' => 'premierRecrutement',
             'options' => array(
-                'label' => "S'agit-il de votre 1er recrutement en qualité de vacataire à l'Université de Caen ?",
-                'value_options' => array('1' => "Oui", '0' => "Non"),
+//                'label' => "S'agit-il de votre 1er recrutement en qualité de vacataire à l'Université de Caen ?",
+//                'value_options' => array('0' => "Non", '1' => "Oui"),
+                'value_options' => array('0' => "Oui", '1' => "Non"), // ATTENTION! La logique de la question a changé !
+                'label' => "Avez-vous enseigné à l'Université de Caen depuis le 01/09/2012 ?",
                 'empty_option'  => "(Sélectionnez...)",
             ),
             'attributes' => array(

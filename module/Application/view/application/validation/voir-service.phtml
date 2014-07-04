@@ -5,7 +5,13 @@
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>Composante d'enseignement</th>
+            <th>
+                <?php if ($this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur): ?>
+                Composante d'enseignement
+                <?php else: ?>
+                Composante d'affectation
+                <?php endif; ?>
+            </th>
             <th>Validation</th>
         </tr>
     </thead>

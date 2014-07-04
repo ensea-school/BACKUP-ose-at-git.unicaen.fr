@@ -65,13 +65,19 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
             $rowArgs[]     = $helper($this->niveauElement);
         }
         if ($this->fieldset->getEtapeEnabled()) {
-            $rowTemplate[] = '<div class="col-md-3">%s</div>';
+            $rowTemplate[] = '<div class="col-md-4">%s</div>';
             $rowArgs[]     = $helper($this->etapeElement);
         }
-        $rowTemplate[] = '<div class="col-md-5">%s</div>';
-        $rowArgs[]     = $helper($this->elementElement);
 
         $html = '';
+        if ($rowTemplate) {
+            $html .= vsprintf('<div class="row">' . implode(PHP_EOL, $rowTemplate) . '</div>', $rowArgs);
+        }
+        
+        $rowTemplate = $rowArgs = array();
+        $rowTemplate[] = '<div class="col-md-8">%s</div>';
+        $rowArgs[]     = $helper($this->elementElement);
+        
         $html .= vsprintf('<div class="row">' . implode(PHP_EOL, $rowTemplate) . '</div>', $rowArgs);
         
         $html .= '<script>' . $this->getJs() . '</script>';

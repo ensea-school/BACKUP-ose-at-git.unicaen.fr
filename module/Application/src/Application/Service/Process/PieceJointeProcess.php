@@ -301,10 +301,18 @@ class PieceJointeProcess extends AbstractService
      */
     public function getRolesDestinatairesPiecesJointes()
     {
-        $qb = $this->getServiceRole()->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RA);
-        $qb = $this->getServiceRole()->finderByStructure($this->getIntervenant()->getStructure(), $qb);
+        $service = $this->getServiceRole();
+        $structure = $this->getIntervenant()->getStructure();
         
-        return $this->getServiceRole()->getList($qb);
+        do {
+            $qb = $service->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RA);
+            $service->finderByStructure($structure, $qb);
+            $roles = $service->getList($qb);
+            $structure = $structure->getParente();
+        }
+        while (!count($roles) && $structure);
+        
+        return $roles;
     }
     
     /**

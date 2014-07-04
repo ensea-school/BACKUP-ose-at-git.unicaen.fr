@@ -192,6 +192,8 @@ $(function() {
         url = url.replace(pattern, "$1=");
         return url;
     }
+            
+    ele.wrap('<div class="input-group"/>').after('<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>');
 });
 
 function updateSelectOptions(select, options)

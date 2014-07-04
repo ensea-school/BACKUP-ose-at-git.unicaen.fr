@@ -108,7 +108,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
         foreach( $typesIntervention as $ti ){
-            $res .= '        <th title="'.$ti->getLibelle().'">'.$ti.'</th>'."\n";
+            $res .= '        <th><abbr title="'.$ti->getLibelle().'">'.$ti.'</abbr></th>'."\n";
         }
         $res .= '</tr>'."\n";
         $res .= '</thead>'."\n";

@@ -281,12 +281,12 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => array('search-structures', 'search-niveaux'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => array('index'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 /**
                  * Etape
@@ -294,12 +294,12 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => array('voir', 'apercevoir', 'search'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => array('ajouter', 'modifier', 'supprimer'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 /**
                  * ElementPedagogique
@@ -307,12 +307,12 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => array('voir', 'apercevoir', 'search', 'getPeriode'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => array('ajouter', 'modifier', 'supprimer'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 /**
                  * Modulateur
@@ -320,7 +320,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Modulateur',
                     'action'     => array('saisir'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
             ),
         ),

@@ -44,9 +44,16 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
     {
         if (null === $form) {
             return $this;
+        }else{
+            $this->form = $form;
         }
 
-        return $this->render($form);
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->render();
     }
 
     /**
@@ -55,13 +62,13 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
      * @param Saisie $form
      * @return string
      */
-    public function render(Saisie $form)
+    public function render()
     {
-        $fservice = $form->get('service');
+        $fservice = $this->form->get('service');
 
-        $form->prepare();
+        $this->form->prepare();
 
-        $res = $this->getView()->form()->openTag($form);
+        $res = $this->getView()->form()->openTag($this->form);
         if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
         }
@@ -75,12 +82,12 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
         }
         foreach( $this->getPeriodes() as $periode ){
             $res .= $this->getView()->volumeHoraireSaisieMultipleFieldset(
-                                            $form->get($periode->getCode()),
+                                            $this->form->get($periode->getCode()),
                                             $this->getServiceLocator()->getServiceLocator()->get('applicationService')->getPeriode($fservice->getObject())
                     );
         }
         $res .= '<br />';
-        $res .= $this->getView()->formRow($form->get('submit'));
+        $res .= $this->getView()->formRow($this->form->get('submit'));
         $res .= $this->getView()->formHidden($fservice->get('id'));
         $res .= $this->getView()->form()->closeTag().'<br />';
         return $res;

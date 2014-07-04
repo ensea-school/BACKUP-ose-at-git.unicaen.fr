@@ -59,16 +59,28 @@ return array(
                             ),
                         ),
                     ),
-                    'voirLigne' => array(
+                    'rafraichir-ligne' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/voirLigne[/:id]',
+                            'route'    => '/rafraichir-ligne/:service/:typeVolumeHoraire',
                             'constraints' => array(
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
+                                'service'=> '[0-9]*',
+                                'typeVolumeHoraire' => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action' => 'voirLigne',
+                                'action' => 'rafraichir-ligne',
+                            ),
+                        ),
+                    ),
+                    'intervenant' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/intervenant/:intervenant',
+                            'constraints' => array(
+                                'intervenant'     => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'intervenant',
                             ),
                         ),
                     ),
@@ -82,18 +94,6 @@ return array(
                             ),
                             'defaults' => array(
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                    'intervenant' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/intervenant/:intervenant',
-                            'constraints' => array(
-                                'intervenant'     => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'action' => 'intervenant',
                             ),
                         ),
                     ),
@@ -178,16 +178,16 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'voirLigne'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
+                    'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'rafraichir-ligne'),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
                 array(
                     'controller' => 'Application\Controller\Service',
                     'action' => array('index', 'resume','resume-refresh','filtres'),
-                    'roles' => array(ComposanteRole::ROLE_ID)),
+                    'roles' => array(ComposanteRole::ROLE_ID,'Administrateur')),
                 array( 
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
             ),
         ),
     ),

@@ -38,30 +38,19 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
      */
     public function hydrate(array $data, $object)
     {
-        $em = $this->getEntityManager();
+        $typeVolumeHoraire = $this->getEntityManager()->find('Application\Entity\Db\TypeVolumeHoraire', (int)$data['type-volume-horaire']);
+        $periode = $this->getEntityManager()->find('Application\Entity\Db\Periode', (int)$data['periode']);
 
-        $service = isset($data['service']) ? $em->getRepository('Application\Entity\Db\Service')->find( $data['service'] ) : null;
-        $periode = isset($data['periode']) ? $em->getRepository('Application\Entity\Db\Periode')->find( $data['periode'] ) : null;
-
+        $object->setTypeVolumeHoraire($typeVolumeHoraire);
+        $object->setPeriode($periode);
         foreach( $this->getTypesInterventions() as $typeIntervention ){
+            $object->setTypeIntervention($typeIntervention);
             if (isset($data[$typeIntervention->getCode()])){
                 $heures = (int)$data[$typeIntervention->getCode()];
             }else{
                 $heures = 0;
             }
-
-            $volumeHoraire = $object->getWithTypeIntervention($typeIntervention);
-            if ($heures && $volumeHoraire){
-                $volumeHoraire->setHeures($heures);
-            }elseif( $heures && ! $volumeHoraire){
-                $volumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire')->newEntity();
-                $volumeHoraire->setPeriode($periode);
-                $volumeHoraire->setTypeIntervention($typeIntervention);
-                $volumeHoraire->setHeures($heures);
-                $object->add($volumeHoraire);
-            }elseif( ! $heures && $volumeHoraire ){
-                $object->remove($volumeHoraire);
-            }
+            $object->setHeures($heures, false);
         }
         return $object;
     }
@@ -74,13 +63,15 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
      */
     public function extract($object)
     {
+        $vhl = $object->getChild();
         $data = array(
+            'type-volume-horaire' => $object->getTypeVolumeHoraire() ? $object->getTypeVolumeHoraire()->getId() : null,
             'service' => $object->getService() ? $object->getService()->getId() : null,
             'periode' => $object->getPeriode() ? $object->getPeriode()->getId() : null,
         );
-
-        foreach( $object->get() as $volumeHoraire ){
-            $data[$volumeHoraire->getTypeIntervention()->getCode()] = $volumeHoraire->getHeures();
+        foreach( $this->getTypesInterventions() as $typeIntervention ){
+            $vhl->setTypeIntervention($typeIntervention);
+            $data[$typeIntervention->getCode()] = $vhl->getHeures();
         }
         return $data;
     }

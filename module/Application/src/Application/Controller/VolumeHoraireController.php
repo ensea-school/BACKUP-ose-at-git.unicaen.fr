@@ -38,55 +38,60 @@ class VolumeHoraireController extends AbstractActionController
 
     public function listeAction()
     {
-        if (!($serviceId = (int)$this->params()->fromRoute('id'))) {
-            throw new LogicException("Aucun identifiant de service spécifié.");
-        }
-        if (!($service = $this->getServiceLocator()->get('ApplicationService')->getRepo()->find($serviceId))) {
-            throw new RuntimeException("Service '$serviceId' spécifié introuvable.");
-        }
+        $service = $this->context()->serviceFromRoute('id');
+        if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
-        $volumeHoraires = $service->getVolumeHoraire();
-        return compact('service','volumeHoraires');
+        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
+
+        if ($typeVolumeHoraire) $service->setTypeVolumehoraire( $typeVolumeHoraire );
+        $volumeHoraireListe = $service->getVolumeHoraireListe();
+        return compact('volumeHoraireListe');
     }
 
     public function saisieAction()
     {
-        $id = (int)$this->params()->fromRoute('id');
-
-        if ($id){
-            $entity = $this->getServiceVolumeHoraire()->getRepo()->find($id);
+        $service            = $this->context()->serviceFromRoute();
+        $typeVolumehoraire  = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
+        $periode            = $this->context()->periodeFromQueryPost();
+        $typeIntervention   = $this->context()->typeInterventionFromQueryPost('type-intervention');
+        $errors = array();
+        if ($this->getServiceService()->canHaveMotifNonPaiement($service)){
+            $tousMotifsNonPaiement = $this->params()->fromQuery('tous-motifs-non-paiement');
+            if ($tousMotifsNonPaiement == '1'){
+                $motifNonPaiement   = false;
+            }else{
+                $motifNonPaiement   = $this->context()->motifNonPaiementFromQueryPost('motif-non-paiement');
+            }
+            $ancienMotifNonPaiement = $this->context()->motifNonPaiementFromQueryPost('ancien-motif-non-paiement', $motifNonPaiement);
         }else{
-            $entity = $this->getServiceVolumeHoraire()->newEntity();
-            $entity->setValiditeDebut(new \DateTime);
-            $entity->setService( $this->context()->serviceFromQueryPost() );
-            $entity->setPeriode( $this->context()->periodeFromQueryPost() );
-            $entity->setMotifNonPaiement( $this->context()->motifNonPaiementFromQueryPost() );
-            $entity->setTypeIntervention( $this->context()->typeInterventionFromQueryPost() );
+            $motifNonPaiement   = false;
+            $ancienMotifNonPaiement = false;
         }
+
+
+
+        /* @var $service \Application\Entity\Db\Service */
+        $service->setTypeVolumeHoraire( $typeVolumehoraire );
+        $volumeHoraireList = $service->getVolumeHoraireListe($periode, $typeIntervention);
+        $volumeHoraireList->setMotifNonPaiement($motifNonPaiement);
 
         $form = $this->getForm();
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
 
         $request = $this->getRequest();
         if ($request->isPost()){
-            $post = $request->getPost();
-
-            $heures = (float)$post['heures'];
-            if (0 == $heures){ // plus d'heures = suppression du volume horaire
-                $entity->setHistoDestruction (new \DateTime);
-            }else{
-                $entity->setMotifNonPaiement( $this->context()->motifNonPaiementFromPost() );
-                $entity->setHeures( $heures );
+            $heures = (float)$request->getPost()['heures'];
+            try{
+                $volumeHoraireList->setHeures($heures, $motifNonPaiement, $ancienMotifNonPaiement);
+            }catch(\Exception $e){
+                $errors[] = $e->getMessage();
             }
         }
-        $form->bind( $entity );
-        $errors = array();
+        $form->bind( $volumeHoraireList );
         if ($request->isPost()){
             if ($form->isValid()){
                 try{
-                    $this->em()->persist($entity);
-                    $this->em()->flush();
-                    $form->get('id')->setValue( $entity->getId() ); // transmet le nouvel ID
+                    $this->getServiceService()->save($service);
                 }catch(\Exception $e){
                     $e = DbException::translate($e);
                     $errors[] = $e->getMessage();
@@ -100,7 +105,7 @@ class VolumeHoraireController extends AbstractActionController
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/volume-horaire/saisie')
-                ->setVariables(compact('form', 'errors'));
+                ->setVariables(compact('form', 'errors', 'ancienMotifNonPaiement'));
         if ($terminal) {
             return $this->popoverInnerViewModel($viewModel, "Saisie d'heures d'enseignement", false);
         }
@@ -115,5 +120,13 @@ class VolumeHoraireController extends AbstractActionController
     protected function getForm()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('VolumeHoraireSaisie');
+    }
+
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->get('applicationService');
     }
 }

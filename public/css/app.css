@@ -19,6 +19,14 @@
 
 
 /* Services */
+table.service {
+    margin-bottom: 0px;
+}
+
+table.service table.volume-horaire {
+    margin-bottom: 0px;
+}
+
 table.service td.volume-horaire {
     padding-left:10em;
 }

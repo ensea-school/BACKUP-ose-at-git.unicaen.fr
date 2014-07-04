@@ -8,6 +8,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Application\Entity\Db\TypeVolumeHoraire;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
@@ -51,6 +52,9 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     final public function __invoke( Service $service )
     {
+        if (! $service->getTypeVolumeHoraire() instanceof TypeVolumeHoraire){
+            throw new \Common\Exception\LogicException('Le type de volume horaire doit être précisé au niveau du service');
+        }
         $this->service = $service;
         return $this;
     }
@@ -66,6 +70,24 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     }
 
     /**
+     * @return string
+     */
+    public function getRefreshUrl()
+    {
+        $url = $this->getView()->url(
+                'service/rafraichir-ligne',
+                [
+                    'service' => $this->service->getId(),
+                    'typeVolumeHoraire' => $this->service->getTypeVolumehoraire()->getId()
+                ],
+                ['query' => [
+                    'only-content' => 1,
+                    'render-intervenants' => $this->getRenderIntervenants(),
+                ]]);
+        return $url;
+    }
+
+    /**
      * Génère le code HTML.
      *
      * @param boolean $details
@@ -75,9 +97,15 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         $context = $this->getContextProvider()->getGlobalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $vhl     = $this->service->getVolumeHoraireListe();
 
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-        $heures = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getTotalHeuresParTypeIntervention($this->service);
+        $serviceService = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService');
+
+        $periode = $serviceService->getPeriode( $this->service );
+        if ($periode){
+            $vhl->setPeriode($periode);
+        }
 
         $out = '';
         if ($this->getRenderIntervenants()) {
@@ -88,7 +116,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             else {
                 $out .= "<td>&nbsp;</td>\n";
             }
-            
+
         }
         if ($this->service->getEtablissement() === $context->getEtablissement()) {
             $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
@@ -107,7 +135,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";
         }
         foreach( $typesIntervention as $ti ){
-            $out .= $this->renderTypeIntervention( $ti, $heures );
+            $out .= $this->renderTypeIntervention( $vhl->setTypeIntervention($ti) );
         }
 
         $out .= $this->renderModifier();
@@ -178,14 +206,13 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $out;
     }
 
-    protected function renderTypeIntervention( \Application\Entity\Db\TypeIntervention $typeIntervention, $heures )
+    protected function renderTypeIntervention( \Application\Entity\VolumeHoraireListe $liste )
     {
-        $out = '<td class=\"heures\" id="service-'.$this->service->getId().'-ti-'.$typeIntervention->getId().'">'
-                   .(array_key_exists($typeIntervention->getId(),$heures)
-                        ? \UnicaenApp\Util::formattedFloat($heures[$typeIntervention->getId()], \NumberFormatter::DECIMAL, -1)
-                        : ''
-                    )
-                   ."</td>\n";
+        $liste = $liste->setMotifNonPaiement(false);
+        $out = '<td class="heures" style="text-align:right" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
+        //$out .= $this->getView()->volumeHoraireListe($liste)->renderHeures($liste);
+        $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
+        $out .= "</td>\n";
         return $out;
     }
 

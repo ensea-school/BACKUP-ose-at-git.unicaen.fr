@@ -162,7 +162,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
-     *
+
      * @return array
      */
     public function getInputFilterSpecification(){

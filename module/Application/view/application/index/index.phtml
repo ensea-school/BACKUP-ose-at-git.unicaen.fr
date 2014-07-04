@@ -14,7 +14,7 @@
                 $message = null;
             }
             elseif ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
-                $message = "L'application sera ouverte du ... au ...";
+                $message = "L'application sera ouverte du lundi 7 juillet au vendredi 17 octobre 2014.";
             }
             $wf    = $this->workflow($intervenant, $role)->getWorkflow();
             $step  = $wf->getCurrentStep() ?: $wf->getLastStep(); /* @var $wf \Application\Service\Workflow\WorkflowIntervenantExterieur */

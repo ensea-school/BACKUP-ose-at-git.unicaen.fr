@@ -309,32 +309,32 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('index', 'apercevoir', 'feuille-de-route'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir', 'choisir', 'rechercher', 'search'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir-heures-comp'),
-                    'roles'      => array(ROLE_ID_DRH),
+                    'roles'      => array(ROLE_ID_DRH,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => array('voir', 'modifier', 'pieces-jointes'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\ModificationServiceDu',
                     'action'     => array('saisir'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\Workflow',
                     'action'     => array('nav-next'),
-                    'roles'      => array('user'),
+                    'roles'      => array('user','Administrateur'),
                 ),
             ),
         ),

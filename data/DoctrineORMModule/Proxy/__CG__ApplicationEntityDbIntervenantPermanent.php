@@ -64,10 +64,10 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
+            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
         }
 
-        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
+        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
     }
 
     /**
@@ -1000,6 +1000,50 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCivilite', array());
 
         return parent::getCivilite();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setBIC($BIC = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBIC', array($BIC));
+
+        return parent::setBIC($BIC);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBIC()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBIC', array());
+
+        return parent::getBIC();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIBAN($IBAN = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIBAN', array($IBAN));
+
+        return parent::setIBAN($IBAN);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIBAN()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIBAN', array());
+
+        return parent::getIBAN();
     }
 
     /**

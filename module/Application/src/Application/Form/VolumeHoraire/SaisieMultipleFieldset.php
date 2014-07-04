@@ -45,7 +45,8 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
             $this->add(array(
                 'name'       => $typeIntervention->getCode(),
                 'options'    => array(
-                    'label' => $typeIntervention.' :',
+                    'label' => '<abbr title="'.$typeIntervention.'">'.$typeIntervention->getCode().'</abbr> :',
+                    'label_options' => ['disable_html_escape' => true]
                 ),
                 'attributes' => array(
                     'title' => $typeIntervention->getLibelle(),
@@ -55,6 +56,7 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
             ));
 
         }
+        $this->add( new Hidden('type-volume-horaire') );
         $this->add( new Hidden('service') );
         $this->add( new Hidden('periode') );
     }

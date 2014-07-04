@@ -19,7 +19,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
 {
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
-    
+
     /**
      * 
      */
@@ -49,7 +49,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
         if ($role instanceof \Application\Acl\DbRole) {
 
             $this->add(array(
-                'name' => 'motifNonPaiement',
+                'name' => 'motif-non-paiement',
                 'options'    => array(
                     'label' => "Motif de non paiement :",
                 ),
@@ -67,13 +67,13 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
                 $motifsNonPaiement[$id] = (string)$motifNonPaiement;
             }
             $motifsNonPaiement[0] = 'Aucun motif : paiement prévu';
-            $this->get('motifNonPaiement')->setValueOptions( $motifsNonPaiement );
+            $this->get('motif-non-paiement')->setValueOptions( $motifsNonPaiement );
         }
-        
-        $this->add( new Hidden('id') );
+
         $this->add( new Hidden('service') );
         $this->add( new Hidden('periode') );
-        $this->add( new Hidden('typeIntervention') );
+        $this->add( new Hidden('type-volume-horaire') );
+        $this->add( new Hidden('type-intervention') );
 
         $this->add(array(
             'name' => 'submit',
@@ -98,20 +98,19 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
         ));
     }
 
-    /* Associe une entity VolumeHoraire au formulaire */
+    /* Associe une entity VolumeHoraireList au formulaire */
     public function bind( $object, $flags=17)
     {
-        /* @var $object \Application\Entity\Db\VolumeHoraire */
-        $data = array(
-            'id'               => $object->getId(),
-            'heures'           => $object->getHeures(),
-            'motifNonPaiement' => $object->getMotifNonPaiement() ? $object->getMotifNonPaiement()->getId() : 0,
-            'service'          => $object->getService() ? $object->getService()->getId() : null,
-            'periode'          => $object->getPeriode() ? $object->getPeriode()->getId() : 0,
-            'typeIntervention' => $object->getTypeIntervention() ? $object->getTypeIntervention()->getId() : null,
-        );
-        if ($object->getService()->getIntervenant() instanceof \Application\Entity\Db\IntervenantExterieur){
-            $this->remove('motifNonPaiement'); // pas de motif de non paiement pour les extérieurs
+        /* @var $object \Application\Entity\VolumeHoraireListe */
+
+        $data = $object->filtersToArray();
+        $data['service'] = $object->getService()->getId();
+        $data['heures'] = $object->getHeures();
+
+        if (! $this->getServiceLocator()->getServiceLocator()->get('applicationService')->canHaveMotifNonPaiement($object->getService())){
+            $this->remove('motif-non-paiement');
+        }else{
+            $data['motif-non-paiement'] = $object->getMotifNonPaiement() ? $object->getMotifNonPaiement()->getId() : 0;
         }
         $this->setData($data);
     }
@@ -125,7 +124,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
     public function getInputFilterSpecification()
     {
         return array(
-            'motifNonPaiement' => array(
+            'motif-non-paiement' => array(
                 'required' => false
             ),
             'periode' => array(

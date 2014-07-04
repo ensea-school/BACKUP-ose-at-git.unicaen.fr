@@ -58,6 +58,7 @@ class SaisieMultipleFieldset extends AbstractHelper implements ServiceLocatorAwa
     {
         $res = $this->getView()->formHidden($fieldset->get('service'));
         $res .= $this->getView()->formHidden($fieldset->get('periode'));
+        $res .= $this->getView()->formHidden($fieldset->get('type-volume-horaire'));
 
         $visible = (($periode === $fieldset->getObject()->getPeriode()) || (! $periode));
 

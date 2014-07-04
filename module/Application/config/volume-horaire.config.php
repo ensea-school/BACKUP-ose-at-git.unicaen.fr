@@ -20,18 +20,6 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'modifier' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/modifier/:id',
-                            'constraints' => array(
-                                'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'action' => 'modifier',
-                            ),
-                        ),
-                    ),
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -42,6 +30,30 @@ return array(
                             ),
                             'defaults' => array(
                                 'action' => 'index',
+                            ),
+                        ),
+                    ),
+                    'saisie' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/saisie/:service',
+                            'constraints' => array(
+                                'service' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'saisie',
+                            ),
+                        ),
+                    ),
+                    'modifier' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/modifier/:id',
+                            'constraints' => array(
+                                'id' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'modifier',
                             ),
                         ),
                     ),

@@ -2,8 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
 use Application\Entity\VolumeHoraireListe;
+use Application\Entity\Db\Periode;
+use Application\Entity\Db\TypeIntervention;
+use Application\Entity\Db\TypeVolumeHoraire;
 
 /**
  * Service
@@ -91,14 +93,16 @@ class Service implements HistoriqueAwareInterface
     protected $annee;
 
     /**
-     * liste de volumes horaires
+     * Type de volume horaire
      *
-     * @var VolumeHoraireListe
+     * @var TypeVolumeHoraire
      */
-    protected $volumeHoraireListes = array();
+    protected $typeVolumeHoraire;
 
 
-        /**
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -266,11 +270,21 @@ class Service implements HistoriqueAwareInterface
     }
 
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Periode $periode
+     * @param TypeIntervention $typeIntervention
      * @return VolumeHoraireListe
      */
-    public function getVolumeHoraireListe( Periode $periode )
+    public function getVolumeHoraireListe( Periode $periode=null, TypeIntervention $typeIntervention=null )
+    {
+        $volumeHoraireListe = new VolumeHoraireListe( $this );
+        if ($this->getTypeVolumeHoraire()) $volumeHoraireListe->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
+        if ($periode)           $volumeHoraireListe->setPeriode($periode);
+        if ($typeIntervention)  $volumeHoraireListe->setTypeIntervention($typeIntervention);
+        return $volumeHoraireListe;
+    }
+
+    public function getVolumeHoraireListeOLD( Periode $periode )
     {
         if (! isset($this->volumeHoraireListes[$periode->getCode()])){
             $this->volumeHoraireListes[$periode->getCode()] = new VolumeHoraireListe( $this, $periode );
@@ -488,4 +502,26 @@ class Service implements HistoriqueAwareInterface
     {
         return $this->annee;
     }
+
+    /**
+     *
+     * @return TypeVolumeHoraire
+     */
+    public function getTypeVolumeHoraire()
+    {
+        return $this->typeVolumeHoraire;
+    }
+
+    /**
+     *
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @return self
+     */
+    public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire)
+    {
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+        return $this;
+    }
+
+
 }

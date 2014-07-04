@@ -105,12 +105,19 @@ function Service( id ) {
     }
 
     this.onAfterAdd = function(){
-        $.get( Service.voirLigneUrl+"/"+this.id+'?only-content=0&details=1&render-intervenants='+Service.getRenderIntervenants(), function( data ) {
+        var url = Url("service/rafraichir-ligne/"+this.id+"/"+Service.typeVolumeHoraireId, {
+            'only-content': 0,
+            'details': 1,
+            'render-intervenants': Service.getRenderIntervenants()
+        });
+        $.get( url, function( data ) {
             $( "#service-"+this.id+"-ligne" ).refresh();
             $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
             $( "#service-resume" ).refresh(); // Si on est dans le résumé
             $('#services > tbody:last').append(data);
+            console.log(data);
             Service.refreshFiltres();
+            Service.refreshTotaux();
             Service.refreshWorkflowNavigation();
         });
     }
@@ -120,6 +127,7 @@ function Service( id ) {
         $( "#service-"+this.id+"-ligne" ).refresh( {details:details} );
         $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
         Service.refreshFiltres();
+        Service.refreshTotaux();
         Service.refreshWorkflowNavigation();
     }
 
@@ -127,6 +135,7 @@ function Service( id ) {
         $('#service-'+this.id+'-volume-horaire-tr').remove();
         $( "#service-"+this.id+"-ligne" ).remove();
         Service.refreshFiltres();
+        Service.refreshTotaux();
         Service.refreshWorkflowNavigation();
     }
 
@@ -138,8 +147,8 @@ Service.get = function( id ){
     return Service.services[id];
 }
 
-Service.init = function( voirLigneUrl ){
-    Service.voirLigneUrl = voirLigneUrl;
+Service.init = function( typeVolumeHoraireId ){
+    Service.typeVolumeHoraireId = typeVolumeHoraireId;
     Service.renderIntervenants = 1; // par défaut
 
     $("body").on("service-modify-message", function(event, data) {
@@ -223,7 +232,21 @@ Service.hideAllDetails = function(){
 }
 
 Service.refreshFiltres = function(){
-    $( "#filtres" ).refresh();
+    if ($( "#filtres" ).length > 0){
+        $( "#filtres" ).refresh();
+    }
+}
+
+Service.refreshTotaux = function(){
+    $.getJSON( $("#service_totaux").data('url'), function( data ) {
+        for (typeHeure in data){
+            if ('total_general' === typeHeure){
+                $("#service_total_general td#" + typeHeure).html(data[typeHeure]);
+            }else{
+                $("#service_totaux td#" + typeHeure).html(data[typeHeure]);
+            }
+        }
+    });
 }
 
 Service.setRenderIntervenants = function( renderIntervenants ){
@@ -273,6 +296,7 @@ VolumeHoraire.init = function(){
         event.a.popover('hide');
         $("#service-"+event.a.data('service')+"-volume-horaire-td").refresh();
         $( "#service-"+event.a.data('service')+"-ligne" ).refresh();
+        Service.refreshTotaux();
     });
 }
 

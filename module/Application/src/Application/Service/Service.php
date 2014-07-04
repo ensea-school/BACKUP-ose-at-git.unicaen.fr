@@ -6,6 +6,8 @@ use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 
 /**
  * Description of Service
@@ -284,7 +286,8 @@ class Service extends AbstractEntityService
             $whereFilter[] = 'STRUCTURE_ENS_ID = ' . $filter->structureEns->getId();
         }
         if (isset($filter->statutInterv)) {
-            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . \Application\Entity\Db\TypeIntervenant::$classToCode[$filter->statutInterv] . "'";
+            $e = new TypeIntervenantEntity();
+            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . $e->classToCode[$filter->statutInterv] . "'";
         }
         if (isset($filter->etape)) {
             $whereFilter[] = 'ETAPE_ID = ' . $filter->etape->getId();
@@ -341,7 +344,8 @@ EOS;
             $whereFilter[] = 'STRUCTURE_ENS_ID = ' . $filter->structureEns->getId();
         }
         if (isset($filter->statutInterv)) {
-            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . \Application\Entity\Db\TypeIntervenant::$classToCode[$filter->statutInterv] . "'";
+            $e = new TypeIntervenantEntity();
+            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . $e->classToCode[$filter->statutInterv] . "'";
         }
         $whereFilter = $whereFilter ? ' AND ' . implode(' AND ', $whereFilter) : null;
         
@@ -389,36 +393,6 @@ EOS;
         });
         
         return $data;
-    }
-    
-    /**
-     * Retourne, par ID du type d'intervention, la liste des heures saisies pour le service donné
-     *
-     * @param integer|ServiceEntity|null $service
-     * @return array
-     */
-    public function getTotalHeuresParTypeIntervention($service = null)
-    {
-        if ($service instanceof ServiceEntity) $service = $service->getId();
-
-        $sql = 'SELECT * FROM V_SERVICE_HEURES';
-        if ($service) $sql .= ' WHERE service_id = '.(int)$service;
-
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-
-        $result = array();
-        while($r = $stmt->fetch()){
-            $result[(int)$r['SERVICE_ID']][(int)$r['TYPE_INTERVENTION_ID']] = (float)$r['HEURES'];
-        }
-
-        if ($service){
-            if (array_key_exists( $service, $result)){
-                return $result[$service];
-            }else{
-                return array();
-            }
-        }
-        return $result;
     }
     
     /**
@@ -489,6 +463,34 @@ EOS;
     }
 
     /**
+     *
+     * @param \Application\Entity\Db\Service $service
+     * @return \Application\Entity\Db\Periode[]
+     */
+    public function getPeriodes(ServiceEntity $service)
+    {
+        $p = $this->getPeriode($service);
+        if (null === $p){
+            $periodeService = $this->getServiceLocator()->get('applicationPeriode'); /* @var $periodeService Periode */
+            // Pas de période donc toutes les périodes sont autorisées
+            return $periodeService->getList( $periodeService->finderByEnseignement() );
+        }else{
+            return [$p->getId() => $p];
+        }
+    }
+
+    public function canHaveMotifNonPaiement(ServiceEntity $service, $runEx = false)
+    {
+        if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantExterieur){
+            return $this->cannotDoThat("Un intervenant vacataire ne peut pas avoir de motif de non paiement", $runEx);
+        }
+        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+            return $this->cannotDoThat("Les intervenants n'ont pas le droit de visualiser ou modifier les motifs de non paiement", $runEx);
+        }
+        return true;
+    }
+
+    /**
      * Détermine si on peut ajouter un nouveau service ou non
      *
      * @param \Application\Entity\Db\Intervenant $intervenant Eventuel intervenant concerné
@@ -518,5 +520,17 @@ EOS;
         }
         
         return true;
+    }
+
+    /**
+     *
+     * @param ServiceEntity[] $services
+     * @param TypeVolumeHoraireEntity $typeVolumehoraire
+     */
+    public function setTypeVolumehoraire($services, TypeVolumeHoraireEntity $typeVolumeHoraire)
+    {
+        foreach( $services as $service ){
+            $service->setTypeVolumeHoraire($typeVolumeHoraire);
+        }
     }
 }

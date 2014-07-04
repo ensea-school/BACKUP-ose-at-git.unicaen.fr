@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 
 /**
  * Description of TypeVolumeHoraire
@@ -48,6 +49,36 @@ class TypeVolumeHoraire extends AbstractEntityService
                 ->setParameter('code', $code);
 
         return $qb;
+    }
+
+    /**
+     * Retourne le type de volume horaire "Prévu"
+     *
+     * @return TypeVolumeHoraireEntity
+     */
+    public function getPrevu()
+    {
+        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_PREVU));
+    }
+
+    /**
+     * Retourne le type de volume horaire "Réel"
+     *
+     * @return TypeVolumeHoraireEntity
+     */
+    public function getReel()
+    {
+        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_REEL));
+    }
+
+    /**
+     * Retourne le type de volume horaire "Payé"
+     *
+     * @return TypeVolumeHoraireEntity
+     */
+    public function getPaye()
+    {
+        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_PAYE));
     }
 
     /**

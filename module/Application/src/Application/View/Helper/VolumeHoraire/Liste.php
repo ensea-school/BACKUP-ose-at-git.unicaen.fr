@@ -3,13 +3,11 @@
 namespace Application\View\Helper\VolumeHoraire;
 
 use Zend\View\Helper\AbstractHelper;
-use Doctrine\ORM\PersistentCollection;
+use Application\Entity\VolumeHoraireListe;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Entity\Db\VolumeHoraire;
-use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervention;
 
 
@@ -20,23 +18,13 @@ use Application\Entity\Db\TypeIntervention;
  */
 class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
-
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
 
     /**
-     * Données formattées
-     *
-     * @var VolumeHoraire[][][]
+     * @var VolumeHoraireListe
      */
-    protected $data = array();
-
-    /**
-     * Service
-     *
-     * @var Service
-     */
-    protected $service;
+    protected $volumeHoraireListe;
 
     /**
      * Liste des types d'intervention
@@ -51,15 +39,13 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     /**
      * Helper entry point.
      *
-     * @param VolumeHoraire[]|PersistentCollection $volumeHoraires
-     * @param Service $service
+     * @param VolumeHoraireListe $volumeHoraireListe
      * @return self
      */
-    final public function __invoke( $volumeHoraires, Service $service )
+    final public function __invoke( VolumeHoraireListe $volumeHoraireListe )
     {
         /* Initialisation */
-        $this->setService( $service );
-        $this->setVolumeHoraires( $volumeHoraires );
+        $this->setVolumeHoraireListe( $volumeHoraireListe );
         return $this;
     }
 
@@ -73,34 +59,57 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $this->render();
     }
 
+    public function getRefreshUrl()
+    {
+        $url = $this->getView()->url(
+                'volume-horaire/default',
+                [
+                    'action' => 'liste', 'id' => $this->getVolumeHoraireListe()->getService()->getId()
+                ], ['query' => [
+                    'type-volume-horaire' => $this->getVolumeHoraireListe()->getTypeVolumehoraire()->getId(),
+                ]]);
+        return $url;
+    }
+
     /**
      * Génère le code HTML.
      *
      * @return string
      */
     public function render(){
-        $out = '<table class="table table-condensed volume-horaire">';
+        $serviceService = $this->getServiceLocator()->getServiceLocator()->get('applicationService');
+
+        $hasMotifNonPaiement = $this->getServiceLocator()->getServiceLocator()->get('applicationService')->canHaveMotifNonPaiement($this->getVolumeHoraireListe()->getService());
+
+        $out = '<table class="table table-condensed table-bordered volume-horaire">';
         $out .= '<tr>';
         $out .= "<th style=\"width:10%\">Période</th>\n";
-        foreach( $this->typesIntervention as $ti ){
-            $out .= "<th style=\"width:8%\" title=\"".$ti->getLibelle()."\">".$ti->getCode()."</th>\n";
+        foreach( $this->getTypesInterventions() as $ti ){
+            $out .= "<th style=\"width:1%\"><abbr title=\"".$ti->getLibelle()."\">".$ti->getCode()."</abbr></th>\n";
         }
-        if ($this->mustRenderMotifNonPaiement()){
+        if ($hasMotifNonPaiement){
             $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
         }
         $out .= "</tr>\n";
-        foreach( $this->data as $pid => $motifsNonPaiement ){
-            $periode = $motifsNonPaiement['periode'];
-            unset($motifsNonPaiement['periode']);
-            foreach( $motifsNonPaiement as $mid => $typesIntervention ){
-                $motifNonPaiement = isset($typesIntervention['motifNonPaiement']) ? $typesIntervention['motifNonPaiement'] : null;
-                $mid = $motifNonPaiement ? $motifNonPaiement->getId() : null;
+        $periodes = $serviceService->getPeriodes( $this->getVolumeHoraireListe()->getService() );
+        foreach( $periodes as $periode ){
+            $vhl = $this->getVolumeHoraireListe()->setPeriode($periode)->setTypeIntervention(false);
+            $motifsNonPaiement = [];
+            if ($hasMotifNonPaiement){  // découpage par motif de non paiement
+                $motifsNonPaiement = $vhl->getMotifsNonPaiement();
+            }
+            if(empty($motifsNonPaiement)){
+                $motifsNonPaiement = [0 => false];
+            }
+            foreach( $motifsNonPaiement as $motifNonPaiement ){
                 $out .= '<tr>';
                 $out .= "<td>".$this->renderPeriode($periode)."</td>\n";
-                foreach( $this->typesIntervention as $tid => $null ){
-                    $out .= '<td>'.$this->renderHeures( $typesIntervention[$tid], $pid, $mid, $tid ).'</td>';
+                foreach( $this->typesIntervention as $typeIntervention ){
+                    $vhl->setMotifNonPaiement($motifNonPaiement)
+                        ->setTypeIntervention($typeIntervention);
+                    $out .= '<td style="text-align:right">'.$this->renderHeures( $vhl ).'</td>';
                 }
-                if ($this->mustRenderMotifNonPaiement()){
+                if ($hasMotifNonPaiement){
                     $out .= "<td>".$this->renderMotifNonPaiement($motifNonPaiement)."</td>\n";
                 }
                 $out .= "</tr>\n";
@@ -117,31 +126,26 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $out;
     }
 
-    protected function renderHeures($volumesHoraires, $periodeId, $motifNonPaiementId, $typeInterventionId)
+    public function renderHeures(VolumeHoraireListe $volumeHoraireListe)
     {
-        $heures = 0;
-        $id = null;
-        foreach( $volumesHoraires as $volumeHoraire ){
-            $heures += $volumeHoraire->getHeures();
-            $id = $volumeHoraire->getId();
-        }
+        $heures = $volumeHoraireListe->getHeures();
         if (0 !== $heures){
             $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
+        }else{
+            $heures = \UnicaenApp\Util::formattedFloat(0, \NumberFormatter::DECIMAL, -1);;
         }
 
-        if (count($volumesHoraires) > 1){
-            /* Pas de moficiation de VH s'il y en a plusieurs */
-            return $heures;
-        }else{
-            $context = array();
-            $params = array('action' => 'saisie');
-            if ($id)                 $params['id'] = $id;
-            if ($this->getService()) $context['service'] = $this->getService()->getId();
-            if ($periodeId)          $context['periode'] = $periodeId;
-            if ($motifNonPaiementId) $context['motifNonPaiement'] = $motifNonPaiementId;
-            if ($typeInterventionId) $context['typeIntervention'] = $typeInterventionId;
-            return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$context['service']."\" href=\"".$this->getView()->url('volume-horaire/default', $params, array('query' => $context ) )."\" >$heures</a>";
+        $query = $volumeHoraireListe->filtersToArray();
+        if (false === $volumeHoraireListe->getMotifNonPaiement()){
+            $query['tous-motifs-non-paiement'] = '1';
         }
+        $url = $this->getView()->url(
+                    'volume-horaire/saisie',
+                    ['service' => $volumeHoraireListe->getService()->getId()],
+                    ['query' => $query]
+               );
+
+        return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$volumeHoraireListe->getService()->getId()."\" href=\"".$url."\" >$heures</a>";
     }
 
     protected function renderMotifNonPaiement($motifNonPaiement)
@@ -155,107 +159,30 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     }
 
     /**
-     * Détermine si les motifs de non maiement doivent être dessinés ou non
      *
-     * @return boolean
+     * @return VolumeHoraireListe
      */
-    public function mustRenderMotifNonPaiement()
+    public function getVolumeHoraireListe()
     {
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            return false;
-        }
-        return true;
+        return $this->volumeHoraireListe;
     }
 
-    /**
-     *
-     * @param VolumeHoraire[] $volumeHoraires
-     * @return self
-     */
-    public function setVolumeHoraires($volumeHoraires)
+    public function setVolumeHoraireListe(VolumeHoraireListe $volumeHoraireListe)
+    {
+        if (! $volumeHoraireListe->getTypeVolumeHoraire() instanceof \Application\Entity\Db\TypeVolumeHoraire){
+            throw new \Common\Exception\LogicException('Le type de volume horaire de la liste n\'a pas été précisé');
+        }
+        $this->volumeHoraireListe = $volumeHoraireListe;
+        return $this;
+    }
+
+    public function getTypesInterventions()
     {
         $serviceTypeIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention');
         /* @var $serviceTypeIntervention \Application\Service\TypeIntervention */
-
-        $periodes = null;
-        $elementPedagogique = $this->getService()->getElementPedagogique();
-        $periodes = null;
-        if ($elementPedagogique){
-            $periode = $elementPedagogique->getPeriode();
-            if ($periode){
-                // Liste des périodes possibles iniitalisée en fonction de l'élément pédagogique
-                $periodes = array( $periode->getId() => $periode );
-            }
+        if (! $this->typesIntervention){
+            $this->typesIntervention = $serviceTypeIntervention->getTypesIntervention();
         }
-        if (! $periodes){
-            // Récupération des périodes issues du service Periodes
-            $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
-            /* @var $servicePeriode \Application\Service\Periode */
-            $periodes = $servicePeriode->getList( $servicePeriode->finderByEnseignement() );
-        }
-        /* Récupération éventuelle des volumes horaires saisis sur d'autres périodes que celles habituelles (en cas de besoin) */
-        foreach( $volumeHoraires as $vh ){
-            if ($vh->getPeriode() && ! isset($periodes[$vh->getPeriode()->getId()])){
-                $periodes[$vh->getPeriode()->getId()] = $vh->getPeriode();
-            }
-        }
-        /* Tri des périodes */
-        uasort( $periodes, function( $a, $b ){
-            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '');
-        });
-
-        $typesIntervention = $serviceTypeIntervention->getTypesIntervention();
-        $this->typesIntervention = $typesIntervention;
-        $this->data = array(); // DATA [Periode][MotifNonPaiement][TypeIntervention]
-
-        /* Initialisation du tableau */
-        $this->data = array();
-        foreach( $periodes as $pid => $p ){
-            $motifsNonPaiement = array(0 => null);
-            if ($this->mustRenderMotifNonPaiement()){
-                foreach( $volumeHoraires as $vh ){
-                    if ($vh->getPeriode() === $p){
-                        if ($motifNonPaiement = $vh->getMotifNonPaiement()){
-                            $motifsNonPaiement[$motifNonPaiement->getId()] = $motifNonPaiement;
-                        }
-                    }
-                }
-
-                /* Tri des motifs de non paiement */
-                uasort( $motifsNonPaiement, function( $a, $b ){
-                    return ($a ? $a->getLibelleLong() : '') > ($b ? $b->getLibelleLong() : '');
-                });
-            }
-
-            if (! isset($this->data[$pid])) $this->data[$pid] = array('periode' => $p);
-            foreach( $motifsNonPaiement as $mid => $m ){
-                if (! isset($this->data[$pid][$mid])) $this->data[$pid][$mid] = array('motifNonPaiement' => $m);
-                foreach( $typesIntervention as $tid => $t ){
-                    $this->data[$pid][$mid][$tid] = [];
-                }
-            }
-        }
-
-        /* Affectation des valeurs */
-        foreach( $volumeHoraires as $vh ){
-            $pid = $vh->getPeriode() ? $vh->getPeriode()->getId() : 0;
-            $mid = ($this->mustRenderMotifNonPaiement() && $vh->getMotifNonPaiement()) ? $vh->getMotifNonPaiement()->getId() : 0;
-            $tid = $vh->getTypeIntervention()->getId();
-            $this->data[$pid][$mid][$tid][$vh->getId()] = $vh;
-        }
-        return $this;
+        return $this->typesIntervention;
     }
-
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    public function setService(Service $service)
-    {
-        $this->service = $service;
-        return $this;
-    }
-
-
 }

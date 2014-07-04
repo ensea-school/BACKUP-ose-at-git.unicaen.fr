@@ -20,6 +20,7 @@ trait IntervenantAwareTrait
      * Spécifie l'intervenant concerné.
      * 
      * @param Intervenant $intervenant Intervenant concerné
+     * @return self
      */
     public function setIntervenant(Intervenant $intervenant)
     {

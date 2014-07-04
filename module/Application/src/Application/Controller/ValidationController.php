@@ -42,7 +42,7 @@ class ValidationController extends AbstractActionController implements ContextPr
     private $structure;
     
     /**
-     * @var \Zend\Form\Form
+     * @var ServiceValidation
      */
     private $formValider;
     
@@ -312,26 +312,30 @@ class ValidationController extends AbstractActionController implements ContextPr
 
         $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
 
-        $this->em()->getFilters()->enable('historique');
+        if ($this->em()->getFilters()->isEnabled($name = 'historique')) {
+            $this->em()->getFilters()->disable($name);
+        }
         
         // recherche des enseignements de l'intervenant non encore validés
         $qb = $serviceService->getRepo()->createQueryBuilder('s')
-                ->addSelect("i, vh, strens")
+                ->select("s, i, vh, strens, v, tv")
                 ->join("s.intervenant", "i")
-                ->join("s.volumeHoraire", 'vh')
-                ->join("s.structureEns", 'strens')
+                ->join("s.volumeHoraire", 'vh', Join::WITH, "vh.histoDestruction is null")
+                ->join("s.structureEns", 'strens', Join::WITH, "strens.histoDestruction is null")
                 ->leftJoin("vh.validation", 'v')
-                ->leftJoin("v.typeValidation", 'tv')
+                ->leftJoin("v.typeValidation", 'tv', Join::WITH, "tv.code = :tv")->setParameter('tv', $typeValidation)
+                ->andWhere("s.histoDestruction is null")
                 ->andWhere("i = :intervenant")->setParameter('intervenant', $this->intervenant)
-                ->andWhere("tv.code = :tv")->setParameter('tv', $typeValidation)
-                ->andWhere("v is null")
-                ->addOrderBy("strens.libelleCourt", 'asc');
+                ->andWhere("v is null OR v.histoDestruction is not null")
+                ->addOrderBy("strens.libelleCourt", 'asc')
+                ->addOrderBy("s.histoModification", 'asc');
+//        var_dump($qb->getQuery()->getSQL());
         $servicesNonValides = $serviceService->getList($qb);
         
         // recherche des enseignements de l'intervenant déjà validés par la composante d'affectation
         // mais n'ayant pas fait l'objet d'un contrat/avenant
         $qb = $serviceService->getRepo()->createQueryBuilder('s')
-                ->addSelect("i, vh, strens, v, tv, s")
+                ->select("s, i, vh, strens, v, tv, s")
                 ->join("s.intervenant", "i")
                 ->join("s.volumeHoraire", 'vh')
                 ->join("s.structureEns", 'strens')
@@ -344,7 +348,6 @@ class ValidationController extends AbstractActionController implements ContextPr
                 ->andWhere("vh.contrat is null")
                 ->orderBy("v.histoModification", 'desc')
                 ->addOrderBy("strens.libelleCourt", 'asc');
-//        var_dump($qb->getQuery()->getSQL(), $qb->getQuery()->getParameter('tv'));
         $servicesValides = $serviceService->getList($qb);
         // collecte des validations correspondantes et mise en forme pour la vue
         $validations = $services = [];
@@ -364,7 +367,7 @@ class ValidationController extends AbstractActionController implements ContextPr
             $this->validation = reset($validations);
         }
         
-        if (!$this->validation) {
+        if ($servicesNonValides && !$this->validation) {
             $this->validation = $serviceValidation->newEntity($typeValidation)
                     ->setIntervenant($this->intervenant)
                     ->setStructure($this->structure);
@@ -397,8 +400,8 @@ class ValidationController extends AbstractActionController implements ContextPr
             $data = $this->getRequest()->getPost();
             $this->formValider->setData($data);
             if ($this->formValider->isValid()) {
-                $valide = (bool) $data['valide'];
-                $this->updateValidation($valide);
+                $serviceValidation->save($this->validation);
+                $this->flashMessenger()->addSuccessMessage("Validation enregistrée avec succès.");
                 
                 return $this->redirect()->toRoute(null, array(), array(), true);
             }

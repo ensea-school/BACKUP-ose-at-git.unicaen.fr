@@ -30,6 +30,9 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
             'type'  => 'Checkbox',
             'options' => array(
                 'label' => "Cochez pour valider les enseignements",
+                'use_hidden_element' => false,
+                'checked_value' => 1,
+                'unchecked_value' => 0
             ),
             'attributes' => array(
             ),
@@ -80,22 +83,22 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
         return $this;
     }
     
-    public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED) 
-    {
-        parent::bind($object, $flags);
-        
-        if ($object->getId()) {
-            if ($this->has($name = 'dateConseilRestreint')) {
-                $this->remove($name);
-            }
-            if ($this->has($name = 'dateCommissionRecherche')) {
-                $this->remove($name);
-            }
-            $this->get('valide')->setLabel("Décochez pour dévalider les enseignements")->setValue(true);
-        }
-        
-        return $this;
-    }
+//    public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED) 
+//    {
+//        parent::bind($object, $flags);
+//        
+//        if ($object->getId()) {
+//            if ($this->has($name = 'dateConseilRestreint')) {
+//                $this->remove($name);
+//            }
+//            if ($this->has($name = 'dateCommissionRecherche')) {
+//                $this->remove($name);
+//            }
+//            $this->get('valide')->setLabel("Décochez pour dévalider les enseignements")->setValue(true);
+//        }
+//        
+//        return $this;
+//    }
     
     /**
      * Should return an array specification compatible with
@@ -143,7 +146,17 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
 
         return array(
             'valide' => array(
-                'required' => false,
+                'required' => true,
+                'validators' => array(
+                    array(
+                        'name' => 'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                NotEmpty::IS_EMPTY => "Vous devez cocher la case pour valider",
+                            ),
+                        ),
+                    ),
+                ),
             ),
             'dateCommissionRecherche' => array(
                 'required'   => $dateCommissionRechercheRequired,

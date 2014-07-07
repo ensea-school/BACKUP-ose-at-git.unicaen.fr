@@ -17,6 +17,18 @@
 /*****/
 
 
+body.development {
+    background-image: url("dev.png");
+}
+
+body.test {
+    background-image: url("test.png");
+}
+
+body > div {
+    background-color: white;
+}
+
 
 /* Services */
 table.service {

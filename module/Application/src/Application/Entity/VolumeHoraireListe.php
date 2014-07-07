@@ -475,7 +475,7 @@ class VolumeHoraireListe
                     $volumeHoraire->setHeures($saisieHeures); // On ajoute les heures au premier item trouvé
                     $soldeHeures = 0; // Fin de la modif
                 }else{ // sinon on retire des heures sur tous les motifs jusqu'à ce que le compte soit bon
-                    $motifVhl = $vhl->getChild()->setMotifNonPaiement($volumeHoraire->getMotifNonPaiement());
+                    $motifVhl = $vhl->getChild()->setValidation(false)->setMotifNonPaiement($volumeHoraire->getMotifNonPaiement());
                     $motifHeures = $motifVhl->getHeures(); // on récupère le nbr d'heures du motif de non paiement
                     if ($motifHeures + $soldeHeures <= 0){
                         $soldeHeures += $volumeHoraire->getHeures();

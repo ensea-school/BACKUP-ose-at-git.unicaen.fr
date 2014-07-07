@@ -70,7 +70,7 @@ class SaisieMultipleFieldset extends AbstractHelper implements ServiceLocatorAwa
             $element->setAttribute('class', 'form-control')
                     ->setAttribute('style', 'width:5em;display:inline')
                     ->setLabelAttributes(array('class' => 'control-label'));
-            $res .= '<div class="col-md-2">';
+            $res .= '<div class="col-xs-3" style="max-width:15em">';
             $res .= $this->getView()->formLabel( $element );
             $res .= ' ';
             $res .= $this->getView()->formNumber( $element);

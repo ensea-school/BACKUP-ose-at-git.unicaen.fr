@@ -64,10 +64,10 @@ class Structure extends \Application\Entity\Db\Structure implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique');
     }
 
     /**
@@ -325,6 +325,28 @@ class Structure extends \Application\Entity\Db\Structure implements \Doctrine\OR
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSourceCode', array());
 
         return parent::getSourceCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContactPj($contactPj)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setContactPj', array($contactPj));
+
+        return parent::setContactPj($contactPj);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getContactPj()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getContactPj', array());
+
+        return parent::getContactPj();
     }
 
     /**

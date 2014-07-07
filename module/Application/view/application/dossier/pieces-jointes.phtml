@@ -38,16 +38,7 @@ echo $messenger;
                     . "merci d'utiliser la rubrique $contact en bas de cette page pour signaler cette anomalie.", 'danger');
             ?>
         <?php else: ?>
-            <ul>
-            <?php foreach ($destinataires as $r): /* @var $r \Application\Entity\Db\Role */ ?>
-                <li>
-                    <?php 
-                    $mailto = sprintf('<a href="mailto:%s">%s</a>', $mail = $r->getPersonnel()->getEmail(), $mail);
-                    echo sprintf("%s : %s", $r->getPersonnel(), $mailto);
-                    ?>
-                </li>
-            <?php endforeach; ?>
-            </ul>
+            <?php echo $this->htmlList($destinataires, false, false, false); ?>
         <?php endif; ?>
     </div>
 </div>

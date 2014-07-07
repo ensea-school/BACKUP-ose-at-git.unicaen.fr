@@ -234,6 +234,9 @@ class VolumeHoraireListe
      */
     public function match( VolumeHoraire $volumeHoraire )
     {
+        if ($volumeHoraire->getRemove()){ // Si le volume horaire est en cours de suppression
+            return false;
+        }
         if (false !== $this->typeVolumeHoraire){
             $typeVolumeHoraire = $volumeHoraire->getTypeVolumeHoraire();
             if (true === $this->typeVolumeHoraire){

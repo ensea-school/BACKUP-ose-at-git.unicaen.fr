@@ -94,7 +94,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\VolumeHoraire',
                     'action' => array('voir', 'liste', 'saisie'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
             ),
         ),
     ),

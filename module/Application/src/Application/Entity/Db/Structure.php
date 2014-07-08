@@ -45,6 +45,11 @@ class Structure implements HistoriqueAwareInterface
     protected $sourceCode;
 
     /**
+     * @var string
+     */
+    protected $contactPj;
+
+    /**
      * @var \DateTime
      */
     protected $validiteDebut;
@@ -263,6 +268,29 @@ class Structure implements HistoriqueAwareInterface
     public function getSourceCode()
     {
         return $this->sourceCode;
+    }
+
+    /**
+     * Set contactPj
+     *
+     * @param string $contactPj
+     * @return Structure
+     */
+    public function setContactPj($contactPj)
+    {
+        $this->contactPj = $contactPj;
+
+        return $this;
+    }
+
+    /**
+     * Get contactPj
+     *
+     * @return string 
+     */
+    public function getContactPj()
+    {
+        return $this->contactPj;
     }
 
     /**

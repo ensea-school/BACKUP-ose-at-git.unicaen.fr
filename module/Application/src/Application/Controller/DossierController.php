@@ -274,10 +274,33 @@ class DossierController extends AbstractActionController implements ContextProvi
             'totalHeuresReelles' => $serviceService->getTotalHeuresReelles($this->intervenant),
             'dossier'            => $this->dossier,
             'complet'            => $complet,
-            'destinataires'      => $this->process->getRolesDestinatairesPiecesJointes(),
+            'destinataires'      => $this->getDestinatairesPiecesJointes(),
             'form'               => $this->form,
             'role'               => $role,
         ));
+    }
+    
+    /**
+     * @return array
+     */
+    private function getDestinatairesPiecesJointes()
+    {
+        $template      = '<a href="mailto:%s">%s</a>';
+        $destinataires = [];
+        
+        if (($contactPj = $this->intervenant->getStructure()->getContactPj())) {
+            foreach (explode(',', $contactPj) as $mail) {
+                $destinataires[] = sprintf($template, $mail = trim($mail), $mail);
+            }
+        }
+        else {
+            foreach ($this->process->getRolesDestinatairesPiecesJointes() as $r) {
+                $mailto = sprintf($template, $mail = $r->getPersonnel()->getEmail(), $mail);
+                $destinataires[] = sprintf("%s : %s", $r->getPersonnel(), $mailto);
+            }
+        }
+        
+        return $destinataires;
     }
     
     /**

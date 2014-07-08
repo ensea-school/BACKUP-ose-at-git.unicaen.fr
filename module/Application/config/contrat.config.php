@@ -72,10 +72,10 @@ return array(
             ),
         ),
     ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
+//    'navigation' => array(
+//        'default' => array(
+//            'home' => array(
+//                'pages' => array(
 //                    'contrat' => array(
 //                        'label'    => 'Contrat et avenants',
 //                        'title'    => "Contrat et avenants de l'intervenant",
@@ -92,10 +92,10 @@ return array(
 //                            ),
 //                        ),
 //                    ),
-                ),
-            ),
-        ),
-    ),
+//                ),
+//            ),
+//        ),
+//    ),
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(

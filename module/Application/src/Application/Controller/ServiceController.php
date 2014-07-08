@@ -32,7 +32,7 @@ class ServiceController extends AbstractActionController
         
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
-            $renderIntervenants = true;
+            $intervenant = null;
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
             /*$intervenant = (int)$this->params()->fromRoute('intervenant'); // N'afficher qu'un seul intervenant
             $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->get($intervenant);
@@ -53,7 +53,6 @@ class ServiceController extends AbstractActionController
         else {
             $intervenant = $role->getIntervenant();
             $service->finderByIntervenant($intervenant, $qb);
-            $renderIntervenants = false;
             $action = 'afficher'; // Affichage par défaut
         }
 
@@ -68,17 +67,19 @@ class ServiceController extends AbstractActionController
             $service->setTypeVolumehoraire($services, $typeVolumeHoraire);
 
             // services référentiels : délégation au contrôleur
-            $controller       = 'Application\Controller\ServiceReferentiel';
-            $params           = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action'] = 'voirListe';
-            $params['query']  = $this->params()->fromQuery();
-            $listeViewModel   = $this->forward()->dispatch($controller, $params);
-            $viewModel->addChild($listeViewModel, 'servicesRefListe');
+            if (! $totaux){
+                $controller       = 'Application\Controller\ServiceReferentiel';
+                $params           = $this->getEvent()->getRouteMatch()->getParams();
+                $params['action'] = 'voirListe';
+                $params['query']  = $this->params()->fromQuery();
+                $listeViewModel   = $this->forward()->dispatch($controller, $params);
+                $viewModel->addChild($listeViewModel, 'servicesRefListe');
+            }
         }else{
             $services = array();
         }
 
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'title', 'renderIntervenants'));
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'title', 'intervenant'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
@@ -86,7 +87,7 @@ class ServiceController extends AbstractActionController
         }
         return $viewModel;
     }
-    
+
     public function intervenantAction()
     {
         $totaux = $this->params()->fromQuery('totaux',0) == '1';
@@ -117,7 +118,7 @@ class ServiceController extends AbstractActionController
         $action = 'afficher';
         $title = "Enseignements <small>$intervenant</small>";
 
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire', 'action', 'role', 'title', 'renderIntervenants', 'renderReferentiel'));
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire', 'action', 'role', 'title', 'renderIntervenants', 'renderReferentiel','intervenant'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{

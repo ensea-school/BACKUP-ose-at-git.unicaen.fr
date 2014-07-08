@@ -57,15 +57,15 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
         
         $rowTemplate = $rowArgs = array();
         if ($this->fieldset->getStructureEnabled()) {
-            $rowTemplate[] = '<div class="col-md-2">%s</div>';
+            $rowTemplate[] = '<div class="col-md-3">%s</div>';
             $rowArgs[]     = $helper($this->structureElement);
         }
         if ($this->fieldset->getNiveauEnabled()) {
-            $rowTemplate[] = '<div class="col-md-2">%s</div>';
+            $rowTemplate[] = '<div class="col-md-3">%s</div>';
             $rowArgs[]     = $helper($this->niveauElement);
         }
         if ($this->fieldset->getEtapeEnabled()) {
-            $rowTemplate[] = '<div class="col-md-4">%s</div>';
+            $rowTemplate[] = '<div class="col-md-6">%s</div>';
             $rowArgs[]     = $helper($this->etapeElement);
         }
 
@@ -75,7 +75,7 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
         }
         
         $rowTemplate = $rowArgs = array();
-        $rowTemplate[] = '<div class="col-md-8">%s</div>';
+        $rowTemplate[] = '<div class="col-md-12">%s</div>';
         $rowArgs[]     = $helper($this->elementElement);
         
         $html .= vsprintf('<div class="row">' . implode(PHP_EOL, $rowTemplate) . '</div>', $rowArgs);

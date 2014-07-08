@@ -23,6 +23,7 @@
     <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="25" nullable="false"/>
     <field name="libelleLong" type="string" column="LIBELLE_LONG" length="60" nullable="false"/>
     <field name="niveau" type="integer" column="NIVEAU" nullable="false"/>
+    <field name="contactPj" type="string" column="CONTACT_PJ" length="255" nullable="true"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>

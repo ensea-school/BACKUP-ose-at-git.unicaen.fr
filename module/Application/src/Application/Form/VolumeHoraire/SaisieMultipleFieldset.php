@@ -45,7 +45,7 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
             $this->add(array(
                 'name'       => $typeIntervention->getCode(),
                 'options'    => array(
-                    'label' => '<abbr title="'.$typeIntervention.'">'.$typeIntervention->getCode().'</abbr> :',
+                    'label' => '<abbr title="'.$typeIntervention->getLibelle().'">'.$typeIntervention->getCode().'</abbr> :',
                     'label_options' => ['disable_html_escape' => true]
                 ),
                 'attributes' => array(

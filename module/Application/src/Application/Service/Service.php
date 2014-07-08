@@ -353,7 +353,13 @@ class Service extends AbstractEntityService
     public function getResumeService($filter)
     {
         $role           = $this->getContextProvider()->getSelectedIdentityRole();
-        $structureEnsId = $role->getStructure()->getId();
+        if ($role instanceof \Application\Acl\ComposanteDbRole){
+            $structureEnsId = $role->getStructure()->getId();
+        }elseif (isset($filter->structureEns)) {
+            $structureEnsId = $filter->structureEns->getId();
+        }else{
+            $structureEnsId = null;
+        }
         
         $whereFilter          = array();
         $filtreOffreFormation = false;
@@ -376,9 +382,16 @@ class Service extends AbstractEntityService
             $filtreOffreFormation = true;
         }
         $whereFilter = $whereFilter ? ' AND ' . implode(' AND ', $whereFilter) : null;
-        
+
+        if ($structureEnsId){
+            $structureFilter = "(v.STRUCTURE_ENS_ID = $structureEnsId or v.STRUCTURE_AFF_ID = $structureEnsId)";
+        }else{
+            $structureFilter = "1=1";
+        }
+
         $queryServices = <<<EOS
-select 
+select
+  
   NOM_USUEL ,
   PRENOM ,
   INTERVENANT_ID ,
@@ -389,7 +402,7 @@ select
   v.total_hetd TOTAL_HETD,
   v.heures_comp HEURES_COMP
 from V_RESUME_SERVICE v
-where (v.STRUCTURE_ENS_ID = $structureEnsId or v.STRUCTURE_AFF_ID = $structureEnsId)
+where $structureFilter
   $whereFilter
 group by 
   NOM_USUEL ,
@@ -436,7 +449,7 @@ select
   TYPE_INTERVENANT_CODE ,
   sum(TOTAL_HEURES) TOTAL_HEURES
 from V_RESUME_REFERENTIEL v
-where (v.STRUCTURE_ENS_ID = $structureEnsId or v.STRUCTURE_AFF_ID = $structureEnsId)
+where $structureFilter
   $whereFilter
 group by 
   NOM_USUEL ,

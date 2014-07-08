@@ -45,6 +45,17 @@ class FormuleHetd extends AbstractService
         }
     }
 
+    public function getServiceTotal( Intervenant $intervenant )
+    {
+        $sql = 'SELECT heures FROM V_FORMULE_VOLUME_HORAIRE_TOTAL WHERE intervenant_id = :intervenant';
+        $result = $this->getEntityManager()->getConnection()->executeQuery($sql, array('intervenant' => $intervenant->getId()))->fetchAll();
+        if (isset($result[0])){
+            return (float)$result[0]['HEURES'];
+        }else{
+            return 0;
+        }
+    }
+
     public function getServiceRestant( Intervenant $intervenant )
     {
         $sql = 'SELECT heures FROM V_FORMULE_SERVICE_RESTANT WHERE intervenant_id = :intervenant';

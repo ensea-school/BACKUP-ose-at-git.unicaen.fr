@@ -3,7 +3,9 @@
 /***************************************************************************************************************************************************/
 
 $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
-    errorDialog.show( 'Une erreur '+jqxhr.status + '('+jqxhr.statusText+') est survenue', jqxhr.responseText );
+    if ($('body').hasClass('development')){
+        errorDialog.show( 'Une erreur '+jqxhr.status + '('+jqxhr.statusText+') est survenue', jqxhr.responseText );
+    }
     console.log( jqxhr );
 });
 
@@ -238,15 +240,7 @@ Service.refreshFiltres = function(){
 }
 
 Service.refreshTotaux = function(){
-    $.getJSON( $("#service_totaux").data('url'), function( data ) {
-        for (typeHeure in data){
-            if ('total_general' === typeHeure){
-                $("#service_total_general td#" + typeHeure).html(data[typeHeure]);
-            }else{
-                $("#service_totaux td#" + typeHeure).html(data[typeHeure]);
-            }
-        }
-    });
+    $("#services tfoot").refresh();
 }
 
 Service.setRenderIntervenants = function( renderIntervenants ){

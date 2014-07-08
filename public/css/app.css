@@ -43,6 +43,14 @@ body.test .navbar-inverse .navbar-nav .active a {
     background-image: linear-gradient(to bottom, #3773d7 0px, #1d57b7 100%);
 }
 
+body.test div#contenu-principal {
+    background-color:white;
+}
+
+body.development div#contenu-principal {
+    background-color:white;
+}
+
 
 /* Services */
 table.service {

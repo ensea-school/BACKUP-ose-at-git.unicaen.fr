@@ -5,9 +5,11 @@ namespace Application\Service;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 
 /**
  * Description of Service
@@ -263,6 +265,82 @@ class Service extends AbstractEntityService
             $value = $contrat ? 'is not null' : 'is null';
             $qb->andWhere("vhc.contrat $value");
         }
+        
+        return $qb;
+    }
+    
+    /**
+     * 
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structureEns
+     * @return QueryBuilder
+     */
+    public function findServicesNonValides(
+            IntervenantEntity $intervenant = null,
+            StructureEntity $structureEns = null)
+    {
+        $qb = $this->getRepo()->createQueryBuilder('s')
+                ->select("s, i, vh, strens")
+                ->join("s.intervenant", "i")
+                ->join("s.volumeHoraire", 'vh')
+                ->join("s.structureEns", 'strens')
+                ->join("strens.structureNiv2", 'strens2')
+                ->andWhere('NOT EXISTS (SELECT sv FROM Application\Entity\Db\VServiceValide sv WHERE sv.volumeHoraire = vh)')
+                ->addOrderBy("strens.libelleCourt", 'asc')
+                ->addOrderBy("s.histoModification", 'asc');
+        
+        if ($intervenant) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
+        }
+        if ($structureEns) {
+            $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
+        }
+        
+//        var_dump($qb->getQuery()->getSQL());
+        
+        return $qb;
+    }
+    
+    /**
+     * 
+     * @param TypeValidationEntity $typeValidation
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structureEns
+     * @param StructureEntity $structureValidation
+     * @return QueryBuilder
+     */
+    public function findServicesValides(
+            TypeValidationEntity $typeValidation = null, 
+            IntervenantEntity $intervenant = null, 
+            StructureEntity $structureEns = null, 
+            StructureEntity $structureValidation = null)
+    {
+        $qb = $this->getRepo()->createQueryBuilder('s')
+                ->select("s, i, vh, strens, v, tv, s")
+                ->join("s.intervenant", "i")
+                ->join("s.volumeHoraire", 'vh')
+                ->join("s.structureEns", 'strens')
+                ->join("strens.structureNiv2", 'strens2')
+                ->join("vh.validation", "v")
+                ->join("v.typeValidation", 'tv')
+                ->join("v.structure", 'str') // validés par la structure spécifiée
+                ->orderBy("v.histoModification", 'desc')
+                ->addOrderBy("strens.libelleCourt", 'asc');
+        
+        if ($typeValidation) {
+            $qb->andWhere("tv = :tv")->setParameter('tv', $typeValidation);
+        }
+        if ($intervenant) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
+        }
+        if ($structureEns) {
+            $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
+        }
+        if ($structureValidation) {
+            $qb->andWhere("str = :structureValidation")->setParameter('structureValidation', $structureValidation);
+        }
+        
+//        var_dump($qb->getQuery()->getSQL());
         
         return $qb;
     }

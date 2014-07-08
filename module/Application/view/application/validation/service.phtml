@@ -1,9 +1,12 @@
 <h1 class="page-header"><?php echo $title ?></small></h1>
 
+<?php $messenger = $this->messenger(true) ?>
 <?php if (($validation = reset($validations)) && !$validation->getId()): ?>
-    <?php $this->messenger(true)->addMessage("Des enseignements à valider ont été trouvés...") ?>
+    <?php $messenger->addMessage("Des enseignements à valider ont été trouvés...") ?>
+<?php else: ?>
+    <?php $messenger->addMessage("Aucun enseignement restant à valider n'a été trouvé.") ?>
 <?php endif ?>
-<?php echo $this->messenger() ?>
+<?php echo $messenger ?>
 
 <?php $formValider->prepare(); ?>
 
@@ -15,7 +18,7 @@
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th class="structure">Composante gestionnaire</th>
+            <th class="structure">Composante</th>
             <th>Validation</th>
         </tr>
     </thead>
@@ -34,7 +37,9 @@
         <?php $display = $validation->getId() ? 'display: none' : ''; ?>
         <div style="<?php echo $validation->getId() ? 'display: none' : '' ?>" class="details-enseignements" 
              id="validation-<?php echo $validation->getId() ?>">
-            <?php echo $this->serviceListe($services[$validation->getId()])->setRenderIntervenants(false)->render(); ?>
+            <?php echo $this->serviceListe($services[$validation->getId()])
+                    ->setTypeVolumeHoraire($typeVolumeHoraire)
+                    ->setRenderIntervenants(false)->render(); ?>
         </div>
         <?php $this->placeholder('enseignements')->captureEnd(); ?>
         <!-- fin de capture -->

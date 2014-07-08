@@ -327,47 +327,28 @@ class ValidationController extends AbstractActionController implements ContextPr
         $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $this->formValider = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
         $this->title       = "Validation des enseignements <small>$this->intervenant</small>";
-        $typeValidation    = TypeValidation::CODE_SERVICES_PAR_COMP;
-
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $typeValidation    = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_SERVICES_PAR_COMP)->getQuery()->getOneOrNullResult();
+        
+        // NB : les enseignements d'un permanant sont validés par la seule composante d'affectation ;
+        //    : les enseignements d'un vacataire sont validés par chaque composante d'intervenation.
+        $structureEns = $this->intervenant->estPermanent() ? null : $this->structure;
+        
         $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
 
-        if ($this->em()->getFilters()->isEnabled($name = 'historique')) {
-            $this->em()->getFilters()->disable($name);
-        }
+        $this->em()->getFilters()->enable('historique');
         
         // recherche des enseignements de l'intervenant non encore validés
-        $qb = $serviceService->getRepo()->createQueryBuilder('s')
-                ->select("s, i, vh, strens, v, tv")
-                ->join("s.intervenant", "i")
-                ->join("s.volumeHoraire", 'vh', Join::WITH, "vh.histoDestruction is null")
-                ->join("s.structureEns", 'strens', Join::WITH, "strens.histoDestruction is null")
-                ->leftJoin("vh.validation", 'v')
-                ->leftJoin("v.typeValidation", 'tv', Join::WITH, "tv.code = :tv")->setParameter('tv', $typeValidation)
-                ->andWhere("s.histoDestruction is null")
-                ->andWhere("i = :intervenant")->setParameter('intervenant', $this->intervenant)
-                ->andWhere("v is null OR v.histoDestruction is not null")
-                ->addOrderBy("strens.libelleCourt", 'asc')
-                ->addOrderBy("s.histoModification", 'asc');
-//        var_dump($qb->getQuery()->getSQL());
+        $qb = $serviceService->findServicesNonValides($this->intervenant, $structureEns);
         $servicesNonValides = $serviceService->getList($qb);
+        $serviceService->setTypeVolumehoraire($servicesNonValides, $typeVolumeHoraire);
         
         // recherche des enseignements de l'intervenant déjà validés par la composante d'affectation
         // mais n'ayant pas fait l'objet d'un contrat/avenant
-        $qb = $serviceService->getRepo()->createQueryBuilder('s')
-                ->select("s, i, vh, strens, v, tv, s")
-                ->join("s.intervenant", "i")
-                ->join("s.volumeHoraire", 'vh')
-                ->join("s.structureEns", 'strens')
-                ->join("vh.validation", "v")
-                ->join("v.typeValidation", 'tv')
-                ->join("v.structure", 'str') // validés par la structure d'affectation
-                ->andWhere("i = :intervenant")->setParameter('intervenant', $this->intervenant)
-                ->andWhere("tv.code = :tv")->setParameter('tv', $typeValidation)
-                ->andWhere("str = :structure")->setParameter('structure', $this->structure) // validés par la structure d'affectation
-                ->andWhere("vh.contrat is null")
-                ->orderBy("v.histoModification", 'desc')
-                ->addOrderBy("strens.libelleCourt", 'asc');
+        $qb = $serviceService->findServicesValides($typeValidation, $this->intervenant, $structureEns, $this->structure);
+        $qb->andWhere("vh.contrat is null");
         $servicesValides = $serviceService->getList($qb);
+        $serviceService->setTypeVolumehoraire($servicesValides, $typeVolumeHoraire);
         // collecte des validations correspondantes et mise en forme pour la vue
         $validations = $services = [];
         foreach ($servicesValides as $service) { /* @var $service \Application\Entity\Db\Service */
@@ -407,6 +388,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         $this->view = new \Zend\View\Model\ViewModel(array(
             'intervenant'        => $this->intervenant,
             'validations'        => $validations,
+            'typeVolumeHoraire'  => $typeVolumeHoraire,
             'services'           => $services,
             'formValider'        => $this->formValider,
             'role'               => $role,
@@ -547,6 +529,14 @@ class ValidationController extends AbstractActionController implements ContextPr
     private function getServiceStructure()
     {
         return $this->getServiceLocator()->get('ApplicationStructure');
+    }
+    
+    /**
+     * @return \Application\Service\TypeVolumeHoraire
+     */
+    private function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
     }
     
     /**

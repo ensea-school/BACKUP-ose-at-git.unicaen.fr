@@ -240,15 +240,7 @@ Service.refreshFiltres = function(){
 }
 
 Service.refreshTotaux = function(){
-    $.getJSON( $("#service_totaux").data('url'), function( data ) {
-        for (typeHeure in data){
-            if ('total_general' === typeHeure){
-                $("#service_total_general td#" + typeHeure).html(data[typeHeure]);
-            }else{
-                $("#service_totaux td#" + typeHeure).html(data[typeHeure]);
-            }
-        }
-    });
+    $("#services tfoot").refresh();
 }
 
 Service.setRenderIntervenants = function( renderIntervenants ){

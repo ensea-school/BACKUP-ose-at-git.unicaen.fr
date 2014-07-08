@@ -36,7 +36,7 @@
     <?php endif; ?>
     <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>"
        title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
-    <?php echo $this->serviceListe( $services )->setTypeVolumeHoraire($typeVolumeHoraire)->setRenderIntervenants($renderIntervenants)->render(); ?>
+    <?php echo $this->serviceListe( $services )->setTypeVolumeHoraire($typeVolumeHoraire)->setIntervenant($intervenant)->render(); ?>
 
     <?php if ($renderReferentiel): ?>
         <h1>Référentiel</h1>

@@ -8,6 +8,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Application\Entity\Db\Intervenant;
 
 /**
  * Aide de vue permettant d'afficher une liste de services
@@ -22,9 +23,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     /**
      * description
      *
-     * @var boolean
+     * @var Intervenant
      */
-    protected $renderIntervenants = true;
+    protected $intervenant;
 
     /**
      *
@@ -33,14 +34,23 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected $typeVolumeHoraire;
 
 
-    public function getRenderIntervenants()
+    /**
+     *
+     * @return Intervenant
+     */
+    public function getIntervenant()
     {
-        return $this->renderIntervenants;
+        return $this->intervenant;
     }
 
-    public function setRenderIntervenants($renderIntervenants)
+    /**
+     *
+     * @param Intervenant $intervenant
+     * @return self
+     */
+    public function setIntervenant( Intervenant $intervenant)
     {
-        $this->renderIntervenants = $renderIntervenants;
+        $this->intervenant = $intervenant;
         return $this;
     }
 
@@ -88,6 +98,11 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $this->render();
     }
 
+    public function getTotalRefreshUrl()
+    {
+        return $this->getView()->url(null, [],['query' => ['totaux' => 1]], true);
+    }
+
     /**
      * Génère le code HTML.
      *
@@ -104,7 +119,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $out .= '<table id="services" class="table table-bordered service">';
         $out .= '<tr>';
 
-        if ($this->getRenderIntervenants()) {
+        if (! $this->getIntervenant()) {
             $out .= "<th>Intervenant</th>\n";
             $out .= "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>\n";
             $colspan += 2;
@@ -132,17 +147,14 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         foreach( $this->services as $service ){
             $out .= $this->renderLigne($service, $details);
         }
-        $out .= '<tfoot>'."\n";
+        $out .= '<tfoot data-url="'.$this->getTotalRefreshUrl().'">'."\n";
         $out .= $this->renderTotaux();
         $out .= '</tfoot>'."\n";
         $out .= '</table>'."\n";
         $out .= $this->renderShowHide();
-//
-//        $url = $this->getView()->url('service/default', array('action' => 'saisie'));
-//        $out .= '<br /><a class="ajax-modal services btn btn-default" data-event="service-add-message" href="'.$url.'" title="Ajouter un service"><span class="glyphicon glyphicon-plus"></span> Saisir un nouveau service</a>';
         $out .= '<script type="text/javascript">';
         $out .= '$(function() { Service.init("'.$this->getTypeVolumeHoraire()->getId().'");
-            Service.setRenderIntervenants('.$this->getRenderIntervenants().')});';
+            Service.setRenderIntervenants('.(! $this->getIntervenant() ? 'true' : 'false').')});';
         $out .= '</script>';
         return $out;
     }
@@ -153,7 +165,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             throw new \Common\Exception\LogicException('Le type de volume horaire du service ne correspond pas à celui de la liste');
         }
 
-        $ligneView = $this->getView()->serviceLigne( $service )->setRenderIntervenants($this->getRenderIntervenants());
+        $ligneView = $this->getView()->serviceLigne( $service )->setRenderIntervenants(! $this->getIntervenant());
         $vhlView = $this->getView()->volumeHoraireListe( $service->getVolumeHoraireListe() );
 
         $out  = '<tr id="service-'.$service->getId().'-ligne" data-url="'.$ligneView->getRefreshUrl().'">';
@@ -170,7 +182,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function getTotaux()
     {
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-        $data = ['total_general' => 0];
+        $data = [
+                    'total_general' => 0,
+                ];
         foreach( $typesIntervention as $ti ){
             $data[$ti->getCode()] = 0;
 
@@ -180,6 +194,11 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                 $data['total_general'] += $h;
             }
 
+        }
+        if ($this->getIntervenant()){
+            $data['total_paye'] = $this->getFormuleHetd()->getServiceTotal($this->getIntervenant());
+            $data['total_hetd'] = $this->getFormuleHetd()->getHetd($this->getIntervenant());
+//            $data['total_compl'] = $this->getFormuleHetd()->getHeuresComplementaires($this->getIntervenant());
         }
         return $data;
     }
@@ -191,14 +210,13 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
         $colspan = 3;
 
-        if ($this->getRenderIntervenants()) $colspan += 2;
+        if (! $this->getIntervenant()) $colspan += 2;
         if ($role instanceof \Application\Acl\ComposanteDbRole) $colspan += 2;
         if (!$context->getAnnee()) $colspan += 1;
 
         $data = $this->getTotaux();
 
-        $url = $this->getView()->url(null, [],['query' => ['totaux' => 1]], true);
-        $out = '<tr id="service_totaux" data-url="'.$url.'">';
+        $out = '<tr>';
         $out .= "<th colspan='$colspan' style=\"text-align:right\">Totaux par type d'intervention :</th>\n";
         foreach( $typesIntervention as $ti ){
             $colspan++;
@@ -207,21 +225,29 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $colspan--;
         $out .= "<td colspan='3'>&nbsp;</td>\n";
         $out .= "</tr>\n";
-        $out .= '<tr id="service_total_general">';
+        $out .= '<tr>';
         $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de service :</th>\n";
-        $out .= "<td id=\"total_general\" style=\"text-align:right\">".\UnicaenApp\Util::formattedFloat($data['total_general'], \NumberFormatter::DECIMAL, -1)."</td>\n";
+        $out .= "<td style=\"text-align:right\">".\UnicaenApp\Util::formattedFloat($data['total_general'], \NumberFormatter::DECIMAL, -1)."</td>\n";
         $out .= "<td colspan='3'>&nbsp;</td>\n";
         $out .= "</tr>\n";
-        return $out;
-    }
-
-    public function renderJsonTotaux()
-    {
-        $data = $this->getTotaux();
-        foreach( $data as $index => $heures ){
-            $data[$index] = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
+        $title = [
+            'Toutes structures confondues'
+        ];
+        if (isset($data['total_hetd'])){
+            if ($data['total_paye'] != $data['total_general']){
+                $title[] = 'Sur la base de '.\UnicaenApp\Util::formattedFloat($data['total_paye'], \NumberFormatter::DECIMAL, -1).' heures payées';
+            }
+            $out .= '<tr>';
+            $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total Heures &Eacute;quivalent TD :</th>\n";
+            if (! empty($title)){
+                $out .= "<td style=\"text-align:right\"><abbr title=\"".implode(",\n",$title).".\">".\UnicaenApp\Util::formattedFloat($data['total_hetd'], \NumberFormatter::DECIMAL, -1)."</abbr></td>\n";
+            }else{
+                $out .= "<td style=\"text-align:right\">".\UnicaenApp\Util::formattedFloat($data['total_hetd'], \NumberFormatter::DECIMAL, -1)."</td>\n";
+            }
+            $out .= "<td colspan='3'>&nbsp;</td>\n";
+            $out .= "</tr>\n";
         }
-        return json_encode($data);
+        return $out;
     }
 
     public function renderShowHide()
@@ -251,6 +277,15 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         $this->services = $services;
         return $this;
+    }
+
+    /**
+     *
+     * @return \Application\Service\Process\FormuleHetd
+     */
+    public function getFormuleHetd()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('processFormuleHetd');
     }
 
 }

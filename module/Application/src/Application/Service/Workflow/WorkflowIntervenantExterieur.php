@@ -5,10 +5,7 @@ namespace Application\Service\Workflow;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeValidation;
-use Application\Rule\Intervenant\ContratEditeRule;
 use Application\Rule\Intervenant\DossierValideRule;
-use Application\Rule\Intervenant\ServiceValideRule;
-use Application\Rule\Intervenant\NecessiteContratRule;
 use Application\Rule\Intervenant\PeutSaisirDossierRule;
 use Application\Rule\Intervenant\PeutSaisirPieceJointeRule;
 use Application\Rule\Intervenant\PeutSaisirServiceRule;
@@ -119,39 +116,6 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
 //        );
             
         return $this;
-    }
-    
-    private $serviceValideRule;
-    
-    private function getServiceValideRule()
-    {
-        if (null === $this->serviceValideRule) {
-            // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
-            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
-            $this->serviceValideRule
-                    ->setTypeValidation($this->getTypeValidationService())
-                    ->setStructure($this->getStructure())
-                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
-//            var_dump(
-//                    $this->serviceValideRule->execute(), 
-//                    $this->serviceValideRule->getMessage(), 
-//                    \UnicaenApp\Util::collectionAsOptions($this->serviceValideRule->getVolumesHorairesNonValides()));
-        }
-        
-        return $this->serviceValideRule;
-    }
-    
-    /**
-     * 
-     * @return \Application\Entity\Db\Structure
-     */
-    protected function getStructure()
-    {
-        if ($this->getRole() instanceof \Application\Acl\ComposanteDbRole) {
-            return $this->getRole()->getStructure();
-        }
-        
-        return null;
     }
     
     /**

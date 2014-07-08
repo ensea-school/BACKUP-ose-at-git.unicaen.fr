@@ -6,6 +6,8 @@ use Application\Entity\Db\TypeValidation;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\RoleAwareTrait;
 use Application\Service\Workflow\Step\Step;
+use Application\Rule\Intervenant\ServiceValideRule;
+use Application\Acl\ComposanteDbRole;
 
 /**
  * Implémentation du workflow concernant un intervenant.
@@ -38,6 +40,35 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     public function getCurrentStepUrl()
     {
         return $this->getStepUrl($this->getCurrentStep());
+    }
+    
+    private $serviceValideRule;
+    
+    protected function getServiceValideRule()
+    {
+        if (null === $this->serviceValideRule) {
+            // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
+            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
+            $this->serviceValideRule
+                    ->setTypeValidation($this->getTypeValidationService())
+                    ->setStructure($this->getStructure())
+                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+        }
+        
+        return $this->serviceValideRule;
+    }
+    
+    /**
+     * 
+     * @return \Application\Entity\Db\Structure
+     */
+    protected function getStructure()
+    {
+        if ($this->getRole() instanceof ComposanteDbRole) {
+            return $this->getRole()->getStructure();
+        }
+        
+        return null;
     }
     
     /**

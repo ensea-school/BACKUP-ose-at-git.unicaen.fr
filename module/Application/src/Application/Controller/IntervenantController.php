@@ -40,6 +40,9 @@ class IntervenantController extends AbstractActionController implements \Applica
             $intervenant = $role->getIntervenant();
             $wf  = $this->getWorkflowIntervenant($intervenant);
             $url = $wf->getCurrentStepUrl();
+            if (!$url) {
+                $url = $wf->getStepUrl($wf->getLastStep());
+            }
             return $this->redirect()->toUrl($url);
         }
         

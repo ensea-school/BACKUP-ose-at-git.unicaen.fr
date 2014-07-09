@@ -1,6 +1,13 @@
 <?php
+
 if ($onlyContent){
-    echo $this->serviceLigne( $service )->setRenderIntervenants($renderIntervenants)->render($details);
+    echo $this->serviceLigne( $service )
+            ->setIntervenant($intervenant)
+            ->setStructure($structure)
+            ->render($details);
 }else{
-    echo $this->serviceListe( array($service) )->setRenderIntervenants($renderIntervenants)->renderLigne( $service, $details );
+    echo $this->serviceListe( array($service) )
+            ->setIntervenant($intervenant)
+            ->setStructure($structure)
+            ->renderLigne( $service, $details );
 }

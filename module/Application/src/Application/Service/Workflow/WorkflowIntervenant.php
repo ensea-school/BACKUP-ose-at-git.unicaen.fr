@@ -39,6 +39,9 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
      */
     public function getCurrentStepUrl()
     {
+        if (!$this->getCurrentStep()) {
+            return null;
+        }
         return $this->getStepUrl($this->getCurrentStep());
     }
     

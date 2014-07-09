@@ -53,14 +53,6 @@ function Service( id ) {
 
     this.id = id;
 
-    this.delete = function( url ){
-        ok = window.confirm('Voulez-vous vraiment supprimer ce service ?');
-        if (ok){
-            $('#service-div').modal({remote: url});
-    }
-        return false;
-    }
-
     this.showHideDetails = function( serviceA ){
 
         var state = $.data(serviceA,'state');
@@ -107,17 +99,15 @@ function Service( id ) {
     }
 
     this.onAfterAdd = function(){
-        var url = Url("service/rafraichir-ligne/"+this.id+"/"+Service.typeVolumeHoraireId, {
-            'only-content': 0,
-            'details': 1,
-            'render-intervenants': Service.getRenderIntervenants()
+        var url = Url("service/rafraichir-ligne/"+this.id+"/"+$("#services").data('type-volume-horaire'), {
+            'only-content'  : 0,
+            'details'       : 1,
+            'intervenant'   : $("#services").data('intervenant'),
+            'structure'     : $("#services").data('structure')
         });
         $.get( url, function( data ) {
-            $( "#service-"+this.id+"-ligne" ).refresh();
-            $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
             $( "#service-resume" ).refresh(); // Si on est dans le résumé
             $('#services > tbody:last').append(data);
-            console.log(data);
             Service.refreshFiltres();
             Service.refreshTotaux();
             Service.refreshWorkflowNavigation();
@@ -149,9 +139,7 @@ Service.get = function( id ){
     return Service.services[id];
 }
 
-Service.init = function( typeVolumeHoraireId ){
-    Service.typeVolumeHoraireId = typeVolumeHoraireId;
-    Service.renderIntervenants = 1; // par défaut
+Service.init = function(){
 
     $("body").on("service-modify-message", function(event, data) {
         var id = null;
@@ -168,15 +156,6 @@ Service.init = function( typeVolumeHoraireId ){
             }
         }
     });
-
-//    $('#service-div').on('loaded.bs.modal', function (e) {
-//        if (id = $('#service-deleted-id').val()){
-//            var terminated = $("form .input-error, form .has-error, div.alert", $(e.target)).length ? false : true;
-//            if (terminated){
-//                Service.get(id).onAfterDelete();
-//            }
-//        }
-//    });
 
     $("body").on("service-add-message", function(event, data) {
         var id = null;
@@ -213,10 +192,6 @@ Service.init = function( typeVolumeHoraireId ){
 
     $(".service-show-all-details").on('click', function(){ Service.showAllDetails(); });
     $(".service-hide-all-details").on('click', function(){ Service.hideAllDetails(); });
-//    $('body').on('click', '.service-delete', function(){
-//        Service.get( $(this).data('id') ).delete( $(this).attr('href') );
-//        return false;
-//    });
 
     VolumeHoraire.init();
 }
@@ -241,14 +216,6 @@ Service.refreshFiltres = function(){
 
 Service.refreshTotaux = function(){
     $("#services tfoot").refresh();
-}
-
-Service.setRenderIntervenants = function( renderIntervenants ){
-    Service.renderIntervenants = renderIntervenants;
-}
-
-Service.getRenderIntervenants = function(){
-    return Service.renderIntervenants;
 }
 
 /**

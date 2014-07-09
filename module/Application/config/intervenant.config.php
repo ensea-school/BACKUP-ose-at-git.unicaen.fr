@@ -214,9 +214,10 @@ return array(
                         'resource' => 'controller/Application\Controller\Intervenant:index',
                         'pages' => array(
                             'rechercher' => array(
-                                'label'  => "Rechercher",
+                                'label'  => " Rechercher",
                                 'title'  => "Rechercher un intervenant",
                                 'route'  => 'intervenant/rechercher',
+                                'class'   => "iconify glyphicon glyphicon-search",
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:rechercher',
                             ),

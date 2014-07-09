@@ -1,7 +1,8 @@
 <?php
-$validation = $this->validation;
-$services   = $this->services;
+$validation        = $this->validation;
+$services          = $this->services;
 $typeVolumeHoraire = $this->typeVolumeHoraire;
+$display           = $validation->getId() ? 'display: none' : '';
 ?>
 <p>
     <strong>Enseignements concernés par la validation</strong><br />
@@ -12,12 +13,11 @@ $typeVolumeHoraire = $this->typeVolumeHoraire;
         data-target="#validation-<?php echo $validation->getId() ?>"
         >Afficher/masquer</a></small>
 </p>
-<?php $display = $validation->getId() ? 'display: none' : ''; ?>
-<div style="<?php echo $display ?>" class="details-enseignements" 
-     id="validation-<?php echo $validation->getId() ?>">
+<div style="<?php echo $display ?>" class="details-enseignements" id="validation-<?php echo $validation->getId() ?>">
     <?php echo $this->serviceListe($services[$validation->getId()])
             ->setTypeVolumeHoraire($typeVolumeHoraire)
-            /*->setIntervenant(false)*/->render(); ?>
+            ->setIntervenant(false)
+            ->render(); ?>
 </div>
 
 <script>

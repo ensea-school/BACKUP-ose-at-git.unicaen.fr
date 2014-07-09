@@ -1,12 +1,6 @@
 <h1 class="page-header"><?php echo $title ?></small></h1>
 
-<?php $messenger = $this->messenger(true) ?>
-<?php if (($validation = reset($validations)) && !$validation->getId()): ?>
-    <?php $messenger->addMessage("Des enseignements à valider ont été trouvés...") ?>
-<?php else: ?>
-    <?php $messenger->addMessage("Aucun enseignement restant à valider n'a été trouvé.") ?>
-<?php endif ?>
-<?php echo $messenger ?>
+<?php echo $this->messenger(true)->addMessages($messages) ?>
 
 <?php $formValider->prepare(); ?>
 
@@ -14,7 +8,7 @@
     .structure { width: 100px; }
 </style>
 
-
+<?php if ($validations): ?>
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -72,6 +66,7 @@
     <?php endforeach; ?>
     </tbody>
 </table>
+<?php endif; ?>
 
 <script>
 $(function() {

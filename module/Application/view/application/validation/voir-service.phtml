@@ -1,11 +1,12 @@
 <h2 class="page-header"><?php echo $title ?></small></h2>
 
-<?php echo $this->messenger(true) ?>
+<?php echo $this->messenger(true)->addMessages($messages) ?>
 
 <style>
     .structure { width: 100px; }
 </style>
 
+<?php if ($data): ?>
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -14,33 +15,40 @@
         </tr>
     </thead>
     <tbody>
-    <?php foreach ($validations as $data): ?>
+    <?php foreach ($data as $array): ?>
         
         <?php 
-        $structure  = $data['structure'];
-        $validation = $data['validation'];
+        $structure   = $array['structure'];
+        $validations = $array['validations'];
+        $services    = $array['services'];
         ?>
         
-        <?php $servicesValidation = $this->partial('application/validation/partial/services-validation', array(
-            'validation' => $validation,
-            'services' => $services,
-            'typeVolumeHoraire' => $typeVolumeHoraire,
-        )) ?>
-        
-        <tr>
-            <td class="structure"><?php echo $structure ?></td>
-            <td>
-                <?php if ($validation): ?>
-                    <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)/*->setIncludeTypeValidation(true)*/, 'success') ?>
-                    <?php echo $servicesValidation ?>
-                <?php else: ?>
-                    Aucune
-                <?php endif; ?>
-            </td>
-        </tr>
+        <?php if ($validations): ?>
+            <?php foreach ($validations as $validation): ?>
+                <tr>
+                    <td class="structure"><?php echo $structure ?></td>
+                    <td>
+                        <?php $servicesValidation = $this->partial('application/validation/partial/services-validation', array(
+                            'validation' => $validation,
+                            'services' => $services,
+                            'typeVolumeHoraire' => $typeVolumeHoraire,
+                        )) ?>
+                        <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)/*->setIncludeTypeValidation(true)*/, 'success') ?>
+                        <?php echo $servicesValidation ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td class="structure"><?php echo $structure ?></td>
+                <td>Aucune</td>
+            </tr>
+        <?php endif; ?>
+            
     <?php endforeach; ?>
     </tbody>
 </table>
+<?php endif; ?>
 
 
 <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>

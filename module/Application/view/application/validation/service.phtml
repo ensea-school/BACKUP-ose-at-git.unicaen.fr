@@ -25,24 +25,11 @@
     <tbody>
     <?php foreach ($validations as $validation): ?>
         
-        <!-- capture -->
-        <?php $this->placeholder('enseignements')->captureStart('SET'); ?>
-        <p>
-            <strong>Enseignements concernés par la validation</strong><br />
-            <small><a title="Cliquez pour afficher/masquer les enseignements concernés par cette validation"
-                href="#" class="voir-enseignements" 
-                data-target="#validation-<?php echo $validation->getId() ?>"
-                >Afficher/masquer</a></small>
-        </p>
-        <?php $display = $validation->getId() ? 'display: none' : ''; ?>
-        <div style="<?php echo $validation->getId() ? 'display: none' : '' ?>" class="details-enseignements" 
-             id="validation-<?php echo $validation->getId() ?>">
-            <?php echo $this->serviceListe($services[$validation->getId()])
-                    ->setTypeVolumeHoraire($typeVolumeHoraire)
-                    ->setRenderIntervenants(false)->render(); ?>
-        </div>
-        <?php $this->placeholder('enseignements')->captureEnd(); ?>
-        <!-- fin de capture -->
+        <?php $servicesValidation = $this->partial('application/validation/partial/services-validation', array(
+            'validation' => $validation,
+            'services' => $services,
+            'typeVolumeHoraire' => $typeVolumeHoraire,
+        )) ?>
         
         <tr>
             <td class="structure">
@@ -51,12 +38,12 @@
             <td>
                 <?php if ($validation->getId()): ?>
                     <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
-                    <?php echo $this->placeholder('enseignements') ?>
+                    <?php echo $servicesValidation ?>
                     <a href="<?php echo $this->url('validation/supprimer', array('validation' => $validation->getId())) ?>"
                        class="validation-delete ajax-modal btn btn-primary" data-event="validation-delete-event">Supprimer cette validation</a>
                 <?php else: ?>
                 <?php // if ($formValider->getObject() === $validation): ?>
-                <?php echo $this->placeholder('enseignements') ?>
+                <?php echo $servicesValidation ?>
                 <div class="row">
                     <div class="col-sm-5">
                         <?php 
@@ -92,6 +79,5 @@ $(function() {
         event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();
     });
-    $("a.voir-enseignements").click(function() { $($(this).data('target')).slideToggle(); return false; });
 });
 </script>

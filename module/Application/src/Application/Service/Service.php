@@ -9,6 +9,7 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 
 /**
@@ -275,19 +276,20 @@ class Service extends AbstractEntityService
      * @param StructureEntity $structureEns
      * @return QueryBuilder
      */
-    public function findServicesNonValides(
+    public function finderServicesNonValides(
             IntervenantEntity $intervenant = null,
             StructureEntity $structureEns = null)
     {
-        $qb = $this->getRepo()->createQueryBuilder('s')
-                ->select("s, i, vh, strens")
-                ->join("s.intervenant", "i")
-                ->join("s.volumeHoraire", 'vh')
-                ->join("s.structureEns", 'strens')
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select("s2, i, vh, strens, strens2")
+                ->from("Application\Entity\Db\Service", 's2')
+                ->join("s2.intervenant", "i")
+                ->join("s2.volumeHoraire", 'vh')
+                ->join("s2.structureEns", 'strens')
                 ->join("strens.structureNiv2", 'strens2')
                 ->andWhere('NOT EXISTS (SELECT sv FROM Application\Entity\Db\VServiceValide sv WHERE sv.volumeHoraire = vh)')
                 ->addOrderBy("strens.libelleCourt", 'asc')
-                ->addOrderBy("s.histoModification", 'asc');
+                ->addOrderBy("s2.histoModification", 'asc');
         
         if ($intervenant) {
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
@@ -303,20 +305,20 @@ class Service extends AbstractEntityService
     
     /**
      * 
-     * @param TypeValidationEntity $typeValidation
+     * @param TypeValidationEntity $validation
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureEns
      * @param StructureEntity $structureValidation
      * @return QueryBuilder
      */
-    public function findServicesValides(
-            TypeValidationEntity $typeValidation = null, 
+    public function finderServicesValides(
+            ValidationEntity $validation = null, 
             IntervenantEntity $intervenant = null, 
-            StructureEntity $structureEns = null, 
-            StructureEntity $structureValidation = null)
+            StructureEntity $structureEns = null)
     {
-        $qb = $this->getRepo()->createQueryBuilder('s')
-                ->select("s, i, vh, strens, v, tv, s")
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select("s, i, vh, strens, strens2")
+                ->from("Application\Entity\Db\Service", 's')
                 ->join("s.intervenant", "i")
                 ->join("s.volumeHoraire", 'vh')
                 ->join("s.structureEns", 'strens')
@@ -327,8 +329,8 @@ class Service extends AbstractEntityService
                 ->orderBy("v.histoModification", 'desc')
                 ->addOrderBy("strens.libelleCourt", 'asc');
         
-        if ($typeValidation) {
-            $qb->andWhere("tv = :tv")->setParameter('tv', $typeValidation);
+        if ($validation) {
+            $qb->andWhere("v = :validation")->setParameter('validation', $validation);
         }
         if ($intervenant) {
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
@@ -336,11 +338,8 @@ class Service extends AbstractEntityService
         if ($structureEns) {
             $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
         }
-        if ($structureValidation) {
-            $qb->andWhere("str = :structureValidation")->setParameter('structureValidation', $structureValidation);
-        }
         
-//        var_dump($qb->getQuery()->getSQL());
+//        print_r($qb->getQuery()->getSQL());
         
         return $qb;
     }

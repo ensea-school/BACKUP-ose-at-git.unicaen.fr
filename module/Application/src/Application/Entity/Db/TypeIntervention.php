@@ -88,7 +88,7 @@ class TypeIntervention
 
     public function __toString()
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
 

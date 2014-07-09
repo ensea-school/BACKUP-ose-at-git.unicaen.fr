@@ -2,30 +2,41 @@
 
 <?php echo $this->messenger(true) ?>
 
+<style>
+    .structure { width: 100px; }
+</style>
+
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>
-                <?php if ($this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur): ?>
-                Composante d'enseignement
-                <?php else: ?>
-                Composante d'affectation
-                <?php endif; ?>
-            </th>
+            <th class="structure">Composante</th>
             <th>Validation</th>
         </tr>
     </thead>
     <tbody>
     <?php foreach ($validations as $data): ?>
+        
         <?php 
         $structure  = $data['structure'];
         $validation = $data['validation'];
         ?>
+        
+        <?php $servicesValidation = $this->partial('application/validation/partial/services-validation', array(
+            'validation' => $validation,
+            'services' => $services,
+            'typeVolumeHoraire' => $typeVolumeHoraire,
+        )) ?>
+        
         <tr>
-            <td><?php echo $structure ?></td>
-            <td><?php echo $validation ? 
-                $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(false), 'success') :
-                "Aucune"; ?></td>
+            <td class="structure"><?php echo $structure ?></td>
+            <td>
+                <?php if ($validation): ?>
+                    <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)/*->setIncludeTypeValidation(true)*/, 'success') ?>
+                    <?php echo $servicesValidation ?>
+                <?php else: ?>
+                    Aucune
+                <?php endif; ?>
+            </td>
         </tr>
     <?php endforeach; ?>
     </tbody>

@@ -64,10 +64,10 @@ class IntervenantExterieur extends \Application\Entity\Db\IntervenantExterieur i
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'typePoste', 'regimeSecu', 'typeIntervenantExterieur', 'situationFamiliale', 'dossier', 'contrat', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
+            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'typePoste', 'regimeSecu', 'typeIntervenantExterieur', 'situationFamiliale', 'dossier', 'contrat', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
         }
 
-        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'typePoste', 'regimeSecu', 'typeIntervenantExterieur', 'situationFamiliale', 'dossier', 'contrat', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
+        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'typePoste', 'regimeSecu', 'typeIntervenantExterieur', 'situationFamiliale', 'dossier', 'contrat', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
     }
 
     /**
@@ -352,12 +352,34 @@ class IntervenantExterieur extends \Application\Entity\Db\IntervenantExterieur i
     /**
      * {@inheritDoc}
      */
-    public function getContrat($type = NULL)
+    public function getContrat()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getContrat', array($type));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getContrat', array());
 
-        return parent::getContrat($type);
+        return parent::getContrat();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getContratInitial()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getContratInitial', array());
+
+        return parent::getContratInitial();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAvenants()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAvenants', array());
+
+        return parent::getAvenants();
     }
 
     /**
@@ -1016,6 +1038,50 @@ class IntervenantExterieur extends \Application\Entity\Db\IntervenantExterieur i
     /**
      * {@inheritDoc}
      */
+    public function setBIC($BIC = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBIC', array($BIC));
+
+        return parent::setBIC($BIC);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBIC()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBIC', array());
+
+        return parent::getBIC();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIBAN($IBAN = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIBAN', array($IBAN));
+
+        return parent::setIBAN($IBAN);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIBAN()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIBAN', array());
+
+        return parent::getIBAN();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = NULL)
     {
 
@@ -1187,6 +1253,17 @@ class IntervenantExterieur extends \Application\Entity\Db\IntervenantExterieur i
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValidation', array($type));
 
         return parent::getValidation($type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function estPermanent()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'estPermanent', array());
+
+        return parent::estPermanent();
     }
 
     /**

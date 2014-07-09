@@ -163,6 +163,51 @@ class Validation extends AbstractEntityService
     }
     
     /**
+     * 
+     * @param TypeValidationEntity $typeValidation
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structureEns
+     * @param StructureEntity $structureValidation
+     * @return QueryBuilder
+     */
+    public function finderValidationsServices(
+            TypeValidationEntity $typeValidation = null, 
+            IntervenantEntity $intervenant = null, 
+            StructureEntity $structureEns = null, 
+            StructureEntity $structureValidation = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select("v, tv, str, i, vh, s, strens, strens2")
+                ->from('Application\Entity\Db\Validation', 'v')
+                ->join("v.typeValidation", 'tv')
+                ->join("v.structure", 'str') // auteur de la validation
+                ->join("v.intervenant", "i")
+                ->join("v.volumeHoraire", 'vh')
+                ->join("vh.service", 's')
+                ->join("s.structureEns", 'strens')
+                ->join("strens.structureNiv2", 'strens2')
+                ->orderBy("v.histoModification", 'desc')
+                ->addOrderBy("strens.libelleCourt", 'asc');
+        
+        if ($typeValidation) {
+            $qb->andWhere("tv = :tv")->setParameter('tv', $typeValidation);
+        }
+        if ($intervenant) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
+        }
+        if ($structureEns) {
+            $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
+        }
+        if ($structureValidation) {
+            $qb->andWhere("str = :structureValidation")->setParameter('structureValidation', $structureValidation);
+        }
+        
+//        var_dump($qb->getQuery()->getSQL());
+        
+        return $qb;
+    }
+    
+    /**
      * Détermine si on peut saisir une validation de services.
      *
      * @param \Application\Entity\Db\Intervenant $intervenant Intervenant concerné

@@ -64,10 +64,10 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'volumeHoraireListes');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'volumeHoraireListes');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire');
     }
 
     /**
@@ -323,23 +323,34 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function getVolumeHoraire()
+    public function getVolumeHoraire(\Application\Entity\Db\Validation $validation = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraire', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraire', array($validation));
 
-        return parent::getVolumeHoraire();
+        return parent::getVolumeHoraire($validation);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getVolumeHoraireListe(\Application\Entity\Db\Periode $periode)
+    public function getVolumeHoraireListe(\Application\Entity\Db\Periode $periode = NULL, \Application\Entity\Db\TypeIntervention $typeIntervention = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireListe', array($periode));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireListe', array($periode, $typeIntervention));
 
-        return parent::getVolumeHoraireListe($periode);
+        return parent::getVolumeHoraireListe($periode, $typeIntervention);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVolumeHoraireListeOLD(\Application\Entity\Db\Periode $periode)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireListeOLD', array($periode));
+
+        return parent::getVolumeHoraireListeOLD($periode);
     }
 
     /**
@@ -538,6 +549,28 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAnnee', array());
 
         return parent::getAnnee();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTypeVolumeHoraire()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeVolumeHoraire', array());
+
+        return parent::getTypeVolumeHoraire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTypeVolumeHoraire', array($typeVolumeHoraire));
+
+        return parent::setTypeVolumeHoraire($typeVolumeHoraire);
     }
 
 }

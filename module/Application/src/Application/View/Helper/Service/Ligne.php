@@ -9,6 +9,8 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Structure;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
@@ -28,20 +30,91 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     /**
      * description
      *
-     * @var boolean
+     * @var Intervenant|boolean
      */
-    protected $renderIntervenants = true;
+    protected $intervenant;
+
+    /**
+     * description
+     *
+     * @var Structure|boolean
+     */
+    protected $structure;
 
 
-    public function getRenderIntervenants()
+    /**
+     *
+     * @return Intervenant|boolean
+     */
+    public function getIntervenant()
     {
-        return $this->renderIntervenants;
+        return $this->intervenant;
     }
 
-    public function setRenderIntervenants($renderIntervenants)
+    /**
+     *
+     * @param Intervenant $intervenant
+     * @return self
+     */
+    public function setIntervenant( $intervenant)
     {
-        $this->renderIntervenants = $renderIntervenants;
+        if (is_bool($intervenant) || $intervenant === null || $intervenant instanceof Intervenant){
+            $this->intervenant = $intervenant;
+        }else{
+            throw new \Common\Exception\LogicException('La valeur transmise pour Intervenant n\'est pas correcte');
+        }
         return $this;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function mustRenderIntervenant()
+    {
+        return $this->intervenant === null || $this->intervenant === false;
+    }
+
+    /**
+     *
+     * @return Structure|boolean
+     */
+    public function getStructure()
+    {
+        return $this->structure;
+    }
+
+    /**
+     *
+     * @param Structure $structure
+     * @return self
+     */
+    public function setStructure( $structure )
+    {
+        if (is_bool($structure) || $structure === null || $structure instanceof Structure){
+            $this->structure = $structure;
+        }else{
+            throw new \Common\Exception\LogicException('La valeur transmise pour Structure n\'est pas correcte');
+        }
+        return $this;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function mustRenderStructure()
+    {
+        return $this->structure === null || $this->structure === false;
+    }
+
+    protected function toQuery($param)
+    {
+        if (null === $param) return null;
+        elseif (false === $param) return 'false';
+        elseif( true === $param) return 'true';
+        elseif(method_exists($param, 'getId')) return $param->getId();
+        else throw new \Common\Exception\LogicException('Le paramètre n\'est pas du bon type');
     }
 
     /**
@@ -81,8 +154,9 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                     'typeVolumeHoraire' => $this->service->getTypeVolumehoraire()->getId()
                 ],
                 ['query' => [
-                    'only-content' => 1,
-                    'render-intervenants' => $this->getRenderIntervenants(),
+                    'only-content'  => 1,
+                    'intervenant'   => $this->toQuery($this->getIntervenant()),
+                    'structure'     => $this->toQuery($this->getStructure()),
                 ]]);
         return $url;
     }
@@ -108,28 +182,34 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         }
 
         $out = '';
-        if ($this->getRenderIntervenants()) {
+        if ($this->mustRenderIntervenant()) {
             $out .= '<td>'.$this->renderIntervenant($this->service->getIntervenant()).'</td>';
-            if ($this->service->getIntervenant() instanceof Application\Entity\Db\IntervenantExterieur){
+            if ($this->service->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
                 $out .= '<td>'.$this->renderStructure( $this->service->getStructureAff() )."</td>\n";
-            }
-            else {
+            } else {
                 $out .= "<td>&nbsp;</td>\n";
             }
 
         }
         if ($this->service->getEtablissement() === $context->getEtablissement()) {
-            $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
+            if ($this->mustRenderStructure()){
+                $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
+            }
             $out .= '<td>'.$this->renderEtape($this->service->getElementPedagogique()->getEtape())."</td>\n";
             $out .= '<td>'.$this->renderElementPedagogique($this->service->getElementPedagogique())."</td>\n";
             if ($role instanceof \Application\Acl\ComposanteDbRole) {
                 $out .= '<td>'.$this->renderFOAD($this->service->getElementPedagogique())."</td>\n";
                 $out .= '<td>'.$this->renderRegimeInscription($this->service->getElementPedagogique())."</td>\n";
             }
-        }
-        else {
-            $colspan = $role instanceof \Application\Acl\ComposanteDbRole ? 5 : 3;
-            $out .= '<td colspan="' . $colspan . '">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
+        }else{
+            $colspan = 2;
+            if ($this->mustRenderStructure()){
+                $colspan++;
+            }
+            if ($role instanceof \Application\Acl\ComposanteDbRole) {
+                $colspan += 2;
+            }
+            $out .= '<td colspan="'.$colspan.'">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";
         }
         if (!$context->getAnnee()) {
             $out .= '<td>'.$this->renderAnnee( $this->service->getAnnee() )."</td>\n";
@@ -146,7 +226,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderIntervenant($intervenant)
     {
-        $pourl = $this->getView()->url('intervenant/default', array('action' => 'voir', 'intervenant' => $intervenant->getId()));
+        $pourl = $this->getView()->url('intervenant/default', array('action' => 'voir', 'intervenant' => $intervenant->getSourceCode()));
         $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
         return $out;
     }

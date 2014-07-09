@@ -79,7 +79,9 @@ class ServiceController extends AbstractActionController
             $services = array();
         }
 
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'title', 'intervenant'));
+        $renderReferentiel  = !$role instanceof IntervenantExterieurRole && !$intervenant instanceof IntervenantExterieur;
+
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'title', 'intervenant', 'renderReferentiel'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
@@ -210,12 +212,25 @@ class ServiceController extends AbstractActionController
     public function rafraichirLigneAction()
     {
         $service = $this->context()->serviceFromRoute();
-        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromRoute();
+        $typeVolumeHoraire  = $this->context()->typeVolumeHoraireFromRoute();
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
+
         $details            = 1 == (int)$this->params()->fromQuery('details',               (int)$this->params()->fromPost('details',0));
-        $renderIntervenants = 1 == (int)$this->params()->fromQuery('render-intervenants',   (int)$this->params()->fromPost('render-intervenants',0));
         $onlyContent        = 1 == (int)$this->params()->fromQuery('only-content',          0);
-        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'renderIntervenants');
+
+        $intervenant        = $this->params()->fromQuery('intervenant');
+        if ('false' === $intervenant) $intervenant = false;
+        if ('true' === $intervenant) $intervenant = true;
+        if ('' === $intervenant) $intervenant = null;
+        $intervenant = $this->getServiceLocator()->get('applicationIntervenant')->get((int)$intervenant);
+
+        $structure        = $this->params()->fromQuery('structure');
+        if ('false' === $structure) $structure = false;
+        if ('true' === $structure) $structure = true;
+        if ('' === $structure) $structure = null;
+        $structure = $this->getServiceLocator()->get('applicationStructure')->get((int)$structure);
+
+        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'intervenant', 'structure');
     }
 
     public function suppressionAction()

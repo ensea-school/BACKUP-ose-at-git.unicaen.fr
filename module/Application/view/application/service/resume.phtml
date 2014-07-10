@@ -15,16 +15,17 @@
 <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un enseignement"><span class="glyphicon glyphicon-plus"></span> Saisir un nouvel enseignement</a>
 <br /><br />
 
+<?php echo $this->messenger()->setMessages(['warning' => "Les totaux en heures équivalent TD sont calulés à partir de l'ensemble des enseignements de chaque intervenant. En outre, les heures non payées ne sont pas prises en compte dans le calcul des HETD."]); ?>
+
 <div data-url="<?php echo $this->url('service/resume-refresh'); ?>" id="service-resume">
-    <?php echo $this->serviceResume()->setFilter($filter)->render(); ?>
+    <?php echo $this->serviceResume($resumeServices)->render(); ?>
 </div>
 <?php else: ?>
 <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les enseignements.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
 <?php endif; ?>
 <script type="text/javascript">
     $(function() {
-            Service.init("<?php echo $this->url('service/default', array('action' => 'voirLigne') ) ?>");
-            Service.setRenderIntervenants(true);
+            Service.init();
     });
 </script>
 <style>

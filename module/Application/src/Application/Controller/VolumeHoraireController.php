@@ -80,7 +80,7 @@ class VolumeHoraireController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()){
-            $heures = (float)$request->getPost()['heures'];
+            $heures = (float)str_replace(',','.',$request->getPost()['heures']);
             try{
                 $volumeHoraireList->setHeures($heures, $motifNonPaiement, $ancienMotifNonPaiement);
             }catch(\Exception $e){

@@ -72,7 +72,11 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
         $filters = array();
         foreach( $this->getTypesInterventions() as $typeIntervention ){
             $filters[$typeIntervention->getCode()] = array(
-                'required' => false
+                'required' => false,
+                'filters'    => array(
+                    array('name' => 'Zend\Filter\StringTrim'),
+                    new \Zend\Filter\PregReplace(array('pattern' => '/,/', 'replacement' => '.')),
+                ),
             );
         }
         return $filters;

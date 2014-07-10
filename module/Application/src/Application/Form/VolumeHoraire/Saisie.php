@@ -105,6 +105,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
 
         $data = $object->filtersToArray();
         $data['service'] = $object->getService()->getId();
+        //$data['heures'] = str_replace('.',',',$object->getHeures());
         $data['heures'] = $object->getHeures();
 
         if (! $this->getServiceLocator()->getServiceLocator()->get('applicationService')->canHaveMotifNonPaiement($object->getService())){
@@ -130,6 +131,13 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             'periode' => array(
                 'required' => false
             ),
+            'heures' => [
+                'required' => true,
+                'filters'  => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                ],
+            ],
         );
     }
 

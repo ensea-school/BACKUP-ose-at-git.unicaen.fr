@@ -40,7 +40,8 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             'attributes' => array(
                 'value' => "0",
                 'title' => "Nombre d'heures",
-                'class' => 'volume-horaire volume-horaire-heures input-sm'
+                'class' => 'volume-horaire volume-horaire-heures input-sm',
+                'step'  => 'any',
             ),
             'type'       => 'Text',
         ));

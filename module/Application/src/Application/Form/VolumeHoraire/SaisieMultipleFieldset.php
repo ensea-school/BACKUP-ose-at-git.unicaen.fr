@@ -50,7 +50,8 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
                 ),
                 'attributes' => array(
                     'title' => $typeIntervention->getLibelle(),
-                    'class' => 'volume-horaire volume-horaire-heures input-sm'
+                    'class' => 'volume-horaire volume-horaire-heures input-sm',
+                    'step'  => 'any',
                 ),
                 'type'       => 'Text',
             ));

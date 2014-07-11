@@ -20,10 +20,14 @@ class PeutValiderServiceRule extends IntervenantRule
         $this->typeValidation = $typeValidation;
     }
     
+    /**
+     * 
+     * @todo Cette règle devrait se concentrer uniquement sur les services, pas les données perso!
+     * @todo Problème potentiel : il est permis de valider les services ssi il est permis de saisir des services
+     * @return boolean
+     */
     public function execute()
     {
-        $statut = $this->getIntervenant()->getStatut();
-        
         switch ($this->typeValidation->getCode()) {
             case TypeValidation::CODE_DONNEES_PERSO_PAR_COMP:
                 $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());

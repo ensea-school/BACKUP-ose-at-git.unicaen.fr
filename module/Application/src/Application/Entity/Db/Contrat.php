@@ -62,6 +62,112 @@ class Contrat implements HistoriqueAwareInterface
      */
     private $structure;
 
+    /**
+     * @var \Application\Entity\Db\Validation
+     */
+    private $validation;
+
+    /**
+     * @var integer
+     */
+    private $numeroAvenant;
+    
+    /**
+     * @var \Application\Entity\Db\Contrat
+     */
+    protected $contrat;
+
+    /**
+     * @var \DateTime
+     */
+    private $dateRetourSigne;
+
+    /**
+     * Libellé de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toString();
+    }
+    
+    /**
+     * Libellé de cet objet.
+     * 
+     * @param $avecArticle boolean Inclure l'article défini (utile pour inclure le libellé dans une phrase)
+     * @param $deLe boolean Activer la formulation "du"/"de l'" ou non
+     * @return string
+     */
+    public function toString($avecArticle = false, $deLe = false)
+    {
+        if ($this->estUnAvenant()) {
+            if ($this->getValidation()) {
+                $template = ($avecArticle ? ($deLe ? "de l'avenant n°%s" : "l'avenant n°%s") : "avenant n°%s");
+            }
+            else {
+                $template = ($avecArticle ? ($deLe ? "du projet d'avenant" : "le projet d'avenant") : "projet d'avenant");
+            }
+        }
+        else {
+            if ($this->getValidation()) {
+                $template = ($avecArticle ? ($deLe ? "du contrat n°%s" : "le contrat n°%s") : "contrat n°%s");
+            }
+            else {
+                $template = ($avecArticle ? ($deLe ? "du projet de contrat" : "le projet de contrat") : "projet de contrat");
+            }
+        }
+        
+        return ucfirst(sprintf($template, $this->getReference()));
+    }
+    
+    /**
+     * Retourne la référence (numéro) du contrat ou de l'avenant.
+     * 
+     * @return string
+     */
+    public function getReference()
+    {
+        if ($this->estUnAvenant()) {
+            return sprintf("%s.%s", $this->getContrat()->getReference(), $this->getNumeroAvenant());
+        }
+        else {
+            return sprintf("%s", $this->getId());
+        }
+    }
+    
+    /**
+     * Indique s'il s'agit d'un avenant.
+     * 
+     * @return boolean
+     */
+    public function estUnAvenant()
+    {
+        return $this->getTypeContrat()->getCode() === TypeContrat::CODE_AVENANT;
+    }
+    
+    /**
+     * Set numeroAvenant
+     *
+     * @param integer $numeroAvenant
+     * @return Contrat
+     */
+    public function setNumeroAvenant($numeroAvenant)
+    {
+        $this->numeroAvenant = $numeroAvenant;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroAvenant
+     *
+     * @return integer 
+     */
+    public function getNumeroAvenant()
+    {
+        return $this->numeroAvenant;
+    }
     
     /**
      * Set histoCreation
@@ -310,5 +416,74 @@ class Contrat implements HistoriqueAwareInterface
     public function getStructure()
     {
         return $this->structure;
+    }
+
+    /**
+     * Set validation
+     *
+     * @param \Application\Entity\Db\Validation $validation
+     * @return Contrat
+     */
+    public function setValidation(\Application\Entity\Db\Validation $validation = null)
+    {
+        $this->validation = $validation;
+
+        return $this;
+    }
+
+    /**
+     * Get validation
+     *
+     * @return \Application\Entity\Db\Validation 
+     */
+    public function getValidation()
+    {
+        return $this->validation;
+    }
+
+    /**
+     * Set contrat
+     *
+     * @param \Application\Entity\Db\Contrat $contrat
+     * @return Contrat
+     */
+    public function setContrat(\Application\Entity\Db\Contrat $contrat = null)
+    {
+        $this->contrat = $contrat;
+
+        return $this;
+    }
+
+    /**
+     * Get contrat
+     *
+     * @return \Application\Entity\Db\Contrat 
+     */
+    public function getContrat()
+    {
+        return $this->contrat;
+    }
+
+    /**
+     * Set dateRetourSigne
+     *
+     * @param \DateTime $dateRetourSigne
+     * @return Contrat
+     */
+    public function setDateRetourSigne($dateRetourSigne)
+    {
+        $this->dateRetourSigne = $dateRetourSigne;
+
+        return $this;
+    }
+
+    /**
+     * Get dateRetourSigne
+     *
+     * @return \DateTime 
+     */
+    public function getDateRetourSigne()
+    {
+        return $this->dateRetourSigne;
     }
 }

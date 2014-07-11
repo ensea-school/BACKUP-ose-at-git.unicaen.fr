@@ -1,0 +1,30 @@
+<?php
+$label    = $this->label ?: "Enseignements concernés";
+$contrat  = $this->contrat;
+$services = $this->services;
+$display  = $contrat->getId() ? 'display: none' : ''; //var_dump($services);die;
+?>
+<p>
+    <?php echo $label ?><br />
+    <small><a title="Cliquez pour afficher/masquer les enseignements concernés"
+        href="#" 
+        class="voir-enseignements" 
+        id="contrat-<?php echo $contrat->getId() ?>-toggle"
+        data-target="#contrat-<?php echo $contrat->getId() ?>"
+        >Afficher/masquer</a></small>
+</p>
+<div style="<?php echo $display ?>" class="details-enseignements" id="contrat-<?php echo $contrat->getId() ?>">
+    <?php    echo $this->serviceListe($services)
+            ->setIntervenant(false)
+            ->render(); ?>
+</div>
+
+<script>
+$(function() {
+    // affichage/masquage des enseignements concernés
+    $("#contrat-<?php echo $contrat->getId() ?>-toggle").click(function() { 
+        $($(this).data('target')).slideToggle(); 
+        return false;
+    });
+});
+</script>

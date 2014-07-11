@@ -140,11 +140,11 @@ class Validation extends AbstractEntityService
     
     /**
      * 
-     * @param TypeValidation|string $type
+     * @param TypeValidationEntity|string $type
      * @return TypeValidationEntity
      * @throws RuntimeException
      */
-    protected function normalizeTypeValidation($type)
+    public function normalizeTypeValidation($type)
     {
         if (null === $type) {
             return null;
@@ -213,23 +213,25 @@ class Validation extends AbstractEntityService
      * @param \Application\Entity\Db\Intervenant $intervenant Intervenant concerné
      * @param \Application\Entity\Db\TypeValidation|string $type Type de validation concerné
      * @return boolean
+     * @todo L'idée des canXxx est bonne mais trop simpliste : le contexte (intervenant, type de validation, 
+     * contrat, ...) varie trop. Idée : transmettre au canXxx les règles métiers à tester plutôt que des paramètres ?
      */
     public function canAdd($intervenant, $type, $runEx = false)
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         $rule = new \Application\Rule\Intervenant\PeutValiderServiceRule($intervenant, $this->normalizeTypeValidation($type));
-        if (!$rule->execute()) {
-            $message = "?";
-            if ($role instanceof \Application\Acl\IntervenantRole) {
-                $message = "Vous ne pouvez pas valider. ";
-            }
-            elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
-                $message = "Vous ne pouvez pas valider pour $intervenant. ";
-            }
-            return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
-        }
-        
+                if (!$rule->execute()) {
+                    $message = "?";
+                    if ($role instanceof \Application\Acl\IntervenantRole) {
+                        $message = "Vous ne pouvez pas valider. ";
+                    }
+                    elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+                        $message = "Vous ne pouvez pas valider pour $intervenant. ";
+                    }
+                    return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
+                }
+            
         return true;
     }
     

@@ -5,11 +5,11 @@ namespace Application\Rule\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 
 /**
- * Description of PeutCreerContratRule
+ * Description of PeutCreerContratInitialRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutCreerContratRule extends IntervenantRule
+class PeutCreerContratInitialRule extends IntervenantRule
 {
     use \Application\Traits\TypeValidationAwareTrait;
     use \Application\Traits\TypeContratAwareTrait;
@@ -18,18 +18,33 @@ class PeutCreerContratRule extends IntervenantRule
     
     public function execute()
     {
+        $this->validation = null; 
+        
         $contrats = $this->getIntervenant()->getContrat($this->getTypeContrat());
-        if (count($contrats)) {
-            $this->setMessage(sprintf("Un contrat existe déjà pour %s.", $this->getIntervenant()));
+        foreach ($contrats as $contrat) { /* @var $contrat \Application\Entity\Db\Contrat */
+            if ($contrat->getValidation()) {
+                $this->validation = $contrat->getValidation();
+                $this->setMessage(sprintf("Un contrat validé le %s existe déjà pour %s.", 
+                        $contrat->getValidation()->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT), 
+                        $this->getIntervenant()));
+                return false;
+            }
+        }
+        /** 
+         * NB: Plusieurs contrats peuvent exister pour un même intervenant et une même composante d'intervention!
+         * Ce sont des "projets" de contrats ou d'avenants qui deviendront soit contrat soit avenant définitif 
+         * au moment de leur validation.
+         * Lorsqu'un projet de contrat est validé, il devient contrat définitif et les autres projets éventuels 
+         * deviennent projets d'avenants.
+         * Il ne peut exister qu'un seul contrat validé. 
+         */
+        
+        $serviceValideMemePartiellement = $this->getServiceValideRule()->execute();
+        
+        if ($this->getServiceValideRule()->isRelevant() && !$serviceValideMemePartiellement) {
+            $this->setMessage(sprintf("Des enseignements de %s doivent être validés au préalable.", $this->getIntervenant()));
             return false;
         }
-        
-        if ($this->getServiceValideRule()->isRelevant() && !$this->getServiceValideRule()->execute()) {
-            $this->setMessage(sprintf("Les enseignements de %s doivent être validés au préalable.", $this->getIntervenant()));
-            return false;
-        }
-        
-        $this->getServiceValideRule()->execute();
         
         // on s'intéresse à ceux validés mais n'ayant pas faits l'objet d'un contrat
         $this->volumesHorairesDispos = [];
@@ -49,6 +64,19 @@ class PeutCreerContratRule extends IntervenantRule
     public function isRelevant()
     {
         return $this->getIntervenant() instanceof IntervenantExterieur;
+    }
+    
+    /**
+     * @var \Application\Entity\Db\Validation
+     */
+    private $validation;
+    
+    /**
+     * @return \Application\Entity\Db\Validation
+     */
+    public function getValidation()
+    {
+        return $this->validation;
     }
     
     /**
@@ -92,7 +120,8 @@ class PeutCreerContratRule extends IntervenantRule
     private function getServiceValideRule()
     {
         if (null === $this->serviceValideRule) {
-            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant());
+            // une validation partielle des services suffit
+            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
             $this->serviceValideRule
                     ->setStructure($this->getStructure())
                     ->setTypeValidation($this->getTypeValidation())

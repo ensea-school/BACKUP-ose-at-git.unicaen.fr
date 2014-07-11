@@ -11,6 +11,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\ServiceValidation;
+use Application\Form\Intervenant\ContratValidation;
 
 /**
  * Description of ValidationController
@@ -260,74 +261,6 @@ class ValidationController extends AbstractActionController implements ContextPr
      * @return \Zend\View\Model\ViewModel
      * @throws \Common\Exception\MessageException
      */
-    public function voirServiceAction_Old()
-    { 
-        $this->readonly = true;
-          
-        $serviceStructure  = $this->getServiceStructure();
-        $serviceValidation = $this->getServiceValidation();
-        $serviceService    = $this->getServiceService();
-        $role              = $this->getContextProvider()->getSelectedIdentityRole();
-        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        $this->formValider = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
-        $this->title       = "Validation des enseignements <small>$this->intervenant</small>";
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-        $typeValidation    = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_SERVICES_PAR_COMP)->getQuery()->getOneOrNullResult();
-
-        $this->em()->getFilters()->enable('historique');
-        
-        // la validation des services d'un vacataire se fait par chaque structure d'intervention
-        if ($this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
-        
-            // fetch des structures d'intervention
-            $qb = $serviceStructure->initQuery()[0];
-            $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
-            $serviceService->finderByContext($qb);
-            $structures = $serviceStructure->getList($qb);
-
-            // collecte des validations de services pour chaque structure d'intervention
-            $this->validation = array();
-            foreach ($structures as $key => $structure) {
-//                $this->validation[$key] = array('validation' => null, 'structure' => $structure);
-                $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
-                $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
-                $validations = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getResult();
-                foreach ($validations as $validation) {
-                    $this->validation[$validation->getId()]['validation'] = $validation;
-                    $this->validation[$validation->getId()]['structure']  = $structure;
-                }
-            }
-        }
-        
-        // la validation des services d'un permanent se fait par la structure d'affectation
-        else {
-
-            // collecte des validations de services 
-            $this->validation = array();
-            $structure = $this->intervenant->getStructure()->getParenteNiv2();
-            $key = $structure->getId();
-//            $this->validation[$key] = array('validation' => null, 'structure' => $structure);
-            $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
-            $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
-            $validations = $serviceValidation->finderByStructure($structure, $qb)->getQuery()->getResult();
-            foreach ($validations as $validation) {
-                $this->validation[$validation->getId()]['validation'] = $validation;
-                $this->validation[$validation->getId()]['structure']  = $structure;
-            }
-        }
-        
-        $this->view = new \Zend\View\Model\ViewModel(array(
-            'intervenant'       => $this->intervenant,
-            'typeVolumeHoraire' => $typeVolumeHoraire,
-            'validations'       => $this->validation,
-            'role'              => $role,
-            'title'             => $this->title,
-            'readonly'          => $this->readonly,
-        ));
-        $this->view->setTemplate('application/validation/voir-service');
-        
-        return $this->view;
-    }
     public function voirServiceAction()
     { 
         $this->readonly = true;
@@ -546,6 +479,22 @@ class ValidationController extends AbstractActionController implements ContextPr
     
     /**
      * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function contratAction()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof ComposanteDbRole) {
+            return $this->modifierContratAction();
+        }
+        else {
+            throw new \Common\Exception\LogicException("Non implémenté.");
+        }
+    }
+    
+    /**
+     * 
      * @throws RuntimeException
      */
     public function supprimerAction()
@@ -564,14 +513,22 @@ class ValidationController extends AbstractActionController implements ContextPr
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
 
         if ($this->getRequest()->isPost()) {
+            $softDelete = true;
+            // NB: une validation de contrat doit être supprimée! Il existe une relation ManyToOne de Contrat vers Validation
+            // et si la validation est seulement historisée, Doctrine ne trouve plus la Validation référencée dans Contrat 
+            // (EntityNotFoundException) si le filtre 'historique' est actif.
+            if ($validation->getTypeValidation()->getCode() === TypeValidation::CODE_CONTRAT_PAR_COMP) {
+                $softDelete = false;
+            }
+            
             $errors = array();
             try {
-                $this->getServiceValidation()->delete($validation);
+                $this->getServiceValidation()->delete($validation, $softDelete);
                 $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
             }
             catch(\Exception $e){
                 $e = \Application\Exception\DbException::translate($e);
-                $errors[] = $e->getMessage();
+                $errors[\UnicaenApp\View\Helper\Messenger::ERROR] = $e->getMessage();
             }
             $viewModel->setVariable('errors', $errors);
         }

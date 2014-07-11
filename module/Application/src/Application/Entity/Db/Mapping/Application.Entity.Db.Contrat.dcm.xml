@@ -10,6 +10,8 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
+    <field name="numeroAvenant" type="integer" column="NUMERO_AVENANT" nullable="false"/>
+    <field name="dateRetourSigne" type="datetime" column="DATE_RETOUR_SIGNE" nullable="true"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
@@ -41,6 +43,16 @@
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
+      <join-columns>
+        <join-column name="VALIDATION_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="contrat" target-entity="Application\Entity\Db\Contrat">
+      <join-columns>
+        <join-column name="CONTRAT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <one-to-many field="volumeHoraire" target-entity="Application\Entity\Db\VolumeHoraire" mapped-by="contrat" />

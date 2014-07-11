@@ -56,6 +56,30 @@ return array(
                             ),
                         ),
                     ),
+                    'valider' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:contrat/valider',
+                            'constraints' => array(
+                                'contrat' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'valider',
+                            ),
+                        ),
+                    ),
+                    'devalider' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:contrat/devalider',
+                            'constraints' => array(
+                                'contrat' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'devalider',
+                            ),
+                        ),
+                    ),
                     'exporter' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -101,7 +125,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => array('creer', 'creer-avenant'),
+                    'action'     => array('creer', 'valider', 'devalider'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
                 array(
@@ -119,8 +143,9 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationContrat'     => 'Application\\Service\\Contrat',
-            'ApplicationTypeContrat' => 'Application\\Service\\TypeContrat',
+            'ApplicationContrat'        => 'Application\\Service\\Contrat',
+            'ApplicationTypeContrat'    => 'Application\\Service\\TypeContrat',
+            'ApplicationContratProcess' => 'Application\\Service\\Process\\ContratProcess',
         ),
     ),
     'view_helpers' => array(

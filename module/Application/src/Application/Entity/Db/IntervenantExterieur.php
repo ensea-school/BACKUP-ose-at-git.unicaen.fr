@@ -47,7 +47,14 @@ class IntervenantExterieur extends Intervenant
      */
     protected $contrat;
 
-
+    /**
+     * 
+     */
+    public function __construct()
+    {
+        $this->contrat = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Set validiteDebut
      *
@@ -249,7 +256,7 @@ class IntervenantExterieur extends Intervenant
      */
     public function getContratInitial()
     {
-        if (null === $this->getContrat()) {
+        if (!count($this->getContrat())) {
             return null;
         }
         
@@ -264,14 +271,10 @@ class IntervenantExterieur extends Intervenant
     /**
      * Get avenants
      *
-     * @return Contrat|null
+     * @return Contrat[]|null
      */
     public function getAvenants()
     {
-        if (null === $this->getContrat()) {
-            return null;
-        }
-            
         $type = TypeContrat::CODE_AVENANT;
         
         $filter   = function(Contrat $contrat) use ($type) { return $type === $contrat->getTypeContrat()->getCode(); };

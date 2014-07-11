@@ -46,7 +46,7 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
         foreach( $this->getTypesInterventions() as $typeIntervention ){
             $object->setTypeIntervention($typeIntervention);
             if (isset($data[$typeIntervention->getCode()])){
-                $heures = (int)$data[$typeIntervention->getCode()];
+                $heures = (float)$data[$typeIntervention->getCode()];
             }else{
                 $heures = 0;
             }

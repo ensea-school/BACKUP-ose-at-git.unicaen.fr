@@ -21,9 +21,9 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
     /**
      * Filtre de données
      *
-     * @var Stdclass
+     * @var array
      */
-    protected $filter;
+    protected $resumeServices;
 
 
 
@@ -34,8 +34,9 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
      *
      * @return self
      */
-    final public function __invoke()
+    final public function __invoke( $resumeServices )
     {
+        $this->resumeServices = $resumeServices;
         return $this;
     }
 
@@ -59,25 +60,6 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
     }
 
     /**
-     * @return Stdclass
-     */
-    protected function getFilter()
-    {
-        return $this->filter;
-    }
-
-    /**
-     *
-     * @param Stdclass $filter
-     * @return self
-     */
-    public function setFilter( $filter )
-    {
-        $this->filter = $filter;
-        return $this;
-    }
-
-    /**
      * Retourne les données
      *
      * @return array
@@ -96,7 +78,6 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
     public function render()
     {
         $typesIntervention = $this->getTypesIntervention();
-        $data              = $this->getData();
 
         $res  = '<table class="table table-hover table-bordered">'."\n";
         $res .= '<thead>'."\n";
@@ -113,7 +94,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</tr>'."\n";
         $res .= '</thead>'."\n";
         $res .= '<tbody>'."\n";
-        foreach( $data as $intervenantId => $line ) {
+        foreach( $this->resumeServices as $intervenantId => $line ) {
             $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
 
 
@@ -123,18 +104,21 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
                 $hetd = 0;
             }
 
+            $msg = '<td>';
+            $endMsg = '</td>';
             if (isset($line['intervenant']['HEURES_COMP'])){
                 $heuresComp = (float)$line['intervenant']['HEURES_COMP'];
-                $msg = '';
+                $heuresReelles = (float)$line['intervenant']['TOTAL_REEL'];
                 if ($heuresComp < 0){
-                    $msg = ' class="bg-danger" title="Sous-service ('.number_format($heuresComp*-1,2,',',' ').' heures manquantes)"';
+                    $msg = '<td class="bg-danger"><abbr title="Sous-service ('.number_format($heuresComp*-1,2,',',' ').' heures manquantes sur la base de '.number_format($heuresReelles,2,',',' ').' heures)">';
+                    $endMsg = '</abbr></td>';
                 }
                 if ($heuresComp > 0 && $intervenantPermanent){
-                    $msg = ' class="bg-warning" title="Sur-service ('.number_format($heuresComp,2,',',' ').' heures complémentaires positionnées)"';;
+                    $msg = '<td class="bg-warning"><abbr title="Sur-service ('.number_format($heuresComp,2,',',' ').' heures complémentaires positionnées sur la base de '.number_format($heuresReelles,2,',',' ').' heures)">';;
+                    $endMsg = '</abbr></td>';
                 }
             }else{
                 $heuresComp = 0;
-                $msg = '';
             }
 
             $res .= '<tr>'."\n";
@@ -146,7 +130,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
                 $res .= '<td>'.(isset($line['service'][$ti->getId()]) ? $line['service'][$ti->getId()] : '0').'</td>'."\n";
             }
             $res .= '<td>'.(array_key_exists('referentiel', $line) ? $line['referentiel'] : ($intervenantPermanent ? 0 : $na)).'</td>'."\n";
-            $res .= '<td'.$msg.'>'.number_format($hetd,2,',',' ').'</td>'."\n";
+            $res .= $msg.number_format($hetd,2,',',' ').'</td>'."\n";
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";

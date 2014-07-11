@@ -50,7 +50,9 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
                 ),
                 'attributes' => array(
                     'title' => $typeIntervention->getLibelle(),
-                    'class' => 'volume-horaire volume-horaire-heures input-sm'
+                    'class' => 'volume-horaire volume-horaire-heures input-sm',
+                    'step'  => 'any',
+                    'min'   => 0,
                 ),
                 'type'       => 'Text',
             ));
@@ -72,7 +74,11 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
         $filters = array();
         foreach( $this->getTypesInterventions() as $typeIntervention ){
             $filters[$typeIntervention->getCode()] = array(
-                'required' => false
+                'required' => false,
+                'filters'    => array(
+                    array('name' => 'Zend\Filter\StringTrim'),
+                    new \Zend\Filter\PregReplace(array('pattern' => '/,/', 'replacement' => '.')),
+                ),
             );
         }
         return $filters;

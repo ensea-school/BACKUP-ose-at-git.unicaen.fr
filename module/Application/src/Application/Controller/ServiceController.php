@@ -160,9 +160,11 @@ class ServiceController extends AbstractActionController
                 (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
         );
 
+        $resumeServices = $this->getServiceLocator()->get('ApplicationService')->getResumeService($filter);
+
         $canAdd = $this->getServiceService()->canAdd();
 
-        $viewModel->setVariables( compact('annee','action','filter','canAdd') );
+        $viewModel->setVariables( compact('annee','action','resumeServices','canAdd') );
         return $viewModel;
     }
 

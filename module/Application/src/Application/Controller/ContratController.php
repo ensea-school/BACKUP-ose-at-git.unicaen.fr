@@ -47,6 +47,17 @@ class ContratController extends AbstractActionController implements ContextProvi
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
+        if ($role instanceof IntervenantRole) {
+            $intervenant = $role->getIntervenant();
+        }
+        else {
+            $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        }
+        
+        if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
+            throw new \Common\Exception\MessageException("Les intervenants permanents n'ont pas de contrat.");
+        }
+        
         if ($role instanceof ComposanteDbRole) {
             return $this->creerAction();
         }

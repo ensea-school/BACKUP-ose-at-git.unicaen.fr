@@ -92,23 +92,26 @@ class ServiceController extends AbstractActionController
 
     public function intervenantAction()
     {
-        $totaux = $this->params()->fromQuery('totaux',0) == '1';
-        $service = $this->getServiceService();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
-        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $totaux            = $this->params()->fromQuery('totaux', 0) == '1';
+        $service           = $this->getServiceService();
+        $role              = $this->getContextProvider()->getSelectedIdentityRole();
+        $annee             = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
-        $qb      = $service->finderByContext();
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant \Application\Entity\Db\Intervenant */
-        $service->finderByIntervenant( $intervenant, $qb );
+        $intervenant       = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $viewModel         = new \Zend\View\Model\ViewModel();
 
         $service->canAdd($intervenant, true);
 
-        /* Préparation et affichage */
+        // fetch des services prévisionnels
+        $qb = $service->finderByContext();
+        $service->finderByIntervenant($intervenant, $qb);
+        if ($role instanceof \Application\Acl\ComposanteDbRole) {
+            $service->finderByStructureResp($role->getStructure(), $qb);
+        }
         $services = $service->getList($qb);
         $service->setTypeVolumehoraire($services, $typeVolumeHoraire);
 
-        // services référentiels : délégation au contrôleur
+        // fetch des services référentiels : délégation au contrôleur
         $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // sauvegarde des filtres dans le contexte local
         $controller       = 'Application\Controller\ServiceReferentiel';
         $params           = $this->getEvent()->getRouteMatch()->getParams();

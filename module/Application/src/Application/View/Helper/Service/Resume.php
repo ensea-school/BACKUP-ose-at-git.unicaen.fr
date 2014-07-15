@@ -108,13 +108,12 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             $endMsg = '</td>';
             if (isset($line['intervenant']['HEURES_COMP'])){
                 $heuresComp = (float)$line['intervenant']['HEURES_COMP'];
-                $heuresReelles = (float)$line['intervenant']['TOTAL_REEL'];
                 if ($heuresComp < 0){
-                    $msg = '<td class="bg-danger"><abbr title="Sous-service ('.number_format($heuresComp*-1,2,',',' ').' heures manquantes sur la base de '.number_format($heuresReelles,2,',',' ').' heures)">';
+                    $msg = '<td class="bg-danger"><abbr title="Sous-service ('.number_format($heuresComp*-1,2,',',' ').' heures manquantes)">';
                     $endMsg = '</abbr></td>';
                 }
                 if ($heuresComp > 0 && $intervenantPermanent){
-                    $msg = '<td class="bg-warning"><abbr title="Sur-service ('.number_format($heuresComp,2,',',' ').' heures complémentaires positionnées sur la base de '.number_format($heuresReelles,2,',',' ').' heures)">';;
+                    $msg = '<td class="bg-warning"><abbr title="Sur-service ('.number_format($heuresComp,2,',',' ').' heures complémentaires)">';;
                     $endMsg = '</abbr></td>';
                 }
             }else{

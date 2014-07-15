@@ -52,6 +52,35 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
      */
     protected $typeVolumeHoraire;
 
+    /**
+     * Lecture seule ou non
+     *
+     * @var boolean
+     */
+    protected $readOnly;
+
+
+
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getReadOnly()
+    {
+        return $this->readOnly;
+    }
+
+    /**
+     *
+     * @param boolean $readOnly
+     * @return self
+     */
+    public function setReadOnly($readOnly)
+    {
+        $this->readOnly = $readOnly;
+        return $this;
+    }
 
     /**
      *
@@ -225,8 +254,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $out .= "<th class=\"heures\" style=\"width:8%\"><abbr title=\"".$ti->getLibelle()."\">".$ti->getCode()."</abbr></th>\n";
         }
         $out .= "<th>&nbsp;</th>\n";
-        $out .= "<th>&nbsp;</th>\n";
-        $out .= "<th>&nbsp;</th>\n";
         $out .= "</tr>\n";
 
         foreach( $this->services as $service ){
@@ -253,8 +280,10 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                         ->getView()
                         ->serviceLigne( $service )
                         ->setIntervenant($this->getIntervenant())
+                        ->setReadOnly($this->getReadOnly())
                         ->setStructure($this->getStructure());
         $vhlView = $this->getView()->volumeHoraireListe( $service->getVolumeHoraireListe() );
+        $vhlView->setReadOnly($this->getReadOnly());
 
         $out  = '<tr id="service-'.$service->getId().'-ligne" data-url="'.$ligneView->getRefreshUrl().'">';
         $out .= $ligneView->render($details);
@@ -310,19 +339,19 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         foreach( $typesIntervention as $ti ){
             $out .= "<td id=\"".$ti->getCode()."\" style=\"text-align:right\">".\UnicaenApp\Util::formattedFloat($data[$ti->getCode()], \NumberFormatter::DECIMAL, -1)."</td>\n";
         }
-        $out .= "<td colspan='3'>&nbsp;</td>\n";
+        $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";
         $out .= '<tr>';
         $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de service :</th>\n";
         $out .= "<td style=\"text-align:right\" colspan=\"".count($typesIntervention)."\">".\UnicaenApp\Util::formattedFloat($data['total_general'], \NumberFormatter::DECIMAL, -1)."</td>\n";
-        $out .= "<td colspan='3'>&nbsp;</td>\n";
+        $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";
         $title = [
             'Toutes structures confondues'
         ];
         if (isset($data['total_hetd'])){
             if ($data['total_paye'] != $data['total_general']){
-                $title[] = 'Sur la base de '.\UnicaenApp\Util::formattedFloat($data['total_paye'], \NumberFormatter::DECIMAL, -1).' heures payées';
+                $title[] = 'Sur la base de '.\UnicaenApp\Util::formattedFloat($data['total_paye'], \NumberFormatter::DECIMAL, -1).' heures payables';
             }
             $out .= '<tr>';
             $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total Heures &Eacute;quivalent TD :</th>\n";
@@ -331,7 +360,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             }else{
                 $out .= "<td style=\"text-align:right\" colspan=\"".count($typesIntervention)."\">".\UnicaenApp\Util::formattedFloat($data['total_hetd'], \NumberFormatter::DECIMAL, -1)."</td>\n";
             }
-            $out .= "<td colspan='3'>&nbsp;</td>\n";
+            $out .= "<td>&nbsp;</td>\n";
             $out .= "</tr>\n";
         }
         return $out;

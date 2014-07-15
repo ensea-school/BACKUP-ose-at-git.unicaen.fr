@@ -219,6 +219,7 @@ class ServiceController extends AbstractActionController
 
         $details            = 1 == (int)$this->params()->fromQuery('details',               (int)$this->params()->fromPost('details',0));
         $onlyContent        = 1 == (int)$this->params()->fromQuery('only-content',          0);
+        $readOnly           = 1 == (int)$this->params()->fromQuery('read-only', 0);
 
         $intervenant        = $this->params()->fromQuery('intervenant');
         if ('false' === $intervenant) $intervenant = false;
@@ -232,7 +233,7 @@ class ServiceController extends AbstractActionController
         if ('' === $structure) $structure = null;
         $structure = $this->getServiceLocator()->get('applicationStructure')->get((int)$structure);
 
-        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'intervenant', 'structure');
+        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'readOnly', 'intervenant', 'structure');
     }
 
     public function suppressionAction()

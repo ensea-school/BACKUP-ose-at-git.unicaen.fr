@@ -21,7 +21,7 @@ $role        = $this->role;
         <?php foreach ($contrats as $contrat): /* @var $avenant \Application\Entity\Db\Contrat */ ?>
         <tr>
             <?php 
-            $urlExport       = $this->url('contrat/exporter',  array('intervenant' => $intervenant->getSourceCode()));
+            $urlExport       = $this->url('contrat/exporter',  array('contrat' => $contrat->getId()));
             $urlValidation   = $this->url('contrat/valider',   array('contrat' => $contrat->getId()));
             $urlDevalidation = $this->url('contrat/devalider', array('contrat' => $contrat->getId()));
             ?>

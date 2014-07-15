@@ -83,9 +83,9 @@ return array(
                     'exporter' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:intervenant/exporter',
+                            'route' => '/:contrat/exporter',
                             'constraints' => array(
-                                'intervenant' => '[0-9]*',
+                                'contrat' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'exporter',

@@ -285,22 +285,45 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function exporterAction()
     {       
-//        if (!$this->getContrat()) {
-//            throw new RuntimeException("Aucun contrat existant.");
-//        }
+        $this->contrat     = $this->context()->mandatory()->contratFromRoute();
+        $this->intervenant = $this->contrat->getIntervenant();
         
+        $numeroContrat         = $this->contrat->getReference();
+        $dateConseil           = $this->contrat->getDateCommissionRecherche();
+        $nomIntervenant        = (string) $this->intervenant;
+        $dateNaissance         = $this->intervenant->getDateNaissanceToString();
+        $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
+        $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
+        $nomCompletIntervenant = $this->intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
+        $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $dateSignature         = new DateTime();
+
         $fileName = sprintf("contrat_%s_%s.pdf", $this->getIntervenant()->getNomUsuel(), $this->getIntervenant()->getSourceCode());
         
         $variables = array(
-            'today'                => (new DateTime())->format(Constants::DATE_FORMAT),
-            'dateConseilRestreint' => null,
+            'dateConseil'           => $dateConseil ? $dateConseil->format(Constants::DATE_FORMAT) : null,
+            'numeroContrat'         => $numeroContrat,
+            'nomIntervenant'        => $nomIntervenant,
+            'dateNaissance'         => $dateNaissance,
+            'adresseIntervenant'    => nl2br($adresseIntervenant),
+            'numeroINSEE'           => $numeroINSEE,
+            'nomCompletIntervenant' => $nomCompletIntervenant,
+            'annee'                 => $annee,
+            'dateSignature'         => $dateSignature->format(Constants::DATE_FORMAT),
+            'lieuSignature'         => "Caen",
         );
-        
+
         // Création du pdf, complétion et envoye au navigateur
         $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
 //        $exp->setHeaderSubtitle("Contrat");
 //        $exp->addBodyHtml("<p style='text-align: center'>Carte n°" . $numeroCarte . "</p>", false);
+        
+        $variables['mentionRetourner'] = "EXEMPLAIRE À CONSERVER";
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', false, $variables);
+        
+        $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER SIGNÉ";
+        $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables);
+        
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }
     

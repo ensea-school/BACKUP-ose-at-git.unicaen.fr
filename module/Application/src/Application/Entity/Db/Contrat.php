@@ -147,6 +147,17 @@ class Contrat implements HistoriqueAwareInterface
     }
     
     /**
+     * Retourne l'éventuelle date de passage en commision de la recherche des enseignements 
+     * de ce contrat/avenant.
+     * 
+     * @return \DateTime|null
+     */
+    public function getDateCommissionRecherche()
+    {
+        return $this->getVolumeHoraire()[0]->getValidation()[0]->getDateCommissionRecherche();
+    }
+    
+    /**
      * Set numeroAvenant
      *
      * @param integer $numeroAvenant

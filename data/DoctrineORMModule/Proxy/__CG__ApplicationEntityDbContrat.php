@@ -220,6 +220,17 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
+    public function getDateCommissionRecherche()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateCommissionRecherche', array());
+
+        return parent::getDateCommissionRecherche();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setNumeroAvenant($numeroAvenant)
     {
 

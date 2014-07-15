@@ -311,7 +311,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         ];
         if (isset($data['total_hetd'])){
             if ($data['total_paye'] != $data['total_general']){
-                $title[] = 'Sur la base de '.\UnicaenApp\Util::formattedFloat($data['total_paye'], \NumberFormatter::DECIMAL, -1).' heures payées';
+                $title[] = 'Sur la base de '.\UnicaenApp\Util::formattedFloat($data['total_paye'], \NumberFormatter::DECIMAL, -1).' heures payables';
             }
             $out .= '<tr>';
             $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total Heures &Eacute;quivalent TD :</th>\n";

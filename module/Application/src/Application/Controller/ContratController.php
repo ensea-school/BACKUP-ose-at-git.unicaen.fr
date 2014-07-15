@@ -75,14 +75,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $contrats = $qb->getQuery()->getResult();
             
         // collecte des services associés
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-        $services = [];
-        foreach ($contrats as $contrat) { /* @var $contrat \Application\Entity\Db\Contrat */ 
-            foreach ($contrat->getVolumeHoraire() as $vh) {
-                $services[$contrat->getId()][$vh->getService()->getId()] = $vh->getService();
-                $vh->getService()->setTypeVolumehoraire($typeVolumeHoraire); // pour aide de vue! :-(
-            }
-        }
+        $services = $this->collectServicesContrats($contrats);
 
         $this->getView()->setVariables(array(
             'role'        => $this->getContextProvider()->getSelectedIdentityRole(),
@@ -93,6 +86,27 @@ class ContratController extends AbstractActionController implements ContextProvi
         $this->getView()->setTemplate('application/contrat/voir');
         
         return $this->getView();
+    }
+    
+    /**
+     * Collecte des services concernés par des contrats.
+     * 
+     * @param array $contrats
+     * @return array [ Id Contrat => [ Id Service => Service ] ]
+     */
+    private function collectServicesContrats($contrats)
+    {
+        // collecte des services associés
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $services = [];
+        foreach ($contrats as $contrat) { /* @var $contrat \Application\Entity\Db\Contrat */ 
+            foreach ($contrat->getVolumeHoraire() as $vh) {
+                $services[$contrat->getId()][$vh->getService()->getId()] = $vh->getService();
+                $vh->getService()->setTypeVolumehoraire($typeVolumeHoraire); // pour aide de vue! :-(
+            }
+        }
+        
+        return $services;
     }
     
     private $contratProcess;
@@ -198,8 +212,8 @@ class ContratController extends AbstractActionController implements ContextProvi
         $requalifier = false;
         if ($process->getDeviendraAvenant($this->contrat)) {
             $requalifier = true;
-            $message = "<p><strong>NB :</strong> à l'issu de sa validation, " . lcfirst($this->contrat->toString(true)) . 
-                    " deviendra un avenant car un projet de contrat a déjà été validé par une composante.</p>" .
+            $message = "<p><strong>NB :</strong> à l'issue de sa validation, " . lcfirst($this->contrat->toString(true)) . 
+                    " deviendra un avenant car un contrat a déjà été validé par une autre composante.</p>" .
                     "<p><strong>Vous devrez donc impérativement imprimer à nouveau le document !</strong></p>";
             $messages = ['warning' => $message];
         }
@@ -285,45 +299,95 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function exporterAction()
     {       
-        $this->contrat     = $this->context()->mandatory()->contratFromRoute();
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        // fetch le contrat/avenant spécifié
+        $serviceContrat = $this->getServiceContrat();
+        $qb = $serviceContrat->getRepo()->createQueryBuilder("c")
+                ->select("c, i, vh")
+                ->join("c.intervenant", "i")
+                ->join("c.structure", "str")
+                ->join("c.volumeHoraire", "vh"/*, \Doctrine\ORM\Query\Expr\Join::WITH, "vh.motifNonPaiement is null"*/)
+                ->andWhere("c = :id")->setParameter('id', $this->params('contrat'))
+                ->orderBy("str.libelleCourt");
+        
+        try {
+            $this->contrat = $qb->getQuery()->getSingleResult();
+        }
+        catch (\Doctrine\ORM\NoResultException $nre) {
+            throw new \Common\Exception\MessageException("Contrat/avenant spécifié introuvable.", null, $nre);
+        }
+
         $this->intervenant = $this->contrat->getIntervenant();
         
-        $numeroContrat         = $this->contrat->getReference();
+        if ($role instanceof ComposanteDbRole) {
+            if ($this->contrat->getStructure() !== $role->getStructure()) {
+                throw new \Common\Exception\MessageException("Le contrat/avenant ne vous est pas accessible.");
+            }
+        }
+        else {
+            if ($this->contrat->getIntervenant() !== $this->intervenant) {
+                throw new \Common\Exception\MessageException("Le contrat/avenant ne vous est pas accessible.");
+            }
+        }
+        
+        $rule = new \Application\Rule\Intervenant\PeutExporterContratRule($this->intervenant, $this->contrat);
+        if (!$rule->execute()) {
+            throw new \Common\Exception\MessageException("Impossible d'exporter le contrat/avenant.", null, new \Exception($rule->getMessage()));
+        }
+        
+        
+        $estUnAvenant          = $this->contrat->estUnAvenant();
+        $contratToString       = (string) $this->contrat;
         $dateConseil           = $this->contrat->getDateCommissionRecherche();
         $nomIntervenant        = (string) $this->intervenant;
         $dateNaissance         = $this->intervenant->getDateNaissanceToString();
         $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
         $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
+        $estATV                = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
         $nomCompletIntervenant = $this->intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
         $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $dateSignature         = new DateTime();
-
-        $fileName = sprintf("contrat_%s_%s.pdf", $this->getIntervenant()->getNomUsuel(), $this->getIntervenant()->getSourceCode());
+        $estUnProjet           = $this->contrat->getValidation() ? false : true;
+        $services              = $this->collectServicesContrats(array($this->contrat))[$this->contrat->getId()];
+        
+        $fileName = sprintf("contrat_%s_%s_%s.pdf", 
+                $this->contrat->getStructure()->getSourceCode(), 
+                $this->intervenant->getNomUsuel(), 
+                $this->intervenant->getSourceCode());
         
         $variables = array(
-            'dateConseil'           => $dateConseil ? $dateConseil->format(Constants::DATE_FORMAT) : null,
-            'numeroContrat'         => $numeroContrat,
-            'nomIntervenant'        => $nomIntervenant,
-            'dateNaissance'         => $dateNaissance,
-            'adresseIntervenant'    => nl2br($adresseIntervenant),
-            'numeroINSEE'           => $numeroINSEE,
-            'nomCompletIntervenant' => $nomCompletIntervenant,
-            'annee'                 => $annee,
-            'dateSignature'         => $dateSignature->format(Constants::DATE_FORMAT),
-            'lieuSignature'         => "Caen",
+            'estUnAvenant'            => $estUnAvenant,
+            'estUnProjet'             => $estUnProjet,
+            'dateConseil'             => $dateConseil ? $dateConseil->format(Constants::DATE_FORMAT) : null,
+            'etablissement'           => "L'université de Caen",
+            'etablissementRepresente' => ", représentée par son Président, Pierre SINEUX",
+            'nomIntervenant'          => $nomIntervenant,
+            'f'                       => $this->intervenant->estUneFemme(),
+            'dateNaissance'           => $dateNaissance,
+            'adresseIntervenant'      => nl2br($adresseIntervenant),
+            'numeroINSEE'             => $numeroINSEE,
+            'estATV'                  => $estATV,
+            'nomCompletIntervenant'   => $nomCompletIntervenant,
+            'annee'                   => $annee,
+            'dateSignature'           => $dateSignature->format(Constants::DATE_FORMAT),
+            'lieuSignature'           => "Caen",
+            'services'                => $services,
         );
 
-        // Création du pdf, complétion et envoye au navigateur
+        // Création du pdf, complétion et envoi au navigateur
         $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
-//        $exp->setHeaderSubtitle("Contrat");
-//        $exp->addBodyHtml("<p style='text-align: center'>Carte n°" . $numeroCarte . "</p>", false);
+        $exp->setHeaderSubtitle($contratToString);
+        if ($estUnProjet) {
+            $exp->setWatermark("Projet");
+        }
         
         $variables['mentionRetourner'] = "EXEMPLAIRE À CONSERVER";
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', false, $variables);
         
         $variables['mentionRetourner'] = "EXEMPLAIRE À RETOURNER SIGNÉ";
-        $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables);
-        
+        $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
+
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }
     

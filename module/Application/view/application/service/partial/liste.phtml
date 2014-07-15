@@ -1,0 +1,51 @@
+<?php
+/**
+ * Liste des services toute simple. 
+ * 
+ * Inclue le total des heures par enseignement et le total global.
+ */
+
+$totalHeures = 0.0;
+?>
+
+<style>
+    th.heures, td.heures { text-align: right; }
+    td.heures-total { font-weight: bold; }
+</style>
+
+<table class="table table-bordered table-hover table-condensed">
+    <thead>
+        <tr>
+            <th>Composante</th>
+            <th>Code</th>
+            <th>Libellé enseignement</th>
+            <th>Total des heures</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->services as $service): /* @var $service \Application\Entity\Db\Service */ ?>
+        <tr>
+            <td><?php echo $service->getStructureEns() ?></td>
+            <td><?php echo $service->getElementPedagogique()->getSourceCode() ?></td>
+            <td><?php echo $service->getElementPedagogique()->getLibelle() ?></td>
+            <td class="heures">
+                <?php
+                $heures = $service->getVolumeHoraireListe()->getHeures();
+                echo UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2);
+                ?>
+            </td>
+            <?php $totalHeures += $heures ?>
+        </tr>
+        <?php endforeach ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="heures heures-total">Total :</td>
+            <td class="heures heures-total">
+                <?php echo UnicaenApp\Util::formattedFloat($totalHeures, \NumberFormatter::DECIMAL, 2) ?>
+            </td>
+        </tr>
+    </tfoot>
+</table>

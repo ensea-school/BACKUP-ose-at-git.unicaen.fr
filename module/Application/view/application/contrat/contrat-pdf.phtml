@@ -1,14 +1,16 @@
 <style>
     body { font-family: ubuntu,arial,sans-serif; }
     .vu { font-size: 80%; }
-    .titre { text-align: center; border-color: black; border-style: solid; border-width: 1px; }
-    .univ { font-weight: bold; }
+    .titre { text-align: center; border-style: solid; border-width: 1px; }
+    .etab { font-weight: bold; }
     .intervenant { font-weight: bold; }
     .partie { margin-left: 50px; }
-    .articles dt { font-weight: bold; }
+    .articles dt { font-weight: bold; margin-top: 10px; }
     .demeurant { text-decoration: underline; vertical-align: top; width: 100px; }
     .insee { text-decoration: underline; width: 100px; }
-    .form { margin-left: 50px; }
+    .services table { border-style: solid; border-width: 1px; }
+    .services table th { border-bottom-style: solid; border-bottom-width: 1px; }
+    .services table tfoot td { border-top-style: dotted; border-top-width: 1px; }
     .fait { text-align: center; }
     .signatures { width: 100%; }
     .signatures td { text-align: center; }
@@ -41,11 +43,18 @@ recrutement et d'emploi de vacataires pour l'enseignement supérieur ;<br /><br 
     </tr>
 </table>
 
-<h1 class="titre">Contrat de travail de vacataire et chargé d'enseignement n°<?php echo $numeroContrat ?></h1>
-
+<h1 class="titre">
+    <?php if ($estUnAvenant): ?>
+        Avenant au contrat de travail initial modifiant le volume horaire initial
+        de recrutement en qualité de vacataire et chargé d'enseignement
+    <?php else: ?>
+        Contrat de travail de vacataire et chargé d'enseignement
+    <?php endif ?>
+</h1>
+        
 <p>Entre d'une part :</p>
 <p class="partie">
-    <span class="univ">L'université de Caen</span>, représentée par son Président, Pierre SINEUX
+    <span class="etab"><?php echo $etablissement ?></span><?php echo $etablissementRepresente ?>
 </p>
 
 <p>et d'autre part :</p>
@@ -65,30 +74,45 @@ recrutement et d'emploi de vacataires pour l'enseignement supérieur ;<br /><br 
     </tr>
 </table>
 
-<p class="partie">Il a été convenu de qui suit :</p>
+<p>Il a été convenu de qui suit :</p>
 
 <dl class="articles">
-    <dt>Article 1er :</dt>
-    <dd>
-        <?php echo $nomCompletIntervenant ?> est recruté<?php echo $f ? 'e' : '' ?> pour l'année universitaire <?php echo $annee ?> en qualité de :<br />
-        <div class="form">
-            <input type="checkbox" name="cev" /> <label for="cev">chargé d'enseignement vacataire</label><br />
-            <input type="checkbox" name="atv" /> <label for="cev">agent temporaire vacataire</label>
-        </div>
-    </dd>
+    
+    <?php 
+    $servicesListe = $this->partial('application/service/partial/liste', array('services' => $services));
+    $noArticle     = 1;
+    ?>
+    
+    <?php if ($estUnAvenant): ?>
+    
+        <dt>Article 1er :</dt>
+        <dd>
+            <p><?php echo $nomCompletIntervenant ?> assurera au lieu des heures d'enseignements prévues au contrat initial :</p>
+            <div class="services"><?php echo $servicesListe ?></div>
+        </dd>
+        
+    <?php else: ?>
+        
+        <dt>Article <?php echo $noArticle++ ?> :</dt>
+        <dd>
+            <?php echo $nomCompletIntervenant ?> est recruté<?php echo $f ? 'e' : '' ?> pour l'année universitaire <?php echo $annee ?> en qualité 
+            <?php echo $estATV ? "d'agent temporaire vacataire" : "de chargé d'enseignement vacataire" ?>.
+        </dd>
 
-    <dt>Article 2 :</dt>
-    <dd>
-        <p>L'intéressé<?php echo $f ? 'e' : '' ?> est chargé<?php echo $f ? 'e' : '' ?> d'assurer les enseignements ci-après :</p>
-        XXXXXX
-        <p>L'intéressé<?php echo $f ? 'e' : '' ?> s'engage à assurer, sans rémunération complémentaire, toutes les obligations liées à son ou à ses enseignements (suivi pédagogique des étudiants, contrôle des connaissances et examens).</p>
-    </dd>
+        <dt>Article <?php echo $noArticle++ ?> :</dt>
+        <dd>
+            <p>L'intéressé<?php echo $f ? 'e' : '' ?> est chargé<?php echo $f ? 'e' : '' ?> d'assurer les enseignements ci-après :</p>
+            <div class="services"><?php echo $servicesListe ?></div>
+            <p>L'intéressé<?php echo $f ? 'e' : '' ?> s'engage à assurer, sans rémunération complémentaire, toutes les obligations liées à son ou à ses enseignements (suivi pédagogique des étudiants, contrôle des connaissances et examens).</p>
+        </dd>
+        
+    <?php endif ?>
 
-    <dt>Article 3 :</dt>
+    <dt>Article <?php echo $noArticle++ ?> :</dt>
     <dd>
-        L'intéressé<?php echo $f ? 'e' : '' ?> sera rémunéré<?php echo $f ? 'e' : '' ?> au taux travaux dirigés en vigueur fixé par arrêté publié au Journal Officiel.<br />
-        Le paiement a lieu au vu de l'état liquidatif visé par le directeur de la composante et de la production d'un dossier complet.<br />
-        Une inexécution partielle du service imputable à l'intéressé<?php echo $f ? 'e' : '' ?> entraîne un abattement correspondant aux heures non faites.<br />
+        <p>L'intéressé<?php echo $f ? 'e' : '' ?> sera rémunéré<?php echo $f ? 'e' : '' ?> au taux travaux dirigés en vigueur fixé par arrêté publié au Journal Officiel.</p>
+        <p>Le paiement a lieu au vu de l'état liquidatif visé par le directeur de la composante et de la production d'un dossier complet.</p>
+        <p>Une inexécution partielle du service imputable à l'intéressé<?php echo $f ? 'e' : '' ?> entraîne un abattement correspondant aux heures non faites.</p>
     </dd>
 </dl>
 

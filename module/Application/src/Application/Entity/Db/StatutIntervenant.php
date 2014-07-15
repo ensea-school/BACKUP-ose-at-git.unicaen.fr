@@ -122,6 +122,16 @@ class StatutIntervenant
     }
     
     /**
+     * Indique si ce statut correspond aux Agents Temporaires Vacataires.
+     *
+     * @return bool 
+     */
+    public function estAgentTemporaireVacataire()
+    {
+        return in_array($this->getSourceCode(), array(self::ETUD_HORS_UCBN, self::ETUD_UCBN, self::RETR_HORS_UCBN));
+    }
+    
+    /**
      * Indique si ce statut requiert la saisie d'un dossier vacataire.
      * 
      * @return bool

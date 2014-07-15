@@ -20,7 +20,6 @@ class DifferentielLigne extends AbstractHelper
     /**
      * Helper entry point.
      *
-     * @param bool $importFlashMessages
      * @return self
      */
     final public function __invoke( Ligne $ligne)

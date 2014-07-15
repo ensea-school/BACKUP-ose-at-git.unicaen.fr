@@ -112,7 +112,64 @@ class QueryGenerator extends Service
         return $this;
     }
 
+    /**
+     * Synchronise une table
+     *
+     * @param string $tableName
+     * @return string[]
+     */
+    public function syncTable( $tableName )
+    {
+        $currentUser = $this->getDbUser();
+        if (empty($currentUser)){
+            throw new Exception('Vous devez être authentifié pour réaliser cette action');
+        }
+        $userId = $this->escape($currentUser->getId());
 
+        $errors = [];
+        $lastLogId = $this->getLastLogId();
+        $sql = "BEGIN OSE_IMPORT.SET_CURRENT_USER($userId);OSE_IMPORT.".$this->escapeKW('SYNC_'.$tableName)."; END;";
+        try{
+            $this->getEntityManager()->getConnection()->exec($sql);
+        }catch(\Doctrine\DBAL\DBALException $e){
+            $errors[] = Exception::duringMajException($e, $tableName)->getMessage();
+        }
+        $errors = $errors + $this->getLogMessages($lastLogId);
+        return $errors;
+    }
+
+    /**
+     * retourne le dernier ID du log de synchronisation
+     *
+     * @return int
+     */
+    protected function getLastLogId()
+    {
+        $sql = "SELECT MAX(id) last_log_id FROM SYNC_LOG";
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery( $sql );
+        if($r = $stmt->fetch()){
+            return (int)$r['LAST_LOG_ID'];
+        }
+        return 0;
+    }
+
+    /**
+     * Retourne tous les messages d'erreur qui sont apparue depuis $since
+     *
+     * @param int $since
+     * @return string[]
+     */
+    protected function getLogMessages( $since )
+    {
+        $since = (int)$since;
+        $sql = "SELECT message FROM sync_log WHERE id > :since ORDER BY id";
+        $messages = [];
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery( $sql, ['since' => (int)$since] );
+        while($r = $stmt->fetch()){
+            $messages[] = $r['MESSAGE'];
+        }
+        return $messages;
+    }
 
     /**
      * Retourne les identifiants des données concernés

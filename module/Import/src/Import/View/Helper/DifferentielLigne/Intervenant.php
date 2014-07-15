@@ -28,6 +28,21 @@ class Intervenant extends DifferentielLigne
                 return 'change de structure pour '.$structure->getLibelleCourt();
             case 'NOM_USUEL':
                 return 'change de nom usuel pour '.$value;
+            case 'STATUT_ID':
+                $intervenant = $this->ligne->getEntity();
+                if ($intervenant){
+                    $oldStatut = $intervenant->getStatut();
+                }else{
+                    $oldStatut = 'Aucun';
+                }
+                $statut = $this->ligne->getEntityManager()->find('Application\Entity\Db\StatutIntervenant', $value);
+                if (
+                    $statut->getSourceCode() == \Application\Entity\Db\StatutIntervenant::AUTRES
+                ){
+                    return 'statut '.$oldStatut.' renseigné manuellement.';
+                }else{
+                    return 'changement de statut ('.$oldStatut.' vers '.$statut.')';
+                }
             default:
                 return parent::getColumnDetails($column, $value);
         }

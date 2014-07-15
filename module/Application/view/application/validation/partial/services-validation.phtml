@@ -1,0 +1,31 @@
+<?php
+$validation        = $this->validation;
+$services          = $this->services;
+$typeVolumeHoraire = $this->typeVolumeHoraire;
+$display           = $validation->getId() ? 'display: none' : '';
+?>
+<p>
+    <strong>Enseignements concernés par la validation</strong><br />
+    <small><a title="Cliquez pour afficher/masquer les enseignements concernés par cette validation"
+        href="#" 
+        class="voir-enseignements" 
+        id="validation-<?php echo $validation->getId() ?>-toggle"
+        data-target="#validation-<?php echo $validation->getId() ?>"
+        >Afficher/masquer</a></small>
+</p>
+<div style="<?php echo $display ?>" class="details-enseignements" id="validation-<?php echo $validation->getId() ?>">
+    <?php echo $this->serviceListe($services[$validation->getId()])
+            ->setTypeVolumeHoraire($typeVolumeHoraire)
+            ->setIntervenant(false)
+            ->render(); ?>
+</div>
+
+<script>
+$(function() {
+    // affichage/masquage des enseignements concernés
+    $("#validation-<?php echo $validation->getId() ?>-toggle").click(function() { 
+        $($(this).data('target')).slideToggle(); 
+        return false;
+    });
+});
+</script>

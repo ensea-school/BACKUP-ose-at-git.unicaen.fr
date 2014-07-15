@@ -33,7 +33,41 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $typesIntervention;
 
+    /**
+     * readOnly
+     *
+     * @var boolean
+     */
+    protected $readOnly;
 
+    /**
+     * Mode lecture seule forcé
+     *
+     * @var boolean
+     */
+    protected $forcedReadOnly;
+
+
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getReadOnly()
+    {
+        return $this->readOnly || $this->forcedReadOnly;
+    }
+
+    /**
+     *
+     * @param boolean $readOnly
+     * @return self
+     */
+    public function setReadOnly($readOnly)
+    {
+        $this->readOnly = $readOnly;
+        return $this;
+    }
 
 
     /**
@@ -66,6 +100,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                 [
                     'action' => 'liste', 'id' => $this->getVolumeHoraireListe()->getService()->getId()
                 ], ['query' => [
+                    'read-only' => $this->getReadOnly() ? '1' : '0',
                     'type-volume-horaire' => $this->getVolumeHoraireListe()->getTypeVolumehoraire()->getId(),
                 ]]);
         return $url;
@@ -139,13 +174,17 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         if (false === $volumeHoraireListe->getMotifNonPaiement()){
             $query['tous-motifs-non-paiement'] = '1';
         }
-        $url = $this->getView()->url(
-                    'volume-horaire/saisie',
-                    ['service' => $volumeHoraireListe->getService()->getId()],
-                    ['query' => $query]
-               );
+        if ($this->getReadOnly()){
+            return $heures;
+        }else{
+            $url = $this->getView()->url(
+                        'volume-horaire/saisie',
+                        ['service' => $volumeHoraireListe->getService()->getId()],
+                        ['query' => $query]
+                   );
 
-        return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$volumeHoraireListe->getService()->getId()."\" href=\"".$url."\" >$heures</a>";
+            return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire\" data-placement=\"bottom\" data-service=\"".$volumeHoraireListe->getService()->getId()."\" href=\"".$url."\" >$heures</a>";
+        }
     }
 
     protected function renderMotifNonPaiement($motifNonPaiement)
@@ -173,6 +212,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             throw new \Common\Exception\LogicException('Le type de volume horaire de la liste n\'a pas été précisé');
         }
         $this->volumeHoraireListe = $volumeHoraireListe;
+        $this->forcedReadOnly = ! $this->getServiceLocator()->getServicelocator()->get('applicationService')->canModify($volumeHoraireListe->getService());
         return $this;
     }
 

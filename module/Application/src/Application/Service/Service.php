@@ -67,6 +67,7 @@ class Service extends AbstractEntityService
         if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }
+        $this->canModify($entity,true);
         $result = parent::save($entity);
         /* Sauvegarde automatique des volumes horaires associés */
         $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
@@ -434,6 +435,27 @@ EOS;
             return $this->cannotDoThat($message . $rulesEvaluator->getMessage(), $runEx);
         }
         
+        return true;
+    }
+
+    /**
+     * Détermine si un service peut, ou non, être modifié
+     * 
+     * @param \Application\Entity\Db\Service $service
+     * @return boolean
+     */
+    public function canModify(ServiceEntity $service, $runEx = false)
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            if ($service->getIntervenant() != $role->getIntervenant()){
+                return $this->cannotDoThat('Vous ne pouvez pas modifier les services d\'un de vos collègues.');
+            }
+        }elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+            if ($service->getStructureEns() != $role->getStructure()){
+                return $this->cannotDoThat('Vous ne pouvez pas modifier ce service car il ne relève pas de votre composante.');
+            }
+        }
         return true;
     }
 

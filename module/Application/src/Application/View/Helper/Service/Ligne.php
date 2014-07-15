@@ -41,6 +41,41 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $structure;
 
+    /**
+     * readOnly
+     *
+     * @var boolean
+     */
+    protected $readOnly;
+
+    /**
+     * forcedReadOnly
+     *
+     * @var boolean
+     */
+    protected $forcedReadOnly = false;
+
+
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getReadOnly()
+    {
+        return $this->readOnly || $this->forcedReadOnly;
+    }
+
+    /**
+     *
+     * @param boolean $readOnly
+     * @return self
+     */
+    public function setReadOnly($readOnly)
+    {
+        $this->readOnly = $readOnly;
+        return $this;
+    }
 
     /**
      *
@@ -128,7 +163,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         if (! $service->getTypeVolumeHoraire() instanceof TypeVolumeHoraire){
             throw new \Common\Exception\LogicException('Le type de volume horaire doit être précisé au niveau du service');
         }
-        $this->service = $service;
+        $this->setService( $service );
         return $this;
     }
 
@@ -155,6 +190,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                 ],
                 ['query' => [
                     'only-content'  => 1,
+                    'read-only'     => $this->getReadOnly() ? '1' : '0',
                     'intervenant'   => $this->toQuery($this->getIntervenant()),
                     'structure'     => $this->toQuery($this->getStructure()),
                 ]]);
@@ -218,9 +254,13 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $out .= $this->renderTypeIntervention( $vhl->setTypeIntervention($ti) );
         }
 
-        $out .= $this->renderModifier();
-        $out .= $this->renderSupprimer();
+        $out .= '<td class="actions">';
+        if (! $this->getReadOnly()){
+            $out .= $this->renderModifier();
+            $out .= $this->renderSupprimer();
+        }
         $out .= $this->renderDetails( $details );
+        $out .= '</td>';
         return $out;
     }
 
@@ -299,22 +339,21 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderModifier()
     {
         $url = $this->getView()->url('service/default', array('action' => 'saisie', 'id' => $this->service->getId()));
-        return '<td><a class="ajax-modal" data-event="service-modify-message" href="'.$url.'" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-edit"></span></a></td>';
+        return '<a class="ajax-modal" data-event="service-modify-message" href="'.$url.'" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-edit"></span></a>';
     }
 
     protected function renderSupprimer()
     {
         $url = $this->getView()->url('service/default', array('action' => 'suppression', 'id' => $this->service->getId()));//onclick="return Service.get('.$this->service->getId().').delete(this)"
-        return '<td><a class="ajax-modal service-delete" data-event="service-delete-message" data-id="'.$this->service->getId().'" href="'.$url.'" title="Supprimer l\'enseignement"><span class="glyphicon glyphicon-remove"></span></a></td>';
+        return '<a class="ajax-modal service-delete" data-event="service-delete-message" data-id="'.$this->service->getId().'" href="'.$url.'" title="Supprimer l\'enseignement"><span class="glyphicon glyphicon-remove"></span></a>';
     }
 
     protected function renderDetails( $details=false )
     {
-        $out = '<td>'
-              .'<a class="service-details-button" title="Détail des heures" onclick="Service.get('.$this->service->getId().').showHideDetails(this)">'
+        $out = 
+              '<a class="service-details-button" title="Détail des heures" onclick="Service.get('.$this->service->getId().').showHideDetails(this)">'
                   .'<span class="glyphicon glyphicon-chevron-'.($details ? 'up' : 'down').'"></span>'
-              .'</a>'
-              ."</td>\n";
+              .'</a>';
         return $out;
     }
 
@@ -334,6 +373,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function setService(Service $service)
     {
+        $this->forcedReadOnly = ! $this->getServiceLocator()->getServicelocator()->get('applicationService')->canModify($service);
         $this->service = $service;
         return $this;
     }

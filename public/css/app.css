@@ -65,6 +65,16 @@ table.service td.volume-horaire {
     padding-left:10em;
 }
 
+table.service td.actions {
+    white-space: nowrap;
+    text-align:center;
+}
+
+table.service td.actions a {
+    margin-left: 0.2em;
+    margin-right:0.2em;
+}
+
 div.service-show-hide-buttons {
     padding-bottom:3px;
     padding-top:3px;

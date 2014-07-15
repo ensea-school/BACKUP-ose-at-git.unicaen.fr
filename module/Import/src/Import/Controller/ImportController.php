@@ -27,9 +27,6 @@ class ImportController extends AbstractActionController
             'INTERVENANT_PERMANENT',
             'INTERVENANT_EXTERIEUR',
         );
-        $ignoreFields = array(
-            'INTERVENANT' => array('STATUT_ID')
-        );
 
         $sc = $this->getServiceLocator()->get('ImportServiceSchema');
         /* @var $sc \Import\Service\Schema */
@@ -56,10 +53,6 @@ class ImportController extends AbstractActionController
                 }
             }else{
                 $q->setAction(null);
-            }
-
-            if (isset($ignoreFields[$table])){
-                $q->setIgnoreFields($ignoreFields[$table]);
             }
 
             $queries[$table] = $q;
@@ -155,7 +148,8 @@ class ImportController extends AbstractActionController
                 if ('vue-materialisee' == $typeMaj){
                     $sq->execMajVM($tableName);
                 }else{
-                    $sq->execMaj($query);
+                    $errors = $errors + $sq->syncTable($tableName);
+                    //$sq->execMaj($query);
                 }
             }catch(\Exception $e){
                 $errors = array($e->getMessage());

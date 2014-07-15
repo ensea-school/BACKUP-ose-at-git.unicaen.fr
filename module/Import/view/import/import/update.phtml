@@ -22,7 +22,7 @@
 <?php
 
 if ($errors){
-    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
+    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));
 }else{
     echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::SUCCESS => array('Action réalisée avec succès')));
 }

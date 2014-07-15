@@ -1225,6 +1225,17 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     /**
      * {@inheritDoc}
      */
+    public function estPermanent()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'estPermanent', array());
+
+        return parent::estPermanent();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function estUneFemme()
     {
 

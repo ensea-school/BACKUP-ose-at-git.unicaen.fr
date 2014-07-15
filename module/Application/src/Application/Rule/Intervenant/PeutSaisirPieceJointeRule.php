@@ -23,7 +23,7 @@ class PeutSaisirPieceJointeRule extends IntervenantRule
         
         $statut = $this->getIntervenant()->getStatut();
         if (!$statut->estVacataireNonBiatss()) {
-            $this->setMessage(sprintf("Le statut '%s' ne nécessite pas la fourniture de pièces justificatives.", $statut));
+            $this->setMessage(sprintf("Le statut &laquo; %s &raquo; ne nécessite pas la fourniture de pièces justificatives.", $statut));
             return false;
         }
         

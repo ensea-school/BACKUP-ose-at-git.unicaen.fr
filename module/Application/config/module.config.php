@@ -210,5 +210,6 @@ return array_merge_recursive(
     include 'service.config.php',
     include 'volume-horaire.config.php',
     include 'offre-formation.config.php',
-    include 'contrat.config.php'
+    include 'contrat.config.php',
+    include 'validation.config.php'
 );

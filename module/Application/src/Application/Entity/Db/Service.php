@@ -262,10 +262,15 @@ class Service implements HistoriqueAwareInterface
     /**
      * Get volumeHoraire
      *
+     * @param \Application\Entity\Db\Validation $validation
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getVolumeHoraire()
+    public function getVolumeHoraire(\Application\Entity\Db\Validation $validation = null)
     {
+        if ($validation) {
+            $closure = function (VolumeHoraire $vh) use ($validation) { return $vh->getValidation()->contains($validation); };
+            return $this->volumeHoraire->filter($closure);
+        }
         return $this->volumeHoraire;
     }
 

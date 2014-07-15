@@ -214,9 +214,10 @@ return array(
                         'resource' => 'controller/Application\Controller\Intervenant:index',
                         'pages' => array(
                             'rechercher' => array(
-                                'label'  => "Rechercher",
+                                'label'  => " Rechercher",
                                 'title'  => "Rechercher un intervenant",
                                 'route'  => 'intervenant/rechercher',
+                                'class'   => "iconify glyphicon glyphicon-search",
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:rechercher',
                             ),
@@ -290,8 +291,8 @@ return array(
                                 'visible' => 'NavigationPageVisibility',
                             ),
                             'contrat' => array(
-                                'label'  => "Contrat",
-                                'title'  => "Contrat de l'intervenant",
+                                'label'  => "Contrat / avenant",
+                                'title'  => "Contrat et avenants de l'intervenant",
                                 'route'  => 'intervenant/contrat',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Contrat:index',
@@ -332,16 +333,6 @@ return array(
                     'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
-                    'controller' => 'Application\Controller\Validation',
-                    'action'     => array('dossier'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
-                ),
-                array(
-                    'controller' => 'Application\Controller\Validation',
-                    'action'     => array('service'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
-                ),
-                array(
                     'controller' => 'Application\Controller\Workflow',
                     'action'     => array('nav-next'),
                     'roles'      => array('user','Administrateur'),
@@ -354,7 +345,6 @@ return array(
             'Application\Controller\Intervenant'           => 'Application\Controller\IntervenantController',
             'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
             'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
-            'Application\Controller\Validation'            => 'Application\Controller\ValidationController',
             'Application\Controller\Workflow'              => 'Application\Controller\WorkflowController',
         ),
         'aliases' => array(
@@ -372,8 +362,6 @@ return array(
             'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
             'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
             'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
-            'ApplicationTypeValidation'        => 'Application\\Service\\TypeValidation',
-            'ApplicationValidation'            => 'Application\\Service\\Validation',
             'ApplicationWorkflowIntervenantExterieur' => 'Application\\Service\\Workflow\\WorkflowIntervenantExterieur',
             'ApplicationWorkflowIntervenantPermanent' => 'Application\\Service\\Workflow\\WorkflowIntervenantPermanent',
         ),

@@ -22,11 +22,22 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     use ContextProviderAwareTrait;
 
     /**
-     * description
-     *
      * @var Intervenant|boolean
      */
     protected $intervenant;
+    protected $renderStructure = true;
+
+
+    public function getRenderStructure()
+    {
+        return $this->renderStructure;
+    }
+
+    public function setRenderStructure($renderStructure)
+    {
+        $this->renderStructure = $renderStructure;
+        return $this;
+    }
 
     /**
      * description
@@ -174,7 +185,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
      * @param Service[] $services
      * @return self
      */
-    final public function __invoke( array $services )
+    final public function __invoke($services)
     {
         $this->services = $services;
         return $this;

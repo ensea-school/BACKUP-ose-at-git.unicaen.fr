@@ -16,7 +16,7 @@ class NecessitePassageCommissionRechercheRule extends IntervenantRule
         $statut = $this->getIntervenant()->getStatut();
         
         if (!$statut->estVacataireNonBiatss()) {
-            $this->setMessage(sprintf("De par son statut '%s', l'intervenant n'est pas concerné par la Commission de la Recherche.", $statut));
+            $this->setMessage(sprintf("De par son statut &laquo; %s &raquo;, l'intervenant n'est pas concerné par la Commission de la Recherche.", $statut));
             return false;
         }
         

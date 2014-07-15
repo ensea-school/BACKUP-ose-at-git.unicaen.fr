@@ -64,10 +64,10 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'numeroAvenant', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'dateRetourSigne');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'numeroAvenant', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'dateRetourSigne');
     }
 
     /**
@@ -173,6 +173,83 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', array());
+
+        return parent::__toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toString($avecArticle = false, $deLe = false)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'toString', array($avecArticle, $deLe));
+
+        return parent::toString($avecArticle, $deLe);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getReference()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getReference', array());
+
+        return parent::getReference();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function estUnAvenant()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'estUnAvenant', array());
+
+        return parent::estUnAvenant();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDateCommissionRecherche()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateCommissionRecherche', array());
+
+        return parent::getDateCommissionRecherche();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setNumeroAvenant($numeroAvenant)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setNumeroAvenant', array($numeroAvenant));
+
+        return parent::setNumeroAvenant($numeroAvenant);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNumeroAvenant()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNumeroAvenant', array());
+
+        return parent::getNumeroAvenant();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -395,6 +472,94 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraire', array());
 
         return parent::getVolumeHoraire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStructure', array($structure));
+
+        return parent::setStructure($structure);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStructure()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStructure', array());
+
+        return parent::getStructure();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setValidation(\Application\Entity\Db\Validation $validation = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValidation', array($validation));
+
+        return parent::setValidation($validation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getValidation()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValidation', array());
+
+        return parent::getValidation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContrat(\Application\Entity\Db\Contrat $contrat = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setContrat', array($contrat));
+
+        return parent::setContrat($contrat);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getContrat()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getContrat', array());
+
+        return parent::getContrat();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDateRetourSigne($dateRetourSigne)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDateRetourSigne', array($dateRetourSigne));
+
+        return parent::setDateRetourSigne($dateRetourSigne);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDateRetourSigne()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateRetourSigne', array());
+
+        return parent::getDateRetourSigne();
     }
 
 }

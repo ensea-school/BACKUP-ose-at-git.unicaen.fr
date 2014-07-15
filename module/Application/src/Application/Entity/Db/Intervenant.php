@@ -1182,6 +1182,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /*************************** IntervenantInterface ***********************/
     
     /**
+     * Get estPermanent
+     *
+     * @return bool 
+     */
+    public function estPermanent()
+    {
+        return $this instanceof IntervenantPermanent;
+    }
+    
+    /**
      * Get estUneFemme
      *
      * @return bool 

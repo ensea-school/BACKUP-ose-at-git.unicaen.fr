@@ -17,7 +17,7 @@ class NecessiteMailStructureAffectationRule extends IntervenantRule
         
         $codes = array(StatutIntervenant::BIATSS);
         if (!in_array($statut->getSourceCode(), $codes)) {
-            $this->setMessage(sprintf("Le statut '%s' ne nécessite pas l'envoi d'un mail à la structure d'affectation.", $statut));
+            $this->setMessage(sprintf("Le statut &laquo; %s &raquo; ne nécessite pas l'envoi d'un mail à la structure d'affectation.", $statut));
             return false;
         }
 

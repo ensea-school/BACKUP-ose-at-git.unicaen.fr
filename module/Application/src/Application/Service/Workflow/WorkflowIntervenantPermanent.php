@@ -53,13 +53,13 @@ class WorkflowIntervenantPermanent extends WorkflowIntervenant
                     new PossedeServicesRule($this->getIntervenant())
             );
         }
-
+        
         $peutSaisirService = new PeutSaisirServiceRule($this->getIntervenant());
         if (!$peutSaisirService->isRelevant() || $peutSaisirService->execute()) {
             $this->addStep(
                     self::INDEX_VALIDATION_SERVICE,
                     new Step\ValidationServiceStep(),
-                    (new ServiceValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationService())
+                    $this->getServiceValideRule()
             );
         }
         

@@ -28,8 +28,6 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected $service;
 
     /**
-     * description
-     *
      * @var Intervenant|boolean
      */
     protected $intervenant;

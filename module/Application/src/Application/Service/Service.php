@@ -5,9 +5,12 @@ namespace Application\Service;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\Validation as ValidationEntity;
+use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 
 /**
  * Description of Service
@@ -145,7 +148,7 @@ class Service extends AbstractEntityService
         }
         elseif ($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
 //            $this->finderByStructureEns( $role->getStructure(), $qb, $alias );
-            $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
+//            $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
         }
         
         return $qb;
@@ -167,6 +170,178 @@ class Service extends AbstractEntityService
         $qb
                 ->join("$alias.intervenant", 'i2')
                 ->andWhere("i2 INSTANCE OF $statutInterv");
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services dont les volumes horaires sont validés ou non.
+     *
+     * @param boolean|\Application\Entity\Db\Validation $validation <code>true</code>, <code>false</code> ou 
+     * bien une Validation précise
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByValidation($validation, QueryBuilder $qb = null, $alias = null )
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        $qb     ->addSelect('vhv')
+                ->join("$alias.volumeHoraire", 'vhv');
+                
+        if ($validation instanceof \Application\Entity\Db\Validation) {
+            $qb
+                    ->join("vhv.validation", "v")
+                    ->andWhere("v = :validation")->setParameter('validation', $validation);
+        }
+        else {
+            $value = $validation ? 'is not null' : 'is null';
+            $qb     ->leftJoin("vhv.validation", 'vv')
+                    ->andWhere("vv $value");
+        }
+        
+        return $qb;
+    }
+    
+    /**
+     * Recherche par type 
+     *
+     * @param TypeValidation|string $type
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    public function finderByTypeValidation($type, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $type = $this->getServiceLocator()->get('ApplicationValidation')->normalizeTypeValidation($type);
+        
+        $qb
+                ->join("$alias.volumeHoraire", 'tvvh')
+                ->join("tvvh.validation", "tvv")
+                ->join("tvv.typeValidation", 'tvtv')
+                ->andWhere("tvtv = :tvtv")->setParameter('tvtv', $type);
+
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services dont les volumes horaires ont été validés par une structure.
+     *
+     * @param \Application\Entity\Db\Structure $structure 
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByStructureValidation(\Application\Entity\Db\Structure $structure, QueryBuilder $qb = null, $alias = null )
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        $qb     ->addSelect("vhs, vs")
+                ->join("$alias.volumeHoraire", 'vhs')
+                ->join("vhs.validation", "vs")
+                ->andWhere("vs.structure = :structurev")->setParameter('structurev', $structure);
+        
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services dont les volumes horaires ont fait ou non l'objet d'un contrat/avenant.
+     *
+     * @param boolean|\Application\Entity\Db\Contrat $contrat <code>true</code>, <code>false</code> ou 
+     * bien un Contrat précis
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByContrat($contrat, QueryBuilder $qb = null, $alias = null )
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        $qb     ->addSelect("vhc")
+                ->join("$alias.volumeHoraire", 'vhc');
+                
+        if ($contrat instanceof \Application\Entity\Db\Contrat) {
+            $qb     ->addSelect("c")
+                    ->join("vhc.contrat", "c")
+                    ->andWhere("c = :contrat")->setParameter('contrat', $contrat);
+        }
+        else {
+            $value = $contrat ? 'is not null' : 'is null';
+            $qb->andWhere("vhc.contrat $value");
+        }
+        
+        return $qb;
+    }
+    
+    /**
+     * 
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structureEns
+     * @return QueryBuilder
+     */
+    public function finderServicesNonValides(
+            IntervenantEntity $intervenant = null,
+            StructureEntity $structureEns = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select("s2, i, vh, strens, strens2")
+                ->from("Application\Entity\Db\Service", 's2')
+                ->join("s2.intervenant", "i")
+                ->join("s2.volumeHoraire", 'vh')
+                ->join("s2.structureEns", 'strens')
+                ->join("strens.structureNiv2", 'strens2')
+                ->andWhere('NOT EXISTS (SELECT sv FROM Application\Entity\Db\VServiceValide sv WHERE sv.volumeHoraire = vh)')
+                ->addOrderBy("strens.libelleCourt", 'asc')
+                ->addOrderBy("s2.histoModification", 'asc');
+        
+        if ($intervenant) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
+        }
+        if ($structureEns) {
+            $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
+        }
+        
+//        var_dump($qb->getQuery()->getSQL());
+        
+        return $qb;
+    }
+    
+    /**
+     * 
+     * @param TypeValidationEntity $validation
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structureEns
+     * @param StructureEntity $structureValidation
+     * @return QueryBuilder
+     */
+    public function finderServicesValides(
+            ValidationEntity $validation = null, 
+            IntervenantEntity $intervenant = null, 
+            StructureEntity $structureEns = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select("s, i, vh, strens, strens2")
+                ->from("Application\Entity\Db\Service", 's')
+                ->join("s.intervenant", "i")
+                ->join("s.volumeHoraire", 'vh')
+                ->join("s.structureEns", 'strens')
+                ->join("strens.structureNiv2", 'strens2')
+                ->join("vh.validation", "v")
+                ->join("v.typeValidation", 'tv')
+                ->join("v.structure", 'str') // validés par la structure spécifiée
+                ->orderBy("v.histoModification", 'desc')
+                ->addOrderBy("strens.libelleCourt", 'asc');
+        
+        if ($validation) {
+            $qb->andWhere("v = :validation")->setParameter('validation', $validation);
+        }
+        if ($intervenant) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
+        }
+        if ($structureEns) {
+            $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
+        }
+        
+//        print_r($qb->getQuery()->getSQL());
+        
         return $qb;
     }
 

@@ -1,6 +1,19 @@
-<h2 class="page-header">Création du contrat <small><?php echo $intervenant ?></small></h2>
+<h2 class="page-header"><?php echo $title ?></h2>
 
+<?php echo $this->messenger(true)->addMessages($messages) ?>
 
-<form method="POST">
-    <input class="btn btn-primary" type="submit" name="submi" value="Créer le contrat" />
-</form>
+<?php echo $this->partial('application/contrat/partial/list', array(
+    'contrats'    => $contrats,
+    'services'    => $services, 
+    'intervenant' => $intervenant,
+    'role'        => $role)); ?>
+
+<?php if ($action): ?>
+    <?php if (count($servicesDispos)): ?>
+        <h3>Enseignements validés candidats pour la création d'un contrat/avenant :</h3>
+        <?php echo $this->serviceListe($servicesDispos)->setIntervenant(false)->render(); ?>
+    <?php endif; ?>
+    <form method="POST">
+        <input class="btn btn-primary" type="submit" name="submit" value="<?php echo $action ?>" />
+    </form>
+<?php endif; ?>

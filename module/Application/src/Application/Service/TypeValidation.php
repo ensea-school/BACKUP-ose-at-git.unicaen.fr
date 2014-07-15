@@ -31,24 +31,6 @@ class TypeValidation extends AbstractEntityService
     public function getAlias(){
         return 'typev';
     }
-    
-    /**
-     * Recherche par code 
-     *
-     * @param string $code
-     * @param QueryBuilder|null $qb
-     * @return QueryBuilder
-     */
-    public function finderByCode($code, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $qb
-                ->andWhere("$alias.code = :code")
-                ->setParameter('code', $code);
-
-        return $qb;
-    }
 
     /**
      * Retourne la liste des types de volumes horaires

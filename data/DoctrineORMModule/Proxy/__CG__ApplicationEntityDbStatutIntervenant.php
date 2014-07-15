@@ -242,6 +242,17 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     /**
      * {@inheritDoc}
      */
+    public function estAgentTemporaireVacataire()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'estAgentTemporaireVacataire', array());
+
+        return parent::estAgentTemporaireVacataire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function requiertDossier()
     {
 

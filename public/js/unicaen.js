@@ -116,8 +116,8 @@ function AjaxModalListener(dialogDivId)
         
         e.preventDefault();
     };
-    
-    /**
+
+   /**
      * Interception des clics sur les liens inclus dans les modales pour rafraichir la modale au lieu de la page
      */
     this.innerAnchorClickListener = function(e)
@@ -158,7 +158,7 @@ function AjaxModalListener(dialogDivId)
             // mise à jour du "content" de la fenêtre modale seulement
             $(".modal-content", modalDialog).html(this.extractNewModalContent(data));
             // tente de déterminer si le formulaire éventuel contient des erreurs de validation
-            var terminated = !isRedirect && ($(".input-error, .has-error, .has-errors, .alert", modalDialog).length ? false : true);
+            var terminated = !isRedirect && ($(".input-error, .has-error, .has-errors, .alert.alert-danger", modalDialog).length ? false : true);
             if (terminated) {
                 // recherche de l'id de l'événement à déclencher parmi les data du lien cliqué
                 var modalEventName = modalDialog.data('a').data('event');
@@ -211,7 +211,7 @@ AjaxModalListener.prototype.start = function()
 {
     // interception des clics sur les liens adéquats pour affichage de la fenêtre modale
     this.eventListener.on("click", "a.ajax-modal", $.proxy(this.anchorClickListener, this));
-    
+
     // interception des clics sur les liens adéquats pour affichage de la fenêtre modale
     this.eventListener.on("click", "#" + this.modalContainerId + " a", $.proxy(this.innerAnchorClickListener, this));
 
@@ -295,7 +295,6 @@ function ajaxPopoverInit(){
         html: true,
         trigger: 'click',
         content: 'Chargement...',
-        container: "body",
     }).on('shown.bs.popover', ".ajax-popover", function (e) {
         var target = $(e.target);
 

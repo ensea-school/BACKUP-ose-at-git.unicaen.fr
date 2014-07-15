@@ -1,34 +1,17 @@
-<h2 class="page-header">Contrat <small><?php echo $intervenant ?></small></h2>
+<h2 class="page-header">Contrat et avenants <small><?php echo $intervenant ?></small></h2>
 
-<?php if (!$contrat): ?>
+<?php if (!$contrats): ?>
 
-    <?php echo $this->messenger()->setMessage(sprintf("Le contrat de %s n'a pas encore été créé.", $intervenant)) ?>
+    <?php //echo $this->messenger()->setMessage(sprintf("Le contrat de %s n'a pas encore été créé.", $intervenant)) ?>
 
 <?php else: ?>
 
 <?php echo $this->messenger(true) ?>
 
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>Contrat ou avenant</th>
-                <th>Création</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Contrat n°<?php echo $contrat->getId() ?></td>
-                <td><?php echo $contrat->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
-                    <?php echo $contrat->getHistoModificateur() ?></td>
-            </tr>
-            <?php foreach ($avenants as $avenant): ?>
-            <tr>
-                <td>Avenant n°<?php echo $avenant->getId() ?></td>
-                <td></td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+<?php echo $this->partial('application/contrat/partial/list', array(
+    'contrats'    => $contrats, 
+    'services'    => $services, 
+    'intervenant' => $intervenant)); ?>
 
 <?php endif; ?>
 

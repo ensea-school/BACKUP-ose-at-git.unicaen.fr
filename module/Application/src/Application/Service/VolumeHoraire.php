@@ -94,6 +94,51 @@ class VolumeHoraire extends AbstractEntityService
     }
     
     /**
+     * Recherche par type de validation.
+     *
+     * @param TypeValidationEntity|string $type
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    public function finderByTypeValidation($type, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
+        $type = $this->getServiceLocator()->get('ApplicationTypeValidation')->normalizeTypeValidation($type);
+        
+        $qb     ->join("$alias.validation", "v")
+                ->join("v.typeValidation", 'tv')
+                ->andWhere("tv = :tv")->setParameter('tv', $type);
+
+        return $qb;
+    }
+
+    /**
+     * Retourne les volumes horaires qui ont fait ou non l'objet d'un contrat/avenant.
+     *
+     * @param boolean|\Application\Entity\Db\Contrat $contrat <code>true</code>, <code>false</code> ou 
+     * bien un Contrat précis
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByContrat($contrat, QueryBuilder $qb = null, $alias = null )
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        
+        if ($contrat instanceof \Application\Entity\Db\Contrat) {
+            $qb     ->addSelect("c")
+                    ->join("$alias.contrat", "c")
+                    ->andWhere("c = :contrat")->setParameter('contrat', $contrat);
+        }
+        else {
+            $value = $contrat ? 'is not null' : 'is null';
+            $qb->andWhere("$alias.contrat $value");
+        }
+        
+        return $qb;
+    }
+    
+    /**
      * Recherche les volumes horaires
      *
      * @param TypeValidationEntity $typeValidation

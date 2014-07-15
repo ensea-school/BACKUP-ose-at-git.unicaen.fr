@@ -32,24 +32,6 @@ class TypeVolumeHoraire extends AbstractEntityService
     public function getAlias(){
         return 'typevh';
     }
-    
-    /**
-     * Recherche par code 
-     *
-     * @param string $code
-     * @param QueryBuilder|null $qb
-     * @return QueryBuilder
-     */
-    public function finderByCode($code, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-
-        $qb
-                ->andWhere("$alias.code = :code")
-                ->setParameter('code', $code);
-
-        return $qb;
-    }
 
     /**
      * Retourne le type de volume horaire "Prévu"

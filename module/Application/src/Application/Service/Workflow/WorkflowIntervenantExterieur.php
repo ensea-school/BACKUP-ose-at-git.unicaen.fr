@@ -5,16 +5,15 @@ namespace Application\Service\Workflow;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeValidation;
-use Application\Rule\Intervenant\ContratEditeRule;
 use Application\Rule\Intervenant\DossierValideRule;
-use Application\Rule\Intervenant\ServiceValideRule;
-use Application\Rule\Intervenant\NecessiteContratRule;
 use Application\Rule\Intervenant\PeutSaisirDossierRule;
 use Application\Rule\Intervenant\PeutSaisirPieceJointeRule;
 use Application\Rule\Intervenant\PeutSaisirServiceRule;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
 use Application\Rule\Intervenant\PossedeDossierRule;
 use Application\Rule\Intervenant\PossedeServicesRule;
+use Application\Rule\Intervenant\NecessiteContratRule;
+use Application\Rule\Intervenant\ContratEditeRule;
 use Application\Service\Workflow\Step;
 use Common\Exception\LogicException;
 
@@ -99,18 +98,18 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
             $this->addStep(
                     self::INDEX_VALIDATION_SERVICE,
                     new Step\ValidationServiceStep(),
-                    (new ServiceValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationService())
+                    $this->getServiceValideRule()
             );
         }
         
-//        $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
-//        if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
-//            $this->addStep(
-//                    self::INDEX_EDITION_CONTRAT,
-//                    new Step\EditionContratStep(),
-//                    (new ContratEditeRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationContrat())
-//            );
-//        }
+        $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
+        if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
+            $this->addStep(
+                    self::INDEX_EDITION_CONTRAT,
+                    new Step\EditionContratStep(),
+                    (new ContratEditeRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationContrat())
+            );
+        }
         
 //        $this->addStep(
 //                self::INDEX_FINAL,

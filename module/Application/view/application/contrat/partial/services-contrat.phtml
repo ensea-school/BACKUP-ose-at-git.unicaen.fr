@@ -14,9 +14,7 @@ $display  = $contrat->getId() ? 'display: none' : ''; //var_dump($services);die;
         >Afficher/masquer</a></small>
 </p>
 <div style="<?php echo $display ?>" class="details-enseignements" id="contrat-<?php echo $contrat->getId() ?>">
-    <?php    echo $this->serviceListe($services)
-            ->setIntervenant(false)
-            ->render(); ?>
+    <?php    echo $this->serviceListe($services)->setIntervenant(true)->setReadonly(true)->render(); ?>
 </div>
 
 <script>

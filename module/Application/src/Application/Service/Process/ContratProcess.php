@@ -13,7 +13,6 @@ use Application\Traits\IntervenantAwareTrait;
 use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\Structure;
 
 /**
  * Workflow de création des contrats et avenants.
@@ -36,7 +35,7 @@ class ContratProcess extends AbstractService
             $volumesHorairesDispos = $this->getVolumesHorairesDisposPourContrat();
             
             if (!count($volumesHorairesDispos)) {
-                throw new RuntimeException("Anomalie : aucun volume horaire validé sans contrat n'a été trouvé pour créer le contrat.");
+                throw new RuntimeException("Anomalie : aucun volume horaire n'a été trouvé pour créer le contrat.");
             }
             
             $this->creerContrat($volumesHorairesDispos);
@@ -48,7 +47,7 @@ class ContratProcess extends AbstractService
             $volumesHorairesDispos = $this->getVolumesHorairesDisposPourAvenant();
             
             if (!count($volumesHorairesDispos)) {
-                throw new RuntimeException("Anomalie : aucun volume horaire validé sans contrat n'a été trouvé pour créer l'avenant.");
+                throw new RuntimeException("Anomalie : aucun volume horaire n'a été trouvé pour créer l'avenant.");
             }
             
             $this->creerAvenant($volumesHorairesDispos);
@@ -67,23 +66,6 @@ class ContratProcess extends AbstractService
      */
     private function creerContrat($volumesHoraires)
     {
-//        // recherche des volumes horaires validés sans contrat, qui seront rattachés au contrat
-////        $serviceValidation = $this->getServiceValidation();
-////        $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
-////        $qb = $serviceValidation->finderByIntervenant($this->getIntervenant(), $qb);
-////        $validation = $serviceValidation->finderByStructureIntervention($this->getStructure(), $qb)->getQuery()->getOneOrNullResult();
-////        $volumesHoraires = $validation->getVolumeHoraire();
-//        $serviceVolumeHoraire = $this->getServiceVolumeHoraire();
-//        $qb = $serviceVolumeHoraire->finderByIntervenant($this->getIntervenant());
-//        $serviceVolumeHoraire->finderByStructureIntervention($this->getStructure(), $qb);
-//        $serviceVolumeHoraire->finderByTypeValidation($this->getTypeValidation(), $qb);
-//        $serviceVolumeHoraire->finderByContrat(false, $qb);
-//        $volumesHoraires = $serviceVolumeHoraire->getList($qb);
-//        
-//        if (!count($volumesHoraires)) {
-//            throw new RuntimeException("Anomalie : aucun volume horaire validé sans contrat n'a été trouvé.");
-//        }
-
         $this->contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)
                 ->setIntervenant($this->getIntervenant())
                 ->setStructure($this->getStructure())
@@ -113,12 +95,13 @@ class ContratProcess extends AbstractService
                 ->setIntervenant($this->getIntervenant())
                 ->setStructure($this->getStructure())
                 ->setContrat($this->getContratInitial()) // lien vers le contrat initial
+                ->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($this->getIntervenant(), false))
                 ->setValidation(null);
         
-        foreach ($volumesHoraires as $volumeHoraire) {
+        foreach ($volumesHoraires as $volumeHoraire) { /* @var $volumeHoraire \Application\Entity\Db\VolumeHoraire */
             $avenant->addVolumeHoraire($volumeHoraire);
             $volumeHoraire->setContrat($avenant);
-            $this->getEntityManager()->persist($volumeHoraire);
+//            $this->getEntityManager()->persist($volumeHoraire);
         }
         
         $this->getEntityManager()->persist($avenant);
@@ -263,7 +246,16 @@ class ContratProcess extends AbstractService
     public function getServicesDisposPourContrat()
     {
         if (null === $this->servicesDisposPourContrat) {
-            $this->servicesDisposPourContrat = $this->getPeutCreerContratInitialRule()->getServicesDispos();
+            $vhDispos = $this->getVolumesHorairesDisposPourContrat();
+            $vhIds    = array_map(function($v) { return $v->getId(); }, $vhDispos);
+            $qb       = $this->getServiceService()->getRepo()->createQueryBuilder("s");
+            $qb
+                    ->select("s, vh, str, i")
+                    ->join("s.volumeHoraire", "vh")
+                    ->join("s.structureEns", "str")
+                    ->join("s.intervenant", "i")
+                    ->andWhere($qb->expr()->in("vh", $vhIds));
+            $this->servicesDisposPourContrat = $qb->getQuery()->getResult();
         }
         
         return $this->servicesDisposPourContrat;
@@ -282,10 +274,29 @@ class ContratProcess extends AbstractService
     
     private $servicesDisposPourAvenant;
     
+    /**
+     * Fetche les services auxquels appartiennent les volumes horaires candidats à un avenant.
+     * 
+     * NB: une requête avec jointure entre Service et VolumeHoraire est INDISPENSABLE. 
+     * Parcourir les volumes horaires pour collecter les services paraît une idée mais
+     * NE CONVIENT PAS car les services seraient hydratés avec tous les volumes horaires existants 
+     * et non ceux réellement disponibles pour un contrat/avenant.
+     * 
+     * @return array
+     */
     public function getServicesDisposPourAvenant()
     {
         if (null === $this->servicesDisposPourAvenant) {
-            $this->servicesDisposPourAvenant = $this->getPeutCreerAvenantRule()->getServicesDispos();
+            $vhDispos = $this->getVolumesHorairesDisposPourAvenant();
+            $vhIds    = array_map(function($v) { return $v->getId(); }, $vhDispos);
+            $qb       = $this->getServiceService()->getRepo()->createQueryBuilder("s");
+            $qb
+                    ->select("s, vh, str, i")
+                    ->join("s.volumeHoraire", "vh")
+                    ->join("s.structureEns", "str")
+                    ->join("s.intervenant", "i")
+                    ->andWhere($qb->expr()->in("vh", $vhIds));
+            $this->servicesDisposPourAvenant = $qb->getQuery()->getResult();
         }
         
         return $this->servicesDisposPourAvenant;
@@ -372,13 +383,13 @@ class ContratProcess extends AbstractService
     {
         return $this->getServiceLocator()->get('ApplicationContrat');
     }
-    
+
     /**
-     * @return \Application\Service\Validation
+     * @return \Application\Service\Service
      */
-    private function getServiceValidation()
+    private function getServiceService()
     {
-        return $this->getServiceLocator()->get('ApplicationValidation');
+        return $this->getServiceLocator()->get('ApplicationService');
     }
     
     /**
@@ -387,13 +398,5 @@ class ContratProcess extends AbstractService
     private function getServiceVolumeHoraire()
     {
         return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-    }
-    
-    /**
-     * @return \Application\Service\TypeValidation
-     */
-    private function getServiceTypeValidation()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
 }

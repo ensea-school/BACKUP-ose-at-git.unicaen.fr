@@ -80,25 +80,6 @@ class PeutCreerContratInitialRule extends IntervenantRule
     }
     
     /**
-     * @var \Application\Entity\Db\Service[]
-     */
-    private $servicesDispos;
-    
-    /**
-     * @return \Application\Entity\Db\Service[]
-     */
-    public function getServicesDispos()
-    {
-        if (null === $this->servicesDispos) {
-            $this->servicesDispos = [];
-            foreach ($this->getVolumesHorairesDispos() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
-                $this->servicesDispos[$vh->getService()->getId()] = $vh->getService();
-            }
-        }
-        return $this->servicesDispos;
-    }
-    
-    /**
      * @var \Application\Entity\Db\VolumeHoraire[]
      */
     private $volumesHorairesDispos;

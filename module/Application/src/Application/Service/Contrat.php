@@ -96,6 +96,28 @@ class Contrat extends AbstractEntityService
     }
     
     /**
+     * Calcule le numero d'avenant suivant : nombre d'avenants validés + 1.
+     * 
+     * @param Intervenant $intervenant Intervenant concerné
+     * @param bool $avenantsValidesSeulement Ne compter que les avenants validés ?
+     * @return int
+     */
+    public function getNextNumeroAvenant(IntervenantEntity $intervenant, $avenantsValidesSeulement = true)
+    {
+        $serviceTypeContrat = $this->getServiceLocator()->get('ApplicationTypeContrat');
+        $typeAvenant        = $serviceTypeContrat->finderByCode(TypeContratEntity::CODE_AVENANT)->getQuery()->getOneOrNullResult();
+        
+        $qb = $this->finderByIntervenant($intervenant);
+        $qb = $this->finderByType($typeAvenant, $qb);
+        if ($avenantsValidesSeulement) {
+            $qb = $this->finderByValidation(true, $qb);
+        }
+        $avenantsCount = (int) $qb->select('COUNT(' . $this->getAlias() . ')')->getQuery()->getSingleScalarResult();
+        
+        return $avenantsCount;
+    }
+    
+    /**
      * 
      * @param \Application\Entity\Db\Contrat $contrat
      * @return \Application\Service\Contrat
@@ -107,10 +129,7 @@ class Contrat extends AbstractEntityService
         $typeAvenant        = $serviceTypeContrat->finderByCode(TypeContratEntity::CODE_AVENANT)->getQuery()->getOneOrNullResult();
         
         // calcul du numero d'avenant définitif : nombre d'avenants validés + 1
-        $qb = $this->finderByIntervenant($contrat->getIntervenant());
-        $qb = $this->finderByType($typeAvenant, $qb);
-        $qb = $this->finderByValidation(true, $qb);
-        $avenantsCount = (int) $qb->select('COUNT(' . $this->getAlias() . ')')->getQuery()->getSingleScalarResult();
+        $avenantsCount = $this->getNextNumeroAvenant($contrat->getIntervenant());
         
         // recherche du contrat initial de rattachement
         $qb = $this->finderByIntervenant($contrat->getIntervenant());

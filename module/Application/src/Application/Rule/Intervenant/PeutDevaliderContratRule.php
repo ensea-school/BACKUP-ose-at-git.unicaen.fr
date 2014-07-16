@@ -30,6 +30,11 @@ class PeutDevaliderContratRule extends IntervenantRule
             $this->setMessage("$contratToString n'est pas encore validé.");
             return false;
         }
+            
+        if (!$this->contrat->estUnAvenant()) {
+            $this->setMessage("Le contrat initial ne peut pas être dévalidé.");
+            return false;
+        }
         
 //        // Seul le contrat (si aucun avenant validé n'existe) et le dernier avenant validé 
 //        // peuvent être dévalidé.

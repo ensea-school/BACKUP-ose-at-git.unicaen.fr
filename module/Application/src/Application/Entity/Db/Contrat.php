@@ -103,22 +103,22 @@ class Contrat implements HistoriqueAwareInterface
     {
         if ($this->estUnAvenant()) {
             if ($this->getValidation()) {
-                $template = ($avecArticle ? ($deLe ? "de l'avenant n°%s" : "l'avenant n°%s") : "avenant n°%s");
+                $template = ($avecArticle ? ($deLe ? "de l'avenant n°%s" : "l'avenant n°%s") : "Avenant n°%s");
             }
             else {
-                $template = ($avecArticle ? ($deLe ? "du projet d'avenant" : "le projet d'avenant") : "projet d'avenant");
+                $template = ($avecArticle ? ($deLe ? "du projet d'avenant" : "le projet d'avenant") : "Projet d'avenant");
             }
         }
         else {
             if ($this->getValidation()) {
-                $template = ($avecArticle ? ($deLe ? "du contrat n°%s" : "le contrat n°%s") : "contrat n°%s");
+                $template = ($avecArticle ? ($deLe ? "du contrat n°%s" : "le contrat n°%s") : "Contrat n°%s");
             }
             else {
-                $template = ($avecArticle ? ($deLe ? "du projet de contrat" : "le projet de contrat") : "projet de contrat");
+                $template = ($avecArticle ? ($deLe ? "du projet de contrat" : "le projet de contrat") : "Projet de contrat");
             }
         }
         
-        return ucfirst(sprintf($template, $this->getReference()));
+        return sprintf($template, $this->getReference());
     }
     
     /**

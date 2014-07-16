@@ -22,6 +22,7 @@ use Application\Entity\Db\Contrat;
  * Description of ContratController
  *
  * @method Context context()
+ * @method \Doctrine\ORM\EntityManager em()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -73,23 +74,16 @@ class ContratController extends AbstractActionController implements ContextProvi
     public function voirAction()
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
-        $structure = $role instanceof ComposanteDbRole ? $role->getStructure() : null;
+        
+        $this->em()->getFilters()->enable('historique');
         
         // fetch (projets de) contrats/avenants
-        $serviceContrat = $this->getServiceContrat();
-        $qb = $serviceContrat->finderByIntervenant($this->getIntervenant());
-        if ($structure) {
-            $serviceContrat->finderByStructure($structure, $qb);
-        }
-        $alias = $serviceContrat->getAlias();
-        $qb->addOrderBy("$alias.typeContrat");
-        $contrats = $qb->getQuery()->getResult();
-            
-        // collecte des services associés
-        $services = $this->collectServicesContrats($contrats);
+        $contrats = $this->getContrats();
+        // fetch des services associés
+        $services = $this->getServicesContrats($contrats);
 
         $this->getView()->setVariables(array(
-            'role'        => $this->getContextProvider()->getSelectedIdentityRole(),
+            'role'        => $role,
             'contrats'    => $contrats,
             'services'    => $services,
             'intervenant' => $this->getIntervenant(),
@@ -100,22 +94,81 @@ class ContratController extends AbstractActionController implements ContextProvi
     }
     
     /**
-     * Collecte des services concernés par des contrats.
+     * Fetch des (projets de) contrats/avenants de l'intervenant.
+     * 
+     * @return Contrat[]
+     */
+    private function getContrats()
+    {
+        $role           = $this->getContextProvider()->getSelectedIdentityRole();
+        $serviceContrat = $this->getServiceContrat();
+        $structure      = $role instanceof ComposanteDbRole ? $role->getStructure() : null;
+        
+        $qb = $serviceContrat->finderByIntervenant($this->getIntervenant());
+        if ($structure) {
+            $serviceContrat->finderByStructure($structure, $qb);
+        }
+        $alias = $serviceContrat->getAlias();
+        $qb->addOrderBy("$alias.typeContrat")->addOrderBy("$alias.numeroAvenant");
+        $contrats = $qb->getQuery()->getResult();
+        
+        return $contrats;
+    }
+    
+    /**
+     * Fetch des services concernés par des contrats.
      * 
      * @param array $contrats
      * @return array [ Id Contrat => [ Id Service => Service ] ]
      */
-    private function collectServicesContrats($contrats)
+    private function getServicesContrats($contrats)
     {
-        // collecte des services associés
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
-        $services = [];
+        $services          = [];
+        
         foreach ($contrats as $contrat) { /* @var $contrat \Application\Entity\Db\Contrat */ 
-            foreach ($contrat->getVolumeHoraire() as $vh) {
-                $services[$contrat->getId()][$vh->getService()->getId()] = $vh->getService();
-                $vh->getService()->setTypeVolumehoraire($typeVolumeHoraire); // pour aide de vue! :-(
+            $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
+                    ->select("s, vh, str, i")
+                    ->join("s.volumeHoraire", "vh")
+                    ->join("s.structureEns", "str")
+                    ->join("s.intervenant", "i")
+                    ->andWhere("vh.contrat = :contrat")->setParameter("contrat", $contrat);
+            $query = $qb->getQuery();
+            foreach ($query->execute() as $service) {
+                $this->em()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
+                $services[$contrat->getId()][$service->getId()] = $service;
+                $service->setTypeVolumehoraire($typeVolumeHoraire); // pour aide de vue! :-(
             }
         }
+        
+        return $services;
+    }
+    
+    /**
+     * Fetch des services à récapituler sur un contrat, c'est-à-dire
+     * les services du contrat en question + tous les services
+     * des contrats/avenants précédemment créés.
+     * 
+     * @param Contrat $contrat Contrat concerné
+     * @return Service[]
+     */
+    private function getServicesRecapsContrat(Contrat $contrat)
+    {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        
+        $this->em()->clear('Application\Entity\Db\Service'); // indispensable si on requête N fois la même entité avec des critères différents
+        $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
+                ->select("s, vh, str, i")
+                ->join("s.volumeHoraire", "vh")
+                ->join("s.structureEns", "str")
+                ->join("s.intervenant", "i")
+                ->join("vh.contrat", "c")
+                ->andWhere("c.histoCreation <= :date")->setParameter("date", $contrat->getHistoModification())
+                ->andWhere("i = :intervenant")->setParameter("intervenant", $contrat->getIntervenant())
+                ->andWhere("str = :structure")->setParameter("structure", $contrat->getStructure());
+        $services = $qb->getQuery()->getResult();
+        
+        $this->getServiceService()->setTypeVolumehoraire($services, $typeVolumeHoraire); // pour aide de vue! :-(
         
         return $services;
     }
@@ -146,7 +199,6 @@ class ContratController extends AbstractActionController implements ContextProvi
         $servicesDispos   = null;
         $action           = null;
 
-        // si un contrat existe déjà, il s'agit de créer un avenant
         if ($peutCreerContrat) {
             $servicesDispos = $process->getServicesDisposPourContrat();
             $action = "Créer le projet de contrat";
@@ -165,10 +217,10 @@ class ContratController extends AbstractActionController implements ContextProvi
             
         if ($servicesDispos) {
             $this->getServiceService()->setTypeVolumehoraire($servicesDispos, $this->getServiceTypeVolumeHoraire()->getPrevu()); // aide de vue
-            $messages['info'] = "Des enseignements validés pouvant faire l'objet d'un contrat/avenant ont été trouvés.";
+            $messages['info'] = "Des enseignements validés candidats pour un contrat/avenant ont été trouvés.";
         }
         else {
-            $messages['info'] = "Aucun enseignement validé pouvant faire l'objet d'un contrat/avenant n'a été trouvé.";
+            $messages['info'] = "Aucun enseignement validé candidat pour un contrat/avenant n'a été trouvé.";
         }
             
         if ($this->getRequest()->isPost() && ($peutCreerContrat || $peutCreerAvenant)) {
@@ -267,7 +319,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $this->contrat     = $this->context()->mandatory()->contratFromRoute();
         $this->intervenant = $this->contrat->getIntervenant();
         $this->validation  = $this->contrat->getValidation();
-        $contratToString   = $this->contrat->toString(true, true);
+        $contratToString   = lcfirst($this->contrat->toString(true, true));
         
         $rule = new \Application\Rule\Intervenant\PeutDevaliderContratRule($this->intervenant, $this->contrat);
         $rule->setContratService($this->getServiceContrat());
@@ -347,7 +399,6 @@ class ContratController extends AbstractActionController implements ContextProvi
             throw new \Common\Exception\MessageException("Impossible d'exporter le contrat/avenant.", null, new \Exception($rule->getMessage()));
         }
         
-        
         $estUnAvenant          = $this->contrat->estUnAvenant();
         $contratToString       = (string) $this->contrat;
         $dateConseil           = $this->contrat->getDateCommissionRecherche();
@@ -360,7 +411,8 @@ class ContratController extends AbstractActionController implements ContextProvi
         $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $dateSignature         = new DateTime();
         $estUnProjet           = $this->contrat->getValidation() ? false : true;
-        $services              = $this->collectServicesContrats(array($this->contrat))[$this->contrat->getId()];
+        $services              = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
+        $servicesRecaps        = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
         
         $fileName = sprintf("contrat_%s_%s_%s.pdf", 
                 $this->contrat->getStructure()->getSourceCode(), 
@@ -384,6 +436,7 @@ class ContratController extends AbstractActionController implements ContextProvi
             'dateSignature'           => $dateSignature->format(Constants::DATE_FORMAT),
             'lieuSignature'           => "Caen",
             'services'                => $services,
+            'servicesRecaps'          => $servicesRecaps,
         );
 
         // Création du pdf, complétion et envoi au navigateur

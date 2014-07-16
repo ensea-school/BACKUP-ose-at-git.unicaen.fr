@@ -1,19 +1,17 @@
-<h2 class="page-header"><?php echo $title ?></h2>
+<h1 class="page-header"><?php echo $title ?></h1>
 
 <?php echo $this->messenger(true)->addMessages($messages) ?>
+
+<?php if ($action && count($servicesDispos)): ?>
+    <?php echo $this->serviceListe($servicesDispos)->setIntervenant(false)->render(); ?>
+    <form method="POST">
+        <input class="btn btn-primary" type="submit" name="submit" value="<?php echo $action ?>" />
+    </form>
+    <hr />
+<?php endif; ?>
 
 <?php echo $this->partial('application/contrat/partial/list', array(
     'contrats'    => $contrats,
     'services'    => $services, 
     'intervenant' => $intervenant,
-    'role'        => $role)); ?>
-
-<?php if ($action): ?>
-    <?php if (count($servicesDispos)): ?>
-        <h3>Enseignements validés candidats pour la création d'un contrat/avenant :</h3>
-        <?php echo $this->serviceListe($servicesDispos)->setIntervenant(false)->render(); ?>
-    <?php endif; ?>
-    <form method="POST">
-        <input class="btn btn-primary" type="submit" name="submit" value="<?php echo $action ?>" />
-    </form>
-<?php endif; ?>
+    'role'        => $role));

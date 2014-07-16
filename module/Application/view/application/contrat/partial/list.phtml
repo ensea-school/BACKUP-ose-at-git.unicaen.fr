@@ -18,9 +18,10 @@ $role        = $this->role;
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($contrats as $contrat): /* @var $avenant \Application\Entity\Db\Contrat */ ?>
+        <?php foreach ($contrats as $contrat): /* @var $contrat \Application\Entity\Db\Contrat */ ?>
         <tr>
             <?php 
+            $contratToString = $contrat->toString(true, true);
             $urlExport       = $this->url('contrat/exporter',  array('contrat' => $contrat->getId()));
             $urlValidation   = $this->url('contrat/valider',   array('contrat' => $contrat->getId()));
             $urlDevalidation = $this->url('contrat/devalider', array('contrat' => $contrat->getId()));
@@ -38,20 +39,20 @@ $role        = $this->role;
                 <p>
                     <?php if (($validation = $contrat->getValidation())): ?>
                         <?php echo $this->messenger()->setMessage((string)$this->validationDl($validation), 'success') ?>
-                        <?php if ($role instanceof Application\Acl\ComposanteDbRole): ?>
+                        <?php if ($role instanceof Application\Acl\ComposanteDbRole && $contrat->estUnAvenant()): ?>
                             <a href="<?php echo $urlDevalidation ?>" class="btn btn-primary ajax-modal"
-                               data-event="event-validation-suppr">Suppimer la validation</a>
+                               data-event="event-validation-suppr">Suppimer la validation <?php echo $contrat->toString(true, true) ?></a>
                         <?php endif; ?>
                     <?php else: ?>
                         <?php if ($role instanceof Application\Acl\ComposanteDbRole): ?>
                             <a href="<?php echo $urlValidation ?>" class="btn btn-primary ajax-modal"
-                               data-event="event-contrat-validation">Valider ce contrat/avenant</a>
+                               data-event="event-contrat-validation">Valider <?php echo $contrat->toString(true) ?></a>
                         <?php endif; ?>
                     <?php endif; ?>
                 </p>
                 <p>
                     <?php echo $this->partial('application/contrat/partial/services-contrat', array(
-                            'label'    => "Enseignements concernés par ce contrat/avenant :",
+                            'label'    => "Enseignements ayant déclenché la création de ce contrat/avenant :",
                             'contrat'  => $contrat,
                             'services' => $this->services[$contrat->getId()])) ?>
                 </p>

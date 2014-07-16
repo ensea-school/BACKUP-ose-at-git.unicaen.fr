@@ -16,6 +16,7 @@ use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Form\Intervenant\ContratValidation;
+use Application\Form\Intervenant\ContratRetour;
 use Application\Entity\Db\Contrat;
 
 /**
@@ -34,11 +35,6 @@ class ContratController extends AbstractActionController implements ContextProvi
      * @var Contrat
      */
     private $contrat;
-    
-    /**
-     * @var ViewModel
-     */
-    private $view;
     
     /**
      * 
@@ -257,13 +253,14 @@ class ContratController extends AbstractActionController implements ContextProvi
         $this->contrat     = $this->context()->mandatory()->contratFromRoute();
         $this->intervenant = $this->contrat->getIntervenant();
         $form              = $this->getFormValidationContrat()->setContrat($this->contrat)->init();
-        $title             = "Validation " . lcfirst($this->contrat->toString(true, true)) . " <small>$this->intervenant</small>";
+        $contratToString   = $this->contrat->toString(true);
+        $title             = "Validation $contratToString <small>$this->intervenant</small>";
         $process           = $this->getProcessContrat();
         $messages          = [];
         
         $rule = new \Application\Rule\Intervenant\PeutValiderContratRule($this->intervenant, $this->contrat);
         if (!$rule->execute()) {
-            throw new \Common\Exception\MessageException("Impossible de valider le contrat/avenant.", null, new \Exception($rule->getMessage()));
+            throw new \Common\Exception\MessageException("Impossible de valider $contratToString.", null, new \Exception($rule->getMessage()));
         }
 
         $this->em()->getFilters()->enable('historique');
@@ -349,11 +346,54 @@ class ContratController extends AbstractActionController implements ContextProvi
         return $viewModel;
     }
     
-    private function getView()
+    /**
+     * Saisie de la date de retour du contrat/avenant signé par l'intervenant.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws Common\Exception\MessageException
+     */
+    public function saisirRetourAction()
     {
-        if (null === $this->view) {
-            $this->view = new ViewModel();
+        $role              = $this->getContextProvider()->getSelectedIdentityRole();
+        $this->structure   = $role->getStructure();
+        $this->contrat     = $this->context()->mandatory()->contratFromRoute();
+        $this->intervenant = $this->contrat->getIntervenant();
+        $form              = $this->getFormRetourContrat()->setContrat($this->contrat)->init();
+        $contratToString   = $this->contrat->toString(true, true);
+        $title             = "Retour $contratToString signé <small>$this->intervenant</small>";
+        $process           = $this->getProcessContrat();
+        $messages          = [];
+        
+        $rule = new \Application\Rule\Intervenant\PeutSaisirRetourContratRule($this->intervenant, $this->contrat);
+        if (!$rule->execute()) {
+            throw new \Common\Exception\MessageException(
+                    "Impossible de saisir la date de retour $contratToString.", 
+                    null, 
+                    new \Exception($rule->getMessage()));
         }
+        
+        $form   ->bind($this->contrat)
+                ->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $this->em()->flush();
+                
+                $this->flashMessenger()->addSuccessMessage(
+                        "Saisie du retour $contratToString signé enregistrée avec succès.");
+            }
+        }
+        
+        $this->view = new \Zend\View\Model\ViewModel(array(
+            'role'        => $role,
+            'intervenant' => $this->intervenant,
+            'form'        => $form,
+            'title'       => $title,
+            'messages'    => $messages,
+        ));
+        
         return $this->view;
     }
     
@@ -455,6 +495,23 @@ class ContratController extends AbstractActionController implements ContextProvi
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }
     
+    /**
+     * @var ViewModel
+     */
+    private $view;
+    
+    /**
+     * 
+     * @return ViewModel
+     */
+    private function getView()
+    {
+        if (null === $this->view) {
+            $this->view = new ViewModel();
+        }
+        return $this->view;
+    }
+    
     private $formValider;
     
     /**
@@ -467,6 +524,20 @@ class ContratController extends AbstractActionController implements ContextProvi
         }
         
         return $this->formValider;
+    }
+    
+    private $formRetour;
+    
+    /**
+     * @return ContratRetour
+     */
+    protected function getFormRetourContrat()
+    {
+        if (null === $this->formRetour) {
+            $this->formRetour = new ContratRetour();
+        }
+        
+        return $this->formRetour;
     }
     
     private $intervenant;

@@ -5,7 +5,12 @@ $role        = $this->role;
 ?>
 
 <style>
-    th.structure, td.structure { max-width: 100px; }
+    th.structure, td.structure { width: 100px; }
+    th.retour, td.retour { width: 75px; }
+</style>
+
+<style>
+    .ui-datepicker{z-index:1151 !important; }
 </style>
 
 <?php if ($contrats): ?>
@@ -14,7 +19,7 @@ $role        = $this->role;
         <tr>
             <th class="structure">Composante d'enseignement</th>
             <th>Contrat ou avenant</th>
-            <th>Retour<br />signé</th>
+            <th class="retour">Retour<br />signé</th>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +27,10 @@ $role        = $this->role;
         <tr>
             <?php 
             $contratToString = $contrat->toString(true, true);
-            $urlExport       = $this->url('contrat/exporter',  array('contrat' => $contrat->getId()));
-            $urlValidation   = $this->url('contrat/valider',   array('contrat' => $contrat->getId()));
-            $urlDevalidation = $this->url('contrat/devalider', array('contrat' => $contrat->getId()));
+            $urlExport       = $this->url('contrat/exporter',      array('contrat' => $contrat->getId()));
+            $urlValidation   = $this->url('contrat/valider',       array('contrat' => $contrat->getId()));
+            $urlDevalidation = $this->url('contrat/devalider',     array('contrat' => $contrat->getId()));
+            $urlSaisieRetour = $this->url('contrat/saisir-retour', array('contrat' => $contrat->getId()));
             ?>
             <td class="structure"><?php echo $contrat->getStructure() ?></td>
             <td>
@@ -41,7 +47,7 @@ $role        = $this->role;
                         <?php echo $this->messenger()->setMessage((string)$this->validationDl($validation), 'success') ?>
                         <?php if ($role instanceof Application\Acl\ComposanteDbRole && $contrat->estUnAvenant()): ?>
                             <a href="<?php echo $urlDevalidation ?>" class="btn btn-primary ajax-modal"
-                               data-event="event-validation-suppr">Suppimer la validation <?php echo $contrat->toString(true, true) ?></a>
+                               data-event="event-validation-suppr">Supprimer la validation <?php echo $contrat->toString(true, true) ?></a>
                         <?php endif; ?>
                     <?php else: ?>
                         <?php if ($role instanceof Application\Acl\ComposanteDbRole): ?>
@@ -57,7 +63,14 @@ $role        = $this->role;
                             'services' => $this->services[$contrat->getId()])) ?>
                 </p>
             </td>
-            <td><?php echo ($d = $contrat->getDateRetourSigne()) ? $d->format(Common\Constants::DATETIME_FORMAT) : null ?></td>
+            <td class="retour">
+                <?php echo ($d = $contrat->getDateRetourSigne()) ? $d->format(Common\Constants::DATE_FORMAT) : null ?>
+                <?php if ($role instanceof Application\Acl\ComposanteDbRole && $contrat->getValidation()): ?>
+                    <a href="<?php echo $urlSaisieRetour ?>" class="btn btn-primary ajax-modal"
+                       data-event="event-saisie-retour-suppr"
+                       title="Cliquez pour saisir la date de retour <?php echo $contrat->toString(true, true) ?> signé">Saisir</a>
+                <?php endif ?>
+            </td>
         </tr>
         <?php endforeach; ?>
     </tbody>
@@ -68,7 +81,7 @@ $role        = $this->role;
 
 
 <script>
-    $("body").on("event-contrat-validation event-validation-suppr", function(event, data) {
+    $("body").on("event-contrat-validation event-validation-suppr event-saisie-retour-suppr", function(event, data) {
         event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();
     });

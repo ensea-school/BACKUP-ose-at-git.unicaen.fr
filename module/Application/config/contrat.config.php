@@ -80,6 +80,18 @@ return array(
                             ),
                         ),
                     ),
+                    'saisir-retour' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:contrat/saisir-retour',
+                            'constraints' => array(
+                                'contrat' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'saisir-retour',
+                            ),
+                        ),
+                    ),
                     'exporter' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -125,7 +137,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => array('creer', 'valider', 'devalider'),
+                    'action'     => array('creer', 'valider', 'devalider', 'saisir-retour'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
                 ),
                 array(

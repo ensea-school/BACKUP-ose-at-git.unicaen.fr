@@ -63,14 +63,14 @@ class WorkflowIntervenantPermanent extends WorkflowIntervenant
             );
         }
         
-//        $passageCR = new \Application\Rule\Intervenant\NecessitePassageCommissionRechercheRule($this->getIntervenant());
+//        $passageCR = new \Application\Rule\Intervenant\NecessitePassageConseilAcademiqueRule($this->getIntervenant());
 //        if ($passageCR->isRelevant() && $passageCR->execute()) {
 //            $this->addStep(
 //                    self::INDEX_PASSAGE_CR,
-//                    "Passage en Commission de la Recherche", 
+//                    "Passage en Conseil Académique", 
 //                    null,
 //                    null,
-//                    new \Application\Rule\Intervenant\NecessitePassageCommissionRechercheRule($this->getIntervenant())
+//                    new \Application\Rule\Intervenant\NecessitePassageConseilAcademiqueRule($this->getIntervenant())
 //            );
 //        }
         

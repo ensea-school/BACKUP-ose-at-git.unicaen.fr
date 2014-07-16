@@ -10,7 +10,7 @@ class Validation implements HistoriqueAwareInterface
     /**
      * @var \DateTime
      */
-    private $dateCommissionRecherche;
+    private $dateConseilAcademique;
     
     /**
      * @var \DateTime
@@ -291,26 +291,26 @@ class Validation implements HistoriqueAwareInterface
     }
 
     /**
-     * Set dateCommissionRecherche
+     * Set dateConseilAcademique
      *
-     * @param \DateTime $dateCommissionRecherche
+     * @param \DateTime $dateConseilAcademique
      * @return Validation
      */
-    public function setDateCommissionRecherche(\DateTime $dateCommissionRecherche = null)
+    public function setDateConseilAcademique(\DateTime $dateConseilAcademique = null)
     {
-        $this->dateCommissionRecherche = $dateCommissionRecherche;
+        $this->dateConseilAcademique = $dateConseilAcademique;
 
         return $this;
     }
 
     /**
-     * Get dateCommissionRecherche
+     * Get dateConseilAcademique
      *
      * @return \DateTime
      */
-    public function getDateCommissionRecherche()
+    public function getDateConseilAcademique()
     {
-        return $this->dateCommissionRecherche;
+        return $this->dateConseilAcademique;
     }
 
     /**

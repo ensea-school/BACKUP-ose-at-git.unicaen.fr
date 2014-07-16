@@ -401,7 +401,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         
         $estUnAvenant          = $this->contrat->estUnAvenant();
         $contratToString       = (string) $this->contrat;
-        $dateConseil           = $this->contrat->getDateCommissionRecherche();
+        $dateConseil           = $this->contrat->getDateConseilAcademique();
         $nomIntervenant        = (string) $this->intervenant;
         $dateNaissance         = $this->intervenant->getDateNaissanceToString();
         $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();

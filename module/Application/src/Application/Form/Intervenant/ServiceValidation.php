@@ -8,7 +8,7 @@ use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Validator\NotEmpty;
 use UnicaenApp\Hydrator\Strategy\DateStrategy;
-use Application\Rule\Intervenant\NecessitePassageCommissionRechercheRule;
+use Application\Rule\Intervenant\NecessitePassageConseilAcademiqueRule;
 use Application\Rule\Intervenant\NecessitePassageConseilRestreintRule;
 
 /**
@@ -54,20 +54,20 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
             $this->getHydrator()->addStrategy('dateConseilRestreint', new DateStrategy($this->get('dateConseilRestreint')));
         }
         
-        $dateCommissionRechercheRequired = $this->getRuleDateCommissionRecherche()->execute();
-        if ($dateCommissionRechercheRequired) {
+        $dateConseilAcademiqueRequired = $this->getRuleDateConseilAcademique()->execute();
+        if ($dateConseilAcademiqueRequired) {
             $this->add(array(
-                'name' => 'dateCommissionRecherche',
+                'name' => 'dateConseilAcademique',
                 'type'  => 'UnicaenApp\Form\Element\Date',
                 'options' => array(
-                    'label' => "Date de passage en Commission de la Recherche",
+                    'label' => "Date de passage en Conseil Académique",
                 ),
                 'attributes' => array(
-                    'id' => uniqid('dateCommissionRecherche'),
-                    'disabled' => !$dateCommissionRechercheRequired,
+                    'id' => uniqid('dateConseilAcademique'),
+                    'disabled' => !$dateConseilAcademiqueRequired,
                 ),
             ));
-            $this->getHydrator()->addStrategy('dateCommissionRecherche', new DateStrategy($this->get('dateCommissionRecherche')));
+            $this->getHydrator()->addStrategy('dateConseilAcademique', new DateStrategy($this->get('dateConseilAcademique')));
         }
         
         $this->add(new Csrf('security'));
@@ -91,7 +91,7 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
 //            if ($this->has($name = 'dateConseilRestreint')) {
 //                $this->remove($name);
 //            }
-//            if ($this->has($name = 'dateCommissionRecherche')) {
+//            if ($this->has($name = 'dateConseilAcademique')) {
 //                $this->remove($name);
 //            }
 //            $this->get('valide')->setLabel("Décochez pour dévalider les enseignements")->setValue(true);
@@ -108,25 +108,25 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        $passageCommissionRechercheRule  = $this->getRuleDateCommissionRecherche();
+        $passageConseilAcademiqueRule  = $this->getRuleDateConseilAcademique();
         $passageConseilRestreintRule     = $this->getRuleDateConseilRestreint();
         
-        $dateCommissionRechercheRequired = $passageCommissionRechercheRule->isRelevant() && $passageCommissionRechercheRule->execute();
+        $dateConseilAcademiqueRequired = $passageConseilAcademiqueRule->isRelevant() && $passageConseilAcademiqueRule->execute();
         $dateConseilRestreintRequired    = $passageConseilRestreintRule->isRelevant()    && $passageConseilRestreintRule->execute();
 
         // la saisie d'une date ne peut être obligatoire que si la case validation est cochée
         if (!$this->get('valide')->getValue()) {
-            $dateCommissionRechercheRequired = false;
+            $dateConseilAcademiqueRequired = false;
             $dateConseilRestreintRequired    = false;
         }
         
-        $validatorsDateCommissionRecherche = array();
-        if ($dateCommissionRechercheRequired) {
-            $validatorsDateCommissionRecherche[] = array(
+        $validatorsDateConseilAcademique = array();
+        if ($dateConseilAcademiqueRequired) {
+            $validatorsDateConseilAcademique[] = array(
                 'name' => 'NotEmpty',
                 'options' => array(
                     'messages' => array(
-                        NotEmpty::IS_EMPTY => $passageCommissionRechercheRule->getMessage(),
+                        NotEmpty::IS_EMPTY => $passageConseilAcademiqueRule->getMessage(),
                     ),
                 ),
             );
@@ -158,9 +158,9 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
                     ),
                 ),
             ),
-            'dateCommissionRecherche' => array(
-                'required'   => $dateCommissionRechercheRequired,
-                'validators' => $validatorsDateCommissionRecherche,
+            'dateConseilAcademique' => array(
+                'required'   => $dateConseilAcademiqueRequired,
+                'validators' => $validatorsDateConseilAcademique,
             ),
             'dateConseilRestreint' => array(
                 'required'   => $dateConseilRestreintRequired,
@@ -170,19 +170,19 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
     }
          
     /**
-     * @var NecessitePassageCommissionRechercheRule 
+     * @var NecessitePassageConseilAcademiqueRule 
      */
-    private $ruleDateCommissionRecherche;
+    private $ruleDateConseilAcademique;
     
     /**
-     * @return NecessitePassageCommissionRechercheRule
+     * @return NecessitePassageConseilAcademiqueRule
      */
-    public function getRuleDateCommissionRecherche()
+    public function getRuleDateConseilAcademique()
     {
-        if (null === $this->ruleDateCommissionRecherche) {
-            $this->ruleDateCommissionRecherche = new NecessitePassageCommissionRechercheRule($this->getIntervenant());
+        if (null === $this->ruleDateConseilAcademique) {
+            $this->ruleDateConseilAcademique = new NecessitePassageConseilAcademiqueRule($this->getIntervenant());
         }
-        return $this->ruleDateCommissionRecherche;
+        return $this->ruleDateConseilAcademique;
     }
         
     /**

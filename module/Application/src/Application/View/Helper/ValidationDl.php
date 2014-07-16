@@ -38,10 +38,10 @@ class ValidationDl extends AbstractDl
                 . ' par ' . $this->getView()->mailto($entity->getHistoModificateur())
         );
         
-        if ($entity->getDateCommissionRecherche()) {
+        if ($entity->getDateConseilAcademique()) {
             $dtdds[] = sprintf($tplDtdd,
-                "Date de passage en Commission de la Recherche :", 
-                $entity->getDateCommissionRecherche()->format(\Common\Constants::DATE_FORMAT)
+                "Date de passage en Conseil Académique :", 
+                $entity->getDateConseilAcademique()->format(\Common\Constants::DATE_FORMAT)
             );
         }
         

@@ -147,14 +147,14 @@ class Contrat implements HistoriqueAwareInterface
     }
     
     /**
-     * Retourne l'éventuelle date de passage en commision de la recherche des enseignements 
+     * Retourne l'éventuelle date de passage en conseil académique des enseignements 
      * de ce contrat/avenant.
      * 
      * @return \DateTime|null
      */
-    public function getDateCommissionRecherche()
+    public function getDateConseilAcademique()
     {
-        return $this->getVolumeHoraire()[0]->getValidation()[0]->getDateCommissionRecherche();
+        return $this->getVolumeHoraire()[0]->getValidation()[0]->getDateConseilAcademique();
     }
     
     /**

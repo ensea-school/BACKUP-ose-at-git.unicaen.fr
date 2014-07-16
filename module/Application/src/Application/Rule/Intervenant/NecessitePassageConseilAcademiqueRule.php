@@ -5,18 +5,18 @@ namespace Application\Rule\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 
 /**
- * Description of NecessitePassageCommissionRechercheRule
+ * Description of NecessitePassageConseilAcademiqueRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class NecessitePassageCommissionRechercheRule extends IntervenantRule
+class NecessitePassageConseilAcademiqueRule extends IntervenantRule
 {
     public function execute()
     {
         $statut = $this->getIntervenant()->getStatut();
         
         if (!$statut->estVacataireNonBiatss()) {
-            $this->setMessage(sprintf("De par son statut &laquo; %s &raquo;, l'intervenant n'est pas concerné par la Commission de la Recherche.", $statut));
+            $this->setMessage(sprintf("De par son statut &laquo; %s &raquo;, l'intervenant n'est pas concerné par le Conseil Académique.", $statut));
             return false;
         }
         
@@ -31,11 +31,11 @@ class NecessitePassageCommissionRechercheRule extends IntervenantRule
         
         $codes = array(StatutIntervenant::SALAR_PRIVE, StatutIntervenant::SALAR_PUBLIC, StatutIntervenant::NON_SALAR);
         if (!in_array($statut->getSourceCode(), $codes)) {
-            $this->setMessage(sprintf("Le statut de l'intervenant (%s) ne nécessite pas le passage en Commission de la Recherche.", $statut));
+            $this->setMessage(sprintf("Le statut de l'intervenant (%s) ne nécessite pas le passage en Conseil Académique.", $statut));
             return false;
         }
 
-        $this->setMessage(sprintf("Le statut de l'intervenant (%s) nécessite le passage en Commission de la Recherche.", $statut));
+        $this->setMessage(sprintf("Le statut de l'intervenant (%s) nécessite le passage en Conseil Académique.", $statut));
             
         return true;
     }

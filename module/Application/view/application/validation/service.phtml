@@ -43,8 +43,8 @@
                         <?php 
                         echo $this->form()->openTag($formValider);
                         echo $this->formControlGroup($formValider->get('valide')->setAttribute('disabled', $readonly));
-                        if ($formValider->has('dateCommissionRecherche')) {
-                            echo $this->formControlGroup($formValider->get('dateCommissionRecherche')->setAttribute('disabled', $readonly));
+                        if ($formValider->has('dateConseilAcademique')) {
+                            echo $this->formControlGroup($formValider->get('dateConseilAcademique')->setAttribute('disabled', $readonly));
                         }
                         if ($formValider->has('dateConseilRestreint')) {
                             echo $this->formControlGroup($formValider->get('dateConseilRestreint')->setAttribute('disabled', $readonly));

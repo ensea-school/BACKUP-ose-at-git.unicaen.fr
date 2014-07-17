@@ -1,4 +1,40 @@
 
+-- ajouts de gestionnaires
+insert into ROLE (
+    ID,
+    STRUCTURE_ID,
+    PERSONNEL_ID,
+    TYPE_ID,
+    SOURCE_ID,
+    SOURCE_CODE,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+SELECT 
+  role_id_seq.nextval id,
+  s.id STRUCTURE_ID,
+  u.PERSONNEL_ID,
+  tr.id TYPE_ID,
+  src.id SOURCE_ID,
+  role_id_seq.currval SOURCE_CODE,
+  u2.id HISTO_CREATEUR_ID,
+  u2.id HISTO_MODIFICATEUR_ID
+FROM 
+  UTILISATEUR u,
+  STRUCTURE s,
+  TYPE_ROLE tr,
+  source src,
+  UTILISATEUR u2
+WHERE s.SOURCE_CODE = 'U091'
+AND tr.CODE         = 'GEST'
+AND src.CODE        = 'OSE'
+AND u2.USERNAME     = 'oseappli'
+AND u.USERNAME     IN( --'levalois', 'esnaults', 'hamelin', 'bouchard', 'negahban', 'cauvins', 'leclaire'
+'lelievre'
+  );
+
+
+
 select 'insert into role (ID , TYPE_ID , SOURCE_CODE , SOURCE_ID , HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID, PERSONNEL_ID , STRUCTURE_ID) values (role_id_seq.nextval, 8, 10000+role_id_seq.currval, 2, 1, 1, '||p.id||', '||s.id||');' from personnel p, structure s where p.source_code = '21255' and s.source_code = 'I11' union 
 select 'insert into role (ID , TYPE_ID , SOURCE_CODE , SOURCE_ID , HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID, PERSONNEL_ID , STRUCTURE_ID) values (role_id_seq.nextval, 8, 10000+role_id_seq.currval, 2, 1, 1, '||p.id||', '||s.id||');' from personnel p, structure s where p.source_code = '26771' and s.source_code = 'I12' union 
 select 'insert into role (ID , TYPE_ID , SOURCE_CODE , SOURCE_ID , HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID, PERSONNEL_ID , STRUCTURE_ID) values (role_id_seq.nextval, 8, 10000+role_id_seq.currval, 2, 1, 1, '||p.id||', '||s.id||');' from personnel p, structure s where p.source_code = '4173' and s.source_code = 'I13' union 

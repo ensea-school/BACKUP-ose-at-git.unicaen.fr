@@ -1,3 +1,30 @@
+-- ajouts de pièces justificatives à joindre
+INSERT
+INTO TYPE_PIECE_JOINTE_STATUT
+  (
+    ID,
+    TYPE_PIECE_JOINTE_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select
+    TYPE_PIECE_JOINTE_STATU_id_seq.nextval id,
+    tpj.id TYPE_PIECE_JOINTE_ID,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    1 PREMIER_RECRUTEMENT, 
+    u.id HISTO_CREATEUR_ID,
+    u.id HISTO_MODIFICATEUR_ID
+  from TYPE_PIECE_JOINTE tpj, STATUT_INTERVENANT si, UTILISATEUR u
+  where tpj.CODE = 'CV' and si.SOURCE_CODE in ('RETR_HORS_UCBN', 'ETUD_HORS_UCBN') and u.USERNAME = 'oseappli';
+  
+  
+  
 
 -- ajouts de gestionnaires
 insert into ROLE (

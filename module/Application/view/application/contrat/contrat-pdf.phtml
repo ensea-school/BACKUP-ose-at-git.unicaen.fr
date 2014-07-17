@@ -43,12 +43,16 @@ recrutement et d'emploi de vacataires pour l'enseignement supérieur ;<br /><br 
     </tr>
 </table>
 
+<?php
+$qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'enseignement vacataire";
+?>
+
 <h1 class="titre">
     <?php if ($estUnAvenant): ?>
         Avenant au contrat de travail initial modifiant le volume horaire initial
-        de recrutement en qualité de vacataire et chargé d'enseignement
+        de recrutement en qualité <?php echo $qualiteIntervenant ?>
     <?php else: ?>
-        Contrat de travail de vacataire et chargé d'enseignement
+        Contrat de travail <?php echo $qualiteIntervenant ?>
     <?php endif ?>
 </h1>
         
@@ -79,30 +83,32 @@ recrutement et d'emploi de vacataires pour l'enseignement supérieur ;<br /><br 
 <dl class="articles">
     
     <?php 
-    $servicesListe = $this->partial('application/service/partial/liste', array('services' => $servicesRecaps));
-    $noArticle     = 1;
+    $servicesToString = $this->partial('application/service/partial/liste', array('services' => $servicesRecaps))
+            . "Total des heures équivalent TD effectuées par $nomCompletIntervenant à " . lcfirst($etablissement) 
+            . " toutes composantes confondues : $totalHETD.";
+    $noArticle = 1;
     ?>
     
     <?php if ($estUnAvenant): ?>
     
-        <dt>Article 1er :</dt>
+        <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
             <p><?php echo $nomCompletIntervenant ?> assurera au lieu des heures d'enseignements prévues au contrat initial :</p>
-            <div class="services"><?php echo $servicesListe ?></div>
+            <div class="services"><?php echo $servicesToString ?></div>
         </dd>
         
     <?php else: ?>
         
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
-            <?php echo $nomCompletIntervenant ?> est recruté<?php echo $f ? 'e' : '' ?> pour l'année universitaire <?php echo $annee ?> en qualité 
-            <?php echo $estATV ? "d'agent temporaire vacataire" : "de chargé d'enseignement vacataire" ?>.
+            <p><?php echo $nomCompletIntervenant ?> est recruté<?php echo $f ? 'e' : '' ?> pour l'année universitaire <?php echo $annee ?> en qualité 
+            <?php echo $qualiteIntervenant ?>.</p>
         </dd>
 
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
             <p>L'intéressé<?php echo $f ? 'e' : '' ?> est chargé<?php echo $f ? 'e' : '' ?> d'assurer les enseignements ci-après :</p>
-            <div class="services"><?php echo $servicesListe ?></div>
+            <div class="services"><?php echo $servicesToString ?></div>
             <p>L'intéressé<?php echo $f ? 'e' : '' ?> s'engage à assurer, sans rémunération complémentaire, toutes les obligations liées à son ou à ses enseignements (suivi pédagogique des étudiants, contrôle des connaissances et examens).</p>
         </dd>
         

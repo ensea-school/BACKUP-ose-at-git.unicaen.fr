@@ -453,6 +453,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $estUnProjet           = $this->contrat->getValidation() ? false : true;
         $services              = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
         $servicesRecaps        = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
+        $totalHETD             = $this->getFormuleHetd()->getHetd($this->intervenant);
         
         $fileName = sprintf("contrat_%s_%s_%s.pdf", 
                 $this->contrat->getStructure()->getSourceCode(), 
@@ -477,11 +478,14 @@ class ContratController extends AbstractActionController implements ContextProvi
             'lieuSignature'           => "Caen",
             'services'                => $services,
             'servicesRecaps'          => $servicesRecaps,
+            'totalHETD'               => \UnicaenApp\Util::formattedFloat($totalHETD, \NumberFormatter::DECIMAL, 2),
         );
 
         // Création du pdf, complétion et envoi au navigateur
         $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
-        $exp->setHeaderSubtitle($contratToString);
+        $exp    ->setHeaderSubtitle($contratToString)
+                ->setMarginBottom(25)
+                ->setMarginTop(25);
         if ($estUnProjet) {
             $exp->setWatermark("Projet");
         }
@@ -645,5 +649,13 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getServiceTypeValidation()
     {
         return $this->getServiceLocator()->get('ApplicationTypeValidation');
+    }
+
+    /**
+     * @return \Application\Service\Process\FormuleHetd
+     */
+    public function getFormuleHetd()
+    {
+        return $this->getServiceLocator()->get('processFormuleHetd');
     }
 }

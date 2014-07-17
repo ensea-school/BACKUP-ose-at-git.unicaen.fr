@@ -114,7 +114,7 @@ class Contrat implements HistoriqueAwareInterface
                 $template = ($avecArticle ? ($deLe ? "du contrat n°%s" : "le contrat n°%s") : "Contrat n°%s");
             }
             else {
-                $template = ($avecArticle ? ($deLe ? "du projet de contrat n°%s" : "le projet de contrat n°%s") : "Projet de contrat n°%s");
+                $template = ($avecArticle ? ($deLe ? "du projet de contrat" : "le projet de contrat") : "Projet de contrat");
             }
         }
         

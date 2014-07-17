@@ -64,10 +64,10 @@ class Dossier extends \Application\Entity\Db\Dossier implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'adresse', 'civilite', 'email', 'telephone', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'prenom', 'rib', 'statut', 'premierRecrutement', 'perteEmploi', 'pieceJointe', 'id', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+            return array('__isInitialized__', 'adresse', 'civilite', 'email', 'telephone', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeEstProvisoire', 'prenom', 'rib', 'statut', 'premierRecrutement', 'perteEmploi', 'pieceJointe', 'id', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
         }
 
-        return array('__isInitialized__', 'adresse', 'civilite', 'email', 'telephone', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'prenom', 'rib', 'statut', 'premierRecrutement', 'perteEmploi', 'pieceJointe', 'id', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+        return array('__isInitialized__', 'adresse', 'civilite', 'email', 'telephone', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeEstProvisoire', 'prenom', 'rib', 'statut', 'premierRecrutement', 'perteEmploi', 'pieceJointe', 'id', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
     }
 
     /**
@@ -391,6 +391,28 @@ class Dossier extends \Application\Entity\Db\Dossier implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNumeroInsee', array());
 
         return parent::getNumeroInsee();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setNumeroInseeEstProvisoire($numeroInseeEstProvisoire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setNumeroInseeEstProvisoire', array($numeroInseeEstProvisoire));
+
+        return parent::setNumeroInseeEstProvisoire($numeroInseeEstProvisoire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNumeroInseeEstProvisoire()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNumeroInseeEstProvisoire', array());
+
+        return parent::getNumeroInseeEstProvisoire();
     }
 
     /**

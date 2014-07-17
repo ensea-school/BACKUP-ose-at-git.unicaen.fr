@@ -56,6 +56,11 @@ class Dossier implements HistoriqueAwareInterface
      * @var string
      */
     protected $numeroInsee;
+    
+    /**
+     * @var boolean
+     */
+    protected $numeroInseeEstProvisoire = false;
 
     /**
      * @var string
@@ -336,6 +341,29 @@ class Dossier implements HistoriqueAwareInterface
     public function getNumeroInsee()
     {
         return $this->numeroInsee;
+    }
+
+    /**
+     * Set numeroInseeEstProvisoire
+     *
+     * @param boolean $numeroInseeEstProvisoire
+     * @return Dossier
+     */
+    public function setNumeroInseeEstProvisoire($numeroInseeEstProvisoire)
+    {
+        $this->numeroInseeEstProvisoire = $numeroInseeEstProvisoire;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroInseeEstProvisoire
+     *
+     * @return boolean 
+     */
+    public function getNumeroInseeEstProvisoire()
+    {
+        return $this->numeroInseeEstProvisoire;
     }
 
     /**

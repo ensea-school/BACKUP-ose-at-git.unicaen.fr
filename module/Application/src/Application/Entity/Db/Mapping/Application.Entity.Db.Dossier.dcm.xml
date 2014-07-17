@@ -21,6 +21,7 @@
     <field name="nomPatronymique" type="string" column="NOM_PATRONYMIQUE" length="128" nullable="true"/>
     <field name="nomUsuel" type="string" column="NOM_USUEL" length="128" nullable="false"/>
     <field name="numeroInsee" type="string" column="NUMERO_INSEE" length="10" nullable="false"/>
+    <field name="numeroInseeEstProvisoire" type="boolean" column="NUMERO_INSEE_EST_PROVISOIRE" nullable="false"/>
     <field name="prenom" type="string" column="PRENOM" length="128" nullable="false"/>
     <field name="rib" type="string" column="RIB" length="50" nullable="false"/>
     <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="false"/>

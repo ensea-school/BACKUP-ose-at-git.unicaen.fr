@@ -29,6 +29,7 @@ $dossier = $form->get('dossier');
         <?php echo $this->formControlGroup($dossier->get('prenom')->setAttribute('disabled', $readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('civilite')->get('id')->setAttribute('disabled', $readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('numeroInsee')->setAttribute('disabled', $readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')->setAttribute('disabled', $readonly)); ?>
     </div>
     <div class="col-md-4">
         <?php echo $this->formControlGroup($dossier->get('adresse')->setAttribute('disabled', $readonly)); ?>

@@ -74,11 +74,31 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
         $this->add( array(
             'name' => 'numeroInsee',
             'options' => array(
-                'label' => 'Numéro sécu (clé incluse)',
+                'label' => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> (clé incluse)',
+                'use_hidden_element' => false,
+                'checked_value' => 1,
+                'unchecked_value' => 0,
+                'label_options' => array(
+                    'disable_html_escape' => true
+                ),
+            ),
+            'attributes' => array(
+                'title' => "Numéro INSEE (sécurité sociale) avec la clé de contrôle",
+            ),
+            'type' => 'Text',
+        ) );
+
+        $this->add( array(
+            'name' => 'numeroInseeEstProvisoire',
+            'options' => array(
+                'label' => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> provisoire',
+                'label_options' => array(
+                    'disable_html_escape' => true
+                ),
             ),
             'attributes' => array(
             ),
-            'type' => 'Text',
+            'type' => 'Checkbox',
         ) );
 
         $this->add( array(
@@ -165,9 +185,10 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
      */
     public function getInputFilterSpecification()
     {
-        $premierRecrutement = $this->get('premierRecrutement')->getValue();
-        $perteEmploi        = $this->get('perteEmploi')->getValue();
-        
+        $numeroInseeProvisoire = (bool) $this->get('numeroInseeEstProvisoire')->getValue();
+        $premierRecrutement    = $this->get('premierRecrutement')->getValue();
+        $perteEmploi           = $this->get('perteEmploi')->getValue();
+
         // la réponse à la question "perte d'emploi" n'est (visible et donc) obligatoire que 
         // si la réponse à la question "1er recrutement" est NON
         $perteEmploiRequired = ('0' === $premierRecrutement);
@@ -185,7 +206,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
             'numeroInsee' => array(
                 'required' => true,
                 'validators' => array(
-                    array('name' => 'UnicaenApp\Validator\NumeroINSEE'),
+                    array('name' => 'UnicaenApp\Validator\NumeroINSEE', 'options' => array('provisoire' => $numeroInseeProvisoire)),
                 ),
             ),
             'adresse' => array(

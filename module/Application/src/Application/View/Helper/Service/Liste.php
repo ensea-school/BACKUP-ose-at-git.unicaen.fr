@@ -10,6 +10,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeIntervention;
 
 /**
  * Aide de vue permettant d'afficher une liste de services
@@ -59,7 +60,36 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
      */
     protected $readOnly;
 
+    /**
+     * Types d'intervention
+     *
+     * @var TypeIntervention[]
+     */
+    protected $typesIntervention;
 
+
+
+    /**
+     * @return TypeIntervention[]
+     */
+    public function getTypesIntervention()
+    {
+        if (! isset($this->typesIntervention) && isset($this->services)){
+            $this->typesIntervention = $this->getServiceTypeIntervention()->getTypesIntervention();
+            //$this->typesIntervention = $this->getServiceService()->getTypesIntervention($this->services); // par défaut
+        }
+        return $this->typesIntervention;
+    }
+
+    /**
+     * @param TypeIntervention[] $typesIntervention
+     * @return self
+     */
+    public function setTypesIntervention($typesIntervention)
+    {
+        $this->typesIntervention = $typesIntervention;
+        return $this;
+    }
 
 
     /**
@@ -165,7 +195,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     public function getTypeVolumeHoraire()
     {
         if (! $this->typeVolumeHoraire){ // par défaut
-            $this->typeVolumeHoraire = $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire')->getPrevu();
+            $this->typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         }
         return $this->typeVolumeHoraire;
     }
@@ -216,7 +246,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $context = $this->getContextProvider()->getGlobalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
 
-        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
+        $typesIntervention = $this->getTypesIntervention();
         $colspan = 3;
         $out = $this->renderShowHide();
 
@@ -281,6 +311,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                         ->serviceLigne( $service )
                         ->setIntervenant($this->getIntervenant())
                         ->setReadOnly($this->getReadOnly())
+                        ->setTypesIntervention($this->getTypesIntervention())
                         ->setStructure($this->getStructure());
         $vhlView = $this->getView()->volumeHoraireListe( $service->getVolumeHoraireListe() );
         $vhlView->setReadOnly($this->getReadOnly());
@@ -298,7 +329,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function getTotaux()
     {
-        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
+        $typesIntervention = $this->getTypesIntervention();
         $data = [
                     'total_general' => 0,
                 ];
@@ -308,9 +339,12 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             foreach( $this->getServices() as $service ){
                 $h = $service->getVolumeHoraireListe()->setTypeVolumeHoraire($this->getTypeVolumehoraire())->setTypeIntervention($ti)->getHeures();
                 $data[$ti->getCode()] += $h;
-                $data['total_general'] += $h;
+                //$data['total_general'] += $h;
             }
 
+        }
+        foreach( $this->getServices() as $service ){
+            $data['total_general'] += $service->getVolumeHoraireListe()->setTypeIntervention(false)->getHeures();
         }
         if ($this->getIntervenant() instanceof Intervenant){
             $data['total_paye'] = $this->getFormuleHetd()->getServiceTotal($this->getIntervenant());
@@ -324,7 +358,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     {
         $context = $this->getContextProvider()->getGlobalContext();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
-        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
+        $typesIntervention = $this->getTypesIntervention();
         $colspan = 2;
 
         if ($this->mustRenderIntervenant()) $colspan += 2;
@@ -399,9 +433,34 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
      *
      * @return \Application\Service\Process\FormuleHetd
      */
-    public function getFormuleHetd()
+    protected function getFormuleHetd()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('processFormuleHetd');
     }
 
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
 }
+
+    /**
+     *
+     * @return \Application\Service\TypeVolumeHoraire
+     */
+    protected function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
+    }
+
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
+    }
+}
+

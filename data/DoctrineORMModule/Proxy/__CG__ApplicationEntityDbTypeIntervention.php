@@ -64,10 +64,10 @@ class TypeIntervention extends \Application\Entity\Db\TypeIntervention implement
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'interventionIndividualisee', 'libelle', 'ordre', 'validiteDebut', 'validiteFin', 'id', 'tauxHetdService', 'tauxHetdComplementaire', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+            return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'interventionIndividualisee', 'libelle', 'ordre', 'validiteDebut', 'validiteFin', 'id', 'tauxHetdService', 'tauxHetdComplementaire', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'visible');
         }
 
-        return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'interventionIndividualisee', 'libelle', 'ordre', 'validiteDebut', 'validiteFin', 'id', 'tauxHetdService', 'tauxHetdComplementaire', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+        return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'interventionIndividualisee', 'libelle', 'ordre', 'validiteDebut', 'validiteFin', 'id', 'tauxHetdService', 'tauxHetdComplementaire', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'visible');
     }
 
     /**
@@ -270,6 +270,28 @@ class TypeIntervention extends \Application\Entity\Db\TypeIntervention implement
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoModification', array());
 
         return parent::getHistoModification();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVisible()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVisible', array());
+
+        return parent::getVisible();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setVisible($visible)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVisible', array($visible));
+
+        return parent::setVisible($visible);
     }
 
     /**

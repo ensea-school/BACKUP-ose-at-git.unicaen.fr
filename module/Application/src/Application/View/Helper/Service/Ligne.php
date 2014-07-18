@@ -53,7 +53,35 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $forcedReadOnly = false;
 
+    /**
+     * Types d'intervention
+     *
+     * @var TypeIntervention[]
+     */
+    protected $typesIntervention;
 
+
+
+    /**
+     * @return TypeIntervention[]
+     */
+    public function getTypesIntervention()
+    {
+        if (! isset($this->typesIntervention) && $this->getService()){
+            $this->typesIntervention = $this->getService()->getElementPedagogique()->getTypeIntervention();
+        }
+        return $this->typesIntervention;
+    }
+
+    /**
+     * @param TypeIntervention[] $typesIntervention
+     * @return self
+     */
+    public function setTypesIntervention($typesIntervention)
+    {
+        $this->typesIntervention = $typesIntervention;
+        return $this;
+    }
 
     /**
      *
@@ -180,6 +208,11 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function getRefreshUrl()
     {
+        $typesIntervention = [];
+        foreach( $this->getTypesIntervention() as $typeIntervention ){
+            $typesIntervention[] = $typeIntervention->getId();
+        }
+
         $url = $this->getView()->url(
                 'service/rafraichir-ligne',
                 [
@@ -187,10 +220,11 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                     'typeVolumeHoraire' => $this->service->getTypeVolumehoraire()->getId()
                 ],
                 ['query' => [
-                    'only-content'  => 1,
-                    'read-only'     => $this->getReadOnly() ? '1' : '0',
-                    'intervenant'   => $this->toQuery($this->getIntervenant()),
-                    'structure'     => $this->toQuery($this->getStructure()),
+                    'only-content'          => 1,
+                    'read-only'             => $this->getReadOnly() ? '1' : '0',
+                    'intervenant'           => $this->toQuery($this->getIntervenant()),
+                    'structure'             => $this->toQuery($this->getStructure()),
+                    'types-intervention'    => implode(',',$typesIntervention),
                 ]]);
         return $url;
     }
@@ -207,8 +241,8 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         $vhl     = $this->service->getVolumeHoraireListe();
 
-        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-        $serviceService = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService');
+        $typesIntervention = $this->getTypesIntervention();
+        $serviceService = $this->getServiceService();
 
         $periode = $serviceService->getPeriode( $this->service );
         if ($periode){
@@ -328,8 +362,11 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         $liste = $liste->setMotifNonPaiement(false);
         $out = '<td class="heures" style="text-align:right" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
-        //$out .= $this->getView()->volumeHoraireListe($liste)->renderHeures($liste);
+        if ($liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention())){
         $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
+        }else{
+            $out .= '&nbsp;'; 
+        }
         $out .= "</td>\n";
         return $out;
     }
@@ -371,9 +408,17 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function setService(Service $service)
     {
-        $this->forcedReadOnly = ! $this->getServiceLocator()->getServicelocator()->get('applicationService')->canModify($service);
+        $this->forcedReadOnly = ! $this->getServiceService()->canModify($service);
         $this->service = $service;
         return $this;
     }
+
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
+}
 
 }

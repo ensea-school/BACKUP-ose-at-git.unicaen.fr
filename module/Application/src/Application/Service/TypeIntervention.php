@@ -62,7 +62,7 @@ class TypeIntervention extends AbstractEntityService
     public function getTypesIntervention()
     {
         if (! $this->typesIntervention){
-            $this->typesIntervention = $this->getList();
+            $this->typesIntervention = $this->getList( $this->finderByVisible(true) );
         }
         return $this->typesIntervention;
     }

@@ -25,11 +25,14 @@ class SaisieMultipleFieldset extends AbstractHelper implements ServiceLocatorAwa
      *
      * @return \Application\Service\TypeIntervention[]
      */
-    public function getTypesInterventions()
+    public function getTypesIntervention()
     {
-        $sti = $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
-        /* @var $sti \Application\Service\TypeIntervention */
-        return $sti->getTypesIntervention();
+        $element = $this->fieldset->getObject()->getService()->getElementPedagogique();
+        if ($element){
+            return $element->getTypeIntervention();
+        }else{
+            return $this->getServiceTypeIntervention()->getTypesIntervention();
+    }
     }
 
     /**
@@ -40,41 +43,44 @@ class SaisieMultipleFieldset extends AbstractHelper implements ServiceLocatorAwa
      */
     public function __invoke(SMFieldset $fieldset = null, $periode=null)
     {
-        if (null === $fieldset) {
+        $this->fieldset = $fieldset;
+        $this->periode = $periode;
+
             return $this;
         }
 
-        return $this->render($fieldset, $periode);
+    public function __toString()
+    {
+        return $this->render();
     }
 
     /**
-     * Rendu du Fieldset
-     *
-     * @param SMFieldset $fieldset
-     * @param \Application\Entity\Db\Periode|null $periode
      * @return string
      */
-    public function render(SMFieldset $fieldset, $periode=null)
+    public function render()
     {
+        $fieldset = $this->fieldset;
+        $typesIntervention = $this->getTypesIntervention();
+        $colXsNumber = floor( 12 / count($typesIntervention) );
+
         $res = $this->getView()->formHidden($fieldset->get('service'));
         $res .= $this->getView()->formHidden($fieldset->get('periode'));
         $res .= $this->getView()->formHidden($fieldset->get('type-volume-horaire'));
 
-        $visible = (($periode === $fieldset->getObject()->getPeriode()) || (! $periode));
+        $visible = (($this->periode === $fieldset->getObject()->getPeriode()) || (! $this->periode));
 
         $res .= '<div class="periode" id="'.$fieldset->getObject()->getPeriode()->getCode().'" style="display:'.($visible ? 'block' : 'none').'">';
         $res .= '<h3>'.$fieldset->getObject()->getPeriode().'</h3>';
         $res .= '<div class="row">';
-        foreach( $this->getTypesInterventions() as $typeIntervention ){
+        foreach( $typesIntervention as $typeIntervention ){
             $element = $fieldset->get($typeIntervention->getCode());
             $element->setAttribute('class', 'form-control')
                     ->setAttribute('style', 'width:5em;display:inline')
                     ->setLabelAttributes(array('class' => 'control-label'));
-            $res .= '<div class="col-xs-3" style="max-width:15em">';
+            $res .= '<div class="col-xs-'.$colXsNumber.'" style="max-width:15em">';
             $res .= $this->getView()->formLabel( $element );
             $res .= ' ';
             $res .= $this->getView()->formNumber( $element);
-            //$res .= $this->getView()->formControlGroup( $fieldset->get($typeIntervention->getCode()) );
             $res .= '</div>';
         }
         $res .= '</div>';
@@ -82,4 +88,12 @@ class SaisieMultipleFieldset extends AbstractHelper implements ServiceLocatorAwa
 
         return $res;
     }
+
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
+}
 }

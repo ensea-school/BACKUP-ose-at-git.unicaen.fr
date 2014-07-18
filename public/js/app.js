@@ -74,21 +74,25 @@ function Service( id ) {
             $("input[name='service\\[etablissement\\]\\[label\\]']").val('');
             $("input[name='service\\[etablissement\\]\\[id\\]']").val('');
             
-            var serviceId = $('form#service input[name="service\\[id\\]"]').val();
+        /*    var serviceId = $('form#service input[name="service\\[id\\]"]').val();
             var elementId = $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val();
             if (elementId && serviceId){
                 ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
-            }
+            }*/
         }else{
             $('#element-interne').hide();
             $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']").val('');
             $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']").val('');
             $('#element-externe').show();
-            this.formShowHidePeriodes({periode: {code:null}});
+            //this.formShowHidePeriodes({periode: {code:null}});
         }
+        this.refreshFormVolumesHoraires(
+            $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val(),
+            $("input[name='service\\[etablissement\\]\\[id\\]']").val()
+        );
     }
 
-    this.formShowHidePeriodes = function( data ){
+    /*this.formShowHidePeriodes = function( data ){
         if (data.periode.code){
             $('form#service div.periode').hide();
             $('form#service div#'+data.periode.code).show();
@@ -96,6 +100,13 @@ function Service( id ) {
         }else{
             $('form#service div.periode').show();
         }
+    }*/
+
+    this.refreshFormVolumesHoraires = function( elementId, etablissementId ){
+        $('form#service div#volumes-horaires').refresh({
+            element      : elementId,
+            etablissement: etablissementId
+        });
     }
 
     this.onAfterAdd = function(){
@@ -187,7 +198,8 @@ Service.init = function(){
     $( "body" ).on( "autocompleteselect", 'form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[label\\]"]', function( event, ui ) {
         var serviceId = $('form#service input[name="service\\[id\\]"]').val();
         var elementId = ui.item.id;
-        ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
+        //ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
+        Service.get(serviceId).refreshFormVolumesHoraires( elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val() );
     } );
 
     $(".service-show-all-details").on('click', function(){ Service.showAllDetails(); });

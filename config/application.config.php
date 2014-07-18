@@ -13,9 +13,7 @@ $modules = array(
 );
 
 if ($env == 'development') {
-    $laurentIP = '10.60.11.40';
-
-    if ( $laurentIP == getenv('REMOTE_ADDR')){
+    if ( 'dig-40' == getenv('HTTP_HOST')){
         $modules[] = 'Test';
     }
 }

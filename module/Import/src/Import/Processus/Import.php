@@ -81,8 +81,10 @@ class Import extends Processus
         $this->execMaj( 'STRUCTURE', 'SOURCE_CODE', $sourceCode, $action );
 
         $ids = $this->getQueryGenerator()->getIdFromSourceCode( 'STRUCTURE', $sourceCode );
-        $this->execMaj( 'ADRESSE_STRUCTURE', 'STRUCTURE_ID', $ids, $action );
-        $this->execMaj( 'ROLE', 'STRUCTURE_ID', $ids, $action );
+        if (! empty($ids)){
+            $this->execMaj( 'ADRESSE_STRUCTURE', 'STRUCTURE_ID', $ids, $action );
+            $this->execMaj( 'ROLE', 'STRUCTURE_ID', $ids, $action );
+        }
         return $this;
     }
 
@@ -241,8 +243,10 @@ class Import extends Processus
         $this->execMaj( 'INTERVENANT_EXTERIEUR', 'SOURCE_CODE', $sourceCode, $action );
 
         $ids = $this->getQueryGenerator()->getIdFromSourceCode( 'INTERVENANT', $sourceCode );
-        $this->execMaj( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $ids, $action );
-        $this->execMaj( 'AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $ids, $action );
+        if (! empty($ids)){
+            $this->execMaj( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $ids, $action );
+            $this->execMaj( 'AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $ids, $action );
+        }
         return $this;
     }
 

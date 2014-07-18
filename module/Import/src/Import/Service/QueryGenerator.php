@@ -190,7 +190,10 @@ class QueryGenerator extends Service
                                                             );
         $ids = array();
         while($r = $stmt->fetch()){
-            $ids[] = $r['ID'];
+            $id = (int)$r['ID'];
+            if (0 != $id){
+                $ids[] = $id;
+            }
         }
         return $ids;
     }

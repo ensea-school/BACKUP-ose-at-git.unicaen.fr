@@ -121,7 +121,7 @@ class Intervenant extends AbstractEntityService
         $import->intervenant($sourceCode);
 
         if (!($intervenant = $repo->findOneBySourceCode($sourceCode))) {
-            throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
+            throw new RuntimeException("Vous n'êtes pas autorisé à vous connecter à OSE avec ce compte. Vous vous prions de vous rapprocher de votre composante pour en obtenir un valide.");
         }
         
         return $intervenant;

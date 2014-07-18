@@ -9,14 +9,6 @@ namespace Import;
 const ROLE_ID_ADMIN = 'Administrateur';
 
 return array(
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array('controller' => 'Import\Controller\Import',      'roles' => array('user')),
-            ),
-        ),
-    ),
-
     'controllers' => array(
         'invokables' => array(
             'Import\Controller\Import'      => 'Import\Controller\ImportController',

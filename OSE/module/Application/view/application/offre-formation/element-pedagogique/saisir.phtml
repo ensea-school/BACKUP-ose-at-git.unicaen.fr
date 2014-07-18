@@ -1,0 +1,71 @@
+<?php echo $this->form()->openTag($form->prepare()); ?>
+
+<?php
+if ($errors) {
+    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
+}
+?>
+
+<div class="row">
+    <div class="col-sm-12">
+        <?php
+        echo $this->formControlGroup($form->get('etape'));
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <?php
+        echo $this->formControlGroup($form->get('source-code'));
+        ?>
+    </div>
+    <div class="col-sm-8">
+        <?php
+        echo $this->formControlGroup($form->get('structure'));
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <?php
+        echo $this->formControlGroup($form->get('libelle'));
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <?php
+        echo $this->formControlGroup($form->get('periode'));
+        ?>
+    </div>
+    <div class="col-sm-2">
+        <?php
+        echo $this->formControlGroup($form->get('taux-foad'));
+        ?>
+    </div>
+    <div class="col-sm-2">
+        <?php
+        echo $this->formControlGroup($form->get('fi'));
+        ?>
+    </div>
+    <div class="col-sm-2">
+        <?php
+        echo $this->formControlGroup($form->get('fc'));
+        ?>
+    </div>
+    <div class="col-sm-2">
+        <?php
+        echo $this->formControlGroup($form->get('fa'));
+        ?>
+    </div>
+    <div class="col-sm-4">
+        <?php
+//        echo $this->formControlGroup($form->get('specifique-echanges'));
+        ?>
+    </div>
+</div>
+
+<?php 
+echo $this->formRow($form->get('submit'));
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag();

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\AdresseStructure" table="ADRESSE_STRUCTURE">
+    <indexes>
+      <index name="IDX_D72AAFC859860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_D72AAFC87E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_D72AAFC863F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_D72AAFC8E9B3446E" columns="SOURCE_ID"/>
+      <index name="IDX_D72AAFC8884B0F7B" columns="STRUCTURE_ID"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="adresse_structure_source_un" columns="SOURCE_CODE"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="codePostal" type="string" column="CODE_POSTAL" length="15" nullable="true"/>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="localite" type="string" column="LOCALITE" length="26" nullable="true"/>
+    <field name="nomVoie" type="string" column="NOM_VOIE" length="60" nullable="true"/>
+    <field name="noVoie" type="string" column="NO_VOIE" length="10" nullable="true"/>
+    <field name="paysCodeInsee" type="string" column="PAYS_CODE_INSEE" length="3" nullable="true"/>
+    <field name="paysLibelle" type="string" column="PAYS_LIBELLE" length="30" nullable="true"/>
+    <field name="principale" type="boolean" column="PRINCIPALE" nullable="true"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
+    <field name="telephone" type="string" column="TELEPHONE" length="20" nullable="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <field name="ville" type="string" column="VILLE" length="26" nullable="true"/>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="source" target-entity="Application\Entity\Db\Source">
+      <join-columns>
+        <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

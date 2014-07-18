@@ -1,0 +1,26 @@
+<?php
+
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formControlGroup( $form->get('heures'), 'Zend\Form\View\Helper\FormNumber' );
+if ($form->has('motif-non-paiement')) {
+    echo $this->formControlGroup( $form->get('motif-non-paiement') );
+
+    $ancienMotifNonPaiementElement = new \Zend\Form\Element\Hidden('ancien-motif-non-paiement');
+    $ancienMotifNonPaiementElement->setValue($ancienMotifNonPaiement ? $ancienMotifNonPaiement->getId() : null);
+    echo $this->formHidden($ancienMotifNonPaiementElement);
+}
+echo '<hr /><div style="text-align:right">';
+echo $this->formRow($form->get('submit'));
+echo ' ';
+echo $this->formRow($form->get('annuler'));
+echo '</div>';
+echo $this->formHidden($form->get('type-volume-horaire'));
+echo $this->formHidden($form->get('periode'));
+echo $this->formHidden($form->get('type-intervention'));
+echo $this->formHidden($form->get('service'));
+echo $this->form()->closeTag().'<br />';
+
+echo $this->formErrors( $form );
+if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));

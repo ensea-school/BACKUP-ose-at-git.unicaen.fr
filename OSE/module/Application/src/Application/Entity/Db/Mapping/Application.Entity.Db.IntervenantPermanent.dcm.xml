@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\IntervenantPermanent" table="INTERVENANT_PERMANENT">
+    <indexes>
+      <index name="IDX_FB425D27E774C1C4" columns="CORPS_ID"/>
+      <index name="IDX_FB425D2759860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_FB425D277E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_FB425D2763F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_FB425D27E9B3446E" columns="SOURCE_ID"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="ip_source_un" columns="SOURCE_CODE"/>
+    </unique-constraints>
+    <id name="id" association-key="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
+        <cascade>
+            <cascade-persist/>
+        </cascade>
+    </one-to-many>
+    <many-to-one field="corps" target-entity="Application\Entity\Db\Corps">
+      <join-columns>
+        <join-column name="CORPS_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="modificationServiceDu" target-entity="Application\Entity\Db\ModificationServiceDu" mapped-by="intervenant">
+        <cascade>
+            <cascade-persist/>
+        </cascade>
+    </one-to-many>
+  </entity>
+</doctrine-mapping>

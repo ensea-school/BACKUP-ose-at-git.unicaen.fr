@@ -1,0 +1,32 @@
+<h2 class="page-header"><?php echo $title ?></h2>
+
+<?php
+$this->messenger(true);
+if ($validation->getId()) {
+    $this->messenger()->addMessage(
+            sprintf("Les données personnelles sont validées. <br /><br />%s", $this->validationDl($validation)), 'success');
+}
+?>
+
+<?php echo $this->messenger() ?>
+
+<?php $form->prepare(); ?>
+<?php echo $this->form()->openTag($form); ?>
+<div class="row">
+    <div class="col-md-4">
+        <?php 
+        echo $this->formControlGroup($form->get('valide')->setAttribute('disabled', $readonly));
+        echo $this->formHidden($form->get('security'));
+        ?>
+    </div>
+</div>
+<hr />
+<?php if (!$readonly) echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
+<?php echo $this->form()->closeTag(); ?>
+
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>
+    

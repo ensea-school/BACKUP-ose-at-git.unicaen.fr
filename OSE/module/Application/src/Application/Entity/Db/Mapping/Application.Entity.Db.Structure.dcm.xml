@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Structure" table="STRUCTURE">
+    <indexes>
+      <index name="IDX_2BC32905F1A6E54F" columns="PARENTE_ID"/>
+      <index name="IDX_2BC32905B3FC6B16" columns="ETABLISSEMENT_ID"/>
+      <index name="IDX_2BC3290559860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_2BC329057E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_2BC3290563F06898" columns="HISTO_MODIFICATEUR_ID"/>
+      <index name="IDX_2BC32905E9B3446E" columns="SOURCE_ID"/>
+      <index name="IDX_2BC329053C7479AE" columns="STRUCTURE_NIV2_ID"/>
+      <index name="IDX_2BC32905C2443469" columns="TYPE_ID"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="structure_source_id_un" columns="SOURCE_CODE"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
+    <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
+    <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="25" nullable="false"/>
+    <field name="libelleLong" type="string" column="LIBELLE_LONG" length="60" nullable="false"/>
+    <field name="niveau" type="integer" column="NIVEAU" nullable="false"/>
+    <field name="contactPj" type="string" column="CONTACT_PJ" length="255" nullable="true"/>
+    <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
+    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
+    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <many-to-one field="source" target-entity="Application\Entity\Db\Source">
+      <join-columns>
+        <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="structureNiv2" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_NIV2_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="type" target-entity="Application\Entity\Db\TypeStructure">
+      <join-columns>
+        <join-column name="TYPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="etablissement" target-entity="Application\Entity\Db\Etablissement">
+      <join-columns>
+        <join-column name="ETABLISSEMENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
+      <join-columns>
+        <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="parente" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="PARENTE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" mapped-by="structure" />
+  </entity>
+</doctrine-mapping>

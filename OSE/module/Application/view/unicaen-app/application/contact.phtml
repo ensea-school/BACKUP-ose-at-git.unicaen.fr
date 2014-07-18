@@ -1,0 +1,23 @@
+<?php $this->headTitle()->append($title = "Contact") ?>
+
+<h1><?php echo $this->translate($title); ?></h1>
+
+<?php
+$role = $this->contextProvider()->getSelectedIdentityRole();
+?>
+
+<?php if ($role instanceof \Application\Acl\ComposanteDbRole): ?>
+    Postez un message sur la liste d'échanges des gestionnaires : 
+    <?php
+    $contacts = array("ose@liste.unicaen.fr");
+    $title = $this->translate("Cliquez pour rédiger un mail à destination de la liste d'échanges des gestionnaires");
+    $v = new \Zend\Validator\EmailAddress();
+    $callback = function($value) use ($v, $title) {
+        return $v->isValid($value) ? sprintf('<a href="mailto:%s" title="%s">%s</a>', $value, $title, $value) : $value;
+    };
+    $contacts = array_map($callback, $contacts);
+    ?>
+    <?php echo $this->htmlList($contacts, false, null, false) ?>
+<?php else: ?>
+Contactez votre composante.
+<?php endif; ?>

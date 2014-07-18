@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\RoleUtilisateur" table="ROLE_UTILISATEUR">
+    <indexes>
+      <index name="IDX_43A8DF1CEF5927F" columns="PARENT_ID"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="role_utilisateur_id_un" columns="ROLE_ID"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="isDefault" type="integer" column="IS_DEFAULT" nullable="false"/>
+    <field name="roleId" type="string" column="ROLE_ID" length="64" nullable="false"/>
+    <many-to-one field="parent" target-entity="Application\Entity\Db\RoleUtilisateur">
+      <join-columns>
+        <join-column name="PARENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="utilisateur" target-entity="Application\Entity\Db\Utilisateur" inversed-by="roleUtilisateur">
+      <join-table name="role_utilisateur_linker">
+        <join-columns>
+          <join-column name="ROLE_UTILISATEUR_ID" referenced-column-name="ID"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="UTILISATEUR_ID" referenced-column-name="ID"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

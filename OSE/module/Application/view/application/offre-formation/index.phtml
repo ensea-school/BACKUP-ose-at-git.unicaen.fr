@@ -1,0 +1,336 @@
+<?php
+$structuresOptions = array('' => "(Sélectionnez...)") + \UnicaenApp\Util::collectionAsOptions($structures);
+$niveauxOptions    = \UnicaenApp\Util::collectionAsOptions($niveaux);
+$etapesOptions     = \UnicaenApp\Util::collectionAsOptions(
+        $etapes, 
+        false, 
+        function($e) { return sprintf("%s (%s EP)", $e, count($e->getElementPedagogique())); /* @var $e \Application\Entity\Db\Etape */ }
+);
+$etapesOrphelinesOptions = \UnicaenApp\Util::collectionAsOptions(
+        $etapesOrphelines, 
+        false, 
+        function($e) { return sprintf("%s (%s EP)", $e, count($e->getElementPedagogique())); /* @var $e \Application\Entity\Db\Etape */ }
+);
+$mc = $this->navigation('navigation')->menuContextuel(); /* @var $mc \UnicaenApp\View\Helper\Navigation\MenuContextuel */
+$mc->setUlClass('navigation navigation-etape pull-right');
+?>
+
+<style>
+    ul.navigation-etape { padding: 0 0 3px 5px; }
+    ul.navigation-etape li { list-style: none; display: inline; }
+    /*th.action, td.action { min-width: 70px; }*/
+    div.element-rech div.panel-body label,
+    div.element-rech div.panel-body input { display: inline; }
+    div.element-rech div.panel-body input.form-control { width: 75% }
+</style>
+
+<h1 class="page-header">Offre de formation <?php echo $structure ? '<small>' . $structure . '</small>' : null ?></h1>
+
+<div class="row">
+    
+    <div class="col-md-3">
+        
+        <!---------------- Champ de sélection d'une structure --------------->
+        <div class="panel panel-default">
+            <div class="panel-heading">Structure</div>
+            <div class="panel-body">
+                <?php
+                $selectStructure = new \Zend\Form\Element\Select('structure');
+                $selectStructure
+                        ->setValueOptions($structuresOptions)
+                        ->setValue($structure ? $structure->getId() : null)
+                        ->setAttributes(array('class' => 'struct'));
+                echo $this->formSelect($selectStructure);
+                ?>
+                <script>
+                    $("body").on("change", "select.struct", function(event) {
+                        $("*").css('cursor', 'wait');
+                        var id = $(this).val();
+                        var url = '<?php echo $this->url('of', 
+                                 array(), 
+                                 array('query' => array(
+                                     'structure' => '__structure__'))) ?>';
+                        $(location).attr('href', url.replace('__structure__', id));
+                    });
+                </script>
+            </div>
+        </div>
+
+        <!---------------- Filtre niveau --------------->
+        <?php if (count($niveauxOptions)): ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">Niveau</div>
+            <div class="panel-body">
+                Cliquez sur le niveau dont vous voulez voir les formations et enseignements...
+            </div>
+            <?php if (count($niveauxOptions)): ?>
+            <ul class="list-group">
+                <?php if (null !== $niveau): ?> 
+                     <li class="list-group-item">
+                         <a class="niveau" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null, 
+                                    'niveau' => null))) ?>">Tous niveaux confondus</a>
+                     </li>
+                <?php else: ?>
+                     <li class="list-group-item active"><strong>Tous niveaux confondus</strong></li>
+                <?php endif; ?>
+                
+                <?php foreach ($niveauxOptions as $code => $lib): ?>
+                <?php if ($code != $niveau): ?> 
+                     <li class="list-group-item">
+                         <a class="niveau" title="Cliquez pour afficher les formations et les enseignements de ce niveau" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null, 
+                                    'niveau' => $code))) ?>"><?php echo $lib ?></a>
+                     </li>
+                <?php else: ?>
+                     <li class="list-group-item active"><strong><?php echo $lib ?></strong></li>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+            <?php endif; ?>
+            <script>
+                $("body").on("click", "a.niveau", function(event) {
+                    $("*").css('cursor', 'wait');
+                });
+            </script>
+        </div>
+        <?php endif; ?>
+
+        <!---------------- Filtre étape --------------->
+        <?php if (count($etapesOptions)): ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Formation
+                <!--------------- Bouton d'ajout d'étape --------------->
+                <?php if (null !== $entities): ?>
+                <?php if ($serviceEtape->canAdd()): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                <?php echo $mc
+                        ->withoutTarget()
+                        ->addParam('structure', $structure ? $structure->getId() : null)
+                        ->withProp('category', 'etape')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+                <?php endif; ?>
+            </div>
+            <div class="panel-body">
+                Cliquez sur la formation dont vous voulez voir les enseignements...
+            </div>
+            
+            <?php if (count($etapesOptions)): ?>
+            <ul class="list-group">
+                <?php if (null !== $etape): ?> 
+                    <li class="list-group-item">
+                        <a class="etape" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null, 
+                                    'niveau' => $niveau, 
+                                    'etape' => null))) ?>">Toutes formations confondues</a>
+                    </li>
+                <?php else: ?>
+                    <li class="list-group-item active"><strong>Toutes formations confondues</strong></li>
+                <?php endif; ?>
+                </li>
+                
+                <!-- Etapes sans EP -->
+                <?php foreach ($etapesOrphelinesOptions as $code => $lib): ?>
+                <!--------------- Boutons de modif d'étape --------------->
+                <?php $actions = null; ?>
+                <?php if ($serviceEtape->canSave($code)): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                <?php $actions = (string) $mc
+                        ->withTarget($code)
+                        ->withProp('category', 'etape')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+                <?php if (!$etape || $code != $etape->getId()): ?> 
+                     <li class="list-group-item">
+                         <?php echo $actions ?>
+                         <a class="etape text-danger" title="Cliquez pour afficher les enseignements de cette formation" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null,
+                                    'niveau' => $niveau, 
+                                    'etape' => $code))) ?>"><?php echo $lib ?></a>
+                     </li>
+                <?php else: ?>
+                    <li class="list-group-item active">
+                        <?php echo $actions ?>
+                        <strong><?php echo $lib ?></strong>
+                    </li>
+                <?php endif; ?>
+                <?php endforeach; ?>
+                
+                <!-- Etapes avec EP -->
+                <?php foreach ($etapesOptions as $code => $lib): ?>
+                <!--------------- Boutons de modif d'étape --------------->
+                <?php $actions = null; ?>
+                <?php if ($serviceEtape->canEditModulateurs($code)): ?>
+                <?php $actions = (string) $mc
+                        ->withTarget($code)
+                        ->addParam('structure', $structure ? $structure->getId() : null)
+                        ->withProp('category', 'modulateur')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+                <?php if ($serviceEtape->canSave($code)): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                <?php $actions .= (string) $mc
+                        ->withTarget($code)
+                        ->addParam('structure', $structure ? $structure->getId() : null)
+                        ->withProp('category', 'etape')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+                <?php if (!$etape || $code != $etape->getId()): ?> 
+                     <li class="list-group-item">
+                         <?php echo $actions ?>
+                         <a class="etape" title="Cliquez pour afficher les enseignements de cette formation" href="<?php echo $this->url('of', 
+                                array(), 
+                                array('query' => array(
+                                    'structure' => $structure ? $structure->getId() : null,
+                                    'niveau' => $niveau, 
+                                    'etape' => $code))) ?>"><?php echo $lib ?></a>
+                     </li>
+                <?php else: ?>
+                    <li class="list-group-item active">
+                         <?php echo $actions ?>
+                        <strong><?php echo $lib ?></strong>
+                    </li>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+            <?php endif; ?>
+
+            <script>
+                $("body").on("click", "a.etape", function(event) {
+                    $("*").css('cursor', 'wait');
+                });
+            </script>
+            
+        </div>
+        <?php endif; ?>
+        
+    </div>
+    
+    <div class="col-md-9" role="main">
+        
+        <?php if (null === $entities): ?>
+        
+        <p><?php echo $this->messenger()->setMessage("Sélectionnez une structure...", 'info') ?></p>
+        
+        <?php else: ?>
+        
+        <!---------------- Champ de recherche d'un élément pédagogique --------------->
+        <div class="element-rech panel panel-default">
+            <div class="panel-heading">
+                <?php $compl = $etape ? "de la formation <strong>$etape</strong>" : "toutes formations confondues"; ?>
+                Enseignements <?php echo $compl ?> 
+                <!--------------- Bouton d'ajout d'élément pédagogique --------------->
+                <?php if ($etape): ?>
+                    <?php echo $mc
+                            ->withoutTarget()
+                            ->withProp('category', 'element')
+                            ->addParam('etape', $etape->getId())
+                            ->addParam('etape', $etape->getId())
+                            ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
+            </div>
+            <div class="panel-body">
+                <?php if (count($entities)): ?>
+                <p>
+                    <?php echo $this->form()->openTag($form) ?> 
+                    <label class="control-label"><?php echo $form->get('element')->getLabel() ?></label>
+                    <?php echo $this->formSearchAndSelect($form->get('element')); ?>
+                    <input id="filter" class="btn btn-primary element-rech-submit" type="submit" value="Y aller..." name="submit" />
+                    <?php echo $this->form()->closeTag() ?> 
+                </p>
+                <script>
+                    $("body").on("submit", "form.element-rech", function(event) {
+                        var form = $(event.target);
+                        var id = $("input.sas", form).val();
+                        if (id && $("#" + id).offset()) {
+                            $('html, body').animate({
+                                scrollTop: $("#" + id).offset().top - $(window).height() / 2
+                            }, 500, 'swing', function() { $("#" + id).effect("highlight"); });
+                        }
+                        event.preventDefault();
+                    });
+                </script>
+                <?php endif; ?>
+                
+                <p><?php echo count($entities) ?> enseignement(s) trouvé(s).</p>
+                
+            </div>
+                
+            <!---------------- Tableau des éléments pédagogiques --------------->
+            <table class="table table-bordered table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="2">Formation</th>
+                        <th colspan="5">Enseignement</th>
+                        <th class="action" rowspan="2"></th>
+                    </tr>
+                    <tr>
+                        <th>Niveau</th>
+                        <th>Libellé</th>
+                        <th>Code</th>
+                        <th>Libellé</th>
+                        <th>Période</th>
+                        <th title="Formation ouverte à distance">FOAD</th>
+                        <th title="Régime d'inscription">Rég. d'insc.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($entities as $ep): /* @var $ep \Application\Entity\Db\ElementPedagogique */ ?>
+                    <tr id="<?php echo $ep->getId() ?>">
+                        <td><?php echo $ep->getEtape()->getNiveauToString() ?></td>
+                        <?php
+                        $etapeEp  = $ep->getEtape();
+                        $urlEtape = $this->url('of/etape/apercevoir', array('id' => $etapeEp->getId()));
+                        $urlElem  = $this->url('of/element/apercevoir', array('id' => $ep->getId()));
+                        ?>
+                        <td class="etape">
+                            <a class="ajax-modal" title="Cliquez pour voir le détail de cette formation" 
+                               href="<?php echo $urlEtape ?>"><?php echo $etapeEp ?></a>
+                        </td>
+                        <td class="element"><?php echo $ep->getSourceCode() ?></td>
+                        <td class="element">
+                            <a class="ajax-modal" title="Cliquez pour voir le détail de cet enseignement" 
+                               href="<?php echo $urlElem ?>"><?php echo $ep->getLibelle() ?></a>
+                        </td>
+                        <td class="periode"><?php echo $ep->getPeriode() ?: "" ?></td>
+                        <td><?php echo (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>
+                        <td><?php echo $ep->getHtmlRegimeInscription() ?></td>
+                        <td class="action">
+                            <!--------------- Boutons de modif d'élément --------------->
+                            <?php if ($etape): ?>
+                            <?php if ($serviceElement->canSave($ep)): /* @var $serviceElement \Application\Service\ElementPedagogique */ ?>
+                            <?php echo $mc
+                                    ->withTarget($ep)
+                                    ->withProp('category', 'element')
+                                    ->addParam('etape', $etapeEp->getId())
+                                    ->addProp('class', 'btn btn-default btn-xs iconify ajax-modal'); ?>
+                            <?php endif; ?>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            
+        </div>
+        
+        <?php endif; ?>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(function() { 
+        Etape.init("<?php echo $this->url('of/default', array('action' => 'voirLigne')) ?>"); 
+        ElementPedagogique.init("<?php echo $this->url('of/default', array('action' => 'voirLigne')) ?>");
+        Modulateur.init();
+    });
+</script>

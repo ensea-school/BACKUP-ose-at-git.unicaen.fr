@@ -1,0 +1,22 @@
+<h2 class="page-header">Contrat et avenants <small><?php echo $intervenant ?></small></h2>
+
+<?php echo $this->messenger(true) ?>
+
+<?php if (!$contrats): ?>
+
+    <?php echo $this->messenger()->setMessage("Aucun contrat ni avenant trouvé.") ?>
+
+<?php else: ?>
+
+<?php echo $this->partial('application/contrat/partial/list', array(
+    'contrats'    => $contrats, 
+    'services'    => $services, 
+    'intervenant' => $intervenant)); ?>
+
+<?php endif; ?>
+
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>

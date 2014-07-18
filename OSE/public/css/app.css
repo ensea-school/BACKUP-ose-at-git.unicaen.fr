@@ -1,0 +1,172 @@
+/***** verrue pour le menu de niveau 3 : à déplacer vers unicaen.css...? */
+.nav-pills>li.active li.active>a/*, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus*/ {
+    color: #fff;
+    background-color: #428bca;
+    opacity: 0.75;
+    font-size: 90%;
+}
+.nav-pills>li li>a {
+    border-radius: 4px;
+}
+.nav>li li>a {
+    position: relative;
+    display: block;
+    padding: 2px 5px;
+    margin-top: 2px;
+}
+/*****/
+
+
+body.development {
+    background-image: url("dev.png");
+}
+
+body.test {
+    background-image: url("test.png");
+}
+
+body.development .navbar-inverse {
+    background-image: linear-gradient(to bottom, #660000 0px, #870a0a 100%);
+    border-color: #660000;
+}
+
+body.development .navbar-inverse .navbar-nav .active a {
+    background-image: linear-gradient(to bottom, #d22828 0px, #a41212 100%);
+}
+
+body.test .navbar-inverse {
+    background-image: linear-gradient(to bottom, #002768 0px, #0a3783 100%);
+    border-color: #002768;
+}
+
+body.test .navbar-inverse .navbar-nav .active a {
+    background-image: linear-gradient(to bottom, #3773d7 0px, #1d57b7 100%);
+}
+
+body.test div#contenu-principal {
+    background-color:white;
+}
+
+body.development div#contenu-principal {
+    background-color:white;
+}
+
+table {
+    background-color:white;
+}
+
+/* Services */
+table.service {
+    margin-bottom: 0px;
+}
+
+table.service table.volume-horaire {
+    margin-bottom: 0px;
+}
+
+table.service td.volume-horaire {
+    padding-left:10em;
+}
+
+table.service td.actions {
+    white-space: nowrap;
+    text-align:center;
+}
+
+table.service td.actions a {
+    margin-left: 0.2em;
+    margin-right:0.2em;
+}
+
+div.service-show-hide-buttons {
+    padding-bottom:3px;
+    padding-top:3px;
+    text-align:right;
+}
+
+/**
+ * Offre de formation
+ */
+span.element-rech.niveau,
+span.element-rech.etape,
+span.element-rech.periode,
+span.element-rech.element {
+    font-size: 80%;
+    padding: 0 5px 0 5px;
+    margin-right: 0.5em;
+}
+span.element-rech.etape,
+span.element-rech.periode {
+    /*background-color: #babdb6;*/
+    /*background-color: #729fcf*/
+    background-color: #caddf4;
+}
+
+
+/**
+ * Autre
+ */
+
+h1.page-header { 
+    margin-top: 10px;
+}
+
+/* Autocomplete jQuery */
+.ui-autocomplete {
+    max-height: 300px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height, we use height instead, but this forces the menu to always be this tall */
+/*html .ui-autocomplete {
+    height: 300px;
+}*/
+.element-rech .ui-menu .ui-menu-item a {
+    line-height: 1.25;
+    padding: 0;
+}
+
+/* Mise en évidence des mots recherchés dans les SearchAndSelect */
+span.sas-highlight {
+    font-weight: bold;
+}
+
+/* Gestion des popovers */
+div.popover {
+    max-width:600px;
+}
+
+div.scr-center {
+    position: fixed;
+    width: 100%;
+    height:100%;
+    top:0px;
+    left:0px;
+    z-index:9999;
+}
+
+div.scr-center div.alert{
+    margin-top:5em;
+    width:60%;
+    margin: none;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 600px;
+    overflow:auto;
+}
+
+
+form#service div#element-interne div.col-md-5 {
+    clear: both;
+}
+
+
+td .form-group{
+    margin-bottom: 0px;
+}
+
+form#modulateurs-saisie th select{
+    display: inline;
+    width:auto;
+}

@@ -1,0 +1,62 @@
+<?php echo $this->form()->openTag($form->prepare()); ?>
+
+<?php
+if ($errors) {
+    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
+}
+?>
+
+<div class="row">
+    <div class="col-sm-4">
+        <?php
+        echo $this->formControlGroup($form->get('source-code'));
+        ?>
+    </div>
+    <div class="col-sm-8">
+        <?php
+        echo $this->formControlGroup($form->get('structure'));
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <?php
+        echo $this->formControlGroup($form->get('libelle'));
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-5">
+        <?php
+        echo $this->formControlGroup($form->get('type-formation'));
+        ?>
+    </div>
+    <div class="col-sm-3">
+        <?php
+        echo $this->formControlGroup($form->get('niveau'));
+        ?>
+    </div>
+    <div class="col-sm-4">
+        <?php
+        echo $this->formControlGroup($form->get('specifique-echanges'));
+        ?>
+    </div>
+</div>
+
+<?php 
+echo $this->formRow($form->get('submit'));
+echo $this->formHidden($form->get('id'));
+echo $this->form()->closeTag();
+?>
+
+<script>
+    var pertinencesNiveau = <?php echo \Zend\Json\Json::encode($form->getPertinencesNiveau()) ?>;
+    $(function() {
+        $("select[name=type-formation]").change(function() {
+            var niveau = $("input[name=niveau]");
+            var tfId = $(this).val();
+            var pertinent = tfId in pertinencesNiveau && pertinencesNiveau[tfId];
+            pertinent ? niveau.attr('disabled', false): niveau.attr('disabled', true).val("");
+        });
+    });
+</script>

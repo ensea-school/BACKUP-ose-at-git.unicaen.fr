@@ -1,0 +1,29 @@
+<div class="jumbotron">
+    <h1>Modification d'un intervenant</h1>
+</div>
+
+<?php $form->prepare(); ?>
+
+<?php echo $this->form()->openTag($form) ?> 
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($form->get('nomUsuel')); ?>
+        <?php echo $this->formControlGroup($form->get('nomPatronymique')); ?>
+        <?php echo $this->formControlGroup($form->get('prenom')); ?>
+        <?php echo $this->formControlGroup($form->get('civilite')); ?>
+        <?php echo $this->formControlGroup($form->get('email')); ?>
+    </div>
+    <div class="col-md-4">
+        <?php echo $this->formControlGroup($form->get('dateNaissance')->setDateSupActivated(false)); ?>
+        <?php echo $this->formControlGroup($form->get('depNaissanceCodeInsee')); ?>
+        <?php echo $this->formControlGroup($form->get('paysNaissanceCodeInsee')); ?>
+    </div>
+</div>
+<input class="btn btn-primary" type="submit" value="Enregistrer" name="submit">
+<?php echo $this->form()->closeTag() ?> 
+
+<script>
+    $(function() {
+        $(":input").tooltip();
+    });
+</script>

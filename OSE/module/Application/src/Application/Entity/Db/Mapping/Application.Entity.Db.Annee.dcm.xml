@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\Annee" table="ANNEE">
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="dateDebut" type="datetime" column="DATE_DEBUT" nullable="false"/>
+    <field name="dateFin" type="datetime" column="DATE_FIN" nullable="false"/>
+    <field name="libelle" type="string" column="LIBELLE" length="9" nullable="false"/>
+  </entity>
+</doctrine-mapping>

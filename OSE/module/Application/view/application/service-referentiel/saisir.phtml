@@ -1,0 +1,138 @@
+<h1><?php echo $title ?></h1>
+
+<style>
+    form.service-referentiel .form-group { float: left; }
+    form.service-referentiel input { width: 100px; }
+    form.service-referentiel input[type=submit] { margin-top: 2em; }
+    button.fonction-referentiel-ajouter   { display: block; margin-top: 0.5em; }
+    button.fonction-referentiel-supprimer { margin: 2em 0 0 1em; }
+</style>
+
+<?php if (isset($exception)) { echo $this->messenger()->setException($exception); } ?>
+
+<?php
+$form->setAttribute('id', $formId = uniqid('form-'))->prepare();
+$serviceReferentiel = $form->get('intervenant');
+?>
+
+<?php 
+echo $this->form()->openTag($form);
+echo $this->formCollection()->setElementHelper($this->formControlGroup())->render($serviceReferentiel->get('serviceReferentiel'));
+?> 
+<div class="text-info" id="fonction-comptage"></div>
+<?php 
+echo $this->formButton($form->get('ajouter'));
+echo $this->formHidden($form->get('security'));
+echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+echo $this->form()->closeTag();
+?>
+
+<script>
+    var formId = "<?php echo $form->getAttribute('id') ?>";
+    var form   = $("#" + formId);
+    var fonctionSelectSel = "select.fonction-referentiel-fonction"; 
+    
+    $("body").on('click', "#" + formId + " button.fonction-referentiel-ajouter", function() {
+        addLigne();
+        return false;
+    });
+    $("body").on('click', "#" + formId + " button.fonction-referentiel-supprimer", function() {
+        if (getLigneCurrentCount() > 0) {
+            removeLigne($(this));
+        }  
+        return false; 
+    });
+        
+    $(function() {
+        updateLigneCounter();
+        $(":input").tooltip();
+        
+        $('body')
+                .on('change', "#" + formId + " " + fonctionSelectSel, function() {
+                    var select = $(this); // select de référence, dont la valeur a changé
+                    if (select.val() === '') {
+                        return;
+                    }
+                    applySelectUnicity(select, $("#" + formId + " " + fonctionSelectSel));
+                })
+                .on('change', "#" + formId + " input.fonction-referentiel-heures", function() {
+                    updateLigneCounter();
+                });
+    });
+    
+    /**
+     * 
+     * @param object changedSelect Select de référence, i.e. dont la valeur a changé
+     * @param object targetSelect  Selects cibles à mettre à jour
+     * @returns void
+     */
+    function applySelectUnicity(changedSelect, targetSelect)
+    {
+        // parcours des select à mettre à jour (exclusion de celui de référence par sécurité)
+//        targetSelect.not(changedSelect).each(function(index, select) {
+//            // parcours des options 
+//            $("option", select).each(function(index, option) {
+//                if (!option.value) {
+//                    return true; // i.e. continue
+//                }
+//                // cache les items identiques à celui sélectionné dans le select de référence
+//                if (option.value === changedSelect.val()) {
+//                    $(option).data('from', changedSelect).hide();
+//                    //console.log('hide ' + $(this).text(), $(this).data('from'));
+//                }
+//                // fait réapparaître les items ayant été cachés précédemment
+//                else if ($(option).is(":hidden") && $(option).data('from') && $(option).data('from').is(changedSelect)) {
+//                    $(option).removeData('from').show();
+//                    //console.log('show ' + $(this).text(), $(this).data('from'));
+//                }
+//            });
+//        });
+    }
+    
+    function addLigne() 
+    {
+        var currentCount = getLigneCurrentCount();
+        var template = $('> fieldset > span', form).data('template');
+        var ligne = $(template.replace(/__index__/g, currentCount));
+        var newSelect = $(fonctionSelectSel, ligne);
+        $('> fieldset', form).append(ligne.fadeIn());
+        $(fonctionSelectSel).not(newSelect).each(function(index, select) { applySelectUnicity($(select), newSelect); });
+        updateLigneCounter();
+        return ligne;
+    }
+    
+    function removeLigne(button) 
+    {
+        $(button).parentsUntil('fieldset').parent().remove();
+        updateLigneCounter();
+        return false;
+    }
+    
+    function getLignes()
+    {
+        return $('> fieldset > fieldset', form);
+    }
+    
+    function getLigneCurrentCount()
+    {
+        return getLignes().length;
+    }
+    
+    function getLigneCurrentTotal()
+    {
+        var total = 0;
+        $.each(getLignes(), function(index, ligne) { total = total + parseFloat($(".fonction-referentiel-heures", ligne).val()); });
+        return total;
+    }
+    
+    function updateLigneCounter() 
+    {
+        var msg = "Aucune fonction référentiel.";
+        var currentCount = getLigneCurrentCount();
+        if (currentCount) {
+            var total = getLigneCurrentTotal();
+            msg = currentCount + " fonction(s) référentiel (total = " + total + ").";
+        }
+        $("#fonction-comptage").html(msg);
+    }
+</script>

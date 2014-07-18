@@ -1,0 +1,44 @@
+<h2><?php echo $this->title ?></h2>
+
+<?php echo $this->messenger(true) ?>
+
+<?php $form->prepare(); ?>
+
+<?php echo $this->form()->openTag($form) ?> 
+<?php echo $this->formControlGroup($form->get('interv')); ?>
+<input class="btn btn-primary" type="submit" value="Choisir" name="submit">
+<?php echo $this->form()->closeTag() ?> 
+
+<hr />
+
+<?php if ($recents): ?>
+<h3>Vos recherches récentes :</h3>
+<ul>
+    <?php foreach($recents as $data): ?>
+    <li><a class="choisir-recent" 
+                   data-id="<?php echo $data['sourceCode'] ?>" 
+                   data-label="<?php echo $data['nom'] ?>" 
+                   title="Cliquez pour choisir cet intervenant" 
+                   href="#"><?php echo $data['nom'] ?></a></li>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+
+<script>
+    $(function() {
+        var form        = $("form.intervenant-rech");
+        var intervId    = $("input[name='interv[id]']", form);
+        var intervLabel = $("input[name='interv[label]']", form);
+        var submit      = $("input[type=submit]", form).prop('disabled', intervLabel.val() ? false : true);
+        intervLabel
+                .on( "autocompletesearch", function() { submit.prop('disabled', true); } )
+                .on( "autocompleteselect", function() { submit.prop('disabled', false); } )
+                .tooltip({ placement: 'bottom' })
+                .focus();
+        $("a.choisir-recent").click(function() {
+            intervId.val($(this).data('id'));
+            submit.prop('disabled', false).click();
+            return false;
+        });
+    });
+</script>

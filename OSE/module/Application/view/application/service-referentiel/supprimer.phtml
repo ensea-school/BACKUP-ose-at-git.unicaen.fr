@@ -1,0 +1,14 @@
+<?php
+if (isset($errors) && $errors) {
+    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => array($errors)));
+}
+else {
+    echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression de cet enregistrement ?</p>';
+    echo $this->serviceReferentielDl($entity, true, true);
+    
+    echo $this->form()->openTag($form);
+    echo $this->formHidden($form->get('id'));
+    echo $this->formHidden($form->get('security'));
+    echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+    echo $this->form()->closeTag();
+}

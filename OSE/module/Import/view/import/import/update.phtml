@@ -1,0 +1,28 @@
+<?php echo $this->differentielListe( $lignes ); ?>
+<?php if (count($lignes) > 100) : ?>
+<div>Toutes les lignes n'ont pas été affichées, leur nombre dépassant 100</div>
+<?php endif; ?>
+
+<div>
+    <a class="import-update-mv" href="javascript:void(0)" data-table="<?php echo $table ?>">
+        <span class="glyphicon glyphicon-refresh"></span>
+        Mettre à jour la vue matérialisée
+    </a>
+<?php if (count($lignes) > 0) : ?>
+    &nbsp;&nbsp;<a class="import-update" href="javascript:void(0)" data-table="<?php echo $table ?>">
+        <span class="glyphicon glyphicon-refresh"></span>
+        Mettre à jour les données
+    </a>
+<?php endif; ?>
+</div>
+<div class="alert alert-info" role="alert" id="DIV_WAIT_<?php echo $table ?>" style="display:none">
+    <img src="<?php echo $this->basePath('loading.gif') ?>" />
+    Traitement en cours, merci de patienter. L'opération peut prendre jusqu'à plusieurs minutes.
+</div>
+<?php
+
+if ($errors){
+    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));
+}else{
+    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::SUCCESS => array('Action réalisée avec succès')));
+}

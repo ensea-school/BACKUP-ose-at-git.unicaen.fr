@@ -1,0 +1,37 @@
+<?php
+namespace Import\View\Helper\DifferentielLigne;
+
+/**
+ * Aide de vue permettant d'afficher une ligne de différentiel d'import
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class ElementPedagogique extends DifferentielLigne
+{
+    public function getSujet()
+    {
+        $format = '%s (%s)';
+        if ('insert' == $this->ligne->getAction() || 'undelete' == $this->ligne->getAction()){
+            return sprintf( $format, $this->ligne->get('LIBELLE'), $this->ligne->getSourceCode() );
+        }else{
+            $entity = $this->ligne->getEntity();
+            /* @var $entity \Application\Entity\Db\ElementPedagogique */
+            return sprintf( $format, $entity->getLibelle(), $this->ligne->getSourceCode() );
+        }
+    }
+
+    public function getColumnDetails($column, $value)
+    {
+        switch( $column ){
+            case 'ETAPE_ID':
+                if (null === $value){
+                    return '<span class="text-danger">Etape non identifiée</span>';
+                }else{
+                    return parent::getColumnDetails($column, $value);
+                }
+            default:
+                return parent::getColumnDetails($column, $value);
+        }
+    }
+
+}

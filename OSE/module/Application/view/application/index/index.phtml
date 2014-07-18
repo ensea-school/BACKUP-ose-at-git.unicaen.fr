@@ -1,0 +1,48 @@
+<?php echo $this->messenger(true) ?>
+<div class="jumbotron">
+    <h1>OSE <small>Organisation des Services d'Enseignement</small></h1>
+    <p class="lead">Bienvenue dans l'application de saisie des enseignements de l'université de Caen.</p>
+    <p>Année <?php echo $annee ?>.</p>
+    
+    <?php if (($identity = $this->identity())): ?>
+    
+        <?php 
+        $message = null;
+        if ($role instanceof \Application\Acl\IntervenantRole) {
+            $intervenant = $role->getIntervenant();
+            if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
+                $message = null;
+            }
+            elseif ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
+                $message = "L'application sera ouverte du lundi 7 juillet au vendredi 17 octobre 2014.";
+            }
+            $wf    = $this->workflow($intervenant, $role)->getWorkflow();
+            $step  = $wf->getCurrentStep() ?: $wf->getLastStep(); /* @var $wf \Application\Service\Workflow\WorkflowIntervenantExterieur */
+            $url   = $wf->getStepUrl($step);
+            $label = $this->translate($step->getLabel($role));
+        }
+        elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+            $url   = $this->url('service/resume');
+            $label = $this->translate("Tableau synthétique des enseignements concernant ma composante...");
+        }
+        else {
+            $url   = $this->url('home');
+            $label = $this->translate("Accueil...");
+        }
+        ?>
+        <?php if ($message): ?>
+        <p><?php echo $message ?></p>
+        <?php endif; ?>
+        <p><a class="btn btn-primary btn-large" href="<?php echo $url ?>"><?php echo $label ?></a></p>
+
+    <?php else: ?>
+
+        <a class="btn btn-success btn-large" href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Connectez-vous...') ?></a>
+
+    <?php endif; ?>
+</div>
+
+<?php if (isset($wf)): ?>
+<h2>Feuille de route</h2>
+<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', array('wf' => $wf, 'role' => $role)); ?>
+<?php endif; ?>

@@ -1,0 +1,18 @@
+<h2 class="page-header"><?php echo $title ?></h2>
+
+<?php echo $this->messenger(true)->addMessages($messages) ?>
+
+
+<?php $form->prepare(); ?>
+<?php echo $this->form()->openTag($form); ?>
+<div class="row">
+    <div class="col-md-8">
+        <?php 
+        echo $this->formControlGroup($form->get('dateRetourSigne'));
+        echo $this->formHidden($form->get('security'));
+        ?>
+    </div>
+</div>
+<hr />
+<?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
+<?php echo $this->form()->closeTag();

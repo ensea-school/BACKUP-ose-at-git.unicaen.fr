@@ -1,0 +1,39 @@
+<div class="jumbotron">
+    <h1>Intervenants</h1>
+</div>
+
+<style>
+    span.sas-highlight { font-weight: bold; }
+    .dl-horizontal dd .dl-horizontal { display: block; }
+</style>
+
+<?php $form->prepare(); ?>
+
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->form()->openTag($form) ?> 
+        <?php echo $this->formControlGroup($form->get('interv')); ?>
+        <input class="btn btn-primary" type="submit" value="Importer / consulter" name="submit">
+        <?php echo $this->form()->closeTag() ?> 
+    </div>
+    <div class="col-md-9 intervenant-voir">
+    </div>
+</div>
+
+<script>
+    var url = '<?php echo $this->url('demo', array('action' => 'voirIntervenant')) ?>';
+    $("body").on("submit", "form.intervenant-rech", function(event) {
+        var div = $("div.intervenant-voir").addClass('fade');
+        var form = $(event.target);
+        var id = $("input.sas", form).val();
+        $.post(url, { 'sourceCode': id }, function(data) {
+            div.removeClass('fade').html(data);
+        });
+        event.preventDefault();
+    });
+
+    $(function() {
+//        $(".ui-autocomplete-input").on("autocompleteselect", function(event, ui) { console.log($(this).val()); });
+        $(":input").tooltip({ placement: 'left' });
+    });
+</script>

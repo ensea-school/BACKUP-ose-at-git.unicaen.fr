@@ -2,15 +2,11 @@
 
 namespace Application\Entity\Db;
 
-use \Application\Traits\ObligatoireSelonSeuilHETDAwareTrait;
-
 /**
- * TypePieceJointeStatut
+ * Agrement
  */
-class TypePieceJointeStatut
+class Agrement implements HistoriqueAwareInterface
 {
-    use ObligatoireSelonSeuilHETDAwareTrait;
-    
     /**
      * @var \DateTime
      */
@@ -27,24 +23,29 @@ class TypePieceJointeStatut
     private $histoModification;
 
     /**
-     * @var boolean
+     * @var string
      */
-    private $premierRecrutement;
+    private $url;
 
     /**
      * @var \DateTime
      */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
+    private $dateDecision;
 
     /**
      * @var integer
      */
     private $id;
+
+    /**
+     * @var \Application\Entity\Db\TypeAgrement
+     */
+    private $type;
+
+    /**
+     * @var \Application\Entity\Db\Intervenant
+     */
+    private $intervenant;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -62,21 +63,25 @@ class TypePieceJointeStatut
     private $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\TypePieceJointe
+     * @var \Application\Entity\Db\Structure
      */
-    private $type;
+    private $structure;
 
     /**
-     * @var \Application\Entity\Db\StatutIntervenant
+     * @var \Application\Entity\Db\Annee
      */
-    private $statut;
+    protected $annee;
 
+    public function __toString()
+    {
+        return $this->getId();
+    }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return TypePieceJointeStatut
+     * @return Agrement
      */
     public function setHistoCreation($histoCreation)
     {
@@ -99,7 +104,7 @@ class TypePieceJointeStatut
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return TypePieceJointeStatut
+     * @return Agrement
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -122,7 +127,7 @@ class TypePieceJointeStatut
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return TypePieceJointeStatut
+     * @return Agrement
      */
     public function setHistoModification($histoModification)
     {
@@ -142,98 +147,49 @@ class TypePieceJointeStatut
     }
 
     /**
-     * Set premierRecrutement
+     * Set url
      *
-     * @param boolean $premierRecrutement
-     * @return TypePieceJointeStatut
+     * @param string $url
+     * @return Agrement
      */
-    public function setPremierRecrutement($premierRecrutement)
+    public function setUrl($url)
     {
-        $this->premierRecrutement = $premierRecrutement;
+        $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Get premierRecrutement
+     * Get url
      *
-     * @return boolean 
+     * @return string 
      */
-    public function getPremierRecrutement()
+    public function getUrl()
     {
-        return $this->premierRecrutement;
+        return $this->url;
     }
 
     /**
-     * Set obligatoire
+     * Set dateDecision
      *
-     * @param boolean $obligatoire
-     * @return TypePieceJointeStatut
+     * @param \DateTime $dateDecision
+     * @return Agrement
      */
-    public function setObligatoire($obligatoire)
+    public function setDateDecision($dateDecision)
     {
-        $this->obligatoire = $obligatoire;
+        $this->dateDecision = $dateDecision;
 
         return $this;
     }
 
     /**
-     * Set seuilHetd
-     *
-     * @param integer $seuilHetd
-     * @return TypePieceJointeStatut
-     */
-    public function setSeuilHetd($seuilHetd)
-    {
-        $this->seuilHetd = $seuilHetd;
-
-        return $this;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return TypePieceJointeStatut
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
+     * Get dateDecision
      *
      * @return \DateTime 
      */
-    public function getValiditeDebut()
+    public function getDateDecision()
     {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return TypePieceJointeStatut
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
+        return $this->dateDecision;
     }
 
     /**
@@ -247,10 +203,56 @@ class TypePieceJointeStatut
     }
 
     /**
+     * Set type
+     *
+     * @param \Application\Entity\Db\TypeAgrement $type
+     * @return Agrement
+     */
+    public function setType(\Application\Entity\Db\TypeAgrement $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \Application\Entity\Db\TypeAgrement 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set intervenant
+     *
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return Agrement
+     */
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    {
+        $this->intervenant = $intervenant;
+
+        return $this;
+    }
+
+    /**
+     * Get intervenant
+     *
+     * @return \Application\Entity\Db\Intervenant 
+     */
+    public function getIntervenant()
+    {
+        return $this->intervenant;
+    }
+
+    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return TypePieceJointeStatut
+     * @return Agrement
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -273,7 +275,7 @@ class TypePieceJointeStatut
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return TypePieceJointeStatut
+     * @return Agrement
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -296,7 +298,7 @@ class TypePieceJointeStatut
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return TypePieceJointeStatut
+     * @return Agrement
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -316,71 +318,48 @@ class TypePieceJointeStatut
     }
 
     /**
-     * Set type
+     * Set structure
      *
-     * @param \Application\Entity\Db\TypePieceJointe $type
-     * @return TypePieceJointeStatut
+     * @param \Application\Entity\Db\Structure $structure
+     * @return Intervenant
      */
-    public function setType(\Application\Entity\Db\TypePieceJointe $type = null)
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
     {
-        $this->type = $type;
+        $this->structure = $structure;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get structure
      *
-     * @return \Application\Entity\Db\TypePieceJointe 
+     * @return \Application\Entity\Db\Structure 
      */
-    public function getType()
+    public function getStructure()
     {
-        return $this->type;
+        return $this->structure;
     }
 
     /**
-     * Set statutIntervenant
+     * Set annee
      *
-     * @param \Application\Entity\Db\StatutIntervenant $statut
-     * @return TypePieceJointeStatut
+     * @param \Application\Entity\Db\Annee $annee
+     * @return Service
      */
-    public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
     {
-        $this->statut = $statut;
+        $this->annee = $annee;
 
         return $this;
     }
 
     /**
-     * Get statutIntervenant
+     * Get annee
      *
-     * @return \Application\Entity\Db\StatutIntervenant 
+     * @return \Application\Entity\Db\Annee 
      */
-    public function getStatut()
+    public function getAnnee()
     {
-        return $this->statut;
-    }
-
-    /**
-     * Redéfiniton pour gestion du cas particulier du RIB.
-     * 
-     * @todo Comment appeler la méthode getObligatoireToString() du trait ?
-     */
-    public function getObligatoireToString($totalHETDIntervenant)
-    {
-        if ($this->isObligatoire($totalHETDIntervenant)) {
-            $seuilHETD   = $this->getSeuilHetd();
-            $obligatoire = "Obligatoire";
-            $obligatoire .= $this->isSeuilHETDDepasse($totalHETDIntervenant) ? 
-                    " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total HETD</abbr> > {$seuilHETD}h" : 
-                    null;
-            return $obligatoire;
-        }
-        
-        if ($this->getType()->getCode() === TypePieceJointe::RIB) {
-            return "En cas de changement";
-        }
-        
-        return "Facultatif";
+        return $this->annee;
     }
 }

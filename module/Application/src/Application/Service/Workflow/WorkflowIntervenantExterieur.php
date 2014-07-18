@@ -12,6 +12,8 @@ use Application\Rule\Intervenant\PeutSaisirServiceRule;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
 use Application\Rule\Intervenant\PossedeDossierRule;
 use Application\Rule\Intervenant\PossedeServicesRule;
+use Application\Rule\Intervenant\NecessiteAgrementRule;
+use Application\Rule\Intervenant\AgrementFourniRule;
 use Application\Rule\Intervenant\NecessiteContratRule;
 use Application\Rule\Intervenant\ContratEditeRule;
 use Application\Service\Workflow\Step;
@@ -24,15 +26,6 @@ use Common\Exception\LogicException;
  */
 class WorkflowIntervenantExterieur extends WorkflowIntervenant
 {
-    const INDEX_SAISIE_DOSSIER     = 10;
-    const INDEX_SAISIE_SERVICE     = 20;
-    const INDEX_VALIDATION_DOSSIER = 30;
-    const INDEX_VALIDATION_SERVICE = 35;
-    const INDEX_PIECES_JOINTES     = 40;
-    const INDEX_PASSAGE_CR         = 50;
-    const INDEX_EDITION_CONTRAT    = 60;
-    const INDEX_FINAL              = 100;
-    
     /**
      * 
      * @param Intervenant $intervenant
@@ -74,7 +67,7 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
                     new PossedeServicesRule($this->getIntervenant())
             );
         }
-        
+        $this->getServiceLocator()->get('ApplicationTypePieceJointeStatut');
         $peutSaisirPj = new PeutSaisirPieceJointeRule($this->getIntervenant());
         if (!$peutSaisirPj->isRelevant() || $peutSaisirPj->execute()) {
             $serviceTypePieceJointeStatut = $this->getServiceLocator()->get('ApplicationTypePieceJointeStatut');
@@ -99,6 +92,39 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
                     self::INDEX_VALIDATION_SERVICE,
                     new Step\ValidationServiceStep(),
                     $this->getServiceValideRule()
+            );
+        }
+        
+        $necessiteAgrement = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrement NecessiteAgrementRule */
+        $necessiteAgrement
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($this->getTypeAgrementConseilRestreint());
+        if (!$necessiteAgrement->isRelevant() || $necessiteAgrement->execute()) {
+            $transitionRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
+            $transitionRule
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($this->getTypeAgrementConseilRestreint());
+            
+            $this->addStep(
+                    self::INDEX_CONSEIL_RESTREINT,
+                    new Step\AgrementStep($this->getTypeAgrementConseilRestreint()),
+                    $transitionRule
+            );
+        }
+        
+        $necessiteAgrement
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($this->getTypeAgrementConseilAcademique());
+        if (!$necessiteAgrement->isRelevant() || $necessiteAgrement->execute()) {
+            $transitionRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
+            $transitionRule
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($this->getTypeAgrementConseilAcademique());
+            
+            $this->addStep(
+                    self::INDEX_CONSEIL_ACADEMIQUE,
+                    new Step\AgrementStep($this->getTypeAgrementConseilAcademique()),
+                    $transitionRule
             );
         }
         

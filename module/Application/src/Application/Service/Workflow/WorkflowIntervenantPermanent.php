@@ -6,7 +6,6 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Rule\Intervenant\PeutSaisirServiceRule;
 use Application\Rule\Intervenant\PossedeServicesRule;
-use Application\Rule\Intervenant\ServiceValideRule;
 use Application\Service\Workflow\Step;
 use Common\Exception\LogicException;
 
@@ -16,11 +15,7 @@ use Common\Exception\LogicException;
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class WorkflowIntervenantPermanent extends WorkflowIntervenant
-{
-    const INDEX_SAISIE_SERVICE     = 20;
-    const INDEX_VALIDATION_SERVICE = 50;
-    const INDEX_FINAL              = 100;
-    
+{    
     /**
      * 
      * @param IntervenantPermanent $intervenant
@@ -63,16 +58,22 @@ class WorkflowIntervenantPermanent extends WorkflowIntervenant
             );
         }
         
-//        $passageCR = new \Application\Rule\Intervenant\NecessitePassageConseilAcademiqueRule($this->getIntervenant());
-//        if ($passageCR->isRelevant() && $passageCR->execute()) {
-//            $this->addStep(
-//                    self::INDEX_PASSAGE_CR,
-//                    "Passage en Conseil Académique", 
-//                    null,
-//                    null,
-//                    new \Application\Rule\Intervenant\NecessitePassageConseilAcademiqueRule($this->getIntervenant())
-//            );
-//        }
+        $necessiteAgrement = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrement NecessiteAgrementRule */
+        $necessiteAgrement
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($this->getTypeAgrementConseilAcademique());
+        if (!$necessiteAgrement->isRelevant() || $necessiteAgrement->execute()) {
+            $transitionRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
+            $transitionRule
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($this->getTypeAgrementConseilAcademique());
+            
+            $this->addStep(
+                    self::INDEX_CONSEIL_ACADEMIQUE,
+                    new Step\AgrementStep($this->getTypeAgrementConseilAcademique()),
+                    $transitionRule
+            );
+        }
         
 //        $this->addStep(
 //                self::INDEX_FINAL,

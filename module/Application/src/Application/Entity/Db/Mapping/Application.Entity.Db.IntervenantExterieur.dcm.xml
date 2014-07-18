@@ -27,11 +27,6 @@
         <join-column name="REGIME_SECU_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="typeIntervenantExterieur" target-entity="Application\Entity\Db\TypeIntervenantExterieur">
-      <join-columns>
-        <join-column name="TYPE_INTERVENANT_EXTERIEUR_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <many-to-one field="situationFamiliale" target-entity="Application\Entity\Db\SituationFamiliale">
       <join-columns>
         <join-column name="SITUATION_FAMILIALE_ID" referenced-column-name="ID"/>

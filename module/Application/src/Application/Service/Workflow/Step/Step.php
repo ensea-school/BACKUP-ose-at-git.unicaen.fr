@@ -108,6 +108,22 @@ EOS;
     }
     
     /**
+     * @var array
+     */
+    private $routeParams = array();
+    
+    public function getRouteParams()
+    {
+        return $this->routeParams;
+    }
+
+    protected function setRouteParams($routeParams)
+    {
+        $this->routeParams = $routeParams;
+        return $this;
+    }
+    
+    /**
      * @var bool
      */
     private $done = false;

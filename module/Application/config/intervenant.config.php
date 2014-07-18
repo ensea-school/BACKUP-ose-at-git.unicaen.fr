@@ -6,13 +6,8 @@ const ROLE_ID_DRH = 'DRH';
 
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
-use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
 
-define('ROUTE_DOSSIER',        'intervenant/saisir-dossier');
-define('ROUTE_SERVICE',        'intervenant/services');
-define('ROUTE_PIECES_JOINTES', 'intervenant/pieces-jointes');
-    
 return array(
     'router' => array(
         'routes' => array(
@@ -172,6 +167,34 @@ return array(
                             ),
                         ),
                     ),
+                    'agrements' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:intervenant/agrements',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Agrement',
+                                'action' => 'index',
+                            ),
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'agrement' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route' => '/:typeAgrement',
+                                    'constraints' => array(
+                                        'typeAgrement' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'voir',
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
                     'contrat' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -253,7 +276,7 @@ return array(
                             'dossier' => array(
                                 'label'  => "Données personnelles",
                                 'title'  => "Saisir les données personnelles d'un intervenant vacataire",
-                                'route'  => ROUTE_DOSSIER,
+                                'route'  => 'intervenant/saisir-dossier',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Dossier:modifier',
                                 'visible' => 'NavigationPageVisibility',
@@ -261,7 +284,7 @@ return array(
                             'service' => array(
                                 'label'  => "Enseignements",
                                 'title'  => "Enseignements de l'intervenant",
-                                'route'  => ROUTE_SERVICE,
+                                'route'  => 'intervenant/services',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Service:intervenant',
                                 'visible' => 'NavigationPageVisibility',
@@ -269,7 +292,7 @@ return array(
                             'pieces-jointes' => array(
                                 'label'  => "Pièces justificatives",
                                 'title'  => "Pièces justificatives du dossier de l'intervenant",
-                                'route'  => ROUTE_PIECES_JOINTES,
+                                'route'  => 'intervenant/pieces-jointes',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Dossier:pieces-jointes',
                                 'visible' => 'NavigationPageVisibility',
@@ -289,6 +312,15 @@ return array(
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:service',
                                 'visible' => 'NavigationPageVisibility',
+                            ),
+                            'agrement' => array(
+                                'label'  => "Agréments",
+                                'title'  => "Agréments de l'intervenant",
+                                'route'  => 'intervenant/agrements',
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Agrement:voir',
+                                'visible' => 'NavigationPageVisibility',
+                                'pagesProvider' => 'NavigationPagesProvider',
                             ),
                             'contrat' => array(
                                 'label'  => "Contrat / avenant",

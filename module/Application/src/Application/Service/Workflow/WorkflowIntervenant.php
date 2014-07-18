@@ -3,6 +3,7 @@
 namespace Application\Service\Workflow;
 
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\TypeAgrement;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\RoleAwareTrait;
 use Application\Service\Workflow\Step\Step;
@@ -19,6 +20,16 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     use IntervenantAwareTrait;
     use RoleAwareTrait;
     
+    const INDEX_SAISIE_DOSSIER     = 'SAISIE_DOSSIER';
+    const INDEX_VALIDATION_DOSSIER = 'VALIDATION_DOSSIER';
+    const INDEX_SAISIE_SERVICE     = 'SAISIE_SERVICE';
+    const INDEX_VALIDATION_SERVICE = 'VALIDATION_SERVICE';
+    const INDEX_PIECES_JOINTES     = 'PIECES_JOINTES';
+    const INDEX_CONSEIL_RESTREINT  = 'CONSEIL_RESTREINT'; 
+    const INDEX_CONSEIL_ACADEMIQUE = 'CONSEIL_ACADEMIQUE'; 
+    const INDEX_EDITION_CONTRAT    = 'EDITION_CONTRAT';
+    const INDEX_FINAL              = 'FINAL';
+    
     /**
      * Retourne l'URL correspondant à l'étape spécifiée.
      * 
@@ -27,7 +38,11 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
      */
     public function getStepUrl(Step $step)
     {
-        $url = $this->getHelperUrl()->fromRoute($step->getRoute(), array('intervenant' => $this->getIntervenant()->getSourceCode()));
+        $params = array_merge(
+                $step->getRouteParams(), 
+                array('intervenant' => $this->getIntervenant()->getSourceCode()));
+        
+        $url = $this->getHelperUrl()->fromRoute($step->getRoute(), $params);
         
         return $url;
     }
@@ -81,7 +96,16 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     protected function getServiceTypeValidation()
     {
         return $this->getServiceLocator()->get('ApplicationTypeValidation');
-    } 
+    }
+    
+    /**
+     * 
+     * @return \Application\Service\TypeAgrement
+     */
+    protected function getServiceTypeAgrement()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeAgrement');
+    }
     
     /**
      * 
@@ -101,5 +125,27 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
         $typeValidation = $qb->getQuery()->getOneOrNullResult();
         
         return $typeValidation;
+    }
+    
+    /**
+     * @return TypeAgrement
+     */
+    protected function getTypeAgrementConseilRestreint()
+    {
+        $qb = $this->getServiceTypeAgrement()->finderByCode(TypeAgrement::CODE_CONSEIL_RESTREINT);
+        $type = $qb->getQuery()->getSingleResult();
+        
+        return $type;
+    }
+    
+    /**
+     * @return TypeAgrement
+     */
+    protected function getTypeAgrementConseilAcademique()
+    {
+        $qb = $this->getServiceTypeAgrement()->finderByCode(TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
+        $type = $qb->getQuery()->getSingleResult();
+        
+        return $type;
     }
 }

@@ -50,6 +50,21 @@ class NavigationFactory extends DefaultNavigationFactory
                 $page['visible'] = $visible($page);
             }
             
+            // l'attribut 'pagesProvider' d'une page peut être le nom d'un fournisseur de pages filles
+            if (isset($page['pagesProvider']) && is_string($page['pagesProvider']) /*&& $this->getServiceLocator()->has($page['pagesProvider'])*/) {
+                $pagesProvider = $this->getServiceLocator()->get($page['pagesProvider']);
+                if (!is_callable($pagesProvider)) {
+                    throw new \Common\Exception\LogicException(
+                            "Service spécifié pour l'attribut de page 'pagesProvider' non valide : " . get_called_class($visible));
+                }
+                $children = $pagesProvider($page);
+                $children = $this->injectComponents($children, $routeMatch, $router, $request);
+                if (!isset($page['pages'])) {
+                    $page['pages'] = [];
+                }
+                $page['pages'] = array_merge($children, $page['pages']); // NB: possibilité d'écraser une page fille issue du fournisseur
+            }
+            
             $this->injectEntity($page, $routeMatch, $router, $request);
         }
         

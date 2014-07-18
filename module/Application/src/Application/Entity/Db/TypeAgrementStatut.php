@@ -2,14 +2,12 @@
 
 namespace Application\Entity\Db;
 
-use \Application\Traits\ObligatoireSelonSeuilHETDAwareTrait;
-
 /**
- * TypePieceJointeStatut
+ * TypeAgrementStatut
  */
-class TypePieceJointeStatut
+class TypeAgrementStatut
 {
-    use ObligatoireSelonSeuilHETDAwareTrait;
+    use \Application\Traits\ObligatoireSelonSeuilHETDAwareTrait;
     
     /**
      * @var \DateTime
@@ -32,16 +30,6 @@ class TypePieceJointeStatut
     private $premierRecrutement;
 
     /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
-
-    /**
      * @var integer
      */
     private $id;
@@ -62,7 +50,7 @@ class TypePieceJointeStatut
     private $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\TypePieceJointe
+     * @var \Application\Entity\Db\TypeAgrement
      */
     private $type;
 
@@ -76,7 +64,7 @@ class TypePieceJointeStatut
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setHistoCreation($histoCreation)
     {
@@ -99,7 +87,7 @@ class TypePieceJointeStatut
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -122,7 +110,7 @@ class TypePieceJointeStatut
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setHistoModification($histoModification)
     {
@@ -145,7 +133,7 @@ class TypePieceJointeStatut
      * Set premierRecrutement
      *
      * @param boolean $premierRecrutement
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setPremierRecrutement($premierRecrutement)
     {
@@ -168,7 +156,7 @@ class TypePieceJointeStatut
      * Set obligatoire
      *
      * @param boolean $obligatoire
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setObligatoire($obligatoire)
     {
@@ -181,59 +169,13 @@ class TypePieceJointeStatut
      * Set seuilHetd
      *
      * @param integer $seuilHetd
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setSeuilHetd($seuilHetd)
     {
         $this->seuilHetd = $seuilHetd;
 
         return $this;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return TypePieceJointeStatut
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return TypePieceJointeStatut
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**
@@ -250,7 +192,7 @@ class TypePieceJointeStatut
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -273,7 +215,7 @@ class TypePieceJointeStatut
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -296,7 +238,7 @@ class TypePieceJointeStatut
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -318,10 +260,10 @@ class TypePieceJointeStatut
     /**
      * Set type
      *
-     * @param \Application\Entity\Db\TypePieceJointe $type
-     * @return TypePieceJointeStatut
+     * @param \Application\Entity\Db\TypeAgrement $type
+     * @return TypeAgrementStatut
      */
-    public function setType(\Application\Entity\Db\TypePieceJointe $type = null)
+    public function setType(\Application\Entity\Db\TypeAgrement $type = null)
     {
         $this->type = $type;
 
@@ -331,7 +273,7 @@ class TypePieceJointeStatut
     /**
      * Get type
      *
-     * @return \Application\Entity\Db\TypePieceJointe 
+     * @return \Application\Entity\Db\TypeAgrement 
      */
     public function getType()
     {
@@ -342,7 +284,7 @@ class TypePieceJointeStatut
      * Set statutIntervenant
      *
      * @param \Application\Entity\Db\StatutIntervenant $statut
-     * @return TypePieceJointeStatut
+     * @return TypeAgrementStatut
      */
     public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
     {
@@ -359,28 +301,5 @@ class TypePieceJointeStatut
     public function getStatut()
     {
         return $this->statut;
-    }
-
-    /**
-     * Redéfiniton pour gestion du cas particulier du RIB.
-     * 
-     * @todo Comment appeler la méthode getObligatoireToString() du trait ?
-     */
-    public function getObligatoireToString($totalHETDIntervenant)
-    {
-        if ($this->isObligatoire($totalHETDIntervenant)) {
-            $seuilHETD   = $this->getSeuilHetd();
-            $obligatoire = "Obligatoire";
-            $obligatoire .= $this->isSeuilHETDDepasse($totalHETDIntervenant) ? 
-                    " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total HETD</abbr> > {$seuilHETD}h" : 
-                    null;
-            return $obligatoire;
-        }
-        
-        if ($this->getType()->getCode() === TypePieceJointe::RIB) {
-            return "En cas de changement";
-        }
-        
-        return "Facultatif";
     }
 }

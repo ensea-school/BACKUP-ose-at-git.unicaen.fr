@@ -1,0 +1,51 @@
+<h1 class="page-header"><?php echo $title ?></small></h1>
+
+<?php // echo $this->messenger(true)->addMessages($messages) ?>
+
+<style>
+    .structure { width: 100px; }
+</style>
+
+<?php if ($data): ?>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="structure">Composante</th>
+            <th>Agrément</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($data as $array): ?>
+        
+        <?php 
+        $structure   = $array['structure'];
+        $agrements = $array['agrements'];
+        ?>
+        
+        <?php if ($agrements): ?>
+            <?php foreach ($agrements as $agrement): ?>
+                <tr>
+                    <td class="structure"><?php echo $structure ?></td>
+                    <td>
+                        <?php echo $agrement ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td class="structure"><?php echo $structure ?></td>
+                <td>Aucun</td>
+            </tr>
+        <?php endif; ?>
+            
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php endif; ?>
+
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif;
+    

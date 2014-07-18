@@ -150,11 +150,15 @@ $main =  array(
             'ApplicationRole'                                => 'Application\\Service\\Role',
             'ApplicationRoleUtilisateur'                     => 'Application\\Service\\RoleUtilisateur',
             'NavigationPageVisibility'                       => 'Application\\Service\\NavigationPageVisibility',
+            'NavigationPagesProvider'                        => 'Application\\Service\\NavigationPagesProvider',
         ),
         'factories' => array(
             'navigation'                  => 'Application\Service\NavigationFactoryFactory',
             'ApplicationRoleProvider'     => 'Application\Provider\Role\RoleProviderFactory',
             'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
+        ),
+        'abstract_factories' => array(
+            'Application\Rule\AbstractRuleFactory',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',
@@ -211,5 +215,6 @@ return array_merge_recursive(
     include 'volume-horaire.config.php',
     include 'offre-formation.config.php',
     include 'contrat.config.php',
-    include 'validation.config.php'
+    include 'validation.config.php',
+    include 'agrement.config.php'
 );

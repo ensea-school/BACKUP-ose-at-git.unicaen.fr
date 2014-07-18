@@ -9,12 +9,25 @@ namespace Application\Rule;
  */
 abstract class AbstractRule implements RuleInterface
 {
+    /**
+     * @var string
+     */
     protected $message;
+    
+    /**
+     * 
+     * @param string $message
+     * @return self
+     */
     protected function setMessage($message)
     {
         $this->message = $message;
         return $this;
     }
+    
+    /**
+     * @return string
+     */
     public function getMessage()
     {
         return $this->message;

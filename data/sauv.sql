@@ -1,6 +1,121 @@
+
+-- ajout types agrements et lien avec les statuts interveant
+INSERT INTO TYPE_AGREMENT
+  (
+    ID,
+    CODE,
+    LIBELLE,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  VALUES
+  (
+    type_agrement_id_seq.nextval,
+    'CONSEIL_RESTREINT',
+    'Conseil Restreint',
+    1,
+    1
+  );
+  
+INSERT INTO TYPE_AGREMENT
+  (
+    ID,
+    CODE,
+    LIBELLE,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  VALUES
+  (
+    type_agrement_id_seq.nextval,
+    'CONSEIL_ACADEMIQUE',
+    'Conseil Académique',
+    1,
+    1
+  );
+  
+  -- CR
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    2,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    1 PREMIER_RECRUTEMENT,
+    1 HISTO_CREATEUR_ID,
+    1 HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si
+  where si.SOURCE_CODE in ('SALAR_PRIVE','SALAR_PUBLIC','NON_SALAR');
+  
+  
+  -- CA, pas 1er recrut
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    3,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    0 PREMIER_RECRUTEMENT,
+    1 HISTO_CREATEUR_ID,
+    1 HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si
+  where si.SOURCE_CODE not in ('AUTRES','RETR_UCBN')
+  ;
+  
+  -- CA, 1er recrut
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    3,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    1 PREMIER_RECRUTEMENT,
+    1 HISTO_CREATEUR_ID,
+    1 HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si
+  where si.SOURCE_CODE not in ('AUTRES','RETR_UCBN')
+  ;
+  
+  
+  
+  
+  
+
 -- ajouts de pièces justificatives à joindre
-INSERT
-INTO TYPE_PIECE_JOINTE_STATUT
+INSERT INTO TYPE_PIECE_JOINTE_STATUT
   (
     ID,
     TYPE_PIECE_JOINTE_ID,

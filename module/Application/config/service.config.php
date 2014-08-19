@@ -182,11 +182,11 @@ return array(
                     'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('index', 'resume','resume-refresh','filtres', 'volumes-horaires-refresh'),
+                    'action' => array('index', 'resume','resume-refresh','filtres'),
                     'roles' => array(ComposanteRole::ROLE_ID,'Administrateur')),
                 array( 
                     'controller' => 'Application\Controller\ServiceReferentiel',
-                    'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe', 'volumes-horaires-refresh'),
+                    'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
                     'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
             ),
         ),

@@ -289,14 +289,6 @@ class Service implements HistoriqueAwareInterface
         return $volumeHoraireListe;
     }
 
-    public function getVolumeHoraireListeOLD( Periode $periode )
-    {
-        if (! isset($this->volumeHoraireListes[$periode->getCode()])){
-            $this->volumeHoraireListes[$periode->getCode()] = new VolumeHoraireListe( $this, $periode );
-        }
-        return $this->volumeHoraireListes[$periode->getCode()];
-    }
-
     /**
      * Set intervenant
      *
@@ -423,8 +415,21 @@ class Service implements HistoriqueAwareInterface
     public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique = $elementPedagogique;
-        if ($elementPedagogique && ! $this->getStructureEns()){
-            $this->setStructureEns( $elementPedagogique->getStructure() );
+
+        if( $elementPedagogique){
+            $vhl = $this->getVolumeHoraireListe()->get();
+            $typesIntervention = $elementPedagogique->getTypeIntervention();       // liste des types d'intervention de l'EP
+            $periode = $elementPedagogique->getPeriode();
+            foreach( $vhl as $vh ){
+                if (
+                    ( ! $typesIntervention->contains($vh->getTypeIntervention()) ) // types d'intervention devenus obsolètes
+                    || ( $periode && $vh->getPeriode() != $periode )               // périodes devenues obsolètes
+                ){
+                    $vh->setRemove(true); // Flag de demande de suppression du volume horaire lors de l'enregistrement de l'entité Service par son service Service
+                }
+            }
+
+            if (! $this->getStructureEns()) $this->setStructureEns( $elementPedagogique->getStructure() );
         }
         return $this;
     }

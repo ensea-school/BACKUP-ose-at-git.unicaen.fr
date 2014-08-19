@@ -246,6 +246,29 @@ class ServiceController extends AbstractActionController
         return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'readOnly', 'intervenant', 'structure', 'typesIntervention');
     }
 
+    public function volumesHorairesRefreshAction()
+    {
+        $id = (int)$this->params()->fromRoute('id');
+        $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
+        $service = $this->getServiceService();
+        $form    = $this->getFormSaisie();
+        $element = $this->context()->elementPedagogiqueFromPost('element');
+        $etablissement = $this->context()->etablissementFromPost();
+
+        if ($id) {
+            $entity = $service->get($id); /* @var $entity \Application\Entity\Db\Service */
+        } else {
+            $entity = $service->newEntity();
+        }
+        $entity->setTypeVolumeHoraire($typeVolumeHoraire);
+        $entity->setEtablissement($etablissement);
+        $entity->setElementPedagogique($element);
+        $form->bind($entity);
+
+        if (! $id) $form->initFromContext();
+        return compact('form');
+    }
+
     public function suppressionAction()
     {
         $id        = (int) $this->params()->fromRoute('id', 0);
@@ -279,7 +302,7 @@ class ServiceController extends AbstractActionController
         $id = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
         $service = $this->getServiceService();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        //$role    = $this->getContextProvider()->getSelectedIdentityRole();
         $form    = $this->getFormSaisie();
         $errors  = array();
 
@@ -312,7 +335,7 @@ class ServiceController extends AbstractActionController
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
-        return compact('form', 'role','errors','title');
+        return compact('form','errors','title');
     }
 
     /**

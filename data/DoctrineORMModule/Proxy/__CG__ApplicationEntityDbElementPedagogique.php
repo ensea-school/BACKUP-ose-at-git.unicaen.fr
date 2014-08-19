@@ -714,6 +714,6 @@ class ElementPedagogique extends \Application\Entity\Db\ElementPedagogique imple
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeIntervention', array());
 
         return parent::getTypeIntervention();
-}
+    }
 
 }

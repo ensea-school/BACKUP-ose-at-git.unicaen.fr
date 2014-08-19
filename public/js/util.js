@@ -184,17 +184,18 @@ function highlight(term, base, cssClass)
      * Se base sur l'attribut data-url de l'élément
      * Si l'attribut data-url n'est pas renseigné alors il ne se passe rien
      *
-     * @param array|FormElement|null data (json) à transmettre
+     * @param array|FormElement|null    data    (json) à transmettre
+     * @param function                  onEnd   Fonction de callback à passer, si besoin. S'exécute une fois le rafraichissement terminé
      * @returns Element
      */
-    $.fn.refresh = function( data ){
+    $.fn.refresh = function( data, onEnd ){
         var that = $(this);
         var url = this.data('url');
         if (data instanceof jQuery){
             data = data.serialize();
         }
         if (undefined != url){
-            that.load( url, data );
+            that.load( url, data, onEnd );
         }
         return that;
     }

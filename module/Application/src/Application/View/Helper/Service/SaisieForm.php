@@ -30,6 +30,10 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
      */
     public function getPeriodes()
     {
+        $service = $this->form->get('service')->getObject(); /* @var $service \Application\Entity\Db\Service */
+        if ($service->getElementPedagogique() && $service->getElementPedagogique()->getPeriode()){
+            return array( $service->getElementPedagogique()->getPeriode() );
+        }
         return $this->getServicePeriode()->getList( $this->getServicePeriode()->finderByEnseignement() );
     }
 
@@ -40,7 +44,8 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
      */
     public function __invoke(Saisie $form = null)
     {
-            $this->form = $form;
+        $this->form = $form;
+        $this->form->prepare();
         return $this;
     }
 
@@ -70,8 +75,6 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
     {
         $fservice = $this->form->get('service');
 
-        $this->form->prepare();
-
         $res = $this->getView()->form()->openTag($this->form);
         if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
@@ -98,10 +101,13 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
     {
         $res = '';
         foreach( $this->getPeriodes() as $periode ){
+            $res .= '<div class="periode" id="'.$periode->getCode().'">';
+            $res .= '<h3>'.$periode.'</h3>';
             $res .= $this->getView()->volumeHoraireSaisieMultipleFieldset(
                                             $this->form->get($periode->getCode()),
                                             $this->getServiceService()->getPeriode( $this->form->get('service')->getObject() )
                     );
+            $res .= '</div>';
         }
         return $res;
     }
@@ -112,7 +118,7 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
     protected function getServiceService()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-}
+    }
 
     /**
      * @return \Application\Service\Periode

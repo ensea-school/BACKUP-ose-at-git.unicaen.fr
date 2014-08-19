@@ -178,15 +178,15 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'rafraichir-ligne'),
+                    'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
                     'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('index', 'resume','resume-refresh','filtres'),
+                    'action' => array('index', 'resume','resume-refresh','filtres', 'volumes-horaires-refresh'),
                     'roles' => array(ComposanteRole::ROLE_ID,'Administrateur')),
                 array( 
                     'controller' => 'Application\Controller\ServiceReferentiel',
-                    'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
+                    'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe', 'volumes-horaires-refresh'),
                     'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
             ),
         ),

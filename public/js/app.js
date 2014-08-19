@@ -73,18 +73,11 @@ function Service( id ) {
             $('#element-externe').hide();
             $("input[name='service\\[etablissement\\]\\[label\\]']").val('');
             $("input[name='service\\[etablissement\\]\\[id\\]']").val('');
-            
-        /*    var serviceId = $('form#service input[name="service\\[id\\]"]').val();
-            var elementId = $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val();
-            if (elementId && serviceId){
-                ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
-            }*/
         }else{
             $('#element-interne').hide();
             $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']").val('');
             $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']").val('');
             $('#element-externe').show();
-            //this.formShowHidePeriodes({periode: {code:null}});
         }
         this.refreshFormVolumesHoraires(
             $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val(),
@@ -92,20 +85,14 @@ function Service( id ) {
         );
     }
 
-    /*this.formShowHidePeriodes = function( data ){
-        if (data.periode.code){
-            $('form#service div.periode').hide();
-            $('form#service div#'+data.periode.code).show();
-            $('form#service div.periode input:hidden').val('');
-        }else{
-            $('form#service div.periode').show();
-        }
-    }*/
-
     this.refreshFormVolumesHoraires = function( elementId, etablissementId ){
         $('form#service div#volumes-horaires').refresh({
             element      : elementId,
             etablissement: etablissementId
+        }, function(){
+            $('form#service div#volumes-horaires input.form-control').each( function(element){
+                $(this).val('0');
+            } );
         });
     }
 
@@ -198,7 +185,6 @@ Service.init = function(){
     $( "body" ).on( "autocompleteselect", 'form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[label\\]"]', function( event, ui ) {
         var serviceId = $('form#service input[name="service\\[id\\]"]').val();
         var elementId = ui.item.id;
-        //ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
         Service.get(serviceId).refreshFormVolumesHoraires( elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val() );
     } );
 
@@ -415,15 +401,6 @@ function ElementPedagogique( id ) {
     this.onAfterDelete = function(){
 //        $( "#etape-"+this.id+"-ligne" ).fadeOut().remove();
             window.location.reload();
-    }
-
-    this.getPeriode = function( func ){
-        var getPeriodeUrl = Url('offre-de-formation/element/get-periode/'+this.id);
-        $.ajax({
-            dataType: "json",
-            url: getPeriodeUrl,
-        //    async: false,
-        }).done(func);
     }
 }
 

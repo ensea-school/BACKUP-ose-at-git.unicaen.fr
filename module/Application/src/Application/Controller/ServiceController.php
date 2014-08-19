@@ -223,12 +223,17 @@ class ServiceController extends AbstractActionController
         $details            = 1 == (int)$this->params()->fromQuery('details',               (int)$this->params()->fromPost('details',0));
         $onlyContent        = 1 == (int)$this->params()->fromQuery('only-content',          0);
         $readOnly           = 1 == (int)$this->params()->fromQuery('read-only', 0);
-        $typesIntervention  = explode(',',$this->params()->fromQuery('types-intervention',''));
-        foreach( $typesIntervention as $index => $id ){
-            $typeIntervention = $this->getServiceLocator()->get('applicationTypeIntervention')->get((int)$id);
-            if ($typeIntervention){
-                $typesIntervention[$index] = $typeIntervention;
+        $typesIntervention = $this->params()->fromQuery('types-intervention',null);
+        if ($typesIntervention){
+            $typesIntervention  = explode(',',$typesIntervention);
+            foreach( $typesIntervention as $index => $id ){
+                $typeIntervention = $this->getServiceLocator()->get('applicationTypeIntervention')->get((int)$id);
+                if ($typeIntervention){
+                    $typesIntervention[$index] = $typeIntervention;
+                }
             }
+        }else{
+            $typesIntervention = array();
         }
 
         $intervenant        = $this->params()->fromQuery('intervenant');

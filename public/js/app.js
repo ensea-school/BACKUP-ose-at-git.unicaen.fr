@@ -98,10 +98,11 @@ function Service( id ) {
 
     this.onAfterAdd = function(){
         var url = Url("service/rafraichir-ligne/"+this.id+"/"+$("#services").data('type-volume-horaire'), {
-            'only-content'  : 0,
-            'details'       : 1,
-            'intervenant'   : $("#services").data('intervenant'),
-            'structure'     : $("#services").data('structure')
+            'only-content'      : 0,
+            'details'           : 1,
+            'intervenant'       : $("#services").data('intervenant'),
+            'structure'         : $("#services").data('structure'),
+            'types-intervention': $("#services").data('types-intervention'),
         });
         $.get( url, function( data ) {
             $( "#service-resume" ).refresh(); // Si on est dans le résumé

@@ -250,12 +250,19 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $colspan = 3;
         $out = $this->renderShowHide();
 
+
+        $typesInterventionAttribute = '';
+        foreach( $typesIntervention as $ti ){
+            if ('' != $typesInterventionAttribute) $typesInterventionAttribute .= ',';
+            $typesInterventionAttribute .= (string)$ti->getId();
+        }
         $attribs = $this->htmlAttribs([
             'id'                        => 'services',
             'class'                     => 'table table-bordered service',
             'data-intervenant'          => $this->toQuery( $this->getIntervenant() ),
             'data-structure'            => $this->toQuery( $this->getStructure() ),
             'data-type-volume-horaire'  => $this->getTypeVolumeHoraire()->getId(),
+            'data-types-intervention'   => $typesInterventionAttribute,
         ]);
         $out .= '<table '.$attribs.'>';
         $out .= '<tr>';

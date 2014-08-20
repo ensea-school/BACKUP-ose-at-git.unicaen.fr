@@ -80,6 +80,12 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
     public function render()
     {
         $typesIntervention = $this->getTypesIntervention();
+        $totaux = array(
+            'intervenants'          => 0,
+            'types_intervention'    => [],
+            'referentiel'           => 0,
+            'hetd'                  => 0,
+        );
 
         $res  = '<table class="table table-hover table-bordered">'."\n";
         $res .= '<thead>'."\n";
@@ -126,14 +132,39 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             $na = '<span title="Non applicable (intervenant vacataire))">NA</span>';
 
             $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant']['NOM_USUEL']) . ' ' . $line['intervenant']['PRENOM'].'</a></td>'."\n";
+            $totaux['intervenants']++;
             foreach( $typesIntervention as $ti ){
-                $res .= '<td>'.(isset($line['service'][$ti->getId()]) ? $this->formatHeures($line['service'][$ti->getId()]) : '0').'</td>'."\n";
+                if (! isset($totaux['types_intervention'][$ti->getId()])){
+                    $totaux['types_intervention'][$ti->getId()] = 0;
+                }
+                if (isset($line['service'][$ti->getId()])){
+                    $totaux['types_intervention'][$ti->getId()] += $line['service'][$ti->getId()];
+                    $res .= '<td>'.$this->formatHeures($line['service'][$ti->getId()]).'</td>'."\n";
+                }else{
+                    $res .= '<td>0</td>'."\n";
+                }
             }
-            $res .= '<td>'.(array_key_exists('referentiel', $line) ? $line['referentiel'] : ($intervenantPermanent ? 0 : $na)).'</td>'."\n";
+            if (array_key_exists('referentiel', $line)){
+                $totaux['referentiel'] += $line['referentiel'];
+                $res .= '<td>'.$this->formatHeures($line['referentiel']).'</td>'."\n";
+            }else{
+                $res .= '<td>'.($intervenantPermanent ? 0 : $na).'</td>'."\n";
+            }
+            $totaux['hetd'] += $hetd;
             $res .= $msg.$this->formatHeures($hetd).'</td>'."\n";
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";
+        $res .= '<tfoot>'."\n";
+        $res .= '<tr>'."\n";
+        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['intervenants']).' intervenants</th>'."\n";
+        foreach( $typesIntervention as $ti ){
+            $res .= '        <th style="text-align:right"><abbr title="'.$ti->getLibelle().'">'.$this->formatHeures($totaux['types_intervention'][$ti->getId()]).'</abbr></th>'."\n";
+        }
+        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['referentiel']).'</th>'."\n";
+        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['hetd']).'</th>'."\n";
+        $res .= '</tr>'."\n";
+        $res .= '</tfoot>'."\n";
         $res .= '</table>'."\n";
         return $res;
     }

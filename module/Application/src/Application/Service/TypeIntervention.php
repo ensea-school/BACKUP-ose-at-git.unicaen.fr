@@ -55,6 +55,26 @@ class TypeIntervention extends AbstractEntityService
     }
 
     /**
+     * Retourne une entité à partir de son code
+     * Retourne null si le code est null
+     *
+     * @param string|string[] $code
+     * @return mixed|null
+     */
+    public function getByCode($code)
+    {
+        if(is_array($code)){
+            list($qb,$alias) = $this->initQuery();
+            $qb->andWhere($alias.'.code IN (:'.$alias.'_code)')->setParameter($alias.'_code', $code);
+            return $this->getList( $qb );
+        }elseif ($code){
+            return $this->getRepo()->findOneBy(array('code' => $code));
+        }else{
+            return null;
+        }
+    }
+
+    /**
      * Liste des types d'intervention
      *
      * @return Entity[]

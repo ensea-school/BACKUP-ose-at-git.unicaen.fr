@@ -345,17 +345,6 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function getVolumeHoraireListeOLD(\Application\Entity\Db\Periode $periode)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireListeOLD', array($periode));
-
-        return parent::getVolumeHoraireListeOLD($periode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = NULL)
     {
 

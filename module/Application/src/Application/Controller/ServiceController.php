@@ -222,18 +222,22 @@ class ServiceController extends AbstractActionController
 
         $details            = 1 == (int)$this->params()->fromQuery('details',               (int)$this->params()->fromPost('details',0));
         $onlyContent        = 1 == (int)$this->params()->fromQuery('only-content',          0);
-        $readOnly           = 1 == (int)$this->params()->fromQuery('read-only', 0);
-        $typesIntervention = $this->params()->fromQuery('types-intervention',null);
+        $readOnly           = 1 == (int)$this->params()->fromQuery('read-only',             0);
+        $typesIntervention  = $this->params()->fromQuery('types-intervention',              null);
         if ($typesIntervention){
             $typesIntervention  = explode(',',$typesIntervention);
-            foreach( $typesIntervention as $index => $id ){
-                $typeIntervention = $this->getServiceLocator()->get('applicationTypeIntervention')->get((int)$id);
-                if ($typeIntervention){
-                    $typesIntervention[$index] = $typeIntervention;
-                }
-            }
+            $typesIntervention = $this->getServiceTypeIntervention()->getByCode($typesIntervention);
         }else{
-            $typesIntervention = array();
+            $typesIntervention = [];
+        }
+
+        $tiv = $this->params()->fromQuery('types-intervention-visibility', $this->params()->fromPost('types-intervention-visibility',null) );
+        $typesInterventionVisibility = [];
+        if ($tiv){
+            $tiv = explode(',',$tiv);
+            foreach( $typesIntervention as $ti ){
+                $typesInterventionVisibility[$ti->getCode()] = in_array($ti->getCode(), $tiv);
+            }
         }
 
         $intervenant        = $this->params()->fromQuery('intervenant');
@@ -248,7 +252,7 @@ class ServiceController extends AbstractActionController
         if ('' === $structure) $structure = null;
         $structure = $this->getServiceLocator()->get('applicationStructure')->get((int)$structure);
 
-        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'readOnly', 'intervenant', 'structure', 'typesIntervention');
+        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'readOnly', 'intervenant', 'structure', 'typesIntervention', 'typesInterventionVisibility');
     }
 
     public function volumesHorairesRefreshAction()
@@ -366,6 +370,14 @@ class ServiceController extends AbstractActionController
     public function getServiceTypeVolumehoraire()
     {
         return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
+    }
+
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    public function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeIntervention');
     }
 
     /**

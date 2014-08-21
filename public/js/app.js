@@ -98,11 +98,12 @@ function Service( id ) {
 
     this.onAfterAdd = function(){
         var url = Url("service/rafraichir-ligne/"+this.id+"/"+$("#services").data('type-volume-horaire'), {
-            'only-content'      : 0,
-            'details'           : 1,
-            'intervenant'       : $("#services").data('intervenant'),
-            'structure'         : $("#services").data('structure'),
-            'types-intervention': $("#services").data('types-intervention'),
+            'only-content'                  : 0,
+            'details'                       : 1,
+            'intervenant'                   : $("#services").data('intervenant'),
+            'structure'                     : $("#services").data('structure'),
+            'types-intervention'            : $("#services").data('types-intervention'),
+            'types-intervention-visibility' : $("#services").data('types-intervention-visibility'),
         });
         $.get( url, function( data ) {
             $( "#service-resume" ).refresh(); // Si on est dans le résumé
@@ -114,8 +115,10 @@ function Service( id ) {
     }
 
     this.onAfterModify = function(){
-        var details = $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1';
-        $( "#service-"+this.id+"-ligne" ).refresh( {details:details} );
+        $( "#service-"+this.id+"-ligne" ).refresh( {
+            details                         : $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
+            'types-intervention-visibility' : $("#services").data('types-intervention-visibility'),
+        } );
         $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
         Service.refreshFiltres();
         Service.refreshTotaux();
@@ -214,7 +217,31 @@ Service.refreshFiltres = function(){
 }
 
 Service.refreshTotaux = function(){
-    $("#services tfoot").refresh();
+    $("#services tfoot").refresh( {}, Service.onListeChanged );
+}
+
+Service.onListeChanged = function(){
+    Service.showHideTypesIntervention();
+}
+
+Service.showHideTypesIntervention = function(){
+    var typesIntervention = $('table#services').data('types-intervention').split(",");
+    var typesInterventionVisibility = '';
+    for(var key in typesIntervention){
+        var visibility = $('table#services tfoot td.type-intervention.'+typesIntervention[key]).is(':visible');
+        $('table#services tbody th.type-intervention.'+typesIntervention[key]+', table#services tbody td.type-intervention.'+typesIntervention[key]).each( function(){
+            if ( visibility ){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
+        });
+        if (visibility){
+            if (typesInterventionVisibility != '') typesInterventionVisibility += ',';
+            typesInterventionVisibility += typesIntervention[key];
+        }
+    }
+    $('table#services').data('types-intervention-visibility', typesInterventionVisibility);
 }
 
 /**
@@ -254,9 +281,7 @@ VolumeHoraire.init = function(){
 
     $("body").on('save-volume-horaire', function(event,data){
         event.a.popover('hide');
-        $("#service-"+event.a.data('service')+"-volume-horaire-td").refresh();
-        $( "#service-"+event.a.data('service')+"-ligne" ).refresh();
-        Service.refreshTotaux();
+        Service.get( event.a.data('service') ).onAfterModify();
     });
 }
 

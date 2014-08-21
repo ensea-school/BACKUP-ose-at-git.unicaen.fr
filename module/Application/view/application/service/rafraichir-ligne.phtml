@@ -6,6 +6,7 @@ if ($onlyContent){
             ->setStructure($structure)
             ->setReadOnly($readOnly)
             ->setTypesIntervention($typesIntervention)
+            ->setTypesInterventionVisibility($typesInterventionVisibility)
             ->render($details);
 }else{
     echo $this->serviceListe( array($service) )
@@ -13,5 +14,6 @@ if ($onlyContent){
             ->setStructure($structure)
             ->setReadOnly($readOnly)
             ->setTypesIntervention($typesIntervention)
+            ->setTypesInterventionVisibility($typesInterventionVisibility)
             ->renderLigne( $service, $details );
 }

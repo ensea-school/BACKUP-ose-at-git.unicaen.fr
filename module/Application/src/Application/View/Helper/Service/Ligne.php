@@ -10,6 +10,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\Structure;
 
 /**
@@ -60,6 +61,13 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $typesIntervention;
 
+    /**
+     * Visibilité des types d'intervention
+     *
+     * @var array
+     */
+    protected $typesInterventionVisibility;
+
 
 
     /**
@@ -81,6 +89,43 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         $this->typesIntervention = $typesIntervention;
         return $this;
+    }
+
+    /**
+     * Clés : codes des types d'intervention
+     * Valeurs : boolean (true sui visible, false sinon)
+     * @return array
+     */
+    public function getTypesInterventionVisibility()
+    {
+        if (! $this->typesInterventionVisibility){
+            $this->typesInterventionVisibility = [];
+            foreach( $this->getTypesIntervention() as $ti ){
+                $this->typesInterventionVisibility[$ti->getcode()] = true; // tout visible par défaut si rien n'est précisé
+            }
+        }
+        return $this->typesInterventionVisibility;
+    }
+
+    /**
+     *
+     * @param array $typesInterventionVisibility
+     * @return self
+     */
+    public function setTypesInterventionVisibility( array $typesInterventionVisibility )
+    {
+        $this->typesInterventionVisibility = $typesInterventionVisibility;
+        return $this;
+    }
+
+    /**
+     * @param TypeIntervention $typeIntervention
+     * @return boolean
+     */
+    protected function typeInterventionIsVisible( TypeIntervention $typeIntervention )
+    {
+        $typesInterventionVisibility = $this->getTypesInterventionVisibility();
+        return $typeIntervention->getVisible() || ( isset($typesInterventionVisibility[$typeIntervention->getCode()]) && $typesInterventionVisibility[$typeIntervention->getCode()] );
     }
 
     /**
@@ -210,7 +255,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         $typesIntervention = [];
         foreach( $this->getTypesIntervention() as $typeIntervention ){
-            $typesIntervention[] = $typeIntervention->getId();
+            $typesIntervention[] = $typeIntervention->getCode();
         }
 
         $url = $this->getView()->url(
@@ -361,11 +406,12 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderTypeIntervention( \Application\Entity\VolumeHoraireListe $liste )
     {
         $liste = $liste->setMotifNonPaiement(false);
-        $out = '<td class="heures" style="text-align:right" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
+        $display = $this->typeInterventionIsVisible($liste->getTypeIntervention()) ? '' : ';display:none';
+        $out = '<td class="heures type-intervention '.$liste->getTypeIntervention()->getCode().'" style="text-align:right'.$display.'" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
         if ($liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention())){
-        $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
+            $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
         }else{
-            $out .= '&nbsp;'; 
+            $out .= '0';
         }
         $out .= "</td>\n";
         return $out;

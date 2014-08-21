@@ -30,9 +30,11 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
      */
     public function getPeriodes()
     {
-        $sp = $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
-        /* @var $sp \Application\Service\Periode */
-        return $sp->getList( $sp->finderByEnseignement() );
+        $service = $this->form->get('service')->getObject(); /* @var $service \Application\Entity\Db\Service */
+        if ($service->getElementPedagogique() && $service->getElementPedagogique()->getPeriode()){
+            return array( $service->getElementPedagogique()->getPeriode() );
+        }
+        return $this->getServicePeriode()->getList( $this->getServicePeriode()->finderByEnseignement() );
     }
 
     /**
@@ -42,18 +44,25 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
      */
     public function __invoke(Saisie $form = null)
     {
-        if (null === $form) {
-            return $this;
-        }else{
-            $this->form = $form;
-        }
-
+        $this->form = $form;
+        $this->form->prepare();
         return $this;
     }
 
     public function __toString()
     {
         return $this->render();
+    }
+
+    public function getVolumesHorairesRefreshUrl()
+    {
+        $url = $this->getView()->url(
+                'service/default',
+                [
+                    'action' => 'volumes-horaires-refresh',
+                    'id' => $this->form->get('service')->get('id')->getValue()
+                ]);
+        return $url;
     }
 
     /**
@@ -65,8 +74,6 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
     public function render()
     {
         $fservice = $this->form->get('service');
-
-        $this->form->prepare();
 
         $res = $this->getView()->form()->openTag($this->form);
         if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
@@ -80,16 +87,44 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
         }else{
             $res .= '<div id="element-interne">'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
         }
-        foreach( $this->getPeriodes() as $periode ){
-            $res .= $this->getView()->volumeHoraireSaisieMultipleFieldset(
-                                            $this->form->get($periode->getCode()),
-                                            $this->getServiceLocator()->getServiceLocator()->get('applicationService')->getPeriode($fservice->getObject())
-                    );
-        }
+        $res .= '<div id="volumes-horaires" data-url="'.$this->getVolumesHorairesRefreshUrl().'">';
+        $res .= $this->renderVolumesHoraires();
+        $res .= '</div>';
         $res .= '<br />';
         $res .= $this->getView()->formRow($this->form->get('submit'));
         $res .= $this->getView()->formHidden($fservice->get('id'));
         $res .= $this->getView()->form()->closeTag().'<br />';
         return $res;
+    }
+
+    public function renderVolumesHoraires()
+    {
+        $res = '';
+        foreach( $this->getPeriodes() as $periode ){
+            $res .= '<div class="periode" id="'.$periode->getCode().'">';
+            $res .= '<h3>'.$periode.'</h3>';
+            $res .= $this->getView()->volumeHoraireSaisieMultipleFieldset(
+                                            $this->form->get($periode->getCode()),
+                                            $this->getServiceService()->getPeriode( $this->form->get('service')->getObject() )
+                    );
+            $res .= '</div>';
+        }
+        return $res;
+    }
+
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
+    }
+
+    /**
+     * @return \Application\Service\Periode
+     */
+    protected function getServicePeriode()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
     }
 }

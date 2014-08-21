@@ -6,6 +6,7 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Entity\Db\Service;
 
 /**
  *
@@ -22,11 +23,13 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
      *
      * @return \Application\Service\TypeIntervention[]
      */
-    public function getTypesInterventions()
+    public function getTypesInterventions( Service $service )
     {
-        $sti = $this->getServiceLocator()->get('applicationTypeIntervention');
-        /* @var $sti \Application\Service\TypeIntervention */
-        return $sti->getTypesIntervention();
+        if ($service->getElementPedagogique()){
+            return $service->getElementPedagogique()->getTypeIntervention();
+        }else{
+            return $this->getServiceTypeIntervention()->getTypesIntervention();
+    }
     }
 
     /**
@@ -43,7 +46,7 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
 
         $object->setTypeVolumeHoraire($typeVolumeHoraire);
         $object->setPeriode($periode);
-        foreach( $this->getTypesInterventions() as $typeIntervention ){
+        foreach( $this->getTypesInterventions($object->getService()) as $typeIntervention ){
             $object->setTypeIntervention($typeIntervention);
             if (isset($data[$typeIntervention->getCode()])){
                 $heures = (float)$data[$typeIntervention->getCode()];
@@ -69,10 +72,18 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
             'service' => $object->getService() ? $object->getService()->getId() : null,
             'periode' => $object->getPeriode() ? $object->getPeriode()->getId() : null,
         );
-        foreach( $this->getTypesInterventions() as $typeIntervention ){
+        foreach( $this->getTypesInterventions( $object->getService() ) as $typeIntervention ){
             $vhl->setTypeIntervention($typeIntervention);
             $data[$typeIntervention->getCode()] = $vhl->getHeures();
         }
         return $data;
     }
+
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->get('applicationTypeIntervention');
+}
 }

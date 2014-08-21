@@ -21,13 +21,11 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
 
     /**
      *
-     * @return \Application\Service\TypeIntervention[]
+     * @return \Application\Entity\Db\TypeIntervention[]
      */
     public function getTypesInterventions()
     {
-        $sti = $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
-        /* @var $sti \Application\Service\TypeIntervention */
-        return $sti->getTypesIntervention();
+        return $this->getServiceTypeIntervention()->getList();
     }
 
     /**
@@ -84,4 +82,11 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
         return $filters;
     }
 
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
+}
 }

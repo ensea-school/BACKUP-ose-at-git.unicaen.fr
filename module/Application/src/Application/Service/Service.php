@@ -9,8 +9,10 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+
 
 /**
  * Description of Service
@@ -568,6 +570,31 @@ EOS;
         }else{
             return [$p->getId() => $p];
         }
+    }
+
+    /**
+     *
+     * @param ServiceEntity|ServiceEntity[] $services
+     * @return TypeInterventionEntity[]
+     */
+    public function getTypesIntervention($services)
+    {
+        if ($services instanceof ServiceEntity) $services = [$services];
+        $typesIntervention = [];
+        foreach( $services as $service ){
+            if (! $service instanceof ServiceEntity){
+                throw new \Common\Exception\LogicException('Seules des entités Service doivent être passées en paramètre');
+            }
+            if ($ep = $service->getElementPedagogique()){
+                foreach( $ep->getTypeIntervention() as $typeIntervention ){
+                    $typesIntervention[$typeIntervention->getId()] = $typeIntervention;
+                }
+            }
+        }
+        usort( $typesIntervention, function($ti1,$ti2){
+            return $ti1->getOrdre() > $ti2->getOrdre();
+        } );
+        return $typesIntervention;
     }
 
     public function canHaveMotifNonPaiement(ServiceEntity $service, $runEx = false)

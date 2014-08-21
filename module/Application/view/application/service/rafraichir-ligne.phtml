@@ -5,11 +5,15 @@ if ($onlyContent){
             ->setIntervenant($intervenant)
             ->setStructure($structure)
             ->setReadOnly($readOnly)
+            ->setTypesIntervention($typesIntervention)
+            ->setTypesInterventionVisibility($typesInterventionVisibility)
             ->render($details);
 }else{
     echo $this->serviceListe( array($service) )
             ->setIntervenant($intervenant)
             ->setStructure($structure)
             ->setReadOnly($readOnly)
+            ->setTypesIntervention($typesIntervention)
+            ->setTypesInterventionVisibility($typesInterventionVisibility)
             ->renderLigne( $service, $details );
 }

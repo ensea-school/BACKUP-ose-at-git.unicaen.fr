@@ -56,18 +56,20 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
      */
     public function getTypesIntervention()
     {
-        return $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-    }
-
-    /**
-     * Retourne les données
-     *
-     * @return array
-     */
-    protected function getData()
-    {
-        $filter = $this->getFilter();
-        return $this->getServiceLocator()->getServiceLocator()->get('ApplicationService')->getResumeService($filter);
+        if ($this->resumeServices){
+            $typesIntervention = array();
+            foreach( $this->resumeServices as $line ) {
+                if (isset($line['service'])){
+                    foreach( $line['service'] as $tiId => $null ){
+                        $typesIntervention[$tiId] = $tiId;
+                    }
+                }
+            }
+            return $this->getServiceTypeIntervention()->get($typesIntervention);
+        }else{
+            return $this->getServiceTypeIntervention()->getTypesIntervention();
+            // Types d'intervention par défaut
+        }
     }
 
     /**
@@ -78,6 +80,12 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
     public function render()
     {
         $typesIntervention = $this->getTypesIntervention();
+        $totaux = array(
+            'intervenants'          => 0,
+            'types_intervention'    => [],
+            'referentiel'           => 0,
+            'hetd'                  => 0,
+        );
 
         $res  = '<table class="table table-hover table-bordered">'."\n";
         $res .= '<thead>'."\n";
@@ -97,7 +105,6 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         foreach( $this->resumeServices as $intervenantId => $line ) {
             $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
 
-
             if (isset($line['intervenant']['TOTAL_HETD'])){
                 $hetd = (float)$line['intervenant']['TOTAL_HETD'];
             }else{
@@ -109,11 +116,11 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             if (isset($line['intervenant']['HEURES_COMP'])){
                 $heuresComp = (float)$line['intervenant']['HEURES_COMP'];
                 if ($heuresComp < 0){
-                    $msg = '<td class="bg-danger"><abbr title="Sous-service ('.number_format($heuresComp*-1,2,',',' ').' heures manquantes)">';
+                    $msg = '<td class="bg-danger"><abbr title="Sous-service ('.$this->formatHeures($heuresComp*-1,2).' heures manquantes)">';
                     $endMsg = '</abbr></td>';
                 }
                 if ($heuresComp > 0 && $intervenantPermanent){
-                    $msg = '<td class="bg-warning"><abbr title="Sur-service ('.number_format($heuresComp,2,',',' ').' heures complémentaires)">';;
+                    $msg = '<td class="bg-warning"><abbr title="Sur-service ('.$this->formatHeures($heuresComp,2).' heures complémentaires)">';;
                     $endMsg = '</abbr></td>';
                 }
             }else{
@@ -125,16 +132,59 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             $na = '<span title="Non applicable (intervenant vacataire))">NA</span>';
 
             $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant']['NOM_USUEL']) . ' ' . $line['intervenant']['PRENOM'].'</a></td>'."\n";
+            $totaux['intervenants']++;
             foreach( $typesIntervention as $ti ){
-                $res .= '<td>'.(isset($line['service'][$ti->getId()]) ? $line['service'][$ti->getId()] : '0').'</td>'."\n";
+                if (! isset($totaux['types_intervention'][$ti->getId()])){
+                    $totaux['types_intervention'][$ti->getId()] = 0;
+                }
+                if (isset($line['service'][$ti->getId()])){
+                    $totaux['types_intervention'][$ti->getId()] += $line['service'][$ti->getId()];
+                    $res .= '<td>'.$this->formatHeures($line['service'][$ti->getId()]).'</td>'."\n";
+                }else{
+                    $res .= '<td>0</td>'."\n";
+                }
             }
-            $res .= '<td>'.(array_key_exists('referentiel', $line) ? $line['referentiel'] : ($intervenantPermanent ? 0 : $na)).'</td>'."\n";
-            $res .= $msg.number_format($hetd,2,',',' ').'</td>'."\n";
+            if (array_key_exists('referentiel', $line)){
+                $totaux['referentiel'] += $line['referentiel'];
+                $res .= '<td>'.$this->formatHeures($line['referentiel']).'</td>'."\n";
+            }else{
+                $res .= '<td>'.($intervenantPermanent ? 0 : $na).'</td>'."\n";
+            }
+            $totaux['hetd'] += $hetd;
+            $res .= $msg.$this->formatHeures($hetd).'</td>'."\n";
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";
+        $res .= '<tfoot>'."\n";
+        $res .= '<tr>'."\n";
+        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['intervenants']).' intervenants</th>'."\n";
+        foreach( $typesIntervention as $ti ){
+            $res .= '        <th style="text-align:right"><abbr title="'.$ti->getLibelle().'">'.$this->formatHeures($totaux['types_intervention'][$ti->getId()]).'</abbr></th>'."\n";
+        }
+        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['referentiel']).'</th>'."\n";
+        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['hetd']).'</th>'."\n";
+        $res .= '</tr>'."\n";
+        $res .= '</tfoot>'."\n";
         $res .= '</table>'."\n";
         return $res;
     }
 
+    /**
+     *
+     * @param float $heures
+     * @return string
+     */
+    protected function formatHeures($heures)
+    {
+        $heures = round( (float)$heures, 2);
+        return \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
+    }
+
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
+    }
 }

@@ -86,6 +86,14 @@ class TypeIntervention
      */
     protected $histoCreateur;
 
+    /**
+     * visible
+     *
+     * @var boolean
+     */
+    protected $visible;
+
+
     public function __toString()
     {
         return (string) $this->getCode();
@@ -182,6 +190,17 @@ class TypeIntervention
     public function getHistoModification()
     {
         return $this->histoModification;
+    }
+
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+        return $this;
     }
 
     /**

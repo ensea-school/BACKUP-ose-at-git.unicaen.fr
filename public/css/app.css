@@ -51,6 +51,9 @@ body.development div#contenu-principal {
     background-color:white;
 }
 
+table {
+    background-color:white;
+}
 
 /* Services */
 table.service {

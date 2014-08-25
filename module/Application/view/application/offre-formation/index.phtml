@@ -320,12 +320,22 @@ $mc->setUlClass('navigation navigation-etape pull-right');
             </table>
             
         </div>
+        <div><a href="<?php 
         
+        $params = [];
+        if ($structure) $params['structure'] = $structure->getId();
+        if ($niveau) $params['niveau'] = $niveau->getId();
+        if ($etape) $params['etape'] = $etape->getId();
+       
+        echo $this->url('of/default', ['action' => 'export'], ['query' => $params]);
+
+        ?>"><span class="glyphicon glyphicon-file"></span> Télécharger l'offre de formation au format CSV</a></div>
         <?php endif; ?>
 
     </div>
 
 </div>
+
 
 <script type="text/javascript">
     $(function() { 

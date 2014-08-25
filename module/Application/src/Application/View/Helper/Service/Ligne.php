@@ -10,6 +10,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\Structure;
 
 /**
@@ -53,7 +54,79 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $forcedReadOnly = false;
 
+    /**
+     * Types d'intervention
+     *
+     * @var TypeIntervention[]
+     */
+    protected $typesIntervention;
 
+    /**
+     * Visibilité des types d'intervention
+     *
+     * @var array
+     */
+    protected $typesInterventionVisibility;
+
+
+
+    /**
+     * @return TypeIntervention[]
+     */
+    public function getTypesIntervention()
+    {
+        if (! isset($this->typesIntervention) && $this->getService()){
+            $this->typesIntervention = $this->getService()->getElementPedagogique()->getTypeIntervention();
+        }
+        return $this->typesIntervention;
+    }
+
+    /**
+     * @param TypeIntervention[] $typesIntervention
+     * @return self
+     */
+    public function setTypesIntervention($typesIntervention)
+    {
+        $this->typesIntervention = $typesIntervention;
+        return $this;
+    }
+
+    /**
+     * Clés : codes des types d'intervention
+     * Valeurs : boolean (true sui visible, false sinon)
+     * @return array
+     */
+    public function getTypesInterventionVisibility()
+    {
+        if (! $this->typesInterventionVisibility){
+            $this->typesInterventionVisibility = [];
+            foreach( $this->getTypesIntervention() as $ti ){
+                $this->typesInterventionVisibility[$ti->getcode()] = true; // tout visible par défaut si rien n'est précisé
+            }
+        }
+        return $this->typesInterventionVisibility;
+    }
+
+    /**
+     *
+     * @param array $typesInterventionVisibility
+     * @return self
+     */
+    public function setTypesInterventionVisibility( array $typesInterventionVisibility )
+    {
+        $this->typesInterventionVisibility = $typesInterventionVisibility;
+        return $this;
+    }
+
+    /**
+     * @param TypeIntervention $typeIntervention
+     * @return boolean
+     */
+    protected function typeInterventionIsVisible( TypeIntervention $typeIntervention )
+    {
+        $typesInterventionVisibility = $this->getTypesInterventionVisibility();
+        return $typeIntervention->getVisible() || ( isset($typesInterventionVisibility[$typeIntervention->getCode()]) && $typesInterventionVisibility[$typeIntervention->getCode()] );
+    }
 
     /**
      *
@@ -180,6 +253,11 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function getRefreshUrl()
     {
+        $typesIntervention = [];
+        foreach( $this->getTypesIntervention() as $typeIntervention ){
+            $typesIntervention[] = $typeIntervention->getCode();
+        }
+
         $url = $this->getView()->url(
                 'service/rafraichir-ligne',
                 [
@@ -187,10 +265,11 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                     'typeVolumeHoraire' => $this->service->getTypeVolumehoraire()->getId()
                 ],
                 ['query' => [
-                    'only-content'  => 1,
-                    'read-only'     => $this->getReadOnly() ? '1' : '0',
-                    'intervenant'   => $this->toQuery($this->getIntervenant()),
-                    'structure'     => $this->toQuery($this->getStructure()),
+                    'only-content'          => 1,
+                    'read-only'             => $this->getReadOnly() ? '1' : '0',
+                    'intervenant'           => $this->toQuery($this->getIntervenant()),
+                    'structure'             => $this->toQuery($this->getStructure()),
+                    'types-intervention'    => implode(',',$typesIntervention),
                 ]]);
         return $url;
     }
@@ -207,8 +286,8 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         $vhl     = $this->service->getVolumeHoraireListe();
 
-        $typesIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention')->getTypesIntervention();
-        $serviceService = $this->getServiceLocator()->getServiceLocator()->get('ApplicationService');
+        $typesIntervention = $this->getTypesIntervention();
+        $serviceService = $this->getServiceService();
 
         $periode = $serviceService->getPeriode( $this->service );
         if ($periode){
@@ -327,9 +406,13 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderTypeIntervention( \Application\Entity\VolumeHoraireListe $liste )
     {
         $liste = $liste->setMotifNonPaiement(false);
-        $out = '<td class="heures" style="text-align:right" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
-        //$out .= $this->getView()->volumeHoraireListe($liste)->renderHeures($liste);
-        $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
+        $display = $this->typeInterventionIsVisible($liste->getTypeIntervention()) ? '' : ';display:none';
+        $out = '<td class="heures type-intervention '.$liste->getTypeIntervention()->getCode().'" style="text-align:right'.$display.'" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
+        if ($liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention())){
+            $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
+        }else{
+            $out .= '0';
+        }
         $out .= "</td>\n";
         return $out;
     }
@@ -371,9 +454,17 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function setService(Service $service)
     {
-        $this->forcedReadOnly = ! $this->getServiceLocator()->getServicelocator()->get('applicationService')->canModify($service);
+        $this->forcedReadOnly = ! $this->getServiceService()->canModify($service);
         $this->service = $service;
         return $this;
     }
+
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
+}
 
 }

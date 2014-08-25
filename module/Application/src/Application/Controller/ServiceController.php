@@ -222,7 +222,23 @@ class ServiceController extends AbstractActionController
 
         $details            = 1 == (int)$this->params()->fromQuery('details',               (int)$this->params()->fromPost('details',0));
         $onlyContent        = 1 == (int)$this->params()->fromQuery('only-content',          0);
-        $readOnly           = 1 == (int)$this->params()->fromQuery('read-only', 0);
+        $readOnly           = 1 == (int)$this->params()->fromQuery('read-only',             0);
+        $typesIntervention  = $this->params()->fromQuery('types-intervention',              null);
+        if ($typesIntervention){
+            $typesIntervention  = explode(',',$typesIntervention);
+            $typesIntervention = $this->getServiceTypeIntervention()->getByCode($typesIntervention);
+        }else{
+            $typesIntervention = [];
+        }
+
+        $tiv = $this->params()->fromQuery('types-intervention-visibility', $this->params()->fromPost('types-intervention-visibility',null) );
+        $typesInterventionVisibility = [];
+        if ($tiv){
+            $tiv = explode(',',$tiv);
+            foreach( $typesIntervention as $ti ){
+                $typesInterventionVisibility[$ti->getCode()] = in_array($ti->getCode(), $tiv);
+            }
+        }
 
         $intervenant        = $this->params()->fromQuery('intervenant');
         if ('false' === $intervenant) $intervenant = false;
@@ -236,7 +252,30 @@ class ServiceController extends AbstractActionController
         if ('' === $structure) $structure = null;
         $structure = $this->getServiceLocator()->get('applicationStructure')->get((int)$structure);
 
-        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'readOnly', 'intervenant', 'structure');
+        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'readOnly', 'intervenant', 'structure', 'typesIntervention', 'typesInterventionVisibility');
+    }
+
+    public function volumesHorairesRefreshAction()
+    {
+        $id = (int)$this->params()->fromRoute('id');
+        $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
+        $service = $this->getServiceService();
+        $form    = $this->getFormSaisie();
+        $element = $this->context()->elementPedagogiqueFromPost('element');
+        $etablissement = $this->context()->etablissementFromPost();
+
+        if ($id) {
+            $entity = $service->get($id); /* @var $entity \Application\Entity\Db\Service */
+        } else {
+            $entity = $service->newEntity();
+        }
+        $entity->setTypeVolumeHoraire($typeVolumeHoraire);
+        $entity->setEtablissement($etablissement);
+        $entity->setElementPedagogique($element);
+        $form->bind($entity);
+
+        if (! $id) $form->initFromContext();
+        return compact('form');
     }
 
     public function suppressionAction()
@@ -272,7 +311,7 @@ class ServiceController extends AbstractActionController
         $id = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
         $service = $this->getServiceService();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        //$role    = $this->getContextProvider()->getSelectedIdentityRole();
         $form    = $this->getFormSaisie();
         $errors  = array();
 
@@ -305,7 +344,7 @@ class ServiceController extends AbstractActionController
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
-        return compact('form', 'role','errors','title');
+        return compact('form','errors','title');
     }
 
     /**
@@ -331,6 +370,14 @@ class ServiceController extends AbstractActionController
     public function getServiceTypeVolumehoraire()
     {
         return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
+    }
+
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    public function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeIntervention');
     }
 
     /**

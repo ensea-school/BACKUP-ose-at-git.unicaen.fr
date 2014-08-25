@@ -112,9 +112,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      * @return string
      */
     public function render(){
-        $serviceService = $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-
-        $hasMotifNonPaiement = $this->getServiceLocator()->getServiceLocator()->get('applicationService')->canHaveMotifNonPaiement($this->getVolumeHoraireListe()->getService());
+        $hasMotifNonPaiement = $this->getServiceService()->canHaveMotifNonPaiement($this->getVolumeHoraireListe()->getService());
 
         $out = '<table class="table table-condensed table-bordered volume-horaire">';
         $out .= '<tr>';
@@ -126,7 +124,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
         }
         $out .= "</tr>\n";
-        $periodes = $serviceService->getPeriodes( $this->getVolumeHoraireListe()->getService() );
+        $periodes = $this->getServiceService()->getPeriodes( $this->getVolumeHoraireListe()->getService() );
         foreach( $periodes as $periode ){
             $vhl = $this->getVolumeHoraireListe()->setPeriode($periode)->setTypeIntervention(false);
             $motifsNonPaiement = [];
@@ -212,17 +210,25 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             throw new \Common\Exception\LogicException('Le type de volume horaire de la liste n\'a pas été précisé');
         }
         $this->volumeHoraireListe = $volumeHoraireListe;
-        $this->forcedReadOnly = ! $this->getServiceLocator()->getServicelocator()->get('applicationService')->canModify($volumeHoraireListe->getService());
+        $this->forcedReadOnly = ! $this->getServiceService()->canModify($volumeHoraireListe->getService());
+        $this->typesIntervention = null;
         return $this;
     }
 
     public function getTypesInterventions()
     {
-        $serviceTypeIntervention = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeIntervention');
-        /* @var $serviceTypeIntervention \Application\Service\TypeIntervention */
         if (! $this->typesIntervention){
-            $this->typesIntervention = $serviceTypeIntervention->getTypesIntervention();
+            $this->typesIntervention = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
         }
         return $this->typesIntervention;
     }
+
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
+}
+
 }

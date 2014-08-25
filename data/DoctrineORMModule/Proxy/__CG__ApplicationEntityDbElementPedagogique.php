@@ -64,10 +64,10 @@ class ElementPedagogique extends \Application\Entity\Db\ElementPedagogique imple
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'sourceCode', 'tauxFoad', 'fi', 'fc', 'fa', 'validiteDebut', 'validiteFin', 'id', 'cheminPedagogique', 'structure', 'periode', 'source', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'etape', 'elementModulateur', 'hasChanged');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'sourceCode', 'tauxFoad', 'fi', 'fc', 'fa', 'validiteDebut', 'validiteFin', 'id', 'cheminPedagogique', 'structure', 'periode', 'source', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'etape', 'elementModulateur', 'hasChanged', '' . "\0" . 'Application\\Entity\\Db\\ElementPedagogique' . "\0" . 'typeIntervention');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'sourceCode', 'tauxFoad', 'fi', 'fc', 'fa', 'validiteDebut', 'validiteFin', 'id', 'cheminPedagogique', 'structure', 'periode', 'source', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'etape', 'elementModulateur', 'hasChanged');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'sourceCode', 'tauxFoad', 'fi', 'fc', 'fa', 'validiteDebut', 'validiteFin', 'id', 'cheminPedagogique', 'structure', 'periode', 'source', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'etape', 'elementModulateur', 'hasChanged', '' . "\0" . 'Application\\Entity\\Db\\ElementPedagogique' . "\0" . 'typeIntervention');
     }
 
     /**
@@ -703,6 +703,17 @@ class ElementPedagogique extends \Application\Entity\Db\ElementPedagogique imple
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElementModulateur', array());
 
         return parent::getElementModulateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTypeIntervention()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeIntervention', array());
+
+        return parent::getTypeIntervention();
     }
 
 }

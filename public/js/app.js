@@ -73,37 +73,37 @@ function Service( id ) {
             $('#element-externe').hide();
             $("input[name='service\\[etablissement\\]\\[label\\]']").val('');
             $("input[name='service\\[etablissement\\]\\[id\\]']").val('');
-            
-            var serviceId = $('form#service input[name="service\\[id\\]"]').val();
-            var elementId = $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val();
-            if (elementId && serviceId){
-                ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
-            }
         }else{
             $('#element-interne').hide();
             $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']").val('');
             $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']").val('');
             $('#element-externe').show();
-            this.formShowHidePeriodes({periode: {code:null}});
         }
+        this.refreshFormVolumesHoraires(
+            $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val(),
+            $("input[name='service\\[etablissement\\]\\[id\\]']").val()
+        );
     }
 
-    this.formShowHidePeriodes = function( data ){
-        if (data.periode.code){
-            $('form#service div.periode').hide();
-            $('form#service div#'+data.periode.code).show();
-            $('form#service div.periode input:hidden').val('');
-        }else{
-            $('form#service div.periode').show();
-        }
+    this.refreshFormVolumesHoraires = function( elementId, etablissementId ){
+        $('form#service div#volumes-horaires').refresh({
+            element      : elementId,
+            etablissement: etablissementId
+        }, function(){
+            $('form#service div#volumes-horaires input.form-control').each( function(element){
+                $(this).val('0');
+            } );
+        });
     }
 
     this.onAfterAdd = function(){
         var url = Url("service/rafraichir-ligne/"+this.id+"/"+$("#services").data('type-volume-horaire'), {
-            'only-content'  : 0,
-            'details'       : 1,
-            'intervenant'   : $("#services").data('intervenant'),
-            'structure'     : $("#services").data('structure')
+            'only-content'                  : 0,
+            'details'                       : 1,
+            'intervenant'                   : $("#services").data('intervenant'),
+            'structure'                     : $("#services").data('structure'),
+            'types-intervention'            : $("#services").data('types-intervention'),
+            'types-intervention-visibility' : $("#services").data('types-intervention-visibility'),
         });
         $.get( url, function( data ) {
             $( "#service-resume" ).refresh(); // Si on est dans le résumé
@@ -115,8 +115,10 @@ function Service( id ) {
     }
 
     this.onAfterModify = function(){
-        var details = $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1';
-        $( "#service-"+this.id+"-ligne" ).refresh( {details:details} );
+        $( "#service-"+this.id+"-ligne" ).refresh( {
+            details                         : $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
+            'types-intervention-visibility' : $("#services").data('types-intervention-visibility'),
+        } );
         $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
         Service.refreshFiltres();
         Service.refreshTotaux();
@@ -187,7 +189,7 @@ Service.init = function(){
     $( "body" ).on( "autocompleteselect", 'form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[label\\]"]', function( event, ui ) {
         var serviceId = $('form#service input[name="service\\[id\\]"]').val();
         var elementId = ui.item.id;
-        ElementPedagogique.get( elementId ).getPeriode( Service.get(serviceId).formShowHidePeriodes );
+        Service.get(serviceId).refreshFormVolumesHoraires( elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val() );
     } );
 
     $(".service-show-all-details").on('click', function(){ Service.showAllDetails(); });
@@ -215,7 +217,31 @@ Service.refreshFiltres = function(){
 }
 
 Service.refreshTotaux = function(){
-    $("#services tfoot").refresh();
+    $("#services tfoot").refresh( {}, Service.onListeChanged );
+}
+
+Service.onListeChanged = function(){
+    Service.showHideTypesIntervention();
+}
+
+Service.showHideTypesIntervention = function(){
+    var typesIntervention = $('table#services').data('types-intervention').split(",");
+    var typesInterventionVisibility = '';
+    for(var key in typesIntervention){
+        var visibility = $('table#services tfoot td.type-intervention.'+typesIntervention[key]).is(':visible');
+        $('table#services tbody th.type-intervention.'+typesIntervention[key]+', table#services tbody td.type-intervention.'+typesIntervention[key]).each( function(){
+            if ( visibility ){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
+        });
+        if (visibility){
+            if (typesInterventionVisibility != '') typesInterventionVisibility += ',';
+            typesInterventionVisibility += typesIntervention[key];
+        }
+    }
+    $('table#services').data('types-intervention-visibility', typesInterventionVisibility);
 }
 
 /**
@@ -255,9 +281,7 @@ VolumeHoraire.init = function(){
 
     $("body").on('save-volume-horaire', function(event,data){
         event.a.popover('hide');
-        $("#service-"+event.a.data('service')+"-volume-horaire-td").refresh();
-        $( "#service-"+event.a.data('service')+"-ligne" ).refresh();
-        Service.refreshTotaux();
+        Service.get( event.a.data('service') ).onAfterModify();
     });
 }
 
@@ -403,15 +427,6 @@ function ElementPedagogique( id ) {
     this.onAfterDelete = function(){
 //        $( "#etape-"+this.id+"-ligne" ).fadeOut().remove();
             window.location.reload();
-    }
-
-    this.getPeriode = function( func ){
-        var getPeriodeUrl = Url('offre-de-formation/element/get-periode/'+this.id);
-        $.ajax({
-            dataType: "json",
-            url: getPeriodeUrl,
-        //    async: false,
-        }).done(func);
     }
 }
 

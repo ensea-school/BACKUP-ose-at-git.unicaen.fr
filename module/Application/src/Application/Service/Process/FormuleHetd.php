@@ -95,14 +95,14 @@ class FormuleHetd extends AbstractService
                 'volumes_horaires'          => []
             ];
         }
-        $elements = $this->getServiceLocator()->get('applicationElementPedagogique')->get(array_keys($elements));
-        $etablissements = $this->getServiceLocator()->get('applicationEtablissement')->get(array_keys($etablissements));
+        $elements = $this->getServiceElementPedagogique()->get(array_keys($elements));
+        $etablissements = $this->getServiceEtablissement()->get(array_keys($etablissements));
         foreach( $data as $did => $d ){
             if ($data[$did]['etablissement']) $data[$did]['etablissement'] = $etablissements[$d['etablissement']];
             if ($data[$did]['element_pedagogique']) $data[$did]['element_pedagogique'] = $elements[$d['element_pedagogique']];
         }
 
-        $typesInterventions = $this->getServiceLocator()->get('applicationTypeIntervention')->getTypesIntervention();
+        $typesInterventions = $this->getServiceTypeIntervention()->getList();
         $sql = '
         SELECT
             *
@@ -129,7 +129,7 @@ class FormuleHetd extends AbstractService
         $sql = 'SELECT * FROM V_FORMULE_VENTILATION WHERE intervenant_id = :intervenant';
         $result = $this->getEntityManager()->getConnection()->executeQuery($sql, array('intervenant' => $intervenant->getId()))->fetchAll();
         
-        $typesInterventions = $this->getServiceLocator()->get('applicationTypeIntervention')->getTypesIntervention();
+        $typesInterventions = $this->getServiceTypeIntervention()->getList();
         $data = [ 'heures' => 0 ];
 
         foreach( $result as $r ){
@@ -268,5 +268,29 @@ class FormuleHetd extends AbstractService
             $where = 'intervenant_id = '.(int)$intervenant;
         }
         return $where;
+    }
+
+    /**
+     * @return \Application\Entity\Db\TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->get('applicationTypeIntervention');
+}
+
+    /**
+     * @return \Application\Service\ElementPedagogique
+     */
+    protected function getServiceElementPedagogique()
+    {
+        return $this->getServiceLocator()->get('applicationElementPedagogique');
+    }
+
+    /**
+     * @return \Application\Service\Etablissement
+     */
+    protected function getServiceEtablissement()
+    {
+        return $this->getServiceLocator()->get('applicationEtablissement');
     }
 }

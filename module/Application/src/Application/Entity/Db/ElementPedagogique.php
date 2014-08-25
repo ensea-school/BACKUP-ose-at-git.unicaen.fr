@@ -154,6 +154,15 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
      */
     protected $hasChanged;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typeIntervention;
+
+
+    
+
+
     public function getHasChanged()
     {
         return $this->hasChanged;
@@ -674,4 +683,14 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     {
         return $this->elementModulateur;
     }
+
+    /**
+     * Get typeIntervention
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypeIntervention()
+    {
+        return $this->typeIntervention;
+}
 }

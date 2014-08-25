@@ -71,5 +71,15 @@
             <cascade-all/>
         </cascade>
     </one-to-many>
+    <many-to-many field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
+        <join-table name="V_ELEMENT_TYPE_INTERVENTION">
+            <join-columns>
+                <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

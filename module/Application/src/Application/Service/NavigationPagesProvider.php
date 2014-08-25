@@ -52,8 +52,13 @@ class NavigationPagesProvider extends AbstractService
     private function getTypesAgrementStatut()
     {
         if (null === $this->typesAgrementStatut) {
-            $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
-            $this->typesAgrementStatut = $this->getServiceTypeAgrementStatut()->getList($qb);
+            if ($this->getIntervenant()) {
+                $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
+                $this->typesAgrementStatut = $this->getServiceTypeAgrementStatut()->getList($qb);
+            }
+            else {
+                $this->typesAgrementStatut = [];
+            }
         }
         
         return $this->typesAgrementStatut;

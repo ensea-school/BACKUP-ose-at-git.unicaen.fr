@@ -429,6 +429,17 @@ class ElementPedagogique extends \Application\Entity\Db\ElementPedagogique imple
     /**
      * {@inheritDoc}
      */
+    public function getRegimesInscription($inHtml = false)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRegimesInscription', array($inHtml));
+
+        return parent::getRegimesInscription($inHtml);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setValiditeDebut($validiteDebut)
     {
 

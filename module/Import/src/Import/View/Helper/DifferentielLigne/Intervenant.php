@@ -40,8 +40,8 @@ class Intervenant extends DifferentielLigne
                     $statut->getSourceCode() == \Application\Entity\Db\StatutIntervenant::AUTRES
                     && ! $this->ligne->hasChanged('LAST_SYNC_STATUT_ID')
                 ){
-                    return 'changement manuel de statut ('.$oldStatut.' vers '.$statut.')';
-                    //return null;
+                    //return 'changement manuel de statut ('.$oldStatut.' vers '.$statut.')';
+                    return null;
                 }else{
                     return 'changement de statut ('.$oldStatut.' vers '.$statut.')';
                 }

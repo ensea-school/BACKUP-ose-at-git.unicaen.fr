@@ -623,6 +623,10 @@ EOS;
         }
         if (!$intervenant) {
             return $this->cannotDoThat("Anomalie : aucun intervenant spécifié.", $runEx);
+        }else{
+            if ($intervenant->getStatut()->getSourceCode() == \Application\Entity\Db\StatutIntervenant::NON_AUTORISE){
+                return $this->cannotDoThat("Votre statut ne vous autorise pas à assurer des enseignements");
+            }
         }
         
         $rulesEvaluator = new \Application\Rule\Service\SaisieServiceRulesEvaluator($intervenant);

@@ -26,6 +26,7 @@ class StatutIntervenant
     const ETUD_HORS_UCBN = 'ETUD_HORS_UCBN';
     const CHARG_ENS_1AN  = 'CHARG_ENS_1AN';
     const AUTRES         = 'AUTRES';
+    const NON_AUTORISE   = 'NON_AUTORISE';
 
     public $permanents = array(
         self::ENS_2ND_DEG,

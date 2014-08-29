@@ -54,19 +54,25 @@ class DifferentielListe extends AbstractHelper
      */
     protected function render(){
         if (empty($this->lignes)) return 'Il n\'y a aucun écart entre les sources de données et OSE';
-        $out = '<table class="table">'."\n";
-        $out .= '<tr><th>Type</th><th>Sujet</th><th>Action</th><th>Source</th><th>Détails</th></tr>';
+        $out = '';
         foreach( $this->lignes as $ligne ){
             $dl = $this->getView()->differentielLigne( $ligne );
-            $out .= '<tr>'
-                        .'<td>'.$dl->getType().'</td>'
-                        .'<td>'.$dl->getSujet().'</td>'
-                        .'<td>'.ucfirst($dl->getAction()).'</td>'
-                        .'<td>'.$dl->getSource().'</td>'
-                        .'<td>'.ucfirst(implode( ', ', $dl->getDetails() )).'</td>'
-                   .'</tr>'."\n";
+            if ($dl->getDetails()){
+                $out .= '<tr>'
+                            .'<td>'.$dl->getType().'</td>'
+                            .'<td>'.$dl->getSujet().'</td>'
+                            .'<td>'.ucfirst($dl->getAction()).'</td>'
+                            .'<td>'.$dl->getSource().'</td>'
+                            .'<td>'.ucfirst(implode( ', ', $dl->getDetails() )).'</td>'
+                       .'</tr>'."\n";
+            }
         }
-        $out .= '</table>'."\n";
+        if ($out){
+            $out  = '<table class="table">'."\n"
+                   .'<tr><th>Type</th><th>Sujet</th><th>Action</th><th>Source</th><th>Détails</th></tr>'
+                   .$out
+                   .'</table>'."\n";
+        }
         return $out;
     }
 

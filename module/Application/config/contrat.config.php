@@ -155,9 +155,11 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationContrat'        => 'Application\\Service\\Contrat',
-            'ApplicationTypeContrat'    => 'Application\\Service\\TypeContrat',
-            'ApplicationContratProcess' => 'Application\\Service\\Process\\ContratProcess',
+            'ApplicationContrat'          => 'Application\\Service\\Contrat',
+            'ApplicationTypeContrat'      => 'Application\\Service\\TypeContrat',
+            'ApplicationContratProcess'   => 'Application\\Service\\Process\\ContratProcess',
+            'PeutCreerContratInitialRule' => 'Application\Rule\Intervenant\PeutCreerContratInitialRule',
+            'PeutCreerAvenantRule'        => 'Application\Rule\Intervenant\PeutCreerAvenantRule',
         ),
     ),
     'view_helpers' => array(

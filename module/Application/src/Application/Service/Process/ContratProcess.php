@@ -201,78 +201,60 @@ class ContratProcess extends AbstractService
         return $this->validationContratInitial;
     }
     
-    private $peutCreerContratRule;
-    
     /**
      * 
      * @return PeutCreerContratInitialRule
      */
     private function getPeutCreerContratInitialRule()
     {
-        if (null === $this->peutCreerContratRule) {
-            $this->peutCreerContratRule = new PeutCreerContratInitialRule($this->getIntervenant());
-            $this->peutCreerContratRule
-                    ->setStructure($this->getStructure())
-                    ->setTypeContrat($this->getTypeContrat())
-                    ->setTypeValidation($this->getTypeValidation())
-                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
-        }
+        $peutCreerContratRule = $this->getServiceLocator()->get('PeutCreerContratInitialRule');
+        $peutCreerContratRule
+                ->setIntervenant($this->getIntervenant())
+                ->setStructure($this->getStructure())
+                ->setTypeValidation($this->getTypeValidation())
+                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
         
-        return $this->peutCreerContratRule;
+        return $peutCreerContratRule;
     }
 
-    private $peutCreerAvenantRule;
-    
     /**
      * 
      * @return PeutCreerAvenantRule
      */
     private function getPeutCreerAvenantRule()
     {
-        if (null === $this->peutCreerAvenantRule) {
-            $this->peutCreerAvenantRule = new PeutCreerAvenantRule($this->getIntervenant());
-            $this->peutCreerAvenantRule
-                    ->setStructure($this->getStructure())
-                    ->setTypeContrat($this->getTypeAvenant())
-                    ->setTypeValidation($this->getTypeValidation())
-                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
-        }
+        $peutCreerAvenantRule = $this->getServiceLocator()->get('PeutCreerAvenantRule');
+        $peutCreerAvenantRule
+                ->setIntervenant($this->getIntervenant())
+                ->setStructure($this->getStructure())
+                ->setTypeValidation($this->getTypeValidation())
+                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
         
-        return $this->peutCreerAvenantRule;
+        return $peutCreerAvenantRule;
     }
-    
-    private $servicesDisposPourContrat;
     
     public function getServicesDisposPourContrat()
     {
-        if (null === $this->servicesDisposPourContrat) {
-            $vhDispos = $this->getVolumesHorairesDisposPourContrat();
-            $vhIds    = array_map(function($v) { return $v->getId(); }, $vhDispos);
-            $qb       = $this->getServiceService()->getRepo()->createQueryBuilder("s");
-            $qb
-                    ->select("s, vh, str, i")
-                    ->join("s.volumeHoraire", "vh")
-                    ->join("s.structureEns", "str")
-                    ->join("s.intervenant", "i")
-                    ->andWhere($qb->expr()->in("vh", $vhIds));
-            $this->servicesDisposPourContrat = $qb->getQuery()->getResult();
-        }
+        $vhDispos = $this->getVolumesHorairesDisposPourContrat();
+        $vhIds    = array_map(function($v) { return $v->getId(); }, $vhDispos);
+        $qb       = $this->getServiceService()->getRepo()->createQueryBuilder("s");
+        $qb
+                ->select("s, vh, str, i")
+                ->join("s.volumeHoraire", "vh")
+                ->join("s.structureEns", "str")
+                ->join("s.intervenant", "i")
+                ->andWhere($qb->expr()->in("vh", $vhIds));
+        $servicesDisposPourContrat = $qb->getQuery()->getResult();
         
-        return $this->servicesDisposPourContrat;
+        return $servicesDisposPourContrat;
     }
-    
-    private $volumesHorairesDisposPourContrat;
     
     public function getVolumesHorairesDisposPourContrat()
     {
-        if (null === $this->volumesHorairesDisposPourContrat) {
-            $this->volumesHorairesDisposPourContrat = $this->getPeutCreerContratInitialRule()->getVolumesHorairesDispos();
-        }
+        $volumesHorairesDisposPourContrat = $this->getPeutCreerContratInitialRule()->getVolumesHorairesDispos();
         
-        return $this->volumesHorairesDisposPourContrat;
+        return $volumesHorairesDisposPourContrat;
     }
-    
-    private $servicesDisposPourAvenant;
     
     /**
      * Fetche les services auxquels appartiennent les volumes horaires candidats à un avenant.
@@ -286,31 +268,25 @@ class ContratProcess extends AbstractService
      */
     public function getServicesDisposPourAvenant()
     {
-        if (null === $this->servicesDisposPourAvenant) {
-            $vhDispos = $this->getVolumesHorairesDisposPourAvenant();
-            $vhIds    = array_map(function($v) { return $v->getId(); }, $vhDispos);
-            $qb       = $this->getServiceService()->getRepo()->createQueryBuilder("s");
-            $qb
-                    ->select("s, vh, str, i")
-                    ->join("s.volumeHoraire", "vh")
-                    ->join("s.structureEns", "str")
-                    ->join("s.intervenant", "i")
-                    ->andWhere($qb->expr()->in("vh", $vhIds));
-            $this->servicesDisposPourAvenant = $qb->getQuery()->getResult();
-        }
+        $vhDispos = $this->getVolumesHorairesDisposPourAvenant();
+        $vhIds    = array_map(function($v) { return $v->getId(); }, $vhDispos);
+        $qb       = $this->getServiceService()->getRepo()->createQueryBuilder("s");
+        $qb
+                ->select("s, vh, str, i")
+                ->join("s.volumeHoraire", "vh")
+                ->join("s.structureEns", "str")
+                ->join("s.intervenant", "i")
+                ->andWhere($qb->expr()->in("vh", $vhIds));
+        $servicesDisposPourAvenant = $qb->getQuery()->getResult();
         
-        return $this->servicesDisposPourAvenant;
+        return $servicesDisposPourAvenant;
     }
-    
-    private $volumesHorairesDisposPourAvenant;
     
     public function getVolumesHorairesDisposPourAvenant()
     {
-        if (null === $this->volumesHorairesDisposPourAvenant) {
-            $this->volumesHorairesDisposPourAvenant = $this->getPeutCreerAvenantRule()->getVolumesHorairesDispos();
-        }
+        $volumesHorairesDisposPourAvenant = $this->getPeutCreerAvenantRule()->getVolumesHorairesDispos();
         
-        return $this->volumesHorairesDisposPourAvenant;
+        return $volumesHorairesDisposPourAvenant;
     }
     
     private function getTypeContrat()

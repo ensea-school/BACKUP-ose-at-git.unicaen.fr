@@ -3,18 +3,27 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\IntervenantExterieur;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Rule\AbstractRule;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\TypeValidationAwareTrait;
+use Application\Traits\StructureAwareTrait;
+use Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
+use Application\Entity\Db\TypeContrat;
 
 /**
  * Description of PeutCreerContratInitialRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutCreerContratInitialRule extends IntervenantRule
+class PeutCreerContratInitialRule extends AbstractRule implements ServiceLocatorAwareInterface
 {
-    use \Application\Traits\TypeValidationAwareTrait;
-    use \Application\Traits\TypeContratAwareTrait;
-    use \Application\Traits\StructureAwareTrait;
-    use \Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
+    use ServiceLocatorAwareTrait;
+    use IntervenantAwareTrait;
+    use TypeValidationAwareTrait;
+    use StructureAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
     
     public function execute()
     {
@@ -67,6 +76,16 @@ class PeutCreerContratInitialRule extends IntervenantRule
     }
     
     /**
+     * Retourne le type de contrat concerné.
+     * 
+     * @return TypeContrat
+     */
+    public function getTypeContrat()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeContrat')->getRepo()->findOneByCode(TypeContrat::CODE_CONTRAT);
+    }
+    
+    /**
      * @var \Application\Entity\Db\Validation
      */
     private $validation;
@@ -101,13 +120,15 @@ class PeutCreerContratInitialRule extends IntervenantRule
     private function getServiceValideRule()
     {
         if (null === $this->serviceValideRule) {
-            // une validation partielle des services suffit
-            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
-            $this->serviceValideRule
-                    ->setStructure($this->getStructure())
-                    ->setTypeValidation($this->getTypeValidation())
-                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+            $this->serviceValideRule = new ServiceValideRule();
         }
+        $this->serviceValideRule
+                ->setMemePartiellement() // une validation partielle des services suffit
+                ->setIntervenant($this->getIntervenant())
+                ->setStructure($this->getStructure())
+                ->setTypeValidation($this->getTypeValidation())
+                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+        
         return $this->serviceValideRule;
     }
 }

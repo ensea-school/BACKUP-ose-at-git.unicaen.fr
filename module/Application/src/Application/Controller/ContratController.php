@@ -204,7 +204,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $peutCreerAvenant = $process->getPeutCreerAvenant();
         $servicesDispos   = null;
         $action           = null;
-
+        
         if ($peutCreerContrat) {
             $servicesDispos = $process->getServicesDisposPourContrat();
             $action = "Créer le projet de contrat";
@@ -220,7 +220,7 @@ class ContratController extends AbstractActionController implements ContextProvi
                         $validation->getHistoModificateur());
             }
         }
-            
+        
         if ($servicesDispos) {
             $this->getServiceService()->setTypeVolumehoraire($servicesDispos, $this->getServiceTypeVolumeHoraire()->getPrevu()); // aide de vue
             $messages['info'] = "Des enseignements validés candidats pour un contrat/avenant ont été trouvés.";

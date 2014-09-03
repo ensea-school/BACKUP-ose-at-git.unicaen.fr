@@ -60,16 +60,22 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
         return $this->getStepUrl($this->getCurrentStep());
     }
     
+    protected $serviceValideRule;
+    
     protected function getServiceValideRule()
     {
+        if (null === $this->serviceValideRule) {
+            $this->serviceValideRule = new ServiceValideRule();
+        }
         // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
-        $serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
-        $serviceValideRule
+        $this->serviceValideRule
+                ->setMemePartiellement()
+                ->setIntervenant($this->getIntervenant())
                 ->setTypeValidation($this->getTypeValidationService())
                 ->setStructure($this->getStructure())
                 ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
         
-        return $serviceValideRule;
+        return $this->serviceValideRule;
     }
     
     /**

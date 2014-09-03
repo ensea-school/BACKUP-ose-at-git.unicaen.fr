@@ -113,6 +113,7 @@ class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface
     {
         if (null === $this->wf) {
             $this->wf = $this->getWorkflowIntervenant($this->intervenant, $this->getServiceLocator()->getServiceLocator());
+            $this->wf->getCurrentStep();
         }
 
         return $this->wf;

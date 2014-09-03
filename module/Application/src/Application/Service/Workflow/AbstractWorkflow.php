@@ -5,6 +5,10 @@ namespace Application\Service\Workflow;
 use Application\Rule\RuleInterface;
 use Application\Service\AbstractService;
 use Application\Service\Workflow\Step\Step;
+use Common\Exception\LogicException;
+use Common\Exception\RuntimeException;
+use Zend\Mvc\Application;
+use Zend\Mvc\Controller\Plugin\Url;
 
 /**
  * Processus implémentant le workflow concernant un intervenant.
@@ -14,12 +18,33 @@ use Application\Service\Workflow\Step\Step;
 abstract class AbstractWorkflow extends AbstractService
 {
     /**
+     * @var Step[] string => Step : mêmes clés que les conditions
+     */
+    protected $steps;
+    
+    /**
+     * Création des différentes étapes composant le workflow.
+     * 
      * @return self
      */
     abstract protected function createSteps();
     
     /**
-     * Parcourt les étapes pour déterminer l'étape courante (non encore réalisée).
+     * Forcera les étapes du workflow à être créées à nouveau.
+     * 
+     * @return self
+     */
+    public function recreateSteps()
+    {
+        $this->steps = null;
+        $this->setCurrentStep(null);
+        
+        return $this;
+    }
+    
+    /**
+     * Parcourt les étapes jusqu'à ce que l'étape courante soit trouvée.
+     * L'étape courante est la première étape non encore réalisée trouvée.
      * 
      * @return self
      */
@@ -47,12 +72,10 @@ abstract class AbstractWorkflow extends AbstractService
     /**
      * Ajoute une étape au workflow, associée à une condition de réalisation.
      * 
-     * @param string $index
-     * @param string $name
-     * @param string $description
-     * @param string $route
-     * @param RuleInterface $rule
-     * @return Step
+     * @param string $key Clé de l'étape dans la liste des étapes
+     * @param string $step Etape à ajouter
+     * @param RuleInterface $rule Condition de réalisation de l'étape
+     * @return self
      */
     protected function addStep($key, Step $step, RuleInterface $rule = null)
     {   
@@ -67,36 +90,56 @@ abstract class AbstractWorkflow extends AbstractService
     /**
      * Retourne l'étape du workflow associée à la clé spécifiée.
      * 
-     * @return Step
+     * @param string $key Clé de l'étape dans la liste des étapes
+     * @return Step Etape
+     * @throws RuntimeException Etape introuvable
      */
     protected function getStep($key)
     {
+        if (!$this->containsStep($key)) {
+            throw new RuntimeException("Aucune étape trouvée dans le workflow avec la clé '$key'.");
+        }
+        
         return $this->getSteps()[$key];
     }
     
     /**
-     * @var Step[]
+     * Recherche la clé d'une étape dans la liste des étapes du workflow.
+     * 
+     * @param Step $step Etape dont on veut la clé
+     * @return string Clé trouvée
+     * @throws RuntimeException Etape introuvable
      */
-    protected $steps;
+    protected function getStepKey(Step $step)
+    {
+        foreach ($this->getSteps() as $key => $s) {
+            if ($step === $s) {
+                return $key;
+            }
+        }
+        
+        throw new RuntimeException("Etape spécifiée introuvable.");
+    }
     
     /**
-     * Reoutne toutes les étapes du workflow.
+     * Retourne toutes les étapes du workflow.
      * 
-     * @return Step[]
+     * @return Step[] string => Step : mêmes clés que les conditions
      */
     public function getSteps()
     {
         if (null === $this->steps) {
-            $this->createSteps()->processSteps();
+            $this->createSteps();
         }
+        
         return $this->steps;
     }
 
     /**
-     * Conditions de réalisation (règles métier) associées à chaque étape du workflow.
+     * Conditions de réalisation (règles métier) de chaque étape du workflow.
      * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
      * 
-     * @var \Application\Rule\RuleInterface[]
+     * @var RuleInterface[] string => RuleInterface : mêmes clés que les étapes
      */
     protected $conditions;
     
@@ -104,7 +147,7 @@ abstract class AbstractWorkflow extends AbstractService
      * Retourne les conditions de réalisation (les règles métier) associées à chaque étape du workflow.
      * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
      * 
-     * @return \Application\Rule\RuleInterface[]
+     * @return RuleInterface[] string => RuleInterface : mêmes clés que les étapes
      */
     public function getConditions()
     {
@@ -112,6 +155,8 @@ abstract class AbstractWorkflow extends AbstractService
     }
 
     /**
+     * Etape où en est l'intervenant dans le workflow.
+     * 
      * @var Step
      */
     private $currentStep;
@@ -133,23 +178,77 @@ abstract class AbstractWorkflow extends AbstractService
     /**
      * Spécifie l'étape où en est l'intervenant dans le workflow.
      * 
-     * @param \Application\Service\Workflow\Step\Step $currentStep
-     * @return \Application\Service\Workflow\AbstractWorkflow
+     * @param Step|string|null $currentStep Etape ou clé de l'étape, ou null
+     * @return self
      */
-    protected function setCurrentStep(Step $currentStep = null)
+    protected function setCurrentStep($currentStep = null)
     {
+        if (is_string($key = $currentStep)) {
+            $currentStep = $this->getStep($key);
+        }
+        
         $this->currentStep = $currentStep;
+        
         return $this;
     }
     
     /**
-     * Retourne l'étape du workflow située juste après l'étape spécifiée.
+     * Teste si l'étape spécifiée est atteignable ou non.
+     * C'est le cas ssi toutes les étapes la précédant sont franchissables.
      * 
-     * @param \Application\Service\Workflow\Step\Step $step
+     * @param Step|string $step Etape ou clé de l'étape à atteindre
+     * @return boolean <code>true</code> si celle-ci est atteignable, <code>false</code> sinon
+     */
+    public function isStepReachable($step)
+    {
+        if (is_string($key = $step)) {
+            $step = $this->getStep($key);
+        }
+        
+        foreach ($this->getSteps() as $key => $s) { /* @var $s Step */
+            if ($s === $step) {
+                return true;
+            }
+            if (($rule = $this->getConditions()[$key]) && $rule->isRelevant() && !$rule->execute()) {
+                break;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Teste si l'étape spécifié est franchissable ou non.
+     * C'est le cas ssi la condition associée à l'étape est satisfaite.
+     * 
+     * @param Step|string $step Etape ou clé de l'étape à franchir
+     * @return boolean
+     */
+    public function isStepCrossable($step)
+    {
+        $key = is_string($step) ? $step : $this->getStepKey($step);
+        $reachable = $this->isStepReachable($key);
+        
+        if ($reachable && ($rule = $this->getConditions()[$key]) && $rule->isRelevant() && $rule->execute()) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Retourne l'étape du workflow située juste après l'étape spécifiée
+     * ou juste après l'étape courante si aucune étape n'est spécifiée.
+     * 
+     * @param Step|string $step Etape ou clé de l'étape
      * @return Step
      */
-    public function getNextStep(Step $step = null)
+    public function getNextStep($step = null)
     {
+        if (is_string($key = $step)) {
+            $step = $this->getStep($key);
+        }
+        
         if (null === $step) {
             $step = $this->getCurrentStep();
             if (null === $step) {
@@ -174,7 +273,7 @@ abstract class AbstractWorkflow extends AbstractService
     {
         $slice = array_slice($this->getSteps(), -1);
         if (!$slice) {
-            throw new \Common\Exception\LogicException("Aucune étape dans le workflow!");
+            throw new LogicException("Aucune étape dans le workflow!");
         }
         
         return current($slice);
@@ -183,7 +282,7 @@ abstract class AbstractWorkflow extends AbstractService
     /**
      * Retourne l'étape correspondant à la route spécifiée.
      * 
-     * @param string $route
+     * @param string $route Nom de la route
      * @return Step|null
      */
     public function getStepForRoute($route)
@@ -205,7 +304,7 @@ abstract class AbstractWorkflow extends AbstractService
      */
     public function getStepForCurrentRoute()
     {
-        $application = $this->getServiceLocator()->get('Application'); /* @var $application \Zend\Mvc\Application */
+        $application = $this->getServiceLocator()->get('Application'); /* @var $application Application */
         $route = $application->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
         
         return $this->getStepForRoute($route);
@@ -214,11 +313,15 @@ abstract class AbstractWorkflow extends AbstractService
     /**
      * Teste si le workflow contient bien l'étape spécifiée.
      * 
-     * @param \Application\Service\Workflow\Step\Step $step
+     * @param Step|string $step Etape ou clé de l'étape recherchée
      * @return bool
      */
-    protected function containsStep(Step $step)
+    protected function containsStep($step)
     {
+        if (is_string($key = $step)) {
+            return isset($this->getSteps()[$key]);
+        }
+        
         foreach ($this->getSteps() as $s) {
             if ($step === $s) {
                 return true;
@@ -231,19 +334,24 @@ abstract class AbstractWorkflow extends AbstractService
     /**
      * Teste si l'étape spécifiée se situe avant l'étape courante dans le workflow.
      * 
-     * @param \Application\Service\Workflow\Step\Step $step
+     * @param Step|string $step Etape ou clé de l'étape
      * @return boolean
      */
-    public function isStepBeforeCurrentStep(Step $step)
+    public function isStepBeforeCurrentStep($step)
     {
         if (!$this->containsStep($step)) {
-            throw new \Common\Exception\RuntimeException("Etape spécifiée non trouvée dans le workflow.");
+            throw new RuntimeException("Aucune étape trouvée dans le workflow avec la clé '$key'.");
+        }
+        if (is_string($key = $step)) {
+            $step = $this->getStep($key);
         }
         
         $currentStep = $this->getCurrentStep();
+        
         if (null === $currentStep) {
             // pas d'étape courante, le workflow est terminé :
             // l'étape spécifiée est considérée comme avant l'étape courante
+            /** @todo Créer peut-être une étape finale générique */
             return true; 
         }
         
@@ -253,13 +361,16 @@ abstract class AbstractWorkflow extends AbstractService
     /**
      * Teste si l'étape spécifiée se situe après l'étape courante dans le workflow.
      * 
-     * @param \Application\Service\Workflow\Step\Step $step
+     * @param Step|string $step Etape ou clé de l'étape
      * @return boolean
      */
-    public function isStepAfterCurrentStep(Step $step)
+    public function isStepAfterCurrentStep($step)
     {
         if (!$this->containsStep($step)) {
-            throw new \Common\Exception\RuntimeException("Etape spécifiée non trouvée dans le workflow.");
+            throw new RuntimeException("Aucune étape trouvée dans le workflow avec la clé '$key'.");
+        }
+        if (is_string($key = $step)) {
+            $step = $this->getStep($key);
         }
         
         $currentStep = $this->getCurrentStep();
@@ -273,7 +384,9 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
-     * @return \Zend\Mvc\Controller\Plugin\Url
+     * Retourne le plugin Url permettant de générer l'URL associé à une étape.
+     * 
+     * @return Url
      */
     protected function getHelperUrl()
     {

@@ -37,21 +37,10 @@ class StatutIntervenant
         self::ENS_CONTRACT,
         self::LECTEUR,
         self::MAITRE_LANG,
+        self::BIATSS,
     );
 
     public $vacataires = array(
-        self::BIATSS,
-        self::SALAR_PRIVE,
-        self::SALAR_PUBLIC,
-        self::NON_SALAR,
-//        self::RETR_UCBN,
-        self::RETR_HORS_UCBN,
-        self::ETUD_UCBN,
-        self::ETUD_HORS_UCBN,
-        self::CHARG_ENS_1AN,
-    );
-
-    public $vacatairesNonBiatss = array(
         self::SALAR_PRIVE,
         self::SALAR_PUBLIC,
         self::NON_SALAR,
@@ -92,16 +81,6 @@ class StatutIntervenant
     }
     
     /**
-     * Indique si ce statut correspond à un vacataire non-BIATSS.
-     * 
-     * @return bool
-     */
-    public function estVacataireNonBiatss()
-    {
-        return in_array($this->getSourceCode(), $this->vacatairesNonBiatss);
-    }
-    
-    /**
      * Indique si ce statut correspond aux vacataires BIATSS.
      * 
      * @return bool
@@ -129,29 +108,6 @@ class StatutIntervenant
     public function estAgentTemporaireVacataire()
     {
         return in_array($this->getSourceCode(), array(self::ETUD_HORS_UCBN, self::ETUD_UCBN, self::RETR_HORS_UCBN));
-    }
-    
-    /**
-     * Indique si ce statut requiert la saisie d'un dossier vacataire.
-     * 
-     * @return bool
-     */
-    public function requiertDossier()
-    {
-        return in_array($this->getSourceCode(), $this->vacatairesNonBiatss);
-    }
-    
-    /**
-     * Indique si ce statut permet la saisie de service prévisionnel ou de référentiel.
-     * 
-     * @return bool
-     */
-    public function permetSaisieService()
-    {
-        return !in_array($this->getSourceCode(), array(
-            self::RETR_UCBN,
-            self::AUTRES,
-        ));
     }
     
     /**
@@ -244,7 +200,11 @@ class StatutIntervenant
      */
     protected $histoCreateur;
 
-
+    /**
+     * @var \Application\Entity\Db\TypeAgrementStatut
+     */
+    protected $typeAgrementStatut;
+    
     /**
      * Set depassement
      *
@@ -644,5 +604,38 @@ class StatutIntervenant
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * Add typeAgrementStatut
+     *
+     * @param \Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut
+     * @return TypeTypeAgrementStatut
+     */
+    public function addTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
+    {
+        $this->typeAgrementStatut[] = $typeAgrementStatut;
+
+        return $this;
+    }
+
+    /**
+     * Remove typeAgrementStatut
+     *
+     * @param \Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut
+     */
+    public function removeTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
+    {
+        $this->typeAgrementStatut->removeElement($typeAgrementStatut);
+    }
+
+    /**
+     * Get typeAgrementStatut
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTypeAgrementStatut()
+    {
+        return $this->typeAgrementStatut;
     }
 }

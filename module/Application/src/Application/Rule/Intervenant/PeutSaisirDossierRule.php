@@ -12,7 +12,7 @@ class PeutSaisirDossierRule extends IntervenantRule
     public function execute()
     {
         $statut = $this->getIntervenant()->getStatut();
-        $ok = $statut->estVacataireNonBiatss() || $statut->estAutre();
+        $ok = $statut->estVacataire() || $statut->estAutre();
         
         if (!$ok) {
             $this->setMessage(sprintf("Le statut &laquo; %s &raquo; n'autorise pas la saisie de données personnelles.", $statut));

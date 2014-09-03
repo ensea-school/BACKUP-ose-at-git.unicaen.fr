@@ -22,11 +22,25 @@ class NecessiteAgrementRule extends AbstractRule implements ServiceLocatorAwareI
     
     public function execute()
     {
-        $this->typesAgrementStatut   = null;
-        $this->typesAgrementAttendus = null;
-        
         $statut = $this->getIntervenant()->getStatut();
         
+        // si aucun critère type d'agrément n'a été spécifié
+        if (!$this->getTypeAgrement()) {
+            if (!$this->getTypesAgrementAttendus()) {
+                $this->setMessage(sprintf(
+                        "Le statut de l'intervenant (%s) ne nécessite aucun d'agrément particulier.", 
+                        $statut));
+                return false;
+            }
+            else {
+                $this->setMessage(sprintf(
+                        "Le statut de l'intervenant (%s) nécessite un agrément au moins.", 
+                        $statut));
+                return true;
+            }
+        }
+        
+        // si type d'agrément spécifié ne fait pas partie des attendus
         if (!in_array($this->getTypeAgrement(), $this->getTypesAgrementAttendus())) {
             $this->setMessage(sprintf(
                     "Le statut de l'intervenant (%s) ne nécessite pas d'agrément &laquo; %s &raquo;.", 
@@ -34,11 +48,12 @@ class NecessiteAgrementRule extends AbstractRule implements ServiceLocatorAwareI
                     $this->getTypeAgrement()));
             return false;
         }
-
-        $this->setMessage(sprintf("Le statut de l'intervenant (%s) nécessite l'agrément &laquo; %s &raquo;.", 
-                $statut, 
-                $this->getTypeAgrement()));
-            
+        else {
+            $this->setMessage(sprintf("Le statut de l'intervenant (%s) nécessite l'agrément &laquo; %s &raquo;.", 
+                    $statut, 
+                    $this->getTypeAgrement()));
+        }
+        
         return true;
     }
     
@@ -48,28 +63,16 @@ class NecessiteAgrementRule extends AbstractRule implements ServiceLocatorAwareI
     }
     
     /**
-     * @var array
-     */
-    private $typesAgrementStatut;
-    
-    /**
      * 
      * @return array id => TypeAgrementStatut
      */
     private function getTypesAgrementStatut()
     {
-        if (null === $this->typesAgrementStatut) {
-            $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
-            $this->typesAgrementStatut = $this->getServiceTypeAgrementStatut()->getList($qb);
-        }
+        $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
+        $typesAgrementStatut = $this->getServiceTypeAgrementStatut()->getList($qb);
         
-        return $this->typesAgrementStatut;
+        return $typesAgrementStatut;
     }
-    
-    /**
-     * @var array
-     */
-    private $typesAgrementAttendus;
     
     /**
      * 
@@ -77,15 +80,13 @@ class NecessiteAgrementRule extends AbstractRule implements ServiceLocatorAwareI
      */
     public function getTypesAgrementAttendus()
     {
-        if (null === $this->typesAgrementAttendus) {
-            $this->typesAgrementAttendus = array();
-            foreach ($this->getTypesAgrementStatut() as $typeAgrementStatut) { /* @var $typeAgrementStatut TypeAgrementStatut */
-                $type = $typeAgrementStatut->getType();
-                $this->typesAgrementAttendus[$type->getId()] = $type;
-            }
+        $typesAgrementAttendus = array();
+        foreach ($this->getTypesAgrementStatut() as $typeAgrementStatut) { /* @var $typeAgrementStatut TypeAgrementStatut */
+            $type = $typeAgrementStatut->getType();
+            $typesAgrementAttendus[$type->getId()] = $type;
         }
         
-        return $this->typesAgrementAttendus;
+        return $typesAgrementAttendus;
     }
     
     /**

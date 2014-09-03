@@ -102,6 +102,26 @@ $main =  array(
             ),
         ),
     ),
+    'navigation' => array(
+        'default' => array(
+            'home' => array(
+                'pages' => array(
+                    'intervenant' => array(
+                        // réservation de l'emplacement pour le menu Intervenant
+                    ),
+                    'service' => array(
+                        // réservation de l'emplacement pour le menu Enseignements
+                    ),
+                    'of' => array(
+                        // réservation de l'emplacement pour le menu Offre de formation
+                    ),
+                    'gestion' => array(
+                        // réservation de l'emplacement pour le menu Gestion
+                    ),
+                ),
+            ),
+        ),
+    ),
     'unicaen-auth' => array(
         /**
          * Fournisseurs d'identité.
@@ -149,8 +169,7 @@ $main =  array(
             'ApplicationTypeRolePhpRole'                     => 'Application\\Service\\TypeRolePhpRole',
             'ApplicationRole'                                => 'Application\\Service\\Role',
             'ApplicationRoleUtilisateur'                     => 'Application\\Service\\RoleUtilisateur',
-            'NavigationPageVisibility'                       => 'Application\\Service\\NavigationPageVisibility',
-            'NavigationPagesProvider'                        => 'Application\\Service\\NavigationPagesProvider',
+            'IntervenantNavigationPageVisibility'                       => 'Application\\Service\\IntervenantNavigationPageVisibility',
         ),
         'factories' => array(
             'navigation'                  => 'Application\Service\NavigationFactoryFactory',
@@ -216,5 +235,6 @@ return array_merge_recursive(
     include 'offre-formation.config.php',
     include 'contrat.config.php',
     include 'validation.config.php',
-    include 'agrement.config.php'
+    include 'agrement.config.php',
+    include 'gestion.config.php'
 );

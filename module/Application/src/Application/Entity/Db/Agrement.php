@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * Agrement
  */
-class Agrement implements HistoriqueAwareInterface
+class Agrement implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * @var \DateTime
@@ -71,11 +73,6 @@ class Agrement implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\Annee
      */
     protected $annee;
-
-    public function __toString()
-    {
-        return $this->getId();
-    }
 
     /**
      * Set histoCreation
@@ -361,5 +358,24 @@ class Agrement implements HistoriqueAwareInterface
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getDateDecision()->format(\Common\Constants::DATE_FORMAT);
+    }
+    
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'Agrement';
     }
 }

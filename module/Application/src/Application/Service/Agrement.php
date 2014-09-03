@@ -5,6 +5,8 @@ namespace Application\Service;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypeAgrement as TypeAgrementEntity;
 use Application\Entity\Db\Agrement as AgrementEntity;
+use Application\Rule\Intervenant\NecessiteAgrementRule;
+use Application\Rule\Intervenant\AgrementFourniRule;
 
 /**
  * Description of Agrement
@@ -87,4 +89,20 @@ class Agrement extends AbstractEntityService
 //        
 //        return true;
 //    }
+    
+    /**
+     * @return NecessiteAgrementRule
+     */
+    public function getRuleNecessiteAgrement()
+    {
+        return $this->getServiceLocator()->get('NecessiteAgrementRule');
+    }
+    
+    /**
+     * @return AgrementFourniRule
+     */
+    public function getRuleAgrementFourni()
+    {
+        return $this->getServiceLocator()->get('AgrementFourniRule');
+    }
 }

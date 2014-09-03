@@ -64,10 +64,10 @@ class Validation extends \Application\Entity\Db\Validation implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'dateConseilAcademique', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'dateConseilRestreint', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'typeValidation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraire');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'typeValidation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraire');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'dateConseilAcademique', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'dateConseilRestreint', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'typeValidation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraire');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'typeValidation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraire');
     }
 
     /**
@@ -384,50 +384,6 @@ class Validation extends \Application\Entity\Db\Validation implements \Doctrine\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
 
         return parent::getHistoCreateur();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setDateConseilAcademique(\DateTime $dateConseilAcademique = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDateConseilAcademique', array($dateConseilAcademique));
-
-        return parent::setDateConseilAcademique($dateConseilAcademique);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getDateConseilAcademique()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateConseilAcademique', array());
-
-        return parent::getDateConseilAcademique();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setDateConseilRestreint(\DateTime $dateConseilRestreint = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDateConseilRestreint', array($dateConseilRestreint));
-
-        return parent::setDateConseilRestreint($dateConseilRestreint);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getDateConseilRestreint()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateConseilRestreint', array());
-
-        return parent::getDateConseilRestreint();
     }
 
     /**

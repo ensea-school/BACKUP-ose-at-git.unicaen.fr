@@ -17,10 +17,9 @@ use Application\Service\Workflow\AbstractWorkflow;
  */
 class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface
 {
-
     use ServiceLocatorAwareTrait;
+    use WorkflowIntervenantAwareTrait;
 
-use WorkflowIntervenantAwareTrait;
     private $wf;
     private $intervenant;
     private $role;

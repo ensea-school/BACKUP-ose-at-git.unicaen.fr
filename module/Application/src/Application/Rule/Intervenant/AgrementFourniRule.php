@@ -28,7 +28,7 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
     use IntervenantAwareTrait;
-//    use StructureAwareTrait;
+    use StructureAwareTrait;
     use TypeAgrementAwareTrait;
 
     /**
@@ -37,54 +37,52 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
      */
     public function execute()
     {
-//        if ($this->getStructure() && $this->getMemePartiellement()) {
-//            throw new \Common\Exception\LogicException(
-//                    "Si une structure est fournie à cette règle, le flag d'agrément partiel ne peut être à true.");
-//        }
-//        if ($this->getStructure() && $this->getTypeAgrement()->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-//            throw new \Common\Exception\LogicException(sprintf(
-//                    "Fournir une structure à cette règle n'a pas de sens "
-//                    . "car l'agrément de type '%s' se donne toutes structures d'enseignement confondues.", $this->getTypeAgrement()));
-//        }
-        
-//        if (!in_array($this->getTypeAgrement(), $this->getTypesAgrementFournis())) {
-//            $this->setMessage(sprintf("L'agrément &laquo; %s &raquo; n'a pas encore été donné%s.", 
-//                    $this->getTypeAgrement(),
-//                    $this->getStructure() ? 
-//                            sprintf(" par la structure &laquo; %s &raquo;", $this->getStructure()) : 
-//                            " par la moindre composante"));
-//            return false;
-//        }
-
-        if ($this->getMemePartiellement() && count($this->getTypesAgrementFournis())) {
-            return true;
-        }
-        
         /**
-         * Il y a un Conseil Restreint par structure d'enseignement
+         * Si agrément partiel toléré : au moins un agrément fourni et c'est ok
          */
-        if ($this->getTypeAgrement()->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
-            // teste si agrément fourni pour chaque structure
-            foreach ($this->getStructuresEnseignement() as $structure) {
-                if (!$this->getAgrementsFournis($structure)) {
-                    $this->setMessage(sprintf("L'agrément &laquo; %s &raquo; n'a pas encore été donné par la structure &laquo; %s &raquo;.", 
-                            $this->getTypeAgrement(),
-                            $structure));
-                    return false;
-                }
+        if ($this->getMemePartiellement()) {
+            if ($this->getStructure()) {
+                throw new \Common\Exception\LogicException(
+                        "Si une structure est fournie à cette règle, le flag d'agrément partiel ne peut être à true.");
+            }
+            if (count($this->getTypesAgrementFournis())) {
+                return true;
             }
         }
+        
         /**
-         * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
+         * Conseil Academique (un seul pour toutes les structures d'enseignement)
          */
-        elseif ($this->getTypeAgrement()->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
+        if ($this->getTypeAgrement()->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
             if (!count($this->getTypesAgrementFournis())) {
                 $this->setMessage(sprintf("L'agrément &laquo; %s &raquo; n'a pas encore été donné.", $this->getTypeAgrement()));
                 return false;
             }
+            // une structure d'enseignement précise doit être fournie
+            $structures = [ $this->getStructure()->getId() => $this->getStructure() ];
         }
-        else {
-            throw new \Common\Exception\LogicException("Type d'agrément inattendu!");
+        /**
+         * Conseil Restreint (un par structure d'enseignement)
+         */
+        elseif ($this->getTypeAgrement()->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
+            // si une structure d'enseignement précise a été fournie, on ne considèrera qu'elle
+            if ($this->getStructure()) {
+                $structures = [ $this->getStructure()->getId() => $this->getStructure() ];
+            }
+            // sinon le test devra porter sur toutes les structures possibles
+            else {
+                $structures = $this->getStructuresEnseignement();
+            }
+        }
+        
+        // teste si un agrément existe pour chaque structure d'enseignement
+        foreach ($structures as $structure) {
+            if (!count($this->getAgrementsFournis($structure))) {
+                $this->setMessage(sprintf("L'agrément &laquo; %s &raquo; n'a pas encore été donné par la structure &laquo; %s &raquo;.", 
+                        $this->getTypeAgrement(),
+                        $structure));
+                return false;
+            }
         }
         
         $this->setMessage(sprintf("L'agrément &laquo; %s &raquo; a été donné.", $this->getTypeAgrement()));
@@ -108,7 +106,7 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
      * 
      * @var boolean
      */
-    private $memePartiellement = true;
+    private $memePartiellement = false;
 
     /**
      * Retourne la valeur du flag indiquant si l'on se satisfait d'un agrément "partiel".
@@ -133,28 +131,15 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
     }
     
     /**
-     * @var array
-     */
-    private $typesAgrementStatut;
-    
-    /**
      * 
      * @return array id => TypeAgrementStatut
      */
     private function getTypesAgrementStatut()
     {
-        if (null === $this->typesAgrementStatut) {
-            $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
-            $this->typesAgrementStatut = $this->getServiceTypeAgrementStatut()->getList($qb);
-        }
+        $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
         
-        return $this->typesAgrementStatut;
+        return $this->getServiceTypeAgrementStatut()->getList($qb);
     }
-    
-    /**
-     * @var array
-     */
-    private $typesAgrementAttendus;
     
     /**
      * 
@@ -162,18 +147,14 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
      */
     public function getTypesAgrementAttendus()
     {
-        if (null === $this->typesAgrementAttendus) {
-            $this->typesAgrementAttendus = array();
-            foreach ($this->getTypesAgrementStatut() as $tas) { /* @var $tas TypeAgrementStatut */
-                $type = $tas->getType();
-                $this->typesAgrementAttendus[$type->getId()] = $type;
-            }
+        $typesAgrementAttendus = array();
+        foreach ($this->getTypesAgrementStatut() as $tas) { /* @var $tas TypeAgrementStatut */
+            $type = $tas->getType();
+            $typesAgrementAttendus[$type->getId()] = $type;
         }
         
-        return $this->typesAgrementAttendus;
+        return $typesAgrementAttendus;
     }
-    
-    private $typesAgrementFournis;
     
     /**
      * 
@@ -181,21 +162,14 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
      */
     public function getTypesAgrementFournis()
     {
-        if (null === $this->typesAgrementFournis) {
-            $this->typesAgrementFournis = array();
-            foreach ($this->getAgrementsFournis() as $a) { /* @var $a Agrement */
-                $type = $a->getType();
-                $this->typesAgrementFournis[$type->getId()] = $type;
-            }
+        $typesAgrementFournis = array();
+        foreach ($this->getAgrementsFournis() as $a) { /* @var $a Agrement */
+            $type = $a->getType();
+            $typesAgrementFournis[$type->getId()] = $type;
         }
         
-        return $this->typesAgrementFournis;
+        return $typesAgrementFournis;
     }
-    
-    /**
-     * @var array
-     */
-    private $agrementsFournis;
     
     /**
      * 
@@ -204,16 +178,15 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
      */
     public function getAgrementsFournis(Structure $structure = null)
     {
-        if (null === $this->agrementsFournis) {
-            $qb = $this->getServiceAgrement()->finderByIntervenant($this->getIntervenant());
-            $qb = $this->getServiceAgrement()->finderByAnnee($this->getContextProvider()->getGlobalContext()->getAnnee(), $qb);
-            $this->agrementsFournis = $this->getServiceAgrement()->getList($qb);
-        }
+        $qb = $this->getServiceAgrement()->finderByType($this->getTypeAgrement());
+        $qb = $this->getServiceAgrement()->finderByIntervenant($this->getIntervenant(), $qb);
+        $qb = $this->getServiceAgrement()->finderByAnnee($this->getContextProvider()->getGlobalContext()->getAnnee(), $qb);
+        $agrementsFournis = $this->getServiceAgrement()->getList($qb);
         
         // filtrage par structure éventuel
         if ($structure) {
             $agrements = [];
-            foreach ($this->agrementsFournis as $agrement) { /* @var $agrement Agrement */
+            foreach ($agrementsFournis as $agrement) { /* @var $agrement Agrement */
                 if ($structure === $agrement->getStructure()) {
                     $agrements[$agrement->getId()] = $agrement;
                 }
@@ -221,13 +194,8 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
             return $agrements;
         }
         
-        return $this->agrementsFournis;
+        return $agrementsFournis;
     }
-    
-    /**
-     * @var array
-     */
-    private $structuresEns;
     
     /**
      * 
@@ -235,17 +203,15 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
      */
     public function getStructuresEnseignement()
     {
-        if (null === $this->structuresEns) {
-            // recherches de toutes les structures d'enseignements
-            $serviceStructure = $this->getServiceStructure();
-            $serviceService   = $this->getServiceService();
-            $qb = $serviceStructure->initQuery()[0];
-            $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
-            $serviceService->finderByIntervenant($this->getIntervenant(), $qb);
-            $this->structuresEns = $serviceStructure->getList($qb);
-        }
+        // recherche des structures d'enseignements de l'intervenant
+        $serviceStructure = $this->getServiceStructure();
+        $serviceService   = $this->getServiceService();
+        $qb = $serviceStructure->initQuery()[0];
+        $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
+        $serviceService->finderByIntervenant($this->getIntervenant(), $qb);
+        $structuresEns = $serviceStructure->getList($qb);
         
-        return $this->structuresEns;
+        return $structuresEns;
     }
     
     /**

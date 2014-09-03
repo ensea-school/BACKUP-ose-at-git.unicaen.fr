@@ -26,9 +26,9 @@ class AgrementStep extends Step
         $this->setRouteParams(array('typeAgrement' => $this->typeAgrement->getId()));
         
         $labels = array(
-            IntervenantPermanentRole::ROLE_ID => sprintf("Je visualise l'agrément &laquo; %s &raquo; de chaque composante d'enseignement", $this->typeAgrement),
-            IntervenantExterieurRole::ROLE_ID => sprintf("Je visualise l'agrément &laquo; %s &raquo; de chaque composante d'enseignement", $this->typeAgrement),
-            ComposanteRole::ROLE_ID           => sprintf("Je visualise l'agrément &laquo; %s &raquo; de chaque composante d'enseignement de l'intervenant", $this->typeAgrement),
+            IntervenantPermanentRole::ROLE_ID => sprintf("Je visualise l'agrément &laquo; %s &raquo;", $this->typeAgrement),
+            IntervenantExterieurRole::ROLE_ID => sprintf("Je visualise l'agrément &laquo; %s &raquo;", $this->typeAgrement),
+            ComposanteRole::ROLE_ID           => sprintf("Je visualise l'agrément &laquo; %s &raquo; de l'intervenant", $this->typeAgrement),
         );
         $descriptions = array(
             IntervenantPermanentRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",
@@ -40,6 +40,6 @@ class AgrementStep extends Step
                 
                 ->setLabels($labels)
                 ->setDescriptions($descriptions)
-                ->setRoute('intervenant/agrements/agrement');
+                ->setRoute('intervenant/agrement/liste');
     }
 }

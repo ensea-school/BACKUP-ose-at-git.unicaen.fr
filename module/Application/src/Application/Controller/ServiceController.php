@@ -105,9 +105,9 @@ class ServiceController extends AbstractActionController
         // fetch des services prévisionnels
         $qb = $service->finderByContext();
         $service->finderByIntervenant($intervenant, $qb);
-        if ($role instanceof \Application\Acl\ComposanteDbRole) {
-            $service->finderByStructureResp($role->getStructure(), $qb);
-        }
+//        if ($role instanceof \Application\Acl\ComposanteDbRole) {
+//            $service->finderByStructureResp($role->getStructure(), $qb);
+//        }
         $services = $service->getList($qb);
         $service->setTypeVolumehoraire($services, $typeVolumeHoraire);
 

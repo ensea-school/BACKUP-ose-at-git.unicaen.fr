@@ -153,7 +153,7 @@ class IntervenantController extends AbstractActionController implements \Applica
 //            $servicesViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
 //            $view->addChild($servicesViewModel, 'services');
 //        }
-        $view->setVariables(compact('intervenant', 'changements', 'title', 'short', 'page'));
+        $view->setVariables(compact('intervenant', 'changements', 'title', 'short', 'page', 'role'));
         return $view;
     }
 
@@ -264,7 +264,7 @@ class IntervenantController extends AbstractActionController implements \Applica
     {
         if (null === $this->intervenantsChoisisRecentsSessionContainer) {
             $container = new \Zend\Session\Container(get_class() . '_IntervenantsChoisisRecents');
-            $container->setExpirationSeconds(60*60); // 1 heure
+            $container->setExpirationSeconds(2*60*60); // 1 heure
             $this->intervenantsChoisisRecentsSessionContainer = $container;
         }
         return $this->intervenantsChoisisRecentsSessionContainer;

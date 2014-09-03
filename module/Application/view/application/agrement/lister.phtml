@@ -1,0 +1,53 @@
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php echo $this->messenger(true)->addMessages($messages) ?>
+
+<style>
+    .structure { width: 100px; }
+</style>
+
+<?php if ($data): ?>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="structure">Composante</th>
+                <th>Agrément</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($data as $array): ?>
+                <?php
+                $structure   = $array['structure'];
+                $agrement    = $array['agrement'];
+                $params      = ['agrement' => $agrement->getId(), 'structure' => $structure->getId(), 'typeAgrement' => $typeAgrement->getId()];
+                $refreshUrl  = $agrement->getId() ? 
+                        $this->url('intervenant/agrement/voir', $params, array(), true) : 
+                        $this->url('intervenant/agrement/voir-str', $params, array(), true);
+                ?>
+                <tr>
+                    <td class="structure"><?php echo $structure ?></td>
+                    <td class="agrement" data-url="<?php echo $refreshUrl ?>">
+                        <?php echo $this->partial('application/agrement/voir', ['agrement' => $agrement]) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>
+
+<script>
+    $(function() {
+        // après la modif d'un agrement, on ferme la fenêtre modale et on rafraîchit la div
+        $(document).on('event-update-agrement', "body", function(event, data) {
+            event.div.modal('hide');
+            var targetSelector = event.a.data('target');
+            event.a.parents(targetSelector).refresh([], function() { $(this).hide().fadeIn(); });
+        });
+    });
+</script>

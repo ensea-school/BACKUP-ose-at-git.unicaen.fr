@@ -4,13 +4,13 @@
     td.step.status { text-align: center; }
 </style>
 
-<?php /* @var $wf \Application\Service\Workflow\AbstractWorkflow */ ?>
+<?php $wf = $this->wf; /* @var $wf \Application\Service\Workflow\AbstractWorkflow */ ?>
 
 
 <div class="row">
     <div class="col-md-9">
         <ul class="list-group">
-            <?php foreach ($this->wf->getSteps() as $step): /* @var $step \Application\Service\Workflow\Step */ ?>
+            <?php foreach ($wf->getSteps() as $step): /* @var $step \Application\Service\Workflow\Step */ ?>
             <li class="list-group-item">
                         <!--<a class="details pull-right" href="#" title="Cliquez pour afficher plus d'informations"><small>En savoir plus...</small></a>-->
                         <?php 

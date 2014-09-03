@@ -11,7 +11,7 @@ class PossedeDossierRule extends IntervenantRule
 {
     public function execute()
     {
-        // un vacataire non-BIATSS doit avoir saisi un dossier
+        // un vacataire doit avoir saisi un dossier
         $dossier = $this->getIntervenant()->getDossier();
         if (null === $dossier || !$dossier->getId()) {
             $this->setMessage("Les données personnelles de l'intervenant doivent avoir été saisies au préalable.");
@@ -24,6 +24,6 @@ class PossedeDossierRule extends IntervenantRule
     {
         $statut = $this->getIntervenant()->getStatut();
         
-        return $statut->estAutre() || $statut->estVacataireNonBiatss();
+        return $statut->estAutre() || $statut->estVacataire();
     }
 }

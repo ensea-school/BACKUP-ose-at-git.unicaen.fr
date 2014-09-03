@@ -20,15 +20,15 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     use IntervenantAwareTrait;
     use RoleAwareTrait;
     
-    const INDEX_SAISIE_DOSSIER     = 'SAISIE_DOSSIER';
-    const INDEX_VALIDATION_DOSSIER = 'VALIDATION_DOSSIER';
-    const INDEX_SAISIE_SERVICE     = 'SAISIE_SERVICE';
-    const INDEX_VALIDATION_SERVICE = 'VALIDATION_SERVICE';
-    const INDEX_PIECES_JOINTES     = 'PIECES_JOINTES';
-    const INDEX_CONSEIL_RESTREINT  = 'CONSEIL_RESTREINT'; 
-    const INDEX_CONSEIL_ACADEMIQUE = 'CONSEIL_ACADEMIQUE'; 
-    const INDEX_EDITION_CONTRAT    = 'EDITION_CONTRAT';
-    const INDEX_FINAL              = 'FINAL';
+    const KEY_SAISIE_DONNEES     = 'KEY_SAISIE_DOSSIER';
+    const KEY_VALIDATION_DONNEES = 'KEY_VALIDATION_DONNEES';
+    const KEY_SAISIE_SERVICE     = 'KEY_SAISIE_SERVICE';
+    const KEY_VALIDATION_SERVICE = 'KEY_VALIDATION_SERVICE';
+    const KEY_PIECES_JOINTES     = 'KEY_PIECES_JOINTES';
+    const KEY_CONSEIL_RESTREINT  = 'KEY_CONSEIL_RESTREINT';  // NB: 'KEY_' . code type agrément
+    const KEY_CONSEIL_ACADEMIQUE = 'KEY_CONSEIL_ACADEMIQUE'; // NB: 'KEY_' . code type agrément
+    const KEY_EDITION_CONTRAT    = 'KEY_EDITION_CONTRAT';
+    const KEY_FINAL              = 'KEY_FINAL';
     
     /**
      * Retourne l'URL correspondant à l'étape spécifiée.
@@ -60,20 +60,16 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
         return $this->getStepUrl($this->getCurrentStep());
     }
     
-    private $serviceValideRule;
-    
     protected function getServiceValideRule()
     {
-        if (null === $this->serviceValideRule) {
-            // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
-            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
-            $this->serviceValideRule
-                    ->setTypeValidation($this->getTypeValidationService())
-                    ->setStructure($this->getStructure())
-                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
-        }
+        // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
+        $serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
+        $serviceValideRule
+                ->setTypeValidation($this->getTypeValidationService())
+                ->setStructure($this->getStructure())
+                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
         
-        return $this->serviceValideRule;
+        return $serviceValideRule;
     }
     
     /**

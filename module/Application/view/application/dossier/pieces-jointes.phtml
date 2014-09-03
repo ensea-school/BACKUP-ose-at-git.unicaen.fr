@@ -14,8 +14,7 @@ echo $messenger;
 <?php $form->prepare(); ?>
 
 <style>
-    input[type=checkbox] { margin-top: 15px; }
-    div.multicheckbox label { display: block; font-weight: normal; width: 250px; text-align: center; }
+    div.multicheckbox label input[type=checkbox] { margin-top: 15px;  }
 </style>
 
 <div class="row">
@@ -43,6 +42,7 @@ echo $messenger;
     </div>
 </div>
 
+<br />
 <?php 
 $message = <<<EOS
 <p><strong>Information importante</strong></p>

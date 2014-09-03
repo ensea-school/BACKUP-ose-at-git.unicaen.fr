@@ -1,4 +1,6 @@
 
+
+
 -- ajout types agrements et lien avec les statuts interveant
 INSERT INTO TYPE_AGREMENT
   (
@@ -34,7 +36,57 @@ INSERT INTO TYPE_AGREMENT
     1
   );
   
-  -- CR
+  -- CR : vacataires seulement, 1er recrutement
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    1,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    0 PREMIER_RECRUTEMENT,
+    1 HISTO_CREATEUR_ID,
+    1 HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si
+  where si.id between 10 and 18;
+  
+  -- CR : vacataires seulement, recrutements suivants
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    1,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    1 PREMIER_RECRUTEMENT,
+    1 HISTO_CREATEUR_ID,
+    1 HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si
+  where si.id between 10 and 18;
+  
+  
+  
+  -- CA: permanents seulement
 INSERT INTO TYPE_AGREMENT_STATUT
   (
     ID,
@@ -52,62 +104,13 @@ INSERT INTO TYPE_AGREMENT_STATUT
     si.id STATUT_INTERVENANT_ID,
     1 OBLIGATOIRE,
     null SEUIL_HETD,
-    1 PREMIER_RECRUTEMENT,
+    null PREMIER_RECRUTEMENT,
     1 HISTO_CREATEUR_ID,
     1 HISTO_MODIFICATEUR_ID
   from STATUT_INTERVENANT si
-  where si.SOURCE_CODE in ('SALAR_PRIVE','SALAR_PUBLIC','NON_SALAR');
-  
-  
-  -- CA, pas 1er recrut
-INSERT INTO TYPE_AGREMENT_STATUT
-  (
-    ID,
-    TYPE_AGREMENT_ID,
-    STATUT_INTERVENANT_ID,
-    OBLIGATOIRE,
-    SEUIL_HETD,
-    PREMIER_RECRUTEMENT,
-    HISTO_CREATEUR_ID,
-    HISTO_MODIFICATEUR_ID
-  )
-  select 
-    TYPE_AGREMENT_STATUT_id_seq.nextval,
-    3,
-    si.id STATUT_INTERVENANT_ID,
-    1 OBLIGATOIRE,
-    null SEUIL_HETD,
-    0 PREMIER_RECRUTEMENT,
-    1 HISTO_CREATEUR_ID,
-    1 HISTO_MODIFICATEUR_ID
-  from STATUT_INTERVENANT si
-  where si.SOURCE_CODE not in ('AUTRES','RETR_UCBN')
+  where si.id < 10
   ;
   
-  -- CA, 1er recrut
-INSERT INTO TYPE_AGREMENT_STATUT
-  (
-    ID,
-    TYPE_AGREMENT_ID,
-    STATUT_INTERVENANT_ID,
-    OBLIGATOIRE,
-    SEUIL_HETD,
-    PREMIER_RECRUTEMENT,
-    HISTO_CREATEUR_ID,
-    HISTO_MODIFICATEUR_ID
-  )
-  select 
-    TYPE_AGREMENT_STATUT_id_seq.nextval,
-    3,
-    si.id STATUT_INTERVENANT_ID,
-    1 OBLIGATOIRE,
-    null SEUIL_HETD,
-    1 PREMIER_RECRUTEMENT,
-    1 HISTO_CREATEUR_ID,
-    1 HISTO_MODIFICATEUR_ID
-  from STATUT_INTERVENANT si
-  where si.SOURCE_CODE not in ('AUTRES','RETR_UCBN')
-  ;
   
   
   

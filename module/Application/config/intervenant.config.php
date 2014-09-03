@@ -57,7 +57,6 @@ return array(
                             ),
                             'defaults' => array(
                                 'action' => 'voir',
-                                'intervenant' => 0,
                             ),
                         ),
                     ),
@@ -109,7 +108,6 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Dossier',
                                 'action' => 'modifier',
-                                'intervenant' => 0,
                             ),
                         ),
                     ),
@@ -123,7 +121,6 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
                                 'action' => 'intervenant',
-                                'intervenant' => 0,
                             ),
                         ),
                     ),
@@ -137,7 +134,6 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Dossier',
                                 'action' => 'pieces-jointes',
-                                'intervenant' => 0,
                             ),
                         ),
                     ),
@@ -164,34 +160,6 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Validation',
                                 'action' => 'service',
-                            ),
-                        ),
-                    ),
-                    'agrements' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route' => '/:intervenant/agrements',
-                            'constraints' => array(
-                                'intervenant' => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'controller' => 'Agrement',
-                                'action' => 'index',
-                            ),
-                        ),
-                        'may_terminate' => true,
-                        'child_routes' => array(
-                            'agrement' => array(
-                                'type'    => 'Segment',
-                                'options' => array(
-                                    'route' => '/:typeAgrement',
-                                    'constraints' => array(
-                                        'typeAgrement' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
-                                        'action' => 'voir',
-                                    ),
-                                ),
                             ),
                         ),
                     ),
@@ -240,6 +208,9 @@ return array(
                                 'label'  => " Rechercher",
                                 'title'  => "Rechercher un intervenant",
                                 'route'  => 'intervenant/rechercher',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'class'   => "iconify glyphicon glyphicon-search",
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:rechercher',
@@ -248,6 +219,9 @@ return array(
                                 'label'  => "Fiche",
                                 'title'  => "Consultation de la fiche de l'intervenant {id}",
                                 'route'  => 'intervenant/fiche',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:voir',
                             ),
@@ -255,6 +229,9 @@ return array(
                                 'label'  => "Heures complémentaires",
                                 'title'  => "Calcul des heures complémentaires {id}",
                                 'route'  => 'intervenant/voir-heures-comp',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'action' => 'voir-heures-comp',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:voir-heures-comp',
@@ -263,6 +240,9 @@ return array(
                                 'label'  => "Modification de service dû",
                                 'title'  => "Modification de service dû de l'intervenant {id}",
                                 'route'  => 'intervenant/modification-service-du',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\ModificationServiceDu:saisir',
                             ),
@@ -270,6 +250,9 @@ return array(
 //                                'label'  => "Feuille de route",
 //                                'title'  => "Feuille de route de l'intervenant {id}",
 //                                'route'  => 'intervenant/feuille-de-route',
+//                                'paramsInject' => array(
+//                                    'intervenant',
+//                                ),
 //                                'withtarget' => true,
 //                                'resource' => 'controller/Application\Controller\Intervenant:feuille-de-route',
 //                            ),
@@ -277,58 +260,70 @@ return array(
                                 'label'  => "Données personnelles",
                                 'title'  => "Saisir les données personnelles d'un intervenant vacataire",
                                 'route'  => 'intervenant/saisir-dossier',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Dossier:modifier',
-                                'visible' => 'NavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'service' => array(
                                 'label'  => "Enseignements",
                                 'title'  => "Enseignements de l'intervenant",
                                 'route'  => 'intervenant/services',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Service:intervenant',
-                                'visible' => 'NavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'pieces-jointes' => array(
                                 'label'  => "Pièces justificatives",
                                 'title'  => "Pièces justificatives du dossier de l'intervenant",
                                 'route'  => 'intervenant/pieces-jointes',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Dossier:pieces-jointes',
-                                'visible' => 'NavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'validation-dossier' => array(
                                 'label'  => "Validation des données personnelles",
                                 'title'  => "Validation des données personnelles de l'intervenant",
                                 'route'  => 'intervenant/validation-dossier',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:dossier',
-                                'visible' => 'NavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'validation-service' => array(
                                 'label'  => "Validation des enseignements",
                                 'title'  => "Validation des enseignements de l'intervenant",
                                 'route'  => 'intervenant/validation-service',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:service',
-                                'visible' => 'NavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'agrement' => array(
-                                'label'  => "Agréments",
-                                'title'  => "Agréments de l'intervenant",
-                                'route'  => 'intervenant/agrements',
-                                'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Agrement:voir',
-                                'visible' => 'NavigationPageVisibility',
-                                'pagesProvider' => 'NavigationPagesProvider',
+                                // coquille vide qui réserve l'emplacement du menu "Agréments"
                             ),
                             'contrat' => array(
                                 'label'  => "Contrat / avenant",
                                 'title'  => "Contrat et avenants de l'intervenant",
                                 'route'  => 'intervenant/contrat',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Contrat:index',
-                                'visible' => 'NavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                         ),
                     ),
@@ -381,6 +376,9 @@ return array(
         ),
         'aliases' => array(
             'IntervenantController' => 'Application\Controller\Intervenant',
+        ),
+        'initializers' => array(
+            'Application\Service\Initializer\IntervenantServiceAwareInitializer',
         ),
     ),
     'service_manager' => array(

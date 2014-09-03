@@ -34,15 +34,15 @@ class StatutIntervenant extends AbstractEntityService
     }
 
     /**
-     * Retourne la liste des statuts correspondant aux vacataires autres que BIATSS.
+     * Retourne la liste des statuts correspondant aux vacataires.
      *
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderVacatairesNonBiatss(QueryBuilder $qb = null, $alias = null)
+    public function finderVacataires(QueryBuilder $qb = null, $alias = null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-    $qb->andWhere($qb->expr()->in('si.sourceCode', (new StatutIntervenantEntity)->vacatairesNonBiatss));
+        $qb->andWhere($qb->expr()->in('si.sourceCode', (new StatutIntervenantEntity)->vacataires));
         return $qb;
     }
 

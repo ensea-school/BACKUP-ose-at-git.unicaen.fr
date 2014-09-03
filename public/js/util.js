@@ -194,7 +194,7 @@ function highlight(term, base, cssClass)
         if (data instanceof jQuery){
             data = data.serialize();
         }
-        if (undefined != url){
+        if ("" !== url && undefined !== url) {
             that.load( url, data, onEnd );
         }
         return that;

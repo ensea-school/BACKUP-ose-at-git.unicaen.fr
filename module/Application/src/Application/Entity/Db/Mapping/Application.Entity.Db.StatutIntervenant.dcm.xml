@@ -51,5 +51,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="typeAgrementStatut" target-entity="Application\Entity\Db\TypeAgrementStatut" mapped-by="statut" />
   </entity>
 </doctrine-mapping>

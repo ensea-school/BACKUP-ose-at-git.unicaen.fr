@@ -244,12 +244,19 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $validation;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $agrement;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->adresse = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->adresse     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation  = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->agrement    = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1174,12 +1181,56 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $validations;
     }
 
+    /**
+     * Add agrement
+     *
+     * @param \Application\Entity\Db\Agrement $agrement
+     * @return Intervenant
+     */
+    public function addAgrement(\Application\Entity\Db\Agrement $agrement)
+    {
+        $this->agrement[] = $agrement;
 
-    /*******************************************************************************************************
-     *                                        Début ajout
-     *******************************************************************************************************/
-    
-    /*************************** IntervenantInterface ***********************/
+        return $this;
+    }
+
+    /**
+     * Remove agrement
+     *
+     * @param \Application\Entity\Db\Agrement $agrement
+     */
+    public function removeAgrement(\Application\Entity\Db\Agrement $agrement)
+    {
+        $this->agrement->removeElement($agrement);
+    }
+
+    /**
+     * Get agrement
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAgrement(TypeAgrement $typeAgrement = null, Annee $annee = null)
+    {
+        if (null === $this->agrement) {
+            return null;
+        }
+        if (null === $typeAgrement && null === $annee) {
+            return $this->agrement;
+        }
+        
+        $filter   = function(Agrement $agrement) use ($typeAgrement, $annee) {
+            if ($typeAgrement && $typeAgrement !== $agrement->getType()) {
+                return false;
+            }
+            if ($annee && $annee !== $agrement->getAnnee()) {
+                return false;
+            }
+            return true; 
+        };
+        $agrements = $this->agrement->filter($filter);
+        
+        return $agrements;
+    }
     
     /**
      * Get estPermanent

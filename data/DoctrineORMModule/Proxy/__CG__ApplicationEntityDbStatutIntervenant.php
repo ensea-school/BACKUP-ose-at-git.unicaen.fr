@@ -64,10 +64,10 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'permanents', 'vacataires', 'vacatairesNonBiatss', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+            return array('__isInitialized__', 'permanents', 'vacataires', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut');
         }
 
-        return array('__isInitialized__', 'permanents', 'vacataires', 'vacatairesNonBiatss', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+        return array('__isInitialized__', 'permanents', 'vacataires', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut');
     }
 
     /**
@@ -209,17 +209,6 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     /**
      * {@inheritDoc}
      */
-    public function estVacataireNonBiatss()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'estVacataireNonBiatss', array());
-
-        return parent::estVacataireNonBiatss();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function estBiatss()
     {
 
@@ -248,28 +237,6 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'estAgentTemporaireVacataire', array());
 
         return parent::estAgentTemporaireVacataire();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function requiertDossier()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'requiertDossier', array());
-
-        return parent::requiertDossier();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function permetSaisieService()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'permetSaisieService', array());
-
-        return parent::permetSaisieService();
     }
 
     /**
@@ -659,6 +626,39 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSource', array());
 
         return parent::getSource();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addTypeAgrementStatut', array($typeAgrementStatut));
+
+        return parent::addTypeAgrementStatut($typeAgrementStatut);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeTypeAgrementStatut', array($typeAgrementStatut));
+
+        return parent::removeTypeAgrementStatut($typeAgrementStatut);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTypeAgrementStatut()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeAgrementStatut', array());
+
+        return parent::getTypeAgrementStatut();
     }
 
 }

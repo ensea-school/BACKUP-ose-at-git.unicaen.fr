@@ -2,6 +2,8 @@
 
 namespace Application\Rule\Intervenant;
 
+use Application\Entity\Db\StatutIntervenant;
+
 /**
  * Description of PeutSaisirServiceRule
  *
@@ -13,7 +15,7 @@ class PeutSaisirServiceRule extends IntervenantRule
     {
         $statut = $this->getIntervenant()->getStatut();
         
-        if (!$statut->permetSaisieService()) {
+        if (in_array($statut->getSourceCode(), array(StatutIntervenant::RETR_UCBN, StatutIntervenant::AUTRES))) {
             $this->setMessage(sprintf("Le statut &laquo; %s &raquo; n'autorise pas la saisie d'enseignement.", $statut));
             return false;
         }
@@ -27,11 +29,11 @@ class PeutSaisirServiceRule extends IntervenantRule
         // cette règle n'est pas pertinente (car il peut changer de statut à l'issu de la
         // saisie de ses données perso)
         if (!$this->getIntervenant()->getStatut()->estBiatss()) {
-            $aucunDossier = new PossedeDossierRule($this->getIntervenant());
-            if (!$aucunDossier->isRelevant()) {
+            $possedeDossier = new PossedeDossierRule($this->getIntervenant());
+            if (!$possedeDossier->isRelevant()) {
                 return true;
             }
-            if (!$aucunDossier->execute()) {
+            if (!$possedeDossier->execute()) {
                 return false;
             }
         }

@@ -220,17 +220,6 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function getDateConseilAcademique()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateConseilAcademique', array());
-
-        return parent::getDateConseilAcademique();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setNumeroAvenant($numeroAvenant)
     {
 

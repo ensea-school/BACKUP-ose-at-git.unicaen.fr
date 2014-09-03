@@ -6,7 +6,6 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Rule\Intervenant\PeutSaisirServiceRule;
 use Application\Rule\Intervenant\PossedeServicesRule;
-use Application\Rule\Intervenant\ServiceValideRule;
 use Application\Service\Workflow\Step;
 use Common\Exception\LogicException;
 
@@ -16,11 +15,7 @@ use Common\Exception\LogicException;
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class WorkflowIntervenantPermanent extends WorkflowIntervenant
-{
-    const INDEX_SAISIE_SERVICE     = 20;
-    const INDEX_VALIDATION_SERVICE = 50;
-    const INDEX_FINAL              = 100;
-    
+{    
     /**
      * 
      * @param IntervenantPermanent $intervenant
@@ -38,44 +33,63 @@ class WorkflowIntervenantPermanent extends WorkflowIntervenant
     }
     
     /**
+     * Création des différentes étapes composant le workflow.
      * 
+     * @param bool $partial En spécifiant <code>true</code>, la création des étapes
+     * ne va pas au-delà de la première étape non franchie.
      * @return self
      */
     protected function createSteps()
     {        
         $this->steps = array();
         
+        /**
+         * Saisie des services
+         */
         $peutSaisirServices = new PeutSaisirServiceRule($this->getIntervenant());
         if (!$peutSaisirServices->isRelevant() || $peutSaisirServices->execute()) {
+            $transitionRule = new PossedeServicesRule($this->getIntervenant());
             $this->addStep(
-                    self::INDEX_SAISIE_SERVICE,
+                    self::KEY_SAISIE_SERVICE,
                     new Step\SaisieServiceStep(),
-                    new PossedeServicesRule($this->getIntervenant())
+                    $transitionRule
             );
         }
         
+        /**
+         * Validation des services
+         */
         $peutSaisirService = new PeutSaisirServiceRule($this->getIntervenant());
         if (!$peutSaisirService->isRelevant() || $peutSaisirService->execute()) {
+            $transitionRule = $this->getServiceValideRule();
             $this->addStep(
-                    self::INDEX_VALIDATION_SERVICE,
+                    self::KEY_VALIDATION_SERVICE,
                     new Step\ValidationServiceStep(),
                     $this->getServiceValideRule()
             );
         }
         
-//        $passageCR = new \Application\Rule\Intervenant\NecessitePassageConseilAcademiqueRule($this->getIntervenant());
-//        if ($passageCR->isRelevant() && $passageCR->execute()) {
-//            $this->addStep(
-//                    self::INDEX_PASSAGE_CR,
-//                    "Passage en Conseil Académique", 
-//                    null,
-//                    null,
-//                    new \Application\Rule\Intervenant\NecessitePassageConseilAcademiqueRule($this->getIntervenant())
-//            );
-//        }
+        /**
+         * Agrements des différents conseils
+         */
+        $necessiteAgrement = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrement NecessiteAgrementRule */
+        $necessiteAgrement->setIntervenant($this->getIntervenant());
+        foreach ($necessiteAgrement->getTypesAgrementAttendus() as $typeAgrement) {
+            $transitionRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
+            $transitionRule
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($typeAgrement)
+                ->setStructure($this->getStructure());
+
+            $this->addStep(
+                     'KEY_' . $typeAgrement->getCode(),
+                    new Step\AgrementStep($typeAgrement),
+                    $transitionRule
+            );
+        }
         
 //        $this->addStep(
-//                self::INDEX_FINAL,
+//                self::KEY_FINAL,
 //                new Step\FinalStep(),
 //                null
 //        );

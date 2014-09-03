@@ -35,9 +35,38 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             }
         );
         
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'injectRouteEntitiesInEvent'), -90);
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkRouteParams'), -100);
     }
 
+    /**
+     * Recherche de chaque entité spécifiée par son identifiant dans la requête courante,
+     * et injection de cette entité dans l'événement MVC courant. 
+     * 
+     * @param \Zend\Mvc\MvcEvent $e
+     * @see Service\NavigationPagesProvider
+     */
+    public function injectRouteEntitiesInEvent(MvcEvent $e)
+    {
+        $routeMatch = $e->getRouteMatch();
+        
+        // intervenant
+        if (($sourceCode = $routeMatch->getParam($name = 'intervenant'))) {
+            $sm = $e->getApplication()->getServiceManager();
+            if (($intervenant = $sm->get('ApplicationIntervenant')->getRepo()->findOneBySourceCode($sourceCode))) {
+                $e->setParam('intervenant', $intervenant);
+            }
+        }
+        
+        // type d'agrément
+        if (($id = $routeMatch->getParam($name = 'typeAgrement'))) {
+            $sm = $e->getApplication()->getServiceManager();
+            if (($typeAgrement = $sm->get('ApplicationTypeAgrement')->get($id))) {
+                $e->setParam('typeAgrement', $typeAgrement);
+            }
+        }
+    }
+    
     /**
      * Si l'utilisateur connecté a le profil "Intervenant", vérification que l'intervenant spécifié dans 
      * la requête est bien celui connecté.

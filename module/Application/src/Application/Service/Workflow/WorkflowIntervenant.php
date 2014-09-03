@@ -3,6 +3,7 @@
 namespace Application\Service\Workflow;
 
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\TypeAgrement;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\RoleAwareTrait;
 use Application\Service\Workflow\Step\Step;
@@ -19,6 +20,16 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     use IntervenantAwareTrait;
     use RoleAwareTrait;
     
+    const KEY_SAISIE_DONNEES     = 'KEY_SAISIE_DOSSIER';
+    const KEY_VALIDATION_DONNEES = 'KEY_VALIDATION_DONNEES';
+    const KEY_SAISIE_SERVICE     = 'KEY_SAISIE_SERVICE';
+    const KEY_VALIDATION_SERVICE = 'KEY_VALIDATION_SERVICE';
+    const KEY_PIECES_JOINTES     = 'KEY_PIECES_JOINTES';
+    const KEY_CONSEIL_RESTREINT  = 'KEY_CONSEIL_RESTREINT';  // NB: 'KEY_' . code type agrément
+    const KEY_CONSEIL_ACADEMIQUE = 'KEY_CONSEIL_ACADEMIQUE'; // NB: 'KEY_' . code type agrément
+    const KEY_EDITION_CONTRAT    = 'KEY_EDITION_CONTRAT';
+    const KEY_FINAL              = 'KEY_FINAL';
+    
     /**
      * Retourne l'URL correspondant à l'étape spécifiée.
      * 
@@ -27,7 +38,11 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
      */
     public function getStepUrl(Step $step)
     {
-        $url = $this->getHelperUrl()->fromRoute($step->getRoute(), array('intervenant' => $this->getIntervenant()->getSourceCode()));
+        $params = array_merge(
+                $step->getRouteParams(), 
+                array('intervenant' => $this->getIntervenant()->getSourceCode()));
+        
+        $url = $this->getHelperUrl()->fromRoute($step->getRoute(), $params);
         
         return $url;
     }
@@ -45,20 +60,16 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
         return $this->getStepUrl($this->getCurrentStep());
     }
     
-    private $serviceValideRule;
-    
     protected function getServiceValideRule()
     {
-        if (null === $this->serviceValideRule) {
-            // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
-            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
-            $this->serviceValideRule
-                    ->setTypeValidation($this->getTypeValidationService())
-                    ->setStructure($this->getStructure())
-                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
-        }
+        // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
+        $serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
+        $serviceValideRule
+                ->setTypeValidation($this->getTypeValidationService())
+                ->setStructure($this->getStructure())
+                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
         
-        return $this->serviceValideRule;
+        return $serviceValideRule;
     }
     
     /**
@@ -81,7 +92,16 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     protected function getServiceTypeValidation()
     {
         return $this->getServiceLocator()->get('ApplicationTypeValidation');
-    } 
+    }
+    
+    /**
+     * 
+     * @return \Application\Service\TypeAgrement
+     */
+    protected function getServiceTypeAgrement()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeAgrement');
+    }
     
     /**
      * 
@@ -101,5 +121,27 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
         $typeValidation = $qb->getQuery()->getOneOrNullResult();
         
         return $typeValidation;
+    }
+    
+    /**
+     * @return TypeAgrement
+     */
+    protected function getTypeAgrementConseilRestreint()
+    {
+        $qb = $this->getServiceTypeAgrement()->finderByCode(TypeAgrement::CODE_CONSEIL_RESTREINT);
+        $type = $qb->getQuery()->getSingleResult();
+        
+        return $type;
+    }
+    
+    /**
+     * @return TypeAgrement
+     */
+    protected function getTypeAgrementConseilAcademique()
+    {
+        $qb = $this->getServiceTypeAgrement()->finderByCode(TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
+        $type = $qb->getQuery()->getSingleResult();
+        
+        return $type;
     }
 }

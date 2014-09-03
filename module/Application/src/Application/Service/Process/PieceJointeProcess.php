@@ -13,7 +13,7 @@ use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\PieceJointe;
 
 /**
- * Processus de gestion de la liste de pièces à fournir pour un dossier vacataire non-BIATSS.
+ * Processus de gestion de la liste de pièces à fournir pour un dossier vacataire.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

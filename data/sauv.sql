@@ -1,6 +1,124 @@
+
+
+
+-- ajout types agrements et lien avec les statuts interveant
+INSERT INTO TYPE_AGREMENT
+  (
+    ID,
+    CODE,
+    LIBELLE,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  VALUES
+  (
+    type_agrement_id_seq.nextval,
+    'CONSEIL_RESTREINT',
+    'Conseil Restreint',
+    1,
+    1
+  );
+  
+INSERT INTO TYPE_AGREMENT
+  (
+    ID,
+    CODE,
+    LIBELLE,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  VALUES
+  (
+    type_agrement_id_seq.nextval,
+    'CONSEIL_ACADEMIQUE',
+    'Conseil Académique',
+    1,
+    1
+  );
+  
+  -- CR : vacataires seulement, 1er recrutement
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    1,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    0 PREMIER_RECRUTEMENT,
+    1 HISTO_CREATEUR_ID,
+    1 HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si
+  where si.id between 10 and 18;
+  
+  -- CR : vacataires seulement, recrutements suivants
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    1,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    1 PREMIER_RECRUTEMENT,
+    1 HISTO_CREATEUR_ID,
+    1 HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si
+  where si.id between 10 and 18;
+  
+  
+  
+  -- CA: permanents seulement
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    2,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    null PREMIER_RECRUTEMENT,
+    1 HISTO_CREATEUR_ID,
+    1 HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si
+  where si.id < 10
+  ;
+  
+  
+  
+  
+  
+  
+
 -- ajouts de pièces justificatives à joindre
-INSERT
-INTO TYPE_PIECE_JOINTE_STATUT
+INSERT INTO TYPE_PIECE_JOINTE_STATUT
   (
     ID,
     TYPE_PIECE_JOINTE_ID,

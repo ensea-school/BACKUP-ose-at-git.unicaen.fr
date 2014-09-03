@@ -39,7 +39,8 @@ $role        = $this->role;
                     <?php echo $contrat->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
                     <?php echo $this->mailto($contrat->getHistoModificateur()) ?>
                     <span class="pull-right">
-                        <a href="<?php echo $urlExport ?>"><span class="glyphicon glyphicon-export"></span> Exporter en PDF</a>
+                        <a href="<?php echo $urlExport ?>"
+                           title="Exporter le contrat/avenant au format PDF"><span class="glyphicon glyphicon-export"></span> Exporter en PDF</a>
                     </span>
                 </p>
                 <p>
@@ -64,7 +65,9 @@ $role        = $this->role;
                 </p>
             </td>
             <td class="retour">
-                <?php echo ($d = $contrat->getDateRetourSigne()) ? $d->format(Common\Constants::DATE_FORMAT) : null ?>
+                <?php if (($d = $contrat->getDateRetourSigne())): ?>
+                <p><?php echo $d->format(Common\Constants::DATE_FORMAT) ?></p>
+                <?php endif ?>
                 <?php if ($role instanceof Application\Acl\ComposanteDbRole && $contrat->getValidation()): ?>
                     <a href="<?php echo $urlSaisieRetour ?>" class="btn btn-primary ajax-modal"
                        data-event="event-saisie-retour-suppr"

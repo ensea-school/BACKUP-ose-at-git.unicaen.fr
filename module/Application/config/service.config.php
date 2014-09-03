@@ -196,6 +196,9 @@ return array(
             'Application\Controller\Service'            => 'Application\Controller\ServiceController',
             'Application\Controller\ServiceReferentiel' => 'Application\Controller\ServiceReferentielController',
         ),
+        'initializers' => array(
+            'Application\Service\Initializer\ServiceServiceAwareInitializer',
+        ),
     ),
     'service_manager' => array(
         'invokables' => array(
@@ -212,6 +215,9 @@ return array(
             'ProcessFormuleHetd'                => 'Application\\Service\\Process\\FormuleHetd',
         ),
         'factories' => array(
+        ),
+        'initializers' => array(
+            'Application\Service\Initializer\ServiceServiceAwareInitializer',
         ),
     ),
     'form_elements' => array(

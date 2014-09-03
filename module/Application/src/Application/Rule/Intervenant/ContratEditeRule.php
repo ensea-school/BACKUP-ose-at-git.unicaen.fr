@@ -25,6 +25,6 @@ class ContratEditeRule extends IntervenantRule
     
     public function isRelevant()
     {
-        return $this->getIntervenant() instanceof IntervenantExterieur && null !== $this->getIntervenant()->getDossier();
+        return $this->getIntervenant() instanceof IntervenantExterieur;
     }
 }

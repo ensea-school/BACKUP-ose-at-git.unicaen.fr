@@ -5,15 +5,17 @@ namespace Application\Service\Workflow;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeValidation;
+use Application\Rule\Intervenant\AgrementFourniRule;
 use Application\Rule\Intervenant\DossierValideRule;
+use Application\Rule\Intervenant\NecessiteAgrementRule;
+use Application\Rule\Intervenant\NecessiteContratRule;
 use Application\Rule\Intervenant\PeutSaisirDossierRule;
 use Application\Rule\Intervenant\PeutSaisirPieceJointeRule;
 use Application\Rule\Intervenant\PeutSaisirServiceRule;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
+use Application\Rule\Intervenant\PossedeContratRule;
 use Application\Rule\Intervenant\PossedeDossierRule;
 use Application\Rule\Intervenant\PossedeServicesRule;
-use Application\Rule\Intervenant\NecessiteContratRule;
-use Application\Rule\Intervenant\ContratEditeRule;
 use Application\Service\Workflow\Step;
 use Common\Exception\LogicException;
 
@@ -24,15 +26,6 @@ use Common\Exception\LogicException;
  */
 class WorkflowIntervenantExterieur extends WorkflowIntervenant
 {
-    const INDEX_SAISIE_DOSSIER     = 10;
-    const INDEX_SAISIE_SERVICE     = 20;
-    const INDEX_VALIDATION_DOSSIER = 30;
-    const INDEX_VALIDATION_SERVICE = 35;
-    const INDEX_PIECES_JOINTES     = 40;
-    const INDEX_PASSAGE_CR         = 50;
-    const INDEX_EDITION_CONTRAT    = 60;
-    const INDEX_FINAL              = 100;
-    
     /**
      * 
      * @param Intervenant $intervenant
@@ -50,69 +43,117 @@ class WorkflowIntervenantExterieur extends WorkflowIntervenant
     }
     
     /**
+     * Création des différentes étapes composant le workflow.
      * 
-     * @return WorkflowIntervenantExterieur
+     * @return self
      */
     protected function createSteps()
     {        
         $this->steps = array();
         
+        /**
+         * Saisie des données personnelles
+         */
         $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
         if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
+            $transitionRule = new PossedeDossierRule($this->getIntervenant());
             $this->addStep(
-                    self::INDEX_SAISIE_DOSSIER,
+                    self::KEY_SAISIE_DONNEES,
                     new Step\SaisieDossierStep(),
-                    new PossedeDossierRule($this->getIntervenant())
+                    $transitionRule
             );
         }
         
+        /**
+         * Saisie des services
+         */
         $peutSaisirServices = new PeutSaisirServiceRule($this->getIntervenant());
         if (!$peutSaisirServices->isRelevant() || $peutSaisirServices->execute()) {
+            $transitionRule = new PossedeServicesRule($this->getIntervenant());
             $this->addStep(
-                    self::INDEX_SAISIE_SERVICE,
+                    self::KEY_SAISIE_SERVICE,
                     new Step\SaisieServiceStep(),
-                    new PossedeServicesRule($this->getIntervenant())
+                    $transitionRule
             );
         }
         
+        /**
+         * Checklist des pièces justificatives
+         */
         $peutSaisirPj = new PeutSaisirPieceJointeRule($this->getIntervenant());
         if (!$peutSaisirPj->isRelevant() || $peutSaisirPj->execute()) {
             $serviceTypePieceJointeStatut = $this->getServiceLocator()->get('ApplicationTypePieceJointeStatut');
+            $transitionRule = new PiecesJointesFourniesRule($this->getIntervenant(), $serviceTypePieceJointeStatut);
             $this->addStep(
-                    self::INDEX_PIECES_JOINTES,
+                    self::KEY_PIECES_JOINTES,
                     new Step\SaisiePiecesJointesStep(),
-                    new PiecesJointesFourniesRule($this->getIntervenant(), $serviceTypePieceJointeStatut)
+                    $transitionRule
             );
         }
         
+        /**
+         * Validation des données personnelles
+         */
         if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
+            $transitionRule = (new DossierValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationDossier());
             $this->addStep(
-                    self::INDEX_VALIDATION_DOSSIER,
+                    self::KEY_VALIDATION_DONNEES,
                     new Step\ValidationDossierStep(),
-                    (new DossierValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationDossier())
+                    $transitionRule
             );
         }
         
+        /**
+         * Validation des services
+         */
         $peutSaisirService = new PeutSaisirServiceRule($this->getIntervenant());
         if (!$peutSaisirService->isRelevant() || $peutSaisirService->execute()) {
+            $transitionRule = $this->getServiceValideRule();
             $this->addStep(
-                    self::INDEX_VALIDATION_SERVICE,
+                    self::KEY_VALIDATION_SERVICE,
                     new Step\ValidationServiceStep(),
-                    $this->getServiceValideRule()
+                    $transitionRule
             );
         }
         
+        /**
+         * Agrements des différents conseils
+         */
+        $necessiteAgrement = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrement NecessiteAgrementRule */
+        $necessiteAgrement->setIntervenant($this->getIntervenant());
+        foreach ($necessiteAgrement->getTypesAgrementAttendus() as $typeAgrement) {
+            $transitionRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
+            $transitionRule
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($typeAgrement)
+                ->setStructure($this->getStructure());
+
+            $this->addStep(
+                     'KEY_' . $typeAgrement->getCode(),
+                    new Step\AgrementStep($typeAgrement),
+                    $transitionRule
+            );
+        }
+        
+        /**
+         * Contrat / avenant
+         */
         $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
         if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
+            $transitionRule = new PossedeContratRule($this->getIntervenant());
+            $transitionRule
+//                    ->setTypeValidation($this->getTypeValidationContrat())
+                    ->setStructure($this->getStructure())
+                    ->setValide(true);
             $this->addStep(
-                    self::INDEX_EDITION_CONTRAT,
+                    self::KEY_EDITION_CONTRAT,
                     new Step\EditionContratStep(),
-                    (new ContratEditeRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationContrat())
+                    $transitionRule
             );
         }
         
 //        $this->addStep(
-//                self::INDEX_FINAL,
+//                self::KEY_FINAL,
 //                new Step\FinalStep(),
 //                null
 //        );

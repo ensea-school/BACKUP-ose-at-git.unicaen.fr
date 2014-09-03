@@ -2,8 +2,7 @@
 .nav-pills>li.active li.active>a/*, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus*/ {
     color: #fff;
     background-color: #428bca;
-    opacity: 0.75;
-    font-size: 90%;
+    opacity: 0.6;
 }
 .nav-pills>li li>a {
     border-radius: 4px;

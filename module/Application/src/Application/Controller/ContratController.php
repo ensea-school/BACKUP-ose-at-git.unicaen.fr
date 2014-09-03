@@ -7,6 +7,7 @@ use Application\Controller\Plugin\Context;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\TypeAgrement;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Common\Constants;
@@ -130,8 +131,11 @@ class ContratController extends AbstractActionController implements ContextProvi
                     ->join("s.intervenant", "i")
                     ->andWhere("vh.contrat = :contrat")->setParameter("contrat", $contrat);
             $query = $qb->getQuery();
-            foreach ($query->execute() as $service) {
+            foreach ($query->execute() as $service) { /* @var $service \Application\Entity\Db\Service */
                 $this->em()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
+                if (0 == $service->getVolumeHoraireListe()->getHeures()) {
+                    continue;
+                }
                 $services[$contrat->getId()][$service->getId()] = $service;
                 $service->setTypeVolumehoraire($typeVolumeHoraire); // pour aide de vue! :-(
             }
@@ -162,7 +166,13 @@ class ContratController extends AbstractActionController implements ContextProvi
                 ->andWhere("c.histoCreation <= :date")->setParameter("date", $contrat->getHistoModification())
                 ->andWhere("i = :intervenant")->setParameter("intervenant", $contrat->getIntervenant())
                 ->andWhere("str = :structure")->setParameter("structure", $contrat->getStructure());
-        $services = $qb->getQuery()->getResult();
+        $services = [];
+        foreach ($qb->getQuery()->getResult() as $service) {
+            if (0 == $service->getVolumeHoraireListe()->getHeures()) {
+                continue;
+            }
+            $services[$service->getId()] = $service;
+        }
         
         $this->getServiceService()->setTypeVolumehoraire($services, $typeVolumeHoraire); // pour aide de vue! :-(
         
@@ -439,16 +449,17 @@ class ContratController extends AbstractActionController implements ContextProvi
             throw new \Common\Exception\MessageException("Impossible d'exporter le contrat/avenant.", null, new \Exception($rule->getMessage()));
         }
         
+        $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $estUnAvenant          = $this->contrat->estUnAvenant();
         $contratToString       = (string) $this->contrat;
-        $dateConseil           = $this->contrat->getDateConseilAcademique();
+        $typeAgrement          = $this->getServiceTypeAgrement()->getRepo()->findOneByCode(TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
+        $dateConseil           = $this->intervenant->getAgrement($typeAgrement, $annee)->first();
         $nomIntervenant        = (string) $this->intervenant;
         $dateNaissance         = $this->intervenant->getDateNaissanceToString();
         $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
         $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
         $estATV                = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
         $nomCompletIntervenant = $this->intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
-        $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $dateSignature         = new DateTime();
         $estUnProjet           = $this->contrat->getValidation() ? false : true;
         $services              = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
@@ -649,6 +660,14 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getServiceTypeValidation()
     {
         return $this->getServiceLocator()->get('ApplicationTypeValidation');
+    }
+    
+    /**
+     * @return \Application\Service\TypeAgrement
+     */
+    private function getServiceTypeAgrement()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeAgrement');
     }
 
     /**

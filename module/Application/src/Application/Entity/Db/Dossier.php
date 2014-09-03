@@ -112,6 +112,13 @@ class Dossier implements HistoriqueAwareInterface
      */
     protected $histoCreateur;
 
+    /**
+     * 
+     */
+    public function __construct()
+    {
+        $this->pieceJointe = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set adresse

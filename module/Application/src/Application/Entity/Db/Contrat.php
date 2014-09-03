@@ -147,17 +147,6 @@ class Contrat implements HistoriqueAwareInterface
     }
     
     /**
-     * Retourne l'éventuelle date de passage en conseil académique des enseignements 
-     * de ce contrat/avenant.
-     * 
-     * @return \DateTime|null
-     */
-    public function getDateConseilAcademique()
-    {
-        return $this->getVolumeHoraire()[0]->getValidation()[0]->getDateConseilAcademique();
-    }
-    
-    /**
      * Set numeroAvenant
      *
      * @param integer $numeroAvenant

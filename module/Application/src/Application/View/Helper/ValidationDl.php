@@ -38,19 +38,19 @@ class ValidationDl extends AbstractDl
                 . ' par ' . $this->getView()->mailto($entity->getHistoModificateur())
         );
         
-        if ($entity->getDateConseilAcademique()) {
-            $dtdds[] = sprintf($tplDtdd,
-                "Date de passage en Conseil Académique :", 
-                $entity->getDateConseilAcademique()->format(\Common\Constants::DATE_FORMAT)
-            );
-        }
-        
-        if ($entity->getDateConseilRestreint()) {
-            $dtdds[] = sprintf($tplDtdd,
-                "Date de passage en Conseil Restreint de la composante :", 
-                $entity->getDateConseilRestreint()->format(\Common\Constants::DATE_FORMAT)
-            );
-        }
+//        if ($entity->getDateConseilAcademique()) {
+//            $dtdds[] = sprintf($tplDtdd,
+//                "Date de passage en Conseil Académique :", 
+//                $entity->getDateConseilAcademique()->format(\Common\Constants::DATE_FORMAT)
+//            );
+//        }
+//        
+//        if ($entity->getDateConseilRestreint()) {
+//            $dtdds[] = sprintf($tplDtdd,
+//                "Date de passage en Conseil Restreint de la composante :", 
+//                $entity->getDateConseilRestreint()->format(\Common\Constants::DATE_FORMAT)
+//            );
+//        }
         
         
         $html .= sprintf($this->getTemplateDl('validation validation-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;

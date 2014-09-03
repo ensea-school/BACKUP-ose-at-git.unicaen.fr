@@ -9,7 +9,7 @@ use Zend\Stdlib\Hydrator\ClassMethods;
 use Application\Traits\IntervenantAwareTrait;
 
 /**
- * Formulaire de validation des données personnelles d'un intervenant vacataire non-BIATSS.
+ * Formulaire de validation des données personnelles d'un intervenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

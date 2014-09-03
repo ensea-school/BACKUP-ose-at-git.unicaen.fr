@@ -30,4 +30,21 @@ class IndexController extends AbstractActionController implements ContextProvide
         
         return $view;
     }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function gestionAction()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        $view = new \Zend\View\Model\ViewModel(array(
+            'annee' => $this->getContextProvider()->getGlobalContext()->getAnnee(),
+            'role'  => $role,
+            'title' => "Gestion",
+        ));
+        
+        return $view;
+    }
 }

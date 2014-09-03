@@ -125,7 +125,67 @@ class OffreFormationController extends AbstractActionController implements Conte
 
         return $viewModel;
     }
-    
+
+    /**
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function exportAction()
+    {
+        $em           = $this->em(); /* @var $em \Doctrine\ORM\EntityManager */
+        $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
+        $role         = $this->getContextProvider()->getSelectedIdentityRole();
+
+        $em->getFilters()->enable('historique');
+
+        // extraction des filtres spécifiés dans la requête
+        $structure = $this->context()->structureFromQuery();
+        $niveau    = $this->context()->niveauFromQuery();
+        $etape     = $this->context()->etapeFromQuery();
+        if ($niveau) $niveau = \Application\Entity\NiveauEtape::getInstance($niveau); // entité Niveau
+        // structure de responsabilité si aucun filtre spécifié
+        if (!$structure && $role instanceof \Application\Acl\DbRole) {
+            $structure = $role->getStructure();
+        }
+
+        // fetch
+        $entities = null;
+        if ($structure) {
+            $qb = $serviceEp->finder(array(
+                'structure' => $structure,
+                'niveau' => $niveau,
+                'etape' => $etape));
+            $entities = $qb->getQuery()->getResult();
+        }
+
+        $csvModel = new \UnicaenApp\View\Model\CsvModel();
+        $csvModel->setHeader([
+            'Code formation',
+            'Libellé formation',
+            'Niveau',
+            'Code enseignement',
+            'Libellé enseignement',
+            'Période',
+            'FOAD',
+            'Régimes d\'inscription'
+        ]);
+        foreach( $entities as $entity ){ /* @var $entity \Application\Entity\Db\ElementPedagogique */
+            $etape = $entity->getEtape();
+            $csvModel->addLine([
+                $etape->getSourceCode(),
+                $etape->getLibelle(),
+                $etape->getNiveauToString(),
+                $entity->getSourceCode(),
+                $entity->getLibelle(),
+                $entity->getPeriode(),
+                $entity->getTauxFoad(),
+                $entity->getRegimesInscription()
+            ]);
+        }
+        $csvModel->setFilename('offre-de-formation.csv');
+        return $csvModel;
+    }
+
     /**
      * Retourne au format JSON les structures distinctes des éléments pédagogiques.
      * 

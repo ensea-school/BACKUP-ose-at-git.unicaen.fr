@@ -408,7 +408,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $liste = $liste->setMotifNonPaiement(false);
         $display = $this->typeInterventionIsVisible($liste->getTypeIntervention()) ? '' : ';display:none';
         $out = '<td class="heures type-intervention '.$liste->getTypeIntervention()->getCode().'" style="text-align:right'.$display.'" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
-        if ($liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention())){
+        if ($liste->getService()->getElementPedagogique() && $liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention())){
             $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
         }else{
             $out .= '0';

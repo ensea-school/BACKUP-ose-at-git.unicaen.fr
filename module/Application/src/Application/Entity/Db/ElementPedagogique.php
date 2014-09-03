@@ -402,6 +402,27 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     }
 
     /**
+     * Retourne, sous forme de chaîne de caractères, la liste des régimes d'inscription
+     *
+     * @param boolean $inHtml   Détermine si le résultat doit ou non être formatté en HTML
+     * @return string
+     */
+    public function getRegimesInscription( $inHtml = false )
+    {
+        $regimes = [];
+        if ($inHtml){
+            if ($this->getFi()) $regimes[] = '<abbr title="Formation initiale">FI</abbr>';
+            if ($this->getFc()) $regimes[] = '<abbr title="Formation continue">FC</abbr>';
+            if ($this->getFa()) $regimes[] = '<abbr title="Formation en apprentissage">FA</abbr>';
+        }else{
+            if ($this->getFi()) $regimes[] = 'FI';
+            if ($this->getFc()) $regimes[] = 'FC';
+            if ($this->getFa()) $regimes[] = 'FA';
+        }
+        return implode( ', ', $regimes );
+    }
+
+    /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut

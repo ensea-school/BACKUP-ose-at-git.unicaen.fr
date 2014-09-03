@@ -285,7 +285,7 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation',
-                    'action'     => array('index'),
+                    'action'     => array('index', 'export'),
                     'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 /**

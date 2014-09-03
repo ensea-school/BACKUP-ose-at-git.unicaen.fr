@@ -218,7 +218,11 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function getTypesInterventions()
     {
         if (! $this->typesIntervention){
-            $this->typesIntervention = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
+            if ($this->getVolumeHoraireListe()->getService()->getElementPedagogique()){
+                $this->typesIntervention = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
+            }else{
+                $this->typesIntervention = $this->getServiceTypeIntervention()->getList();
+            }
         }
         return $this->typesIntervention;
     }
@@ -229,6 +233,14 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function getServiceService()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-}
+    }
+
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
+    }
 
 }

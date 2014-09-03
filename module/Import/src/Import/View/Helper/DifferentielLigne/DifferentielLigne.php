@@ -108,7 +108,8 @@ class DifferentielLigne extends AbstractHelper
         if ('update' == $this->ligne->getAction()){
             $changes = $this->ligne->getChanges();
             foreach( $changes as $column => $value ){
-                $details[] = $this->getColumnDetails( $column, $value );
+                $columnDetails = $this->getColumnDetails( $column, $value );
+                if ($columnDetails) $details[] = $columnDetails;
             }
         }
         return $details;

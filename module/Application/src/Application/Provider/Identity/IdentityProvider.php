@@ -101,7 +101,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
         foreach ($utilisateur->getRoleUtilisateur() as $roleUtilisateur) { /* @var $roleUtilisateur \Application\Entity\Db\RoleUtilisateur */
             $roles[] = $roleUtilisateur->getRoleId();
         }
-        
+
         /**
          * Responsabilités métier importées (tables ROLE et TYPE_ROLE)
          */
@@ -124,7 +124,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
         $utilisateur = $this->getDbUser();
         
         if (!$utilisateur) {
-            return array();
+            return null;
         }
         
         $intervenant = $utilisateur->getIntervenant();
@@ -132,7 +132,12 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
         if (!$intervenant) {
             return IntervenantRole::ROLE_ID;
         }
-        
+
+        $statut = $intervenant->getStatut()->getSourceCode();
+        if ($statut === \Application\Entity\Db\StatutIntervenant::NON_AUTORISE){
+            return null;
+        }
+
         if ($intervenant instanceof IntervenantPermanent) {
             $role = IntervenantPermanentRole::ROLE_ID;
         }

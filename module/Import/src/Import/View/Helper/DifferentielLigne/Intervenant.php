@@ -38,11 +38,24 @@ class Intervenant extends DifferentielLigne
                 $statut = $this->ligne->getEntityManager()->find('Application\Entity\Db\StatutIntervenant', $value);
                 if (
                     $statut->getSourceCode() == \Application\Entity\Db\StatutIntervenant::AUTRES
+                    && ! $this->ligne->hasChanged('LAST_SYNC_STATUT_ID')
                 ){
-                    return 'statut '.$oldStatut.' renseigné manuellement.';
+                    //return 'changement manuel de statut ('.$oldStatut.' vers '.$statut.')';
+                    return null;
                 }else{
                     return 'changement de statut ('.$oldStatut.' vers '.$statut.')';
                 }
+            case 'TYPE_ID':
+                $intervenant = $this->ligne->getEntity();
+                if ($intervenant){
+                    $oldType = $intervenant->getType();
+                }else{
+                    $oldType = 'Aucun';
+                }
+                $type = $this->ligne->getEntityManager()->find('Application\Entity\Db\TypeIntervenant', $value);
+                return $oldType.' devient '.lcfirst( $type );
+            case 'LAST_SYNC_STATUT_ID':
+                return null;
             default:
                 return parent::getColumnDetails($column, $value);
         }

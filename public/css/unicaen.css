@@ -102,7 +102,8 @@ div.multicheckbox label {
 }
 div.multicheckbox label input[type=checkbox],
 div.multicheckbox label input[type=radio] { 
-    float: left; 
-    width: 25px; 
+    float: left;
+    margin-right: 5px;
+    width: 15px;
     height: auto; 
 }

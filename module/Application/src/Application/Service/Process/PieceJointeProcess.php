@@ -97,7 +97,8 @@ class PieceJointeProcess extends AbstractService
             if (($url = $ligne->getType()->getUrlModeleDoc())) {
                 $href = $this->getServiceLocator()->get('ViewHelperManager')->get('basePath')->__invoke($url);
                 $fileName = ltrim(strrchr($href, '/'), '/');
-                $link = '<br /><a title="Cliquez pour télécharger le document à remplir" href="' . $href . '"><span class="glyphicon glyphicon-file"></span> ' . $fileName . '</a>';
+                $link = '<br /><a class="modele-doc" title="Cliquez pour télécharger le document à remplir" href="' 
+                        . $href . '"><span class="glyphicon glyphicon-file"></span> ' . $fileName . '</a>';
             }
     
             $type = (string) $ligne->getType();
@@ -105,7 +106,7 @@ class PieceJointeProcess extends AbstractService
                 $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
                 $type .= " $annee";
             }
-            $label = sprintf('%s<br /><span class="text-warning">%s</span>%s', $type, $obligatoire, $link);
+            $label = sprintf('%s <span class="text-warning">%s</span>%s', $type, $obligatoire, $link);
             $valueOptions[] = array(
                 'value' => $ligne->getType()->getId(),
                 'label' => $label,

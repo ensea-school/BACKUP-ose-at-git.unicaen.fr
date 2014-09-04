@@ -141,6 +141,7 @@ class ValidationController extends AbstractActionController implements ContextPr
      */
     public function dossierAction()
     {
+        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof ComposanteDbRole) {
@@ -205,7 +206,6 @@ class ValidationController extends AbstractActionController implements ContextPr
     {
         $role              = $this->getContextProvider()->getSelectedIdentityRole();
         $serviceValidation = $this->getServiceValidation();
-        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $typeValidation    = TypeValidation::CODE_DONNEES_PERSO_PAR_COMP;
         
         $serviceValidation->canAdd($this->intervenant, $typeValidation, true);

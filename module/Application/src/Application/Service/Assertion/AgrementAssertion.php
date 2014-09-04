@@ -59,24 +59,23 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
                 return false;
             }
             
-//            var_dump($this->getWorkflow()->getCurrentStepUrl());
-            
             $agrementStepKey = 'KEY_' . $this->resource->getType()->getCode();
             
-//            if (!$this->getWorkflow()->isStepReachable($agrementStepKey)) {
-//                return false;
-//            }
-//            
-//            /**
-//             * Modification
-//             */
-//            if ('update' === $this->privilege) {
+            // l'étape Agrement du workflow doit être atteignable
+            if (!$this->getWorkflow()->isStepReachable($agrementStepKey)) {
+                return false;
+            }
+            
+            /**
+             * Modification, suppression
+             */
+            if (in_array($this->privilege, ['update', 'delete'])) {
                 // l'étape suivante du workflow ne doit pas avoir été franchie
                 $nextStep = $this->getWorkflow()->getNextStep($agrementStepKey);
                 if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
                     return false;
                 }
-//            }
+            }
             
             return true;
         }

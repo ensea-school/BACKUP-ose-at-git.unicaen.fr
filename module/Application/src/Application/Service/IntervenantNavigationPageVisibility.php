@@ -3,6 +3,8 @@
 namespace Application\Service;
 
 use Application\Rule\Intervenant\Navigation\VoitPageRule;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 
 /**
  * Service chargé de déterminer si une page de navigation doit être visible ou non
@@ -10,9 +12,9 @@ use Application\Rule\Intervenant\Navigation\VoitPageRule;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantNavigationPageVisibility extends AbstractService
+class IntervenantNavigationPageVisibility extends AbstractService implements WorkflowIntervenantAwareInterface
 {
-    use \Application\Traits\WorkflowIntervenantAwareTrait;
+    use WorkflowIntervenantAwareTrait;
     
     public function __invoke(array &$page)
     {
@@ -21,7 +23,7 @@ class IntervenantNavigationPageVisibility extends AbstractService
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
-            $wf = $this->getWorkflowIntervenant($intervenant, $this->getServiceLocator());
+            $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
             
             return $this->isPageVisible($intervenant, $page, $wf, $annee);
         }

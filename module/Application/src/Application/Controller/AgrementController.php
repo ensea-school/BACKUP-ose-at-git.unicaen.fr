@@ -24,7 +24,8 @@ use Application\Service\Initializer\IntervenantServiceAwareInterface;
 use Application\Service\Initializer\IntervenantServiceAwareTrait;
 use Application\Service\Initializer\ServiceServiceAwareInterface;
 use Application\Service\Initializer\ServiceServiceAwareTrait;
-use Application\Traits\WorkflowIntervenantAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 
 /**
  * Opérations sur les agréments.
@@ -35,7 +36,9 @@ use Application\Traits\WorkflowIntervenantAwareTrait;
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class AgrementController extends AbstractActionController 
-implements ContextProviderAwareInterface, AgrementServiceAwareInterface, IntervenantServiceAwareInterface, ServiceServiceAwareInterface
+implements ContextProviderAwareInterface, 
+           AgrementServiceAwareInterface, IntervenantServiceAwareInterface, ServiceServiceAwareInterface,
+           WorkflowIntervenantAwareInterface
 {
     use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
@@ -374,8 +377,8 @@ implements ContextProviderAwareInterface, AgrementServiceAwareInterface, Interve
          */
         $intervenants = [];
         foreach ($intervenantsCandidats as $i) {
-            $wf = $this->getWorkflowIntervenant($i);
-            $wf->setRole($this->role);
+            $wf = $this->getWorkflowIntervenant();
+            $wf->setIntervenant($i)->setRole($this->role);
             $step = $wf->getCurrentStep();
             if ($step instanceof \Application\Service\Workflow\Step\AgrementStep) {
                 $intervenants[$i->getId()] = $i;

@@ -13,7 +13,6 @@ use Application\Service\ContextProviderAwareTrait;
 class IndexController extends AbstractActionController implements ContextProviderAwareInterface
 {
     use ContextProviderAwareTrait;
-    use \Application\Traits\WorkflowIntervenantAwareTrait;
     
     /**
      * 

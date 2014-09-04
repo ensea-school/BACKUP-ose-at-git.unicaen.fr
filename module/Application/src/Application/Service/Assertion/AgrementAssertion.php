@@ -11,14 +11,15 @@ use Application\Service\Initializer\AgrementServiceAwareTrait;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
-use Application\Traits\WorkflowIntervenantAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 
 /**
  * Description of Agrement
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareInterface
+class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareInterface, WorkflowIntervenantAwareInterface
 {
     use AgrementServiceAwareTrait;
     use WorkflowIntervenantAwareTrait;
@@ -95,10 +96,9 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
      */
     private function getWorkflow()
     {
-        $wf = $this->getWorkflowIntervenant(
-                $this->resource->getIntervenant(), 
-                $this->getAgrementService()->getServiceLocator());
-        $wf->setRole($this->identityRole);
+        $wf = $this->getWorkflowIntervenant()
+                ->setIntervenant($this->resource->getIntervenant())
+                ->setRole($this->identityRole);
         
         return $wf;
     }

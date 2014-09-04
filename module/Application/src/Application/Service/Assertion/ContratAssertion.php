@@ -6,10 +6,9 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Acl\ComposanteDbRole;
 use Application\Entity\Db\Contrat;
-use Application\Service\Initializer\ContratServiceAwareInterface;
-use Application\Service\Initializer\ContratServiceAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenant;
-use Application\Traits\WorkflowIntervenantAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -19,9 +18,8 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratAssertion extends EntityAssertion implements ServiceLocatorAwareInterface//, ContratServiceAwareInterface
+class ContratAssertion extends EntityAssertion implements ServiceLocatorAwareInterface, WorkflowIntervenantAwareInterface
 {
-//    use ContratServiceAwareTrait;
     use ServiceLocatorAwareTrait;
     use WorkflowIntervenantAwareTrait;
     
@@ -93,7 +91,8 @@ class ContratAssertion extends EntityAssertion implements ServiceLocatorAwareInt
      */
     private function getWorkflow()
     {
-        $wf = $this->getWorkflowIntervenant($this->resource->getIntervenant(), $this->getServiceLocator())
+        $wf = $this->getWorkflowIntervenant()
+                ->setIntervenant($this->resource->getIntervenant())
                 ->setRole($this->identityRole);
         
         return $wf;

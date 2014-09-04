@@ -7,6 +7,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 
 /**
  * Description of WorkflowController
@@ -17,10 +21,10 @@ use Application\Entity\Db\Intervenant;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class WorkflowController extends AbstractActionController implements \Application\Service\ContextProviderAwareInterface
+class WorkflowController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
 {
-    use \Application\Service\ContextProviderAwareTrait;
-    use \Application\Traits\WorkflowIntervenantAwareTrait;
+    use ContextProviderAwareTrait;
+    use WorkflowIntervenantAwareTrait;
     
     /**
      * @var Intervenant
@@ -217,7 +221,7 @@ class WorkflowController extends AbstractActionController implements \Applicatio
         
         $title = sprintf("Feuille de route <small>%s</small>", $intervenant);
         
-        $wf = $this->getWorkflowIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
+        $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
         $wf->init();
         
         $view = new \Zend\View\Model\ViewModel();

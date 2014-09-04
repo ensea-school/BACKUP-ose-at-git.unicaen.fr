@@ -379,6 +379,7 @@ return array(
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',
+            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'service_manager' => array(
@@ -392,16 +393,19 @@ return array(
             'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
             'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
             'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
-            'ApplicationWorkflowIntervenantExterieur' => 'Application\\Service\\Workflow\\WorkflowIntervenantExterieur',
-            'ApplicationWorkflowIntervenantPermanent' => 'Application\\Service\\Workflow\\WorkflowIntervenantPermanent',
+            'WorkflowIntervenant'              => 'Application\\Service\\Workflow\\WorkflowIntervenant',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',
+            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'view_helpers' => array(
         'invokables' => array(
             'Workflow' => 'Application\View\Helper\Workflow',
+        ),
+        'initializers' => array(
+            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'form_elements' => array(

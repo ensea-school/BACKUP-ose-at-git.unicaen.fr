@@ -281,6 +281,7 @@ class ValidationController extends AbstractActionController implements ContextPr
          * La validation des services d'un vacataire se fait par chaque structure d'intervention
          */
         if ($this->intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
+            $messages[] = "La validation des enseignements d'un intervenant vacataire se fait par chaque composante d'enseignement.";
             // fetch des structures d'intervention
             $qb = $serviceStructure->initQuery()[0];
             $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
@@ -291,6 +292,7 @@ class ValidationController extends AbstractActionController implements ContextPr
          * La validation des services d'un permanent se fait par la structure d'affectation
          */
         else {
+            $messages[] = "La validation des enseignements d'un intervenant permanent se fait par sa structure d'affectation administrative.";
             $structure = $this->intervenant->getStructure()->getParenteNiv2();
             $structures = [ $structure->getId() => $structure ];
         }

@@ -33,14 +33,17 @@ class AgrementNavigationPagesProvider extends AbstractService
             $pages[$typeAgrement->getCode()] = $child;
         }
         
+        // s'il n'y aucune page fille (car aucun type d'agrément), on masque la page mère
+        if (!count($pages)) {
+            $page['visible'] = false;
+        }
         // s'il n'y a qu'une page fille (car un seul type d'agrément), on "remplace"
         // la page mère par cette seule page
-        if (count($pages) === 1) {
+        elseif (count($pages) === 1) {
             $child['title'] = $page['title'] . " : " . $child['label'];
             $child['label'] = $page['label'] . " : " . $child['label'];
             $page = array_merge($page, $child);
-            
-            return [];
+            $pages = [];
         }
             
         return $pages;

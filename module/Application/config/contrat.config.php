@@ -147,6 +147,23 @@ return array(
                 ),
             ),
         ),
+        'resource_providers' => array(
+            'BjyAuthorize\Provider\Resource\Config' => array(
+                'Contrat' => array(),
+            ),
+        ),
+        'rule_providers' => array(
+            'BjyAuthorize\Provider\Rule\Config' => array(
+                'allow' => array(
+                    array(
+                        array(ComposanteRole::ROLE_ID), 
+                        'Contrat', 
+                        array('create', 'read', 'delete', 'update'), 
+                        'ContratAssertion',
+                    ),
+                ),
+            ),
+        ),
     ),
     'controllers' => array(
         'invokables' => array(
@@ -160,6 +177,7 @@ return array(
             'ApplicationContratProcess'   => 'Application\\Service\\Process\\ContratProcess',
             'PeutCreerContratInitialRule' => 'Application\Rule\Intervenant\PeutCreerContratInitialRule',
             'PeutCreerAvenantRule'        => 'Application\Rule\Intervenant\PeutCreerAvenantRule',
+            'ContratAssertion'            => 'Application\\Service\\Assertion\\ContratAssertion',
         ),
     ),
     'view_helpers' => array(

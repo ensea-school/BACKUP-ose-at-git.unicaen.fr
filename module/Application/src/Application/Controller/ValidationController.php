@@ -353,7 +353,6 @@ class ValidationController extends AbstractActionController implements ContextPr
         $structureValidation = $role->getStructure();
         $servicesNonValides  = [];
         $messages            = [];
-        $peutValider         = true;
 
         $this->em()->getFilters()->enable('historique');
         
@@ -365,9 +364,9 @@ class ValidationController extends AbstractActionController implements ContextPr
         
         if ($this->intervenant->estPermanent()) {
             if ($role->getStructure() !== $structureAffect) {
-                $peutValider = false;
+                $this->readonly = true;
                 $structureValidation = $structureAffect;
-                $messages[] = "Les enseignements de cet intervenant permanent ne peuvent être "
+                $messages['warning'] = "Les enseignements de cet intervenant permanent ne peuvent être "
                         . "validés que par la structure &laquo; $structureValidation &raquo;.";
             }
         }
@@ -376,18 +375,16 @@ class ValidationController extends AbstractActionController implements ContextPr
         
         $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes sur Service !
         
-        if ($peutValider) {
-            // recherche des enseignements de l'intervenant non encore validés
-            $qb = $serviceService->finderServicesNonValides($this->intervenant, $structureEns);
-            $servicesNonValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
-            $serviceService->setTypeVolumehoraire($servicesNonValides, $typeVolumeHoraire);
-        
-            if (!count($servicesNonValides)) {
-                $this->validation = current($this->validations);
-                $message = sprintf("Aucun enseignement à valider%s n'a été trouvé.", 
-                        $structureEns ? " concernant la composante d'intervention &laquo; $structureEns &raquo;" : null);
-                $messages[] = $message;
-            }
+        // recherche des enseignements de l'intervenant non encore validés
+        $qb = $serviceService->finderServicesNonValides($this->intervenant, $structureEns);
+        $servicesNonValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
+        $serviceService->setTypeVolumehoraire($servicesNonValides, $typeVolumeHoraire);
+
+        if (!count($servicesNonValides)) {
+            $this->validation = current($this->validations);
+            $message = sprintf("Aucun enseignement à valider%s n'a été trouvé.", 
+                    $structureEns ? " concernant la composante d'intervention &laquo; $structureEns &raquo;" : null);
+            $messages[] = $message;
         }
         
         if (count($servicesNonValides) && !$this->validation) {
@@ -400,7 +397,7 @@ class ValidationController extends AbstractActionController implements ContextPr
             
             $this->formValider->bind($this->validation);
             
-            $messages = ['info' => "Des enseignements à valider ont été trouvés..."];
+            $messages[] = "Des enseignements à valider ont été trouvés...";
         }
 
         $this->view = new \Zend\View\Model\ViewModel(array(
@@ -412,12 +409,11 @@ class ValidationController extends AbstractActionController implements ContextPr
             'formValider'       => $this->formValider,
             'title'             => $this->title,
             'readonly'          => $this->readonly,
-            'peutValider'       => $peutValider,
             'messages'          => $messages,
         ));
         $this->view->setTemplate('application/validation/service');
         
-        if ($peutValider && $this->getRequest()->isPost()) {
+        if (!$this->readonly && $this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $this->formValider->setData($data);
             if ($this->formValider->isValid()) {

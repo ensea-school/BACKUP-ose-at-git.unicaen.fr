@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * Contrat
  */
-class Contrat implements HistoriqueAwareInterface
+class Contrat implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * @var \DateTime
@@ -485,5 +487,16 @@ class Contrat implements HistoriqueAwareInterface
     public function getDateRetourSigne()
     {
         return $this->dateRetourSigne;
+    }
+    
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'Contrat';
     }
 }

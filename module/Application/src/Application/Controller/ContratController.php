@@ -205,6 +205,14 @@ class ContratController extends AbstractActionController implements ContextProvi
         $servicesDispos   = null;
         $action           = null;
         
+        // instanciation d'un contrat fictif transmis à l'assertion
+        $contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)
+                ->setIntervenant($this->getIntervenant())
+                ->setStructure($this->getStructure());
+        if (!$this->isAllowed($contrat, 'create')) {
+            throw new \Common\Exception\MessageException("La création de contrat/avenant n'est pas encore possible.");
+        }
+        
         if ($peutCreerContrat) {
             $servicesDispos = $process->getServicesDisposPourContrat();
             $action = "Créer le projet de contrat";

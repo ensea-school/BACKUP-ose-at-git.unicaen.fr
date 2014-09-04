@@ -336,12 +336,12 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('index', 'apercevoir', 'feuille-de-route'),
+                    'action'     => array('voir', 'index', 'apercevoir', 'feuille-de-route'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('voir', 'choisir', 'rechercher', 'search'),
+                    'action'     => array('choisir', 'rechercher', 'search'),
                     'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(

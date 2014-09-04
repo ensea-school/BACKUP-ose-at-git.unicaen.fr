@@ -309,13 +309,18 @@ class ContratProcess extends AbstractService
     
     private $contrat;
     
+    /**
+     * Recherche le contrat initial de l'intervenant.
+     * NB: le contrat initial n'est pas forcément rattaché à la structure courante.
+     * 
+     * @return Contrat
+     */
     private function getContratInitial()
     {
         if (null === $this->contrat) {
             $serviceContrat = $this->getServiceContrat();
             $qb = $serviceContrat->finderByType($this->getTypeContrat());
             $serviceContrat->finderByIntervenant($this->getIntervenant(), $qb);
-            $serviceContrat->finderByStructure($this->getStructure(), $qb);
             $this->contrat = $qb->getQuery()->getOneOrNullResult();
         }
         

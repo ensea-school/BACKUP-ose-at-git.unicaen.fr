@@ -34,7 +34,7 @@ class PeutCreerAvenantRule extends AbstractRule implements ServiceLocatorAwareIn
         
         $this->getServiceValideRule()->execute();
         
-        // on s'intéresse à ceux validés mais n'ayant pas faits l'objet d'un avenant
+        // on s'intéresse aux enseignements validés mais n'ayant pas faits l'objet d'un avenant
         $this->volumesHorairesDispos = [];
         foreach ($this->getServiceValideRule()->getVolumesHorairesValides() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
             if (!count($vh->getContrat())) {

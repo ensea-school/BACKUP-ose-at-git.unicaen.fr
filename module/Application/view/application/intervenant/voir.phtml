@@ -5,7 +5,7 @@
 <hr />
 
 <?php 
-$wf = $this->workflow($intervenant, $role)->getWorkflow()->setRole($role); 
+$wf = $this->workflow($intervenant, $role)->getWorkflow(); 
 ?>
 <h2>Feuille de route</h2>
 <?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', array('wf' => $wf, 'role' => $role)); ?>

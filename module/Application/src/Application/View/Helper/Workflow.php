@@ -68,6 +68,7 @@ class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface
     public function navNext($prependText = null)
     {
         $wf = $this->getWorkflow(); /* @var $wf AbstractWorkflow */
+        $wf->getCurrentStep();
 
         $step = ($route = $this->getCurrentRoute()) ? $wf->getStepForRoute($route) : $wf->getStepForCurrentRoute();
         if (!$step || !$step->getDone()) {
@@ -113,8 +114,9 @@ class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface
     {
         if (null === $this->wf) {
             $this->wf = $this->getWorkflowIntervenant($this->intervenant, $this->getServiceLocator()->getServiceLocator());
-            $this->wf->getCurrentStep();
         }
+        
+        $this->wf->setRole($this->role);
 
         return $this->wf;
     }

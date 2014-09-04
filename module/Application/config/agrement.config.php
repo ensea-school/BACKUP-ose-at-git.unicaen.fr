@@ -139,8 +139,8 @@ return array(
                     'intervenant' => array(
                         'pages' => array(
                             'agrement' => array(
-                                'label'         => "Agréments",
-                                'title'         => "Agréments de l'intervenant",
+                                'label'         => "Agrément",
+                                'title'         => "Agrément de l'intervenant",
                                 'route'         => 'intervenant/agrement',
                                 'paramsInject' => array(
                                     'intervenant',

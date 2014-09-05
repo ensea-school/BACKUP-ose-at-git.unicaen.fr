@@ -1,3 +1,5 @@
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Fiche") ?>
+
 <h1 class="page-header"><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h1>
 
 <?php echo $this->intervenantDl($intervenant, true) ?>

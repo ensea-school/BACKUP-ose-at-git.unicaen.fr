@@ -1118,7 +1118,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@509"
+                "reference": "/trunk/@525"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1167,7 +1167,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenAuth",
-                "reference": "/trunk/@209"
+                "reference": "/trunk/@211"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -1220,11 +1220,10 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenUpload",
-                "reference": "/trunk/@10"
+                "reference": "/trunk/@12"
             },
             "require": {
                 "php": ">=5.3.3",
-                "rwoverdijk/assetmanager": ">=1.3",
                 "zendframework/zend-i18n": ">=2.2",
                 "zendframework/zend-mvc": ">=2.2",
                 "zendframework/zend-navigation": ">=2.2",
@@ -1242,6 +1241,14 @@
                 },
                 "classmap": [
                     "./Module.php"
+                ]
+            },
+            "scripts": {
+                "post-update-cmd": [
+                    "UnicaenUpload\\Installer::postUpdate"
+                ],
+                "post-install-cmd": [
+                    "UnicaenUpload\\Installer::postInstall"
                 ]
             },
             "description": "Module ZF2 facilitant l'upload de fichiers"

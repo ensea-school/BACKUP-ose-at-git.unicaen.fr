@@ -95,8 +95,8 @@ class FormuleHetd extends AbstractService
                 'volumes_horaires'          => []
             ];
         }
-        $elements = $this->getServiceElementPedagogique()->get(array_keys($elements));
-        $etablissements = $this->getServiceEtablissement()->get(array_keys($etablissements));
+        if (! empty($elements)) $elements = $this->getServiceElementPedagogique()->get(array_keys($elements));
+        if (! empty($etablissements)) $etablissements = $this->getServiceEtablissement()->get(array_keys($etablissements));
         foreach( $data as $did => $d ){
             if ($data[$did]['etablissement']) $data[$did]['etablissement'] = $etablissements[$d['etablissement']];
             if ($data[$did]['element_pedagogique']) $data[$did]['element_pedagogique'] = $elements[$d['element_pedagogique']];

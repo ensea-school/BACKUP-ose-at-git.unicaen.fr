@@ -140,8 +140,22 @@ abstract class AbstractEntityService extends AbstractService
         return array($qb,$alias);
     }
 
-    public function join( AbstractEntityService $service, QueryBuilder $qb, $leftProperty, $rightProperty=null, $leftAlias=null, $rightAlias=null )
+    /**
+     *
+     * @param \Application\Service\AbstractEntityService|string $service
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string $leftProperty
+     * @param string $rightProperty
+     * @param string $leftAlias
+     * @param string $rightAlias
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function join( $service, QueryBuilder $qb, $leftProperty, $rightProperty=null, $leftAlias=null, $rightAlias=null )
     {
+        if (is_string($service)){
+            $service = $this->getServiceLocator()->get($service);
+        }
+
         if (null == $leftAlias) $leftAlias = $this->getAlias();
         if (null == $rightAlias) $rightAlias = $service->getAlias();
 
@@ -150,11 +164,26 @@ abstract class AbstractEntityService extends AbstractService
         }else{ // relation spéciale
             $qb->join( $service->getEntityClass(), $rightAlias, Expr\Join::WITH, $leftAlias.'.'.$leftProperty.'='.$rightAlias.'.'.$rightProperty );
         }
+        $qb->addSelect($rightAlias);
         return $qb;
     }
 
-    public function leftJoin( AbstractEntityService $service, QueryBuilder $qb, $leftProperty, $rightProperty=null, $leftAlias=null, $rightAlias=null )
+    /**
+     *
+     * @param \Application\Service\AbstractEntityService|string $service
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string $leftProperty
+     * @param string $rightProperty
+     * @param string $leftAlias
+     * @param string $rightAlias
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function leftJoin( $service, QueryBuilder $qb, $leftProperty, $rightProperty=null, $leftAlias=null, $rightAlias=null )
     {
+        if (is_string($service)){
+            $service = $this->getServiceLocator()->get($service);
+        }
+
         if (null == $leftAlias) $leftAlias = $this->getAlias();
         if (null == $rightAlias) $rightAlias = $service->getAlias();
         if (null == $rightProperty){ // relation
@@ -162,10 +191,11 @@ abstract class AbstractEntityService extends AbstractService
         }else{ // relation spéciale
             $qb->leftJoin( $service->getEntityClass(), $rightAlias, Expr\Join::WITH, $leftAlias.'.'.$leftProperty.'='.$rightAlias.'.'.$rightProperty );
         }
-
-        
+        $qb->addSelect($rightAlias);
         return $qb;
     }
+
+
 
     /**
      * Retourne une liste d'entités en fonction du QueryBuilder donné

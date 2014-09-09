@@ -137,6 +137,19 @@ return array(
                             ),
                         ),
                     ),
+                    'joindre' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:intervenant/joindre[/:action]',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Dossier',
+                                'action' => 'joindre',
+                            ),
+                        ),
+                    ),
                     'validation-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -351,7 +364,7 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
-                    'action'     => array('voir', 'modifier', 'pieces-jointes'),
+                    'action'     => array('voir', 'modifier', 'pieces-jointes', 'joindre', 'upload', 'download'),
                     'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(

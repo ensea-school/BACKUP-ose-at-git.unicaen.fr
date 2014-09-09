@@ -280,6 +280,92 @@ class DossierController extends AbstractActionController implements ContextProvi
             'role'               => $role,
         ));
     }
+
+    public function joindreAction()
+    {
+        $form     = $this->getFormJoindre();
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            // Make certain to merge the files info!
+            $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+            
+            var_dump($post);
+            
+            $form->setData($post);
+            if ($form->isValid()) {
+                $data = $form->getData();var_dump('valid');
+                // Form is valid, save the form!
+                return $this->redirect()->toRoute('upload-form/success');
+            }
+        }
+        
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel//->setTemplate('closer-module/ligne/joindre')
+                ->setVariables(array(
+                    'form'      => $form,
+                    'terminal'  => $this->getRequest()->isXmlHttpRequest(),
+                    'uploadUrl' => $this->url()->fromRoute(null, ['action' => 'download'], [], true),
+                ));
+
+        return $viewModel;
+    }
+    
+    public function uploadAction()
+    {
+        error_reporting(E_ALL | E_STRICT);
+        $this->uploader()
+//                ->setUploadDir($this->getUploadDir($ligne))
+                ->setUploadUrl($this->getUploadUrl() . '/')
+                ->setDownloadUrl($this->getDownloadUrl())
+                ->handle();
+        exit;
+    }
+    
+    public function downloadAction()
+    {
+        error_reporting(E_ALL | E_STRICT);
+        $this->uploader()
+//                ->setUploadDir($this->getUploadDir($ligne))
+                ->setUploadUrl($this->getUploadUrl() . '/')
+                ->setDownloadUrl($this->getDownloadUrl())
+                ->handle();
+        exit;
+    }
+
+    protected $formJoindre;
+    
+    protected function getFormJoindre()
+    {
+        if (null === $this->formJoindre) {
+            $this->formJoindre = new \Application\Form\Joindre();
+            $this->formJoindre//->setHydrator(HydratorFactory::getHydrator($ligne))
+                    //->bind($ligne)
+                    ->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        }
+        return $this->formJoindre;
+    }
+    
+    protected function getDownloadUrl()
+    {
+        return $this->url()->fromRoute(null, ['action' => 'download'], [], true);
+    }
+    
+    protected function getUploadUrl()
+    {
+        return $this->url()->fromRoute(null, ['action' => 'upload'], [], true);
+    }
+    
+//    protected function getUploadDir(Ligne $ligne)
+//    {
+//        $options = $this->getServiceLocator()->get('closer-module_options'); /* @var $options \CloserModule\Options\ModuleOptions */
+//        return sprintf($options->getUploadDir() . '/acteur-%s/ligne-%s/', 
+//                $ligne->getActeur()->getIdInterne(), 
+//                $ligne->getId());
+//    }
     
     /**
      * @return array

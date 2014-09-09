@@ -415,6 +415,7 @@ implements ContextProviderAwareInterface,
         
         $this->view = new ViewModel(array(
             'intervenants' => $intervenants,
+            'typeAgrement' => $this->typeAgrement,
             'title'        => $this->title,
             'form'         => $this->formSaisie,
             'role'         => $this->role,

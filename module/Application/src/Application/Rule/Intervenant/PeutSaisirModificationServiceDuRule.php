@@ -2,6 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
+use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Entity\Db\Intervenant;
 use Application\Acl\ComposanteDbRole;
 
@@ -15,10 +16,10 @@ class PeutSaisirModificationServiceDuRule extends IntervenantRule
     /**
      * Constructeur.
      * 
-     * @param Intervenant      $intervenant Intervenant dont on modifie le service dû
-     * @param ComposanteDbRole $role        Role auteur de la modification
+     * @param Intervenant   $intervenant Intervenant dont on modifie le service dû
+     * @param RoleInterface $role        Role auteur de la modification
      */
-    public function __construct(Intervenant $intervenant, ComposanteDbRole $role)
+    public function __construct(Intervenant $intervenant, RoleInterface $role)
     {
         parent::__construct($intervenant);
         $this->role = $role;
@@ -32,10 +33,12 @@ class PeutSaisirModificationServiceDuRule extends IntervenantRule
             return false;
         }
         
-        $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getRole()->getStructure());
-        if (!$estAffecte->execute()) {
-            $this->setMessage(sprintf("%s %s étant votre structure de responsabilité.", $estAffecte->getMessage(), $this->getRole()->getStructure()));
-            return false;
+        if ($this->getRole() instanceof ComposanteDbRole) {
+            $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getRole()->getStructure());
+            if (!$estAffecte->execute()) {
+                $this->setMessage(sprintf("%s %s étant votre structure de responsabilité.", $estAffecte->getMessage(), $this->getRole()->getStructure()));
+                return false;
+            }
         }
         
         return true;
@@ -47,11 +50,11 @@ class PeutSaisirModificationServiceDuRule extends IntervenantRule
     }
     
     /**
-     * @var \Application\Acl\ComposanteDbRole
+     * @var RoleInterface
      */
     protected $role;
     /**
-     * @return \Application\Acl\ComposanteDbRole
+     * @return RoleInterface
      */
     public function getRole()
     {

@@ -7,6 +7,7 @@ $modules = array(
     'UnicaenApp', //'AssetManager',
     'UnicaenAuth',
     'UnicaenLdap',
+    'UnicaenUpload',
     'Common',
     'Import',
     'Application'

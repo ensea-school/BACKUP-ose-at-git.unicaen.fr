@@ -24,6 +24,8 @@ $mc->setUlClass('navigation navigation-etape pull-right');
     div.element-rech div.panel-body input.form-control { width: 75% }
 </style>
 
+<?php $this->headTitle()->append((string)$structure)->append("Offre de formation") ?>
+
 <h1 class="page-header">Offre de formation <?php echo $structure ? '<small>' . $structure . '</small>' : null ?></h1>
 
 <div class="row">

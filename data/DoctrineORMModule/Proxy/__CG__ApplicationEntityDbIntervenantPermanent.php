@@ -64,10 +64,10 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
+            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation', 'agrement');
         }
 
-        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation');
+        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation', 'agrement');
     }
 
     /**
@@ -1220,6 +1220,39 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValidation', array($type));
 
         return parent::getValidation($type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addAgrement(\Application\Entity\Db\Agrement $agrement)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addAgrement', array($agrement));
+
+        return parent::addAgrement($agrement);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeAgrement(\Application\Entity\Db\Agrement $agrement)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeAgrement', array($agrement));
+
+        return parent::removeAgrement($agrement);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAgrement(\Application\Entity\Db\TypeAgrement $typeAgrement = NULL, \Application\Entity\Db\Annee $annee = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAgrement', array($typeAgrement, $annee));
+
+        return parent::getAgrement($typeAgrement, $annee);
     }
 
     /**

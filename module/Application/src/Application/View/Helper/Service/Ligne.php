@@ -309,7 +309,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                 $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
             }
             $out .= '<td>'.$this->renderEtape($this->service->getElementPedagogique()->getEtape())."</td>\n";
-            $out .= '<td>'.$this->renderElementPedagogique($this->service->getElementPedagogique())."</td>\n";
+            $out .= '<td>'.$this->getView()->elementPedagogique($this->service->getElementPedagogique())->renderLink()."</td>\n";
             if ($role instanceof \Application\Acl\ComposanteDbRole) {
                 $out .= '<td>'.$this->renderFOAD($this->service->getElementPedagogique())."</td>\n";
                 $out .= '<td>'.$this->renderRegimeInscription($this->service->getElementPedagogique())."</td>\n";

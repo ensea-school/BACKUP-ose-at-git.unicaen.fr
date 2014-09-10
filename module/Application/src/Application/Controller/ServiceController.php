@@ -18,6 +18,14 @@ use Application\Entity\Db\IntervenantExterieur;
  */
 class ServiceController extends AbstractActionController
 {
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')
+                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
+                ->disableForEntity('Application\Entity\Db\Etape')
+                ->disableForEntity('Application\Entity\Db\Etablissement');
+    }
+
     public function indexAction()
     {
         $totaux = $this->params()->fromQuery('totaux') == '1';
@@ -29,28 +37,22 @@ class ServiceController extends AbstractActionController
         $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
         $filter    = new \stdClass();
         $title     = "Enseignements et référentiel <small>$annee</small>";
-        
+
+        $this->initFilters();
+
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
         if (! $role instanceof \Application\Acl\IntervenantRole){
             $intervenant = null;
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
-            /*$intervenant = (int)$this->params()->fromRoute('intervenant'); // N'afficher qu'un seul intervenant
-            $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->get($intervenant);
-            if ($intervenant){
-                $service->finderByIntervenant( $intervenant, $qb );
-                $action = 'afficher'; // Affichage par défaut
-            }else{*/
-                $params = $this->getEvent()->getRouteMatch()->getParams();
-                $params['action'] = 'filtres';
-                $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-                $viewModel->addChild($listeViewModel, 'filtresListe');
-                $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
-                /* @var $rechercheForm \Application\Form\Service\Recherche */
-                $filter = $rechercheForm->hydrateFromSession();
-            //}
+            $params = $this->getEvent()->getRouteMatch()->getParams();
+            $params['action'] = 'filtres';
+            $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
+            $viewModel->addChild($listeViewModel, 'filtresListe');
+            $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+            /* @var $rechercheForm \Application\Form\Service\Recherche */
+            $filter = $rechercheForm->hydrateFromSession();
             $service->finderByFilterObject($filter, null, $qb);
-        }
-        else {
+        } else {
             $intervenant = $role->getIntervenant();
             $service->finderByIntervenant($intervenant, $qb);
             $action = 'afficher'; // Affichage par défaut
@@ -101,13 +103,15 @@ class ServiceController extends AbstractActionController
         $viewModel         = new \Zend\View\Model\ViewModel();
 
         $service->canAdd($intervenant, true);
+        $this->initFilters();
 
         // fetch des services prévisionnels
         $qb = $service->finderByContext();
         $service->finderByIntervenant($intervenant, $qb);
-//        if ($role instanceof \Application\Acl\ComposanteDbRole) {
-//            $service->finderByStructureResp($role->getStructure(), $qb);
-//        }
+        $service->leftJoin('applicationElementPedagogique', $qb, 'elementPedagogique');
+        $this->getServiceElementPedagogique()->leftJoin( 'applicationEtape', $qb, 'etape' );
+        $this->getServiceElementPedagogique()->leftJoin( 'applicationPeriode', $qb, 'periode');
+
         $services = $service->getList($qb);
         $service->setTypeVolumehoraire($services, $typeVolumeHoraire);
 
@@ -139,6 +143,8 @@ class ServiceController extends AbstractActionController
      */
     public function resumeAction()
     {
+        $this->initFilters();
+
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
@@ -173,6 +179,8 @@ class ServiceController extends AbstractActionController
 
     public function resumeRefreshAction()
     {
+        $this->initFilters();
+
         $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
         /* @var $rechercheForm \Application\Form\Service\Recherche */
         $filter = $rechercheForm->hydrateFromSession();
@@ -216,6 +224,8 @@ class ServiceController extends AbstractActionController
 
     public function rafraichirLigneAction()
     {
+        $this->initFilters();
+
         $service = $this->context()->serviceFromRoute();
         $typeVolumeHoraire  = $this->context()->typeVolumeHoraireFromRoute();
         $service->setTypeVolumeHoraire($typeVolumeHoraire);
@@ -257,6 +267,8 @@ class ServiceController extends AbstractActionController
 
     public function volumesHorairesRefreshAction()
     {
+        $this->initFilters();
+
         $id = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
         $service = $this->getServiceService();
@@ -308,6 +320,8 @@ class ServiceController extends AbstractActionController
 
     public function saisieAction()
     {
+        $this->initFilters();
+
         $id = (int)$this->params()->fromRoute('id');
         $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
         $service = $this->getServiceService();
@@ -362,6 +376,14 @@ class ServiceController extends AbstractActionController
     public function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
+    }
+
+    /**
+     * @return \Application\Service\ElementPedagogique
+     */
+    public function getServiceElementPedagogique()
+    {
+        return $this->getServiceLocator()->get('ApplicationElementPedagogique');
     }
 
     /**

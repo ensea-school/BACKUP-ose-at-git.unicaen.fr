@@ -212,7 +212,9 @@ abstract class AbstractEntityService extends AbstractService
         $entities = $qb->getQuery()->execute();
         $result = array();
         foreach( $entities as $entity ){
-            $result[$entity->getId()] = $entity;
+            if (get_class($entity) == $this->getEntityClass()){
+                $result[$entity->getId()] = $entity;
+            }
         }
         return $result;
     }

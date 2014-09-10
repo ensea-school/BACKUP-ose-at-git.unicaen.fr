@@ -371,6 +371,7 @@ return array(
         'invokables' => array(
             'EtapeModulateursSaisieForm'       => 'Application\View\Helper\OffreFormation\EtapeModulateursSaisieForm',
             'ElementModulateursSaisieFieldset' => 'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset',
+            'ElementPedagogique'               => 'Application\View\Helper\OffreFormation\ElementPedagogique',
         ),
     ),
 

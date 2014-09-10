@@ -211,8 +211,9 @@ abstract class AbstractEntityService extends AbstractService
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $entities = $qb->getQuery()->execute();
         $result = array();
+        $entityClass = $this->getEntityClass();
         foreach( $entities as $entity ){
-            if (get_class($entity) == $this->getEntityClass()){
+            if ($entity instanceof $entityClass){
                 $result[$entity->getId()] = $entity;
             }
         }

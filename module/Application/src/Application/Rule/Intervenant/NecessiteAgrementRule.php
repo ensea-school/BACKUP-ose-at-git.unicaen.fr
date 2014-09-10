@@ -2,12 +2,14 @@
 
 namespace Application\Rule\Intervenant;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Entity\Db\Dossier;
+use Application\Entity\Db\TypeAgrementStatut;
 use Application\Rule\AbstractRule;
+use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\TypeAgrementAwareTrait;
-use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Description of NecessiteAgrementRule
@@ -64,11 +66,15 @@ class NecessiteAgrementRule extends AbstractRule implements ServiceLocatorAwareI
     
     /**
      * 
-     * @return array id => TypeAgrementStatut
+     * @return TypeAgrementStatut[] id => TypeAgrementStatut
      */
     private function getTypesAgrementStatut()
     {
         $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
+        if ($this->getIntervenant() instanceof \Application\Entity\Db\IntervenantExterieur 
+                && ($dossier = $this->getIntervenant()->getDossier())) { /* @var $dossier Dossier */
+            $this->getServiceTypeAgrementStatut()->finderByPremierRecrutement($dossier->getPremierRecrutement(), $qb);
+        }
         $typesAgrementStatut = $this->getServiceTypeAgrementStatut()->getList($qb);
         
         return $typesAgrementStatut;

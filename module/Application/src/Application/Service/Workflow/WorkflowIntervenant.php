@@ -132,7 +132,7 @@ class WorkflowIntervenant extends AbstractWorkflow
         $necessiteAgrement = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrement NecessiteAgrementRule */
         $necessiteAgrement->setIntervenant($this->getIntervenant());
         foreach ($necessiteAgrement->getTypesAgrementAttendus() as $typeAgrement) {
-            $transitionRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
+            $transitionRule = clone $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
             $transitionRule
                 ->setIntervenant($this->getIntervenant())
                 ->setTypeAgrement($typeAgrement)

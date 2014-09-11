@@ -106,6 +106,8 @@ class Etape extends AbstractEntityService
     {
         $localContext = $this->getContextProvider()->getLocalContext();
         $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        /* @var $role \Application\Acl\DbRole */
+        if ('Administrateur' == $role->getRoleId()) return true;
 
         if ($role instanceof \Application\Acl\DbRole) { 
             if (!$localContext->getStructure()) {

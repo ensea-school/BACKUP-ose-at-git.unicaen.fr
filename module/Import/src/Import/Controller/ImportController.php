@@ -19,8 +19,8 @@ class ImportController extends AbstractActionController
             'INTERVENANT_PERMANENT',
             'INTERVENANT_EXTERIEUR',
             'INTERVENANT',
-            'AFFECTATION_RECHERCHE',
-            'ADRESSE_INTERVENANT',
+        //    'AFFECTATION_RECHERCHE',
+        //    'ADRESSE_INTERVENANT',
         );
         /* Liste des tables pour lesquelles les insertions doivent tout de même être scrutées si un intervenant existe déjà dans OSE */
         $inTable = array(
@@ -56,6 +56,13 @@ class ImportController extends AbstractActionController
             }
 
             $queries[$table] = $q;
+        }
+
+        if (isset($queries['ADRESSE_INTERVENANT'])){
+            $queries['ADRESSE_INTERVENANT']->addNotNull('INTERVENANT_ID');
+        }
+        if (isset($queries['AFFECTATION_RECHERCHE'])){
+            $queries['AFFECTATION_RECHERCHE']->addNotNull('INTERVENANT_ID');
         }
 
         if ($import){

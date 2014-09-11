@@ -1,4 +1,9 @@
-<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements") ?>
+<?php if ($intervenant){
+    $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");
+}else{
+    $this->headTitle()->append("Enseignements");
+}
+?>
 
 <h1 class="page-header"><?php echo $title; ?></h1>
 

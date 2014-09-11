@@ -198,7 +198,7 @@ return array(
                                 'paramsInject' => array(
                                     'intervenant',
                                 ),
-                                'class'   => "iconify glyphicon glyphicon-search",
+                                'icon'   => "glyphicon glyphicon-search",
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Intervenant:rechercher',
                             ),

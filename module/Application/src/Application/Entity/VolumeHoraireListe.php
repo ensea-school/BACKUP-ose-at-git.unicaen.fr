@@ -344,6 +344,22 @@ class VolumeHoraireListe
     }
 
     /**
+     * Détermine si, dans la liste des heures, des périodes non autorisées sont présentes
+     * 
+     * @return boolean
+     */
+    public function hasForbiddenPeriodes()
+    {
+        if (! $this->getService()->getElementPedagogique()) return false;
+        if (! $periode = $this->getService()->getElementPedagogique()->getPeriode()) return false;
+
+        $periodes = $this->getPeriodes();
+        foreach( $periodes as $p ){
+            if ($p !== $periode) return true;
+        }
+    }
+
+    /**
      *
      * @return MotifNonPaiement[]
      */

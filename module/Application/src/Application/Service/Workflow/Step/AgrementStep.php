@@ -43,4 +43,12 @@ class AgrementStep extends Step
                 ->setDescriptions($descriptions)
                 ->setRoute('intervenant/agrement/liste');
     }
+    
+    /**
+     * @return TypeAgrement
+     */
+    public function getTypeAgrement()
+    {
+        return $this->typeAgrement;
+    }
 }

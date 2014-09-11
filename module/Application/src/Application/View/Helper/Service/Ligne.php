@@ -287,12 +287,6 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $vhl     = $this->service->getVolumeHoraireListe();
 
         $typesIntervention = $this->getTypesIntervention();
-        $serviceService = $this->getServiceService();
-
-        $periode = $serviceService->getPeriode( $this->service );
-        if ($periode){
-            $vhl->setPeriode($periode);
-        }
 
         $out = '';
         if ($this->mustRenderIntervenant()) {
@@ -309,7 +303,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                 $out .= '<td>'.$this->renderStructure($this->service->getStructureEns())."</td>\n";
             }
             $out .= '<td>'.$this->renderEtape($this->service->getElementPedagogique()->getEtape())."</td>\n";
-            $out .= '<td>'.$this->renderElementPedagogique($this->service->getElementPedagogique())."</td>\n";
+            $out .= '<td>'.$this->getView()->elementPedagogique($this->service->getElementPedagogique())->renderLink()."</td>\n";
             if ($role instanceof \Application\Acl\ComposanteDbRole) {
                 $out .= '<td>'.$this->renderFOAD($this->service->getElementPedagogique())."</td>\n";
                 $out .= '<td>'.$this->renderRegimeInscription($this->service->getElementPedagogique())."</td>\n";
@@ -405,14 +399,19 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderTypeIntervention( \Application\Entity\VolumeHoraireListe $liste )
     {
+
+        $hasForbiddenPeriodes = $liste->hasForbiddenPeriodes();
         $liste = $liste->setMotifNonPaiement(false);
         $display = $this->typeInterventionIsVisible($liste->getTypeIntervention()) ? '' : ';display:none';
-        $out = '<td class="heures type-intervention '.$liste->getTypeIntervention()->getCode().'" style="text-align:right'.$display.'" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
+        $out = '';
+        $out .= '<td class="heures type-intervention '.$liste->getTypeIntervention()->getCode().'" style="text-align:right'.$display.'" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
+        if ($hasForbiddenPeriodes) $out .= '<abbr class="bg-danger" title="Des heures sont renseignées sur une période non conforme à la période de l\'enseignement">';
         if ($liste->getService()->getElementPedagogique() && $liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention())){
             $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
         }else{
             $out .= '0';
         }
+        if ($hasForbiddenPeriodes) $out .= '</abbr>';
         $out .= "</td>\n";
         return $out;
     }
@@ -465,6 +464,6 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function getServiceService()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-}
+    }
 
 }

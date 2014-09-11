@@ -3,6 +3,7 @@
 namespace Application\Form;
 
 use Zend\Form\Element\Csrf;
+use Zend\Form\Element\Hidden;
 use Zend\Form\Form;
 use Zend\InputFilter\FileInput;
 use Zend\InputFilter\InputFilter;
@@ -22,12 +23,18 @@ class Joindre extends Form
         parent::__construct();
         
         $this
+                ->setAttribute('id', "upload-form")
                 ->addElements()
                 ->addInputFilter();
     }
     
     private function addElements()
     {
+        /**
+         * Id intervenant
+         */
+        $this->add(new Hidden('id'));
+        
         /**
          * Pièces justificatives
          */

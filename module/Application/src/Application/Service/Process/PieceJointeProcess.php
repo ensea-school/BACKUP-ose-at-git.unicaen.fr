@@ -82,35 +82,36 @@ class PieceJointeProcess extends AbstractService
     }
     
     /**
-     * @return \Application\Form\Intervenant\Dossier
+     * @return \Zend\Form\Form
      */
     public function getFormPiecesJointes()
     {
-        $form = new \Zend\Form\Form();
+        $form           = new \Zend\Form\Form();
+        $basePathHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('basePath');
         
         $valueOptions = array();
-        foreach ($this->getTypesPieceJointeStatut() as $ligne) { /* @var $ligne TypePieceJointeStatut */
+        foreach ($this->getTypesPieceJointeStatut() as $tpjs) { /* @var $tpjs TypePieceJointeStatut */
             $totalHETD   = $this->getTotalHETDIntervenant();
-            $obligatoire = $ligne->getObligatoireToString($totalHETD);
+            $obligatoire = $tpjs->getObligatoireToString($totalHETD);
             
             $link = null;
-            if (($url = $ligne->getType()->getUrlModeleDoc())) {
-                $href = $this->getServiceLocator()->get('ViewHelperManager')->get('basePath')->__invoke($url);
+            if (($url = $tpjs->getType()->getUrlModeleDoc())) {
+                $href = $basePathHelper($url);
                 $fileName = ltrim(strrchr($href, '/'), '/');
                 $link = '<br /><a class="modele-doc" title="Cliquez pour télécharger le document à remplir" href="' 
                         . $href . '"><span class="glyphicon glyphicon-file"></span> ' . $fileName . '</a>';
             }
     
-            $type = (string) $ligne->getType();
-            if ($ligne->getType()->getCode() === TypePieceJointe::CARTE_ETUD) {
+            $type = (string) $tpjs->getType();
+            if ($tpjs->getType()->getCode() === TypePieceJointe::CARTE_ETUD) {
                 $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
                 $type .= " $annee";
             }
             $label = sprintf('%s <span class="text-warning">%s</span>%s', $type, $obligatoire, $link);
             $valueOptions[] = array(
-                'value' => $ligne->getType()->getId(),
+                'value' => $tpjs->getType()->getId(),
                 'label' => $label,
-                'selected' => $this->isTypePieceJointeFourni($ligne->getType()),
+                'selected' => $this->isTypePieceJointeFourni($tpjs->getType()),
                 'attributes' => array(
                     'class' => 'form-control required',
                 ),
@@ -204,12 +205,20 @@ class PieceJointeProcess extends AbstractService
     
     /**
      * 
+     * @param int|TypePieceJointe $typePieceJointe
      * @return array id => PieceJointe
      */
-    public function getPiecesJointesFournies()
+    public function getPiecesJointesFournies($typePieceJointe = null)
     {
+        if ($typePieceJointe && !$typePieceJointe instanceof TypePieceJointe) {
+            $typePieceJointe = $this->getServiceTypePieceJointe()->get($typePieceJointe);
+        }
+        
         if (null === $this->piecesJointesFournies) {
             $qb = $this->getServicePieceJointe()->finderByDossier($this->getDossier());
+            if ($typePieceJointe) {
+                $this->getServicePieceJointe()->finderByType($typePieceJointe, $qb);
+            }
             $this->piecesJointesFournies = $this->getServicePieceJointe()->getList($qb);
         }
         
@@ -221,18 +230,18 @@ class PieceJointeProcess extends AbstractService
      * @param int|TypePieceJointe $type
      * @return PieceJointe|null
      */
-    public function getPieceJointeFournie($type)
-    {
-        $type = $type instanceof TypePieceJointe ? $type->getId() : $type;
-        
-        foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
-            if ($type === $pj->getType()->getId()) {
-                return $pj;
-            }
-        }
-        
-        return null;
-    }
+//    public function getPieceJointeFournie($type)
+//    {
+//        $type = $type instanceof TypePieceJointe ? $type->getId() : $type;
+//        
+//        foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
+//            if ($type === $pj->getType()->getId()) {
+//                return $pj;
+//            }
+//        }
+//        
+//        return null;
+//    }
 
     /**
      * Teste si un type de pj est attendu.

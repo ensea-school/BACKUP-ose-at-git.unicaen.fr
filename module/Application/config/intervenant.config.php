@@ -124,32 +124,6 @@ return array(
                             ),
                         ),
                     ),
-                    'pieces-jointes' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/:intervenant/pieces-jointes',
-                            'constraints' => array(
-                                'intervenant' => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'controller' => 'Dossier',
-                                'action' => 'pieces-jointes',
-                            ),
-                        ),
-                    ),
-                    'joindre' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/:intervenant/joindre[/:action]',
-                            'constraints' => array(
-                                'intervenant' => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'controller' => 'Dossier',
-                                'action' => 'joindre',
-                            ),
-                        ),
-                    ),
                     'validation-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -292,15 +266,7 @@ return array(
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'pieces-jointes' => array(
-                                'label'  => "Pièces justificatives",
-                                'title'  => "Pièces justificatives du dossier de l'intervenant",
-                                'route'  => 'intervenant/pieces-jointes',
-                                'paramsInject' => array(
-                                    'intervenant',
-                                ),
-                                'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Dossier:pieces-jointes',
-                                'visible' => 'IntervenantNavigationPageVisibility',
+                                // coquille vide qui réserve l'emplacement du menu
                             ),
                             'validation-dossier' => array(
                                 'label'  => "Validation des données personnelles",
@@ -364,7 +330,7 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
-                    'action'     => array('voir', 'modifier', 'pieces-jointes', 'joindre', 'upload', 'download'),
+                    'action'     => array('voir', 'modifier'),
                     'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
                 ),
                 array(
@@ -402,10 +368,6 @@ return array(
             'ApplicationCivilite'              => 'Application\\Service\\Civilite',
             'ApplicationStatutIntervenant'     => 'Application\\Service\\StatutIntervenant',
             'ApplicationDossier'               => 'Application\\Service\\Dossier',
-            'ApplicationPieceJointe'           => 'Application\\Service\\PieceJointe',
-            'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
-            'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
-            'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
             'WorkflowIntervenant'              => 'Application\\Service\\Workflow\\WorkflowIntervenant',
         ),
         'initializers' => array(

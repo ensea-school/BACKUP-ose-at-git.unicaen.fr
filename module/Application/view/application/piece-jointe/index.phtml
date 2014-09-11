@@ -1,0 +1,84 @@
+<link href="<?php //echo $this->basePath('css/fileinput.min.css') ?>" media="screen" rel="stylesheet" type="text/css"> 
+
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Pièces justificatives") ?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+$messenger = $this->messenger(true);
+if ($complet) {
+    $messenger->addMessage("Toutes les pièces justificatives obligatoires ont été fournies.", 'success');
+}
+else {
+    $messenger->addMessage("Il manque des pièces justificatives obligatoires.", 'danger');
+}
+echo $messenger;
+?>
+
+<?php $form->prepare(); ?>
+
+<style>
+    a.modele-doc { margin-left: 20px; }
+    span.text-warning { font-style: italic; }
+</style>
+
+<div class="row">
+    <div class="col-md-6">
+        <?php echo $this->form()->openTag($form) ?>
+        <?php echo $this->formControlGroup($form->get('pj')) ?>
+        <?php echo $this->formElement($form->get('security')) ?>
+        <hr />
+        <?php echo $form->has('submit') ? $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')) : null ?>
+        <?php echo $this->form()->closeTag() ?>
+    </div>
+    
+    <div class="col-md-6">
+        
+        <?php foreach($form->get('pj')->getValueOptions() as $options): ?>
+        <?php $url = $this->url('piece-jointe/intervenant/lister', array('typePieceJointe' => $options['value']), [], true); ?>
+        <div class="liste-pj-par-type" data-url="<?php echo $url ?>"></div>
+        <?php endforeach ?>
+        
+        <!--<h3>Destinataires des pièces justificatives</h3>
+        <?php if (!count($destinataires)): ?>
+            <?php 
+            $contact = '<a href="' . $this->url('contact') . '">Contact</a>';
+            echo $this->messenger()->setMessage(
+                    "<strong>Oups!</strong> L'application n'a pas été en mesure de déterminer la liste des destinataires compétents, "
+                    . "merci d'utiliser la rubrique $contact en bas de cette page pour signaler cette anomalie.", 'danger');
+            ?>
+        <?php else: ?>
+            <?php echo $this->htmlList($destinataires, false, false, false); ?>
+        <?php endif; ?>-->
+    </div>
+</div>
+
+<br />
+<?php 
+$message = <<<EOS
+<p><strong>Information importante</strong></p>
+<p>Votre saisie est terminée.</p>
+<p>Votre contrat ne pourra être édité qu'après réception et vérification de l'ensemble des pièces justificatives.<br />
+Aucun enseignement ne pourra avoir lieu avant la signature du contrat.</p>
+EOS;
+echo $this->messenger()->setMessage($message, 'warning');
+?>
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>
+    
+    
+<script>
+$(function() {
+    // interdiction de décocher une case déjà cochée
+    $("input[type=checkbox]:checked").not(":disabled").css('opacity', '0.5').click(function() { return false; });
+    
+    $(".liste-pj-par-type").each(function(index, elem) { $(elem).refresh(); });
+});
+</script>
+
+<?php //$this->inlineScript()->prependFile($this->basePath('js/fileinput.min.js')) ?>
+
+<!--<script src="http://malsup.github.com/jquery.form.js"></script>--> 

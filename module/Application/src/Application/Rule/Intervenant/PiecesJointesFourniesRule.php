@@ -2,27 +2,25 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\Intervenant;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Rule\AbstractRule;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
+use Application\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\IntervenantExterieur;
-use Application\Service\TypePieceJointeStatut;
+use Application\Service\TypePieceJointeStatut as TypePieceJointeStatutService;
 
 /**
- * Description of PiecesJointesFournies
+ * Description of PiecesJointesFourniesRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PiecesJointesFourniesRule extends IntervenantRule
+class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
-    /**
-     * @var TypePieceJointeStatut
-     */
-    private $serviceTypePieceJointeStatut;
-    
-    public function __construct(Intervenant $intervenant, TypePieceJointeStatut $serviceTypePieceJointeStatut)
-    {
-        parent::__construct($intervenant);
-        $this->serviceTypePieceJointeStatut = $serviceTypePieceJointeStatut;
-    }
+    use ServiceLocatorAwareTrait;
+    use ContextProviderAwareTrait;
+    use IntervenantAwareTrait;
     
     public function execute()
     {
@@ -33,10 +31,12 @@ class PiecesJointesFourniesRule extends IntervenantRule
             $typesFournis[$pj->getType()->getId()] = $pj->getType();
         }
         
+        $service = $this->getServiceTypePieceJointeStatut();
+        
         // liste des (types de) pièces justificatives à fournir selon le statut d'intervenant
-        $qb = $this->serviceTypePieceJointeStatut->finderByStatutIntervenant($this->getIntervenant()->getStatut());
-        $qb = $this->serviceTypePieceJointeStatut->finderByPremierRecrutement($this->getIntervenant()->getDossier()->getPremierRecrutement(), $qb);
-        $typesPieceJointeStatut = $this->serviceTypePieceJointeStatut->getList($qb);
+        $qb = $service->finderByStatutIntervenant($this->getIntervenant()->getStatut());
+        $qb = $service->finderByPremierRecrutement($this->getIntervenant()->getDossier()->getPremierRecrutement(), $qb);
+        $typesPieceJointeStatut = $service->getList($qb);
         
         // recherche des (types de) pièces justificatives obligatoires non fournies
         $typesNonFournis = array();
@@ -63,5 +63,13 @@ class PiecesJointesFourniesRule extends IntervenantRule
     public function isRelevant()
     {
         return $this->getIntervenant() instanceof IntervenantExterieur && null !== $this->getIntervenant()->getDossier();
+    }
+    
+    /**
+     * @return TypePieceJointeStatutService
+     */
+    private function getServiceTypePieceJointeStatut()
+    {
+        return $this->getServiceLocator()->get('applicationTypePieceJointeStatut');
     }
 }

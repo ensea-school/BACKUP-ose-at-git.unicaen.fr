@@ -28,6 +28,21 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     private $url;
 
     /**
+     * @var blob
+     */
+    private $fichier;
+
+    /**
+     * @var string
+     */
+    private $nomFichier;
+
+    /**
+     * @var float
+     */
+    private $tailleFichier;
+
+    /**
      * @var \DateTime
      */
     private $validiteDebut;
@@ -51,6 +66,11 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
      * @var \Application\Entity\Db\Dossier
      */
     private $dossier;
+
+    /**
+     * @var \Application\Entity\Db\Validation
+     */
+    private $validation;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -161,6 +181,75 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     }
 
     /**
+     * Set fichier
+     *
+     * @param string $fichier
+     * @return PieceJointe
+     */
+    public function setFichier($fichier)
+    {
+        $this->fichier = $fichier;
+
+        return $this;
+    }
+
+    /**
+     * Get fichier
+     *
+     * @return string 
+     */
+    public function getFichier()
+    {
+        return $this->fichier;
+    }
+
+    /**
+     * Set nomFichier
+     *
+     * @param string $nomFichier
+     * @return PieceJointe
+     */
+    public function setNomFichier($nomFichier)
+    {
+        $this->nomFichier = $nomFichier;
+
+        return $this;
+    }
+
+    /**
+     * Get nomFichier
+     *
+     * @return string 
+     */
+    public function getNomFichier()
+    {
+        return $this->nomFichier;
+    }
+
+    /**
+     * Set tailleFichier
+     *
+     * @param float $tailleFichier
+     * @return PieceJointe
+     */
+    public function setTailleFichier($tailleFichier)
+    {
+        $this->tailleFichier = $tailleFichier;
+
+        return $this;
+    }
+
+    /**
+     * Get tailleFichier
+     *
+     * @return float 
+     */
+    public function getTailleFichier()
+    {
+        return $this->tailleFichier;
+    }
+
+    /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
@@ -260,6 +349,29 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getDossier()
     {
         return $this->dossier;
+    }
+
+    /**
+     * Set validation
+     *
+     * @param \Application\Entity\Db\Validation $validation
+     * @return PieceJointe
+     */
+    public function setValidation(\Application\Entity\Db\Validation $validation = null)
+    {
+        $this->validation = $validation;
+
+        return $this;
+    }
+
+    /**
+     * Get validation
+     *
+     * @return \Application\Entity\Db\Validation 
+     */
+    public function getValidation()
+    {
+        return $this->validation;
     }
 
     /**

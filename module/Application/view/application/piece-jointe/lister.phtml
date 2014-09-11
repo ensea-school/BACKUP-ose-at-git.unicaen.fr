@@ -1,0 +1,29 @@
+<h3>Fichiers fournis pour la pièce &laquo; <?php echo $this->typePieceJointe ?> &raquo; :</h3>
+<?php if (count($this->piecesJointes)): ?>
+<ul>
+<?php foreach ($this->piecesJointes as $pj): /* @var $pj \Application\Entity\Db\PieceJointe */ ?>
+    <li>
+        <a href="#"><span class="glyphicon glyphicon-file"></span> <?php echo $pj->getNomFichier() ?></a> 
+        <a href="#" title="Supprimer ce fichier"><span class="glyphicon glyphicon-trash"></span></a>
+    </li>
+<?php endforeach ?>
+</ul>
+<?php else: ?>
+<p>Aucun.</p>
+<?php endif ?>
+<a class="ajax-modal btn btn-xs btn-default" title="Déposer un fichier supplémentaire" 
+   href="<?php echo $this->url('piece-jointe/intervenant/ajouter', [], [], true) ?>"><span class="glyphicon glyphicon-plus"></span> Ajouter</a> 
+
+<?php $form->prepare(); // The correct enctype is set here ?>
+<?php echo $this->form()->openTag($form); ?>
+
+    <div class="form-element">
+        <?php $fileElement = $form->get('files'); ?>
+        <?php echo $this->formLabel($fileElement); ?>
+        <?php echo $this->formFile($fileElement); ?>
+        <?php echo $this->formElementErrors($fileElement); ?>
+    </div>
+
+    <input type="submit" value="Envoyer" />
+
+<?php echo $this->form()->closeTag(); ?>

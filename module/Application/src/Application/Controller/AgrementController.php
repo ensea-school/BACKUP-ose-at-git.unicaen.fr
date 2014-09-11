@@ -380,7 +380,7 @@ implements ContextProviderAwareInterface,
             $wf = $this->getWorkflowIntervenant();
             $wf->setIntervenant($i)->setRole($this->role);
             $step = $wf->getCurrentStep();
-            if ($step instanceof \Application\Service\Workflow\Step\AgrementStep) {
+            if ($step instanceof \Application\Service\Workflow\Step\AgrementStep && $step->getTypeAgrement() === $this->typeAgrement) {
                 $intervenants[$i->getId()] = $i;
             }
             $wf->recreateSteps();

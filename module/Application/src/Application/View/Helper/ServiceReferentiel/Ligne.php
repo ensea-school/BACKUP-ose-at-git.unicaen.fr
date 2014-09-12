@@ -109,7 +109,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderStructure($structure)
     {
         if (!$structure) {
-            return '';
+            return 'Établissement';
         }
 
         $url   = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));

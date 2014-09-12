@@ -291,9 +291,11 @@ class TypeAgrement implements HistoriqueAwareInterface
     public function __call($name, $arguments)
     {
         if (substr($name, 0, $len = 2) === 'is') {
-            $code = strtolower(substr($name, $len));
+            $code = substr($name, $len);
+            $f    = new \Zend\Filter\Word\CamelCaseToUnderscore();
+            $code = strtoupper($f->filter($code));
             if (in_array($code, static::$codes)) {
-                return strtolower($this->getCode()) === $code;
+                return $this->getCode() === $code;
             }
         }
         

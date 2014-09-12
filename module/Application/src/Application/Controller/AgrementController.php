@@ -99,7 +99,7 @@ implements ContextProviderAwareInterface,
         $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
-        $this->title        = sprintf("Agrément &laquo; %s &raquo; <small>%s</small>", $this->typeAgrement, $this->intervenant);
+        $this->title        = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
         $messages           = [];
 
         $this->em()->getFilters()->enable('historique');
@@ -115,8 +115,8 @@ implements ContextProviderAwareInterface,
          */
         if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
             $structures = $agrementFourniRule->getStructuresEnseignement();
-            $messages[] = sprintf("Sont attendus autant d'agréments &laquo; %s &raquo; qu'il y a de composantes d'enseignement.", 
-                    $this->typeAgrement);
+//            $messages[] = sprintf("Sont attendus autant d'agréments &laquo; %s &raquo; qu'il y a de composantes d'enseignement.", 
+//                    $this->typeAgrement);
         }
         /**
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
@@ -127,7 +127,7 @@ implements ContextProviderAwareInterface,
 //            $messages[] = sprintf("Est attendu un seul agrément &laquo; %s &raquo; par la composante d'enseignement &laquo; %s &raquo;.", 
 //                    $this->typeAgrement, $structureEns);
             $structures = [ null ];
-            $messages[] = sprintf("Est attendu un seul agrément &laquo; %s &raquo;.", $this->typeAgrement);
+//            $messages[] = sprintf("Est attendu un seul agrément &laquo; %s &raquo;.", $this->typeAgrement);
         }
         else {
             throw new LogicException("Type d'agrément inattendu!");
@@ -305,7 +305,7 @@ implements ContextProviderAwareInterface,
      */
     private function updateCommon()
     {
-        $this->title      = sprintf("Saisie de l'agrément &laquo; %s &raquo; <small>%s</small>", $this->typeAgrement, $this->intervenant);
+        $this->title      = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
         $this->formSaisie = $this->getFormSaisie();
 
         $this->formSaisie->bind($this->agrement);
@@ -356,7 +356,7 @@ implements ContextProviderAwareInterface,
             throw new LogicException("Type d'agrément inattendu!");
         }
         
-        $this->title = sprintf("Ajout d'agréments &laquo; %s &raquo; par lot <small>%s</small>", $this->typeAgrement, $structure);
+        $this->title = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $structure);
         
         /**
          * Recherche des intervenants candidats :
@@ -414,11 +414,11 @@ implements ContextProviderAwareInterface,
                 }
             }
 
-            $messages[] = sprintf("Les intervenants ci-dessous sont en attente d'agrément &laquo; %s &raquo;.", $this->typeAgrement);
+            $messages[] = sprintf("Intervenants en attente d'agrément par %s.", $this->typeAgrement->toString(true));
         }
         else {
             $this->formSaisie = null;
-            $messages['warning'] = sprintf("Aucun intervenant en attente d'agrément &laquo; %s &raquo; n'a été trouvé.", $this->typeAgrement);
+            $messages['warning'] = sprintf("Aucun intervenant n'est en attente d'agrément par %s.", $this->typeAgrement->toString(true));
         }
         
         $this->view = new ViewModel(array(

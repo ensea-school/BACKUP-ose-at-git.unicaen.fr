@@ -378,6 +378,17 @@ class TypeAgrement extends \Application\Entity\Db\TypeAgrement implements \Doctr
     /**
      * {@inheritDoc}
      */
+    public function toString($avecArticle = false, $deLe = false)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'toString', array($avecArticle, $deLe));
+
+        return parent::toString($avecArticle, $deLe);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function __call($name, $arguments)
     {
 

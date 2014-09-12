@@ -254,14 +254,30 @@ class TypeAgrement implements HistoriqueAwareInterface
     {
         return $this->histoCreateur;
     }
-    
+
     /**
+     * Libellé de cet objet.
      * 
      * @return string
      */
     public function __toString()
     {
-        return $this->getLibelle();
+        return $this->toString();
+    }
+    
+    /**
+     * Libellé de cet objet.
+     * 
+     * @param $avecArticle boolean Inclure l'article défini (utile pour inclure le libellé dans une phrase)
+     * @param $deLe boolean Activer la formulation "du"/"de l'" ou non
+     * @return string
+     * @todo Gérer le masculin/féminin...
+     */
+    public function toString($avecArticle = false, $deLe = false)
+    {
+        $template = ($avecArticle ? ($deLe ? "du %s" : "le %s") : "%s");
+        
+        return sprintf($template, $this->getLibelle());
     }
     
     /**

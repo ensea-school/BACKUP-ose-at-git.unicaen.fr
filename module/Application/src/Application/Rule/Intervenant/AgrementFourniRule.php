@@ -2,21 +2,24 @@
 
 namespace Application\Rule\Intervenant;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Entity\Db\Agrement;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeAgrement;
 use Application\Rule\AbstractRule;
+use Application\Service\Agrement as AgrementService;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Traits\StructureAwareTrait;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\TypeAgrementAwareTrait;
-use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
-use Application\Service\Agrement as AgrementService;
-use Application\Service\Structure as StructureService;
 use Application\Service\Service as ServiceService;
-use Application\Entity\Db\Structure;
-use Application\Entity\Db\Agrement;
-use Application\Entity\Db\TypeAgrement;
+use Application\Service\Structure as StructureService;
+use Application\Service\TypeAgrementStatut;
+use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\StructureAwareTrait;
+use Application\Traits\TypeAgrementAwareTrait;
+use Common\Exception\LogicException;
+use Doctrine\ORM\EntityManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Description of AgrementFourniRule
@@ -42,7 +45,7 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
          */
         if ($this->getMemePartiellement()) {
             if ($this->getStructure()) {
-                throw new \Common\Exception\LogicException(
+                throw new LogicException(
                         "Si une structure est fournie à cette règle, le flag d'agrément partiel ne peut être à true.");
             }
             if (count($this->getTypesAgrementFournis())) {
@@ -58,8 +61,10 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
                 $this->setMessage(sprintf("L'agrément &laquo; %s &raquo; n'a pas encore été donné.", $this->getTypeAgrement()));
                 return false;
             }
-            // une structure d'enseignement précise doit être fournie
-            $structures = [ $this->getStructure()->getId() => $this->getStructure() ];
+//            // une structure d'enseignement précise doit être fournie
+//            $structures = [ $this->getStructure()->getId() => $this->getStructure() ];
+            // aucun critère de structure pour ce type d'agrément
+            $structures = [ null ];
         }
         /**
          * Conseil Restreint (un par structure d'enseignement)
@@ -78,9 +83,9 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
         // teste si un agrément existe pour chaque structure d'enseignement
         foreach ($structures as $structure) {
             if (!count($this->getAgrementsFournis($structure))) {
-                $this->setMessage(sprintf("L'agrément &laquo; %s &raquo; n'a pas encore été donné par la structure &laquo; %s &raquo;.", 
+                $this->setMessage(sprintf("L'agrément &laquo; %s &raquo; n'a pas encore été donné%s.", 
                         $this->getTypeAgrement(),
-                        $structure));
+                        $structure ? sprintf(" par la structure &laquo; %s &raquo;", $structure) : null));
                 return false;
             }
         }
@@ -122,7 +127,7 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
      * Change la valeur du flag indiquant si l'on se satisfait d'un agrément "partiel".
      * 
      * @param boolean $memePartiellement
-     * @return \Application\Rule\Intervenant\AgrementFourniRule
+     * @return AgrementFourniRule
      */
     public function setMemePartiellement($memePartiellement = true)
     {
@@ -172,8 +177,9 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
     }
     
     /**
+     * Recherche les agréments déjà fournis.
      * 
-     * @param Structure $structure
+     * @param Structure|null $structure Structure concernée éventuelle
      * @return array id => Agrement
      */
     public function getAgrementsFournis(Structure $structure = null)
@@ -204,12 +210,12 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
     public function getStructuresEnseignement()
     {
         // recherche des structures d'enseignements de l'intervenant
-        $serviceStructure = $this->getServiceStructure();
-        $serviceService   = $this->getServiceService();
-        $qb = $serviceStructure->initQuery()[0];
-        $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
-        $serviceService->finderByIntervenant($this->getIntervenant(), $qb);
-        $structuresEns = $serviceStructure->getList($qb);
+        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); /* @var $em EntityManager */
+        $qb = $em->getRepository('Application\Entity\Db\Structure')->createQueryBuilder("str")
+                ->join("str.service", "s")
+                ->where("s.intervenant = :intervenant")
+                ->setParameter('intervenant', $this->getIntervenant());
+        $structuresEns = $qb->getQuery()->getResult();
         
         return $structuresEns;
     }

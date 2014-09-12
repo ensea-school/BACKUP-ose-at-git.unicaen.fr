@@ -63,7 +63,7 @@ return array(
                             'voir-str' => array(
                                 'type'    => 'Segment',
                                 'options' => array(
-                                    'route' => '/:typeAgrement/voir-str/:structure',
+                                    'route' => '/:typeAgrement/voir-str[/:structure]',
                                     'constraints' => array(
                                         'typeAgrement' => '[0-9]*',
                                         'structure' => '[0-9]*',
@@ -205,7 +205,7 @@ return array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
                     array(
-                        array(ComposanteRole::ROLE_ID), 
+                        array(ComposanteRole::ROLE_ID, 'Administrateur'), 
                         'Agrement', 
                         array('create', 'read', 'delete', 'update'), 
                         'AgrementAssertion',

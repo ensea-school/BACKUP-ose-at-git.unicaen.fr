@@ -57,34 +57,35 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
         if ($this->identityRole instanceof ComposanteDbRole) {
             // structure de responsabilité de l'utilisateur et structure de l'agrément doivent correspondre
             if ($this->identityRole->getStructure() !== $this->resource->getStructure()) {
+//            if ($this->resource->getStructure() && $this->identityRole->getStructure()->getId() !== $this->resource->getStructure()->getId()) {
                 return false;
             }
-            
-            $agrementStepKey = 'KEY_' . $this->resource->getType()->getCode();
-            
-            // l'étape Agrement du workflow doit être atteignable
-            if (!$this->getWorkflow()->isStepReachable($agrementStepKey)) {
-                return false;
-            }
-            
-            /**
-             * Modification, suppression
-             */
-            if (in_array($this->privilege, ['update', 'delete'])) {
-                // l'étape suivante du workflow ne doit pas avoir été franchie
-                $nextStep = $this->getWorkflow()->getNextStep($agrementStepKey);
-                if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
-                    return false;
-                }
-            }
-            
-            return true;
+        }
+        
+        $agrementStepKey = 'KEY_' . $this->resource->getType()->getCode();
+
+        // l'étape Agrement du workflow doit être atteignable
+        if (!$this->getWorkflow()->isStepReachable($agrementStepKey)) {
+            return false;
         }
 
-//        /*********************************************************
-//         *                      Rôle X
-//         *********************************************************/
-//        if ($this->identityRole instanceof XRole) {
+        /**
+         * Modification, suppression
+         */
+        if (in_array($this->privilege, ['update', 'delete'])) {
+            // l'étape suivante du workflow ne doit pas avoir été franchie
+            $nextStep = $this->getWorkflow()->getNextStep($agrementStepKey);
+            if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
+                return false;
+            }
+        }
+
+        return true;
+
+        /*********************************************************
+         *                      Rôle X
+         *********************************************************/
+//        if ($this->identityRole->getRoleId() === \Application\Provider\Role\RoleProvider::ROLE_ID_ADMIN) {
 //            
 //        }
         

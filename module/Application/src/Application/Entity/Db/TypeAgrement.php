@@ -10,6 +10,11 @@ class TypeAgrement implements HistoriqueAwareInterface
     const CODE_CONSEIL_RESTREINT  = 'CONSEIL_RESTREINT';
     const CODE_CONSEIL_ACADEMIQUE = 'CONSEIL_ACADEMIQUE';
 
+    static public $codes = [
+        self::CODE_CONSEIL_RESTREINT,
+        self::CODE_CONSEIL_ACADEMIQUE,
+    ];
+    
     /**
      * @var string
      */
@@ -257,5 +262,25 @@ class TypeAgrement implements HistoriqueAwareInterface
     public function __toString()
     {
         return $this->getLibelle();
+    }
+    
+    /**
+     * Intercepte les appels de méthodes de la forme "isXxxxxx" où Xxxxxx est un
+     * code de type d'agrément.
+     * 
+     * @param string $name Ex: isConseilRestreint, isConseilAcademique
+     * @param araay $arguments
+     * @throws \BadMethodCallException
+     */
+    public function __call($name, $arguments)
+    {
+        if (substr($name, 0, $len = 2) === 'is') {
+            $code = strtolower(substr($name, $len));
+            if (in_array($code, static::$codes)) {
+                return strtolower($this->getCode()) === $code;
+            }
+        }
+        
+        throw new \BadMethodCallException("Méthode inconnue : $name");
     }
 }

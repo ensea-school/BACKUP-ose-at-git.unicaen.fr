@@ -46,6 +46,12 @@ implements ContextProviderAwareInterface,
     use IntervenantServiceAwareTrait;
     use ServiceServiceAwareTrait;
     
+    const ACTION_VOIR        = "voir";
+    const ACTION_VOIR_STR    = "voir-str";
+    const ACTION_AJOUTER     = "ajouter";
+    const ACTION_AJOUTER_LOT = "ajouter-lot";
+    const ACTION_MODIFIER    = "modifier";
+
     /**
      * @var RoleInterface
      */

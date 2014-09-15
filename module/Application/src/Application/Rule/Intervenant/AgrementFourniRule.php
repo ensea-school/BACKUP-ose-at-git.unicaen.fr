@@ -2,38 +2,21 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\Agrement;
-use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
-use Application\Rule\AbstractRule;
-use Application\Service\Agrement as AgrementService;
 use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
-use Application\Service\Service as ServiceService;
-use Application\Service\Structure as StructureService;
-use Application\Service\TypeAgrementStatut;
-use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\StructureAwareTrait;
-use Application\Traits\TypeAgrementAwareTrait;
 use Common\Exception\LogicException;
-use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Traits\StructureAwareTrait;
 
 /**
  * Description of AgrementFourniRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class AgrementFourniRule extends AgrementAbstractRule implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
-    use IntervenantAwareTrait;
     use StructureAwareTrait;
-    use TypeAgrementAwareTrait;
-
+    
     /**
      * 
      * @return boolean
@@ -133,122 +116,5 @@ class AgrementFourniRule extends AbstractRule implements ServiceLocatorAwareInte
     {
         $this->memePartiellement = $memePartiellement;
         return $this;
-    }
-    
-    /**
-     * 
-     * @return array id => TypeAgrementStatut
-     */
-    private function getTypesAgrementStatut()
-    {
-        $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
-        
-        return $this->getServiceTypeAgrementStatut()->getList($qb);
-    }
-    
-    /**
-     * 
-     * @return array id => TypeAgrement
-     */
-    public function getTypesAgrementAttendus()
-    {
-        $typesAgrementAttendus = array();
-        foreach ($this->getTypesAgrementStatut() as $tas) { /* @var $tas TypeAgrementStatut */
-            $type = $tas->getType();
-            $typesAgrementAttendus[$type->getId()] = $type;
-        }
-        
-        return $typesAgrementAttendus;
-    }
-    
-    /**
-     * 
-     * @return array id => TypeAgrement
-     */
-    public function getTypesAgrementFournis()
-    {
-        $typesAgrementFournis = array();
-        foreach ($this->getAgrementsFournis() as $a) { /* @var $a Agrement */
-            $type = $a->getType();
-            $typesAgrementFournis[$type->getId()] = $type;
-        }
-        
-        return $typesAgrementFournis;
-    }
-    
-    /**
-     * Recherche les agréments déjà fournis.
-     * 
-     * @param Structure|null $structure Structure concernée éventuelle
-     * @return array id => Agrement
-     */
-    public function getAgrementsFournis(Structure $structure = null)
-    {
-        $qb = $this->getServiceAgrement()->finderByType($this->getTypeAgrement());
-        $qb = $this->getServiceAgrement()->finderByIntervenant($this->getIntervenant(), $qb);
-        $qb = $this->getServiceAgrement()->finderByAnnee($this->getContextProvider()->getGlobalContext()->getAnnee(), $qb);
-        $agrementsFournis = $this->getServiceAgrement()->getList($qb);
-        
-        // filtrage par structure éventuel
-        if ($structure) {
-            $agrements = [];
-            foreach ($agrementsFournis as $agrement) { /* @var $agrement Agrement */
-                if ($structure === $agrement->getStructure()) {
-                    $agrements[$agrement->getId()] = $agrement;
-                }
-            }
-            return $agrements;
-        }
-        
-        return $agrementsFournis;
-    }
-    
-    /**
-     * 
-     * @return array id => Structure
-     */
-    public function getStructuresEnseignement()
-    {
-        // recherche des structures d'enseignements de l'intervenant
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); /* @var $em EntityManager */
-        $qb = $em->getRepository('Application\Entity\Db\Structure')->createQueryBuilder("str")
-                ->join("str.service", "s")
-                ->where("s.intervenant = :intervenant")
-                ->setParameter('intervenant', $this->getIntervenant());
-        $structuresEns = $qb->getQuery()->getResult();
-        
-        return $structuresEns;
-    }
-    
-    /**
-     * @return TypeAgrementStatutService
-     */
-    private function getServiceTypeAgrementStatut()
-    {
-        return $this->getServiceLocator()->get('applicationTypeAgrementStatut');
-    }
-    
-    /**
-     * @return AgrementService
-     */
-    private function getServiceAgrement()
-    {
-        return $this->getServiceLocator()->get('applicationAgrement');
-    }
-    
-    /**
-     * @return StructureService
-     */
-    private function getServiceStructure()
-    {
-        return $this->getServiceLocator()->get('applicationStructure');
-    }
-    
-    /**
-     * @return ServiceService
-     */
-    private function getServiceService()
-    {
-        return $this->getServiceLocator()->get('applicationService');
     }
 }

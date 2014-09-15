@@ -2,26 +2,19 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\Dossier;
-use Application\Entity\Db\TypeAgrementStatut;
-use Application\Rule\AbstractRule;
-use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\TypeAgrementAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Description of NecessiteAgrementRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class NecessiteAgrementRule extends AbstractRule implements ServiceLocatorAwareInterface
+class NecessiteAgrementRule extends AgrementAbstractRule implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use IntervenantAwareTrait;
-    use TypeAgrementAwareTrait;
-    
+    /**
+     * 
+     * @return boolean
+     */
     public function execute()
     {
         $statut = $this->getIntervenant()->getStatut();
@@ -62,44 +55,5 @@ class NecessiteAgrementRule extends AbstractRule implements ServiceLocatorAwareI
     public function isRelevant()
     {
         return true;
-    }
-    
-    /**
-     * 
-     * @return TypeAgrementStatut[] id => TypeAgrementStatut
-     */
-    private function getTypesAgrementStatut()
-    {
-        $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
-        if ($this->getIntervenant() instanceof \Application\Entity\Db\IntervenantExterieur 
-                && ($dossier = $this->getIntervenant()->getDossier())) { /* @var $dossier Dossier */
-            $this->getServiceTypeAgrementStatut()->finderByPremierRecrutement($dossier->getPremierRecrutement(), $qb);
-        }
-        $typesAgrementStatut = $this->getServiceTypeAgrementStatut()->getList($qb);
-        
-        return $typesAgrementStatut;
-    }
-    
-    /**
-     * 
-     * @return array id => TypeAgrement
-     */
-    public function getTypesAgrementAttendus()
-    {
-        $typesAgrementAttendus = array();
-        foreach ($this->getTypesAgrementStatut() as $typeAgrementStatut) { /* @var $typeAgrementStatut TypeAgrementStatut */
-            $type = $typeAgrementStatut->getType();
-            $typesAgrementAttendus[$type->getId()] = $type;
-        }
-        
-        return $typesAgrementAttendus;
-    }
-    
-    /**
-     * @return TypeAgrementStatutService
-     */
-    private function getServiceTypeAgrementStatut()
-    {
-        return $this->getServiceLocator()->get('applicationTypeAgrementStatut');
     }
 }

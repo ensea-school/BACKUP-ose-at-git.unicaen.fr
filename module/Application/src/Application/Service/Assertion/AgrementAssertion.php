@@ -3,23 +3,27 @@
 namespace Application\Service\Assertion;
 
 use Application\Acl\ComposanteDbRole;
+use Application\Controller\AgrementController;
 use Application\Entity\Db\Agrement;
+use Application\Entity\Db\TypeAgrement;
+use Application\Provider\Role\RoleProvider;
 use Application\Rule\Intervenant\AgrementFourniRule;
 use Application\Rule\Intervenant\NecessiteAgrementRule;
 use Application\Service\Initializer\AgrementServiceAwareInterface;
 use Application\Service\Initializer\AgrementServiceAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenant;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
-use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 
 /**
  * Description of Agrement
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareInterface, WorkflowIntervenantAwareInterface
+class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwareInterface, WorkflowIntervenantAwareInterface
 {
     use AgrementServiceAwareTrait;
     use WorkflowIntervenantAwareTrait;
@@ -27,7 +31,7 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
     /**
      * @var Agrement
      */
-    protected $resource;
+    protected $agrement;
     
     /**
      * Returns true if and only if the assertion conditions are met
@@ -44,26 +48,98 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
-        if (!$resource instanceof Agrement) {
-            return false;
-        }
-        if (!parent::assert($acl, $role, $resource, $privilege)) {
-            return false;
+        /**
+         * Cas N°1 : la ressource spécifiée est une entité ; un privilège est spécifié.
+         */
+        if ($resource instanceof Agrement) {
+            return $this->assertEntity($acl, $role, $resource, $privilege);
         }
         
-        /*********************************************************
-         *                      Rôle Composante
-         *********************************************************/
-        if ($this->identityRole instanceof ComposanteDbRole) {
-            // structure de responsabilité de l'utilisateur et structure de l'agrément doivent correspondre
-            if ($this->identityRole->getStructure() !== $this->resource->getStructure()) {
-//            if ($this->resource->getStructure() && $this->identityRole->getStructure()->getId() !== $this->resource->getStructure()->getId()) {
+        /**
+         * Cas N°2 : la ressource spécifiée est une chaîne de caractères du type 'controller/Application\Controller\Agrement:action' ;
+         * un privilège est spécifié (config des pages de navigation) ou pas (config des controller guards BjyAuthorize).
+         */
+        
+        $privilege = $this->normalizedPrivilege($privilege, $resource);
+        
+//        var_dump(__CLASS__ . ' >>> ' . $resource . ' : ' . $privilege);
+        
+        $privilegeAjouterLotConseilRestreint  = sprintf("%s/%s", AgrementController::ACTION_AJOUTER_LOT, TypeAgrement::CODE_CONSEIL_RESTREINT);
+        $privilegeAjouterLotConseilAcademique = sprintf("%s/%s", AgrementController::ACTION_AJOUTER_LOT, TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
+
+        // l'ajout par lot d'agréments de type "Conseil Académique" n'est autorisé qu'aux admin
+        if ($privilege === $privilegeAjouterLotConseilAcademique) {
+            if ($this->getSelectedIdentityRole()->getRoleId() !== RoleProvider::ROLE_ID_ADMIN) {
+                return false;
+            }
+        }
+        // l'ajout par lot d'agréments de type "Conseil Restreint" n'est pas autorisé aux admin pour
+        // l'instant car cela nécessiterait la sélection de la composante concernée
+        elseif ($privilege === $privilegeAjouterLotConseilRestreint) {
+            if ($this->getSelectedIdentityRole()->getRoleId() === RoleProvider::ROLE_ID_ADMIN) {
                 return false;
             }
         }
         
-        $agrementStepKey = 'KEY_' . $this->resource->getType()->getCode();
-
+        return true;
+    }
+    
+    /**
+     * 
+     * @param string $privilege
+     * @param string $resource
+     * @return string
+     */
+    protected function normalizedPrivilege($privilege, $resource)
+    {
+        if (is_object($privilege)) {
+            return $privilege;
+        }
+        if (!$privilege) {
+            $privilege = ($tmp = strrchr($resource, $c = ':')) ? ltrim($tmp, $c) : null;
+        }
+        if ($privilege && false === strpos($privilege, '/') && $this->getTypeAgrement()) {
+            $privilege .= '/' . $this->getTypeAgrement()->getCode();
+        }
+        
+        return $privilege;
+    }
+    
+    /**
+     * 
+     * @param Acl $acl
+     * @param RoleInterface $role
+     * @param ResourceInterface $resource
+     * @param string $privilege
+     * @return boolean
+     */
+    protected function assertEntity(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
+    {
+        if (!parent::assertCRUD($acl, $role, $resource, $privilege)) {
+            return false;
+        }
+        
+        $this->agrement = $resource;
+        
+        /*********************************************************
+         *                      Rôle Composante
+         *********************************************************/
+        if ($this->getSelectedIdentityRole() instanceof ComposanteDbRole) {
+            
+            // saisie de l'agrément Conseil Academique interdit aux gestionnaires de composante
+            if ($this->agrement->getType()->isConseilAcademique()) {
+                return false;
+            }
+            
+            // structure de responsabilité de l'utilisateur et structure de l'agrément doivent correspondre
+            if ($this->getSelectedIdentityRole()->getStructure() !== $this->agrement->getStructure()) {
+//            if ($this->agrement->getStructure() && $this->getSelectedIdentityRole()->getStructure()->getId() !== $this->agrement->getStructure()->getId()) {
+                return false;
+            }
+        }
+        
+        $agrementStepKey = 'KEY_' . $this->agrement->getType()->getCode();
+        
         // l'étape Agrement du workflow doit être atteignable
         if (!$this->getWorkflow()->isStepReachable($agrementStepKey)) {
             return false;
@@ -72,7 +148,7 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
         /**
          * Modification, suppression
          */
-        if (in_array($this->privilege, ['update', 'delete'])) {
+        if (in_array($privilege, ['update', 'delete'])) {
             // l'étape suivante du workflow ne doit pas avoir été franchie
             $nextStep = $this->getWorkflow()->getNextStep($agrementStepKey);
             if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
@@ -81,25 +157,25 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
         }
 
         return true;
-
-        /*********************************************************
-         *                      Rôle X
-         *********************************************************/
-//        if ($this->identityRole->getRoleId() === \Application\Provider\Role\RoleProvider::ROLE_ID_ADMIN) {
-//            
-//        }
-        
-        return false;
     }
     
     /**
-     * @return \Application\Service\Workflow\WorkflowIntervenant
+     * 
+     * @return TypeAgrement
+     */
+    protected function getTypeAgrement()
+    {
+        return $this->getMvcEvent()->getParam('typeAgrement');
+    }
+    
+    /**
+     * @return WorkflowIntervenant
      */
     private function getWorkflow()
     {
         $wf = $this->getWorkflowIntervenant()
-                ->setIntervenant($this->resource->getIntervenant())
-                ->setRole($this->identityRole);
+                ->setIntervenant($this->agrement->getIntervenant())
+                ->setRole($this->getSelectedIdentityRole());
         
         return $wf;
     }
@@ -111,8 +187,8 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
     {
         $rule = $this->getAgrementService()->getRuleNecessiteAgrement();
         $rule
-                ->setIntervenant($this->resource->getIntervenant())
-                ->setTypeAgrement($this->resource->getType());
+                ->setIntervenant($this->agrement->getIntervenant())
+                ->setTypeAgrement($this->agrement->getType());
         
         return $rule;
     }
@@ -124,8 +200,8 @@ class AgrementAssertion extends EntityAssertion implements AgrementServiceAwareI
     {
         $rule = $this->getAgrementService()->getRuleAgrementFourni();
         $rule
-                ->setIntervenant($this->resource->getIntervenant())
-                ->setTypeAgrement($this->resource->getType());
+                ->setIntervenant($this->agrement->getIntervenant())
+                ->setTypeAgrement($this->agrement->getType());
         
         return $rule;
     }

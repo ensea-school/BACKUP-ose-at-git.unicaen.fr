@@ -157,11 +157,9 @@ class ElementPedagogiqueController extends AbstractActionController implements C
             exit;
         }
         
-        $localContext = $this->getContextProvider()->getLocalContext();
-        
-        $structure = $this->context()->structureFromQuery() ?: $localContext->getStructure();
-        $niveau    = $this->context()->niveauFromQuery()    ?: $localContext->getNiveau();
-        $etape     = $this->context()->etapeFromQuery()     ?: $localContext->getEtape();
+        $structure = $this->context()->structureFromQuery();
+        $niveau    = $this->context()->niveauFromQuery();
+        $etape     = $this->context()->etapeFromQuery();
         
         // respect des filtres éventuels spécifiés en GET ou sinon en session
         $params = array();
@@ -173,7 +171,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         
         // fetch
         $serviceEp = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
-        $found     = $serviceEp->finderByTerm($params);
+        $found     = $serviceEp->getSearchResultByTerm($params);
 
         $result = array();
         foreach ($found as $item) {

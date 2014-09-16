@@ -29,32 +29,49 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
      */
     public function __invoke(ElementPedagogiqueRechercheFieldset $fieldset = null)
     {
-        if (null === $fieldset) {
-            return $this;
-        }
-        
-        return $this->render($fieldset);
+        $this->fieldset = $fieldset;
+        return $this;
     }
-    
+
+    public function __toString()
+    {
+        return $this->render();
+    }
+
     /**
      * 
-     * @param ElementPedagogiqueRechercheFieldset $fieldset
      */
-    public function render(ElementPedagogiqueRechercheFieldset $fieldset)
+    public function render()
     {
-        $this->fieldset         = $fieldset;
-        $this->structureElement = $fieldset->get('structure');
-        $this->niveauElement    = $fieldset->get('niveau');
-        $this->etapeElement     = $fieldset->get('etape');
-        $this->elementElement   = $fieldset->get('element');
+        $id = uniqid();
+
+        $this->fieldset->populateOptions();
+        $this->structureElement = $this->fieldset->get('structure');
+        $this->niveauElement    = $this->fieldset->get('niveau');
+        $this->etapeElement     = $this->fieldset->get('etape');
+        $this->elementElement   = $this->fieldset->get('element');
         
-        $this->structureElement->setAttribute('id', uniqid('structure'));
-        $this->niveauElement   ->setAttribute('id', uniqid('niveau'));
-        $this->etapeElement    ->setAttribute('id', uniqid('etape'));
+        
+        $this->structureElement ->setAttribute('id', 'structure-'.$id)
+                                ->setAttribute('data-id', $id)
+                                ->setAttribute('onchange', 'elementPedagogiqueRecherche.updateValues("'.$id.'",this)');
+
+        $this->niveauElement    ->setAttribute('id', 'niveau-'.$id)
+                                ->setAttribute('data-id', $id)
+                                ->setAttribute('onchange', 'elementPedagogiqueRecherche.updateValues("'.$id.'",this)');
+
+        $this->etapeElement     ->setAttribute('id', 'etape-'.$id)
+                                ->setAttribute('data-id', $id)
+                                ->setAttribute('onchange', 'elementPedagogiqueRecherche.updateValues("'.$id.'",this)');
+
+        $this->elementElement   ->setAttribute('id', 'element-'.$id);
+
+        $this->structureElement ->setAttribute('data-relations', json_encode($this->fieldset->getRelations()) );
+        $this->structureElement ->setAttribute('data-default-url', $this->fieldset->get('element')->getautoCompleteSource() );
         //NB: $this->elementElement possède déjà un id DOM
-        
+
         $helper = $this->getView()->formControlGroup();
-        
+
         $rowTemplate = $rowArgs = array();
         if ($this->fieldset->getStructureEnabled()) {
             $rowTemplate[] = '<div class="col-md-3">%s</div>';
@@ -80,130 +97,8 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
         
         $html .= vsprintf('<div class="row">' . implode(PHP_EOL, $rowTemplate) . '</div>', $rowArgs);
         
-        $html .= '<script>' . $this->getJs() . '</script>';
+        $html .= '<script> elementPedagogiqueRecherche.updateValues("'.$id.'"); </script>';
         
         return $html;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    protected function getJs()
-    {
-        $updateStructuresOnLoad = $this->fieldset->getUpdateStructuresOnLoad() ? 'true' : 'false';
-        $updateEtapesOnLoad     = count($this->fieldset->getEtapes())     ? 'false' : 'true';
-        
-        $js = <<<EOS
-$(function() {
-    var str      = $("#{$this->structureElement->getAttribute('id')}");
-    var niv      = $("#{$this->niveauElement->getAttribute('id')}");
-    var eta      = $("#{$this->etapeElement->getAttribute('id')}");
-    var ele      = $("#{$this->elementElement->getAttribute('id')}-autocomplete");
-    var elements = new Array();
-
-    if (str.length) {
-        elements.push(str.data({ 
-            updateUrl:    '{$this->fieldset->getStructuresSourceUrl()}',
-            updateOnLoad: {$updateStructuresOnLoad},
-            paramName:    "{$this->fieldset->getStructureName()}",
-            initValue:    "{$this->structureElement->getValue()}"
-        }));
-    }
-    if (niv.length) {
-        elements.push(niv.data({ 
-            updateUrl:    '{$this->fieldset->getNiveauxSourceUrl()}',
-            updateOnLoad: true,
-            paramName:    "{$this->fieldset->getNiveauName()}",
-            initValue:    "{$this->niveauElement->getValue()}"
-        }));
-    }
-    if (eta.length) {
-        elements.push(eta.data({ 
-            updateUrl:    '{$this->fieldset->getEtapesSourceUrl()}',
-            updateOnLoad: {$updateEtapesOnLoad},
-            paramName:    "{$this->fieldset->getEtapeName()}",
-            initValue:    "{$this->etapeElement->getValue()}"
-        }));
-    }
-    if (ele.length) {
-        elements.push(ele.data({ 
-            updateUrl:    '{$this->fieldset->getElementsSourceUrl()}',
-            updateOnLoad: true,
-        }));
-    }
-            
-    // écoute de l'événement 'change' sur chaque élément
-    $.each(elements, function (index, element) {
-        element.change(function() {
-            var next = elements[index+1];
-            if (next && next.length) updateElement(next);
-        });
-    });
-    
-    if (elements[0].data('updateOnLoad')) {
-        updateElement(elements[0]);
-    }
-    else if (elements[1] && elements[1].data('updateOnLoad')) {
-        updateElement(elements[1]);
-    }
-    else if (elements[2] && elements[2].data('updateOnLoad')) {
-        updateElement(elements[2]);
-    }
-            
-    function updateElement(element)
-    {
-        element.is("select") ? updateSelect(element) : updateAutocomplete(element);
-    }
-    
-    function updateSelect(element)
-    {
-        var url = getUrl(element.data('updateUrl'));
-        if (!url) {
-            element.change();
-            return;
-        }
-        var value     = element.data('initValue');
-        var selection = value ? value : element.val();
-        element.css('opacity', '0.5').append($("<option/>").attr("value", 'temp').text("Patientez, svp...")).val('temp');
-        $.get(url, function(data) {
-            updateSelectOptions(element, data);
-            element.val('').val(selection).css('opacity', '1').change();
-        });
-    }
-    
-    function updateAutocomplete(element)
-    {
-        var url = getUrl(element.data('updateUrl'));
-        element.autocomplete("option", "source", url);
-    }
-    
-    function getUrl(urlTemplate)
-    {
-        var pattern;
-        var url = urlTemplate;
-        $.each(elements, function (index, element) {
-            if (element.data('paramName')) {
-                pattern = new RegExp(element.data('paramName') + "=(\\\w+)", "g");
-                url = url.replace(pattern, element.data('paramName') + "=" + element.val());
-            }
-        });
-        pattern = new RegExp("(\\\w+)=__(\\\w+)__", "g"); 
-        url = url.replace(pattern, "$1=");
-        return url;
-    }
-            
-    ele.wrap('<div class="input-group"/>').after('<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>');
-});
-
-function updateSelectOptions(select, options)
-{
-    $("option[value!='']", select).remove();
-    $.each(options, function(key, value) {
-        select.append($("<option/>").attr("value", key).text(value));
-    });
-}
-EOS;
-        return $js;
     }
 }

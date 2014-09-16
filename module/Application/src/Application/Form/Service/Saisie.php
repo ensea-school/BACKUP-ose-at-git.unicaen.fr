@@ -102,6 +102,11 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         $this->get('service')->initFromContext();
     }
 
+    public function saveToContext()
+    {
+        $this->get('service')->saveToContext();
+    }
+
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.

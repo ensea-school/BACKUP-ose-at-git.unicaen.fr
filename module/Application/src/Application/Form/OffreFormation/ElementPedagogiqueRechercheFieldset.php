@@ -6,6 +6,7 @@ use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Description of ElementPedagogiqueRechercheFieldset
@@ -16,9 +17,28 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
 {
     use ServiceLocatorAwareTrait;
 
-    public function __construct($name = null, $options = array())
+    protected $structureName = 'structure';
+    protected $niveauName    = 'niveau';
+    protected $etapeName     = 'etape';
+
+    protected $structureEnabled = true;
+    protected $niveauEnabled    = true;
+    protected $etapeEnabled     = true;
+    protected $relations = [];
+
+    /**
+     *
+     * @var QueryBuilder
+     */
+    protected $queryBuilder;
+
+
+    public function init()
     {
-        parent::__construct($name, $options);
+        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
+        /* @var $url Zend\View\Helper\Url */
+
+        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator'));
 
         $this->add(array(
             'name'       => $this->getStructureName(),
@@ -85,12 +105,65 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             ),
             'type' => 'UnicaenApp\Form\Element\SearchAndSelect',
         ));
+
+        $this->get('element')->setAutoCompleteSource( $url('of/element/default', array('action' => 'search')) );
     }
-    
-    protected $structureName = 'structure';
-    protected $niveauName    = 'niveau';
-    protected $etapeName     = 'etape';
-    
+
+    public function populateOptions()
+    {
+        $data = $this->getData();
+        $this->relations = $data['relations'];
+        $this->get('structure')->setValueOptions( $data['structures'] );
+        $this->get('niveau')->setValueOptions( $data['niveaux'] );
+        $this->get('etape')->setValueOptions( $data['etapes'] );
+    }
+
+    protected function getData()
+    {
+        $qb = $this->getQueryBuilder();
+
+        $entities = $qb->getQuery()->execute();
+        $result = [
+            'structures' => [],
+            'niveaux'    => [],
+            'etapes'     => [],
+            'relations'  => []
+        ];
+        foreach( $entities as $entity ){
+            if ($entity instanceof \Application\Entity\Db\Etape){
+                $etape     = $entity;
+                $niveau    = \Application\Entity\NiveauEtape::getInstanceFromEtape($etape);
+                $structure = $etape->getStructure();
+
+                if (! isset($result['structures'][$structure->getId()])){
+                    $result['structures'][$structure->getId()] = (string)$structure;
+                }
+                if (! isset($result['niveaux'][$niveau->getId()])){
+                    $result['niveaux'][$niveau->getId()] = (string)$niveau;
+                }
+                if (! isset($result['etapes'][$etape->getId()])){
+                    $result['etapes'][$etape->getId()] = (string)$etape;
+                }
+                
+                if (! isset( $result['relations'][$structure->getId()][$niveau->getId()] )){
+                    $result['relations']['ALL'][$niveau->getId()] = [];
+                    $result['relations'][$structure->getId()][$niveau->getId()] = [];
+                }
+                $result['relations'][$structure->getId()]['ALL'][] = $etape->getId();
+                $result['relations'][$structure->getId()][$niveau->getId()][] = $etape->getId();
+            }
+        }
+        asort( $result['structures'] );
+        asort( $result['niveaux'] );
+        asort( $result['etapes'] );
+        return $result;
+    }
+
+    public function getRelations()
+    {
+        return $this->relations;
+    }
+
     public function getStructureName()
     {
         return $this->structureName;
@@ -105,11 +178,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
     {
         return $this->etapeName;
     }
-    
-    protected $structureEnabled = true;
-    protected $niveauEnabled    = true;
-    protected $etapeEnabled     = true;
-    
+
     public function getStructureEnabled()
     {
         return $this->structureEnabled;
@@ -142,132 +211,6 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         $this->etapeEnabled = $etapeEnabled;
         return $this;
     }
-    
-    protected $structuresSourceUrl;
-    protected $niveauxSourceUrl;
-    protected $etapesSourceUrl;
-    protected $elementsSourceUrl;
-    
-    public function getStructuresSourceUrl()
-    {
-        return $this->structuresSourceUrl;
-    }
-
-    public function getNiveauxSourceUrl()
-    {
-        return $this->niveauxSourceUrl;
-    }
-
-    public function getEtapesSourceUrl()
-    {
-        return $this->etapesSourceUrl;
-    }
-
-    public function getElementsSourceUrl()
-    {
-        return $this->elementsSourceUrl;
-    }
-
-    public function setStructuresSourceUrl($structuresSourceUrl)
-    {
-        $this->structuresSourceUrl = $structuresSourceUrl;
-        return $this;
-    }
-
-    public function setNiveauxSourceUrl($niveauxSourceUrl)
-    {
-        $this->niveauxSourceUrl = $niveauxSourceUrl;
-        return $this;
-    }
-
-    public function setEtapesSourceUrl($etapesSourceUrl)
-    {
-        $this->etapesSourceUrl = $etapesSourceUrl;
-        return $this;
-    }
-
-    public function setElementsSourceUrl($elementsSourceUrl)
-    {
-        $this->elementsSourceUrl = $elementsSourceUrl;
-        $this->get('element')->setAutocompleteSource($elementsSourceUrl);
-        return $this;
-    }
-    
-    protected $structures = array();
-    protected $etapes     = array();
-
-    /**
-     * Retournent les étapes possibles.
-     * 
-     * @return array
-     */
-    public function getEtapes()
-    {
-        return $this->etapes;
-    }
-
-    /**
-     * Retournent les structures possibles.
-     * 
-     * @return array|Traversable
-     */
-    public function getStructures()
-    {
-        return $this->structures;
-    }
-
-    /**
-     * Spécifie les étapes possibles.
-     * 
-     * @param array|Traversable $etapes
-     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
-     */
-    public function setEtapes($etapes)
-    {
-        $this->etapes = $etapes;
-        $this->get('etape')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($etapes));
-        return $this;
-    }
-
-    /**
-     * Spécifie les structures possibles.
-     * 
-     * @param array|Traversable $structures
-     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
-     */
-    public function setStructures($structures)
-    {
-        $this->structures = $structures;
-        $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($structures));
-        return $this;
-    }
-    
-    /**
-     * @var boolean
-     */
-    private $updateStructuresOnLoad = true;
-    
-    /**
-     * La liste des structures doit-elle être peuplées via AJAX au chargement de la page ?
-     * 
-     * @return boolean
-     */
-    public function getUpdateStructuresOnLoad()
-    {
-        return $this->updateStructuresOnLoad;
-    }
-
-    /**
-     * Spécifie si la liste des structures doit être peuplées via AJAX au chargement de la page.
-     * 
-     * @param boolean $updateStructuresOnLoad
-     * @return \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset
-     */
-    public function setUpdateStructuresOnLoad($updateStructuresOnLoad = true)
-    {
-        $this->updateStructuresOnLoad = $updateStructuresOnLoad;
-        return $this;
-    }
 
     /**
      * Should return an array specification compatible with
@@ -293,4 +236,60 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         );
     }
 
+    public function getQueryBuilder()
+    {
+        if (! $this->queryBuilder){
+            $this->queryBuilder = $this->getServiceEtape()->initQuery()[0];
+
+            $this->getServiceEtape()->join( $this->getServiceStructure(), $this->queryBuilder, 'structure' );
+            $this->queryBuilder->addSelect( $this->getServiceStructure()->getAlias() );
+
+            $this->getServiceEtape()->join( $this->getServiceTypeFormation(), $this->queryBuilder, 'typeFormation' );
+            $this->queryBuilder->addSelect( $this->getServiceTypeFormation()->getAlias() );
+
+            $this->getServiceTypeFormation()->join( $this->getServiceGroupeTypeFormation(), $this->queryBuilder, 'groupe' );
+            $this->queryBuilder->addSelect( $this->getServiceGroupeTypeFormation()->getAlias() );
+        }
+        return $this->queryBuilder;
+    }
+
+    /**
+     * @return \Application\Service\Structure
+     */
+    protected function getServiceStructure()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationStructure');
+    }
+
+    /**
+     * @return \Application\Service\Etape
+     */
+    protected function getServiceEtape()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtape');
+    }
+
+    /**
+     * @return \Application\Service\ElementPedagogique
+     */
+    protected function getServiceElementPedagogique()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationElementPedagogique');
+    }
+
+    /**
+     * @return \Application\Service\TypeFormation
+     */
+    protected function getServiceTypeFormation()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeFormation');
+    }
+
+    /**
+     * @return \Application\Service\GroupeTypeFormation
+     */
+    protected function getServiceGroupeTypeFormation()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationGroupeTypeFormation');
+    }
 }

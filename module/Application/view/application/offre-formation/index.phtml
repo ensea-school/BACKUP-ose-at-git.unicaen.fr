@@ -80,7 +80,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php endif; ?>
                 
                 <?php foreach ($niveauxOptions as $code => $lib): ?>
-                <?php if ($code != $niveau): ?> 
+                <?php if (!($niveau && $code == $niveau)): ?>
                      <li class="list-group-item">
                          <a class="niveau" title="Cliquez pour afficher les formations et les enseignements de ce niveau" href="<?php echo $this->url('of', 
                                 array(), 

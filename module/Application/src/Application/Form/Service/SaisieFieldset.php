@@ -85,22 +85,8 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             ));
         }
 
-        /**
-         * @todo : fourrer l'init des URL dans la classe ElementPedagogiqueRechercheFieldset
-         */
-        $queryTemplate = array('structure' => '__structure__', 'niveau' => '__niveau__', 'etape' => '__etape__');
-        $urlStructures = $url('of/default',         array('action' => 'search-structures'), array('query' => $queryTemplate));
-        $urlNiveaux    = $url('of/default',         array('action' => 'search-niveaux'),    array('query' => $queryTemplate));
-        $urlEtapes     = $url('of/etape/default',   array('action' => 'search'),            array('query' => $queryTemplate));
-        $urlElements   = $url('of/element/default', array('action' => 'search'),            array('query' => $queryTemplate));
-
-        $fs = new \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset('element-pedagogique');
-        $fs
-                ->setStructuresSourceUrl($urlStructures)
-                ->setNiveauxSourceUrl($urlNiveaux)
-                ->setEtapesSourceUrl($urlEtapes)
-                ->setElementsSourceUrl($urlElements)
-        ;
+        $fs = $this->getServiceLocator()->get('FormElementPedagogiqueRechercheFieldset');
+        $fs->setName('element-pedagogique');
         $this->add( $fs );
 
         $etablissement = new SearchAndSelect('etablissement');
@@ -118,7 +104,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     {
         /* Peuple le formulaire avec les valeurs par défaut issues du contexte global */
         $role = $this->getContextProvider()->getSelectedIdentityRole();
-        $fs = $this->get('element-pedagogique');
+        $fs = $this->get('element-pedagogique'); /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
         $cl = $this->getContextProvider()->getLocalContext();
@@ -129,15 +115,21 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
                 'label' => (string)$cl->getIntervenant()
             ));
         }
-        if ($cl->getStructure()){
-            $structure = $cl->getStructure()->getParenteNiv2();
-            $valueOptions = array($structure->getId() => (string) $structure);
-            $fs->setStructures(array($structure));
-            $fs->get('structure')->setEmptyOption(null)->setValue($structure->getId());
-            $fs->setUpdateStructuresOnLoad(false);
-        }
-        if ($cl->getEtape()){
-            $fs->get('etape')->setValue( $cl->getEtape()->getId() );
+
+        if (! $role instanceof IntervenantRole){
+            if ($cl->getStructure()){
+                $structure = $cl->getStructure()->getParenteNiv2();
+                $valueOptions = array($structure->getId() => (string) $structure);
+            //    $this->getServiceStructure()->finderById($structure->getId(), $fs->getQueryBuilder());
+                $fs->get('structure')->setValue($structure->getId());
+
+            }
+            if ($cl->getNiveau()){
+                $fs->get('niveau')->setValue( $cl->getNiveau()->getId() );
+            }
+            if ($cl->getEtape()){
+                $fs->get('etape')->setValue( $cl->getEtape()->getId() );
+            }
         }
         if ($cl->getElementPedagogique()){
             $fs->get('element')->setValue( array(
@@ -154,8 +146,35 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             $structure = $role->getStructure()->getParenteNiv2();
             $valueOptions = array($structure->getId() => (string) $structure);
             $fs->setStructures(array($structure));
-            $fs->get('structure')->setEmptyOption(null)->setValue($structure->getId());
-            $fs->setUpdateStructuresOnLoad(false);
+            $fs->get('structure')->setValue($structure->getId());
+        }
+    }
+
+    public function saveToContext()
+    {
+        /* Met à jour le contexte local en fonction des besoins... */
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $fs = $this->get('element-pedagogique'); /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
+
+        /* Peuple le formulaire avec les valeurs issues du contexte local */
+        $cl = $this->getContextProvider()->getLocalContext();
+
+        if (! $role instanceof IntervenantRole){
+            if ( $structureId = $fs->get('structure')->getValue() ){
+                $cl->setStructure( $this->getServiceStructure()->get( $structureId ) );
+            }else{
+                $cl->setStructure( null );
+            }
+            if ( $niveauId = $fs->get('niveau')->getValue() ){
+                $cl->setNiveau( $this->getServiceNiveauEtape()->get( $niveauId ) );
+            }else{
+                $cl->setNiveau( null );
+            }
+            if ( $etapeId = $fs->get('etape')->getValue() ){
+                $cl->setEtape( $this->getServiceEtape()->get( $etapeId ) );
+            }else{
+                $cl->setEtape( null );
+            }
         }
     }
 
@@ -177,5 +196,29 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
                 'required' => false
             ),
         );
+    }
+
+    /**
+     * @return \Application\Service\Structure
+     */
+    protected function getServiceStructure()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationStructure');
+    }
+
+    /**
+     * @return \Application\Service\NiveauEtape
+     */
+    protected function getServiceNiveauEtape()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationNiveauEtape');
+    }
+
+    /**
+     * @return \Application\Service\Etape
+     */
+    protected function getServiceEtape()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtape');
     }
 }

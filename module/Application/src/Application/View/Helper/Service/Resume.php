@@ -159,7 +159,8 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '<tr>'."\n";
         $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['intervenants']).' intervenants</th>'."\n";
         foreach( $typesIntervention as $ti ){
-            $res .= '        <th style="text-align:right"><abbr title="'.$ti->getLibelle().'">'.$this->formatHeures($totaux['types_intervention'][$ti->getId()]).'</abbr></th>'."\n";
+            $heures = isset($totaux['types_intervention'][$ti->getId()]) ? $totaux['types_intervention'][$ti->getId()] : 0;
+            $res .= '        <th style="text-align:right"><abbr title="'.$ti->getLibelle().'">'.$this->formatHeures($heures).'</abbr></th>'."\n";
         }
         $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['referentiel']).'</th>'."\n";
         $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['hetd']).'</th>'."\n";

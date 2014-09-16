@@ -30,6 +30,11 @@ class AgrementNavigationPagesProvider extends AbstractService
             ];
             $child = array_merge($child, $params);
             
+            // le code du type d'agrément est concaténé au privilège existant éventuel
+            if (isset($child['privilege'])) {
+                $child['privilege'] .= '/' . $typeAgrement->getCode();
+            }
+            
             $pages[$typeAgrement->getCode()] = $child;
         }
         

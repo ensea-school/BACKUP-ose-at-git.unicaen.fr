@@ -32,12 +32,7 @@ publics à caractère scientifique et culturel et les autres établissements
 d'enseignement supérieur relevant du ministère de l'éducation nationale ;<br /><br />
             VU le décret n° 87-889 du 29 octobre 1987 modifié relatif aux conditions de
 recrutement et d'emploi de vacataires pour l'enseignement supérieur ;<br /><br />
-            VU la proposition du directeur de la composante 
-            <?php if ($dateConseil): ?>
-                ;<br /><br />VU l'avis du Conseil Académique du <?php echo $dateConseil ?>.
-            <?php else: ?>
-                .
-            <?php endif; ?>
+            VU la proposition du directeur de la composante.
             <br /><br />
         </td>
     </tr>
@@ -78,7 +73,7 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'e
     </tr>
 </table>
 
-<p>Il a été convenu de qui suit :</p>
+<p>Il a été convenu ce qui suit :</p>
 
 <dl class="articles">
     
@@ -113,13 +108,15 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'e
         </dd>
         
     <?php endif ?>
-
-    <dt>Article <?php echo $noArticle++ ?> :</dt>
-    <dd>
-        <p>L'intéressé<?php echo $f ? 'e' : '' ?> sera rémunéré<?php echo $f ? 'e' : '' ?> au taux travaux dirigés en vigueur fixé par arrêté publié au Journal Officiel.</p>
-        <p>Le paiement a lieu au vu de l'état liquidatif visé par le directeur de la composante et de la production d'un dossier complet.</p>
-        <p>Une inexécution partielle du service imputable à l'intéressé<?php echo $f ? 'e' : '' ?> entraîne un abattement correspondant aux heures non faites.</p>
-    </dd>
+        
+    <div style="page-break-inside: avoid;">
+        <dt>Article <?php echo $noArticle++ ?> :</dt>
+        <dd>
+            <p>L'intéressé<?php echo $f ? 'e' : '' ?> sera rémunéré<?php echo $f ? 'e' : '' ?> au taux travaux dirigés en vigueur fixé par arrêté publié au Journal Officiel.</p>
+            <p>Le paiement a lieu au vu de l'état liquidatif visé par le directeur de la composante et de la production d'un dossier complet.</p>
+            <p>Une inexécution partielle du service imputable à l'intéressé<?php echo $f ? 'e' : '' ?> entraîne un abattement correspondant aux heures non faites.</p>
+        </dd>
+    </div>
 </dl>
 
 <p class="fait">Fait à <?php echo $lieuSignature ?>, le <?php echo $dateSignature ?></p>

@@ -21,7 +21,11 @@
                 <?php
                 $structure   = $array['structure'];
                 $agrement    = $array['agrement'];
-                $params      = ['agrement' => $agrement->getId(), 'structure' => $structure->getId(), 'typeAgrement' => $typeAgrement->getId()];
+                $params      = [
+                    'agrement'     => $agrement->getId(), 
+                    'structure'    => $structure ? $structure->getId() : null, 
+                    'typeAgrement' => $typeAgrement->getId(),
+                ];
                 $refreshUrl  = $agrement->getId() ? 
                         $this->url('intervenant/agrement/voir', $params, array(), true) : 
                         $this->url('intervenant/agrement/voir-str', $params, array(), true);

@@ -2,8 +2,6 @@
 
 namespace Application\Service\Assertion;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Acl\ComposanteDbRole;
 use Application\Entity\Db\Contrat;
 use Application\Service\Workflow\WorkflowIntervenant;
@@ -18,15 +16,14 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratAssertion extends EntityAssertion implements ServiceLocatorAwareInterface, WorkflowIntervenantAwareInterface
+class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantAwareInterface
 {
-    use ServiceLocatorAwareTrait;
     use WorkflowIntervenantAwareTrait;
     
     /**
      * @var Contrat
      */
-    protected $resource;
+    protected $contrat;
     
     /**
      * Returns true if and only if the assertion conditions are met
@@ -43,20 +40,36 @@ class ContratAssertion extends EntityAssertion implements ServiceLocatorAwareInt
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
-        if (!$resource instanceof Contrat) {
+        if ($resource instanceof Contrat) {
+            return $this->assertEntity($acl, $role, $resource, $privilege);
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 
+     * @param Acl $acl
+     * @param RoleInterface $role
+     * @param ResourceInterface $resource
+     * @param string $privilege
+     * @return boolean
+     */
+    protected function assertEntity(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
+    {
+        if (!parent::assertCRUD($acl, $role, $resource, $privilege)) {
             return false;
         }
-        if (!parent::assert($acl, $role, $resource, $privilege)) {
-            return false;
-        }
+        
+        $this->contrat = $resource;
         
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->identityRole instanceof ComposanteDbRole) 
+        if ($this->getSelectedIdentityRole() instanceof ComposanteDbRole) 
         {
             // structure de responsabilité de l'utilisateur et structure du contrat doivent correspondre
-            if ($this->identityRole->getStructure() !== $this->resource->getStructure()) {
+            if ($this->getSelectedIdentityRole()->getStructure() !== $this->contrat->getStructure()) {
                 return false;
             }
             
@@ -75,15 +88,8 @@ class ContratAssertion extends EntityAssertion implements ServiceLocatorAwareInt
             
             return true;
         }
-
-//        /*********************************************************
-//         *                      Rôle X
-//         *********************************************************/
-//        if ($this->identityRole instanceof XRole) {
-//            
-//        }
         
-        return false;
+        return true;
     }
     
     /**
@@ -92,8 +98,8 @@ class ContratAssertion extends EntityAssertion implements ServiceLocatorAwareInt
     private function getWorkflow()
     {
         $wf = $this->getWorkflowIntervenant()
-                ->setIntervenant($this->resource->getIntervenant())
-                ->setRole($this->identityRole);
+                ->setIntervenant($this->contrat->getIntervenant())
+                ->setRole($this->getSelectedIdentityRole());
         
         return $wf;
     }

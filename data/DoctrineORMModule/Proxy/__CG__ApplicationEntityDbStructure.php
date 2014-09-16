@@ -64,10 +64,10 @@ class Structure extends \Application\Entity\Db\Structure implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique', 'service');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique', 'service');
     }
 
     /**
@@ -615,6 +615,39 @@ class Structure extends \Application\Entity\Db\Structure implements \Doctrine\OR
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElementPedagogique', array());
 
         return parent::getElementPedagogique();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addService(\Application\Entity\Db\Service $service)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addService', array($service));
+
+        return parent::addService($service);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeService(\Application\Entity\Db\Service $service)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeService', array($service));
+
+        return parent::removeService($service);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getService()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getService', array());
+
+        return parent::getService();
     }
 
     /**

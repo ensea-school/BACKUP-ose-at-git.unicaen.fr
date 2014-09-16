@@ -461,7 +461,6 @@ class ContratController extends AbstractActionController implements ContextProvi
         $estUnAvenant          = $this->contrat->estUnAvenant();
         $contratToString       = (string) $this->contrat;
         $typeAgrement          = $this->getServiceTypeAgrement()->getRepo()->findOneByCode(TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
-        $dateConseil           = $this->intervenant->getAgrement($typeAgrement, $annee)->first();
         $nomIntervenant        = (string) $this->intervenant;
         $dateNaissance         = $this->intervenant->getDateNaissanceToString();
         $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
@@ -482,7 +481,6 @@ class ContratController extends AbstractActionController implements ContextProvi
         $variables = array(
             'estUnAvenant'            => $estUnAvenant,
             'estUnProjet'             => $estUnProjet,
-            'dateConseil'             => $dateConseil ? $dateConseil->format(Constants::DATE_FORMAT) : null,
             'etablissement'           => "L'université de Caen",
             'etablissementRepresente' => ", représentée par son Président, Pierre SINEUX",
             'nomIntervenant'          => $nomIntervenant,

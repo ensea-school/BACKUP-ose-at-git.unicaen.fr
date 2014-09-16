@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Role
  */
-class Role
+class Role implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime

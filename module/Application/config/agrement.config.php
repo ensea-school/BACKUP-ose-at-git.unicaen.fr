@@ -4,6 +4,7 @@ namespace Application;
 
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
+use Application\Controller\AgrementController;
 
 return array(
     'router' => array(
@@ -44,7 +45,7 @@ return array(
                                         'typeAgrement' => '[0-9]*',
                                     ),
                                     'defaults' => array(
-                                        'action' => 'ajouter',
+                                        'action' => AgrementController::ACTION_AJOUTER,
                                     ),
                                 ),
                             ),
@@ -56,20 +57,20 @@ return array(
                                         'agrement' => '[0-9]*',
                                     ),
                                     'defaults' => array(
-                                        'action' => 'voir',
+                                        'action' => AgrementController::ACTION_VOIR,
                                     ),
                                 ),
                             ),
                             'voir-str' => array(
                                 'type'    => 'Segment',
                                 'options' => array(
-                                    'route' => '/:typeAgrement/voir-str/:structure',
+                                    'route' => '/:typeAgrement/voir-str[/:structure]',
                                     'constraints' => array(
                                         'typeAgrement' => '[0-9]*',
                                         'structure' => '[0-9]*',
                                     ),
                                     'defaults' => array(
-                                        'action' => 'voir-str',
+                                        'action' => AgrementController::ACTION_VOIR_STR,
                                     ),
                                 ),
                             ),
@@ -81,19 +82,7 @@ return array(
                                         'agrement' => '[0-9]*',
                                     ),
                                     'defaults' => array(
-                                        'action' => 'modifier',
-                                    ),
-                                ),
-                            ),
-                            'supprimer' => array(
-                                'type'    => 'Segment',
-                                'options' => array(
-                                    'route' => '/supprimer/:agrement',
-                                    'constraints' => array(
-                                        'agrement' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
-                                        'action' => 'supprimer',
+                                        'action' => AgrementController::ACTION_MODIFIER,
                                     ),
                                 ),
                             ),
@@ -122,7 +111,7 @@ return array(
                                         'typeAgrement' => '[0-9]*',
                                     ),
                                     'defaults' => array(
-                                        'action' => 'ajouter-lot',
+                                        'action' => AgrementController::ACTION_AJOUTER_LOT,
                                     ),
                                 ),
                             ),
@@ -172,7 +161,9 @@ return array(
                                     'type'  => 'AgrementNavigationPagesProvider',
                                     'route' => 'gestion/agrement/ajouter-lot',
                                     'withtarget' => true,
-                                    'resource'   => 'controller/Application\Controller\Agrement:ajouter-lot',
+                                    'resource'   => 'controller/Application\Controller\Agrement:' . AgrementController::ACTION_AJOUTER_LOT,
+                                    'privilege'  => AgrementController::ACTION_AJOUTER_LOT,
+                                    // NB: le code du type d'agrément sera concaténé au 'privilege' par le AgrementNavigationPagesProvider
                                 ),
                             ),
                         ),
@@ -188,11 +179,13 @@ return array(
                     'controller' => 'Application\Controller\Agrement',
                     'action'     => array('index', 'lister', 'voir'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, 'Administrateur'),
+                    'assertion'  => 'AgrementAssertion',
                 ),
                 array(
                     'controller' => 'Application\Controller\Agrement',
                     'action'     => array('ajouter', 'ajouter-lot', 'modifier', 'supprimer', 'voir-str'),
                     'roles'      => array(ComposanteRole::ROLE_ID, 'Administrateur'),
+                    'assertion'  => 'AgrementAssertion',
                 ),
             ),
         ),
@@ -205,7 +198,7 @@ return array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
                     array(
-                        array(ComposanteRole::ROLE_ID), 
+                        array(ComposanteRole::ROLE_ID, 'Administrateur'), 
                         'Agrement', 
                         array('create', 'read', 'delete', 'update'), 
                         'AgrementAssertion',

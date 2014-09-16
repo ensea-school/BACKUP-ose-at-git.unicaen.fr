@@ -13,6 +13,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\Parametre;
 
 /**
  * Description of DossierController
@@ -455,4 +456,12 @@ class DossierController extends AbstractActionController implements ContextProvi
 //    {
 //        return $this->getServiceLocator()->get('ApplicationService');
 //    }
+    
+    /**
+     * @return \Application\Service\Parametres
+     */
+    private function getParametreService()
+    {
+        return $this->getServiceLocator()->get('ApplicationParametres');
+    }
 }

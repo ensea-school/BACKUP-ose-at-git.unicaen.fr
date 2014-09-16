@@ -46,6 +46,12 @@ implements ContextProviderAwareInterface,
     use IntervenantServiceAwareTrait;
     use ServiceServiceAwareTrait;
     
+    const ACTION_VOIR        = "voir";
+    const ACTION_VOIR_STR    = "voir-str";
+    const ACTION_AJOUTER     = "ajouter";
+    const ACTION_AJOUTER_LOT = "ajouter-lot";
+    const ACTION_MODIFIER    = "modifier";
+
     /**
      * @var RoleInterface
      */
@@ -99,7 +105,7 @@ implements ContextProviderAwareInterface,
         $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
-        $this->title        = sprintf("Agrément &laquo; %s &raquo; <small>%s</small>", $this->typeAgrement, $this->intervenant);
+        $this->title        = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
         $messages           = [];
 
         $this->em()->getFilters()->enable('historique');
@@ -109,23 +115,25 @@ implements ContextProviderAwareInterface,
                 ->setIntervenant($this->intervenant)
                 ->setTypeAgrement($this->typeAgrement)/*
                 ->execute()*/;
-
+        
         /**
          * Il y a un Conseil Restreint par structure d'enseignement
          */
         if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
             $structures = $agrementFourniRule->getStructuresEnseignement();
-            $messages[] = sprintf("Sont attendus autant d'agréments &laquo; %s &raquo; qu'il y a de composantes d'enseignement.", 
-                    $this->typeAgrement);
+//            $messages[] = sprintf("Sont attendus autant d'agréments &laquo; %s &raquo; qu'il y a de composantes d'enseignement.", 
+//                    $this->typeAgrement);
         }
         /**
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
          */
         elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-            $structureEns = $this->intervenant->getStructure()->getParenteNiv2();
-            $structures = [ $structureEns->getId() => $structureEns];
-            $messages[] = sprintf("Est attendu un seul agrément &laquo; %s &raquo; par la composante d'enseignement &laquo; %s &raquo;.", 
-                    $this->typeAgrement, $structureEns);
+//            $structureEns = $this->intervenant->getStructure()->getParenteNiv2();
+//            $structures = [ $structureEns->getId() => $structureEns];
+//            $messages[] = sprintf("Est attendu un seul agrément &laquo; %s &raquo; par la composante d'enseignement &laquo; %s &raquo;.", 
+//                    $this->typeAgrement, $structureEns);
+            $structures = [ null ];
+//            $messages[] = sprintf("Est attendu un seul agrément &laquo; %s &raquo;.", $this->typeAgrement);
         }
         else {
             throw new LogicException("Type d'agrément inattendu!");
@@ -142,8 +150,7 @@ implements ContextProviderAwareInterface,
                 // instanciation d'un support de création d'agrément (utilisé pour les ACL/assertion)
                 $agrement = $this->getNewEntity()->setStructure($s); /* @var $agrement Agrement */
             }
-            $data[$s->getId()]['structure'] = $s;
-            $data[$s->getId()]['agrement']  = $agrement;
+            $data[] = ['structure' => $s, 'agrement' => $agrement];
         }
 
         if (!$data) {
@@ -190,9 +197,13 @@ implements ContextProviderAwareInterface,
     {
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
-        $structure          = $this->context()->mandatory()->structureFromRoute();
+        $structure          = $this->context()->structureFromRoute();
         $this->agrement     = $this->getAgrementForStructure($structure);
 
+        if (!$structure && !$this->typeAgrement->isConseilAcademique()) {
+            throw new LogicException(sprintf("Une structure doit être spécifiée pour le type d'agrément '%s'.", $this->typeAgrement));
+        }
+        
         $this->view = new ViewModel(array(
             'agrement'    => $this->agrement,
         ));
@@ -270,25 +281,25 @@ implements ContextProviderAwareInterface,
 
         $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
         
-        /**
-         * Il y a un Conseil Restreint par structure d'enseignement
-         */
-        if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
-            $structureEns = $this->role->getStructure();
-        }
-        /**
-         * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
-         */
-        elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-            $structureEns = $this->intervenant->getStructure()->getParenteNiv2();
-        }
-        else {
-            throw new LogicException("Type d'agrément inattendu!");
-        }
-
-        if ($this->agrement->getStructure() !== $structureEns) {
-            throw new UnAuthorizedException("Les structures ne correspondent pas!");
-        }
+//        /**
+//         * Il y a un Conseil Restreint par structure d'enseignement
+//         */
+//        if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
+//            $structureEns = $this->role->getStructure();
+//        }
+//        /**
+//         * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
+//         */
+//        elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
+//            $structureEns = $this->intervenant->getStructure()->getParenteNiv2();
+//        }
+//        else {
+//            throw new LogicException("Type d'agrément inattendu!");
+//        }
+//
+//        if ($this->agrement->getStructure() !== $structureEns) {
+//            throw new UnAuthorizedException("Les structures ne correspondent pas!");
+//        }
 
         $this->updateCommon();
 
@@ -300,7 +311,7 @@ implements ContextProviderAwareInterface,
      */
     private function updateCommon()
     {
-        $this->title      = sprintf("Saisie de l'agrément &laquo; %s &raquo; <small>%s</small>", $this->typeAgrement, $this->intervenant);
+        $this->title      = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
         $this->formSaisie = $this->getFormSaisie();
 
         $this->formSaisie->bind($this->agrement);
@@ -337,24 +348,25 @@ implements ContextProviderAwareInterface,
          * Il y a un Conseil Restreint par structure d'enseignement
          */
         if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
-            $structureEns = $this->role->getStructure();
+            $structure = $this->role->getStructure();
         }
         /**
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
          */
         elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
 //            $structureEns = $this->intervenant->getStructure()->getParenteNiv2();
-            $structureEns = $this->role->getStructure();
+//            $structureEns = $this->role->getStructure();
+            $structure = null;
         }
         else {
             throw new LogicException("Type d'agrément inattendu!");
         }
         
-        $this->title = sprintf("Ajout d'agréments &laquo; %s &raquo; par lot <small>%s</small>", $this->typeAgrement, $structureEns);
+        $this->title = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $structure);
         
         /**
          * Recherche des intervenants candidats :
-         * - ayant des services sur la structure adéquate 
+         * - ayant des services sur la structure adéquate éventuelle
          * - et en attente du type d'agrément spécifié dans la requête
          */
         $serviceIntervenant = $this->getIntervenantService();
@@ -366,7 +378,9 @@ implements ContextProviderAwareInterface,
                 ->join("sta.typeAgrementStatut", "tas")
                 ->join("tas.type", 'ta')
                 ->andWhere("ta = :type")->setParameter('type', $this->typeAgrement);
-        $serviceService->finderByStructureEns($structureEns, $qb);
+        if ($structure) {
+            $serviceService->finderByStructureEns($structure, $qb);
+        }
         $serviceService->finderByAnnee($this->getContextProvider()->getGlobalContext()->getAnnee(), $qb);
         $serviceIntervenant->join($serviceService, $qb, "service"); //print_r($qb->getQuery()->getDQL());
         $intervenantsCandidats = $serviceIntervenant->getList($qb);
@@ -387,7 +401,7 @@ implements ContextProviderAwareInterface,
         }
 
         if ($intervenants) {
-            $this->agrement   = $this->getNewEntity()->setStructure($structureEns);
+            $this->agrement   = $this->getNewEntity()->setStructure($structure);
             $this->formSaisie = $this->getFormSaisie()
                     ->setIntervenants($intervenants)
                     ->bind($this->agrement);
@@ -406,11 +420,11 @@ implements ContextProviderAwareInterface,
                 }
             }
 
-            $messages[] = sprintf("Les intervenants ci-dessous sont en attente d'agrément &laquo; %s &raquo;.", $this->typeAgrement);
+            $messages[] = sprintf("Intervenants en attente d'agrément par %s.", $this->typeAgrement->toString(true));
         }
         else {
             $this->formSaisie = null;
-            $messages['warning'] = sprintf("Aucun intervenant en attente d'agrément &laquo; %s &raquo; n'a été trouvé.", $this->typeAgrement);
+            $messages['warning'] = sprintf("Aucun intervenant n'est en attente d'agrément par %s.", $this->typeAgrement->toString(true));
         }
         
         $this->view = new ViewModel(array(
@@ -444,10 +458,10 @@ implements ContextProviderAwareInterface,
     /**
      * Recherche d'un agrément par l'intervenant, le type et la structure.
      * 
-     * @param Structure $structure
+     * @param Structure|null $structure
      * @return Agrement
      */
-    private function getAgrementForStructure(Structure $structure)
+    private function getAgrementForStructure(Structure $structure = null)
     {
         $service = $this->getAgrementService();
         

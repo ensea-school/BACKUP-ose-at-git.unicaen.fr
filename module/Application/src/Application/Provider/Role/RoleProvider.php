@@ -23,6 +23,8 @@ use Zend\Permissions\Acl\Role\GenericRole;
  */
 class RoleProvider implements ProviderInterface
 {
+    const ROLE_ID_ADMIN = 'Administrateur';
+    
     /**
      * @var array
      */

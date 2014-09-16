@@ -164,7 +164,6 @@ abstract class AbstractEntityService extends AbstractService
         }else{ // relation spéciale
             $qb->join( $service->getEntityClass(), $rightAlias, Expr\Join::WITH, $leftAlias.'.'.$leftProperty.'='.$rightAlias.'.'.$rightProperty );
         }
-        $qb->addSelect($rightAlias);
         return $qb;
     }
 
@@ -191,7 +190,6 @@ abstract class AbstractEntityService extends AbstractService
         }else{ // relation spéciale
             $qb->leftJoin( $service->getEntityClass(), $rightAlias, Expr\Join::WITH, $leftAlias.'.'.$leftProperty.'='.$rightAlias.'.'.$rightProperty );
         }
-        $qb->addSelect($rightAlias);
         return $qb;
     }
 

@@ -13,6 +13,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\Parametre;
 
 /**
  * Description of DossierController
@@ -301,6 +302,11 @@ class DossierController extends AbstractActionController implements ContextProvi
             }
         }
         
+        if (!$destinataires && ($contactParDefaut = $this->getParametreService()->get(Parametre::CONTACT_PJ_DEFAUT))) {
+            $mailto = sprintf($template, $contactParDefaut, $contactParDefaut);
+            $destinataires[] = sprintf("%s : %s", "Contact par défaut", $mailto);
+        }
+        
         return $destinataires;
     }
     
@@ -368,5 +374,13 @@ class DossierController extends AbstractActionController implements ContextProvi
     private function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
+    }
+    
+    /**
+     * @return \Application\Service\Parametres
+     */
+    private function getParametreService()
+    {
+        return $this->getServiceLocator()->get('ApplicationParametres');
     }
 }

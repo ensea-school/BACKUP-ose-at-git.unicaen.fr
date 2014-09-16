@@ -2,13 +2,13 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Parametre
  */
 class Parametre
 {
+    const CONTACT_PJ_DEFAUT = 'contact_pj_defaut';
+    
     /**
      * @var string
      */

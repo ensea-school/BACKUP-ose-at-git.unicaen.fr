@@ -42,7 +42,7 @@ class Joindre extends Form
             'name' => 'files',
             'type' => 'File',
             'options' => array(
-                'label' => "Pièces justificatives :"
+                'label' => "Dépôt de fichier(s) :"
             ),
             'attributes' => array(
                 'id' => 'files',

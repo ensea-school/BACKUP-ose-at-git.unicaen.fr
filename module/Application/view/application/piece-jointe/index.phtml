@@ -35,8 +35,36 @@ echo $messenger;
     <div class="col-md-6">
         
         <?php foreach($form->get('pj')->getValueOptions() as $options): ?>
-        <?php $url = $this->url('piece-jointe/intervenant/lister', array('typePieceJointe' => $options['value']), [], true); ?>
-        <div class="liste-pj-par-type" data-url="<?php echo $url ?>"></div>
+            <?php 
+            $typePieceJointe = $options['value'];
+            $divId = uniqid('div');
+            $formId = 'form-' . $typePieceJointe->getId();
+            $urlLister = $this->url('piece-jointe/intervenant/lister', ['typePieceJointe' => $typePieceJointe], [], true);
+            $urlAjouter = $this->url('piece-jointe/intervenant/ajouter', ['typePieceJointe' => $typePieceJointe], [], true);
+            $formUpload
+                    ->setAttribute('id', $formId)
+                    ->setAttribute('action', $urlAjouter)
+                    ->prepare(); // The correct enctype is set here 
+            ?>
+            <h3>Fichiers fournis pour la pièce &laquo; <?php echo $typePieceJointe ?> &raquo; :</h3>
+            <div class="liste-pj-par-type" id="<?php echo $divId ?>" data-url="<?php echo $urlLister ?>"></div>
+            
+            <script>
+            $(function() {
+                $("#<?php echo $formId ?>").ajaxForm({
+                    success: function() { 
+                        alert("Thank you for your comment!");
+                        $("#<?php echo $divId ?>").refresh();
+                    },
+                    beforeSubmit: function(arr, $form, options) { 
+                        // The array of form data takes the following form: 
+                        // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
+                        console.log(arr);
+                        // return false to cancel submit                  
+                    }
+                }); 
+            });
+            </script>
         <?php endforeach ?>
         
         <!--<h3>Destinataires des pièces justificatives</h3>
@@ -81,4 +109,4 @@ $(function() {
 
 <?php //$this->inlineScript()->prependFile($this->basePath('js/fileinput.min.js')) ?>
 
-<!--<script src="http://malsup.github.com/jquery.form.js"></script>--> 
+<script src="http://malsup.github.com/jquery.form.js"></script> 

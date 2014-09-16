@@ -1,7 +1,13 @@
-<h3>Fichiers fournis pour la pièce &laquo; <?php echo $this->typePieceJointe ?> &raquo; :</h3>
-<?php if (count($this->piecesJointes)): ?>
+<?php
+/* @var $typePieceJointe \Application\Entity\Db\TypePieceJointe */
+/* @var $piecesJointes   \Application\Entity\Db\PieceJointe[] */
+/* @var $form            \Application\Form\Joindre */
+echo time();
+?>
+
+<?php if (count($piecesJointes)): ?>
 <ul>
-<?php foreach ($this->piecesJointes as $pj): /* @var $pj \Application\Entity\Db\PieceJointe */ ?>
+<?php foreach ($piecesJointes as $pj): ?>
     <li>
         <a href="#"><span class="glyphicon glyphicon-file"></span> <?php echo $pj->getNomFichier() ?></a> 
         <a href="#" title="Supprimer ce fichier"><span class="glyphicon glyphicon-trash"></span></a>
@@ -11,19 +17,24 @@
 <?php else: ?>
 <p>Aucun.</p>
 <?php endif ?>
-<a class="ajax-modal btn btn-xs btn-default" title="Déposer un fichier supplémentaire" 
-   href="<?php echo $this->url('piece-jointe/intervenant/ajouter', [], [], true) ?>"><span class="glyphicon glyphicon-plus"></span> Ajouter</a> 
 
-<?php $form->prepare(); // The correct enctype is set here ?>
-<?php echo $this->form()->openTag($form); ?>
+<!--<a class="ajax-modal btn btn-xs btn-default" title="Déposer un fichier supplémentaire" 
+   href="<?php echo $this->url('piece-jointe/intervenant/ajouter', [], [], true) ?>"><span class="glyphicon glyphicon-plus"></span> Ajouter</a> -->
 
-    <div class="form-element">
-        <?php $fileElement = $form->get('files'); ?>
-        <?php echo $this->formLabel($fileElement); ?>
-        <?php echo $this->formFile($fileElement); ?>
-        <?php echo $this->formElementErrors($fileElement); ?>
-    </div>
-
-    <input type="submit" value="Envoyer" />
-
-<?php echo $this->form()->closeTag(); ?>
+            <?php 
+            $formId = 'form-' . $typePieceJointe->getId();
+            $urlAjouter = $this->url('piece-jointe/intervenant/ajouter', ['typePieceJointe' => $typePieceJointe->getId()], [], true);
+            $formUpload
+                    ->setAttribute('id', $formId)
+                    ->setAttribute('action', $urlAjouter)
+                    ->prepare(); // The correct enctype is set here 
+            ?>
+            <?php echo $this->form()->openTag($formUpload); ?>
+                <div class="form-element">
+                    <?php $fileElement = $formUpload->get('files'); ?>
+                    <?php echo $this->formLabel($fileElement); ?>
+                    <?php echo $this->formFile($fileElement); ?>
+                    <?php echo $this->formElementErrors($fileElement); ?>
+                </div>
+                <input type="submit" value="Envoyer" />
+            <?php echo $this->form()->closeTag(); ?>

@@ -58,7 +58,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
      * @throws MessageException
      */
     public function indexAction()
-    { 
+    {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         if ($role instanceof ComposanteDbRole) {
@@ -83,9 +83,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 ->remove('submit')
                 ->get('pj')->setAttribute('disabled', true)->setLabel("Merci d'adresser les pièces justificatives suivantes à l'adresse ci-après...");
         
-        $this->view
-//                ->setTemplate('application/dossier/pieces-jointes')
-                ->setVariables(array('title' => $this->title));
+        $this->view->setVariables(array('title' => $this->title));
         
         return $this->view;
     }
@@ -101,8 +99,8 @@ class PieceJointeController extends AbstractActionController implements ContextP
 //                ->setTailleFichier(strlen($content));
 //        $this->em()->flush($pieceJointe);
         
-        $form = $this->getFormJoindre()
-                ->setAttribute('action', $this->url('piece-jointe/intervenant/ajouter', [], [], null));
+        $form = $this->getFormJoindre();
+        $form->setAttribute('action', $this->url()->fromRoute('piece-jointe/intervenant/ajouter', [], [], true));
                
         return [
             'typePieceJointe' => $this->getTypePieceJointe(),
@@ -168,9 +166,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
             }
         }
         
-        $this->view
-                ->setTemplate('application/dossier/pieces-jointes')
-                ->setVariables(array('title' => $this->title));
+        $this->view->setVariables(array('title' => $this->title));
 
         return $this->view;
     }
@@ -194,6 +190,8 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 ->setIntervenant($this->getIntervenant());
         $complet = $piecesJointesFournies->execute();
         
+        $formUpload = $this->getFormJoindre();
+        
         $this->view = new ViewModel(array(
             'intervenant'        => $this->getIntervenant(),
             'totalHeuresReelles' => $serviceService->getTotalHeuresReelles($this->getIntervenant()),
@@ -201,6 +199,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
             'complet'            => $complet,
             'destinataires'      => $this->getDestinatairesPiecesJointes(),
             'form'               => $this->form,
+            'formUpload'         => $formUpload,
             'role'               => $role,
         ));
     }

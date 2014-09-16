@@ -177,7 +177,7 @@ return array(
             'ApplicationContratProcess'   => 'Application\\Service\\Process\\ContratProcess',
             'PeutCreerContratInitialRule' => 'Application\Rule\Intervenant\PeutCreerContratInitialRule',
             'PeutCreerAvenantRule'        => 'Application\Rule\Intervenant\PeutCreerAvenantRule',
-            'ContratAssertion'            => 'Application\\Service\\Assertion\\ContratAssertion',
+            'ContratAssertion'            => 'Application\\Assertion\\ContratAssertion',
         ),
     ),
     'view_helpers' => array(

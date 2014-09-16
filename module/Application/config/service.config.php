@@ -190,6 +190,23 @@ return array(
                     'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
             ),
         ),
+        'resource_providers' => array(
+            'BjyAuthorize\Provider\Resource\Config' => array(
+                'Service' => array(),
+            ),
+        ),
+        'rule_providers' => array(
+            'BjyAuthorize\Provider\Rule\Config' => array(
+                'allow' => array(
+                    array(
+                        array(ComposanteRole::ROLE_ID),
+                        'Service',
+                        array('create', 'read', 'delete', 'update'),
+                        'ServiceAssertion',
+                    ),
+                ),
+            ),
+        ),
     ),
     'controllers' => array(
         'invokables' => array(
@@ -213,6 +230,7 @@ return array(
             'FormServiceSaisieFieldsetHydrator' => 'Application\Form\Service\SaisieFieldsetHydrator',
             'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',
             'ProcessFormuleHetd'                => 'Application\\Service\\Process\\FormuleHetd',
+            'ServiceAssertion'                  => 'Application\\Assertion\\ServiceAssertion',
         ),
         'factories' => array(
         ),

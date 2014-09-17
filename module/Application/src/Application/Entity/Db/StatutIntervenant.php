@@ -28,30 +28,6 @@ class StatutIntervenant
     const AUTRES         = 'AUTRES';
     const NON_AUTORISE   = 'NON_AUTORISE';
 
-    public $permanents = array(
-        self::ENS_2ND_DEG,
-        self::ENS_CH,
-        self::ASS_MI_TPS,
-        self::ATER,
-        self::ATER_MI_TPS,
-        self::DOCTOR,
-        self::ENS_CONTRACT,
-        self::LECTEUR,
-        self::MAITRE_LANG,
-        self::BIATSS,
-    );
-
-    public $vacataires = array(
-        self::SALAR_PRIVE,
-        self::SALAR_PUBLIC,
-        self::NON_SALAR,
-//        self::RETR_UCBN,
-        self::RETR_HORS_UCBN,
-        self::ETUD_UCBN,
-        self::ETUD_HORS_UCBN,
-        self::CHARG_ENS_1AN,
-    );
-
     /**
      * 
      * @return string
@@ -68,7 +44,7 @@ class StatutIntervenant
      */
     public function estPermanent()
     {
-        return in_array($this->getSourceCode(), $this->permanents);
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
     }
     
     /**
@@ -78,7 +54,7 @@ class StatutIntervenant
      */
     public function estVacataire()
     {
-        return in_array($this->getSourceCode(), $this->vacataires);
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
     }
     
     /**

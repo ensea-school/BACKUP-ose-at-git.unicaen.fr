@@ -88,6 +88,48 @@ class StatutIntervenant
     }
     
     /**
+     * Indique si ce statut nécessite un contrat.
+     *
+     * @return bool 
+     */
+    public function necessiteContrat()
+    {
+        if ($this->estVacataire() || $this->estBiatss()) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Indique si ce statut permet la saisie des données personnelles.
+     *
+     * @return bool 
+     */
+    public function peutSaisirDossier()
+    {
+        if ($this->estAutre() || ($this->estVacataire() && !$this->estBiatss())) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Indique si ce statut permet la fourniture de pièces justificatives.
+     *
+     * @return bool 
+     */
+    public function peutSaisirPieceJointe()
+    {
+        if ($this->estVacataire() && !$this->estBiatss()) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
      * @var \Application\Entity\Db\Source
      */
     protected $source;

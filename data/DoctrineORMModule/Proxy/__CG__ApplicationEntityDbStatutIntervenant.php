@@ -242,6 +242,39 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     /**
      * {@inheritDoc}
      */
+    public function necessiteContrat()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'necessiteContrat', array());
+
+        return parent::necessiteContrat();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function peutSaisirDossier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'peutSaisirDossier', array());
+
+        return parent::peutSaisirDossier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function peutSaisirPieceJointe()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'peutSaisirPieceJointe', array());
+
+        return parent::peutSaisirPieceJointe();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setDepassement($depassement)
     {
 

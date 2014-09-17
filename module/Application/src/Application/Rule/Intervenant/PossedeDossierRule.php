@@ -13,10 +13,12 @@ class PossedeDossierRule extends IntervenantRule
     {
         // un vacataire doit avoir saisi un dossier
         $dossier = $this->getIntervenant()->getDossier();
+        
         if (null === $dossier || !$dossier->getId()) {
             $this->setMessage("Les données personnelles de l'intervenant doivent avoir été saisies au préalable.");
             return false;
         }
+        
         return true;
     }
     
@@ -24,6 +26,6 @@ class PossedeDossierRule extends IntervenantRule
     {
         $statut = $this->getIntervenant()->getStatut();
         
-        return $statut->estAutre() || $statut->estVacataire();
+        return $statut->peutSaisirDossier();
     }
 }

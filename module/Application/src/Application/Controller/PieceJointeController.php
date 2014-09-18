@@ -6,11 +6,12 @@ use Application\Acl\ComposanteDbRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypePieceJointe;
+use Application\Entity\Db\PieceJointe;
 use Application\Form\Joindre;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Service\PieceJointe;
+use Application\Service\PieceJointe as PieceJointeService;
 use Application\Service\Process\PieceJointeProcess;
 use Application\Service\Service;
 use Application\Service\TypePieceJointeStatut;
@@ -78,7 +79,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
     { 
         $this->commonPiecesJointes();
         
-        $this->title = "Liste des pièces justificatives à joindre <small>$this->intervenant</small>";
         $this->form
                 ->remove('submit')
                 ->get('pj')->setAttribute('disabled', true)->setLabel("Merci d'adresser les pièces justificatives suivantes à l'adresse ci-après...");
@@ -122,14 +122,29 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
-            
-            var_dump($post);
-            
             $form->setData($post);
+//                var_dump($post, $form->isValid(), $form->getMessages());
             if ($form->isValid()) {
-                $data = $form->getData();var_dump('valid');
-                // Form is valid, save the form!
-                return $this->redirect()->toRoute('upload-form/success');
+                $data = $form->getData();
+                foreach ($data['files'] as $file) {
+                    $path          = $file['tmp_name'];
+                    $nomFichier    = $file['name'];
+                    $typeFichier   = $file['type'];
+                    $tailleFichier = $file['size'];
+                    $pj = (new PieceJointe())
+                            ->setType($this->getTypePieceJointe())
+                            ->setDossier($this->getIntervenant()->getDossier())
+                            ->setNomFichier($nomFichier)
+                            ->setTailleFichier($tailleFichier)
+                            ->setTypeFichier($typeFichier)
+                            ->setFichier(file_get_contents($path))
+                            ->setValidation(null);
+                    $this->em()->persist($pj);
+                    $this->em()->flush();
+                    unlink($path);
+                }
+                
+                return $this->redirect()->toRoute('piece-jointe/intervenant/lister', [], [], true);
             }
         }
         
@@ -143,7 +158,37 @@ class PieceJointeController extends AbstractActionController implements ContextP
 
         return $viewModel;
     }
+    
+    public function supprimerAction()
+    {
+        $pj              = $this->getPieceJointe();
+        $typePieceJointe = $pj->getType();
         
+        $this->em()->remove($this->getPieceJointe());
+        $this->em()->flush();
+        
+        return $this->redirect()->toRoute('piece-jointe/intervenant/lister', ['typePieceJointe' => $typePieceJointe->getId()], [], true);
+    }
+    
+    public function telechargerAction()
+    {
+        $pj          = $this->getPieceJointe();
+        $content     = stream_get_contents($pj->getFichier());
+        $contentType = $pj->getTypeFichier() ?: 'application/octet-stream';
+        
+        header('Content-Description: File Transfer');
+        header('Content-Type: ' . $contentType);
+        header('Content-Disposition: attachment; filename=' . $pj->getNomFichier());
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . strlen($content));
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        header('Pragma: public');
+        
+        echo $content;
+        exit;
+    }
+    
     /**
      * 
      * @return ViewModel
@@ -153,7 +198,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
     { 
         $this->commonPiecesJointes();
 
-        $this->title = "Checklist des pièces à joindre <small>$this->intervenant</small>";
         $this->form->get('pj')->setLabel("Cochez les pièces qui ont été fournies...");
         
         if ($this->getRequest()->isPost()) {
@@ -173,6 +217,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
     
     private function commonPiecesJointes()
     {
+        $this->title        = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
         $role               = $this->getContextProvider()->getSelectedIdentityRole();
         $serviceService     = $this->getServiceService();
         $servicePieceJointe = $this->getPieceJointeService();
@@ -185,6 +230,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
         }
         
         $this->form = $this->getPieceJointeProcess()->getFormPiecesJointes();
+        $typesPieceJointeStatut = $this->getPieceJointeProcess()->getTypesPieceJointeStatut();
         
         $piecesJointesFournies = $this->getServiceLocator()->get('PiecesJointesFourniesRule')
                 ->setIntervenant($this->getIntervenant());
@@ -193,14 +239,18 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $formUpload = $this->getFormJoindre();
         
         $this->view = new ViewModel(array(
-            'intervenant'        => $this->getIntervenant(),
-            'totalHeuresReelles' => $serviceService->getTotalHeuresReelles($this->getIntervenant()),
-            'dossier'            => $dossier,
-            'complet'            => $complet,
-            'destinataires'      => $this->getDestinatairesPiecesJointes(),
-            'form'               => $this->form,
-            'formUpload'         => $formUpload,
-            'role'               => $role,
+            'intervenant'              => $this->getIntervenant(),
+            'totalHETD'                => $this->getPieceJointeProcess()->getTotalHETDIntervenant(),
+            'annee'                    => $this->getContextProvider()->getGlobalContext()->getAnnee(),
+            'typesPieceJointeStatut'   => $typesPieceJointeStatut,
+            'totalHeuresReelles'       => $serviceService->getTotalHeuresReelles($this->getIntervenant()),
+            'dossier'                  => $dossier,
+            'complet'                  => $complet,
+            'destinataires'            => $this->getDestinatairesPiecesJointes(),
+            'form'                     => $this->form,
+            'formUpload'               => $formUpload,
+            'role'                     => $role,
+            'title'                    => $this->title,
         ));
     }
     
@@ -309,6 +359,23 @@ class PieceJointeController extends AbstractActionController implements ContextP
     }
     
     /**
+     * @var PieceJointe
+     */
+    private $pieceJointe;
+    
+    /**
+     * @return PieceJointe
+     */
+    public function getPieceJointe()
+    {
+        if (null == $this->pieceJointe) {
+            $this->pieceJointe = $this->context()->mandatory()->pieceJointeFromRoute();
+        }
+        
+        return $this->pieceJointe;
+    }
+    
+    /**
      * @var PieceJointeProcess
      */
     private $process;
@@ -346,7 +413,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
     }
     
     /**
-     * @return PieceJointe
+     * @return PieceJointeService
      */
     private function getPieceJointeService()
     {

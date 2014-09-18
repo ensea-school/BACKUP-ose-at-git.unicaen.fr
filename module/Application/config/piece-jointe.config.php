@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Entity\Db\PieceJointe;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantExterieurRole;
@@ -58,6 +59,30 @@ return array(
                                     ),
                                 ),
                             ),
+                            'supprimer' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/supprimer/:pieceJointe/:nomFichier',
+                                    'constraints' => array(
+                                        'pieceJointe' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'supprimer',
+                                    ),
+                                ),
+                            ),
+                            'telecharger' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/telecharger/:pieceJointe/:nomFichier',
+                                    'constraints' => array(
+                                        'pieceJointe' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'telecharger',
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                 ),
@@ -92,8 +117,25 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => array('index', 'ajouter', 'lister', 'download'),
+                    'action'     => array('index', 'ajouter', 'supprimer', 'lister', 'telecharger'),
                     'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
+                ),
+            ),
+        ),
+        'resource_providers' => array(
+            'BjyAuthorize\Provider\Resource\Config' => array(
+                PieceJointe::RESOURCE_ID => array(),
+            ),
+        ),
+        'rule_providers' => array(
+            'BjyAuthorize\Provider\Rule\Config' => array(
+                'allow' => array(
+                    array(
+                        array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, 'Administrateur'), 
+                        PieceJointe::RESOURCE_ID, 
+                        array('create', 'read', 'delete', 'update'), 
+                        'PieceJointeAssertion',
+                    ),
                 ),
             ),
         ),

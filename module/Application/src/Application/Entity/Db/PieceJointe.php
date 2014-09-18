@@ -1,12 +1,16 @@
 <?php
 
 namespace Application\Entity\Db;
-
+ 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+ 
 /**
  * PieceJointe
  */
-class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
+class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface, ResourceInterface
 {
+    const RESOURCE_ID = 'PieceJointe';
+    
     /**
      * @var \DateTime
      */
@@ -41,6 +45,11 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
      * @var float
      */
     private $tailleFichier;
+
+    /**
+     * @var string
+     */
+    private $typeFichier;
 
     /**
      * @var \DateTime
@@ -250,6 +259,41 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     }
 
     /**
+     * Get tailleFichier
+     *
+     * @return string 
+     */
+    public function getTailleFichierToString()
+    {
+        $f = new \UnicaenApp\Filter\BytesFormatter();
+        
+        return $f->filter($this->getTailleFichier());
+    }
+
+    /**
+     * Set typeFichier
+     *
+     * @param string $typeFichier
+     * @return PieceJointe
+     */
+    public function setTypeFichier($typeFichier)
+    {
+        $this->typeFichier = $typeFichier;
+
+        return $this;
+    }
+
+    /**
+     * Get typeFichier
+     *
+     * @return string 
+     */
+    public function getTypeFichier()
+    {
+        return $this->typeFichier;
+    }
+
+    /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut
@@ -441,5 +485,15 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+    
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return self::RESOURCE_ID;
     }
 }

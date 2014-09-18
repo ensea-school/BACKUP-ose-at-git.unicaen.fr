@@ -1,40 +1,40 @@
 <?php
-/* @var $typePieceJointe \Application\Entity\Db\TypePieceJointe */
-/* @var $piecesJointes   \Application\Entity\Db\PieceJointe[] */
-/* @var $form            \Application\Form\Joindre */
-echo time();
+$piecesJointes = $this->piecesJointes; /* @var $piecesJointes \Application\Entity\Db\PieceJointe[] */
 ?>
 
 <?php if (count($piecesJointes)): ?>
+
 <ul>
 <?php foreach ($piecesJointes as $pj): ?>
-    <li>
-        <a href="#"><span class="glyphicon glyphicon-file"></span> <?php echo $pj->getNomFichier() ?></a> 
-        <a href="#" title="Supprimer ce fichier"><span class="glyphicon glyphicon-trash"></span></a>
+    <li class="fichier-pj">
+        <?php
+        $params = ['pieceJointe' => $pj->getId(), 'nomFichier' => $pj->getNomFichier()];
+        $urlTelecharger = $this->url('piece-jointe/intervenant/telecharger', $params, [], true);
+        $urlSupprimer   = $this->url('piece-jointe/intervenant/supprimer', $params, [], true); 
+        ?>
+        
+        <!-- lien de téléchargement de la PJ -->
+        <a class="download-file" href="<?php echo $urlTelecharger ?>" title="Télécharger le fichier déposé '<?php echo $pj->getNomFichier() ?>'">
+            <span class="glyphicon glyphicon-file"></span> 
+            <?php echo sprintf("%s (<abbr title=\"%s octets\">%s</abbr>)", $pj->getNomFichier(), $pj->getTailleFichier(), $pj->getTailleFichierToString()) ?></a> 
+       
+        <!-- lien de suppression de la PJ -->
+        <a class="delete-file" href="<?php echo $urlSupprimer ?>" title="Supprimer le fichier déposé '<?php echo $pj->getNomFichier() ?>'">
+            <span class="glyphicon glyphicon-trash"></span></a> 
+            
+        <!-- validation éventuelle de la PJ -->
+        <?php if ($pj->getValidation()): ?>
+            <?php $title = (string) $pj->getValidation() ?>
+            <span class="label label-success" title="<?php echo $title ?>"><span class="glyphicon glyphicon-ok"></span> Validée</span>
+        <?php endif ?>
+            
+        <!--<span class="label label-warning"><span class="glyphicon glyphicon-exclamation-sign"></span> Non validée</span>-->
     </li>
 <?php endforeach ?>
 </ul>
+
 <?php else: ?>
+
 <p>Aucun.</p>
+
 <?php endif ?>
-
-<!--<a class="ajax-modal btn btn-xs btn-default" title="Déposer un fichier supplémentaire" 
-   href="<?php echo $this->url('piece-jointe/intervenant/ajouter', [], [], true) ?>"><span class="glyphicon glyphicon-plus"></span> Ajouter</a> -->
-
-            <?php 
-            $formId = 'form-' . $typePieceJointe->getId();
-            $urlAjouter = $this->url('piece-jointe/intervenant/ajouter', ['typePieceJointe' => $typePieceJointe->getId()], [], true);
-            $formUpload
-                    ->setAttribute('id', $formId)
-                    ->setAttribute('action', $urlAjouter)
-                    ->prepare(); // The correct enctype is set here 
-            ?>
-            <?php echo $this->form()->openTag($formUpload); ?>
-                <div class="form-element">
-                    <?php $fileElement = $formUpload->get('files'); ?>
-                    <?php echo $this->formLabel($fileElement); ?>
-                    <?php echo $this->formFile($fileElement); ?>
-                    <?php echo $this->formElementErrors($fileElement); ?>
-                </div>
-                <input type="submit" value="Envoyer" />
-            <?php echo $this->form()->closeTag(); ?>

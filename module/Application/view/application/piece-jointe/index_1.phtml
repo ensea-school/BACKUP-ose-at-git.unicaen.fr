@@ -1,6 +1,6 @@
 <link href="<?php //echo $this->basePath('css/fileinput.min.css') ?>" media="screen" rel="stylesheet" type="text/css"> 
 
-<?php $this->headTitle()->append($this->intervenant->getNomUsuel())->append("Pièces justificatives") ?>
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Pièces justificatives") ?>
 
 <h1 class="page-header"><?php echo $title ?></h1>
 
@@ -15,74 +15,64 @@ else {
 echo $messenger;
 ?>
 
+<?php $form->prepare(); ?>
+
 <style>
-    a.modele-doc { /*margin-left: 20px;*/ }
-    /*span.text-warning { font-style: italic; }*/
+    a.modele-doc { margin-left: 20px; }
+    span.text-warning { font-style: italic; }
 </style>
 
-<?php foreach($this->typesPieceJointeStatut as $tpjs): /* @var $tpjs \Application\Entity\Db\TypePieceJointeStatut */ ?>
-    <?php 
-    $tpj        = $tpjs->getType();
-    $divId      = uniqid('div');
-    $formId     = 'form-' . $tpj->getId();
-    $urlLister  = $this->url('piece-jointe/intervenant/lister', ['typePieceJointe' => $tpj->getId()], [], true);
-    $urlAjouter = $this->url('piece-jointe/intervenant/ajouter', ['typePieceJointe' => $tpj->getId()], [], true);
-
-    $obligatoire = $tpjs->getObligatoireToString($this->totalHETD);
-    $linksDocs = [];
-    if (($url = $tpj->getUrlModeleDoc())) {
-        $href = $this->basePath($url);
-        $fileName = ltrim(strrchr($href, '/'), '/');
-        $linksDocs[] = '<a class="modele-doc" title="Cliquez pour télécharger le document à remplir" href="' 
-                . $href . '"><span class="glyphicon glyphicon-file"></span> ' . $fileName . '</a>';
-    }
-    $type = (string) $tpj;
-    if ($tpj->getCode() === \Application\Entity\Db\TypePieceJointe::CARTE_ETUD) {
-        $type .= " $this->annee";
-    }
-    $label = sprintf('%s <span class="text-warning">%s</span>', $type, $obligatoire);
-            
-    $this->formUpload
-            ->setAttribute('id', $formId)
-            ->setAttribute('class', "upload-form")
-            ->setAttribute('action', $urlAjouter)
-            ->setAttribute('data-div-to-update', "#$divId")
-            ->prepare(); // The correct enctype is set here 
-    ?>
-    <h2><?php echo $label ?></h2>
-    <div class="row">
-        <div class="col-md-7">
-            <?php if ($linksDocs): ?>
-            <div>
-                <label>Documents à télécharger et à remplir :</label><br />
-                <?php echo $this->htmlList($linksDocs, false, false, false) ?>
-            </div>
-            <?php endif ?>
-            
-            <div class="upload-container">
-                <label>Fichiers déposés pour cette pièce :</label>
-                <div class="uploaded-files-div" id="<?php echo $divId ?>" data-url="<?php echo $urlLister ?>">
-                    <!-- DIV mise à jour via AJAX -->
-                </div>
-                <?php echo $this->form()->openTag($this->formUpload); ?>
-                    <?php $fileElement = $this->formUpload->get('files')->setAttribute('class', "choose-file pull-left "); ?>
-                    <div><?php echo $this->formLabel($fileElement); ?></div>
-                    <?php echo $this->formFile($fileElement); ?>
-                    <?php echo $this->formElementErrors($fileElement); ?>
-                    <?php echo $this->formHidden($this->formUpload->get('security')); ?>
-                    <button type="submit" class="pull-right upload-file btn btn-file btn-primary btn-xs" style="display: none;">
-                        <span class="glyphicon glyphicon-upload"></span> Envoyer
-                    </button>
-                <?php echo $this->form()->closeTag(); ?>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-        <div class="col-md-5">
-            Validation!!
-        </div>
+<div class="row">
+    <div class="col-md-5">
+        <fieldset>
+            <legend><h2>Validation des pièces</h2></legend>
+            <?php echo $this->form()->openTag($form) ?>
+            <?php echo $this->formControlGroup($form->get('pj')) ?>
+            <?php echo $this->formElement($form->get('security')) ?>
+            <hr />
+            <?php echo $form->has('submit') ? $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')) : null ?>
+            <?php echo $this->form()->closeTag() ?>
+        </fieldset>
     </div>
-    <hr />
-<?php endforeach ?>
+    
+    <div class="col-md-7">
+        <fieldset>
+            <legend><h2>Dépôt des pièces</h2></legend>
+            <?php foreach($typesPieceJointeAttendus as $tpj): /* @var $tpj \Application\Entity\Db\TypePieceJointe */ ?>
+                <?php 
+                $divId      = uniqid('div');
+                $formId     = 'form-' . $tpj->getId();
+                $urlLister  = $this->url('piece-jointe/intervenant/lister', ['typePieceJointe' => $tpj->getId()], [], true);
+                $urlAjouter = $this->url('piece-jointe/intervenant/ajouter', ['typePieceJointe' => $tpj->getId()], [], true);
+
+                $formUpload
+                        ->setAttribute('id', $formId)
+                        ->setAttribute('class', "upload-form")
+                        ->setAttribute('action', $urlAjouter)
+                        ->setAttribute('data-div-to-update', "#$divId")
+                        ->prepare(); // The correct enctype is set here 
+                ?>
+                <fieldset>
+                    <legend><h3><?php echo $tpj ?></h3></legend>
+                    <div class="upload-container">
+                        <label>Fichiers déposés :</label>
+                        <div class="uploaded-files-div" id="<?php echo $divId ?>" data-url="<?php echo $urlLister ?>">
+                            <!-- DIV mise à jour via AJAX -->
+                        </div>
+                        <?php echo $this->form()->openTag($formUpload); ?>
+                            <?php $fileElement = $formUpload->get('files')->setAttribute('class', "choose-file pull-left "); ?>
+                            <div><?php echo $this->formLabel($fileElement); ?></div>
+                            <?php echo $this->formFile($fileElement); ?>
+                            <?php echo $this->formElementErrors($fileElement); ?>
+                            <?php echo $this->formHidden($formUpload->get('security')); ?>
+                            <input class="pull-right upload-file btn btn-file btn-success btn-xs" type="submit" value="Envoyer" />
+                        <?php echo $this->form()->closeTag(); ?>
+                    </div>
+                </fieldset>
+            <?php endforeach ?>
+        </fieldset>
+    </div>
+</div>
 
 <br />
 <?php 

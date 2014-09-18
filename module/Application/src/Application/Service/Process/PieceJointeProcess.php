@@ -20,26 +20,6 @@ use Application\Entity\Db\PieceJointe;
 class PieceJointeProcess extends AbstractService
 {
     /**
-     * @var array
-     */
-    private $typesPieceJointeStatut;
-    
-    /**
-     * @var array
-     */
-    private $typesPieceJointeAttendus;
-    
-    /**
-     * @var array
-     */
-    private $typesPieceJointeFournis;
-    
-    /**
-     * @var array
-     */
-    private $piecesJointesFournies;
-    
-    /**
      * 
      * @param string[] $typesPieceJointeIds Ids des type de pj à instancier.
      * @return \Application\Service\Process\DossierProcess
@@ -158,15 +138,13 @@ class PieceJointeProcess extends AbstractService
      * 
      * @return array id => TypePieceJointeStatut
      */
-    private function getTypesPieceJointeStatut()
+    public function getTypesPieceJointeStatut()
     {
-        if (null === $this->typesPieceJointeStatut) {
-            $qb = $this->getServiceTypePieceJointeStatut()->finderByStatutIntervenant($this->getStatut());
-            $qb = $this->getServiceTypePieceJointeStatut()->finderByPremierRecrutement($this->getDossier()->getPremierRecrutement(), $qb);
-            $this->typesPieceJointeStatut = $this->getServiceTypePieceJointeStatut()->getList($qb);
-        }
+        $qb = $this->getServiceTypePieceJointeStatut()->finderByStatutIntervenant($this->getStatut());
+        $qb = $this->getServiceTypePieceJointeStatut()->finderByPremierRecrutement($this->getDossier()->getPremierRecrutement(), $qb);
+        $typesPieceJointeStatut = $this->getServiceTypePieceJointeStatut()->getList($qb);
         
-        return $this->typesPieceJointeStatut;
+        return $typesPieceJointeStatut;
     }
     
     /**
@@ -175,15 +153,14 @@ class PieceJointeProcess extends AbstractService
      */
     public function getTypesPieceJointeAttendus()
     {
-        if (null === $this->typesPieceJointeAttendus) {
-            $this->typesPieceJointeAttendus = array();
-            foreach ($this->getTypesPieceJointeStatut() as $typePieceJointeStatut) { /* @var $typePieceJointeStatut TypePieceJointeStatut */
-                $type = $typePieceJointeStatut->getType();
-                $this->typesPieceJointeAttendus[$type->getId()] = $type;
-            }
+        $typesPieceJointeAttendus = [];
+        
+        foreach ($this->getTypesPieceJointeStatut() as $typePieceJointeStatut) { /* @var $typePieceJointeStatut TypePieceJointeStatut */
+            $type = $typePieceJointeStatut->getType();
+            $typesPieceJointeAttendus[$type->getId()] = $type;
         }
         
-        return $this->typesPieceJointeAttendus;
+        return $typesPieceJointeAttendus;
     }
     
     /**
@@ -192,15 +169,14 @@ class PieceJointeProcess extends AbstractService
      */
     public function getTypesPieceJointeFournis()
     {
-        if (null === $this->typesPieceJointeFournis) {
-            $this->typesPieceJointeFournis = array();
-            foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
-                $type = $pj->getType();
-                $this->typesPieceJointeFournis[$type->getId()] = $type;
-            }
+        $typesPieceJointeFournis = [];
+
+        foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
+            $type = $pj->getType();
+            $typesPieceJointeFournis[$type->getId()] = $type;
         }
         
-        return $this->typesPieceJointeFournis;
+        return $typesPieceJointeFournis;
     }
     
     /**
@@ -214,15 +190,13 @@ class PieceJointeProcess extends AbstractService
             $typePieceJointe = $this->getServiceTypePieceJointe()->get($typePieceJointe);
         }
         
-        if (null === $this->piecesJointesFournies) {
-            $qb = $this->getServicePieceJointe()->finderByDossier($this->getDossier());
-            if ($typePieceJointe) {
-                $this->getServicePieceJointe()->finderByType($typePieceJointe, $qb);
-            }
-            $this->piecesJointesFournies = $this->getServicePieceJointe()->getList($qb);
+        $qb = $this->getServicePieceJointe()->finderByDossier($this->getDossier());
+        if ($typePieceJointe) {
+            $this->getServicePieceJointe()->finderByType($typePieceJointe, $qb);
         }
+        $piecesJointesFournies = $this->getServicePieceJointe()->getList($qb);
         
-        return $this->piecesJointesFournies;
+        return $piecesJointesFournies;
     }
     
     /**
@@ -273,7 +247,7 @@ class PieceJointeProcess extends AbstractService
         $qb = $this->getServicePieceJointe()->finderByType($type);
         $qb = $this->getServicePieceJointe()->finderByDossier($this->getDossier(), $qb);
         
-        return $qb->getQuery()->getOneOrNullResult() ?: false;
+        return $qb->getQuery()->getResult() ?: false;
     }
     
     /**
@@ -295,7 +269,7 @@ class PieceJointeProcess extends AbstractService
     /**
      * @deprecated Implémenter le vrai calcul d'HETD ?
      */
-    private function getTotalHETDIntervenant()
+    public function getTotalHETDIntervenant()
     {
         return $this->getServiceService()->getTotalHeuresReelles($this->getIntervenant());
     }

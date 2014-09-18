@@ -38,17 +38,22 @@ class Joindre extends Form
         /**
          * Pièces justificatives
          */
-        $this->add(array(
+        $this->add([
             'name' => 'files',
             'type' => 'File',
-            'options' => array(
-                'label' => "Dépôt de fichier(s) :"
-            ),
-            'attributes' => array(
+            'options' => [
+                'label' => "Déposer un fichier :",
+                'label_attributes' => [
+                    'title' => "Niveau",
+                    'disable_html_escape' => true,
+                ],
+                'label_options' => ['disable_html_escape' => true],
+            ],
+            'attributes' => [
                 'id' => 'files',
                 'multiple' => true,
-            ),
-        ));
+            ],
+        ]);
         
         /**
          * Csrf
@@ -58,13 +63,13 @@ class Joindre extends Form
         /**
          * Submit
          */
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => "Enregistrer",
-            ),
-        ));
+            ],
+        ]);
         
         return $this;
     }
@@ -82,21 +87,22 @@ class Joindre extends Form
         // will be run through the same validators and filters
         // automatically.
         $fileInput->getValidatorChain()
-            ->attachByName('filesize',      array('max' => 204800))
-            ->attachByName('filemimetype',  array('mimeType' => 'image/png,image/x-png'))
+//            ->attachByName('filesize',      array('max' => 204800)) // 100 ko
+            ->attachByName('filesize',      array('max' => 1024*1024*1024*1 )) // 1 Mo
+//            ->attachByName('filemimetype',  array('mimeType' => 'image/png,image/x-png'))
             /*->attachByName('fileimagesize', array('maxWidth' => 100, 'maxHeight' => 100))*/;
 
         // All files will be renamed, i.e.:
         //   ./data/tmpuploads/avatar_4b3403665fea6.png,
         //   ./data/tmpuploads/avatar_5c45147660fb7.png
-        $fileInput->getFilterChain()->attachByName(
-            'filerenameupload',
-            array(
-                'target'    => './data/tmpuploads/pj.png',
-                'randomize' => true,
-            )
-        );
-        $inputFilter->add($fileInput);
+//        $fileInput->getFilterChain()->attachByName(
+//            'filerenameupload',
+//            array(
+//                'target'    => './data/tmpuploads/pj.png',
+//                'randomize' => true,
+//            )
+//        );
+//        $inputFilter->add($fileInput);
 
         $this->setInputFilter($inputFilter);
         

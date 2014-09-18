@@ -15,7 +15,10 @@
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="url" type="string" column="URL" length="255" nullable="true"/>
-    <field name="fichier" type="blob" column="fichier" nullable="true"/>
+    <field name="fichier" type="blob" column="FICHIER" nullable="true"/>
+    <field name="nomFichier" type="string" column="NOM_FICHIER" nullable="true"/>
+    <field name="tailleFichier" type="integer" column="TAILLE_FICHIER" nullable="true"/>
+    <field name="typeFichier" type="string" column="TYPE_FICHIER" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="type" target-entity="Application\Entity\Db\TypePieceJointe">

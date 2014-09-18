@@ -22,6 +22,9 @@ class IdentityProviderFactory implements FactoryInterface
     {
         $em = $serviceLocator->get('doctrine.entitymanager.orm_default'); /* @var $em \Doctrine\ORM\EntityManager */
         
-        return new IdentityProvider($em);
+        $identityProvider = new IdentityProvider;
+        $identityProvider->setEntityManager($em);
+        $identityProvider->init();
+        return $identityProvider;
     }
 }

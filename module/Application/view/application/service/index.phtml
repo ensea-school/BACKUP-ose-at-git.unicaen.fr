@@ -12,7 +12,7 @@
     th.heures, td.heures { width: 3em !important; }
 </style>
 
-<?php if ($role instanceof \Application\Acl\DbRole): ?>
+<?php if ($role instanceof \Application\Acl\Role): ?>
 <?php echo $this->messenger()->setMessages(array('warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
         . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures.")); ?>
 <?php endif; ?>

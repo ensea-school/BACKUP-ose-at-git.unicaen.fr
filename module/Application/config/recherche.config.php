@@ -24,7 +24,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Recherche',
-                    'roles' => array('user','Administrateur')),
+                    'roles' => array('user')),
             ),
         ),
     ),

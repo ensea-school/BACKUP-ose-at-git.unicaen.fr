@@ -114,27 +114,27 @@ $main =  array(
     ),
     'bjyauthorize' => array(
         'role_providers' => array(
-            /**
-             * 
-             */
-            'ApplicationRoleProvider' => array(),
-            
-            /**
-             * Rôles issus de l'annuaire LDAP
-             */
-//            'UnicaenAuth\Provider\Role\Config' => array(
-//                // intervant = rôle de base
-//                'intervenant' => array('name' => "Intervenant", 'children' => array(
-//                    // gestionnaires de composantes
-//                    'cn=ucbn_composantes_responsables,ou=groups,dc=unicaen,dc=fr' => array('name' => "Responsable de composante", 'children' => array(
-//                        // directeurs de composantes
-//                        'cn=ucbn_composantes_directeurs,ou=groups,dc=unicaen,dc=fr' => array('name' => "Directeur de composante", 'children' => array(
-//                            // administrateur de l'appli
-////                            'cn=admin_cartagen,ou=groups,dc=unicaen,dc=fr',
-//                        )),
-//                    )),
-//                )),
-//            ),
+            'ApplicationRoleProvider' => [
+                'Application\\Acl\\AdministrateurRole',
+
+                'Application\\Acl\\ComposanteRole',
+                    'Application\\Acl\\DirecteurComposanteRole',
+                    'Application\\Acl\\GestionnaireComposanteRole',
+                    'Application\\Acl\\ResponsableComposanteRole',
+                    'Application\\Acl\\SuperviseurComposanteRole',
+                    'Application\\Acl\\ResponsableRechercheLaboRole',
+
+                'Application\\Acl\\DrhRole',
+                    'Application\\Acl\\GestionnaireDrhRole',
+                    'Application\\Acl\\ResponsableDrhRole',
+
+                'Application\\Acl\\EtablissementRole',
+                    'Application\\Acl\\SuperviseurEtablissementRole',
+
+                'Application\\Acl\\IntervenantRole',
+                    'Application\\Acl\\IntervenantExterieurRole',
+                    'Application\\Acl\\IntervenantPermanentRole',
+            ],
         ),
     ),
     'service_manager' => array(
@@ -146,9 +146,8 @@ $main =  array(
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
             'ApplicationSource'                              => 'Application\\Service\\Source',
-            'ApplicationTypeRolePhpRole'                     => 'Application\\Service\\TypeRolePhpRole',
             'ApplicationRole'                                => 'Application\\Service\\Role',
-            'ApplicationRoleUtilisateur'                     => 'Application\\Service\\RoleUtilisateur',
+            'ApplicationTypeRole'                            => 'Application\\Service\\TypeRole',
             'NavigationPageVisibility'                       => 'Application\\Service\\NavigationPageVisibility',
         ),
         'factories' => array(

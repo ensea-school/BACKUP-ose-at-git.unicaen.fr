@@ -1,16 +1,12 @@
 <?php
 namespace Application\Provider\Identity;
 
-use Application\Acl\DbRole;
-use Application\Acl\IntervenantExterieurRole;
-use Application\Acl\IntervenantPermanentRole;
-use Application\Acl\IntervenantRole;
+use Application\Acl;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\Role;
 use Application\Entity\Db\Utilisateur;
 use Common\Exception\RuntimeException;
-use Doctrine\ORM\EntityManager;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Identity\ChainableProvider;
@@ -28,23 +24,17 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
 {
     use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;
-    
+
     /**
      * @var array
      */
     protected $roles;
-    
-    /**
-     * Constructeur.
-     * 
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager)
+
+    public function init()
     {
-        $this->setEntityManager($entityManager);
         $this->getEntityManager()->getFilters()->enable('historique');
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -52,103 +42,104 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
     {
         $event->addRoles($this->getIdentityRoles());
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public function getIdentityRoles()
     {
         if (null === $this->roles) {
-            $this->roles = array();
-            
+            $this->roles = [];
+
             if (!$this->getServiceLocator()->get('AuthUserContext')->getIdentity()) {
                 return $this->roles;
             }
-            
+
             /**
              * Rôles que possède l'utilisateur dans la base de données.
              */
             $this->roles = array_merge($this->roles, $this->getDbRoles());
-            
+
             /**
              * Rôle correspondant au type d'intervenant auquel appartient l'utilisateur
              */
-            $this->roles[] = $this->getIntervenantRole();
+            $intervenantRole = $this->getIntervenantRole();
+            if ($intervenantRole){
+                $this->roles[] = $intervenantRole;
+            }
+
         }
-        
-//        var_dump($this->roles);
-        
+
+        //var_dump($this->roles);
+
         return $this->roles;
     }
-    
+
     /**
      * Fetch dans la base de données les rôles que possède l'utilisateur sur une structure précise.
-     * 
+     *
      * @return array Id des rôles trouvés
      */
     protected function getDbRoles()
     {
         $utilisateur = $this->getDbUser();
-        $roles       = array();
-        
+        $roles       = [];
+
         if (!$utilisateur) {
             return $roles;
         }
-        
-        /**
-         * Rôles utilisateurs au sein de l'application (tables UTILISATEUR, ROLE_UTILISATEUR et ROLE_UTILISATEUR_LINKER)
-         */
-        foreach ($utilisateur->getRoleUtilisateur() as $roleUtilisateur) { /* @var $roleUtilisateur \Application\Entity\Db\RoleUtilisateur */
-            $roles[] = $roleUtilisateur->getRoleId();
-        }
-        
+
         /**
          * Responsabilités métier importées (tables ROLE et TYPE_ROLE)
          */
         if ($utilisateur->getPersonnel()) {
             foreach ($utilisateur->getPersonnel()->getRole() as $role) { /* @var $role Role */
-                $roles[] = DbRole::createRoleId($role->getType(), $role->getStructure()); // le role id suffit, pas besoin d'instance
+                $roleId = $role->getType()->getCode();
+                if ($structure = $role->getStructure()){
+                    $roleId .= '-'.$structure->getSourceCode();
+                }
+                $roles[] = $roleId;
             }
         }
-        
+
         return $roles;
     }
-    
+
     /**
      * Retourne le rôle correspondant au type d'intervenant auquel appartient l'utilisateur.
-     * 
-     * @return RoleInterface
+     *
+     * @return RoleInterface|null
      */
     protected function getIntervenantRole()
     {
         $utilisateur = $this->getDbUser();
-        
+
         if (!$utilisateur) {
-            return array();
+            return null;
         }
-        
+
         $intervenant = $utilisateur->getIntervenant();
-        
+
         if (!$intervenant) {
-            return IntervenantRole::ROLE_ID;
+            return Acl\IntervenantRole::ROLE_ID;
         }
-        
+
         if ($intervenant instanceof IntervenantPermanent) {
-            $role = IntervenantPermanentRole::ROLE_ID;
+            $role = Acl\IntervenantPermanentRole::ROLE_ID;
         }
         elseif ($intervenant instanceof IntervenantExterieur) {
-            $role = IntervenantExterieurRole::ROLE_ID;
+            $role = Acl\IntervenantExterieurRole::ROLE_ID;
         }
         else {
             throw new RuntimeException("Type d'intervenant inattendu : " . get_class($intervenant));
         }
-        
+
         return $role;
     }
-    
+
     /**
      * Retourne l'utilisateur connecté.
-     * 
+     *
      * @return Utilisateur
      */
     private function getDbUser()

@@ -91,7 +91,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Structure',
                     'action' => array('index', 'choisir', 'recherche', 'voir', 'apercevoir'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID)),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, 'administrateur')),
             ),
         ),
     ),

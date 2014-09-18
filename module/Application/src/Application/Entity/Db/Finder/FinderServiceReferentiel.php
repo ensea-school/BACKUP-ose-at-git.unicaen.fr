@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Finder;
 
-use Application\Acl\DbRole;
+use Application\Acl\Role;
 use Application\Acl\IntervenantRole;
 
 /**
@@ -35,7 +35,7 @@ class FinderServiceReferentiel extends AbstractFinder
                     ->andWhere("sr.intervenant = :intervenant")
                     ->setParameter('intervenant', $context->getIntervenant());
         }
-        elseif ($role instanceof DbRole) {
+        elseif ($role instanceof Role) {
             $e = $this->expr()->orX(
                     "sr.structure     = :structureResp", 
                     "s2.structureNiv2 = :structureResp"

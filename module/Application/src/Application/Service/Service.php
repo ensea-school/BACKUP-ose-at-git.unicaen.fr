@@ -148,7 +148,7 @@ class Service extends AbstractEntityService
         if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
             $this->finderByIntervenant( $context->getIntervenant(), $qb, $alias );
         }
-        elseif ($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
+        elseif ($role instanceof \Application\Acl\ComposanteRole){ // Si c'est un RA
 //            $this->finderByStructureEns( $role->getStructure(), $qb, $alias );
 //            $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
         }

@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db\Finder;
 
-use Application\Acl\DbRole;
+use Application\Acl\Role;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\IntervenantPermanent;
 
@@ -57,7 +57,7 @@ class FinderIntervenantPermanentWithServiceReferentiel extends AbstractFinder
 //                    ->andWhere("sr.intervenant = :intervenant")
 //                    ->setParameter('intervenant', $context->getIntervenant());
         }
-        elseif ($role instanceof DbRole) {
+        elseif ($role instanceof Role) {
             $or = $this->expr()->orX(
                     "sr.structure       = :structureResp", 
                     "stmp.structureNiv2 = :structureResp"

@@ -251,20 +251,18 @@ EOS;
     {
         $localContext = $this->getContextProvider()->getLocalContext();
         $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
-        
-        if ($role instanceof \Application\Acl\DbRole) { 
-            if (!$localContext->getStructure()) {
-                throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
-            }
-            if ($localContext->getStructure()->getId() === $role->getStructure()->getId()
-                    || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())) {
-                return true;
-            }
-            
-            $this->cannotDoThat(
-                    "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier un enseignement"
-                    . "pour la structure '{$localContext->getStructure()}'", $runEx);
+
+        if (!$localContext->getStructure()) {
+            throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
         }
+        if ($localContext->getStructure()->getId() === $role->getStructure()->getId()
+                || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())) {
+            return true;
+        }
+
+        $this->cannotDoThat(
+                "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier un enseignement"
+                . "pour la structure '{$localContext->getStructure()}'", $runEx);
 
         return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter/modifier un enseignement', $runEx);
     }

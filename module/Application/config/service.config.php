@@ -179,15 +179,15 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Service',
                     'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'administrateur')),
                 array(
                     'controller' => 'Application\Controller\Service',
                     'action' => array('index', 'resume','resume-refresh','filtres'),
-                    'roles' => array(ComposanteRole::ROLE_ID,'Administrateur')),
+                    'roles' => array(ComposanteRole::ROLE_ID,'administrateur')),
                 array( 
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'administrateur')),
             ),
         ),
     ),

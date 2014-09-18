@@ -107,19 +107,17 @@ class Etape extends AbstractEntityService
         $localContext = $this->getContextProvider()->getLocalContext();
         $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
 
-        if ($role instanceof \Application\Acl\DbRole) { 
-            if (!$localContext->getStructure()) {
-                throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
-            }
-            if ($localContext->getStructure()->getId() === $role->getStructure()->getId()
-                    || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())) {
-                return true;
-            }
-            
-            $this->cannotDoThat(
-                    "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier de formation"
-                    . "pour la structure '{$localContext->getStructure()}'", $runEx);
+        if (!$localContext->getStructure()) {
+            throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
         }
+        if ($localContext->getStructure()->getId() === $role->getStructure()->getId()
+                || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())) {
+            return true;
+        }
+
+        $this->cannotDoThat(
+                "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier de formation"
+                . "pour la structure '{$localContext->getStructure()}'", $runEx);
 
         return $this->cannotDoThat('Vous n\'avez pas les droits nécessaires pour ajouter ou modifier une formation', $runEx);
     }
@@ -173,7 +171,7 @@ class Etape extends AbstractEntityService
             if ($etape->getStructure() != $ir->getStructure()){
                 return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour éditer les modulateurs de cette structure', $runEx);
             }
-        }elseif($ir instanceof \Application\Acl\DbRole){
+        }elseif($ir instanceof \Application\Acl\Role){
             return $this->cannotDoThat('Vous n\'êtes pas autorisé à éditer de modulateurs', $runEx);
         }elseif($ir instanceof \Application\Acl\IntervenantRole){
             return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité d\'ajouter de modulateur', $runEx);

@@ -223,6 +223,39 @@ class StatutIntervenant
      * @var \Application\Entity\Db\TypeAgrementStatut
      */
     protected $typeAgrementStatut;
+
+    /**
+     * @var boolean
+     */
+    protected $nonAutorise;
+
+    /**
+     * @var boolean
+     */
+    protected $peutSaisirService;
+
+
+    function getNonAutorise()
+    {
+        return $this->nonAutorise;
+    }
+
+    function getPeutSaisirService()
+    {
+        return $this->peutSaisirService;
+    }
+
+    function setNonAutorise($nonAutorise)
+    {
+        $this->nonAutorise = $nonAutorise;
+        return $this;
+    }
+
+    function setPeutSaisirService($peutSaisirService)
+    {
+        $this->peutSaisirService = $peutSaisirService;
+        return $this;
+    }
     
     /**
      * Set depassement

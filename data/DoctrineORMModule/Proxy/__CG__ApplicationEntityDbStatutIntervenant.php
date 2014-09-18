@@ -64,10 +64,10 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut');
+            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService');
         }
 
-        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut');
+        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService');
     }
 
     /**
@@ -270,6 +270,50 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'peutSaisirPieceJointe', array());
 
         return parent::peutSaisirPieceJointe();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNonAutorise()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNonAutorise', array());
+
+        return parent::getNonAutorise();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPeutSaisirService()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPeutSaisirService', array());
+
+        return parent::getPeutSaisirService();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setNonAutorise($nonAutorise)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setNonAutorise', array($nonAutorise));
+
+        return parent::setNonAutorise($nonAutorise);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPeutSaisirService($peutSaisirService)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPeutSaisirService', array($peutSaisirService));
+
+        return parent::setPeutSaisirService($peutSaisirService);
     }
 
     /**

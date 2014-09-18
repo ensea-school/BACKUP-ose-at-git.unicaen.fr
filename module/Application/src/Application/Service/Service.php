@@ -45,7 +45,7 @@ class Service extends AbstractEntityService
     /**
      * Retourne une nouvelle entité de la classe donnée
      *
-     * @return mixed
+     * @return ServiceEntity
      */
     public function newEntity()
     {
@@ -55,11 +55,14 @@ class Service extends AbstractEntityService
         if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }
+        if (! $this->getAuthorize()->isAllowed($entity, 'create')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException('Action interdite');
+        }
         return $entity;
     }
 
     /**
-     * Suvegarde une entité
+     * Sauvegarde une entité
      *
      * @param ServiceEntity $entity
      * @throws \Common\Exception\RuntimeException
@@ -72,7 +75,9 @@ class Service extends AbstractEntityService
         if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }
-        $this->canModify($entity,true);
+        if (! $this->getAuthorize()->isAllowed($entity, 'update')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException('Action interdite');
+        }
         $result = parent::save($entity);
         /* Sauvegarde automatique des volumes horaires associés */
         $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
@@ -612,6 +617,7 @@ EOS;
      * Détermine si on peut ajouter un nouveau service ou non
      *
      * @param \Application\Entity\Db\Intervenant $intervenant Eventuel intervenant concerné
+     * @deprecated
      * @return boolean
      */
     public function canAdd($intervenant = null, $runEx = false)
@@ -628,7 +634,7 @@ EOS;
                 return $this->cannotDoThat("Votre statut ne vous autorise pas à assurer des enseignements");
             }
         }
-        
+                
         $rulesEvaluator = new \Application\Rule\Service\SaisieServiceRulesEvaluator($intervenant);
         if (!$rulesEvaluator->execute()) {
             $message = "?";
@@ -641,27 +647,6 @@ EOS;
             return $this->cannotDoThat($message . $rulesEvaluator->getMessage(), $runEx);
         }
         
-        return true;
-    }
-
-    /**
-     * Détermine si un service peut, ou non, être modifié
-     * 
-     * @param \Application\Entity\Db\Service $service
-     * @return boolean
-     */
-    public function canModify(ServiceEntity $service, $runEx = false)
-    {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            if ($service->getIntervenant() != $role->getIntervenant()){
-                return $this->cannotDoThat('Vous ne pouvez pas modifier les services d\'un de vos collègues.');
-            }
-        }elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
-            if ($service->getStructureEns() != $role->getStructure()){
-                return $this->cannotDoThat('Vous ne pouvez pas modifier ce service car il ne relève pas de votre composante.');
-            }
-        }
         return true;
     }
 

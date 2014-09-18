@@ -453,7 +453,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function setService(Service $service)
     {
-        $this->forcedReadOnly = ! $this->getServiceService()->canModify($service);
+        $this->forcedReadOnly = ! $this->getView()->isAllowed($service, 'update');
         $this->service = $service;
         return $this;
     }

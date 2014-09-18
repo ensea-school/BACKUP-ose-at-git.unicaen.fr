@@ -105,6 +105,10 @@ class ServiceController extends AbstractActionController
         $service->canAdd($intervenant, true);
         $this->initFilters();
 
+        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException();
+        }
+
         // fetch des services prévisionnels
         $qb = $service->finderByContext();
         $service->finderByIntervenant($intervenant, $qb);

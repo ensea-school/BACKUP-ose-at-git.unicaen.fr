@@ -38,9 +38,6 @@
     <?php endif; ?>
 
     <?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
-    <?php if (!$role instanceof \Application\Acl\IntervenantExterieurRole): ?>
-        <!--<h2>Enseignements prévisionnels</h2>-->
-    <?php endif; ?>
     <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>"
        title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
     <?php echo $this->serviceListe( $services )->setTypeVolumeHoraire($typeVolumeHoraire)->setIntervenant($intervenant)->render(); ?>
@@ -53,7 +50,7 @@
         <?php echo $this->servicesRefListe; ?>
         <hr />
     <?php endif; ?>
-    
+
     <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
         <hr />
         <?php $url = $this->url('workflow', 
@@ -63,9 +60,9 @@
             <?php echo $this->workflow($role->getIntervenant(), $role)->navNext($prepend) ?>
         </div>
     <?php endif; ?>
-    
+
 <?php else:?>
-        
+
     <?php echo $this->messenger()->setMessage('Cliquez sur "Afficher" pour afficher les enseignements.', \UnicaenApp\View\Helper\Messenger::INFO); ?>
 
 <?php endif; ?>

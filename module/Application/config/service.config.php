@@ -179,15 +179,16 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Service',
                     'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
-                array(
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
+                ), array(
                     'controller' => 'Application\Controller\Service',
                     'action' => array('index', 'resume','resume-refresh','filtres'),
-                    'roles' => array(ComposanteRole::ROLE_ID,'Administrateur')),
-                array( 
+                    'roles' => array(ComposanteRole::ROLE_ID,'Administrateur')
+                ), array(
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur')
+                ),
             ),
         ),
         'resource_providers' => array(
@@ -199,7 +200,7 @@ return array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
                     array(
-                        array(ComposanteRole::ROLE_ID),
+                        array(ComposanteRole::ROLE_ID, IntervenantRole::ROLE_ID, 'Administrateur'),
                         'Service',
                         array('create', 'read', 'delete', 'update'),
                         'ServiceAssertion',
@@ -259,6 +260,12 @@ return array(
             'serviceLigne'            => 'Application\View\Helper\Service\LigneFactory',
             'serviceReferentielListe' => 'Application\View\Helper\ServiceReferentiel\ListeFactory',
             'serviceReferentielLigne' => 'Application\View\Helper\ServiceReferentiel\LigneFactory',
+        ),
+        'javascript' => array(
+            '/test.js'
+        ),
+        'css' => array(
+            
         ),
     ),
 );

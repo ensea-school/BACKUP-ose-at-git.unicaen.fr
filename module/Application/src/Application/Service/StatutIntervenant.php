@@ -58,7 +58,7 @@ class StatutIntervenant extends AbstractEntityService
     public function finderByVacatairesNonChargeEns1An(QueryBuilder $qb = null, $alias = null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->andWhere('si.sourceCode <> :code')->setParameter('code', StatutIntervenantEntity::CHARG_ENS_1AN);
+        $qb->andWhere($alias.'.sourceCode <> :sourceCode')->setParameter('sourceCode', StatutIntervenantEntity::CHARG_ENS_1AN);
         return $qb;
     }
 

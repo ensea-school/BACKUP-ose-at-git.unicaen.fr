@@ -21,11 +21,13 @@ class Modulateur extends AbstractService
     public function getTypeModulateurCodes( ElementPedagogique $element )
     {
         $codes = array();
-        if (1 == $element->getTauxFoad()){
+        if ($element->getTauxFoad() > 0){
             $codes[] = TypeModulateur::FOAD;
         }
         if ($element->getFc()){
             $codes[] = TypeModulateur::FC;
+            $codes[] = TypeModulateur::FCIUTCAEN;
+            $codes[] = TypeModulateur::FCDROIT;
         }
         if ($element->getFc() && $element->getFi()){
             $codes[] = TypeModulateur::FIFC;

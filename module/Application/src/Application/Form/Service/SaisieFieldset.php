@@ -118,9 +118,8 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
 
         if (! $role instanceof IntervenantRole){
             if ($cl->getStructure()){
-                $structure = $cl->getStructure()->getParenteNiv2();
+                $structure = $cl->getStructure();
                 $valueOptions = array($structure->getId() => (string) $structure);
-            //    $this->getServiceStructure()->finderById($structure->getId(), $fs->getQueryBuilder());
                 $fs->get('structure')->setValue($structure->getId());
 
             }
@@ -143,9 +142,9 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
 
         // la structure de responsabilité du gestionnaire écrase celle du contexte local
         if ($role instanceof ComposanteDbRole) { // Si c'est un membre d'une composante
-            $structure = $role->getStructure()->getParenteNiv2();
+            $structure = $role->getStructure();
             $valueOptions = array($structure->getId() => (string) $structure);
-            $fs->setStructures(array($structure));
+            //    $this->getServiceStructure()->finderById($structure->getId(), $fs->getQueryBuilder());
             $fs->get('structure')->setValue($structure->getId());
         }
     }

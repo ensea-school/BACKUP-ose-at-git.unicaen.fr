@@ -150,6 +150,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                     $result['relations'][$structure->getId()][$niveau->getId()] = [];
                 }
                 $result['relations'][$structure->getId()]['ALL'][] = $etape->getId();
+                $result['relations']['ALL'][$niveau->getId()][] = $etape->getId();
                 $result['relations'][$structure->getId()][$niveau->getId()][] = $etape->getId();
             }
         }

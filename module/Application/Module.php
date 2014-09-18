@@ -47,6 +47,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     {
         $basePath = dirname($_SERVER['PHP_SELF']);
         $jsFiles = [
+            '/js/elementPedagogiqueRecherche.js'
         ];
 
         foreach( $jsFiles as $jsFile ){

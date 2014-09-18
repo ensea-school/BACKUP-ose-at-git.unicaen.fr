@@ -13,6 +13,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\Feature\ControllerPluginProviderInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Module implements ControllerPluginProviderInterface, ViewHelperProviderInterface
 {
@@ -20,6 +21,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     {
         $sm = $e->getApplication()->getServiceManager();
         $sm->get('translator');
+
+        $this->injectJsFiles($sm);
+
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -37,6 +41,18 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'injectRouteEntitiesInEvent'), -90);
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkRouteParams'), -100);
+    }
+
+    public function injectJsFiles(ServiceLocatorInterface $serviceLocator)
+    {
+        $basePath = dirname($_SERVER['PHP_SELF']);
+        $jsFiles = [
+            '/js/elementPedagogiqueRecherche.js'
+        ];
+
+        foreach( $jsFiles as $jsFile ){
+            $serviceLocator->get('viewhelpermanager')->get('HeadScript')->appendFile($basePath.$jsFile);
+        }
     }
 
     /**

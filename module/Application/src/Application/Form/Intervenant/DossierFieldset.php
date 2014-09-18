@@ -30,7 +30,13 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
         
         $anneePrec = $this->getContextProvider()->getGlobalContext()->getAnneePrecedente();
         $civilites = $serviceCivilite->getList();
-        $statuts   = $serviceStatut->getList($serviceStatut->finderVacatairesNonChargeEns1An($serviceStatut->finderVacataires()));
+        $statuts   = $serviceStatut->getList(
+                            $serviceStatut->finderByVacatairesNonChargeEns1An(
+                                    $serviceStatut->finderByNonAutorise( false,
+                                        $serviceStatut->finderByVacataires()
+                                    )
+                            )
+                     );
 
         $this
                 ->setObject(new \Application\Entity\Db\Dossier())

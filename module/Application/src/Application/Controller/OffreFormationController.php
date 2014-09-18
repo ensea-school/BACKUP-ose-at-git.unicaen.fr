@@ -32,32 +32,30 @@ class OffreFormationController extends AbstractActionController implements Conte
      */
     public function indexAction()
     {
-        $em           = $this->em(); /* @var $em \Doctrine\ORM\EntityManager */
+        $this->em()->getFilters()->enable('historique');
+        
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $serviceEtape = $this->getServiceLocator()->get('applicationEtape'); /* @var $serviceEtape EtapeService */
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $localContext = $this->getContextProvider()->getLocalContext();
         $role         = $this->getContextProvider()->getSelectedIdentityRole();
 
-        $em->getFilters()->enable('historique');
-//        $em->getFilters()->enable('validite');
-        
         // extraction des filtres spécifiés dans la requête
         $structure = $this->context()->structureFromQuery();
         $niveau    = $this->context()->niveauFromQuery();
         $etape     = $this->context()->etapeFromQuery();
-        if ($niveau) $niveau = \Application\Entity\NiveauEtape::getInstance($niveau); // entité Niveau
+        if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
         // structure de responsabilité si aucun filtre spécifié
         if (!$structure && $role instanceof \Application\Acl\DbRole) {
             $structure = $role->getStructure();
         }
-        
+
         // persiste les filtres dans le contexte local
         $localContext
                 ->setStructure($structure)
                 ->setNiveau($niveau)
                 ->setEtape($etape);
-        
+
         // liste des structures distinctes
         $structuresDistinctes = $serviceStructure->getList( $serviceStructure->finderByEnseignement() );
         // niveaux distincts pour la structure spécifiée
@@ -76,10 +74,14 @@ class OffreFormationController extends AbstractActionController implements Conte
         $etapesOrphelines = $structure ? 
                 $serviceEtape->getList( $qb ) :
                 array();
-        
+
+        $params = [];
+        if ($structure) $params['structure'] = $structure->getId();
+        if ($niveau) $params['niveau'] = $niveau->getId();
+        if ($etape) $params['etape'] = $etape->getId();
         $ep = new \UnicaenApp\Form\Element\SearchAndSelect('element');
         $ep
-                ->setAutocompleteSource($this->url()->fromRoute('of/element/default', array('action' => 'search')))
+                ->setAutocompleteSource($this->url()->fromRoute('of/element/default', array('action' => 'search'), ['query' => $params]))
                 ->setLabel("Recherche :")
                 ->setAttributes(array('title' => "Saisissez 2 lettres au moins"));
         $form = new \Zend\Form\Form('search');
@@ -91,16 +93,9 @@ class OffreFormationController extends AbstractActionController implements Conte
             $form->get('element')->setValue($element);
         }
 
-        // mise en session des filtres courants (utilisés dans la recherche d'élément pédagogique)
-        $session = $this->getSessionContainer();
-        $session->structure = $structure ? $structure->getId() : null;
-        $session->niveau    = $niveau;
-        $session->etape     = $etape ? $etape->getId() : null;
-
         // fetch
         $entities = null;
         if ($structure) {
-//            $em->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger());
             $qb = $serviceEp->finder(array(
                 'structure' => $structure, 
                 'niveau' => $niveau, 
@@ -249,13 +244,10 @@ class OffreFormationController extends AbstractActionController implements Conte
     }
 
     /**
-     * @return \Zend\Session\Container
+     * @return \Application\Service\NiveauEtape
      */
-    protected function getSessionContainer()
+    protected function getServiceNiveauEtape()
     {
-        if (null === $this->sessionContainer) {
-            $this->sessionContainer = new \Zend\Session\Container(get_class());
-        }
-        return $this->sessionContainer;
+        return $this->getServiceLocator()->get('applicationNiveauEtape');
     }
 }

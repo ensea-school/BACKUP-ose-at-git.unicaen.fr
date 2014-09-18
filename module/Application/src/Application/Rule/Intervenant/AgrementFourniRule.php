@@ -23,6 +23,8 @@ class AgrementFourniRule extends AgrementAbstractRule implements ServiceLocatorA
      */
     public function execute()
     {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+                
         /**
          * Si agrément partiel toléré : au moins un agrément fourni et c'est ok
          */
@@ -58,6 +60,10 @@ class AgrementFourniRule extends AgrementAbstractRule implements ServiceLocatorA
                 $structures = [ $this->getStructure()->getId() => $this->getStructure() ];
             }
             // sinon le test devra porter sur toutes les structures possibles
+            elseif ($role instanceof \Application\Acl\IntervenantRole) {
+                // du point de vue intervenant, aucun critère de structure
+                $structures = [ null ];
+            }
             else {
                 $structures = $this->getStructuresEnseignement();
             }

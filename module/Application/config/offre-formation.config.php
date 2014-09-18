@@ -343,6 +343,7 @@ return array(
             'ApplicationEtape'                        => 'Application\\Service\\Etape',
             'ApplicationTypeFormation'                => 'Application\\Service\\TypeFormation',
             'ApplicationGroupeTypeFormation'          => 'Application\\Service\\GroupeTypeFormation',
+            'ApplicationNiveauEtape'                  => 'Application\\Service\\NiveauEtape',
             'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
             'ApplicationElementModulateur'            => 'Application\\Service\\ElementModulateur',
             'ApplicationTypeModulateur'               => 'Application\\Service\\TypeModulateur',
@@ -354,10 +355,8 @@ return array(
         ),
     ),
     'form_elements' => array(
-        'factories' => array(
-            'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldsetFactory',
-        ),
         'invokables' => array(
+            'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset',
             'EtapeSaisie'                   => 'Application\Form\OffreFormation\EtapeSaisie',
             'ElementPedagogiqueSaisie'      => 'Application\Form\OffreFormation\ElementPedagogiqueSaisie',
             'EtapeModulateursSaisie'        => 'Application\Form\OffreFormation\EtapeModulateursSaisie',

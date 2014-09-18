@@ -36,6 +36,15 @@ class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwar
     }
 
     /**
+     * 
+     * @return \BjyAuthorize\Service\Authorize
+     */
+    public function getAuthorize()
+    {
+        return $this->getServiceLocator()->get('BjyAuthorize\Service\Authorize');
+    }
+
+    /**
      * Si on ne peut pas faire quelque chose, alors soit on lève une exception soit on renvoie false
      *
      * @param string $why               Explication de l'interdiction

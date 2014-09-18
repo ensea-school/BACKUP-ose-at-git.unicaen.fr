@@ -39,10 +39,13 @@ class StatutIntervenant extends AbstractEntityService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderVacataires(QueryBuilder $qb = null, $alias = null)
+    public function finderByVacataires(QueryBuilder $qb = null, $alias = null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->andWhere($qb->expr()->in('si.sourceCode', (new StatutIntervenantEntity)->vacataires));
+
+        $this->join( $this->getServiceTypeIntervention(), $qb, 'typeIntervenant' );
+        $this->getServiceTypeIntervention()->finderByCode( \Application\Entity\Db\TypeIntervenant::CODE_EXTERIEUR, $qb );
+
         return $qb;
     }
 
@@ -52,10 +55,10 @@ class StatutIntervenant extends AbstractEntityService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderVacatairesNonChargeEns1An(QueryBuilder $qb = null, $alias = null)
+    public function finderByVacatairesNonChargeEns1An(QueryBuilder $qb = null, $alias = null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->andWhere('si.sourceCode <> :code')->setParameter('code', StatutIntervenantEntity::CHARG_ENS_1AN);
+        $qb->andWhere($alias.'.sourceCode <> :sourceCode')->setParameter('sourceCode', StatutIntervenantEntity::CHARG_ENS_1AN);
         return $qb;
     }
 
@@ -71,5 +74,13 @@ class StatutIntervenant extends AbstractEntityService
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->orderBy("$alias.id");
         return parent::getList($qb, $alias);
+    }
+
+    /**
+     * @return TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->get('applicationTypeIntervention');
     }
 }

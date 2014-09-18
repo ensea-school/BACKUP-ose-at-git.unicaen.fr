@@ -158,7 +158,7 @@ class ElementPedagogique extends AbstractEntityService
      * <i>etape</i>        : Etape concernée sous forme d'une entité<br />
      * @return array
      */
-    public function finderByTerm(array $filters = array())
+    public function getSearchResultByTerm(array $filters = array())
     {
         if (!isset($filters['term'])) {
             return array();
@@ -360,7 +360,14 @@ EOS;
         
         return parent::delete($entity, $softDelete);
     }
-    
+
+    public function getList(QueryBuilder $qb=null, $alias=null)
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy($this->getAlias().'.libelle');
+        return parent::getList($qb, $alias);
+    }
+
     /**
      * 
      * @return CheminPedagogique
@@ -370,10 +377,4 @@ EOS;
         return $this->getServiceLocator()->get('ApplicationCheminPedagogique');
     }
 
-    public function getList(QueryBuilder $qb=null, $alias=null )
-    {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->addOrderBy($this->getAlias().'.libelle');
-        return parent::getList($qb, $alias);
-    }
 }

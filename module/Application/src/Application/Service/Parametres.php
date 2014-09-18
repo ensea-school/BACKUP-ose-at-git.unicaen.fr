@@ -14,22 +14,37 @@ use Common\Exception\LogicException;
 class Parametres extends AbstractService {
 
     /**
+     *
+     * @var array
+     */
+    protected $cache = [];
+
+    protected function getCache($param)
+    {
+        if (! $this->cache){
+            $repository = $this->getEntityManager()->getRepository('Application\Entity\Db\Parametre');
+            /* @var $repository \Doctrine\ORM\EntityRepository */
+            $list = $repository->findAll();
+
+            foreach( $list as $entity ){ /* @var $entity \Application\Entity\Db\Parametre */
+                $this->cache[$entity->getNom()] = $entity->getValeur();
+            }
+        }
+        if ($param)
+            return isset($this->cache[$param]) ? $this->cache[$param] : null;
+        else
+            return $this->cache;
+    }
+
+    /**
      * Retourne la liste des paramètres de configuration de OSE
      *
      * @return string[]
      */
     public function getList()
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Entity\Db\Parametre');
-        /* @var $repository \Doctrine\ORM\EntityRepository */
-
-        $result = $repository->findAll();
-        foreach( $result as $index => $entity ){
-            $result[$index] = $entity->getNom();
-        }
-        return $result;
+        return $this->getCache();
     }
-
 
     /**
      * Retourne un paramètre
@@ -39,14 +54,10 @@ class Parametres extends AbstractService {
      */
     public function get($param)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Entity\Db\Parametre');
-        /* @var $repository \Doctrine\ORM\EntityRepository */
-
-        $result = $repository->findBy(array('nom' => $param));
-        if (empty($result)){
+        if (! $this->getCache($param)){
             throw new LogicException('Le paramètre "'.$param.'" est invalide.');
         }
-        return $result[0]->getValeur();
+        return $this->getCache($param);
     }
 
     /**
@@ -85,6 +96,7 @@ class Parametres extends AbstractService {
             throw new LogicException('Le paramètre "'.$param.'" est invalide.');
         }
         $result[0]->setValeur($value);
+        $this->cache[$param] = $value;
         $this->getEntityManager()->flush();
         return $this;
     }

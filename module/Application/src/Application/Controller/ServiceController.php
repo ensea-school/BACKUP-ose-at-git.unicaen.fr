@@ -105,6 +105,10 @@ class ServiceController extends AbstractActionController
         $service->canAdd($intervenant, true);
         $this->initFilters();
 
+        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException();
+        }
+
         // fetch des services prévisionnels
         $qb = $service->finderByContext();
         $service->finderByIntervenant($intervenant, $qb);
@@ -169,10 +173,13 @@ class ServiceController extends AbstractActionController
                 (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
         );
 
-        $resumeServices = $this->getServiceLocator()->get('ApplicationService')->getResumeService($filter);
+        if ('afficher' == $action ){
+            $resumeServices = $this->getServiceLocator()->get('ApplicationService')->getResumeService($filter);
+        }else{
+            $resumeServices = null;
+        }
 
         $canAdd = $this->getServiceService()->canAdd();
-
         $viewModel->setVariables( compact('annee','action','resumeServices','canAdd') );
         return $viewModel;
     }
@@ -345,6 +352,7 @@ class ServiceController extends AbstractActionController
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
+            $form->saveToContext();
             if ($form->isValid()) {
                 try {
                     $service->save($entity);

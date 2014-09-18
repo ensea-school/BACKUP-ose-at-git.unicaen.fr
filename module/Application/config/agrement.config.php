@@ -222,7 +222,7 @@ return array(
             'ApplicationTypeAgrementStatut'              => 'Application\\Service\\TypeAgrementStatut',
             'AgrementNavigationPagesProvider'            => 'Application\\Service\\AgrementNavigationPagesProvider',
             'AgrementIntervenantNavigationPagesProvider' => 'Application\\Service\\AgrementIntervenantNavigationPagesProvider',
-            'AgrementAssertion'                          => 'Application\\Service\\Assertion\\AgrementAssertion',
+            'AgrementAssertion'                          => 'Application\\Assertion\\AgrementAssertion',
         ),
         'initializers' => array(
             'Application\Service\Initializer\AgrementServiceAwareInitializer',

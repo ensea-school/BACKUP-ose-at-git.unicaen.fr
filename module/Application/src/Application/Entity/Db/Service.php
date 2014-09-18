@@ -6,11 +6,12 @@ use Application\Entity\VolumeHoraireListe;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Service
  */
-class Service implements HistoriqueAwareInterface
+class Service implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * @var \DateTime
@@ -533,5 +534,14 @@ class Service implements HistoriqueAwareInterface
         return $this;
     }
 
-
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'Service';
+    }
 }

@@ -2,8 +2,6 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\StatutIntervenant;
-
 /**
  * Description of PeutSaisirServiceRule
  *
@@ -14,15 +12,15 @@ class PeutSaisirServiceRule extends IntervenantRule
     public function execute()
     {
         $statut = $this->getIntervenant()->getStatut();
-        
-        if (in_array($statut->getSourceCode(), array(StatutIntervenant::RETR_UCBN, StatutIntervenant::AUTRES))) {
+
+        if (! $statut->getPeutSaisirService()) {
             $this->setMessage(sprintf("Le statut &laquo; %s &raquo; n'autorise pas la saisie d'enseignement.", $statut));
             return false;
         }
-        
+
         return true;
     }
-    
+
     public function isRelevant()
     {
 //        // NB: pour un intervenant non-BIATSS qui n'a pas encore saisi ses données perso, 
@@ -37,7 +35,7 @@ class PeutSaisirServiceRule extends IntervenantRule
 //                return false;
 //            }
 //        }
-        
+
         return true;
     }
 }

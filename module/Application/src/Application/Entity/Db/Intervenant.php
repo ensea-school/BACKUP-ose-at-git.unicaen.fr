@@ -1329,10 +1329,10 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Get adresse principale
      *
-     * @param bool $returnFirstIfNoneFound
+     * @param bool $returnFirstAddressIfNoPrimaryAddressFound
      * @return AdresseIntervenant
      */
-    public function getAdressePrincipale($returnFirstIfNoneFound = false)
+    public function getAdressePrincipale($returnFirstAddressIfNoPrimaryAddressFound = false)
     {
         if (!count($this->getAdresse())) {
             return null;
@@ -1344,6 +1344,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
             }
         }
         
-        return $returnFirstIfNoneFound ? reset($this->getAdresse()) : null;
+        return $returnFirstAddressIfNoPrimaryAddressFound ? reset($this->getAdresse()) : null;
     }
 }

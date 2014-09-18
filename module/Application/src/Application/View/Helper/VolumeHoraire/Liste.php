@@ -239,7 +239,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             throw new \Common\Exception\LogicException('Le type de volume horaire de la liste n\'a pas été précisé');
         }
         $this->volumeHoraireListe = $volumeHoraireListe;
-        $this->forcedReadOnly = ! $this->getServiceService()->canModify($volumeHoraireListe->getService());
+        $this->forcedReadOnly = ! $this->getView()->isAllowed($volumeHoraireListe->getService(), 'update');
         $this->typesIntervention = null;
         return $this;
     }

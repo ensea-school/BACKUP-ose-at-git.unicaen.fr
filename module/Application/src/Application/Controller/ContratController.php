@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Acl\ComposanteDbRole;
 use Application\Controller\Plugin\Context;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\TypeValidation;
@@ -460,18 +461,25 @@ class ContratController extends AbstractActionController implements ContextProvi
         $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $estUnAvenant          = $this->contrat->estUnAvenant();
         $contratToString       = (string) $this->contrat;
-        $typeAgrement          = $this->getServiceTypeAgrement()->getRepo()->findOneByCode(TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
         $nomIntervenant        = (string) $this->intervenant;
         $dateNaissance         = $this->intervenant->getDateNaissanceToString();
-        $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
-        $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
         $estATV                = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
-        $nomCompletIntervenant = $this->intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
         $dateSignature         = new DateTime();
         $estUnProjet           = $this->contrat->getValidation() ? false : true;
         $services              = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
         $servicesRecaps        = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
         $totalHETD             = $this->getFormuleHetd()->getHetd($this->intervenant);
+        
+        if ($this->intervenant->getDossier()) {
+            $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
+            $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
+            $nomCompletIntervenant = $this->intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
+        }
+        else {
+            $adresseIntervenant    = $this->intervenant->getAdressePrincipale(true);
+            $numeroINSEE           = $this->intervenant->getNumeroInsee() . ' ' . $this->intervenant->getNumeroInseeCle();
+            $nomCompletIntervenant = $this->intervenant->getCivilite() . ' ' . $nomIntervenant;
+        }
         
         $fileName = sprintf("contrat_%s_%s_%s.pdf", 
                 $this->contrat->getStructure()->getSourceCode(), 
@@ -561,10 +569,13 @@ class ContratController extends AbstractActionController implements ContextProvi
         return $this->formRetour;
     }
     
+    /**
+     * @var Intervenant
+     */
     private $intervenant;
     
     /**
-     * @return IntervenantExterieur
+     * @return Intervenant
      */
     private function getIntervenant()
     {

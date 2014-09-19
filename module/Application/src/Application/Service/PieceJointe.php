@@ -5,6 +5,7 @@ namespace Application\Service;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypePieceJointe as TypePieceJointeEntity;
 use Application\Entity\Db\PieceJointe as PieceJointeEntity;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
 
 /**
  * Description of PieceJointe
@@ -75,6 +76,54 @@ class PieceJointe extends AbstractEntityService
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.id");
         return parent::getList($qb, $alias);
+    }
+    
+    /**
+     * Création de pièces jointes à partir de fichiers déposés.
+     * 
+     * @param array $files Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png', 'size' => 321215]
+     * @param boolean $deleteFiles Supprimer les fichiers après création de la PJ$
+     * @return PieceJointeEntity[]
+     */
+    public function createFromFiles($files, IntervenantEntity $intervenant, TypePieceJointeEntity $type, $deleteFiles = true)
+    {
+        $instances = [];
+        
+        foreach ($files as $file) {
+            $path          = $file['tmp_name'];
+            $nomFichier    = $file['name'];
+            $typeFichier   = $file['type'];
+            $tailleFichier = $file['size'];
+            
+            $pj = (new PieceJointe())
+                    ->setType($type)
+                    ->setDossier($intervenant->getDossier())
+                    ->setNomFichier($nomFichier)
+                    ->setTailleFichier($tailleFichier)
+                    ->setTypeFichier($typeFichier)
+                    ->setFichier(file_get_contents($path))
+                    ->setValidation(null);
+            
+            $this->getEntityManager()->persist($pj);
+            $this->getEntityManager()->flush();
+            
+            $instances[] = $pj;
+            
+            if ($deleteFiles) {
+                unlink($path);
+            }
+        }
+        
+        return $instances;
+    }
+    
+    public function valider(PieceJointeEntity $pj)
+    {
+            $this->validation = $serviceValidation->newEntity($typeValidation);
+            $this->validation->setIntervenant($this->intervenant);
+            if ($role instanceof ComposanteDbRole) {
+                $this->validation->setStructure($role->getStructure());
+            }
     }
     
     /**

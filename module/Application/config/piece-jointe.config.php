@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Entity\Db\PieceJointe;
+use Application\Assertion\PieceJointeAssertion;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantExterieurRole;
@@ -83,6 +84,30 @@ return array(
                                     ),
                                 ),
                             ),
+                            'valider' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/valider/:pieceJointe',
+                                    'constraints' => array(
+                                        'pieceJointe' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'valider',
+                                    ),
+                                ),
+                            ),
+                            'devalider' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/devalider/:pieceJointe',
+                                    'constraints' => array(
+                                        'pieceJointe' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'devalider',
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                 ),
@@ -133,7 +158,14 @@ return array(
                     array(
                         array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, 'Administrateur'), 
                         PieceJointe::RESOURCE_ID, 
-                        array('create', 'read', 'delete', 'update'), 
+                        array(
+                            PieceJointeAssertion::PRIVILEGE_CREATE, 
+                            PieceJointeAssertion::PRIVILEGE_READ, 
+                            PieceJointeAssertion::PRIVILEGE_DELETE, 
+                            PieceJointeAssertion::PRIVILEGE_UPDATE, 
+                            PieceJointeAssertion::PRIVILEGE_TELECHARGER, 
+                            PieceJointeAssertion::PRIVILEGE_VALIDER, 
+                            PieceJointeAssertion::PRIVILEGE_DEVALIDER), 
                         'PieceJointeAssertion',
                     ),
                 ),
@@ -153,7 +185,8 @@ return array(
             'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
             'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
             'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
-            'PiecesJointesFourniesRule'        => 'Application\\Rule\\Intervenant\\PiecesJointesFourniesRule'
+            'PiecesJointesFourniesRule'        => 'Application\\Rule\\Intervenant\\PiecesJointesFourniesRule',
+            'PieceJointeAssertion'             => 'Application\\Assertion\\AgrementAssertion',
         ),
         'initializers' => array(
         ),

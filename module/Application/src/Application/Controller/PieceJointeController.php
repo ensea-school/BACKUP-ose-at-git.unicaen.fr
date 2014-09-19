@@ -83,8 +83,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 ->remove('submit')
                 ->get('pj')->setAttribute('disabled', true)->setLabel("Merci d'adresser les pièces justificatives suivantes à l'adresse ci-après...");
         
-        $this->view->setVariables(array('title' => $this->title));
-        
         return $this->view;
     }
     
@@ -112,10 +110,9 @@ class PieceJointeController extends AbstractActionController implements ContextP
     
     public function ajouterAction()
     {
-//        $piecesJointes = $this->getPieceJointeProcess()->getPiecesJointesFournies($this->getTypePieceJointe());
-        $form     = $this->getFormJoindre();
-
+        $form    = $this->getFormJoindre();
         $request = $this->getRequest();
+        
         if ($request->isPost()) {
             // Make certain to merge the files info!
             $post = array_merge_recursive(
@@ -123,26 +120,10 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 $request->getFiles()->toArray()
             );
             $form->setData($post);
-//                var_dump($post, $form->isValid(), $form->getMessages());
+            
             if ($form->isValid()) {
                 $data = $form->getData();
-                foreach ($data['files'] as $file) {
-                    $path          = $file['tmp_name'];
-                    $nomFichier    = $file['name'];
-                    $typeFichier   = $file['type'];
-                    $tailleFichier = $file['size'];
-                    $pj = (new PieceJointe())
-                            ->setType($this->getTypePieceJointe())
-                            ->setDossier($this->getIntervenant()->getDossier())
-                            ->setNomFichier($nomFichier)
-                            ->setTailleFichier($tailleFichier)
-                            ->setTypeFichier($typeFichier)
-                            ->setFichier(file_get_contents($path))
-                            ->setValidation(null);
-                    $this->em()->persist($pj);
-                    $this->em()->flush();
-                    unlink($path);
-                }
+                $this->getServicePieceJointe()->createFromFiles($data['files'], $this->getIntervenant(), $this->getTypePieceJointe());
                 
                 return $this->redirect()->toRoute('piece-jointe/intervenant/lister', [], [], true);
             }
@@ -163,6 +144,19 @@ class PieceJointeController extends AbstractActionController implements ContextP
     {
         $pj              = $this->getPieceJointe();
         $typePieceJointe = $pj->getType();
+        
+        $this->em()->remove($this->getPieceJointe());
+        $this->em()->flush();
+        
+        return $this->redirect()->toRoute('piece-jointe/intervenant/lister', ['typePieceJointe' => $typePieceJointe->getId()], [], true);
+    }
+    
+    public function validerAction()
+    {
+        $pj              = $this->getPieceJointe();
+        $typePieceJointe = $pj->getType();
+        
+        $this->getServicePieceJointe()->valider($pj);
         
         $this->em()->remove($this->getPieceJointe());
         $this->em()->flush();
@@ -209,8 +203,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 return $this->redirect()->toUrl($this->url()->fromRoute(null, array(), array(), true));
             }
         }
-        
-        $this->view->setVariables(array('title' => $this->title));
 
         return $this->view;
     }
@@ -220,7 +212,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $this->title        = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
         $role               = $this->getContextProvider()->getSelectedIdentityRole();
         $serviceService     = $this->getServiceService();
-        $servicePieceJointe = $this->getPieceJointeService();
+        $servicePieceJointe = $this->getServicePieceJointe();
         
         $servicePieceJointe->canAdd($this->getIntervenant(), true);
         
@@ -253,28 +245,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
             'title'                    => $this->title,
         ));
     }
-    
-    public function uploadAction()
-    {
-        error_reporting(E_ALL | E_STRICT);
-        $this->uploader()
-//                ->setUploadDir($this->getUploadDir($ligne))
-                ->setUploadUrl($this->getUploadUrl() . '/')
-                ->setDownloadUrl($this->getDownloadUrl())
-                ->handle();
-        exit;
-    }
-    
-    public function downloadAction()
-    {
-        error_reporting(E_ALL | E_STRICT);
-        $this->uploader()
-//                ->setUploadDir($this->getUploadDir($ligne))
-                ->setUploadUrl($this->getUploadUrl() . '/')
-                ->setDownloadUrl($this->getDownloadUrl())
-                ->handle();
-        exit;
-    }
 
     protected $formJoindre;
     
@@ -288,24 +258,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
         }
         return $this->formJoindre;
     }
-    
-    protected function getDownloadUrl()
-    {
-        return $this->url()->fromRoute(null, ['action' => 'download'], [], true);
-    }
-    
-    protected function getUploadUrl()
-    {
-        return $this->url()->fromRoute(null, ['action' => 'upload'], [], true);
-    }
-    
-//    protected function getUploadDir(Ligne $ligne)
-//    {
-//        $options = $this->getServiceLocator()->get('closer-module_options'); /* @var $options \CloserModule\Options\ModuleOptions */
-//        return sprintf($options->getUploadDir() . '/acteur-%s/ligne-%s/', 
-//                $ligne->getActeur()->getIdInterne(), 
-//                $ligne->getId());
-//    }
     
     /**
      * @return array
@@ -415,7 +367,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
     /**
      * @return PieceJointeService
      */
-    private function getPieceJointeService()
+    private function getServicePieceJointe()
     {
         return $this->getServiceLocator()->get('ApplicationPieceJointe');
     }

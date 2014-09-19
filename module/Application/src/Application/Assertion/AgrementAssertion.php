@@ -2,7 +2,7 @@
 
 namespace Application\Assertion;
 
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Controller\AgrementController;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\TypeAgrement;
@@ -124,7 +124,7 @@ class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwar
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof ComposanteDbRole) {
+        if ($this->getSelectedIdentityRole() instanceof ComposanteRole) {
             
             // saisie de l'agrément Conseil Academique interdit aux gestionnaires de composante
             if ($this->agrement->getType()->isConseilAcademique()) {

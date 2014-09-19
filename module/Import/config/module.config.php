@@ -67,7 +67,7 @@ return array(
                 array(
                     'controller' => 'Import\Controller\Import',
                     'action' => array('index','updateViewsAndPackages','showImportTbl','showDiff','update','updateTables'),
-                    'roles' => array('administrateur'),
+                    'roles' => array(\Application\Acl\AdministrateurRole::ROLE_ID),
                 ),
             ),
         ),

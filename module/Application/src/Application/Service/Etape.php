@@ -107,7 +107,7 @@ class Etape extends AbstractEntityService
         $localContext = $this->getContextProvider()->getLocalContext();
         $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
         /* @var $role \Application\Acl\DbRole */
-        if ('Administrateur' == $role->getRoleId()) return true;
+        if ($role->getRoleId() instanceof \Application\Acl\AdministrateurRole) return true;
 
         if (!$localContext->getStructure()) {
             throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
@@ -169,7 +169,7 @@ class Etape extends AbstractEntityService
         }
 
         $ir = $this->getContextProvider()->getSelectedIdentityRole();
-        if ($ir instanceof \Application\Acl\ComposanteDbRole){
+        if ($ir instanceof \Application\Acl\ComposanteRole){
             if ($etape->getStructure() != $ir->getStructure()){
                 return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour éditer les modulateurs de cette structure', $runEx);
             }

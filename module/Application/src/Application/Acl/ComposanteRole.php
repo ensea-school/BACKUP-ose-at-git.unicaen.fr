@@ -99,13 +99,3 @@ class ResponsableRechercheLaboRole extends ComposanteRole
         parent::__construct($id, $parent, $name, $description, $selectable);
     }
 }
-
-
-
-
-/**
- * @deprecated since version 1.1
- */
-class ComposanteDbRole extends ComposanteRole
-{
-}

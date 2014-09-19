@@ -9,7 +9,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Application\Entity\Db\IntervenantExterieur;
@@ -141,7 +141,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         }
 
         // la structure de responsabilité du gestionnaire écrase celle du contexte local
-        if ($role instanceof ComposanteDbRole) { // Si c'est un membre d'une composante
+        if ($role instanceof ComposanteRole) { // Si c'est un membre d'une composante
             $structure = $role->getStructure();
             $valueOptions = array($structure->getId() => (string) $structure);
             //    $this->getServiceStructure()->finderById($structure->getId(), $fs->getQueryBuilder());

@@ -2,7 +2,7 @@
 
 namespace Application\Assertion;
 
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Service;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -52,7 +52,7 @@ class ServiceAssertion extends AbstractAssertion
         /*********************************************************
          *                      Rôle administrateur
          *********************************************************/
-        if ($this->getSelectedIdentityRole()->getRoleId() == 'Administrateur'){
+        if ($this->getSelectedIdentityRole() instanceof \Application\Acl\AdministrateurRole){
             return true;
         }
 
@@ -80,7 +80,7 @@ class ServiceAssertion extends AbstractAssertion
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof ComposanteDbRole){
+        if ($this->getSelectedIdentityRole() instanceof ComposanteRole){
             if ('read' == $privilege) return true; // les composantes voient tout
 
             if ($roleStructure == $serviceStructure) return true; // chacun peut gérer ses propres services

@@ -152,4 +152,9 @@ class RoleUtilisateur
     {
         return $this->utilisateur;
     }
+
+    public function __toString()
+    {
+        return $this->getRoleId();
+    }
 }

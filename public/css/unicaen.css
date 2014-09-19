@@ -90,3 +90,20 @@ div.messenger span.glyphicon {
 .user-profile-select-form {
     padding-left: 25px;
 }
+
+div.ui-datepicker {
+    z-index: 1051 !important; /* NB: doit être supérieur à la modale Bootstrap qui est à 1050 */
+}
+
+div.multicheckbox label { 
+    display: block; 
+    font-weight: normal; 
+    margin-bottom: 10px; 
+}
+div.multicheckbox label input[type=checkbox],
+div.multicheckbox label input[type=radio] { 
+    float: left;
+    margin-right: 5px;
+    width: 15px;
+    height: auto; 
+}

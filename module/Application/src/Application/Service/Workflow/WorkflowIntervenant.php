@@ -2,22 +2,174 @@
 
 namespace Application\Service\Workflow;
 
+use Application\Acl\ComposanteDbRole;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeValidation;
+use Application\Rule\Intervenant\AgrementFourniRule;
+use Application\Rule\Intervenant\DossierValideRule;
+use Application\Rule\Intervenant\NecessiteAgrementRule;
+use Application\Rule\Intervenant\NecessiteContratRule;
+use Application\Rule\Intervenant\PeutSaisirDossierRule;
+use Application\Rule\Intervenant\PeutSaisirPieceJointeRule;
+use Application\Rule\Intervenant\PeutSaisirServiceRule;
+use Application\Rule\Intervenant\PiecesJointesFourniesRule;
+use Application\Rule\Intervenant\PossedeContratRule;
+use Application\Rule\Intervenant\PossedeDossierRule;
+use Application\Rule\Intervenant\PossedeServicesRule;
+use Application\Rule\Intervenant\ServiceValideRule;
+use Application\Service\TypeAgrement as TypeAgrementService;
+use Application\Service\TypeValidation as TypeValidationService;
+use Application\Service\VolumeHoraire;
+use Application\Service\Workflow\Step\AgrementStep;
+use Application\Service\Workflow\Step\EditionContratStep;
+use Application\Service\Workflow\Step\SaisieDossierStep;
+use Application\Service\Workflow\Step\SaisiePiecesJointesStep;
+use Application\Service\Workflow\Step\SaisieServiceStep;
+use Application\Service\Workflow\Step\Step;
+use Application\Service\Workflow\Step\ValidationDossierStep;
+use Application\Service\Workflow\Step\ValidationServiceStep;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\RoleAwareTrait;
-use Application\Service\Workflow\Step\Step;
-use Application\Rule\Intervenant\ServiceValideRule;
-use Application\Acl\ComposanteDbRole;
 
 /**
  * Implémentation du workflow concernant un intervenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class WorkflowIntervenant extends AbstractWorkflow
+class WorkflowIntervenant extends AbstractWorkflow
 {
     use IntervenantAwareTrait;
     use RoleAwareTrait;
+    
+    const KEY_SAISIE_DONNEES     = 'KEY_SAISIE_DOSSIER';
+    const KEY_VALIDATION_DONNEES = 'KEY_VALIDATION_DONNEES';
+    const KEY_SAISIE_SERVICE     = 'KEY_SAISIE_SERVICE';
+    const KEY_VALIDATION_SERVICE = 'KEY_VALIDATION_SERVICE';
+    const KEY_PIECES_JOINTES     = 'KEY_PIECES_JOINTES';
+    const KEY_CONSEIL_RESTREINT  = 'KEY_CONSEIL_RESTREINT';  // NB: 'KEY_' . code type agrément
+    const KEY_CONSEIL_ACADEMIQUE = 'KEY_CONSEIL_ACADEMIQUE'; // NB: 'KEY_' . code type agrément
+    const KEY_EDITION_CONTRAT    = 'KEY_EDITION_CONTRAT';
+    const KEY_FINAL              = 'KEY_FINAL';
+    
+    /**
+     * Création des différentes étapes composant le workflow.
+     * 
+     * @return self
+     */
+    protected function createSteps()
+    {        
+        $this->steps = array();
+        
+        /**
+         * Saisie des données personnelles
+         */
+        $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
+        if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
+            $transitionRule = new PossedeDossierRule($this->getIntervenant());
+            $this->addStep(
+                    self::KEY_SAISIE_DONNEES,
+                    new SaisieDossierStep(),
+                    $transitionRule
+            );
+        }
+        
+        /**
+         * Saisie des services
+         */
+        $peutSaisirServices = new PeutSaisirServiceRule($this->getIntervenant());
+        if (!$peutSaisirServices->isRelevant() || $peutSaisirServices->execute()) {
+            $transitionRule = new PossedeServicesRule($this->getIntervenant());
+            $this->addStep(
+                    self::KEY_SAISIE_SERVICE,
+                    new SaisieServiceStep(),
+                    $transitionRule
+            );
+        }
+        
+        /**
+         * Checklist des pièces justificatives
+         */
+        $peutSaisirPj = new PeutSaisirPieceJointeRule($this->getIntervenant());
+        if (!$peutSaisirPj->isRelevant() || $peutSaisirPj->execute()) {
+            $serviceTypePieceJointeStatut = $this->getServiceLocator()->get('ApplicationTypePieceJointeStatut');
+            $transitionRule = new PiecesJointesFourniesRule($this->getIntervenant(), $serviceTypePieceJointeStatut);
+            $this->addStep(
+                    self::KEY_PIECES_JOINTES,
+                    new SaisiePiecesJointesStep(),
+                    $transitionRule
+            );
+        }
+        
+        /**
+         * Validation des données personnelles
+         */
+        if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
+            $transitionRule = (new DossierValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationDossier());
+            $this->addStep(
+                    self::KEY_VALIDATION_DONNEES,
+                    new ValidationDossierStep(),
+                    $transitionRule
+            );
+        }
+        
+        /**
+         * Validation des services
+         */
+        $peutSaisirService = new PeutSaisirServiceRule($this->getIntervenant());
+        if (!$peutSaisirService->isRelevant() || $peutSaisirService->execute()) {
+            $transitionRule = $this->getServiceValideRule();
+            $this->addStep(
+                    self::KEY_VALIDATION_SERVICE,
+                    new ValidationServiceStep(),
+                    $transitionRule
+            );
+        }
+        
+        /**
+         * Agrements des différents conseils
+         */
+        $necessiteAgrement = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrement NecessiteAgrementRule */
+        $necessiteAgrement->setIntervenant($this->getIntervenant());
+        foreach ($necessiteAgrement->getTypesAgrementAttendus() as $typeAgrement) {
+            $transitionRule = clone $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
+            $transitionRule
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeAgrement($typeAgrement)
+                ->setStructure($this->getStructure());
+
+            $this->addStep(
+                     'KEY_' . $typeAgrement->getCode(),
+                    new AgrementStep($typeAgrement),
+                    $transitionRule
+            );
+        }
+        
+        /**
+         * Contrat / avenant
+         */
+        $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
+        if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
+            $transitionRule = new PossedeContratRule($this->getIntervenant());
+            $transitionRule
+//                    ->setTypeValidation($this->getTypeValidationContrat())
+                    ->setStructure($this->getStructure())
+                    ->setValide(true);
+            $this->addStep(
+                    self::KEY_EDITION_CONTRAT,
+                    new EditionContratStep(),
+                    $transitionRule
+            );
+        }
+        
+//        $this->addStep(
+//                self::KEY_FINAL,
+//                new Step\FinalStep(),
+//                null
+//        );
+            
+        return $this;
+    }
     
     /**
      * Retourne l'URL correspondant à l'étape spécifiée.
@@ -27,7 +179,11 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
      */
     public function getStepUrl(Step $step)
     {
-        $url = $this->getHelperUrl()->fromRoute($step->getRoute(), array('intervenant' => $this->getIntervenant()->getSourceCode()));
+        $params = array_merge(
+                $step->getRouteParams(), 
+                array('intervenant' => $this->getIntervenant()->getSourceCode()));
+        
+        $url = $this->getHelperUrl()->fromRoute($step->getRoute(), $params);
         
         return $url;
     }
@@ -45,25 +201,27 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
         return $this->getStepUrl($this->getCurrentStep());
     }
     
-    private $serviceValideRule;
+    protected $serviceValideRule;
     
     protected function getServiceValideRule()
     {
         if (null === $this->serviceValideRule) {
-            // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
-            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant(), true);
-            $this->serviceValideRule
-                    ->setTypeValidation($this->getTypeValidationService())
-                    ->setStructure($this->getStructure())
-                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+            $this->serviceValideRule = new ServiceValideRule();
         }
+        // teste si les enseignements ont été validés, MÊME PARTIELLEMENT
+        $this->serviceValideRule
+                ->setMemePartiellement()
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeValidation($this->getTypeValidationService())
+                ->setStructure($this->getStructure())
+                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
         
         return $this->serviceValideRule;
     }
     
     /**
      * 
-     * @return \Application\Entity\Db\Structure
+     * @return Structure
      */
     protected function getStructure()
     {
@@ -75,17 +233,48 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
     }
     
     /**
+     * @return TypeValidation
+     */
+    private function getTypeValidationDossier()
+    {
+        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        $typeValidation = $qb->getQuery()->getOneOrNullResult();
+        
+        return $typeValidation;
+    }
+    
+    /**
+     * @return TypeValidation
+     */
+    private function getTypeValidationContrat()
+    {
+        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_CONTRAT_PAR_COMP);
+        $typeValidation = $qb->getQuery()->getOneOrNullResult();
+        
+        return $typeValidation;
+    }
+    
+    /**
      * 
-     * @return \Application\Service\TypeValidation
+     * @return TypeValidationService
      */
     protected function getServiceTypeValidation()
     {
         return $this->getServiceLocator()->get('ApplicationTypeValidation');
-    } 
+    }
     
     /**
      * 
-     * @return \Application\Service\VolumeHoraire
+     * @return TypeAgrementService
+     */
+    protected function getServiceTypeAgrement()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeAgrement');
+    }
+    
+    /**
+     * 
+     * @return VolumeHoraire
      */
     protected function getServiceVolumeHoraire()
     {
@@ -101,5 +290,27 @@ abstract class WorkflowIntervenant extends AbstractWorkflow
         $typeValidation = $qb->getQuery()->getOneOrNullResult();
         
         return $typeValidation;
+    }
+    
+    /**
+     * @return TypeAgrement
+     */
+    protected function getTypeAgrementConseilRestreint()
+    {
+        $qb = $this->getServiceTypeAgrement()->finderByCode(TypeAgrement::CODE_CONSEIL_RESTREINT);
+        $type = $qb->getQuery()->getSingleResult();
+        
+        return $type;
+    }
+    
+    /**
+     * @return TypeAgrement
+     */
+    protected function getTypeAgrementConseilAcademique()
+    {
+        $qb = $this->getServiceTypeAgrement()->finderByCode(TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
+        $type = $qb->getQuery()->getSingleResult();
+        
+        return $type;
     }
 }

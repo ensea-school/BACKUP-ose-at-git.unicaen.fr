@@ -10,8 +10,10 @@ use Application\Acl\ComposanteDbRole;
 use Application\Acl\IntervenantRole;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
-use Application\Traits\WorkflowIntervenantAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\Parametre;
 
 /**
  * Description of DossierController
@@ -21,7 +23,7 @@ use Application\Entity\Db\TypeValidation;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierController extends AbstractActionController implements ContextProviderAwareInterface
+class DossierController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
 {
     use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
@@ -111,7 +113,7 @@ class DossierController extends AbstractActionController implements ContextProvi
             $validation = $dossierValide->getValidation();
         }
         
-        $wf    = $this->getWorkflowIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
         $url   = $step ? $wf->getStepUrl($step) : $this->url('home');
         if ($role instanceof IntervenantRole) {
@@ -300,6 +302,11 @@ class DossierController extends AbstractActionController implements ContextProvi
             }
         }
         
+        if (!$destinataires && ($contactParDefaut = $this->getParametreService()->get(Parametre::CONTACT_PJ_DEFAUT))) {
+            $mailto = sprintf($template, $contactParDefaut, $contactParDefaut);
+            $destinataires[] = sprintf("%s : %s", "Contact par défaut", $mailto);
+        }
+        
         return $destinataires;
     }
     
@@ -367,5 +374,13 @@ class DossierController extends AbstractActionController implements ContextProvi
     private function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
+    }
+    
+    /**
+     * @return \Application\Service\Parametres
+     */
+    private function getParametreService()
+    {
+        return $this->getServiceLocator()->get('ApplicationParametres');
     }
 }

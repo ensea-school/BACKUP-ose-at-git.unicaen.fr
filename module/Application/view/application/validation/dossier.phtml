@@ -1,4 +1,6 @@
-<h2 class="page-header"><?php echo $title ?></h2>
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Validation des données personnelles") ?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
 
 <?php
 $this->messenger(true);

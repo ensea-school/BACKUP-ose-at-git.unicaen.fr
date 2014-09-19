@@ -2,6 +2,22 @@
 
 namespace Application;
 
+use Application\Acl\AdministrateurRole;
+use Application\Acl\ComposanteRole;
+use Application\Acl\DirecteurComposanteRole;
+use Application\Acl\GestionnaireComposanteRole;
+use Application\Acl\ResponsableComposanteRole;
+use Application\Acl\SuperviseurComposanteRole;
+use Application\Acl\ResponsableRechercheLaboRole;
+use Application\Acl\DrhRole;
+use Application\Acl\GestionnaireDrhRole;
+use Application\Acl\ResponsableDrhRole;
+use Application\Acl\EtablissementRole;
+use Application\Acl\SuperviseurEtablissementRole;
+use Application\Acl\IntervenantRole;
+use Application\Acl\IntervenantPermanentRole;
+use Application\Acl\IntervenantExterieurRole;
+
 $main =  array(
     'doctrine' => array(
         'configuration' => array(
@@ -102,6 +118,26 @@ $main =  array(
             ),
         ),
     ),
+    'navigation' => array(
+        'default' => array(
+            'home' => array(
+                'pages' => array(
+                    'intervenant' => array(
+                        // réservation de l'emplacement pour le menu Intervenant
+                    ),
+                    'service' => array(
+                        // réservation de l'emplacement pour le menu Enseignements
+                    ),
+                    'of' => array(
+                        // réservation de l'emplacement pour le menu Offre de formation
+                    ),
+                    'gestion' => array(
+                        // réservation de l'emplacement pour le menu Gestion
+                    ),
+                ),
+            ),
+        ),
+    ),
     'unicaen-auth' => array(
         /**
          * Fournisseurs d'identité.
@@ -143,17 +179,21 @@ $main =  array(
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
             'ApplicationContextProvider'                     => 'Application\\Service\\ContextProvider',
+            'ApplicationlocalContext'                        => 'Application\\Service\\LocalContext',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
             'ApplicationSource'                              => 'Application\\Service\\Source',
             'ApplicationRole'                                => 'Application\\Service\\Role',
             'ApplicationTypeRole'                            => 'Application\\Service\\TypeRole',
-            'NavigationPageVisibility'                       => 'Application\\Service\\NavigationPageVisibility',
+            'IntervenantNavigationPageVisibility'            => 'Application\\Service\\IntervenantNavigationPageVisibility',
         ),
         'factories' => array(
             'navigation'                  => 'Application\Service\NavigationFactoryFactory',
             'ApplicationRoleProvider'     => 'Application\Provider\Role\RoleProviderFactory',
             'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
+        ),
+        'abstract_factories' => array(
+            'Application\Rule\AbstractRuleFactory',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',
@@ -210,5 +250,7 @@ return array_merge_recursive(
     include 'volume-horaire.config.php',
     include 'offre-formation.config.php',
     include 'contrat.config.php',
-    include 'validation.config.php'
+    include 'validation.config.php',
+    include 'agrement.config.php',
+    include 'gestion.config.php'
 );

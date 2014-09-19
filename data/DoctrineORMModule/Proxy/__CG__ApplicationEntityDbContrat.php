@@ -220,17 +220,6 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function getDateConseilAcademique()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateConseilAcademique', array());
-
-        return parent::getDateConseilAcademique();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setNumeroAvenant($numeroAvenant)
     {
 
@@ -560,6 +549,17 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateRetourSigne', array());
 
         return parent::getDateRetourSigne();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResourceId', array());
+
+        return parent::getResourceId();
     }
 
 }

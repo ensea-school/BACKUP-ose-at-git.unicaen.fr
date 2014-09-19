@@ -10,16 +10,6 @@ class Validation implements HistoriqueAwareInterface
     /**
      * @var \DateTime
      */
-    private $dateConseilAcademique;
-    
-    /**
-     * @var \DateTime
-     */
-    private $dateConseilRestreint;
-    
-    /**
-     * @var \DateTime
-     */
     private $histoCreation;
 
     /**
@@ -288,52 +278,6 @@ class Validation implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set dateConseilAcademique
-     *
-     * @param \DateTime $dateConseilAcademique
-     * @return Validation
-     */
-    public function setDateConseilAcademique(\DateTime $dateConseilAcademique = null)
-    {
-        $this->dateConseilAcademique = $dateConseilAcademique;
-
-        return $this;
-    }
-
-    /**
-     * Get dateConseilAcademique
-     *
-     * @return \DateTime
-     */
-    public function getDateConseilAcademique()
-    {
-        return $this->dateConseilAcademique;
-    }
-
-    /**
-     * Set dateConseilRestreint
-     *
-     * @param \DateTime $dateConseilRestreint
-     * @return Validation
-     */
-    public function setDateConseilRestreint(\DateTime $dateConseilRestreint = null)
-    {
-        $this->dateConseilRestreint = $dateConseilRestreint;
-
-        return $this;
-    }
-
-    /**
-     * Get dateConseilRestreint
-     *
-     * @return \DateTime
-     */
-    public function getDateConseilRestreint()
-    {
-        return $this->dateConseilRestreint;
     }
 
     /**

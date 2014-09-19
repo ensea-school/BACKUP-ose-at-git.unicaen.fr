@@ -108,18 +108,10 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
     {
         $sl = $this->getServiceLocator()->getServiceLocator();
 
-        $intervenant        = $sl->get('ApplicationIntervenant');
         $elementPedagogique = $sl->get('ApplicationElementPedagogique');
         $etape              = $sl->get('ApplicationEtape');
         $structure          = $sl->get('ApplicationStructure');
         $service            = $sl->get('ApplicationService');
-
-//        $qb = $intervenant->initQuery()[0];
-//        $intervenant->join( $service, $qb, 'id', 'intervenant' );
-//        $service->finderByContext( $qb );
-//        $this->get('intervenant')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
-//                                                            array( '' => '(Tous)') + $intervenant->getList($qb))
-//                                                  );
 
         $qb = $elementPedagogique->initQuery()[0];
         $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );

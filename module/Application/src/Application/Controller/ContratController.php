@@ -4,9 +4,11 @@ namespace Application\Controller;
 
 use Application\Acl\ComposanteDbRole;
 use Application\Controller\Plugin\Context;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\TypeAgrement;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Common\Constants;
@@ -130,8 +132,11 @@ class ContratController extends AbstractActionController implements ContextProvi
                     ->join("s.intervenant", "i")
                     ->andWhere("vh.contrat = :contrat")->setParameter("contrat", $contrat);
             $query = $qb->getQuery();
-            foreach ($query->execute() as $service) {
+            foreach ($query->execute() as $service) { /* @var $service \Application\Entity\Db\Service */
                 $this->em()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
+                if (0 == $service->getVolumeHoraireListe()->getHeures()) {
+                    continue;
+                }
                 $services[$contrat->getId()][$service->getId()] = $service;
                 $service->setTypeVolumehoraire($typeVolumeHoraire); // pour aide de vue! :-(
             }
@@ -162,7 +167,13 @@ class ContratController extends AbstractActionController implements ContextProvi
                 ->andWhere("c.histoCreation <= :date")->setParameter("date", $contrat->getHistoModification())
                 ->andWhere("i = :intervenant")->setParameter("intervenant", $contrat->getIntervenant())
                 ->andWhere("str = :structure")->setParameter("structure", $contrat->getStructure());
-        $services = $qb->getQuery()->getResult();
+        $services = [];
+        foreach ($qb->getQuery()->getResult() as $service) {
+            if (0 == $service->getVolumeHoraireListe()->getHeures()) {
+                continue;
+            }
+            $services[$service->getId()] = $service;
+        }
         
         $this->getServiceService()->setTypeVolumehoraire($services, $typeVolumeHoraire); // pour aide de vue! :-(
         
@@ -194,7 +205,15 @@ class ContratController extends AbstractActionController implements ContextProvi
         $peutCreerAvenant = $process->getPeutCreerAvenant();
         $servicesDispos   = null;
         $action           = null;
-
+        
+        // instanciation d'un contrat fictif transmis à l'assertion
+        $contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)
+                ->setIntervenant($this->getIntervenant())
+                ->setStructure($this->getStructure());
+        if (!$this->isAllowed($contrat, 'create')) {
+            throw new \Common\Exception\MessageException("La création de contrat/avenant n'est pas encore possible.");
+        }
+        
         if ($peutCreerContrat) {
             $servicesDispos = $process->getServicesDisposPourContrat();
             $action = "Créer le projet de contrat";
@@ -210,7 +229,7 @@ class ContratController extends AbstractActionController implements ContextProvi
                         $validation->getHistoModificateur());
             }
         }
-            
+        
         if ($servicesDispos) {
             $this->getServiceService()->setTypeVolumehoraire($servicesDispos, $this->getServiceTypeVolumeHoraire()->getPrevu()); // aide de vue
             $messages['info'] = "Des enseignements validés candidats pour un contrat/avenant ont été trouvés.";
@@ -439,21 +458,28 @@ class ContratController extends AbstractActionController implements ContextProvi
             throw new \Common\Exception\MessageException("Impossible d'exporter le contrat/avenant.", null, new \Exception($rule->getMessage()));
         }
         
+        $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $estUnAvenant          = $this->contrat->estUnAvenant();
         $contratToString       = (string) $this->contrat;
-        $dateConseil           = $this->contrat->getDateConseilAcademique();
         $nomIntervenant        = (string) $this->intervenant;
         $dateNaissance         = $this->intervenant->getDateNaissanceToString();
-        $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
-        $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
         $estATV                = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
-        $nomCompletIntervenant = $this->intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
-        $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $dateSignature         = new DateTime();
         $estUnProjet           = $this->contrat->getValidation() ? false : true;
         $services              = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
         $servicesRecaps        = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
         $totalHETD             = $this->getFormuleHetd()->getHetd($this->intervenant);
+        
+        if ($this->intervenant->getDossier()) {
+            $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
+            $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
+            $nomCompletIntervenant = $this->intervenant->getDossier()->getCivilite() . ' ' . $nomIntervenant;
+        }
+        else {
+            $adresseIntervenant    = $this->intervenant->getAdressePrincipale(true);
+            $numeroINSEE           = $this->intervenant->getNumeroInsee() . ' ' . $this->intervenant->getNumeroInseeCle();
+            $nomCompletIntervenant = $this->intervenant->getCivilite() . ' ' . $nomIntervenant;
+        }
         
         $fileName = sprintf("contrat_%s_%s_%s.pdf", 
                 $this->contrat->getStructure()->getSourceCode(), 
@@ -463,7 +489,6 @@ class ContratController extends AbstractActionController implements ContextProvi
         $variables = array(
             'estUnAvenant'            => $estUnAvenant,
             'estUnProjet'             => $estUnProjet,
-            'dateConseil'             => $dateConseil ? $dateConseil->format(Constants::DATE_FORMAT) : null,
             'etablissement'           => "L'université de Caen",
             'etablissementRepresente' => ", représentée par son Président, Pierre SINEUX",
             'nomIntervenant'          => $nomIntervenant,
@@ -544,10 +569,13 @@ class ContratController extends AbstractActionController implements ContextProvi
         return $this->formRetour;
     }
     
+    /**
+     * @var Intervenant
+     */
     private $intervenant;
     
     /**
-     * @return IntervenantExterieur
+     * @return Intervenant
      */
     private function getIntervenant()
     {
@@ -649,6 +677,14 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getServiceTypeValidation()
     {
         return $this->getServiceLocator()->get('ApplicationTypeValidation');
+    }
+    
+    /**
+     * @return \Application\Service\TypeAgrement
+     */
+    private function getServiceTypeAgrement()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeAgrement');
     }
 
     /**

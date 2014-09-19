@@ -47,7 +47,10 @@ abstract class Step
             $roleId = \Application\Acl\ComposanteRole::ROLE_ID;
         }
         if (!isset($this->labels[$roleId])) {
-            throw new \Common\Exception\LogicException("Label not set for role '$roleId'!");
+            if (!isset($this->labels['default'])) {
+                throw new \Common\Exception\LogicException("Aucun label par défaut n'a été spécifié pour l'étape '" . get_class() . "'.");
+            }
+            return $this->labels['default'];
         }
         return $this->labels[$roleId];
     }
@@ -86,7 +89,8 @@ EOS;
             $roleId = \Application\Acl\ComposanteRole::ROLE_ID;
         }
         if (!isset($this->descriptions[$roleId])) {
-            throw new \Common\Exception\LogicException("Label not set for role '$roleId'!");
+//            throw new \Common\Exception\LogicException("Description not set for role '$roleId'!");
+            return "";
         }
         return $this->descriptions[$roleId];
     }
@@ -104,6 +108,22 @@ EOS;
     protected function setRoute($route)
     {
         $this->route = $route;
+        return $this;
+    }
+    
+    /**
+     * @var array
+     */
+    private $routeParams = array();
+    
+    public function getRouteParams()
+    {
+        return $this->routeParams;
+    }
+
+    protected function setRouteParams($routeParams)
+    {
+        $this->routeParams = $routeParams;
         return $this;
     }
     

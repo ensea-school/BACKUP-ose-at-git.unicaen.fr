@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * Contrat
  */
-class Contrat implements HistoriqueAwareInterface
+class Contrat implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * @var \DateTime
@@ -144,17 +146,6 @@ class Contrat implements HistoriqueAwareInterface
     public function estUnAvenant()
     {
         return $this->getTypeContrat()->getCode() === TypeContrat::CODE_AVENANT;
-    }
-    
-    /**
-     * Retourne l'éventuelle date de passage en conseil académique des enseignements 
-     * de ce contrat/avenant.
-     * 
-     * @return \DateTime|null
-     */
-    public function getDateConseilAcademique()
-    {
-        return $this->getVolumeHoraire()[0]->getValidation()[0]->getDateConseilAcademique();
     }
     
     /**
@@ -496,5 +487,16 @@ class Contrat implements HistoriqueAwareInterface
     public function getDateRetourSigne()
     {
         return $this->dateRetourSigne;
+    }
+    
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'Contrat';
     }
 }

@@ -64,10 +64,10 @@ class TypePieceJointeStatut extends \Application\Entity\Db\TypePieceJointeStatut
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHetd', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'statut');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHetd');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHetd', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'statut');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHetd');
     }
 
     /**
@@ -275,34 +275,12 @@ class TypePieceJointeStatut extends \Application\Entity\Db\TypePieceJointeStatut
     /**
      * {@inheritDoc}
      */
-    public function getObligatoire()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getObligatoire', array());
-
-        return parent::getObligatoire();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setSeuilHetd($seuilHetd)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSeuilHetd', array($seuilHetd));
 
         return parent::setSeuilHetd($seuilHetd);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSeuilHetd()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSeuilHetd', array());
-
-        return parent::getSeuilHetd();
     }
 
     /**
@@ -477,23 +455,45 @@ class TypePieceJointeStatut extends \Application\Entity\Db\TypePieceJointeStatut
     /**
      * {@inheritDoc}
      */
-    public function isObligatoire($totalHETDIntervenant)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isObligatoire', array($totalHETDIntervenant));
-
-        return parent::isObligatoire($totalHETDIntervenant);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getObligatoireToString($totalHETDIntervenant)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getObligatoireToString', array($totalHETDIntervenant));
 
         return parent::getObligatoireToString($totalHETDIntervenant);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getObligatoire()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getObligatoire', array());
+
+        return parent::getObligatoire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSeuilHetd()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSeuilHetd', array());
+
+        return parent::getSeuilHetd();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isObligatoire($totalHETDIntervenant)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isObligatoire', array($totalHETDIntervenant));
+
+        return parent::isObligatoire($totalHETDIntervenant);
     }
 
     /**

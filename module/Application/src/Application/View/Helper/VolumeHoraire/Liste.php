@@ -47,6 +47,14 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $forcedReadOnly;
 
+    /**
+     * hasForbiddenPeriodes
+     *
+     * @var boolean
+     */
+    protected $hasForbiddenPeriodes = false;
+
+
 
 
     /**
@@ -69,6 +77,10 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $this;
     }
 
+    public function hasForbiddenPeriodes()
+    {
+        return $this->hasForbiddenPeriodes;
+    }
 
     /**
      * Helper entry point.
@@ -112,6 +124,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      * @return string
      */
     public function render(){
+        $this->hasForbiddenPeriodes = false;
         $hasMotifNonPaiement = $this->getServiceService()->canHaveMotifNonPaiement($this->getVolumeHoraireListe()->getService());
 
         $out = '<table class="table table-condensed table-bordered volume-horaire">';
@@ -124,7 +137,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             $out .= "<th style=\"width:25%\">Motif de non paiement</th>\n";
         }
         $out .= "</tr>\n";
-        $periodes = $this->getServiceService()->getPeriodes( $this->getVolumeHoraireListe()->getService() );
+        $periodes = $this->getPeriodes();
         foreach( $periodes as $periode ){
             $vhl = $this->getVolumeHoraireListe()->setPeriode($periode)->setTypeIntervention(false);
             $motifsNonPaiement = [];
@@ -135,8 +148,24 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                 $motifsNonPaiement = [0 => false];
             }
             foreach( $motifsNonPaiement as $motifNonPaiement ){
-                $out .= '<tr>';
-                $out .= "<td>".$this->renderPeriode($periode)."</td>\n";
+                $forbiddenPeriode = false;
+                if (
+                       $this->getVolumeHoraireListe()->getService()
+                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()
+                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getPeriode()
+                    && $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getPeriode() !== $periode
+                ){
+                    $forbiddenPeriode = true;
+                    $this->hasForbiddenPeriodes = true;
+                }
+                if ($forbiddenPeriode){
+                    $out .= '<tr class="bg-danger">';
+                    $out .= "<td><abbr title=\"La période n'est pas conforme à l'enseignement\">".$this->renderPeriode($periode)."</abbr></td>\n";
+                }else{
+                    $out .= '<tr>';
+                    $out .= "<td>".$this->renderPeriode($periode)."</td>\n";
+                }
+                
                 foreach( $this->typesIntervention as $typeIntervention ){
                     $vhl->setMotifNonPaiement($motifNonPaiement)
                         ->setTypeIntervention($typeIntervention);
@@ -210,7 +239,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             throw new \Common\Exception\LogicException('Le type de volume horaire de la liste n\'a pas été précisé');
         }
         $this->volumeHoraireListe = $volumeHoraireListe;
-        $this->forcedReadOnly = ! $this->getServiceService()->canModify($volumeHoraireListe->getService());
+        $this->forcedReadOnly = ! $this->getView()->isAllowed($volumeHoraireListe->getService(), 'update');
         $this->typesIntervention = null;
         return $this;
     }
@@ -218,9 +247,26 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function getTypesInterventions()
     {
         if (! $this->typesIntervention){
-            $this->typesIntervention = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
+            if ($this->getVolumeHoraireListe()->getService()->getElementPedagogique()){
+                $this->typesIntervention = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
+            }else{
+                $this->typesIntervention = $this->getServiceTypeIntervention()->getList();
+            }
         }
         return $this->typesIntervention;
+    }
+
+    public function getPeriodes()
+    {
+        $periodes = $this->getServiceService()->getPeriodes( $this->getVolumeHoraireListe()->getService() );
+        $vhPeriodes = $this->getVolumeHoraireListe()->getPeriodes();
+        foreach($vhPeriodes as $periode ){
+            if (! isset($periodes[$periode->getId()])) $periodes[$periode->getId()] = $periode;
+        }
+        uasort( $periodes, function( $a, $b ){
+            return ($a ? $a->getOrdre() : '') > ($b ? $b->getOrdre() : '');
+        });
+        return $periodes;
     }
 
     /**
@@ -229,6 +275,14 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function getServiceService()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-}
+    }
+
+    /**
+     * @return \Application\Service\TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
+    }
 
 }

@@ -7,6 +7,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 
 /**
  * Description of IntervenantController
@@ -17,10 +21,10 @@ use Application\Entity\Db\Intervenant;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantController extends AbstractActionController implements \Application\Service\ContextProviderAwareInterface
+class IntervenantController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
 {
-    use \Application\Service\ContextProviderAwareTrait;
-    use \Application\Traits\WorkflowIntervenantAwareTrait;
+    use ContextProviderAwareTrait;
+    use WorkflowIntervenantAwareTrait;
     
     /**
      * @var Intervenant
@@ -38,7 +42,7 @@ class IntervenantController extends AbstractActionController implements \Applica
         if ($role instanceof \Application\Acl\IntervenantRole) {
             // redirection selon le workflow
             $intervenant = $role->getIntervenant();
-            $wf  = $this->getWorkflowIntervenant($intervenant);
+            $wf  = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
             $url = $wf->getCurrentStepUrl();
             if (!$url) {
                 $url = $wf->getStepUrl($wf->getLastStep());
@@ -153,7 +157,7 @@ class IntervenantController extends AbstractActionController implements \Applica
 //            $servicesViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
 //            $view->addChild($servicesViewModel, 'services');
 //        }
-        $view->setVariables(compact('intervenant', 'changements', 'title', 'short', 'page'));
+        $view->setVariables(compact('intervenant', 'changements', 'title', 'short', 'page', 'role'));
         return $view;
     }
 
@@ -200,7 +204,7 @@ class IntervenantController extends AbstractActionController implements \Applica
         
         $title = sprintf("Feuille de route <small>%s</small>", $intervenant);
         
-        $wf = $this->getWorkflowIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
+        $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
         $wf->init();
         
         $view = new \Zend\View\Model\ViewModel();
@@ -264,7 +268,7 @@ class IntervenantController extends AbstractActionController implements \Applica
     {
         if (null === $this->intervenantsChoisisRecentsSessionContainer) {
             $container = new \Zend\Session\Container(get_class() . '_IntervenantsChoisisRecents');
-            $container->setExpirationSeconds(60*60); // 1 heure
+            $container->setExpirationSeconds(2*60*60); // 1 heure
             $this->intervenantsChoisisRecentsSessionContainer = $container;
         }
         return $this->intervenantsChoisisRecentsSessionContainer;

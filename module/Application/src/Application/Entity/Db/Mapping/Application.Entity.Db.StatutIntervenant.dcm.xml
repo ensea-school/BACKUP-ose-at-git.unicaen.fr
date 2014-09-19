@@ -26,6 +26,8 @@
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <field name="nonAutorise" type="boolean" column="NON_AUTORISE" nullable="false"/>
+    <field name="peutSaisirService" type="boolean" column="PEUT_SAISIR_SERVICE" nullable="false"/>
     <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
       <join-columns>
         <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
@@ -51,5 +53,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="typeAgrementStatut" target-entity="Application\Entity\Db\TypeAgrementStatut" mapped-by="statut" />
   </entity>
 </doctrine-mapping>

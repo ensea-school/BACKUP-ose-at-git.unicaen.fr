@@ -1,11 +1,12 @@
 <?php
-$validation        = $this->validation;
+$validation        = $this->validation; /* @var $validation \Application\Entity\Db\Validation */
 $services          = $this->services;
 $typeVolumeHoraire = $this->typeVolumeHoraire;
 $display           = $validation->getId() ? 'display: none' : '';
+$intituleConcernes = $validation->getId() ? "Enseignements concernés par la validation :" : "Enseignements à valider :";
 ?>
 <p>
-    <strong>Enseignements concernés par la validation</strong><br />
+    <strong><?php echo $intituleConcernes ?></strong><br />
     <small><a title="Cliquez pour afficher/masquer les enseignements concernés par cette validation"
         href="#" 
         class="voir-enseignements" 

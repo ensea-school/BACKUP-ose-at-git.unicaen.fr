@@ -52,6 +52,7 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function indexAction()
     {
+        $this->em()->getFilters()->enable('historique');
         $service  = $this->getServiceServiceReferentiel();
         $cp       = $this->getContextProvider();
         $annee    = $cp->getGlobalContext()->getAnnee();
@@ -75,6 +76,7 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function intervenantAction()
     {
+        $this->em()->getFilters()->enable('historique');
         $service = $this->getServiceServiceReferentiel();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
@@ -99,6 +101,7 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function voirAction()
     {
+        $this->em()->getFilters()->enable('historique');
         $service = $this->getServiceServiceReferentiel();
         if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
             throw new LogicException("Aucun identifiant de service spécifié.");
@@ -112,6 +115,7 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function voirListeAction()
     {
+        $this->em()->getFilters()->enable('historique');
         $service  = $this->getServiceServiceReferentiel();
         $qb       = $service->getFinder()->orderBy("i.nomUsuel, s.libelleCourt");
         $services = $qb->getQuery()->execute();
@@ -121,6 +125,7 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function voirLigneAction()
     {
+        $this->em()->getFilters()->enable('historique');
         $id      = (int)$this->params()->fromRoute('id',0);
         $details = 1 == (int)$this->params()->fromQuery('details',0);
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content',0);
@@ -134,6 +139,7 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function supprimerAction()
     {
+        $this->em()->getFilters()->enable('historique');
         $id        = $this->params()->fromRoute('id');
         $entity    = $this->em()->find('Application\Entity\Db\ServiceReferentiel', $id);
         $title     = "Suppression de service référentiel";

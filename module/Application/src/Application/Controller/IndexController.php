@@ -13,7 +13,6 @@ use Application\Service\ContextProviderAwareTrait;
 class IndexController extends AbstractActionController implements ContextProviderAwareInterface
 {
     use ContextProviderAwareTrait;
-    use \Application\Traits\WorkflowIntervenantAwareTrait;
     
     /**
      * 
@@ -26,6 +25,23 @@ class IndexController extends AbstractActionController implements ContextProvide
         $view = new \Zend\View\Model\ViewModel(array(
             'annee' => $this->getContextProvider()->getGlobalContext()->getAnnee(),
             'role'  => $role,
+        ));
+        
+        return $view;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function gestionAction()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        $view = new \Zend\View\Model\ViewModel(array(
+            'annee' => $this->getContextProvider()->getGlobalContext()->getAnnee(),
+            'role'  => $role,
+            'title' => "Gestion",
         ));
         
         return $view;

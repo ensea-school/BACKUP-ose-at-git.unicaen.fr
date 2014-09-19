@@ -2,8 +2,21 @@
 
 namespace Application;
 
+use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
+use Application\Acl\DirecteurComposanteRole;
+use Application\Acl\GestionnaireComposanteRole;
+use Application\Acl\ResponsableComposanteRole;
+use Application\Acl\SuperviseurComposanteRole;
+use Application\Acl\ResponsableRechercheLaboRole;
+use Application\Acl\DrhRole;
+use Application\Acl\GestionnaireDrhRole;
+use Application\Acl\ResponsableDrhRole;
+use Application\Acl\EtablissementRole;
+use Application\Acl\SuperviseurEtablissementRole;
 use Application\Acl\IntervenantRole;
+use Application\Acl\IntervenantPermanentRole;
+use Application\Acl\IntervenantExterieurRole;
 
 return array(
     'router' => array(
@@ -281,12 +294,12 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => array('search-structures', 'search-niveaux'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'administrateur'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation',
                     'action'     => array('index', 'export'),
-                    'roles'      => array(ComposanteRole::ROLE_ID,'administrateur'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 /**
                  * Etape
@@ -294,12 +307,12 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => array('voir', 'apercevoir', 'search'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'administrateur'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => array('ajouter', 'modifier', 'supprimer'),
-                    'roles'      => array(ComposanteRole::ROLE_ID,'administrateur'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 /**
                  * ElementPedagogique
@@ -307,12 +320,12 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => array('voir', 'apercevoir', 'search', 'getPeriode'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'administrateur'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => array('ajouter', 'modifier', 'supprimer'),
-                    'roles'      => array(ComposanteRole::ROLE_ID,'administrateur'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 /**
                  * Modulateur
@@ -320,7 +333,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Modulateur',
                     'action'     => array('saisir'),
-                    'roles'      => array(ComposanteRole::ROLE_ID,'administrateur'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
             ),
         ),
@@ -343,6 +356,7 @@ return array(
             'ApplicationEtape'                        => 'Application\\Service\\Etape',
             'ApplicationTypeFormation'                => 'Application\\Service\\TypeFormation',
             'ApplicationGroupeTypeFormation'          => 'Application\\Service\\GroupeTypeFormation',
+            'ApplicationNiveauEtape'                  => 'Application\\Service\\NiveauEtape',
             'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
             'ApplicationElementModulateur'            => 'Application\\Service\\ElementModulateur',
             'ApplicationTypeModulateur'               => 'Application\\Service\\TypeModulateur',
@@ -354,10 +368,8 @@ return array(
         ),
     ),
     'form_elements' => array(
-        'factories' => array(
-            'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldsetFactory',
-        ),
         'invokables' => array(
+            'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset',
             'EtapeSaisie'                   => 'Application\Form\OffreFormation\EtapeSaisie',
             'ElementPedagogiqueSaisie'      => 'Application\Form\OffreFormation\ElementPedagogiqueSaisie',
             'EtapeModulateursSaisie'        => 'Application\Form\OffreFormation\EtapeModulateursSaisie',
@@ -371,6 +383,7 @@ return array(
         'invokables' => array(
             'EtapeModulateursSaisieForm'       => 'Application\View\Helper\OffreFormation\EtapeModulateursSaisieForm',
             'ElementModulateursSaisieFieldset' => 'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset',
+            'ElementPedagogique'               => 'Application\View\Helper\OffreFormation\ElementPedagogique',
         ),
     ),
 

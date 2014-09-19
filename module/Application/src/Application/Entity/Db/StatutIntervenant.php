@@ -26,41 +26,7 @@ class StatutIntervenant
     const ETUD_HORS_UCBN = 'ETUD_HORS_UCBN';
     const CHARG_ENS_1AN  = 'CHARG_ENS_1AN';
     const AUTRES         = 'AUTRES';
-
-    public $permanents = array(
-        self::ENS_2ND_DEG,
-        self::ENS_CH,
-        self::ASS_MI_TPS,
-        self::ATER,
-        self::ATER_MI_TPS,
-        self::DOCTOR,
-        self::ENS_CONTRACT,
-        self::LECTEUR,
-        self::MAITRE_LANG,
-    );
-
-    public $vacataires = array(
-        self::BIATSS,
-        self::SALAR_PRIVE,
-        self::SALAR_PUBLIC,
-        self::NON_SALAR,
-//        self::RETR_UCBN,
-        self::RETR_HORS_UCBN,
-        self::ETUD_UCBN,
-        self::ETUD_HORS_UCBN,
-        self::CHARG_ENS_1AN,
-    );
-
-    public $vacatairesNonBiatss = array(
-        self::SALAR_PRIVE,
-        self::SALAR_PUBLIC,
-        self::NON_SALAR,
-//        self::RETR_UCBN,
-        self::RETR_HORS_UCBN,
-        self::ETUD_UCBN,
-        self::ETUD_HORS_UCBN,
-        self::CHARG_ENS_1AN,
-    );
+    const NON_AUTORISE   = 'NON_AUTORISE';
 
     /**
      * 
@@ -78,7 +44,7 @@ class StatutIntervenant
      */
     public function estPermanent()
     {
-        return in_array($this->getSourceCode(), $this->permanents);
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
     }
     
     /**
@@ -88,17 +54,7 @@ class StatutIntervenant
      */
     public function estVacataire()
     {
-        return in_array($this->getSourceCode(), $this->vacataires);
-    }
-    
-    /**
-     * Indique si ce statut correspond à un vacataire non-BIATSS.
-     * 
-     * @return bool
-     */
-    public function estVacataireNonBiatss()
-    {
-        return in_array($this->getSourceCode(), $this->vacatairesNonBiatss);
+        return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
     }
     
     /**
@@ -132,26 +88,45 @@ class StatutIntervenant
     }
     
     /**
-     * Indique si ce statut requiert la saisie d'un dossier vacataire.
-     * 
-     * @return bool
+     * Indique si ce statut nécessite un contrat.
+     *
+     * @return bool 
      */
-    public function requiertDossier()
+    public function necessiteContrat()
     {
-        return in_array($this->getSourceCode(), $this->vacatairesNonBiatss);
+        if ($this->estVacataire() || $this->estBiatss()) {
+            return true;
+        }
+
+        return false;
     }
     
     /**
-     * Indique si ce statut permet la saisie de service prévisionnel ou de référentiel.
-     * 
-     * @return bool
+     * Indique si ce statut permet la saisie des données personnelles.
+     *
+     * @return bool 
      */
-    public function permetSaisieService()
+    public function peutSaisirDossier()
     {
-        return !in_array($this->getSourceCode(), array(
-            self::RETR_UCBN,
-            self::AUTRES,
-        ));
+        if ($this->estAutre() || ($this->estVacataire() && !$this->estBiatss())) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Indique si ce statut permet la fourniture de pièces justificatives.
+     *
+     * @return bool 
+     */
+    public function peutSaisirPieceJointe()
+    {
+        if ($this->estVacataire() && !$this->estBiatss()) {
+            return true;
+        }
+
+        return false;
     }
     
     /**
@@ -244,7 +219,44 @@ class StatutIntervenant
      */
     protected $histoCreateur;
 
+    /**
+     * @var \Application\Entity\Db\TypeAgrementStatut
+     */
+    protected $typeAgrementStatut;
 
+    /**
+     * @var boolean
+     */
+    protected $nonAutorise;
+
+    /**
+     * @var boolean
+     */
+    protected $peutSaisirService;
+
+
+    function getNonAutorise()
+    {
+        return $this->nonAutorise;
+    }
+
+    function getPeutSaisirService()
+    {
+        return $this->peutSaisirService;
+    }
+
+    function setNonAutorise($nonAutorise)
+    {
+        $this->nonAutorise = $nonAutorise;
+        return $this;
+    }
+
+    function setPeutSaisirService($peutSaisirService)
+    {
+        $this->peutSaisirService = $peutSaisirService;
+        return $this;
+    }
+    
     /**
      * Set depassement
      *
@@ -644,5 +656,38 @@ class StatutIntervenant
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * Add typeAgrementStatut
+     *
+     * @param \Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut
+     * @return TypeTypeAgrementStatut
+     */
+    public function addTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
+    {
+        $this->typeAgrementStatut[] = $typeAgrementStatut;
+
+        return $this;
+    }
+
+    /**
+     * Remove typeAgrementStatut
+     *
+     * @param \Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut
+     */
+    public function removeTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
+    {
+        $this->typeAgrementStatut->removeElement($typeAgrementStatut);
+    }
+
+    /**
+     * Get typeAgrementStatut
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTypeAgrementStatut()
+    {
+        return $this->typeAgrementStatut;
     }
 }

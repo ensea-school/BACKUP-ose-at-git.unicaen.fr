@@ -1,4 +1,6 @@
-<h2 class="page-header">Données personnelles <small><?php echo $intervenant ?></small></h2>
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Données personnelles") ?>
+
+<h1 class="page-header">Données personnelles <small><?php echo $intervenant ?></small></h1>
 
 <?php
 if ($validation) {
@@ -12,8 +14,6 @@ if ($validation) {
 <style>
     div.rib-part { display: inline-block; vertical-align: top; }
     div.rib-part input { width: auto; }
-    div.multicheckbox label { margin-left: 2em; font-weight: normal ; }
-    /*input[type=radio] { margin-left: 2em; margin-right: 3px; }*/
 </style>
 
 <?php 
@@ -62,14 +62,17 @@ $dossier = $form->get('dossier');
         var divStatut         = $("div.statut");
         var radios1erRecrut   = $("input[name='dossier[premierRecrutement]']"); // NB: 2 radios
         var radiosPerteEmploi = $("input[name='dossier[perteEmploi]']"); // NB: 2 radios
+        var readonly          = <?php echo $readonly ? 'true' : 'false' ?>
         
-        radios1erRecrut.change(function () {
-            updatePerteEmploi();
-        });
-        radiosPerteEmploi.change(function () {
-            updateStatut();
-        });
-        
+        if (!readonly) {
+            radios1erRecrut.change(function () {
+                updatePerteEmploi();
+            });
+            radiosPerteEmploi.change(function () {
+                updateStatut();
+            });
+        }
+    
         function getRadioValue(radioInputs)
         {
             var checkedRadio = radioInputs.filter(":checked");
@@ -84,13 +87,13 @@ $dossier = $form->get('dossier');
             var valuePremierRecrutement = getRadioValue(radios1erRecrut);
             if (valuePremierRecrutement === '0') {
                 divPerteEmploi.show();
-                if (!radios1erRecrut.attr('disabled')) {
+                if (!readonly) {
                     divPerteEmploi.find("input[type=radio]").attr('disabled', false);
                 }
             }
             else {
                 divPerteEmploi.hide();
-                if (!radios1erRecrut.attr('disabled')) {
+                if (!readonly) {
                     divPerteEmploi.find("input[type=radio]").attr('disabled', true);
                 }
             }
@@ -103,13 +106,13 @@ $dossier = $form->get('dossier');
             var valuePerteEmploi        = getRadioValue(radiosPerteEmploi);
             if (valuePremierRecrutement === '1' || valuePerteEmploi === '0') {
                 divStatut.show();
-                if (!radios1erRecrut.attr('disabled') && !radiosPerteEmploi.attr('disabled')) {
+                if (!readonly) {
                     divStatut.find("select").attr('disabled', false);
                 }
             }
             else {
                 divStatut.hide();
-                if (!radios1erRecrut.attr('disabled') && !radiosPerteEmploi.attr('disabled')) {
+                if (!readonly) {
                     divStatut.find("select").attr('disabled', true);
                 }
             }

@@ -2,7 +2,20 @@
 
 namespace Application;
 
+use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
+use Application\Acl\DirecteurComposanteRole;
+use Application\Acl\GestionnaireComposanteRole;
+use Application\Acl\ResponsableComposanteRole;
+use Application\Acl\SuperviseurComposanteRole;
+use Application\Acl\ResponsableRechercheLaboRole;
+use Application\Acl\DrhRole;
+use Application\Acl\GestionnaireDrhRole;
+use Application\Acl\ResponsableDrhRole;
+use Application\Acl\EtablissementRole;
+use Application\Acl\SuperviseurEtablissementRole;
+use Application\Acl\IntervenantRole;
+use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
     
 return array(
@@ -147,6 +160,23 @@ return array(
                 ),
             ),
         ),
+        'resource_providers' => array(
+            'BjyAuthorize\Provider\Resource\Config' => array(
+                'Contrat' => array(),
+            ),
+        ),
+        'rule_providers' => array(
+            'BjyAuthorize\Provider\Rule\Config' => array(
+                'allow' => array(
+                    array(
+                        array(ComposanteRole::ROLE_ID), 
+                        'Contrat', 
+                        array('create', 'read', 'delete', 'update'), 
+                        'ContratAssertion',
+                    ),
+                ),
+            ),
+        ),
     ),
     'controllers' => array(
         'invokables' => array(
@@ -155,9 +185,12 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationContrat'        => 'Application\\Service\\Contrat',
-            'ApplicationTypeContrat'    => 'Application\\Service\\TypeContrat',
-            'ApplicationContratProcess' => 'Application\\Service\\Process\\ContratProcess',
+            'ApplicationContrat'          => 'Application\\Service\\Contrat',
+            'ApplicationTypeContrat'      => 'Application\\Service\\TypeContrat',
+            'ApplicationContratProcess'   => 'Application\\Service\\Process\\ContratProcess',
+            'PeutCreerContratInitialRule' => 'Application\Rule\Intervenant\PeutCreerContratInitialRule',
+            'PeutCreerAvenantRule'        => 'Application\Rule\Intervenant\PeutCreerAvenantRule',
+            'ContratAssertion'            => 'Application\\Assertion\\ContratAssertion',
         ),
     ),
     'view_helpers' => array(

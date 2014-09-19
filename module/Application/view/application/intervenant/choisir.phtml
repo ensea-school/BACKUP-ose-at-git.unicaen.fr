@@ -1,4 +1,6 @@
-<h2><?php echo $this->title ?></h2>
+<?php $this->headTitle($this->title) ?>
+
+<h1 class="page-header"><?php echo $this->title ?></h1>
 
 <?php echo $this->messenger(true) ?>
 
@@ -29,15 +31,13 @@
         var form        = $("form.intervenant-rech");
         var intervId    = $("input[name='interv[id]']", form);
         var intervLabel = $("input[name='interv[label]']", form);
-        var submit      = $("input[type=submit]", form).prop('disabled', intervLabel.val() ? false : true);
-        intervLabel
-                .on( "autocompletesearch", function() { submit.prop('disabled', true); } )
-                .on( "autocompleteselect", function() { submit.prop('disabled', false); } )
-                .tooltip({ placement: 'bottom' })
-                .focus();
+        var submit      = $("input[type=submit]", form);
+        
+        intervLabel.tooltip({ placement: 'bottom' }).focus();
+        
         $("a.choisir-recent").click(function() {
             intervId.val($(this).data('id'));
-            submit.prop('disabled', false).click();
+            submit.click();
             return false;
         });
     });

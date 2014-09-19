@@ -2,17 +2,27 @@
 
 namespace Application\Rule\Intervenant;
 
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Rule\AbstractRule;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\TypeValidationAwareTrait;
+use Application\Traits\StructureAwareTrait;
+use Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
+use Application\Entity\Db\TypeContrat;
+ 
 /**
  * Description of PeutCreerAvenantRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutCreerAvenantRule extends IntervenantRule
+class PeutCreerAvenantRule extends AbstractRule implements ServiceLocatorAwareInterface
 {
-    use \Application\Traits\TypeValidationAwareTrait;
-    use \Application\Traits\TypeContratAwareTrait;
-    use \Application\Traits\StructureAwareTrait;
-    use \Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
+    use ServiceLocatorAwareTrait;
+    use IntervenantAwareTrait;
+    use TypeValidationAwareTrait;
+    use StructureAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
     
     public function execute()
     {
@@ -24,7 +34,7 @@ class PeutCreerAvenantRule extends IntervenantRule
         
         $this->getServiceValideRule()->execute();
         
-        // on s'intéresse à ceux validés mais n'ayant pas faits l'objet d'un avenant
+        // on s'intéresse aux enseignements validés mais n'ayant pas faits l'objet d'un avenant
         $this->volumesHorairesDispos = [];
         foreach ($this->getServiceValideRule()->getVolumesHorairesValides() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
             if (!count($vh->getContrat())) {
@@ -45,22 +55,26 @@ class PeutCreerAvenantRule extends IntervenantRule
     }
     
     /**
-     * @var \Application\Entity\Db\Service[]
+     * Retourne le type de contrat "contrat".
+     * 
+     * @return TypeContrat
      */
-    private $servicesDispos;
+    protected function getTypeContrat()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeContrat')->getRepo()->findOneByCode(TypeContrat::CODE_CONTRAT);
+    }
     
     /**
      * @return \Application\Entity\Db\Service[]
      */
     public function getServicesDispos()
     {
-        if (null === $this->servicesDispos) {
-            $this->servicesDispos = [];
-            foreach ($this->getVolumesHorairesDispos() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
-                $this->servicesDispos[$vh->getService()->getId()] = $vh->getService();
-            }
+        $servicesDispos = [];
+        foreach ($this->getVolumesHorairesDispos() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            $servicesDispos[$vh->getService()->getId()] = $vh->getService();
         }
-        return $this->servicesDispos;
+        
+        return $servicesDispos;
     }
     
     /**
@@ -85,12 +99,14 @@ class PeutCreerAvenantRule extends IntervenantRule
     private function getServiceValideRule()
     {
         if (null === $this->serviceValideRule) {
-            $this->serviceValideRule = new ServiceValideRule($this->getIntervenant());
-            $this->serviceValideRule
-                    ->setStructure($this->getStructure())
-                    ->setTypeValidation($this->getTypeValidation())
-                    ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+            $this->serviceValideRule = new ServiceValideRule();
         }
+        $this->serviceValideRule
+                ->setIntervenant($this->getIntervenant())
+                ->setStructure($this->getStructure())
+                ->setTypeValidation($this->getTypeValidation())
+                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+        
         return $this->serviceValideRule;
     }
 }

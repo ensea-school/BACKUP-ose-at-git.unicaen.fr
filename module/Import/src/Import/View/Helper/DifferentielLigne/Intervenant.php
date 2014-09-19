@@ -36,13 +36,16 @@ class Intervenant extends DifferentielLigne
                     $oldStatut = 'Aucun';
                 }
                 $statut = $this->ligne->getEntityManager()->find('Application\Entity\Db\StatutIntervenant', $value);
-                if (
-                    $statut->getSourceCode() == \Application\Entity\Db\StatutIntervenant::AUTRES
-                ){
-                    return 'statut '.$oldStatut.' renseigné manuellement.';
+                return 'changement de statut ('.$oldStatut.' vers '.$statut.')';
+            case 'TYPE_ID':
+                $intervenant = $this->ligne->getEntity();
+                if ($intervenant){
+                    $oldType = $intervenant->getType();
                 }else{
-                    return 'changement de statut ('.$oldStatut.' vers '.$statut.')';
+                    $oldType = 'Aucun';
                 }
+                $type = $this->ligne->getEntityManager()->find('Application\Entity\Db\TypeIntervenant', $value);
+                return $oldType.' devient '.lcfirst( $type );
             default:
                 return parent::getColumnDetails($column, $value);
         }

@@ -236,16 +236,16 @@ class Import extends Processus
      * @param string            $action      Action
      * @return self
      */
-    public function intervenant( $sourceCode=null, $action=self::A_ALL )
+    public function intervenant( $sourceCode=null, $action=null )
     {
-        $this->execMaj( 'INTERVENANT', 'SOURCE_CODE', $sourceCode, $action );
-        $this->execMaj( 'INTERVENANT_PERMANENT', 'SOURCE_CODE', $sourceCode, $action );
-        $this->execMaj( 'INTERVENANT_EXTERIEUR', 'SOURCE_CODE', $sourceCode, $action );
+        $this->execMaj( 'INTERVENANT', 'SOURCE_CODE', $sourceCode, $action ?: self::A_INSERT );
+        $this->execMaj( 'INTERVENANT_PERMANENT', 'SOURCE_CODE', $sourceCode, $action ?: self::A_ALL );
+        $this->execMaj( 'INTERVENANT_EXTERIEUR', 'SOURCE_CODE', $sourceCode, $action ?: self::A_ALL );
 
         $ids = $this->getQueryGenerator()->getIdFromSourceCode( 'INTERVENANT', $sourceCode );
         if (! empty($ids)){
-            $this->execMaj( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $ids, $action );
-            $this->execMaj( 'AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $ids, $action );
+            $this->execMaj( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $ids, $action ?: self::A_ALL );
+            $this->execMaj( 'AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $ids, $action ?: self::A_ALL );
         }
         return $this;
     }

@@ -24,6 +24,8 @@ $mc->setUlClass('navigation navigation-etape pull-right');
     div.element-rech div.panel-body input.form-control { width: 75% }
 </style>
 
+<?php $this->headTitle()->append((string)$structure)->append("Offre de formation") ?>
+
 <h1 class="page-header">Offre de formation <?php echo $structure ? '<small>' . $structure . '</small>' : null ?></h1>
 
 <div class="row">
@@ -78,7 +80,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php endif; ?>
                 
                 <?php foreach ($niveauxOptions as $code => $lib): ?>
-                <?php if ($code != $niveau): ?> 
+                <?php if (!($niveau && $code == $niveau)): ?>
                      <li class="list-group-item">
                          <a class="niveau" title="Cliquez pour afficher les formations et les enseignements de ce niveau" href="<?php echo $this->url('of', 
                                 array(), 
@@ -264,6 +266,16 @@ $mc->setUlClass('navigation navigation-etape pull-right');
             </div>
                 
             <!---------------- Tableau des éléments pédagogiques --------------->
+            <div><a href="<?php 
+        
+        $params = [];
+        if ($structure) $params['structure'] = $structure->getId();
+        if ($niveau) $params['niveau'] = $niveau->getId();
+        if ($etape) $params['etape'] = $etape->getId();
+       
+        echo $this->url('of/default', ['action' => 'export'], ['query' => $params]);
+
+        ?>"><span class="glyphicon glyphicon-file"></span> Télécharger l'offre de formation au format CSV</a></div>
             <table class="table table-bordered table-condensed table-hover">
                 <thead>
                     <tr>

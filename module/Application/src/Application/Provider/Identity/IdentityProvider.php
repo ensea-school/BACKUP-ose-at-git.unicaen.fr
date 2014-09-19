@@ -124,6 +124,11 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
             return Acl\IntervenantRole::ROLE_ID;
         }
 
+        $statut = $intervenant->getStatut()->getSourceCode();
+        if ($statut === \Application\Entity\Db\StatutIntervenant::NON_AUTORISE){
+            return null;
+        }
+
         if ($intervenant instanceof IntervenantPermanent) {
             $role = Acl\IntervenantPermanentRole::ROLE_ID;
         }

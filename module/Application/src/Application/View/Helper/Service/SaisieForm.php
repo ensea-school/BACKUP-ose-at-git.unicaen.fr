@@ -85,7 +85,7 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
             $res .= '<div id="element-interne" '.(($interne) ? '' : 'style="display:none"').'>'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
             $res .= '<div id="element-externe" '.(($interne) ? 'style="display:none"' : '').'>'.$this->getView()->formControlGroup($fservice->get('etablissement')).'</div>';
         }else{
-            $res .= '<div id="element-interne">'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique')).'</div>';
+            $res .= '<div id="element-interne">'.$this->getView()->fieldsetElementPedagogiqueRecherche($fservice->get('element-pedagogique'))->render().'</div>';
         }
         $res .= '<div id="volumes-horaires" data-url="'.$this->getVolumesHorairesRefreshUrl().'">';
         $res .= $this->renderVolumesHoraires();

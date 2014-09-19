@@ -64,10 +64,10 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'permanents', 'vacataires', 'vacatairesNonBiatss', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService');
         }
 
-        return array('__isInitialized__', 'permanents', 'vacataires', 'vacatairesNonBiatss', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService');
     }
 
     /**
@@ -209,17 +209,6 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     /**
      * {@inheritDoc}
      */
-    public function estVacataireNonBiatss()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'estVacataireNonBiatss', array());
-
-        return parent::estVacataireNonBiatss();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function estBiatss()
     {
 
@@ -253,23 +242,78 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     /**
      * {@inheritDoc}
      */
-    public function requiertDossier()
+    public function necessiteContrat()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'requiertDossier', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'necessiteContrat', array());
 
-        return parent::requiertDossier();
+        return parent::necessiteContrat();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function permetSaisieService()
+    public function peutSaisirDossier()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'permetSaisieService', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'peutSaisirDossier', array());
 
-        return parent::permetSaisieService();
+        return parent::peutSaisirDossier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function peutSaisirPieceJointe()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'peutSaisirPieceJointe', array());
+
+        return parent::peutSaisirPieceJointe();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNonAutorise()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNonAutorise', array());
+
+        return parent::getNonAutorise();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPeutSaisirService()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPeutSaisirService', array());
+
+        return parent::getPeutSaisirService();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setNonAutorise($nonAutorise)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setNonAutorise', array($nonAutorise));
+
+        return parent::setNonAutorise($nonAutorise);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPeutSaisirService($peutSaisirService)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPeutSaisirService', array($peutSaisirService));
+
+        return parent::setPeutSaisirService($peutSaisirService);
     }
 
     /**
@@ -659,6 +703,39 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSource', array());
 
         return parent::getSource();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addTypeAgrementStatut', array($typeAgrementStatut));
+
+        return parent::addTypeAgrementStatut($typeAgrementStatut);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeTypeAgrementStatut', array($typeAgrementStatut));
+
+        return parent::removeTypeAgrementStatut($typeAgrementStatut);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTypeAgrementStatut()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeAgrementStatut', array());
+
+        return parent::getTypeAgrementStatut();
     }
 
 }

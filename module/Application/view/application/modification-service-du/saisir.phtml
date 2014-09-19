@@ -1,4 +1,6 @@
-<h1><?php echo $title ?></h1>
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Modification de service dû") ?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
 
 <?php echo $this->messenger(true) ?>
 

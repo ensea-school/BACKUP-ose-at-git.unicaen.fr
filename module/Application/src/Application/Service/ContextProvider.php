@@ -87,7 +87,8 @@ class ContextProvider extends AbstractService
     public function getLocalContext()
     {
         if (null === $this->localContext) {
-            $this->localContext = new LocalContext($this->getEntityManager());
+            $this->localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $this->localContext LocalContext */
         }
         
         return $this->localContext;

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * FonctionReferentiel
  */
-class FonctionReferentiel
+class FonctionReferentiel implements HistoriqueAwareInterface
 {
     /**
      * @var string

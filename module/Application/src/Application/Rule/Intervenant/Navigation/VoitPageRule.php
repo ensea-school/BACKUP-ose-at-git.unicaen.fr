@@ -54,14 +54,14 @@ class VoitPageRule extends IntervenantRule
         $step = $this->wf->getStepForRoute($route);
         if (null === $step) {
             // si aucune étape correspondante n'est trouvée, on masque la page
-            $this->setMessage("Aucune formation trouvée correspondant à la route '$route'.");
+            $this->setMessage("Aucune étape trouvée correspondant à la route '$route'.");
             return false;
         }
         
         // la page est masquée si elle correspond à une étape située après l'étape courante
 //        if ($step !== $this->wf->getCurrentStep() && !$this->wf->isStepBeforeCurrentStep($step)) {
         if ($this->wf->isStepAfterCurrentStep($step)) {
-            $this->setMessage("%s ne peut pas encore accéder à cette formation.");
+            $this->setMessage("%s ne peut pas encore accéder à cette étape.");
             return false;
         }
         

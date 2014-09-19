@@ -2,6 +2,12 @@
 
 namespace Application\Rule\Intervenant;
 
+use Application\Rule\AbstractRule;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\TypeValidationAwareTrait;
+use Application\Traits\StructureAwareTrait;
+use Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
+    
 /**
  * Recherche si les enseignements d'un intervenant au sein d'une structure ont été validés.
  * 
@@ -18,33 +24,13 @@ namespace Application\Rule\Intervenant;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ServiceValideRule extends IntervenantRule
+class ServiceValideRule extends AbstractRule
 {
-    use \Application\Traits\TypeValidationAwareTrait;
-    use \Application\Traits\StructureAwareTrait;
-    use \Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
-    
-    /**
-     * Flag indiquant si l'on se satisfait d'une validation partielle des services.
-     * Autrement dit, avec ce flag à <code>true</code>, les services seront considérés comme validés
-     * (i.e. cette règle retournera <code>true</code>) si au moins un volume horaire est validé.
-     *  
-     * @var boolean
-     */
-    private $memePartiellement = false;
-    
-    /**
-     * 
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @param bool $memePartiellement Flag indiquant si l'on se satisfait d'une validation partielle des services.
-     */
-    public function __construct(\Application\Entity\Db\Intervenant $intervenant, $memePartiellement = false)
-    {
-        parent::__construct($intervenant);
+    use IntervenantAwareTrait;
+    use TypeValidationAwareTrait;
+    use StructureAwareTrait;
+    use VolumeHoraireServiceAwareTrait;
         
-        $this->memePartiellement = $memePartiellement;
-    }
-    
     public function execute()
     {
         if (!$this->getServiceVolumeHoraire()) {
@@ -107,6 +93,26 @@ class ServiceValideRule extends IntervenantRule
     public function isRelevant()
     {
         return !$this->getIntervenant()->getStatut()->estAutre();
+    }
+    
+    /**
+     * Flag indiquant si l'on se satisfait d'une validation partielle des services.
+     * Autrement dit, avec ce flag à <code>true</code>, les services seront considérés comme validés
+     * (i.e. cette règle retournera <code>true</code>) si au moins un volume horaire est validé.
+     *  
+     * @var boolean
+     */
+    private $memePartiellement = false;
+
+    /**
+     * 
+     * @param boolean $memePartiellement
+     * @return \Application\Rule\Intervenant\ServiceValideRule
+     */
+    public function setMemePartiellement($memePartiellement = true)
+    {
+        $this->memePartiellement = $memePartiellement;
+        return $this;
     }
     
     private $servicesValides;

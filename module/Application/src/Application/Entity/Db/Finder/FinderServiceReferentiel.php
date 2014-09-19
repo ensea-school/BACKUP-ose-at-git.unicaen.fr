@@ -25,7 +25,7 @@ class FinderServiceReferentiel extends AbstractFinder
         $this
                 ->select('sr')
                 ->from("Application\Entity\Db\ServiceReferentiel", 'sr')
-                ->join("sr.structure", 's')
+                ->leftJoin("sr.structure", 's')
                 ->join("sr.intervenant", 'i')
                 ->join("sr.fonction", 'f')
                 ->orderBy("i.nomUsuel, s.libelleCourt");

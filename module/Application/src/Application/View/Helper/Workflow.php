@@ -6,7 +6,8 @@ use Zend\Form\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
-use Application\Traits\WorkflowIntervenantAwareTrait;
+use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Workflow\AbstractWorkflow;
 
@@ -15,12 +16,11 @@ use Application\Service\Workflow\AbstractWorkflow;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface
+class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface, WorkflowIntervenantAwareInterface
 {
-
     use ServiceLocatorAwareTrait;
+    use WorkflowIntervenantAwareTrait;
 
-use WorkflowIntervenantAwareTrait;
     private $wf;
     private $intervenant;
     private $role;
@@ -69,6 +69,7 @@ use WorkflowIntervenantAwareTrait;
     public function navNext($prependText = null)
     {
         $wf = $this->getWorkflow(); /* @var $wf AbstractWorkflow */
+        $wf->getCurrentStep();
 
         $step = ($route = $this->getCurrentRoute()) ? $wf->getStepForRoute($route) : $wf->getStepForCurrentRoute();
         if (!$step || !$step->getDone()) {
@@ -113,8 +114,12 @@ use WorkflowIntervenantAwareTrait;
     public function getWorkflow()
     {
         if (null === $this->wf) {
-            $this->wf = $this->getWorkflowIntervenant($this->intervenant, $this->getServiceLocator()->getServiceLocator());
+            $this->wf = $this->getWorkflowIntervenant();
         }
+        
+        $this->wf
+                ->setIntervenant($this->intervenant)
+                ->setRole($this->role);
 
         return $this->wf;
     }

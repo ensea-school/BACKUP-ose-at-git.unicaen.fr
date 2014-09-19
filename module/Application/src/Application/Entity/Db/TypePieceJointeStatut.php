@@ -2,13 +2,15 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use \Application\Traits\ObligatoireSelonSeuilHETDAwareTrait;
 
 /**
  * TypePieceJointeStatut
  */
 class TypePieceJointeStatut
 {
+    use ObligatoireSelonSeuilHETDAwareTrait;
+    
     /**
      * @var \DateTime
      */
@@ -28,16 +30,6 @@ class TypePieceJointeStatut
      * @var boolean
      */
     private $premierRecrutement;
-
-    /**
-     * @var boolean
-     */
-    private $obligatoire;
-
-    /**
-     * @var integer
-     */
-    private $seuilHetd;
 
     /**
      * @var \DateTime
@@ -186,16 +178,6 @@ class TypePieceJointeStatut
     }
 
     /**
-     * Get obligatoire
-     *
-     * @return boolean 
-     */
-    public function getObligatoire()
-    {
-        return $this->obligatoire;
-    }
-
-    /**
      * Set seuilHetd
      *
      * @param integer $seuilHetd
@@ -206,16 +188,6 @@ class TypePieceJointeStatut
         $this->seuilHetd = $seuilHetd;
 
         return $this;
-    }
-
-    /**
-     * Get seuilHetd
-     *
-     * @return integer 
-     */
-    public function getSeuilHetd()
-    {
-        return $this->seuilHetd;
     }
 
     /**
@@ -388,33 +360,11 @@ class TypePieceJointeStatut
     {
         return $this->statut;
     }
-    
+
     /**
-     * Indique si le type de pièce jointe est obligatoire.
-     * NB: prend en compte le seil HETD éventuellement spécifié.
+     * Redéfiniton pour gestion du cas particulier du RIB.
      * 
-     * @param integer $totalHETDIntervenant Total d'HETD de l'intervenant, exploité dans le cas où le caractère
-     * obligatoire dépend d'un seuil d'HETD
-     * @return boolean
-     */
-    public function isObligatoire($totalHETDIntervenant)
-    {
-        $obligatoire = $this->getObligatoire();
-        
-        if ($obligatoire && $this->getSeuilHetd() && !$this->isSeuilHETDDepasse($totalHETDIntervenant)) {
-            $obligatoire = false;
-        }
-        
-        return $obligatoire;
-    }
-    
-    /**
-     * Retourne le libellé du caractère obligatoire ou non du type de pièce jointe.
-     * NB: prend en compte le seil HETD éventuellement spécifié.
-     * 
-     * @param integer $totalHETDIntervenant Total d'HETD de l'intervenant, exploité dans le cas où le caractère
-     * obligatoire dépend d'un seuil d'HETD
-     * @return string
+     * @todo Comment appeler la méthode getObligatoireToString() du trait ?
      */
     public function getObligatoireToString($totalHETDIntervenant)
     {
@@ -432,20 +382,5 @@ class TypePieceJointeStatut
         }
         
         return "Facultatif";
-    }
-    
-    /**
-     * Indique si le seuil d'HETD est dépassé.
-     * 
-     * @param float $totalHETDIntervenant Total d'HETD de l'intervenant à tester
-     * @return boolean
-     */
-    public function isSeuilHETDDepasse($totalHETDIntervenant)
-    {
-        if (!$this->getSeuilHetd()) {
-            return false;
-        }
-        
-        return (float)$this->getSeuilHetd() < (float)$totalHETDIntervenant;
     }
 }

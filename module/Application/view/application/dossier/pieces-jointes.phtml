@@ -1,4 +1,6 @@
-<h2 class="page-header"><?php echo $title ?></h2>
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Pièces justificatives") ?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
 
 <?php
 $messenger = $this->messenger(true);
@@ -14,8 +16,8 @@ echo $messenger;
 <?php $form->prepare(); ?>
 
 <style>
-    input[type=checkbox] { margin-top: 15px; }
-    div.multicheckbox label { display: block; font-weight: normal; width: 250px; text-align: center; }
+    a.modele-doc { margin-left: 20px; }
+    span.text-warning { font-style: italic; }
 </style>
 
 <div class="row">
@@ -43,6 +45,7 @@ echo $messenger;
     </div>
 </div>
 
+<br />
 <?php 
 $message = <<<EOS
 <p><strong>Information importante</strong></p>

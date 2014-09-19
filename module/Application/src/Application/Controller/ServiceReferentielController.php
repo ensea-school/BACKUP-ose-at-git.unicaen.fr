@@ -49,34 +49,41 @@ class ServiceReferentielController extends AbstractActionController implements C
     {
         return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
-
-    public function indexAction()
+    
+    protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique');
-        $service  = $this->getServiceServiceReferentiel();
-        $cp       = $this->getContextProvider();
-        $annee    = $cp->getGlobalContext()->getAnnee();
-        $criteria = array();
-        $services = $service->getFinder($criteria)
-                ->orderBy("i.nomUsuel, s.libelleCourt")
-                ->getQuery()->execute();
-        
-        $listeViewModel = new \Zend\View\Model\ViewModel();
-        $listeViewModel
-                ->setTemplate('application/service-referentiel/voir-liste')
-                ->setVariables(compact('services'));
-        
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel
-                ->setVariables(compact('annee'))
-                ->addChild($listeViewModel, 'serviceListe');
-        
-        return $viewModel;
+        $this->em()->getFilters()->enable('historique')
+                ->disableForEntity('Application\Entity\Db\FonctionReferentiel');
     }
+
+//    public function indexAction()
+//    {
+//        $this->em()->getFilters()->enable('historique');
+//        $service  = $this->getServiceServiceReferentiel();
+//        $cp       = $this->getContextProvider();
+//        $annee    = $cp->getGlobalContext()->getAnnee();
+//        $criteria = array();
+//        $services = $service->getFinder($criteria)
+//                ->orderBy("i.nomUsuel, s.libelleCourt")
+//                ->getQuery()->execute();
+//        
+//        $listeViewModel = new \Zend\View\Model\ViewModel();
+//        $listeViewModel
+//                ->setTemplate('application/service-referentiel/voir-liste')
+//                ->setVariables(compact('services'));
+//        
+//        $viewModel = new \Zend\View\Model\ViewModel();
+//        $viewModel
+//                ->setVariables(compact('annee'))
+//                ->addChild($listeViewModel, 'serviceListe');
+//        
+//        return $viewModel;
+//    }
 
     public function intervenantAction()
     {
-        $this->em()->getFilters()->enable('historique');
+        $this->initFilters();
+        
         $service = $this->getServiceServiceReferentiel();
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
@@ -115,7 +122,8 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function voirListeAction()
     {
-        $this->em()->getFilters()->enable('historique');
+        $this->initFilters();
+        
         $service  = $this->getServiceServiceReferentiel();
         $qb       = $service->getFinder()->orderBy("i.nomUsuel, s.libelleCourt");
         $services = $qb->getQuery()->execute();
@@ -125,7 +133,8 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function voirLigneAction()
     {
-        $this->em()->getFilters()->enable('historique');
+        $this->initFilters();
+        
         $id      = (int)$this->params()->fromRoute('id',0);
         $details = 1 == (int)$this->params()->fromQuery('details',0);
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content',0);

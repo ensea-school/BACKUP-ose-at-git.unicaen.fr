@@ -69,14 +69,14 @@ class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwar
 
         // l'ajout par lot d'agréments de type "Conseil Académique" n'est autorisé qu'aux admin
         if ($privilege === $privilegeAjouterLotConseilAcademique) {
-            if ($this->getSelectedIdentityRole()->getRoleId() !== RoleProvider::ROLE_ID_ADMIN) {
+            if ($this->getSelectedIdentityRole()->getRoleId() !== \Application\Acl\AdministrateurRole::ROLE_ID) {
                 return false;
             }
         }
         // l'ajout par lot d'agréments de type "Conseil Restreint" n'est pas autorisé aux admin pour
         // l'instant car cela nécessiterait la sélection de la composante concernée
         elseif ($privilege === $privilegeAjouterLotConseilRestreint) {
-            if ($this->getSelectedIdentityRole()->getRoleId() === RoleProvider::ROLE_ID_ADMIN) {
+            if ($this->getSelectedIdentityRole()->getRoleId() === \Application\Acl\AdministrateurRole::ROLE_ID) {
                 return false;
             }
         }

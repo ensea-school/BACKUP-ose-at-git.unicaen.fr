@@ -79,7 +79,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 }else{
                     $this->roles[$roleId] = new $classname($roleId);
                 }
-           }
+            }
         }
         return $this->roles;
     }

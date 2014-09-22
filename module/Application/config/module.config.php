@@ -17,6 +17,8 @@ use Application\Acl\SuperviseurEtablissementRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
+use Application\Acl\FoadRole;
+use Application\Acl\ResponsableFoadRole;
 
 $main =  array(
     'doctrine' => array(
@@ -166,6 +168,9 @@ $main =  array(
 
                 'Application\\Acl\\EtablissementRole',
                     'Application\\Acl\\SuperviseurEtablissementRole',
+
+                'Application\\Acl\\FoadRole',
+                    'Application\\Acl\\ResponsableFoadRole',
 
                 'Application\\Acl\\IntervenantRole',
                     'Application\\Acl\\IntervenantExterieurRole',

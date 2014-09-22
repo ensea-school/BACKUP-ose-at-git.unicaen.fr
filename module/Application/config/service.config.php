@@ -17,6 +17,8 @@ use Application\Acl\SuperviseurEtablissementRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
+use Application\Acl\FoadRole;
+use Application\Acl\ResponsableFoadRole;
 
 
 return array(

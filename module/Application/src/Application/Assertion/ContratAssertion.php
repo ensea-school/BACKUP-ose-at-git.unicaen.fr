@@ -2,7 +2,7 @@
 
 namespace Application\Assertion;
 
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Contrat;
 use Application\Service\Workflow\WorkflowIntervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -66,7 +66,7 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof ComposanteDbRole) 
+        if ($this->getSelectedIdentityRole() instanceof ComposanteRole) 
         {
             // structure de responsabilité de l'utilisateur et structure du contrat doivent correspondre
             if ($this->getSelectedIdentityRole()->getStructure() !== $this->contrat->getStructure()) {

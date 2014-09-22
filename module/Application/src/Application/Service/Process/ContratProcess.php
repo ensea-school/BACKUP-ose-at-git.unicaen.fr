@@ -2,7 +2,7 @@
 
 namespace Application\Service\Process;
 
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\TypeValidation;
 use Application\Rule\Intervenant\PeutCreerAvenantRule;
@@ -348,7 +348,7 @@ class ContratProcess extends AbstractService
     {
         if (null === $this->structure) {
             $role = $this->getContextProvider()->getSelectedIdentityRole();
-            if (!$role instanceof ComposanteDbRole) {
+            if (!$role instanceof ComposanteRole) {
                 throw new LogicException("Rôle courant inattendu.");
             }
             $this->structure = $role->getStructure();

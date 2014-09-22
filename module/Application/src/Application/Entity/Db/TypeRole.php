@@ -44,7 +44,7 @@ class TypeRole implements HistoriqueAwareInterface, RoleInterface
     protected $role;
 
     /**
-     * 
+     *
      */
     public function __construct()
     {

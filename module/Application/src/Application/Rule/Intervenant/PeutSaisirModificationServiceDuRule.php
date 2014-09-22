@@ -4,7 +4,7 @@ namespace Application\Rule\Intervenant;
 
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Entity\Db\Intervenant;
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 
 /**
  * Description of PeutSaisirModificationServiceDuRule
@@ -33,7 +33,7 @@ class PeutSaisirModificationServiceDuRule extends IntervenantRule
             return false;
         }
         
-        if ($this->getRole() instanceof ComposanteDbRole) {
+        if ($this->getRole() instanceof ComposanteRole) {
             $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getRole()->getStructure());
             if (!$estAffecte->execute()) {
                 $this->setMessage(sprintf("%s %s étant votre structure de responsabilité.", $estAffecte->getMessage(), $this->getRole()->getStructure()));

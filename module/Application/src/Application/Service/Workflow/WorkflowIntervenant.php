@@ -2,7 +2,7 @@
 
 namespace Application\Service\Workflow;
 
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeValidation;
@@ -225,7 +225,7 @@ class WorkflowIntervenant extends AbstractWorkflow
      */
     protected function getStructure()
     {
-        if ($this->getRole() instanceof ComposanteDbRole) {
+        if ($this->getRole() instanceof ComposanteRole) {
             return $this->getRole()->getStructure();
         }
         

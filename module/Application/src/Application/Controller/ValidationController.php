@@ -4,7 +4,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Structure;
 use Application\Service\ContextProviderAwareInterface;
@@ -143,7 +143,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof ComposanteDbRole) {
+        if ($role instanceof ComposanteRole) {
             return $this->modifierDossierAction();
         }
         else {
@@ -218,7 +218,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         if (!$this->validation) {
             $this->validation = $serviceValidation->newEntity($typeValidation);
             $this->validation->setIntervenant($this->intervenant);
-            if ($role instanceof ComposanteDbRole) {
+            if ($role instanceof ComposanteRole) {
                 $this->validation->setStructure($role->getStructure());
             }
         }
@@ -247,7 +247,7 @@ class ValidationController extends AbstractActionController implements ContextPr
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof ComposanteDbRole) {
+        if ($role instanceof ComposanteRole) {
             return $this->modifierServiceAction();
         }
         else {
@@ -487,7 +487,7 @@ class ValidationController extends AbstractActionController implements ContextPr
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof ComposanteDbRole) {
+        if ($role instanceof ComposanteRole) {
             return $this->modifierContratAction();
         }
         else {

@@ -6,7 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Listener\DossierListener;
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
@@ -181,7 +181,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     { 
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof ComposanteDbRole) {
+        if ($role instanceof ComposanteRole) {
             return $this->modifierPiecesJointesAction();
         }
         else {

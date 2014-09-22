@@ -304,7 +304,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             }
             $out .= '<td>'.$this->renderEtape($this->service->getElementPedagogique()->getEtape())."</td>\n";
             $out .= '<td>'.$this->getView()->elementPedagogique($this->service->getElementPedagogique())->renderLink()."</td>\n";
-            if ($role instanceof \Application\Acl\ComposanteDbRole) {
+            if ($role instanceof \Application\Acl\ComposanteRole) {
                 $out .= '<td>'.$this->renderFOAD($this->service->getElementPedagogique())."</td>\n";
                 $out .= '<td>'.$this->renderRegimeInscription($this->service->getElementPedagogique())."</td>\n";
             }
@@ -313,7 +313,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             if ($this->mustRenderStructure()){
                 $colspan++;
             }
-            if ($role instanceof \Application\Acl\ComposanteDbRole) {
+            if ($role instanceof \Application\Acl\ComposanteRole) {
                 $colspan += 2;
             }
             $out .= '<td colspan="'.$colspan.'">'.$this->renderEtablissement( $this->service->getEtablissement() )."</td>\n";

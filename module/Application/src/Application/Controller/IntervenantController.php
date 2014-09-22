@@ -7,6 +7,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\IntervenantExterieur;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -144,20 +145,42 @@ class IntervenantController extends AbstractActionController implements ContextP
             $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
         
+        // fetch avec jointures
+        $entityClass = $intervenant instanceof IntervenantExterieur ? 
+                'Application\Entity\Db\IntervenantExterieur' : 
+                'Application\Entity\Db\IntervenantPermanent';
+        $qb = $this->em()->getRepository($entityClass)->createQueryBuilder("i")
+                ->addSelect("ti, si, c, src, a, aff, affr, d")
+                ->join("i.type", "ti")
+                ->join("i.statut", "si")
+                ->join("i.civilite", "c")
+                ->join("i.source", "src")
+                ->leftJoin("i.adresse", "a")
+                ->leftJoin("i.structure", "aff")
+                ->leftJoin("i.affectation", "affr")
+                ->leftJoin("i.discipline", "d")
+                ->where("i = :intervenant")->setParameter('intervenant', $intervenant);
+        if ($intervenant instanceof IntervenantExterieur) {
+            $qb
+                    ->addSelect("sf, rs, tp")
+                    ->leftJoin("i.situationFamiliale", "sf")
+                    ->leftJoin("i.regimeSecu", "rs")
+                    ->leftJoin("i.typePoste", "tp");
+        }
+        else {
+            $qb
+                    ->addSelect("co")
+                    ->leftJoin("i.corps", "co");
+        }
+        $intervenant = $qb->getQuery()->getSingleResult();
+        
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->intervenantGetDifferentiel($intervenant);
-        $title = "Détails d'un intervenant";
         $short = $this->params()->fromQuery('short', false);
 
         $view = new \Zend\View\Model\ViewModel();
-//        if ('services' == $page){
-//            $params = $this->getEvent()->getRouteMatch()->getParams();
-//            $params['action'] = 'intervenant';
-//            $params['intervenant'] = $intervenant->getSourceCode();
-//            $servicesViewModel = $this->forward()->dispatch('Application\Controller\Service', $params);
-//            $view->addChild($servicesViewModel, 'services');
-//        }
-        $view->setVariables(compact('intervenant', 'changements', 'title', 'short', 'page', 'role'));
+        $view->setVariables(compact('intervenant', 'changements', 'short', 'page', 'role'));
+        
         return $view;
     }
 

@@ -50,6 +50,10 @@ body.development div#contenu-principal {
     background-color:white;
 }
 
+body.development div#navbar div.collapse pre {
+    display: none;
+}
+
 table {
     background-color:white;
 }

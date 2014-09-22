@@ -119,11 +119,10 @@ return array(
                     'route' => '/service-referentiel',
                     'defaults' => array(
                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'ServiceReferentiel',
-                        'action'        => 'index',
+                        'controller'   => 'ServiceReferentiel',
                     ),
                 ),
-                'may_terminate' => true,
+                'may_terminate' => FALSE,
                 'child_routes' => array(
                     'modifier' => array(
                         'type'    => 'Segment',

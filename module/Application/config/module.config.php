@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Acl\Role;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\DirecteurComposanteRole;
@@ -153,6 +154,8 @@ $main =  array(
     'bjyauthorize' => array(
         'role_providers' => array(
             'ApplicationRoleProvider' => [
+                'Application\\Acl\\Role',
+
                 'Application\\Acl\\AdministrateurRole',
 
                 'Application\\Acl\\ComposanteRole',

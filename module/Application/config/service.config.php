@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Acl\Role;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\DirecteurComposanteRole;
@@ -96,17 +97,16 @@ return array(
                                 'intervenant'     => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action' => 'intervenant',
+                                'action' => 'index',
                             ),
                         ),
                     ),
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:action[/:id]',
+                            'route'    => '/:action',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'index',
@@ -193,22 +193,24 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'action' => array('index', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID, DrhRole::ROLE_ID, EtablissementRole::ROLE_ID, FoadRole::ROLE_ID),
                 ), array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('index', 'resume','resume-refresh','filtres'),
-                    'roles' => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID)
+                    'action' => array('resume','resume-refresh','filtres'),
+                    'roles' => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID, DrhRole::ROLE_ID, EtablissementRole::ROLE_ID, FoadRole::ROLE_ID)
                 ), array(
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID)
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID, DrhRole::ROLE_ID, EtablissementRole::ROLE_ID, FoadRole::ROLE_ID)
                 ),
             ),
         ),
         'resource_providers' => array(
             'BjyAuthorize\Provider\Resource\Config' => array(
                 'Service' => array(),
+                'ServiceListView' => array(),
+                'ServiceController' => [],
             ),
         ),
         'rule_providers' => array(
@@ -218,6 +220,24 @@ return array(
                         array(ComposanteRole::ROLE_ID, IntervenantRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                         'Service',
                         array('create', 'read', 'delete', 'update'),
+                        'ServiceAssertion',
+                    ),
+                    array(
+                        array(AdministrateurRole::ROLE_ID, ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, FoadRole::ROLE_ID, EtablissementRole::ROLE_ID),
+                        'ServiceController',
+                        array('show-filtres'),
+                        'ServiceAssertion',
+                    ),
+                    array(
+                        array(ComposanteRole::ROLE_ID),
+                        'ServiceListView',
+                        array('info-only-structure'),
+                        'ServiceAssertion',
+                    ),
+                    array(
+                        array(IntervenantRole::ROLE_ID),
+                        'ServiceListView',
+                        array('aide-intervenant'),
                         'ServiceAssertion',
                     ),
                 ),

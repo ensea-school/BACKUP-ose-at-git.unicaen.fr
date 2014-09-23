@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Acl\Role;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\DirecteurComposanteRole;

@@ -13,14 +13,14 @@ use Application\Traits\StructureAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantRole extends NamedRole implements StructureAwareInterface, IntervenantAwareInterface
+class IntervenantRole extends Role implements StructureAwareInterface, IntervenantAwareInterface
 {
     use StructureAwareTrait;
     use IntervenantAwareTrait;
 
     const ROLE_ID = "intervenant";
 
-    public function __construct($id = self::ROLE_ID, $parent = 'user', $name = 'Intervenant', $description = null, $selectable = true)
+    public function __construct($id = self::ROLE_ID, $parent = Role::ROLE_ID, $name = 'Intervenant', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
     }

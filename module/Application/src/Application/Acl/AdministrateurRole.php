@@ -11,13 +11,13 @@ use Application\Traits\PersonnelAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class AdministrateurRole extends NamedRole implements PersonnelAwareInterface
+class AdministrateurRole extends Role implements PersonnelAwareInterface
 {
     use PersonnelAwareTrait;
 
     const ROLE_ID = 'administrateur';
 
-    public function __construct($id = self::ROLE_ID, $parent = 'user', $name = 'Administrateur', $description = null, $selectable = true)
+    public function __construct($id = self::ROLE_ID, $parent = Role::ROLE_ID, $name = 'Administrateur', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
     }

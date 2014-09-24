@@ -119,7 +119,7 @@ class PieceJointeAssertion extends AbstractAssertion implements WorkflowInterven
         /*********************************************************
          *                   Rôle Composante
          *********************************************************/
-//        if ($role instanceof ComposanteDbRole) {
+//        if ($role instanceof ComposanteRole) {
 //            
 //        }
 

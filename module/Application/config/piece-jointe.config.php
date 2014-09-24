@@ -7,6 +7,7 @@ use Application\Assertion\PieceJointeAssertion;
 use Application\Entity\Db\Fichier;
 use Application\Assertion\FichierAssertion;
 use Application\Acl\ComposanteRole;
+use Application\Acl\AdministrateurRole;
 use Application\Acl\IntervenantExterieurRole;
 
 return array(
@@ -181,13 +182,13 @@ return array(
                 array(
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => array('index', 'ajouter', 'supprimer', 'voir', 'voir-type', 'lister', 'telecharger', 'status'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, 'Administrateur'),
+                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                     'assertion'  => 'PieceJointeAssertion',
                 ),
                 array(
                     'controller' => 'Application\Controller\PieceJointe',
                     'action'     => array('valider', 'devalider'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, 'Administrateur'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                     'assertion'  => 'PieceJointeAssertion',
                 ),
             ),
@@ -208,7 +209,7 @@ return array(
                         array(
                             IntervenantExterieurRole::ROLE_ID, 
                             ComposanteRole::ROLE_ID, 
-                            'Administrateur',
+                            AdministrateurRole::ROLE_ID,
                         ), 
                         PieceJointe::RESOURCE_ID, 
                         array(
@@ -222,7 +223,7 @@ return array(
                     array(
                         array(
                             ComposanteRole::ROLE_ID, 
-                            'Administrateur',
+                            AdministrateurRole::ROLE_ID,
                         ), 
                         PieceJointe::RESOURCE_ID, 
                         array(
@@ -238,7 +239,7 @@ return array(
                         array(
                             IntervenantExterieurRole::ROLE_ID, 
                             ComposanteRole::ROLE_ID, 
-                            'Administrateur',
+                            AdministrateurRole::ROLE_ID,
                         ), 
                         Fichier::RESOURCE_ID, 
                         array(
@@ -252,7 +253,7 @@ return array(
                     array(
                         array(
                             ComposanteRole::ROLE_ID, 
-                            'Administrateur',
+                            AdministrateurRole::ROLE_ID,
                         ), 
                         Fichier::RESOURCE_ID, 
                         array(

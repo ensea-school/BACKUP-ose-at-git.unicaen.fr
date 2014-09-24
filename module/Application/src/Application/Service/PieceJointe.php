@@ -13,7 +13,7 @@ use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Assertion\PieceJointeAssertion;
 use Application\Assertion\FichierAssertion;
 use BjyAuthorize\Exception\UnAuthorizedException;
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 
 /**
  * Description of PieceJointe
@@ -178,7 +178,7 @@ class PieceJointe extends AbstractEntityService
         $serviceValidation     = $this->getServiceLocator()->get('ApplicationValidation');
         $serviceTypeValidation = $this->getServiceLocator()->get('ApplicationTypeValidation');
         
-        if ($role instanceof ComposanteDbRole) {
+        if ($role instanceof ComposanteRole) {
             $structure = $role->getStructure();
         }
         else {
@@ -251,7 +251,7 @@ class PieceJointe extends AbstractEntityService
         $serviceValidation     = $this->getServiceLocator()->get('ApplicationValidation');
         $serviceTypeValidation = $this->getServiceLocator()->get('ApplicationTypeValidation');
         
-        if ($role instanceof ComposanteDbRole) {
+        if ($role instanceof ComposanteRole) {
             $structure = $role->getStructure();
         }
         else {

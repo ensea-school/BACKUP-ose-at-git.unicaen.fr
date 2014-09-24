@@ -181,7 +181,7 @@ class DossierController extends AbstractActionController implements ContextProvi
 //    { 
 //        $role = $this->getContextProvider()->getSelectedIdentityRole();
 //        
-//        if ($role instanceof ComposanteDbRole) {
+//        if ($role instanceof ComposanteRole) {
 //            return $this->modifierPiecesJointesAction();
 //        }
 //        else {

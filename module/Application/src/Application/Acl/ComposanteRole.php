@@ -13,14 +13,14 @@ use Application\Traits\PersonnelAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ComposanteRole extends NamedRole implements StructureAwareInterface, PersonnelAwareInterface
+class ComposanteRole extends Role implements StructureAwareInterface, PersonnelAwareInterface
 {
     use StructureAwareTrait;
     use PersonnelAwareTrait;
 
     const ROLE_ID = 'composante';
 
-    public function __construct($id = self::ROLE_ID, $parent = 'user', $name = 'Composante', $description = null, $selectable = true)
+    public function __construct($id = self::ROLE_ID, $parent = Role::ROLE_ID, $name = 'Composante', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
     }

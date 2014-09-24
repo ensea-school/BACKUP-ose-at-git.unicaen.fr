@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Acl\Role;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\DirecteurComposanteRole;
@@ -132,7 +133,7 @@ return array(
                             ),
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
-                                'action' => 'intervenant',
+                                'action' => 'index',
                             ),
                         ),
                     ),
@@ -274,7 +275,7 @@ return array(
                                     'intervenant',
                                 ),
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Service:intervenant',
+                                'resource' => 'controller/Application\Controller\Service:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'pieces-jointes' => array(

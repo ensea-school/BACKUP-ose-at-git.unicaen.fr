@@ -98,10 +98,6 @@ class Structure extends AbstractEntityService
         //$f = new Func('OSE_DIVERS.STRUCTURE_DANS_STRUCTURE', array("$alias.id", ":structure_cible"));
 
         $qb->andWhere( $alias.'.structureNiv2 = :structure_cible')->setParameter('structure_cible', $structure->getParenteNiv2()->getId());
-        //$qb->andWhere( "OSE_DIVERS.STRUCTURE_DANS_STRUCTURE($alias.id, :structure_cible) = 1")->setParameter('structure_cible', $structure->getParenteNiv2()->getId());
-        //$qb->andWhere($qb->expr()->eq($f, 1));
-        //$qb->setParameter('structure_cible', $structure->getParenteNiv2()->getId());
-        //$this->join( $this, $qb, 'id', 'structureNiv2', $this->getAlias(), 'strniv2' );
 
         return $qb;
     }
@@ -147,13 +143,7 @@ class Structure extends AbstractEntityService
     public function finderByEnseignement(QueryBuilder $qb=null, $alias=null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-
-        /* recherche par éléments trouvés ou non */
-        $serviceElementPedagogique = $this->getServiceLocator()->get('ApplicationElementPedagogique');
-        $this->join( $this, $qb, 'id', 'structureNiv2', $this->getAlias(), 'strniv2' );
-        $this->join( $serviceElementPedagogique, $qb, 'id', 'structure', 'strniv2' );
-
-        $qb->distinct();
+        $qb->andWhere( 'EXISTS (SELECT ep FROM Application\Entity\Db\ElementPedagogique ep WHERE ep.structure = '.$alias.')');
         return $qb;
     }
 

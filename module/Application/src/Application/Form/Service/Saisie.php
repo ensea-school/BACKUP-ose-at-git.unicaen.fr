@@ -34,7 +34,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
     {
         $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
         /* @var $servicePeriode \Application\Service\Periode */
-        $periodes = $servicePeriode->getList( $servicePeriode->finderByEnseignement() );
+        $periodes = $servicePeriode->getEnseignement();
         return $periodes;
     }
 

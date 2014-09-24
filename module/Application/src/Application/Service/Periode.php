@@ -12,6 +12,15 @@ use Doctrine\ORM\QueryBuilder;
  */
 class Periode extends AbstractEntityService
 {
+    /**
+     * Périodes d'enseignement
+     *
+     * @var \Application\Entity\Db\Periode[]
+     */
+    protected $enseignement;
+
+
+
 
     /**
      * retourne la classe des entités
@@ -57,6 +66,19 @@ class Periode extends AbstractEntityService
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->orderBy("$alias.ordre");
         return parent::getList($qb, $alias);
+    }
+
+    /**
+     * Retourne la liste dezs périodes d'enseignement
+     *
+     * @return \Application\Entity\Db\Periode[]
+     */
+    public function getEnseignement()
+    {
+        if (! $this->enseignement){
+            $this->enseignement = $this->getList( $this->finderByEnseignement() );
+        }
+        return $this->enseignement;
     }
 
     /**

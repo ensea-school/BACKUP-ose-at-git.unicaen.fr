@@ -82,6 +82,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $typesIntervention = $this->getTypesIntervention();
         $totaux = array(
             'intervenants'          => 0,
+            'heures'                => 0,
             'types_intervention'    => [],
             'referentiel'           => 0,
             'hetd'                  => 0,
@@ -139,6 +140,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
                 }
                 if (isset($line['service'][$ti->getId()])){
                     $totaux['types_intervention'][$ti->getId()] += $line['service'][$ti->getId()];
+                    $totaux['heures'] += $line['service'][$ti->getId()];
                     $res .= '<td>'.$this->formatHeures($line['service'][$ti->getId()]).'</td>'."\n";
                 }else{
                     $res .= '<td>0</td>'."\n";
@@ -157,13 +159,16 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</tbody>'."\n";
         $res .= '<tfoot>'."\n";
         $res .= '<tr>'."\n";
-        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['intervenants']).' intervenants</th>'."\n";
+        $res .= '<th rowspan="2" style="text-align:right">'.$this->formatHeures($totaux['intervenants']).' intervenants</th>'."\n";
         foreach( $typesIntervention as $ti ){
             $heures = isset($totaux['types_intervention'][$ti->getId()]) ? $totaux['types_intervention'][$ti->getId()] : 0;
             $res .= '        <th style="text-align:right"><abbr title="'.$ti->getLibelle().'">'.$this->formatHeures($heures).'</abbr></th>'."\n";
         }
-        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['referentiel']).'</th>'."\n";
-        $res .= '<th style="text-align:right">'.$this->formatHeures($totaux['hetd']).'</th>'."\n";
+        $res .= '<th rowspan="2" style="text-align:right">'.$this->formatHeures($totaux['referentiel']).'</th>'."\n";
+        $res .= '<th rowspan="2" style="text-align:right">'.$this->formatHeures($totaux['hetd']).'</th>'."\n";
+        $res .= '</tr>'."\n";
+        $res .= '<tr>'."\n";
+        $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right">Total des heures de service : '.$this->formatHeures($totaux['heures']).'</th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '</tfoot>'."\n";
         $res .= '</table>'."\n";

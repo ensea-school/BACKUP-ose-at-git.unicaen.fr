@@ -27,7 +27,7 @@ class SaisieHydrator implements HydratorInterface, EntityManagerAwareInterface, 
     {
         $servicePeriode = $this->getServiceLocator()->get('applicationPeriode');
         /* @var $servicePeriode \Application\Service\Periode */
-        $periodes = $servicePeriode->getList( $servicePeriode->finderByEnseignement() );
+        $periodes = $servicePeriode->getEnseignement();
         return $periodes;
     }
 

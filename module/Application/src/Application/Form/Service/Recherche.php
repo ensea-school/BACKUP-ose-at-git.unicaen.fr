@@ -35,14 +35,23 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
      */
     public function init()
     {
+        $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
+        /* @var $url Zend\View\Helper\Url */
+
+        $resumeUrl = $url('service/resume');
+        $resumeDetailsUrl = $url('service/default', ['action' => 'index']);
+
+        $formId = uniqid();
+
         $this   ->setAttribute('method', 'get')
-                ->setAttribute('class', 'service-recherche');
+                ->setAttribute('class', 'service-recherche')
+                ->setAttribute('id', $formId);
 
         $intervenantUrl = $this->getUrlPlugin()->fromRoute(
                 'recherche', 
                 array('action' => 'intervenantFind'),
                 array('query' => array('having-services' => 1)));
-        
+
         $intervenant = new \UnicaenApp\Form\Element\SearchAndSelect('intervenant');
         $intervenant
                 ->setAutocompleteSource($intervenantUrl)
@@ -78,12 +87,28 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         /**
          * Submit
          */
-        $this->add(array(
-            'name' => 'submit',
-            'type'  => 'Submit',
-            'attributes' => array(
-                'value' => 'Afficher',
+        $this->add([
+            'name' => 'submit-resume',
+            'type'  => 'Button',
+            'options' => ['label' => 'Afficher (résumé)'],
+            'attributes' => [
+                'type' => 'submit',
                 'class' => 'btn btn-primary',
+                'onclick' => '$("#'.$formId.'").attr("action", "'.$resumeUrl.'");',
+            ],
+        ]);
+
+        /**
+         * Submit
+         */
+        $this->add(array(
+            'name' => 'submit-details',
+            'type'  => 'Button',
+            'options' => ['label' => 'Afficher (détails)'],
+            'attributes' => array(
+                'type' => 'submit',
+                'class' => 'btn btn-default',
+                'onclick' => '$("#'.$formId.'").attr("action", "'.$resumeDetailsUrl.'");',
             ),
         ));
     }
@@ -108,28 +133,28 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
     {
         $sl = $this->getServiceLocator()->getServiceLocator();
 
-        $elementPedagogique = $sl->get('ApplicationElementPedagogique');
-        $etape              = $sl->get('ApplicationEtape');
-        $structure          = $sl->get('ApplicationStructure');
-        $service            = $sl->get('ApplicationService');
+        $elementPedagogique = $sl->get('ApplicationElementPedagogique'); /* @var $elementPedagogique \Application\Service\ElementPedagogique */
+        $etape              = $sl->get('ApplicationEtape');              /* @var $etape \Application\Service\Etape */
+        $structure          = $sl->get('ApplicationStructure');          /* @var $structure \Application\Service\Structure */
+        $service            = $sl->get('ApplicationService');            /* @var $service \Application\Service\Service */
 
         $qb = $elementPedagogique->initQuery()[0];
-        $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );
+        $elementPedagogique->join( $service, $qb, 'service' );
         $service->finderByContext( $qb );
         $this->get('element-pedagogique')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
                                                             array( '' => '(Tous)') + $elementPedagogique->getList($qb))
                                                   );
 
         $qb = $structure->initQuery()[0];
-        $structure->join( $service, $qb, 'id', 'structureEns' );
+        $structure->join( $service, $qb, 'service' );
         $service->finderByContext( $qb );
         $this->get('structure-ens')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
                                                             array( '' => '(Toutes)') + $structure->getList($qb))
                                                     );
 
         $qb = $etape->initQuery()[0];
-        $etape->join( $elementPedagogique, $qb, 'id', 'etape' );
-        $elementPedagogique->join( $service, $qb, 'id', 'elementPedagogique' );
+        $etape->join( $elementPedagogique, $qb, 'elementPedagogique' );
+        $elementPedagogique->join( $service, $qb, 'service' );
         $service->finderByContext( $qb );
         $this->get('etape')->setValueOptions( \UnicaenApp\Util::collectionAsOptions(
                                                             array( '' => '(Tous)') + $etape->getList($qb))
@@ -174,10 +199,8 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         if (is_object($data)){ // Si l'objet est bindé, alors il faut l'extraire avec l'hydrateur
             $data = $this->getHydrator()->extract($data);
         }
-        if ($data['submit']){
-            $session = $this->getSessionContainer();
-            $session->data = $data;
-        }
+        $session = $this->getSessionContainer();
+        $session->data = $data;        
         return $this;
     }
 

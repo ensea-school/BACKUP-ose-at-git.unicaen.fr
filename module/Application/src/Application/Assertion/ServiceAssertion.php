@@ -59,7 +59,9 @@ class ServiceAssertion extends AbstractAssertion
         $intervenant            = $resource->getIntervenant();
         $serviceStructure       = $resource->getStructureEns();
         if (! $serviceStructure && $resource->getElementPedagogique()) $serviceStructure = $resource->getElementPedagogique()->getStructure();
-        $intervenantStructure   = $resource->getStructureAff() ?: $resource->getIntervenant()->getStructure();
+        if ($intervenant){
+            $intervenantStructure = $resource->getStructureAff() ?: $resource->getIntervenant()->getStructure();
+        }
         
         /*********************************************************
          *                      Rôle intervenant
@@ -92,6 +94,8 @@ class ServiceAssertion extends AbstractAssertion
                         return true;
                     }
                 }
+            }elseif('create' == $privilege){
+                return true;
             }
         }
 

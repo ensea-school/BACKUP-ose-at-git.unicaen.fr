@@ -248,10 +248,15 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     {
         if (! $this->typesIntervention){
             if ($this->getVolumeHoraireListe()->getService()->getElementPedagogique()){
-                $this->typesIntervention = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
+                $tis = $this->getVolumeHoraireListe()->getService()->getElementPedagogique()->getTypeIntervention();
             }else{
-                $this->typesIntervention = $this->getServiceTypeIntervention()->getList();
+                $tis = $this->getServiceTypeIntervention()->getList();
             }
+            $this->typesIntervention = [];
+            foreach( $tis as $ti ){
+                $this->typesIntervention[] = $ti;
+            }
+            uasort( $this->typesIntervention, function($a,$b){ return $a->getordre() > $b->getOrdre(); });
         }
         return $this->typesIntervention;
     }

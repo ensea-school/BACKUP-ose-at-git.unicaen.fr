@@ -2,25 +2,6 @@
 
 namespace Application;
 
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\DirecteurComposanteRole;
-use Application\Acl\GestionnaireComposanteRole;
-use Application\Acl\ResponsableComposanteRole;
-use Application\Acl\SuperviseurComposanteRole;
-use Application\Acl\ResponsableRechercheLaboRole;
-use Application\Acl\DrhRole;
-use Application\Acl\GestionnaireDrhRole;
-use Application\Acl\ResponsableDrhRole;
-use Application\Acl\EtablissementRole;
-use Application\Acl\SuperviseurEtablissementRole;
-use Application\Acl\IntervenantRole;
-use Application\Acl\IntervenantPermanentRole;
-use Application\Acl\IntervenantExterieurRole;
-use Application\Acl\FoadRole;
-use Application\Acl\ResponsableFoadRole;
-
-
 return array(
     'router' => array(
         'routes' => array(
@@ -96,7 +77,7 @@ return array(
                                 'intervenant'     => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action' => 'intervenant',
+                                'action' => 'index',
                             ),
                         ),
                     ),
@@ -106,10 +87,10 @@ return array(
                             'route'    => '/:action[/:id]',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'index',
+                                'id'     => '[0-9]*',
                             ),
                         ),
                     ),
@@ -193,31 +174,51 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('intervenant', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'action' => array('index', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
+                    'roles' => [R_ROLE],
                 ), array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('index', 'resume','resume-refresh','filtres'),
-                    'roles' => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID)
+                    'action' => array('resume','resume-refresh','filtres'),
+                    'roles' => [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD]
                 ), array(
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID)
+                    'roles' => [R_ROLE],
                 ),
             ),
         ),
         'resource_providers' => array(
             'BjyAuthorize\Provider\Resource\Config' => array(
                 'Service' => array(),
+                'ServiceListView' => array(),
+                'ServiceController' => [],
             ),
         ),
         'rule_providers' => array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
                     array(
-                        array(ComposanteRole::ROLE_ID, IntervenantRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                        [R_ROLE],
                         'Service',
                         array('create', 'read', 'delete', 'update'),
+                        'ServiceAssertion',
+                    ),
+                    array(
+                        [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD],
+                        'ServiceController',
+                        array('show-multiples-intervenants'),
+                        'ServiceAssertion',
+                    ),
+                    array(
+                        [R_COMPOSANTE],
+                        'ServiceListView',
+                        array('info-only-structure'),
+                        'ServiceAssertion',
+                    ),
+                    array(
+                        [R_INTERVENANT],
+                        'ServiceListView',
+                        array('aide-intervenant'),
                         'ServiceAssertion',
                     ),
                 ),

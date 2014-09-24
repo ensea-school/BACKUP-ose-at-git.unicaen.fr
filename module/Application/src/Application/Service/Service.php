@@ -101,36 +101,41 @@ class Service extends AbstractEntityService
      */
     public function finderByEtape( EtapeEntity $etape, QueryBuilder $qb=null, $alias=null )
     {
+        $serviceElement = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceElement Element */
+
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->join('Application\Entity\Db\ElementPedagogique', 'ep', \Doctrine\ORM\Query\Expr\Join::WITH, 'ep.id = s.elementPedagogique');
-        $qb->andWhere('ep.etape = :etape')->setParameter('etape', $etape);
+        $this->leftJoin( $serviceElement, $qb, 'elementPedagogique');
+        $serviceElement->finderByEtape($etape, $qb);
         return $qb;
     }
 
     /**
      * Retourne le query builder permettant de rechercher les services prévisionnels
-     * selon la structure de responsabilité spécifiée. 
+     * selon la composante spécifiée.
      * 
      * Càd les services prévisionnels satisfaisant au moins l'un des critères suivants :
-     * - la structure d'enseignement (champ 'structure_ens') est la structure spécifiée OU l'une de ses filles ;
-     * - la structure d'affectation (champ 'structure_aff')  est la structure spécifiée OU l'une de ses filles ;
+     * - la structure d'enseignement (champ 'structure_ens') est la structure spécifiée;
+     * - la structure d'affectation (champ 'structure_aff')  est la structure spécifiée;
      *
      * @param StructureEntity $structure
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByStructureResp(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    public function finderByComposante(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $filter = "(si.structureNiv2 = :structure OR NOT (sa.structureNiv2 <> :structure AND se.structureNiv2 <> :structure))";
-        $qb
-                ->leftJoin("$alias.structureEns", 'se')
-                ->leftJoin("$alias.structureAff", 'sa')
-                ->leftJoin("$alias.intervenant", 'i')
-                ->leftJoin("i.structure", 'si')
-                ->andWhere($filter)
-                ->setParameter('structure', $structure->getParenteNiv2());
+        $serviceStructure   = $this->getServiceStructure();
+        $serviceIntervenant = $this->getServiceIntervenant();
+        $iAlias             = $serviceIntervenant->getAlias();
+
+        $this->join( $serviceIntervenant, $qb, 'intervenant' );
+        $this->join( $serviceStructure, $qb, 'structureAff', 's_aff' );
+        $this->leftJoin( $serviceStructure, $qb, 'structureEns', 's_ens' );
+
+        $filter = "($iAlias.structure = :composante OR s_aff = :composante OR s_ens = :composante)";
+        $qb->andWhere($filter)->setParameter('composante', $structure);
+
         return $qb;
     }
 
@@ -147,17 +152,13 @@ class Service extends AbstractEntityService
         $role    = $this->getContextProvider()->getSelectedIdentityRole();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        
+
         $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
-        
+
         if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
             $this->finderByIntervenant( $context->getIntervenant(), $qb, $alias );
         }
-        elseif ($role instanceof \Application\Acl\ComposanteRole){ // Si c'est un RA
-//            $this->finderByStructureEns( $role->getStructure(), $qb, $alias );
-//            $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
-        }
-        
+
         return $qb;
     }
 
@@ -346,9 +347,6 @@ class Service extends AbstractEntityService
         if ($structureEns) {
             $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
         }
-        
-//        print_r($qb->getQuery()->getSQL());
-        
         return $qb;
     }
 
@@ -571,7 +569,7 @@ EOS;
         if (null === $p){
             $periodeService = $this->getServiceLocator()->get('applicationPeriode'); /* @var $periodeService Periode */
             // Pas de période donc toutes les périodes sont autorisées
-            return $periodeService->getList( $periodeService->finderByEnseignement() );
+            return $periodeService->getEnseignement();
         }else{
             return [$p->getId() => $p];
         }
@@ -660,5 +658,21 @@ EOS;
         foreach( $services as $service ){
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
         }
+    }
+
+    /**
+     * @return Structure
+     */
+    protected function getServiceStructure()
+    {
+        return $this->getServiceLocator()->get('applicationStructure');
+    }
+
+    /**
+     * @return Intervenant
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->get('applicationIntervenant');
     }
 }

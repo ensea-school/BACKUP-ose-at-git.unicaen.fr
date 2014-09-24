@@ -76,6 +76,10 @@ table.service td.actions {
     text-align:center;
 }
 
+table.service tfoot td.type-intervention{
+    white-space: nowrap;
+}
+
 table.service td.actions a {
     margin-left: 0.2em;
     margin-right:0.2em;

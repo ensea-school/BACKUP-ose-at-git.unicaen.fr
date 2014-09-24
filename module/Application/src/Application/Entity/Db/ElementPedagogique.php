@@ -108,6 +108,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     protected $cheminPedagogique;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $service;
+
+    /**
      * @var \Application\Entity\Db\Structure
      */
     protected $structure;
@@ -703,6 +708,39 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getElementModulateur()
     {
         return $this->elementModulateur;
+    }
+
+    /**
+     * Add service
+     *
+     * @param \Application\Entity\Db\Service $service
+     * @return Service
+     */
+    public function addService(\Application\Entity\Db\Service $service)
+    {
+        $this->service[] = $service;
+
+        return $this;
+    }
+
+    /**
+     * Remove service
+     *
+     * @param \Application\Entity\Db\Service $service
+     */
+    public function removeService(\Application\Entity\Db\Service $service)
+    {
+        $this->service->removeElement($service);
+    }
+
+    /**
+     * Get service
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getService()
+    {
+        return $this->service;
     }
 
     /**

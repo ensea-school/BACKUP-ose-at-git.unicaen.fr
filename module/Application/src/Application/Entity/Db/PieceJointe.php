@@ -23,11 +23,6 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     private $histoModification;
 
     /**
-     * @var string
-     */
-    private $url;
-
-    /**
      * @var \DateTime
      */
     private $validiteDebut;
@@ -135,29 +130,6 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getHistoModification()
     {
         return $this->histoModification;
-    }
-
-    /**
-     * Set url
-     *
-     * @param string $url
-     * @return PieceJointe
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * Get url
-     *
-     * @return string 
-     */
-    public function getUrl()
-    {
-        return $this->url;
     }
 
     /**

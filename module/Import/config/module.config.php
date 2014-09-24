@@ -2,12 +2,6 @@
 
 namespace Import;
 
-/**
- * @todo Impossible de faire le use ci-dessous!
- */
-//use Application\Entity\Db\RoleUtilisateur;
-const ROLE_ID_ADMIN = 'Administrateur';
-
 return array(
     'controllers' => array(
         'invokables' => array(
@@ -73,7 +67,7 @@ return array(
                 array(
                     'controller' => 'Import\Controller\Import',
                     'action' => array('index','updateViewsAndPackages','showImportTbl','showDiff','update','updateTables'),
-                    'roles' => array(ROLE_ID_ADMIN),
+                    'roles' => array('administrateur'),
                 ),
             ),
         ),

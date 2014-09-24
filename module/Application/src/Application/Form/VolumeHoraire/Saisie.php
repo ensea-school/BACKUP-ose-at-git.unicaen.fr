@@ -48,7 +48,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
         ));
 
         $role = $this->getContextProvider()->getSelectedIdentityRole();
-        if ($role instanceof \Application\Acl\DbRole) {
+        if ($role instanceof \Application\Acl\Role) {
 
             $this->add(array(
                 'name' => 'motif-non-paiement',

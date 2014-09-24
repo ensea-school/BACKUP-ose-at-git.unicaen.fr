@@ -4,7 +4,9 @@ namespace Application\Service;
 
 use Application\Service\Parametres;
 use Application\Acl\IntervenantRole;
-use Application\Acl\DbRole;
+use Application\Interfaces\IntervenantAwareInterface;
+use Application\Interfaces\PersonnelAwareInterface;
+use Application\Acl\Role;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.
@@ -94,15 +96,18 @@ class ContextProvider extends AbstractService
     
     /**
      * 
-     * @return DbRole|IntervenantRole
+     * @return Role|IntervenantRole
      */
     public function getSelectedIdentityRole()
     {
         if (null === $this->selectedIdentityRole) {
             $this->selectedIdentityRole = $this->getServiceLocator()->get('AuthUserContext')->getSelectedIdentityRole();
             
-            if ($this->selectedIdentityRole instanceof IntervenantRole) {
+            if ($this->selectedIdentityRole instanceof IntervenantAwareInterface) {
                 $this->selectedIdentityRole->setIntervenant($this->getGlobalContext()->getIntervenant());
+            }
+            if ($this->selectedIdentityRole instanceof PersonnelAwareInterface){
+                $this->selectedIdentityRole->setPersonnel($this->getGlobalContext()->getPersonnel());
             }
         }
         

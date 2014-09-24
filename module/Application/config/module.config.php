@@ -2,6 +2,24 @@
 
 namespace Application;
 
+use Application\Acl\AdministrateurRole;
+use Application\Acl\ComposanteRole;
+use Application\Acl\DirecteurComposanteRole;
+use Application\Acl\GestionnaireComposanteRole;
+use Application\Acl\ResponsableComposanteRole;
+use Application\Acl\SuperviseurComposanteRole;
+use Application\Acl\ResponsableRechercheLaboRole;
+use Application\Acl\DrhRole;
+use Application\Acl\GestionnaireDrhRole;
+use Application\Acl\ResponsableDrhRole;
+use Application\Acl\EtablissementRole;
+use Application\Acl\SuperviseurEtablissementRole;
+use Application\Acl\IntervenantRole;
+use Application\Acl\IntervenantPermanentRole;
+use Application\Acl\IntervenantExterieurRole;
+use Application\Acl\FoadRole;
+use Application\Acl\ResponsableFoadRole;
+
 $main =  array(
     'doctrine' => array(
         'configuration' => array(
@@ -134,27 +152,30 @@ $main =  array(
     ),
     'bjyauthorize' => array(
         'role_providers' => array(
-            /**
-             * 
-             */
-            'ApplicationRoleProvider' => array(),
-            
-            /**
-             * Rôles issus de l'annuaire LDAP
-             */
-//            'UnicaenAuth\Provider\Role\Config' => array(
-//                // intervant = rôle de base
-//                'intervenant' => array('name' => "Intervenant", 'children' => array(
-//                    // gestionnaires de composantes
-//                    'cn=ucbn_composantes_responsables,ou=groups,dc=unicaen,dc=fr' => array('name' => "Responsable de composante", 'children' => array(
-//                        // directeurs de composantes
-//                        'cn=ucbn_composantes_directeurs,ou=groups,dc=unicaen,dc=fr' => array('name' => "Directeur de composante", 'children' => array(
-//                            // administrateur de l'appli
-////                            'cn=admin_cartagen,ou=groups,dc=unicaen,dc=fr',
-//                        )),
-//                    )),
-//                )),
-//            ),
+            'ApplicationRoleProvider' => [
+                'Application\\Acl\\AdministrateurRole',
+
+                'Application\\Acl\\ComposanteRole',
+                    'Application\\Acl\\DirecteurComposanteRole',
+                    'Application\\Acl\\GestionnaireComposanteRole',
+                    'Application\\Acl\\ResponsableComposanteRole',
+                    'Application\\Acl\\SuperviseurComposanteRole',
+                    'Application\\Acl\\ResponsableRechercheLaboRole',
+
+                'Application\\Acl\\DrhRole',
+                    'Application\\Acl\\GestionnaireDrhRole',
+                    'Application\\Acl\\ResponsableDrhRole',
+
+                'Application\\Acl\\EtablissementRole',
+                    'Application\\Acl\\SuperviseurEtablissementRole',
+
+                'Application\\Acl\\FoadRole',
+                    'Application\\Acl\\ResponsableFoadRole',
+
+                'Application\\Acl\\IntervenantRole',
+                    'Application\\Acl\\IntervenantExterieurRole',
+                    'Application\\Acl\\IntervenantPermanentRole',
+            ],
         ),
     ),
     'service_manager' => array(
@@ -167,10 +188,9 @@ $main =  array(
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
             'ApplicationSource'                              => 'Application\\Service\\Source',
-            'ApplicationTypeRolePhpRole'                     => 'Application\\Service\\TypeRolePhpRole',
             'ApplicationRole'                                => 'Application\\Service\\Role',
-            'ApplicationRoleUtilisateur'                     => 'Application\\Service\\RoleUtilisateur',
-            'IntervenantNavigationPageVisibility'                       => 'Application\\Service\\IntervenantNavigationPageVisibility',
+            'ApplicationTypeRole'                            => 'Application\\Service\\TypeRole',
+            'IntervenantNavigationPageVisibility'            => 'Application\\Service\\IntervenantNavigationPageVisibility',
         ),
         'factories' => array(
             'navigation'                  => 'Application\Service\NavigationFactoryFactory',

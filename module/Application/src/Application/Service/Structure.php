@@ -70,13 +70,13 @@ class Structure extends AbstractEntityService
     /**
      * Retourne la liste des structures pour lesquelles le rôle est autorisé à officier
      *
-     * @param \Application\Acl\DbRole $role
+     * @param \Application\Acl\Role $role
      */
     public function finderByRole( $role, QueryBuilder $qb=null, $alias=null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        if (! $role instanceof \Application\Acl\DbRole) return $qb;
+        if (! $role instanceof \Application\Acl\Role) return $qb;
         $this->finderByStructure( $role->getStructure(), $qb, $alias );
         
         return $qb;

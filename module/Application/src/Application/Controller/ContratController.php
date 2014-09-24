@@ -2,7 +2,7 @@
 
 namespace Application\Controller;
 
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
@@ -57,7 +57,7 @@ class ContratController extends AbstractActionController implements ContextProvi
             throw new \Common\Exception\MessageException("Les intervenants permanents n'ont pas de contrat.");
         }
         
-        if ($role instanceof ComposanteDbRole) {
+        if ($role instanceof ComposanteRole) {
             return $this->creerAction();
         }
         else {
@@ -100,7 +100,7 @@ class ContratController extends AbstractActionController implements ContextProvi
     {
         $role           = $this->getContextProvider()->getSelectedIdentityRole();
         $serviceContrat = $this->getServiceContrat();
-        $structure      = $role instanceof ComposanteDbRole ? $role->getStructure() : null;
+        $structure      = $role instanceof ComposanteRole ? $role->getStructure() : null;
         
         $qb = $serviceContrat->finderByIntervenant($this->getIntervenant());
         if ($structure) {
@@ -442,7 +442,7 @@ class ContratController extends AbstractActionController implements ContextProvi
 
         $this->intervenant = $this->contrat->getIntervenant();
         
-        if ($role instanceof ComposanteDbRole) {
+        if ($role instanceof ComposanteRole) {
             if ($this->contrat->getStructure() !== $role->getStructure()) {
                 throw new \Common\Exception\MessageException("Le contrat/avenant ne vous est pas accessible.");
             }
@@ -591,7 +591,7 @@ class ContratController extends AbstractActionController implements ContextProvi
     {
         if (null === $this->structure) {
             $role = $this->getContextProvider()->getSelectedIdentityRole();
-            if (!$role instanceof ComposanteDbRole) {
+            if (!$role instanceof ComposanteRole) {
                 throw new LogicException("Rôle courant inattendu.");
             }
             $this->structure = $role->getStructure();

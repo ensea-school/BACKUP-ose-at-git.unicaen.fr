@@ -4,7 +4,7 @@ namespace Application\Rule\Intervenant;
 
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Entity\Db\Intervenant;
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 
 /**
  * Description of PeutSaisirReferentielRule
@@ -33,7 +33,7 @@ class PeutSaisirReferentielRule extends IntervenantRule
             return false;
         }
         
-        if (!$this->getRole() instanceof ComposanteDbRole) {
+        if (!$this->getRole() instanceof ComposanteRole) {
             return true;
         }
         

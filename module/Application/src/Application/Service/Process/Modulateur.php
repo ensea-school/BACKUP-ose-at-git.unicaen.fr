@@ -22,15 +22,15 @@ class Modulateur extends AbstractService
     {
         $codes = array();
         if ($element->getTauxFoad() > 0){
-            $codes[] = TypeModulateur::FOAD;
+            $codes[] = 'IAE_FOAD';
         }
         if ($element->getFc()){
-            $codes[] = TypeModulateur::FC;
-            $codes[] = TypeModulateur::FCIUTCAEN;
-            $codes[] = TypeModulateur::FCDROIT;
+            $codes[] = 'IUTCAEN_FC';
+            $codes[] = 'IAE_FC';
+            $codes[] = 'DROIT_FC';
         }
         if ($element->getFc() && $element->getFi()){
-            $codes[] = TypeModulateur::FIFC;
+            //$codes[] = TypeModulateur::FIFC;
         }
         return $codes;
     }

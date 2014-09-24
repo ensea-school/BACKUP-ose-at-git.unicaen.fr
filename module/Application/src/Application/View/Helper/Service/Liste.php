@@ -303,7 +303,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         }
         $out .= "<th title=\"Formation\">Formation</th>\n";
         $out .= "<th title=\">Enseignement\">Enseignement</th>\n";
-        if ($role instanceof \Application\Acl\ComposanteDbRole) {
+        if ($role instanceof \Application\Acl\ComposanteRole) {
             $out .= "<th title=\"Formation ouverte à distance\">FOAD</th>\n";
             $out .= "<th title=\"Régime d'inscription\">Rég. d'insc.</th>\n";
         }
@@ -437,7 +437,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
         if ($this->mustRenderIntervenant()) $colspan += 2;
         if ($this->mustRenderStructure()) $colspan++;
-        if ($role instanceof \Application\Acl\ComposanteDbRole) $colspan += 2;
+        if ($role instanceof \Application\Acl\ComposanteRole) $colspan += 2;
         if (!$context->getAnnee()) $colspan += 1;
 
         $data = $this->getTotaux();

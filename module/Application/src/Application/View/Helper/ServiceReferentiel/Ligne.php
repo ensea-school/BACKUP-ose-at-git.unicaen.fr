@@ -2,13 +2,16 @@
 
 namespace Application\View\Helper\ServiceReferentiel;
 
-use Zend\View\Helper\AbstractHelper;
+use Application\Acl\IntervenantRole;
+use Application\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\ServiceReferentiel;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Acl\IntervenantRole;
+use NumberFormatter;
+use UnicaenApp\Util;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\View\Helper\AbstractHelper;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
@@ -96,7 +99,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         $out  = '';
         
-        if (!$role instanceof \Application\Acl\IntervenantRole) {
+        if (!$role instanceof IntervenantRole) {
             if ($this->getRenderIntervenants()) {
                 $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'intervenant' => $intervenant->getSourceCode()));
                 $out   = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
@@ -119,13 +122,17 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $out;
     }
 
-    protected function renderFonction($fonction)
+    protected function renderFonction(FonctionReferentiel $fonction = null)
     {
         if (!$fonction) {
             return '';
         }
         
-        $out = "" . $fonction;
+        $out = (string) $fonction;
+        
+        if ($fonction->getHistoDestruction()) {
+            $out = sprintf("<span class=\"bg-danger\"><abbr title=\"Cette fonction n'existe plus\">%s</abbr></span>", $out);
+        }
 
         return $out;
     }
@@ -139,7 +146,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderHeures($heures)
     {
-        $out = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
+        $out = Util::formattedFloat($heures, NumberFormatter::DECIMAL, -1);
         
         return $out;
     }

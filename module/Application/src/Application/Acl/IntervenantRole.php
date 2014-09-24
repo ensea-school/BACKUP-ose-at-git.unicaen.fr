@@ -3,57 +3,50 @@
 namespace Application\Acl;
 
 use UnicaenAuth\Acl\NamedRole;
+use Application\Interfaces\StructureAwareInterface;
+use Application\Interfaces\IntervenantAwareInterface;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\StructureAwareTrait;
 
 /**
  * Description of IntervenantRole
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantRole extends NamedRole
+class IntervenantRole extends NamedRole implements StructureAwareInterface, IntervenantAwareInterface
 {
-    const ROLE_ID = "intervenant";
-    
-    /**
-     * @var \Application\Entity\Db\Intervenant
-     */
-    protected $intervenant;
-    
-    /**
-     * Constructeur.
-     * 
-     * @param string|null               $id
-     * @param RoleInterface|string|null $parent
-     * @param string                    $name
-     * @param string                    $description
-     * @param bool                      $selectable
-     */
-    public function __construct($id = null, $parent = null, $name = null, $description = null, $selectable = true)
-    {
-        NamedRole::__construct(
-                $id = static::ROLE_ID, 
-                $parent = 'user', 
-                $name = "Intervenant", 
-                $description, 
-                $selectable);
-    }
-    
-    /**
-     * 
-     * @return \Application\Entity\Db\Intervenant
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
-    }
+    use StructureAwareTrait;
+    use IntervenantAwareTrait;
 
-    /**
-     * 
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return \Application\Acl\IntervenantRole
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    const ROLE_ID = "intervenant";
+
+    public function __construct($id = self::ROLE_ID, $parent = 'user', $name = 'Intervenant', $description = null, $selectable = true)
     {
-        $this->intervenant = $intervenant;
-        return $this;
+        parent::__construct($id, $parent, $name, $description, $selectable);
+    }
+}
+
+
+
+class IntervenantPermanentRole extends IntervenantRole
+{
+    const ROLE_ID = "intervenant-permanent";
+
+    public function __construct($id = self::ROLE_ID, $parent = IntervenantRole::ROLE_ID, $name = "Intervenant permanent", $description = null, $selectable = true)
+    {
+        parent::__construct($id, $parent, $name, $description, $selectable);
+    }
+}
+
+
+
+class IntervenantExterieurRole extends IntervenantRole
+{
+    const ROLE_ID = "intervenant-exterieur";
+    protected $parent = IntervenantRole::ROLE_ID;
+
+    public function __construct($id = self::ROLE_ID, $parent = IntervenantRole::ROLE_ID, $name = "Intervenant vacataire", $description = null, $selectable = true)
+    {
+        parent::__construct($id, $parent, $name, $description, $selectable);
     }
 }

@@ -5,10 +5,9 @@ namespace Application\Entity\Db;
 /**
  * RoleUtilisateur
  */
-class RoleUtilisateur implements \BjyAuthorize\Acl\HierarchicalRoleInterface
+class RoleUtilisateur
 {
-    const ROLE_ID_ADMIN = 'Administrateur'; // idem table ROLE_UTILISATEUR
-    
+
     /**
      * @var integer
      */
@@ -152,5 +151,10 @@ class RoleUtilisateur implements \BjyAuthorize\Acl\HierarchicalRoleInterface
     public function getUtilisateur()
     {
         return $this->utilisateur;
+    }
+
+    public function __toString()
+    {
+        return $this->getRoleId();
     }
 }

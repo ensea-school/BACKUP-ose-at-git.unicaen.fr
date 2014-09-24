@@ -6,7 +6,7 @@
 $role = $this->contextProvider()->getSelectedIdentityRole();
 ?>
 
-<?php if ($role instanceof \Application\Acl\ComposanteDbRole): ?>
+<?php if ($role instanceof \Application\Acl\ComposanteRole): ?>
     Postez un message sur la liste d'échanges des gestionnaires : 
     <?php
     $contacts = array("ose@liste.unicaen.fr");

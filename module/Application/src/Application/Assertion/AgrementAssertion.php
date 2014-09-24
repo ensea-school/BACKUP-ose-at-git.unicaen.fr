@@ -2,7 +2,7 @@
 
 namespace Application\Assertion;
 
-use Application\Acl\ComposanteDbRole;
+use Application\Acl\ComposanteRole;
 use Application\Controller\AgrementController;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\TypeAgrement;
@@ -69,14 +69,14 @@ class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwar
 
         // l'ajout par lot d'agréments de type "Conseil Académique" n'est autorisé qu'aux admin
         if ($privilege === $privilegeAjouterLotConseilAcademique) {
-            if ($this->getSelectedIdentityRole()->getRoleId() !== RoleProvider::ROLE_ID_ADMIN) {
+            if ($this->getSelectedIdentityRole()->getRoleId() !== \Application\Acl\AdministrateurRole::ROLE_ID) {
                 return false;
             }
         }
         // l'ajout par lot d'agréments de type "Conseil Restreint" n'est pas autorisé aux admin pour
         // l'instant car cela nécessiterait la sélection de la composante concernée
         elseif ($privilege === $privilegeAjouterLotConseilRestreint) {
-            if ($this->getSelectedIdentityRole()->getRoleId() === RoleProvider::ROLE_ID_ADMIN) {
+            if ($this->getSelectedIdentityRole()->getRoleId() === \Application\Acl\AdministrateurRole::ROLE_ID) {
                 return false;
             }
         }
@@ -124,7 +124,7 @@ class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwar
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof ComposanteDbRole) {
+        if ($this->getSelectedIdentityRole() instanceof ComposanteRole) {
             
             // saisie de l'agrément Conseil Academique interdit aux gestionnaires de composante
             if ($this->agrement->getType()->isConseilAcademique()) {

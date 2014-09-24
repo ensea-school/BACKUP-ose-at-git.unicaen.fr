@@ -43,7 +43,7 @@ abstract class Step
     public function getLabel(\Zend\Permissions\Acl\Role\RoleInterface $role)
     {
         $roleId = $role->getRoleId();
-        if ($role instanceof \Application\Acl\ComposanteDbRole) {
+        if ($role instanceof \Application\Acl\ComposanteRole) {
             $roleId = \Application\Acl\ComposanteRole::ROLE_ID;
         }
         if (!isset($this->labels[$roleId])) {
@@ -85,7 +85,7 @@ EOS;
     public function getDescription(\Zend\Permissions\Acl\Role\RoleInterface $role)
     {
         $roleId = $role->getRoleId();
-        if ($role instanceof \Application\Acl\ComposanteDbRole) {
+        if ($role instanceof \Application\Acl\ComposanteRole) {
             $roleId = \Application\Acl\ComposanteRole::ROLE_ID;
         }
         if (!isset($this->descriptions[$roleId])) {

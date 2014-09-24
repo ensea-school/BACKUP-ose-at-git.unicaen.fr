@@ -2,11 +2,23 @@
 
 namespace Application;
 
-const ROLE_ID_DRH = 'DRH';
-
+use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
+use Application\Acl\DirecteurComposanteRole;
+use Application\Acl\GestionnaireComposanteRole;
+use Application\Acl\ResponsableComposanteRole;
+use Application\Acl\SuperviseurComposanteRole;
+use Application\Acl\ResponsableRechercheLaboRole;
+use Application\Acl\DrhRole;
+use Application\Acl\GestionnaireDrhRole;
+use Application\Acl\ResponsableDrhRole;
+use Application\Acl\EtablissementRole;
+use Application\Acl\SuperviseurEtablissementRole;
 use Application\Acl\IntervenantRole;
+use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
+use Application\Acl\FoadRole;
+use Application\Acl\ResponsableFoadRole;
 
 return array(
     'router' => array(
@@ -316,32 +328,32 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir', 'index', 'apercevoir', 'feuille-de-route'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,  AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('choisir', 'rechercher', 'search'),
-                    'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir-heures-comp'),
-                    'roles'      => array(ROLE_ID_DRH,'Administrateur'),
+                    'roles'      => array(DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => array('voir', 'modifier'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
+                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\ModificationServiceDu',
                     'action'     => array('saisir'),
-                    'roles'      => array(ComposanteRole::ROLE_ID,'Administrateur'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Workflow',
                     'action'     => array('nav-next'),
-                    'roles'      => array('user','Administrateur'),
+                    'roles'      => array('user'),
                 ),
             ),
         ),

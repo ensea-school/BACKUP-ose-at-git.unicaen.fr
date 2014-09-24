@@ -153,7 +153,7 @@ class Service extends AbstractEntityService
         if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
             $this->finderByIntervenant( $context->getIntervenant(), $qb, $alias );
         }
-        elseif ($role instanceof \Application\Acl\DbRole){ // Si c'est un RA
+        elseif ($role instanceof \Application\Acl\ComposanteRole){ // Si c'est un RA
 //            $this->finderByStructureEns( $role->getStructure(), $qb, $alias );
 //            $this->finderByStructureResp( $role->getStructure(), $qb, $alias );
         }
@@ -360,7 +360,7 @@ class Service extends AbstractEntityService
     public function getResumeService($filter)
     {
         $role           = $this->getContextProvider()->getSelectedIdentityRole();
-        if ($role instanceof \Application\Acl\ComposanteDbRole){
+        if ($role instanceof \Application\Acl\ComposanteRole){
             $structureEnsId = $role->getStructure()->getId();
         }elseif (isset($filter->structureEns)) {
             $structureEnsId = $filter->structureEns->getId();
@@ -641,7 +641,7 @@ EOS;
             if ($role instanceof \Application\Acl\IntervenantRole) {
                 $message = "Vous ne pouvez pas saisir de service. ";
             }
-            elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+            elseif ($role instanceof \Application\Acl\ComposanteRole) {
                 $message = "Vous ne pouvez pas saisir de service pour $intervenant. ";
             }
             return $this->cannotDoThat($message . $rulesEvaluator->getMessage(), $runEx);

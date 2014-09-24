@@ -226,7 +226,7 @@ class Validation extends AbstractEntityService
                     if ($role instanceof \Application\Acl\IntervenantRole) {
                         $message = "Vous ne pouvez pas valider. ";
                     }
-                    elseif ($role instanceof \Application\Acl\ComposanteDbRole) {
+                    elseif ($role instanceof \Application\Acl\ComposanteRole) {
                         $message = "Vous ne pouvez pas valider pour $intervenant. ";
                     }
                     return $this->cannotDoThat($message . $rule->getMessage(), $runEx);

@@ -62,6 +62,17 @@ class Validation implements HistoriqueAwareInterface
      */
     private $volumeHoraire;
 
+    /**
+     * Représentation littérale de cvet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf("Validation du %s par %s",
+                $this->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT), 
+                $this->getHistoModificateur());
+    }
 
     /**
      * Set histoCreation

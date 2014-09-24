@@ -51,14 +51,14 @@ fieldset > fieldset {
     margin-left: 1.5em;
 }
 
-fieldset > fieldset legend {
+/*fieldset > fieldset legend {
     margin-left: -1.5em;
     line-height: inherit;
-    /*border: none;*/
+    border: none;
     padding-left: 0;
     font-size: 110%;
     margin-bottom: 0;
-}
+}*/
 
 pre.prettyprint {
     white-space: pre;
@@ -106,4 +106,20 @@ div.multicheckbox label input[type=radio] {
     margin-right: 5px;
     width: 15px;
     height: auto; 
+}
+
+
+.loading {
+    background-image: url('//gest.unicaen.fr/images/ajax-loader-h.gif');
+    background-repeat: no-repeat;
+    background-position: left center;
+    min-height: 16px;
+    min-width: 11px;
+}
+a.loading {
+    color: transparent;
+}
+a.btn.loading, button.loading {
+    /*opacity: 0.5;*/
+    background-position: center center;
 }

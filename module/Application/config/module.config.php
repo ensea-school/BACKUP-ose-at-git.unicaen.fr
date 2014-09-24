@@ -259,6 +259,7 @@ $main =  array(
 return array_merge_recursive(
     $main,
     include 'intervenant.config.php',
+    include 'piece-jointe.config.php',
     include 'structure.config.php',
     include 'etablissement.config.php',
     include 'demo.config.php',

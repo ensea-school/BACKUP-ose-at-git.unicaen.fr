@@ -31,6 +31,6 @@ class SaisiePiecesJointesStep extends Step
                 
                 ->setLabels($labels)
                 ->setDescriptions($descriptions)
-                ->setRoute('intervenant/pieces-jointes');
+                ->setRoute('piece-jointe/intervenant');
     }
 }

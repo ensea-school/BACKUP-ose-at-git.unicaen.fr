@@ -64,10 +64,10 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'url', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'dossier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreateur');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'url', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'fichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'nomFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'tailleFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'typeFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'dossier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreateur');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'url', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'dossier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreateur');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'url', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'fichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'nomFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'tailleFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'typeFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'dossier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreateur');
     }
 
     /**
@@ -176,6 +176,17 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
     /**
      * {@inheritDoc}
      */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', array());
+
+        return parent::__toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setHistoCreation($histoCreation)
     {
 
@@ -259,6 +270,105 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUrl', array());
 
         return parent::getUrl();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFichier($fichier)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFichier', array($fichier));
+
+        return parent::setFichier($fichier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFichier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFichier', array());
+
+        return parent::getFichier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setNomFichier($nomFichier)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setNomFichier', array($nomFichier));
+
+        return parent::setNomFichier($nomFichier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNomFichier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNomFichier', array());
+
+        return parent::getNomFichier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTailleFichier($tailleFichier)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTailleFichier', array($tailleFichier));
+
+        return parent::setTailleFichier($tailleFichier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTailleFichier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTailleFichier', array());
+
+        return parent::getTailleFichier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTailleFichierToString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTailleFichierToString', array());
+
+        return parent::getTailleFichierToString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTypeFichier($typeFichier)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTypeFichier', array($typeFichier));
+
+        return parent::setTypeFichier($typeFichier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTypeFichier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeFichier', array());
+
+        return parent::getTypeFichier();
     }
 
     /**
@@ -367,6 +477,28 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
     /**
      * {@inheritDoc}
      */
+    public function setValidation(\Application\Entity\Db\Validation $validation = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValidation', array($validation));
+
+        return parent::setValidation($validation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getValidation()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValidation', array());
+
+        return parent::getValidation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = NULL)
     {
 
@@ -428,6 +560,17 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
 
         return parent::getHistoCreateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResourceId', array());
+
+        return parent::getResourceId();
     }
 
 }

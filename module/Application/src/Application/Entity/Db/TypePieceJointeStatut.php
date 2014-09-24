@@ -370,7 +370,7 @@ class TypePieceJointeStatut
     {
         if ($this->isObligatoire($totalHETDIntervenant)) {
             $seuilHETD   = $this->getSeuilHetd();
-            $obligatoire = "Obligatoire";
+            $obligatoire = "À fournir obligatoirement";
             $obligatoire .= $this->isSeuilHETDDepasse($totalHETDIntervenant) ? 
                     " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total HETD</abbr> > {$seuilHETD}h" : 
                     null;
@@ -378,7 +378,7 @@ class TypePieceJointeStatut
         }
         
         if ($this->getType()->getCode() === TypePieceJointe::RIB) {
-            return "En cas de changement";
+            return "À fournir en cas de changement";
         }
         
         return "Facultatif";

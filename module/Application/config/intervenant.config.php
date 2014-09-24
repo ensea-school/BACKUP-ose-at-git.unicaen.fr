@@ -133,7 +133,7 @@ return array(
                             ),
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
-                                'action' => 'intervenant',
+                                'action' => 'index',
                             ),
                         ),
                     ),
@@ -288,7 +288,7 @@ return array(
                                     'intervenant',
                                 ),
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Service:intervenant',
+                                'resource' => 'controller/Application\Controller\Service:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'pieces-jointes' => array(

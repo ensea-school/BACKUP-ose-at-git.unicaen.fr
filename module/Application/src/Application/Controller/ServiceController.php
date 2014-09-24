@@ -6,7 +6,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Exception\DbException;
-use Application\Acl\IntervenantExterieurRole;
 use Application\Entity\Db\IntervenantExterieur;
 
 /**
@@ -18,6 +17,11 @@ use Application\Entity\Db\IntervenantExterieur;
  */
 class ServiceController extends AbstractActionController
 {
+    /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')
@@ -27,22 +31,42 @@ class ServiceController extends AbstractActionController
     }
 
     public function indexAction()
-    {
-        $totaux = $this->params()->fromQuery('totaux') == '1';
-        $service = $this->getServiceService();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
-        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $qb      = $service->finderByContext();
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
-        $filter    = new \stdClass();
-        $title     = "Enseignements et référentiel <small>$annee</small>";
+    { 
+        $totaux             = $this->params()->fromQuery('totaux', 0) == '1';
+        $service            = $this->getServiceService();
+        $role               = $this->getContextProvider()->getSelectedIdentityRole();
+        $intervenant        = $this->context()->intervenantFromRoute();
+        $annee              = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $viewModel          = new \Zend\View\Model\ViewModel();
+        $typeVolumeHoraire  = $this->getServiceTypeVolumehoraire()->getPrevu();
+        $showMultiplesIntervenants        = (! $intervenant) && $this->isAllowed('ServiceController', 'show-multiples-intervenants');
+
+        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException();
+        }
 
         $this->initFilters();
 
-        /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
-        if (! $role instanceof \Application\Acl\IntervenantRole){
-            $intervenant = null;
+        $qb = $service->finderByContext();
+        $service->leftJoin($this->getServiceElementPedagogique(), $qb, 'elementPedagogique', true);
+
+        $this->getServiceElementPedagogique()->leftJoin( 'applicationEtape', $qb, 'etape', true );
+        $this->getServiceElementPedagogique()->leftJoin( 'applicationPeriode', $qb, 'periode', true);
+        $service->join( $this->getServiceIntervenant(), $qb, 'intervenant', true);
+
+        $volumeHoraireService = $this->getServiceLocator()->get('applicationVolumehoraire'); /* @var $volumeHoraireService \Application\Service\VolumeHoraire */
+        $service->leftjoin($volumeHoraireService, $qb, 'volumeHoraire', true);
+        $volumeHoraireService->leftJoin('applicationMotifNonPaiement', $qb, 'motifNonPaiement', true);
+
+        $this->getServiceElementPedagogique()->leftJoin('applicationTypeIntervention', $qb, 'typeIntervention', true);
+
+        if (! $intervenant){
+            $intervenant = method_exists($role, 'getIntervenant') ? $role->getIntervenant() : null;
+        }else{
+            $service->finderByIntervenant( $intervenant, $qb ); // filtre par intervenant souhaité
+        }
+
+        if ($showMultiplesIntervenants){
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
             $params = $this->getEvent()->getRouteMatch()->getParams();
             $params['action'] = 'filtres';
@@ -52,16 +76,15 @@ class ServiceController extends AbstractActionController
             /* @var $rechercheForm \Application\Form\Service\Recherche */
             $filter = $rechercheForm->hydrateFromSession();
             $service->finderByFilterObject($filter, null, $qb);
-        } else {
-            $intervenant = $role->getIntervenant();
-            $service->finderByIntervenant($intervenant, $qb);
+            if($role instanceof \Application\Acl\ComposanteRole){
+                $service->finderByComposante($role->getStructure(), $qb);
+            }
+            $this->getContextProvider()->getLocalContext()->fromArray( // sauvegarde des filtres dans le contexte local
+                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
+            );
+        }else{
             $action = 'afficher'; // Affichage par défaut
         }
-
-        // sauvegarde des filtres dans le contexte local
-        $this->getContextProvider()->getLocalContext()->fromArray(
-                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
-        );
 
         /* Préparation et affichage */
         if ('afficher' === $action || $totaux){
@@ -74,64 +97,15 @@ class ServiceController extends AbstractActionController
                 $params           = $this->getEvent()->getRouteMatch()->getParams();
                 $params['action'] = 'voirListe';
                 $params['query']  = $this->params()->fromQuery();
+                $params['renderIntervenants'] = $showMultiplesIntervenants;
                 $listeViewModel   = $this->forward()->dispatch($controller, $params);
                 $viewModel->addChild($listeViewModel, 'servicesRefListe');
             }
         }else{
             $services = array();
         }
-
-        $renderReferentiel  = !$role instanceof IntervenantExterieurRole && !$intervenant instanceof IntervenantExterieur;
-
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'title', 'intervenant', 'renderReferentiel'));
-        if ($totaux){
-            $viewModel->setTemplate('application/service/rafraichir-totaux');
-        }else{
-            $viewModel->setTemplate('application/service/index');
-        }
-        return $viewModel;
-    }
-
-    public function intervenantAction()
-    {
-        $totaux            = $this->params()->fromQuery('totaux', 0) == '1';
-        $service           = $this->getServiceService();
-        $role              = $this->getContextProvider()->getSelectedIdentityRole();
-        $annee             = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
-        $intervenant       = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant \Application\Entity\Db\Intervenant */
-        $viewModel         = new \Zend\View\Model\ViewModel();
-
-        $service->canAdd($intervenant, true);
-        $this->initFilters();
-
-        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
-            throw new \BjyAuthorize\Exception\UnAuthorizedException();
-        }
-
-        // fetch des services prévisionnels
-        $qb = $service->finderByContext();
-        $service->finderByIntervenant($intervenant, $qb);
-        $service->leftJoin('applicationElementPedagogique', $qb, 'elementPedagogique');
-        $this->getServiceElementPedagogique()->leftJoin( 'applicationEtape', $qb, 'etape' );
-        $this->getServiceElementPedagogique()->leftJoin( 'applicationPeriode', $qb, 'periode');
-
-        $services = $service->getList($qb);
-        $service->setTypeVolumehoraire($services, $typeVolumeHoraire);
-
-        // fetch des services référentiels : délégation au contrôleur
-        $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // sauvegarde des filtres dans le contexte local
-        $controller       = 'Application\Controller\ServiceReferentiel';
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $listeViewModel   = $this->forward()->dispatch($controller, $params);
-        $viewModel->addChild($listeViewModel, 'servicesRefListe');
-
-        $renderIntervenants = false;
-        $renderReferentiel  = !$role instanceof IntervenantExterieurRole && !$intervenant instanceof IntervenantExterieur;
-        $action = 'afficher';
-        $title = "Enseignements <small>$intervenant</small>";
-
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire', 'action', 'role', 'title', 'renderIntervenants', 'renderReferentiel','intervenant'));
+        $renderReferentiel  = !$intervenant instanceof IntervenantExterieur;
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'renderReferentiel', 'showMultiplesIntervenants'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
@@ -174,7 +148,7 @@ class ServiceController extends AbstractActionController
         );
 
         if ('afficher' == $action ){
-            $resumeServices = $this->getServiceLocator()->get('ApplicationService')->getResumeService($filter);
+            $resumeServices = $this->getServiceService()->getResumeService($filter);
         }else{
             $resumeServices = null;
         }
@@ -197,23 +171,16 @@ class ServiceController extends AbstractActionController
 
     public function filtresAction()
     {
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
-
         /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
-        if (! $role instanceof \Application\Acl\IntervenantRole){
-            $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
-            /* @var $rechercheForm \Application\Form\Service\Recherche */
-            $rechercheForm->populateOptions();
-            $rechercheForm->setDataFromSession();
-            $rechercheForm->setData( $this->getRequest()->getQuery() );
-            if ($rechercheForm->isValid()){
-                $rechercheForm->sessionUpdate();
-            }
+        $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+        /* @var $rechercheForm \Application\Form\Service\Recherche */
+        $rechercheForm->populateOptions();
+        $rechercheForm->setDataFromSession();
+        $rechercheForm->setData( $this->getRequest()->getQuery() );
+        if ($rechercheForm->isValid()){
+            $rechercheForm->sessionUpdate();
         }
-        else {
-            $rechercheForm = null; // pas de filtrage
-        }
-        return compact('rechercheForm', 'role');
+        return compact('rechercheForm');
     }
 
     public function voirAction()
@@ -381,7 +348,7 @@ class ServiceController extends AbstractActionController
     /**
      * @return \Application\Service\Service
      */
-    public function getServiceService()
+    protected function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
     }
@@ -389,7 +356,7 @@ class ServiceController extends AbstractActionController
     /**
      * @return \Application\Service\ElementPedagogique
      */
-    public function getServiceElementPedagogique()
+    protected function getServiceElementPedagogique()
     {
         return $this->getServiceLocator()->get('ApplicationElementPedagogique');
     }
@@ -397,7 +364,7 @@ class ServiceController extends AbstractActionController
     /**
      * @return \Application\Service\TypeVolumeHoraire
      */
-    public function getServiceTypeVolumehoraire()
+    protected function getServiceTypeVolumehoraire()
     {
         return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
     }
@@ -405,9 +372,17 @@ class ServiceController extends AbstractActionController
     /**
      * @return \Application\Service\TypeIntervention
      */
-    public function getServiceTypeIntervention()
+    protected function getServiceTypeIntervention()
     {
         return $this->getServiceLocator()->get('ApplicationTypeIntervention');
+    }
+
+    /**
+     * @return \Application\Service\Intervenant
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->get('applicationIntervenant');
     }
 
     /**
@@ -416,5 +391,14 @@ class ServiceController extends AbstractActionController
     public function getContextProvider()
     {
         return $this->getServiceLocator()->get('ApplicationContextProvider');
+    }
+
+    /**
+     *
+     * @return \Application\Assertion\ServiceAssertion
+     */
+    public function getAssertionService()
+    {
+        return $this->getServiceLocator()->get('ServiceAssertion');
     }
 }

@@ -49,61 +49,11 @@ class ServiceReferentielController extends AbstractActionController implements C
     {
         return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
-    
+
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')
                 ->disableForEntity('Application\Entity\Db\FonctionReferentiel');
-    }
-
-//    public function indexAction()
-//    {
-//        $this->em()->getFilters()->enable('historique');
-//        $service  = $this->getServiceServiceReferentiel();
-//        $cp       = $this->getContextProvider();
-//        $annee    = $cp->getGlobalContext()->getAnnee();
-//        $criteria = array();
-//        $services = $service->getFinder($criteria)
-//                ->orderBy("i.nomUsuel, s.libelleCourt")
-//                ->getQuery()->execute();
-//        
-//        $listeViewModel = new \Zend\View\Model\ViewModel();
-//        $listeViewModel
-//                ->setTemplate('application/service-referentiel/voir-liste')
-//                ->setVariables(compact('services'));
-//        
-//        $viewModel = new \Zend\View\Model\ViewModel();
-//        $viewModel
-//                ->setVariables(compact('annee'))
-//                ->addChild($listeViewModel, 'serviceListe');
-//        
-//        return $viewModel;
-//    }
-
-    public function intervenantAction()
-    {
-        $this->initFilters();
-        
-        $service = $this->getServiceServiceReferentiel();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
-        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $viewModel = new \Zend\View\Model\ViewModel();
-
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        
-        // sauvegarde des filtres dans le contexte local
-        $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
-
-        $qb       = $service->getFinder();
-        $services = $qb->getQuery()->execute();
-        
-        $renderIntervenants = false;
-        $renderReferentiel  = !$role instanceof IntervenantExterieurRole && !$intervenant instanceof IntervenantExterieur;
-        
-        $viewModel->setVariables(compact('annee', 'services', 'action', 'role', 'renderIntervenants', 'renderReferentiel'));
-        $viewModel->setTemplate('application/service-referentiel/voir-liste');
-        
-        return $viewModel;
     }
 
     public function voirAction()
@@ -123,12 +73,18 @@ class ServiceReferentielController extends AbstractActionController implements C
     public function voirListeAction()
     {
         $this->initFilters();
-        
-        $service  = $this->getServiceServiceReferentiel();
-        $qb       = $service->getFinder()->orderBy("i.nomUsuel, s.libelleCourt");
+        $service = $this->getServiceServiceReferentiel();
+        $intervenant = $this->context()->intervenantFromRoute();
+
+        $qb = $service->getFinder();
+        if ($intervenant) {
+            $qb->andWhere("sr.intervenant = :intervenant")->setParameter('intervenant', $intervenant);
+            $renderIntervenants = false;
+        }else{
+            $renderIntervenants = true;
+        }
         $services = $qb->getQuery()->execute();
-        
-        return compact('services');
+        return compact('services', 'renderIntervenants');
     }
 
     public function voirLigneAction()

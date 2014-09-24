@@ -199,10 +199,8 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
         if (is_object($data)){ // Si l'objet est bindé, alors il faut l'extraire avec l'hydrateur
             $data = $this->getHydrator()->extract($data);
         }
-        if ($data['submit-resume']){
-            $session = $this->getSessionContainer();
-            $session->data = $data;
-        }
+        $session = $this->getSessionContainer();
+        $session->data = $data;        
         return $this;
     }
 

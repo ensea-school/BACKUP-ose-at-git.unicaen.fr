@@ -2,24 +2,33 @@
 
 namespace Application;
 
-use Application\Acl\Role;
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\DirecteurComposanteRole;
-use Application\Acl\GestionnaireComposanteRole;
-use Application\Acl\ResponsableComposanteRole;
-use Application\Acl\SuperviseurComposanteRole;
-use Application\Acl\ResponsableRechercheLaboRole;
-use Application\Acl\DrhRole;
-use Application\Acl\GestionnaireDrhRole;
-use Application\Acl\ResponsableDrhRole;
-use Application\Acl\EtablissementRole;
-use Application\Acl\SuperviseurEtablissementRole;
-use Application\Acl\IntervenantRole;
-use Application\Acl\IntervenantPermanentRole;
-use Application\Acl\IntervenantExterieurRole;
-use Application\Acl\FoadRole;
-use Application\Acl\ResponsableFoadRole;
+const R_USER                        = 'user';
+
+const R_ROLE                        = Acl\Role::ROLE_ID;
+
+const R_ADMINISTRATEUR              = Acl\AdministrateurRole::ROLE_ID;
+
+const R_COMPOSANTE                  = Acl\ComposanteRole::ROLE_ID;
+const R_DIRECTEUR_COMPOSANTE        = Acl\DirecteurComposanteRole::ROLE_ID;
+const R_GESTIONNAIRE_COMPOSANTE     = Acl\GestionnaireComposanteRole::ROLE_ID;
+const R_RESPONSABLE_COMPOSANTE      = Acl\ResponsableComposanteRole::ROLE_ID;
+const R_SUPERVISEUR_COMPOSANTE      = Acl\SuperviseurComposanteRole::ROLE_ID;
+
+const R_RESPONSABLE_RECHERCHE_LABO  = Acl\ResponsableRechercheLaboRole::ROLE_ID;
+
+const R_DRH                         = Acl\DrhRole::ROLE_ID;
+const R_GESTIONNAIRE_DRH            = Acl\GestionnaireDrhRole::ROLE_ID;
+const R_RESPONSABLE_DRH             = Acl\ResponsableDrhRole::ROLE_ID;
+
+const R_ETABLISSEMENT               = Acl\EtablissementRole::ROLE_ID;
+const R_SUPERVISEUR_ETABLISSEMENT   = Acl\SuperviseurEtablissementRole::ROLE_ID;
+
+const R_INTERVENANT                 = Acl\IntervenantRole::ROLE_ID;
+const R_INTERVENANT_PERMANENT       = Acl\IntervenantPermanentRole::ROLE_ID;
+const R_INTERVENANT_EXTERIEUR       = Acl\IntervenantExterieurRole::ROLE_ID;
+
+const R_FOAD                        = Acl\FoadRole::ROLE_ID;
+const R_RESPONSABLE_FOAD            = Acl\ResponsableFoadRole::ROLE_ID;
 
 $main =  array(
     'doctrine' => array(

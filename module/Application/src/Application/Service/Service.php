@@ -105,8 +105,7 @@ class Service extends AbstractEntityService
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $this->leftJoin( $serviceElement, $qb, 'elementPedagogique');
-        $serviceElement->finderByEtape($etape);
-$this->getQbFromAliases($qb);
+        $serviceElement->finderByEtape($etape, $qb);
         return $qb;
     }
 
@@ -129,10 +128,10 @@ $this->getQbFromAliases($qb);
         $serviceStructure   = $this->getServiceStructure();
         $serviceIntervenant = $this->getServiceIntervenant();
         $iAlias             = $serviceIntervenant->getAlias();
-/* @TODO GLOUBI_BOULGA */
+
         $this->join( $serviceIntervenant, $qb, 'intervenant' );
-        $this->join( $serviceStructure, $qb, 'structureAff', null, null, 's_aff' );
-        $this->leftJoin( $serviceStructure, $qb, 'structureEns', null, null, 's_ens' );
+        $this->join( $serviceStructure, $qb, 'structureAff', 's_aff' );
+        $this->leftJoin( $serviceStructure, $qb, 'structureEns', 's_ens' );
 
         $filter = "($iAlias.structure = :composante OR s_aff = :composante OR s_ens = :composante)";
         $qb->andWhere($filter)->setParameter('composante', $structure);
@@ -348,9 +347,6 @@ $this->getQbFromAliases($qb);
         if ($structureEns) {
             $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
         }
-        
-//        print_r($qb->getQuery()->getSQL());
-        
         return $qb;
     }
 
@@ -573,7 +569,7 @@ EOS;
         if (null === $p){
             $periodeService = $this->getServiceLocator()->get('applicationPeriode'); /* @var $periodeService Periode */
             // Pas de période donc toutes les périodes sont autorisées
-            return $periodeService->getList( $periodeService->finderByEnseignement() );
+            return $periodeService->getEnseignement();
         }else{
             return [$p->getId() => $p];
         }

@@ -154,7 +154,7 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
         $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('ApplicationPeriode');
         $this->get('periode')
                 ->setEmptyOption("")
-                ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($servicePeriode->getList($servicePeriode->finderByEnseignement())));
+                ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($servicePeriode->getEnseignement()));
         
         // peuplement liste des structures
         if ($localContext->getStructure()) {

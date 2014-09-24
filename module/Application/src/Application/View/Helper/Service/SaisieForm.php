@@ -34,7 +34,7 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
         if ($service->getElementPedagogique() && $service->getElementPedagogique()->getPeriode()){
             return array( $service->getElementPedagogique()->getPeriode() );
         }
-        return $this->getServicePeriode()->getList( $this->getServicePeriode()->finderByEnseignement() );
+        return $this->getServicePeriode()->getEnseignement();
     }
 
     /**

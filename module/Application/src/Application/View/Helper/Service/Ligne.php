@@ -399,18 +399,22 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderTypeIntervention( \Application\Entity\VolumeHoraireListe $liste )
     {
-        $hasForbiddenPeriodes = $liste->hasForbiddenPeriodes();
-        $hasBadTypeIntervention = $liste->getService()->getElementPedagogique()
-                && ! $liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention());
-
         $liste = $liste->setMotifNonPaiement(false);
+        $heures = $liste->getHeures();
+
+        $hasForbiddenPeriodes = $liste->hasForbiddenPeriodes();
+        $hasBadTypeIntervention = 
+                $heures > 0
+                && $liste->getService()->getElementPedagogique()
+                && ! $liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention());
+        
         $display = $this->typeInterventionIsVisible($liste->getTypeIntervention()) ? '' : ';display:none';
         $out = '';
         $out .= '<td class="heures type-intervention '.$liste->getTypeIntervention()->getCode().'" style="text-align:right'.$display.'" id="service-'.$liste->getService()->getId().'-ti-'.$liste->getTypeIntervention()->getId().'">';
         if ($hasForbiddenPeriodes) $out .= '<abbr class="bg-danger" title="Des heures sont renseignées sur une période non conforme à la période de l\'enseignement">';
         if ($hasBadTypeIntervention) $out .= '<abbr class="bg-danger" title="Ce type d\'intervention n\'est pas appliquable à cet enseignement">';
 
-        $out .= \UnicaenApp\Util::formattedFloat($liste->getHeures(), \NumberFormatter::DECIMAL, -1);
+        $out .= \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
 
         if ($hasBadTypeIntervention) $out .= '</abbr>';
         if ($hasForbiddenPeriodes) $out .= '</abbr>';

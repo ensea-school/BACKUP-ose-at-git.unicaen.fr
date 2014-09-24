@@ -144,56 +144,94 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @param \Application\Service\AbstractEntityService|string $service
      * @param \Doctrine\ORM\QueryBuilder $qb
-     * @param string $leftProperty
-     * @param string $rightProperty
+     * @param string $relation
+     * @param boolean $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function join( $service, QueryBuilder $qb, $leftProperty, $rightProperty=null, $leftAlias=null, $rightAlias=null )
+    public function join( $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
     {
-        if (is_string($service)){
-            $service = $this->getServiceLocator()->get($service);
-        }
-
-        if (null == $leftAlias) $leftAlias = $this->getAlias();
-        if (null == $rightAlias) $rightAlias = $service->getAlias();
-
-        if (null == $rightProperty){ // relation
-            $qb->join( $leftAlias.'.'.$leftProperty, $rightAlias );
-        }else{ // relation spéciale
-            $qb->join( $service->getEntityClass(), $rightAlias, Expr\Join::WITH, $leftAlias.'.'.$leftProperty.'='.$rightAlias.'.'.$rightProperty );
-        }
-        return $qb;
+        return $this->_join('join', $service, $qb, $relation, $addSelect, $leftAlias, $rightAlias);
     }
 
     /**
      *
      * @param \Application\Service\AbstractEntityService|string $service
      * @param \Doctrine\ORM\QueryBuilder $qb
-     * @param string $leftProperty
-     * @param string $rightProperty
+     * @param string $relation
+     * @param boolean $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function leftJoin( $service, QueryBuilder $qb, $leftProperty, $rightProperty=null, $leftAlias=null, $rightAlias=null )
+    public function leftJoin( $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
+    {
+        return $this->_join('leftJoin', $service, $qb, $relation, $addSelect, $leftAlias, $rightAlias);
+    }
+
+    /**
+     *
+     * @param \Application\Service\AbstractEntityService|string $service
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string $relation
+     * @param boolean $addSelect
+     * @param string $leftAlias
+     * @param string $rightAlias
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function _join( $method='join', $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
     {
         if (is_string($service)){
             $service = $this->getServiceLocator()->get($service);
+            if (! $service instanceof AbstractEntityService){
+                throw new \Common\Exception\LogicException('Le service transmis n\'est pas compatible.');
+            }
         }
 
-        if (null == $leftAlias) $leftAlias = $this->getAlias();
-        if (null == $rightAlias) $rightAlias = $service->getAlias();
-        if (null == $rightProperty){ // relation
-            $qb->leftJoin( $leftAlias.'.'.$leftProperty, $rightAlias );
-        }else{ // relation spéciale
-            $qb->leftJoin( $service->getEntityClass(), $rightAlias, Expr\Join::WITH, $leftAlias.'.'.$leftProperty.'='.$rightAlias.'.'.$rightProperty );
+        if (null === $leftAlias) $leftAlias = $this->getAlias();
+        if (null === $rightAlias) $rightAlias = $service->getAlias();
+
+        if (in_array($rightAlias, $this->getQbFromAliases($qb))){
+            return $qb; // Prévention de conflits de jointures
+        }
+
+        $qb->$method( $leftAlias.'.'.$relation, $rightAlias );
+        if ($addSelect){
+            $qb->addSelect( $rightAlias );
         }
         return $qb;
     }
 
+    /**
+     * 
+     * @param QueryBuilder $qb
+     * @return string[]
+     */
+    public function getQbFromAliases( QueryBuilder $qb )
+    {
+        $aliases = [];
+        $from = $qb->getDQLPart('from');
+        $join = $qb->getDQLPart('join');
 
+        foreach( $from as $ef ){ /* @var $ef Expr\From */
+            $aliases[] = $ef->getAlias();
+        }
+
+        $this->getJoinExprs($join, $aliases);
+
+        return $aliases;
+    }
+
+    private function getJoinExprs( $joinPart, &$aliases ){
+        if ($joinPart instanceof Expr\Join){ /* @var $joinPart Expr\Join */
+            $aliases[] = $joinPart->getAlias();
+        }elseif(is_array($joinPart)){
+            foreach( $joinPart as $jp ){
+                $this->getJoinExprs( $jp, $aliases );
+            }
+        }
+    }
 
     /**
      * Retourne une liste d'entités en fonction du QueryBuilder donné

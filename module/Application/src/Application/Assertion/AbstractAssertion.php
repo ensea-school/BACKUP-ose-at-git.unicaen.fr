@@ -67,7 +67,7 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
             case self::PRIVILEGE_DELETE:
                 return $this->_assertDelete($resource);
             default:
-                throw new LogicException("Privilège spécifié inconnu: $privilege.");
+                return true;
         }
     }
     

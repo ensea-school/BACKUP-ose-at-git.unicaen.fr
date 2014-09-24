@@ -1,41 +1,17 @@
 <?php
 
 namespace Application\Entity\Db;
-
+ 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+ 
 /**
  * PieceJointe
  */
-class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
+class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface, ResourceInterface
 {
-    /**
-     * @var \DateTime
-     */
-    private $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
-
-    /**
-     * @var string
-     */
-    private $url;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
+    use HistoriqueAwareTrait;
+    
+    const RESOURCE_ID = 'PieceJointe';
 
     /**
      * @var integer
@@ -53,111 +29,47 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     private $dossier;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var \DateTime
      */
-    private $histoModificateur;
+    private $validiteDebut;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var \DateTime
      */
-    private $histoDestructeur;
+    private $validiteFin;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $histoCreateur;
-
+    private $fichier;
 
     /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return PieceJointe
+     * @var \Application\Entity\Db\Validation
      */
-    public function setHistoCreation($histoCreation)
+    private $validation;
+
+    /**
+     * 
+     */
+    public function __construct()
     {
-        $this->histoCreation = $histoCreation;
-
-        return $this;
+        $this->fichier = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    
     /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
+     * Représentation littérale de cet objet.
+     * 
+     * @return string
      */
-    public function getHistoCreation()
+    public function __toString()
     {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return PieceJointe
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return PieceJointe
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
-
-    /**
-     * Set url
-     *
-     * @param string $url
-     * @return PieceJointe
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * Get url
-     *
-     * @return string 
-     */
-    public function getUrl()
-    {
-        return $this->url;
+        $string = (string) $this->getType();
+        
+        if ($this->getValidation()) {
+            $string .= $this->getValidation();
+        }
+        
+        return $string;
     }
 
     /**
@@ -263,71 +175,68 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
     }
 
     /**
-     * Set histoModificateur
+     * Add fichier
      *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return PieceJointe
+     * @param \Application\Entity\Db\Fichier $fichier
+     * @return TypeFichier
      */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    public function addFichier(\Application\Entity\Db\Fichier $fichier)
     {
-        $this->histoModificateur = $histoModificateur;
+        $this->fichier[] = $fichier;
 
         return $this;
     }
 
     /**
-     * Get histoModificateur
+     * Remove fichier
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @param \Application\Entity\Db\Fichier $fichier
      */
-    public function getHistoModificateur()
+    public function removeFichier(\Application\Entity\Db\Fichier $fichier)
     {
-        return $this->histoModificateur;
+        $this->fichier->removeElement($fichier);
     }
 
     /**
-     * Set histoDestructeur
+     * Get fichier
      *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFichier()
+    {
+        return $this->fichier;
+    }
+
+    /**
+     * Set validation
+     *
+     * @param \Application\Entity\Db\Validation $validation
      * @return PieceJointe
      */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    public function setValidation(\Application\Entity\Db\Validation $validation = null)
     {
-        $this->histoDestructeur = $histoDestructeur;
+        $this->validation = $validation;
 
         return $this;
     }
 
     /**
-     * Get histoDestructeur
+     * Get validation
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Validation 
      */
-    public function getHistoDestructeur()
+    public function getValidation()
     {
-        return $this->histoDestructeur;
+        return $this->validation;
     }
-
+    
     /**
-     * Set histoCreateur
+     * Returns the string identifier of the Resource
      *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return PieceJointe
+     * @return string
      */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    public function getResourceId()
     {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
+        return self::RESOURCE_ID;
     }
 }

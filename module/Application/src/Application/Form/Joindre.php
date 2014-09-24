@@ -58,7 +58,11 @@ class Joindre extends Form
         /**
          * Csrf
          */
-        $this->add(new Csrf('security'));
+        $this->add(new Csrf('security', array(
+            'csrf_options' => array(
+                'timeout' => 20*60, // 20 min (5 min par défaut)
+            ),
+        )));
         
         /**
          * Submit

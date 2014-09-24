@@ -1390,12 +1390,12 @@ class IntervenantExterieur extends \Application\Entity\Db\IntervenantExterieur i
     /**
      * {@inheritDoc}
      */
-    public function getAdressePrincipale($returnFirstIfNoneFound = false)
+    public function getAdressePrincipale($returnFirstAddressIfNoPrimaryAddressFound = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAdressePrincipale', array($returnFirstIfNoneFound));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAdressePrincipale', array($returnFirstAddressIfNoPrimaryAddressFound));
 
-        return parent::getAdressePrincipale($returnFirstIfNoneFound);
+        return parent::getAdressePrincipale($returnFirstAddressIfNoPrimaryAddressFound);
     }
 
 }

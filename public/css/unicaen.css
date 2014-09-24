@@ -120,6 +120,6 @@ a.loading {
     color: transparent;
 }
 a.btn.loading, button.loading {
-    opacity: 0.5;
+    /*opacity: 0.5;*/
     background-position: center center;
 }

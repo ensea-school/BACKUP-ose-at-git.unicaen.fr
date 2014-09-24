@@ -11,6 +11,7 @@ use Application\Service\PieceJointe as PieceJointeService;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\PieceJointe;
+use Application\Rule\Intervenant\PiecesJointesFourniesRule;
 
 /**
  * Processus de gestion de la liste de pièces à fournir pour un dossier vacataire.
@@ -134,18 +135,24 @@ class PieceJointeProcess extends AbstractService
         return $form;
     }
     
+    protected $typesPieceJointeStatut;
+    
     /**
      * 
      * @return array id => TypePieceJointeStatut
      */
     public function getTypesPieceJointeStatut()
     {
-        $qb = $this->getServiceTypePieceJointeStatut()->finderByStatutIntervenant($this->getStatut());
-        $qb = $this->getServiceTypePieceJointeStatut()->finderByPremierRecrutement($this->getDossier()->getPremierRecrutement(), $qb);
-        $typesPieceJointeStatut = $this->getServiceTypePieceJointeStatut()->getList($qb);
+        if (null === $this->typesPieceJointeStatut) {
+            $qb = $this->getServiceTypePieceJointeStatut()->finderByStatutIntervenant($this->getStatut());
+            $qb = $this->getServiceTypePieceJointeStatut()->finderByPremierRecrutement($this->getDossier()->getPremierRecrutement(), $qb);
+            $this->typesPieceJointeStatut = $this->getServiceTypePieceJointeStatut()->getList($qb);
+        }
         
-        return $typesPieceJointeStatut;
+        return $this->typesPieceJointeStatut;
     }
+    
+    protected $typesPieceJointeAttendus;
     
     /**
      * 
@@ -153,15 +160,18 @@ class PieceJointeProcess extends AbstractService
      */
     public function getTypesPieceJointeAttendus()
     {
-        $typesPieceJointeAttendus = [];
-        
-        foreach ($this->getTypesPieceJointeStatut() as $typePieceJointeStatut) { /* @var $typePieceJointeStatut TypePieceJointeStatut */
-            $type = $typePieceJointeStatut->getType();
-            $typesPieceJointeAttendus[$type->getId()] = $type;
+        if (null === $this->typesPieceJointeAttendus) {
+            $this->typesPieceJointeAttendus = [];
+            foreach ($this->getTypesPieceJointeStatut() as $typePieceJointeStatut) { /* @var $typePieceJointeStatut TypePieceJointeStatut */
+                $type = $typePieceJointeStatut->getType();
+                $this->typesPieceJointeAttendus[$type->getId()] = $type;
+            }
         }
         
-        return $typesPieceJointeAttendus;
+        return $this->typesPieceJointeAttendus;
     }
+    
+    protected $typesPieceJointeFournis;
     
     /**
      * 
@@ -169,34 +179,38 @@ class PieceJointeProcess extends AbstractService
      */
     public function getTypesPieceJointeFournis()
     {
-        $typesPieceJointeFournis = [];
-
-        foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
-            $type = $pj->getType();
-            $typesPieceJointeFournis[$type->getId()] = $type;
+        if (null === $this->typesPieceJointeFournis) {
+            $this->typesPieceJointeFournis = [];
+            foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
+                $type = $pj->getType();
+                $this->typesPieceJointeFournis[$type->getId()] = $type;
+            }
         }
         
-        return $typesPieceJointeFournis;
+        return $this->typesPieceJointeFournis;
     }
+    
+    protected $piecesJointesFournies;
     
     /**
      * 
-     * @param int|TypePieceJointe $typePieceJointe
-     * @return array id => PieceJointe
+     * @return array type_id => PieceJointe
      */
-    public function getPiecesJointesFournies($typePieceJointe = null)
+    public function getPiecesJointesFournies()
     {
-        if ($typePieceJointe && !$typePieceJointe instanceof TypePieceJointe) {
-            $typePieceJointe = $this->getServiceTypePieceJointe()->get($typePieceJointe);
+        if (null === $this->piecesJointesFournies) {
+            $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule') /* @var $rule PiecesJointesFourniesRule */
+                    ->setIntervenant($this->getIntervenant());
+            $piecesJointes = $rule->getPiecesJointesFournies();
+            
+            $this->piecesJointesFournies = [];
+            foreach ($piecesJointes as $pj) { /* @var $pj PieceJointe */
+                // NB: il ne peut y avoir qu'une seule pièce par type de pièce jointe
+                $this->piecesJointesFournies[$pj->getType()->getId()] = $pj;
+            }
         }
         
-        $qb = $this->getServicePieceJointe()->finderByDossier($this->getDossier());
-        if ($typePieceJointe) {
-            $this->getServicePieceJointe()->finderByType($typePieceJointe, $qb);
-        }
-        $piecesJointesFournies = $this->getServicePieceJointe()->getList($qb);
-        
-        return $piecesJointesFournies;
+        return $this->piecesJointesFournies;
     }
     
     /**
@@ -204,18 +218,18 @@ class PieceJointeProcess extends AbstractService
      * @param int|TypePieceJointe $type
      * @return PieceJointe|null
      */
-//    public function getPieceJointeFournie($type)
-//    {
-//        $type = $type instanceof TypePieceJointe ? $type->getId() : $type;
-//        
-//        foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
-//            if ($type === $pj->getType()->getId()) {
-//                return $pj;
-//            }
-//        }
-//        
-//        return null;
-//    }
+    public function getPieceJointeFournie($type)
+    {
+        $type = $type instanceof TypePieceJointe ? $type->getId() : $type;
+        
+        foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
+            if ($type === $pj->getType()->getId()) {
+                return $pj;
+            }
+        }
+        
+        return null;
+    }
 
     /**
      * Teste si un type de pj est attendu.
@@ -362,6 +376,11 @@ class PieceJointeProcess extends AbstractService
     {
         $this->intervenant = $intervenant;
         
+        $this->piecesJointesFournies    = null;
+        $this->typesPieceJointeFournis  = null;
+        $this->typesPieceJointeAttendus = null;
+        $this->typesPieceJointeStatut   = null;
+
         if (!$this->getTypesPieceJointeStatut()) {
             throw new \Common\Exception\PieceJointe\AucuneAFournirException(
                     "Aucun type de pièce justificative à fournir n'a été trouvé pour l'intervenant {$this->getIntervenant()} "

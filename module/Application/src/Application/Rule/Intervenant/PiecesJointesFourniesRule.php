@@ -8,7 +8,10 @@ use Application\Rule\AbstractRule;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Traits\IntervenantAwareTrait;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\PieceJointe;
+use Application\Service\PieceJointe as PieceJointeService;
 use Application\Service\TypePieceJointeStatut as TypePieceJointeStatutService;
 
 /**
@@ -24,8 +27,10 @@ class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAw
     
     public function execute()
     {
+        // liste des PJ déjà fournies
+        $pjFournies = $this->getPiecesJointesFournies();
+        
         // liste des (types de) pièces justificatives déjà fournies
-        $pjFournies = $this->getIntervenant()->getDossier()->getPieceJointe(); /* @var $pjFournies \Doctrine\Common\Collections\Collection */
         $typesFournis = array();
         foreach ($pjFournies as $pj) {
             $typesFournis[$pj->getType()->getId()] = $pj->getType();
@@ -63,6 +68,93 @@ class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAw
     public function isRelevant()
     {
         return $this->getIntervenant() instanceof IntervenantExterieur && null !== $this->getIntervenant()->getDossier();
+    }
+    
+    protected $piecesJointesFournies;
+    
+    /**
+     * 
+     * @return PieceJointe[] type_id => PieceJointe
+     */
+    public function getPiecesJointesFournies()
+    {
+        if (null === $this->piecesJointesFournies) {
+            $qb = $this->getServicePieceJointe()->finderByDossier($this->getIntervenant()->getDossier());
+            if (is_bool($this->getAvecFichier())) {
+                $this->getServicePieceJointe()->finderByExistsFichier(true, $qb);
+            }
+            $piecesJointes = $qb->getQuery()->getResult();
+            
+            $this->piecesJointesFournies = [];
+            foreach ($piecesJointes as $pj) { /* @var $pj PieceJointe */
+                // NB: il ne peut y avoir qu'une seule pièce par type de pièce jointe
+                $this->piecesJointesFournies[$pj->getType()->getId()] = $pj;
+            }
+        }
+        
+        return $this->piecesJointesFournies;
+    }
+    
+    /**
+     * Spécifie l'intervenant concerné.
+     * 
+     * @param Intervenant $intervenant Intervenant concerné
+     * @return self
+     */
+    public function setIntervenant(Intervenant $intervenant)
+    {
+        $this->intervenant = $intervenant;
+        
+        $this->reset();
+        
+        return $this;
+    }
+
+    /**
+     * Réinitialise les variables de travail.
+     * 
+     * @return self
+     */
+    private function reset()
+    {
+        $this->piecesJointesFournies = null;
+        
+        return $this;
+    }
+    
+    protected $avecFichier = null;
+    
+    /**
+     * Retourne le flag indiquant s'il faut vérifier ou pas la présence/absence de fichier pour chaque pièce justificative.
+     * 
+     * @return boolean|null null : peu importe ; true : présence ; false : absence 
+     */
+    public function getAvecFichier()
+    {
+        return $this->avecFichier;
+    }
+
+    /**
+     * Spécifie s'il faut vérifier ou pas la présence/absence de fichier pour chaque pièce justificative.
+     * 
+     * @param boolean|null $avecFichier null : peu importe ; true : présence ; false : absence 
+     * @return self
+     */
+    public function setAvecFichier($avecFichier = true)
+    {
+        $this->avecFichier = $avecFichier;
+        
+        $this->reset();
+        
+        return $this;
+    }
+    
+    /**
+     * @return PieceJointeService
+     */
+    private function getServicePieceJointe()
+    {
+        return $this->getServiceLocator()->get('applicationPieceJointe');
     }
     
     /**

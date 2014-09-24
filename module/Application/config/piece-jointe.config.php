@@ -4,8 +4,9 @@ namespace Application;
 
 use Application\Entity\Db\PieceJointe;
 use Application\Assertion\PieceJointeAssertion;
+use Application\Entity\Db\Fichier;
+use Application\Assertion\FichierAssertion;
 use Application\Acl\ComposanteRole;
-use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantExterieurRole;
 
 return array(
@@ -36,6 +37,30 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
+                            'voir' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/voir/:pieceJointe/vue/:vue',
+                                    'constraints' => array(
+                                        'pieceJointe' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'voir',
+                                    ),
+                                ),
+                            ),
+                            'voir-type' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/voir-type/:typePieceJointe/vue/:vue',
+                                    'constraints' => array(
+                                        'typePieceJointe' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'voir-type',
+                                    ),
+                                ),
+                            ),
                             'lister' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -45,6 +70,15 @@ return array(
                                     ),
                                     'defaults' => array(
                                         'action' => 'lister',
+                                    ),
+                                ),
+                            ),
+                            'status' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/status',
+                                    'defaults' => array(
+                                        'action' => 'status',
                                     ),
                                 ),
                             ),
@@ -63,9 +97,10 @@ return array(
                             'supprimer' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/supprimer/:pieceJointe/:nomFichier',
+                                    'route' => '/supprimer/:pieceJointe[/fichier/:fichier]',
                                     'constraints' => array(
                                         'pieceJointe' => '[0-9]*',
+                                        'fichier'     => '[0-9]*',
                                     ),
                                     'defaults' => array(
                                         'action' => 'supprimer',
@@ -75,9 +110,10 @@ return array(
                             'telecharger' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/telecharger/:pieceJointe/:nomFichier',
+                                    'route' => '/telecharger/:pieceJointe[/fichier/:fichier/:nomFichier]',
                                     'constraints' => array(
                                         'pieceJointe' => '[0-9]*',
+                                        'fichier'     => '[0-9]*',
                                     ),
                                     'defaults' => array(
                                         'action' => 'telecharger',
@@ -87,9 +123,10 @@ return array(
                             'valider' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/valider/:pieceJointe',
+                                    'route' => '/valider/:pieceJointe[/fichier/:fichier]',
                                     'constraints' => array(
                                         'pieceJointe' => '[0-9]*',
+                                        'fichier'     => '[0-9]*',
                                     ),
                                     'defaults' => array(
                                         'action' => 'valider',
@@ -99,9 +136,10 @@ return array(
                             'devalider' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/devalider/:pieceJointe',
+                                    'route' => '/devalider/:pieceJointe[/fichier/:fichier]',
                                     'constraints' => array(
                                         'pieceJointe' => '[0-9]*',
+                                        'fichier'     => '[0-9]*',
                                     ),
                                     'defaults' => array(
                                         'action' => 'devalider',
@@ -142,31 +180,86 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => array('index', 'ajouter', 'supprimer', 'lister', 'telecharger'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID,'Administrateur'),
+                    'action'     => array('index', 'ajouter', 'supprimer', 'voir', 'voir-type', 'lister', 'telecharger', 'status'),
+                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, 'Administrateur'),
+                    'assertion'  => 'PieceJointeAssertion',
+                ),
+                array(
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => array('valider', 'devalider'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, 'Administrateur'),
+                    'assertion'  => 'PieceJointeAssertion',
                 ),
             ),
         ),
         'resource_providers' => array(
             'BjyAuthorize\Provider\Resource\Config' => array(
                 PieceJointe::RESOURCE_ID => array(),
+                Fichier::RESOURCE_ID => array(),
             ),
         ),
         'rule_providers' => array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
+                    /**
+                     * Pièces jointes
+                     */
                     array(
-                        array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, 'Administrateur'), 
+                        array(
+                            IntervenantExterieurRole::ROLE_ID, 
+                            ComposanteRole::ROLE_ID, 
+                            'Administrateur',
+                        ), 
                         PieceJointe::RESOURCE_ID, 
                         array(
                             PieceJointeAssertion::PRIVILEGE_CREATE, 
                             PieceJointeAssertion::PRIVILEGE_READ, 
                             PieceJointeAssertion::PRIVILEGE_DELETE, 
-                            PieceJointeAssertion::PRIVILEGE_UPDATE, 
-                            PieceJointeAssertion::PRIVILEGE_TELECHARGER, 
-                            PieceJointeAssertion::PRIVILEGE_VALIDER, 
-                            PieceJointeAssertion::PRIVILEGE_DEVALIDER), 
+                            PieceJointeAssertion::PRIVILEGE_CREATE_FICHIER, 
+                        ), 
                         'PieceJointeAssertion',
+                    ),
+                    array(
+                        array(
+                            ComposanteRole::ROLE_ID, 
+                            'Administrateur',
+                        ), 
+                        PieceJointe::RESOURCE_ID, 
+                        array(
+                            PieceJointeAssertion::PRIVILEGE_VALIDER, 
+                            PieceJointeAssertion::PRIVILEGE_DEVALIDER, 
+                        ), 
+                        'PieceJointeAssertion',
+                    ),
+                    /**
+                     * Fichiers déposés
+                     */
+                    array(
+                        array(
+                            IntervenantExterieurRole::ROLE_ID, 
+                            ComposanteRole::ROLE_ID, 
+                            'Administrateur',
+                        ), 
+                        Fichier::RESOURCE_ID, 
+                        array(
+                            FichierAssertion::PRIVILEGE_CREATE, 
+                            FichierAssertion::PRIVILEGE_READ, 
+                            FichierAssertion::PRIVILEGE_DELETE,
+                            FichierAssertion::PRIVILEGE_TELECHARGER, 
+                        ), 
+                        'FichierAssertion',
+                    ),
+                    array(
+                        array(
+                            ComposanteRole::ROLE_ID, 
+                            'Administrateur',
+                        ), 
+                        Fichier::RESOURCE_ID, 
+                        array(
+                            FichierAssertion::PRIVILEGE_VALIDER, 
+                            FichierAssertion::PRIVILEGE_DEVALIDER, 
+                        ), 
+                        'FichierAssertion',
                     ),
                 ),
             ),
@@ -186,7 +279,8 @@ return array(
             'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
             'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
             'PiecesJointesFourniesRule'        => 'Application\\Rule\\Intervenant\\PiecesJointesFourniesRule',
-            'PieceJointeAssertion'             => 'Application\\Assertion\\AgrementAssertion',
+            'PieceJointeAssertion'             => 'Application\\Assertion\\PieceJointeAssertion',
+            'FichierAssertion'                 => 'Application\\Assertion\\FichierAssertion',
         ),
         'initializers' => array(
         ),

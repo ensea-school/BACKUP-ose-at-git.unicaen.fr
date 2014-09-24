@@ -1,38 +1,24 @@
 <?php 
 use Application\Assertion\PieceJointeAssertion;
-use Application\Entity\Db\PieceJointe;
+use Application\Entity\Db\TypePieceJointeStatut;
 ?>
-
-<link href="<?php //echo $this->basePath('css/fileinput.min.css') ?>" media="screen" rel="stylesheet" type="text/css"> 
 
 <?php $this->headTitle()->append($this->intervenant->getNomUsuel())->append("Pièces justificatives") ?>
 
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<?php
-$messenger = $this->messenger(true);
-if ($complet) {
-    $messenger->addMessage("Toutes les pièces justificatives obligatoires ont été fournies.", 'success');
-}
-else {
-    $messenger->addMessage("Il manque des pièces justificatives obligatoires.", 'danger');
-}
-echo $messenger;
-?>
+<?php echo $this->partial('application/piece-jointe/status'); ?>
 
-<style>
-    a.modele-doc { /*margin-left: 20px;*/ }
-    /*span.text-warning { font-style: italic; }*/
-</style>
-
-<?php foreach($this->typesPieceJointeStatut as $tpjs): /* @var $tpjs \Application\Entity\Db\TypePieceJointeStatut */ ?>
+<?php foreach($this->typesPieceJointeStatut as $tpjs): /* @var $tpjs TypePieceJointeStatut */ ?>
     <?php 
     $tpj         = $tpjs->getType();
+    $pj          = isset($this->piecesJointesFournies[$tpj->getId()]) ? $this->piecesJointesFournies[$tpj->getId()] : null;
     $divId       = uniqid('div');
     $formId      = 'form-' . $tpj->getId();
     $urlLister   = $this->url('piece-jointe/intervenant/lister', ['typePieceJointe' => $tpj->getId()], [], true);
     $urlAjouter  = $this->url('piece-jointe/intervenant/ajouter', ['typePieceJointe' => $tpj->getId()], [], true);
-    $assertionPj = (new PieceJointe())->setType($tpj); // instance d'entité transmise à l'assertion
+    
+    $validationBar = $this->partial('application/piece-jointe/partial/validation-bar', ['pj' => $pj]);
 
     $obligatoire = $tpjs->getObligatoireToString($this->totalHETD);
     $linksModelesDocs = [];
@@ -46,7 +32,7 @@ echo $messenger;
     if ($tpj->getCode() === \Application\Entity\Db\TypePieceJointe::CARTE_ETUD) {
         $type .= " $this->annee";
     }
-    $label = sprintf('%s <span class="text-warning">%s</span>', $type, $obligatoire);
+    $label = sprintf('%s<br /><small>%s</small>', $type, $obligatoire);
             
     $this->formUpload
             ->setAttribute('id', $formId)
@@ -55,44 +41,47 @@ echo $messenger;
             ->setAttribute('data-div-to-update', "#$divId")
             ->prepare(); // The correct enctype is set here 
     ?>
-    <h2><?php echo $label ?></h2>
-    <div class="row">
-        <div class="col-md-7">
-            <?php if ($linksModelesDocs): ?>
-            <div>
-                <label>Documents à télécharger et à remplir :</label><br />
-                <?php echo $this->htmlList($linksModelesDocs, false, false, false) ?>
-            </div>
-            <?php endif ?>
-            
-            <div class="upload-container">
-                
-                <!-- Liste des fichiers déposés -->
-                <label>Fichiers déposés pour cette pièce :</label>
-                <div class="uploaded-files-div" id="<?php echo $divId ?>" data-url="<?php echo $urlLister ?>"><!-- màj via AJAX --></div>
-                
-                <!-- formulaire éventuel de dépôt de PJ -->
-                <?php if ($this->isAllowed($assertionPj, PieceJointeAssertion::PRIVILEGE_CREATE)): ?>
-                    <?php echo $this->form()->openTag($this->formUpload); ?>
-                        <?php $fileElement = $this->formUpload->get('files')->setAttribute('class', "choose-file pull-left "); ?>
-                        <div><?php echo $this->formLabel($fileElement); ?></div>
-                        <?php echo $this->formFile($fileElement); ?>
-                        <?php echo $this->formElementErrors($fileElement); ?>
-                        <?php echo $this->formHidden($this->formUpload->get('security')); ?>
-                        <button type="submit" class="pull-right upload-file btn btn-file btn-primary btn-xs" style="display: none;">
-                            <span class="glyphicon glyphicon-upload"></span> Envoyer
-                        </button>
-                    <?php echo $this->form()->closeTag(); ?>
-                <?php endif; ?>
-                    
-                <div class="clearfix"></div>
-            </div>
+
+    <div class="panel panel-default upload-container">
+        <div class="panel-heading">
+            <h2>
+                <?php $urlValidationBar = $this->url('piece-jointe/intervenant/voir-type', ['typePieceJointe' => $tpj->getId(), 'vue' => urlencode('partial/validation-bar')], [], true); ?>
+                <div class="validation-bar pull-right" data-url="<?php echo $urlValidationBar ?>"><?php echo $validationBar ?></div>
+                <?php echo $label ?>
+            </h2>
         </div>
-        <div class="col-md-5">
-            Validation!!
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-7">
+                    <?php if ($linksModelesDocs): ?>
+                    <div>
+                        <label>Documents à télécharger et à remplir :</label><br />
+                        <?php echo $this->htmlList($linksModelesDocs, false, false, false) ?>
+                    </div>
+                    <?php endif ?>
+                    <!-- Liste des fichiers déposés -->
+                    <label>Fichiers déposés pour cette pièce :</label>
+                    <div class="uploaded-files-div" id="<?php echo $divId ?>" data-url="<?php echo $urlLister ?>"><!-- màj via AJAX --></div>
+                </div>
+                <div class="col-md-5">
+                    <!-- formulaire éventuel de dépôt de PJ -->
+                    <?php if ($this->isAllowed($pj ?: $this->assertionPj->setType($tpj), PieceJointeAssertion::PRIVILEGE_CREATE_FICHIER)): ?>
+                        <?php echo $this->form()->openTag($this->formUpload); ?>
+                            <?php $fileElement = $this->formUpload->get('files')->setAttribute('class', "choose-file pull-left "); ?>
+                            <div><?php echo $this->formLabel($fileElement); ?></div>
+                            <?php echo $this->formFile($fileElement); ?>
+                            <?php echo $this->formElementErrors($fileElement); ?>
+                            <?php echo $this->formHidden($this->formUpload->get('security')); ?>
+                            <button type="submit" class="upload-file center-block btn btn-primary btn-xs" data-loading-text="Patientez..." style="display: none;">
+                                <span class="glyphicon glyphicon-upload"></span> Envoyer
+                            </button>
+                        <?php echo $this->form()->closeTag(); ?>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
     </div>
-    <hr />
+    <!--<hr />-->
 <?php endforeach ?>
 
 <br />
@@ -121,6 +110,12 @@ $(function() {
 
 <script>
 $(function() {
+    var uploadEventFileDeleted  = "upload-event-file-deleted";
+    var uploadEventFileUploaded = "upload-event-file-uploaded";
+    
+    /**
+     * @todo à extraire dans une aide de vue ??
+     */
     $(".upload-container").each(function() {
         var container = $(this);
         var form = $(".upload-form", container);
@@ -131,7 +126,8 @@ $(function() {
                 form.clearForm();
                 showHideUploadButton();
                 // interdiction du bouton d'envoi
-                $(".upload-file", form).prop('disabled', false);
+                $(".upload-file", form).button('reset');
+                $("body").trigger(uploadEventFileUploaded, [ container ]);
             },
             error: function() {
                 alert("Oups, une erreur s'est produite pendant l'envoi de fichier! Essayez à nouveau, svp.");
@@ -140,7 +136,7 @@ $(function() {
                 // The array of form data takes the following form:
                 // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
                 // interdiction du bouton d'envoi
-                $(".upload-file", form).prop('disabled', true);
+                $(".upload-file", form).button('loading');
                 // ajout d'un témoin de chargement AJAX
                 if (! $("ul", filesDiv).length) {
                    filesDiv.html("<ul/>"); 
@@ -150,20 +146,51 @@ $(function() {
             },
         });
         // chargement initial de la liste des fichiers pour chaque type de pièce
-        filesDiv.addClass("loading").refresh([], function() { filesDiv.removeClass("loading") });
+        filesDiv.addClass("loading").refresh([], function() { filesDiv.hide().removeClass("loading").fadeIn(); });
         // écoute clic sur suppression de fichier pour faire la requête AJAX et rafraîchir la liste des fichiers
         filesDiv.on("click", ".delete-file", function(event) {
             var a = $(this);
-            a.addClass("loading");
+            a.button('loading');
             $.post(a.prop('href'), [], function(data, textStatus, jqXHR) {
+                a.parent("li").fadeOut();
                 filesDiv.refresh();
+                $("body").trigger(uploadEventFileDeleted, [ container ]);
             });
             event.preventDefault();
         });
         // affichage/masquage bouton d'envoi selon sélection de fichier
-        $(".choose-file", container).change(function() { showHideUploadButton($(this)); });
+        $(".choose-file", container).change(function() { 
+            showHideUploadButton($(this)); 
+        });
         // masquage initial du bouton d'envoi
         showHideUploadButton();
+    });
+    
+    var eventFileValidated = "event-file-validated";
+    
+    $(".upload-container .uploaded-files-div").each(function() {
+        var filesDiv = $(this);
+        // écoute clic sur suppression de fichier pour faire la requête AJAX et rafraîchir la liste des fichiers
+        filesDiv.on("click", ".valider-pj, .devalider-pj", function(event) {
+            var a = $(this);
+            a.button('loading');
+            $.post(a.prop('href'), [], function(data, textStatus, jqXHR) {
+                filesDiv.refresh();
+                $("body").trigger(eventFileValidated);
+            });
+            event.preventDefault();
+        });
+    });
+    
+    /**
+     * Ecoute des événements concernant les fichiers déposés, pour actualiser les messages d'infos
+     */
+    $("body").on(uploadEventFileUploaded + " " + uploadEventFileDeleted + " " + eventFileValidated, function(event, container) {
+        $("div.status").refresh([], function() { $(this).hide().fadeIn(); });
+        if (container) {
+            var validationBar = $("div.validation-bar", container);
+            validationBar.refresh([], function() { $(this).hide().fadeIn(); });
+        }
     });
 });
 function showHideUploadButton(browseButton) 
@@ -175,7 +202,5 @@ function showHideUploadButton(browseButton)
     });
 }
 </script>
-            
-<?php //$this->inlineScript()->prependFile($this->basePath('js/fileinput.min.js')) ?>
-
-<script src="http://malsup.github.com/jquery.form.js"></script> 
+       
+<?php $this->inlineScript()->appendFile("http://malsup.github.com/jquery.form.js") ?>

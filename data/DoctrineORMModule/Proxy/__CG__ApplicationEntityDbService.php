@@ -562,4 +562,15 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
         return parent::setTypeVolumeHoraire($typeVolumeHoraire);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResourceId', array());
+
+        return parent::getResourceId();
+    }
+
 }

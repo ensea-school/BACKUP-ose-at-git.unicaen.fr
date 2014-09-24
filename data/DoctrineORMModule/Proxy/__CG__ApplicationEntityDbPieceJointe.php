@@ -64,10 +64,10 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'url', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'fichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'nomFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'tailleFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'dossier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreateur');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'url', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'fichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'nomFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'tailleFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'typeFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'dossier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreateur');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'url', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'fichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'nomFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'tailleFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'dossier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreateur');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'url', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'fichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'nomFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'tailleFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'typeFichier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'dossier', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\PieceJointe' . "\0" . 'histoCreateur');
     }
 
     /**
@@ -173,6 +173,17 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', array());
+
+        return parent::__toString();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -325,6 +336,39 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTailleFichier', array());
 
         return parent::getTailleFichier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTailleFichierToString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTailleFichierToString', array());
+
+        return parent::getTailleFichierToString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTypeFichier($typeFichier)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTypeFichier', array($typeFichier));
+
+        return parent::setTypeFichier($typeFichier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTypeFichier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeFichier', array());
+
+        return parent::getTypeFichier();
     }
 
     /**
@@ -516,6 +560,17 @@ class PieceJointe extends \Application\Entity\Db\PieceJointe implements \Doctrin
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
 
         return parent::getHistoCreateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResourceId', array());
+
+        return parent::getResourceId();
     }
 
 }

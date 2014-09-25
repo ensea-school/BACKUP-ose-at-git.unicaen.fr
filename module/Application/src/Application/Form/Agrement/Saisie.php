@@ -65,7 +65,9 @@ class Saisie extends Form implements InputFilterProviderInterface
         foreach ($intervenants as $intervenant) {
             $options[$intervenant->getId()] = (string)$intervenant;
         }
-        $this->get($name)->setValueOptions($options);
+        $this->get($name)
+                ->setValueOptions($options)
+                ->setValue(array_keys($options));
         
         return $this;
     }

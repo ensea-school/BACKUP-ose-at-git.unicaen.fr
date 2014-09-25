@@ -70,8 +70,8 @@ class Validation implements HistoriqueAwareInterface
     public function __toString()
     {
         return sprintf("Validation du %s par %s",
-                $this->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT), 
-                $this->getHistoModificateur());
+                $this->getHistoCreation()->format(\Common\Constants::DATETIME_FORMAT), 
+                $this->getHistoCreateur());
     }
 
     /**

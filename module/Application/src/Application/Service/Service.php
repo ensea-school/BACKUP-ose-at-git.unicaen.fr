@@ -55,9 +55,6 @@ class Service extends AbstractEntityService
         if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }
-        if (! $this->getAuthorize()->isAllowed($entity, 'create')){
-            throw new \BjyAuthorize\Exception\UnAuthorizedException('Action interdite');
-        }
         return $entity;
     }
 
@@ -75,8 +72,8 @@ class Service extends AbstractEntityService
         if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }
-        if (! $this->getAuthorize()->isAllowed($entity, 'update')){
-            throw new \BjyAuthorize\Exception\UnAuthorizedException('Action interdite');
+        if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
         }
         $result = parent::save($entity);
         /* Sauvegarde automatique des volumes horaires associés */

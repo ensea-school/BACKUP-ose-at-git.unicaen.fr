@@ -154,12 +154,12 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => array('creer', 'valider', 'devalider', 'saisir-retour'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => array('index', 'voir', 'exporter'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID),
+                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
             ),
         ),

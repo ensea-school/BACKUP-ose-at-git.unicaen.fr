@@ -59,8 +59,8 @@ class AgrementFourniRule extends AgrementAbstractRule implements ServiceLocatorA
             if ($this->getStructure()) {
                 $structures = [ $this->getStructure()->getId() => $this->getStructure() ];
             }
-            // sinon le test devra porter sur toutes les structures possibles
-            elseif ($role instanceof \Application\Acl\IntervenantRole) {
+            // sinon, pour certains rôles, peu importe la structure
+            elseif ($role instanceof \Application\Acl\IntervenantRole || $role instanceof \Application\Acl\AdministrateurRole) {
                 // du point de vue intervenant, aucun critère de structure
                 $structures = [ null ];
             }

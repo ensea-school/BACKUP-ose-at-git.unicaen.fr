@@ -25,19 +25,8 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
      */
     public function init()
     {
-        $serviceCivilite = $this->getServiceLocator()->getServiceLocator()->get('applicationCivilite');
-        $serviceStatut   = $this->getServiceLocator()->getServiceLocator()->get('applicationStatutIntervenant');
-        
         $anneePrec = $this->getContextProvider()->getGlobalContext()->getAnneePrecedente();
-        $civilites = $serviceCivilite->getList();
-        $statuts   = $serviceStatut->getList(
-                            $serviceStatut->finderByVacatairesNonChargeEns1An(
-                                    $serviceStatut->finderByNonAutorise( false,
-                                        $serviceStatut->finderByVacataires()
-                                    )
-                            )
-                     );
-
+        
         $this
                 ->setObject(new \Application\Entity\Db\Dossier())
                 ->setHydrator(new DossierFieldsetHydrator(false));
@@ -73,7 +62,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
 
         $civilite = new CiviliteFieldset('civilite');
         $civilite
-                ->setCivilites($civilites)
+                ->setCivilites($this->getCivilites())
                 ->init();
         $this->add($civilite);
 
@@ -178,9 +167,40 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
         
         $statut = new StatutFieldset('statut');
         $statut
-                ->setStatuts($statuts)
+                ->setStatuts($this->getStatutsIntervenant())
                 ->init();
         $this->add($statut);
+    }
+    
+    /**
+     * 
+     * @return \Application\Entity\Db\StatutIntervenant[] id => StatutIntervenant
+     */
+    private function getStatutsIntervenant() 
+    {
+        $serviceStatut   = $this->getServiceLocator()->getServiceLocator()->get('applicationStatutIntervenant');
+        
+        $qb = $serviceStatut->finderByVacatairesNonChargeEns1An();
+        $serviceStatut->finderByVacatairesNonBiatss($qb);
+        $serviceStatut->finderByNonAutorise(false, $qb);
+        $serviceStatut->finderByPeutSaisirService(true, $qb);
+        
+        $statuts = $serviceStatut->getList($qb);
+
+        return $statuts;
+    }
+    
+    /**
+     * 
+     * @return \Application\Entity\Db\Civilite[] id => Civilite
+     */
+    private function getCivilites()
+    {
+        $serviceCivilite = $this->getServiceLocator()->getServiceLocator()->get('applicationCivilite');
+        
+        $civilites = $serviceCivilite->getList();
+
+        return $civilites;
     }
     
     /**

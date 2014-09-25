@@ -199,10 +199,6 @@ implements ContextProviderAwareInterface,
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
         $structure          = $this->context()->structureFromRoute();
         $this->agrement     = $this->getAgrementForStructure($structure);
-
-        if (!$structure && !$this->typeAgrement->isConseilAcademique()) {
-            throw new LogicException(sprintf("Une structure doit être spécifiée pour le type d'agrément '%s'.", $this->typeAgrement));
-        }
         
         $this->view = new ViewModel(array(
             'agrement'    => $this->agrement,
@@ -463,10 +459,16 @@ implements ContextProviderAwareInterface,
      */
     private function getAgrementForStructure(Structure $structure = null)
     {
+        if (!$structure && !$this->typeAgrement->isConseilAcademique()) {
+            throw new LogicException(sprintf("Une structure doit être spécifiée pour le type d'agrément '%s'.", $this->typeAgrement));
+        }
+        
         $service = $this->getAgrementService();
         
         $qb = $service->finderByType($this->typeAgrement);
-        $service->finderByStructure($structure, $qb);
+        if ($structure) {
+            $service->finderByStructure($structure, $qb);
+        }
         $service->finderByIntervenant($this->intervenant, $qb);
         
         return $qb->getQuery()->getOneOrNullResult();

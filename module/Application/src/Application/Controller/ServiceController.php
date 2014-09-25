@@ -64,6 +64,7 @@ class ServiceController extends AbstractActionController
             $intervenant = method_exists($role, 'getIntervenant') ? $role->getIntervenant() : null;
         }else{
             $service->finderByIntervenant( $intervenant, $qb ); // filtre par intervenant souhaité
+            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
         }
 
         if ($showMultiplesIntervenants){

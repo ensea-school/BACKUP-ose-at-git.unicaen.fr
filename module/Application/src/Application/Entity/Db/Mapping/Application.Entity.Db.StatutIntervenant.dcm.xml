@@ -28,6 +28,7 @@
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <field name="nonAutorise" type="boolean" column="NON_AUTORISE" nullable="false"/>
     <field name="peutSaisirService" type="boolean" column="PEUT_SAISIR_SERVICE" nullable="false"/>
+    <field name="peutChoisirDansDossier" type="boolean" column="PEUT_CHOISIR_DANS_DOSSIER" nullable="false"/>
     <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
       <join-columns>
         <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>

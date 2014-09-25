@@ -179,15 +179,11 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
     private function getStatutsIntervenant() 
     {
         $serviceStatut   = $this->getServiceLocator()->getServiceLocator()->get('applicationStatutIntervenant');
+        /* @var $serviceStatut \Application\Service\StatutIntervenant */
         
-        $qb = $serviceStatut->finderByVacatairesNonChargeEns1An();
-        $serviceStatut->finderByVacatairesNonBiatss($qb);
-        $serviceStatut->finderByNonAutorise(false, $qb);
-        $serviceStatut->finderByPeutSaisirService(true, $qb);
-        
-        $statuts = $serviceStatut->getList($qb);
-
-        return $statuts;
+        return $serviceStatut->getList(
+                    $serviceStatut->finderByPeutChoisirDansDossier(true)
+               );
     }
     
     /**
@@ -197,6 +193,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
     private function getCivilites()
     {
         $serviceCivilite = $this->getServiceLocator()->getServiceLocator()->get('applicationCivilite');
+        /* @var $serviceCivilite \Application\Service\Civilite */
         
         $civilites = $serviceCivilite->getList();
 

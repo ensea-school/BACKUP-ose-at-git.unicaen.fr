@@ -234,29 +234,73 @@ class StatutIntervenant
      */
     protected $peutSaisirService;
 
+    /**
+     * @var boolean
+     */
+    protected $peutChoisirDansDossier;
 
+    
+
+    /**
+     *
+     * @return boolean
+     */
     function getNonAutorise()
     {
         return $this->nonAutorise;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     function getPeutSaisirService()
     {
         return $this->peutSaisirService;
     }
 
+    /**
+     *
+     * @param boolean $nonAutorise
+     * @return \Application\Entity\Db\StatutIntervenant
+     */
     function setNonAutorise($nonAutorise)
     {
         $this->nonAutorise = $nonAutorise;
         return $this;
     }
 
+    /**
+     *
+     * @param boolean $peutSaisirService
+     * @return \Application\Entity\Db\StatutIntervenant
+     */
     function setPeutSaisirService($peutSaisirService)
     {
         $this->peutSaisirService = $peutSaisirService;
         return $this;
     }
-    
+
+    /**
+     *
+     * @return boolean
+     */
+    function getPeutChoisirDansDossier()
+    {
+        return $this->peutChoisirDansDossier;
+    }
+
+    /**
+     *
+     * @param boolean $peutChoisirDansDossier
+     * @return \Application\Entity\Db\StatutIntervenant
+     */
+    function setPeutChoisirDansDossier($peutChoisirDansDossier)
+    {
+        $this->peutChoisirDansDossier = $peutChoisirDansDossier;
+        return $this;
+    }
+
     /**
      * Set depassement
      *

@@ -64,10 +64,10 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService');
+            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutChoisirDansDossier');
         }
 
-        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService');
+        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutChoisirDansDossier');
     }
 
     /**
@@ -314,6 +314,28 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPeutSaisirService', array($peutSaisirService));
 
         return parent::setPeutSaisirService($peutSaisirService);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPeutChoisirDansDossier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPeutChoisirDansDossier', array());
+
+        return parent::getPeutChoisirDansDossier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPeutChoisirDansDossier($peutChoisirDansDossier)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPeutChoisirDansDossier', array($peutChoisirDansDossier));
+
+        return parent::setPeutChoisirDansDossier($peutChoisirDansDossier);
     }
 
     /**

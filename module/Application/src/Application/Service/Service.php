@@ -130,8 +130,8 @@ class Service extends AbstractEntityService
         $iAlias             = $serviceIntervenant->getAlias();
 
         $this->join( $serviceIntervenant, $qb, 'intervenant' );
-        $this->join( $serviceStructure, $qb, 'structureAff', 's_aff' );
-        $this->leftJoin( $serviceStructure, $qb, 'structureEns', 's_ens' );
+        $this->join( $serviceStructure, $qb, 'structureAff', false, null, 's_aff' );
+        $this->leftJoin( $serviceStructure, $qb, 'structureEns', false, null, 's_ens' );
 
         $filter = "($iAlias.structure = :composante OR s_aff = :composante OR s_ens = :composante)";
         $qb->andWhere($filter)->setParameter('composante', $structure);

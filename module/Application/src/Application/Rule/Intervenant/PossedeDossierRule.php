@@ -26,6 +26,6 @@ class PossedeDossierRule extends IntervenantRule
     {
         $statut = $this->getIntervenant()->getStatut();
         
-        return $statut->peutSaisirDossier();
+        return $statut->getPeutSaisirDossier();
     }
 }

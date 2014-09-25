@@ -102,20 +102,6 @@ class StatutIntervenant
     }
     
     /**
-     * Indique si ce statut permet la saisie des données personnelles.
-     *
-     * @return bool 
-     */
-    public function peutSaisirDossier()
-    {
-        if ($this->estAutre() || ($this->estVacataire() && !$this->estBiatss())) {
-            return true;
-        }
-
-        return false;
-    }
-    
-    /**
      * Indique si ce statut permet la fourniture de pièces justificatives.
      *
      * @return bool 
@@ -238,8 +224,11 @@ class StatutIntervenant
      * @var boolean
      */
     protected $peutChoisirDansDossier;
-
     
+    /**
+     * @var boolean
+     */
+    protected $peutSaisirDossier;
 
     /**
      *
@@ -299,6 +288,29 @@ class StatutIntervenant
     {
         $this->peutChoisirDansDossier = $peutChoisirDansDossier;
         return $this;
+    }
+    
+    /**
+     * Spécifie si ce statut permet la saisie des données personnelles.
+     * 
+     * @param boolean $peutSaisirDossier
+     * @return self
+     */
+    public function setPeutSaisirDossier($peutSaisirDossier = true)
+    {
+        $this->peutSaisirDossier = $peutSaisirDossier;
+        
+        return $this;
+    }
+    
+    /**
+     * Indique si ce statut permet la saisie des données personnelles.
+     *
+     * @return boolean 
+     */
+    public function getPeutSaisirDossier()
+    {
+        return $this->peutSaisirDossier;
     }
 
     /**

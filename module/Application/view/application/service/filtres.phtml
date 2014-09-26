@@ -34,7 +34,7 @@
           <div class="col-md-8"><?php echo $this->formRow($rechercheForm->get('submit-resume')); ?> <?php echo $this->formRow($rechercheForm->get('submit-details')); ?> </div>
         </div>
         <?php
-        echo $this->formHidden( $rechercheForm->get('action'));
+        echo $this->formHidden( $rechercheForm->get('action')->setValue('afficher') );
         echo $this->form()->closeTag();
         echo $this->formErrors( $rechercheForm );
         ?>

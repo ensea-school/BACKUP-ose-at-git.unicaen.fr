@@ -9,7 +9,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Application\Traits\StructureAwareTrait;
 
 /**
- * Description of AgrementFourniRule
+ * Règle métier déterminant si un intervenant a reçu un type d'agrément donné.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -25,18 +25,18 @@ class AgrementFourniRule extends AgrementAbstractRule implements ServiceLocatorA
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
                 
-        /**
-         * Si agrément partiel toléré : au moins un agrément fourni et c'est ok
-         */
-        if ($this->getMemePartiellement()) {
-            if ($this->getStructure()) {
-                throw new LogicException(
-                        "Si une structure est fournie à cette règle, le flag d'agrément partiel ne peut être à true.");
-            }
-            if (count($this->getTypesAgrementFournis())) {
-                return true;
-            }
-        }
+//        /**
+//         * Si agrément partiel toléré : au moins un agrément fourni et c'est ok
+//         */
+//        if ($this->getMemePartiellement()) {
+//            if ($this->getStructure()) {
+//                throw new LogicException(
+//                        "Si une structure est fournie à cette règle, le flag d'agrément partiel ne peut être à true.");
+//            }
+//            if (count($this->getTypesAgrementFournis())) {
+//                return true;
+//            }
+//        }
         
         /**
          * Conseil Academique (un seul pour toutes les structures d'enseignement)
@@ -89,38 +89,38 @@ class AgrementFourniRule extends AgrementAbstractRule implements ServiceLocatorA
         return true;
     }
     
-    /**
-     * Flag indiquant si l'on se satisfait d'un agrément "partiel".
-     * 
-     * Autrement dit, avec ce flag à <code>true</code>, les agréments seront considérés comme donnés
-     * (i.e. cette règle retournera <code>true</code>) si au moins une structure d'enseignement a donné 
-     * son agrément parmi toutes celles où enseigne l'intervenant.
-     * 
-     * Attention : ce flag n'est pas pris en compte si une structure d'enseignement est fourni à cette règle.
-     * 
-     * @var boolean
-     */
-    private $memePartiellement = false;
-
-    /**
-     * Retourne la valeur du flag indiquant si l'on se satisfait d'un agrément "partiel".
-     * 
-     * @return boolean
-     */
-    public function getMemePartiellement()
-    {
-        return $this->memePartiellement;
-    }
-
-    /**
-     * Change la valeur du flag indiquant si l'on se satisfait d'un agrément "partiel".
-     * 
-     * @param boolean $memePartiellement
-     * @return AgrementFourniRule
-     */
-    public function setMemePartiellement($memePartiellement = true)
-    {
-        $this->memePartiellement = $memePartiellement;
-        return $this;
-    }
+//    /**
+//     * Flag indiquant si l'on se satisfait d'un agrément "partiel".
+//     * 
+//     * Autrement dit, avec ce flag à <code>true</code>, les agréments seront considérés comme donnés
+//     * (i.e. cette règle retournera <code>true</code>) si au moins une structure d'enseignement a donné 
+//     * son agrément parmi toutes celles où enseigne l'intervenant.
+//     * 
+//     * Attention : ce flag n'est pas pris en compte si une structure d'enseignement est fourni à cette règle.
+//     * 
+//     * @var boolean
+//     */
+//    private $memePartiellement = false;
+//
+//    /**
+//     * Retourne la valeur du flag indiquant si l'on se satisfait d'un agrément "partiel".
+//     * 
+//     * @return boolean
+//     */
+//    public function getMemePartiellement()
+//    {
+//        return $this->memePartiellement;
+//    }
+//
+//    /**
+//     * Change la valeur du flag indiquant si l'on se satisfait d'un agrément "partiel".
+//     * 
+//     * @param boolean $memePartiellement
+//     * @return AgrementFourniRule
+//     */
+//    public function setMemePartiellement($memePartiellement = true)
+//    {
+//        $this->memePartiellement = $memePartiellement;
+//        return $this;
+//    }
 }

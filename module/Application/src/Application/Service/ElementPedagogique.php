@@ -192,7 +192,7 @@ class ElementPedagogique extends AbstractEntityService
             $params['niveau'] = $niveau;
         }
         if (isset($filters['etape']) && $filters['etape'] instanceof \Application\Entity\Db\Etape) {
-            $whereContext[] = 'ep.etape_id = :etape';
+            $whereContext[] = 'cp.etape_id = :etape';
             $params['etape'] = $filters['etape']->getId();
         }
         $whereContext = implode(PHP_EOL . 'AND ', array_filter($whereContext));

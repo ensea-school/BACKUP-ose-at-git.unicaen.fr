@@ -90,7 +90,8 @@ class Contrat extends AbstractEntityService
         $contrat->setValidation(null)
                 ->setTypeContrat($typeContrat)
                 ->setContrat(null)
-                ->setNumeroAvenant(0);
+                ->setNumeroAvenant(0)
+                ->setDateRetourSigne(null);
         
         return $this;
     }

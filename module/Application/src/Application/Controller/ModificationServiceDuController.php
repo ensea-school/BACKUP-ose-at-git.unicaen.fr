@@ -7,6 +7,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Common\Exception\RuntimeException;
 use Application\Entity\Db\IntervenantPermanent;
 use Common\Exception\MessageException;
+use Application\Acl\ComposanteRole;
 
 /**
  * Description of IntervenantController
@@ -31,7 +32,8 @@ class ModificationServiceDuController extends AbstractActionController implement
         $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant IntervenantPermanent */
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
         
-        $rule = new \Application\Rule\Intervenant\PeutSaisirModificationServiceDuRule($intervenant, $role);
+        $rule = new \Application\Rule\Intervenant\PeutSaisirModificationServiceDuRule($intervenant);
+        $rule->setStructure($role instanceof ComposanteRole ? $role->getStructure() : null);
         if (!$rule->execute()) {
             throw new MessageException("La modification de service dû n'est pas possible. ", null, new \Exception($rule->getMessage()));
         }
@@ -42,15 +44,8 @@ class ModificationServiceDuController extends AbstractActionController implement
         $qb = $this->getServiceIntervenant()->getFinderIntervenantPermanentWithModificationServiceDu();
         $qb->setIntervenant($intervenant);
         $intervenant = $qb->getQuery()->getOneOrNullResult(); /* @var $intervenant IntervenantPermanent */
-//        print_r($qb->getQuery()->getSQL());
-//        var_dump($qb->getQuery()->getParameters());
-        if (!$intervenant) {
-            
-        }
         
         $annee = $context->getAnnee();
-        
-//        var_dump(get_class($intervenant), "".$annee, count($intervenant->getModificationServiceDu($annee)));
         
         // NB: patch pour permettre de vider toutes les modifs de service dû
         if ($this->getRequest()->isPost()) {

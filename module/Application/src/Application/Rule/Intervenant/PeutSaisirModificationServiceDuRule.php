@@ -2,28 +2,16 @@
 
 namespace Application\Rule\Intervenant;
 
-use Zend\Permissions\Acl\Role\RoleInterface;
-use Application\Entity\Db\Intervenant;
-use Application\Acl\ComposanteRole;
+use Application\Traits\StructureAwareTrait;
 
 /**
- * Description of PeutSaisirModificationServiceDuRule
+ * Règle métier déterminant si un intervenant peut faire l'objet d'une modification de service dû.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class PeutSaisirModificationServiceDuRule extends IntervenantRule
 {
-    /**
-     * Constructeur.
-     * 
-     * @param Intervenant   $intervenant Intervenant dont on modifie le service dû
-     * @param RoleInterface $role        Role auteur de la modification
-     */
-    public function __construct(Intervenant $intervenant, RoleInterface $role)
-    {
-        parent::__construct($intervenant);
-        $this->role = $role;
-    }
+    use StructureAwareTrait;
     
     public function execute()
     {
@@ -33,10 +21,10 @@ class PeutSaisirModificationServiceDuRule extends IntervenantRule
             return false;
         }
         
-        if ($this->getRole() instanceof ComposanteRole) {
-            $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getRole()->getStructure());
+        if ($this->getStructure()) {
+            $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getStructure());
             if (!$estAffecte->execute()) {
-                $this->setMessage(sprintf("%s %s étant votre structure de responsabilité.", $estAffecte->getMessage(), $this->getRole()->getStructure()));
+                $this->setMessage($estAffecte->getMessage());
                 return false;
             }
         }
@@ -47,17 +35,5 @@ class PeutSaisirModificationServiceDuRule extends IntervenantRule
     public function isRelevant()
     {
         return true;
-    }
-    
-    /**
-     * @var RoleInterface
-     */
-    protected $role;
-    /**
-     * @return RoleInterface
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 }

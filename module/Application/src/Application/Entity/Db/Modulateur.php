@@ -79,6 +79,11 @@ class Modulateur implements HistoriqueAwareInterface
      */
     protected $histoCreateur;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $elementModulateur;
+
     
     public function __toString()
     {
@@ -393,5 +398,38 @@ class Modulateur implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Add elementModulateur
+     *
+     * @param \Application\Entity\Db\ElementModulateur $elementModulateur
+     * @return self
+     */
+    public function addElementModulateur(\Application\Entity\Db\ElementModulateur $elementModulateur)
+    {
+        $this->elementModulateur[] = $elementModulateur;
+
+        return $this;
+    }
+
+    /**
+     * Remove elementModulateur
+     *
+     * @param \Application\Entity\Db\ElementModulateur $elementModulateur
+     */
+    public function removeElementModulateur(\Application\Entity\Db\Service $elementModulateur)
+    {
+        $this->elementModulateur->removeElement($elementModulateur);
+    }
+
+    /**
+     * Get elementModulateur
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getElementModulateur()
+    {
+        return $this->elementModulateur;
     }
 }

@@ -173,7 +173,7 @@ class Etape extends AbstractEntityService
             if ($etape->getStructure() != $ir->getStructure()){
                 return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour éditer les modulateurs de cette structure', $runEx);
             }
-        }elseif($ir instanceof \Application\Acl\Role){
+        }elseif($ir->getRoleId() == \Application\Acl\Role::ROLE_ID || $ir->getRoleId() == 'user'){
             return $this->cannotDoThat('Vous n\'êtes pas autorisé à éditer de modulateurs', $runEx);
         }elseif($ir instanceof \Application\Acl\IntervenantRole){
             return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité d\'ajouter de modulateur', $runEx);

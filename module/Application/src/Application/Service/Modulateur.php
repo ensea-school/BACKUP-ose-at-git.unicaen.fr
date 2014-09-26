@@ -49,11 +49,11 @@ class Modulateur extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $serviceElementPedagogique = $this->getServiceLocator()->get('ApplicationElementPedagogique');
-        $serviceElementModulateur = $this->getServiceLocator()->get('ApplicationElementModulateur');
-//        $serviceTypeModulateur = $this->getServiceLocator()->get('ApplicationTypeModulateur');
+        $serviceElementPedagogique = $this->getServiceLocator()->get('ApplicationElementPedagogique'); /* @var $serviceElementPedagogique ElementPedagogique */
+        $serviceElementModulateur = $this->getServiceLocator()->get('ApplicationElementModulateur'); /* @var $serviceElementModulateur ElementModulateur */
+//        $serviceTypeModulateur = $this->getServiceLocator()->get('ApplicationTypeModulateur'); /* @var $serviceTypeModulateur TypeModulateur */
 
-        $this->join( $serviceElementModulateur, $qb, 'id', 'modulateur' );
+        $this->join( $serviceElementModulateur, $qb, 'elementModulateur' );
 //        $this->join( $serviceTypeModulateur, $qb, 'typeModulateur' ); // pour éviter des sous-reqûetes intempestives par la suite !!
         $serviceElementModulateur->join( $serviceElementPedagogique, $qb, 'element' );
         $qb->andWhere($serviceElementPedagogique->getAlias().'.id = '.$element->getId());

@@ -8,7 +8,7 @@ use Application\Traits\StructureAwareTrait;
 use Application\Traits\TypeContratAwareTrait;
 
 /**
- * Description of PossedeContratRule
+ * Règle métier déterminant si un intervenant a fait l'objet d'un contrat/avenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

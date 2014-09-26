@@ -5,7 +5,7 @@ namespace Application\Rule\Intervenant;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
- * Description of NecessiteAgrementRule
+ * Règle métier déterminant si un intervenant est concerné par un type d'agrément donné.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

@@ -3,7 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 /**
- * Description of PeutSaisirServiceRule
+ * Règle métier déterminant si un intervenant peut saisir des données personnelles.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

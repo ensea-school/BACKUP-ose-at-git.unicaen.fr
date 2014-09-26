@@ -5,7 +5,7 @@ namespace Application\Rule\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 
 /**
- * Description of DossierValideRule
+ * Règle métier déterminant si les données personnelles d'un intervenant sont validées.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

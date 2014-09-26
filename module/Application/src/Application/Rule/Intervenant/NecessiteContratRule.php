@@ -3,7 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 /**
- * Description of NecessiteContratRule
+ * Règle métier déterminant si un intervenant nécessite l'établissement d'un contrat/avenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

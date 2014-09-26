@@ -3,7 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 /**
- * Description of PossedeDossierRule
+ * Règle métier déterminant si un intervenant a saisi des données personnelles.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

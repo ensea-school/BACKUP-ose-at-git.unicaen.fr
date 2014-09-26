@@ -15,7 +15,7 @@ use Application\Service\PieceJointe as PieceJointeService;
 use Application\Service\TypePieceJointeStatut as TypePieceJointeStatutService;
 
 /**
- * Description of PiecesJointesFourniesRule
+ * Règle métier déterminant si des pièces justificatives existent pour un intervenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

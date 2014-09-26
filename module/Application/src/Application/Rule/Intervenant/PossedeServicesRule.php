@@ -3,7 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 /**
- * Description of PossedeServicesRule
+ * Règle métier déterminant si un intervenant a fait l'objet d'une saisie d'enseignements.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

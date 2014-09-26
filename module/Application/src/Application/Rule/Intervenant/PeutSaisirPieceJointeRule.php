@@ -5,7 +5,7 @@ namespace Application\Rule\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 
 /**
- * Description of PeutSaisirServiceRule
+ * Règle métier déterminant si un intervenant peut joindre des pièces justificatives.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

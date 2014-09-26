@@ -2,39 +2,30 @@
 
 namespace Application\Rule\Intervenant;
 
+use Application\Entity\Db\Contrat;
 use Application\Entity\Db\IntervenantExterieur;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\TypeValidationAwareTrait;
-use Application\Traits\StructureAwareTrait;
-use Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
 use Application\Entity\Db\TypeContrat;
+use Application\Entity\Db\Validation;
+use Application\Entity\Db\VolumeHoraire;
+use Common\Constants;
 
 /**
- * Description of PeutCreerContratInitialRule
+ * Règle métier déterminant si un intervenant peut faire l'objet d'une création de contrat initial.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutCreerContratInitialRule extends AbstractRule implements ServiceLocatorAwareInterface
+class PeutCreerContratInitialRule extends PeutCreerContratAbstractRule
 {
-    use ServiceLocatorAwareTrait;
-    use IntervenantAwareTrait;
-    use TypeValidationAwareTrait;
-    use StructureAwareTrait;
-    use VolumeHoraireServiceAwareTrait;
-    
     public function execute()
     {
         $this->validation = null; 
         
         $contrats = $this->getIntervenant()->getContrat($this->getTypeContrat());
-        foreach ($contrats as $contrat) { /* @var $contrat \Application\Entity\Db\Contrat */
+        foreach ($contrats as $contrat) { /* @var $contrat Contrat */
             if ($contrat->getValidation()) {
                 $this->validation = $contrat->getValidation();
                 $this->setMessage(sprintf("Un contrat validé le %s existe déjà pour %s.", 
-                        $contrat->getValidation()->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT), 
+                        $contrat->getValidation()->getHistoModification()->format(Constants::DATETIME_FORMAT), 
                         $this->getIntervenant()));
                 return false;
             }
@@ -57,7 +48,7 @@ class PeutCreerContratInitialRule extends AbstractRule implements ServiceLocator
         
         // on s'intéresse à ceux validés mais n'ayant pas faits l'objet d'un contrat
         $this->volumesHorairesDispos = [];
-        foreach ($this->getServiceValideRule()->getVolumesHorairesValides() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+        foreach ($this->getServiceValideRule()->getVolumesHorairesValides() as $vh) { /* @var $vh VolumeHoraire */
             if (!count($vh->getContrat())) {
                 $this->volumesHorairesDispos[] = $vh;
             }
@@ -86,49 +77,15 @@ class PeutCreerContratInitialRule extends AbstractRule implements ServiceLocator
     }
     
     /**
-     * @var \Application\Entity\Db\Validation
+     * @var Validation
      */
     private $validation;
     
     /**
-     * @return \Application\Entity\Db\Validation
+     * @return Validation
      */
     public function getValidation()
     {
         return $this->validation;
-    }
-    
-    /**
-     * @var \Application\Entity\Db\VolumeHoraire[]
-     */
-    private $volumesHorairesDispos;
-    
-    /**
-     * @return \Application\Entity\Db\VolumeHoraire[]
-     */
-    public function getVolumesHorairesDispos()
-    {
-        return $this->volumesHorairesDispos ?: [];
-    }
-    
-    private $serviceValideRule;
-    
-    /**
-     * 
-     * @return ServiceValideRule
-     */
-    private function getServiceValideRule()
-    {
-        if (null === $this->serviceValideRule) {
-            $this->serviceValideRule = new ServiceValideRule();
-        }
-        $this->serviceValideRule
-                ->setMemePartiellement() // une validation partielle des services suffit
-                ->setIntervenant($this->getIntervenant())
-                ->setStructure($this->getStructure())
-                ->setTypeValidation($this->getTypeValidation())
-                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
-        
-        return $this->serviceValideRule;
     }
 }

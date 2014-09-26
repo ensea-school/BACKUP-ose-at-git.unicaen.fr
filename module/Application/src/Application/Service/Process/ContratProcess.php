@@ -211,7 +211,6 @@ class ContratProcess extends AbstractService
         $peutCreerContratRule
                 ->setIntervenant($this->getIntervenant())
                 ->setStructure($this->getStructure())
-                ->setTypeValidation($this->getTypeValidation())
                 ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
         
         return $peutCreerContratRule;
@@ -227,7 +226,6 @@ class ContratProcess extends AbstractService
         $peutCreerAvenantRule
                 ->setIntervenant($this->getIntervenant())
                 ->setStructure($this->getStructure())
-                ->setTypeValidation($this->getTypeValidation())
                 ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
         
         return $peutCreerAvenantRule;
@@ -295,18 +293,6 @@ class ContratProcess extends AbstractService
                 ->findOneByCode(TypeContrat::CODE_CONTRAT);
     }
     
-    private function getTypeAvenant()
-    {
-        return $this->getEntityManager()->getRepository('Application\Entity\Db\TypeContrat')
-                ->findOneByCode(TypeContrat::CODE_AVENANT);
-    }
-    
-    private function getTypeValidation()
-    {
-        return $this->getEntityManager()->getRepository('Application\Entity\Db\TypeValidation')
-                ->findOneByCode(TypeValidation::CODE_SERVICES_PAR_COMP);
-    }
-    
     private $contrat;
     
     /**
@@ -325,21 +311,6 @@ class ContratProcess extends AbstractService
         }
         
         return $this->contrat;
-    }
-    
-    private $avenants;
-    
-    private function getAvenants()
-    {
-        if (null === $this->avenants) {
-            $serviceContrat = $this->getServiceContrat();
-            $qb = $serviceContrat->finderByType($this->getTypeAvenant());
-            $serviceContrat->finderByIntervenant($this->getIntervenant(), $qb);
-            $serviceContrat->finderByStructure($this->getStructure(), $qb);
-            $this->avenants = $qb->getQuery()->getResult();
-        }
-
-        return $this->avenants;
     }
     
     private $structure;

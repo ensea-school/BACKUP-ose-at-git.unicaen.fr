@@ -2,28 +2,17 @@
 
 namespace Application\Rule\Intervenant;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\TypeValidationAwareTrait;
-use Application\Traits\StructureAwareTrait;
-use Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
+use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeContrat;
- 
+use Application\Entity\Db\VolumeHoraire;
+
 /**
- * Description of PeutCreerAvenantRule
+ * Règle métier déterminant si un intervenant peut faire l'objet d'une création d'avenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutCreerAvenantRule extends AbstractRule implements ServiceLocatorAwareInterface
+class PeutCreerAvenantRule extends PeutCreerContratAbstractRule
 {
-    use ServiceLocatorAwareTrait;
-    use IntervenantAwareTrait;
-    use TypeValidationAwareTrait;
-    use StructureAwareTrait;
-    use VolumeHoraireServiceAwareTrait;
-    
     public function execute()
     {
         $contrats = $this->getIntervenant()->getContrat($this->getTypeContrat());
@@ -36,7 +25,7 @@ class PeutCreerAvenantRule extends AbstractRule implements ServiceLocatorAwareIn
         
         // on s'intéresse aux enseignements validés mais n'ayant pas faits l'objet d'un avenant
         $this->volumesHorairesDispos = [];
-        foreach ($this->getServiceValideRule()->getVolumesHorairesValides() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+        foreach ($this->getServiceValideRule()->getVolumesHorairesValides() as $vh) { /* @var $vh VolumeHoraire */
             if (!count($vh->getContrat())) {
                 $this->volumesHorairesDispos[] = $vh;
             }
@@ -65,48 +54,15 @@ class PeutCreerAvenantRule extends AbstractRule implements ServiceLocatorAwareIn
     }
     
     /**
-     * @return \Application\Entity\Db\Service[]
+     * @return Service[]
      */
     public function getServicesDispos()
     {
         $servicesDispos = [];
-        foreach ($this->getVolumesHorairesDispos() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+        foreach ($this->getVolumesHorairesDispos() as $vh) { /* @var $vh VolumeHoraire */
             $servicesDispos[$vh->getService()->getId()] = $vh->getService();
         }
         
         return $servicesDispos;
-    }
-    
-    /**
-     * @var \Application\Entity\Db\VolumeHoraire[]
-     */
-    private $volumesHorairesDispos;
-    
-    /**
-     * @return \Application\Entity\Db\VolumeHoraire[]
-     */
-    public function getVolumesHorairesDispos()
-    {
-        return $this->volumesHorairesDispos ?: [];
-    }
-    
-    private $serviceValideRule;
-    
-    /**
-     * 
-     * @return ServiceValideRule
-     */
-    private function getServiceValideRule()
-    {
-        if (null === $this->serviceValideRule) {
-            $this->serviceValideRule = new ServiceValideRule();
-        }
-        $this->serviceValideRule
-                ->setIntervenant($this->getIntervenant())
-                ->setStructure($this->getStructure())
-                ->setTypeValidation($this->getTypeValidation())
-                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
-        
-        return $this->serviceValideRule;
     }
 }

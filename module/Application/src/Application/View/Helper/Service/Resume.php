@@ -85,7 +85,6 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             'heures'                => 0,
             'types_intervention'    => [],
             'referentiel'           => 0,
-            'hetd'                  => 0,
         );
 
         $res  = '<table class="table table-hover table-bordered">'."\n";
@@ -94,7 +93,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '    <th style="width:40%" rowspan="2">Intervenant</th>'."\n";
         $res .= '    <th style="width:40%" colspan="'.count($typesIntervention).'">Enseignements</th>'."\n";
         $res .= '    <th style="width:10%" rowspan="2">Référentiel</th>'."\n";
-        $res .= '    <th style="width:10%" rowspan="2">Heures &Eacute;q. TD</th>'."\n";
+        $res .= '    <th style="width:10%" rowspan="2">Solde HETD</th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
         foreach( $typesIntervention as $ti ){
@@ -104,33 +103,20 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</thead>'."\n";
         $res .= '<tbody>'."\n";
         foreach( $this->resumeServices as $intervenantId => $line ) {
+            $na = '<abbr title="Non applicable (intervenant vacataire))">NA</abbr>';
             $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
 
-            if (isset($line['intervenant']['TOTAL_HETD'])){
-                $hetd = (float)$line['intervenant']['TOTAL_HETD'];
-            }else{
-                $hetd = 0;
-            }
-
-            $msg = '<td>';
-            $endMsg = '</td>';
             if (isset($line['intervenant']['HEURES_COMP'])){
-                $heuresComp = (float)$line['intervenant']['HEURES_COMP'];
-                if ($heuresComp < 0){
-                    $msg = '<td class="bg-danger"><abbr title="Sous-service ('.$this->formatHeures($heuresComp*-1,2).' heures manquantes)">';
-                    $endMsg = '</abbr></td>';
-                }
-                if ($heuresComp > 0 && $intervenantPermanent){
-                    $msg = '<td class="bg-warning"><abbr title="Sur-service ('.$this->formatHeures($heuresComp,2).' heures complémentaires)">';;
-                    $endMsg = '</abbr></td>';
-                }
+                $solde = (float)$line['intervenant']['HEURES_COMP'];
             }else{
-                $heuresComp = 0;
+                $solde = 0;
+            }
+            if (! $intervenantPermanent){
+                $solde = $na;
             }
 
             $res .= '<tr>'."\n";
             $url = $this->getView()->url('intervenant/services', array('intervenant' => $line['intervenant']['SOURCE_CODE']));
-            $na = '<span title="Non applicable (intervenant vacataire))">NA</span>';
 
             $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant']['NOM_USUEL']) . ' ' . $line['intervenant']['PRENOM'].'</a></td>'."\n";
             $totaux['intervenants']++;
@@ -141,37 +127,50 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
                 if (isset($line['service'][$ti->getId()])){
                     $totaux['types_intervention'][$ti->getId()] += $line['service'][$ti->getId()];
                     $totaux['heures'] += $line['service'][$ti->getId()];
-                    $res .= '<td>'.$this->formatHeures($line['service'][$ti->getId()]).'</td>'."\n";
+                    $res .= '<td style="text-align:right">'.$this->formatHeures($line['service'][$ti->getId()]).'</td>'."\n";
                 }else{
-                    $res .= '<td>0</td>'."\n";
+                    $res .= '<td style="text-align:right">'.$this->formatHeures(0).'</td>'."\n";
                 }
             }
             if (array_key_exists('referentiel', $line)){
                 $totaux['referentiel'] += $line['referentiel'];
-                $res .= '<td>'.$this->formatHeures($line['referentiel']).'</td>'."\n";
+                $res .= '<td style="text-align:right">'.$this->formatHeures($line['referentiel']).'</td>'."\n";
             }else{
-                $res .= '<td>'.($intervenantPermanent ? 0 : $na).'</td>'."\n";
+                $res .= '<td style="text-align:right">'.($intervenantPermanent ? $this->formatHeures(0) : $na).'</td>'."\n";
             }
-            $totaux['hetd'] += $hetd;
-            $res .= $msg.$this->formatHeures($hetd).'</td>'."\n";
+            $res .= $this->renderSoldeHetd($solde);
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";
         $res .= '<tfoot>'."\n";
         $res .= '<tr>'."\n";
-        $res .= '<th rowspan="2" style="text-align:right">'.$this->formatHeures($totaux['intervenants']).' intervenants</th>'."\n";
+        $res .= '<th rowspan="2" style="text-align:right">'.$totaux['intervenants'].' intervenants</th>'."\n";
         foreach( $typesIntervention as $ti ){
             $heures = isset($totaux['types_intervention'][$ti->getId()]) ? $totaux['types_intervention'][$ti->getId()] : 0;
             $res .= '        <th style="text-align:right"><abbr title="'.$ti->getLibelle().'">'.$this->formatHeures($heures).'</abbr></th>'."\n";
         }
         $res .= '<th rowspan="2" style="text-align:right">'.$this->formatHeures($totaux['referentiel']).'</th>'."\n";
-        $res .= '<th rowspan="2" style="text-align:right">'.$this->formatHeures($totaux['hetd']).'</th>'."\n";
+        $res .= '<th rowspan="2">&nbsp;</th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
         $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right">Total des heures de service : '.$this->formatHeures($totaux['heures']).'</th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '</tfoot>'."\n";
         $res .= '</table>'."\n";
+        return $res;
+    }
+
+    protected function renderSoldeHetd( $solde )
+    {
+        $class = '';
+        $plus = '';
+        if (is_numeric($solde)){
+            if ($solde > 0){ $class = ' class="bg-warning"'; $plus = '+';}
+            if ($solde < 0) $class = ' class="bg-danger"';
+            $solde = $plus.$this->formatHeures($solde);
+        }
+
+        $res = '<td style="text-align:right"'.$class.'>'.$solde.'</td>'."\n";
         return $res;
     }
 
@@ -183,7 +182,9 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
     protected function formatHeures($heures)
     {
         $heures = round( (float)$heures, 2);
-        return \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
+        $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2);
+        $heures = str_replace( ',00', '<span style="color:gray">,00</span>', $heures );
+        return $heures;
     }
 
     /**

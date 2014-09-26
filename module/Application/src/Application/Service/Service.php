@@ -401,7 +401,6 @@ select
   TYPE_INTERVENANT_CODE ,
   TYPE_INTERVENTION_ID ,
   sum(TOTAL_HEURES) TOTAL_HEURES,
-  v.total_hetd TOTAL_HETD,
   v.heures_comp HEURES_COMP
 from V_RESUME_SERVICE v
 where $structureFilter
@@ -413,7 +412,6 @@ group by
   SOURCE_CODE ,
   TYPE_INTERVENANT_CODE ,
   TYPE_INTERVENTION_ID ,
-  v.total_hetd,
   v.heures_comp
 EOS;
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($queryServices);

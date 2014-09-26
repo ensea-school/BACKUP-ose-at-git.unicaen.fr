@@ -73,7 +73,7 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
         $this->add(array(
             'name'       => 'heures',
             'options'    => array(
-                'label' => "Nombre d'heures :",
+                'label' => "Nb d'heures :",
             ),
             'attributes' => array(
                 'value' => "0",
@@ -81,6 +81,18 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
                 'class' => 'fonction-referentiel fonction-referentiel-heures input-sm'
             ),
             'type'       => 'Text',
+        ));
+
+        $this->add(array(
+            'name'       => 'commentaires',
+            'options'    => array(
+                'label' => "Commentaires :",
+            ),
+            'attributes' => array(
+                'title' => "Commentaires éventuels",
+                'class' => 'fonction-referentiel fonction-referentiel-commentaires input-sm'
+            ),
+            'type'       => 'Textarea',
         ));
 
         $this->add(array(
@@ -201,6 +213,12 @@ class FonctionServiceReferentielFieldset extends Fieldset implements InputFilter
                     ),
                 ),
             ),
+            'commentaires' => array(
+                'required' => false,
+                'filters'    => array(
+                    array('name' => 'Zend\Filter\StringTrim'),
+                ),
+            ),
         );
         
         if (($validator = $this->getValidatorHeures())) {
@@ -250,9 +268,10 @@ class FonctionServiceReferentielHydrator implements HydratorInterface
     public function extract($object)
     {
         return array(
-            'structure' => $object->getStructure() ? $object->getStructure()->getId() : null,
-            'fonction'  => $object->getFonction()->getId(),
-            'heures'    => floatval($object->getHeures()),
+            'structure'    => $object->getStructure() ? $object->getStructure()->getId() : null,
+            'fonction'     => $object->getFonction()->getId(),
+            'heures'       => floatval($object->getHeures()),
+            'commentaires' => $object->getCommentaires(),
         );
     }
 
@@ -267,7 +286,8 @@ class FonctionServiceReferentielHydrator implements HydratorInterface
     {
         $object->setStructure(isset($this->structuresPossibles[$data['structure']]) ? $this->structuresPossibles[$data['structure']] : null)
                ->setFonction($this->fonctionsPossibles[intval($data['fonction'])])
-               ->setHeures(floatval($data['heures']));
+               ->setHeures(floatval($data['heures']))
+               ->setCommentaires(isset($data['commentaires']) ? $data['commentaires'] : null);
         
         return $object;
     }

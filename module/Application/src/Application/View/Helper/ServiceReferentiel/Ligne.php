@@ -64,6 +64,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $parts[]              = '<td>' . $this->renderStructure($this->service->getStructure()) . "</td>\n";
         $parts['annee']       = '<td>' . $this->renderAnnee($this->service->getAnnee()) . "</td>\n";
         $parts[]              = '<td>' . $this->renderFonction($this->service->getFonction()) . "</td>\n";
+        $parts[]              = '<td>' . $this->renderCommentaires($this->service->getCommentaires()) . "</td>\n";
         $parts[]              = '<td>' . $this->renderHeures($this->service->getHeures()) . "</td>\n";
 
         $parts[] = $this->renderModifier();
@@ -128,11 +129,22 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             return '';
         }
         
-        $out = (string) $fonction;
+        $out = sprintf("<span title=\"\">%s</span>", $fonction);
         
         if ($fonction->getHistoDestruction()) {
             $out = sprintf("<span class=\"bg-danger\"><abbr title=\"Cette fonction n'existe plus\">%s</abbr></span>", $out);
         }
+
+        return $out;
+    }
+
+    protected function renderCommentaires($commentaires = null)
+    {
+        if (!$commentaires) {
+            return '';
+        }
+        
+        $out = sprintf("<span title=\"%s\">%s</span>", $commentaires, substr($commentaires, 0, 12));
 
         return $out;
     }

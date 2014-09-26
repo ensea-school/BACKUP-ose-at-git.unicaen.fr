@@ -61,6 +61,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $parts['intervenant'] = "<th>Intervenant</th>";
         $parts[]              = "<th>Structure</th>";
         $parts[]              = "<th>Fonction référentielle</th>";
+        $parts[]              = "<th>Commentaires</th>";
         $parts['annee']       = "<th>Année univ.</th>";
         $parts[]              = "<th>Heures</th>";
         $parts[]              = "<th class=\"action\" colspan=\"2\">&nbsp;</th>";

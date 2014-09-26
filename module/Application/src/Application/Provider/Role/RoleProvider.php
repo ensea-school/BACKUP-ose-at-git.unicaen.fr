@@ -69,7 +69,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             foreach ($qb->getQuery()->getResult() as $role) { /* @var $role \Application\Entity\Db\Role */
                 $roleId = $role->getType()->getCode();
                 if (! isset($this->roles[$roleId])){
-                    throw new Exception('Le rôle "'.$roleId.'" est inconnu.');
+                    throw new \Exception('Le rôle "'.$roleId.'" est inconnu.');
                 }
                 $classname = get_class($this->roles[$roleId]);
                 if ($this->roles[$roleId] instanceof StructureAwareInterface && $role->getStructure()){

@@ -2,28 +2,16 @@
 
 namespace Application\Rule\Intervenant;
 
-use Zend\Permissions\Acl\Role\RoleInterface;
-use Application\Entity\Db\Intervenant;
-use Application\Acl\ComposanteRole;
+use Application\Traits\StructureAwareTrait;
 
 /**
- * Description of PeutSaisirReferentielRule
+ * Règle métier déterminant si du référentiel peut être saisi pour un intervenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class PeutSaisirReferentielRule extends IntervenantRule
 {
-    /**
-     * Constructeur.
-     * 
-     * @param Intervenant   $intervenant Intervenant dont on saisit du référentiel
-     * @param RoleInterface $role        Role auteur de la modification
-     */
-    public function __construct(Intervenant $intervenant, RoleInterface $role)
-    {
-        parent::__construct($intervenant);
-        $this->setRole($role);
-    }
+    use StructureAwareTrait;
     
     public function execute()
     {
@@ -33,14 +21,12 @@ class PeutSaisirReferentielRule extends IntervenantRule
             return false;
         }
         
-        if (!$this->getRole() instanceof ComposanteRole) {
-            return true;
-        }
-        
-        $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getRole()->getStructure());
-        if (!$estAffecte->execute()) {
-            $this->setMessage(sprintf("%s %s étant votre structure de responsabilité.", $estAffecte->getMessage(), $this->getRole()->getStructure()));
-            return false;
+        if ($this->getStructure()) {
+            $estAffecte = new EstAffecteRule($this->getIntervenant(), $this->getStructure());
+            if (!$estAffecte->execute()) {
+                $this->setMessage($estAffecte->getMessage());
+                return false;
+            }
         }
         
         return true;
@@ -49,27 +35,5 @@ class PeutSaisirReferentielRule extends IntervenantRule
     public function isRelevant()
     {
         return true;
-    }
-    
-    /**
-     * @var RoleInterface
-     */
-    protected $role;
-    /**
-     * 
-     * @param RoleInterface $role
-     * @return self
-     */
-    public function setRole(RoleInterface $role)
-    {
-        $this->role = $role;
-        return $this;
-    }
-    /**
-     * @return RoleInterface
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 }

@@ -13,6 +13,7 @@ use Application\Service\ContextProviderAwareTrait;
 use Application\Exception\DbException;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Form\ServiceReferentiel\FonctionServiceReferentielFieldset;
+use Application\Acl\ComposanteRole;
 
 /**
  * Description of ServiceReferentielController
@@ -215,7 +216,8 @@ class ServiceReferentielController extends AbstractActionController implements C
         }
         
         // verifications concernant l'intervenant
-        $rule = new \Application\Rule\Intervenant\PeutSaisirReferentielRule($intervenant, $role);
+        $rule = new \Application\Rule\Intervenant\PeutSaisirReferentielRule($intervenant);
+        $rule->setStructure($role instanceof ComposanteRole ? $role->getStructure() : null);
         if (!$rule->execute()) {
             throw new MessageException("La saisie de référentiel n'est pas possible. ", null, new \Exception($rule->getMessage()));
         }

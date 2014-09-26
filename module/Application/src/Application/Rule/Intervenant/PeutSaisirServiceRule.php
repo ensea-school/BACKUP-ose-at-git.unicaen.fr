@@ -3,7 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 /**
- * Règle métier déterminant si un intervenant peut saisir des enseignements.
+ * Règle métier déterminant si des enseignements peuvent être saisis pour un intervenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

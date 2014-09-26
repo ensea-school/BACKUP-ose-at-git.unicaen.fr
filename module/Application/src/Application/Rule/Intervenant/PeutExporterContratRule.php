@@ -6,7 +6,7 @@ use Application\Entity\Db\Contrat;
 use Application\Entity\Db\Intervenant;
 
 /**
- * Description of PeutExporterContratRule
+ * Règle métier déterminant si le contrat/avenant d'un intervenant peut être exporté (en PDF par ex).
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 
 /**
- * Description of EstPermanentRule
+ * Règle métier déterminant si un intervenant est affecté à une structure de niveau 2 précise ou à l'une de ses sous-structures.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

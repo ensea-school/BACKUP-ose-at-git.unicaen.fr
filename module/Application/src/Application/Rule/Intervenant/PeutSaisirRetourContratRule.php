@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Contrat;
 
 /**
- * Description of PeutSaisirRetourContratRule
+ * Règle métier déterminant si une date de retour signé peut être saisie pour un contrat/avenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */

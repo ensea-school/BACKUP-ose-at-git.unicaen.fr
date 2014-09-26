@@ -2,11 +2,10 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 
 /**
- * Description of EstPermanentRule
+ * Règle métier déterminant si un intervenant est un permanent ou un vacataire.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -26,6 +25,6 @@ class EstPermanentRule extends IntervenantRule
     
     public function isRelevant()
     {
-        return $this->getIntervenant() instanceof Intervenant;
+        return true;
     }
 }

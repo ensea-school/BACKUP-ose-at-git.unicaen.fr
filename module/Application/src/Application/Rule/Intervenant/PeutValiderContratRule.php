@@ -6,7 +6,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Contrat;
 
 /**
- * Description of PeutValiderContratRule
+ * Règle métier déterminant si le contrat/avenant d'un intervenant peut être validé.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -34,6 +34,6 @@ class PeutValiderContratRule extends IntervenantRule
     
     public function isRelevant()
     {
-        return $this->getIntervenant()->getStatut()->estVacataire();
+        return true;
     }
 }

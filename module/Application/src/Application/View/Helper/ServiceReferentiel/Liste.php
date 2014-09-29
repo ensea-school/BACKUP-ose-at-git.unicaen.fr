@@ -8,7 +8,8 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Acl\IntervenantRole;
+use NumberFormatter;
+use UnicaenApp\Util;
 
 /**
  * Aide de vue permettant d'afficher une liste de services referentiels
@@ -67,12 +68,19 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $parts[]              = "<th class=\"action\" colspan=\"2\">&nbsp;</th>";
         $parts[]              = "</tr>";
 
+        $total = 0;
+
         foreach ($this->services as $service) {
             $parts[] = '<tr id="service-ref-' . $service->getId() . '-ligne">';
             $parts[] = $this->renderLigne($service);
+            $total += $service->getHeures();
             $parts[] = '</tr>';
         }
-        
+        $parts[] = '<tfoot>';
+        $parts[] = '<th style="text-align:right" colspan="'.($this->getColumnsCount()-3).'">Total :</th>';
+        $parts[] = '<td style="text-align:right;padding-right:2em">'.Util::formattedFloat($total, NumberFormatter::DECIMAL, -1).'</td>';
+        $parts[] = "<td class=\"action\" colspan=\"2\">&nbsp;</td>";
+        $parts[] = '</tfoot>';
         $parts[] = '</table>';
         
         $parts[] = '<script type="text/javascript">';
@@ -90,6 +98,26 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $helper->setRenderIntervenants($this->getRenderIntervenants());
         
         return $helper->render();
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    private function getColumnsCount()
+    {
+        $count = 8;
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+
+        if (!$this->getRenderIntervenants()) {
+            $count--;
+        }
+        if ($context->getAnnee()) {
+            $count--;
+        }
+
+        return $count;
     }
 
     /**

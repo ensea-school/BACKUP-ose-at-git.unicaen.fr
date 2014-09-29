@@ -153,7 +153,7 @@ return array(
                         'label'    => 'Enseignements',
                         'title'    => "Résumé des enseignements",
                         'route'    => 'service/resume',
-                        'resource' => 'controller/Application\Controller\Service:index',
+                        'resource' => 'controller/Application\Controller\Service:resume',
                         'pages' => array(
 //                            'consultation' => array(
 //                                'label'  => "Consultation",

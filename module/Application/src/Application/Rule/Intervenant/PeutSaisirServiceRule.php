@@ -21,21 +21,20 @@ class PeutSaisirServiceRule extends IntervenantRule
         return true;
     }
 
+    /**
+     * Pour un intervenant qui n'a pas encore saisi ses données perso, 
+     * cette règle n'est pas pertinente car il peut changer de statut à l'issu de la
+     * saisie de ses données perso.
+     * 
+     * @return boolean
+     */
     public function isRelevant()
     {
-//        // NB: pour un intervenant non-BIATSS qui n'a pas encore saisi ses données perso, 
-//        // cette règle n'est pas pertinente (car il peut changer de statut à l'issu de la
-//        // saisie de ses données perso)
-//        if (!$this->getIntervenant()->getStatut()->estBiatss()) {
-//            $possedeDossier = new PossedeDossierRule($this->getIntervenant());
-//            if (!$possedeDossier->isRelevant()) {
-//                return true;
-//            }
-//            if (!$possedeDossier->execute()) {
-//                return false;
-//            }
-//        }
-
+        $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
+        if ($peutSaisirDossier->isRelevant() && $peutSaisirDossier->execute()) {
+            return false;
+        }
+        
         return true;
     }
 }

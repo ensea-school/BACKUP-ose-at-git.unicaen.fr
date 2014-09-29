@@ -64,10 +64,10 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutChoisirDansDossier');
+            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutChoisirDansDossier', 'peutSaisirDossier');
         }
 
-        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutChoisirDansDossier');
+        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutChoisirDansDossier', 'peutSaisirDossier');
     }
 
     /**
@@ -253,17 +253,6 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     /**
      * {@inheritDoc}
      */
-    public function peutSaisirDossier()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'peutSaisirDossier', array());
-
-        return parent::peutSaisirDossier();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function peutSaisirPieceJointe()
     {
 
@@ -336,6 +325,28 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPeutChoisirDansDossier', array($peutChoisirDansDossier));
 
         return parent::setPeutChoisirDansDossier($peutChoisirDansDossier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPeutSaisirDossier($peutSaisirDossier = true)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPeutSaisirDossier', array($peutSaisirDossier));
+
+        return parent::setPeutSaisirDossier($peutSaisirDossier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPeutSaisirDossier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPeutSaisirDossier', array());
+
+        return parent::getPeutSaisirDossier();
     }
 
     /**

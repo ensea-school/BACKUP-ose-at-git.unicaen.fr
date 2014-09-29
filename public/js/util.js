@@ -111,7 +111,7 @@ $.fn.autocompleteUnicaen = function(options)
                     .replace('{id}', item.id ? item.id : '')
                     .replace('{label}', item.label ? item.label : '')
                     .replace('{extra}', item.extra ? item.extra : '');
-            markup = '<a>' + markup + "</a>";
+            markup = '<a id="autocomplete-item-'+item.id+'">' + markup + "</a>";
             var li = $("<li></li>").data("item.autocomplete", item).append(markup).appendTo(ul);
             // mise en évidence du motif dans chaque résultat de recherche
             highlight(element.val(), li, 'sas-highlight');

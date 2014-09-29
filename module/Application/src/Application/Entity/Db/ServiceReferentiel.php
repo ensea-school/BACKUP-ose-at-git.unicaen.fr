@@ -66,6 +66,11 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     protected $validiteFin;
 
     /**
+     * @var string
+     */
+    protected $commentaires;
+
+    /**
      * @var integer
      */
     protected $id;
@@ -242,6 +247,29 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getValiditeFin()
     {
         return $this->validiteFin;
+    }
+
+    /**
+     * Set commentaires
+     *
+     * @param string $commentaires
+     * @return ServiceReferentiel
+     */
+    public function setCommentaires($commentaires)
+    {
+        $this->commentaires = $commentaires;
+
+        return $this;
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return string
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
     }
 
     /**

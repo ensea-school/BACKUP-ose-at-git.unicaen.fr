@@ -118,8 +118,10 @@ INSERT INTO TYPE_PIECE_JOINTE_STATUT
   from TYPE_PIECE_JOINTE tpj, STATUT_INTERVENANT si, UTILISATEUR u
   where tpj.CODE = 'CV' and si.SOURCE_CODE in ('RETR_HORS_UCBN', 'ETUD_HORS_UCBN') and u.USERNAME = 'oseappli';
   
-  
-  
+select * from type_role;
+
+select libelle_long, source_code from structure where libelle_court = 'ESPE'; 
+select * from personnel p where upper(p.nom_usuel) = 'MAHAUT'; 
 
 -- ajouts de gestionnaires
 insert into ROLE (
@@ -135,25 +137,23 @@ insert into ROLE (
 SELECT 
   role_id_seq.nextval id,
   s.id STRUCTURE_ID,
-  u.PERSONNEL_ID,
+  p.ID personnel_id,
   tr.id TYPE_ID,
   src.id SOURCE_ID,
   role_id_seq.currval SOURCE_CODE,
-  u2.id HISTO_CREATEUR_ID,
-  u2.id HISTO_MODIFICATEUR_ID
+  u.id HISTO_CREATEUR_ID,
+  u.id HISTO_MODIFICATEUR_ID
 FROM 
-  UTILISATEUR u,
+  personnel p,
   STRUCTURE s,
   TYPE_ROLE tr,
   source src,
-  UTILISATEUR u2
-WHERE s.SOURCE_CODE = 'U091'
-AND tr.CODE         = 'GEST'
-AND src.CODE        = 'OSE'
-AND u2.USERNAME     = 'oseappli'
-AND u.USERNAME     IN( --'levalois', 'esnaults', 'hamelin', 'bouchard', 'negahban', 'cauvins', 'leclaire'
-'lelievre'
-  );
+  UTILISATEUR u
+WHERE s.SOURCE_CODE    = 'E01'
+AND tr.CODE            = 'gestionnaire-composante'
+AND src.CODE           = 'OSE'
+AND u.USERNAME         = 'oseappli'
+AND upper(p.nom_usuel) = 'MAHAUT';
 
 
 

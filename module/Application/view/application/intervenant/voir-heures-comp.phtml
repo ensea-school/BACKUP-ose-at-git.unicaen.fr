@@ -31,9 +31,9 @@ $serviceRestant     = $formule->getServiceRestant($intervenant);
 $service            = $formule->getService($intervenant);
 $ventilation        = $formule->getVentilation($intervenant);
 $reevalReste        = $formule->getReevalResteAPayer($intervenant);
-$hetd               = $formule->getHetd($intervenant);
 $heures             = $formule->getHeuresComplementaires($intervenant);
 $payer              = $formule->getAPayer($intervenant);
+$heuresReelles      = $serviceDu + $modifServiceDu + $heures;
 
 $typesIntervention = [];
 foreach( $ventilation as $tid => $v ){
@@ -135,14 +135,29 @@ foreach( $service as $sid => $ligne ){
     </tr>
 </table>
 
-<div class="row" style="font-size:16pt">
-  <div class="col-md-5">Heures équivalent TD :</div>
-  <div class="col-md-7"><span class="label label-success"><?php fh( $hetd ); ?></span></div>
-</div>
-<div class="row" style="font-size:16pt">
-  <div class="col-md-5">Dont heures complémentaires :</div>
-  <div class="col-md-7"><span class="label label-<?php echo $heures < 0 ? 'danger' : 'success' ?>"><?php fh( $heures ); ?></span><?php echo $heures < 0 ? ' Sous-service' : '' ?></div>
-</div>
+<?php if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur): ?>
+    <div class="row" style="font-size:16pt">
+      <div class="col-md-5">Heures de service :</div>
+      <div class="col-md-7"><span class="label label-success"><?php fh( $heuresReelles ); ?></span></div>
+    </div>
+<?php else: ?>
+    <div class="row" style="font-size:16pt">
+      <div class="col-md-5">Service dû + Heures complémentaires :</div>
+      <div class="col-md-7"><span class="label label-success"><?php fh( $heuresReelles ); ?></span></div>
+    </div>
+    <?php if ($heures < 0 ): ?>
+        <div class="row" style="font-size:16pt">
+          <div class="col-md-5">Sous-service :</div>
+          <div class="col-md-7"><span class="label label-danger"><?php fh( $heures * -1 ); ?></span></div>
+        </div>
+    <?php elseif($heures > 0): ?>
+        <div class="row" style="font-size:16pt">
+          <div class="col-md-5">Dont heures complémentaires :</div>
+          <div class="col-md-7"><span class="label label-success"><?php fh( $heures ); ?></span></div>
+        </div>
+    <?php endif; ?>
+<?php endif;?>
+
 <div class="row" style="font-size:16pt">
   <div class="col-md-5">A payer :</div>
   <div class="col-md-7"><span class="label label-success"><?php fc( $payer ); ?></span></div>

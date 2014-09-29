@@ -99,7 +99,7 @@ class FormuleHetd extends AbstractService
         if (! empty($etablissements)) $etablissements = $this->getServiceEtablissement()->get(array_keys($etablissements));
         foreach( $data as $did => $d ){
             if ($data[$did]['etablissement']) $data[$did]['etablissement'] = $etablissements[$d['etablissement']];
-            if ($data[$did]['element_pedagogique']) $data[$did]['element_pedagogique'] = $elements[$d['element_pedagogique']];
+            if (isset($data[$did]['element_pedagogique']) && $data[$did]['element_pedagogique']) $data[$did]['element_pedagogique'] = isset($elements[$d['element_pedagogique']]) ? $elements[$d['element_pedagogique']] : null;
         }
 
         $typesInterventions = $this->getServiceTypeIntervention()->getList();

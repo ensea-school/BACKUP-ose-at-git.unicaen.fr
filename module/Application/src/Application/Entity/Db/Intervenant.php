@@ -4,6 +4,7 @@ namespace Application\Entity\Db;
 
 use Zend\Form\Annotation;
 use Common\Constants;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Intervenant
@@ -12,7 +13,7 @@ use Common\Constants;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface
+abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface
 {    
     /**
      * @var \DateTime
@@ -1345,5 +1346,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         }
         
         return $returnFirstAddressIfNoPrimaryAddressFound ? reset($this->getAdresse()) : null;
+    }
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'Intervenant';
     }
 }

@@ -30,6 +30,10 @@ const R_INTERVENANT_EXTERIEUR       = Acl\IntervenantExterieurRole::ROLE_ID;
 const R_FOAD                        = Acl\FoadRole::ROLE_ID;
 const R_RESPONSABLE_FOAD            = Acl\ResponsableFoadRole::ROLE_ID;
 
+$R_ALL = [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_INTERVENANT, R_FOAD];
+$R_NOT_INTERVENANT = [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD];
+$R_COMMUN = [R_ADMINISTRATEUR, R_DRH, R_ETABLISSEMENT, R_FOAD];
+
 $main =  array(
     'doctrine' => array(
         'configuration' => array(

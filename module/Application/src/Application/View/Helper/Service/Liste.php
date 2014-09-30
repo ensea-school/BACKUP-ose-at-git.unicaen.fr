@@ -381,11 +381,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             foreach( $this->getServices() as $service ){
                 $data['total_general'] += $service->getVolumeHoraireListe()->setTypeIntervention(false)->getHeures();
             }
-            if ($this->getIntervenant() instanceof Intervenant){
-                $data['total_paye'] = $this->getFormuleHetd()->getServiceTotal($this->getIntervenant());
-                $data['total_hetd'] = $this->getFormuleHetd()->getHetd($this->getIntervenant());
-    //            $data['total_compl'] = $this->getFormuleHetd()->getHeuresComplementaires($this->getIntervenant());
-            }
             $this->totaux = $data;
         }
         return $this->totaux;
@@ -464,20 +459,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $title = [
             'Toutes structures confondues'
         ];
-        if (isset($data['total_hetd'])){
-            if ($data['total_paye'] != $data['total_general']){
-                $title[] = 'Sur la base de '.\UnicaenApp\Util::formattedFloat($data['total_paye'], \NumberFormatter::DECIMAL, -1).' heures payables';
-            }
-            $out .= '<tr>';
-            $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total Heures &Eacute;quivalent TD :</th>\n";
-            if (! empty($title)){
-                $out .= "<td style=\"text-align:right\" colspan=\"".$typesInterventionDisplayed."\"><abbr title=\"".implode(",\n",$title).".\">".\UnicaenApp\Util::formattedFloat($data['total_hetd'], \NumberFormatter::DECIMAL, -1)."</abbr></td>\n";
-            }else{
-                $out .= "<td style=\"text-align:right\" colspan=\"".$typesInterventionDisplayed."\">".\UnicaenApp\Util::formattedFloat($data['total_hetd'], \NumberFormatter::DECIMAL, -1)."</td>\n";
-            }
-            $out .= "<td>&nbsp;</td>\n";
-            $out .= "</tr>\n";
-        }
         return $out;
     }
 

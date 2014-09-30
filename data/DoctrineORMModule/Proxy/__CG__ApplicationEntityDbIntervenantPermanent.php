@@ -1365,4 +1365,15 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
         return parent::getAdressePrincipale($returnFirstAddressIfNoPrimaryAddressFound);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResourceId', array());
+
+        return parent::getResourceId();
+    }
+
 }

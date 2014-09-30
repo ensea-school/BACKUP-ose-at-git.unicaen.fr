@@ -111,4 +111,21 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
     {
         return $this->getContextProvider()->getSelectedIdentityRole();
     }
+
+    /**
+     *
+     * @param string $privilege
+     * @param string $resource
+     * @return string
+     */
+    protected function normalizedPrivilege($privilege, $resource)
+    {
+        if (is_object($privilege)) {
+            return $privilege;
+        }
+        if (!$privilege) {
+            $privilege = ($tmp = strrchr($resource, $c = ':')) ? ltrim($tmp, $c) : null;
+        }
+        return $privilege;
+    }
 }

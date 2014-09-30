@@ -202,9 +202,23 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirHeuresCompAction()
     {
+        $viewModel        = new \Zend\View\Model\ViewModel();
+        $params           = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'total-heures-comp';
+        $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
+        $viewModel->addChild($totalViewModel, 'totalHeuresComp');
+
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
 
+        $viewModel->setVariables( compact('intervenant', 'formule') );
+        return $viewModel;
+    }
+
+    public function totalHeuresCompAction()
+    {
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
         return compact('intervenant', 'formule');
     }
 

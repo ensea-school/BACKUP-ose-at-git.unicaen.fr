@@ -86,6 +86,19 @@ return array(
                             ),
                         ),
                     ),
+                    'total-heures-comp' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/total-heures-comp[/:intervenant]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'total-heures-comp',
+                            ),
+                        ),
+                    ),
                     'feuille-de-route' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -328,6 +341,12 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
+                    'action'     => array('total-heures-comp'),
+                    'roles'      => $R_ALL,
+                    'assertion'  => 'IntervenantAssertion',
+                ),
+                array(
+                    'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir', 'index', 'apercevoir', 'feuille-de-route'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,  AdministrateurRole::ROLE_ID),
                 ),
@@ -358,6 +377,23 @@ return array(
                 ),
             ),
         ),
+        'resource_providers' => array(
+            'BjyAuthorize\Provider\Resource\Config' => array(
+                'Intervenant' => [],
+            ),
+        ),
+        'rule_providers' => array(
+            'BjyAuthorize\Provider\Rule\Config' => array(
+                'allow' => array(
+                    array(
+                        $R_ALL,
+                        'Intervenant',
+                        array('total-heures-comp'),
+                        'IntervenantAssertion',
+                    ),
+                ),
+            ),
+        ),
     ),
     'controllers' => array(
         'invokables' => array(
@@ -382,6 +418,7 @@ return array(
             'ApplicationStatutIntervenant'     => 'Application\\Service\\StatutIntervenant',
             'ApplicationDossier'               => 'Application\\Service\\Dossier',
             'WorkflowIntervenant'              => 'Application\\Service\\Workflow\\WorkflowIntervenant',
+            'IntervenantAssertion'             => 'Application\\Assertion\\IntervenantAssertion',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',

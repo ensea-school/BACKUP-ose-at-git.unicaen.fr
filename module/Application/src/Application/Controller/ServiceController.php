@@ -85,6 +85,13 @@ class ServiceController extends AbstractActionController
             );
         }else{
             $action = 'afficher'; // Affichage par défaut
+
+            //$params           = $this->getEvent()->getRouteMatch()->getParams();
+            $params           = [];
+            $params['intervenant'] = $intervenant->getSourceCode();
+            $params['action'] = 'total-heures-comp';
+            $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
+            $viewModel->addChild($totalViewModel, 'totalHeuresComp');
         }
 
         /* Préparation et affichage */

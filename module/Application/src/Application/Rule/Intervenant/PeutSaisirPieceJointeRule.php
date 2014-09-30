@@ -13,13 +13,13 @@ class PeutSaisirPieceJointeRule extends IntervenantRule
 {
     public function execute()
     {
-        if ($this->getIntervenant() instanceof IntervenantExterieur) {
-            $dossier = $this->getIntervenant()->getDossier();
-            if (!$dossier) {
-                $this->setMessage("La saisie de pièce justificative requiert au préalable la saisie des données personnelles.");
-                return false;
-            }
-        }
+//        if ($this->getIntervenant() instanceof IntervenantExterieur) {
+//            $dossier = $this->getIntervenant()->getDossier();
+//            if (!$dossier) {
+//                $this->setMessage("La saisie de pièce justificative requiert au préalable la saisie des données personnelles.");
+//                return false;
+//            }
+//        }
         
         $statut = $this->getIntervenant()->getStatut();
         

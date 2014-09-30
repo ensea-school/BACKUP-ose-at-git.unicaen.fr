@@ -92,8 +92,7 @@ class WorkflowIntervenant extends AbstractWorkflow
          */
         $peutSaisirPj = new PeutSaisirPieceJointeRule($this->getIntervenant());
         if (!$peutSaisirPj->isRelevant() || $peutSaisirPj->execute()) {
-            $serviceTypePieceJointeStatut = $this->getServiceLocator()->get('ApplicationTypePieceJointeStatut');
-            $transitionRule = new PiecesJointesFourniesRule($this->getIntervenant(), $serviceTypePieceJointeStatut);
+            $transitionRule = clone $this->getPiecesJointesFourniesRule();
             $this->addStep(
                     self::KEY_PIECES_JOINTES,
                     new SaisiePiecesJointesStep(),
@@ -199,6 +198,23 @@ class WorkflowIntervenant extends AbstractWorkflow
             return null;
         }
         return $this->getStepUrl($this->getCurrentStep());
+    }
+    
+    /**
+     * @var PiecesJointesFourniesRule 
+     */
+    protected $piecesJointesFourniesRule;
+    
+    protected function getPiecesJointesFourniesRule()
+    {
+        if (null === $this->piecesJointesFourniesRule) {
+            $this->piecesJointesFourniesRule = $this->getServiceLocator()->get('PiecesJointesFourniesRule');
+        }
+        $this->piecesJointesFourniesRule
+                ->setIntervenant($this->getIntervenant());
+//                ->setAvecValidation(true);
+        
+        return $this->piecesJointesFourniesRule;
     }
     
     protected $serviceValideRule;

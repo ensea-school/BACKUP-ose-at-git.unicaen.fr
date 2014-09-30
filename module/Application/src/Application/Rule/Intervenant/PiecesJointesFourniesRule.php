@@ -58,7 +58,7 @@ class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAw
         if ($typesNonFournis) {
             $this->setMessage(sprintf("Les pièces justificatives suivantes n'ont pas été fournies par %s : %s", 
                     $this->getIntervenant(),
-                    implode(", ", array_map('lcfirst', $typesNonFournis))));
+                    implode(", ", $typesNonFournis)));
             return false;
         }
         
@@ -82,6 +82,9 @@ class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAw
             $qb = $this->getServicePieceJointe()->finderByDossier($this->getIntervenant()->getDossier());
             if (is_bool($this->getAvecFichier())) {
                 $this->getServicePieceJointe()->finderByExistsFichier(true, $qb);
+            }
+            if (is_bool($this->getAvecValidation())) {
+                $this->getServicePieceJointe()->finderByExistsValidation(true, $qb);
             }
             $piecesJointes = $qb->getQuery()->getResult();
             
@@ -143,6 +146,33 @@ class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAw
     public function setAvecFichier($avecFichier = true)
     {
         $this->avecFichier = $avecFichier;
+        
+        $this->reset();
+        
+        return $this;
+    }
+    
+    protected $avecValidation = null;
+    
+    /**
+     * Retourne le flag indiquant s'il faut vérifier ou pas la présence/absence de validation pour chaque pièce justificative.
+     * 
+     * @return boolean|null null : peu importe ; true : présence ; false : absence 
+     */
+    public function getAvecValidation()
+    {
+        return $this->avecValidation;
+    }
+
+    /**
+     * Spécifie s'il faut vérifier ou pas la présence/absence de validation pour chaque pièce justificative.
+     * 
+     * @param boolean|null $avecValidation null : peu importe ; true : présence ; false : absence 
+     * @return self
+     */
+    public function setAvecValidation($avecValidation = true)
+    {
+        $this->avecValidation = $avecValidation;
         
         $this->reset();
         

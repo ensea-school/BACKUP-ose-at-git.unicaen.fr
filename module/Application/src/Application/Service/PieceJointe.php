@@ -82,8 +82,25 @@ class PieceJointe extends AbstractEntityService
     public function finderByExistsFichier($exists = true, QueryBuilder $qb = null, $alias = null)
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
+        $qb->leftJoin("$alias.fichier", "f");
         $op = $exists ? '> 0' : '= 0';
-        $qb->andWhere("SIZE ($alias.fichier) $op");
+        $qb->andWhere("SIZE (f) $op");
+        return $qb;
+    }
+
+    /**
+     * Ajoute comme critère l'existence ou l'inexistence de validation.
+     *
+     * @param boolean $exists
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByExistsValidation($exists = true, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        $qb->leftJoin("$alias.validation", "v");
+        $op = $exists ? 'IS NOT' : 'IS';
+        $qb->andWhere("v $op NULL");
         return $qb;
     }
 

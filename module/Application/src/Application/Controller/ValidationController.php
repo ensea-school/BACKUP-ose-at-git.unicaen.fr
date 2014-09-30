@@ -283,7 +283,8 @@ class ValidationController extends AbstractActionController implements ContextPr
             $messages[] = "La validation des enseignements d'un intervenant vacataire se fait par chaque composante d'enseignement.";
             // fetch des structures d'intervention
             $qb = $serviceStructure->initQuery()[0];
-            $serviceStructure->join($serviceService, $qb, 'id', 'structureEns');
+            $serviceStructure->finderByEnseignement($qb);
+            $serviceStructure->join($serviceService, $qb, 'service');
             $serviceService->finderByContext($qb);
             $structures = $serviceStructure->getList($qb);
         }

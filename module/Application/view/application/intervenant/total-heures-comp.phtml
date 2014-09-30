@@ -30,22 +30,22 @@ function ffc( $montant )
 <div id="details-hetd">
 <?php if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur): ?>
     <div class="row" style="font-size:16pt">
-      <div class="col-md-5">Heures de service :</div>
+        <div class="col-md-5"><abbr title="en heures équivalent TD (HETD)">Heures de service :</abbr></div>
       <div class="col-md-7"><span class="label label-success"><?php ffh( $heuresReelles ); ?></span></div>
     </div>
 <?php else: ?>
     <div class="row" style="font-size:16pt">
-      <div class="col-md-5">Service dû + Heures complémentaires :</div>
+      <div class="col-md-5"><abbr title="en heures équivalent TD (HETD)">Service dû + Heures complémentaires :</abbr></div>
       <div class="col-md-7"><span class="label label-success"><?php ffh( $heuresReelles ); ?></span></div>
     </div>
     <?php if ($heures < 0 ): ?>
         <div class="row" style="font-size:16pt">
-          <div class="col-md-5">Sous-service :</div>
+          <div class="col-md-5"><abbr title="en heures équivalent TD (HETD)">Sous-service :</abbr></div>
           <div class="col-md-7"><span class="label label-danger"><?php ffh( $heures * -1 ); ?></span></div>
         </div>
     <?php elseif($heures > 0): ?>
         <div class="row" style="font-size:16pt">
-          <div class="col-md-5">Dont heures complémentaires :</div>
+          <div class="col-md-5"><abbr title="en heures équivalent TD (HETD)">Dont heures complémentaires :</abbr></div>
           <div class="col-md-7"><span class="label label-success"><?php ffh( $heures ); ?></span></div>
         </div>
     <?php endif; ?>

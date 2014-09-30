@@ -211,8 +211,9 @@ class WorkflowIntervenant extends AbstractWorkflow
             $this->piecesJointesFourniesRule = $this->getServiceLocator()->get('PiecesJointesFourniesRule');
         }
         $this->piecesJointesFourniesRule
-                ->setIntervenant($this->getIntervenant());
-//                ->setAvecValidation(true);
+                ->setIntervenant($this->getIntervenant())
+                ->setAvecFichier(true) // à décommenter ssi le dépôt de fichier devient obligatoire
+                ->setAvecValidation(true);
         
         return $this->piecesJointesFourniesRule;
     }

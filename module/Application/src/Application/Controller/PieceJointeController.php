@@ -86,27 +86,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $assertionPj            = (new PieceJointe())->setDossier($dossier); // entité transmise à l'assertion
         $formUpload             = $this->getFormJoindre();
         
-        // Compatibilité avec les données enregistrées avant l'implémentation du dépôt de fichier... 
-        // > Problème : il existe une PieceJointe sans Fichier
-        // > Solution : on valide la PieceJointe même s'il n'y a aucun fichier, ; l'utilsateur pourra la dévalider pour déposer des fichiers
-        foreach ($piecesJointesFournies as $pj) { /* @var $pj PieceJointe */
-            if (!count($pj->getFichier()) && !$pj->getValidation()) {
-                // petite verrue temporaire pour ne pas revalider des PJ dévalidée volontairement
-                $dateVersionAppli = $this->appInfos()->getDate();
-                if ($pj->getHistoModification() >= $dateVersionAppli->setTime(0, 0, 0)) {
-                    continue;
-                }
-
-                $validation = $this->getServicePieceJointe()->valider($pj, $this->getIntervenant());
-                $validation
-                        ->setHistoCreateur($pj->getHistoCreateur())
-                        ->setHistoCreation($pj->getHistoCreation())
-                        ->setHistoModificateur($pj->getHistoCreateur())
-                        ->setHistoModification($pj->getHistoCreation());
-                $this->em()->flush($validation);
-            }
-        }
-        
         $this->view->setVariables(array(
             'intervenant'            => $this->getIntervenant(),
             'totalHETD'              => $this->getPieceJointeProcess()->getTotalHETDIntervenant(),

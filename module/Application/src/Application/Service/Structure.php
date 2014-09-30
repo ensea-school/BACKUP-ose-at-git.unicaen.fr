@@ -135,6 +135,7 @@ class Structure extends AbstractEntityService
      * Ne recherche que les structures où il y a des enseignements
      *
      * @todo à corriger pour palier au cas où une structure destinée à assurer des enseignements n'ai encore aucun enseignement
+     * @todo prendre en compte l'année courante (tester utilisation d'un filtre Doctrine)
      *
      * @param QueryBuilder|null $qb
      * @param string|null $alias

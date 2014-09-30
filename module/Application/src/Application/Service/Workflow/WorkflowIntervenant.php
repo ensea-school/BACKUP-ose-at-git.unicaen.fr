@@ -212,7 +212,7 @@ class WorkflowIntervenant extends AbstractWorkflow
         }
         $this->piecesJointesFourniesRule
                 ->setIntervenant($this->getIntervenant())
-                ->setAvecFichier(true) // à décommenter ssi le dépôt de fichier devient obligatoire
+//                ->setAvecFichier(true) // à décommenter ssi le dépôt de fichier devient obligatoire
                 ->setAvecValidation(true);
         
         return $this->piecesJointesFourniesRule;

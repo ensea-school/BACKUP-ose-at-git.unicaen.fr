@@ -40,6 +40,17 @@ class ContratController extends AbstractActionController implements ContextProvi
     
     /**
      * 
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')
+                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
+                ->disableForEntity('Application\Entity\Db\Etape');
+    }
+    
+    /**
+     * Point d'entrée sur les contrats/avenants.
+     * 
      * @return array
      */
     public function indexAction()
@@ -73,7 +84,7 @@ class ContratController extends AbstractActionController implements ContextProvi
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        $this->em()->getFilters()->enable('historique');
+        $this->initFilters();
         
         // fetch (projets de) contrats/avenants
         $contrats = $this->getContrats();

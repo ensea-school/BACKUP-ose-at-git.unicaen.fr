@@ -434,6 +434,8 @@ class ContratController extends AbstractActionController implements ContextProvi
     {       
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
+        $this->initFilters();
+        
         // fetch le contrat/avenant spécifié
         $serviceContrat = $this->getServiceContrat();
         $qb = $serviceContrat->getRepo()->createQueryBuilder("c")

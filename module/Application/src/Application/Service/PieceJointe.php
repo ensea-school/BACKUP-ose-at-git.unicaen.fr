@@ -84,7 +84,7 @@ class PieceJointe extends AbstractEntityService
         list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb->leftJoin("$alias.fichier", "f");
         $op = $exists ? '> 0' : '= 0';
-        $qb->andWhere("SIZE (f) $op");
+        $qb->andWhere("SIZE ($alias.fichier) $op");
         return $qb;
     }
 

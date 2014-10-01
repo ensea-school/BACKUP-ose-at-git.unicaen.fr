@@ -162,8 +162,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
         }
-        
-        if ($role instanceof \Application\Acl\ComposanteRole) {
+        else {
             // récupère l'éventuel intervenant du contexte local
             $intervenant = $context->getIntervenant();
         }

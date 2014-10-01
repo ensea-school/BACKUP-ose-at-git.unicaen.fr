@@ -121,7 +121,6 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
     protected function getData()
     {
         $qb = $this->getQueryBuilder();
-
         $entities = $qb->getQuery()->execute();
         $result = [
             'structures' => [],
@@ -242,14 +241,13 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         if (! $this->queryBuilder){
             $this->queryBuilder = $this->getServiceEtape()->initQuery()[0];
 
-            $this->getServiceEtape()->join( $this->getServiceStructure(), $this->queryBuilder, 'structure' );
-            $this->queryBuilder->addSelect( $this->getServiceStructure()->getAlias() );
+            $this->getServiceEtape()->join( $this->getServiceStructure(), $this->queryBuilder, 'structure', true );
 
-            $this->getServiceEtape()->join( $this->getServiceTypeFormation(), $this->queryBuilder, 'typeFormation' );
-            $this->queryBuilder->addSelect( $this->getServiceTypeFormation()->getAlias() );
+            $this->getServiceEtape()->join( $this->getServiceTypeFormation(), $this->queryBuilder, 'typeFormation', true );
 
-            $this->getServiceTypeFormation()->join( $this->getServiceGroupeTypeFormation(), $this->queryBuilder, 'groupe' );
-            $this->queryBuilder->addSelect( $this->getServiceGroupeTypeFormation()->getAlias() );
+            $this->getServiceTypeFormation()->join( $this->getServiceGroupeTypeFormation(), $this->queryBuilder, 'groupe', true );
+
+            $this->queryBuilder->andWhere($this->getServiceEtape()->getAlias().'.histoDestruction IS NULL');
         }
         return $this->queryBuilder;
     }

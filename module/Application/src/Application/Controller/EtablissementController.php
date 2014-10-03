@@ -71,7 +71,7 @@ class EtablissementController extends AbstractActionController
             $result[] = array(
                 'id'    => $item->getId(),  // identifiant unique de l'item
                 'label' => (string)$item,   // libellé de l'item
-                'extra' => '( département '.$item->getDepartement().')', // infos complémentaires (facultatives) sur l'item
+                'extra' => $item->getDepartement() ? '( département '.$item->getDepartement().')' : '', // infos complémentaires (facultatives) sur l'item
             );
         };
 

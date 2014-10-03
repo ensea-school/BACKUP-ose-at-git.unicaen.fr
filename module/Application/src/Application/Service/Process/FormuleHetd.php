@@ -4,14 +4,232 @@ namespace Application\Service\Process;
 
 use Application\Service\AbstractService;
 use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\Annee;
+use Application\Interfaces\IntervenantAwareInterface;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Interfaces\TypeVolumeHoraireAwareInterface;
+use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\Interfaces\AnneeAwareInterface;
+use Application\Traits\AnneeAwareTrait;
 
 /**
  * Processus de gestion de la formule de Kerbeyrie
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class FormuleHetd extends AbstractService
+class FormuleHetd extends AbstractService implements IntervenantAwareInterface, TypeVolumeHoraireAwareInterface, AnneeAwareInterface
 {
+    use IntervenantAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use AnneeAwareTrait;
+
+    /**
+     * Paramètres de sortie de la formule de calcul
+     *
+     * @var array
+     */
+    protected $params;
+
+    /**
+     * Spécifie l'intervenant concerné.
+     *
+     * @param Intervenant $intervenant inervenant concerné
+     * @return self
+     */
+    public function setIntervenant(Intervenant $intervenant)
+    {
+        $this->intervenant = $intervenant;
+        $this->params = [];
+        return $this;
+    }
+
+    /**
+     * Spécifie l'annee concerné.
+     *
+     * @param Annee $annee Annee concernée
+     */
+    public function setAnnee(Annee $annee)
+    {
+        $this->annee = $annee;
+        $this->params = [];
+        return $this;
+    }
+
+    /**
+     * Spécifie le type de volume horaire concerné.
+     *
+     * @param TypeVolumeHoraire $typeVolumeHoraire Type de rôle concerné
+     */
+    public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire = null)
+    {
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+        $this->params = [];
+        return $this;
+    }
+
+
+    public function getParams()
+    {
+        if (empty($this->params)) $this->calculer();
+        return $this->params;
+    }
+
+    protected function calculer()
+    {
+        if (! $this->getIntervenant()){
+            throw new \Common\Exception\LogicException('Impossible de calculer la formule : intervenant non spécifié');
+        }
+        if (! $this->getTypeVolumeHoraire()){
+            $this->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() );
+        }
+        if (! $this->getAnnee()){
+            $this->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
+        }
+
+        $sql = 'SELECT MAX(valeur) FROM TAUX_HORAIRE_HETD thh '
+              .'WHERE SYSDATE BETWEEN thh.validite_debut AND NVL(thh.validite_fin,SYSDATE) AND thh.histo_destruction IS NULL';
+        $tauxHoraireHetd = (float)$this->getEntityManager()->getConnection()->executeQuery($sql)->fetchColumn(0);
+
+
+        $params = [
+            'service-du'                => 0,
+            'service-du-modifications'  => 0,
+            'service-du-modifie'        => 0,
+            'service-referentiel'       => 0,
+            'service-du-restant'        => 0,
+            'service'                   => [
+                'type-intervention'         => [],
+                'element-pedagogique'       => []
+            ],
+            'total-heures-reelles'      => 0,
+            'total-heures-hetd'         => 0,
+            'total-heures-hetd-service' => 0,
+            'total-heures-hetd-comp'    => 0,
+            'taux-ponderation-service'  => 0,
+            'taux-ponderation-comp'     => 0,
+            'reevaluation-service'      => 0,
+            'reste-a-payer'             => 0,
+            'heures-complementaires'    => 0,
+            'taux-horaire-hetd'         => $tauxHoraireHetd,
+            'a-payer'                   => 0,
+        ];
+
+        $params['service-du'] = $this->getIntervenant()->getStatut()->getServiceStatutaire();
+        if ($this->getIntervenant()->estPermanent()){
+            $msds = $this->getIntervenant()->getModificationServiceDu($this->getAnnee());
+            foreach( $msds as $msd ){
+                $params['service-du-modifications'] += $msd->getHeures();
+            }
+
+            $srs = $this->getIntervenant()->getServiceReferentiel($this->getAnnee());
+            foreach( $srs as $sr ){
+                $params['service-referentiel'] += $sr->getHeures();
+            }
+        }
+
+        $vhl = [];
+        foreach( $this->getIntervenant()->getService($this->getAnnee()) as $service ){/* @var $service \Application\Entity\Db\Service */
+            foreach( $service->getVolumeHoraire() as $vh ){ /* @var $vh \Application\Entity\Db\VolumeHoraire */
+                if ($vh->getMotifNonPaiement() === null && $vh->getTypeVolumeHoraire() === $this->getTypeVolumeHoraire()){
+                    $vhl[] = $vh;
+                }
+            }
+        }
+
+        foreach( $vhl as $vh ){
+            $element = $vh->getService()->getElementPedagogique();
+            $tauxHetdServiceDu   = $vh->getTypeIntervention()->getTauxHetdService();
+            $tauxHetdServiceComp = $vh->getTypeIntervention()->getTauxHetdComplementaire();
+            if ($element){
+                foreach( $element->getElementModulateur() as $elementModulateur ){ /* @var $elementModulateur \Application\Entity\Db\ElementModulateur */
+                    if ($elementModulateur->getAnnee() == $this->getAnnee()){
+                        $tauxHetdServiceDu *= $elementModulateur->getModulateur()->getPonderationServiceDu();
+                        $tauxHetdServiceComp *= $elementModulateur->getModulateur()->getPonderationServiceCompl();
+                    }
+                }
+            }
+            $params['total-heures-reelles']      += $vh->getHeures();
+            $params['total-heures-hetd-service'] += $vh->getHeures() * $tauxHetdServiceDu;
+            $params['total-heures-hetd-comp']    += $vh->getHeures() * $tauxHetdServiceComp;
+            if (! isset($params['service']['type-intervention'][$vh->getTypeIntervention()->getCode()])){
+                $params['service']['type-intervention'][$vh->getTypeIntervention()->getCode()] = [
+                    'heures'         => 0,
+                    'heures-service' => 0,
+                    'heures-comp'    => 0,
+                    'pourc-service'  => 0,
+                    'pourc-comp'     => 1,
+                ];
+            }
+            $elId = isset($element) ? $element->getId() : 0;
+            if (! isset($params['service']['element-pedagogique'][$elId])){
+                $params['service']['element-pedagogique'][$elId] = [
+                    'heures'            => 0,
+                    'type-intervention' => [],
+                ];
+            }
+            if (! isset($params['service']['element-pedagogique'][$elId]['type-intervention'][$vh->getTypeIntervention()->getCode()])){
+                $params['service']['element-pedagogique'][$elId]['type-intervention'][$vh->getTypeIntervention()->getCode()] = [
+                    'heures'         => 0,
+                    'heures-service' => 0,
+                    'heures-comp'    => 0,
+                ];
+            }
+            $params['service']['element-pedagogique'][$elId]['heures'] += $vh->getHeures();
+            $params['service']['type-intervention'][$vh->getTypeIntervention()->getCode()]['heures']            += $vh->getHeures();
+            $params['service']['type-intervention'][$vh->getTypeIntervention()->getCode()]['heures-service']    += $vh->getHeures() * $tauxHetdServiceDu;
+            $params['service']['type-intervention'][$vh->getTypeIntervention()->getCode()]['heures-comp']       += $vh->getHeures() * $tauxHetdServiceComp;
+            $params['service']['element-pedagogique'][$elId]['type-intervention'][$vh->getTypeIntervention()->getCode()]['heures']          += $vh->getHeures();
+            $params['service']['element-pedagogique'][$elId]['type-intervention'][$vh->getTypeIntervention()->getCode()]['heures-service']  += $vh->getHeures() * $tauxHetdServiceDu;
+            $params['service']['element-pedagogique'][$elId]['type-intervention'][$vh->getTypeIntervention()->getCode()]['heures-comp']     += $vh->getHeures() * $tauxHetdServiceComp;
+        }
+
+        /* Ventilation */
+        foreach( $params['service']['type-intervention'] as $tiCode => $tiParams ){
+            $total = $params['total-heures-reelles'];
+
+            if ($total > 0){
+                $params['service']['type-intervention'][$tiCode]['pourc-service'] = $tiParams['heures-service'] / $total;
+                $params['service']['type-intervention'][$tiCode]['pourc-comp'] = $tiParams['heures-comp'] / $total;
+
+                $params['taux-ponderation-service'] += $tiParams['heures-service'] / $total;
+                $params['taux-ponderation-comp'] += $tiParams['heures-comp'] / $total;
+            }
+        }
+
+        if (empty($params['service']['type-intervention'])){ // 1 par défaut, c'est-à-dire s'il n'y a aucun service!!
+            $params['taux-ponderation-service'] = 1;
+            $params['taux-ponderation-comp']    = 1;
+        }
+
+        $params['service-du-modifie']       = $params['service-du'] - $params['service-du-modifications'];
+        $params['service-du-restant']       = $params['service-du-modifie'] - $params['service-referentiel'];
+        $params['reevaluation-service']     = $params['service-du-modifie'] / $params['taux-ponderation-service'];
+        $params['reste-a-payer']            = $params['total-heures-reelles'] - $params['reevaluation-service'];
+        if ($params['reste-a-payer'] < 0 ){
+            $params['heures-complementaires'] = $params['taux-ponderation-service'] * $params['total-heures-reelles'] - $params['service-du-restant'];
+        }else{
+            $params['heures-complementaires'] = $params['reste-a-payer'] * $params['taux-ponderation-comp'] + $params['service-referentiel'];
+        }
+        
+        if($params['heures-complementaires'] >= 0){
+            $params['total-heures-hetd']      = $params['service-du-modifie'] + $params['heures-complementaires'];
+            $params['a-payer']                = $params['heures-complementaires'] * $params['taux-horaire-hetd'];
+        }else{
+            $params['total-heures-hetd']      = $params['service-du-modifie'];
+        }
+        $this->params = $params;
+        return $this;
+    }
+
+
+
+
+    /**
+     * @deprecated
+     * @param Intervenant $intervenant
+     * @return int
+     */
     public function getServiceDu( Intervenant $intervenant )
     {
         $sql = 'SELECT heures FROM V_FORMULE_SERVICE_DU WHERE intervenant_id = :intervenant';
@@ -23,6 +241,11 @@ class FormuleHetd extends AbstractService
         }
     }
 
+    /**
+     * @deprecated
+     * @param Intervenant $intervenant
+     * @return int
+     */
     public function getModifServiceDu( Intervenant $intervenant )
     {
         $sql = 'SELECT heures FROM V_FORMULE_MODIF_SERVICE_DU WHERE intervenant_id = :intervenant';
@@ -34,6 +257,11 @@ class FormuleHetd extends AbstractService
         }
     }
 
+    /**
+     * @deprecated
+     * @param Intervenant $intervenant
+     * @return int
+     */
     public function getServiceReferentiel( Intervenant $intervenant )
     {
         $sql = 'SELECT heures FROM V_FORMULE_SERVICE_REFERENTIEL WHERE intervenant_id = :intervenant';
@@ -45,6 +273,11 @@ class FormuleHetd extends AbstractService
         }
     }
 
+    /**
+     * @deprecated
+     * @param Intervenant $intervenant
+     * @return int
+     */
     public function getServiceTotal( Intervenant $intervenant )
     {
         $sql = 'SELECT heures FROM V_FORMULE_VOLUME_HORAIRE_TOTAL WHERE intervenant_id = :intervenant';
@@ -56,6 +289,11 @@ class FormuleHetd extends AbstractService
         }
     }
 
+    /**
+     * @deprecated
+     * @param Intervenant $intervenant
+     * @return int
+     */
     public function getServiceRestant( Intervenant $intervenant )
     {
         $sql = 'SELECT heures FROM V_FORMULE_SERVICE_RESTANT WHERE intervenant_id = :intervenant';
@@ -67,6 +305,11 @@ class FormuleHetd extends AbstractService
         }
     }
 
+    /**
+     * @deprecated
+     * @param Intervenant $intervenant
+     *
+     */
     public function getService( Intervenant $intervenant )
     {
         $sql = '
@@ -124,6 +367,11 @@ class FormuleHetd extends AbstractService
         return $data;
     }
 
+    /**
+     * @deprecated
+     * @param Intervenant $intervenant
+     *
+     */
     public function getVentilation( Intervenant $intervenant )
     {
         $sql = 'SELECT * FROM V_FORMULE_VENTILATION WHERE intervenant_id = :intervenant';
@@ -144,6 +392,11 @@ class FormuleHetd extends AbstractService
         return $data;
     }
 
+    /**
+     * @deprecated
+     * @param Intervenant $intervenant
+     *
+     */
     public function getReevalResteAPayer( Intervenant $intervenant )
     {
         $sql = 'SELECT * FROM V_FORMULE_REEVAL_RESTEAPAYER WHERE intervenant_id = :intervenant';
@@ -167,7 +420,7 @@ class FormuleHetd extends AbstractService
 
     /**
      * Retourne les heures complémentaires calculées pour un intervenant à partir de ses services
-     * 
+     * @deprecated
      * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant
      * @return float[]|float
      */
@@ -193,7 +446,7 @@ class FormuleHetd extends AbstractService
 
     /**
      * Retourne les heures éq. TD calculées pour un intervenant à partir de ses services
-     *
+     * @deprecated
      * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant
      * @return float[]|float
      */
@@ -219,7 +472,7 @@ class FormuleHetd extends AbstractService
 
     /**
      * Retourne le montant en euros à payer des heures complémentaires
-     *
+     * @deprecated
      * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant
      * @return float[]|float
      */
@@ -245,7 +498,7 @@ class FormuleHetd extends AbstractService
 
     /**
      * Retourne lac partie WHERE d'une requête SQL
-     *
+     * @deprecated
      * @param Intervenant|Intervenant[]|integer|integer[]|null $intervenant
      * @return string
      */
@@ -292,5 +545,13 @@ class FormuleHetd extends AbstractService
     protected function getServiceEtablissement()
     {
         return $this->getServiceLocator()->get('applicationEtablissement');
+    }
+
+    /**
+     * @return \Application\Service\TypeVolumeHoraire
+     */
+    protected function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
     }
 }

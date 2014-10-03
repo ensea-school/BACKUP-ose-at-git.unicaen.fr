@@ -133,10 +133,10 @@ class PieceJointeController extends AbstractActionController implements ContextP
             }
         }
         if (count($validations) < count($piecesJointesFournies)) {
-            $messages['danger'][] = "Il reste des pièces justificatives fournies à valider.";
+            $messages['danger'][] = "Elles doivent encore être validées par votre composante.";
         }
         elseif (count($typesPieceJointeAttendus) === count($validations)) {
-            $messages['success'][] = "Toutes les pièces justificatives fournies ont été validées.";
+            $messages['success'][] = "Toutes les pièces justificatives fournies ont été validées par votre composante.";
         }
         
         

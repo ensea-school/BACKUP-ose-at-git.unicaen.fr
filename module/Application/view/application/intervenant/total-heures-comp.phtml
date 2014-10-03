@@ -1,5 +1,5 @@
 <?php
-
+/* @var $this \Zend\View\Renderer\PhpRenderer */
 /* @var $intervenant Application\Entity\Db\Intervenant */
 
 $serviceDu          = $formule->getServiceDu($intervenant);
@@ -25,12 +25,14 @@ function ffc( $montant )
     echo ' €';
 }
 
+$url = $this->url('intervenant/total-heures-comp', ['intervenant' => $intervenant->getSourceCode()]);
+
 ?>
 
-<div id="details-hetd">
+<div id="details-hetd" data-url="<?php echo $this->escapeHtmlAttr($url)?>">
 <?php if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur): ?>
     <div class="row" style="font-size:16pt">
-        <div class="col-md-5"><abbr title="en heures équivalent TD (HETD)">Heures de service :</abbr></div>
+        <div class="col-md-5">Total d'heures éq. TD (HETD) :</div>
       <div class="col-md-7"><span class="label label-success"><?php ffh( $heuresReelles ); ?></span></div>
     </div>
 <?php else: ?>

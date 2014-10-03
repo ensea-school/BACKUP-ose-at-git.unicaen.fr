@@ -15,9 +15,6 @@ elementPedagogiqueRecherche = {
 
         filterSelect( $('#niveau-'+id), niveauxValues );
         filterSelect( $('#etape-'+id), etapesValues );
-        console.log(relations);
-        console.log(niveauxValues);
-        console.log(etapesValues);
 
         var query = {
             structure: structureId,

@@ -122,6 +122,112 @@ class ServiceController extends AbstractActionController
         return $viewModel;
     }
 
+    public function exportAction()
+    {
+        $service            = $this->getServiceService();
+        $role               = $this->getContextProvider()->getSelectedIdentityRole();
+        $intervenant        = $this->context()->intervenantFromRoute();
+        $typeVolumeHoraire  = $this->getServiceTypeVolumehoraire()->getPrevu();
+        $showMultiplesIntervenants        = (! $intervenant) && $this->isAllowed('ServiceController', 'show-multiples-intervenants');
+
+        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException();
+        }
+
+        $this->initFilters();
+
+        $qb = $service->finderByContext();
+        $service->leftJoin($this->getServiceElementPedagogique(), $qb, 'elementPedagogique', true);
+
+        $this->getServiceElementPedagogique()->leftJoin( 'applicationEtape', $qb, 'etape', true );
+        $this->getServiceElementPedagogique()->leftJoin( 'applicationPeriode', $qb, 'periode', true);
+        $service->join( $this->getServiceIntervenant(), $qb, 'intervenant', true);
+
+        $volumeHoraireService = $this->getServiceLocator()->get('applicationVolumehoraire'); /* @var $volumeHoraireService \Application\Service\VolumeHoraire */
+        $service->leftjoin($volumeHoraireService, $qb, 'volumeHoraire', true);
+        $volumeHoraireService->leftJoin('applicationMotifNonPaiement', $qb, 'motifNonPaiement', true);
+
+        $this->getServiceElementPedagogique()->leftJoin('applicationTypeIntervention', $qb, 'typeIntervention', true);
+
+        if (! $intervenant){
+            $intervenant = method_exists($role, 'getIntervenant') ? $role->getIntervenant() : null;
+        }else{
+            $service->finderByIntervenant( $intervenant, $qb ); // filtre par intervenant souhaité
+            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
+        }
+
+        if ($showMultiplesIntervenants){
+            $this->filtresAction();
+            $rechercheForm = $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+            /* @var $rechercheForm \Application\Form\Service\Recherche */
+            $filter = $rechercheForm->hydrateFromSession();
+            $service->finderByFilterObject($filter, null, $qb);
+            if($role instanceof \Application\Acl\ComposanteRole){
+                $service->finderByComposante($role->getStructure(), $qb);
+            }
+        }
+
+        /* Préparation et affichage */
+
+        $services = $service->getList($qb);
+        $service->setTypeVolumehoraire($services, $typeVolumeHoraire);
+
+        $csvModel = new \UnicaenApp\View\Model\CsvModel();
+        $head = [
+            'Code Intervenant',
+            'Intervenant',
+            'Statut',
+            'Type',
+            'Fc. Référentiel',
+            'Structure d\'affectation',
+            'Composante d\'enseignement',
+            'Code formation',
+            'Formation',
+            'Code enseignement',
+            'Enseignement',
+        ];
+        $typesIntervention = [];
+        foreach( $services as $service ){
+            $tis = $service->getVolumeHoraireListe()->getTypesIntervention();
+            foreach( $tis as $ti ){
+                if (! isset($typesIntervention[$ti->getId()])){
+                    $typesIntervention[$ti->getId()] = $ti;
+                }
+            }
+
+        }
+        usort( $typesIntervention, function($ti1,$ti2){
+            return $ti1->getOrdre() > $ti2->getOrdre();
+        } );
+        foreach( $typesIntervention as $typeIntervention ){
+            $head[] = $typeIntervention->getCode();
+        }
+
+        $csvModel->setHeader( $head );
+        foreach( $services as $service ){ /* @var $service \Application\Entity\Db\Service */
+            $line = [
+                'code_intervenant'  => $service->getIntervenant()->getSourceCode(),
+                'intervenant'       => (string)$service->getIntervenant(),
+                'statut'            => (string)$service->getIntervenant()->getStatut(),
+                'type'              => (string)$service->getIntervenant()->getStatut()->getTypeIntervenant(),
+                'referentiel'       => $this->getServiceLocator()->get('ProcessFormuleHetd')->getServiceReferentiel($service->getIntervenant()),
+                'str_aff'           => (string)$service->getStructureAff(),
+                'str_ens'           => (string)$service->getStructureEns(),
+                'code_etape'        => $service->getElementPedagogique() ? $service->getElementPedagogique()->getEtape()->getSourceCode() : '',
+                'etape'             => $service->getElementPedagogique() ? (string)$service->getElementPedagogique()->getEtape() : '',
+                'code_element'      => $service->getElementPedagogique() ? $service->getElementPedagogique()->getSourceCode() : '',
+                'element'           => $service->getElementPedagogique() ? (string)$service->getElementPedagogique() : '',
+            ];
+            foreach( $typesIntervention as $typeIntervention ){
+                $line[$typeIntervention->getCode()] = $service->getVolumeHoraireListe(null, $typeIntervention)->getHeures();
+            }
+            $data[$service->getId()] = $line;
+            $csvModel->addLine($line);
+        }
+        $csvModel->setFilename('service.csv');
+        return $csvModel;
+    }
+
     /**
      * Totaux de services et de référentiel par intervenant.
      * 

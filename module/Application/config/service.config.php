@@ -26,6 +26,15 @@ return array(
                             ),
                         ),
                     ),
+                    'export' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/export',
+                            'defaults' => array(
+                                'action' => 'export',
+                            ),
+                        ),
+                    ),
                     'resume-refresh' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -174,7 +183,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('index', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
+                    'action' => array('index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
                     'roles' => [R_ROLE],
                 ), array(
                     'controller' => 'Application\Controller\Service',

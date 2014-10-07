@@ -34,12 +34,18 @@ class EtapeController extends AbstractActionController implements ContextProvide
     protected function saisirAction()
     {
         $structure = $this->context()->mandatory()->structureFromRoute();
+        $niveau    = $this->context()->niveauFromRoute();
         $id        = $this->params()->fromRoute('id');
         $service   = $this->getServiceEtape();
         $title     = $id ? "Modification d'une formation" : "Création d'une nouvelle formation";
         $form      = $this->getFormAjouterModifier();
         $errors    = array();
 
+        // persiste les filtres dans le contexte local
+        $this->getContextProvider()->getLocalContext()
+                ->setStructure($structure)
+                ->setNiveau($niveau ? $this->getServiceNiveauEtape()->get($niveau) : null);
+                
         $service->canAdd(true);
         
         if ($id) {
@@ -160,5 +166,13 @@ class EtapeController extends AbstractActionController implements ContextProvide
     protected function getServiceEtape()
     {
         return $this->getServiceLocator()->get('applicationEtape');
+    }
+
+    /**
+     * @return \Application\Service\NiveauEtape
+     */
+    protected function getServiceNiveauEtape()
+    {
+        return $this->getServiceLocator()->get('applicationNiveauEtape');
     }
 }

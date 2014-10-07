@@ -163,8 +163,8 @@ return array(
                             'ajouter' => array(
                                 'type'    => 'Segment',
                                 'options' => array(
-                                    'route'    => '/ajouter/:structure',
-                                    'constraints' => array( 'id' => '[0-9]*', ),
+                                    'route'    => '/ajouter/:structure[/niveau/:niveau]',
+                                    'constraints' => array( 'structure' => '[0-9]*' ),
                                     'defaults' => array( 'action' => 'ajouter' ),
                                 ),
                             ),

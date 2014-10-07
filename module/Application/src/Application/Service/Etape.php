@@ -70,9 +70,12 @@ class Etape extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $qb->andWhere("SIZE ($alias.elementPedagogique) = 0")
-           ->andWhere("SIZE ($alias.cheminPedagogique) = 0")
-           ->andWhere("$alias.specifiqueEchanges = 0");
+        $qb
+                ->join("$alias.source", "src")
+                ->andWhere("SIZE ($alias.elementPedagogique) = 0")
+                ->andWhere("SIZE ($alias.cheminPedagogique) = 0")
+                ->andWhere("$alias.specifiqueEchanges = 0 OR src.code = :sourceOse")
+                ->setParameter('sourceOse', \Application\Entity\Db\Source::CODE_SOURCE_OSE);
 
         return $qb;
     }

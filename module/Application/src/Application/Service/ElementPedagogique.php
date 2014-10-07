@@ -202,6 +202,7 @@ class ElementPedagogique extends AbstractEntityService
 select * from (
   select ep.id,
     rank() over (partition by ep.id order by cp.ordre) rang,
+    count(*) over (partition by ep.id) nb_ch,
     ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle_long libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf,
     ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
   from chemin_pedagogique cp

@@ -238,6 +238,21 @@ class IntervenantDl extends AbstractDl
 //        $html .= sprintf($this->getTemplateDl('intervenant intervenant-modif-servie-du'), implode(PHP_EOL, $modificationsServiceDu)) . PHP_EOL;
         
         /**
+         * Divers
+         */
+        
+        $divers = array();
+        
+        if (!$this->short) {
+            $divers[] = sprintf($tplDtdd,
+                "Id de connexion :", 
+                ($u = $this->entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)"
+            );
+        }
+        
+        $html .= sprintf($this->getTemplateDl('intervenant intervenant-divers'), implode(PHP_EOL, $divers)) . PHP_EOL;
+        
+        /**
          * Historique
          */
         

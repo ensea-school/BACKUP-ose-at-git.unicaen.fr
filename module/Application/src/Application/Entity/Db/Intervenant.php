@@ -250,6 +250,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $agrement;
 
     /**
+     * @var Utilisateur
+     */
+    protected $utilisateur;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1231,6 +1236,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $agrements = $this->agrement->filter($filter);
         
         return $agrements;
+    }
+    
+    /**
+     * Get utilisateur
+     * 
+     * @return Utilisateur
+     */
+    public function getUtilisateur()
+    {
+        return $this->utilisateur;
     }
     
     /**

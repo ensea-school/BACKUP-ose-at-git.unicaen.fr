@@ -354,6 +354,7 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function finderByFilterObject( $object, HydratorInterface $hydrator=null, QueryBuilder $qb=null, $alias=null )
     {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
         if (null === $object) return $qb;
         if (! $hydrator && $object instanceof \Zend\Stdlib\Hydrator\HydratorAwareInterface){
             $hydrator = $object->getHydrator();

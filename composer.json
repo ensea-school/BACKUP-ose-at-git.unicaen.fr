@@ -12,7 +12,7 @@
         "unicaen/unicaen-auth":                 "dev-trunk",
         "unicaen/unicaen-ldap":                 "dev-trunk",
         "unicaen/unicaen-upload":               "dev-trunk",
-        "zendframework/zend-code":              ">=2.3",
+        "zendframework/zend-code":              "2.3.1",
         
         "zendframework/zend-mvc":               "2.3.1",
         "zendframework/zend-eventmanager":      "2.3.1",

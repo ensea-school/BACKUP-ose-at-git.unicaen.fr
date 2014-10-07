@@ -178,7 +178,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param boolean $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return self
      */
     private function _join( $method='join', $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
     {
@@ -200,7 +200,7 @@ abstract class AbstractEntityService extends AbstractService
         if ($addSelect){
             $qb->addSelect( $rightAlias );
         }
-        return $qb;
+        return $this;
     }
 
     /**

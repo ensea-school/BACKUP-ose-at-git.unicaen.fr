@@ -4,8 +4,6 @@ namespace Application\Controller;
 
 use Application\Assertion\FichierAssertion;
 use Application\Assertion\PieceJointeAssertion;
-use Application\Controller\Plugin\Context;
-use UnicaenApp\Controller\Plugin\AppInfos;
 use Application\Entity\Db\Fichier;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\PieceJointe;
@@ -21,10 +19,9 @@ use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Common\Exception\MessageException;
+use Common\Exception\RuntimeException;
 use Common\Exception\PieceJointe\AucuneAFournirException;
 use Common\Exception\PieceJointe\PieceJointeException;
-use Doctrine\ORM\EntityManager;
-use Zend\Form\Form;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -32,9 +29,10 @@ use Zend\View\Model\ViewModel;
 /**
  * Description of UploadController
  *
- * @method EntityManager em()
- * @method Context       context()
- * @method AppInfos      appInfos() 
+ * @method Doctrine\ORM\EntityManager               em()
+ * @method Application\Controller\Plugin\Context    context()
+ * @method UnicaenApp\Controller\Plugin\AppInfos    appInfos() 
+ * @method UnicaenApp\Controller\Plugin\Mail        mail()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -42,11 +40,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
 {
     use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
-    
-    /**
-     * @var Form
-     */
-    private $form;
     
     /**
      * @var string
@@ -139,7 +132,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
             $messages['success'][] = "Toutes les pièces justificatives fournies ont été validées par votre composante.";
         }
         
-        
         $this->view->setVariables(array(
             'urlStatus' => $this->url()->fromRoute('piece-jointe/intervenant/status', [], [], true),
             'messages'  => $messages,
@@ -196,12 +188,69 @@ class PieceJointeController extends AbstractActionController implements ContextP
             if ($form->isValid()) {
                 $data = $form->getData();
                 $this->getServicePieceJointe()->createFromFiles($data['files'], $intervenant, $typePieceJointe);
+                $this->notifyPiecesJointesFournies();
                 
                 return $redir;
             }
         }
         
         return $redir;
+    }
+    
+    private function notifyPiecesJointesFournies()
+    {
+        // notif ssi toutes les PJ obligatoires ont été founies
+        if (!$this->getRulePiecesJointesFournies()->execute()) { 
+           return;
+        }
+        // pas de nottif si c'est un gestionnaire qui dépose des PJ
+        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\ComposanteRole) {
+            return;
+        }
+                
+        // extraction des messages d'info (ce sont les feuilles du tableau)
+        $messages = \UnicaenApp\Util::extractArrayLeafNodes($this->statusAction()->getVariable('messages'));
+        
+        // corps au format HTML
+        $renderer = $this->getServiceLocator()->get('view_manager')->getRenderer();  /* @var $renderer \Zend\View\Renderer\PhpRenderer */
+        $html = $renderer->render('application/piece-jointe/partial/mail', [
+            'messages'    => $messages,
+            'intervenant' => $this->getIntervenant(),
+            'url'         => $this->url()->fromRoute('piece-jointe/intervenant', [], ['force_canonical' => true], true),
+        ]);
+        $part          = new \Zend\Mime\Part($html);
+        $part->type    = \Zend\Mime\Mime::TYPE_HTML;
+        $part->charset = 'UTF-8';
+        $body          = new \Zend\Mime\Message();
+        $body->addPart($part);
+        
+        // init
+        $message       = new \Zend\Mail\Message();
+        $message->setEncoding('UTF-8')
+                ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
+                ->setSubject(sprintf("[%s] Pièces justificatives déposées par %s", $app, $this->getIntervenant()))
+                ->setBody($body);
+        
+        // destinataires
+        $destinataires = $this->getPieceJointeProcess()->getDestinatairesMail();
+        if (!$destinataires) {
+            throw new RuntimeException(sprintf("Aucun destinataire trouvé concernant %s.", $this->getIntervenant()));
+        }
+        $message->addTo($destinataires);
+        
+        // envoi
+        $this->mail()->send($message);
+    }
+
+    /**
+     * @return PiecesJointesFourniesRule
+     */
+    private function getRulePiecesJointesFournies()
+    {
+        $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule');
+        $rule->setIntervenant($this->getIntervenant());
+        
+        return $rule;
     }
     
     /**

@@ -51,6 +51,58 @@ class Structure extends AbstractEntityService
     }
 
     /**
+     * Recherche les adresses mails de contact d'une structure.
+     * 
+     * Si une adresse de contact est spécifiée pour cette structure dans la table, on retourne cette adresse.
+     * Sinon, on recherche les personnes ayant un rôle spécifique dans la structure, en remontant la hiérarchie 
+     * des structures mères tant que personne n'est trouvé (et si demandé).
+     * 
+     * @param \Application\Entity\Db\Structure $structure Structure concernée
+     * @param boolean $remonterStructures Remonter les structures mères ?
+     * @return string[] mail => nom
+     */
+    public function getMailsContact(EntityStructure $structure, $remonterStructures = true)
+    {
+        if ($structure->getContactPj()) {
+            return [ $structure->getContactPj() ];
+        }
+        
+        $serviceRole = $this->getServiceLocator()->get('applicationRole');
+        
+        $str   = $structure;
+        
+        // recherche des rôles dans la structure, en remontant la hiérarchie des structures si besoin et demandé
+        do {
+            // recherche de "gestionnaires" en priorité
+            $qb = $serviceRole->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_GESTIONNAIRE_COMPOSANTE);
+            $serviceRole->finderByStructure($str, $qb);
+            $roles = $serviceRole->getList($qb);
+            if (count($roles)) {
+                continue; // on a trouvé du monde, ça nous va
+            }
+            
+            // si aucun gestionnaire trouvé, recherche de "responsables"
+            $qb = $serviceRole->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RESPONSABLE_COMPOSANTE);
+            $serviceRole->finderByStructure($str, $qb);
+            $roles = $serviceRole->getList($qb);
+            
+            // on grimpe la hiérarchie des structures
+            $str = $str->getParente();
+        }
+        while ($remonterStructures && !count($roles) && $str);
+        
+        // mise en forme du résultat
+        $contacts = [];
+        foreach ($roles as $role) { /* @var $role \Application\Entity\Db\Role */
+            $mail = $role->getPersonnel()->getEmail();
+            $name = $role->getPersonnel()->getNomUsuel() . ' ' . $role->getPersonnel()->getPrenom();
+            $contacts[$mail] = $name;
+        }
+        
+        return $contacts;
+    }
+    
+    /**
      * Retourne la liste des structures selon le contexte donné
      *
      * @param array $context

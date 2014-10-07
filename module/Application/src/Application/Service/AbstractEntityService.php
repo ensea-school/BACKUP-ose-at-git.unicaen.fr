@@ -148,7 +148,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param boolean $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return self
      */
     public function join( $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
     {
@@ -163,7 +163,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param boolean $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return self
      */
     public function leftJoin( $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
     {

@@ -7,7 +7,6 @@ namespace Application\Entity\Db;
  */
 class Parametre
 {
-    const CONTACT_PJ_DEFAUT = 'contact_pj_defaut';
     
     /**
      * @var string

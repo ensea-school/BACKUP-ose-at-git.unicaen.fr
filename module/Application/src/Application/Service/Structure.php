@@ -58,7 +58,7 @@ class Structure extends AbstractEntityService
      * des structures mères tant que personne n'est trouvé (et si demandé).
      * 
      * @param \Application\Entity\Db\Structure $structure Structure concernée
-     * @param boolean $remonterStructures Remonter les structures mères ?
+     * @param boolean $remonterStructures Remonter les structures mères tant que personne n'est trouvé ?
      * @return string[] mail => nom
      */
     public function getMailsContact(EntityStructure $structure, $remonterStructures = true)
@@ -73,18 +73,15 @@ class Structure extends AbstractEntityService
         
         // recherche des rôles dans la structure, en remontant la hiérarchie des structures si besoin et demandé
         do {
-            // recherche de "gestionnaires" en priorité
+            // recherche de "gestionnaires"
             $qb = $serviceRole->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_GESTIONNAIRE_COMPOSANTE);
             $serviceRole->finderByStructure($str, $qb);
             $roles = $serviceRole->getList($qb);
-            if (count($roles)) {
-                continue; // on a trouvé du monde, ça nous va
-            }
             
-            // si aucun gestionnaire trouvé, recherche de "responsables"
+            // recherche de "responsables"
             $qb = $serviceRole->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RESPONSABLE_COMPOSANTE);
             $serviceRole->finderByStructure($str, $qb);
-            $roles = $serviceRole->getList($qb);
+            $roles += $serviceRole->getList($qb);
             
             // on grimpe la hiérarchie des structures
             $str = $str->getParente();

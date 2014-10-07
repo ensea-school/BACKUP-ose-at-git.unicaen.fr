@@ -64,6 +64,9 @@ class ServiceController extends AbstractActionController
 
         $service->finderByContext($qb);
         $service->finderByFilterObject($filter, null, $qb);
+        if ($intervenant){
+            $service->finderByIntervenant($intervenant, $qb);
+        }
         if (! $intervenant && $role instanceof \Application\Acl\ComposanteRole){
             $service->finderByComposante($role->getStructure(), $qb);
         }

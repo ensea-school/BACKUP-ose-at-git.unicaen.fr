@@ -153,7 +153,7 @@ class Service extends AbstractEntityService
         $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
 
         if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
-            $this->finderByIntervenant( $context->getIntervenant(), $qb, $alias );
+            $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
         }
 
         return $qb;

@@ -106,8 +106,14 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Structure',
-                    'action' => array('index', 'choisir', 'recherche', 'voir', 'apercevoir'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID)),
+                    'action' => array('voir', 'apercevoir'),
+                    'roles' => array(R_ROLE)
+                ),
+                array(
+                    'controller' => 'Application\Controller\Structure',
+                    'action' => array('index', 'choisir', 'recherche'),
+                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID)
+                ),
             ),
         ),
     ),

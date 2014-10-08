@@ -347,7 +347,12 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('voir', 'index', 'apercevoir', 'feuille-de-route'),
+                    'action'     => array('apercevoir',),
+                    'roles'      => array(R_ROLE),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => array('voir', 'index', 'feuille-de-route'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,  AdministrateurRole::ROLE_ID),
                 ),
                 array(

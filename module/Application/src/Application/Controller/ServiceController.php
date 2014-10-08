@@ -121,6 +121,7 @@ class ServiceController extends AbstractActionController
                 $controller       = 'Application\Controller\ServiceReferentiel';
                 $params           = $this->getEvent()->getRouteMatch()->getParams();
                 $params['action'] = 'voirListe';
+                $params['filter'] = $filter;
                 $params['query']  = $this->params()->fromQuery();
                 $params['renderIntervenants'] = ! $intervenant;
                 $listeViewModel   = $this->forward()->dispatch($controller, $params);

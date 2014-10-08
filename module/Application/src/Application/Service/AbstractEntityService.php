@@ -193,7 +193,7 @@ abstract class AbstractEntityService extends AbstractService
         if (null === $rightAlias) $rightAlias = $service->getAlias();
 
         if (in_array($rightAlias, $this->getQbFromAliases($qb))){
-            return $qb; // Prévention de conflits de jointures
+            return $this; // Prévention de conflits de jointures
         }
 
         $qb->$method( $leftAlias.'.'.$relation, $rightAlias );

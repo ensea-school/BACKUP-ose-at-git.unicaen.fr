@@ -310,7 +310,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => array('voir', 'apercevoir', 'search'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_ROLE),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\Etape',
@@ -323,7 +323,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => array('voir', 'apercevoir', 'search', 'getPeriode'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_ROLE),
                 ),
                 array(
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',

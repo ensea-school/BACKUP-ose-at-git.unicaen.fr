@@ -198,8 +198,9 @@ return array(
         ),
         'resource_providers' => array(
             'BjyAuthorize\Provider\Resource\Config' => array(
-                'Service' => array(),
-                'ServiceListView' => array(),
+                'Service' => [],
+                'ServiceReferentiel' => [],
+                'ServiceListView' => [],
                 'ServiceController' => [],
             ),
         ),
@@ -210,12 +211,6 @@ return array(
                         [R_ROLE],
                         'Service',
                         array('create', 'read', 'delete', 'update'),
-                        'ServiceAssertion',
-                    ),
-                    array(
-                        [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD],
-                        'ServiceController',
-                        array('show-multiples-intervenants'),
                         'ServiceAssertion',
                     ),
                     array(
@@ -230,6 +225,12 @@ return array(
                         array('aide-intervenant'),
                         'ServiceAssertion',
                     ),
+                    [
+                        [R_INTERVENANT_PERMANENT, R_COMPOSANTE, R_ADMINISTRATEUR],
+                        'ServiceReferentiel',
+                        ['create', 'read', 'delete', 'update'],
+                        'ServiceReferentielAssertion'
+                    ]
                 ),
             ),
         ),
@@ -247,6 +248,7 @@ return array(
         'invokables' => array(
             'ApplicationService'                => 'Application\\Service\\Service',
             'ApplicationServiceReferentiel'     => 'Application\\Service\\ServiceReferentiel',
+            'ApplicationFonctionReferentiel'     => 'Application\\Service\\FonctionReferentiel',
             'ApplicationServiceValidation'      => 'Application\\Service\\ServiceValidation',
             'ApplicationPeriode'                => 'Application\\Service\\Periode',
             'ApplicationMotifNonPaiement'       => 'Application\\Service\\MotifNonPaiement',
@@ -257,6 +259,7 @@ return array(
             'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',
             'ProcessFormuleHetd'                => 'Application\\Service\\Process\\FormuleHetd',
             'ServiceAssertion'                  => 'Application\\Assertion\\ServiceAssertion',
+            'ServiceReferentielAssertion'       => 'Application\\Assertion\\ServiceReferentielAssertion',
         ),
         'factories' => array(
         ),

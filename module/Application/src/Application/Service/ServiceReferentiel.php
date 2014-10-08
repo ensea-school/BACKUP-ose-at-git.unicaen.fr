@@ -3,54 +3,16 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\ServiceReferentiel as ServiceEntity;
-use Application\Entity\Db\Finder\FinderServiceReferentiel;
-use Application\Entity\Db\Finder\FinderServiceReferentielSum;
+use Application\Entity\Db\Structure as StructureEntity;
+
 
 /**
  * Description of ServiceReferentiel
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentiel extends AbstractService
+class ServiceReferentiel extends AbstractEntityService
 {
-    /**
-     * Supprime (historise par défaut) le service spécifié.
-     *
-     * @param ServiceEntity $entity
-     * @param bool $softDelete 
-     * @return self
-     */
-    public function delete(ServiceEntity $entity, $softDelete = true)
-    {
-        if ($softDelete) {
-            $entity->setHistoDestruction(new \DateTime);
-        }
-        else {
-            $this->getEntityManager()->remove($entity);
-        }
-        
-        $this->getEntityManager()->flush($entity);
-        
-        return $this;
-    } 
-    
-    /**
-     * Retourne le requêteur des services référentiels contraint par les critères spécifiés.
-     *
-     * @param array $filter
-     * @return FinderServiceReferentiel
-     */
-    public function getFinder(array $filter = array())
-    {
-        $qb = new FinderServiceReferentiel(
-                $this->getEntityManager(), 
-                $this->getContextProvider(),
-                $filter);
-
-        return $qb;
-    } 
-    
     /**
      * Retourne la classe des entités
      *
@@ -72,56 +34,101 @@ class ServiceReferentiel extends AbstractService
     }
 
     /**
-     * Retourne la liste des services selon le contexte donné
+     * Initialise une requête
+     * Permet de retourner des valeurs par défaut ou de les forcer en cas de besoin
+     * Format de sortie : array( $qb, $alias ).
      *
-     * @param Context $context
+     * @param QueryBuilder|null $qb      Générateur de requêtes
+     * @param string|null $alias         Alias d'entité
+     * @return array
+     */
+    public function initQuery(QueryBuilder $qb=null, $alias=null)
+    {
+        list($qb, $alias) = parent::initQuery($qb, $alias);
+
+        $this->leftJoin( $this->getServiceStructure()       , $qb, 'structure'      , true, $alias )
+             ->join( $this->getServiceFonctionReferentiel() , $qb, 'fonction'       , true, $alias )
+             ->join( $this->getServiceIntervenant()         , $qb, 'intervenant'    , true, $alias );
+
+        return array($qb,$alias);
+    }
+
+    /**
+     * Retourne le query builder permettant de rechercher les services référentiels
+     * selon la composante spécifiée.
+     *
+     * @param StructureEntity $structure
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByContext(Context $context, QueryBuilder $qb = null, $alias = null)
+    public function finderByComposante(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
+        list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        if (($intervenant = $context->getIntervenant())) {
-            $qb->andWhere("$alias.intervenant = :intervenant")->setParameter('intervenant', $intervenant);
-        }
-        if (($annee = $context->getAnnee())) {
-            $qb->andWhere("$alias.annee = :annee")->setParameter('annee', $annee);
+        $iAlias             = $this->getServiceIntervenant()->getAlias();
+        $filter = "($iAlias.structure = :composante OR $alias.structure = :composante)";
+        $qb->andWhere($filter)->setParameter('composante', $structure);
+
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des services selon le contexte donné
+     *
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByContext(QueryBuilder $qb = null, $alias = null)
+    {
+        $context = $this->getContextProvider()->getGlobalContext();
+        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+
+        if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
+            $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
         }
 
         return $qb;
     }
 
     /**
-     * Retourne, par ID du type d'intervention, la liste des heures saisies pour le service donné
+     * Retourne la liste des intervenants
      *
-     * @param integer|ServiceEntity|null $service
-     * @return array
+     * @param QueryBuilder|null $queryBuilder
+     * @param string|null $alias
+     * @return \Application\Entity\Db\ServiceReferentiel[]
      */
-    public function getTotalHeures($service)
+    public function getList( QueryBuilder $qb=null, $alias=null )
     {
-        if ($service instanceof ServiceEntity) {
-            $service = $service->getId();
-        }
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy( $this->getServiceIntervenant()->getAlias().'.nomUsuel, '.$this->getServiceStructure()->getAlias().'.libelleCourt' );
+        return parent::getList($qb, $alias);
+    }
 
-//        $sql = 'SELECT * FROM V_SERVICE_HEURES';
-//        if ($service) $sql .= ' WHERE service_id = '.(int)$service;
-//
-//        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-//
-//        $result = array();
-//        while($r = $stmt->fetch()){
-//            $result[(int)$r['SERVICE_ID']][(int)$r['TYPE_INTERVENTION_ID']] = (float)$r['HEURES'];
-//        }
-//
-//        if ($service){
-//            if (array_key_exists( $service, $result)){
-//                return $result[$service];
-//            }else{
-//                return array();
-//            }
-//        }
-//        return $result;
-        return array();
+    /**
+     * @return Intervenant
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->get('applicationIntervenant');
+    }
+
+    /**
+     * @return Structure
+     */
+    protected function getServiceStructure()
+    {
+        return $this->getServiceLocator()->get('applicationStructure');
+    }
+
+    /**
+     * @return FonctionReferentiel
+     */
+    protected function getServiceFonctionReferentiel()
+    {
+        return $this->getServiceLocator()->get('applicationFonctionReferentiel');
     }
 }

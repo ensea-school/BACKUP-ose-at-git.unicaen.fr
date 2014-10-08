@@ -121,13 +121,12 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
     protected function getData()
     {
         $qb = $this->getQueryBuilder();
-
         $entities = $qb->getQuery()->execute();
         $result = [
             'structures' => [],
             'niveaux'    => [],
             'etapes'     => [],
-            'relations'  => []
+            'relations'  => ['ALL' => ['ALL' => []]]
         ];
         foreach( $entities as $entity ){
             if ($entity instanceof \Application\Entity\Db\Etape){
@@ -135,23 +134,33 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 $niveau    = \Application\Entity\NiveauEtape::getInstanceFromEtape($etape);
                 $structure = $etape->getStructure();
 
-                if (! isset($result['structures'][$structure->getId()])){
-                    $result['structures'][$structure->getId()] = (string)$structure;
+                $structureId = (string)$structure->getId();
+                $niveauId = (string)$niveau->getId();
+                $etapeId = (string)$etape->getId();
+
+                if (! isset($result['structures'][$structureId])){
+                    $result['structures'][$structureId] = (string)$structure;
                 }
-                if (! isset($result['niveaux'][$niveau->getId()])){
-                    $result['niveaux'][$niveau->getId()] = (string)$niveau;
+                if (! isset($result['niveaux'][$niveauId])){
+                    $result['niveaux'][$niveauId] = (string)$niveau;
                 }
-                if (! isset($result['etapes'][$etape->getId()])){
-                    $result['etapes'][$etape->getId()] = (string)$etape;
+                if (! isset($result['etapes'][$etapeId])){
+                    $result['etapes'][$etapeId] = (string)$etape;
                 }
-                
-                if (! isset( $result['relations'][$structure->getId()][$niveau->getId()] )){
-                    $result['relations']['ALL'][$niveau->getId()] = [];
-                    $result['relations'][$structure->getId()][$niveau->getId()] = [];
+
+                if (! isset($result['relations'][$structureId]['ALL'])){
+                    $result['relations'][$structureId]['ALL'] = [];
                 }
-                $result['relations'][$structure->getId()]['ALL'][] = $etape->getId();
-                $result['relations']['ALL'][$niveau->getId()][] = $etape->getId();
-                $result['relations'][$structure->getId()][$niveau->getId()][] = $etape->getId();
+                if (! isset($result['relations']['ALL'][$niveauId])){
+                    $result['relations']['ALL'][$niveauId] = [];
+                }
+                if (! isset( $result['relations'][$structureId][$niveauId] )){
+                    $result['relations'][$structureId][$niveauId] = [];
+                }
+                $result['relations']['ALL']['ALL'][] = $etapeId;
+                $result['relations'][$structureId]['ALL'][] = $etapeId;
+                $result['relations']['ALL'][$niveauId][] = $etapeId;
+                $result['relations'][$structureId][$niveauId][] = $etapeId;
             }
         }
         asort( $result['structures'] );
@@ -242,14 +251,13 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         if (! $this->queryBuilder){
             $this->queryBuilder = $this->getServiceEtape()->initQuery()[0];
 
-            $this->getServiceEtape()->join( $this->getServiceStructure(), $this->queryBuilder, 'structure' );
-            $this->queryBuilder->addSelect( $this->getServiceStructure()->getAlias() );
+            $this->getServiceEtape()->join( $this->getServiceStructure(), $this->queryBuilder, 'structure', true );
 
-            $this->getServiceEtape()->join( $this->getServiceTypeFormation(), $this->queryBuilder, 'typeFormation' );
-            $this->queryBuilder->addSelect( $this->getServiceTypeFormation()->getAlias() );
+            $this->getServiceEtape()->join( $this->getServiceTypeFormation(), $this->queryBuilder, 'typeFormation', true );
 
-            $this->getServiceTypeFormation()->join( $this->getServiceGroupeTypeFormation(), $this->queryBuilder, 'groupe' );
-            $this->queryBuilder->addSelect( $this->getServiceGroupeTypeFormation()->getAlias() );
+            $this->getServiceTypeFormation()->join( $this->getServiceGroupeTypeFormation(), $this->queryBuilder, 'groupe', true );
+
+            $this->queryBuilder->andWhere($this->getServiceEtape()->getAlias().'.histoDestruction IS NULL');
         }
         return $this->queryBuilder;
     }

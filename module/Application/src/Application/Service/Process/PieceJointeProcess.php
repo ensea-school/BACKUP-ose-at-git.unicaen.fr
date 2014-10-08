@@ -4,7 +4,7 @@ namespace Application\Service\Process;
 
 use Application\Service\AbstractService;
 use Application\Entity\Db\IntervenantExterieur;
-use Application\Service\StatutIntervenant as StatutIntervenantService;
+use Application\Service\Stucture as StuctureService;
 use Application\Service\TypePieceJointe as TypePieceJointeService;
 use Application\Service\TypePieceJointeStatut as TypePieceJointeStatutService;
 use Application\Service\PieceJointe as PieceJointeService;
@@ -12,6 +12,7 @@ use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\PieceJointe;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
+use Common\Exception\RuntimeException;
 
 /**
  * Processus de gestion de la liste de pièces à fournir pour un dossier vacataire.
@@ -303,7 +304,7 @@ class PieceJointeProcess extends AbstractService
         $structure = $this->getIntervenant()->getStructure();
         
         do {
-            $qb = $service->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RA);
+            $qb = $service->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_GESTIONNAIRE_COMPOSANTE);
             $service->finderByStructure($structure, $qb);
             $roles = $service->getList($qb);
             $structure = $structure->getParente();
@@ -314,11 +315,42 @@ class PieceJointeProcess extends AbstractService
     }
     
     /**
-     * @return StatutIntervenantService
+     * Recherche les destinataires du mail de notification lorsque toutes les pièces justificatives 
+     * obligaoires ont été fournies.
+     * 
+     * @return string[]
      */
-    private function getServiceStatut()
+    public function getDestinatairesMail()
     {
-        return $this->getServiceLocator()->get('applicationStatutIntervenant');
+        // recherches des composantes d'intervention
+        $serviceService   = $this->getServiceService();
+        $serviceStructure = $this->getServiceStructure(); /* @var $serviceStructure \Application\Service\Structure */
+        $qb = $serviceStructure->initQuery()[0];
+        $serviceStructure->join($serviceService, $qb, 'service');
+        $serviceService->finderByIntervenant($this->getIntervenant(), $qb);
+        $structures = $serviceStructure->getList($qb);
+        if (!$structures) {
+            $structures = [ $this->getIntervenant()->getStructure() ];
+        }
+        if (!$structures) {
+            throw new RuntimeException(sprintf("Aucune composante d'intervention ni structure d'affectation trouvée pour %s.", 
+                    $this->getIntervenant()));
+        }
+        
+        $contacts = [];
+        foreach ($structures as $structure) {
+            $contacts += $serviceStructure->getMailsContact($structure);
+        }
+        
+        return $contacts;
+    }
+    
+    /**
+     * @return StuctureService
+     */
+    private function getServiceStructure()
+    {
+        return $this->getServiceLocator()->get('applicationStructure');
     }
     
     /**

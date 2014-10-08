@@ -40,6 +40,7 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
 
         $resumeUrl = $url('service/resume');
         $resumeDetailsUrl = $url('service/default', ['action' => 'index']);
+        $resumeExportUrl = $url('service/export');
 
         $formId = uniqid();
 
@@ -109,6 +110,20 @@ class Recherche extends Form implements InputFilterProviderInterface, ServiceLoc
                 'type' => 'submit',
                 'class' => 'btn btn-default',
                 'onclick' => '$("#'.$formId.'").attr("action", "'.$resumeDetailsUrl.'");',
+            ),
+        ));
+
+        /**
+         * Submit
+         */
+        $this->add(array(
+            'name' => 'submit-export',
+            'type'  => 'Button',
+            'options' => ['label' => 'Exporter (CSV)'],
+            'attributes' => array(
+                'type' => 'submit',
+                'class' => 'btn btn-default',
+                'onclick' => '$("#'.$formId.'").attr("action", "'.$resumeExportUrl.'");',
             ),
         ));
     }

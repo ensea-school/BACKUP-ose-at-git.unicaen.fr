@@ -15,6 +15,24 @@ $mc = $this->navigation('navigation')->menuContextuel(); /* @var $mc \UnicaenApp
 $mc->setUlClass('navigation navigation-etape pull-right');
 ?>
 
+<!-- Lien d'export de l'OF au format CSV -->
+<?php
+$this->placeholder('export-of-link')->captureStart();
+$params = [
+    'structure' => $structure ? $structure->getId() : null,
+    'niveau'    => $niveau ? $niveau->getId() : null,
+    'etape'     => $etape ? $etape->getId() : null,
+];
+$urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $params]);
+?>
+<?php if (count($entities)): ?>
+<div>
+    <a class="pull-right" href="<?php echo $urlExportOf ?>"><span class="glyphicon glyphicon-export">
+        </span> Télécharger l'offre de formation au format CSV</a>
+</div> 
+<?php endif ?>
+<?php $this->placeholder('export-of-link')->captureEnd() ?>
+
 <style>
     ul.navigation-etape { padding: 0 0 3px 5px; }
     ul.navigation-etape li { list-style: none; display: inline; }
@@ -80,7 +98,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 <?php endif; ?>
                 
                 <?php foreach ($niveauxOptions as $code => $lib): ?>
-                <?php if (!($niveau && $code == $niveau)): ?>
+                <?php if (!($niveau && $code === $niveau->getId())): ?>
                      <li class="list-group-item">
                          <a class="niveau" title="Cliquez pour afficher les formations et les enseignements de ce niveau" href="<?php echo $this->url('of', 
                                 array(), 
@@ -109,13 +127,14 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 Formation
                 <!--------------- Bouton d'ajout d'étape --------------->
                 <?php if (null !== $entities): ?>
-                <?php if ($serviceEtape->canAdd()): /* @var $serviceEtape \Application\Service\Etape */ ?>
-                <?php echo $mc
-                        ->withoutTarget()
-                        ->addParam('structure', $structure ? $structure->getId() : null)
-                        ->withProp('category', 'etape')
-                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
-                <?php endif; ?>
+                    <?php if ($serviceEtape->canAdd()): /* @var $serviceEtape \Application\Service\Etape */ ?>
+                        <?php echo $mc
+                                ->withoutTarget()
+                                ->addParam('structure', $structure ? $structure->getId() : null)
+                                ->addParam('niveau', $niveau ? $niveau->getId() : null)
+                                ->withProp('category', 'etape')
+                                ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             <div class="panel-body">
@@ -130,7 +149,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                                 array(), 
                                 array('query' => array(
                                     'structure' => $structure ? $structure->getId() : null, 
-                                    'niveau' => $niveau, 
+                                    'niveau' => $niveau ? $niveau->getId() : null, 
                                     'etape' => null))) ?>">Toutes formations confondues</a>
                     </li>
                 <?php else: ?>
@@ -155,7 +174,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                                 array(), 
                                 array('query' => array(
                                     'structure' => $structure ? $structure->getId() : null,
-                                    'niveau' => $niveau, 
+                                    'niveau' => $niveau ? $niveau->getId() : null, 
                                     'etape' => $code))) ?>"><?php echo $lib ?></a>
                      </li>
                 <?php else: ?>
@@ -191,7 +210,7 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                                 array(), 
                                 array('query' => array(
                                     'structure' => $structure ? $structure->getId() : null,
-                                    'niveau' => $niveau, 
+                                    'niveau' => $niveau ? $niveau->getId() : null, 
                                     'etape' => $code))) ?>"><?php echo $lib ?></a>
                      </li>
                 <?php else: ?>
@@ -263,19 +282,10 @@ $mc->setUlClass('navigation navigation-etape pull-right');
                 
                 <p><?php echo count($entities) ?> enseignement(s) trouvé(s).</p>
                 
+                <?php echo $this->placeholder('export-of-link') ?>
             </div>
                 
             <!---------------- Tableau des éléments pédagogiques --------------->
-            <div><a href="<?php 
-        
-        $params = [];
-        if ($structure) $params['structure'] = $structure->getId();
-        if ($niveau) $params['niveau'] = $niveau->getId();
-        if ($etape) $params['etape'] = $etape->getId();
-       
-        echo $this->url('of/default', ['action' => 'export'], ['query' => $params]);
-
-        ?>"><span class="glyphicon glyphicon-file"></span> Télécharger l'offre de formation au format CSV</a></div>
             <table class="table table-bordered table-condensed table-hover">
                 <thead>
                     <tr>
@@ -332,16 +342,9 @@ $mc->setUlClass('navigation navigation-etape pull-right');
             </table>
             
         </div>
-        <div><a href="<?php 
         
-        $params = [];
-        if ($structure) $params['structure'] = $structure->getId();
-        if ($niveau) $params['niveau'] = $niveau->getId();
-        if ($etape) $params['etape'] = $etape->getId();
-       
-        echo $this->url('of/default', ['action' => 'export'], ['query' => $params]);
-
-        ?>"><span class="glyphicon glyphicon-file"></span> Télécharger l'offre de formation au format CSV</a></div>
+        <?php echo $this->placeholder('export-of-link') ?>
+        
         <?php endif; ?>
 
     </div>

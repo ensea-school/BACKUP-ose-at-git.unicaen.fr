@@ -218,6 +218,7 @@ Service.refreshFiltres = function(){
 
 Service.refreshTotaux = function(){
     $("#services tfoot").refresh( {}, Service.onListeChanged );
+    $("#details-hetd").refresh();
 }
 
 Service.onListeChanged = function(){

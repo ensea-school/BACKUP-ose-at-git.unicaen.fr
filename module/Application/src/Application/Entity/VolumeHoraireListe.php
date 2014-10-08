@@ -144,6 +144,21 @@ class VolumeHoraireListe
     }
 
     /**
+     * Retourne la liste des types d'intervention concernés par le service
+     */
+    public function getTypesIntervention()
+    {
+        $typesIntervention = [];
+        $vhs = $this->get();
+        foreach( $vhs as $vh ){
+            if (! isset($typesIntervention[$vh->getTypeIntervention()->getId()])){
+                $typesIntervention[$vh->getTypeIntervention()->getId()] = $vh->getTypeIntervention();
+            }
+        }
+        return $typesIntervention;
+    }
+
+    /**
      *
      * @param TypeIntervention|boolean $typeIntervention
      * @return self

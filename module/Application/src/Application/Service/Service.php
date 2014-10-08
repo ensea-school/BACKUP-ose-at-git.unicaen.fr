@@ -153,7 +153,7 @@ class Service extends AbstractEntityService
         $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
 
         if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
-            $this->finderByIntervenant( $context->getIntervenant(), $qb, $alias );
+            $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
         }
 
         return $qb;
@@ -401,6 +401,7 @@ select
   TYPE_INTERVENANT_CODE ,
   TYPE_INTERVENTION_ID ,
   sum(TOTAL_HEURES) TOTAL_HEURES,
+  v.service_du SERVICE_DU,
   v.heures_comp HEURES_COMP
 from V_RESUME_SERVICE v
 where $structureFilter
@@ -412,6 +413,7 @@ group by
   SOURCE_CODE ,
   TYPE_INTERVENANT_CODE ,
   TYPE_INTERVENTION_ID ,
+  v.service_du,
   v.heures_comp
 EOS;
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($queryServices);

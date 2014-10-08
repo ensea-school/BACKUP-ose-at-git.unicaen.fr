@@ -57,7 +57,7 @@ class FinderIntervenantPermanentWithServiceReferentiel extends AbstractFinder
 //                    ->andWhere("sr.intervenant = :intervenant")
 //                    ->setParameter('intervenant', $context->getIntervenant());
         }
-        elseif ($role instanceof Role) {
+        elseif ($role instanceof \Application\Acl\ComposanteRole) {
             $or = $this->expr()->orX(
                     "sr.structure       = :structureResp", 
                     "stmp.structureNiv2 = :structureResp"

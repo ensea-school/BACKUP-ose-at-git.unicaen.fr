@@ -2,12 +2,12 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * ServiceReferentiel
  */
-class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInterface
+class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInterface, ResourceInterface
 {
     /**
      * Retourne la représentation littérale de cet objet.
@@ -441,5 +441,16 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'ServiceReferentiel';
     }
 }

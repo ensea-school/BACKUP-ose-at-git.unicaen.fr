@@ -15,10 +15,6 @@ use Application\Entity\Db\Utilisateur as UtilisateurEntity;
  */
 class GlobalContext
 {
-    /**
-     * @var Parametres
-     */
-    protected $parametres;
     
     /**
      * @var UtilisateurEntity
@@ -49,6 +45,12 @@ class GlobalContext
      * @var Annee
      */
     protected $anneeSuivante;
+    
+    /**
+     *
+     * @var \DateTime
+     */
+    protected $dateFinSaisiePermanents;
     
     /**
      * @var EntityEtablissement
@@ -99,6 +101,11 @@ class GlobalContext
         return $this->etablissement;
     }
 
+    function getDateFinSaisiePermanents()
+    {
+        return $this->dateFinSaisiePermanents;
+    }
+
     public function setUtilisateur(UtilisateurEntity $utilisateur = null)
     {
         $this->utilisateur = $utilisateur;
@@ -140,4 +147,11 @@ class GlobalContext
         $this->etablissement = $etablissement;
         return $this;
     }
+
+    function setDateFinSaisiePermanents(\DateTime $dateFinSaisiePermanents)
+    {
+        $this->dateFinSaisiePermanents = $dateFinSaisiePermanents;
+        return $this;
+    }
+
 }

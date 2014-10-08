@@ -148,7 +148,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param boolean $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return self
      */
     public function join( $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
     {
@@ -163,7 +163,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param boolean $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return self
      */
     public function leftJoin( $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
     {
@@ -178,7 +178,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param boolean $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return self
      */
     private function _join( $method='join', $service, QueryBuilder $qb, $relation, $addSelect=false, $leftAlias=null, $rightAlias=null )
     {
@@ -193,14 +193,14 @@ abstract class AbstractEntityService extends AbstractService
         if (null === $rightAlias) $rightAlias = $service->getAlias();
 
         if (in_array($rightAlias, $this->getQbFromAliases($qb))){
-            return $qb; // Prévention de conflits de jointures
+            return $this; // Prévention de conflits de jointures
         }
 
         $qb->$method( $leftAlias.'.'.$relation, $rightAlias );
         if ($addSelect){
             $qb->addSelect( $rightAlias );
         }
-        return $qb;
+        return $this;
     }
 
     /**
@@ -354,6 +354,8 @@ abstract class AbstractEntityService extends AbstractService
      */
     public function finderByFilterObject( $object, HydratorInterface $hydrator=null, QueryBuilder $qb=null, $alias=null )
     {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if (null === $object) return $qb;
         if (! $hydrator && $object instanceof \Zend\Stdlib\Hydrator\HydratorAwareInterface){
             $hydrator = $object->getHydrator();
         }

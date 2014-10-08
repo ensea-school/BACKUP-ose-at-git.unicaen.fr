@@ -47,20 +47,6 @@ class Parametres extends AbstractService {
     }
 
     /**
-     * Retourne un paramètre
-     *
-     * @param string $param
-     * @return string
-     */
-    public function get($param)
-    {
-        if (! $this->getCache($param)){
-            throw new LogicException('Le paramètre "'.$param.'" est invalide.');
-        }
-        return $this->getCache($param);
-    }
-
-    /**
      * Retourne la description d'un paramètre
      *
      * @param string $param
@@ -77,6 +63,20 @@ class Parametres extends AbstractService {
             throw new LogicException('Le paramètre "'.$param.'" est invalide.');
         }
         return $result[0]->getDescription();
+    }
+
+    /**
+     * Retourne un paramètre
+     *
+     * @param string $param
+     * @return string
+     */
+    public function get($param)
+    {
+        if (! $this->getCache($param)){
+            throw new LogicException('Le paramètre "'.$param.'" est invalide.');
+        }
+        return $this->getCache($param);
     }
 
     /**

@@ -93,6 +93,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '    <th style="width:40%" rowspan="2">Intervenant</th>'."\n";
         $res .= '    <th style="width:40%" colspan="'.count($typesIntervention).'">Enseignements</th>'."\n";
         $res .= '    <th style="width:10%" rowspan="2">Référentiel</th>'."\n";
+        $res .= '    <th style="width:10%" rowspan="2">Service dû</th>'."\n";
         $res .= '    <th style="width:10%" rowspan="2">Solde HETD</th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
@@ -111,8 +112,11 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             }else{
                 $solde = 0;
             }
-            if (! $intervenantPermanent){
-                $solde = $na;
+
+            if (isset($line['intervenant']['SERVICE_DU'])){
+                $serviceDu = (float)$line['intervenant']['SERVICE_DU'];
+            }else{
+                $serviceDu = 0;
             }
 
             $res .= '<tr>'."\n";
@@ -138,7 +142,8 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             }else{
                 $res .= '<td style="text-align:right">'.($intervenantPermanent ? $this->formatHeures(0) : $na).'</td>'."\n";
             }
-            $res .= $this->renderSoldeHetd($solde);
+            $res .= $this->renderServiceDu( $serviceDu );
+            $res .= $this->renderSoldeHetd($solde, $intervenantPermanent);
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";
@@ -160,14 +165,30 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         return $res;
     }
 
-    protected function renderSoldeHetd( $solde )
+    protected function renderServiceDu( $serviceDu )
+    {
+        $class = '';
+        if (is_numeric($serviceDu)){
+            if ($serviceDu < 0) $class = ' class="bg-danger"';
+            $serviceDu = $this->formatHeures($serviceDu);
+        }
+
+        $res = '<td style="text-align:right"'.$class.'>'.$serviceDu.'</td>'."\n";
+        return $res;
+    }
+
+    protected function renderSoldeHetd( $solde, $intervanantPermanent=false )
     {
         $class = '';
         $plus = '';
         if (is_numeric($solde)){
+            if ($intervanantPermanent){
             if ($solde > 0){ $class = ' class="bg-warning"'; $plus = '+';}
             if ($solde < 0) $class = ' class="bg-danger"';
             $solde = $plus.$this->formatHeures($solde);
+            }else{
+                $solde = $this->formatHeures($solde);
+        }
         }
 
         $res = '<td style="text-align:right"'.$class.'>'.$solde.'</td>'."\n";

@@ -175,6 +175,10 @@ class ElementPedagogiqueController extends AbstractActionController implements C
 
         $result = array();
         foreach ($found as $item) {
+            if ($item['NB_CH'] > 1){
+                $item['LIBELLE_ETAPE'] = 'Enseignement commun à plusieurs parcours';
+            }
+
             $extra = '';
             if (!$niveau) {
                 $extra .= sprintf('<span class="element-rech niveau" title="%s">%s</span>', "Niveau", $item['LIBELLE_GTF'] . $item['NIVEAU']);

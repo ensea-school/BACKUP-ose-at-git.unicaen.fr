@@ -74,24 +74,37 @@ class ServiceReferentielController extends AbstractActionController implements C
     public function voirListeAction()
     {
         $this->initFilters();
-        $service = $this->getServiceServiceReferentiel();
-        $intervenant = $this->context()->intervenantFromRoute();
+        $role           = $this->getContextProvider()->getSelectedIdentityRole();
+        $service        = $this->getServiceServiceReferentiel();
+        $intervenant    = $this->context()->intervenantFromRoute();
+        $filter         = $this->params('filter');
 
-        $qb = $service->getFinder();
+        $qb = $service->finderByContext();
         if ($intervenant) {
-            $qb->andWhere("sr.intervenant = :intervenant")->setParameter('intervenant', $intervenant);
+            $service->finderByIntervenant( $intervenant, $qb );
             $renderIntervenants = false;
         }else{
             $renderIntervenants = true;
+            if ($role instanceof \Application\Acl\ComposanteRole){
+                $service->finderByComposante($role->getStructure(), $qb);
+            }
         }
-        $services = $qb->getQuery()->execute();
+
+        if (isset($filter->structureEns)){
+            $service->finderByStructure( $filter->structureEns, $qb );
+        }
+        if (isset($filter->intervenant)){
+            $service->finderByIntervenant( $filter->intervenant, $qb );
+        }
+
+        $services = $service->getList( $qb );
         return compact('services', 'renderIntervenants');
     }
 
     public function voirLigneAction()
     {
         $this->initFilters();
-        
+
         $id      = (int)$this->params()->fromRoute('id',0);
         $details = 1 == (int)$this->params()->fromQuery('details',0);
         $onlyContent = 1 == (int)$this->params()->fromQuery('only-content',0);
@@ -162,8 +175,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
         }
-        
-        if ($role instanceof \Application\Acl\ComposanteRole) {
+        else {
             // récupère l'éventuel intervenant du contexte local
             $intervenant = $context->getIntervenant();
         }

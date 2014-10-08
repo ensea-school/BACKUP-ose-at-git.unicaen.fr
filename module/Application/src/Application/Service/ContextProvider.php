@@ -52,6 +52,13 @@ class ContextProvider extends AbstractService
             $utilisateur = null;
             $intervenant = null;
             $personnel   = null;
+
+            if (null != $this->getParametres()->date_fin_saisie_permanents){
+                list( $dfspJour, $dfspMois, $dfspAnnee ) = explode( '/', $this->getParametres()->date_fin_saisie_permanents );
+                $dateFinSaisiePermanents = new \DateTime( $dfspAnnee.'-'.$dfspMois.'-'.$dfspJour );
+            }else{
+                $dateFinSaisiePermanents = null;
+            }
             
             if ($authUserContext->getIdentity()) {
                 $utilisateur = $authUserContext->getDbUser();
@@ -73,7 +80,8 @@ class ContextProvider extends AbstractService
                     ->setAnnee($annee)
                     ->setAnneePrecedente($anneePrec)
                     ->setAnneeSuivante($anneeSuiv)
-                    ->setEtablissement($etab);
+                    ->setEtablissement($etab)
+                    ->setDateFinSaisiePermanents($dateFinSaisiePermanents);
         }
         
         return $this->globalContext;

@@ -133,7 +133,6 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirAction()
     {
-//        $page = $this->params()->fromQuery('page', 'fiche');
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         $this->em()->getFilters()->enable('historique');
@@ -155,6 +154,7 @@ class IntervenantController extends AbstractActionController implements ContextP
                 ->join("i.statut", "si")
                 ->join("i.civilite", "c")
                 ->join("i.source", "src")
+                ->leftJoin("i.utilisateur", "u")
                 ->leftJoin("i.adresse", "a")
                 ->leftJoin("i.structure", "aff")
                 ->leftJoin("i.affectation", "affr")

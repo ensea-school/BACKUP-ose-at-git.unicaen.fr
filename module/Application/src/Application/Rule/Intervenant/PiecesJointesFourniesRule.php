@@ -19,6 +19,10 @@ class PiecesJointesFourniesRule extends AbstractRule
 {
     use IntervenantAwareTrait;
     
+    /**
+     * 
+     * @return boolean
+     */
     public function execute()
     {
         // liste des PJ déjà fournies
@@ -43,7 +47,7 @@ class PiecesJointesFourniesRule extends AbstractRule
             if (array_key_exists($tpjs->getType()->getId(), $typesFournis)) {
                 continue;
             }
-            if (!$tpjs->getObligatoire()) {
+            if (!$tpjs->isObligatoire($this->totalHETDIntervenant)) {
                 continue;
             }
             $typesNonFournis[$tpjs->getType()->getId()] = $tpjs->getType();
@@ -59,6 +63,10 @@ class PiecesJointesFourniesRule extends AbstractRule
         return true;
     }
     
+    /**
+     * 
+     * @return boolean
+     */
     public function isRelevant()
     {
         return $this->getIntervenant() instanceof IntervenantExterieur && null !== $this->getIntervenant()->getDossier();
@@ -103,6 +111,25 @@ class PiecesJointesFourniesRule extends AbstractRule
         $this->intervenant = $intervenant;
         
         $this->reset();
+        
+        return $this;
+    }
+    
+    /**
+     * @var float
+     */
+    protected $totalHETDIntervenant;
+    
+    /**
+     * Spécifie le total d'HETD de l'intervenant.
+     * Ce total est pris en compte pour déterminer le caractère obligatoire de certain type de PJ.
+     * 
+     * @param float $totalHETDIntervenant
+     * @return self
+     */
+    public function setTotalHETDIntervenant($totalHETDIntervenant)
+    {
+        $this->totalHETDIntervenant = $totalHETDIntervenant;
         
         return $this;
     }

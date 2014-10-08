@@ -46,8 +46,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     public function injectJsFiles(ServiceLocatorInterface $serviceLocator)
     {
         $basePath = dirname($_SERVER['PHP_SELF']);
+        if ( substr($basePath, -1) !== '/' ) $basePath .= '/';
         $jsFiles = [
-            '/js/elementPedagogiqueRecherche.js'
+            'js/elementPedagogiqueRecherche.js'
         ];
 
         foreach( $jsFiles as $jsFile ){

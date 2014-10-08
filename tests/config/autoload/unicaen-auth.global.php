@@ -10,7 +10,7 @@ $settings = array(
      * Flag indiquant si l'utilisateur authenitifié avec succès via l'annuaire LDAP doit
      * être enregistré/mis à jour dans la table des utilisateurs de l'appli.
      */
-    'save_ldap_user_in_database' => false,
+    'save_ldap_user_in_database' => true,
     /**
      * Enable registration
      * Allows users to register through the website.

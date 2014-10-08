@@ -258,7 +258,10 @@ class FormuleTest extends BaseTest {
         parent::tearDown();
     }
 
-    public function testFormule(){
+    public function testFormule()
+    {
+        $this->markTestSkipped("A revoir...");
+        
         //$this->addIntervenant('TEST03', 'TEST03', 'Testeur2', 'ENS_CH');
         $this->addServiceReferentiel(605, 2);
         return null;

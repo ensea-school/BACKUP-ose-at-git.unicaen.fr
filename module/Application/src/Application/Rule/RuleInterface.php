@@ -11,5 +11,5 @@ interface RuleInterface
 {
     public function execute();
     public function isRelevant();
-    public function getMessage();
+    public function getMessages();
 }

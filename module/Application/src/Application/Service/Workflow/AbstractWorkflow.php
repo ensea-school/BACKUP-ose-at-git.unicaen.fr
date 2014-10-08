@@ -18,6 +18,25 @@ use Zend\Mvc\Controller\Plugin\Url;
 abstract class AbstractWorkflow extends AbstractService
 {
     /**
+     * Conditions de réalisation (règles métier) de chaque étape du workflow.
+     * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
+     * 
+     * @var RuleInterface[] string => RuleInterface : mêmes clés que les étapes
+     */
+    protected $conditions;
+    
+    /**
+     * Conditions (règles métier) :
+     * - de pertinence de chaque étape : une étape est pertinente si cette condition est satisfaite.
+     * - de réalisation de chaque étape : une étape est considérée comme réalisée si cette condition est satisfaite.
+     * 
+     * @var RuleInterface[][] string => RuleInterface[]
+     */
+    protected $rules;
+    
+    /**
+     * Etapes.
+     * 
      * @var Step[] string => Step : mêmes clés que les conditions
      */
     protected $steps;
@@ -66,6 +85,21 @@ abstract class AbstractWorkflow extends AbstractService
             }
         }
         
+        return $this;
+    }
+    
+    /**
+     * Ajoute de règle : de pertinence et de franchissement.
+     * 
+     * @param string $key Clé de l'étape
+     * @param RuleInterface $relevanceRule Règle de pertinence
+     * @param RuleInterface $crossingRule  Règle de franchissement
+     * @return self
+     */
+    protected function addRule($key, RuleInterface $relevanceRule = null, RuleInterface $crossingRule = null)
+    {   
+        $this->rules[$key] = ['relevance' => $relevanceRule, 'crossing' => $crossingRule];
+
         return $this;
     }
     
@@ -134,14 +168,6 @@ abstract class AbstractWorkflow extends AbstractService
         
         return $this->steps;
     }
-
-    /**
-     * Conditions de réalisation (règles métier) de chaque étape du workflow.
-     * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
-     * 
-     * @var RuleInterface[] string => RuleInterface : mêmes clés que les étapes
-     */
-    protected $conditions;
     
     /**
      * Retourne les conditions de réalisation (les règles métier) associées à chaque étape du workflow.

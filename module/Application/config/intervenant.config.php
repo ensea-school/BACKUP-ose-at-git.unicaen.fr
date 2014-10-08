@@ -401,6 +401,10 @@ return array(
             'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
             'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
             'Application\Controller\Workflow'              => 'Application\Controller\WorkflowController',
+            'PeutSaisirDossierRule'                        => 'Application\Rule\Intervenant\PeutSaisirDossierRule',
+            'PossedeDossierRule'                           => 'Application\Rule\Intervenant\PossedeDossierRule',
+            'PeutSaisirServiceRule'                        => 'Application\Rule\Intervenant\PeutSaisirServiceRule',
+            'PossedeServicesRule'                          => 'Application\Rule\Intervenant\PossedeServicesRule',
         ),
         'aliases' => array(
             'IntervenantController' => 'Application\Controller\Intervenant',

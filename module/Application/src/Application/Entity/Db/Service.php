@@ -11,7 +11,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 /**
  * Service
  */
-class Service implements HistoriqueAwareInterface, ResourceInterface
+class Service implements HistoriqueAwareInterface, ValiditeAwareInterface, ResourceInterface
 {
     /**
      * @var \DateTime

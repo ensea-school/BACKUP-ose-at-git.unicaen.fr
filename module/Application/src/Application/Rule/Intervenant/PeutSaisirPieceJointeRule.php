@@ -2,24 +2,32 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\IntervenantExterieur;
+use Application\Rule\AbstractRule;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Service\Intervenant as IntervenantService;
 
 /**
  * Règle métier déterminant si un intervenant peut joindre des pièces justificatives.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutSaisirPieceJointeRule extends IntervenantRule
+class PeutSaisirPieceJointeRule extends AbstractRule
 {
+    use IntervenantAwareTrait;
+    
+    /**
+     * Exécute la règle métier.
+     * 
+     * @return array [ integer => [ 'id' => {id} ] ]
+     */
     public function execute()
     {
-//        if ($this->getIntervenant() instanceof IntervenantExterieur) {
-//            $dossier = $this->getIntervenant()->getDossier();
-//            if (!$dossier) {
-//                $this->setMessage("La saisie de pièce justificative requiert au préalable la saisie des données personnelles.");
-//                return false;
-//            }
-//        }
+        $this->setMessage(null);
+        
+        $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.statut", "s")
+                ->andWhere("s.peutSaisirDossier = 1");
         
         $statut = $this->getIntervenant()->getStatut();
         

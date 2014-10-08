@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface
+class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
      * @var \DateTime

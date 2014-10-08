@@ -22,7 +22,7 @@ trait IntervenantAwareTrait
      * @param Intervenant $intervenant Intervenant concerné
      * @return self
      */
-    public function setIntervenant(Intervenant $intervenant)
+    public function setIntervenant(Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
         

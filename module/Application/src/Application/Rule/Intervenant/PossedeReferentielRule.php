@@ -4,18 +4,20 @@ namespace Application\Rule\Intervenant;
 
 use Application\Rule\AbstractRule;
 use Application\Traits\IntervenantAwareTrait;
-use Application\Entity\Db\IntervenantExterieur;
+use Application\Traits\AnneeAwareTrait;
+use Application\Entity\Db\IntervenantPermanent;
 use Application\Service\Intervenant as IntervenantService;
 use Common\Exception\LogicException;
 
 /**
- * Règle métier déterminant si un intervenant a saisi des données personnelles.
+ * Règle métier déterminant si un intervenant a fait l'objet d'une saisie d'enseignements.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PossedeDossierRule extends AbstractRule
+class PossedeReferentielRule extends AbstractRule
 {
     use IntervenantAwareTrait;
+    use AnneeAwareTrait;
     
     /**
      * Exécute la règle métier.
@@ -27,16 +29,17 @@ class PossedeDossierRule extends AbstractRule
         $this->setMessage(null);
         
         $em = $this->getServiceIntervenant()->getEntityManager();
-        $qb = $em->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i")
+        $qb = $em->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i")
                 ->select("i.id")
-                ->join("i.dossier", "d");
+                ->join("i.serviceReferentiel", "sr")
+                ->andWhere("sr.annee = :annee")->setParameter('annee', $this->getAnnee());
         
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
-            if (!$this->getIntervenant() instanceof IntervenantExterieur) {
-                throw new LogicException("L'intervenant spécifié doit être un IntervenantExterieur.");
+            if (!$this->getIntervenant() instanceof IntervenantPermanent) {
+                throw new LogicException("L'intervenant spécifié doit être un IntervenantPermanent.");
             }
             
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
@@ -44,7 +47,7 @@ class PossedeDossierRule extends AbstractRule
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
-                $this->setMessage("Les données personnelles de l'intervenant doivent avoir été saisies au préalable.");
+                $this->setMessage(sprintf("Le référentiel de %s n'a pas été saisi.", $this->getIntervenant()));
             }
                 
             return $result;
@@ -62,7 +65,7 @@ class PossedeDossierRule extends AbstractRule
     public function isRelevant()
     {
         if ($this->getIntervenant()) {
-            return $this->getIntervenant()->getStatut()->getPeutSaisirDossier();
+            return $this->getIntervenant() instanceof IntervenantPermanent;
         }
         
         return true;

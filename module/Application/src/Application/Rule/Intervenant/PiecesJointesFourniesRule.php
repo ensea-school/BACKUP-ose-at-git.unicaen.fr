@@ -2,11 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Rule\AbstractRule;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
@@ -19,10 +15,8 @@ use Application\Service\TypePieceJointeStatut as TypePieceJointeStatutService;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class PiecesJointesFourniesRule extends AbstractRule
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
     use IntervenantAwareTrait;
     
     public function execute()

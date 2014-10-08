@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Etablissement
  */
-class Etablissement implements HistoriqueAwareInterface
+class Etablissement implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
      * @var string

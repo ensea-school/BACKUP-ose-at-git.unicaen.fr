@@ -13,7 +13,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface
+abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ValiditeAwareInterface, ResourceInterface
 {    
     /**
      * @var \DateTime

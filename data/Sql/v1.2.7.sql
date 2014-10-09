@@ -292,6 +292,30 @@ FROM
 WHERE
   'P' = his.type_intervenant;
 
+
+CREATE TABLE formule_referentiel
+  (
+    id             NUMBER (*,0) NOT NULL ,
+    intervenant_id NUMBER (*,0) NOT NULL ,
+    annee_id       NUMBER (*,0) NOT NULL ,
+    service_du FLOAT NOT NULL ,
+    service_du_modification FLOAT NOT NULL ,
+    service_du_modifie FLOAT NOT NULL ,
+    service_referentiel FLOAT NOT NULL ,
+    service_du_restant FLOAT NOT NULL
+  )
+  LOGGING ;
+ALTER TABLE formule_referentiel ADD CONSTRAINT formule_referentiel_PK PRIMARY KEY ( id ) ;
+ALTER TABLE formule_referentiel ADD CONSTRAINT formule_referentiel__UN UNIQUE ( intervenant_id , annee_id ) ;
+
+ALTER TABLE formule_referentiel ADD CONSTRAINT formule_referentiel_annee_FK FOREIGN KEY ( annee_id ) REFERENCES annee ( id ) ON
+DELETE CASCADE NOT DEFERRABLE ;
+
+ALTER TABLE formule_referentiel ADD CONSTRAINT formule_ref_intervenant_FK FOREIGN KEY ( intervenant_id ) REFERENCES intervenant ( id ) ON
+DELETE CASCADE NOT DEFERRABLE ;
+
+CREATE SEQUENCE FORMULE_REFERENTIEL_ID_SEQ INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 1 NOCACHE;
+
 -- ********************************************************************* --
 -- *          à faire APRÈS avoir mis à jour le code source            * --
 -- ********************************************************************* --

@@ -44,16 +44,20 @@ if ($intervenant){
                 "Merci de saisir les heures effectuées <strong>sans majoration</strong>. Exemple: saisissez 1h CM et non 1,5h TD."); ?>
     <?php endif; ?>
 
+    <?php if ($canAddService): ?>
     <?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
     <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>"
        title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
+    <?php endif; ?>
     <?php echo $this->serviceListe( $services )->setTypeVolumeHoraire($typeVolumeHoraire)->setIntervenant($intervenant)->render(); ?>
 
     <?php if ($renderReferentiel): ?>
         <h1>Référentiel</h1>
-        <?php $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir')); ?>
-        <a class="ajax-modal services-ref btn btn-primary" data-event="service-ref-add-message" href="<?php echo $urlSaisir ?>"
-           title="Modifier le référentiel"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
+        <?php if ($canAddServiceReferentiel): ?>
+            <?php $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir')); ?>
+            <a class="ajax-modal services-ref btn btn-primary" data-event="service-ref-add-message" href="<?php echo $urlSaisir ?>"
+               accesskey=""title="Modifier le référentiel"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
+        <?php endif; ?>
         <?php echo $this->servicesRefListe; ?>
         <hr />
     <?php endif; ?>

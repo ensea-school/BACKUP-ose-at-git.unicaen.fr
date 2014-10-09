@@ -118,7 +118,8 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function supprimerAction()
     {
-        $this->em()->getFilters()->enable('historique');
+        $this->initFilters();
+        
         $id        = $this->params()->fromRoute('id');
         $entity    = $this->em()->find('Application\Entity\Db\ServiceReferentiel', $id);
         $title     = "Suppression de service référentiel";

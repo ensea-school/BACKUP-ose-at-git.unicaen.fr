@@ -1,0 +1,1 @@
+select 'DROP TABLE ' || table_name || ';' from user_tables where table_name like 'BCP_%'

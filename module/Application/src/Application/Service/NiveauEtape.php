@@ -18,7 +18,10 @@ class NiveauEtape extends AbstractService
      */
     public function get($id)
     {
-        list( $groupeTypeFormationLibelleCourt, $niv) = explode( '-', $id );
+        $tiretPos = strrpos($id,'-');
+        $groupeTypeFormationLibelleCourt = substr( $id, 0, $tiretPos );
+        $niv = substr( $id, $tiretPos+1 );
+        if ($niv === false) $niv = null;
         
         $niveau = new NiveauEtapeEntity();
         $niveau->setLib($groupeTypeFormationLibelleCourt);

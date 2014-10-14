@@ -53,7 +53,7 @@ class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAw
             if (array_key_exists($tpjs->getType()->getId(), $typesFournis)) {
                 continue;
             }
-            if (!$tpjs->isObligatoire($this->totalHETDIntervenant)) {
+            if (!$tpjs->isObligatoire($this->totalHeuresReellesIntervenant)) {
                 continue;
             }
             $typesNonFournis[$tpjs->getType()->getId()] = $tpjs->getType();
@@ -124,18 +124,18 @@ class PiecesJointesFourniesRule extends AbstractRule implements ServiceLocatorAw
     /**
      * @var float
      */
-    protected $totalHETDIntervenant;
+    protected $totalHeuresReellesIntervenant;
     
     /**
-     * Spécifie le total d'HETD de l'intervenant.
+     * Spécifie le total d'heures réelles de l'intervenant.
      * Ce total est pris en compte pour déterminer le caractère obligatoire de certain type de PJ.
      * 
-     * @param float $totalHETDIntervenant
+     * @param float $totalHeuresReellesIntervenant
      * @return self
      */
-    public function setTotalHETDIntervenant($totalHETDIntervenant)
+    public function setTotalHeuresReellesIntervenant($totalHeuresReellesIntervenant)
     {
-        $this->totalHETDIntervenant = $totalHETDIntervenant;
+        $this->totalHeuresReellesIntervenant = $totalHeuresReellesIntervenant;
         
         return $this;
     }

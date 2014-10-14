@@ -2,14 +2,14 @@
 
 namespace Application\Entity\Db;
 
-use \Application\Traits\ObligatoireSelonSeuilHETDAwareTrait;
+use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
 
 /**
  * TypePieceJointeStatut
  */
 class TypePieceJointeStatut
 {
-    use ObligatoireSelonSeuilHETDAwareTrait;
+    use ObligatoireSelonSeuilHeuresAwareTrait;
     
     /**
      * @var \DateTime
@@ -71,6 +71,20 @@ class TypePieceJointeStatut
      */
     private $statut;
 
+    /**
+     * @var float
+     */
+    private $seuilHetd;
+
+    /**
+     * Get seuilHeures
+     *
+     * @return integer 
+     */
+    public function getSeuilHeures()
+    {
+        return $this->seuilHetd;
+    }
 
     /**
      * Set histoCreation
@@ -366,13 +380,13 @@ class TypePieceJointeStatut
      * 
      * @todo Comment appeler la méthode getObligatoireToString() du trait ?
      */
-    public function getObligatoireToString($totalHETDIntervenant)
+    public function getObligatoireToString($totalHeuresReellesIntervenant)
     {
-        if ($this->isObligatoire($totalHETDIntervenant)) {
-            $seuilHETD   = $this->getSeuilHetd();
+        if ($this->isObligatoire($totalHeuresReellesIntervenant)) {
+            $seuilHETD   = $this->getSeuilHeures();
             $obligatoire = "À fournir obligatoirement";
-            $obligatoire .= $this->isSeuilHETDDepasse($totalHETDIntervenant) ? 
-                    " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total HETD</abbr> > {$seuilHETD}h" : 
+            $obligatoire .= $this->isSeuilHeuresDepasse($totalHeuresReellesIntervenant) ? 
+                    " car le <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total d'heures réelles</abbr> > {$seuilHETD}h" : 
                     null;
             return $obligatoire;
         }

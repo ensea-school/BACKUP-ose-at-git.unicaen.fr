@@ -2,19 +2,13 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Service\Intervenant as IntervenantService;
-
 /**
  * Règle métier déterminant si un intervenant peut joindre des pièces justificatives.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutSaisirPieceJointeRule extends AbstractRule
-{
-    use IntervenantAwareTrait;
-    
+class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
+{    
     /**
      * Exécute la règle métier.
      * 

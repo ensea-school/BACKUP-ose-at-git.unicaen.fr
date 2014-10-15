@@ -74,8 +74,10 @@ class PeutSaisirDossierRuleTest extends BaseRuleTest
          * => L'IE doit être dans le résultat, mais pas l'IP
          */
         $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertContains(['id' => $this->ie->getId()], $result);
-        $this->assertNotContains(['id' => $this->ip->getId()], $result);
+        $this->assertArrayHasKey($id = $this->ie->getId(), $result);
+        $this->assertEquals(['id' => $id], $result[$id]);
+        $this->assertArrayNotHasKey($id = $this->ip->getId(), $result);
+        $this->assertNotContains(['id' => $id], $result);
         $this->assertNull($this->rule->getMessage());
         
         /**
@@ -92,7 +94,7 @@ class PeutSaisirDossierRuleTest extends BaseRuleTest
          * => Le résultat ne doit contenir que l'IE
          */
         $result = $this->rule->setIntervenant($this->ie)->execute();
-        $this->assertEquals([0 => ['id' => $this->ie->getId()]], $result);
+        $this->assertEquals([$id = $this->ie->getId() => ['id' => $id]], $result);
         $this->assertNull($this->rule->getMessage());
     }
     
@@ -103,6 +105,9 @@ class PeutSaisirDossierRuleTest extends BaseRuleTest
         /**
          * Suppression du jeu d'essai
          */
+        $this->getEntityManager()->remove($this->ip);
+        $this->getEntityManager()->remove($this->ie);
+        $this->getEntityManager()->flush();
         $this->getEntityProvider()->removeNewEntities();
     }
 }

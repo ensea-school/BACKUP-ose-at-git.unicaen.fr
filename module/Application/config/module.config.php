@@ -214,7 +214,6 @@ $main =  array(
             'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
         ),
         'abstract_factories' => array(
-            'Application\Rule\AbstractRuleFactory',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',

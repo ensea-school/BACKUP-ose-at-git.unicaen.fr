@@ -10,15 +10,25 @@ use Application\Entity\Db\Source;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeStructure;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
+use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\TypeIntervention;
+use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\PieceJointe;
+use Application\Entity\Db\TypePieceJointeStatut;
+use Application\Entity\Db\TypePieceJointe;
+use Application\Entity\Db\Dossier;
+use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\Validation;
 use Common\ORM\Event\Listeners\HistoriqueListener;
 use Doctrine\ORM\EntityManager;
 use RuntimeException;
@@ -67,7 +77,7 @@ class EntityProvider
     /**
      * @var Structure
      */
-    private $structure;
+    private $structureRacine;
     
     /**
      * @var Structure
@@ -80,6 +90,11 @@ class EntityProvider
     private $statuts;
     
     /**
+     * @var TypeValidation[]
+     */
+    private $typesValidation;
+    
+    /**
      * @var Corps
      */
     private $corps;
@@ -88,11 +103,6 @@ class EntityProvider
      * @var RegimeSecu
      */
     private $regimeSecu;
-    
-    /**
-     * @var Dossier
-     */
-    private $dossier;
     
     /**
      * @var ElementPedagogique
@@ -108,6 +118,21 @@ class EntityProvider
      * @var TypeVolumeHoraire
      */
     private $typeVolumeHoraire;
+    
+    /**
+     * @var TypeIntervenant[]
+     */
+    private $typesIntervenant;
+    
+    /**
+     * @var TypeIntervention
+     */
+    private $typeIntervention;
+    
+    /**
+     * @var Periode
+     */
+    private $periode;
 
     /**
      * 
@@ -149,11 +174,11 @@ class EntityProvider
         
         while ($this->newEntities->valid()) {
             $this->getEntityManager()->remove($this->newEntities->current());
-            if ($flush) {
-                $this->getEntityManager()->flush();
-            }
-            
             $this->newEntities->next();
+        }
+        
+        if ($flush) {
+            $this->getEntityManager()->flush();
         }
         
         return $this;
@@ -162,13 +187,14 @@ class EntityProvider
     /**
      * Retourne à chaque appel une nouvelle instance d'IntervenantPermanent persistée.
      * 
+     * @param StatutIntervenant $statut
      * @return IntervenantPermanent
      */
-    public function getIntervenantPermanent()
+    public function getIntervenantPermanent(StatutIntervenant $statut = null)
     {
         $i = Asset::newIntervenantPermanent(
                 $this->getCivilite(), 
-                $this->getStatutIntervenantByCode(StatutIntervenant::ENS_CH), 
+                $statut ?: $this->getStatutIntervenantByCode(StatutIntervenant::ENS_CH), 
                 $this->getStructure(), 
                 $this->getCorps());
         
@@ -182,19 +208,20 @@ class EntityProvider
     /**
      * Retourne à chaque appel une nouvelle instance d'IntervenantExterieur persistée.
      * 
+     * @param StatutIntervenant $statut
      * @return IntervenantExterieur
      */
-    public function getIntervenantExterieur()
+    public function getIntervenantExterieur(StatutIntervenant $statut = null)
     {
         $i = Asset::newIntervenantExterieur(
                 $this->getCivilite(), 
-                $this->getStatutIntervenantByCode(StatutIntervenant::SALAR_PRIVE), 
+                $statut ?: $this->getStatutIntervenantByCode(StatutIntervenant::SALAR_PRIVE), 
                 $this->getStructure(), 
                 $this->getRegimeSecu());
         
-        $this->newEntities->push($i);
-        
         $this->getEntityManager()->persist($i);
+        
+        $this->newEntities->push($i);
         
         return $i;
     }
@@ -294,22 +321,41 @@ class EntityProvider
     }
 
     /**
-     * Retourne une nouvelle instance UNIQUE de Structure persistée.
+     * Retourne à chaque appel une nouvelle instance de Structure persistée.
      * 
      * @return Structure
      */
     public function getStructure()
     {
-        if (null === $this->structure) {
-            $this->structure = Asset::newStructure($this->getTypeStructure(), $this->getEtablissement());
-            $this->getEntityManager()->persist($this->structure);
+        $structure = Asset::newStructure($this->getTypeStructure(), $this->getEtablissement(), $this->getStructureRacine());
         
-            $this->newEntities->push($this->structure);
-        }
+        $this->getEntityManager()->persist($structure);
+
+        $this->newEntities->push($structure);
         
-        return $this->structure;
+        return $structure;
     }
 
+    /**
+     * Recherche et retourne la structure racine, i.e. qui n'a aucun structure mère.
+     * 
+     * @return Structure
+     * @throws RuntimeException Structure racine introuvable
+     */
+    public function getStructureRacine()
+    {
+        if (null !== $this->structureRacine) {
+            return $this->structureRacine;
+        }
+        
+        $this->structureRacine = $this->getEntityManager()->getRepository("Application\Entity\Db\Structure")->findOneByParente(null);
+        if (!$this->structureRacine) {
+            throw new RuntimeException("Structure racine introuvable.");
+        }
+        
+        return $this->structureRacine;
+    }
+    
     /**
      * Recherche et retourne une Structure d'enseignement quelconque.
      * 
@@ -328,6 +374,45 @@ class EntityProvider
         }
         
         return $this->structureEns;
+    }
+
+    /** 
+     * Recherche et retourne le TypeIntervenant permanent ou extérieur.
+     * 
+     * @param boolean $permanent
+     * @return TypeIntervenant
+     */
+    public function getTypeIntervenant($permanent = true)
+    {
+        $code = $permanent ? TypeIntervenant::CODE_PERMANENT : TypeIntervenant::CODE_EXTERIEUR;
+            
+        if (null === $this->typesIntervenant[$code]) {
+            $type = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervenant')->findOneByCode($code);
+            if (!$type) {
+                throw new RuntimeException(sprintf("Type d'intervenant '%s' introuvable.", $code));
+            }
+            $this->typesIntervenant[$code] = $type;
+        }
+        
+        return $this->typesIntervenant[$code];
+    }
+
+    /** 
+     * Retourne à chaque appel une nouvelle instance de StatutIntervenant persistée.
+     * 
+     * @param boolean $permanent
+     * @return StatutIntervenant
+     */
+    public function getStatutIntervenant($permanent = true)
+    {
+        $typeIntervenant = $this->getTypeIntervenant($permanent);
+        $statut          = Asset::newStatutIntervenant($typeIntervenant);
+        
+        $this->getEntityManager()->persist($statut);
+
+        $this->newEntities->push($statut);
+
+        return $statut;
     }
 
     /** 
@@ -388,25 +473,24 @@ class EntityProvider
     }
 
     /**
-     * Retourne une nouvelle instance UNIQUE de Dossier.
+     * Retourne à chaque appel une nouvelle instance de Dossier persistée.
      * 
      * @return Dossier
      */
     public function getDossier()
     {
-        if (null === $this->dossier) {
-            $this->dossier = Asset::newDossier(
-                    $this->getCivilite(),
-                    true,
-                    false,
-                    $this->getStatutIntervenantByCode(StatutIntervenant::SALAR_PRIVE)
-            );
-            $this->getEntityManager()->persist($this->dossier);
+        $dossier = Asset::newDossier(
+                $this->getCivilite(),
+                true,
+                false,
+                $this->getStatutIntervenantByCode(StatutIntervenant::SALAR_PRIVE)
+        );
         
-            $this->newEntities->push($this->dossier);
-        }
+        $this->getEntityManager()->persist($dossier);
+
+        $this->newEntities->push($dossier);
         
-        return $this->dossier;
+        return $dossier;
     }
 
     /**
@@ -430,6 +514,64 @@ class EntityProvider
         $this->newEntities->push($service);
         
         return $service;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de VolumeHoraire.
+     * 
+     * @param Service $v
+     * @param float $heures
+     * @param TypeIntervention $typeIntervention
+     * @return VolumeHoraire
+     */
+    public function getVolumeHoraire(Service $v, $heures, TypeIntervention $typeIntervention = null, Periode $periode = null)
+    {
+        $vh = Asset::newVolumeHoraire(
+                $v, 
+                $typeIntervention ?: $this->getTypeIntervention(), 
+                $periode ?: $this->getPeriode(),  
+                $heures);
+        $this->getEntityManager()->persist($vh);
+
+        $this->newEntities->push($vh);
+        
+        return $vh;
+    }
+
+    /**
+     * Recherche et retourne un TypeIntervention quelconque.
+     * 
+     * @return TypeIntervention
+     */
+    public function getTypeIntervention()
+    {
+        if (null === $this->typeIntervention) {
+            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervention')->createQueryBuilder("ti");
+            $this->typeIntervention = $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
+            if (!$this->typeIntervention) {
+                throw new RuntimeException("TypeIntervention quelconque introuvable.");
+            }
+        }
+        
+        return $this->typeIntervention;
+    }
+
+    /**
+     * Recherche et retourne un Periode quelconque.
+     * 
+     * @return Periode
+     */
+    public function getPeriode()
+    {
+        if (null === $this->periode) {
+            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Periode')->createQueryBuilder("p");
+            $this->periode = $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
+            if (!$this->periode) {
+                throw new RuntimeException("Periode quelconque introuvable.");
+            }
+        }
+        
+        return $this->periode;
     }
 
     /**
@@ -506,5 +648,114 @@ class EntityProvider
         }
         
         return $this->typeVolumeHoraire;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de TypePieceJointe persistée.
+     * 
+     * @return TypePieceJointe
+     */
+    public function getTypePieceJointe()
+    {
+        $type = Asset::newTypePieceJointe();
+        
+        $this->getEntityManager()->persist($type);
+
+        $this->newEntities->push($type);
+        
+        return $type;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de TypePieceJointeStatut persistée.
+     * 
+     * @param StatutIntervenant $statut
+     * @param TypePieceJointe $type
+     * @return TypePieceJointeStatut
+     */
+    public function getTypePieceJointeStatut(StatutIntervenant $statut, TypePieceJointe $type = null)
+    {
+        $tpjs = Asset::newTypePieceJointeStatut(
+                $statut,
+                $type ?: $this->getTypePieceJointe());
+        
+        $this->getEntityManager()->persist($tpjs);
+
+        $this->newEntities->push($tpjs);
+        
+        return $tpjs;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de PieceJointe persistée.
+     * 
+     * @param TypePieceJointe $type
+     * @param Dossier $dossier
+     * @return PieceJointe
+     */
+    public function getPieceJointe(TypePieceJointe $type, Dossier $dossier = null)
+    {
+        $pj = Asset::newPieceJointe($type, $dossier);
+        
+        $this->getEntityManager()->persist($pj);
+
+        $this->newEntities->push($pj);
+        
+        return $pj;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de Fichier persistée.
+     * 
+     * @return Fichier
+     */
+    public function getFichier()
+    {
+        $fichier = Asset::newFichier();
+        
+        $this->getEntityManager()->persist($fichier);
+
+        $this->newEntities->push($fichier);
+        
+        return $fichier;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de Validation persistée.
+     * 
+     * @return Validation
+     */
+    public function getValidation(TypeValidation $type, Intervenant $intervenant)
+    {
+        $validation = Asset::newValidation($type, $intervenant);
+        
+        $this->getEntityManager()->persist($validation);
+
+        $this->newEntities->push($validation);
+        
+        return $validation;
+    }
+
+    /** 
+     * Recherche et retourne le TypeValidation correspondant au code spécifié.
+     * 
+     * @param string $sourceCode Code du TypeValidation, ex: TypeValidation::CODE_PIECE_JOINTE
+     * @return TypeValidation
+     */
+    public function getTypeValidationByCode($sourceCode)
+    {
+        if (!$sourceCode) {
+            throw new LogicException("Un code de TypeValidation est requis.");
+        }
+        
+        if (!isset($this->typesValidation[$sourceCode])) {
+            $this->typesValidation[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeValidation')
+                    ->findOneByCode($sourceCode);
+            if (!$this->typesValidation[$sourceCode]) {
+                throw new RuntimeException("TypeValidation introuvable avec le code '$sourceCode'.");
+            }
+        }
+        
+        return $this->typesValidation[$sourceCode];
     }
 }

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * TypeIntervenant
  */
-class TypeIntervenant implements HistoriqueAwareInterface
+class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterface
 {    
     public $classToCode = array(
         'Application\Entity\Db\IntervenantPermanent' => 'P',

@@ -575,6 +575,29 @@ class Dossier implements HistoriqueAwareInterface
     {
         return $this->pieceJointe;
     }
+    
+    /**
+     * 
+     * @return PieceJointe
+     */
+    public function addPieceJointe(PieceJointe $pieceJointe)
+    {
+        $this->pieceJointe->add($pieceJointe);
+        
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param PieceJointe $pieceJointe
+     * @return self
+     */
+    public function removePieceJointe(PieceJointe $pieceJointe)
+    {
+        $this->pieceJointe->removeElement($pieceJointe);
+        
+        return $this;
+    }
         
     /**
      * 

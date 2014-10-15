@@ -90,8 +90,10 @@ class PossedeDossierRuleTest extends BaseRuleTest
          * => L'IE n'est pas dans le résultat, encore moins l'IP
          */
         $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertNotContains(['id' => $this->ie->getId()], $result);
-        $this->assertNotContains(['id' => $this->ip->getId()], $result);
+        $this->assertArrayNotHasKey($id = $this->ie->getId(), $result);
+        $this->assertNotContains(['id' => $id], $result);
+        $this->assertArrayNotHasKey($id = $this->ip->getId(), $result);
+        $this->assertNotContains(['id' => $id], $result);
         
         /**
          * - Intervenant spécifié : aucun
@@ -100,8 +102,10 @@ class PossedeDossierRuleTest extends BaseRuleTest
          * => l'IE est dans le résultat, pas l'IP
          */
         $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertContains(['id' => $this->ieAvecDossier->getId()], $result);
-        $this->assertNotContains(['id' => $this->ip->getId()], $result);
+        $this->assertArrayHasKey($id = $this->ieAvecDossier->getId(), $result);
+        $this->assertEquals(['id' => $id], $result[$id]);
+        $this->assertArrayNotHasKey($id = $this->ip->getId(), $result);
+        $this->assertNotContains(['id' => $id], $result);
         $this->assertNull($this->rule->getMessage());
         
         /**
@@ -119,7 +123,7 @@ class PossedeDossierRuleTest extends BaseRuleTest
          * => Le résultat ne contient que l'IE
          */
         $result = $this->rule->setIntervenant($this->ieAvecDossier)->execute();
-        $this->assertEquals([0 => ['id' => $this->ieAvecDossier->getId()]], $result);
+        $this->assertEquals([$id = $this->ieAvecDossier->getId() => ['id' => $id]], $result);
         $this->assertNull($this->rule->getMessage());
     }
     
@@ -130,6 +134,10 @@ class PossedeDossierRuleTest extends BaseRuleTest
         /**
          * Suppression du jeu d'essai
          */
+        $this->getEntityManager()->remove($this->ie);
+        $this->getEntityManager()->remove($this->ieAvecDossier);
+        $this->getEntityManager()->remove($this->ip);
+        $this->getEntityManager()->flush();
         $this->getEntityProvider()->removeNewEntities();
     }
 }

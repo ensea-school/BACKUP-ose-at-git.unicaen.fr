@@ -93,7 +93,8 @@ class PossedeServicesRuleTest extends BaseRuleTest
          * => Le résultat doit contenir l'IE mais pas l'IP
          */
         $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertNotContains(['id' => $this->ip->getId()], $result);
+        $this->assertArrayNotHasKey($id = $this->ip->getId(), $result);
+        $this->assertNotContains(['id' => $id], $result);
         $this->assertNull($this->rule->getMessage());
         
         /**
@@ -101,7 +102,7 @@ class PossedeServicesRuleTest extends BaseRuleTest
          * => Le résultat ne contient que l'IE
          */
         $result = $this->rule->setIntervenant($this->ie)->execute();
-        $this->assertEquals([0 => ['id' => $this->ie->getId()]], $result);
+        $this->assertEquals([$id = $this->ie->getId() => ['id' => $id]], $result);
         $this->assertNull($this->rule->getMessage());
         
         /**
@@ -120,6 +121,9 @@ class PossedeServicesRuleTest extends BaseRuleTest
         /**
          * Suppression du jeu d'essai
          */
+        $this->getEntityManager()->remove($this->ie);
+        $this->getEntityManager()->remove($this->ip);
+        $this->getEntityManager()->flush();
         $this->getEntityProvider()->removeNewEntities();
     }
 }

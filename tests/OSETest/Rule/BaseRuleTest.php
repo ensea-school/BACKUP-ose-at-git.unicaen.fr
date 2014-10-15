@@ -40,6 +40,13 @@ abstract class BaseRuleTest extends PHPUnit_Framework_TestCase
         $this->rule = Bootstrap::getServiceManager()->get($this->getRuleName());
     }
     
+    public function testRuleSingleton()
+    {
+        $rule1 = Bootstrap::getServiceManager()->get($this->getRuleName());
+        $rule2 = Bootstrap::getServiceManager()->get($this->getRuleName());
+        $this->assertSame($rule1, $rule2, "Le service manager ne fournit pas une instance unique de la règle.");
+    }
+    
     /**
      * 
      * @return EntityProvider

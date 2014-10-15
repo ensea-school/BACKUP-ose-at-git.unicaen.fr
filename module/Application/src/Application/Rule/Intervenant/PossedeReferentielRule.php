@@ -2,22 +2,30 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\AnneeAwareTrait;
 use Application\Entity\Db\IntervenantPermanent;
-use Application\Service\Intervenant as IntervenantService;
 use Common\Exception\LogicException;
 
 /**
- * Règle métier déterminant si un intervenant a fait l'objet d'une saisie d'enseignements.
+ * Règle métier déterminant :
+ * - si un intervenant précis a fait l'objet d'une saisie de référentiel ;
+ * - les intervenants ayant fait l'objet d'une saisie de référentiel.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PossedeReferentielRule extends AbstractRule
+class PossedeReferentielRule extends AbstractIntervenantRule
 {
-    use IntervenantAwareTrait;
     use AnneeAwareTrait;
+    
+    const MESSAGE_REFERENTIEL = 'messageReferentiel';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_REFERENTIEL => "Le référentiel de %value% n'a pas été saisi.",
+    );
     
     /**
      * Exécute la règle métier.
@@ -26,7 +34,7 @@ class PossedeReferentielRule extends AbstractRule
      */
     public function execute()
     {
-        $this->setMessage(null);
+        $this->message(null);
         
         $em = $this->getServiceIntervenant()->getEntityManager();
         $qb = $em->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i")
@@ -47,10 +55,10 @@ class PossedeReferentielRule extends AbstractRule
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
-                $this->setMessage(sprintf("Le référentiel de %s n'a pas été saisi.", $this->getIntervenant()));
+                $this->message(self::MESSAGE_REFERENTIEL, $this->getIntervenant());
             }
                 
-            return $result;
+            return $this->normalizeResult($result);
         }
         
         /**
@@ -59,7 +67,7 @@ class PossedeReferentielRule extends AbstractRule
         
         $result = $qb->getQuery()->getScalarResult();
 
-        return $result;
+        return $this->normalizeResult($result);
     }
     
     public function isRelevant()
@@ -69,13 +77,5 @@ class PossedeReferentielRule extends AbstractRule
         }
         
         return true;
-    }
-    
-    /**
-     * @return IntervenantService
-     */
-    private function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
 }

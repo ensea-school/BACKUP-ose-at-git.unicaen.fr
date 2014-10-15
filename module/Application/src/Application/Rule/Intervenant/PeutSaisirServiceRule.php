@@ -2,18 +2,22 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Service\Intervenant as IntervenantService;
-
 /**
  * Règle métier déterminant si des enseignements peuvent être saisis pour un intervenant.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutSaisirServiceRule extends AbstractRule
+class PeutSaisirServiceRule extends AbstractIntervenantRule
 {
-    use IntervenantAwareTrait;
+    const MESSAGE_STATUT = 'messageStatut';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_STATUT => "Le statut &laquo; %value% &raquo; n'autorise pas la saisie d'enseignement.",
+    );
     
     /**
      * Exécute la règle métier.
@@ -22,7 +26,7 @@ class PeutSaisirServiceRule extends AbstractRule
      */
     public function execute()
     {
-        $this->setMessage(null);
+        $this->message(null);
         
         $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
                 ->select("i.id")
@@ -39,10 +43,10 @@ class PeutSaisirServiceRule extends AbstractRule
             
             if (!$result) {
                 $statut = $this->getIntervenant()->getStatut();
-                $this->setMessage(sprintf("Le statut &laquo; %s &raquo; n'autorise pas la saisie d'enseignement.", $statut));
+                $this->message(self::MESSAGE_STATUT, $statut);
             }
                 
-            return $result;
+            return $this->normalizeResult($result);
         }
         
         /**
@@ -51,7 +55,7 @@ class PeutSaisirServiceRule extends AbstractRule
         
         $result = $qb->getQuery()->getScalarResult();
 
-        return $result;
+        return $this->normalizeResult($result);
     }
 
     /**
@@ -64,13 +68,5 @@ class PeutSaisirServiceRule extends AbstractRule
     public function isRelevant()
     {
         return true;
-    }
-    
-    /**
-     * @return IntervenantService
-     */
-    private function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
 }

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * StatutIntervenant
  */
-class StatutIntervenant
+class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     const ENS_2ND_DEG    = 'ENS_2ND_DEG';
     const ENS_CH         = 'ENS_CH';
@@ -223,12 +223,27 @@ class StatutIntervenant
     /**
      * @var boolean
      */
+    protected $peutSaisirReferentiel;
+
+    /**
+     * @var boolean
+     */
     protected $peutChoisirDansDossier;
     
     /**
      * @var boolean
      */
     protected $peutSaisirDossier;
+    
+    /**
+     * @var integer
+     */
+    protected $ordre;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typePieceJointeStatut;
 
     /**
      *
@@ -246,6 +261,26 @@ class StatutIntervenant
     function getPeutSaisirService()
     {
         return $this->peutSaisirService;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    function getPeutSaisirReferentiel()
+    {
+        return $this->peutSaisirReferentiel;
+    }
+
+    /**
+     *
+     * @param boolean $peutSaisirReferentiel
+     * @return \Application\Entity\Db\StatutIntervenant
+     */
+    function setPeutSaisirReferentiel($peutSaisirReferentiel)
+    {
+        $this->peutSaisirReferentiel = $peutSaisirReferentiel;
+        return $this;
     }
 
     /**
@@ -745,5 +780,38 @@ class StatutIntervenant
     public function getTypeAgrementStatut()
     {
         return $this->typeAgrementStatut;
+    }
+
+    /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return StatutIntervenant
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
+     * Get typePieceJointeStatut
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypePieceJointeStatut()
+    {
+        return $this->typePieceJointeStatut;
     }
 }

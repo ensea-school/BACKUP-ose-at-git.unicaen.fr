@@ -110,9 +110,12 @@ class PossedeReferentielRuleTest extends BaseRuleTest
          * => Le résultat doit contenir l'IP avec référentiel mais ni l'IE sans référentiel ni l'IP
          */
         $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertContains(['id' => $this->ipAvecRef->getId()], $result);
-        $this->assertNotContains(['id' => $this->ip->getId()], $result);
-        $this->assertNotContains(['id' => $this->ie->getId()], $result);
+        $this->assertArrayHasKey($id = $this->ipAvecRef->getId(), $result);
+        $this->assertEquals(['id' => $id], $result[$id]);
+        $this->assertArrayNotHasKey($id = $this->ip->getId(), $result);
+        $this->assertNotContains(['id' => $id], $result);
+        $this->assertArrayNotHasKey($id = $this->ie->getId(), $result);
+        $this->assertNotContains(['id' => $id], $result);
         $this->assertNull($this->rule->getMessage());
         
         /**
@@ -128,7 +131,7 @@ class PossedeReferentielRuleTest extends BaseRuleTest
          * => Le résultat ne doit contenir que cet IP
          */
         $result = $this->rule->setIntervenant($this->ipAvecRef)->execute();
-        $this->assertEquals([0 => ['id' => $this->ipAvecRef->getId()]], $result);
+        $this->assertEquals([$id = $this->ipAvecRef->getId() => ['id' => $id]], $result);
         $this->assertNull($this->rule->getMessage());
     }
     
@@ -139,6 +142,10 @@ class PossedeReferentielRuleTest extends BaseRuleTest
         /**
          * Suppression du jeu d'essai
          */
+        $this->getEntityManager()->remove($this->ie);
+        $this->getEntityManager()->remove($this->ip);
+        $this->getEntityManager()->remove($this->ipAvecRef);
+        $this->getEntityManager()->flush();
         $this->getEntityProvider()->removeNewEntities();
     }
 }

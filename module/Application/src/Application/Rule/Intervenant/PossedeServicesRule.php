@@ -2,10 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\AnneeAwareTrait;
-use Application\Service\Intervenant as IntervenantService;
 use Common\Exception\LogicException;
 
 /**
@@ -13,10 +10,19 @@ use Common\Exception\LogicException;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PossedeServicesRule extends AbstractRule
+class PossedeServicesRule extends AbstractIntervenantRule
 {
-    use IntervenantAwareTrait;
     use AnneeAwareTrait;
+    
+    const MESSAGE_SERVICE = 'messageService';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_SERVICE => "Les enseignements de %value% n'ont pas été saisis.",
+    );
     
     /**
      * Exécute la règle métier.
@@ -29,7 +35,7 @@ class PossedeServicesRule extends AbstractRule
             throw new LogicException("Une année est requise.");
         }
         
-        $this->setMessage(null);
+        $this->message(null);
         
         $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
                 ->select("i.id")
@@ -45,10 +51,10 @@ class PossedeServicesRule extends AbstractRule
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
-                $this->setMessage(sprintf("Les enseignements de %s n'ont pas été saisis.", $this->getIntervenant()));
+                $this->message(self::MESSAGE_SERVICE, $this->getIntervenant());
             }
                 
-            return $result;
+            return $this->normalizeResult($result);
         }
         
         /**
@@ -57,19 +63,11 @@ class PossedeServicesRule extends AbstractRule
         
         $result = $qb->getQuery()->getScalarResult();
 
-        return $result;
+        return $this->normalizeResult($result);
     }
     
     public function isRelevant()
     {
         return true;
-    }
-
-    /**
-     * @return IntervenantService
-     */
-    private function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
 }

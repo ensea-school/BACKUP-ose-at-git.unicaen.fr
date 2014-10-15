@@ -20,8 +20,17 @@ use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\Periode;
 use Application\Entity\Db\TypeVolumeHoraire;
+USE Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\FonctionReferentiel;
+use Application\Entity\Db\PieceJointe;
+use Application\Entity\Db\TypePieceJointeStatut;
+use Application\Entity\Db\TypePieceJointe;
+use Application\Entity\Db\Fichier;
+use Application\Entity\Db\TypeValidation;
+use Application\Entity\Db\Validation;
 use DateTime;
 
 /**
@@ -91,16 +100,16 @@ class Asset
         return $e;
     }
         
-    static public function newStructure(TypeStructure $typeStructure, Etablissement $etablissement)
+    static public function newStructure(TypeStructure $typeStructure, Etablissement $etablissement, Structure $parente)
     {
         $e = new Structure();
         $e
                 ->setEtablissement($etablissement)
-                ->setLibelleCourt('TEST')
-                ->setLibelleLong('Structure de test')
+                ->setLibelleCourt(uniqid('TEST '))
+                ->setLibelleLong(uniqid('Structure de test'))
                 ->setNiveau(2)
                 ->setType($typeStructure)
-                ->setParente(null)
+                ->setParente($parente)
                 ->setParenteNiv2($e)
                 ->setSource(static::getSource())
                 ->setSourceCode(uniqid());
@@ -112,30 +121,31 @@ class Asset
     {
         $e = new StatutIntervenant();
         $e
-                ->setLibelle("Statut intervenant " . $typeIntervenant)
+                ->setLibelle("Statut TEST " . $typeIntervenant)
                 ->setTypeIntervenant($typeIntervenant)
+                ->setServiceStatutaire(100)
+                ->setDepassement(false)
+                ->setFonctionEC(true)
+                ->setMaximumHETD(0)
+                ->setNonAutorise(false)
+                ->setPeutChoisirDansDossier(true)
+                ->setPeutSaisirDossier(true)
+                ->setPeutSaisirReferentiel(true)
+                ->setPeutSaisirService(true)
+                ->setPlafondReferentiel(100)
+                ->setOrdre(1)
                 ->setSource(static::getSource())
                 ->setSourceCode(uniqid());
         
         return $e;
     }
         
-    static public function newTypeIntervenantPerm()
+    static public function newTypeIntervenant()
     {
         $e = new TypeIntervenant();
         $e
-                ->setCode(TypeIntervenant::CODE_PERMANENT)
-                ->setLibelle("Intervenant permanent");
-        
-        return $e;
-    }
-        
-    static public function newTypeIntervenantExt()
-    {
-        $e = new TypeIntervenant();
-        $e
-                ->setCode(TypeIntervenant::CODE_EXTERIEUR)
-                ->setLibelle("Intervenant extérieur");
+                ->setCode('|')
+                ->setLibelle(uniqid("Type Intervenant "));
         
         return $e;
     }
@@ -235,6 +245,25 @@ class Asset
         return $e;
     }
         
+    static public function newVolumeHoraire(
+            Service $service,
+            TypeIntervention $typeIntervention,
+            Periode $periode,
+            $heures)
+    {
+        $e = new VolumeHoraire();
+        $e
+                ->setHeures($heures)
+                ->setContrat(null)
+                ->setMotifNonPaiement(null)
+                ->setPeriode($periode)
+                ->setService($service)
+                ->setTypeIntervention($typeIntervention)
+                ->setTypeVolumeHoraire($service->getTypeVolumeHoraire());
+        
+        return $e;
+    }
+        
     static public function newIntervenantPermanent(
             Civilite $civilite, 
             StatutIntervenant $statut, 
@@ -295,6 +324,60 @@ class Asset
                 ->setTelMobile(null)
                 ->setVilleNaissanceCodeInsee('75019')
                 ->setVilleNaissanceLibelle('CF');
+        
+        return $e;
+    }
+    
+    static public function newTypePieceJointe()
+    {
+        $e = new TypePieceJointe();
+        $e
+                ->setCode(uniqid())
+                ->setLibelle(uniqid("TPJ "));
+        
+        return $e;
+    }
+    
+    static public function newTypePieceJointeStatut(StatutIntervenant $statut, TypePieceJointe $type)
+    {
+        $e = new TypePieceJointeStatut();
+        $e
+                ->setType($type)
+                ->setStatut($statut);
+        
+        return $e;
+    }
+    
+    static public function newPieceJointe(TypePieceJointe $type, Dossier $dossier = null)
+    {
+        $e = new PieceJointe();
+        $e
+                ->setType($type)
+                ->setDossier($dossier);
+        
+        return $e;
+    }
+        
+    static public function newFichier()
+    {
+        $e = new Fichier();
+        $e
+                ->setNom(uniqid('Fichier '))
+                ->setDescription(null)
+                ->setType("image/png")
+                ->setTaille(1024)
+                ->setContenu("binary data");
+        
+        return $e;
+    }
+        
+    static public function newValidation(TypeValidation $type, Intervenant $intervenant, Structure $structure = null)
+    {
+        $e = new Validation();
+        $e
+                ->setIntervenant($intervenant)
+                ->setStructure($structure ?: $intervenant->getStructure())
+                ->setTypeValidation($type);
         
         return $e;
     }

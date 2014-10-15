@@ -2,10 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
 use Application\Entity\Db\IntervenantExterieur;
-use Application\Service\Intervenant as IntervenantService;
 use Common\Exception\LogicException;
 
 /**
@@ -13,9 +10,17 @@ use Common\Exception\LogicException;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PossedeDossierRule extends AbstractRule
+class PossedeDossierRule extends AbstractIntervenantRule
 {
-    use IntervenantAwareTrait;
+    const MESSAGE_DOSSIER = 'messageDossier';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_DOSSIER => "Les données personnelles de l'intervenant n'ont pas été saisies.",
+    );
     
     /**
      * Exécute la règle métier.
@@ -24,7 +29,7 @@ class PossedeDossierRule extends AbstractRule
      */
     public function execute()
     {
-        $this->setMessage(null);
+        $this->message(null);
         
         $em = $this->getServiceIntervenant()->getEntityManager();
         $qb = $em->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i")
@@ -44,10 +49,10 @@ class PossedeDossierRule extends AbstractRule
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
-                $this->setMessage("Les données personnelles de l'intervenant doivent avoir été saisies au préalable.");
+                $this->message(self::MESSAGE_DOSSIER);
             }
                 
-            return $result;
+            return $this->normalizeResult($result);
         }
         
         /**
@@ -56,7 +61,7 @@ class PossedeDossierRule extends AbstractRule
         
         $result = $qb->getQuery()->getScalarResult();
 
-        return $result;
+        return $this->normalizeResult($result);
     }
     
     public function isRelevant()
@@ -66,13 +71,5 @@ class PossedeDossierRule extends AbstractRule
         }
         
         return true;
-    }
-    
-    /**
-     * @return IntervenantService
-     */
-    private function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
 }

@@ -7,7 +7,7 @@ use \Application\Traits\ObligatoireSelonSeuilHETDAwareTrait;
 /**
  * TypePieceJointeStatut
  */
-class TypePieceJointeStatut
+class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     use ObligatoireSelonSeuilHETDAwareTrait;
     
@@ -71,6 +71,20 @@ class TypePieceJointeStatut
      */
     private $statut;
 
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf("Id=%s, Statut=%s, TypePJ=%s, Oblig=%d, 1erRecrut=%d, Seuil=%s",
+                $this->getId(),
+                sprintf("%s (%s)", $this->getStatut(), $this->getStatut()->getId()),
+                sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
+                $this->getObligatoire(),
+                $this->getPremierRecrutement(),
+                $this->getSeuilHetd() ?: "Aucun");
+    }
 
     /**
      * Set histoCreation

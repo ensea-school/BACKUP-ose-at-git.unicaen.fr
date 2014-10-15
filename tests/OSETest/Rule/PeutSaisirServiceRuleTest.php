@@ -92,9 +92,12 @@ class PeutSaisirServiceRuleTest extends BaseRuleTest
          * ---> L'IE et l'IP doivent être dans le résultat
          */
         $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertContains(['id' => $this->ie->getId()], $result);
-        $this->assertContains(['id' => $this->ip->getId()], $result);
-        $this->assertNotContains(['id' => $this->ieSansSaisieService->getId()], $result);
+        $this->assertArrayHasKey($id = $this->ie->getId(), $result);
+        $this->assertEquals(['id' => $id], $result[$id]);
+        $this->assertArrayHasKey($id = $this->ip->getId(), $result);
+        $this->assertEquals(['id' => $id], $result[$id]);
+        $this->assertArrayNotHasKey($id = $this->ieSansSaisieService->getId(), $result);
+        $this->assertNotContains(['id' => $id], $result);
         $this->assertNull($this->rule->getMessage());
         
         /**
@@ -102,7 +105,7 @@ class PeutSaisirServiceRuleTest extends BaseRuleTest
          * ---> Le résultat doit contenir uniquement l'IE
          */
         $result = $this->rule->setIntervenant($this->ie)->execute();
-        $this->assertEquals([0 => ['id' => $this->ie->getId()]], $result);
+        $this->assertEquals([$id = $this->ie->getId() => ['id' => $id]], $result);
         $this->assertNull($this->rule->getMessage());
         
         /**
@@ -118,7 +121,7 @@ class PeutSaisirServiceRuleTest extends BaseRuleTest
          * ---> Le résultat doit contenir uniquement l'IP
          */
         $result = $this->rule->setIntervenant($this->ip)->execute();
-        $this->assertEquals([0 => ['id' => $this->ip->getId()]], $result);
+        $this->assertEquals([$id = $this->ip->getId() => ['id' => $id]], $result);
         $this->assertNull($this->rule->getMessage());
     }
     
@@ -129,6 +132,10 @@ class PeutSaisirServiceRuleTest extends BaseRuleTest
         /**
          * Suppression du jeu d'essai
          */
+        $this->getEntityManager()->remove($this->ip);
+        $this->getEntityManager()->remove($this->ie);
+        $this->getEntityManager()->remove($this->ieSansSaisieService);
+        $this->getEntityManager()->flush();
         $this->getEntityProvider()->removeNewEntities();
     }
 }

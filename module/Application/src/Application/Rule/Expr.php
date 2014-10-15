@@ -102,6 +102,8 @@ class Expr extends AbstractRule
      */
     public function execute()
     {
+        $this->message(null);
+        
         if (!$this->rules) {
             throw new LogicException("Aucune règle spécifiée!");
         }
@@ -122,6 +124,7 @@ class Expr extends AbstractRule
                 $result = $this->processArray($execute, $result);
             }
             else {
+                var_dump($execute);
                 throw new LogicException("Résultat d'exécution de règle imprévu!");
             }
         }

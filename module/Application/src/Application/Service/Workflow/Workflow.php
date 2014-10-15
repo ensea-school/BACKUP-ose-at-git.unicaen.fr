@@ -74,7 +74,7 @@ class Workflow extends AbstractWorkflow
         );
         
         /**
-         * Saisie des services ET du référentiel
+         * Saisie des services et du référentiel
          */
         $relevanceRule = new Expr(
                 $this->getServiceLocator()->get('PeutSaisirServiceRule')->setIntervenant($this->getIntervenant()),

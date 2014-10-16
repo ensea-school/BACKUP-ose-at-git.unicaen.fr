@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
+use Common\Exception\MessageException;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
@@ -77,16 +78,15 @@ class ServiceController extends AbstractActionController
 
     public function indexAction()
     { 
-        $totaux             = $this->params()->fromQuery('totaux', 0) == '1';
-        $role               = $this->getContextProvider()->getSelectedIdentityRole();
-        $intervenant        = $this->context()->intervenantFromRoute();
-        $annee              = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $viewModel          = new \Zend\View\Model\ViewModel();
-        $typeVolumeHoraire  = $this->getServiceTypeVolumehoraire()->getPrevu();
-        $canAddService      = true;//$this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
-        $canAddServiceReferentiel = true;
-//                ! $intervenant instanceof IntervenantExterieur
-//                && $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
+        $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
+        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
+        $intervenant              = $this->context()->intervenantFromRoute();
+        $annee                    = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $viewModel                = new \Zend\View\Model\ViewModel();
+        $typeVolumeHoraire        = $this->getServiceTypeVolumehoraire()->getPrevu();
+        $canAddService            = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
+        $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
+                $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
             throw new \BjyAuthorize\Exception\UnAuthorizedException();
@@ -379,6 +379,12 @@ class ServiceController extends AbstractActionController
         $form      = new \Application\Form\Supprimer('suppr');
         $viewModel = new \Zend\View\Model\ViewModel();
 
+        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
+        $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
+        if (! $this->isAllowed($assertionEntity, 'delete')) {
+            throw new MessageException("Cette opération n'est pas autorisée.");
+        }
+
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
 
         if ($this->getRequest()->isPost()) {
@@ -422,6 +428,12 @@ class ServiceController extends AbstractActionController
             $title   = "Ajout d'enseignement";
         }
 
+        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
+        $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
+        if (! $this->isAllowed($assertionEntity, 'create') || ! $this->isAllowed($assertionEntity, 'update')) {
+            throw new MessageException("Cette opération n'est pas autorisée.");
+        }
+        
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());

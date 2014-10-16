@@ -23,27 +23,19 @@ class PieceJointeAssertion extends AbstractAssertion implements WorkflowInterven
     const PRIVILEGE_VALIDER        = 'valider';
     const PRIVILEGE_DEVALIDER      = 'devalider';
     const PRIVILEGE_CREATE_FICHIER = 'create-fichier';
-
-    /**
-     * @var PieceJointe
-     */
-    protected $pj;
     
     /**
-     * Returns true if and only if the assertion conditions are met
      *
-     * This method is passed the ACL, Role, Resource, and privilege to which the authorization query applies. If the
-     * $role, $resource, or $privilege parameters are null, it means that the query applies to all Roles, Resources, or
-     * privileges, respectively.
-     *
-     * @param  Acl                        $acl
-     * @param  RoleInterface         $role
+     * @param  Acl               $acl
+     * @param  RoleInterface     $role
      * @param  ResourceInterface $resource
-     * @param  string                         $privilege
+     * @param  string            $privilege
      * @return bool
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
+        parent::assert($acl, $role, $resource, $privilege);
+        
         /**
          * Cas N°1 : la ressource spécifiée est une entité ; un privilège est spécifié.
          */
@@ -58,89 +50,55 @@ class PieceJointeAssertion extends AbstractAssertion implements WorkflowInterven
         
         $privilege = $this->normalizedPrivilege($privilege, $resource);
         
-//        var_dump(__CLASS__ . ' >>> ' . $resource . ' : ' . $privilege);
-        
         return true;
     }
     
     /**
      * 
-     * @param Acl $acl
-     * @param RoleInterface $role
-     * @param ResourceInterface $resource
-     * @param string $privilege
      * @return boolean
      */
-    protected function assertEntity(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
+    protected function assertEntity()
     {
-        if (!parent::assertCRUD($acl, $role, $resource, $privilege)) {
+        if (!parent::assertCRUD()) {
             return false;
         }
         
-        $this->pj = $resource;
-        $role     = $this->getSelectedIdentityRole();
-        
         // Impossible de supprimer une PJ validée
-        if ($privilege === self::PRIVILEGE_DELETE && $this->pj->getValidation()) {
+        if ($this->privilege === self::PRIVILEGE_DELETE && $this->resource->getValidation()) {
             return false;
         }
         
         // Impossible de valider une PJ déjà validée
-        if ($privilege === self::PRIVILEGE_VALIDER && $this->pj->getValidation()) {
+        if ($this->privilege === self::PRIVILEGE_VALIDER && $this->resource->getValidation()) {
             return false;
         }
         
         // Impossible de dévalider une PJ non encore validée
-        if ($privilege === self::PRIVILEGE_DEVALIDER && !$this->pj->getValidation()) {
+        if ($this->privilege === self::PRIVILEGE_DEVALIDER && !$this->resource->getValidation()) {
             return false;
         }
         
         // Impossible d'ajouter un fichier à une PJ validée
-        if ($privilege === self::PRIVILEGE_CREATE_FICHIER && $this->pj->getValidation()) {
+        if ($this->privilege === self::PRIVILEGE_CREATE_FICHIER && $this->resource->getValidation()) {
             return false;
         }
         
         /*********************************************************
          *              Rôle Intervenant extérieur
          *********************************************************/
-        if ($role instanceof IntervenantExterieurRole) {
+        if ($this->role instanceof IntervenantExterieurRole) {
             
             // cas imprévu
-            if (!$role->getIntervenant()->getDossier()) {
+            if (!$this->role->getIntervenant()->getDossier()) {
                 throw new LogicException("Anomalie rencontrée : l'intervenant n'a pas de dossier.");
             }
             
             // Un intervenant ne peut manipuler que ses PJ !
-            if ($this->pj->getDossier() !== $role->getIntervenant()->getDossier()) {
+            if ($this->resource->getDossier() !== $this->role->getIntervenant()->getDossier()) {
                 return false;
             }
         }
-        
-        /*********************************************************
-         *                   Rôle Composante
-         *********************************************************/
-//        if ($role instanceof ComposanteRole) {
-//            
-//        }
 
         return true;
-    }
-    
-    /**
-     * 
-     * @param string $privilege
-     * @param string $resource
-     * @return string
-     */
-    protected function normalizedPrivilege($privilege, $resource)
-    {
-        if (is_object($privilege)) {
-            return $privilege;
-        }
-        if (!$privilege) {
-            $privilege = ($tmp = strrchr($resource, $c = ':')) ? ltrim($tmp, $c) : null;
-        }
-        
-        return $privilege;
     }
 }

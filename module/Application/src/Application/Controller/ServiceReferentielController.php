@@ -11,6 +11,7 @@ use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Exception\DbException;
+use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\IntervenantPermanent;
 use Application\Form\ServiceReferentiel\FonctionServiceReferentielFieldset;
 use Application\Acl\ComposanteRole;
@@ -121,11 +122,16 @@ class ServiceReferentielController extends AbstractActionController implements C
         $this->initFilters();
         
         $id        = $this->params()->fromRoute('id');
-        $entity    = $this->em()->find('Application\Entity\Db\ServiceReferentiel', $id);
+        $entity    = $this->em()->find('Application\Entity\Db\ServiceReferentiel', $id); /* @var $entity ServiceReferentiel */
         $title     = "Suppression de service référentiel";
         $form      = new \Application\Form\Supprimer('suppr');
         $viewModel = new \Zend\View\Model\ViewModel();
 
+        // ACL
+        if (! $this->isAllowed($entity, 'delete')) {
+            throw new MessageException("Cette opération n'est pas autorisée.");
+        }
+        
         $form->setAttribute('action', $this->getRequest()->getRequestUri());
 
         if ($this->getRequest()->isPost()) {
@@ -228,11 +234,16 @@ class ServiceReferentielController extends AbstractActionController implements C
             return $this->redirectToChoisirIntervenant();
         }
         
-        // verifications concernant l'intervenant
+        // verification règle métier
         $rule = new \Application\Rule\Intervenant\PeutSaisirReferentielRule($intervenant);
         $rule->setStructure($role instanceof ComposanteRole ? $role->getStructure() : null);
         if (!$rule->execute()) {
             throw new MessageException("La saisie de référentiel n'est pas possible. ", null, new \Exception($rule->getMessage()));
+        }
+        // ACL
+        $assertionEntity = $this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant);
+        if (! $this->isAllowed($assertionEntity, 'create') || ! $this->isAllowed($assertionEntity, 'update')) {
+            throw new MessageException("Cette opération n'est pas autorisée.");
         }
         
         $this->em()->getFilters()->enable("historique");
@@ -241,18 +252,11 @@ class ServiceReferentielController extends AbstractActionController implements C
         $qb = $this->getServiceIntervenant()->getFinderIntervenantPermanentWithServiceReferentiel();
         $qb->setIntervenant($intervenant);
         $intervenant = $qb->getQuery()->getOneOrNullResult(); /* @var $intervenant IntervenantPermanent */
-//        print_r($qb->getQuery()->getSQL());
-//        var_dump($qb->getQuery()->getParameters());
-        if (!$intervenant) {
-            
-        }
         
         $repoFonctionReferentiel = $this->em()->getRepository('Application\Entity\Db\FonctionReferentiel'); /* @var $repoFonctionReferentiel \Doctrine\ORM\EntityRepository */
         $serviceEp = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $annee = $context->getAnnee();
-        
-//        var_dump(get_class($intervenant), "".$annee, count($intervenant->getServiceReferentiel($annee)));
         
         $structures = $serviceStructure->getList($serviceStructure->finderByEnseignement());
         $fonctions  = $repoFonctionReferentiel->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
@@ -289,7 +293,6 @@ class ServiceReferentielController extends AbstractActionController implements C
             if (empty($data['intervenant']['serviceReferentiel'])) {
                 $data['intervenant']['serviceReferentiel'] = array();
             }
-//            var_dump($data);
             $form->setData($data);
             if ($form->isValid()) {
                 try {
@@ -303,11 +306,7 @@ class ServiceReferentielController extends AbstractActionController implements C
                 catch (\Doctrine\DBAL\DBALException $exc) {
                     $exception = new RuntimeException("Impossible d'enregistrer les services référentiels.", null, $exc->getPrevious());
                     $variables['exception'] = $exception;
-//                    var_dump($exc->getMessage(), $exc->getTraceAsString());
                 }
-//                $data = isset($data['intervenant']['serviceReferentiel']) ? $data['intervenant']['serviceReferentiel'] : array();
-//                $repo = $this->em()->getRepository('Application\Entity\Db\ServiceReferentiel'); /* @var $repo ServiceReferentielRepository */
-//                $repo->updateServicesReferentiel($intervenant, $annee, $data);
             }
         }
         

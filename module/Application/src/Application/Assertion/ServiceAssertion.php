@@ -2,9 +2,12 @@
 
 namespace Application\Assertion;
 
+use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
-use Application\Acl\EtablissementRole;
 use Application\Acl\DrhRole;
+use Application\Acl\EtablissementRole;
+use Application\Acl\IntervenantRole;
+use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\Service;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -17,6 +20,10 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  */
 class ServiceAssertion extends AbstractAssertion
 {
+    /**
+     * @var Service
+     */
+    protected $resource;
 
     /**
      * Returns true if and only if the assertion conditions are met
@@ -33,9 +40,12 @@ class ServiceAssertion extends AbstractAssertion
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
+        parent::assert($acl, $role, $resource, $privilege);
+
         if ($resource instanceof Service) {
-            return $this->assertEntity($acl, $role, $resource, $privilege);
+            return $this->assertEntity();
         }
+        
         return true;
     }
 
@@ -43,37 +53,39 @@ class ServiceAssertion extends AbstractAssertion
      *
      * @todo gérer les autres types de rôles
      *
-     * @param Acl $acl
-     * @param RoleInterface $role
-     * @param Service $resource
-     * @param string $privilege
      * @return boolean
      */
-    protected function assertEntity(Acl $acl, RoleInterface $role = null, Service $resource = null, $privilege = null)
+    protected function assertEntity()
     {
         /*********************************************************
          *                      Rôle administrateur
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof \Application\Acl\AdministrateurRole){
+        if ($this->role instanceof AdministrateurRole) {
             return true;
         }
 
-        $intervenant            = $resource->getIntervenant();
-        $serviceStructure       = $resource->getStructureEns();
-        if (! $serviceStructure && $resource->getElementPedagogique()) $serviceStructure = $resource->getElementPedagogique()->getStructure();
-        if ($intervenant){
-            $intervenantStructure = $resource->getStructureAff() ?: $resource->getIntervenant()->getStructure();
+        $intervenant      = $this->resource->getIntervenant();
+        $serviceStructure = $this->resource->getStructureEns();
+        if (!$serviceStructure && $this->resource->getElementPedagogique()) {
+            $serviceStructure = $this->resource->getElementPedagogique()->getStructure();
         }
-        
+        if ($intervenant) {
+            $intervenantStructure = $this->resource->getStructureAff() ? : $this->resource->getIntervenant()->getStructure();
+        }
+
         /*********************************************************
          *                      Rôle intervenant
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            if (!$intervenant->getStatut()->getPeutSaisirService()){
+        if ($this->role instanceof IntervenantRole) {
+            if (!$intervenant->getStatut()->getPeutSaisirService()) {
                 return false;
             }
 
-            if (!$intervenant || $intervenant == $this->getSelectedIdentityRole()->getIntervenant()){
+            if ($this->isDateFinPrivilegeDepassee()) {
+                return false;
+            }
+
+            if (!$intervenant || $intervenant == $this->role->getIntervenant()) {
                 return true; // Un intervenant ne peut travailler qu'avec ses services ou avec un service non enregistré
             }
         }
@@ -81,20 +93,25 @@ class ServiceAssertion extends AbstractAssertion
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof ComposanteRole){
-            if ('read' == $privilege) return true; // les composantes voient tout
-
-            $roleStructure          = $this->getSelectedIdentityRole()->getStructure();
-            if ($roleStructure == $serviceStructure) return true; // chacun peut gérer ses propres services
-
-            if ($intervenant){
-                if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent){
-                    if ($roleStructure == $intervenantStructure){
+        if ($this->role instanceof ComposanteRole) {
+            if ('read' == $this->privilege) {
+                return true; // les composantes voient tout
+            }
+            
+            $roleStructure = $this->role->getStructure();
+            if ($roleStructure == $serviceStructure) {
+                return true; // chacun peut gérer ses propres services
+            }
+            
+            if ($intervenant) {
+                if ($intervenant instanceof IntervenantPermanent) {
+                    if ($roleStructure == $intervenantStructure) {
                         /* la composante d'affectation doit pouvoir saisir et contrôler les heures effectuées par ses permanents dans quelque composante que ce soit. */
                         return true;
                     }
                 }
-            }elseif('create' == $privilege){
+            }
+            elseif ('create' == $this->privilege) {
                 return true;
             }
         }
@@ -102,15 +119,19 @@ class ServiceAssertion extends AbstractAssertion
         /*********************************************************
          *                      Rôle Superviseur
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof EtablissementRole){
-            if ('read' == $privilege) return true; // les superviseurs voient tout
+        if ($this->role instanceof EtablissementRole) {
+            if ('read' == $this->privilege) {
+                return true; // les superviseurs voient tout
+            }
         }
 
         /*********************************************************
          *                      Rôle DRH
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof DrhRole){
-            if ('read' == $privilege) return true; // ils voient tout à la DRH
+        if ($this->role instanceof DrhRole) {
+            if ('read' == $this->privilege) {
+                return true; // ils voient tout à la DRH
+            }
         }
 
         return false;

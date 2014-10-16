@@ -14,7 +14,6 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  */
 class IntervenantAssertion extends AbstractAssertion
 {
-
     /**
      * Returns true if and only if the assertion conditions are met
      *
@@ -30,11 +29,15 @@ class IntervenantAssertion extends AbstractAssertion
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
+        parent::assert($acl, $role, $resource, $privilege);
+        
         $privilege = $this->normalizedPrivilege($privilege, $resource);
+        
         if ('total-heures-comp' == $privilege){
             $resource = $this->getMvcEvent()->getParam('intervenant');
             return $this->assertIntervenantTotalHeuresComp($this->getSelectedIdentityRole(), $resource);
         }
+        
         return true;
     }
 

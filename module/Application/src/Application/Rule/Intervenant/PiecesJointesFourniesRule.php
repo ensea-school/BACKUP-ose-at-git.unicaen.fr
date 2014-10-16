@@ -171,7 +171,7 @@ EOS;
         if (null === $this->getIntervenant()) {
             throw new LogicException("Cette méthode n'est valable que pour un intervenant précis.");
         }
-        if (null === $this->getTotalHETDIntervenant()) {
+        if (null === $this->getTotalHeuresReellesIntervenant()) {
             throw new LogicException("Le total HETD de l'intervenant doit être spécifié.");
         }
         
@@ -263,7 +263,7 @@ EOS;
     
     /**
      * Spécifie le total d'heures réelles de l'intervenant.
-     * Ce total est pris en compte pour déterminer le caractère obligatoire de certain type de PJ.
+     * Ce total est pris en compte pour déterminer le caractère obligatoire de certains types de PJ.
      * 
      * @param float $totalHeuresReellesIntervenant
      * @return self
@@ -276,13 +276,14 @@ EOS;
     }
 
     /**
-     * Retourne le total d'HETD de l'intervenant pris en considération.
+     * Retourne le total d'heures réelles de l'intervenant pris en considération.
+     * Ce total est pris en compte pour déterminer le caractère obligatoire de certains types de PJ.
      * 
      * @return float
      */
-    public function getTotalHETDIntervenant()
+    public function getTotalHeuresReellesIntervenant()
     {
-        return $this->totalHETDIntervenant;
+        return $this->totalHeuresReellesIntervenant;
     }
     
     protected $avecFichier = null;

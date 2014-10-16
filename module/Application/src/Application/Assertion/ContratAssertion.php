@@ -23,7 +23,7 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
     /**
      * @var Contrat
      */
-    protected $contrat;
+    protected $resource;
     
     /**
      * Returns true if and only if the assertion conditions are met
@@ -40,36 +40,31 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
+        parent::assert($acl, $role, $resource, $privilege);
+        
         if ($resource instanceof Contrat) {
-            return $this->assertEntity($acl, $role, $resource, $privilege);
+            return $this->assertEntity();
         }
         
-        return false;
+        return true;
     }
     
     /**
      * 
-     * @param Acl $acl
-     * @param RoleInterface $role
-     * @param ResourceInterface $resource
-     * @param string $privilege
      * @return boolean
      */
-    protected function assertEntity(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
+    protected function assertEntity()
     {
-        if (!parent::assertCRUD($acl, $role, $resource, $privilege)) {
+        if (!parent::assertCRUD()) {
             return false;
         }
-        
-        $this->contrat = $resource;
         
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->getSelectedIdentityRole() instanceof ComposanteRole) 
-        {
+        if ($this->role instanceof ComposanteRole) {
             // structure de responsabilité de l'utilisateur et structure du contrat doivent correspondre
-            if ($this->getSelectedIdentityRole()->getStructure() !== $this->contrat->getStructure()) {
+            if ($this->role->getStructure() !== $this->resource->getStructure()) {
                 return false;
             }
             
@@ -98,8 +93,8 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
     private function getWorkflow()
     {
         $wf = $this->getWorkflowIntervenant()
-                ->setIntervenant($this->contrat->getIntervenant())
-                ->setRole($this->getSelectedIdentityRole());
+                ->setIntervenant($this->resource->getIntervenant())
+                ->setRole($this->role);
         
         return $wf;
     }

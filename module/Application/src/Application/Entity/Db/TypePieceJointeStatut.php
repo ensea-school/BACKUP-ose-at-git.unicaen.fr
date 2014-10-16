@@ -90,7 +90,7 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareIn
                 sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
                 $this->getObligatoire(),
                 $this->getPremierRecrutement(),
-                $this->getSeuilHetd() ?: "Aucun");
+                $this->getSeuilHeures() ?: "Aucun");
     }
 
     /**

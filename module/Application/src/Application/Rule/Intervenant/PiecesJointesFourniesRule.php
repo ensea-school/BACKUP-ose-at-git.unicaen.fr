@@ -88,7 +88,7 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
      * @return string
      * @throws LogicException
      */
-    public function getQuerySQL()
+    public function getQuerySQL($uniquementLesIntervenantsAyantFourniToutesLesPjObligatoires = true)
     {
         /**
          * Liste des intervenants (extérieurs) dont le statut requiert des pièces justificatives OBLIGATOIRES,
@@ -99,9 +99,10 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
          * - du nombre d'heures réelles de l'intervenant lorsqu'une PJ n'est obligatoire qu'au delà d'un seuil d'heures.
          */
         $sqlTemplate = <<<EOS
-WITH ATTENDU AS (
+WITH
+ATTENDU AS (
   -- nombres de pj OBLIGATOIRES pour chaque intervenant
-  SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, count(tpjs.id) NB /*+ materialize */
+  SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0) TOTAL_HEURES, count(tpjs.id) NB /*+ materialize */
   FROM INTERVENANT_EXTERIEUR IE
   INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
   INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
@@ -109,8 +110,9 @@ WITH ATTENDU AS (
   INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT AND tpjs.OBLIGATOIRE = 1) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
   LEFT JOIN V_PJ_HEURES vheures ON vheures.INTERVENANT_ID = I.ID
   WHERE COALESCE(vheures.TOTAL_HEURES, 0) >= COALESCE(tpjs.SEUIL_HETD, 0)
-  GROUP BY I.ID, I.SOURCE_CODE
-), FOURNI AS (
+  GROUP BY I.ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0)
+), 
+FOURNI AS (
   -- nombres de pj OBLIGATOIRES FOURNIES par chaque intervenant
   SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, count(tpjAttendu.ID) NB /*+ materialize */
   FROM INTERVENANT_EXTERIEUR IE
@@ -126,12 +128,12 @@ WITH ATTENDU AS (
   %s
   GROUP BY I.ID, I.SOURCE_CODE
 )
-SELECT A.INTERVENANT_ID ID --, A.SOURCE_CODE, A.NB NB_PJ_ATTENDU, COALESCE(F.NB, 0) NB_PJ_FOURNI 
+SELECT A.INTERVENANT_ID ID, A.SOURCE_CODE, A.TOTAL_HEURES, A.NB NB_PJ_ATTENDU, COALESCE(F.NB, 0) NB_PJ_FOURNI 
 FROM ATTENDU A
 LEFT JOIN FOURNI F ON F.INTERVENANT_ID = A.INTERVENANT_ID
-WHERE A.NB <= COALESCE(F.NB, 0) -- au moins autant de PJ fournies que de PJ attendues
+WHERE 1=1
 %s
---ORDER BY A.INTERVENANT_ID
+%s
 EOS;
         
         $andFichier = null;
@@ -146,12 +148,18 @@ EOS;
         
         $andIntervenant = null;
         if ($this->getIntervenant()) {
-            $andIntervenant = "AND A.INTERVENANT_ID = :intervenant";
+            $andIntervenant = "AND A.INTERVENANT_ID = :intervenant ";
+        }
+        
+        $andComplet = null;
+        if ($uniquementLesIntervenantsAyantFourniToutesLesPjObligatoires) {
+            $andComplet = "AND A.NB <= COALESCE(F.NB, 0) -- intervenants ayant fourni toutes les PJ attendues obligatoires (ou plus!) ";
         }
         
         $sql = sprintf($sqlTemplate, 
                 $andFichier,
-                $andValidation, 
+                $andValidation,
+                $andComplet, 
                 $andIntervenant);
         
         return $sql;
@@ -171,9 +179,6 @@ EOS;
         if (null === $this->getIntervenant()) {
             throw new LogicException("Cette méthode n'est valable que pour un intervenant précis.");
         }
-        if (null === $this->getTotalHeuresReellesIntervenant()) {
-            throw new LogicException("Le total HETD de l'intervenant doit être spécifié.");
-        }
         
         // liste des PJ déjà fournies
         $pjFournies = $this->getPiecesJointesFournies();
@@ -184,20 +189,21 @@ EOS;
             $typesFournis[$pj->getType()->getId()] = $pj->getType();
         }
 
+        // liste des types de pièce justificative à fournir selon le statut d'intervenant
         $service = $this->getServiceTypePieceJointeStatut();
-
-        // liste des (types de) pièces justificatives à fournir selon le statut d'intervenant
         $qb = $service->finderByStatutIntervenant($this->getIntervenant()->getDossier()->getStatut());
         $qb = $service->finderByPremierRecrutement($this->getIntervenant()->getDossier()->getPremierRecrutement(), $qb);
         $typesPieceJointeStatut = $service->getList($qb);
 
-        // recherche des (types de) pièces justificatives obligatoires non fournies
+        $totalHeuresReellesIntervenant = $this->getTotalHeuresReellesIntervenant();
+        
+        // recherche des types de pièce justificative obligatoires non fournis
         $typesPieceJointeObligatoiresNonFournis = [];
         foreach ($typesPieceJointeStatut as $tpjs) { /* @var $tpjs TypePieceJointeStatut */
             if (array_key_exists($tpjs->getType()->getId(), $typesFournis)) {
                 continue;
             }
-            if (!$tpjs->isObligatoire($this->totalHeuresReellesIntervenant)) {
+            if (!$tpjs->isObligatoire($totalHeuresReellesIntervenant)) {
                 continue;
             }
             $typesPieceJointeObligatoiresNonFournis[$tpjs->getType()->getId()] = $tpjs->getType();
@@ -207,7 +213,7 @@ EOS;
     }
     
     /**
-     * Recherche les PJ fournies.
+     * Recherche les PJ fournies, obligatoires ou non.
      * 
      * NB: les flags suivants sont pris en compte :
      * - flag indiquant s'il faut vérifier ou pas la présence/absence de fichier pour chaque pièce justificative.
@@ -255,35 +261,33 @@ EOS;
         
         return $this;
     }
-    
-    /**
-     * @var float
-     */
-    protected $totalHeuresReellesIntervenant;
-    
-    /**
-     * Spécifie le total d'heures réelles de l'intervenant.
-     * Ce total est pris en compte pour déterminer le caractère obligatoire de certains types de PJ.
-     * 
-     * @param float $totalHeuresReellesIntervenant
-     * @return self
-     */
-    public function setTotalHeuresReellesIntervenant($totalHeuresReellesIntervenant)
-    {
-        $this->totalHeuresReellesIntervenant = $totalHeuresReellesIntervenant;
-        
-        return $this;
-    }
 
     /**
-     * Retourne le total d'heures réelles de l'intervenant pris en considération.
+     * Retourne le total d'heures réelles de l'intervenant concerné.
      * Ce total est pris en compte pour déterminer le caractère obligatoire de certains types de PJ.
      * 
      * @return float
      */
     public function getTotalHeuresReellesIntervenant()
     {
-        return $this->totalHeuresReellesIntervenant;
+        if (!$this->getIntervenant()) {
+            throw new LogicException("Un intervenant doit être spécifié.");
+        }
+        
+        $em          = $this->getServiceIntervenant()->getEntityManager();
+        $sql         = $this->getQuerySQL(false);
+        $stmt        = $em->getConnection()->executeQuery($sql, array('intervenant' => $this->getIntervenant()->getId()));
+        $result      = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        if (isset($result[0])) {
+            if (!isset($result[0]["TOTAL_HEURES"])) {
+                throw new RuntimeException("Anomalie: total d'heures réelles introuvable dans le résultat de la requête.");
+            }
+            
+            return floatval($result[0]["TOTAL_HEURES"]);
+        }
+        
+        return 0;
     }
     
     protected $avecFichier = null;

@@ -7,7 +7,7 @@ namespace Application\Entity\Db;
  */
 class TypeAgrementStatut
 {
-    use \Application\Traits\ObligatoireSelonSeuilHETDAwareTrait;
+    use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
     
     /**
      * @var \DateTime
@@ -28,6 +28,11 @@ class TypeAgrementStatut
      * @var boolean
      */
     private $premierRecrutement;
+
+    /**
+     * @var float
+     */
+    private $seuilHetd;
 
     /**
      * @var integer
@@ -59,6 +64,15 @@ class TypeAgrementStatut
      */
     private $statut;
 
+    /**
+     * Get seuilHeures
+     *
+     * @return integer 
+     */
+    public function getSeuilHeures()
+    {
+        return $this->seuilHetd;
+    }
 
     /**
      * Set histoCreation

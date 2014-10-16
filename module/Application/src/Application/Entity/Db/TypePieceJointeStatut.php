@@ -2,14 +2,14 @@
 
 namespace Application\Entity\Db;
 
-use \Application\Traits\ObligatoireSelonSeuilHETDAwareTrait;
+use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
 
 /**
  * TypePieceJointeStatut
  */
 class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
-    use ObligatoireSelonSeuilHETDAwareTrait;
+    use ObligatoireSelonSeuilHeuresAwareTrait;
     
     /**
      * @var \DateTime
@@ -70,6 +70,13 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareIn
      * @var \Application\Entity\Db\StatutIntervenant
      */
     private $statut;
+    
+    /**
+     * @var float
+     * @see ObligatoireSelonSeuilHeuresAwareTrait
+     * @todo A supprimer lorsque la colonne de la table sera renommée "SEUIL_HEURES"
+     */
+    private $seuilHetd;
 
     /**
      * 
@@ -84,6 +91,18 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareIn
                 $this->getObligatoire(),
                 $this->getPremierRecrutement(),
                 $this->getSeuilHetd() ?: "Aucun");
+    }
+
+    /**
+     * Get seuilHeures
+     *
+     * @return integer 
+     * @see ObligatoireSelonSeuilHeuresAwareTrait
+     * @todo A supprimer lorsque la colonne de la table sera renommée "SEUIL_HEURES"
+     */
+    public function getSeuilHeures()
+    {
+        return $this->seuilHetd;
     }
 
     /**
@@ -380,13 +399,13 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareIn
      * 
      * @todo Comment appeler la méthode getObligatoireToString() du trait ?
      */
-    public function getObligatoireToString($totalHETDIntervenant)
+    public function getObligatoireToString($totalHeuresReellesIntervenant)
     {
-        if ($this->isObligatoire($totalHETDIntervenant)) {
-            $seuilHETD   = $this->getSeuilHetd();
+        if ($this->isObligatoire($totalHeuresReellesIntervenant)) {
+            $seuilHETD   = $this->getSeuilHeures();
             $obligatoire = "À fournir obligatoirement";
-            $obligatoire .= $this->isSeuilHETDDepasse($totalHETDIntervenant) ? 
-                    " car <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total HETD</abbr> > {$seuilHETD}h" : 
+            $obligatoire .= $this->isSeuilHeuresDepasse($totalHeuresReellesIntervenant) ? 
+                    " car le <abbr title=\"Total d'heures de service réelles de l'intervenant toutes structures confondues\">total d'heures réelles</abbr> > {$seuilHETD}h" : 
                     null;
             return $obligatoire;
         }

@@ -83,6 +83,10 @@ class ServiceController extends AbstractActionController
         $annee              = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel          = new \Zend\View\Model\ViewModel();
         $typeVolumeHoraire  = $this->getServiceTypeVolumehoraire()->getPrevu();
+        $canAddService      = true;//$this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
+        $canAddServiceReferentiel = true;
+//                ! $intervenant instanceof IntervenantExterieur
+//                && $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
             throw new \BjyAuthorize\Exception\UnAuthorizedException();
@@ -105,11 +109,11 @@ class ServiceController extends AbstractActionController
             $filter = null;
 
             //$params           = $this->getEvent()->getRouteMatch()->getParams();
-            $params           = [];
+        /*    $params           = [];
             $params['intervenant'] = $intervenant->getSourceCode();
             $params['action'] = 'total-heures-comp';
             $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
-            $viewModel->addChild($totalViewModel, 'totalHeuresComp');
+            $viewModel->addChild($totalViewModel, 'totalHeuresComp');*/
         }
 
         /* Préparation et affichage */
@@ -131,7 +135,7 @@ class ServiceController extends AbstractActionController
             $services = [];
         }
         $renderReferentiel  = !$intervenant instanceof IntervenantExterieur;
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'renderReferentiel'));
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'renderReferentiel','canAddService', 'canAddServiceReferentiel'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
@@ -226,6 +230,9 @@ class ServiceController extends AbstractActionController
      */
     public function resumeAction()
     {
+        $intervenant        = $this->context()->intervenantFromRoute();
+        $canAddService      = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
+
         $this->initFilters();
 
         $role = $this->getContextProvider()->getSelectedIdentityRole();
@@ -255,9 +262,8 @@ class ServiceController extends AbstractActionController
         }else{
             $resumeServices = null;
         }
-
-        $canAdd = $this->getServiceService()->canAdd();
-        $viewModel->setVariables( compact('annee','action','resumeServices','canAdd') );
+   
+        $viewModel->setVariables( compact('annee','action','resumeServices','canAddService') );
         return $viewModel;
     }
 
@@ -491,6 +497,14 @@ class ServiceController extends AbstractActionController
     protected function getServiceIntervenant()
     {
         return $this->getServiceLocator()->get('applicationIntervenant');
+    }
+
+    /**
+     * @return \Application\Service\ServiceReferentiel
+     */
+    protected function getServiceServiceReferentiel()
+    {
+        return $this->getServiceLocator()->get('applicationServiceReferentiel');
     }
 
     /**

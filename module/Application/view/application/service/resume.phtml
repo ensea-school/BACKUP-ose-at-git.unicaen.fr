@@ -12,10 +12,12 @@
 </div>
 
 <?php if ('afficher' === $action ): ?>
-<?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
 
+<?php if ($canAddService): ?>
+<?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
 <a class="ajax-modal services btn btn-default pull-right" data-event="service-add-message" href="<?php echo $url ?>" title="Ajouter un enseignement"><span class="glyphicon glyphicon-plus"></span> Saisir un nouvel enseignement</a>
 <br /><br />
+<?php endif; ?>
 
 <?php echo $this->messenger()->setMessages(['warning' => "Les totaux en heures équivalent TD sont calculés à partir de l'ensemble des enseignements de chaque intervenant. En outre, les heures non payables ne sont pas prises en compte."]); ?>
 

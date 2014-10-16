@@ -64,8 +64,7 @@ class ElementPedagogique extends AbstractEntityService
             if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
                 $filters['niveau'] = $filters['niveau']->getId();
             }
-            $niveau = str_replace('-', '', $filters['niveau']);
-            $qb->andWhere('CONCAT(gtf.libelleCourt, e.niveau) = :niveau')->setParameter('niveau', $niveau);
+            $qb->andWhere('CONCAT(gtf.libelleCourt, CONCAT( \'-\', e.niveau )) = :niveau')->setParameter('niveau', $filters['niveau']);
         }
         
         if (isset($filters['etape'])) {
@@ -139,10 +138,8 @@ class ElementPedagogique extends AbstractEntityService
             if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
                 $filters['niveau'] = $filters['niveau']->getId();
             }
-            $niveau = str_replace('-', '', $filters['niveau']);
-            $qb->andWhere('CONCAT(gtf.libelleCourt, e.niveau) = :niveau')->setParameter('niveau', $niveau);
+            $qb->andWhere('CONCAT(gtf.libelleCourt, CONCAT( \'-\', e.niveau )) = :niveau')->setParameter('niveau', $filters['niveau']);
         }
-//        print_r($qb->getQuery()->getSQL());die;
         return $qb;
     }
     

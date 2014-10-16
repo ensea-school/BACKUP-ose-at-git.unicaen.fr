@@ -73,7 +73,7 @@ class PieceJointeProcess extends AbstractService
         
         $valueOptions = array();
         foreach ($this->getTypesPieceJointeStatut() as $tpjs) { /* @var $tpjs TypePieceJointeStatut */
-            $totalHETD   = $this->getTotalHETDIntervenant();
+            $totalHETD   = $this->getTotalHeuresReellesIntervenant();
             $obligatoire = $tpjs->getObligatoireToString($totalHETD);
             
             $link = null;
@@ -278,15 +278,15 @@ class PieceJointeProcess extends AbstractService
         
         $typePieceJointeStatut = $this->getTypesPieceJointeStatut()[$type]; /* @var $typePieceJointeStatut TypePieceJointeStatut */
         
-        return $typePieceJointeStatut->isObligatoire($this->getTotalHETDIntervenant());
+        return $typePieceJointeStatut->isObligatoire($this->getTotalHeuresReellesIntervenant());
     }
     
     /**
      * @deprecated Implémenter le vrai calcul d'HETD ?
      */
-    public function getTotalHETDIntervenant()
+    public function getTotalHeuresReellesIntervenant()
     {
-        return $this->getServiceService()->getTotalHeuresReelles($this->getIntervenant());
+        return $this->getServicePieceJointe()->getTotalHeuresReelles($this->getIntervenant());
     }
     
     /**

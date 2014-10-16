@@ -119,6 +119,32 @@ class PieceJointe extends AbstractEntityService
     }
     
     /**
+     * Retourne le total des heures RÉELLES de référentiel et de service d'un intervenant.
+     *
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return float
+     */
+    public function getTotalHeuresReelles(\Application\Entity\Db\Intervenant $intervenant)
+    {
+        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        
+        /**
+         * Service
+         */
+        $sql = <<<EOS
+select sum(v.total_heures) as TOTAL_HEURES from V_PJ_HEURES v 
+where v.INTERVENANT_ID = :intervenant and v.ANNEE_ID = :annee
+EOS;
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, array(
+            'intervenant' => $intervenant->getId(),
+            'annee' => $annee->getId()));
+        $r = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $total = isset($r[0]) ? (float)$r[0] : 0.0;
+        
+        return $total;
+    }
+    
+    /**
      * Création si besoin de la PieceJointe et ajout des Fichiers associés.
      * 
      * @param array $files Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png', 'size' => 321215]

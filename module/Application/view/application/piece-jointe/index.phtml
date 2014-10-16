@@ -20,7 +20,7 @@ use Application\Entity\Db\TypePieceJointeStatut;
     
     $validationBar = $this->partial('application/piece-jointe/partial/validation-bar', ['pj' => $pj]);
 
-    $obligatoire = $tpjs->getObligatoireToString($this->totalHETD);
+    $obligatoire = $tpjs->getObligatoireToString($this->totalHeuresReelles);
     $linksModelesDocs = [];
     if (($url = $tpj->getUrlModeleDoc())) {
         $href = $this->basePath($url);

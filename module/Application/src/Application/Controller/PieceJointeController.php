@@ -81,7 +81,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
         
         $this->view->setVariables(array(
             'intervenant'            => $this->getIntervenant(),
-            'totalHETD'              => $this->getPieceJointeProcess()->getTotalHETDIntervenant(),
+            'totalHeuresReelles'     => $this->getPieceJointeProcess()->getTotalHeuresReellesIntervenant(),
             'annee'                  => $this->getContextProvider()->getGlobalContext()->getAnnee(),
             'typesPieceJointeStatut' => $typesPieceJointeStatut,
             'piecesJointesFournies'  => $piecesJointesFournies,
@@ -105,9 +105,8 @@ class PieceJointeController extends AbstractActionController implements ContextP
     {
         $messages = [];
         
-        // recherche si toutes les PJ obligatoires existent
-        $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule') /* @var $rule PiecesJointesFourniesRule */
-                ->setIntervenant($this->getIntervenant());
+        // recherche si toutes les PJ obligatoires ont été fournies
+        $rule = $this->getRulePiecesJointesFournies();
         $complet = $rule->execute();
         if ($complet) {
             $messages['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
@@ -248,7 +247,9 @@ class PieceJointeController extends AbstractActionController implements ContextP
     private function getRulePiecesJointesFournies()
     {
         $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule');
-        $rule->setIntervenant($this->getIntervenant());
+        $rule
+                ->setIntervenant($this->getIntervenant())
+                ->setTotalHeuresReellesIntervenant($this->getPieceJointeProcess()->getTotalHeuresReellesIntervenant());
         
         return $rule;
     }

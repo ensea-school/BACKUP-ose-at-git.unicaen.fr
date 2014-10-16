@@ -424,7 +424,7 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         /**
          * - Intervenant-filtre spécifié : IE
          */
-        $result = $this->rule->setIntervenant($ie)->setTotalHETDIntervenant(50)->execute();
+        $result = $this->rule->setIntervenant($ie)->setTotalHeuresReellesIntervenant(50)->execute();
         $this->assertEquals([], $result);
         $this->assertNotNull($this->rule->getMessage());
     }
@@ -448,7 +448,7 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         /**
          * - Intervenant-filtre spécifié : IE
          */
-        $result = $this->rule->setIntervenant($ie)->setTotalHETDIntervenant(50)->execute();
+        $result = $this->rule->setIntervenant($ie)->setTotalHeuresReellesIntervenant(50)->execute();
         $this->assertEquals([$id => ['id' => $id]], $result);
         $this->assertNull($this->rule->getMessage());
     }

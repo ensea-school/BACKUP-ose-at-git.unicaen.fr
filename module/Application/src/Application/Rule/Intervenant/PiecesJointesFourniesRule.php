@@ -28,7 +28,7 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
     protected $messageTemplates = array(
         self::MESSAGE_INCOMPLET => "Toutes les pièces justificatives obligatoires de l'intervenant n'ont pas été fournies.",
     );
-
+    
     /**
      * 
      * @todo Ajouter la jointure avec la table FORMULE quand elle existera
@@ -88,7 +88,7 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
      * @return string
      * @throws LogicException
      */
-    public function getQuerySQL($uniquementLesIntervenantsAyantFourniToutesLesPjObligatoires = true)
+    public function getQuerySQL()
     {
         /**
          * Liste des intervenants (extérieurs) dont le statut requiert des pièces justificatives OBLIGATOIRES,
@@ -99,68 +99,123 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
          * - du nombre d'heures réelles de l'intervenant lorsqu'une PJ n'est obligatoire qu'au delà d'un seuil d'heures.
          */
         $sqlTemplate = <<<EOS
-WITH
-ATTENDU AS (
-  -- nombres de pj OBLIGATOIRES pour chaque intervenant
-  SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0) TOTAL_HEURES, count(tpjs.id) NB /*+ materialize */
-  FROM INTERVENANT_EXTERIEUR IE
-  INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
-  INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
-  INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
-  INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT AND tpjs.OBLIGATOIRE = 1) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
-  LEFT JOIN V_PJ_HEURES vheures ON vheures.INTERVENANT_ID = I.ID
-  WHERE COALESCE(vheures.TOTAL_HEURES, 0) >= COALESCE(tpjs.SEUIL_HETD, 0)
-  GROUP BY I.ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0)
-), 
-FOURNI AS (
-  -- nombres de pj OBLIGATOIRES FOURNIES par chaque intervenant
-  SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, count(tpjAttendu.ID) NB /*+ materialize */
-  FROM INTERVENANT_EXTERIEUR IE
-  INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
-  INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
-  INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
-  INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT AND tpjs.OBLIGATOIRE = 1) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
-  INNER JOIN TYPE_PIECE_JOINTE tpjAttendu ON tpjs.TYPE_PIECE_JOINTE_ID = tpjAttendu.ID AND (tpjAttendu.HISTO_DESTRUCTEUR_ID IS NULL)
-  INNER JOIN PIECE_JOINTE pj ON d.ID = pj.DOSSIER_ID AND (pj.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN pj.VALIDITE_DEBUT AND COALESCE(pj.VALIDITE_FIN, SYSDATE))
-  INNER JOIN TYPE_PIECE_JOINTE tpjFourni ON pj.TYPE_PIECE_JOINTE_ID = tpjFourni.ID AND (tpjFourni.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN tpjFourni.VALIDITE_DEBUT AND COALESCE(tpjFourni.VALIDITE_FIN, SYSDATE))
-  WHERE tpjFourni.ID = tpjAttendu.ID
-  %s
-  %s
-  GROUP BY I.ID, I.SOURCE_CODE
-)
-SELECT A.INTERVENANT_ID ID, A.SOURCE_CODE, A.TOTAL_HEURES, A.NB NB_PJ_ATTENDU, COALESCE(F.NB, 0) NB_PJ_FOURNI 
-FROM ATTENDU A
-LEFT JOIN FOURNI F ON F.INTERVENANT_ID = A.INTERVENANT_ID
-WHERE 1=1
-%s
-%s
+    WITH 
+    ATTENDU_OBLIGATOIRE AS (
+        -- nombres de pj OBLIGATOIRES pour chaque intervenant
+        SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0) TOTAL_HEURES, count(tpjs.id) NB /*+ materialize */
+        FROM INTERVENANT_EXTERIEUR IE
+        INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
+        INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
+        LEFT JOIN V_PJ_HEURES vheures ON vheures.INTERVENANT_ID = I.ID
+        WHERE tpjs.OBLIGATOIRE = 1
+        AND (tpjs.SEUIL_HETD IS NULL OR COALESCE(vheures.TOTAL_HEURES, 0) >= tpjs.SEUIL_HETD)
+        GROUP BY I.ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0)
+    ), 
+    FOURNI_OBLIGATOIRE AS (
+        -- nombres de pj OBLIGATOIRES FOURNIES par chaque intervenant
+        SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, count(tpjAttendu.ID) NB /*+ materialize */
+        FROM INTERVENANT_EXTERIEUR IE
+        INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
+        INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
+        INNER JOIN TYPE_PIECE_JOINTE tpjAttendu ON tpjs.TYPE_PIECE_JOINTE_ID = tpjAttendu.ID AND (tpjAttendu.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN PIECE_JOINTE pj ON d.ID = pj.DOSSIER_ID AND (pj.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN pj.VALIDITE_DEBUT AND COALESCE(pj.VALIDITE_FIN, SYSDATE))
+        INNER JOIN TYPE_PIECE_JOINTE tpjFourni ON pj.TYPE_PIECE_JOINTE_ID = tpjFourni.ID AND (tpjFourni.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN tpjFourni.VALIDITE_DEBUT AND COALESCE(tpjFourni.VALIDITE_FIN, SYSDATE))
+        LEFT JOIN V_PJ_HEURES vheures ON vheures.INTERVENANT_ID = I.ID
+        WHERE tpjs.OBLIGATOIRE = 1
+        AND tpjFourni.ID = tpjAttendu.ID
+        AND (tpjs.SEUIL_HETD IS NULL OR COALESCE(vheures.TOTAL_HEURES, 0) >= tpjs.SEUIL_HETD)
+        %s
+        %s
+        GROUP BY I.ID, I.SOURCE_CODE
+    ), 
+    ATTENDU_FACULTATIF AS (
+        -- nombres de pj FACULTATIVES pour chaque intervenant
+        SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0) TOTAL_HEURES, count(tpjs.id) NB /*+ materialize */
+        FROM INTERVENANT_EXTERIEUR IE
+        INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
+        INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
+        LEFT JOIN V_PJ_HEURES vheures ON vheures.INTERVENANT_ID = I.ID
+        WHERE (tpjs.OBLIGATOIRE = 0 OR tpjs.OBLIGATOIRE = 1 AND tpjs.SEUIL_HETD IS NOT NULL AND COALESCE(vheures.TOTAL_HEURES, 0) < tpjs.SEUIL_HETD)
+        GROUP BY I.ID, I.SOURCE_CODE, COALESCE(vheures.TOTAL_HEURES, 0)
+    ), 
+    FOURNI_FACULTATIF AS (
+        -- nombres de pj FACULTATIVES FOURNIES par chaque intervenant
+        SELECT I.ID INTERVENANT_ID, I.SOURCE_CODE, count(tpjAttendu.ID) NB /*+ materialize */
+        FROM INTERVENANT_EXTERIEUR IE
+        INNER JOIN INTERVENANT I ON IE.ID = I.ID AND (I.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN DOSSIER d ON IE.DOSSIER_ID = d.ID AND (d.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN STATUT_INTERVENANT si ON d.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
+        INNER JOIN TYPE_PIECE_JOINTE_STATUT tpjs ON si.ID = tpjs.STATUT_INTERVENANT_ID AND (tpjs.PREMIER_RECRUTEMENT = d.PREMIER_RECRUTEMENT) AND (tpjs.HISTO_DESTRUCTEUR_ID IS NULL) 
+        INNER JOIN TYPE_PIECE_JOINTE tpjAttendu ON tpjs.TYPE_PIECE_JOINTE_ID = tpjAttendu.ID AND (tpjAttendu.HISTO_DESTRUCTEUR_ID IS NULL)
+        INNER JOIN PIECE_JOINTE pj ON d.ID = pj.DOSSIER_ID AND (pj.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN pj.VALIDITE_DEBUT AND COALESCE(pj.VALIDITE_FIN, SYSDATE))
+        INNER JOIN TYPE_PIECE_JOINTE tpjFourni ON pj.TYPE_PIECE_JOINTE_ID = tpjFourni.ID AND (tpjFourni.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN tpjFourni.VALIDITE_DEBUT AND COALESCE(tpjFourni.VALIDITE_FIN, SYSDATE))
+        LEFT JOIN V_PJ_HEURES vheures ON vheures.INTERVENANT_ID = I.ID
+        WHERE (tpjs.OBLIGATOIRE = 0 OR tpjs.OBLIGATOIRE = 1 AND tpjs.SEUIL_HETD IS NOT NULL AND COALESCE(vheures.TOTAL_HEURES, 0) < tpjs.SEUIL_HETD)
+        AND tpjFourni.ID = tpjAttendu.ID
+        GROUP BY I.ID, I.SOURCE_CODE
+    )
+    SELECT 
+        COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID)  ID, 
+        COALESCE(AO.SOURCE_CODE, AF.SOURCE_CODE)        SOURCE_CODE, 
+        COALESCE(AO.TOTAL_HEURES, AF.TOTAL_HEURES)      TOTAL_HEURES, 
+        COALESCE(AO.NB, 0)                              NB_PJ_OBLIG_ATTENDU, 
+        COALESCE(FO.NB, 0)                              NB_PJ_OBLIG_FOURNI, 
+        COALESCE(AF.NB, 0)                              NB_PJ_FACUL_ATTENDU, 
+        COALESCE(FF.NB, 0)                              NB_PJ_FACUL_FOURNI 
+    FROM            ATTENDU_OBLIGATOIRE AO
+    FULL OUTER JOIN ATTENDU_FACULTATIF  AF ON AF.INTERVENANT_ID = AO.INTERVENANT_ID
+    LEFT JOIN       FOURNI_OBLIGATOIRE  FO ON FO.INTERVENANT_ID = AO.INTERVENANT_ID
+    LEFT JOIN       FOURNI_FACULTATIF   FF ON FF.INTERVENANT_ID = AF.INTERVENANT_ID
+    WHERE 1=1 
+    %s
+    %s
 EOS;
         
         $andFichier = null;
-        if (is_bool($this->getAvecFichier())) {
-            $andFichier = "AND EXISTS (SELECT * FROM PIECE_JOINTE_FICHIER pjf INNER JOIN FICHIER f ON pjf.FICHIER_ID = f.ID AND (f.HISTO_DESTRUCTION IS NULL AND f.HISTO_DESTRUCTEUR_ID IS NULL) WHERE pjf.PIECE_JOINTE_ID = pj.ID) ";
+        if (true === $this->getAvecFichier()) {
+            $andFichier = <<<EOS
+    AND EXISTS (
+        SELECT * FROM PIECE_JOINTE_FICHIER pjf 
+        INNER JOIN FICHIER f ON pjf.FICHIER_ID = f.ID AND (f.HISTO_DESTRUCTION IS NULL AND f.HISTO_DESTRUCTEUR_ID IS NULL) 
+        WHERE pjf.PIECE_JOINTE_ID = pj.ID
+    )
+EOS;
         }
         
         $andValidation = null;
-        if (is_bool($this->getAvecValidation())) {
+        if (true === $this->getAvecValidation()) {
             $andValidation = "AND pj.VALIDATION_ID IS NOT NULL ";
         }
         
         $andIntervenant = null;
         if ($this->getIntervenant()) {
-            $andIntervenant = "AND A.INTERVENANT_ID = :intervenant ";
+            $andIntervenant = "AND COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID) = :intervenant ";
         }
         
-        $andComplet = null;
-        if ($uniquementLesIntervenantsAyantFourniToutesLesPjObligatoires) {
-            $andComplet = "AND A.NB <= COALESCE(F.NB, 0) -- intervenants ayant fourni toutes les PJ attendues obligatoires (ou plus!) ";
-        }
+        $andToutesPjObligFournies = null;
+//        if ($this->getPiecesJointesObligatoiresUniquement()) {
+//            $andToutesPjObligFournies = "AND COALESCE(AO.NB, 0) <= COALESCE(FO.NB, 0) -- intervenants ayant fourni toutes les PJ obligatoires (ou plus!) ";
+//        }
         
         $sql = sprintf($sqlTemplate, 
                 $andFichier,
                 $andValidation,
-                $andComplet, 
+                $andToutesPjObligFournies, 
                 $andIntervenant);
+        
+        $sql = <<<EOS
+SELECT ID, SOURCE_CODE, TOTAL_HEURES, NB_PJ_OBLIG_ATTENDU, NB_PJ_OBLIG_FOURNI, NB_PJ_FACUL_ATTENDU, NB_PJ_FACUL_FOURNI
+FROM (
+    $sql
+)
+WHERE NB_PJ_OBLIG_ATTENDU <= NB_PJ_OBLIG_FOURNI
+EOS;
         
         return $sql;
     }
@@ -274,21 +329,51 @@ EOS;
             throw new LogicException("Un intervenant doit être spécifié.");
         }
         
-        $em          = $this->getServiceIntervenant()->getEntityManager();
-        $sql         = $this->getQuerySQL(false);
-        $stmt        = $em->getConnection()->executeQuery($sql, array('intervenant' => $this->getIntervenant()->getId()));
-        $result      = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-        if (isset($result[0])) {
-            if (!isset($result[0]["TOTAL_HEURES"])) {
-                throw new RuntimeException("Anomalie: total d'heures réelles introuvable dans le résultat de la requête.");
-            }
-            
-            return floatval($result[0]["TOTAL_HEURES"]);
-        }
-        
-        return 0;
+        return $this->getServicePieceJointe()->getTotalHeuresReelles($this->getIntervenant());
+//        $em     = $this->getServiceIntervenant()->getEntityManager();
+//        $stmt   = $em->getConnection()->executeQuery($sql, array('intervenant' => $this->getIntervenant()->getId()));
+//        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+//
+//        if (isset($result[0])) {
+//            if (!isset($result[0]["TOTAL_HEURES"])) {
+//                throw new RuntimeException("Anomalie: total d'heures réelles introuvable dans le résultat de la requête.");
+//            }
+//            
+//            return floatval($result[0]["TOTAL_HEURES"]);
+//        }
+//        
+//        return 0;
     }
+
+//    /**
+//     * @var boolean
+//     */
+//    protected $piecesJointesObligatoiresUniquement = false;
+//    
+//    /**
+//     * Retourne le flag indiquant s'il ne faut considérer que les pièces justificatives OBLIGATOIRES (true) ou 
+//     * bien les facultatives aussi (false).
+//     * 
+//     * @return boolean
+//     */
+//    public function getPiecesJointesObligatoiresUniquement()
+//    {
+//        return $this->piecesJointesObligatoiresUniquement;
+//    }
+//
+//    /**
+//     * Spécifie s'il ne faut considérer que les pièces justificatives OBLIGATOIRES (true) ou 
+//     * bien les facultatives aussi (false).
+//     * 
+//     * @param boolean $piecesJointesObligatoiresUniquement
+//     * @return self
+//     */
+//    public function setPiecesJointesObligatoiresUniquement($piecesJointesObligatoiresUniquement = true)
+//    {
+//        $this->piecesJointesObligatoiresUniquement = $piecesJointesObligatoiresUniquement;
+//        
+//        return $this;
+//    }
     
     protected $avecFichier = null;
     

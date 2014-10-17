@@ -53,10 +53,10 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
     {
         parent::setUp();
         
-        // par défaut: pas de critère de fichier, ni de validation
         $this->rule
-                ->setAvecFichier(null)
-                ->setAvecValidation(null);
+                ->setAvecFichier(null) // pas de critère de fichier
+                ->setAvecValidation(null) //  pas de critère de validation
+                /*->setPiecesJointesObligatoiresUniquement(false)*/; // seules les PJ obligatoires nous intéressent
         
         // création d'un intervenant extérieur
         $this->ie = $this->getEntityProvider()->getIntervenantExterieur();
@@ -123,34 +123,23 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         $this->getEntityManager()->flush($tpj);
         $this->createTpjs($tpj, $tpjsObligatoire, $tpjsPremierRecrutement);
         
-        /**
-         * L'intervenant n'a fourni aucune PJ...
-         */
-        
-        // 1er recrutement de l'intervenant
-        $this->setPremierRecrutementIntervenant(true);
-        $this->assertIntervenantNotInResult($this->ie);
-        
-        // 2nd recrutement de l'intervenant
-        $this->setPremierRecrutementIntervenant(false);
-        $this->assertIntervenantNotInResult($this->ie);
-        
-        /**
-         * L'intervenant a fourni une PJ d'un type non requis...
-         */
-        
-        $tpjNonAttendu = $this->getEntityProvider()->getTypePieceJointe();
-        $pjNonAttendue = $this->getEntityProvider()->getPieceJointe($tpjNonAttendu, $this->ie->getDossier());
-        $this->ie->getDossier()->addPieceJointe($pjNonAttendue);
-        $this->getEntityManager()->flush();
-        
-        // 1er recrutement de l'intervenant
-        $this->setPremierRecrutementIntervenant(true);
-        $this->assertIntervenantNotInResult($this->ie);
-        
-        // 2nd recrutement de l'intervenant
-        $this->setPremierRecrutementIntervenant(false);
-        $this->assertIntervenantNotInResult($this->ie);
+        foreach ([false, true] as $intervenantPremierRecrutement) {
+            $this->setPremierRecrutementIntervenant($intervenantPremierRecrutement);
+            
+            // lorsque le recrutement de l'intervenant ne correspond pas à celui de la config TypePieceJointeStatut,
+            // l'intervenant n'a pas à fournir la PJ
+            if ($intervenantPremierRecrutement !== $tpjsPremierRecrutement) {
+                $this->assertIntervenantNotInResult($this->ie);
+            }
+            // lorsque la PJ est obligatoire, l'intervenant n'est pas dans la liste des intervenants ayant fourni la PJ
+            elseif (true === $tpjsObligatoire) {
+                $this->assertIntervenantNotInResult($this->ie);
+            }
+            // lorsque la PJ est facultative, l'intervenant est dans la liste des intervenants en règle avec leurs PJ
+            else {
+                $this->assertIntervenantInResult($this->ie);
+            }
+        }
     }
 
     /**
@@ -163,25 +152,22 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         $this->getEntityManager()->flush($tpj);
         $this->createTpjs($tpj, $tpjsObligatoire, $tpjsPremierRecrutement);
         
-        // l'intervenant a fourni l'unique PJ obligatoire attendue...
+        // l'intervenant a fourni l'unique PJ attendue...
         $tpjAttendu = $tpj;
-        $pj = $this->addPieceJointeToIntervenant($tpjAttendu);
-        $this->getEntityManager()->flush($pj);
+        $this->addPieceJointeToIntervenant($tpjAttendu);
         
-        // 1er recrutement de l'intervenant
-        $this->setPremierRecrutementIntervenant(true);
-        if ($tpjsObligatoire && $tpjsPremierRecrutement) {
-            $this->assertIntervenantInResult($this->ie);
-        } else {
-            $this->assertIntervenantNotInResult($this->ie);
-        }
-        
-        // 2nd recrutement de l'intervenant
-        $this->setPremierRecrutementIntervenant(false);
-        if ($tpjsObligatoire && !$tpjsPremierRecrutement) {
-            $this->assertIntervenantInResult($this->ie);
-        } else {
-            $this->assertIntervenantNotInResult($this->ie);
+        foreach ([false, true] as $intervenantPremierRecrutement) {
+            $this->setPremierRecrutementIntervenant($intervenantPremierRecrutement);
+            
+            // lorsque le recrutement de l'intervenant ne correspond pas à celui de la config TypePieceJointeStatut,
+            // l'intervenant n'a pas à fournir la PJ
+            if ($intervenantPremierRecrutement !== $tpjsPremierRecrutement) {
+                $this->assertIntervenantNotInResult($this->ie);
+            }
+            // sinon l'intervenant est dans la liste des intervenants en règle avec leurs PJ
+            else {
+                $this->assertIntervenantInResult($this->ie);
+            }
         }
     }
 
@@ -198,24 +184,29 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         $this->getEntityManager()->flush($tpj);
         $this->createTpjs($tpj, true, $premierRecrutement, 20);
         
-        // l'utilisateur a fourni la PJ attendue
-        $tpjAttendu = $tpj;
-        $pj = $this->addPieceJointeToIntervenant($tpjAttendu);
-        $this->getEntityManager()->flush($pj);
-        
-        // si l'utilisateur n'a aucun service, la PJ n'est pas obligatoire...
-        $this->assertIntervenantNotInResult($this->ie);
-        
-        // si l'utilisateur a 15h de service (i.e. en dessous du seuil), la PJ n'est pas obligatoire...
-        $this->setServiceIntervenant(15.0);
-        $this->assertIntervenantNotInResult($this->ie);
-        
-        // si l'utilisateur a 20h de service (i.e. égal au seuil), la PJ devient obligatoire...
-        $this->setServiceIntervenant(20);
+        // si l'utilisateur n'a aucun service, la PJ n'est pas obligatoire
+        // --> l'utilisateur est en règle
         $this->assertIntervenantInResult($this->ie);
         
-        // si l'utilisateur a 20,1h de service (i.e. supérieur au au seuil), la PJ reste obligatoire...
-        $this->setServiceIntervenant(20.1);
+        // si l'utilisateur a moins d'heures de service que le seuil requis, la PJ n'est pas obligatoire
+        // --> l'utilisateur est en règle
+        $this->setServiceIntervenant(15.0);
+        $this->assertIntervenantInResult($this->ie);
+        
+        // si l'utilisateur a exactement le nombre d'heures de service que le seuil requis, la PJ devient obligatoire
+        // --> l'utilisateur n'est plus en règle
+        $this->setServiceIntervenant(20);
+        $this->assertIntervenantNotInResult($this->ie);
+        
+        // si l'utilisateur a plus d'heures de service que le seuil requis, la PJ reste obligatoire
+        // --> l'utilisateur n'est toujours pas en règle
+        $this->setServiceIntervenant(20.01);
+        $this->assertIntervenantNotInResult($this->ie);
+        
+        // maintenant, l'utilisateur fournit la PJ attendue
+        // --> l'utilisateur est en règle
+        $tpjAttendu = $tpj;
+        $this->addPieceJointeToIntervenant($tpjAttendu);
         $this->assertIntervenantInResult($this->ie);
     }
     
@@ -364,21 +355,29 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         /**
          * PJ facultative fournie
          */
-//        $pjFac = $this->addPieceJointeToIntervenant($tpjFac);
-//        $this->getEntityManager()->flush($pjFac);
-//        
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertCount(1, $types);
-//        $this->assertContains($tpjObl1, $types);
-//        
-//        /**
-//         * PJ obligatoire fournie
-//         */
-//        $pjObl = $this->addPieceJointeToIntervenant($tpjObl1);
-//        $this->getEntityManager()->flush($pjObl);
-//        
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertEquals([], $types);
+        $this->addPieceJointeToIntervenant($tpjFac);
+        
+        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
+        $this->assertCount(2, $types);
+        $this->assertContains($tpjObl1, $types);
+        $this->assertContains($tpjObl2, $types);
+        
+        /**
+         * PJ obligatoire sans seuil fournie
+         */
+        $this->addPieceJointeToIntervenant($tpjObl1);
+        
+        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
+        $this->assertCount(1, $types);
+        $this->assertContains($tpjObl2, $types);
+        
+        /**
+         * PJ obligatoire avec seuil fournie
+         */
+        $this->addPieceJointeToIntervenant($tpjObl2);
+        
+        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
+        $this->assertEquals([], $types);
     }
 
     /**
@@ -518,6 +517,7 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         $dossier->addPieceJointe($pj);
         
         $this->getEntityManager()->flush($dossier);
+        $this->getEntityManager()->flush($pj);
         
         return $pj;
     }

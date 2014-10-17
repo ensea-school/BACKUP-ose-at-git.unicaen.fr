@@ -37,17 +37,12 @@ class PossedeServicesRule extends AbstractIntervenantRule
         
         $this->message(null);
         
-        $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
-                ->select("i.id")
-                ->join("i.service", "s")
-                ->andWhere("s.annee = :annee")->setParameter('annee', $this->getAnnee());
+        $qb = $this->getQueryBuilder();
         
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
-            
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
@@ -69,5 +64,23 @@ class PossedeServicesRule extends AbstractIntervenantRule
     public function isRelevant()
     {
         return true;
+    }
+    
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.service", "s")
+                ->andWhere("s.annee = :annee")->setParameter('annee', $this->getAnnee());
+        
+        if ($this->getIntervenant()) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+        }
+        
+        return $qb;
     }
 }

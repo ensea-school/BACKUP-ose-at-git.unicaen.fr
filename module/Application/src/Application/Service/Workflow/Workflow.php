@@ -76,14 +76,14 @@ class Workflow extends AbstractWorkflow
         /**
          * Saisie des services et du référentiel
          */
-        $relevanceRule = new Expr(
-                $this->getServiceLocator()->get('PeutSaisirServiceRule')->setIntervenant($this->getIntervenant()),
-                $this->getServiceLocator()->get('PeutSaisirReferentielRule')->setIntervenant($this->getIntervenant()), 
-                Expr::OPERATOR_OR);
-        $crossingRule = new Expr(
-                $this->getServiceLocator()->get('PossedeServicesRule')->setIntervenant($this->getIntervenant()),
-                $this->getServiceLocator()->get('PossedeReferentielRule')->setIntervenant($this->getIntervenant()), 
-                Expr::OPERATOR_OR);
+        $relevanceRule = Expr::orX(
+                $this->getServiceLocator()->get('PeutSaisirServiceRule')    ->setIntervenant($this->getIntervenant()),
+                $this->getServiceLocator()->get('PeutSaisirReferentielRule')->setIntervenant($this->getIntervenant())
+        );
+        $crossingRule = Expr::orX(
+                $this->getServiceLocator()->get('PossedeServicesRule')   ->setIntervenant($this->getIntervenant()),
+                $this->getServiceLocator()->get('PossedeReferentielRule')->setIntervenant($this->getIntervenant())
+        );
         $this->addRule(
                 self::KEY_SAISIE_SERVICE, 
                 $relevanceRule,
@@ -105,112 +105,112 @@ class Workflow extends AbstractWorkflow
         
         
         
-        
-        /**
-         * Saisie des données personnelles
-         */
-        $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
-        if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
-            $transitionRule = new PossedeDossierRule($this->getIntervenant());
-            $this->addStep(
-                    self::KEY_SAISIE_DONNEES,
-                    new SaisieDossierStep(),
-                    $transitionRule
-            );
-        }
-        
-        /**
-         * Saisie des services
-         */
-        $peutSaisirServices = new PeutSaisirServiceRule($this->getIntervenant());
-        if (!$peutSaisirServices->isRelevant() || $peutSaisirServices->execute()) {
-            $transitionRule = new PossedeServicesRule($this->getIntervenant());
-            $this->addStep(
-                    self::KEY_SAISIE_SERVICE,
-                    new SaisieServiceStep(),
-                    $transitionRule
-            );
-        }
-        
-        /**
-         * Checklist des pièces justificatives
-         */
-        $peutSaisirPj = new PeutSaisirPieceJointeRule($this->getIntervenant());
-        if (!$peutSaisirPj->isRelevant() || $peutSaisirPj->execute()) {
-            $transitionRule = clone $this->getPiecesJointesFourniesRule();
-            $this->addStep(
-                    self::KEY_PIECES_JOINTES,
-                    new SaisiePiecesJointesStep(),
-                    $transitionRule
-            );
-        }
-        
-        /**
-         * Validation des données personnelles
-         */
-        if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
-            $transitionRule = (new DossierValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationDossier());
-            $this->addStep(
-                    self::KEY_VALIDATION_DONNEES,
-                    new ValidationDossierStep(),
-                    $transitionRule
-            );
-        }
-        
-        /**
-         * Validation des services
-         */
-        $peutSaisirService = new PeutSaisirServiceRule($this->getIntervenant());
-        if (!$peutSaisirService->isRelevant() || $peutSaisirService->execute()) {
-            $transitionRule = $this->getServiceValideRule();
-            $this->addStep(
-                    self::KEY_VALIDATION_SERVICE,
-                    new ValidationServiceStep(),
-                    $transitionRule
-            );
-        }
-        
-        /**
-         * Agrements des différents conseils
-         */
-        $necessiteAgrement = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrement NecessiteAgrementRule */
-        $necessiteAgrement->setIntervenant($this->getIntervenant());
-        foreach ($necessiteAgrement->getTypesAgrementAttendus() as $typeAgrement) {
-            $transitionRule = clone $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
-            $transitionRule
-                ->setIntervenant($this->getIntervenant())
-                ->setTypeAgrement($typeAgrement)
-                ->setStructure($this->getStructure());
-
-            $this->addStep(
-                     'KEY_' . $typeAgrement->getCode(),
-                    new AgrementStep($typeAgrement),
-                    $transitionRule
-            );
-        }
-        
-        /**
-         * Contrat / avenant
-         */
-        $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
-        if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
-            $transitionRule = new PossedeContratRule($this->getIntervenant());
-            $transitionRule
-//                    ->setTypeValidation($this->getTypeValidationContrat())
-                    ->setStructure($this->getStructure())
-                    ->setValide(true);
-            $this->addStep(
-                    self::KEY_EDITION_CONTRAT,
-                    new EditionContratStep(),
-                    $transitionRule
-            );
-        }
-        
-//        $this->addStep(
-//                self::KEY_FINAL,
-//                new Step\FinalStep(),
-//                null
-//        );
+//        
+//        /**
+//         * Saisie des données personnelles
+//         */
+//        $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
+//        if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
+//            $transitionRule = new PossedeDossierRule($this->getIntervenant());
+//            $this->addStep(
+//                    self::KEY_SAISIE_DONNEES,
+//                    new SaisieDossierStep(),
+//                    $transitionRule
+//            );
+//        }
+//        
+//        /**
+//         * Saisie des services
+//         */
+//        $peutSaisirServices = new PeutSaisirServiceRule($this->getIntervenant());
+//        if (!$peutSaisirServices->isRelevant() || $peutSaisirServices->execute()) {
+//            $transitionRule = new PossedeServicesRule($this->getIntervenant());
+//            $this->addStep(
+//                    self::KEY_SAISIE_SERVICE,
+//                    new SaisieServiceStep(),
+//                    $transitionRule
+//            );
+//        }
+//        
+//        /**
+//         * Checklist des pièces justificatives
+//         */
+//        $peutSaisirPj = new PeutSaisirPieceJointeRule($this->getIntervenant());
+//        if (!$peutSaisirPj->isRelevant() || $peutSaisirPj->execute()) {
+//            $transitionRule = clone $this->getPiecesJointesFourniesRule();
+//            $this->addStep(
+//                    self::KEY_PIECES_JOINTES,
+//                    new SaisiePiecesJointesStep(),
+//                    $transitionRule
+//            );
+//        }
+//        
+//        /**
+//         * Validation des données personnelles
+//         */
+//        if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
+//            $transitionRule = (new DossierValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationDossier());
+//            $this->addStep(
+//                    self::KEY_VALIDATION_DONNEES,
+//                    new ValidationDossierStep(),
+//                    $transitionRule
+//            );
+//        }
+//        
+//        /**
+//         * Validation des services
+//         */
+//        $peutSaisirService = new PeutSaisirServiceRule($this->getIntervenant());
+//        if (!$peutSaisirService->isRelevant() || $peutSaisirService->execute()) {
+//            $transitionRule = $this->getServiceValideRule();
+//            $this->addStep(
+//                    self::KEY_VALIDATION_SERVICE,
+//                    new ValidationServiceStep(),
+//                    $transitionRule
+//            );
+//        }
+//        
+//        /**
+//         * Agrements des différents conseils
+//         */
+//        $necessiteAgrement = $this->getServiceLocator()->get('NecessiteAgrementRule'); /* @var $necessiteAgrement NecessiteAgrementRule */
+//        $necessiteAgrement->setIntervenant($this->getIntervenant());
+//        foreach ($necessiteAgrement->getTypesAgrementAttendus() as $typeAgrement) {
+//            $transitionRule = clone $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $transitionRule AgrementFourniRule */
+//            $transitionRule
+//                ->setIntervenant($this->getIntervenant())
+//                ->setTypeAgrement($typeAgrement)
+//                ->setStructure($this->getStructure());
+//
+//            $this->addStep(
+//                     'KEY_' . $typeAgrement->getCode(),
+//                    new AgrementStep($typeAgrement),
+//                    $transitionRule
+//            );
+//        }
+//        
+//        /**
+//         * Contrat / avenant
+//         */
+//        $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
+//        if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
+//            $transitionRule = new PossedeContratRule($this->getIntervenant());
+//            $transitionRule
+////                    ->setTypeValidation($this->getTypeValidationContrat())
+//                    ->setStructure($this->getStructure())
+//                    ->setValide(true);
+//            $this->addStep(
+//                    self::KEY_EDITION_CONTRAT,
+//                    new EditionContratStep(),
+//                    $transitionRule
+//            );
+//        }
+//        
+////        $this->addStep(
+////                self::KEY_FINAL,
+////                new Step\FinalStep(),
+////                null
+////        );
             
         return $this;
     }

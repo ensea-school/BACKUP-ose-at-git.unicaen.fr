@@ -36,22 +36,12 @@ class PossedeReferentielRule extends AbstractIntervenantRule
     {
         $this->message(null);
         
-        $em = $this->getServiceIntervenant()->getEntityManager();
-        $qb = $em->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i")
-                ->select("i.id")
-                ->join("i.serviceReferentiel", "sr")
-                ->andWhere("sr.annee = :annee")->setParameter('annee', $this->getAnnee());
+        $qb = $this->getQueryBuilder();
         
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
-            if (!$this->getIntervenant() instanceof IntervenantPermanent) {
-                throw new LogicException("L'intervenant spécifié doit être un IntervenantPermanent.");
-            }
-            
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
-            
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
@@ -77,5 +67,28 @@ class PossedeReferentielRule extends AbstractIntervenantRule
         }
         
         return true;
+    }
+    
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        $em = $this->getServiceIntervenant()->getEntityManager();
+        $qb = $em->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.serviceReferentiel", "sr")
+                ->andWhere("sr.annee = :annee")->setParameter('annee', $this->getAnnee());
+        
+        if ($this->getIntervenant()) {
+            if (!$this->getIntervenant() instanceof IntervenantPermanent) {
+                throw new LogicException("L'intervenant spécifié doit être un IntervenantPermanent.");
+            }
+            
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+        }
+        
+        return $qb;
     }
 }

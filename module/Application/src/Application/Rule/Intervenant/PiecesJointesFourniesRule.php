@@ -48,7 +48,6 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
             $stmt = $em->getConnection()->executeQuery($sql, array('intervenant' => $this->getIntervenant()->getId()));
             
             $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-//            var_dump($sql, $result);
         
             if (!$result) {
                 $this->message(self::MESSAGE_INCOMPLET, implode(", ", $this->getTypesPieceJointeObligatoiresNonFournis()));
@@ -65,7 +64,6 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
          */
         
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-//        var_dump($sql, $result, $this->normalizeResult($result));
         
         return $this->normalizeResult($result);
     }
@@ -81,6 +79,15 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
         }
         
         return true;
+    }
+    
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        throw new \BadMethodCallException("Cette méthode ne devrait pas être appelée!!");
     }
     
     /**
@@ -174,7 +181,6 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
     LEFT JOIN       FOURNI_FACULTATIF   FF ON FF.INTERVENANT_ID = AF.INTERVENANT_ID
     WHERE 1=1 
     %s
-    %s
 EOS;
         
         $andFichier = null;
@@ -198,15 +204,9 @@ EOS;
             $andIntervenant = "AND COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID) = :intervenant ";
         }
         
-        $andToutesPjObligFournies = null;
-//        if ($this->getPiecesJointesObligatoiresUniquement()) {
-//            $andToutesPjObligFournies = "AND COALESCE(AO.NB, 0) <= COALESCE(FO.NB, 0) -- intervenants ayant fourni toutes les PJ obligatoires (ou plus!) ";
-//        }
-        
         $sql = sprintf($sqlTemplate, 
                 $andFichier,
                 $andValidation,
-                $andToutesPjObligFournies, 
                 $andIntervenant);
         
         $sql = <<<EOS
@@ -330,50 +330,7 @@ EOS;
         }
         
         return $this->getServicePieceJointe()->getTotalHeuresReelles($this->getIntervenant());
-//        $em     = $this->getServiceIntervenant()->getEntityManager();
-//        $stmt   = $em->getConnection()->executeQuery($sql, array('intervenant' => $this->getIntervenant()->getId()));
-//        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-//
-//        if (isset($result[0])) {
-//            if (!isset($result[0]["TOTAL_HEURES"])) {
-//                throw new RuntimeException("Anomalie: total d'heures réelles introuvable dans le résultat de la requête.");
-//            }
-//            
-//            return floatval($result[0]["TOTAL_HEURES"]);
-//        }
-//        
-//        return 0;
     }
-
-//    /**
-//     * @var boolean
-//     */
-//    protected $piecesJointesObligatoiresUniquement = false;
-//    
-//    /**
-//     * Retourne le flag indiquant s'il ne faut considérer que les pièces justificatives OBLIGATOIRES (true) ou 
-//     * bien les facultatives aussi (false).
-//     * 
-//     * @return boolean
-//     */
-//    public function getPiecesJointesObligatoiresUniquement()
-//    {
-//        return $this->piecesJointesObligatoiresUniquement;
-//    }
-//
-//    /**
-//     * Spécifie s'il ne faut considérer que les pièces justificatives OBLIGATOIRES (true) ou 
-//     * bien les facultatives aussi (false).
-//     * 
-//     * @param boolean $piecesJointesObligatoiresUniquement
-//     * @return self
-//     */
-//    public function setPiecesJointesObligatoiresUniquement($piecesJointesObligatoiresUniquement = true)
-//    {
-//        $this->piecesJointesObligatoiresUniquement = $piecesJointesObligatoiresUniquement;
-//        
-//        return $this;
-//    }
     
     protected $avecFichier = null;
     

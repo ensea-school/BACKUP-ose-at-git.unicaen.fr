@@ -28,19 +28,12 @@ class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
     {
         $this->message(null);
         
-        $em = $this->getServiceIntervenant()->getEntityManager();
-        $qb = $em->getRepository("Application\Entity\Db\IntervenantExterieur")->createQueryBuilder("i")
-                ->select("i.id")
-                ->join("i.dossier", "d")
-                ->join("d.statut", "si")
-                ->join("si.typePieceJointeStatut", "tpjs");
+        $qb = $this->getQueryBuilder();
         
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
-            
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
@@ -63,5 +56,25 @@ class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
     public function isRelevant()
     {
         return true;
+    }
+    
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        $em = $this->getServiceIntervenant()->getEntityManager();
+        $qb = $em->getRepository("Application\Entity\Db\IntervenantExterieur")->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.dossier", "d")
+                ->join("d.statut", "si")
+                ->join("si.typePieceJointeStatut", "tpjs");
+        
+        if ($this->getIntervenant()) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+        }
+        
+        return $qb;
     }
 }

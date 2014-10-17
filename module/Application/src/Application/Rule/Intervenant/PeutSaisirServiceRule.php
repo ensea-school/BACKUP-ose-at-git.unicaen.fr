@@ -28,17 +28,12 @@ class PeutSaisirServiceRule extends AbstractIntervenantRule
     {
         $this->message(null);
         
-        $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
-                ->select("i.id")
-                ->join("i.statut", "s")
-                ->andWhere("s.peutSaisirService = 1");
+        $qb = $this->getQueryBuilder();
         
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
-            
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
@@ -68,5 +63,23 @@ class PeutSaisirServiceRule extends AbstractIntervenantRule
     public function isRelevant()
     {
         return true;
+    }
+    
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.statut", "s")
+                ->andWhere("s.peutSaisirService = 1");
+        
+        if ($this->getIntervenant()) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+        }
+        
+        return $qb;
     }
 }

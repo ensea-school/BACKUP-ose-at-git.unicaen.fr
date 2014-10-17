@@ -2,9 +2,10 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Traits\IntervenantAwareTrait;
 use Application\Rule\AbstractRule;
 use Application\Service\Intervenant as IntervenantService;
+use Application\Traits\IntervenantAwareTrait;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Description of AbstractIntervenantRule
@@ -44,6 +45,32 @@ abstract class AbstractIntervenantRule extends AbstractRule
         
         return $new;
     }
+    
+    /**
+     * @var string
+     */
+    protected $querySQL;
+    
+    /**
+     * Retourne la requête SQL de cette règle.
+     * 
+     * @return string
+     */
+    public function getQuerySQL()
+    {
+        if (null === $this->querySQL) {
+            $this->querySQL = $this->getQueryBuilder()->getQuery()->getSQL();
+        }
+        
+        return $this->querySQL;
+    }
+    
+    /**
+     * Retourne le query builder de cette règle.
+     * 
+     * @return QueryBuilder
+     */
+    abstract public function getQueryBuilder();
     
     /**
      * @return IntervenantService

@@ -31,21 +31,12 @@ class PossedeDossierRule extends AbstractIntervenantRule
     {
         $this->message(null);
         
-        $em = $this->getServiceIntervenant()->getEntityManager();
-        $qb = $em->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i")
-                ->select("i.id")
-                ->join("i.dossier", "d");
+        $qb = $this->getQueryBuilder();
         
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
-            if (!$this->getIntervenant() instanceof IntervenantExterieur) {
-                throw new LogicException("L'intervenant spécifié doit être un IntervenantExterieur.");
-            }
-            
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
-            
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
@@ -71,5 +62,27 @@ class PossedeDossierRule extends AbstractIntervenantRule
         }
         
         return true;
+    }
+    
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        $em = $this->getServiceIntervenant()->getEntityManager();
+        $qb = $em->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.dossier", "d");
+        
+        if ($this->getIntervenant()) {
+            if (!$this->getIntervenant() instanceof IntervenantExterieur) {
+                throw new LogicException("L'intervenant spécifié doit être un IntervenantExterieur.");
+            }
+            
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+        }
+        
+        return $qb;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Application\Rule\Intervenant;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * Règle métier déterminant si un intervenant peut saisir des données personnelles.
  *
@@ -22,23 +24,18 @@ class PeutSaisirDossierRule extends AbstractIntervenantRule
     /**
      * Exécute la règle métier.
      * 
-     * @return array [ integer => [ 'id' => {id} ] ]
+     * @return array [ {id} => [ 'id' => {id} ] ]
      */
     public function execute()
     {
         $this->message(null);
         
-        $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
-                ->select("i.id")
-                ->join("i.statut", "s")
-                ->andWhere("s.peutSaisirDossier = 1");
+        $qb = $this->getQueryBuilder();
         
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
-            
             $result = $qb->getQuery()->getScalarResult();
             
             if (!$result) {
@@ -61,5 +58,23 @@ class PeutSaisirDossierRule extends AbstractIntervenantRule
     public function isRelevant()
     {
         return true;
+    }
+    
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.statut", "s")
+                ->andWhere("s.peutSaisirDossier = 1");
+        
+        if ($this->getIntervenant()) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+        }
+        
+        return $qb;
     }
 }

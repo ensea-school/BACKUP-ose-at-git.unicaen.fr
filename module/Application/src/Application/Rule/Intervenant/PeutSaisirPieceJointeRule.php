@@ -9,6 +9,16 @@ namespace Application\Rule\Intervenant;
  */
 class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
 {    
+    const MESSAGE_STATUT = 'messageStatut';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_STATUT => "Le statut &laquo; %value% &raquo; ne nécessite pas la fourniture de pièce justificative.",
+    );
+    
     /**
      * Exécute la règle métier.
      * 
@@ -16,21 +26,38 @@ class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
      */
     public function execute()
     {
-        $this->setMessage(null);
+        $this->message(null);
         
-        $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
+        $em = $this->getServiceIntervenant()->getEntityManager();
+        $qb = $em->getRepository("Application\Entity\Db\IntervenantExterieur")->createQueryBuilder("i")
                 ->select("i.id")
-                ->join("i.statut", "s")
-                ->andWhere("s.peutSaisirDossier = 1");
+                ->join("i.dossier", "d")
+                ->join("d.statut", "si")
+                ->join("si.typePieceJointeStatut", "tpjs");
         
-        $statut = $this->getIntervenant()->getStatut();
-        
-        if (!$statut->peutSaisirPieceJointe()) {
-            $this->setMessage(sprintf("Le statut &laquo; %s &raquo; ne nécessite pas la fourniture de pièces justificatives.", $statut));
-            return false;
+        /**
+         * Application de la règle à un intervenant précis
+         */
+        if ($this->getIntervenant()) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+            
+            $result = $qb->getQuery()->getScalarResult();
+            
+            if (!$result) {
+                $statut = $this->getIntervenant()->getStatut();
+                $this->message(self::MESSAGE_STATUT, $statut);
+            }
+                
+            return $this->normalizeResult($result);
         }
         
-        return true;
+        /**
+         * Recherche des intervenants répondant à la règle
+         */
+        
+        $result = $qb->getQuery()->getScalarResult();
+
+        return $this->normalizeResult($result);
     }
     
     public function isRelevant()

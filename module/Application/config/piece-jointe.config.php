@@ -279,6 +279,7 @@ return array(
             'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
             'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
             'ApplicationTypePieceJointeStatut' => 'Application\\Service\\TypePieceJointeStatut',
+            'PeutSaisirPieceJointeRule'        => 'Application\\Rule\\Intervenant\\PeutSaisirPieceJointeRule',
             'PiecesJointesFourniesRule'        => 'Application\\Rule\\Intervenant\\PiecesJointesFourniesRule',
             'PieceJointeAssertion'             => 'Application\\Assertion\\PieceJointeAssertion',
             'FichierAssertion'                 => 'Application\\Assertion\\FichierAssertion',

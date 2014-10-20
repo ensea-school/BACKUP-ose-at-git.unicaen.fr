@@ -22,7 +22,7 @@ abstract class AbstractIntervenantRule extends AbstractRule
      * @param array $result Tableau au format [clé => ['id' => entier]]
      * @return array Tableau au format [entier => ['id' => entier]]
      */
-    protected function normalizeResult($result)
+    static public function normalizeResult($result)
     {
         $idExtractor = function($value) {
             if (!is_array($value)) {
@@ -53,6 +53,7 @@ abstract class AbstractIntervenantRule extends AbstractRule
     
     /**
      * Retourne la requête SQL de cette règle.
+     * NB: les paramètres éventuels ne sont pas valués et restent sous la forme ":param".
      * 
      * @return string
      */

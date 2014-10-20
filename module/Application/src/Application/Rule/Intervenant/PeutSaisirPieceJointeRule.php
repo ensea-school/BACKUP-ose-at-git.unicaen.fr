@@ -72,7 +72,7 @@ class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
                 ->join("si.typePieceJointeStatut", "tpjs");
         
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
         return $qb;

@@ -6,7 +6,8 @@ use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeValidation;
-use Application\Rule\Expr;
+use Application\Rule\Intervenant\Expr;
+use Application\Rule\Intervenant\AbstractIntervenantRule;
 use Application\Rule\Intervenant\AgrementFourniRule;
 use Application\Rule\Intervenant\DossierValideRule;
 use Application\Rule\Intervenant\NecessiteAgrementRule;
@@ -40,10 +41,10 @@ use Application\Traits\RoleAwareTrait;
  */
 class Workflow extends AbstractWorkflow
 {
-//    use IntervenantAwareTrait;
+    use IntervenantAwareTrait;
     use RoleAwareTrait;
     
-    const KEY_SAISIE_DONNEES     = 'KEY_SAISIE_DOSSIER';
+    const KEY_SAISIE_DOSSIER     = 'KEY_SAISIE_DOSSIER';
     const KEY_VALIDATION_DONNEES = 'KEY_VALIDATION_DONNEES';
     const KEY_SAISIE_SERVICE     = 'KEY_SAISIE_SERVICE';
     const KEY_VALIDATION_SERVICE = 'KEY_VALIDATION_SERVICE';
@@ -54,97 +55,67 @@ class Workflow extends AbstractWorkflow
     const KEY_FINAL              = 'KEY_FINAL';
     
     /**
-     * Création des différentes étapes composant le workflow.
+     * Création des différentes étapes et règles métiers composant le workflow.
      * 
      * @return self
      */
     protected function createSteps()
     {        
-        $this->steps = array();
+        $this->steps = [];
+        $this->rules = [];
         
         /**
          * Saisie des données personnelles
          */
+        $key           = self::KEY_SAISIE_DOSSIER;
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
-        $crossingRule = $this->getServiceLocator()->get('PossedeDossierRule')->setIntervenant($this->getIntervenant());
-        $this->addRule(
-                self::KEY_SAISIE_DONNEES, 
-                $relevanceRule, 
-                $crossingRule
-        );
+        $crossingRule  = $this->getServiceLocator()->get('PossedeDossierRule')->setIntervenant($this->getIntervenant());
+        $this->addRule($key, $relevanceRule, $crossingRule);
+        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+            $this->addStep(
+                    $key,
+                    new SaisieDossierStep(),
+                    $crossingRule
+            );
+        }
         
         /**
-         * Saisie des services et du référentiel
+         * Saisie des services
          */
+        $key           = self::KEY_SAISIE_SERVICE;
         $relevanceRule = Expr::orX(
                 $this->getServiceLocator()->get('PeutSaisirServiceRule')    ->setIntervenant($this->getIntervenant()),
                 $this->getServiceLocator()->get('PeutSaisirReferentielRule')->setIntervenant($this->getIntervenant())
         );
+        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $crossingRule = Expr::orX(
-                $this->getServiceLocator()->get('PossedeServicesRule')   ->setIntervenant($this->getIntervenant()),
-                $this->getServiceLocator()->get('PossedeReferentielRule')->setIntervenant($this->getIntervenant())
+                $this->getServiceLocator()->get('PossedeServicesRule')   ->setIntervenant($this->getIntervenant())->setAnnee($annee),
+                $this->getServiceLocator()->get('PossedeReferentielRule')->setIntervenant($this->getIntervenant())->setAnnee($annee)
         );
-        $this->addRule(
-                self::KEY_SAISIE_SERVICE, 
-                $relevanceRule,
-                $crossingRule
-        );
+        $this->addRule($key, $relevanceRule, $crossingRule);
+        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+            $this->addStep(
+                    $key,
+                    new SaisieServiceStep(),
+                    $crossingRule
+            );
+        }
         
         /**
-         * Pièces justificatives
+         * Checklist des pièces justificatives
          */
+        $key           = self::KEY_PIECES_JOINTES;
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirPieceJointeRule')->setIntervenant($this->getIntervenant());
-        $crossingRule = clone $this->getPiecesJointesFourniesRule();
-        $this->addRule(
-                self::KEY_PIECES_JOINTES, 
-                $relevanceRule, 
-                $crossingRule
-        );
+        $crossingRule  = clone $this->getPiecesJointesFourniesRule();
+        $this->addRule($key, $relevanceRule, $crossingRule);
+        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+            $this->addStep(
+                    $key,
+                    new SaisiePiecesJointesStep(),
+                    $crossingRule
+            );
+        }
         
-        
-        
-        
-        
-//        
-//        /**
-//         * Saisie des données personnelles
-//         */
-//        $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
-//        if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
-//            $transitionRule = new PossedeDossierRule($this->getIntervenant());
-//            $this->addStep(
-//                    self::KEY_SAISIE_DONNEES,
-//                    new SaisieDossierStep(),
-//                    $transitionRule
-//            );
-//        }
-//        
-//        /**
-//         * Saisie des services
-//         */
-//        $peutSaisirServices = new PeutSaisirServiceRule($this->getIntervenant());
-//        if (!$peutSaisirServices->isRelevant() || $peutSaisirServices->execute()) {
-//            $transitionRule = new PossedeServicesRule($this->getIntervenant());
-//            $this->addStep(
-//                    self::KEY_SAISIE_SERVICE,
-//                    new SaisieServiceStep(),
-//                    $transitionRule
-//            );
-//        }
-//        
-//        /**
-//         * Checklist des pièces justificatives
-//         */
-//        $peutSaisirPj = new PeutSaisirPieceJointeRule($this->getIntervenant());
-//        if (!$peutSaisirPj->isRelevant() || $peutSaisirPj->execute()) {
-//            $transitionRule = clone $this->getPiecesJointesFourniesRule();
-//            $this->addStep(
-//                    self::KEY_PIECES_JOINTES,
-//                    new SaisiePiecesJointesStep(),
-//                    $transitionRule
-//            );
-//        }
-//        
 //        /**
 //         * Validation des données personnelles
 //         */
@@ -292,6 +263,115 @@ class Workflow extends AbstractWorkflow
         }
         
         return null;
+    }
+    
+    /**
+     * @var array clé => SQL
+     */
+    protected $rulesCrossingSQL;
+    
+    /**
+     * @var array clé => SQL
+     */
+    protected $rulesNotCrossingSQL;
+    
+    /**
+     * 
+     * @return self
+     */
+    protected function processRulesQuerySQL()
+    {
+        if (null !== $this->rulesCrossingSQL || null !== $this->rulesNotCrossingSQL) {
+            return $this;
+        }
+        
+        $rulesCrossingSQLParts    = [];
+        $rulesNotCrossingSQLParts = [];
+        
+        $previousKey = null;
+        foreach ($this->getRules() as $key => $rules) {
+            
+            $relevanceRule = $rules['relevance'];
+            $crossingRule  = $rules['crossing'];
+            
+            /**
+             * Construction des requêtes SQL
+             */
+            
+            $relevanceRuleSQL = $relevanceRule->setIntervenant(null)->getQuerySQL(); /* @var $relevanceRuleSQL AbstractIntervenantRule */
+            $crossingRuleSQL  = $crossingRule ->setIntervenant(null)->getQuerySQL(); /* @var $crossingRuleSQL  AbstractIntervenantRule */
+            
+            $crossingSQLParts    = [];
+            $notCrossingSQLParts = [];
+            
+            if (isset($rulesCrossingSQLParts[$previousKey])) {
+                $notCrossingSQLParts[] = $rulesCrossingSQLParts[$previousKey];
+                $crossingSQLParts[]    = $rulesCrossingSQLParts[$previousKey];
+            }
+            
+            $crossingSQLParts[]    = $relevanceRuleSQL . PHP_EOL . 'INTERSECT' . PHP_EOL . $crossingRuleSQL . PHP_EOL;
+            $notCrossingSQLParts[] = $relevanceRuleSQL . PHP_EOL . 'MINUS'     . PHP_EOL . $crossingRuleSQL . PHP_EOL;
+            
+            $rulesCrossingSQLParts   [$key] = implode('INTERSECT' . PHP_EOL, $crossingSQLParts)    . PHP_EOL;
+            $rulesNotCrossingSQLParts[$key] = implode('INTERSECT' . PHP_EOL, $notCrossingSQLParts) . PHP_EOL;
+
+            $previousKey = $key;
+        }
+        
+        $this->rulesCrossingSQL    = $rulesCrossingSQLParts;
+        $this->rulesNotCrossingSQL = $rulesNotCrossingSQLParts;
+        
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param string $stepKey
+     * @return array
+     */
+    public function executeNotCrossingQuerySQL($stepKey)
+    {
+        $sql = $this->getNotCrossingQuerySQL($stepKey);
+        
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        return AbstractIntervenantRule::normalizeResult($result);
+    }
+    
+    /**
+     * 
+     * @param string $stepKey
+     * @return string
+     * @throws RuntimeException Aucune requête SQL trouvée avec la clé
+     */
+    public function getCrossingQuerySQL($stepKey)
+    {
+        $this->processRulesQuerySQL();
+        
+        if (!array_key_exists($stepKey, $this->rulesCrossingSQL)) {
+            throw new RuntimeException("Aucune requête SQL trouvée avec la clé '$stepKey'.");
+        }
+        
+        return $this->rulesCrossingSQL[$stepKey];
+    }
+    
+    /**
+     * 
+     * @param string $stepKey
+     * @return string
+     * @throws RuntimeException Aucune requête SQL trouvée avec la clé
+     */
+    public function getNotCrossingQuerySQL($stepKey)
+    {
+        $this->processRulesQuerySQL();
+        
+        if (!array_key_exists($stepKey, $this->rulesNotCrossingSQL)) {
+            throw new RuntimeException("Aucune requête SQL trouvée avec la clé '$stepKey'.");
+        }
+        
+        return $this->rulesNotCrossingSQL[$stepKey];
     }
     
     /**

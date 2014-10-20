@@ -48,7 +48,7 @@ class Expr extends AbstractRule
      */
     static public function orX($x = null)
     {
-        return new self(func_get_args(), self::OPERATOR_OR);
+        return new static(func_get_args(), self::OPERATOR_OR);
     }
     
     /**
@@ -59,7 +59,7 @@ class Expr extends AbstractRule
      */
     static public function andX($x = null)
     {
-        return new self(func_get_args(), self::OPERATOR_AND);
+        return new static(func_get_args(), self::OPERATOR_AND);
     }
     
     /**

@@ -201,7 +201,7 @@ EOS;
         
         $andIntervenant = null;
         if ($this->getIntervenant()) {
-            $andIntervenant = "AND COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID) = :intervenant ";
+            $andIntervenant = "AND COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID) = " . $this->getIntervenant()->getId();
         }
         
         $sql = sprintf($sqlTemplate, 
@@ -210,7 +210,7 @@ EOS;
                 $andIntervenant);
         
         $sql = <<<EOS
-SELECT ID, SOURCE_CODE, TOTAL_HEURES, NB_PJ_OBLIG_ATTENDU, NB_PJ_OBLIG_FOURNI, NB_PJ_FACUL_ATTENDU, NB_PJ_FACUL_FOURNI
+SELECT ID
 FROM (
     $sql
 )

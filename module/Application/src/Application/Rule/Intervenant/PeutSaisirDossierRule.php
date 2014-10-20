@@ -72,7 +72,7 @@ class PeutSaisirDossierRule extends AbstractIntervenantRule
                 ->andWhere("s.peutSaisirDossier = 1");
         
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
         return $qb;

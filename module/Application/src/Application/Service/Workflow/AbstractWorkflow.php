@@ -18,19 +18,11 @@ use Zend\Mvc\Controller\Plugin\Url;
 abstract class AbstractWorkflow extends AbstractService
 {
     /**
-     * Conditions de réalisation (règles métier) de chaque étape du workflow.
-     * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
-     * 
-     * @var RuleInterface[] string => RuleInterface : mêmes clés que les étapes
-     */
-    protected $conditions;
-    
-    /**
      * Conditions (règles métier) :
      * - de pertinence de chaque étape : une étape est pertinente si cette condition est satisfaite.
      * - de réalisation de chaque étape : une étape est considérée comme réalisée si cette condition est satisfaite.
      * 
-     * @var RuleInterface[][] string => RuleInterface[]
+     * @var array clé => ['relevance' => RuleInterface, 'crossing' => RuleInterface]
      */
     protected $rules;
     
@@ -75,8 +67,8 @@ abstract class AbstractWorkflow extends AbstractService
         
         $this->setCurrentStep(null);
         
-        foreach ($this->getSteps() as $index => $step) { /* @var $step Step */
-            if (($rule = $this->getConditions()[$index]) && $rule->isRelevant() && !$rule->execute()) {
+        foreach ($this->getSteps() as $key => $step) { /* @var $step Step */
+            if (($rule = $this->getCrossingRule($key)) && $rule->isRelevant() && !$rule->execute()) {
                 $this->setCurrentStep($step->setIsCurrent());
                 break;
             }
@@ -104,19 +96,17 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
-     * Ajoute une étape au workflow, associée à une condition de réalisation.
+     * Ajoute une étape au workflow.
      * 
      * @param string $key Clé de l'étape dans la liste des étapes
      * @param string $step Etape à ajouter
-     * @param RuleInterface $rule Condition de réalisation de l'étape
      * @return self
      */
-    protected function addStep($key, Step $step, RuleInterface $rule = null)
+    protected function addStep($key, Step $step)
     {   
         $step->setIndex(count($this->getSteps()) + 1);
         
-        $this->steps[$key]      = $step;
-        $this->conditions[$key] = $rule;
+        $this->steps[$key] = $step;
 
         return $this;
     }
@@ -170,14 +160,32 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
-     * Retourne les conditions de réalisation (les règles métier) associées à chaque étape du workflow.
-     * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
+     * Retourne toutes les règles métiers du workflow.
      * 
-     * @return RuleInterface[] string => RuleInterface : mêmes clés que les étapes
+     * @return array clé => ['relevance' => RuleInterface, 'crossing' => RuleInterface] : mêmes clés que les conditions
      */
-    public function getConditions()
+    public function getRules()
     {
-        return $this->conditions;
+        if (null === $this->rules) {
+            $this->createSteps();
+        }
+        
+        return $this->rules;
+    }
+    
+    /**
+     * Retourne la règle métier de franchissement de l'étape spécifiée.
+     * 
+     * @param string $key Clé de l'étape
+     * @return RuleInterface
+     */
+    protected function getCrossingRule($key)
+    {
+        if (!isset($this->rules[$key]['crossing'])) {
+            return null;
+        }
+        
+        return $this->rules[$key]['crossing'];
     }
 
     /**
@@ -235,7 +243,7 @@ abstract class AbstractWorkflow extends AbstractService
             if ($s === $step) {
                 return true;
             }
-            if (($rule = $this->getConditions()[$key]) && $rule->isRelevant() && !$rule->execute()) {
+            if (($rule = $this->getCrossingRule($key)) && $rule->isRelevant() && !$rule->execute()) {
                 break;
             }
         }
@@ -255,7 +263,7 @@ abstract class AbstractWorkflow extends AbstractService
         $key = is_string($step) ? $step : $this->getStepKey($step);
         $reachable = $this->isStepReachable($key);
         
-        if ($reachable && ($rule = $this->getConditions()[$key]) && $rule->isRelevant() && $rule->execute()) {
+        if ($reachable && ($rule = $this->getCrossingRule($key)) && $rule->isRelevant() && $rule->execute()) {
             return true;
         }
         

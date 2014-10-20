@@ -2,7 +2,9 @@
 
 namespace Application\Service\Workflow\Step;
 
-use SplObjectStorage;
+use Application\Acl\ComposanteRole;
+use Common\Exception\LogicException;
+use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
  * Descriptions of Step
@@ -26,29 +28,42 @@ abstract class Step
         $this->index = $index;
         return $this;
     }
+//    
+//    /**
+//     * @var string
+//     */
+//    private $key;
+//    
+//    public function getKey()
+//    {
+//        return $this->key;
+//    }
+//
+//    public function setKey($key)
+//    {
+//        $this->key = $key;
+//        return $this;
+//    }
     
     /**
-     * @var SplObjectStorage
+     * @var array
      */
     private $labels;
     
     public function getLabels()
     {
-//        if (null === $this->labels) {
-//            $this->labels = new \SplObjectStorage();
-//        }
         return $this->labels;
     }
     
-    public function getLabel(\Zend\Permissions\Acl\Role\RoleInterface $role)
+    public function getLabel(RoleInterface $role)
     {
         $roleId = $role->getRoleId();
-        if ($role instanceof \Application\Acl\ComposanteRole) {
-            $roleId = \Application\Acl\ComposanteRole::ROLE_ID;
+        if ($role instanceof ComposanteRole) {
+            $roleId = ComposanteRole::ROLE_ID;
         }
         if (!isset($this->labels[$roleId])) {
             if (!isset($this->labels['default'])) {
-                throw new \Common\Exception\LogicException("Aucun label par défaut n'a été spécifié pour l'étape '" . get_class() . "'.");
+                throw new LogicException("Aucun label par défaut n'a été spécifié pour l'étape '" . get_class() . "'.");
             }
             return $this->labels['default'];
         }
@@ -73,7 +88,7 @@ abstract class Step
 <p>Aenean in fermentum dolor. Donec quis odio condimentum, mollis est ut, semper magna. Donec ornare euismod justo, et auctor mi rutrum ut. Vestibulum consequat orci vel nulla facilisis, quis vulputate elit tristique. Nulla nec convallis turpis. Integer nulla nisl, mollis quis magna a, accumsan bibendum felis. Integer fringilla pretium imperdiet. Duis pharetra nisi orci, vel vehicula lectus vehicula eu. Nullam placerat fringilla urna in faucibus. Pellentesque imperdiet interdum arcu sit amet venenatis. Maecenas nulla nunc, blandit a sem vel, vulputate pretium neque. Sed hendrerit nisi orci, eget aliquam justo malesuada quis. Sed ultricies risus sed justo egestas, vel cursus quam bibendum. Etiam eget convallis metus. Phasellus ac lacinia tellus.</p>
 <p>Pellentesque venenatis nisi et turpis commodo dapibus. Integer bibendum quis massa ac rutrum. Mauris dolor arcu, luctus pulvinar ligula eu, aliquet dapibus risus. Nulla nec lorem non purus tempor rhoncus mattis non lorem. Duis vehicula arcu eu bibendum sodales. Proin vitae turpis a neque tempus ornare. In hac habitasse platea dictumst. Morbi molestie egestas pellentesque. Fusce sit amet aliquam massa. Sed interdum sapien vel nibh egestas blandit. Nunc placerat ipsum ut dignissim sollicitudin. Fusce malesuada porta libero. Sed mi lectus, commodo a facilisis vel, eleifend ac tortor. Suspendisse auctor sem in massa auctor, id sollicitudin nisi dapibus.</p>
 EOS;
-        return $this->descriptions;
+//        return $this->descriptions;
     }
 
     protected function setDescriptions($descriptions)
@@ -82,11 +97,11 @@ EOS;
         return $this;
     }
     
-    public function getDescription(\Zend\Permissions\Acl\Role\RoleInterface $role)
+    public function getDescription(RoleInterface $role)
     {
         $roleId = $role->getRoleId();
-        if ($role instanceof \Application\Acl\ComposanteRole) {
-            $roleId = \Application\Acl\ComposanteRole::ROLE_ID;
+        if ($role instanceof ComposanteRole) {
+            $roleId = ComposanteRole::ROLE_ID;
         }
         if (!isset($this->descriptions[$roleId])) {
 //            throw new \Common\Exception\LogicException("Description not set for role '$roleId'!");

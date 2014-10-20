@@ -620,6 +620,28 @@ class Dossier extends \Application\Entity\Db\Dossier implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
+    public function addPieceJointe(\Application\Entity\Db\PieceJointe $pieceJointe)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPieceJointe', array($pieceJointe));
+
+        return parent::addPieceJointe($pieceJointe);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removePieceJointe(\Application\Entity\Db\PieceJointe $pieceJointe)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removePieceJointe', array($pieceJointe));
+
+        return parent::removePieceJointe($pieceJointe);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function fromIntervenant(\Application\Entity\Db\IntervenantExterieur $intervenant)
     {
 

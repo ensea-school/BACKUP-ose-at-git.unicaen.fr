@@ -80,7 +80,7 @@ class PossedeDossierRule extends AbstractIntervenantRule
                 throw new LogicException("L'intervenant spécifié doit être un IntervenantExterieur.");
             }
             
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
         return $qb;

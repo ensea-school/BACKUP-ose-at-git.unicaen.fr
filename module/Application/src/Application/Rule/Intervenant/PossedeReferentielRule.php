@@ -79,14 +79,14 @@ class PossedeReferentielRule extends AbstractIntervenantRule
         $qb = $em->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i")
                 ->select("i.id")
                 ->join("i.serviceReferentiel", "sr")
-                ->andWhere("sr.annee = :annee")->setParameter('annee', $this->getAnnee());
+                ->andWhere("sr.annee = " . $this->getAnnee()->getId());
         
         if ($this->getIntervenant()) {
             if (!$this->getIntervenant() instanceof IntervenantPermanent) {
                 throw new LogicException("L'intervenant spécifié doit être un IntervenantPermanent.");
             }
             
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
         return $qb;

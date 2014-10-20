@@ -98,11 +98,11 @@ class PeutSaisirReferentielRule extends AbstractIntervenantRule
             $qb
                     ->join("i.structure", "saff")
                     ->join("saff.structureNiv2", "saff2")
-                    ->andWhere("saff2 = :strNiv2")->setParameter('strNiv2', $this->getStructure());
+                    ->andWhere("saff2 = " . $this->getStructure()->getId());
         }
         
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
         return $qb;

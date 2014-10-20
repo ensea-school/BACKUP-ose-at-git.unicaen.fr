@@ -77,7 +77,7 @@ class PeutSaisirServiceRule extends AbstractIntervenantRule
                 ->andWhere("s.peutSaisirService = 1");
         
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
         return $qb;

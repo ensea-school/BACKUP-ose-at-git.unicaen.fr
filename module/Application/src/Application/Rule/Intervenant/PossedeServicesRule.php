@@ -75,10 +75,10 @@ class PossedeServicesRule extends AbstractIntervenantRule
         $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
                 ->select("i.id")
                 ->join("i.service", "s")
-                ->andWhere("s.annee = :annee")->setParameter('annee', $this->getAnnee());
+                ->andWhere("s.annee = " . $this->getAnnee()->getId());
         
         if ($this->getIntervenant()) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $this->getIntervenant());
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
         return $qb;

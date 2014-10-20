@@ -104,9 +104,20 @@ class ServiceAssertion extends AbstractAssertion
             }
             
             if ($intervenant) {
+                if (!$serviceStructure /*&& 'create' == $this->privilege*/) { 
+                    // si la composante d'enseignement n'est pas encore connue à ce stade, 
+                    // on veut sans doute créer un nouveau service, il faut laisser passer...
+                    return true;
+                }
                 if ($intervenant instanceof IntervenantPermanent) {
-                    if ($roleStructure == $intervenantStructure) {
+                    if ($roleStructure === $intervenantStructure) {
                         /* la composante d'affectation doit pouvoir saisir et contrôler les heures effectuées par ses permanents dans quelque composante que ce soit. */
+                        return true;
+                    }
+                }
+                else {
+                    if ($roleStructure === $serviceStructure) {
+                        // un gestionnaire ne peut saisir des enseignements à un vacataire que sur sa propre composante
                         return true;
                     }
                 }

@@ -78,8 +78,10 @@ class ServiceReferentielController extends AbstractActionController implements C
         $role           = $this->getContextProvider()->getSelectedIdentityRole();
         $service        = $this->getServiceServiceReferentiel();
         $intervenant    = $this->context()->intervenantFromRoute();
+var_dump((string)$intervenant);
+        if (! $intervenant) $intervenant = $this->context()->intervenantFromQuery('intervenant-filter');
         $filter         = $this->params('filter');
-
+var_dump((string)$intervenant);
         $qb = $service->finderByContext();
         if ($intervenant) {
             $service->finderByIntervenant( $intervenant, $qb );
@@ -99,7 +101,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         }
 
         $services = $service->getList( $qb );
-        return compact('services', 'renderIntervenants');
+        return compact('services', 'intervenant', 'renderIntervenants');
     }
 
     public function voirLigneAction()

@@ -8,6 +8,8 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Application\Interfaces\IntervenantAwareInterface;
+use Application\Traits\IntervenantAwareTrait;
 use NumberFormatter;
 use UnicaenApp\Util;
 
@@ -16,13 +18,14 @@ use UnicaenApp\Util;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, IntervenantAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
+    use IntervenantAwareTrait;
 
     protected $services;
-    
+
     /**
      * Helper entry point.
      *
@@ -54,9 +57,14 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function render()
     {
-        $urlVoirListe = $this->getView()->url('service-ref/default', array('action' => 'voirListe'));
+        $params = [];
+        if ($this->getIntervenant()){
+            $params['query'] = ['intervenant-filter' => $this->getIntervenant()->getSourceCode()];
+        }
+
+        $urlVoirListe = $this->getView()->url('service-ref/default', ['action' => 'voirListe'], $params);
         $parts        = array();
-        
+
         $parts[]              = '<table id="services-ref" class="table service-ref">';
         $parts[]              = '<tr>';
         $parts['intervenant'] = "<th>Intervenant</th>";

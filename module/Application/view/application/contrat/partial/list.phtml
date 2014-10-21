@@ -35,8 +35,7 @@ $role        = $this->role;
             <td class="structure"><?php echo $contrat->getStructure() ?></td>
             <td>
                 <p>
-                    <strong><?php echo $contrat ?></strong> créé le 
-                    <?php echo $contrat->getHistoModification()->format(\Common\Constants::DATE_FORMAT) ?> par 
+                    <strong><?php echo $contrat ?></strong> créé par 
                     <?php echo $this->mailto($contrat->getHistoModificateur()) ?>
                     <span class="pull-right">
                         <a href="<?php echo $urlExport ?>"

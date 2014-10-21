@@ -471,18 +471,18 @@ class ContratController extends AbstractActionController implements ContextProvi
             throw new \Common\Exception\MessageException("Impossible d'exporter le contrat/avenant.", null, new \Exception($rule->getMessage()));
         }
         
-        $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $estUnAvenant          = $this->contrat->estUnAvenant();
-        $contratToString       = (string) $this->contrat;
-        $nomIntervenant        = (string) $this->intervenant;
-        $dateNaissance         = $this->intervenant->getDateNaissanceToString();
-        $estATV                = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
-        $dateSignature         = new DateTime();
-        $estUnProjet           = $this->contrat->getValidation() ? false : true;
-        $services              = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
-        $servicesRecaps        = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
-        $totalHETD             = $this->getFormuleHetd()->getHetd($this->intervenant);
-        
+        $annee           = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $estUnAvenant    = $this->contrat->estUnAvenant();
+        $contratToString = (string) $this->contrat;
+        $nomIntervenant  = (string) $this->intervenant;
+        $dateNaissance   = $this->intervenant->getDateNaissanceToString();
+        $estATV          = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
+        $estUnProjet     = $this->contrat->getValidation() ? false : true;
+        $dateSignature   = $estUnProjet ? $this->contrat->getHistoCreation() : $this->contrat->getValidation()->getHistoCreation();
+        $services        = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
+        $servicesRecaps  = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
+        $totalHETD       = $this->getFormuleHetd()->getHetd($this->intervenant);
+
         if ($this->intervenant->getDossier()) {
             $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
             $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();

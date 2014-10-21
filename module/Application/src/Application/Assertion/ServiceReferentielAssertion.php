@@ -94,6 +94,12 @@ class ServiceReferentielAssertion extends AbstractAssertion
             }
             
             if ($intervenant) {
+                if (!$serviceStructure /*&& 'create' == $this->privilege*/) { 
+                    // - Si la composante d'enseignement n'est pas encore connue à ce stade, 
+                    // on veut sans doute créer un nouveau service, il faut laisser passer...
+                    // - Ou alors il s'agit d'un saisie de référentiel sans structure de rattachement...
+                    return true;
+                }
                 if ($intervenant instanceof IntervenantPermanent) {
                     if ($roleStructure === $intervenantStructure) {
                         /* la composante d'affectation doit pouvoir saisir et contrôler les heures effectuées par ses permanents dans quelque composante que ce soit. */

@@ -49,6 +49,7 @@
     <field name="villeNaissanceLibelle" type="string" column="VILLE_NAISSANCE_LIBELLE" length="26" nullable="true"/>
     <field name="BIC" type="string" column="BIC" length="255" nullable="true"/>
     <field name="IBAN" type="string" column="IBAN" length="255" nullable="true"/>
+    <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="true"/>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>

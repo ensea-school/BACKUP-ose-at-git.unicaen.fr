@@ -255,6 +255,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $utilisateur;
 
     /**
+     * @var boolean
+     */
+    protected $premierRecrutement;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1361,6 +1366,29 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         }
         
         return $returnFirstAddressIfNoPrimaryAddressFound ? reset($this->getAdresse()) : null;
+    }
+
+    /**
+     * Set premierRecrutement
+     *
+     * @param null|boolean $premierRecrutement
+     * @return Dossier
+     */
+    public function setPremierRecrutement($premierRecrutement)
+    {
+        $this->premierRecrutement = $premierRecrutement;
+
+        return $this;
+    }
+
+    /**
+     * Get premierRecrutement
+     *
+     * @return null|boolean 
+     */
+    public function getPremierRecrutement()
+    {
+        return $this->premierRecrutement;
     }
 
     /**

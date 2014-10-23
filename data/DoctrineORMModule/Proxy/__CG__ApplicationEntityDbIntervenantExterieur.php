@@ -64,10 +64,10 @@ class IntervenantExterieur extends \Application\Entity\Db\IntervenantExterieur i
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'typePoste', 'regimeSecu', 'typeIntervenantExterieur', 'situationFamiliale', 'dossier', 'contrat', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation', 'agrement');
+            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'typePoste', 'regimeSecu', 'typeIntervenantExterieur', 'situationFamiliale', 'dossier', 'contrat', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation', 'agrement', 'utilisateur');
         }
 
-        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'typePoste', 'regimeSecu', 'typeIntervenantExterieur', 'situationFamiliale', 'dossier', 'contrat', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation', 'agrement');
+        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'typePoste', 'regimeSecu', 'typeIntervenantExterieur', 'situationFamiliale', 'dossier', 'contrat', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'primeExcellenceScient', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation', 'agrement', 'utilisateur');
     }
 
     /**
@@ -1291,6 +1291,17 @@ class IntervenantExterieur extends \Application\Entity\Db\IntervenantExterieur i
     /**
      * {@inheritDoc}
      */
+    public function getUtilisateur()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUtilisateur', array());
+
+        return parent::getUtilisateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function estPermanent()
     {
 
@@ -1396,6 +1407,17 @@ class IntervenantExterieur extends \Application\Entity\Db\IntervenantExterieur i
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAdressePrincipale', array($returnFirstAddressIfNoPrimaryAddressFound));
 
         return parent::getAdressePrincipale($returnFirstAddressIfNoPrimaryAddressFound);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResourceId', array());
+
+        return parent::getResourceId();
     }
 
 }

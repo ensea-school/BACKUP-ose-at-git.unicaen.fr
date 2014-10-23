@@ -64,10 +64,10 @@ class TypePieceJointeStatut extends \Application\Entity\Db\TypePieceJointeStatut
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHetd');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHetd', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHeures');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHetd');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHetd', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointeStatut' . "\0" . 'seuilHeures');
     }
 
     /**
@@ -173,6 +173,28 @@ class TypePieceJointeStatut extends \Application\Entity\Db\TypePieceJointeStatut
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', array());
+
+        return parent::__toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSeuilHeures()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSeuilHeures', array());
+
+        return parent::getSeuilHeures();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -455,12 +477,12 @@ class TypePieceJointeStatut extends \Application\Entity\Db\TypePieceJointeStatut
     /**
      * {@inheritDoc}
      */
-    public function getObligatoireToString($totalHETDIntervenant)
+    public function getObligatoireToString($totalHeuresReellesIntervenant)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getObligatoireToString', array($totalHETDIntervenant));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getObligatoireToString', array($totalHeuresReellesIntervenant));
 
-        return parent::getObligatoireToString($totalHETDIntervenant);
+        return parent::getObligatoireToString($totalHeuresReellesIntervenant);
     }
 
     /**
@@ -477,34 +499,23 @@ class TypePieceJointeStatut extends \Application\Entity\Db\TypePieceJointeStatut
     /**
      * {@inheritDoc}
      */
-    public function getSeuilHetd()
+    public function isObligatoire($totalHeuresReellesIntervenant)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSeuilHetd', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isObligatoire', array($totalHeuresReellesIntervenant));
 
-        return parent::getSeuilHetd();
+        return parent::isObligatoire($totalHeuresReellesIntervenant);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isObligatoire($totalHETDIntervenant)
+    public function isSeuilHeuresDepasse($totalHETDIntervenant)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isObligatoire', array($totalHETDIntervenant));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isSeuilHeuresDepasse', array($totalHETDIntervenant));
 
-        return parent::isObligatoire($totalHETDIntervenant);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isSeuilHETDDepasse($totalHETDIntervenant)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isSeuilHETDDepasse', array($totalHETDIntervenant));
-
-        return parent::isSeuilHETDDepasse($totalHETDIntervenant);
+        return parent::isSeuilHeuresDepasse($totalHETDIntervenant);
     }
 
 }

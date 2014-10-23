@@ -45,10 +45,7 @@ class PeutSaisirPieceJointeRuleTest extends BaseRuleTest
         parent::setUp();
         
         // création d'un intervenant extérieur
-        $this->ie = $this->getEntityProvider()->getIntervenantExterieur();
-        $dossier = $this->getEntityProvider()->getDossier()->setStatut($this->getStatut());
-        $this->ie->setDossier($dossier);
-        $this->getEntityManager()->flush($dossier);
+        $this->ie = $this->getEntityProvider()->getIntervenantExterieur()->setStatut($this->getStatut());
         $this->getEntityManager()->flush($this->ie);
     }
     
@@ -101,6 +98,10 @@ class PeutSaisirPieceJointeRuleTest extends BaseRuleTest
         /**
          * Aucune config dans TypePieceJointeStatut
          */
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantNotInResult($this->ie);
+        
+        $this->rule->setIntervenant($this->ie);
         $this->assertIntervenantNotInResult($this->ie);
         
         /**
@@ -113,55 +114,11 @@ class PeutSaisirPieceJointeRuleTest extends BaseRuleTest
         /**
          * Si au moins une PJ obligatoire OU facultative est requise, l'intervenant "satisfait" la règle
          */
+        $this->rule->setIntervenant(null);
         $this->assertIntervenantInResult($this->ie);
-    }
-    
-    /**
-     * 
-     * @param \Application\Entity\Db\IntervenantExterieur $ie
-     */
-    private function assertIntervenantNotInResult(IntervenantExterieur $ie)
-    {
-        $id = $ie->getId();
         
-        /**
-         * - Intervenant-filtre spécifié : aucun
-         */
-        $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertArrayNotHasKey($id, $result);
-        $this->assertNotContains(['id' => $id], $result);
-        $this->assertNull($this->rule->getMessage());
-        
-        /**
-         * - Intervenant-filtre spécifié : IE
-         */
-        $result = $this->rule->setIntervenant($ie)->execute();
-        $this->assertEquals([], $result);
-        $this->assertNotNull($this->rule->getMessage());
-    }
-    
-    /**
-     * 
-     * @param \Application\Entity\Db\IntervenantExterieur $ie
-     */
-    private function assertIntervenantInResult(IntervenantExterieur $ie)
-    {
-        $id = $ie->getId();
-        
-        /**
-         * - Intervenant-filtre spécifié : aucun
-         */
-        $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertArrayHasKey($id, $result);
-        $this->assertEquals(['id' => $id], $result[$id]);
-        $this->assertNull($this->rule->getMessage());
-        
-        /**
-         * - Intervenant-filtre spécifié : IE
-         */
-        $result = $this->rule->setIntervenant($ie)->execute();
-        $this->assertEquals([$id => ['id' => $id]], $result);
-        $this->assertNull($this->rule->getMessage());
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
     }
     
     /**

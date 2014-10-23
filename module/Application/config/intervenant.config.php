@@ -430,6 +430,10 @@ return array(
             'PossedeDossierRule'           => 'Application\Rule\Intervenant\PossedeDossierRule',
             'PossedeServicesRule'          => 'Application\Rule\Intervenant\PossedeServicesRule',
             'PossedeReferentielRule'       => 'Application\Rule\Intervenant\PossedeReferentielRule',
+            'DossierValideRule'            => 'Application\Rule\Intervenant\DossierValideRule',
+            'ServiceValideRule'            => 'Application\Rule\Intervenant\ServiceValideRule',
+            'NecessiteAgrementRule'        => 'Application\Rule\Intervenant\NecessiteAgrementRule',
+            'AgrementFourniRule'           => 'Application\Rule\Intervenant\AgrementFourniRule',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',

@@ -104,7 +104,9 @@ class VolumeHoraire extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $type = $this->getServiceLocator()->get('ApplicationTypeValidation')->normalizeTypeValidation($type);
+        if (!is_object($type)) {
+            $type = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeValidation')->findOneByCode($type);
+        }
         
         $qb     ->join("$alias.validation", "v")
                 ->join("v.typeValidation", 'tv')

@@ -21,12 +21,16 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\TypeIntervention;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\Annee;
+use Application\Entity\Db\Etape;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\Dossier;
+use Application\Entity\Db\Agrement;
+use Application\Entity\Db\TypeAgrement;
+use Application\Entity\Db\TypeAgrementStatut;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use Common\ORM\Event\Listeners\HistoriqueListener;
@@ -90,9 +94,19 @@ class EntityProvider
     private $statuts;
     
     /**
+     * @var TypeAgrement[]
+     */
+    private $typesAgrement;
+    
+    /**
      * @var TypeValidation[]
      */
     private $typesValidation;
+    
+    /**
+     * @var TypeIntervention[]
+     */
+    private $typesIntervention;
     
     /**
      * @var Corps
@@ -105,14 +119,14 @@ class EntityProvider
     private $regimeSecu;
     
     /**
-     * @var ElementPedagogique
-     */
-    private $ep;
-    
-    /**
      * @var FonctionReferentiel
      */
     private $fonction;
+    
+    /**
+     * @var Etape
+     */
+    private $etape;
     
     /**
      * @var TypeVolumeHoraire
@@ -175,7 +189,17 @@ class EntityProvider
         $this->newEntities->rewind();
         
         while ($this->newEntities->valid()) {
-            $this->getEntityManager()->remove($this->newEntities->current());
+            $entity = $this->newEntities->current();
+            if ($entity instanceof ElementPedagogique) {
+                // On historise les EP à la main car on n'arrive pas à éviter l'erreur suivante :
+                // Doctrine\DBAL\DBALException: An exception occurred while executing 
+                // 'DELETE FROM V_ELEMENT_TYPE_INTERVENTION WHERE ELEMENT_PEDAGOGIQUE_ID = ?' with params [17970]:
+                // ORA-01752: cannot delete from view without exactly one key-preserved table
+                $entity->setHistoDestruction(new \DateTime());
+            }
+            else {
+                $this->getEntityManager()->remove($entity);
+            }
             $this->newEntities->next();
         }
         
@@ -500,14 +524,15 @@ class EntityProvider
      * 
      * @param Intervenant $intervenant
      * @param Structure $structureEns
+     * @param ElementPedagogique $ep
      * @return Service
      */
-    public function getService(Intervenant $intervenant, Structure $structureEns = null)
+    public function getService(Intervenant $intervenant, Structure $structureEns = null, ElementPedagogique $ep = null)
     {
         $service = Asset::newService(
             $intervenant,
             $structureEns ?: $this->getStructureEns(),
-            $this->getElementPedagogique(),
+            $ep ?: $this->getElementPedagogique(),
             $this->getTypeVolumeHoraire(),
             $this->getAnnee()
         );
@@ -558,8 +583,31 @@ class EntityProvider
         return $this->typeIntervention;
     }
 
+    /** 
+     * Recherche et retourne le TypeIntervention correspondant au code spécifié.
+     * 
+     * @param string $code Code du TypeIntervention, ex: TypeIntervention::CODE_PIECE_JOINTE
+     * @return TypeIntervention
+     */
+    public function getTypeInterventionByCode($code)
+    {
+        if (!$code) {
+            throw new LogicException("Un code de TypeIntervention est requis.");
+        }
+
+        if (!isset($this->typesIntervention[$code])) {
+            $this->typesIntervention[$code] = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeIntervention')
+                    ->findOneByCode($code);
+            if (!$this->typesIntervention[$code]) {
+                throw new RuntimeException("TypeIntervention introuvable avec le code '$code'.");
+            }
+        }
+        
+        return $this->typesIntervention[$code];
+    }
+
     /**
-     * Recherche et retourne un Periode quelconque.
+     * Recherche et retourne une Periode quelconque.
      * 
      * @return Periode
      */
@@ -567,6 +615,7 @@ class EntityProvider
     {
         if (null === $this->periode) {
             $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Periode')->createQueryBuilder("p");
+            $qb->where("p.enseignement = 1");
             $this->periode = $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
             if (!$this->periode) {
                 throw new RuntimeException("Periode quelconque introuvable.");
@@ -577,25 +626,44 @@ class EntityProvider
     }
 
     /**
-     * Recherche et retourne un ElementPedagogique quelconque.
+     * Recherche et retourne une Etape quelconque.
      * 
-     * @return ElementPedagogique
+     * @return Etape
      */
-    public function getElementPedagogique()
+    public function getEtape()
     {
-        if (null === $this->ep) {
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\ElementPedagogique')->createQueryBuilder("ep");
-            $this->ep = $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
-            if (!$this->ep) {
-                throw new RuntimeException("Elément pédagogique quelconque introuvable.");
+        if (null === $this->etape) {
+            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Etape')->createQueryBuilder("e");
+            $this->etape = $qb->getQuery()->setMaxResults(1)->getSingleResult();
+            if (!$this->etape) {
+                throw new RuntimeException("Etape quelconque introuvable.");
             }
         }
         
-        return $this->ep;
+        return $this->etape;
     }
 
     /**
-     * Retourne à chaque appel une nouvelle instance de ServiceReferentiel.
+     * Retourne à chaque appel une nouvelle instance de ElementPedagogique persistée.
+     * 
+     * @return ElementPedagogique
+     */
+    public function getElementPedagogique(Structure $structure = null)
+    {
+        $ep = Asset::newElementPedagogique(
+            $structure ?: $this->getStructureEns(),
+            $this->getEtape(),
+            $this->getPeriode()
+        );
+        $this->getEntityManager()->persist($ep);
+
+        $this->newEntities->push($ep);
+        
+        return $ep;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de ServiceReferentiel persistée.
      * 
      * @param Intervenant $intervenant
      * @param Structure $structure
@@ -723,6 +791,65 @@ class EntityProvider
     }
 
     /**
+     * Retourne à chaque appel une nouvelle instance de TypeAgrement persistée.
+     * 
+     * @return TypeAgrement
+     */
+    public function getTypeAgrement()
+    {
+        $type = Asset::newTypeAgrement();
+        
+        $this->getEntityManager()->persist($type);
+
+        $this->newEntities->push($type);
+        
+        return $type;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de TypeAgrementStatut persistée.
+     * 
+     * @param StatutIntervenant $statut
+     * @param TypeAgrement $type
+     * @return TypeAgrementStatut
+     */
+    public function getTypeAgrementStatut(StatutIntervenant $statut, TypeAgrement $type = null)
+    {
+        $tas = Asset::newTypeAgrementStatut(
+                $statut,
+                $type ?: $this->getTypeAgrement());
+        
+        $this->getEntityManager()->persist($tas);
+
+        $this->newEntities->push($tas);
+        
+        return $tas;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance d'Agrement persistée.
+     * 
+     * @param TypeAgrement $type
+     * @param Intervenant $intervenant
+     * @param Structure $structure
+     * @return Agrement
+     */
+    public function getAgrement(TypeAgrement $type, Intervenant $intervenant, Structure $structure = null)
+    {
+        $a = Asset::newAgrement(
+                $type, 
+                $intervenant, 
+                $structure ?: $intervenant->getStructure(), 
+                $this->getAnnee());
+        
+        $this->getEntityManager()->persist($a);
+
+        $this->newEntities->push($a);
+        
+        return $a;
+    }
+
+    /**
      * Retourne à chaque appel une nouvelle instance de Validation persistée.
      * 
      * @return Validation
@@ -759,5 +886,28 @@ class EntityProvider
         }
         
         return $this->typesValidation[$sourceCode];
+    }
+
+    /** 
+     * Recherche et retourne le TypeAgrement correspondant au code spécifié.
+     * 
+     * @param string $sourceCode Code du TypeAgrement, ex: TypeAgrement::CODE_CONSEIL_RESTREINT
+     * @return TypeAgrement
+     */
+    public function getTypeAgrementByCode($sourceCode)
+    {
+        if (!$sourceCode) {
+            throw new LogicException("Un code de TypeAgrement est requis.");
+        }
+        
+        if (!isset($this->typesAgrement[$sourceCode])) {
+            $this->typesAgrement[$sourceCode] = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeAgrement')
+                    ->findOneByCode($sourceCode);
+            if (!$this->typesAgrement[$sourceCode]) {
+                throw new RuntimeException("TypeAgrement introuvable avec le code '$sourceCode'.");
+            }
+        }
+        
+        return $this->typesAgrement[$sourceCode];
     }
 }

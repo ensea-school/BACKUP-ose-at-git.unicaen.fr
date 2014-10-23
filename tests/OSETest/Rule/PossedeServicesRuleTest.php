@@ -57,7 +57,7 @@ class PossedeServicesRuleTest extends BaseRuleTest
         $this->ip = $this->getEntityProvider()->getIntervenantPermanent();
         $this->ie = $this->getEntityProvider()->getIntervenantExterieur();
         
-        $this->service = $this->getEntityProvider()->getService($this->ie); // NB: doit être instancié avant l'intervenant!
+        $this->service = $this->getEntityProvider()->getService($this->ie);
         $this->ie->addService($this->service);
         
         $this->getEntityManager()->flush();

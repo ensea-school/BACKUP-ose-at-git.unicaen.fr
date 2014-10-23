@@ -2,12 +2,14 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Rule\AbstractRule;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\TypeValidationAwareTrait;
+use Application\Entity\Db\VolumeHoraire;
+use Application\Service\VolumeHoraire as VolumeHoraireService;
 use Application\Traits\StructureAwareTrait;
-use Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
-    
+use Application\Traits\TypeValidationAwareTrait;
+use Common\Exception\LogicException;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * Recherche si les enseignements d'un intervenant au sein d'une structure ont été validés.
  * 
@@ -24,28 +26,75 @@ use Application\Service\Initializer\VolumeHoraireServiceAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ServiceValideRule extends AbstractRule
+class ServiceValideRule extends AbstractIntervenantRule
 {
-    use IntervenantAwareTrait;
     use TypeValidationAwareTrait;
     use StructureAwareTrait;
-    use VolumeHoraireServiceAwareTrait;
         
+    const MESSAGE_AUCUNE     = 'messageAucune';
+    const MESSAGE_INCOMPLETE = 'messageIncomplete';
+    const MESSAGE_COMPLETE   = 'messageComplete';
+    const MESSAGE_PARTIELLE  = 'messagePartielle';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_AUCUNE     => "Les enseignements de %value% n'ont fait l'objet d'aucune validation.",
+        self::MESSAGE_INCOMPLETE => "Tous les volumes horaires d'enseignement de %value% n'ont pas été validés.",
+        self::MESSAGE_COMPLETE   => "Tous les volumes horaires d'enseignement de %value% ont été validés.",
+        self::MESSAGE_PARTIELLE  => "Les enseignements de %value% ont été validés PARTIELLEMENT.",
+    );
+    
+    /**
+     * Exécute la règle métier.
+     * 
+     * @return array [ integer => [ 'id' => {id} ] ]
+     */
     public function execute()
     {
-        if (!$this->getServiceVolumeHoraire()) {
-            throw new \Common\Exception\LogicException("Anomalie: aucun service VolumeHoraire spécifié.");
+        $this->message(null);
+        
+        $qb = $this->getQueryBuilder();
+        
+        /**
+         * Application de la règle à un intervenant précis
+         */
+        if ($this->getIntervenant()) {
+//            $result = $qb->getQuery()->getScalarResult();
+//            
+//            if (!$result) {
+//                $this->message(self::MESSAGE_AUCUNE);
+//            }
+            $result = $this->executeForIntervenant();
+                
+            return $this->normalizeResult($result);
         }
+        
+        /**
+         * Recherche des intervenants répondant à la règle
+         */
+        
+        $result = $qb->getQuery()->getScalarResult();
 
+        return $this->normalizeResult($result);
+    }
+    
+    protected function executeForIntervenant()
+    {
         $qb = $this->getServiceVolumeHoraire()->finderByIntervenant($this->getIntervenant());
+        // NB: pas de filtre sur le type de validation ici, car on veut collecter les VH validés et non validés plus bas...
         if ($this->getStructure()) {
-            $qb = $this->getServiceVolumeHoraire()->finderByStructureIntervention($this->getStructure(), $qb);
+            $this->getServiceVolumeHoraire()->finderByStructureIntervention($this->getStructure(), $qb);
         }
+        
+        $volumesHoraires = $qb->getQuery()->getResult();
         
         $this->volumesHorairesNonValides = [];
         $this->volumesHorairesValides    = [];
         
-        foreach ($qb->getQuery()->getResult() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+        foreach ($volumesHoraires as $vh) { /* @var $vh VolumeHoraire */
             if (!count($vh->getValidation($this->getTypeValidation()))) {
                 $this->volumesHorairesNonValides[] = $vh;
             }
@@ -53,46 +102,69 @@ class ServiceValideRule extends AbstractRule
                 $this->volumesHorairesValides[] = $vh;
             }
         }
+        
+        $info = sprintf("%s%s", 
+                $this->getIntervenant(),
+                $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null);
 
         if (!count($this->volumesHorairesValides)) {
-            $this->setMessage(sprintf(
-                    "Les enseignements de %s%s n'ont fait l'objet d'aucune validation.", 
-                    $this->getIntervenant(),
-                    $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null
-            ));
-            return false;
+            $this->message(self::MESSAGE_AUCUNE, $info);
+            return [];
         }
         
         if (!$this->memePartiellement && count($this->volumesHorairesNonValides)) {
-            $this->setMessage(sprintf(
-                    "Tous les volumes horaires d'enseignement de %s%s n'ont pas été validés.",
-                    $this->getIntervenant(),
-                    $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null
-            ));
-            return false;
+            $this->message(self::MESSAGE_INCOMPLETE, $info);
+            return [];
         }
         
-        if (!count($this->volumesHorairesNonValides)) {
-            $this->setMessage(sprintf(
-                    "Tous les volumes horaires d'enseignement de %s%s ont été validés.",
-                    $this->getIntervenant(),
-                    $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null
-            ));
-        }
-        else {
-            $this->setMessage(sprintf(
-                    "Les enseignements de %s%s ont été validés PARTIELLEMENT.",
-                    $this->getIntervenant(),
-                    $this->getStructure() ? sprintf(" au sein de la structure &laquo; %s &raquo;", $this->getStructure()) : null
-            ));
+//        if (!count($this->volumesHorairesNonValides)) {
+//            $this->message(self::MESSAGE_COMPLETE, $info);
+//        }
+//        else {
+//            $this->message(self::MESSAGE_PARTIELLE, $info);
+//        }
+        
+        return [0 => ['id' => $this->getIntervenant()->getId()]];
+    }
+    
+    public function isRelevant()
+    {
+        if ($this->getIntervenant()) {
+            return $this->getIntervenant()->getStatut()->getPeutSaisirService();
         }
         
         return true;
     }
     
-    public function isRelevant()
-    {
-        return !$this->getIntervenant()->getStatut()->estAutre();
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {        
+        if (!$this->getTypeValidation()) {
+            throw new LogicException("Type de validation non fourni.");
+        }
+        
+        $em = $this->getServiceIntervenant()->getEntityManager();
+        $qb = $em->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
+                ->select("i.id")
+                ->distinct()
+                ->join("i.service", 's')
+                ->join("s.structureEns", "strEns")
+                ->join("s.volumeHoraire", 'vh')
+                ->join("vh.validation", "v", Join::WITH, "v.typeValidation = " . $this->getTypeValidation()->getId())
+                ->join("v.typeValidation", "tv");
+        
+        if ($this->getIntervenant()) {
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
+        }
+        
+        if ($this->getStructure()) {
+            $qb->andWhere("strEns = " . $this->getStructure()->getId());
+        }
+        
+        return $qb;
     }
     
     /**
@@ -102,12 +174,12 @@ class ServiceValideRule extends AbstractRule
      *  
      * @var boolean
      */
-    private $memePartiellement = false;
+    private $memePartiellement = true;
 
     /**
      * 
      * @param boolean $memePartiellement
-     * @return \Application\Rule\Intervenant\ServiceValideRule
+     * @return ServiceValideRule
      */
     public function setMemePartiellement($memePartiellement = true)
     {
@@ -126,7 +198,7 @@ class ServiceValideRule extends AbstractRule
     {
         if (null === $this->servicesValides) {
             $this->servicesValides = [];
-            foreach ($this->getVolumesHorairesValides() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            foreach ($this->getVolumesHorairesValides() as $vh) { /* @var $vh VolumeHoraire */
                 $this->servicesValides[$vh->getService()->getId()] = $vh->getService();
             }
         }
@@ -144,7 +216,7 @@ class ServiceValideRule extends AbstractRule
     {
         if (null === $this->servicesNonValides) {
             $this->servicesNonValides = [];
-            foreach ($this->getVolumesHorairesNonValides() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            foreach ($this->getVolumesHorairesNonValides() as $vh) { /* @var $vh VolumeHoraire */
                 $this->servicesNonValides[$vh->getService()->getId()] = $vh->getService();
             }
         }
@@ -174,6 +246,14 @@ class ServiceValideRule extends AbstractRule
     {
         return $this->volumesHorairesNonValides ?: [];
     }
-
-
+    
+    /**
+     * Retourne le service VolumeHoraire.
+     *
+     * @return VolumeHoraireService
+     */
+    public function getServiceVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
+    }
 }

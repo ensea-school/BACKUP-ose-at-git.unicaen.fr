@@ -3,6 +3,7 @@
 namespace Application\Traits;
 
 use Application\Entity\Db\TypeAgrement;
+use Common\Exception\LogicException;
 
 /**
  * Description of TypeAgrementAwareTrait
@@ -21,10 +22,12 @@ trait TypeAgrementAwareTrait
      * 
      * @param TypeAgrement $typeAgrement type d'agrément concerné
      */
-    public function setTypeAgrement(TypeAgrement $typeAgrement)
+    public function setTypeAgrement(TypeAgrement $typeAgrement = null)
     {
-        if (!in_array($typeAgrement->getCode(), [ TypeAgrement::CODE_CONSEIL_RESTREINT, TypeAgrement::CODE_CONSEIL_ACADEMIQUE ])) {
-            throw new \Common\Exception\LogicException("Type d'agrément spécifié inattendu!");
+        if ($typeAgrement && !in_array($typeAgrement->getCode(), [
+            TypeAgrement::CODE_CONSEIL_RESTREINT,
+            TypeAgrement::CODE_CONSEIL_ACADEMIQUE ])) {
+            throw new LogicException("Type d'agrément spécifié inattendu!");
         }
         
         $this->typeAgrement = $typeAgrement;

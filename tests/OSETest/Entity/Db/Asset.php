@@ -19,6 +19,7 @@ use Application\Entity\Db\Dossier;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Annee;
+use Application\Entity\Db\Etape;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\Periode;
@@ -29,6 +30,9 @@ use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\Fichier;
+use Application\Entity\Db\Agrement;
+use Application\Entity\Db\TypeAgrement;
+use Application\Entity\Db\TypeAgrementStatut;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
 use DateTime;
@@ -245,6 +249,23 @@ class Asset
         return $e;
     }
         
+    static public function newElementPedagogique(
+            Structure $structure,
+            Etape $etape,
+            Periode $periode)
+    {
+        $e = new ElementPedagogique();
+        $e
+                ->setEtape($etape)
+                ->setLibelle(uniqid("EP "))
+                ->setPeriode($periode)
+                ->setSource(self::getSource())
+                ->setSourceCode(uniqid())
+                ->setStructure($structure);
+        
+        return $e;
+    }
+        
     static public function newVolumeHoraire(
             Service $service,
             TypeIntervention $typeIntervention,
@@ -367,6 +388,38 @@ class Asset
                 ->setType("image/png")
                 ->setTaille(1024)
                 ->setContenu("binary data");
+        
+        return $e;
+    }
+    
+    static public function newTypeAgrement()
+    {
+        $e = new TypeAgrement();
+        $e
+                ->setCode(uniqid())
+                ->setLibelle(uniqid("TA "));
+        
+        return $e;
+    }
+    
+    static public function newTypeAgrementStatut(StatutIntervenant $statut, TypeAgrement $type)
+    {
+        $e = new TypeAgrementStatut();
+        $e
+                ->setType($type)
+                ->setStatut($statut);
+        
+        return $e;
+    }
+    
+    static public function newAgrement(TypeAgrement $type, Intervenant $intervenant, Structure $structure, Annee $annee)
+    {
+        $e = new Agrement();
+        $e
+                ->setType($type)
+                ->setAnnee($annee)
+                ->setIntervenant($intervenant)
+                ->setStructure($structure);
         
         return $e;
     }

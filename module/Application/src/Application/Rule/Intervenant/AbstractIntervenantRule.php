@@ -47,23 +47,15 @@ abstract class AbstractIntervenantRule extends AbstractRule
     }
     
     /**
-     * @var string
-     */
-    protected $querySQL;
-    
-    /**
      * Retourne la requête SQL de cette règle.
-     * NB: les paramètres éventuels ne sont pas valués et restent sous la forme ":param".
+     * 
+     * ATTENTION: il ne doit pas y avoir de paramètres non valués de la forme ":param"!!
      * 
      * @return string
      */
     public function getQuerySQL()
     {
-        if (null === $this->querySQL) {
-            $this->querySQL = $this->getQueryBuilder()->getQuery()->getSQL();
-        }
-        
-        return $this->querySQL;
+        return $this->getQueryBuilder()->getQuery()->getSQL();
     }
     
     /**

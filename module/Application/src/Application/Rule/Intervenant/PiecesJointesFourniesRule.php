@@ -98,12 +98,7 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
     public function getQuerySQL()
     {
         /**
-         * Liste des intervenants (extérieurs) dont le statut requiert des pièces justificatives OBLIGATOIRES,
-         * nombre de pièces OBLIGATOIRES à fournir et nombre de pièces OBLIGATOIRES fournies.
          * 
-         * On tient compte :
-         * - du fait qu'il s'agit d'un 1er recrutement ou pas (cf. données personnelles) ; 
-         * - du nombre d'heures réelles de l'intervenant lorsqu'une PJ n'est obligatoire qu'au delà d'un seuil d'heures.
          */
         $sqlTemplate = <<<EOS
     WITH 
@@ -168,13 +163,13 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
         GROUP BY I.ID, I.SOURCE_CODE
     )
     SELECT 
-        COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID)  ID, 
-        COALESCE(AO.SOURCE_CODE, AF.SOURCE_CODE)        SOURCE_CODE, 
-        COALESCE(AO.TOTAL_HEURES, AF.TOTAL_HEURES)      TOTAL_HEURES, 
-        COALESCE(AO.NB, 0)                              NB_PJ_OBLIG_ATTENDU, 
-        COALESCE(FO.NB, 0)                              NB_PJ_OBLIG_FOURNI, 
-        COALESCE(AF.NB, 0)                              NB_PJ_FACUL_ATTENDU, 
-        COALESCE(FF.NB, 0)                              NB_PJ_FACUL_FOURNI 
+        COALESCE(AO.INTERVENANT_ID, AF.INTERVENANT_ID) ID, 
+        COALESCE(AO.SOURCE_CODE, AF.SOURCE_CODE)       SOURCE_CODE, 
+        COALESCE(AO.TOTAL_HEURES, AF.TOTAL_HEURES)     TOTAL_HEURES, 
+        COALESCE(AO.NB, 0)                             NB_PJ_OBLIG_ATTENDU, 
+        COALESCE(FO.NB, 0)                             NB_PJ_OBLIG_FOURNI, 
+        COALESCE(AF.NB, 0)                             NB_PJ_FACUL_ATTENDU, 
+        COALESCE(FF.NB, 0)                             NB_PJ_FACUL_FOURNI 
     FROM            ATTENDU_OBLIGATOIRE AO
     FULL OUTER JOIN ATTENDU_FACULTATIF  AF ON AF.INTERVENANT_ID = AO.INTERVENANT_ID
     LEFT JOIN       FOURNI_OBLIGATOIRE  FO ON FO.INTERVENANT_ID = AO.INTERVENANT_ID

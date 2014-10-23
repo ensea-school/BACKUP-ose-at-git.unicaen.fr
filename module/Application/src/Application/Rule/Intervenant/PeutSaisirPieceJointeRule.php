@@ -65,11 +65,11 @@ class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
     public function getQueryBuilder()
     {
         $em = $this->getServiceIntervenant()->getEntityManager();
-        $qb = $em->getRepository("Application\Entity\Db\IntervenantExterieur")->createQueryBuilder("i")
+        $qb = $em->getRepository("Application\Entity\Db\Intervenant")->createQueryBuilder("i")
                 ->select("i.id")
-                ->join("i.dossier", "d")
-                ->join("d.statut", "si")
-                ->join("si.typePieceJointeStatut", "tpjs");
+                ->join("i.statut", "si")
+                ->join("si.typePieceJointeStatut", "tpjs")
+                ->andWhere("i.premierRecrutement is null OR tpjs.premierRecrutement = i.premierRecrutement");
         
         if ($this->getIntervenant()) {
             $qb->andWhere("i = " . $this->getIntervenant()->getId());

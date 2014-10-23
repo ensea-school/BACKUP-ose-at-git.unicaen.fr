@@ -64,10 +64,10 @@ class ServiceReferentiel extends \Application\Entity\Db\ServiceReferentiel imple
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'intervenant', 'structure', 'fonction', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'annee');
+            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'commentaires', 'id', 'intervenant', 'structure', 'fonction', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'annee');
         }
 
-        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'intervenant', 'structure', 'fonction', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'annee');
+        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'commentaires', 'id', 'intervenant', 'structure', 'fonction', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'annee');
     }
 
     /**
@@ -319,6 +319,28 @@ class ServiceReferentiel extends \Application\Entity\Db\ServiceReferentiel imple
     /**
      * {@inheritDoc}
      */
+    public function setCommentaires($commentaires)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCommentaires', array($commentaires));
+
+        return parent::setCommentaires($commentaires);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCommentaires()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCommentaires', array());
+
+        return parent::getCommentaires();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
@@ -483,6 +505,17 @@ class ServiceReferentiel extends \Application\Entity\Db\ServiceReferentiel imple
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAnnee', array());
 
         return parent::getAnnee();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResourceId', array());
+
+        return parent::getResourceId();
     }
 
 }

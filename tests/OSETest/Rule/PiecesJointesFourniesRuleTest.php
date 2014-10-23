@@ -129,14 +129,26 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
             // lorsque le recrutement de l'intervenant ne correspond pas à celui de la config TypePieceJointeStatut,
             // l'intervenant n'a pas à fournir la PJ
             if ($intervenantPremierRecrutement !== $tpjsPremierRecrutement) {
+                $this->rule->setIntervenant(null);
+                $this->assertIntervenantNotInResult($this->ie);
+                
+                $this->rule->setIntervenant($this->ie);
                 $this->assertIntervenantNotInResult($this->ie);
             }
             // lorsque la PJ est obligatoire, l'intervenant n'est pas dans la liste des intervenants ayant fourni la PJ
             elseif (true === $tpjsObligatoire) {
+                $this->rule->setIntervenant(null);
+                $this->assertIntervenantNotInResult($this->ie);
+                
+                $this->rule->setIntervenant($this->ie);
                 $this->assertIntervenantNotInResult($this->ie);
             }
             // lorsque la PJ est facultative, l'intervenant est dans la liste des intervenants en règle avec leurs PJ
             else {
+                $this->rule->setIntervenant(null);
+                $this->assertIntervenantInResult($this->ie);
+                
+                $this->rule->setIntervenant($this->ie);
                 $this->assertIntervenantInResult($this->ie);
             }
         }
@@ -162,10 +174,18 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
             // lorsque le recrutement de l'intervenant ne correspond pas à celui de la config TypePieceJointeStatut,
             // l'intervenant n'a pas à fournir la PJ
             if ($intervenantPremierRecrutement !== $tpjsPremierRecrutement) {
+                $this->rule->setIntervenant(null);
+                $this->assertIntervenantNotInResult($this->ie);
+                
+                $this->rule->setIntervenant($this->ie);
                 $this->assertIntervenantNotInResult($this->ie);
             }
             // sinon l'intervenant est dans la liste des intervenants en règle avec leurs PJ
             else {
+                $this->rule->setIntervenant(null);
+                $this->assertIntervenantInResult($this->ie);
+                
+                $this->rule->setIntervenant($this->ie);
                 $this->assertIntervenantInResult($this->ie);
             }
         }
@@ -186,27 +206,51 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         
         // si l'utilisateur n'a aucun service, la PJ n'est pas obligatoire
         // --> l'utilisateur est en règle
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+
+        $this->rule->setIntervenant($this->ie);
         $this->assertIntervenantInResult($this->ie);
         
         // si l'utilisateur a moins d'heures de service que le seuil requis, la PJ n'est pas obligatoire
         // --> l'utilisateur est en règle
-        $this->setServiceIntervenant(15.0);
+        $this->setServiceIntervenant($this->ie, ['CM' => 15.0], $this->service);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+
+        $this->rule->setIntervenant($this->ie);
         $this->assertIntervenantInResult($this->ie);
         
         // si l'utilisateur a exactement le nombre d'heures de service que le seuil requis, la PJ devient obligatoire
         // --> l'utilisateur n'est plus en règle
-        $this->setServiceIntervenant(20);
+        $this->setServiceIntervenant($this->ie, ['CM' => 20], $this->service);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantNotInResult($this->ie);
+
+        $this->rule->setIntervenant($this->ie);
         $this->assertIntervenantNotInResult($this->ie);
         
         // si l'utilisateur a plus d'heures de service que le seuil requis, la PJ reste obligatoire
         // --> l'utilisateur n'est toujours pas en règle
-        $this->setServiceIntervenant(20.01);
+        $this->setServiceIntervenant($this->ie, ['CM' => 20.01], $this->service);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantNotInResult($this->ie);
+
+        $this->rule->setIntervenant($this->ie);
         $this->assertIntervenantNotInResult($this->ie);
         
         // maintenant, l'utilisateur fournit la PJ attendue
         // --> l'utilisateur est en règle
         $tpjAttendu = $tpj;
         $this->addPieceJointeToIntervenant($tpjAttendu);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+
+        $this->rule->setIntervenant($this->ie);
         $this->assertIntervenantInResult($this->ie);
     }
     
@@ -338,7 +382,7 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         /**
          * Aucune PJ fournie, service < seuil
          */
-        $this->setServiceIntervenant(10);
+        $this->setServiceIntervenant($this->ie, ['CM' => 10], $this->service);
         $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
         $this->assertCount(1, $types);
         $this->assertContains($tpjObl1, $types);
@@ -346,7 +390,7 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         /**
          * Aucune PJ fournie, service > seuil
          */
-        $this->setServiceIntervenant(25);
+        $this->setServiceIntervenant($this->ie, ['CM' => 25], $this->service);
         $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
         $this->assertCount(2, $types);
         $this->assertContains($tpjObl1, $types);
@@ -426,54 +470,6 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
     
     /**
      * 
-     * @param \Application\Entity\Db\IntervenantExterieur $ie
-     */
-    private function assertIntervenantNotInResult(IntervenantExterieur $ie)
-    {
-        $id = $ie->getId();
-        
-        /**
-         * - Intervenant-filtre spécifié : aucun
-         */
-        $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertArrayNotHasKey($id, $result);
-        $this->assertNotContains(['id' => $id], $result);
-        $this->assertNull($this->rule->getMessage());
-        
-        /**
-         * - Intervenant-filtre spécifié : IE
-         */
-        $result = $this->rule->setIntervenant($ie)->execute();
-        $this->assertEquals([], $result);
-        $this->assertNotNull($this->rule->getMessage());
-    }
-    
-    /**
-     * 
-     * @param \Application\Entity\Db\IntervenantExterieur $ie
-     */
-    private function assertIntervenantInResult(IntervenantExterieur $ie)
-    {
-        $id = $ie->getId();
-        
-        /**
-         * - Intervenant-filtre spécifié : aucun
-         */
-        $result = $this->rule->setIntervenant(null)->execute();
-        $this->assertArrayHasKey($id, $result);
-        $this->assertEquals(['id' => $id], $result[$id]);
-        $this->assertNull($this->rule->getMessage());
-        
-        /**
-         * - Intervenant-filtre spécifié : IE
-         */
-        $result = $this->rule->setIntervenant($ie)->execute();
-        $this->assertEquals([$id => ['id' => $id]], $result);
-        $this->assertNull($this->rule->getMessage());
-    }
-    
-    /**
-     * 
      */
     protected function tearDown()
     {
@@ -520,31 +516,6 @@ class PiecesJointesFourniesRuleTest extends BaseRuleTest
         $this->getEntityManager()->flush($pj);
         
         return $pj;
-    }
-
-    /**
-     * 
-     * @param float $heures
-     * @return Service
-     */
-    private function setServiceIntervenant($heures)
-    {
-        if (null === $this->service) {
-            $this->service = $this->getEntityProvider()->getService($this->ie);
-            $vh            = $this->getEntityProvider()->getVolumeHoraire($this->service, $heures);
-            $this->service->addVolumeHoraire($vh);
-            $this->ie->addService($this->service);
-            
-            $this->getEntityManager()->flush($this->ie);
-        }
-        
-        $vh = $this->service->getVolumeHoraire()->first();
-        $vh->setHeures($heures);
-        
-        $this->getEntityManager()->flush($this->service);
-        $this->getEntityManager()->flush($vh);
-        
-        return $this->service;
     }
     
     /**

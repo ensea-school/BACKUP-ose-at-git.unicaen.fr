@@ -1,23 +1,33 @@
 <?php
 
-namespace OSETest\Service;
+namespace OSETest;
 
 use Doctrine\ORM\EntityManager;
 use OSETest\Bootstrap;
+use OSETest\Entity\Db\EntityProvider;
 use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * Description of BaseTest
+ * Classe mère abstraite de toutes nos classes de tests unitaires/fonctionnels.
  *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class BaseTest extends PHPUnit_Framework_TestCase
+class BaseTestCase extends PHPUnit_Framework_TestCase
 {
     protected $em;
     protected $eventm;
     protected $user;
+    
+    /**
+     * @var EntityProvider
+     */
+    protected $entityProvider;
 
+    /**
+     * Sets up the fixture, for example, open a network connection.
+     * This method is called before a test is executed.
+     */
     protected function setUp()
     {
         $em = $this->getEntityManager();
@@ -34,6 +44,20 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
                 }
             }
         }
+    }
+    
+    /**
+     * 
+     * @param string $name
+     * @return EntityProvider
+     */
+    public function getEntityProvider($name = 'orm_default')
+    {
+        if (null === $this->entityProvider) {
+            $this->entityProvider = new EntityProvider($this->getEntityManager($name));
+        }
+        
+        return $this->entityProvider;
     }
 
     /**

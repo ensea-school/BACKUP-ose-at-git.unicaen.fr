@@ -1,12 +1,12 @@
 <?php
 
 namespace OSETest\Service\Process;
-use OSETest\Service\BaseTest;
+use OSETest\BaseTestCase;
 
 /**
  * @group Formule
  */
-class FormuleTest extends BaseTest {
+class FormuleTest extends BaseTestCase {
 
     protected $etape;
     protected $source;

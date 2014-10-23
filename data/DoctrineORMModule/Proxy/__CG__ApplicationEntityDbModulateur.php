@@ -64,10 +64,10 @@ class Modulateur extends \Application\Entity\Db\Modulateur implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'ponderationServiceCompl', 'ponderationServiceDu', 'validiteDebut', 'validiteFin', 'id', 'typeModulateur', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+            return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'ponderationServiceCompl', 'ponderationServiceDu', 'validiteDebut', 'validiteFin', 'id', 'typeModulateur', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'elementModulateur');
         }
 
-        return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'ponderationServiceCompl', 'ponderationServiceDu', 'validiteDebut', 'validiteFin', 'id', 'typeModulateur', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+        return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'ponderationServiceCompl', 'ponderationServiceDu', 'validiteDebut', 'validiteFin', 'id', 'typeModulateur', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'elementModulateur');
     }
 
     /**
@@ -483,6 +483,39 @@ class Modulateur extends \Application\Entity\Db\Modulateur implements \Doctrine\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
 
         return parent::getHistoCreateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addElementModulateur(\Application\Entity\Db\ElementModulateur $elementModulateur)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addElementModulateur', array($elementModulateur));
+
+        return parent::addElementModulateur($elementModulateur);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeElementModulateur(\Application\Entity\Db\Service $elementModulateur)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeElementModulateur', array($elementModulateur));
+
+        return parent::removeElementModulateur($elementModulateur);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getElementModulateur()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElementModulateur', array());
+
+        return parent::getElementModulateur();
     }
 
 }

@@ -137,7 +137,7 @@ class OffreFormationController extends AbstractActionController implements Conte
         $structure = $this->context()->structureFromQuery();
         $niveau    = $this->context()->niveauFromQuery();
         $etape     = $this->context()->etapeFromQuery();
-        if ($niveau) $niveau = \Application\Entity\NiveauEtape::getInstance($niveau); // entité Niveau
+        if ($niveau) $niveau = $this->getServiceNiveauEtape()->get($niveau); // entité Niveau
         // structure de responsabilité si aucun filtre spécifié
         if (!$structure && $role instanceof \Application\Acl\ComposanteRole) {
             $structure = $role->getStructure();

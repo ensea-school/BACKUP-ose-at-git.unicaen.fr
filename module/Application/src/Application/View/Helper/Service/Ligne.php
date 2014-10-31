@@ -380,7 +380,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderRegimeInscription($element)
     {
         if (! $element) return '';
-        return $element->getHtmlRegimeInscription();
+        return $element->getRegimesInscription(true);
     }
 
     protected function renderAnnee($annee)

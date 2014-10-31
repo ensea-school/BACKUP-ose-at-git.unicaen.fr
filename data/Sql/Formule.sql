@@ -1,43 +1,57 @@
+DECLARE
+  prevu NUMERIC;
+BEGIN                
+  prevu := ose_test.get_type_volume_horaire('prevu').id;
 
-UPDATE service_du SET heures = 194 where intervenant_id = 534;
-DELETE FROM "OSE"."SERVICE_DU" where intervenant_id = 534;
+  -- SET SERVEROUTPUT ON;
+  DBMS_OUTPUT.ENABLE(99999999999999);
 
-select * from service_referentiel where intervenant_id = 534;
-select * from formule_referentiel where intervenant_id = 534;
-select annee_id, heures, motif_id, histo_destruction from modification_service_du where intervenant_id = 534;
-delete from modification_service_du where intervenant_id = 534 AND histo_destruction is not null;
-delete from modification_service_du where intervenant_id = 534 AND heures = 9;
-
-delete from formule_referentiel;
-
-SET SERVEROUTPUT ON;
-
-BEGIN
-  --OSE_FORMULE.INIT_REFERENTIEL();
-  --ose_formule.init_volume_horaire();
-  
-  --ose_formule.init_service();
-  ose_test.echo( 'id=' || ose_test.get_civilite('MME').libelle_long );
-  --ose_test.echo( ose_divers.STR_REDUCE('Mm' ) );
-  
-  --ose_test.echo( NLS_LOWER('Mm', 'NLS_SORT = BINARY_AI') );
-  --OSE_TEST_FORMULE.RUN;
-END;
-
-/
-
-BEGIN
-  ose_test.init;
+  --ose_test.show_succes;
   ose_test.hide_succes;
-  OSE_TEST_FORMULE.set_intervenant( 534 );
-  OSE_TEST_FORMULE.RUN;
+  ose_test.init;
+  FOR i IN (
+    SELECT id FROM intervenant 
+    where 
+      histo_destruction IS NULL
+      AND exists(select * from service where intervenant_id = intervenant.id)
+      --AND id=9999999
+      AND rownum between 1 and 500
+  ) LOOP
+    ose_test.echo(' '); ose_test.echo('INTERVENANT_ID = ' || i.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_INTERVENANT(i.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_SERVICE_DU(i.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_SERVICE_DU_MODIF(i.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_SERVICE_REF(i.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_MOTIF_MOD_SERV(i.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_SERVICE(i.id);
+    ose_divers.do_nothing;
+  END LOOP;
+
+  FOR s IN (
+    SELECT id FROM service WHERE
+      histo_destruction IS NULL
+      --AND id=9999999
+      --AND id=468
+      AND rownum between 1 and 500
+  ) LOOP
+    ose_test.echo(' ');ose_test.echo('SERVICE_ID = ' || s.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_ELEMENT( s.id );
+    OSE_TEST_FORMULE.TEST_MODIFY_MODULATEUR( s.id );
+    OSE_TEST_FORMULE.TEST_MODIFY_VOLUME_HORAIRE( s.id );
+  END LOOP;
+
+  FOR vh IN (
+    SELECT id FROM volume_horaire WHERE
+      histo_destruction IS NULL
+      --AND id=765
+      --AND id=9999999
+      AND rownum between 1 and 500
+  ) LOOP
+    ose_test.echo(' ');ose_test.echo('VOLUME_HORAIRE_ID = ' || vh.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_TYPE_INTERVENTION( vh.id );
+    OSE_TEST_FORMULE.TEST_MODIFY_VALIDATION( vh.id );
+    OSE_TEST_FORMULE.TEST_MODIFY_CONTRAT( vh.id );
+  END LOOP;
+
   ose_test.show_stats;
-END;
-
-/
-
-BEGIN
-
-  ose_formule.refresh_referentiel( 534, 2014 );
-
 END;

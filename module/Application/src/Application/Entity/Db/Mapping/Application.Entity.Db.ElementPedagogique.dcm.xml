@@ -22,10 +22,13 @@
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="120" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
-    <field name="tauxFoad" type="integer" column="TAUX_FOAD" nullable="true"/>
-    <field name="fi" type="boolean" column="FI" nullable="true"/>
-    <field name="fc" type="boolean" column="FC" nullable="true"/>
-    <field name="fa" type="boolean" column="FA" nullable="true"/>
+    <field name="tauxFoad" type="float" column="TAUX_FOAD" nullable="false"/>
+    <field name="tauxFc" type="float" column="TAUX_FC" nullable="false"/>
+    <field name="tauxFi" type="float" column="TAUX_FI" nullable="false"/>
+    <field name="tauxFa" type="float" column="TAUX_FA" nullable="false"/>
+    <field name="fi" type="boolean" column="FI" nullable="false"/>
+    <field name="fc" type="boolean" column="FC" nullable="false"/>
+    <field name="fa" type="boolean" column="FA" nullable="false"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">

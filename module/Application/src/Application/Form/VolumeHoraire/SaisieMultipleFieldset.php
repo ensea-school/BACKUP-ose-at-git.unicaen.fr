@@ -88,5 +88,5 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
     protected function getServiceTypeIntervention()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
-}
+    }
 }

@@ -69,6 +69,10 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $this->title = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
 
+        if (!$this->getIntervenant() instanceof IntervenantExterieur) {
+            throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
+        }
+            
         $dossier = $this->getIntervenant()->getDossier();
         if (!$dossier) {
             throw new MessageException("L'intervenant {$this->getIntervenant()} n'a aucune donnée personnelle enregistrée.");

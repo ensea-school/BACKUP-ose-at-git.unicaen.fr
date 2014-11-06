@@ -63,7 +63,6 @@ class NecessiteAgrementRule extends AgrementAbstractRule implements ServiceLocat
     
     /**
      * Retourne la requête SQL de cette règle.
-     * NB: les paramètres éventuels ne sont pas valués et restent sous la forme ":param".
      * 
      * @return string
      * @deprecated 
@@ -77,12 +76,11 @@ class NecessiteAgrementRule extends AgrementAbstractRule implements ServiceLocat
         }
 
         $sql = <<<EOS
--- intervenants concernés par le type d'agrément
 SELECT DISTINCT i.ID
 FROM INTERVENANT i
 INNER JOIN STATUT_INTERVENANT si ON i.STATUT_ID = si.ID AND (si.HISTO_DESTRUCTEUR_ID IS NULL AND SYSDATE BETWEEN si.VALIDITE_DEBUT AND COALESCE(si.VALIDITE_FIN, SYSDATE))
 INNER JOIN TYPE_AGREMENT_STATUT tas ON si.ID = tas.STATUT_INTERVENANT_ID AND (tas.HISTO_DESTRUCTEUR_ID IS NULL)
-    AND (i.PREMIER_RECRUTEMENT IS NULL OR tas.PREMIER_RECRUTEMENT = i.PREMIER_RECRUTEMENT)
+    AND (i.PREMIER_RECRUTEMENT IS NULL OR tas.PREMIER_RECRUTEMENT = i.PREMIER_RECRUTEMENT) AND tas.OBLIGATOIRE = 1
 INNER JOIN TYPE_AGREMENT ta ON tas.TYPE_AGREMENT_ID = ta.ID AND (ta.HISTO_DESTRUCTEUR_ID IS NULL)
 WHERE (i.HISTO_DESTRUCTEUR_ID IS NULL)
 $andTypeAgrement

@@ -6,6 +6,7 @@ use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Structure;
 use Application\Service\Agrement as AgrementService;
 use Application\Service\TypeAgrementStatut;
+use Application\Service\TypeAgrement as TypeAgrementService;
 use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
 use Application\Traits\TypeAgrementAwareTrait;
 use Doctrine\ORM\EntityManager;
@@ -37,15 +38,22 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule
     }
     
     /**
+     * Si un intervenant est spécifié, retourne les types d'agrément requis par son statut ;
+     * ou sinon tous les types d'agrément existant.
      * 
      * @return array id => TypeAgrement
      */
     public function getTypesAgrementAttendus()
     {
-        $typesAgrementAttendus = array();
-        foreach ($this->getTypesAgrementStatut() as $tas) { /* @var $tas TypeAgrementStatut */
-            $type = $tas->getType();
-            $typesAgrementAttendus[$type->getId()] = $type;
+        if ($this->getIntervenant()) {
+            $typesAgrementAttendus = array();
+            foreach ($this->getTypesAgrementStatut() as $tas) { /* @var $tas TypeAgrementStatut */
+                $type = $tas->getType();
+                $typesAgrementAttendus[$type->getId()] = $type;
+            }
+        }
+        else {
+            $typesAgrementAttendus = $this->getServiceTypeAgrement()->getList();
         }
         
         return $typesAgrementAttendus;
@@ -108,6 +116,14 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule
         $structuresEns = $qb->getQuery()->getResult();
         
         return $structuresEns;
+    }
+    
+    /**
+     * @return TypeAgrementService
+     */
+    protected function getServiceTypeAgrement()
+    {
+        return $this->getServiceLocator()->get('applicationTypeAgrement');
     }
     
     /**

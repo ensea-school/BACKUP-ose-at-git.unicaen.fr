@@ -88,34 +88,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
     }
     
     /**
-     * Indique si ce statut nécessite un contrat.
-     *
-     * @return bool 
-     */
-    public function necessiteContrat()
-    {
-        if ($this->estVacataire() || $this->estBiatss()) {
-            return true;
-        }
-
-        return false;
-    }
-    
-    /**
-     * Indique si ce statut permet la fourniture de pièces justificatives.
-     *
-     * @return bool 
-     */
-    public function peutSaisirPieceJointe()
-    {
-        if ($this->estVacataire() && !$this->estBiatss()) {
-            return true;
-        }
-
-        return false;
-    }
-    
-    /**
      * @var \Application\Entity\Db\Source
      */
     protected $source;
@@ -236,6 +208,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
     protected $peutSaisirDossier;
     
     /**
+     * @var boolean
+     */
+    protected $peutAvoirContrat;
+    
+    /**
      * @var integer
      */
     protected $ordre;
@@ -346,6 +323,29 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
     public function getPeutSaisirDossier()
     {
         return $this->peutSaisirDossier;
+    }
+    
+    /**
+     * Spécifie si ce statut permet l'établissement d'un contrat/avenant.
+     * 
+     * @param boolean $peutAvoirContrat
+     * @return self
+     */
+    public function setPeutAvoirContrat($peutAvoirContrat = true)
+    {
+        $this->peutAvoirContrat = $peutAvoirContrat;
+        
+        return $this;
+    }
+    
+    /**
+     * Indique si ce statut permet l'établissement d'un contrat/avenant.
+     *
+     * @return boolean 
+     */
+    public function getPeutAvoirContrat()
+    {
+        return $this->peutAvoirContrat;
     }
 
     /**

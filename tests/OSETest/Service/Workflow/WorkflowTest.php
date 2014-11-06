@@ -2,9 +2,12 @@
 
 namespace OSETest\Service\Workflow;
 
-use OSETest\BaseTestCase;
-use Application\Service\Workflow\Workflow;
+use Application\Acl\ComposanteRole;
+use Application\Acl\IntervenantPermanentRole;
+use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\IntervenantExterieur;
+use Application\Service\Workflow\Workflow;
+use OSETest\BaseTestCase;
 
 /**
  * Description of WorkflowTest
@@ -24,6 +27,11 @@ class WorkflowTest extends BaseTestCase
     protected $ie;
     
     /**
+     * @var IntervenantPermanent
+     */
+    protected $ip;
+    
+    /**
      * 
      */
     protected function setUp()
@@ -36,44 +44,49 @@ class WorkflowTest extends BaseTestCase
     public function getRuleKeys()
     {
         return [
-            [Workflow::KEY_SAISIE_DOSSIER], 
-            [Workflow::KEY_SAISIE_SERVICE], 
-            [Workflow::KEY_PIECES_JOINTES], 
-            [Workflow::KEY_VALIDATION_DONNEES],
-            [Workflow::KEY_VALIDATION_SERVICE],
+//            [Workflow::KEY_DONNEES_PERSO_SAISIE], 
+//            [Workflow::KEY_SERVICE_SAISIE], 
+//            [Workflow::KEY_PIECES_JOINTES], 
+//            [Workflow::KEY_DONNEES_PERSO_VALIDATION],
+//            [Workflow::KEY_SERVICE_VALIDATION],
+            [Workflow::KEY_CONSEIL_RESTREINT],
+            [Workflow::KEY_CONSEIL_ACADEMIQUE],
+            [Workflow::KEY_CONTRAT],
         ];
     }
     
     /**
      * @dataProvider getRuleKeys
      */
-    public function testGetCrossingQuerySQL($key)
+    public function testGetCrossingQuerySQL($stepKey)
     {
-        $sql = $this->wf->getCrossingQuerySQL($key);
+        $sql = $this->wf->getCrossingQuerySQL($stepKey);
         $this->assertInternalType('string', $sql);
         $this->assertNotEmpty($sql);
+        
+//        var_dump($this->wf->getNotCrossingQuerySQL(Workflow::KEY_CONSEIL_RESTREINT));
     }
     
     /**
      * @dataProvider getRuleKeys
      */
-    public function testExecuteNotCrossingQuerySQLSansRole($key)
+    public function testExecuteNotCrossingQuerySQLSansRole($stepKey)
     {
-//        var_dump(PHP_EOL . PHP_EOL . $key);
-        
-        $result = $this->wf->executeNotCrossingQuerySQL($key);
+        $result = $this->wf->executeNotCrossingQuerySQL($stepKey);
         $this->assertInternalType('array', $result);
         
-//        $em = $this->wf->getEntityManager();
-//        $intervenantIds = array_keys($result);
-//        $intervenants = [];
-//        foreach ($intervenantIds as $id) {
-//            $intervenants[] = "" . $em->find('Application\Entity\Db\Intervenant', $id);
-//        }
-//        var_dump($intervenants);
+        var_dump(PHP_EOL . "=================== " . $stepKey . " =================== " . PHP_EOL);
+        var_dump($this->wf->getNotCrossingQuerySQL($stepKey));
+        $em = $this->wf->getEntityManager();
+        $intervenantIds = array_keys($result);
+        $intervenants = [];
+        foreach ($intervenantIds as $id) {
+            $intervenants[] = "" . $em->find('Application\Entity\Db\Intervenant', $id);
+        }
+        var_dump($intervenants);
     }
     
-    public function testSpecifierRole()
+    public function testSpecifierUnRoleImpacteLaStructure()
     {
         /**
          * Rôle intervenant permanent
@@ -81,7 +94,7 @@ class WorkflowTest extends BaseTestCase
         $this->ip = $this->getEntityProvider()->getIntervenantPermanent();
         $this->getEntityManager()->flush();
         
-        $roleIp = new \Application\Acl\IntervenantPermanentRole();
+        $roleIp = new IntervenantPermanentRole();
         $roleIp->setIntervenant($this->ip);
         
         $this->wf->setRole($roleIp);
@@ -93,7 +106,7 @@ class WorkflowTest extends BaseTestCase
         $this->ie = $this->getEntityProvider()->getIntervenantExterieur();
         $this->getEntityManager()->flush();
         
-        $roleIe = new \Application\Acl\IntervenantPermanentRole();
+        $roleIe = new IntervenantPermanentRole();
         $roleIe->setIntervenant($this->ie);
         
         $this->wf->setRole($roleIe);
@@ -104,10 +117,27 @@ class WorkflowTest extends BaseTestCase
          */
         $structure = $this->getEntityProvider()->getStructureEns();
         
-        $roleComp = new \Application\Acl\ComposanteRole();
+        $roleComp = new ComposanteRole();
         $roleComp->setStructure($structure);
         
         $this->wf->setRole($roleComp);
         $this->assertSame($roleComp->getStructure(), $this->wf->getStructure());
+    }
+    
+    protected function tearDown()
+    {
+        parent::tearDown();
+        
+        /**
+         * Suppression du jeu d'essai
+         */
+        if ($this->ie) {
+            $this->getEntityManager()->remove($this->ie);
+        }
+        if ($this->ip) {
+            $this->getEntityManager()->remove($this->ip);
+        }
+        $this->getEntityManager()->flush();
+        $this->getEntityProvider()->removeNewEntities();
     }
 }

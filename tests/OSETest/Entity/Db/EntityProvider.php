@@ -33,6 +33,8 @@ use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeAgrementStatut;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
+use Application\Entity\Db\Contrat;
+use Application\Entity\Db\TypeContrat;
 use Common\ORM\Event\Listeners\HistoriqueListener;
 use Doctrine\ORM\EntityManager;
 use RuntimeException;
@@ -97,6 +99,16 @@ class EntityProvider
      * @var TypeAgrement[]
      */
     private $typesAgrement;
+    
+    /**
+     * @var TypeContrat[]
+     */
+    private $typesContrat;
+    
+    /**
+     * @var TypeStructure
+     */
+    private $typeStructureEns;
     
     /**
      * @var TypeValidation[]
@@ -180,6 +192,23 @@ class EntityProvider
     }
     
     /**
+     * @var string
+     */
+    protected $testClassName;
+    
+    /**
+     * 
+     * @param string $className
+     * @return self
+     */
+    public function setTestClassName($className)
+    {
+        $this->testClassName = $className;
+        
+        return $this;
+    }
+    
+    /**
      * SUpprime du gestionnaire d'entité les éventuelles nouvelles instances d'entités créées.
      * 
      * @return self
@@ -224,6 +253,11 @@ class EntityProvider
                 $this->getStructure(), 
                 $this->getCorps());
         
+        // permet de repérer dans la bdd les intervenants de test non supprimés
+        if ($this->testClassName) {
+            $i->setNomUsuel(ltrim(strrchr($this->testClassName, '\\'), '\\'));
+        }
+        
         $this->getEntityManager()->persist($i);
         
         $this->newEntities->push($i);
@@ -244,6 +278,11 @@ class EntityProvider
                 $statut ?: $this->getStatutIntervenantByCode(StatutIntervenant::SALAR_PRIVE), 
                 $this->getStructure(), 
                 $this->getRegimeSecu());
+        
+        // permet de repérer dans la bdd les intervenants de test non supprimés
+        if ($this->testClassName) {
+            $i->setNomUsuel(ltrim(strrchr($this->testClassName, '\\'), '\\'));
+        }
         
         $this->getEntityManager()->persist($i);
         
@@ -346,6 +385,25 @@ class EntityProvider
         return $this->typeStructure;
     }
 
+    /** 
+     * Recherche et retourne un TypeStructure *enseignement* quelconque.
+     * 
+     * @return TypeStructure
+     */
+    public function getTypeStructureEns()
+    {
+        if (null === $this->typeStructureEns) {
+            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeStructure')->createQueryBuilder("ts")
+                    ->andWhere("ts.enseignement = 1");
+            $this->typeStructureEns = $qb->getQuery()->setMaxResults(1)->getSingleResult();
+            if (!$this->typeStructureEns) {
+                throw new RuntimeException("TypeStructure enseignement quelconque introuvable.");
+            }
+        }
+        
+        return $this->typeStructureEns;
+    }
+
     /**
      * Retourne à chaque appel une nouvelle instance de Structure persistée.
      * 
@@ -383,23 +441,36 @@ class EntityProvider
     }
     
     /**
-     * Recherche et retourne une Structure d'enseignement quelconque.
+     * Retourne :
+     * - soit une Structure d'enseignement quelconque ;
+     * - soit à chaque appel une nouvelle instance de Structure d'enseignement persistée.
      * 
+     * @param boolean $quelconque
      * @return Structure
      */
-    public function getStructureEns()
+    public function getStructureEns($quelconque = true)
     {
-        if (null === $this->structureEns) {
-            $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Structure')->createQueryBuilder("s")
-                    ->join("s.type", "ts")
-                    ->andWhere("ts.enseignement = 1");
-            $this->structureEns = $qb->getQuery()->setMaxResults(1)->getSingleResult();
-            if (!$this->structureEns) {
-                throw new RuntimeException("Structure d'enseignement quelconque introuvable.");
+        if ($quelconque) {
+            if (null === $this->structureEns) {
+                $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Structure')->createQueryBuilder("s")
+                        ->join("s.type", "ts")
+                        ->andWhere("ts.enseignement = 1");
+                $this->structureEns = $qb->getQuery()->setMaxResults(1)->getSingleResult();
+                if (!$this->structureEns) {
+                    throw new RuntimeException("Structure d'enseignement quelconque introuvable.");
+                }
             }
+            
+            return $this->structureEns;
         }
         
-        return $this->structureEns;
+        $structureEns = Asset::newStructure($this->getTypeStructureByCode(), $this->getEtablissement(), $this->getStructureRacine());
+
+        $this->getEntityManager()->persist($structureEns);
+
+        $this->newEntities->push($structureEns);
+        
+        return $structureEns;
     }
 
     /** 
@@ -909,5 +980,48 @@ class EntityProvider
         }
         
         return $this->typesAgrement[$sourceCode];
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de Contrat persistée.
+     * 
+     * @param TypeContrat $type
+     * @param Intervenant $intervenant
+     * @param Structure $structure
+     * @return Contrat
+     */
+    public function getContrat(TypeContrat $type, Intervenant $intervenant, Structure $structure = null)
+    {
+        $a = Asset::newContrat(
+                $type, 
+                $intervenant, 
+                $structure ?: $intervenant->getStructure());
+        
+        $this->getEntityManager()->persist($a);
+
+        $this->newEntities->push($a);
+        
+        return $a;
+    }
+
+    /**
+     * Retourne à chaque appel une nouvelle instance de TypeContrat persistée.
+     * 
+     * @param boolean $avenant
+     * @return TypeContrat
+     */
+    public function getTypeContrat($avenant = false)
+    {
+        $code = $avenant ? TypeContrat::CODE_AVENANT : TypeContrat::CODE_CONTRAT;
+                
+        if (!isset($this->typesContrat[$code])) {
+            $this->typesContrat[$code] = $this->getEntityManager()->getRepository('Application\Entity\Db\TypeContrat')
+                    ->findOneByCode($code);
+            if (!$this->typesContrat[$code]) {
+                throw new RuntimeException("TypeContrat introuvable avec le code '$code'.");
+            }
+        }
+        
+        return $this->typesContrat[$code];
     }
 }

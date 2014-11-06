@@ -55,6 +55,7 @@ class BaseTestCase extends PHPUnit_Framework_TestCase
     {
         if (null === $this->entityProvider) {
             $this->entityProvider = new EntityProvider($this->getEntityManager($name));
+            $this->entityProvider->setTestClassName(get_class($this));
         }
         
         return $this->entityProvider;

@@ -148,7 +148,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
      */
     public function estUnAvenant()
     {
-        return $this->getTypeContrat()->getCode() === TypeContrat::CODE_AVENANT;
+        return $this->getTypeContrat()->estUnAvenant();
     }
     
     /**

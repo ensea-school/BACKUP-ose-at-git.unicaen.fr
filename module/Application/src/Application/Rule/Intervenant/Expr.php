@@ -55,7 +55,7 @@ class Expr extends BaseExpr
             $parts[] = $rule->getQuerySQL();
         }
         
-        return '(' . PHP_EOL . implode(PHP_EOL . $glue . PHP_EOL, $parts) . PHP_EOL . ')' . PHP_EOL;
+        return implode(PHP_EOL . $glue . PHP_EOL, $parts);
     }
     
     /**

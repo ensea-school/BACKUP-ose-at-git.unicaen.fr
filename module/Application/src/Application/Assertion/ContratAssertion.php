@@ -68,7 +68,7 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
                 return false;
             }
             
-            $contratStepKey = WorkflowIntervenant::KEY_EDITION_CONTRAT;
+            $contratStepKey = WorkflowIntervenant::KEY_CONTRAT;
             
             // l'étape Contrat du workflow doit être atteignable
             if (!$this->getWorkflow()->isStepReachable($contratStepKey)) {

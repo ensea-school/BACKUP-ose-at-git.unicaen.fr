@@ -35,6 +35,8 @@ use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeAgrementStatut;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Validation;
+use Application\Entity\Db\Contrat;
+use Application\Entity\Db\TypeContrat;
 use DateTime;
 
 /**
@@ -136,6 +138,7 @@ class Asset
                 ->setPeutSaisirDossier(true)
                 ->setPeutSaisirReferentiel(true)
                 ->setPeutSaisirService(true)
+                ->setPeutAvoirContrat(0)
                 ->setPlafondReferentiel(100)
                 ->setOrdre(1)
                 ->setSource(static::getSource())
@@ -419,7 +422,8 @@ class Asset
                 ->setType($type)
                 ->setAnnee($annee)
                 ->setIntervenant($intervenant)
-                ->setStructure($structure);
+                ->setStructure($structure)
+                ->setDateDecision(new \DateTime());
         
         return $e;
     }
@@ -431,6 +435,28 @@ class Asset
                 ->setIntervenant($intervenant)
                 ->setStructure($structure ?: $intervenant->getStructure())
                 ->setTypeValidation($type);
+        
+        return $e;
+    }
+    
+    static public function newContrat(TypeContrat $type, Intervenant $intervenant, Structure $structure)
+    {
+        $e = new Contrat();
+        $e
+                ->setTypeContrat($type)
+                ->setIntervenant($intervenant)
+                ->setStructure($structure)
+                ->setNumeroAvenant($type->estUnAvenant() ? 1 : 0);
+        
+        return $e;
+    }
+    
+    static public function newTypeContrat($avenant = false)
+    {
+        $e = new TypeContrat();
+        $e
+                ->setCode($avenant ? TypeContrat::CODE_AVENANT : TypeContrat::CODE_CONTRAT)
+                ->setLibelle(uniqid("TC "));
         
         return $e;
     }

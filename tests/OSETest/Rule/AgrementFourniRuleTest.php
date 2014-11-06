@@ -8,6 +8,7 @@ use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeAgrementStatut;
+use Application\Entity\Db\Structure;
 use Application\Rule\Intervenant\AgrementFourniRule;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
@@ -114,24 +115,15 @@ class AgrementFourniRuleTest extends BaseRuleTest
         $this->rule->setTypeAgrement(null);
         $this->rule->execute();
     }
-    
-    /**
-     * @expectedException LogicException
-     */
-    public function testExecuteThrowsExceptionWhenBadTypeSpecified()
-    {
-        $ta = $this->getEntityProvider()->getTypeAgrement();
-        $this->rule->setTypeAgrement($ta);
-    }
-    
-    /**
-     * @expectedException LogicException
-     */
-    public function testExecuteThrowsExceptionWhenNoRoleSpecified()
-    {
-        $this->rule->setIntervenant($this->ie);
-        $this->rule->execute();
-    }
+//    
+//    /**
+//     * @expectedException LogicException
+//     */
+//    public function testExecuteThrowsExceptionWhenNoRoleSpecified()
+//    {
+//        $this->rule->setIntervenant($this->ie);
+//        $this->rule->execute();
+//    }
     
     /**
      * @return array
@@ -179,11 +171,17 @@ class AgrementFourniRuleTest extends BaseRuleTest
      */
     public function testExecuteIntervenantsSansAgrementOuAgrementNonAttendu($tasObligatoire, $tasPremierRecrutement)
     {
-        $this->rule->setTypeAgrement($this->typeAgrementCR);
+        $this->_testExecuteIntervenantsSansAgrementOuAgrementNonAttendu($this->typeAgrementCR, $tasObligatoire, $tasPremierRecrutement);
+        $this->_testExecuteIntervenantsSansAgrementOuAgrementNonAttendu($this->typeAgrementCA, $tasObligatoire, $tasPremierRecrutement);
+    }
+
+    private function _testExecuteIntervenantsSansAgrementOuAgrementNonAttendu($typeAgrement, $tasObligatoire, $tasPremierRecrutement)
+    {
+        $this->rule->setTypeAgrement($typeAgrement);
         $this->rule->setRole($this->roleIntervenant);
         
         // un seul type d'agrément attendu
-        $this->createTAS($this->typeAgrementCR, $tasObligatoire, $tasPremierRecrutement);
+        $this->createTAS($typeAgrement, $tasObligatoire, $tasPremierRecrutement);
         
         foreach ([false, true] as $intervenantPremierRecrutement) {
             $this->setPremierRecrutementIntervenant($this->ie, $intervenantPremierRecrutement);
@@ -210,329 +208,202 @@ class AgrementFourniRuleTest extends BaseRuleTest
                 $this->rule->setIntervenant(null);
                 $this->assertIntervenantInResult($this->ie);
                 
-                /**
-                 * @todo Corriger la règle pour prendre en compte le caractère facultatif 
-                 * dans AgrementAbstractRule
-                 */
                 $this->rule->setIntervenant($this->ie);
                 $this->assertIntervenantInResult($this->ie);
             }
         }
     }
+    
+    public function testExecuteIntervenantsAvecUnAgrementConseilRestreintAttenduEtFourni()
+    {
+        $typeAgrement          = $this->typeAgrementCR;
+        $tasObligatoire        = true;
+        $tasPremierRecrutement = true;
+            
+        $this->setPremierRecrutementIntervenant($this->ie, $tasPremierRecrutement);
+        
+        $this->rule->setRole($this->roleIntervenant);
+        $this->rule->setTypeAgrement($typeAgrement);
+        
+        $typeStructureEns = $this->getEntityProvider()->getTypeStructureEns();
+        $composante1      = $this->getEntityProvider()->getStructure()->setType($typeStructureEns);
+        $composante2      = $this->getEntityProvider()->getStructure()->setType($typeStructureEns);
+        $this->getEntityManager()->flush($composante1);
+        $this->getEntityManager()->flush($composante2);
 
-//    /**
-//     * @dataProvider getSettings
-//     */
-//    public function testExecuteIntervenantsAvecUnePjAttendue($tpjsObligatoire, $tpjsPremierRecrutement)
-//    {
-//        // une seule PJ attendue
-//        $tpj = $this->getEntityProvider()->getTypePieceJointe();
-//        $this->getEntityManager()->flush($tpj);
-//        $this->createTpjs($tpj, $tpjsObligatoire, $tpjsPremierRecrutement);
-//        
-//        // l'intervenant a fourni l'unique PJ attendue...
-//        $tpjAttendu = $tpj;
-//        $this->addPieceJointeToIntervenant($tpjAttendu);
-//        
-//        foreach ([false, true] as $intervenantPremierRecrutement) {
-//            $this->setPremierRecrutementIntervenant($intervenantPremierRecrutement);
-//            
-//            // lorsque le recrutement de l'intervenant ne correspond pas à celui de la config TypePieceJointeStatut,
-//            // l'intervenant n'a pas à fournir la PJ
-//            if ($intervenantPremierRecrutement !== $tpjsPremierRecrutement) {
-//                $this->rule->setIntervenant(null);
-//                $this->assertIntervenantNotInResult($this->ie);
-//                
-//                $this->rule->setIntervenant($this->ie);
-//                $this->assertIntervenantNotInResult($this->ie);
-//            }
-//            // sinon l'intervenant est dans la liste des intervenants en règle avec leurs PJ
-//            else {
-//                $this->rule->setIntervenant(null);
-//                $this->assertIntervenantInResult($this->ie);
-//                
-//                $this->rule->setIntervenant($this->ie);
-//                $this->assertIntervenantInResult($this->ie);
-//            }
-//        }
-//    }
-//
-//    /**
-//     * 
-//     */
-//    public function testExecuteAvecPjObligatoireSelonSeuil()
-//    {
-//        $premierRecrutement = true;
-//        $this->setPremierRecrutementIntervenant($premierRecrutement);
-//        
-//        // une PJ obligatoire au delà d'un seuil d'heures
-//        $tpj = $this->getEntityProvider()->getTypePieceJointe();
-//        $this->getEntityManager()->flush($tpj);
-//        $this->createTpjs($tpj, true, $premierRecrutement, 20);
-//        
-//        // si l'utilisateur n'a aucun service, la PJ n'est pas obligatoire
-//        // --> l'utilisateur est en règle
-//        $this->rule->setIntervenant(null);
-//        $this->assertIntervenantInResult($this->ie);
-//
-//        $this->rule->setIntervenant($this->ie);
-//        $this->assertIntervenantInResult($this->ie);
-//        
-//        // si l'utilisateur a moins d'heures de service que le seuil requis, la PJ n'est pas obligatoire
-//        // --> l'utilisateur est en règle
-//        $this->setServiceIntervenant($this->ie, ['CM' => 15.0], $this->service);
-//        
-//        $this->rule->setIntervenant(null);
-//        $this->assertIntervenantInResult($this->ie);
-//
-//        $this->rule->setIntervenant($this->ie);
-//        $this->assertIntervenantInResult($this->ie);
-//        
-//        // si l'utilisateur a exactement le nombre d'heures de service que le seuil requis, la PJ devient obligatoire
-//        // --> l'utilisateur n'est plus en règle
-//        $this->setServiceIntervenant($this->ie, ['CM' => 20], $this->service);
-//        
-//        $this->rule->setIntervenant(null);
-//        $this->assertIntervenantNotInResult($this->ie);
-//
-//        $this->rule->setIntervenant($this->ie);
-//        $this->assertIntervenantNotInResult($this->ie);
-//        
-//        // si l'utilisateur a plus d'heures de service que le seuil requis, la PJ reste obligatoire
-//        // --> l'utilisateur n'est toujours pas en règle
-//        $this->setServiceIntervenant($this->ie, ['CM' => 20.01], $this->service);
-//        
-//        $this->rule->setIntervenant(null);
-//        $this->assertIntervenantNotInResult($this->ie);
-//
-//        $this->rule->setIntervenant($this->ie);
-//        $this->assertIntervenantNotInResult($this->ie);
-//        
-//        // maintenant, l'utilisateur fournit la PJ attendue
-//        // --> l'utilisateur est en règle
-//        $tpjAttendu = $tpj;
-//        $this->addPieceJointeToIntervenant($tpjAttendu);
-//        
-//        $this->rule->setIntervenant(null);
-//        $this->assertIntervenantInResult($this->ie);
-//
-//        $this->rule->setIntervenant($this->ie);
-//        $this->assertIntervenantInResult($this->ie);
-//    }
-//    
-//    /**
-//     * @return array
-//     */
-//    public function getFichierEtValidationFlags()
-//    {
-//        return [
-//            'AvecOuSansFichier_AvecOuSansValidation' => [null, null],
-//            'AvecOuSansFichier_AvecValidation'       => [null, true],
-//            'AvecFichier_AvecOuSansValidation'       => [true, null],
-//            'AvecFichier_AvecValidation'             => [true, true],
-//        ];
-//    }
-//
-//    /**
-//     * @dataProvider getFichierEtValidationFlags
-//     */
-//    public function testGetPiecesJointesFournies($avecFichier, $avecValidation)
-//    {
-//        $this->rule
-//                ->setIntervenant($this->ie)
-//                ->setAvecFichier($avecFichier)
-//                ->setAvecValidation($avecValidation);
-//                
-//        /**
-//         * Aucune PJ fournie
-//         */
-//        $fournies = $this->rule->getPiecesJointesFournies();
-//        $this->assertEquals([], $fournies);
-//        
-//        /**
-//         * PJ fournie: pas de fichier, pas de validation
-//         */
-//        $tpj = $this->getEntityProvider()->getTypePieceJointe();
-//        $pj = $this->addPieceJointeToIntervenant($tpj);
-//        $this->getEntityManager()->flush($tpj);
-//        $this->getEntityManager()->flush($pj);
-//        
-//        $fournies = $this->rule->getPiecesJointesFournies();
-//        if (true === $avecFichier || true === $avecValidation) {
-//            $this->assertEquals([], $fournies);
-//        }
-//        else {
-//            $this->assertCount(1, $fournies);
-//            $this->assertContains($pj, $fournies);
-//        }
-//        
-//        /**
-//         * PJ fournie: un fichier, pas de validation
-//         */
-//        $fichier = $this->getEntityProvider()->getFichier();
-//        $pj->addFichier($fichier);
-//        $this->getEntityManager()->flush($fichier);
-//        $this->getEntityManager()->flush($pj);
-//        
-//        $fournies = $this->rule->getPiecesJointesFournies();
-//        if (false === $avecFichier || true === $avecValidation) {
-//            $this->assertEquals([], $fournies);
-//        }
-//        else {
-//            $this->assertCount(1, $fournies);
-//            $this->assertContains($pj, $fournies);
-//        }
-//        
-//        /**
-//         * PJ fournie: un fichier, une validation
-//         */
-//        $typeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_PIECE_JOINTE);
-//        $validation = $this->getEntityProvider()->getValidation($typeValidation, $this->ie);
-//        $pj->setValidation($validation);
-//        $this->getEntityManager()->flush($validation);
-//        $this->getEntityManager()->flush($pj);
-//        
-//        $fournies = $this->rule->getPiecesJointesFournies();
-//        if (false === $avecFichier || false === $avecValidation) {
-//            $this->assertEquals([], $fournies);
-//        }
-//        else {
-//            $this->assertCount(1, $fournies);
-//            $this->assertContains($pj, $fournies);
-//        }
-//        
-//        /**
-//         * PJ fournie: pas de fichier, une validation
-//         */
-//        $pj->removeFichier($fichier);
-//        $this->getEntityManager()->remove($fichier);
-//        $this->getEntityManager()->flush($pj);
-//        
-//        $fournies = $this->rule->getPiecesJointesFournies();
-//        if (true === $avecFichier || false === $avecValidation) {
-//            $this->assertEquals([], $fournies);
-//        }
-//        else {
-//            $this->assertCount(1, $fournies);
-//            $this->assertContains($pj, $fournies);
-//        }
-//    }
-//
-//    /**
-//     * 
-//     */
-//    public function testGetTypesPieceJointeObligatoiresNonFournis()
-//    {
-//        $this->rule->setIntervenant($this->ie);
-//        
-//        /**
-//         * 3 PJ attendues : 1 obligatoire sans seuil, 1 obligatoire au-delà de 20h, et 1 facultative
-//         */
-//        $tpjObl1 = $this->getEntityProvider()->getTypePieceJointe();
-//        $tpjObl2 = $this->getEntityProvider()->getTypePieceJointe();
-//        $tpjFac  = $this->getEntityProvider()->getTypePieceJointe();
-//        $this->getEntityManager()->flush($tpjObl1);
-//        $this->getEntityManager()->flush($tpjObl2);
-//        $this->getEntityManager()->flush($tpjFac);
-//        $this->createTpjs($tpjObl1, true, true);
-//        $this->createTpjs($tpjObl2, true, true, 20);
-//        $this->createTpjs($tpjFac, false, true);
-//        
-//        /**
-//         * Aucune PJ fournie, aucun service
-//         */
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertCount(1, $types);
-//        $this->assertContains($tpjObl1, $types);
-//        
-//        /**
-//         * Aucune PJ fournie, service < seuil
-//         */
-//        $this->setServiceIntervenant($this->ie, ['CM' => 10], $this->service);
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertCount(1, $types);
-//        $this->assertContains($tpjObl1, $types);
-//        
-//        /**
-//         * Aucune PJ fournie, service > seuil
-//         */
-//        $this->setServiceIntervenant($this->ie, ['CM' => 25], $this->service);
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertCount(2, $types);
-//        $this->assertContains($tpjObl1, $types);
-//        $this->assertContains($tpjObl2, $types);
-//        
-//        /**
-//         * PJ facultative fournie
-//         */
-//        $this->addPieceJointeToIntervenant($tpjFac);
-//        
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertCount(2, $types);
-//        $this->assertContains($tpjObl1, $types);
-//        $this->assertContains($tpjObl2, $types);
-//        
-//        /**
-//         * PJ obligatoire sans seuil fournie
-//         */
-//        $this->addPieceJointeToIntervenant($tpjObl1);
-//        
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertCount(1, $types);
-//        $this->assertContains($tpjObl2, $types);
-//        
-//        /**
-//         * PJ obligatoire avec seuil fournie
-//         */
-//        $this->addPieceJointeToIntervenant($tpjObl2);
-//        
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertEquals([], $types);
-//    }
-//
-//    /**
-//     * 
-//     */
-//    public function testGetTypesPieceJointeObligatoiresSelonSeuilNonFournis()
-//    {
-//        $this->rule->setIntervenant($this->ie);
-//        
-//        /**
-//         * 2 PJ attendues : une obligatoire et une facultative
-//         */
-//        $tpjObl = $this->getEntityProvider()->getTypePieceJointe();
-//        $tpjFac = $this->getEntityProvider()->getTypePieceJointe();
-//        $this->getEntityManager()->flush($tpjObl);
-//        $this->getEntityManager()->flush($tpjFac);
-//        $this->createTpjs($tpjObl, true, true, null);
-//        $this->createTpjs($tpjFac, false, true, null);
-//        
-//        /**
-//         * Aucune PJ fournie
-//         */
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertCount(1, $types);
-//        $this->assertContains($tpjObl, $types);
-//        
-//        /**
-//         * PJ facultative fournie
-//         */
-//        $pjFac = $this->addPieceJointeToIntervenant($tpjFac);
-//        $this->getEntityManager()->flush($pjFac);
-//        
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertCount(1, $types);
-//        $this->assertContains($tpjObl, $types);
-//        
-//        /**
-//         * PJ obligatoire fournie
-//         */
-//        $pjObl = $this->addPieceJointeToIntervenant($tpjObl);
-//        $this->getEntityManager()->flush($pjObl);
-//        
-//        $types = $this->rule->getTypesPieceJointeObligatoiresNonFournis();
-//        $this->assertEquals([], $types);
-//    }
+        $this->createTAS($typeAgrement, $tasObligatoire, $tasPremierRecrutement);
+        $this->addAgrementToIntervenant($this->ie, $typeAgrement, $composante1);
+        
+        /**
+         * - aucune structure précise transmise à la règle métier
+         * - 1 agrément Conseil Restreint attendu a été fourni
+         * - aucun enseignement saisi donc aucune composante d'intervention
+         * --> l'intervenant figure dans la liste des intervenants en règle
+         */
+        $this->rule->setStructure(null);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
+        
+        /**
+         * - aucune structure précise transmise à la règle métier
+         * - 1 agrément Conseil Restreint attendu a été fourni
+         * - 2 enseignements saisis dans 2 composantes d'intervention différentes : doit exister autant d'agréments que de composantes
+         * --> 1 agrément < 2 composantes : l'intervenant n'est pas en règle
+         */
+        $this->rule->setStructure(null);
+        
+        $service1 = $this->getEntityProvider()->getService($this->ie, $composante1);
+        $service2 = $this->getEntityProvider()->getService($this->ie, $composante2);
+        $this->setServiceIntervenant($this->ie, ['CM' => 10], $service1);
+        $this->setServiceIntervenant($this->ie, ['CM' => 20], $service2);
+        $this->getEntityManager()->flush($service1);
+        $this->getEntityManager()->flush($service2);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantNotInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantNotInResult($this->ie);
+        
+        /**
+         * - une structure précise est transmise à la règle métier : composante 2
+         * - 1 agrément Conseil Restreint attendu a été fourni concernant la composante 1
+         * - 2 enseignements saisis dans 2 composantes d'intervention différentes : un agrément concernant la structure doit exister
+         * --> structure transmise à la règle != celle de l'agrément : l'intervenant n'est donc pas en règle
+         */
+        $this->rule->setStructure($composante2);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantNotInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantNotInResult($this->ie);
+        
+        /**
+         * - une structure précise est transmise à la règle métier : composante 1
+         * - 1 agrément Conseil Restreint attendu a été fourni concernant la composante 1
+         * - 2 enseignements saisis dans 2 composantes d'intervention différentes : un agrément concernant la structure doit exister
+         * --> structure transmise à la règle = celle de l'agrément : l'intervenant est donc en règle
+         */
+        $this->rule->setStructure($composante1);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
+        
+        /**
+         * - aucune structure précise transmise à la règle métier
+         * - 2 agréments Conseil Restreint attendus ont été fournis
+         * - 2 enseignements saisis dans 2 composantes d'intervention différentes
+         * --> 2 agréments = 2 composantes : l'intervenant est en règle
+         */
+        $this->rule->setStructure(null);
+        
+        $this->addAgrementToIntervenant($this->ie, $typeAgrement, $composante2);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
+    }
+    
+    
+    public function testExecuteIntervenantsAvecUnAgrementConseilAcademiqueAttenduEtFourni()
+    {
+        $typeAgrement          = $this->typeAgrementCA;
+        $tasObligatoire        = true;
+        $tasPremierRecrutement = true;
+            
+        $this->setPremierRecrutementIntervenant($this->ie, $tasPremierRecrutement);
+        
+        $this->rule->setRole($this->roleIntervenant);
+        $this->rule->setTypeAgrement($typeAgrement);
+        
+        $typeStructureEns = $this->getEntityProvider()->getTypeStructureEns();
+        $composante1      = $this->getEntityProvider()->getStructure()->setType($typeStructureEns);
+        $composante2      = $this->getEntityProvider()->getStructure()->setType($typeStructureEns);
+        $this->getEntityManager()->flush($composante1);
+        $this->getEntityManager()->flush($composante2);
+
+        $this->createTAS($typeAgrement, $tasObligatoire, $tasPremierRecrutement);
+        $this->addAgrementToIntervenant($this->ie, $typeAgrement, $composante1);
+        
+        /**
+         * - aucune structure précise transmise à la règle métier
+         * - 1 agrément Conseil Academique attendu a été fourni
+         * - aucun enseignement saisi donc aucune composante d'intervention
+         * --> l'intervenant figure dans la liste des intervenants en règle
+         */
+        $this->rule->setStructure(null);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
+        
+        /**
+         * - aucune structure précise transmise à la règle métier
+         * - 1 agrément Conseil Academique attendu a été fourni
+         * - 2 enseignements saisis dans 2 composantes d'intervention différentes : 1 agrément pour toutes les composantes suffit
+         * --> l'intervenant est en règle
+         */
+        $this->rule->setStructure(null);
+        
+        $service1 = $this->getEntityProvider()->getService($this->ie, $composante1);
+        $service2 = $this->getEntityProvider()->getService($this->ie, $composante2);
+        $this->setServiceIntervenant($this->ie, ['CM' => 10], $service1);
+        $this->setServiceIntervenant($this->ie, ['CM' => 20], $service2);
+        $this->getEntityManager()->flush($service1);
+        $this->getEntityManager()->flush($service2);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
+        
+        /**
+         * - une structure précise est transmise à la règle métier (composante 2) mais elle n'est pas prise en compte
+         * - 1 agrément Conseil Academique attendu a été fourni concernant la composante 1
+         * - 2 enseignements saisis dans 2 composantes d'intervention différentes : 1 agrément pour toutes les composantes suffit
+         * --> l'intervenant est en règle
+         */
+        $this->rule->setStructure($composante2);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
+        
+        /**
+         * - une structure précise est transmise à la règle métier (composante 2) mais elle n'est pas prise en compte
+         * - 1 agrément Conseil Academique attendu a été fourni concernant la composante 1
+         * - 2 enseignements saisis dans 2 composantes d'intervention différentes : 1 agrément pour toutes les composantes suffit
+         * --> l'intervenant est en règle
+         */
+        $this->rule->setStructure($composante1);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
+        
+        /**
+         * - aucune structure précise transmise à la règle métier
+         * - 2 agréments Conseil Academique attendus ont été fournis
+         * - 2 enseignements saisis dans 2 composantes d'intervention différentes : 1 agrément pour toutes les composantes suffit
+         * --> l'intervenant est en règle
+         */
+        $this->rule->setStructure(null);
+        
+        $this->addAgrementToIntervenant($this->ie, $typeAgrement, $composante2);
+        
+        $this->rule->setIntervenant(null);
+        $this->assertIntervenantInResult($this->ie);
+        $this->rule->setIntervenant($this->ie);
+        $this->assertIntervenantInResult($this->ie);
+    }
     
     /**
      * 
@@ -569,13 +440,14 @@ class AgrementFourniRuleTest extends BaseRuleTest
 
     /**
      * 
-     * @param TypeAgrement $typeAgrement
      * @param Intervenant $intervenant
+     * @param TypeAgrement $typeAgrement
+     * @param Structure $structure
      * @return Agrement
      */
-    private function addAgrementToIntervenant(TypeAgrement $typeAgrement, Intervenant $intervenant)
+    private function addAgrementToIntervenant(Intervenant $intervenant, TypeAgrement $typeAgrement, Structure $structure = null)
     {
-        $agrement = $this->getEntityProvider()->getAgrement($typeAgrement, $intervenant);
+        $agrement = $this->getEntityProvider()->getAgrement($typeAgrement, $intervenant, $structure);
         $intervenant->addAgrement($agrement);
         
         $this->getEntityManager()->flush($agrement);

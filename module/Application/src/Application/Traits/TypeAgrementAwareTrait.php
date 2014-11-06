@@ -24,12 +24,6 @@ trait TypeAgrementAwareTrait
      */
     public function setTypeAgrement(TypeAgrement $typeAgrement = null)
     {
-        if ($typeAgrement && !in_array($typeAgrement->getCode(), [
-            TypeAgrement::CODE_CONSEIL_RESTREINT,
-            TypeAgrement::CODE_CONSEIL_ACADEMIQUE ])) {
-            throw new LogicException("Type d'agrément spécifié inattendu!");
-        }
-        
         $this->typeAgrement = $typeAgrement;
         
         return $this;

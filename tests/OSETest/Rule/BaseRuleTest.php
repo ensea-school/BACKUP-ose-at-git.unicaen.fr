@@ -5,6 +5,9 @@ namespace OSETest\Rule;
 use Application\Rule\RuleInterface;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
+use Application\Entity\Db\IntervenantPermanent;
+use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\StatutIntervenant;
 use OSETest\BaseTestCase;
 use OSETest\Bootstrap;
 
@@ -75,19 +78,19 @@ abstract class BaseRuleTest extends BaseTestCase
         
         // la règle porte sur un intervenant précis
         if ($this->rule->getIntervenant()) {
-            $result = $this->rule->setIntervenant($intervenant)->execute();
+            $result = $this->rule->execute();
             $this->assertEquals([$id => ['id' => $id]], $result, $message);
             $this->assertNull($this->rule->getMessage(), $message);
         } 
         // la règle ne porte sur aucun intervenant précis
         else {
-            $result = $this->rule->setIntervenant(null)->execute();
+            $result = $this->rule->execute();
             $this->assertArrayHasKey($id, $result, $message);
             $this->assertEquals(['id' => $id], $result[$id], $message);
             $this->assertNull($this->rule->getMessage(), $message);
         }
     }
-
+    
     /**
      * Ajoute ou modifie du service à un intervenant.
      * 

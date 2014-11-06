@@ -258,4 +258,14 @@ class TypeContrat implements HistoriqueAwareInterface
     {
         return $this->getLibelle();
     }
+    
+    /**
+     * Retourne <code>true</code> si ce contrat est en réalité un avenant.
+     * 
+     * @return boolean
+     */
+    public function estUnAvenant()
+    {
+        return self::CODE_AVENANT === $this->getCode();
+    }
 }

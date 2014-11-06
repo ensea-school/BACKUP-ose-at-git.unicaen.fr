@@ -6,19 +6,9 @@ use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeValidation;
-use Application\Rule\Intervenant\Expr;
 use Application\Rule\Intervenant\AbstractIntervenantRule;
-use Application\Rule\Intervenant\AgrementFourniRule;
-use Application\Rule\Intervenant\DossierValideRule;
-use Application\Rule\Intervenant\NecessiteAgrementRule;
-use Application\Rule\Intervenant\NecessiteContratRule;
-use Application\Rule\Intervenant\PeutSaisirDossierRule;
-use Application\Rule\Intervenant\PeutSaisirPieceJointeRule;
-use Application\Rule\Intervenant\PeutSaisirServiceRule;
+use Application\Rule\Intervenant\Expr;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
-use Application\Rule\Intervenant\PossedeContratRule;
-use Application\Rule\Intervenant\PossedeDossierRule;
-use Application\Rule\Intervenant\PossedeServicesRule;
 use Application\Rule\Intervenant\ServiceValideRule;
 use Application\Service\Intervenant as IntervenantService;
 use Application\Service\TypeAgrement as TypeAgrementService;
@@ -34,7 +24,9 @@ use Application\Service\Workflow\Step\ValidationDossierStep;
 use Application\Service\Workflow\Step\ValidationServiceStep;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\RoleAwareTrait;
+use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
+use PDO;
 
 /**
  * 
@@ -46,16 +38,16 @@ class Workflow extends AbstractWorkflow
     use IntervenantAwareTrait;
     use RoleAwareTrait;
     
-    const KEY_SAISIE_DOSSIER     = 'SAISIE_DOSSIER';
-    const KEY_VALIDATION_DONNEES = 'ALIDATION_DONNEES';
-    const KEY_SAISIE_SERVICE     = 'SAISIE_SERVICE';
-    const KEY_VALIDATION_SERVICE = 'VALIDATION_SERVICE';
-    const KEY_PIECES_JOINTES     = 'PIECES_JOINTES';
-    const KEY_CONSEIL_RESTREINT  = 'CONSEIL_RESTREINT';  // NB: c'est texto le code du type d'agrément
-    const KEY_CONSEIL_ACADEMIQUE = 'CONSEIL_ACADEMIQUE'; // NB: c'est texto le code du type d'agrément
-    const KEY_EDITION_CONTRAT    = 'EDITION_CONTRAT';
-    const KEY_FINAL              = 'FINAL';
-    
+    const KEY_DONNEES_PERSO_SAISIE     = 'DONNEES_PERSO_SAISIE';
+    const KEY_DONNEES_PERSO_VALIDATION = 'DONNEES_PERSO_VALIDATION';
+    const KEY_SERVICE_SAISIE           = 'SERVICE_SAISIE';
+    const KEY_SERVICE_VALIDATION       = 'SERVICE_VALIDATION';
+    const KEY_PIECES_JOINTES           = 'PIECES_JOINTES';
+    const KEY_CONSEIL_RESTREINT        = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
+    const KEY_CONSEIL_ACADEMIQUE       = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
+    const KEY_CONTRAT                  = 'CONTRAT';
+    const KEY_FINAL                    = 'FINAL';
+
     /**
      * Création des différentes étapes et règles métiers composant le workflow.
      * 
@@ -69,7 +61,7 @@ class Workflow extends AbstractWorkflow
         /**
          * Saisie des données personnelles
          */
-        $key           = self::KEY_SAISIE_DOSSIER;
+        $key           = self::KEY_DONNEES_PERSO_SAISIE;
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
         $crossingRule  = $this->getServiceLocator()->get('PossedeDossierRule')->setIntervenant($this->getIntervenant());
         $this->addRule($key, $relevanceRule, $crossingRule);
@@ -80,7 +72,7 @@ class Workflow extends AbstractWorkflow
         /**
          * Saisie des services
          */
-        $key           = self::KEY_SAISIE_SERVICE;
+        $key           = self::KEY_SERVICE_SAISIE;
         $relevanceRule = Expr::orX(
                 $this->getServiceLocator()->get('PeutSaisirServiceRule')    ->setIntervenant($this->getIntervenant()),
                 $this->getServiceLocator()->get('PeutSaisirReferentielRule')->setIntervenant($this->getIntervenant())
@@ -109,7 +101,7 @@ class Workflow extends AbstractWorkflow
         /**
          * Validation des données personnelles
          */
-        $key           = self::KEY_VALIDATION_DONNEES;
+        $key           = self::KEY_DONNEES_PERSO_VALIDATION;
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
         $crossingRule  = $this->getServiceLocator()->get('DossierValideRule')->setIntervenant($this->getIntervenant())->setTypeValidation($this->getTypeValidationDossier());
         $this->addRule($key, $relevanceRule, $crossingRule);
@@ -120,7 +112,7 @@ class Workflow extends AbstractWorkflow
         /**
          * Validation des services
          */
-        $key           = self::KEY_VALIDATION_SERVICE;
+        $key           = self::KEY_SERVICE_VALIDATION;
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirServiceRule')->setIntervenant($this->getIntervenant());
         $crossingRule  = $this->getServiceValideRule();
         $this->addRule($key, $relevanceRule, $crossingRule);
@@ -129,11 +121,13 @@ class Workflow extends AbstractWorkflow
         }
         
         /**
-         * Agrements des différents conseils
+         * Agréments des différents conseils
          */
-        $relevanceRule = $this->getServiceLocator()->get('NecessiteAgrementRule')->setIntervenant($this->getIntervenant());
-        $typesAgrement = $relevanceRule->getTypesAgrementAttendus();
+        $typesAgrement = $this->getServiceTypeAgrement()->getList();
         foreach ($typesAgrement as $typeAgrement) {
+            $relevanceRule = $this->getServiceLocator()->get('NecessiteAgrementRule')->setIntervenant($this->getIntervenant());
+            $relevanceRule->setTypeAgrement($typeAgrement);
+            
             $crossingRule  = clone $this->getServiceLocator()->get('AgrementFourniRule');
             $crossingRule
                 ->setIntervenant($this->getIntervenant())
@@ -147,28 +141,25 @@ class Workflow extends AbstractWorkflow
             }
         }
         
-//        /**
-//         * Contrat / avenant
-//         */
-//        $necessiteContrat = new NecessiteContratRule($this->getIntervenant());
-//        if (!$necessiteContrat->isRelevant() || $necessiteContrat->execute()) {
-//            $transitionRule = new PossedeContratRule($this->getIntervenant());
-//            $transitionRule
-////                    ->setTypeValidation($this->getTypeValidationContrat())
-//                    ->setStructure($this->getStructure())
-//                    ->setValide(true);
-//            $this->addStep(
-//                    self::KEY_EDITION_CONTRAT,
-//                    new EditionContratStep(),
-//                    $transitionRule
-//            );
-//        }
-//        
-////        $this->addStep(
-////                self::KEY_FINAL,
-////                new Step\FinalStep(),
-////                null
-////        );
+        /**
+         * Contrat / avenant
+         */
+        $key           = self::KEY_CONTRAT;
+        $relevanceRule = $this->getServiceLocator()->get('NecessiteContratRule')->setIntervenant($this->getIntervenant());
+        $crossingRule  = $this->getServiceLocator()->get('PossedeContratRule')->setIntervenant($this->getIntervenant());
+        $crossingRule
+                ->setStructure($this->getStructure())
+                ->setValide(true);
+        $this->addRule($key, $relevanceRule, $crossingRule);
+        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+            $this->addStep($key, new EditionContratStep());
+        }
+        
+//        $this->addStep(
+//                self::KEY_FINAL,
+//                new Step\FinalStep(),
+//                null
+//        );
             
         return $this;
     }
@@ -176,7 +167,7 @@ class Workflow extends AbstractWorkflow
     /**
      * Retourne l'URL correspondant à l'étape spécifiée.
      * 
-     * @param \Application\Service\Workflow\Step $step
+     * @param Step $step
      * @return string
      */
     public function getStepUrl(Step $step)
@@ -276,51 +267,7 @@ class Workflow extends AbstractWorkflow
      * 
      * @return self
      */
-//    protected function processRulesQuerySQL()
-//    {
-//        if (null !== $this->rulesCrossingSQL && null !== $this->rulesNotCrossingSQL) {
-//            return $this;
-//        }
-//        
-//        $rulesCrossingSQLParts    = [];
-//        $rulesNotCrossingSQLParts = [];
-//        
-//        $previousKey = null;
-//        foreach ($this->getRules() as $key => $rules) {
-//            
-//            $relevanceRule = $rules['relevance'];
-//            $crossingRule  = $rules['crossing'];
-//            
-//            /**
-//             * Construction des requêtes SQL
-//             */
-//            
-//            $relevanceRuleSQL = $relevanceRule->setIntervenant(null)->getQuerySQL(); /* @var $relevanceRuleSQL AbstractIntervenantRule */
-//            $crossingRuleSQL  = $crossingRule ->setIntervenant(null)->getQuerySQL(); /* @var $crossingRuleSQL  AbstractIntervenantRule */
-//            
-//            $crossingSQLParts    = [];
-//            $notCrossingSQLParts = [];
-//            
-//            if (isset($rulesCrossingSQLParts[$previousKey])) {
-//                $notCrossingSQLParts[] = $rulesCrossingSQLParts[$previousKey];
-//                $crossingSQLParts[]    = $rulesCrossingSQLParts[$previousKey];
-//            }
-//            
-//            $crossingSQLParts[]    = $relevanceRuleSQL . PHP_EOL . 'INTERSECT' . PHP_EOL . $crossingRuleSQL . PHP_EOL;
-//            $notCrossingSQLParts[] = $relevanceRuleSQL . PHP_EOL . 'MINUS'     . PHP_EOL . $crossingRuleSQL . PHP_EOL;
-//            
-//            $rulesCrossingSQLParts   [$key] = implode('INTERSECT' . PHP_EOL, $crossingSQLParts)    . PHP_EOL;
-//            $rulesNotCrossingSQLParts[$key] = implode('INTERSECT' . PHP_EOL, $notCrossingSQLParts) . PHP_EOL;
-//
-//            $previousKey = $key;
-//        }
-//        
-//        $this->rulesCrossingSQL    = $rulesCrossingSQLParts;
-//        $this->rulesNotCrossingSQL = $rulesNotCrossingSQLParts;
-//        
-//        return $this;
-//    }
-    protected function processRulesQuerySQL()
+    protected function createRulesQuerySQL()
     {
         if (null !== $this->rulesCrossingSQL && null !== $this->rulesNotCrossingSQL) {
             return $this;
@@ -331,16 +278,22 @@ class Workflow extends AbstractWorkflow
         $rulesNotRelevantSQL = [];
         $rulesCrossingSQL    = [];
         $rulesNotCrossingSQL = [];
+
+        $indentor = function($sql, $n = 1) {
+            $lines = explode(PHP_EOL, $sql);
+            array_walk($lines, function(&$line) use ($n) { $line = str_repeat(' ', $n * 4) . $line; });
+            return implode(PHP_EOL, $lines);
+        };
         
         $previousKey = null;
         foreach ($this->getRules() as $key => $rules) {
             
             $relevantRuleSQL = implode(PHP_EOL, [
-                "-- Requête SQL des intervenants concernés par l'étape $key",
+                "-- Intervenants concernés par l'étape $key",
                 $rules['relevance']->setIntervenant(null)->getQuerySQL(),
             ]);
             $crossingRuleSQL =  implode(PHP_EOL, [
-                "-- Requête SQL des intervenants (pas forcément concernés) franchissant l'étape $key",
+                "-- Intervenants satisfaisant l'étape $key",
                 $rules['crossing'] ->setIntervenant(null)->getQuerySQL(),
             ]);
             
@@ -351,68 +304,80 @@ class Workflow extends AbstractWorkflow
             
             if (!isset($rulesNotRelevantSQL[$previousKey]) || !isset($rulesCrossingSQL[$previousKey])) {
                 $inputSQL = implode(PHP_EOL, [ 
-                    "-- Requête SQL des intervenants en entrée de l'étape $key",
-                    "-- > Pour l'étape 1, ce sont tous les intervenants existants",
+                    "-- Intervenants en entrée de l'étape $key (1ère étape) :",
+                    "--     Tous les intervenants existants",
                     $qb->getQuery()->getSQL(),
                 ]);
             } else {
                 $inputSQL = implode(PHP_EOL, [ 
-                    "-- Requête SQL des intervenants en entrée de l'étape $key",
-                    "-- > Pour les étapes 2+, ce sont les intervenants non concernés par l'étape précédente UNION les intervenants satisfaisant l'étape précédente $previousKey",
+                    "-- Intervenants en entrée de l'étape $key (i.e. en sortie de l'étape précédente $previousKey) :",
+                    "--     Intervenants non concernés par l'étape précédente $previousKey",
+                    "--     UNION",
+                    "--     Intervenants satisfaisant l'étape précédente $previousKey",
                     '(',
-                        $rulesNotRelevantSQL[$previousKey],
+                        $indentor($rulesNotRelevantSQL[$previousKey]),
                     ')',
                     'UNION',
                     '(',
-                        $rulesCrossingSQL[$previousKey],
+                        $indentor($rulesCrossingSQL[$previousKey]),
                     ')',
                 ]);
             }
             if (!$inputSQL) {
-                throw new \Common\Exception\LogicException("Anomalie: la requête SQL des intervenants en entrée est vide.");
+                throw new LogicException("Anomalie: la requête SQL des intervenants en entrée est vide.");
             }
             
             $notRelevantSQL = implode(PHP_EOL, [ 
-                    "-- Requête SQL des intervenants non concernés par l'étape $key (i.e. 'not relevant')",
-                    "-- > Ce sont les intervenants en entrée MINUS les intervenants concernés",
+                    "-- Intervenants non concernés par l'étape $key (i.e. 'not relevant') :",
+                    "--     Intervenants en entrée de l'étape $key",
+                    "--     MINUS",
+                    "--     Intervenants concernés par l'étape $key",
                     '(',
-                        $inputSQL,
+                        $indentor($inputSQL),
                     ')',
                     'MINUS',
                     '(',
-                        $relevantRuleSQL,
+                        $indentor($relevantRuleSQL),
                     ')',
             ]);
             
             $crossingSQL = implode(PHP_EOL, [ 
-                    "-- Requête SQL des intervenants concernés franchissant l'étape $key (i.e. 'crossing')",
-                    "-- > Ce sont les intervenants en entrée INTERSECT les intervenants concernés INTERSECT les intervenants satisfaisant l'étape",
+                    "-- Intervenants concernés par l'étape $key et la satisfaisant (i.e. 'crossing') :",
+                    "--     Intervenants en entrée de l'étape $key",
+                    "--     INTERSECT",
+                    "--     Intervenants concernés par l'étape $key",
+                    "--     INTERSECT",
+                    "--     Intervenants satisfaisant l'étape $key",
                     '(',
-                        $inputSQL,
+                        $indentor($inputSQL),
                     ')',
                     'INTERSECT',
                     '(',
-                        $relevantRuleSQL,
+                        $indentor($relevantRuleSQL),
                     ')',
                     'INTERSECT',
                     '(',
-                        $crossingRuleSQL,
+                        $indentor($crossingRuleSQL),
                     ')',
             ]);
             
             $notCrossingSQL = implode(PHP_EOL, [ 
-                    "-- Requête SQL des intervenants concernés ne franchissant pas l'étape $key (i.e. 'not crossing')",
-                    "-- > Ce sont les intervenants en entrée INTERSECT les intervenants concernés MINUS les intervenants satisfaisant l'étape",
+                    "-- Intervenants concernés par l'étape $key mais ne la satisfaisant pas (i.e. 'not crossing') :",
+                    "--     Intervenants en entrée de l'étape $key",
+                    "--     INTERSECT",
+                    "--     Intervenants concernés par l'étape $key",
+                    "--     MINUS",
+                    "--     Intervenants satisfaisant l'étape $key",
                     '(',
-                        $inputSQL,
+                        $indentor($inputSQL),
                     ')',
                     'INTERSECT',
                     '(',
-                        $relevantRuleSQL,
+                        $indentor($relevantRuleSQL),
                     ')',
                     'MINUS',
                     '(',
-                        $crossingRuleSQL,
+                        $indentor($crossingRuleSQL),
                     ')',
             ]);
             
@@ -440,7 +405,7 @@ class Workflow extends AbstractWorkflow
         
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
 
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         return AbstractIntervenantRule::normalizeResult($result);
     }
@@ -453,7 +418,7 @@ class Workflow extends AbstractWorkflow
      */
     public function getCrossingQuerySQL($stepKey)
     {
-        $this->processRulesQuerySQL();
+        $this->createRulesQuerySQL();
         
         if (!array_key_exists($stepKey, $this->rulesCrossingSQL)) {
             throw new RuntimeException("Aucune requête SQL trouvée avec la clé '$stepKey'.");
@@ -470,7 +435,7 @@ class Workflow extends AbstractWorkflow
      */
     public function getNotCrossingQuerySQL($stepKey)
     {
-        $this->processRulesQuerySQL();
+        $this->createRulesQuerySQL();
         
         if (!array_key_exists($stepKey, $this->rulesNotCrossingSQL)) {
             throw new RuntimeException("Aucune requête SQL trouvée avec la clé '$stepKey'.");
@@ -546,27 +511,5 @@ class Workflow extends AbstractWorkflow
         $typeValidation = $qb->getQuery()->getOneOrNullResult();
         
         return $typeValidation;
-    }
-    
-    /**
-     * @return TypeAgrement
-     */
-    protected function getTypeAgrementConseilRestreint()
-    {
-        $qb = $this->getServiceTypeAgrement()->finderByCode(TypeAgrement::CODE_CONSEIL_RESTREINT);
-        $type = $qb->getQuery()->getSingleResult();
-        
-        return $type;
-    }
-    
-    /**
-     * @return TypeAgrement
-     */
-    protected function getTypeAgrementConseilAcademique()
-    {
-        $qb = $this->getServiceTypeAgrement()->finderByCode(TypeAgrement::CODE_CONSEIL_ACADEMIQUE);
-        $type = $qb->getQuery()->getSingleResult();
-        
-        return $type;
     }
 }

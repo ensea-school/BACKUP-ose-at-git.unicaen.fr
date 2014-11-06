@@ -42,14 +42,14 @@ class WorkflowIntervenant extends AbstractWorkflow
     use IntervenantAwareTrait;
     use RoleAwareTrait;
     
-    const KEY_SAISIE_DONNEES     = 'KEY_SAISIE_DOSSIER';
-    const KEY_VALIDATION_DONNEES = 'KEY_VALIDATION_DONNEES';
-    const KEY_SAISIE_SERVICE     = 'KEY_SAISIE_SERVICE';
-    const KEY_VALIDATION_SERVICE = 'KEY_VALIDATION_SERVICE';
+    const KEY_SAISIE_DONNEES     = 'KEY_DONNEES_PERSO_SAISIE';
+    const KEY_DONNEES_PERSO_VALIDATION = 'KEY_DONNEES_PERSO_VALIDATION';
+    const KEY_SERVICE_SAISIE     = 'KEY_SERVICE_SAISIE';
+    const KEY_SERVICE_VALIDATION = 'KEY_SERVICE_VALIDATION';
     const KEY_PIECES_JOINTES     = 'KEY_PIECES_JOINTES';
     const KEY_CONSEIL_RESTREINT  = 'KEY_CONSEIL_RESTREINT';  // NB: 'KEY_' . code type agrément
     const KEY_CONSEIL_ACADEMIQUE = 'KEY_CONSEIL_ACADEMIQUE'; // NB: 'KEY_' . code type agrément
-    const KEY_EDITION_CONTRAT    = 'KEY_EDITION_CONTRAT';
+    const KEY_CONTRAT    = 'KEY_CONTRAT';
     const KEY_FINAL              = 'KEY_FINAL';
     
     /**
@@ -81,7 +81,7 @@ class WorkflowIntervenant extends AbstractWorkflow
         if (!$peutSaisirServices->isRelevant() || $peutSaisirServices->execute()) {
             $transitionRule = new PossedeServicesRule($this->getIntervenant());
             $this->addStep(
-                    self::KEY_SAISIE_SERVICE,
+                    self::KEY_SERVICE_SAISIE,
                     new SaisieServiceStep(),
                     $transitionRule
             );
@@ -106,7 +106,7 @@ class WorkflowIntervenant extends AbstractWorkflow
         if (!$peutSaisirDossier->isRelevant() || $peutSaisirDossier->execute()) {
             $transitionRule = (new DossierValideRule($this->getIntervenant()))->setTypeValidation($this->getTypeValidationDossier());
             $this->addStep(
-                    self::KEY_VALIDATION_DONNEES,
+                    self::KEY_DONNEES_PERSO_VALIDATION,
                     new ValidationDossierStep(),
                     $transitionRule
             );
@@ -119,7 +119,7 @@ class WorkflowIntervenant extends AbstractWorkflow
         if (!$peutSaisirService->isRelevant() || $peutSaisirService->execute()) {
             $transitionRule = $this->getServiceValideRule();
             $this->addStep(
-                    self::KEY_VALIDATION_SERVICE,
+                    self::KEY_SERVICE_VALIDATION,
                     new ValidationServiceStep(),
                     $transitionRule
             );
@@ -155,7 +155,7 @@ class WorkflowIntervenant extends AbstractWorkflow
                     ->setStructure($this->getStructure())
                     ->setValide(true);
             $this->addStep(
-                    self::KEY_EDITION_CONTRAT,
+                    self::KEY_CONTRAT,
                     new EditionContratStep(),
                     $transitionRule
             );

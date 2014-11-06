@@ -64,10 +64,10 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutSaisirReferentiel', 'peutChoisirDansDossier', 'peutSaisirDossier', 'ordre', '' . "\0" . 'Application\\Entity\\Db\\StatutIntervenant' . "\0" . 'typePieceJointeStatut');
+            return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutSaisirReferentiel', 'peutChoisirDansDossier', 'peutSaisirDossier', 'peutAvoirContrat', 'ordre', '' . "\0" . 'Application\\Entity\\Db\\StatutIntervenant' . "\0" . 'typePieceJointeStatut');
         }
 
-        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutSaisirReferentiel', 'peutChoisirDansDossier', 'peutSaisirDossier', 'ordre', '' . "\0" . 'Application\\Entity\\Db\\StatutIntervenant' . "\0" . 'typePieceJointeStatut');
+        return array('__isInitialized__', 'source', 'sourceCode', 'depassement', 'fonctionEC', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'serviceStatutaire', 'plafondReferentiel', 'maximumHETD', 'validiteDebut', 'validiteFin', 'id', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'typeAgrementStatut', 'nonAutorise', 'peutSaisirService', 'peutSaisirReferentiel', 'peutChoisirDansDossier', 'peutSaisirDossier', 'peutAvoirContrat', 'ordre', '' . "\0" . 'Application\\Entity\\Db\\StatutIntervenant' . "\0" . 'typePieceJointeStatut');
     }
 
     /**
@@ -242,28 +242,6 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     /**
      * {@inheritDoc}
      */
-    public function necessiteContrat()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'necessiteContrat', array());
-
-        return parent::necessiteContrat();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function peutSaisirPieceJointe()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'peutSaisirPieceJointe', array());
-
-        return parent::peutSaisirPieceJointe();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getNonAutorise()
     {
 
@@ -369,6 +347,28 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPeutSaisirDossier', array());
 
         return parent::getPeutSaisirDossier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPeutAvoirContrat($peutAvoirContrat = true)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPeutAvoirContrat', array($peutAvoirContrat));
+
+        return parent::setPeutAvoirContrat($peutAvoirContrat);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPeutAvoirContrat()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPeutAvoirContrat', array());
+
+        return parent::getPeutAvoirContrat();
     }
 
     /**

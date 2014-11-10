@@ -213,6 +213,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $process          = $this->getProcessContrat();
         $peutCreerContrat = $process->getPeutCreerContratInitial();
         $peutCreerAvenant = $process->getPeutCreerAvenant();
+        $messages         = [];
         $servicesDispos   = null;
         $action           = null;
         
@@ -244,9 +245,9 @@ class ContratController extends AbstractActionController implements ContextProvi
             $this->getServiceService()->setTypeVolumehoraire($servicesDispos, $this->getServiceTypeVolumeHoraire()->getPrevu()); // aide de vue
             $messages['info'] = "Des enseignements validés candidats pour un contrat/avenant ont été trouvés.";
         }
-        else {
-            $messages['info'] = "Aucun enseignement validé candidat pour un contrat/avenant n'a été trouvé.";
-        }
+//        else {
+//            $messages['info'] = "Aucun enseignement validé candidat pour un contrat/avenant n'a été trouvé.";
+//        }
             
         if ($this->getRequest()->isPost() && ($peutCreerContrat || $peutCreerAvenant)) {
             $process->creer();

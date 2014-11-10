@@ -64,10 +64,10 @@ class ElementPedagogique extends \Application\Entity\Db\ElementPedagogique imple
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'sourceCode', 'tauxFoad', 'fi', 'fc', 'fa', 'validiteDebut', 'validiteFin', 'id', 'cheminPedagogique', 'service', 'structure', 'periode', 'source', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'etape', 'elementModulateur', 'hasChanged', '' . "\0" . 'Application\\Entity\\Db\\ElementPedagogique' . "\0" . 'typeIntervention');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'sourceCode', 'tauxFoad', 'tauxFi', 'tauxFc', 'tauxFa', 'fi', 'fc', 'fa', 'validiteDebut', 'validiteFin', 'id', 'cheminPedagogique', 'service', 'structure', 'periode', 'source', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'etape', 'elementModulateur', 'hasChanged', '' . "\0" . 'Application\\Entity\\Db\\ElementPedagogique' . "\0" . 'typeIntervention');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'sourceCode', 'tauxFoad', 'fi', 'fc', 'fa', 'validiteDebut', 'validiteFin', 'id', 'cheminPedagogique', 'service', 'structure', 'periode', 'source', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'etape', 'elementModulateur', 'hasChanged', '' . "\0" . 'Application\\Entity\\Db\\ElementPedagogique' . "\0" . 'typeIntervention');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'sourceCode', 'tauxFoad', 'tauxFi', 'tauxFc', 'tauxFa', 'fi', 'fc', 'fa', 'validiteDebut', 'validiteFin', 'id', 'cheminPedagogique', 'service', 'structure', 'periode', 'source', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'etape', 'elementModulateur', 'hasChanged', '' . "\0" . 'Application\\Entity\\Db\\ElementPedagogique' . "\0" . 'typeIntervention');
     }
 
     /**
@@ -352,17 +352,6 @@ class ElementPedagogique extends \Application\Entity\Db\ElementPedagogique imple
     /**
      * {@inheritDoc}
      */
-    public function getHtmlRegimeInscription()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHtmlRegimeInscription', array());
-
-        return parent::getHtmlRegimeInscription();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getFi()
     {
 
@@ -396,6 +385,39 @@ class ElementPedagogique extends \Application\Entity\Db\ElementPedagogique imple
     /**
      * {@inheritDoc}
      */
+    public function getTauxFi()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTauxFi', array());
+
+        return parent::getTauxFi();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTauxFc()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTauxFc', array());
+
+        return parent::getTauxFc();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTauxFa()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTauxFa', array());
+
+        return parent::getTauxFa();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setFi($fi)
     {
 
@@ -424,6 +446,39 @@ class ElementPedagogique extends \Application\Entity\Db\ElementPedagogique imple
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFa', array($fa));
 
         return parent::setFa($fa);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTauxFi($tauxFi)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTauxFi', array($tauxFi));
+
+        return parent::setTauxFi($tauxFi);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTauxFc($tauxFc)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTauxFc', array($tauxFc));
+
+        return parent::setTauxFc($tauxFc);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTauxFa($tauxFa)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTauxFa', array($tauxFa));
+
+        return parent::setTauxFa($tauxFa);
     }
 
     /**

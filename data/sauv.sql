@@ -1,3 +1,29 @@
+CREATE TABLE "OSE"."CONTRAT_FICHIER" (	
+   "CONTRAT_ID" NUMBER(*,0) NOT NULL ENABLE, 
+   "FICHIER_ID" NUMBER(*,0) NOT NULL ENABLE, 
+   CONSTRAINT "CONTRAT_FICHIER_PK" PRIMARY KEY ("CONTRAT_ID", "FICHIER_ID"), 
+   CONSTRAINT "CONTRAT_FICHIER_FFK" FOREIGN KEY ("FICHIER_ID") REFERENCES "OSE"."FICHIER" ("ID") ON DELETE CASCADE ENABLE, 
+   CONSTRAINT "CONTRAT_FICHIER_cFK" FOREIGN KEY ("CONTRAT_ID") REFERENCES "OSE"."CONTRAT" ("ID") ON DELETE CASCADE ENABLE
+ ) ;
+ 
+ 
+ -- copie dossier.premier_recrutement --> intervenant.premier_recrutement
+UPDATE INTERVENANT I
+set i.premier_recrutement = (
+  select d.premier_recrutement
+  from DOSSIER D
+  inner join INTERVENANT_EXTERIEUR IE on ie.dossier_id = d.id
+  where ie.id = i.id 
+);
+-- verif
+select i.premier_recrutement, d.premier_recrutement
+from intervenant i
+inner join intervenant_exterieur ie on ie.id = i.id
+inner join dossier d on d.id = ie.dossier_id
+--where i.source_code = '30688'
+;
+
+
 -- recréation séquence TYPE_AGREMENT_ID_SEQ et insert 2 types agrément
 drop SEQUENCE TYPE_AGREMENT_ID_SEQ;
 CREATE SEQUENCE TYPE_AGREMENT_ID_SEQ  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE ;

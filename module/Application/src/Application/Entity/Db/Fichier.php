@@ -4,11 +4,12 @@ namespace Application\Entity\Db;
 
 use UnicaenApp\Filter\BytesFormatter;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
- 
+use UnicaenApp\Controller\Plugin\Upload\UploadedFileInterface;
+
 /**
  * Fichier
  */
-class Fichier implements HistoriqueAwareInterface, ResourceInterface
+class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFileInterface
 {
     use HistoriqueAwareTrait;
     

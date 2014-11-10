@@ -64,10 +64,10 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'numeroAvenant', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'dateRetourSigne');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'numeroAvenant', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'dateRetourSigne', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'fichier');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'numeroAvenant', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'dateRetourSigne');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'typeContrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'numeroAvenant', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'dateRetourSigne', '' . "\0" . 'Application\\Entity\\Db\\Contrat' . "\0" . 'fichier');
     }
 
     /**
@@ -549,6 +549,39 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDateRetourSigne', array());
 
         return parent::getDateRetourSigne();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addFichier(\Application\Entity\Db\Fichier $fichier)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addFichier', array($fichier));
+
+        return parent::addFichier($fichier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeFichier(\Application\Entity\Db\Fichier $fichier)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeFichier', array($fichier));
+
+        return parent::removeFichier($fichier);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFichier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFichier', array());
+
+        return parent::getFichier();
     }
 
     /**

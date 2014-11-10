@@ -3,28 +3,27 @@
 namespace Application\Controller;
 
 use Application\Acl\ComposanteRole;
-use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\TypeValidation;
-use Application\Entity\Db\TypeAgrement;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Common\Constants;
 use Common\Exception\LogicException;
-use DateTime;
 use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Form\Intervenant\ContratValidation;
 use Application\Form\Intervenant\ContratRetour;
 use Application\Entity\Db\Contrat;
+use Application\Assertion\FichierAssertion;
+use Zend\View\Model\JsonModel;
 
 /**
  * Description of ContratController
  *
- * @method Context context()
+ * @method Application\Controller\Plugin\Context context()
+ * @method Application\Controller\Plugin\Upload\UploadPlugin uploader()
  * @method \Doctrine\ORM\EntityManager em()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
@@ -535,6 +534,86 @@ class ContratController extends AbstractActionController implements ContextProvi
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+    }
+    
+    /**
+     * Dépôt du contrat signé.
+     * 
+     * @return Response
+     */
+    public function deposerFichierAction()
+    {
+        $contrat = $this->context()->mandatory()->contratFromRoute();
+        
+        $result  = $this->uploader()->upload();
+        
+        if ($result instanceof JsonModel) {
+            return $result;
+        }
+        if (is_array($result)) {
+            $this->getServiceContrat()->creerFichiers($result['files'], $contrat);
+        }
+        
+        return $this->redirect()->toRoute('contrat/lister-fichier', [], [], true);
+    }
+    
+    /**
+     * Listing des fichiers déposés pour le contrat.
+     * 
+     * @return aarray
+     */
+    public function listerFichierAction()
+    {
+        $contrat = $this->context()->mandatory()->contratFromRoute();
+               
+        return [
+            'contrat' => $contrat,
+        ];
+    }
+    
+    /**
+     * Téléchargement d'un fichier.
+     * 
+     * @throws UnAuthorizedException
+     */
+    public function telechargerFichierAction()
+    {
+        $contrat = $this->context()->mandatory()->contratFromRoute();
+        $fichier = $this->context()->fichierFromRoute();
+        
+        if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_TELECHARGER)) {
+            throw new UnAuthorizedException("Interdit!");
+        }
+        
+        $this->uploader()->download($fichier);
+    }
+    
+    /**
+     * Suppression d'un fichier déposé.
+     * 
+     * @return Response
+     * @throws UnAuthorizedException
+     */
+    public function supprimerFichierAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->redirect()->toRoute('home');
+        }
+        
+        $contrat = $this->context()->mandatory()->contratFromRoute();
+        $fichier = $this->context()->fichierFromRoute();
+        
+        if ($fichier) {
+            if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_DELETE)) {
+                throw new UnAuthorizedException("Suppression du fichier interdite!");
+            }
+            $contrat->removeFichier($fichier);
+            $this->em()->remove($fichier);
+        }
+        
+        $this->em()->flush();
+            
+        return $this->redirect()->toRoute('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true);
     }
     
     /**

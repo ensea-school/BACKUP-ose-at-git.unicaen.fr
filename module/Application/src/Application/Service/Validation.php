@@ -220,17 +220,19 @@ class Validation extends AbstractEntityService
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        $rule = new \Application\Rule\Intervenant\PeutValiderServiceRule($intervenant, $this->normalizeTypeValidation($type));
-                if (!$rule->execute()) {
-                    $message = "?";
-                    if ($role instanceof \Application\Acl\IntervenantRole) {
-                        $message = "Vous ne pouvez pas valider. ";
-                    }
-                    elseif ($role instanceof \Application\Acl\ComposanteRole) {
-                        $message = "Vous ne pouvez pas valider pour $intervenant. ";
-                    }
-                    return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
-                }
+        $rule = $this->getServiceLocator()->get('PeutValiderServiceRule')->setIntervenant($intervenant);
+        $rule->setTypeValidation($this->normalizeTypeValidation($type));
+        if (!$rule->execute()) {
+            $message = "";
+            if ($role instanceof \Application\Acl\IntervenantRole) {
+                $message = "Vous ne pouvez pas valider. ";
+            }
+            elseif ($role instanceof \Application\Acl\ComposanteRole) {
+                $message = "Vous ne pouvez pas valider pour $intervenant. ";
+            }
+            
+            return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
+        }
             
         return true;
     }

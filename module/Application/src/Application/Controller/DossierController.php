@@ -83,11 +83,13 @@ class DossierController extends AbstractActionController implements ContextProvi
         }
      
         $validation = null;
-        $dossierValide = new \Application\Rule\Intervenant\DossierValideRule($this->intervenant);
+        $dossierValide = $this->getServiceLocator()->get('DossierValideRule')->setIntervenant($this->intervenant);
         $dossierValide->setTypeValidation($this->getTypeValidationDossier());
         if ($dossierValide->isRelevant() && $dossierValide->execute()) {
             $this->readonly = true;
-            $validation = $this->intervenant->getValidation($this->getTypeValidationDossier());
+            if (count($validations = $this->intervenant->getValidation($this->getTypeValidationDossier()))) {
+                $validation = $validations->first();
+            }
         }
         
         $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */

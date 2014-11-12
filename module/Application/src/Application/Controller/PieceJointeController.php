@@ -247,9 +247,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
     private function getRulePiecesJointesFournies()
     {
         $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule');
-        $rule
-                ->setIntervenant($this->getIntervenant())
-                ->setTotalHeuresReellesIntervenant($this->getPieceJointeProcess()->getTotalHeuresReellesIntervenant());
+        $rule->setIntervenant($this->getIntervenant());
         
         return $rule;
     }

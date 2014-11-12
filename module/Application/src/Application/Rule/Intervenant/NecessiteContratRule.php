@@ -12,7 +12,7 @@ use PDO;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class NecessiteContratRule extends AgrementAbstractRule
+class NecessiteContratRule extends AbstractIntervenantRule
 {
     const MESSAGE_AUCUN = 'messageAucun';
 

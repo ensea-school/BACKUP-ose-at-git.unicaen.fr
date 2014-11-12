@@ -2,7 +2,7 @@
 
 namespace Application\Rule\Intervenant\Navigation;
 
-use Application\Rule\Intervenant\IntervenantRule;
+use Application\Rule\AbstractRule;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Workflow\AbstractWorkflow;
 
@@ -11,7 +11,7 @@ use Application\Service\Workflow\AbstractWorkflow;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class VoitPageRule extends IntervenantRule
+class VoitPageRule extends AbstractRule
 {
     use \Application\Traits\AnneeAwareTrait;
     

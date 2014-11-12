@@ -422,7 +422,7 @@ return array(
             'ApplicationCivilite'          => 'Application\\Service\\Civilite',
             'ApplicationStatutIntervenant' => 'Application\\Service\\StatutIntervenant',
             'ApplicationDossier'           => 'Application\\Service\\Dossier',
-            'Workflow'                     => 'Application\\Service\\Workflow\\Workflow',
+            'WorkflowIntervenant'          => 'Application\\Service\\Workflow\\WorkflowIntervenant',
             'IntervenantAssertion'         => 'Application\\Assertion\\IntervenantAssertion',
             'PeutSaisirDossierRule'        => 'Application\Rule\Intervenant\PeutSaisirDossierRule',
             'PeutSaisirServiceRule'        => 'Application\Rule\Intervenant\PeutSaisirServiceRule',

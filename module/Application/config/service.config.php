@@ -260,6 +260,7 @@ return array(
             'ProcessFormuleHetd'                => 'Application\\Service\\Process\\FormuleHetd',
             'ServiceAssertion'                  => 'Application\\Assertion\\ServiceAssertion',
             'ServiceReferentielAssertion'       => 'Application\\Assertion\\ServiceReferentielAssertion',
+            'PeutValiderServiceRule'            => 'Application\Rule\Intervenant\PeutValiderServiceRule',
         ),
         'factories' => array(
         ),

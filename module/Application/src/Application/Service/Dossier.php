@@ -50,7 +50,7 @@ class Dossier extends AbstractEntityService
             return $this->cannotDoThat("Anomalie : aucun intervenant spécifié.", $runEx);
         }
         
-        $rule = new \Application\Rule\Intervenant\PeutSaisirDossierRule($intervenant);
+        $rule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($intervenant);
         if (!$rule->execute()) {
             $message = "?";
             if ($role instanceof \Application\Acl\IntervenantRole) {

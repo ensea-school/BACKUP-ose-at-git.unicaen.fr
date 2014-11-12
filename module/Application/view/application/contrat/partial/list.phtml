@@ -62,6 +62,31 @@ $role        = $this->role;
                             'contrat'  => $contrat,
                             'services' => $this->services[$contrat->getId()])) ?>
                 </p>
+                
+                <?php if ($role instanceof Application\Acl\ComposanteRole && $contrat->getValidation() && $contrat->getDateRetourSigne()): ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>Dépôt du contrat signé</strong>
+                    </div>
+                    <div class="panel-body upload-container">
+                        <?php 
+                        $urlAjouter = $this->url('contrat/deposer-fichier', ['contrat' => $contrat->getId()], [], true);
+                        $urlLister  = $this->url('contrat/lister-fichier',  ['contrat' => $contrat->getId()], [], true);
+                        $uploader   = $this->uploader()->setUrl($urlAjouter);
+                        ?>
+                        <div class="row">
+                            <!-- Liste des fichiers déposés -->
+                            <div class="col-md-6">
+                                <?php echo $uploader->renderUploadedFiles($urlLister) ?>
+                            </div>
+                            <!-- formulaire de dépôt -->
+                            <div class="col-md-6">
+                                <?php echo $uploader->renderForm() ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endif ?>
             </td>
             <td class="retour">
                 <?php if (($d = $contrat->getDateRetourSigne())): ?>

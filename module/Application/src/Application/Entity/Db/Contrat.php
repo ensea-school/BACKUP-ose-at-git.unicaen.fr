@@ -85,6 +85,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $dateRetourSigne;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $fichier;
+
+    /**
      * Libellé de cet objet.
      * 
      * @return string
@@ -490,6 +495,39 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     public function getDateRetourSigne()
     {
         return $this->dateRetourSigne;
+    }
+
+    /**
+     * Add fichier
+     *
+     * @param \Application\Entity\Db\Fichier $fichier
+     * @return self
+     */
+    public function addFichier(\Application\Entity\Db\Fichier $fichier)
+    {
+        $this->fichier[] = $fichier;
+
+        return $this;
+    }
+
+    /**
+     * Remove fichier
+     *
+     * @param \Application\Entity\Db\Fichier $fichier
+     */
+    public function removeFichier(\Application\Entity\Db\Fichier $fichier)
+    {
+        $this->fichier->removeElement($fichier);
+    }
+
+    /**
+     * Get fichier
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFichier()
+    {
+        return $this->fichier;
     }
     
     /**

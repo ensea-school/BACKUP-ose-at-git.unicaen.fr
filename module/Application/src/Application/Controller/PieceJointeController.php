@@ -25,6 +25,7 @@ use Common\Exception\PieceJointe\PieceJointeException;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 /**
  * Description of UploadController
@@ -81,7 +82,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $typesPieceJointeStatut = $this->getPieceJointeProcess()->getTypesPieceJointeStatut();
         $piecesJointesFournies  = $this->getPieceJointeProcess()->getPiecesJointesFournies();
         $assertionPj            = (new PieceJointe())->setDossier($dossier); // entité transmise à l'assertion
-        $formUpload             = $this->getFormJoindre();
         
         $this->view->setVariables(array(
             'intervenant'            => $this->getIntervenant(),
@@ -91,7 +91,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
             'piecesJointesFournies'  => $piecesJointesFournies,
             'dossier'                => $dossier,
             'assertionPj'            => $assertionPj,
-            'formUpload'             => $formUpload,
             'role'                   => $role,
             'title'                  => $this->title,
         ));
@@ -150,15 +149,11 @@ class PieceJointeController extends AbstractActionController implements ContextP
      */
     public function listerAction()
     {
-        $pj   = $this->getPieceJointeProcess()->getPieceJointeFournie($this->getTypePieceJointe());
-        $form = $this->getFormJoindre();
-
-        $form->setAttribute('action', $this->url()->fromRoute('piece-jointe/intervenant/ajouter', [], [], true));
+        $pj = $this->getPieceJointeProcess()->getPieceJointeFournie($this->getTypePieceJointe());
                
         return [
             'typePieceJointe' => $this->getTypePieceJointe(),
             'pj'              => $pj,
-            'form'            => $form,
         ];
     }
     
@@ -171,33 +166,18 @@ class PieceJointeController extends AbstractActionController implements ContextP
     {
         $intervenant     = $this->getIntervenant();
         $typePieceJointe = $this->getTypePieceJointe();
-        $form            = $this->getFormJoindre();
-        $request         = $this->getRequest();
         
-        if ($request->isXmlHttpRequest()) {
-            $redir = $this->redirect()->toRoute('piece-jointe/intervenant/lister', [], [], true);
-        }
-        else {
-            $redir = $this->redirect()->toRoute('piece-jointe/intervenant', [], [], true);
-        }
+        $result  = $this->uploader()->upload();
         
-        if ($request->isPost()) {
-            // Make certain to merge the files info!
-            $post = array_merge_recursive(
-                $request->getPost()->toArray(),
-                $request->getFiles()->toArray()
-            );
-            $form->setData($post);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $this->getServicePieceJointe()->createFromFiles($data['files'], $intervenant, $typePieceJointe);
-                $this->notifyPiecesJointesFournies();
-                
-                return $redir;
-            }
+        if ($result instanceof JsonModel) {
+            return $result;
+        }
+        if (is_array($result)) {
+            $this->getServicePieceJointe()->createFromFiles($result['files'], $intervenant, $typePieceJointe);
+            $this->notifyPiecesJointesFournies();
         }
         
-        return $redir;
+        return $this->redirect()->toRoute('piece-jointe/intervenant/lister', [], [], true);
     }
     
     private function notifyPiecesJointesFournies()
@@ -272,20 +252,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
             throw new UnAuthorizedException("Interdit!");
         }
         
-        $content     = stream_get_contents($fichier->getContenu());
-        $contentType = $fichier->getType() ?: 'application/octet-stream';
-        
-        header('Content-Description: File Transfer');
-        header('Content-Type: ' . $contentType);
-        header('Content-Disposition: attachment; filename=' . $fichier->getNom());
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Length: ' . strlen($content));
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Expires: 0');
-        header('Pragma: public');
-        
-        echo $content;
-        exit;
+        $this->uploader()->download($fichier);
     }
     
     /**
@@ -427,17 +394,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
         ));
 
         return $this->view;
-    }
-    
-    protected $formJoindre;
-    
-    protected function getFormJoindre()
-    {
-        if (null === $this->formJoindre) {
-            $this->formJoindre = new Joindre();
-            $this->formJoindre->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-        }
-        return $this->formJoindre;
     }
     
     /**

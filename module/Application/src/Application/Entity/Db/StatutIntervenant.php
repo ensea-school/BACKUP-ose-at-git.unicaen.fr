@@ -156,6 +156,11 @@ class StatutIntervenant
     protected $libelle;
 
     /**
+     * @var integer
+     */
+    protected $ordre;
+
+    /**
      * @var float
      */
     protected $serviceStatutaire;
@@ -449,6 +454,29 @@ class StatutIntervenant
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Get ordre
+     * 
+     * @return integer
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
+     * Set ordre
+     * 
+     * @param integer $ordre
+     * @return self
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+        
+        return $this;
     }
 
     /**

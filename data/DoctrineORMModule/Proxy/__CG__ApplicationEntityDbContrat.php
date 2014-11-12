@@ -220,6 +220,17 @@ class Contrat extends \Application\Entity\Db\Contrat implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
+    public function estUnProjet()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'estUnProjet', array());
+
+        return parent::estUnProjet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setNumeroAvenant($numeroAvenant)
     {
 

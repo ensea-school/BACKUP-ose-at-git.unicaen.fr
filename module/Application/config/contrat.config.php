@@ -20,6 +20,7 @@ use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
+use Application\Assertion\ContratAssertion as CA;
     
 return array(
     'router' => array(
@@ -227,9 +228,15 @@ return array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
                     array(
+                        array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID), 
+                        'Contrat', 
+                        array(CA::PRIVILEGE_READ), 
+                        'ContratAssertion',
+                    ),
+                    array(
                         array(ComposanteRole::ROLE_ID), 
                         'Contrat', 
-                        array('create', 'read', 'delete', 'update', 'deposer'), 
+                        array(CA::PRIVILEGE_CREATE, CA::PRIVILEGE_DELETE, CA::PRIVILEGE_UPDATE, CA::PRIVILEGE_DATE_RETOUR, CA::PRIVILEGE_DEPOSER), 
                         'ContratAssertion',
                     ),
                 ),

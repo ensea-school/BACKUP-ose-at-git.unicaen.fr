@@ -16,8 +16,10 @@ use Zend\View\Model\ViewModel;
 use Application\Form\Intervenant\ContratValidation;
 use Application\Form\Intervenant\ContratRetour;
 use Application\Entity\Db\Contrat;
+use Application\Assertion\ContratAssertion;
 use Application\Assertion\FichierAssertion;
 use Zend\View\Model\JsonModel;
+use BjyAuthorize\Exception\UnAuthorizedException;
 
 /**
  * Description of ContratController
@@ -432,8 +434,6 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function exporterAction()
     {       
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
         $this->initFilters();
         
         // fetch le contrat/avenant spécifié
@@ -455,20 +455,8 @@ class ContratController extends AbstractActionController implements ContextProvi
 
         $this->intervenant = $this->contrat->getIntervenant();
         
-        if ($role instanceof ComposanteRole) {
-            if ($this->contrat->getStructure() !== $role->getStructure()) {
-                throw new \Common\Exception\MessageException("Le contrat/avenant ne vous est pas accessible.");
-            }
-        }
-        else {
-            if ($this->contrat->getIntervenant() !== $this->intervenant) {
-                throw new \Common\Exception\MessageException("Le contrat/avenant ne vous est pas accessible.");
-            }
-        }
-        
-        $rule = new \Application\Rule\Intervenant\PeutExporterContratRule($this->intervenant, $this->contrat);
-        if (!$rule->execute()) {
-            throw new \Common\Exception\MessageException("Impossible d'exporter le contrat/avenant.", null, new \Exception($rule->getMessage()));
+        if (! $this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_READ)) {
+            throw new UnAuthorizedException("Interdit !");
         }
         
         $annee           = $this->getContextProvider()->getGlobalContext()->getAnnee();
@@ -581,6 +569,10 @@ class ContratController extends AbstractActionController implements ContextProvi
     {
         $contrat = $this->context()->mandatory()->contratFromRoute();
         $fichier = $this->context()->fichierFromRoute();
+        
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIVILEGE_READ)) {
+            throw new UnAuthorizedException("Interdit!");
+        }
         
         if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_TELECHARGER)) {
             throw new UnAuthorizedException("Interdit!");

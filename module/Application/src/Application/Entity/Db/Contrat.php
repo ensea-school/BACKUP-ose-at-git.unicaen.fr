@@ -157,6 +157,16 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     }
     
     /**
+     * Indique s'il s'agit d'un projet de contrat/avenant.
+     * 
+     * @return boolean
+     */
+    public function estUnProjet()
+    {
+        return null === $this->getValidation();
+    }
+    
+    /**
      * Set numeroAvenant
      *
      * @param integer $numeroAvenant

@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use DateTime;
 use UnicaenApp\Filter\BytesFormatter;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use UnicaenApp\Controller\Plugin\Upload\UploadedFileInterface;
@@ -239,6 +240,16 @@ class Fichier implements HistoriqueAwareInterface, ResourceInterface, UploadedFi
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Retourne la date de dépôt du fichier.
+     *
+     * @return DateTime
+     */
+    public function getDate()
+    {
+        return $this->getHistoModification();
     }
 
     /**

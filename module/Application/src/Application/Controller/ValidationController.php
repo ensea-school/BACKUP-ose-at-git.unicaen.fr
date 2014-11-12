@@ -71,6 +71,16 @@ class ValidationController extends AbstractActionController implements ContextPr
     
     /**
      * 
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')
+                ->disableForEntity('Application\Entity\Db\Etape')
+                ->disableForEntity('Application\Entity\Db\ElementPedagogique');
+    }
+    
+    /**
+     * 
      * @return \Zend\View\Model\ViewModel
      */
     public function voirAction()
@@ -262,6 +272,8 @@ class ValidationController extends AbstractActionController implements ContextPr
      */
     public function voirServiceAction()
     { 
+        $this->initFilters();
+        
         $this->readonly = true;
           
         $serviceStructure  = $this->getServiceStructure();
@@ -340,6 +352,8 @@ class ValidationController extends AbstractActionController implements ContextPr
      */
     public function modifierServiceAction()
     {
+        $this->initFilters();
+        
         $this->readonly = false;
         
         $serviceService      = $this->getServiceService();

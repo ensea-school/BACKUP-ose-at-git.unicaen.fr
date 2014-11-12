@@ -198,7 +198,23 @@ class ValidationController extends AbstractActionController implements ContextPr
             }
         }
         
+        $this->view->formModifier = $this->getDossierModifierViewModel()->form;
+        
         return $this->view;
+    }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function getDossierModifierViewModel()
+    {
+        $controller       = 'Application\Controller\Dossier';
+        $params           = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'modifier';
+        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
+
+        return $viewModel;
     }
     
     private function commonDossier()

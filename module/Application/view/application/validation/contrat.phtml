@@ -1,6 +1,6 @@
 <h2 class="page-header"><?php echo $title ?></h2>
 
-<?php echo $this->messenger(true)->addMessages($messages) ?>
+<?php echo $this->messenger()->addMessagesFromFlashMessenger()->addMessages($messages) ?>
 
 <?php $form->prepare(); ?>
 <?php echo $this->form()->openTag($form); ?>

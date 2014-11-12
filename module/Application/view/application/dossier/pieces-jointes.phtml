@@ -3,7 +3,7 @@
 <h1 class="page-header"><?php echo $title ?></h1>
 
 <?php
-$messenger = $this->messenger(true);
+$messenger = $this->messenger()->addMessagesFromFlashMessenger();
 if ($complet) {
     $messenger->addMessage("Toutes les pièces justificatives obligatoires ont été fournies.", 'success');
 }

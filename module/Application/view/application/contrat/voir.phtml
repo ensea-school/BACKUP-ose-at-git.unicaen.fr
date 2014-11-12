@@ -1,6 +1,6 @@
 <h1 class="page-header">Contrat et avenants <small><?php echo $intervenant ?></small></h1>
 
-<?php echo $this->messenger(true) ?>
+<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <?php if (!$contrats): ?>
 

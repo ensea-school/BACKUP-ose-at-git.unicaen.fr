@@ -9,6 +9,6 @@ if ($validation) {
 }
 ?>
 
-<?php echo $this->messenger(true) ?>
+<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <?php echo $this->partial('application/dossier/partial/form') ?>

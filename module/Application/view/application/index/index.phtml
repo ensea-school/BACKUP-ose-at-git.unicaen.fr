@@ -1,6 +1,6 @@
 <?php $this->headTitle("Accueil") ?>
 
-<?php echo $this->messenger(true) ?>
+<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <div class="jumbotron">
     <h1>OSE <small>Organisation des Services d'Enseignement</small></h1>

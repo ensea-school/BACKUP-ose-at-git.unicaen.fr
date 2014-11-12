@@ -46,6 +46,7 @@ class Workflow extends AbstractWorkflow
     const KEY_CONSEIL_RESTREINT        = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
     const KEY_CONSEIL_ACADEMIQUE       = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
     const KEY_CONTRAT                  = 'CONTRAT';
+    const KEY_CONTRAT_VALIDE           = 'CONTRAT_VALIDE';
     const KEY_FINAL                    = 'FINAL';
 
     /**
@@ -65,7 +66,7 @@ class Workflow extends AbstractWorkflow
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
         $crossingRule  = $this->getServiceLocator()->get('PossedeDossierRule')->setIntervenant($this->getIntervenant());
         $this->addRule($key, $relevanceRule, $crossingRule);
-        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+        if ($relevanceRule->execute()) {
             $this->addStep($key, new SaisieDossierStep());
         }
         
@@ -83,7 +84,7 @@ class Workflow extends AbstractWorkflow
                 $this->getServiceLocator()->get('PossedeReferentielRule')->setIntervenant($this->getIntervenant())->setAnnee($annee)
         );
         $this->addRule($key, $relevanceRule, $crossingRule);
-        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+        if ($relevanceRule->execute()) {
             $this->addStep($key, new SaisieServiceStep());
         }
         
@@ -94,7 +95,7 @@ class Workflow extends AbstractWorkflow
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirPieceJointeRule')->setIntervenant($this->getIntervenant());
         $crossingRule  = clone $this->getPiecesJointesFourniesRule();
         $this->addRule($key, $relevanceRule, $crossingRule);
-        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+        if ($relevanceRule->execute()) {
             $this->addStep($key, new SaisiePiecesJointesStep());
         }
         
@@ -105,7 +106,7 @@ class Workflow extends AbstractWorkflow
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
         $crossingRule  = $this->getServiceLocator()->get('DossierValideRule')->setIntervenant($this->getIntervenant())->setTypeValidation($this->getTypeValidationDossier());
         $this->addRule($key, $relevanceRule, $crossingRule);
-        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+        if ($relevanceRule->execute()) {
             $this->addStep($key, new ValidationDossierStep());
         }
         
@@ -116,7 +117,7 @@ class Workflow extends AbstractWorkflow
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirServiceRule')->setIntervenant($this->getIntervenant());
         $crossingRule  = $this->getServiceValideRule();
         $this->addRule($key, $relevanceRule, $crossingRule);
-        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+        if ($relevanceRule->execute()) {
             $this->addStep($key, new ValidationServiceStep());
         }
         
@@ -136,7 +137,7 @@ class Workflow extends AbstractWorkflow
             
             $key = $typeAgrement->getCode();
             $this->addRule($key, $relevanceRule, $crossingRule);
-            if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+            if ($relevanceRule->execute()) {
                 $this->addStep($key, new AgrementStep($typeAgrement));
             }
         }
@@ -151,7 +152,7 @@ class Workflow extends AbstractWorkflow
                 ->setStructure($this->getStructure())
                 ->setValide(true);
         $this->addRule($key, $relevanceRule, $crossingRule);
-        if (!$relevanceRule->isRelevant() || $relevanceRule->execute()) {
+        if ($relevanceRule->execute()) {
             $this->addStep($key, new EditionContratStep());
         }
         

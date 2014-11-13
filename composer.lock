@@ -1118,7 +1118,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@528"
+                "reference": "/trunk/@549"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -3727,9 +3727,7 @@
             "time": "2014-04-15 15:29:12"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "unicaen/unicaen-app": 20,
@@ -3739,10 +3737,6 @@
         "bjyoungblood/bjy-authorize": 20
     },
     "prefer-stable": false,
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "platform": [],
+    "platform-dev": []
 }

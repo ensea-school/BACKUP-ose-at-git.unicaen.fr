@@ -434,6 +434,7 @@ return array(
             'ServiceValideRule'            => 'Application\Rule\Intervenant\ServiceValideRule',
             'NecessiteAgrementRule'        => 'Application\Rule\Intervenant\NecessiteAgrementRule',
             'AgrementFourniRule'           => 'Application\Rule\Intervenant\AgrementFourniRule',
+            'EstAffecteRule'               => 'Application\Rule\Intervenant\EstAffecteRule',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',

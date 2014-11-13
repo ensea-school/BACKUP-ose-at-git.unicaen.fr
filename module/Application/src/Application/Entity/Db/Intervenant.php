@@ -1260,7 +1260,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function estPermanent()
     {
-        return $this instanceof IntervenantPermanent;
+        return $this->getType()->getCode() === TypeIntervenant::CODE_PERMANENT;
     }
     
     /**

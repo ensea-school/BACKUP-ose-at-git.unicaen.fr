@@ -210,8 +210,7 @@ class ContratProcess extends AbstractService
         $peutCreerContratRule = $this->getServiceLocator()->get('PeutCreerContratInitialRule');
         $peutCreerContratRule
                 ->setIntervenant($this->getIntervenant())
-                ->setStructure($this->getStructure())
-                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+                ->setStructure($this->getStructure());
         
         return $peutCreerContratRule;
     }
@@ -225,8 +224,7 @@ class ContratProcess extends AbstractService
         $peutCreerAvenantRule = $this->getServiceLocator()->get('PeutCreerAvenantRule');
         $peutCreerAvenantRule
                 ->setIntervenant($this->getIntervenant())
-                ->setStructure($this->getStructure())
-                ->setServiceVolumeHoraire($this->getServiceVolumeHoraire());
+                ->setStructure($this->getStructure());
         
         return $peutCreerAvenantRule;
     }
@@ -342,13 +340,5 @@ class ContratProcess extends AbstractService
     private function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
-    }
-    
-    /**
-     * @return \Application\Service\VolumeHoraire
-     */
-    private function getServiceVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
     }
 }

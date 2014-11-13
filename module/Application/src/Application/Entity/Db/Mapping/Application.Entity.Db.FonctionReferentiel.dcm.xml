@@ -18,6 +18,11 @@
     <field name="plafond" type="float" column="PLAFOND" precision="126" scale="0" nullable="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

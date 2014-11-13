@@ -74,6 +74,10 @@ class FonctionReferentiel implements HistoriqueAwareInterface
      */
     protected $histoCreateur;
 
+    /**
+     * @var \Application\Entity\Db\Structure
+     */
+    protected $structure;
 
     /**
      * Set code
@@ -361,10 +365,28 @@ class FonctionReferentiel implements HistoriqueAwareInterface
         return $this->histoCreateur;
     }
 
+    /**
+     * Set structure
+     *
+     * @param \Application\Entity\Db\Structure $structure
+     * @return self
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    {
+        $this->structure = $structure;
 
-	/**************************************************************************************************
-	 * 										Début ajout
-	 **************************************************************************************************/
+        return $this;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Application\Entity\Db\Structure 
+     */
+    public function getStructure()
+    {
+        return $this->structure;
+    }
 
     /**
      * Retourne la représentation littérale de cet objet.
@@ -373,6 +395,12 @@ class FonctionReferentiel implements HistoriqueAwareInterface
      */
     public function __toString()
     {
-        return $this->getLibelleCourt();
+        $str = $this->getLibelleCourt();
+        
+        if ($this->getStructure()) {
+            $str .= " (" . $this->getStructure() . ")";
+        }
+        
+        return $str;
     }
 }

@@ -51,6 +51,16 @@ class Structure extends AbstractEntityService
     }
 
     /**
+     * Retourne la structure racine (i.e. qui n'a pas de structure parente).
+     *
+     * @return EntityStructure
+     */
+    public function getRacine()
+    {
+        return $this->getRepo()->findOneBySourceCode('UNIV');
+    }
+    
+    /**
      * Recherche les adresses mails de contact d'une structure.
      * 
      * Si une adresse de contact est spécifiée pour cette structure dans la table, on retourne cette adresse.

@@ -27,10 +27,20 @@ echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-prim
 echo $this->form()->closeTag();
 ?>
 
+<?php 
+// collecte des structures associées aux fonctions
+$structuresFonction = [];
+foreach ($fonctions as $fonction) {
+    $structuresFonction[$fonction->getId()] = (($s = $fonction->getStructure()) ? $s->getId() : 0);
+}
+?>
+
 <script>
     var formId = "<?php echo $form->getAttribute('id') ?>";
     var form   = $("#" + formId);
-    var fonctionSelectSel = "select.fonction-referentiel-fonction"; 
+    var structureSelectSel = "select.fonction-referentiel-structure"; 
+    var fonctionSelectSel  = "select.fonction-referentiel-fonction"; 
+    var structuresFonction = <?php echo json_encode($structuresFonction) ?>;
     
     $("body").on('click', "#" + formId + " button.fonction-referentiel-ajouter", function() {
         addLigne();
@@ -45,48 +55,36 @@ echo $this->form()->closeTag();
         
     $(function() {
         updateLigneCounter();
+        applyStructureFonction();
         $(":input").tooltip();
         
         $('body')
-                .on('change', "#" + formId + " " + fonctionSelectSel, function() {
-                    var select = $(this); // select de référence, dont la valeur a changé
-                    if (select.val() === '') {
-                        return;
-                    }
-                    applySelectUnicity(select, $("#" + formId + " " + fonctionSelectSel));
-                })
-                .on('change', "#" + formId + " input.fonction-referentiel-heures", function() {
-                    updateLigneCounter();
-                });
+            .on('change', "#" + formId + " " + fonctionSelectSel, function() {
+                applyStructureFonction();
+            })
+            .on('change', "#" + formId + " input.fonction-referentiel-heures", function() {
+                updateLigneCounter();
+            });
     });
     
     /**
-     * 
-     * @param object changedSelect Select de référence, i.e. dont la valeur a changé
-     * @param object targetSelect  Selects cibles à mettre à jour
-     * @returns void
+     * Si une structure est associée à la fonction sélectionnée, on la sélectionne
+     * et interdit les autres structures.
      */
-    function applySelectUnicity(changedSelect, targetSelect)
+    function applyStructureFonction()
     {
-        // parcours des select à mettre à jour (exclusion de celui de référence par sécurité)
-//        targetSelect.not(changedSelect).each(function(index, select) {
-//            // parcours des options 
-//            $("option", select).each(function(index, option) {
-//                if (!option.value) {
-//                    return true; // i.e. continue
-//                }
-//                // cache les items identiques à celui sélectionné dans le select de référence
-//                if (option.value === changedSelect.val()) {
-//                    $(option).data('from', changedSelect).hide();
-//                    //console.log('hide ' + $(this).text(), $(this).data('from'));
-//                }
-//                // fait réapparaître les items ayant été cachés précédemment
-//                else if ($(option).is(":hidden") && $(option).data('from') && $(option).data('from').is(changedSelect)) {
-//                    $(option).removeData('from').show();
-//                    //console.log('show ' + $(this).text(), $(this).data('from'));
-//                }
-//            });
-//        });
+        $("fieldset.fonction-referentiel").each(function(index, fs) {
+            var fonctionVal     = $(fonctionSelectSel, fs).val();
+            var structureSelect = $(structureSelectSel, fs);
+
+            $('option', structureSelect).attr('disabled', false);
+                
+            // si une structure est associée à la fonction sélectionnée
+            if (structuresFonction[fonctionVal]) {
+                structureSelect.val(structuresFonction[fonctionVal]);
+                $('option:not(:selected)', structureSelect).attr('disabled', true);
+            }
+        });
     }
     
     function addLigne() 
@@ -94,9 +92,7 @@ echo $this->form()->closeTag();
         var currentCount = getLigneCurrentCount();
         var template = $('> fieldset > span', form).data('template');
         var ligne = $(template.replace(/__index__/g, currentCount));
-        var newSelect = $(fonctionSelectSel, ligne);
         $('> fieldset', form).append(ligne.fadeIn());
-        $(fonctionSelectSel).not(newSelect).each(function(index, select) { applySelectUnicity($(select), newSelect); });
         updateLigneCounter();
         return ligne;
     }

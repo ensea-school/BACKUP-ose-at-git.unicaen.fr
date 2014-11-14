@@ -1,0 +1,39 @@
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Validation du référentiel") ?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+$this->messenger(true);
+if ($validation->getId()) {
+    $this->messenger()->addMessage(
+            sprintf("Le référentiel est validé. <br /><br />%s", $this->validationDl($validation)), 'success');
+}
+?>
+
+<?php echo $this->messenger() ?>
+
+<?php echo $this->serviceReferentielListe($services)->setRenderIntervenants(false)->setReadOnly()->render(); ?>
+
+<?php $form->prepare(); ?>
+<?php echo $this->form()->openTag($form); ?>
+<div class="row">
+    <div class="col-md-4">
+        <?php 
+        echo $this->formControlGroup($form->get('valide')->setAttribute('disabled', $readonly));
+        echo $this->formHidden($form->get('security'));
+        ?>
+    </div>
+</div>
+
+<hr />
+<?php if (!$readonly): ?>
+    <?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
+<?php endif ?>
+<?php echo $this->form()->closeTag(); ?>
+
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>
+    

@@ -13,6 +13,7 @@ use Application\Service\Workflow\AbstractWorkflow;
  */
 class VoitPageRule extends AbstractRule
 {
+    use \Application\Traits\IntervenantAwareTrait;
     use \Application\Traits\AnneeAwareTrait;
     
     /**
@@ -33,8 +34,8 @@ class VoitPageRule extends AbstractRule
      */
     public function __construct(Intervenant $intervenant, array $page, AbstractWorkflow $wf)
     {
-        parent::__construct($intervenant);
-        
+        parent::__construct();
+        $this->setIntervenant($intervenant);
         $this->page = $page;
         $this->wf   = $wf;
     }

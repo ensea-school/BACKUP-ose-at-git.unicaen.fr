@@ -75,7 +75,7 @@ class PiecesJointesFourniesRule extends AbstractIntervenantRule
     public function isRelevant()
     {
         if ($this->getIntervenant()) {
-            return $this->getIntervenant() instanceof IntervenantExterieur && null !== $this->getIntervenant()->getDossier();
+            return !$this->getIntervenant()->estPermanent() && null !== $this->getIntervenant()->getDossier();
         }
         
         return true;
@@ -294,23 +294,23 @@ EOS;
         
         return $piecesJointesFournies;
     }
-    
-    /**
-     * Spécifie l'intervenant concerné.
-     * 
-     * @param Intervenant $intervenant Intervenant concerné
-     * @return self
-     */
-    public function setIntervenant(Intervenant $intervenant = null)
-    {
-        if ($intervenant && !$intervenant instanceof IntervenantExterieur) {
-            throw new LogicException("L'intervenant spécifié doit être un IntervenantExterieur.");
-        }
-        
-        $this->intervenant = $intervenant;
-        
-        return $this;
-    }
+//    
+//    /**
+//     * Spécifie l'intervenant concerné.
+//     * 
+//     * @param Intervenant $intervenant Intervenant concerné
+//     * @return self
+//     */
+//    public function setIntervenant(Intervenant $intervenant = null)
+//    {
+//        if ($intervenant && !$intervenant instanceof IntervenantExterieur) {
+//            throw new LogicException("L'intervenant spécifié doit être un IntervenantExterieur.");
+//        }
+//        
+//        $this->intervenant = $intervenant;
+//        
+//        return $this;
+//    }
 
     /**
      * Retourne le total d'heures réelles de l'intervenant concerné.

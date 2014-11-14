@@ -156,7 +156,7 @@ class Validation extends AbstractEntityService
         $qb = $this->getServiceLocator()->get('ApplicationTypeValidation')->finderByCode($code = $type);
         $type = $qb->getQuery()->getOneOrNullResult();
         if (!$type) {
-            throw new RuntimeException("Aucun type de validation trouvé avec le code '$code'.");
+            throw new \Common\Exception\RuntimeException("Aucun type de validation trouvé avec le code '$code'.");
         }
         
         return $type;
@@ -215,6 +215,7 @@ class Validation extends AbstractEntityService
      * @return boolean
      * @todo L'idée des canXxx est bonne mais trop simpliste : le contexte (intervenant, type de validation, 
      * contrat, ...) varie trop. Idée : transmettre au canXxx les règles métiers à tester plutôt que des paramètres ?
+     * @todo On présuppose ici qu'il s'agit de valider les services!
      */
     public function canAdd($intervenant, $type, $runEx = false)
     {

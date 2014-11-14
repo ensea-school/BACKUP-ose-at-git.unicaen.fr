@@ -375,4 +375,15 @@ class TypeContrat extends \Application\Entity\Db\TypeContrat implements \Doctrin
         return parent::__toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function estUnAvenant()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'estUnAvenant', array());
+
+        return parent::estUnAvenant();
+    }
+
 }

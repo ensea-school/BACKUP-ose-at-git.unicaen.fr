@@ -8,6 +8,9 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Application\Interfaces\IntervenantAwareInterface;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\ReadOnlyAwareTrait;
 use NumberFormatter;
 use UnicaenApp\Util;
 
@@ -16,13 +19,15 @@ use UnicaenApp\Util;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, IntervenantAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
+    use IntervenantAwareTrait;
+    use ReadOnlyAwareTrait;
 
     protected $services;
-    
+
     /**
      * Helper entry point.
      *
@@ -54,9 +59,14 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function render()
     {
-        $urlVoirListe = $this->getView()->url('service-ref/default', array('action' => 'voirListe'));
+        $params = [];
+        if ($this->getIntervenant()){
+            $params['query'] = ['intervenant-filter' => $this->getIntervenant()->getSourceCode()];
+        }
+
+        $urlVoirListe = $this->getView()->url('service-ref/default', ['action' => 'voirListe'], $params);
         $parts        = array();
-        
+
         $parts[]              = '<table id="services-ref" class="table service-ref">';
         $parts[]              = '<tr>';
         $parts['intervenant'] = "<th>Intervenant</th>";
@@ -95,7 +105,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderLigne($service)
     {
         $helper = $this->getView()->serviceReferentielLigne($service); /* @var $helper Ligne */
-        $helper->setRenderIntervenants($this->getRenderIntervenants());
+        $helper
+                ->setReadOnly($this->getReadOnly())
+                ->setRenderIntervenants($this->getRenderIntervenants());
         
         return $helper->render();
     }
@@ -128,7 +140,6 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function applyGlobalContext(array &$parts)
     {
         $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
         if (!$this->getRenderIntervenants()) {
             unset($parts['intervenant']);
@@ -165,12 +176,23 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $renderIntervenants = true;
 
+    /**
+     * Indique si la colonne intervenant doit être générée ou non.
+     * 
+     * @return boolean
+     */
     public function getRenderIntervenants()
     {
         return $this->renderIntervenants;
     }
 
-    public function setRenderIntervenants($renderIntervenants)
+    /**
+     * Spécifie si la colonne intervenant doit être générée ou non.
+     * 
+     * @param boolean $renderIntervenants
+     * @return self
+     */
+    public function setRenderIntervenants($renderIntervenants = true)
     {
         $this->renderIntervenants = $renderIntervenants;
         return $this;

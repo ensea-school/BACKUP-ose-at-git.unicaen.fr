@@ -6,10 +6,11 @@ use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeValidation;
-use Application\Rule\Intervenant\AbstractIntervenantRule;
 use Application\Rule\Intervenant\Expr;
+use Application\Rule\Intervenant\AbstractIntervenantRule;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
 use Application\Rule\Intervenant\ServiceValideRule;
+use Application\Rule\Intervenant\ReferentielValideRule;
 use Application\Service\Intervenant as IntervenantService;
 use Application\Service\TypeAgrement as TypeAgrementService;
 use Application\Service\TypeValidation as TypeValidationService;
@@ -22,6 +23,7 @@ use Application\Service\Workflow\Step\SaisieServiceStep;
 use Application\Service\Workflow\Step\Step;
 use Application\Service\Workflow\Step\ValidationDossierStep;
 use Application\Service\Workflow\Step\ValidationServiceStep;
+use Application\Service\Workflow\Step\ValidationReferentielStep;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\RoleAwareTrait;
 use Common\Exception\LogicException;
@@ -42,6 +44,8 @@ class Workflow extends AbstractWorkflow
     const KEY_DONNEES_PERSO_VALIDATION = 'DONNEES_PERSO_VALIDATION';
     const KEY_SERVICE_SAISIE           = 'SERVICE_SAISIE';
     const KEY_SERVICE_VALIDATION       = 'SERVICE_VALIDATION';
+    const KEY_REFERENTIEL_SAISIE       = 'REFERENTIEL_SAISIE';
+    const KEY_REFERENTIEL_VALIDATION   = 'REFERENTIEL_VALIDATION';
     const KEY_PIECES_JOINTES           = 'PIECES_JOINTES';
     const KEY_CONSEIL_RESTREINT        = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
     const KEY_CONSEIL_ACADEMIQUE       = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
@@ -63,8 +67,10 @@ class Workflow extends AbstractWorkflow
          * Saisie des données personnelles
          */
         $key           = self::KEY_DONNEES_PERSO_SAISIE;
-        $relevanceRule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
-        $crossingRule  = $this->getServiceLocator()->get('PossedeDossierRule')->setIntervenant($this->getIntervenant());
+        $relevanceRule = $this->getServiceLocator()->get('PeutSaisirDossierRule')
+                ->setIntervenant($this->getIntervenant());
+        $crossingRule  = $this->getServiceLocator()->get('PossedeDossierRule')
+                ->setIntervenant($this->getIntervenant());
         $this->addRule($key, $relevanceRule, $crossingRule);
         if ($relevanceRule->execute()) {
             $this->addStep($key, new SaisieDossierStep());
@@ -89,7 +95,7 @@ class Workflow extends AbstractWorkflow
         }
         
         /**
-         * Checklist des pièces justificatives
+         * Pièces justificatives
          */
         $key           = self::KEY_PIECES_JOINTES;
         $relevanceRule = $this->getServiceLocator()->get('PeutSaisirPieceJointeRule')->setIntervenant($this->getIntervenant());
@@ -119,6 +125,17 @@ class Workflow extends AbstractWorkflow
         $this->addRule($key, $relevanceRule, $crossingRule);
         if ($relevanceRule->execute()) {
             $this->addStep($key, new ValidationServiceStep());
+        }
+        
+        /**
+         * Validation du référentiel
+         */
+        $key           = self::KEY_REFERENTIEL_VALIDATION;
+        $relevanceRule = $this->getServiceLocator()->get('PeutSaisirReferentielRule')->setIntervenant($this->getIntervenant());
+        $crossingRule  = $this->getReferentielValideRule();
+        $this->addRule($key, $relevanceRule, $crossingRule);
+        if ($relevanceRule->execute()) {
+            $this->addStep($key, new ValidationReferentielStep());
         }
         
         /**
@@ -237,6 +254,27 @@ class Workflow extends AbstractWorkflow
                 ->setStructure($this->getStructure());
         
         return $this->serviceValideRule;
+    }
+    
+    /**
+     * @var ReferentielValideRule 
+     */
+    protected $referentielValideRule;
+    
+    /**
+     * @return ReferentielValideRule
+     */
+    protected function getReferentielValideRule()
+    {
+        if (null === $this->referentielValideRule) {
+            $this->referentielValideRule = $this->getServiceLocator()->get('ServiceValideRule');
+        }
+        // teste si le référentiel a été validé
+        $this->referentielValideRule
+                ->setIntervenant($this->getIntervenant())
+                ->setTypeValidation($this->getTypeValidationService());
+        
+        return $this->referentielValideRule;
     }
     
     /**

@@ -11,6 +11,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\ServiceValidation;
+use Application\Form\Intervenant\ReferentielValidation;
 
 /**
  * Description of ValidationController
@@ -48,11 +49,6 @@ class ValidationController extends AbstractActionController implements ContextPr
      * @var \Application\Entity\Db\IntervenantExterieur
      */
     private $intervenant;
-    
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
     
     /**
      * @var ServiceValidation
@@ -497,6 +493,119 @@ class ValidationController extends AbstractActionController implements ContextPr
     /**
      * 
      * @return \Zend\View\Model\ViewModel
+     * @throws \Common\Exception\MessageException
+     */
+    public function referentielAction()
+    {
+        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof ComposanteRole) {
+            return $this->modifierReferentielAction();
+        }
+        else {
+            return $this->voirReferentielAction();
+        }
+    }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws \Common\Exception\MessageException
+     */
+    public function voirReferentielAction()
+    { 
+        $this->title    = "Validation du référentiel <small>$this->intervenant</small>";
+        $this->readonly = true;
+            
+        $this->commonReferentiel();
+        
+        $this->formValider->get('valide')->setLabel("Si cette case est cochée, cela indique que le référentiel a été validé...");
+        $this->view->setTemplate('application/validation/voir-referentiel');
+                
+        return $this->view;
+    }
+    
+    /**
+     * (Dé)Validation du référentiel.
+     * NB : une seule validation pour tout le référentiel.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws RuntimeException
+     */
+    public function modifierReferentielAction()
+    {
+        $this->title    = "Validation du référentiel <small>$this->intervenant</small>";
+        $this->readonly = false;
+            
+        $this->commonReferentiel();
+        
+        if ($this->validation->getId()) {
+            $this->formValider->get('valide')->setLabel("Décochez pour dévalider le référentiel");
+        }
+        
+        if (!$this->readonly && $this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            $this->formValider->setData($data);
+            if ($this->formValider->isValid()) {
+                $complet = (bool) $data['valide'];
+                $this->updateValidation($complet);
+                
+                return $this->redirect()->toRoute(null, array(), array(), true);
+            }
+        }
+
+        return $this->view;
+    }
+    
+    private function commonReferentiel()
+    {
+        $role              = $this->getContextProvider()->getSelectedIdentityRole();
+        $serviceValidation = $this->getServiceValidation();
+        $typeValidation    = TypeValidation::CODE_REFERENTIEL;
+        
+//        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
+
+        $this->formValider = $this->getFormValidationReferentiel()->setIntervenant($this->intervenant)->init();
+        
+        $this->em()->getFilters()->enable('historique');
+        
+        $qb = $serviceValidation->finderByType($typeValidation);
+        $this->validation = $serviceValidation->finderByIntervenant($this->intervenant, $qb)->getQuery()->getOneOrNullResult();
+        if (!$this->validation) {
+            $this->validation = $serviceValidation->newEntity($typeValidation);
+            $this->validation->setIntervenant($this->intervenant);
+            if ($role instanceof ComposanteRole) {
+                $this->validation->setStructure($role->getStructure());
+            }
+        }
+        else {
+            $this->formValider->get('valide')->setValue(true);
+        }
+        $this->formValider->bind($this->validation);
+        
+        // fetch du référentiel délégué au contrôleur dédié
+        $controller       = 'Application\Controller\ServiceReferentiel';
+        $params           = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'voir-liste';
+        $result           = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
+        $services         = $result->services;
+        
+        $this->view = new \Zend\View\Model\ViewModel(array(
+            'intervenant' => $this->intervenant,
+            'services'    => $services,
+            'validation'  => $this->validation,
+            'form'        => $this->formValider,
+            'role'        => $role,
+            'readonly'    => $this->readonly,
+            'title'       => $this->title,
+        ));
+        $this->view->setTemplate('application/validation/referentiel');
+    }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
      */
     public function contratAction()
     {
@@ -601,6 +710,18 @@ class ValidationController extends AbstractActionController implements ContextPr
     {
         if (null === $this->formValider) {
             $this->formValider = new ServiceValidation();
+        }
+        
+        return $this->formValider;
+    }
+    
+    /**
+     * @return ReferentielValidation
+     */
+    protected function getFormValidationReferentiel()
+    {
+        if (null === $this->formValider) {
+            $this->formValider = new ReferentielValidation();
         }
         
         return $this->formValider;

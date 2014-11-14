@@ -9,6 +9,7 @@ use Common\Exception\MessageException;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\IntervenantPermanent;
 
 /**
  * Description of ServiceController

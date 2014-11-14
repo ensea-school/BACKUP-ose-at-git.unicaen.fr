@@ -7,6 +7,7 @@ use Application\Entity\Db\FonctionReferentiel;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Application\Traits\ReadOnlyAwareTrait;
 use NumberFormatter;
 use UnicaenApp\Util;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -22,6 +23,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 {
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
+    use ReadOnlyAwareTrait;
     
     /**
      * @var ServiceReferentiel
@@ -165,26 +167,45 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     protected function renderModifier()
     {
-        if ($this->getView()->isAllowed($this->service, 'update')){
+        if ($this->getReadOnly()) {
+            $td = null;
+        }
+        elseif ($this->getView()->isAllowed($this->service, 'update')) {
             $query = array('sourceCode' => $this->service->getIntervenant()->getSourceCode());
             $url = $this->getView()->url('service-ref/default', array('action' => 'saisir'), array('query' => $query));
-            return '<td><a class="ajax-modal" data-event="service-ref-modify-message" href="' . $url . '" title="Modifier le référentiel de ' . $this->service->getIntervenant() . '"><span class="glyphicon glyphicon-edit"></span></a></td>';
-        }else{
-            return '<td>&nbsp;</td>';
+            $td = sprintf('<a class="ajax-modal" data-event="service-ref-modify-message" href="%s" '
+                           . 'title="Modifier le référentiel de %s"><span class="glyphicon glyphicon-edit"></span></a>',
+                    $url,
+                    $this->service->getIntervenant());
         }
+        else {
+            $td = null;
+        }
+        
+        return sprintf('<td>%s</td>', $td);
     }
 
     protected function renderSupprimer()
     {
-        if ($this->getView()->isAllowed($this->service, 'delete')){
-            $url = $this->getView()->url('service-ref/default', array('action' => 'supprimer', 'id' => $this->service->getId()));
-            return '<td><a class="ajax-modal" data-event="service-ref-delete-message" data-id="' . $this->service->getId() . '" href="' . $url . '" title="Supprimer ce référentiel"><span class="glyphicon glyphicon-remove"></span></a></td>';
-        }else{
-            return '<td>&nbsp;</td>';
+        if ($this->getReadOnly()) {
+            $td = null;
         }
+        elseif ($this->getView()->isAllowed($this->service, 'delete')) {
+            $url = $this->getView()->url('service-ref/default', array('action' => 'supprimer', 'id' => $this->service->getId()));
+            $td = sprintf('<a class="ajax-modal" data-event="service-ref-delete-message" data-id="%s" href="%s" '
+                           . 'title="Supprimer ce référentiel"><span class="glyphicon glyphicon-remove"></span></a>',
+                    $this->service->getId(),
+                    $url);
+        }
+        else {
+            $td = null;
+        }
+        
+        return sprintf('<td>%s</td>', $td);
     }
 
     /**
+     * Retourne le service référentiel source.
      *
      * @return ServiceReferentiel
      */
@@ -194,6 +215,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     }
 
     /**
+     * Spécifie le service référentiel source.
      *
      * @param ServiceReferentiel $service
      * @return self
@@ -209,12 +231,23 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $renderIntervenants = true;
 
+    /**
+     * Indique si la colonne intervenant doit être générée ou non.
+     * 
+     * @return boolean
+     */
     public function getRenderIntervenants()
     {
         return $this->renderIntervenants;
     }
 
-    public function setRenderIntervenants($renderIntervenants)
+    /**
+     * Spécifie si la colonne intervenant doit être générée ou non.
+     * 
+     * @param boolean $renderIntervenants
+     * @return self
+     */
+    public function setRenderIntervenants($renderIntervenants = true)
     {
         $this->renderIntervenants = $renderIntervenants;
         return $this;

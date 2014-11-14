@@ -5,9 +5,9 @@
 <?php $form->prepare(); ?>
 <?php if ($form->get('valide')->getValue()): ?>
     <?php echo $this->messenger()->setMessage(
-            sprintf("Vos données personnelles ont été validées. <hr />%s", $this->validationDl($validation)), 'success') ?>
+            sprintf("Votre référentiel a été validé. <hr />%s", $this->validationDl($validation)), 'success') ?>
 <?php else: ?>
-    <?php echo $this->messenger()->setMessage("Vos données personnelles n'ont pas encore été validées.", 'info') ?>
+    <?php echo $this->messenger()->setMessage("Votre référentiel n'a pas encore été validé.", 'info') ?>
 <?php endif; ?>
 
 

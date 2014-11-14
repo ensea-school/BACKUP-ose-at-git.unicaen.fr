@@ -349,9 +349,9 @@ EOS;
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        $rule = new \Application\Rule\Intervenant\PeutSaisirPieceJointeRule($intervenant);
+        $rule = $this->getServiceLocator()->get('PeutSaisirPieceJointeRule')->setIntervenant($intervenant);
         if (!$rule->execute()) {
-            $message = "?";
+            $message = "";
             if ($role instanceof \Application\Acl\IntervenantRole) {
                 $message = "Vous ne pouvez pas saisir de pièce justificative. ";
             }

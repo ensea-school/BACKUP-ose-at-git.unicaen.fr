@@ -1254,7 +1254,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
     
     /**
-     * Get estPermanent
+     * Indique si cet intervenant est permanent.
      *
      * @return bool 
      */

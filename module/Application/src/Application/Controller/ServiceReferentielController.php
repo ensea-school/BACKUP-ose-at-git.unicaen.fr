@@ -235,7 +235,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         }
         
         // verification règle métier
-        $rule = new \Application\Rule\Intervenant\PeutSaisirReferentielRule($intervenant);
+        $rule = $this->getServiceLocator()->get('PeutSaisirReferentielRule')->setIntervenant($intervenant);
         $rule->setStructure($role instanceof ComposanteRole ? $role->getStructure() : null);
         if (!$rule->execute()) {
             throw new MessageException("La saisie de référentiel n'est pas possible. ", null, new \Exception($rule->getMessage()));

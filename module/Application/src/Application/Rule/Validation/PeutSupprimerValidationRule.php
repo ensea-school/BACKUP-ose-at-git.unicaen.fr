@@ -11,6 +11,16 @@ use Application\Entity\Db\Validation;
  */
 class PeutSupprimerValidationRule extends \Application\Rule\AbstractRule
 {
+    const MESSAGE_VH_AVEC_CONTRAT = 'messageVhAvecContrat';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_VH_AVEC_CONTRAT => "Un volume horaire au moins est rattaché à un contrat/avenant.",
+    );
+    
     /**
      * @var Validation
      */
@@ -34,7 +44,7 @@ class PeutSupprimerValidationRule extends \Application\Rule\AbstractRule
     {
         foreach ($this->validation->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
             if (count($vh->getContrat())) {
-                $this->setMessage(sprintf("Un volume horaire au moins est rattaché à un contrat/avenant.", $this->getIntervenant()));
+                $this->message(self::MESSAGE_VH_AVEC_CONTRAT);
                 return false;
             }
         }

@@ -10,13 +10,26 @@ use Application\Entity\Db\Contrat;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutValiderContratRule extends IntervenantRule
+class PeutValiderContratRule extends \Application\Rule\AbstractRule
 {
+    use \Application\Traits\IntervenantAwareTrait;
+    
+    const MESSAGE_DEJA_VALIDE = 'messageDejaValide';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_DEJA_VALIDE => "%value%.",
+    );
+    
     private $contrat;
     
     public function __construct(Intervenant $intervenant, Contrat $contrat)
     {
-        parent::__construct($intervenant);
+        parent::__construct();
+        $this->setIntervenant($intervenant);
         $this->contrat = $contrat;
     }
     
@@ -25,7 +38,9 @@ class PeutValiderContratRule extends IntervenantRule
         if (($validation = $this->contrat->getValidation())) {
             $contratToString = $this->contrat->toString(true);
             $dateValidation  = $validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT);
-            $this->setMessage("$contratToString est a déjà été validé le $dateValidation par {$validation->getHistoModificateur()}.");
+            $this->message(
+                    self::MESSAGE_DEJA_VALIDE, 
+                    "$contratToString est a déjà été validé le $dateValidation par {$validation->getHistoModificateur()}");
             return false;
         }
         

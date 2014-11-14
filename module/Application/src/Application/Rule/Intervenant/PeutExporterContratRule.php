@@ -12,6 +12,18 @@ use Application\Entity\Db\Intervenant;
  */
 class PeutExporterContratRule extends IntervenantRule
 {
+    use \Application\Traits\IntervenantAwareTrait;
+    
+    const MESSAGE_IMPOSSIBLE = 'messageImpossible';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_IMPOSSIBLE => "L'intervenant spécifié ne peut pas exporter ce contrat/avenant.",
+    );
+    
     /**
      * @var Contrat
      */
@@ -24,15 +36,15 @@ class PeutExporterContratRule extends IntervenantRule
      */
     public function __construct(Intervenant $intervenant, Contrat $contrat)
     {
-        parent::__construct($intervenant);
-        
+        parent::__construct();
+        $this->setIntervenant($intervenant);
         $this->contrat = $contrat;
     }
     
     public function execute()
     {
         if ($this->contrat->getIntervenant() !== $this->getIntervenant()) {
-            $this->setMessage("L'intervenant spécifié ne peut pas exporter ce contrat/avenant.");
+            $this->message(self::MESSAGE_IMPOSSIBLE);
             return false;
         }
         

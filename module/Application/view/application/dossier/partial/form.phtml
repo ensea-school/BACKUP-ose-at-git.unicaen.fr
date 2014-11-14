@@ -1,0 +1,113 @@
+<?php 
+$this->form->prepare();
+$dossier = $this->form->get('dossier');
+?>
+
+<style>
+    div.rib-part { display: inline-block; vertical-align: top; }
+    div.rib-part input { width: auto; }
+</style>
+
+<?php echo $this->form()->openTag($this->form) ?> 
+<div class="row">
+    <div class="col-md-3">
+        <?php echo $this->formControlGroup($dossier->get('nomUsuel')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('nomPatronymique')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('prenom')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('civilite')->get('id')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('numeroInsee')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')->setAttribute('disabled', $this->readonly)); ?>
+    </div>
+    <div class="col-md-4">
+        <?php echo $this->formControlGroup($dossier->get('adresse')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('email')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('telephone')->setAttribute('disabled', $this->readonly)); ?>
+        <fieldset class="rib">
+            <legend>RIB</legend>
+            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('bic')->setAttribute('disabled', $this->readonly)); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('iban')->setAttribute('disabled', $this->readonly)); ?></div>
+            <?php echo $this->formControlGroup($dossier->get('rib')->get('hidden')); ?>
+        </fieldset>
+    </div>
+    <div class="col-md-5">
+        <?php echo $this->formControlGroup($dossier->get('premierRecrutement')->setAttribute('disabled', $this->readonly)); ?>
+        <div class="perteEmploi"><?php echo $this->formControlGroup($dossier->get('perteEmploi')->setAttribute('disabled', $this->readonly)); ?></div>
+        <div class="statut"><?php echo $this->formControlGroup($dossier->get('statut')->get('id')->setAttribute('disabled', $this->readonly)); ?></div>
+    </div>
+</div>
+<?php echo $this->formHidden($dossier->get('id')); ?>
+
+<?php echo $this->formHidden($this->form->get('security')); ?>
+<?php if (!$this->readonly): ?>
+    <?php echo $this->formSubmit($this->form->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
+<?php endif ?>
+<?php echo $this->form()->closeTag() ?> 
+
+<script>
+    $(function() {
+        $(":input").tooltip({ placement: 'bottom' });
+        
+        var divPerteEmploi    = $("div.perteEmploi");
+        var divStatut         = $("div.statut");
+        var radios1erRecrut   = $("input[name='dossier[premierRecrutement]']"); // NB: 2 radios
+        var radiosPerteEmploi = $("input[name='dossier[perteEmploi]']"); // NB: 2 radios
+        var readonly          = <?php echo $this->readonly ? 'true' : 'false' ?>
+        
+        if (!readonly) {
+            radios1erRecrut.change(function () {
+                updatePerteEmploi();
+            });
+            radiosPerteEmploi.change(function () {
+                updateStatut();
+            });
+        }
+    
+        function getRadioValue(radioInputs)
+        {
+            var checkedRadio = radioInputs.filter(":checked");
+            if (checkedRadio.length === 0) {
+                return null;
+            }
+            return checkedRadio.attr('value');
+        }
+        
+        function updatePerteEmploi()
+        {
+            var valuePremierRecrutement = getRadioValue(radios1erRecrut);
+            if (valuePremierRecrutement === '0') {
+                divPerteEmploi.show();
+                if (!readonly) {
+                    divPerteEmploi.find("input[type=radio]").attr('disabled', false);
+                }
+            }
+            else {
+                divPerteEmploi.hide();
+                if (!readonly) {
+                    divPerteEmploi.find("input[type=radio]").attr('disabled', true);
+                }
+            }
+            updateStatut();
+        }
+        
+        function updateStatut()
+        {
+            var valuePremierRecrutement = getRadioValue(radios1erRecrut);
+            var valuePerteEmploi        = getRadioValue(radiosPerteEmploi);
+            if (valuePremierRecrutement === '1' || valuePerteEmploi === '0') {
+                divStatut.show();
+                if (!readonly) {
+                    divStatut.find("select").attr('disabled', false);
+                }
+            }
+            else {
+                divStatut.hide();
+                if (!readonly) {
+                    divStatut.find("select").attr('disabled', true);
+                }
+            }
+        }
+        
+        updatePerteEmploi();
+        updateStatut();
+    });
+</script>

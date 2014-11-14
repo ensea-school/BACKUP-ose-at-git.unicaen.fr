@@ -53,16 +53,13 @@ class StructureDl extends AbstractDl
             "Structure mère :", 
             $entity->getParente()->getLibelleLong()
         );
-
-        if (!$this->short) {
-            $dtdds[] = sprintf($tplDtdd,
-                "Historique :", 
-                $this->getView()->historiqueDl($entity)
-            );
-        }
         
         $html .= sprintf($this->getTemplateDl('structure structure-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
  
+        if (!$this->short) {
+            $html .= $this->getView()->historiqueDl($entity, $this->horizontal);
+        }
+        
         return $html;
     }
 }

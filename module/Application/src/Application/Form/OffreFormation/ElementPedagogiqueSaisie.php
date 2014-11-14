@@ -77,36 +77,48 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
         ));
 
         $this->add(array(
-            'name'       => 'fc',
+            'name'       => 'taux-fc',
             'options'    => array(
-                'label' => 'FC',
+                'label' => 'Taux FC',
             ),
             'attributes' => array(
-                'title' => "Formation continue",
+                'title' => "Taux de formation continue",
+                'class' => 'input-sm',
+                'step'  => 'any',
+                'min'   => 0,
+                'max'   => 1,
             ),
-            'type'       => 'Checkbox',
+            'type'       => 'Text',
         ));
 
         $this->add(array(
-            'name'       => 'fi',
+            'name'       => 'taux-fi',
             'options'    => array(
-                'label' => 'FI',
+                'label' => 'Taux FI',
             ),
             'attributes' => array(
-                'title' => "Formation initiale",
+                'title' => "Taux de formation initiale",
+                'class' => 'input-sm',
+                'step'  => 'any',
+                'min'   => 0,
+                'max'   => 1,
             ),
-            'type'       => 'Checkbox',
+            'type'       => 'Text',
         ));
 
         $this->add(array(
-            'name'       => 'fa',
+            'name'       => 'taux-fa',
             'options'    => array(
-                'label' => 'FA',
+                'label' => 'Taux FA',
             ),
             'attributes' => array(
-                'title' => "Formation en apprentissage",
+                'title' => "Taux de formation en apprentissage",
+                'class' => 'input-sm',
+                'step'  => 'any',
+                'min'   => 0,
+                'max'   => 1,
             ),
-            'type'       => 'Checkbox',
+            'type'       => 'Text',
         ));
 
         $this->add(array(
@@ -187,15 +199,27 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
 //                    array('name' => 'Float'),
 //                ),
             ),
-            'fc' => array(
+            'taux-fc' => [
                 'required' => true,
-            ),
-            'fi' => array(
+                'filters'  => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                ],
+            ],
+            'taux-fi' => [
                 'required' => true,
-            ),
-            'fa' => array(
+                'filters'  => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                ],
+            ],
+            'taux-fa' => [
                 'required' => true,
-            ),
+                'filters'  => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                ],
+            ],
             'source-code' => array(
                 'required' => true,
             ),

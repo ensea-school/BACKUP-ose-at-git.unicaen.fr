@@ -69,6 +69,27 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * FI
      *
+     * @var float
+     */
+    protected $tauxFi;
+
+    /**
+     * FC
+     *
+     * @var float
+     */
+    protected $tauxFc;
+
+    /**
+     * FA
+     *
+     * @var float
+     */
+    protected $tauxFa;
+
+    /**
+     * FI
+     *
      * @var boolean
      */
     protected $fi;
@@ -305,7 +326,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Set tauxFoad
      *
-     * @param integer $tauxFoad
+     * @param float $tauxFoad
      * @return ElementPedagogique
      */
     public function setTauxFoad($tauxFoad)
@@ -318,32 +339,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get tauxFoad
      *
-     * @return integer 
+     * @return float
      */
     public function getTauxFoad()
     {
         return $this->tauxFoad;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHtmlRegimeInscription()
-    {
-        $res = '';
-        if ($this->getFi()){
-            if ($res != '') $res .= ', ';
-            $res .= '<abbr title="Formation initiale">FI</abbr>';
-        }
-        if ($this->getFc()){
-            if ($res != '') $res .= ', ';
-            $res .= '<abbr title="Formation continue">FC</abbr>';
-        }
-        if ($this->getFa()){
-            if ($res != '') $res .= ', ';
-            $res .= '<abbr title="Formation en apprentissage">FA</abbr>';
-        }
-        return $res;
     }
 
     /**
@@ -374,6 +374,33 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     }
 
     /**
+     *
+     * @return float
+     */
+    public function getTauxFi()
+    {
+        return $this->tauxFi;
+    }
+
+    /**
+     *
+     * @return float
+     */
+    public function getTauxFc()
+    {
+        return $this->tauxFc;
+    }
+
+    /**
+     *
+     * @return float
+     */
+    public function getTauxFa()
+    {
+        return $this->tauxFa;
+    }
+
+/**
      *
      * @param boolean $fi
      * @return self
@@ -407,6 +434,39 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     }
 
     /**
+     *
+     * @param float $tauxFi
+     * @return self
+     */
+    public function setTauxFi($tauxFi)
+    {
+        $this->tauxFi = $tauxFi;
+        return $this;
+    }
+
+    /**
+     *
+     * @param float $tauxFc
+     * @return self
+     */
+    public function setTauxFc($tauxFc)
+    {
+        $this->tauxFc = $tauxFc;
+        return $this;
+    }
+
+    /**
+     *
+     * @param float $tauxFa
+     * @return self
+     */
+    public function setTauxFa($tauxFa)
+    {
+        $this->tauxFa = $tauxFa;
+        return $this;
+    }
+
+    /**
      * Retourne, sous forme de chaîne de caractères, la liste des régimes d'inscription
      *
      * @param boolean $inHtml   Détermine si le résultat doit ou non être formatté en HTML
@@ -416,9 +476,9 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     {
         $regimes = [];
         if ($inHtml){
-            if ($this->getFi()) $regimes[] = '<abbr title="Formation initiale">FI</abbr>';
-            if ($this->getFc()) $regimes[] = '<abbr title="Formation continue">FC</abbr>';
-            if ($this->getFa()) $regimes[] = '<abbr title="Formation en apprentissage">FA</abbr>';
+            if ($this->getFi()) $regimes[] = '<abbr title="Formation initiale ('.number_format($this->getTauxFi()*100, 2, ',', ' ').'%)">FI</abbr>';
+            if ($this->getFc()) $regimes[] = '<abbr title="Formation continue ('.number_format($this->getTauxFc()*100, 2, ',', ' ').'%)">FC</abbr>';
+            if ($this->getFa()) $regimes[] = '<abbr title="Formation en apprentissage ('.number_format($this->getTauxFa()*100, 2, ',', ' ').'%)">FA</abbr>';
         }else{
             if ($this->getFi()) $regimes[] = 'FI';
             if ($this->getFc()) $regimes[] = 'FC';

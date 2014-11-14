@@ -1,0 +1,42 @@
+<?php
+use Application\Assertion\ContratAssertion;
+use Application\Assertion\FichierAssertion;
+
+$contrat  = $this->contrat;                         /* @var $contrat       \Application\Entity\Db\Contrat */
+$fichiers = $contrat ? $contrat->getFichier() : []; /* @var $fichiers \Application\Entity\Db\Fichier[] */
+?>
+
+<?php if (count($fichiers)): ?>
+
+<ul>
+<?php foreach ($fichiers as $fichier): ?>
+    <li class="fichier-contrat">
+
+        <!-- lien de téléchargement du fichier -->
+        <?php 
+        $urlTelecharger = null;
+        if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_READ) && $this->isAllowed($fichier, FichierAssertion::PRIVILEGE_TELECHARGER)) {
+            $paramsTelecharger = ['contrat' => $contrat->getId(), 'fichier' => $fichier->getId(), 'nomFichier' => $fichier->getNom()];
+            $urlTelecharger    = $this->url('contrat/telecharger-fichier', $paramsTelecharger, [], true);
+        }
+        echo $this->uploader()->renderUploadedFile($fichier, $urlTelecharger);
+        ?>
+       
+        <!-- lien de suppression du fichier -->
+        <?php 
+        $urlSupprimer = null;
+        if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_DEPOSER) && $this->isAllowed($fichier, FichierAssertion::PRIVILEGE_DELETE)) {
+            $paramsSupprimer = ['contrat' => $contrat->getId(), 'fichier' => $fichier->getId()];
+            $urlSupprimer    = $this->url('contrat/supprimer-fichier', $paramsSupprimer, [], true); 
+        }
+        echo $this->uploader()->renderDeleteFile($fichier, $urlSupprimer);
+        ?>
+    </li>
+<?php endforeach ?>
+</ul>
+
+<?php else: ?>
+
+<p>Aucun.</p>
+
+<?php endif;

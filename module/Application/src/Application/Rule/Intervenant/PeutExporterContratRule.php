@@ -10,7 +10,7 @@ use Application\Entity\Db\Intervenant;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutExporterContratRule extends IntervenantRule
+class PeutExporterContratRule extends \Application\Rule\AbstractRule
 {
     use \Application\Traits\IntervenantAwareTrait;
     

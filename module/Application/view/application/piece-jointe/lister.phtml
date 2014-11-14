@@ -1,5 +1,4 @@
 <?php
-use Application\Assertion\PieceJointeAssertion;
 use Application\Assertion\FichierAssertion;
 
 $pj       = $this->pj;                    /* @var $pj       \Application\Entity\Db\PieceJointe */
@@ -11,31 +10,26 @@ $fichiers = $pj ? $pj->getFichier() : []; /* @var $fichiers \Application\Entity\
 <ul>
 <?php foreach ($fichiers as $fichier): ?>
     <li class="fichier-pj">
-
+        
         <!-- lien de téléchargement du fichier -->
         <?php 
-        $file = sprintf("%s (<abbr title=\"%s octets\">%s</abbr>)", $fichier->getNom(), $fichier->getTaille(), $fichier->getTailleToString());
-        ?>
-        <?php if ($this->isAllowed($fichier, FichierAssertion::PRIVILEGE_TELECHARGER)): ?>
-            <?php
+        $urlTelecharger = null;
+        if ($this->isAllowed($fichier, FichierAssertion::PRIVILEGE_TELECHARGER)) {
             $paramsTelecharger = ['pieceJointe' => $pj->getId(), 'fichier' => $fichier->getId(), 'nomFichier' => $fichier->getNom()];
             $urlTelecharger    = $this->url('piece-jointe/intervenant/telecharger', $paramsTelecharger, [], true);
-            ?>
-            <a class="download-file" href="<?php echo $urlTelecharger ?>" title="Télécharger le fichier déposé '<?php echo $fichier->getNom() ?>'">
-                <span class="glyphicon glyphicon-file"></span> <?php echo $file ?></a> 
-        <?php else: ?>
-            <span class="glyphicon glyphicon-file"></span> <?php echo $file ?></a> 
-        <?php endif; ?>
+        }
+        echo $this->uploader()->renderUploadedFile($fichier, $urlTelecharger);
+        ?>
        
         <!-- lien de suppression du fichier -->
-        <?php if ($this->isAllowed($fichier, FichierAssertion::PRIVILEGE_DELETE)): ?>
-            <?php
+        <?php 
+        $urlSupprimer = null;
+        if ($this->isAllowed($fichier, FichierAssertion::PRIVILEGE_DELETE)) {
             $paramsSupprimer = ['pieceJointe' => $pj->getId(), 'fichier' => $fichier->getId()];
             $urlSupprimer    = $this->url('piece-jointe/intervenant/supprimer', $paramsSupprimer, [], true); 
-            ?>
-            <a class="delete-file btn btn-xs btn-default" href="<?php echo $urlSupprimer ?>" title="Supprimer le fichier déposé '<?php echo $fichier->getNom() ?>'" data-loading-text="Patientez...">
-                <span class="glyphicon glyphicon-trash"></span> Supprimer</a> 
-        <?php endif; ?>
+        }
+        echo $this->uploader()->renderDeleteFile($fichier, $urlSupprimer);
+        ?>
             
         <!--<span class="label label-warning"><span class="glyphicon glyphicon-exclamation-sign"></span> Non validée</span>-->
     </li>

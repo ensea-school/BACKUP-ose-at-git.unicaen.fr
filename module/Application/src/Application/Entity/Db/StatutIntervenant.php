@@ -487,6 +487,29 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
     }
 
     /**
+     * Get ordre
+     * 
+     * @return integer
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
+     * Set ordre
+     * 
+     * @param integer $ordre
+     * @return self
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+        
+        return $this;
+    }
+
+    /**
      * Set serviceStatutaire
      *
      * @param float $serviceStatutaire
@@ -780,29 +803,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
     public function getTypeAgrementStatut()
     {
         return $this->typeAgrementStatut;
-    }
-
-    /**
-     * Set ordre
-     *
-     * @param integer $ordre
-     * @return StatutIntervenant
-     */
-    public function setOrdre($ordre)
-    {
-        $this->ordre = $ordre;
-
-        return $this;
-    }
-
-    /**
-     * Get ordre
-     *
-     * @return integer
-     */
-    public function getOrdre()
-    {
-        return $this->ordre;
     }
 
     /**

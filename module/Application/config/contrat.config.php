@@ -20,6 +20,7 @@ use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
+use Application\Assertion\ContratAssertion as CA;
     
 return array(
     'router' => array(
@@ -120,6 +121,55 @@ return array(
                             ),
                         ),
                     ),
+                    'deposer-fichier' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:contrat/deposer-fichier',
+                            'constraints' => array(
+                                'contrat' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'deposer-fichier',
+                            ),
+                        ),
+                    ),
+                    'lister-fichier' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:contrat/lister-fichier',
+                            'constraints' => array(
+                                'contrat' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'lister-fichier',
+                            ),
+                        ),
+                    ),
+                    'telecharger-fichier' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:contrat/telecharger-fichier[/:fichier/:nomFichier]',
+                            'constraints' => array(
+                                'contrat' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'telecharger-fichier',
+                            ),
+                        ),
+                    ),
+                    'supprimer-fichier' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/:contrat/supprimer-fichier[/:fichier]',
+                            'constraints' => array(
+                                'contrat' => '[0-9]*',
+                                'fichier' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'supprimer-fichier',
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -153,12 +203,18 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => array('creer', 'valider', 'devalider', 'saisir-retour'),
+                    'action'     => array(
+                        'creer', 'valider', 'devalider', 'saisir-retour', 
+                        'deposer-fichier', 'supprimer-fichier', 
+                    ),
                     'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Contrat',
-                    'action'     => array('index', 'voir', 'exporter'),
+                    'action'     => array(
+                        'index', 'voir', 'exporter', 
+                        'telecharger-fichier', 'lister-fichier', 
+                    ),
                     'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
             ),
@@ -172,9 +228,15 @@ return array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
                     array(
+                        array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID), 
+                        'Contrat', 
+                        array(CA::PRIVILEGE_READ), 
+                        'ContratAssertion',
+                    ),
+                    array(
                         array(ComposanteRole::ROLE_ID), 
                         'Contrat', 
-                        array('create', 'read', 'delete', 'update'), 
+                        array(CA::PRIVILEGE_CREATE, CA::PRIVILEGE_DELETE, CA::PRIVILEGE_UPDATE, CA::PRIVILEGE_DATE_RETOUR, CA::PRIVILEGE_DEPOSER), 
                         'ContratAssertion',
                     ),
                 ),

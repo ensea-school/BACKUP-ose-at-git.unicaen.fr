@@ -1,1 +1,8 @@
-<?php echo $this->serviceReferentielListe($services)->setRenderIntervenants($renderIntervenants)->render(); ?>
+<?php
+
+$srl = $this->serviceReferentielListe($services);
+
+$srl->setRenderIntervenants($renderIntervenants);
+if ($intervenant) $srl->setIntervenant( $intervenant );
+
+echo $srl->render();

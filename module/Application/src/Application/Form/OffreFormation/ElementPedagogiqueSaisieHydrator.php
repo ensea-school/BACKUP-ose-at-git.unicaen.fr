@@ -29,10 +29,13 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface, ServiceLoca
         $object->setLibelle($data['libelle']);
 //        $object->setEtape($this->getServiceLocator()->get('ApplicationEtape')->get($data['etape']));
         $object->setPeriode($this->getServiceLocator()->get('ApplicationPeriode')->get($data['periode']));
-        $object->setTauxFoad($data['taux-foad']);
-        $object->setFc((boolean)$data['fc']);
-        $object->setFi((boolean)$data['fi']);
-        $object->setFa((boolean)$data['fa']);
+        $object->setTauxFoad((float)$data['taux-foad']);
+        $object->setTauxFc((float)$data['taux-fc']);
+        $object->setTauxFi((float)$data['taux-fi']);
+        $object->setTauxFa((float)$data['taux-fa']);
+        $object->setFc((float)$data['taux-fc'] > 0);
+        $object->setFi((float)$data['taux-fi'] > 0);
+        $object->setFa((float)$data['taux-fa'] > 0);
 //        $object->setStructure($this->getServiceLocator()->get('ApplicationStructure')->get($data['structure']));
 
         return $object;
@@ -54,9 +57,9 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface, ServiceLoca
             'periode'        => ($tf              = $object->getPeriode()) ? $tf->getId() : null,
             'taux-foad'      => $object->getTauxFoad(),
             'structure'      => ($s               = $object->getStructure()) ? $s->getId() : null,
-            'fc'             => $object->getFc(),
-            'fi'             => $object->getFi(),
-            'fa'             => $object->getFa(),
+            'taux-fc'        => $object->getTauxFc(),
+            'taux-fi'        => $object->getTauxFi(),
+            'taux-fa'        => $object->getTauxFa(),
         );
         return $data;
     }

@@ -3,6 +3,7 @@
 namespace Application\Assertion;
 
 use Application\Acl\ComposanteRole;
+use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Contrat;
 use Application\Service\Workflow\WorkflowIntervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -19,7 +20,12 @@ use Zend\Permissions\Acl\Role\RoleInterface;
 class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait;
-    
+ 
+    const PRIVILEGE_VALIDER     = 'valider';
+    const PRIVILEGE_DEVALIDER   = 'devalider';
+    const PRIVILEGE_DATE_RETOUR = 'date_retour';
+    const PRIVILEGE_DEPOSER     = 'deposer';
+
     /**
      * @var Contrat
      */
@@ -59,10 +65,57 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
             return false;
         }
         
+        // Impossible de supprimer un contrat/avenant validé
+        if ($this->privilege === self::PRIVILEGE_DELETE && $this->resource->getValidation()) {
+            return false;
+        }
+        
+        // Impossible de valider un contrat/avenant déjà validé
+        if ($this->privilege === self::PRIVILEGE_VALIDER && $this->resource->getValidation()) {
+            return false;
+        }
+        
+        // Impossible de dévalider un contrat
+        if ($this->privilege === self::PRIVILEGE_DEVALIDER && !$this->resource->estUnAvenant()) {
+            return false;
+        }
+        
+        // Impossible de dévalider un avenant non encore validé
+        if ($this->privilege === self::PRIVILEGE_DEVALIDER && !$this->resource->getValidation()) {
+            return false;
+        }
+        
+        // Impossible d'ajouter/supprimer un fichier à un PROJET de contrat/avenant
+        if ($this->privilege === self::PRIVILEGE_DEPOSER && $this->resource->estUnProjet()) {
+            return false;
+        }
+        
+        // Impossible de modifier la date de retour signé d'un PROJET de contrat/avenant
+        if ($this->privilege === self::PRIVILEGE_DATE_RETOUR && $this->resource->estUnProjet()) {
+            return false;
+        }
+        
+        /*********************************************************
+         *                      Rôle Intervenant
+         *********************************************************/
+        if ($this->role instanceof IntervenantRole) {
+            
+            // l'intervenant n'a pas accès à un contrat/avenant d'un autre
+            if ($this->resource->getIntervenant() !== $this->role->getIntervenant()) {
+                return false;
+            }
+            
+            // l'intervenant n'a pas accès aux projets de contrat/avenant
+            if (! $this->resource->getValidation()) {
+                return false;
+            }
+        }
+        
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->role instanceof ComposanteRole) {
+        elseif ($this->role instanceof ComposanteRole) {
+            
             // structure de responsabilité de l'utilisateur et structure du contrat doivent correspondre
             if ($this->role->getStructure() !== $this->resource->getStructure()) {
                 return false;
@@ -80,8 +133,6 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
             if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
                 return false;
             }
-            
-            return true;
         }
         
         return true;

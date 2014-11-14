@@ -2,7 +2,7 @@
 
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<?php echo $this->messenger(true) ?>
+<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <style>
     form.modification-service-du .form-group { float: left; margin-right: 1em; }

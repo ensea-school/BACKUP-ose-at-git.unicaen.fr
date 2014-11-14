@@ -1,6 +1,6 @@
 <h2 class="page-header"><?php echo $title ?></small></h2>
 
-<?php echo $this->messenger(true) ?>
+<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <table class="table table-bordered table-hover">
     <thead>

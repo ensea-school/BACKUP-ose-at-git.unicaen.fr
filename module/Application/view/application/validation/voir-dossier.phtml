@@ -1,6 +1,6 @@
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<?php echo $this->messenger(true) ?>
+<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <?php $form->prepare(); ?>
 <?php if ($form->get('valide')->getValue()): ?>

@@ -3,28 +3,29 @@
 namespace Application\Controller;
 
 use Application\Acl\ComposanteRole;
-use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\TypeValidation;
-use Application\Entity\Db\TypeAgrement;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Common\Constants;
 use Common\Exception\LogicException;
-use DateTime;
 use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Form\Intervenant\ContratValidation;
 use Application\Form\Intervenant\ContratRetour;
 use Application\Entity\Db\Contrat;
+use Application\Assertion\ContratAssertion;
+use Application\Assertion\FichierAssertion;
+use Zend\View\Model\JsonModel;
+use BjyAuthorize\Exception\UnAuthorizedException;
 
 /**
  * Description of ContratController
  *
- * @method Context context()
+ * @method Application\Controller\Plugin\Context context()
+ * @method Application\Controller\Plugin\Upload\UploadPlugin uploader()
  * @method \Doctrine\ORM\EntityManager em()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
@@ -214,6 +215,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $process          = $this->getProcessContrat();
         $peutCreerContrat = $process->getPeutCreerContratInitial();
         $peutCreerAvenant = $process->getPeutCreerAvenant();
+        $messages         = [];
         $servicesDispos   = null;
         $action           = null;
         
@@ -245,9 +247,9 @@ class ContratController extends AbstractActionController implements ContextProvi
             $this->getServiceService()->setTypeVolumehoraire($servicesDispos, $this->getServiceTypeVolumeHoraire()->getPrevu()); // aide de vue
             $messages['info'] = "Des enseignements validés candidats pour un contrat/avenant ont été trouvés.";
         }
-        else {
-            $messages['info'] = "Aucun enseignement validé candidat pour un contrat/avenant n'a été trouvé.";
-        }
+//        else {
+//            $messages['info'] = "Aucun enseignement validé candidat pour un contrat/avenant n'a été trouvé.";
+//        }
             
         if ($this->getRequest()->isPost() && ($peutCreerContrat || $peutCreerAvenant)) {
             $process->creer();
@@ -432,8 +434,6 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function exporterAction()
     {       
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
         $this->initFilters();
         
         // fetch le contrat/avenant spécifié
@@ -455,34 +455,22 @@ class ContratController extends AbstractActionController implements ContextProvi
 
         $this->intervenant = $this->contrat->getIntervenant();
         
-        if ($role instanceof ComposanteRole) {
-            if ($this->contrat->getStructure() !== $role->getStructure()) {
-                throw new \Common\Exception\MessageException("Le contrat/avenant ne vous est pas accessible.");
-            }
-        }
-        else {
-            if ($this->contrat->getIntervenant() !== $this->intervenant) {
-                throw new \Common\Exception\MessageException("Le contrat/avenant ne vous est pas accessible.");
-            }
+        if (! $this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_READ)) {
+            throw new UnAuthorizedException("Interdit !");
         }
         
-        $rule = new \Application\Rule\Intervenant\PeutExporterContratRule($this->intervenant, $this->contrat);
-        if (!$rule->execute()) {
-            throw new \Common\Exception\MessageException("Impossible d'exporter le contrat/avenant.", null, new \Exception($rule->getMessage()));
-        }
-        
-        $annee                 = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $estUnAvenant          = $this->contrat->estUnAvenant();
-        $contratToString       = (string) $this->contrat;
-        $nomIntervenant        = (string) $this->intervenant;
-        $dateNaissance         = $this->intervenant->getDateNaissanceToString();
-        $estATV                = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
-        $dateSignature         = new DateTime();
-        $estUnProjet           = $this->contrat->getValidation() ? false : true;
-        $services              = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
-        $servicesRecaps        = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
-        $totalHETD             = $this->getFormuleHetd()->getHetd($this->intervenant);
-        
+        $annee           = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $estUnAvenant    = $this->contrat->estUnAvenant();
+        $contratToString = (string) $this->contrat;
+        $nomIntervenant  = (string) $this->intervenant;
+        $dateNaissance   = $this->intervenant->getDateNaissanceToString();
+        $estATV          = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
+        $estUnProjet     = $this->contrat->getValidation() ? false : true;
+        $dateSignature   = $estUnProjet ? $this->contrat->getHistoCreation() : $this->contrat->getValidation()->getHistoCreation();
+        $services        = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
+        $servicesRecaps  = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
+        $totalHETD       = $this->getFormuleHetd()->getHetd($this->intervenant);
+
         if ($this->intervenant->getDossier()) {
             $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
             $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
@@ -535,6 +523,90 @@ class ContratController extends AbstractActionController implements ContextProvi
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+    }
+    
+    /**
+     * Dépôt du contrat signé.
+     * 
+     * @return Response
+     */
+    public function deposerFichierAction()
+    {
+        $contrat = $this->context()->mandatory()->contratFromRoute();
+        
+        $result  = $this->uploader()->upload();
+        
+        if ($result instanceof JsonModel) {
+            return $result;
+        }
+        if (is_array($result)) {
+            $this->getServiceContrat()->creerFichiers($result['files'], $contrat);
+        }
+        
+        return $this->redirect()->toRoute('contrat/lister-fichier', [], [], true);
+    }
+    
+    /**
+     * Listing des fichiers déposés pour le contrat.
+     * 
+     * @return aarray
+     */
+    public function listerFichierAction()
+    {
+        $contrat = $this->context()->mandatory()->contratFromRoute();
+               
+        return [
+            'contrat' => $contrat,
+        ];
+    }
+    
+    /**
+     * Téléchargement d'un fichier.
+     * 
+     * @throws UnAuthorizedException
+     */
+    public function telechargerFichierAction()
+    {
+        $contrat = $this->context()->mandatory()->contratFromRoute();
+        $fichier = $this->context()->fichierFromRoute();
+        
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIVILEGE_READ)) {
+            throw new UnAuthorizedException("Interdit!");
+        }
+        
+        if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_TELECHARGER)) {
+            throw new UnAuthorizedException("Interdit!");
+        }
+        
+        $this->uploader()->download($fichier);
+    }
+    
+    /**
+     * Suppression d'un fichier déposé.
+     * 
+     * @return Response
+     * @throws UnAuthorizedException
+     */
+    public function supprimerFichierAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->redirect()->toRoute('home');
+        }
+        
+        $contrat = $this->context()->mandatory()->contratFromRoute();
+        $fichier = $this->context()->fichierFromRoute();
+        
+        if ($fichier) {
+            if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_DELETE)) {
+                throw new UnAuthorizedException("Suppression du fichier interdite!");
+            }
+            $contrat->removeFichier($fichier);
+            $this->em()->remove($fichier);
+        }
+        
+        $this->em()->flush();
+            
+        return $this->redirect()->toRoute('contrat/lister-fichier', ['contrat' => $contrat->getId()], [], true);
     }
     
     /**

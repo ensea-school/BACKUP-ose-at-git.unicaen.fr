@@ -323,7 +323,7 @@ $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $par
                         </td>
                         <td class="periode"><?php echo $ep->getPeriode() ?: "" ?></td>
                         <td><?php echo (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>
-                        <td><?php echo $ep->getHtmlRegimeInscription() ?></td>
+                        <td><?php echo $ep->getRegimesInscription(true) ?></td>
                         <td class="action">
                             <!--------------- Boutons de modif d'élément --------------->
                             <?php if ($etape): ?>

@@ -52,7 +52,7 @@ class Dossier extends AbstractEntityService
         
         $rule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($intervenant);
         if (!$rule->execute()) {
-            $message = "?";
+            $message = "";
             if ($role instanceof \Application\Acl\IntervenantRole) {
                 $message = "Vous ne pouvez pas saisir de données personnelles. ";
             }

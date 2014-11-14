@@ -7,6 +7,7 @@ use Application\Entity\Db\Contrat as ContratEntity;
 use Application\Entity\Db\TypeContrat as TypeContratEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+use Application\Entity\Db\Fichier as FichierEntity;
 
 /**
  * Description of Contrat
@@ -149,6 +150,53 @@ class Contrat extends AbstractEntityService
         }
         
         return $this;
+    }
+    
+    /**
+     * Création des Fichiers déposés pour un contrat.
+     * 
+     * @param array $files Ex: ['tmp_name' => '/tmp/k65sd4d', 'name' => 'Image.png', 'type' => 'image/png', 'size' => 321215]
+     * @param ContratEntity $contrat
+     * @param boolean $deleteFiles Supprimer les fichiers temporaires après création du Fichier
+     * @return Fichier[]
+     */
+    public function creerFichiers($files, ContratEntity $contrat, $deleteFiles = true)
+    {
+        if (!$files) {
+           throw new \Common\Exception\LogicException("Aucune donnée sur les fichiers spécifiée.");
+        }
+        $instances = [];
+        
+        foreach ($files as $file) {
+            $path          = $file['tmp_name'];
+            $nomFichier    = $file['name'];
+            $typeFichier   = $file['type'];
+            $tailleFichier = $file['size'];
+            
+            $fichier = (new FichierEntity())
+                    ->setType($typeFichier)
+                    ->setNom($nomFichier)
+                    ->setTaille($tailleFichier)
+                    ->setContenu(file_get_contents($path))
+                    ->setValidation(null);
+            
+//            if (!$this->getAuthorize()->isAllowed($pj, Fichierssertion::PRIVILEGE_CREATE)) {
+//                throw new UnAuthorizedException('Création du fichier suivant interdite : ' . $pj);
+//            }
+        
+            $contrat->addFichier($fichier);
+            
+            $this->getEntityManager()->persist($fichier);
+            $instances[] = $fichier;
+            
+            if ($deleteFiles) {
+                unlink($path);
+            }
+        }
+
+        $this->getEntityManager()->flush();
+        
+        return $instances;
     }
 
     /**

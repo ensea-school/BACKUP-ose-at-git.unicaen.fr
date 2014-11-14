@@ -1,3 +1,313 @@
+INSERT INTO STATUT_INTERVENANT
+  (
+    ID,
+    LIBELLE,
+    SERVICE_STATUTAIRE,
+    DEPASSEMENT,
+    PLAFOND_REFERENTIEL,
+    MAXIMUM_HETD,
+    FONCTION_E_C,
+    TYPE_INTERVENANT_ID,
+    SOURCE_ID,
+    SOURCE_CODE,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID,
+    ORDRE,
+    NON_AUTORISE,
+    PEUT_SAISIR_SERVICE,
+    PEUT_CHOISIR_DANS_DOSSIER,
+    PEUT_SAISIR_DOSSIER,
+    PEUT_SAISIR_REFERENTIEL,
+    PEUT_SAISIR_MOTIF_NON_PAIEMENT,
+    PEUT_AVOIR_CONTRAT
+  )
+  select
+    STATUT_INTERVENANT_id_seq.nextval,
+    'Salarié d''une entreprise ou d''un organisme étranger',
+    0,
+    0,
+    0,
+    187,
+    0,
+    ti.id,
+    src.id,
+    'SALAR_ETRANGER',
+    u.id,
+    u.id,
+    13, -- ordre
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    1
+  from
+    type_intervenant ti, source src, utilisateur u
+  where   
+    ti.code = 'E' and src.code = 'OSE' and u.username = 'oseappli'
+  ;
+  
+  update statut_intervenant si set si.libelle = 'Salarié du secteur privé français' where si.source_code = 'SALAR_PRIVE';
+  update statut_intervenant si set si.libelle = 'Salarié du secteur public français' where si.source_code = 'SALAR_PUBLIC';
+  
+  --select * from statut_intervenant where SOURCE_CODE like 'SALAR_%';
+  
+  INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    ta.id TYPE_AGREMENT_ID,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    1 PREMIER_RECRUTEMENT,
+    u.id HISTO_CREATEUR_ID,
+    u.id HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si, type_agrement ta, utilisateur u
+  where si.source_code in ('SALAR_ETRANGER') 
+  and ta.code = 'CONSEIL_RESTREINT'
+  and u.username = 'oseappli';
+  
+  INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    ta.id TYPE_AGREMENT_ID,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    0 PREMIER_RECRUTEMENT,
+    u.id HISTO_CREATEUR_ID,
+    u.id HISTO_MODIFICATEUR_ID
+  from STATUT_INTERVENANT si, type_agrement ta, utilisateur u
+  where si.source_code in ('SALAR_ETRANGER') 
+  and ta.code = 'CONSEIL_RESTREINT'
+  and u.username = 'oseappli';
+  
+INSERT INTO TYPE_AGREMENT_STATUT
+  (
+    ID,
+    TYPE_AGREMENT_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select 
+    TYPE_AGREMENT_STATUT_id_seq.nextval,
+    ta.id TYPE_AGREMENT_ID,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    1 PREMIER_RECRUTEMENT,
+    u.id HISTO_CREATEUR_ID,
+    u.id HISTO_MODIFICATEUR_ID
+  from 
+    STATUT_INTERVENANT si, type_agrement ta, utilisateur u
+  where 
+    si.source_code in ('SALAR_ETRANGER') 
+    and ta.code = 'CONSEIL_ACADEMIQUE'
+    and u.username = 'oseappli';
+  
+INSERT INTO TYPE_PIECE_JOINTE
+  (
+    ID,
+    CODE,
+    LIBELLE,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select
+    TYPE_PIECE_JOINTE_id_seq.nextval,
+    'PASSEPORT',
+    'Passeport',
+    u.id,
+    u.id
+  from
+    utilisateur u
+  where 
+    u.username = 'oseappli'
+  ;
+  
+INSERT INTO TYPE_PIECE_JOINTE
+  (
+    ID,
+    CODE,
+    LIBELLE,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select
+    TYPE_PIECE_JOINTE_id_seq.nextval,
+    'ATT_ACT_SAL',
+    'Attestation d''activité salariée',
+    u.id,
+    u.id
+  from
+    utilisateur u
+  where 
+    u.username = 'oseappli'
+  ;
+  
+INSERT INTO TYPE_PIECE_JOINTE_STATUT
+  (
+    ID,
+    TYPE_PIECE_JOINTE_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select
+    TYPE_PIECE_JOINTE_STATU_id_seq.nextval id,
+    tpj.id TYPE_PIECE_JOINTE_ID,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    1 PREMIER_RECRUTEMENT, 
+    u.id HISTO_CREATEUR_ID,
+    u.id HISTO_MODIFICATEUR_ID
+  from 
+    TYPE_PIECE_JOINTE tpj, STATUT_INTERVENANT si, UTILISATEUR u
+  where 
+    tpj.CODE in ('RIB', 'CV', 'PASSEPORT', 'ATT_ACT_SAL') 
+    and si.SOURCE_CODE in ('SALAR_ETRANGER') 
+    and u.USERNAME = 'oseappli'
+  ;
+  
+  INSERT INTO TYPE_PIECE_JOINTE_STATUT
+  (
+    ID,
+    TYPE_PIECE_JOINTE_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select
+    TYPE_PIECE_JOINTE_STATU_id_seq.nextval id,
+    tpj.id TYPE_PIECE_JOINTE_ID,
+    si.id STATUT_INTERVENANT_ID,
+    1 OBLIGATOIRE,
+    null SEUIL_HETD,
+    0 PREMIER_RECRUTEMENT, 
+    u.id HISTO_CREATEUR_ID,
+    u.id HISTO_MODIFICATEUR_ID
+  from 
+    TYPE_PIECE_JOINTE tpj, STATUT_INTERVENANT si, UTILISATEUR u
+  where 
+    tpj.CODE in ('ATT_ACT_SAL') 
+    and si.SOURCE_CODE in ('SALAR_ETRANGER') 
+    and u.USERNAME = 'oseappli'
+  ;
+  
+  INSERT INTO TYPE_PIECE_JOINTE_STATUT
+  (
+    ID,
+    TYPE_PIECE_JOINTE_ID,
+    STATUT_INTERVENANT_ID,
+    OBLIGATOIRE,
+    SEUIL_HETD,
+    PREMIER_RECRUTEMENT,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  select
+    TYPE_PIECE_JOINTE_STATU_id_seq.nextval id,
+    tpj.id TYPE_PIECE_JOINTE_ID,
+    si.id STATUT_INTERVENANT_ID,
+    0 OBLIGATOIRE,
+    null SEUIL_HETD,
+    0 PREMIER_RECRUTEMENT, 
+    u.id HISTO_CREATEUR_ID,
+    u.id HISTO_MODIFICATEUR_ID
+  from 
+    TYPE_PIECE_JOINTE tpj, STATUT_INTERVENANT si, UTILISATEUR u
+  where 
+    tpj.CODE in ('RIB') 
+    and si.SOURCE_CODE in ('SALAR_ETRANGER') 
+    and u.USERNAME = 'oseappli'
+  ;
+  
+  
+
+
+
+INSERT
+INTO FONCTION_REFERENTIEL
+  (
+    ID,
+    CODE,
+    LIBELLE_LONG,
+    LIBELLE_COURT,
+    PLAFOND,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATEUR_ID
+  )
+  VALUES
+  (
+    FONCTION_REFERENTIEL_ID_SEQ.nextval,
+    'VAE_VAP',
+    'Validation des acquis (VAE/VAP)',
+    'VAE/VAP',
+    9999,
+    1,
+    1
+  );
+  
+  
+  
+  CREATE TABLE "OSE"."CONTRAT_FICHIER" (	
+   "CONTRAT_ID" NUMBER(*,0) NOT NULL ENABLE, 
+   "FICHIER_ID" NUMBER(*,0) NOT NULL ENABLE, 
+   CONSTRAINT "CONTRAT_FICHIER_PK" PRIMARY KEY ("CONTRAT_ID", "FICHIER_ID"), 
+   CONSTRAINT "CONTRAT_FICHIER_FFK" FOREIGN KEY ("FICHIER_ID") REFERENCES "OSE"."FICHIER" ("ID") ON DELETE CASCADE ENABLE, 
+   CONSTRAINT "CONTRAT_FICHIER_cFK" FOREIGN KEY ("CONTRAT_ID") REFERENCES "OSE"."CONTRAT" ("ID") ON DELETE CASCADE ENABLE
+ ) ;
+ 
+ 
+ -- copie dossier.premier_recrutement --> intervenant.premier_recrutement
+UPDATE INTERVENANT I
+set i.premier_recrutement = (
+  select d.premier_recrutement
+  from DOSSIER D
+  inner join INTERVENANT_EXTERIEUR IE on ie.dossier_id = d.id
+  where ie.id = i.id 
+);
+-- verif
+select i.premier_recrutement, d.premier_recrutement
+from intervenant i
+inner join intervenant_exterieur ie on ie.id = i.id
+inner join dossier d on d.id = ie.dossier_id
+--where i.source_code = '30688'
+;
+
+
 -- recréation séquence TYPE_AGREMENT_ID_SEQ et insert 2 types agrément
 drop SEQUENCE TYPE_AGREMENT_ID_SEQ;
 CREATE SEQUENCE TYPE_AGREMENT_ID_SEQ  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE ;

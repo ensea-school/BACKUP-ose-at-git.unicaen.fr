@@ -506,6 +506,28 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
     /**
      * {@inheritDoc}
      */
+    public function getOrdre()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrdre', array());
+
+        return parent::getOrdre();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOrdre($ordre)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOrdre', array($ordre));
+
+        return parent::setOrdre($ordre);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setServiceStatutaire($serviceStatutaire)
     {
 
@@ -791,28 +813,6 @@ class StatutIntervenant extends \Application\Entity\Db\StatutIntervenant impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeAgrementStatut', array());
 
         return parent::getTypeAgrementStatut();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setOrdre($ordre)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOrdre', array($ordre));
-
-        return parent::setOrdre($ordre);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOrdre()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrdre', array());
-
-        return parent::getOrdre();
     }
 
     /**

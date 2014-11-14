@@ -78,8 +78,8 @@ class ServiceReferentielController extends AbstractActionController implements C
         $role           = $this->getContextProvider()->getSelectedIdentityRole();
         $service        = $this->getServiceServiceReferentiel();
         $intervenant    = $this->context()->intervenantFromRoute();
+        if (! $intervenant) $intervenant = $this->context()->intervenantFromQuery('intervenant-filter');
         $filter         = $this->params('filter');
-
         $qb = $service->finderByContext();
         if ($intervenant) {
             $service->finderByIntervenant( $intervenant, $qb );
@@ -99,7 +99,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         }
 
         $services = $service->getList( $qb );
-        return compact('services', 'renderIntervenants');
+        return compact('services', 'intervenant', 'renderIntervenants');
     }
 
     public function voirLigneAction()
@@ -257,8 +257,11 @@ class ServiceReferentielController extends AbstractActionController implements C
         $serviceEp = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $annee = $context->getAnnee();
+
+        $univ = $serviceStructure->getRacine();
         
         $structures = $serviceStructure->getList($serviceStructure->finderByEnseignement());
+        $structures[$univ->getId()] = $univ;
         $fonctions  = $repoFonctionReferentiel->findBy(array('validiteFin' => null), array('libelleCourt' => 'asc'));
         FonctionServiceReferentielFieldset::setStructuresPossibles(new ArrayCollection($structures));
         FonctionServiceReferentielFieldset::setFonctionsPossibles(new ArrayCollection($fonctions));
@@ -282,11 +285,12 @@ class ServiceReferentielController extends AbstractActionController implements C
         $form->bind($intervenant);
         
         $variables = array(
-            'form' => $form, 
+            'form'        => $form,
             'intervenant' => $intervenant,
-            'title' => "Saisie du service référentiel <small>$intervenant</small>",
+            'fonctions'   => $fonctions,
+            'title'       => "Saisie du service référentiel <small>$intervenant</small>",
         );
-        
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = $request->getPost()->toArray();

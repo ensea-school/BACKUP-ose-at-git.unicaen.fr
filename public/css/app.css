@@ -169,6 +169,21 @@ form#service div#element-interne div.col-md-5 {
 }
 
 
+form#service div.volume-horaire-saisie-multiple div {
+    float:left;
+    width:10em;
+    height:5em;
+}
+
+form#service div.volume-horaire-saisie-multiple div input {
+    width:7em;
+    display:inline;
+}
+
+form#service div.volume-horaire-saisie-multiple-fin {
+    clear: both;
+}
+
 td .form-group{
     margin-bottom: 0px;
 }

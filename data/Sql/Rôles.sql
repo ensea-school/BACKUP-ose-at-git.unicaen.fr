@@ -33,6 +33,20 @@ INSERT INTO ROLE (
     ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 1, 1
 );
 
+INSERT INTO ROLE (
+    STRUCTURE_ID,
+    PERSONNEL_ID,
+    TYPE_ID,
+    SOURCE_CODE,
+    ID, SOURCE_ID, HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
+)VALUES(
+    NULL, --(SELECT ID FROM structure WHERE source_code = ''),
+    (SELECT ID FROM personnel WHERE source_code ='4650'),
+    (SELECT ID FROM TYPE_ROLE WHERE code = 'administrateur'),
+    'gestionnaire-drh-alcalde',
+    ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 1, 1
+);
+
 select * from personnel where nom_usuel like 'Gouvary%';
 select * from type_role;
 

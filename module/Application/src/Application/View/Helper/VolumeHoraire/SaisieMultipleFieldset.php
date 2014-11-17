@@ -58,25 +58,23 @@ class SaisieMultipleFieldset extends AbstractHelper implements ServiceLocatorAwa
     {
         $fieldset = $this->fieldset;
         $typesIntervention = $this->getTypesIntervention();
-        $colXsNumber = floor( 12 / count($typesIntervention) );
 
         $res = $this->getView()->formHidden($fieldset->get('service'));
         $res .= $this->getView()->formHidden($fieldset->get('periode'));
         $res .= $this->getView()->formHidden($fieldset->get('type-volume-horaire'));
 
-        $res .= '<div class="row">';
+        $res .= '<div class="volume-horaire-saisie-multiple">';
         foreach( $typesIntervention as $typeIntervention ){
             $element = $fieldset->get($typeIntervention->getCode());
             $element->setAttribute('class', 'form-control')
-                    ->setAttribute('style', 'width:5em;display:inline')
                     ->setLabelAttributes(array('class' => 'control-label'));
-            $res .= '<div class="col-xs-'.$colXsNumber.'" style="max-width:15em">';
+            $res .= '<div style="">';
             $res .= $this->getView()->formLabel( $element );
-            $res .= ' ';
+            $res .= '<br />';
             $res .= $this->getView()->formNumber( $element);
             $res .= '</div>';
         }
-        $res .= '</div>';
+        $res .= '</div><div class="volume-horaire-saisie-multiple-fin"></div>';
 
         return $res;
     }

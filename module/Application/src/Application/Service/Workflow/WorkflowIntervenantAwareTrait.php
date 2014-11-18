@@ -36,6 +36,4 @@ trait WorkflowIntervenantAwareTrait
         $this->workflowIntervenant = $workflow;
         return $this;
     }
-
-
 }

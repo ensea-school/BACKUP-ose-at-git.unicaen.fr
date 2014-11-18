@@ -118,7 +118,7 @@ abstract class AbstractWorkflow extends AbstractService
      * @return Step Etape
      * @throws RuntimeException Etape introuvable
      */
-    protected function getStep($key)
+    public function getStep($key)
     {
         if (!$this->containsStep($key)) {
             throw new RuntimeException("Aucune étape trouvée dans le workflow avec la clé '$key'.");

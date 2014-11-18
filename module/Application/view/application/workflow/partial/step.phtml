@@ -1,0 +1,21 @@
+<?php 
+use Application\Service\Workflow\WorkflowIntervenant;
+use Application\Service\Workflow\Step\Step;
+use Application\Entity\Db\Intervenant;
+
+$wf           = $this->wf;           /* @var $wf WorkflowIntervenant */
+$step         = $this->step;         /* @var $step Step */
+$intervenants = $this->intervenants; /* @var $intervenants Intervenant[] */
+?>
+
+<h2><?php echo $step->getLabel($this->role) ?></h2>
+
+<p><?php echo count($intervenants) ?> intervenant(s).</p>
+
+<ul>
+<?php foreach ($intervenants as $intervenant): ?>
+
+    <li><a href="<?php echo $wf->getStepUrl($step, $intervenant) ?>"><?php echo $intervenant ?></a></li>
+
+<?php endforeach; ?>
+</ul>

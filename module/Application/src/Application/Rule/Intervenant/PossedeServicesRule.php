@@ -3,6 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Traits\AnneeAwareTrait;
+use Application\Traits\StructureAwareTrait;
 use Common\Exception\LogicException;
 
 /**
@@ -13,6 +14,7 @@ use Common\Exception\LogicException;
 class PossedeServicesRule extends AbstractIntervenantRule
 {
     use AnneeAwareTrait;
+    use StructureAwareTrait;
     
     const MESSAGE_SERVICE = 'messageService';
 
@@ -75,10 +77,18 @@ class PossedeServicesRule extends AbstractIntervenantRule
         $qb = $this->getServiceIntervenant()->getRepo()->createQueryBuilder("i")
                 ->select("i.id")
                 ->join("i.service", "s")
+                ->join("s.elementPedagogique", "ep") // permet d'écarter les EP historisés
+                ->join("ep.etape", "e")              // permet d'écarter les Etapes historisées
                 ->andWhere("s.annee = " . $this->getAnnee()->getId());
         
         if ($this->getIntervenant()) {
             $qb->andWhere("i = " . $this->getIntervenant()->getId());
+        }
+        
+        if ($this->getStructure()) {
+            $qb
+                    ->join("s.structureEns", "strEns")
+                    ->andWhere("strEns = " . $this->getStructure()->getId());
         }
         
         return $qb;

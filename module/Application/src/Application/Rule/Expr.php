@@ -188,7 +188,7 @@ class Expr extends AbstractRule
                 
         switch ($this->operator) {
             case self::OPERATOR_AND:
-                return array_uintersect_assoc($a1, $a2, function ($a, $b) { return $a === $b ? 0 : -1; });
+                return array_uintersect_assoc($a1, $a2, function ($a, $b) { return $a == $b ? 0 : -1; });
             case self::OPERATOR_OR:
                 return $a1 + $a2;
             default:

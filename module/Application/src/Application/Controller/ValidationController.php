@@ -12,6 +12,7 @@ use Application\Service\ContextProviderAwareTrait;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\ServiceValidation;
 use Application\Form\Intervenant\ReferentielValidation;
+use Common\Exception\MessageException;
 
 /**
  * Description of ValidationController
@@ -554,6 +555,11 @@ class ValidationController extends AbstractActionController implements ContextPr
         $this->title    = "Validation du référentiel <small>$this->intervenant</small>";
         $this->readonly = false;
             
+        $rule = $this->getServiceLocator()->get('PeutSaisirModificationServiceDuRule')->setIntervenant($this->intervenant);
+        if (!$rule->execute()) {
+            throw new MessageException("La validation du référentiel n'est pas possible. ", null, new \Exception($rule->getMessage()));
+        }
+        
         $this->commonReferentiel();
         
         if ($this->validation->getId()) {

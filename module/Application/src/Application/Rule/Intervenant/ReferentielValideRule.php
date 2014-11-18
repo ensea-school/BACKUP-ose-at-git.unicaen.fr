@@ -2,9 +2,8 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Traits\StructureAwareTrait;
-use Application\Traits\TypeValidationAwareTrait;
-use Common\Exception\LogicException;
+use Application\Entity\Db\TypeValidation;
+use Application\Service\TypeValidation as TypeValidationService;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -15,9 +14,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ReferentielValideRule extends AbstractIntervenantRule
 {
-    use TypeValidationAwareTrait;
-    use StructureAwareTrait;
-        
     const MESSAGE_AUCUNE = 'messageAucune';
 
     /**
@@ -76,27 +72,39 @@ class ReferentielValideRule extends AbstractIntervenantRule
      */
     public function getQueryBuilder()
     {        
-        if (!$this->getTypeValidation()) {
-            throw new LogicException("Type de validation non fourni.");
-        }
-        
         $em = $this->getServiceIntervenant()->getEntityManager();
         $qb = $em->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i")
                 ->select("i.id")
                 ->distinct()
                 ->join("i.serviceReferentiel", 'r')
-                ->join("r.structure", "str")
-                ->join("r.validation", "v", Join::WITH, "v.typeValidation = " . $this->getTypeValidation()->getId())
+                ->join("r.fonction", 'f')    // nécessaire pour écarter le référentiel si la fonction est historisée
+                ->join("i.validation", "v", Join::WITH, "v.typeValidation = " . $this->getTypeValidationReferentiel()->getId())
                 ->join("v.typeValidation", "tv");
         
         if ($this->getIntervenant()) {
             $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
-        if ($this->getStructure()) {
-            $qb->andWhere("str = " . $this->getStructure()->getId());
-        }
-        
         return $qb;
+    }
+    
+    /**
+     * @return TypeValidation
+     */
+    private function getTypeValidationReferentiel()
+    {
+        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_REFERENTIEL);
+        $typeValidation = $qb->getQuery()->getOneOrNullResult();
+        
+        return $typeValidation;
+    }
+    
+    /**
+     * 
+     * @return TypeValidationService
+     */
+    private function getServiceTypeValidation()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
 }

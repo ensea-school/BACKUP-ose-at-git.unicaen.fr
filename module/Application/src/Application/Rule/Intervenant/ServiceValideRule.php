@@ -3,9 +3,10 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\VolumeHoraire;
+use Application\Entity\Db\TypeValidation;
+use Application\Service\TypeValidation as TypeValidationService;
 use Application\Service\VolumeHoraire as VolumeHoraireService;
 use Application\Traits\StructureAwareTrait;
-use Application\Traits\TypeValidationAwareTrait;
 use Common\Exception\LogicException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -28,7 +29,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ServiceValideRule extends AbstractIntervenantRule
 {
-    use TypeValidationAwareTrait;
     use StructureAwareTrait;
         
     const MESSAGE_AUCUNE     = 'messageAucune';
@@ -95,7 +95,7 @@ class ServiceValideRule extends AbstractIntervenantRule
         $this->volumesHorairesValides    = [];
         
         foreach ($volumesHoraires as $vh) { /* @var $vh VolumeHoraire */
-            if (!count($vh->getValidation($this->getTypeValidation()))) {
+            if (!count($vh->getValidation($this->getTypeValidationService()))) {
                 $this->volumesHorairesNonValides[] = $vh;
             }
             else {
@@ -142,10 +142,6 @@ class ServiceValideRule extends AbstractIntervenantRule
      */
     public function getQueryBuilder()
     {        
-        if (!$this->getTypeValidation()) {
-            throw new LogicException("Type de validation non fourni.");
-        }
-        
         $em = $this->getServiceIntervenant()->getEntityManager();
         $qb = $em->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
                 ->select("i.id")
@@ -153,7 +149,7 @@ class ServiceValideRule extends AbstractIntervenantRule
                 ->join("i.service", 's')
                 ->join("s.structureEns", "strEns")
                 ->join("s.volumeHoraire", 'vh')
-                ->join("vh.validation", "v", Join::WITH, "v.typeValidation = " . $this->getTypeValidation()->getId())
+                ->join("vh.validation", "v", Join::WITH, "v.typeValidation = " . $this->getTypeValidationService()->getId())
                 ->join("v.typeValidation", "tv");
         
         if ($this->getIntervenant()) {
@@ -255,5 +251,25 @@ class ServiceValideRule extends AbstractIntervenantRule
     public function getServiceVolumeHoraire()
     {
         return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
+    }
+    
+    /**
+     * @return TypeValidation
+     */
+    private function getTypeValidationService()
+    {
+        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_SERVICES_PAR_COMP);
+        $typeValidation = $qb->getQuery()->getOneOrNullResult();
+        
+        return $typeValidation;
+    }
+    
+    /**
+     * 
+     * @return TypeValidationService
+     */
+    private function getServiceTypeValidation()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
 }

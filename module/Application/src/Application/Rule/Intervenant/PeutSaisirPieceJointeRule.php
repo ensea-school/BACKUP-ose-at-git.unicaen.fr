@@ -69,7 +69,8 @@ class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
                 ->select("i.id")
                 ->join("i.statut", "si")
                 ->join("si.typePieceJointeStatut", "tpjs")
-                ->andWhere("i.premierRecrutement is null OR tpjs.premierRecrutement = i.premierRecrutement");
+                ->join("tpjs.type", "tpj") //  pour écarter les types historisés
+                ->andWhere("tpjs.premierRecrutement = i.premierRecrutement");
         
         if ($this->getIntervenant()) {
             $qb->andWhere("i = " . $this->getIntervenant()->getId());

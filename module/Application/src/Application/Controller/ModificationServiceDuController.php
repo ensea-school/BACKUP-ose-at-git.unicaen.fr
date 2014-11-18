@@ -36,7 +36,6 @@ class ModificationServiceDuController extends AbstractActionController implement
                 ->setIntervenant($intervenant)
                 ->setStructure($role instanceof ComposanteRole ? $role->getStructure() : null);
         if (!$rule->execute()) {
-                        var_dump($rule->getMessage());
             throw new MessageException("La modification de service dû n'est pas possible. ", null, new \Exception($rule->getMessage()));
         }
         

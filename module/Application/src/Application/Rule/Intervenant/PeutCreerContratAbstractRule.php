@@ -48,19 +48,8 @@ abstract class PeutCreerContratAbstractRule extends AbstractRule
         $this->serviceValideRule
                 ->setMemePartiellement() // une validation partielle des services suffit
                 ->setIntervenant($this->getIntervenant())
-                ->setStructure($this->getStructure())
-                ->setTypeValidation($this->getTypeValidationEns());
+                ->setStructure($this->getStructure());
         
         return $this->serviceValideRule;
-    }
-    
-    /**
-     * 
-     * @return TypeValidation
-     */
-    private function getTypeValidationEns()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeValidation')->getRepo()
-                ->findOneByCode(TypeValidation::CODE_SERVICES_PAR_COMP);
     }
 }

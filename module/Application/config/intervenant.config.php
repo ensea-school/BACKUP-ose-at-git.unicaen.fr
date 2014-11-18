@@ -204,20 +204,6 @@ return array(
                     ),
                 ),
             ),
-            'workflow' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route' => '/workflow/:intervenant/:action',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'intervenant' => '[0-9]*',
-                    ),
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Workflow',
-                    ),
-                ),
-            ),
         ),
     ),
     'navigation' => array(
@@ -389,11 +375,6 @@ return array(
                     'action'     => array('saisir'),
                     'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
-                array(
-                    'controller' => 'Application\Controller\Workflow',
-                    'action'     => array('nav-next'),
-                    'roles'      => array('user'),
-                ),
             ),
         ),
         'resource_providers' => array(
@@ -419,14 +400,12 @@ return array(
             'Application\Controller\Intervenant'           => 'Application\Controller\IntervenantController',
             'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
             'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
-            'Application\Controller\Workflow'              => 'Application\Controller\WorkflowController',
         ),
         'aliases' => array(
             'IntervenantController' => 'Application\Controller\Intervenant',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'service_manager' => array(
@@ -436,7 +415,6 @@ return array(
             'ApplicationCivilite'          => 'Application\\Service\\Civilite',
             'ApplicationStatutIntervenant' => 'Application\\Service\\StatutIntervenant',
             'ApplicationDossier'           => 'Application\\Service\\Dossier',
-            'WorkflowIntervenant'          => 'Application\\Service\\Workflow\\WorkflowIntervenant',
             'IntervenantAssertion'         => 'Application\\Assertion\\IntervenantAssertion',
             'PeutSaisirDossierRule'        => 'Application\Rule\Intervenant\PeutSaisirDossierRule',
             'PeutSaisirServiceRule'        => 'Application\Rule\Intervenant\PeutSaisirServiceRule',
@@ -446,21 +424,19 @@ return array(
             'PossedeReferentielRule'       => 'Application\Rule\Intervenant\PossedeReferentielRule',
             'DossierValideRule'            => 'Application\Rule\Intervenant\DossierValideRule',
             'ServiceValideRule'            => 'Application\Rule\Intervenant\ServiceValideRule',
+            'ReferentielValideRule'        => 'Application\Rule\Intervenant\ReferentielValideRule',
             'NecessiteAgrementRule'        => 'Application\Rule\Intervenant\NecessiteAgrementRule',
             'AgrementFourniRule'           => 'Application\Rule\Intervenant\AgrementFourniRule',
             'EstAffecteRule'               => 'Application\Rule\Intervenant\EstAffecteRule',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'Workflow' => 'Application\View\Helper\Workflow',
         ),
         'initializers' => array(
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'form_elements' => array(

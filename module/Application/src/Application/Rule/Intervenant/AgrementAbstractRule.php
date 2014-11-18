@@ -29,9 +29,9 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule
         $service = $this->getServiceTypeAgrementStatut();
                 
         $qb = $service->finderByStatutIntervenant($this->getIntervenant()->getStatut());
-        if (null !== $this->getIntervenant()->getPremierRecrutement()) {
+//        if (null !== $this->getIntervenant()->getPremierRecrutement()) {
             $service->finderByPremierRecrutement($this->getIntervenant()->getPremierRecrutement(), $qb);
-        }
+//        }
         $typesAgrementStatut = $service->getList($qb);
         
         return $typesAgrementStatut;

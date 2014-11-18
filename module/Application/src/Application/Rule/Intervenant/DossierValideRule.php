@@ -3,7 +3,8 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\IntervenantExterieur;
-use Application\Traits\TypeValidationAwareTrait;
+use Application\Entity\Db\TypeValidation;
+use Application\Service\TypeValidation as TypeValidationService;
 use Common\Exception\LogicException;
 use Doctrine\ORM\QueryBuilder;
 
@@ -14,8 +15,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class DossierValideRule extends AbstractIntervenantRule
 {
-    use TypeValidationAwareTrait;
-    
     const MESSAGE_DOSSIER = 'messageDossier';
 
     /**
@@ -74,21 +73,37 @@ class DossierValideRule extends AbstractIntervenantRule
      */
     public function getQueryBuilder()
     {        
-        if (!$this->getTypeValidation()) {
-            throw new LogicException("Type de validation non fourni.");
-        }
-        
         $em = $this->getServiceIntervenant()->getEntityManager();
         $qb = $em->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
                 ->select("i.id")
                 ->join("i.validation", "v")
                 ->join("v.typeValidation", "tv")
-                ->andWhere("tv = " . $this->getTypeValidation()->getId());
+                ->andWhere("tv = " . $this->getTypeValidationDossier()->getId());
         
         if ($this->getIntervenant()) {
             $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
         
         return $qb;
+    }
+    
+    /**
+     * @return TypeValidation
+     */
+    private function getTypeValidationDossier()
+    {
+        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        $typeValidation = $qb->getQuery()->getOneOrNullResult();
+        
+        return $typeValidation;
+    }
+    
+    /**
+     * 
+     * @return TypeValidationService
+     */
+    private function getServiceTypeValidation()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
 }

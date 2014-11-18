@@ -84,7 +84,6 @@ class DossierController extends AbstractActionController implements ContextProvi
      
         $validation = null;
         $dossierValide = $this->getServiceLocator()->get('DossierValideRule')->setIntervenant($this->intervenant);
-        $dossierValide->setTypeValidation($this->getTypeValidationDossier());
         if ($dossierValide->isRelevant() && $dossierValide->execute()) {
             $this->readonly = true;
             if (count($validations = $this->intervenant->getValidation($this->getTypeValidationDossier()))) {
@@ -92,7 +91,7 @@ class DossierController extends AbstractActionController implements ContextProvi
             }
         }
         
-        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
         $url   = $step ? $wf->getStepUrl($step) : $this->url('home');
         if ($role instanceof IntervenantRole) {

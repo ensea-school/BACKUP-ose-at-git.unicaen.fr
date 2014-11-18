@@ -60,7 +60,7 @@ END;
 /
 
 BEGIN
-  --OSe_FORMULE.MAJ_ALL_IDT;
+--  OSE_FORMULE.MAJ_ALL_IDT;
 
 --  OSE_FORMULE.MAJ_RESULTAT( 25839, 2014 );
   OSE_FORMULE.MAJ_ALL;
@@ -68,6 +68,9 @@ END;
 
 /
 
+25839 ou 17599
+
+select * from intervenant where source_code = '1058';
 SELECT * FROM formule_service_du WHERE intervenant_id = 25839;
 SELECT * FROM formule_referentiel WHERE intervenant_id = 25839;
 SELECT * FROM formule_service WHERE intervenant_id = 25839;

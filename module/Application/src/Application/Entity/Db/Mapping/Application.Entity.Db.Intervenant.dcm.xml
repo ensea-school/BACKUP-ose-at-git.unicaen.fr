@@ -100,5 +100,10 @@
     <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant" />
     <one-to-many field="agrement" target-entity="Application\Entity\Db\Agrement" mapped-by="intervenant" />
     <one-to-one field="utilisateur" target-entity="Application\Entity\Db\Utilisateur" mapped-by="intervenant" />
+    <one-to-many field="formuleReferentiel" target-entity="Application\Entity\Db\FormuleReferentiel" mapped-by="intervenant" />
+    <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant" />
+    <one-to-many field="formuleService" target-entity="Application\Entity\Db\FormuleService" mapped-by="intervenant" />
+    <one-to-many field="formuleServiceDu" target-entity="Application\Entity\Db\FormuleServiceDu" mapped-by="intervenant" />
+    <one-to-many field="formuleVolumeHoraire" target-entity="Application\Entity\Db\FormuleVolumeHoraire" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

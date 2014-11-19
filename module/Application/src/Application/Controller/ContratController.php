@@ -776,7 +776,7 @@ class ContratController extends AbstractActionController implements ContextProvi
      * @return \Application\Service\Process\FormuleHetd
      */
     public function getFormuleHetd()
-    {
+    {   throw new \Exception('processFormuleHetd supprimé');
         return $this->getServiceLocator()->get('processFormuleHetd');
     }
 }

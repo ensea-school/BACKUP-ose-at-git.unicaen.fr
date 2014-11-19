@@ -218,7 +218,7 @@ Service.refreshFiltres = function(){
 
 Service.refreshTotaux = function(){
     $("#services tfoot").refresh( {}, Service.onListeChanged );
-    $("#details-hetd").refresh();
+    $("#formule-totaux-hetd").refresh();
 }
 
 Service.onListeChanged = function(){
@@ -296,10 +296,12 @@ function ServiceReferentiel( id ) {
 
     this.onAfterAdd = function() {
         $.get(ServiceReferentiel.voirLigneUrl, [], function(data) { $("#services-ref").replaceWith($(data).filter("table").fadeIn()); });
+        $("#formule-totaux-hetd").refresh();
     }
 
     this.onAfterDelete = function() {
         $( "#service-ref-" + this.id + "-ligne" ).fadeOut().remove();
+        $("#formule-totaux-hetd").refresh();
     }
 }
 

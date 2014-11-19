@@ -16,6 +16,7 @@
     <field name="aPayer" type="float" column="A_PAYER" precision="126" scale="0" nullable="false"/>
     <field name="enseignements" type="float" column="ENSEIGNEMENTS" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplTotal" type="float" column="HEURES_COMPL_TOTAL" precision="126" scale="0" nullable="false"/>

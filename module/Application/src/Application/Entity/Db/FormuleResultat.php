@@ -27,6 +27,11 @@ class FormuleResultat
     /**
      * @var float
      */
+    private $heuresComplFa;
+
+    /**
+     * @var float
+     */
     private $heuresComplFi;
 
     /**
@@ -152,6 +157,29 @@ class FormuleResultat
     public function getHeuresComplFc()
     {
         return $this->heuresComplFc;
+    }
+
+    /**
+     * Set heuresComplFa
+     *
+     * @param float $heuresComplFa
+     * @return FormuleResultat
+     */
+    public function setHeuresComplFa($heuresComplFa)
+    {
+        $this->heuresComplFa = $heuresComplFa;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFa
+     *
+     * @return float
+     */
+    public function getHeuresComplFa()
+    {
+        return $this->heuresComplFa;
     }
 
     /**

@@ -207,25 +207,29 @@ class IntervenantController extends AbstractActionController implements ContextP
         $params['action'] = 'total-heures-comp';
         $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
         $viewModel->addChild($totalViewModel, 'totalHeuresComp');
-
+/** @todo refaire la sortie heures-comp */
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
 
-        $viewModel->setVariables( compact('intervenant', 'formule') );
+        $viewModel->setVariables( compact('intervenant') );
         return $viewModel;
     }
 
-    public function totalHeuresCompAction()
+    public function formuleTotauxHetdAction()
     {
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
-        return compact('intervenant', 'formule');
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant Intervenant */
+        $annee = $this->context()->getGlobalContext()->getAnnee();
+        $typeVolumeHoraire = $this->getEvent()->getRouteMatch()->getParam('typeVolumeHoraire');
+        $etatVolumeHoraire = $this->getEvent()->getRouteMatch()->getParam('etatVolumeHoraire');
+
+        $formuleResultat = $intervenant->getFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire)->first();
+
+        return compact('formuleResultat');
     }
 
     public function feuilleDeRouteAction()
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
+
         $this->em()->getFilters()->enable('historique');
 
         if ($role instanceof \Application\Acl\IntervenantRole) {

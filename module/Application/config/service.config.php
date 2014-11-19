@@ -256,7 +256,6 @@ return array(
             'FormServiceRechercheHydrator'      => 'Application\Form\Service\RechercheHydrator',
             'FormServiceSaisieFieldsetHydrator' => 'Application\Form\Service\SaisieFieldsetHydrator',
             'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',
-            'ProcessFormuleHetd'                => 'Application\\Service\\Process\\FormuleHetd',
             'ServiceAssertion'                  => 'Application\\Assertion\\ServiceAssertion',
             'ServiceReferentielAssertion'       => 'Application\\Assertion\\ServiceReferentielAssertion',
         ),
@@ -281,6 +280,7 @@ return array(
             'serviceReferentielDl'    => 'Application\View\Helper\ServiceReferentiel\Dl',
             'serviceSaisieForm'       => 'Application\View\Helper\Service\SaisieForm',
             'serviceResume'           => 'Application\View\Helper\Service\Resume',
+            'formuleTotauxHetd'       => 'Application\View\Helper\Formule\TotauxHetdViewHelper',
         ),
         'factories' => array(
             'serviceListe'            => 'Application\View\Helper\Service\ListeFactory',

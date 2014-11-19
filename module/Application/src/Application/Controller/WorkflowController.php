@@ -197,8 +197,8 @@ class WorkflowController extends AbstractActionController implements ContextProv
     public function voirHeuresCompAction()
     {
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        throw new \Exception('processFormuleHetd supprimé');
         $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
-
         return compact('intervenant', 'formule');
     }
 

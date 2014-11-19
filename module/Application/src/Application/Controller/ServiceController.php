@@ -110,11 +110,13 @@ class ServiceController extends AbstractActionController
             $filter = null;
 
             //$params           = $this->getEvent()->getRouteMatch()->getParams();
-        /*    $params           = [];
+            $params           = [];
             $params['intervenant'] = $intervenant->getSourceCode();
-            $params['action'] = 'total-heures-comp';
+            $params['action'] = 'formule-totaux-hetd';
+            $params['typeVolumeHoraire'] = $typeVolumeHoraire;
+            $params['etatVolumeHoraire'] = $this->getServiceEtatVolumeHoraire()->getSaisi();
             $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
-            $viewModel->addChild($totalViewModel, 'totalHeuresComp');*/
+            $viewModel->addChild($totalViewModel, 'formuleTotauxHetd');
         }
 
         /* Préparation et affichage */
@@ -199,7 +201,7 @@ class ServiceController extends AbstractActionController
         foreach( $typesIntervention as $typeIntervention ){
             $head[] = $typeIntervention->getCode();
         }
-
+throw new \Exception('processFormuleHetd supprimé');
         $csvModel->setHeader( $head );
         foreach( $services as $service ){ /* @var $service \Application\Entity\Db\Service */
             $line = [
@@ -518,6 +520,14 @@ class ServiceController extends AbstractActionController
     protected function getServiceServiceReferentiel()
     {
         return $this->getServiceLocator()->get('applicationServiceReferentiel');
+    }
+
+    /**
+     * @return \Application\Service\EtatVolumeHoraire
+     */
+    protected function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 
     /**

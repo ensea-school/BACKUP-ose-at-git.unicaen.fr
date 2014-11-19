@@ -492,15 +492,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     }
 
     /**
-     *
-     * @return \Application\Service\Process\FormuleHetd
-     */
-    protected function getFormuleHetd()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('processFormuleHetd');
-    }
-
-    /**
      * @return \Application\Service\Service
      */
     protected function getServiceService()

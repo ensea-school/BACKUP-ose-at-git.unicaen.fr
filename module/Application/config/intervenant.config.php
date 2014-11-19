@@ -86,16 +86,16 @@ return array(
                             ),
                         ),
                     ),
-                    'total-heures-comp' => array(
+                    'formule-totaux-hetd' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/total-heures-comp[/:intervenant]',
+                            'route'    => '/formule-totaux-hetd[/:intervenant]',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action' => 'total-heures-comp',
+                                'action' => 'formule-totaux-hetd',
                             ),
                         ),
                     ),
@@ -341,8 +341,8 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('total-heures-comp'),
-                    'roles'      => $R_ALL,
+                    'action'     => array('formule-totaux-hetd'),
+                    'roles'      => $R_ALL, /** @todo à sécuriser à l'aide d'une assertion pour éviter qu'un intervenant ne puisse voir les HETD des autres */
                     'assertion'  => 'IntervenantAssertion',
                 ),
                 array(
@@ -422,6 +422,7 @@ return array(
             'ApplicationCivilite'              => 'Application\\Service\\Civilite',
             'ApplicationStatutIntervenant'     => 'Application\\Service\\StatutIntervenant',
             'ApplicationDossier'               => 'Application\\Service\\Dossier',
+            'ApplicationFormule'               => 'Application\\Service\\Formule',
             'WorkflowIntervenant'              => 'Application\\Service\\Workflow\\WorkflowIntervenant',
             'IntervenantAssertion'             => 'Application\\Assertion\\IntervenantAssertion',
         ),

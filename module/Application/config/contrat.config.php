@@ -20,7 +20,7 @@ use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
-use Application\Assertion\ContratAssertion as CA;
+use Application\Assertion\ContratAssertion;
     
 return array(
     'router' => array(
@@ -230,13 +230,20 @@ return array(
                     array(
                         array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID), 
                         'Contrat', 
-                        array(CA::PRIVILEGE_READ), 
+                        array(ContratAssertion::PRIVILEGE_READ), 
                         'ContratAssertion',
                     ),
                     array(
                         array(ComposanteRole::ROLE_ID), 
                         'Contrat', 
-                        array(CA::PRIVILEGE_CREATE, CA::PRIVILEGE_DELETE, CA::PRIVILEGE_UPDATE, CA::PRIVILEGE_DATE_RETOUR, CA::PRIVILEGE_DEPOSER), 
+                        array(
+                            ContratAssertion::PRIVILEGE_CREATE, 
+                            ContratAssertion::PRIVILEGE_DELETE, 
+                            ContratAssertion::PRIVILEGE_UPDATE, 
+                            ContratAssertion::PRIVILEGE_VALIDER,
+                            ContratAssertion::PRIVILEGE_DEVALIDER, 
+                            ContratAssertion::PRIVILEGE_DATE_RETOUR, 
+                            ContratAssertion::PRIVILEGE_DEPOSER), 
                         'ContratAssertion',
                     ),
                 ),

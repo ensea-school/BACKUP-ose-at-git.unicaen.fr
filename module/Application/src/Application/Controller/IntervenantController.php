@@ -221,8 +221,7 @@ class IntervenantController extends AbstractActionController implements ContextP
         $typeVolumeHoraire = $this->getEvent()->getRouteMatch()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getRouteMatch()->getParam('etatVolumeHoraire');
 
-        $formuleResultat = $intervenant->getFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire)->first();
-
+        $formuleResultat = $intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
         return compact('formuleResultat');
     }
 
@@ -238,7 +237,7 @@ class IntervenantController extends AbstractActionController implements ContextP
         else {
             $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
-        
+
         if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
             throw new \Common\Exception\MessageException("Pas encore implémenté pour IntervenantPermanent");
         }

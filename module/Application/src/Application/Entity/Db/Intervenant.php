@@ -1437,6 +1437,28 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Get unique formuleResultat
+     *
+     * @param Annee $annee
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumehoraire
+     *
+     * @return FormuleResultat
+     */
+    public function getUniqueFormuleResultat( Annee $annee, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire )
+    {
+        $formuleResultat = $this->getFormuleResultat($annee, $typeVolumeHoraire, $etatVolumehoraire)->first();
+        if (false === $formuleResultat){
+            $formuleResultat = new FormuleResultat;
+            $formuleResultat->setIntervenant($this);
+            $formuleResultat->setAnnee($annee);
+            $formuleResultat->setTypeVolumeHoraire($typeVolumeHoraire);
+            $formuleResultat->setEtatVolumeHoraire($etatVolumehoraire);
+        }
+        return $formuleResultat;
+    }
+
+    /**
      * Get formuleService
      *
      * @param Annee $annee

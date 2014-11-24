@@ -21,6 +21,7 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
 {
     use WorkflowIntervenantAwareTrait;
  
+    const PRIVILEGE_EXPORTER    = 'exporter';
     const PRIVILEGE_VALIDER     = 'valider';
     const PRIVILEGE_DEVALIDER   = 'devalider';
     const PRIVILEGE_DATE_RETOUR = 'date_retour';

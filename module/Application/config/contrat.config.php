@@ -204,7 +204,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => array(
-                        'creer', 'valider', 'devalider', 'saisir-retour', 
+                        'creer', 'exporter', 'valider', 'devalider', 'saisir-retour', 
                         'deposer-fichier', 'supprimer-fichier', 
                     ),
                     'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
@@ -212,7 +212,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => array(
-                        'index', 'voir', 'exporter', 
+                        'index', 'voir', 
                         'telecharger-fichier', 'lister-fichier', 
                     ),
                     'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
@@ -240,6 +240,7 @@ return array(
                             ContratAssertion::PRIVILEGE_CREATE, 
                             ContratAssertion::PRIVILEGE_DELETE, 
                             ContratAssertion::PRIVILEGE_UPDATE, 
+                            ContratAssertion::PRIVILEGE_EXPORTER,
                             ContratAssertion::PRIVILEGE_VALIDER,
                             ContratAssertion::PRIVILEGE_DEVALIDER, 
                             ContratAssertion::PRIVILEGE_DATE_RETOUR, 

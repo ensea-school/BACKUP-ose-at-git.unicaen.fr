@@ -40,7 +40,7 @@ $role        = $this->role;
                     <strong><?php echo $contrat ?></strong> créé par 
                     <?php echo $this->mailto($contrat->getHistoModificateur()) ?>
                     
-                    <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_READ)): ?>
+                    <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_EXPORTER)): ?>
                     <span class="pull-right">
                         <a href="<?php echo $urlExport ?>"
                            title="Exporter le contrat/avenant au format PDF"><span class="glyphicon glyphicon-export"></span> Exporter en PDF</a>

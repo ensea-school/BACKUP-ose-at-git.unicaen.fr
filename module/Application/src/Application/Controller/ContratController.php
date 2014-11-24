@@ -466,11 +466,11 @@ class ContratController extends AbstractActionController implements ContextProvi
         $dateNaissance   = $this->intervenant->getDateNaissanceToString();
         $estATV          = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
         $estUnProjet     = $this->contrat->getValidation() ? false : true;
+        $contratIniModif = $estUnAvenant && $this->contrat->getContrat()->getStructure() === $this->contrat->getStructure() ? true : false;
         $dateSignature   = $estUnProjet ? $this->contrat->getHistoCreation() : $this->contrat->getValidation()->getHistoCreation();
-        $services        = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
         $servicesRecaps  = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
-        $totalHETD       = $this->getFormuleHetd()->getHetd($this->intervenant);
-
+        $totalHETD       = $this->getTotalHetdIntervenant();
+        
         if ($this->intervenant->getDossier()) {
             $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
             $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
@@ -490,6 +490,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $variables = array(
             'estUnAvenant'            => $estUnAvenant,
             'estUnProjet'             => $estUnProjet,
+            'contratIniModif'         => $contratIniModif,
             'etablissement'           => "L'université de Caen",
             'etablissementRepresente' => ", représentée par son Président, Pierre SINEUX",
             'nomIntervenant'          => $nomIntervenant,
@@ -502,7 +503,6 @@ class ContratController extends AbstractActionController implements ContextProvi
             'annee'                   => $annee,
             'dateSignature'           => $dateSignature->format(Constants::DATE_FORMAT),
             'lieuSignature'           => "Caen",
-            'services'                => $services,
             'servicesRecaps'          => $servicesRecaps,
             'totalHETD'               => \UnicaenApp\Util::formattedFloat($totalHETD, \NumberFormatter::DECIMAL, 2),
         );
@@ -523,6 +523,20 @@ class ContratController extends AbstractActionController implements ContextProvi
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalHetdIntervenant()
+    {   
+        $annee             = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
+        
+        $fr = $this->intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+
+        return $fr->getServiceAssure();
     }
     
     /**
@@ -757,6 +771,14 @@ class ContratController extends AbstractActionController implements ContextProvi
     }
     
     /**
+     * @return \Application\Service\EtatVolumeHoraire
+     */
+    private function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationEtatVolumeHoraire');
+    }
+    
+    /**
      * @return \Application\Service\TypeValidation
      */
     private function getServiceTypeValidation()
@@ -770,13 +792,5 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getServiceTypeAgrement()
     {
         return $this->getServiceLocator()->get('ApplicationTypeAgrement');
-    }
-
-    /**
-     * @return \Application\Service\Process\FormuleHetd
-     */
-    public function getFormuleHetd()
-    {   throw new \Exception('processFormuleHetd supprimé');
-        return $this->getServiceLocator()->get('processFormuleHetd');
     }
 }

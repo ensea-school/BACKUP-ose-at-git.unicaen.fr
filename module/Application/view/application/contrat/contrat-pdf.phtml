@@ -6,8 +6,8 @@
     .intervenant { font-weight: bold; }
     .partie { margin-left: 50px; }
     .articles dt { font-weight: bold; margin-top: 10px; }
-    .demeurant { text-decoration: underline; vertical-align: top; width: 100px; }
-    .insee { text-decoration: underline; width: 100px; }
+    .demeurant { vertical-align: top; width: 100px; }
+    .insee { width: 100px; }
     .services table { border-style: solid; border-width: 1px; }
     .services table th { border-bottom-style: solid; border-bottom-width: 1px; }
     .services table tfoot td { border-top-style: dotted; border-top-width: 1px; }
@@ -39,7 +39,8 @@ recrutement et d'emploi de vacataires pour l'enseignement supérieur ;<br /><br 
 </table>
 
 <?php
-$qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'enseignement vacataire";
+$e = $f ? 'e' : '';
+$qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d'enseignement vacataire";
 ?>
 
 <h1 class="titre">
@@ -58,7 +59,7 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'e
 
 <p>et d'autre part :</p>
 <p class="partie">
-    <span class="intervenant"><?php echo $nomIntervenant ?></span>, né<?php echo $f ? 'e' : '' ?> le <?php echo $dateNaissance ?><br />
+    <span class="intervenant"><?php echo $nomIntervenant ?></span>, né<?php echo $e ?> le <?php echo $dateNaissance ?><br />
 </p>
 <table class="partie">
     <tr>
@@ -88,7 +89,7 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'e
     
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
-            <p><?php echo $nomCompletIntervenant ?> assurera au lieu des heures d'enseignements effectives prévues au contrat initial :</p>
+            <p>Le contrat de travail initial de <?php echo $nomCompletIntervenant ?> est <?php echo $contratIniModif ? "modifié" : "complété" ?> comme suit :</p>
             <div class="services"><?php echo $servicesToString ?></div>
         </dd>
         
@@ -96,15 +97,15 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'e
         
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
-            <p><?php echo $nomCompletIntervenant ?> est recruté<?php echo $f ? 'e' : '' ?> pour l'année universitaire <?php echo $annee ?> en qualité 
+            <p><?php echo $nomCompletIntervenant ?> est recruté<?php echo $e ?> pour l'année universitaire <?php echo $annee ?> en qualité 
             <?php echo $qualiteIntervenant ?>.</p>
         </dd>
 
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
-            <p>L'intéressé<?php echo $f ? 'e' : '' ?> est chargé<?php echo $f ? 'e' : '' ?> d'assurer les heures effectives d'enseignements ci-après :</p>
+            <p>L'intéressé<?php echo $e ?> est chargé<?php echo $e ?> d'assurer les heures effectives d'enseignement suivantes :</p>
             <div class="services"><?php echo $servicesToString ?></div>
-            <p>L'intéressé<?php echo $f ? 'e' : '' ?> s'engage à assurer, sans rémunération complémentaire, toutes les obligations liées à son ou à ses enseignements (suivi pédagogique des étudiants, contrôle des connaissances et examens).</p>
+            <p>L'intéressé<?php echo $e ?> s'engage à assurer, sans rémunération complémentaire, toutes les obligations liées à ses enseignements (suivi pédagogique des étudiants, contrôle des connaissances et examens).</p>
         </dd>
         
     <?php endif ?>
@@ -112,9 +113,9 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'e
     <div style="page-break-inside: avoid;">
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
-            <p>L'intéressé<?php echo $f ? 'e' : '' ?> sera rémunéré<?php echo $f ? 'e' : '' ?> au taux travaux dirigés en vigueur fixé par arrêté publié au Journal Officiel.</p>
+            <p>L'intéressé<?php echo $e ?> sera rémunéré<?php echo $e ?> au taux horaire en vigueur pour les travaux dirigés fixé par arrêté publié au Journal Officiel.</p>
             <p>Le paiement a lieu au vu de l'état liquidatif visé par le directeur de la composante et de la production d'un dossier complet.</p>
-            <p>Une inexécution partielle du service imputable à l'intéressé<?php echo $f ? 'e' : '' ?> entraîne un abattement correspondant aux heures non faites.</p>
+            <p>Une inexécution partielle du service imputable à l'intéressé<?php echo $e ?> entraîne un abattement correspondant aux heures non faites.</p>
         </dd>
     </div>
 </dl>
@@ -123,7 +124,7 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé d'e
 
 <table class="signatures">
     <tr>
-        <td>Signature de l'intéressé<?php echo $f ? 'e' : '' ?><br /><?php echo $nomIntervenant ?></td>
+        <td>Signature de l'intéressé<?php echo $e ?><br /><?php echo $nomIntervenant ?></td>
         <td>Pour le Président, par délégation :</td>
     </tr>
     <tr>

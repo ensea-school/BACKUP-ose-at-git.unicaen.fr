@@ -200,12 +200,7 @@ abstract class AbstractEntityService extends AbstractService
         if (true === $addSelect){
             $qb->addSelect( $rightAlias );
         }elseif(is_array($addSelect)){
-            $selectString = '';
-            foreach( $addSelect as $propertyName ){
-                if ($selectString != '') $selectString .= ',';
-                $selectString .= $rightAlias.'.'.$propertyName;
-            }
-            $qb->addSelect($selectString);
+            $qb->addSelect( 'partial '.$rightAlias.'.{'.implode( ', ', $addSelect).'}' );
         }
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\View\Helper\Formule;
+namespace Application\View\Helper\Intervenant;
 
 use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\FormuleResultat;
@@ -42,14 +42,11 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
     {
         $fr = $this->getFormuleResultat();
         return $this->getView()->url(
-            'intervenant/formule-totaux-hetd',
-            ['intervenant' => $fr->getIntervenant()->getSourceCode()],
-            ['query' => [
+            'intervenant/formule-totaux-hetd', [
+                'intervenant'       => $fr->getIntervenant()->getSourceCode(),
                 'typeVolumeHoraire' => $fr->getTypeVolumeHoraire()->getId(),
-                'etatVolumeHoraire' => $fr->getEtatVolumeHoraire()->getId(),
-            ] ],
-            true
-        );
+                'etatVolumeHoraire' => $fr->getEtatVolumeHoraire()->getId()
+            ] );
     }
 
     public function render()

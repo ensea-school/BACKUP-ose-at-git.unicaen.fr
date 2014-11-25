@@ -29,29 +29,29 @@ class Intervenant extends AbstractEntityService
     {
         $term = str_replace(' ', '', $term);
         
-        $qb = $this->getRepo()->createQueryBuilder('i');
+        $qb = $this->getRepo()->createQueryBuilder($this->getAlias());
         
         $concatNomUsuelPrenom = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat('i.nomUsuel', 'i.prenom'), 
+                array($qb->expr()->concat($this->getAlias().'.nomUsuel', $this->getAlias().'.prenom'),
                 '?3'));
         $concatNomPatroPrenom = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat('i.nomPatronymique', 'i.prenom'), 
+                array($qb->expr()->concat($this->getAlias().'.nomPatronymique', $this->getAlias().'.prenom'),
                 '?3'));
         $concatPrenomNomUsuel = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat('i.prenom', 'i.nomUsuel'), 
+                array($qb->expr()->concat($this->getAlias().'.prenom', $this->getAlias().'.nomUsuel'),
                 '?3'));
         $concatPrenomNomPatro = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat('i.prenom', 'i.nomPatronymique'), 
+                array($qb->expr()->concat($this->getAlias().'.prenom', $this->getAlias().'.nomPatronymique'),
                 '?3'));
         
         $qb
 //                ->select('i.')
-                ->where('i.sourceCode = ?1')
+                ->where($this->getAlias().'.sourceCode = ?1')
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatNomUsuelPrenom), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatNomPatroPrenom), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatPrenomNomUsuel), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatPrenomNomPatro), $qb->expr()->upper('CONVERT(?2, ?3)')))
-                ->orderBy('i.nomUsuel, i.prenom');
+                ->orderBy($this->getAlias().'.nomUsuel, '.$this->getAlias().'.prenom');
         
         $qb->setParameters(array(1 => $term, 2 => "%$term%", 3 => 'US7ASCII'));
         
@@ -91,6 +91,17 @@ class Intervenant extends AbstractEntityService
     public function getEntityClass()
     {
         return 'Application\Entity\Db\Intervenant';
+    }
+
+    /**
+     *
+     * @param string $sourceCode
+     * @return IntervenantEntity
+     */
+    public function getBySourceCode( $sourceCode )
+    {
+        if (null == $sourceCode) return null;
+        return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode]);
     }
 
     /**

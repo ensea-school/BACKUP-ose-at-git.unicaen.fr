@@ -218,9 +218,8 @@ class IntervenantController extends AbstractActionController implements ContextP
     {
         $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant Intervenant */
         $annee = $this->context()->getGlobalContext()->getAnnee();
-        $typeVolumeHoraire = $this->getEvent()->getRouteMatch()->getParam('typeVolumeHoraire');
-        $etatVolumeHoraire = $this->getEvent()->getRouteMatch()->getParam('etatVolumeHoraire');
-
+        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
         $formuleResultat = $intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
         return compact('formuleResultat');
     }

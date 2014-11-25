@@ -65,25 +65,24 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
      */
     public function injectRouteEntitiesInEvent(MvcEvent $e)
     {
-        $routeMatch = $e->getRouteMatch();
-        
-        // intervenant
-        if (($sourceCode = $routeMatch->getParam($name = 'intervenant'))) {
-            $sm = $e->getApplication()->getServiceManager();
-            if (($intervenant = $sm->get('ApplicationIntervenant')->getRepo()->findOneBySourceCode($sourceCode))) {
-                $e->setParam('intervenant', $intervenant);
-            }
-        }
-        
-        // type d'agrément
-        if (($id = $routeMatch->getParam($name = 'typeAgrement'))) {
-            $sm = $e->getApplication()->getServiceManager();
-            if (($typeAgrement = $sm->get('ApplicationTypeAgrement')->get($id))) {
-                $e->setParam('typeAgrement', $typeAgrement);
+        $smPrefix = 'Application';
+        $sm = $e->getApplication()->getServiceManager();
+        $params = $e->getRouteMatch()->getParams();
+
+        foreach( $params as $name => $value ){
+            if ('intervenant' === $name){
+                $value = $sm->get($smPrefix.ucfirst($name))->getBySourceCode( $value );
+                $e->setParam($name, $value);
+            }elseif ($sm->has($smPrefix.$name)){ // Si un service est associé à l'entité
+                $service = $sm->get($smPrefix.ucfirst($name));
+                if ($service instanceof Service\AbstractEntityService){
+                    $value = $sm->get($smPrefix.ucfirst($name))->get( $value );
+                    $e->setParam($name, $value);
+                }
             }
         }
     }
-    
+
     /**
      * Si l'utilisateur connecté a le profil "Intervenant", vérification que l'intervenant spécifié dans 
      * la requête est bien celui connecté.
@@ -101,7 +100,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
             $routeMatch->setParam('intervenant', $role->getIntervenant()->getSourceCode());
         }
     }
-    
+
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';

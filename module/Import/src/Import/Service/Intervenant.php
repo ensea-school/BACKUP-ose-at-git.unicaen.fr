@@ -2,7 +2,8 @@
 
 namespace Import\Service;
 
-use DateTime;
+use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeIntervenant;
 
 /**
  *
@@ -15,9 +16,11 @@ class Intervenant extends Service {
      * Recherche un ensemble d'intervenants
      *
      * @param string $criterion
+     * @param Structure|null $structure
+     * @param TypeIntervenant|null $typeIntervenant
      * @return array[]
      */
-    public function searchIntervenant( $criterion )
+    public function searchIntervenant( $criterion, Structure $structure=null, TypeIntervenant $typeIntervenant=null )
     {
 
         $params = array(
@@ -34,6 +37,14 @@ class Intervenant extends Service {
                      ." OR lower(CONVERT(i.nom_patronymique,'US7ASCII')) LIKE LOWER(CONVERT(:criterionStr$i,'US7ASCII'))"
                      ." OR lower(CONVERT(i.prenom,'US7ASCII')) LIKE LOWER(CONVERT(:criterionStr$i,'US7ASCII')))";
             $params["criterionStr$i"] = '%'.$criterion[$i].'%';
+        }
+
+        $where = '';
+        if ($structure){
+            $where .= 'AND i.structure_id = '.$structure->getId()."\n";
+        }
+        if ($typeIntervenant){
+            $where .= 'AND i.type_id = '.$typeIntervenant->getId()."\n";
         }
 
         $params['sexeFem'] = \Common\Constants::SEXE_F;
@@ -54,6 +65,7 @@ class Intervenant extends Service {
             JOIN STRUCTURE s ON (s.ID = i.STRUCTURE_ID)
         WHERE
             (i.source_code = :criterionId OR ($sqlCrit))
+            $where
             AND rownum <= :limit
         ORDER BY
             nom_usuel, prenom

@@ -40,10 +40,22 @@ class RechercheController extends AbstractActionController
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel(array());
         }
-        
+
+        $typeIntervenant = $this->params()->fromQuery('typeIntervenant', false);
+        $sTypeIntervenant = $this->getServiceLocator()->get('applicationTypeIntervenant');
+        /* @var $sTypeIntervenant \Application\Service\TypeIntervenant */
+        $typeIntervenant = $sTypeIntervenant->get( $typeIntervenant );
+
+        $structure = $this->params()->fromQuery('structure', false);
+        $sStructure = $this->getServiceLocator()->get('applicationStructure');
+        /* @var $sStructure \Application\Service\Structure */
+        $structure = $sStructure->get( $structure );
+
         $template  = "{label} <small>{extra}</small>";
         $resultOSE = array();
         $qb        = $this->getServiceIntervenant()->finderByNomPrenomId($term);
+        if ($structure) $this->getServiceIntervenant()->finderByStructure( $structure, $qb );
+        if ($typeIntervenant) $this->getServiceIntervenant()->finderByType( $typeIntervenant, $qb );
         $entities  = $qb->getQuery()->execute();
 
         $f = new \Common\Filter\IntervenantTrouveFormatter();
@@ -55,7 +67,7 @@ class RechercheController extends AbstractActionController
         
         // recherche dans la source de données externe (ex: Harpege)
         $service = $this->getServiceLocator()->get('importServiceIntervenant'); /* @var $service \Import\Service\Intervenant */
-        $resultHarp = $service->searchIntervenant($term);
+        $resultHarp = $service->searchIntervenant($term, $structure, $typeIntervenant);
         
         // marquage des individus existant dans OSE mais inexistant dans la source
         // + retrait des individus trouvés à la fois dans OSE et dans la source

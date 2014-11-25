@@ -279,4 +279,9 @@ class EtatVolumeHoraire implements HistoriqueAwareInterface
     {
         return $this->histoCreateur;
     }
+
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
 }

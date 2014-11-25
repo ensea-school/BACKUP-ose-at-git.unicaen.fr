@@ -39,6 +39,11 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
     /**
      * @var integer
      */
+    private $ordre;
+
+    /**
+     * @var integer
+     */
     private $id;
 
     /**
@@ -170,6 +175,29 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return TypeVolumeHoraire
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
     }
 
     /**

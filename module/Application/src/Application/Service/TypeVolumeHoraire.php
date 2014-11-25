@@ -72,7 +72,7 @@ class TypeVolumeHoraire extends AbstractEntityService
     public function getList( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->addOrderBy("$alias.libelle");
+        $qb->addOrderBy("$alias.ordre");
         return parent::getList($qb, $alias);
     }
 

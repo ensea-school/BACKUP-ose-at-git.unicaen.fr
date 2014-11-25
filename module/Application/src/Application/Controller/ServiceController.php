@@ -96,14 +96,11 @@ class ServiceController extends AbstractActionController
         if (! $intervenant){
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
             $params = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action'] = 'filtres';
-            $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-            $viewModel->addChild($listeViewModel, 'filtresListe');
+            $params['action'] = 'recherche';
+            $rechercheViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
+            $viewModel->addChild($rechercheViewModel, 'recherche');
             
-            $filter = $this->getFormServiceRecherche()->hydrateFromSession();
-            $this->getContextProvider()->getLocalContext()->fromArray( // sauvegarde des filtres dans le contexte local
-                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
-            );
+            $filter = $this->getFormRecherche()->hydrateFromSession();
         }else{
             $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action = 'afficher'; // Affichage par défaut
@@ -113,8 +110,8 @@ class ServiceController extends AbstractActionController
             $params           = [];
             $params['intervenant'] = $intervenant->getSourceCode();
             $params['action'] = 'formule-totaux-hetd';
-            $params['typeVolumeHoraire'] = $typeVolumeHoraire;
-            $params['etatVolumeHoraire'] = $this->getServiceEtatVolumeHoraire()->getSaisi();
+            $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
+            $this->getEvent()->setParam('etatVolumeHoraire', $this->getServiceEtatVolumeHoraire()->getSaisi());
             $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
             $viewModel->addChild($totalViewModel, 'formuleTotauxHetd');
         }
@@ -162,7 +159,7 @@ class ServiceController extends AbstractActionController
 
         if (! $intervenant){
             $this->filtresAction();
-            $filter = $this->getFormServiceRecherche()->hydrateFromSession();
+            $filter = $this->getFormRecherche()->hydrateFromSession();
         }else{
             $filter = null;
         }
@@ -243,29 +240,23 @@ throw new \Exception('processFormuleHetd supprimé');
         if ($role instanceof \Application\Acl\IntervenantRole) {
             return $this->redirect()->toRoute('intervenant/services', array('intervenant' => $role->getIntervenant()->getSourceCode()));
         }
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
 
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $action = $this->getRequest()->getQuery('action', null);
         $params = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'filtres';
+        $params['action'] = 'recherche';
         $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-        $viewModel->addChild($listeViewModel, 'filtresListe');
+        $viewModel->addChild($listeViewModel, 'recherche');
 
-        $filter = $this->getFormServiceRecherche()->hydrateFromSession();
-
-        // sauvegarde des filtres dans le contexte local
-        $this->getContextProvider()->getLocalContext()->fromArray(
-                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
-        );
-
+        $recherche = $this->getServiceService()->loadRecherche();
         if ('afficher' == $action ){
-            $resumeServices = $this->getServiceService()->getResumeService($filter);
+            $resumeServices = $this->getServiceService()->getResumeService($recherche);
         }else{
             $resumeServices = null;
         }
-   
+
         $viewModel->setVariables( compact('annee','action','resumeServices','canAddService') );
         return $viewModel;
     }
@@ -274,22 +265,34 @@ throw new \Exception('processFormuleHetd supprimé');
     {
         $this->initFilters();
 
-        $filter = $this->getFormServiceRecherche()->hydrateFromSession();
+        $filter = $this->getFormRecherche()->hydrateFromSession();
 
         return compact('filter');
     }
 
-    public function filtresAction()
+    public function rechercheAction()
     {
-        /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
-        $rechercheForm = $this->getFormServiceRecherche();
-        $rechercheForm->populateOptions();
-        $rechercheForm->setDataFromSession();
-        $rechercheForm->setData( $this->getRequest()->getQuery() );
-        if ($rechercheForm->isValid()){
-            $rechercheForm->sessionUpdate();
+        $errors = [];
+        $service = $this->getServiceService();
+        $rechercheForm = $this->getFormRecherche();
+        $entity = $service->loadRecherche();
+        $rechercheForm->bind($entity);
+
+        $request = $this->getRequest();
+        /* @var $request Http\Request */
+        if ('afficher' === $request->getQuery('action', null)){
+            $rechercheForm->setData($request->getQuery());
+            if ($rechercheForm->isValid()) {
+                try {
+                    $service->saveRecherche($entity);
+                }catch (\Exception $e) {
+                    $errors[] = $e->getMessage();
+                }
+            }else{
+                $errors[] = 'Les données de recherche saisies sont invalides.';
+            }
         }
-        return compact('rechercheForm');
+        return compact('rechercheForm', $errors);
     }
 
     public function voirAction()
@@ -469,9 +472,9 @@ throw new \Exception('processFormuleHetd supprimé');
     /**
      * @return \Application\Form\Service\Recherche
      */
-    protected function getFormServiceRecherche()
+    protected function getFormRecherche()
     {
-        return $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+        return $this->getServiceLocator()->get('FormElementManager')->get('ServiceRechercheForm');
     }
 
     /**

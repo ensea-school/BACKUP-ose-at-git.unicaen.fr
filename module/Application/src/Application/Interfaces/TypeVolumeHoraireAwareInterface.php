@@ -14,7 +14,8 @@ interface TypeVolumeHoraireAwareInterface
     /**
      * Spécifie le type de volume horaire concerné.
      *
-     * @param TypeVolumeHoraire $typeVolumeHoraire Type de rôle concernée
+     * @param TypeVolumeHoraire $typeVolumeHoraire le type de volume horaire concerné
+     * @return self
      */
     public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire = null);
 

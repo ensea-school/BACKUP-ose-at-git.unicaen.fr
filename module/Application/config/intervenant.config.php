@@ -2,25 +2,6 @@
 
 namespace Application;
 
-use Application\Acl\Role;
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\DirecteurComposanteRole;
-use Application\Acl\GestionnaireComposanteRole;
-use Application\Acl\ResponsableComposanteRole;
-use Application\Acl\SuperviseurComposanteRole;
-use Application\Acl\ResponsableRechercheLaboRole;
-use Application\Acl\DrhRole;
-use Application\Acl\GestionnaireDrhRole;
-use Application\Acl\ResponsableDrhRole;
-use Application\Acl\EtablissementRole;
-use Application\Acl\SuperviseurEtablissementRole;
-use Application\Acl\IntervenantRole;
-use Application\Acl\IntervenantPermanentRole;
-use Application\Acl\IntervenantExterieurRole;
-use Application\Acl\FoadRole;
-use Application\Acl\ResponsableFoadRole;
-
 return array(
     'router' => array(
         'routes' => array(
@@ -89,7 +70,7 @@ return array(
                     'formule-totaux-hetd' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/formule-totaux-hetd[/:intervenant]',
+                            'route'    => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
                             'constraints' => array(
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'intervenant' => '[0-9]*',
@@ -353,27 +334,27 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir', 'index', 'feuille-de-route'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,  AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_INTERVENANT, R_COMPOSANTE,  R_ADMINISTRATEUR),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('choisir', 'rechercher', 'search'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir-heures-comp'),
-                    'roles'      => array(DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_DRH, R_ADMINISTRATEUR),
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => array('voir', 'modifier'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_INTERVENANT_EXTERIEUR, R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
                 array(
                     'controller' => 'Application\Controller\ModificationServiceDu',
                     'action'     => array('saisir'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
                 array(
                     'controller' => 'Application\Controller\Workflow',
@@ -421,6 +402,7 @@ return array(
             'ApplicationIntervenant'           => 'Application\\Service\\Intervenant',
             'ApplicationCivilite'              => 'Application\\Service\\Civilite',
             'ApplicationStatutIntervenant'     => 'Application\\Service\\StatutIntervenant',
+            'ApplicationTypeIntervenant'       => 'Application\\Service\\TypeIntervenant',
             'ApplicationDossier'               => 'Application\\Service\\Dossier',
             'ApplicationFormule'               => 'Application\\Service\\Formule',
             'WorkflowIntervenant'              => 'Application\\Service\\Workflow\\WorkflowIntervenant',
@@ -434,6 +416,7 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'Workflow' => 'Application\View\Helper\Workflow',
+            'formuleTotauxHetd' => 'Application\View\Helper\Intervenant\TotauxHetdViewHelper',
         ),
         'initializers' => array(
             'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',

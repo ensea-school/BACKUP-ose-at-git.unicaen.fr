@@ -198,6 +198,30 @@ Service.init = function(){
     VolumeHoraire.init();
 }
 
+Service.initRecherche = function(){
+    var structureAffName = 'form.service-recherche select[name=\"structure-aff\"]';
+    var intervenantName = 'form.service-recherche input[name=\"intervenant[label]\"]';
+    var changeIntervenant = function(){
+        var structure_aff = $( "form.service-recherche select[name=\"structure-aff\"]" ).val();
+        var type_intervenant = $('input[name=type-intervenant]:checked', 'form.service-recherche').val();
+        var url = $( intervenantName ).autocomplete( "option", "source" );
+        var pi = url.indexOf('?');
+
+        if (-1 !== pi){
+            url = url.substring( 0, pi );
+        }
+        url += '?' + $.param( {
+            typeIntervenant     : type_intervenant,
+            structure           : structure_aff,
+            'having-services'   : 1
+        } );
+        $( intervenantName ).autocomplete( "option", "source", url );
+    }
+
+    $( structureAffName ).change( changeIntervenant );
+    $('input[name=type-intervenant]', 'form.service-recherche').change(changeIntervenant);
+}
+
 Service.showAllDetails = function(){
     $('.service-details-button').data('state', 'show');
     $('.service-details-button').click();

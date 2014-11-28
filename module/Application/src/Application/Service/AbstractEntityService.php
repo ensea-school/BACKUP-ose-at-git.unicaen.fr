@@ -200,6 +200,7 @@ abstract class AbstractEntityService extends AbstractService
         if (true === $addSelect){
             $qb->addSelect( $rightAlias );
         }elseif(is_array($addSelect)){
+            //$qb->addSelect( $rightAlias );
             $qb->addSelect( 'partial '.$rightAlias.'.{'.implode( ', ', $addSelect).'}' );
         }
         return $this;

@@ -55,6 +55,11 @@ class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
     protected $niveau;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $niveauFormation;
+
+    /**
      * @var string
      */
     protected $sourceCode;
@@ -233,6 +238,18 @@ class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getNiveau()
     {
         return $this->niveau;
+    }
+
+    /**
+     * Get niveauFormation
+     *
+     * @return NiveauFormation
+     */
+    public function getNiveauFormation()
+    {
+        $res = $this->niveauFormation->first();
+        if (false === $res) $res = null;
+        return $res;
     }
 
     /**

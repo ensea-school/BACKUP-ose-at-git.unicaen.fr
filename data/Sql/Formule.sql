@@ -70,11 +70,11 @@ END;
 
 -- 25839 ou 17599
 
-select * from intervenant where source_code = '92265';
+select * from intervenant where nom_usuel like 'Sorel';
 SELECT * FROM formule_service_du WHERE intervenant_id = 28263;
 SELECT * FROM formule_referentiel WHERE intervenant_id = 28263;
 SELECT * FROM formule_service WHERE intervenant_id = 28263;
-SELECT * FROM formule_volume_horaire WHERE intervenant_id = 28263;
+SELECT * FROM formule_volume_horaire WHERE intervenant_id = 17599;
 
 SELECT * FROM formule_referentiel WHERE intervenant_id = 28263;
 

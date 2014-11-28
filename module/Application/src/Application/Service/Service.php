@@ -8,10 +8,12 @@ use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+use Application\Entity\NiveauEtape as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
 use Zend\Session\Container as SessionContainer;
 use Application\Form\Service\RechercheHydrator;
@@ -202,6 +204,65 @@ class Service extends AbstractEntityService
     }
 
     /**
+     * Retourne la liste des services selon l'étape donnée
+     *
+     * @param EtapeEntity $etape
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByNiveauEtape(NiveauEtapeEntity $niveauEtape, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if ($niveauEtape && $niveauEtape->getId() !== '-'){
+            $serviceElement = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceElement Element */
+            $serviceEtape   = $this->getServiceLocator()->get('applicationEtape');              /* @var $serviceEtape   Etape */
+
+            $this->leftJoin( $serviceElement, $qb, 'elementPedagogique');
+            $serviceElement->join( $serviceEtape, $qb, 'etape' );
+            $serviceEtape->finderByNiveau($niveauEtape, $qb);
+        }
+        return $qb;
+    }
+
+    /**
+     *
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
+     * @param QueryBuilder $qb
+     * @param string $alias
+     * @return QueryBuilder
+     */
+    public function finderByTypeVolumeHoraire(TypeVolumeHoraireEntity $typeVolumeHoraire, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if ($typeVolumeHoraire){
+            $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire'); /* @var $serviceVolumeHoraire VolumeHoraire */
+
+            $this->join( $serviceVolumeHoraire, $qb, 'volumeHoraire' );
+            $serviceVolumeHoraire->finderByTypeVolumeHoraire( $typeVolumeHoraire, $qb );
+        }
+        return $qb;
+    }
+
+    /**
+     *
+     * @param EtatVolumeHoraireEntity $etatVolumeHoraire
+     * @param QueryBuilder $qb
+     * @param string $alias
+     * @return QueryBuilder
+     */
+    public function finderByEtatVolumeHoraire(EtatVolumeHoraireEntity $etatVolumeHoraire, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if ($etatVolumeHoraire){
+            $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire'); /* @var $serviceVolumeHoraire VolumeHoraire */
+
+            $this->join( $serviceVolumeHoraire, $qb, 'volumeHoraire' );
+            $serviceVolumeHoraire->finderByEtatVolumeHoraire( $etatVolumeHoraire, $qb );
+        }
+        return $qb;
+    }
+
+    /**
      * Retourne le query builder permettant de rechercher les services prévisionnels
      * selon la composante spécifiée.
      * 
@@ -261,15 +322,13 @@ class Service extends AbstractEntityService
      * @param QueryBuilder|null $queryBuilder
      * @return QueryBuilder
      */
-    public function finderByStatutInterv($statutInterv, QueryBuilder $qb=null, $alias=null )
+    public function finderByTypeIntervenant(TypeIntervenantEntity $typeIntervenant=null, QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        if (!in_array((string)$statutInterv, array("Application\Entity\Db\IntervenantPermanent", "Application\Entity\Db\IntervenantExterieur"))) {
-            return $qb;
+        if ($typeIntervenant){
+            $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', $alias );
+            $this->getServiceIntervenant()->finderByType( $typeIntervenant, $qb );
         }
-        $qb
-                ->join("$alias.intervenant", 'i2')
-                ->andWhere("i2 INSTANCE OF $statutInterv");
         return $qb;
     }
 
@@ -443,25 +502,116 @@ class Service extends AbstractEntityService
     }
 
     /**
-     * 
-     * @param \stdClass $filter
+     * Retourne les données du TBL des services en fonction des critères de recherche transmis
+     *
+     * @param Recherche $recherche
+     * @param array $typesIntervention
      * @return array
      */
-    public function getResumeService($filter)
+    public function getTableauBordExport( Recherche $recherche )
+    {
+        $res = [];
+        $resInt = [];
+        $typesIntervention = [];
+
+        $conditions = [
+            'annee_id = '.$this->getContextProvider()->getGlobalContext()->getAnnee()->getId()
+        ];
+        if ($c1 = $recherche->getTypeVolumeHoraire()  ) $conditions['type_volume_horaire_id'] = '(type_volume_horaire_id IS NULL OR type_volume_horaire_id = ' . $c1->getId().')';
+        if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = '(etat_volume_horaire_id IS NULL OR etat_volume_horaire_id = ' . $c2->getId().')';
+        if ($c3 = $recherche->getTypeIntervenant()    ) $conditions['type_intervenant_id']    = '(type_intervenant_id IS NULL OR type_intervenant_id = '    . $c3->getId().')';
+        if ($c4 = $recherche->getIntervenant()        ) $conditions['intervenant_id']         = '(intervenant_id IS NULL OR intervenant_id = '         . $c4->getId().')';
+        //if ($c5 = $recherche->getNiveauFormation()    ) $conditions['niveau_formation_id']    = '(niveau_formation_id IS NULL OR niveau_formation_id = '    . $c5->getId().')';
+        if ($c6 = $recherche->getEtape()              ) $conditions['etape_id']               = '(etape_id IS NULL OR etape_id = '               . $c6->getId().')';
+        if ($c7 = $recherche->getElementPedagogique() ) $conditions['element_pedagogique_id'] = '(element_pedagogique_id IS NULL OR element_pedagogique_id = ' . $c7->getId().')';
+        if ($c8 = $recherche->getStructureAff()       ) $conditions['structure_aff_id']       = '(structure_aff_id IS NULL OR structure_aff_id = '       . $c8->getId().')';
+        if ($c9 = $recherche->getStructureEns()       ) $conditions['structure_ens_id']       = '(structure_ens_id IS NULL OR structure_ens_id = '       . $c9->getId().')';
+
+        $sql = 'SELECT * FROM V_TBL_SERVICE_EXPORT WHERE '.implode( ' AND ', $conditions ).' '
+              .'ORDER BY INTERVENANT_NOM, SERVICE_STRUCTURE_AFF_LIBELLE, SERVICE_STRUCTURE_ENS_LIBELLE, ETAPE_LIBELLE, ELEMENT_LIBELLE';
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while( $d = $stmt->fetch()){
+            $sid = $d['SERVICE_ID'];
+            $iid = $d['INTERVENANT_ID'];
+            $res[$sid] = [
+
+                'intervenant-code'              =>          $d['INTERVENANT_CODE'],
+                'intervenant-nom'               =>          $d['INTERVENANT_NOM'],
+                'intervenant-statut-libelle'    =>          $d['INTERVENANT_STATUT_LIBELLE'],
+                'intervenant-type-libelle'      =>          $d['INTERVENANT_TYPE_LIBELLE'],
+                'service-structure-aff-libelle' =>          $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
+
+                'service-structure-ens-libelle' =>          $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
+                'etablissement-libelle'         =>          $d['ETABLISSEMENT_LIBELLE'],
+                'etape-code'                    =>          $d['ETAPE_CODE'],
+                'etape-libelle'                 =>          $d['ETAPE_LIBELLE'],
+                'element-code'                  =>          $d['ELEMENT_CODE'],
+                'element-libelle'               =>          $d['ELEMENT_LIBELLE'],
+                'element-periode-libelle'       =>          $d['ELEMENT_PERIODE_LIBELLE'],
+                'element-ponderation-compl'     => $d['ELEMENT_PONDERATION_COMPL'] === null ? null : (float)$d['ELEMENT_PONDERATION_COMPL'],
+                'element-source-libelle'        =>          $d['ELEMENT_SOURCE_LIBELLE'],
+                'commentaires'                  =>          $d['COMMENTAIRES'],
+
+                'heures-service-statutaire'     => (float)  $d['HEURES_SERVICE_STATUTAIRE'],
+                'heures-service-du-modifie'     => (float)  $d['HEURES_SERVICE_DU_MODIFIE'],
+                'heures-reelles'                => (float)  $d['HEURES_REFERENTIEL'], // Attention : le référentiel est à compter dans les heures!!
+                'heures-assurees'               => (float)  $d['HEURES_ASSUREES'],
+                'heures-compl'                  => (float)  $d['HEURES_COMPL'],
+                'heures-sous-service'           => (float)  $d['HEURES_SOUS_SERVICE'],
+                'heures-non-payees'             => (float)  $d['HEURES_NON_PAYEES'],
+                'heures-referentiel'            => (float)  $d['HEURES_REFERENTIEL'],
+
+                'types-intervention'            => [],
+            ];
+            if (! isset($resInt[$iid])) $resInt[$iid] = [];
+            $resInt[$iid][] = $sid;
+        }
+
+        if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = 'etat_volume_horaire_ordre >= ' . $c2->getId();
+        $sql = 'SELECT * FROM V_TBL_SERVICE_EXPORT_VH WHERE '.implode( ' AND ', $conditions );
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while( $d = $stmt->fetch()){
+            $sid = $d['SERVICE_ID'];
+            $tid = $d['TYPE_INTERVENTION_ID'];
+            if (! isset($res[$sid]['types-intervention'][$tid])){
+                $res[$sid]['types-intervention'][$tid] = 0;
+            }
+            if (! isset($typesIntervention[$tid])){
+                $typesIntervention[$tid] = $this->getServiceTypeIntervention()->get($tid);
+            }if (! isset($res[$sid]['heures-reelles'])){var_dump($d);}
+            $res[$sid]['types-intervention'][$tid] += (float)$d['HEURES'];
+            $res[$sid]['heures-reelles'] += (float)$d['HEURES'];
+        }
+        usort( $typesIntervention, function($ti1,$ti2){
+            return $ti1->getOrdre() > $ti2->getOrdre();
+        } );
+
+        return [
+            'data'                   => $res,
+            'types-intervention'     => $typesIntervention,
+        ];
+    }
+
+    /**
+     * 
+     * @param Recherche $filter
+     * @return array
+     */
+    public function getResumeService(Recherche $recherche)
     {
         $role           = $this->getContextProvider()->getSelectedIdentityRole();
         if ($role instanceof \Application\Acl\ComposanteRole){
             $structureEnsId = $role->getStructure()->getId();
-        }elseif (isset($filter->structureEns)) {
-            $structureEnsId = $filter->structureEns->getId();
+        }elseif ($recherche->getStructureEns()) {
+            $structureEnsId = $recherche->getStructureEns()->getId();
         }else{
             $structureEnsId = null;
         }
-        
+
         $whereFilter          = array();
         $filtreOffreFormation = false;
-        if (isset($filter->intervenant)) {
-            $whereFilter[] = 'INTERVENANT_ID = ' . $filter->intervenant->getId();
+        if ($recherche->getIntervenant()) {
+            $whereFilter[] = 'INTERVENANT_ID = ' . $recherche->getIntervenant()->getId();
         }
         if (isset($filter->structureEns)) {
             $whereFilter[] = 'STRUCTURE_ENS_ID = ' . $filter->structureEns->getId();
@@ -750,6 +900,14 @@ EOS;
         foreach( $services as $service ){
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
         }
+    }
+
+    /**
+     * @return TypeIntervention
+     */
+    protected function getServiceTypeIntervention()
+    {
+        return $this->getServiceLocator()->get('applicationTypeIntervention');
     }
 
     /**

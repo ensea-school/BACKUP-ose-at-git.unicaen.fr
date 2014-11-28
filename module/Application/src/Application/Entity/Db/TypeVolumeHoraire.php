@@ -7,9 +7,9 @@ namespace Application\Entity\Db;
  */
 class TypeVolumeHoraire implements HistoriqueAwareInterface
 {
-    const CODE_PREVU = 'PREVU';
-    const CODE_REEL  = 'REEL';
-    const CODE_PAYE  = 'PAYE';
+    const CODE_PREVU    = 'PREVU';
+    const CODE_REALISE  = 'REALISE';
+    const CODE_PAYE     = 'PAYE';
     
     /**
      * @var string

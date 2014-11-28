@@ -56,5 +56,15 @@
     </many-to-one>
     <one-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" mapped-by="etape" />
     <one-to-many field="cheminPedagogique" target-entity="Application\Entity\Db\CheminPedagogique" mapped-by="etape" />
+    <many-to-many field="niveauFormation" target-entity="Application\Entity\Db\NiveauFormation">
+        <join-table name="V_ETAPE_NIVEAU_FORMATION">
+            <join-columns>
+                <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="NIVEAU_FORMATION_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

@@ -93,6 +93,11 @@ class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
     private $validation;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $etatVolumeHoraire;
+
+    /**
      * remove
      *
      * @var boolean
@@ -518,5 +523,15 @@ class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getValidation()
     {
         return $this->validation;
+    }
+
+    /**
+     * Get etatVolumeHoraire
+     *
+     * @return EtatVolumeHoraire
+     */
+    public function getEtatVolumeHoraire()
+    {
+        return $this->etatVolumeHoraire->first();
     }
 }

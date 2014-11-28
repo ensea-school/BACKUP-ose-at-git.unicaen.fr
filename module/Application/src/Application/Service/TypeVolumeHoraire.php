@@ -44,13 +44,13 @@ class TypeVolumeHoraire extends AbstractEntityService
     }
 
     /**
-     * Retourne le type de volume horaire "Réel"
+     * Retourne le type de volume horaire "Réalisé"
      *
      * @return TypeVolumeHoraireEntity
      */
-    public function getReel()
+    public function getRealise()
     {
-        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_REEL));
+        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_REALISE));
     }
 
     /**

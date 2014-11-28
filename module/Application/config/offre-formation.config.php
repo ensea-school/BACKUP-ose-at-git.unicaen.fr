@@ -360,6 +360,7 @@ return array(
             'ApplicationTypeFormation'                => 'Application\\Service\\TypeFormation',
             'ApplicationGroupeTypeFormation'          => 'Application\\Service\\GroupeTypeFormation',
             'ApplicationNiveauEtape'                  => 'Application\\Service\\NiveauEtape',
+            'ApplicationNiveauFormation'              => 'Application\\Service\\NiveauFormation',
             'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
             'ApplicationElementModulateur'            => 'Application\\Service\\ElementModulateur',
             'ApplicationTypeModulateur'               => 'Application\\Service\\TypeModulateur',

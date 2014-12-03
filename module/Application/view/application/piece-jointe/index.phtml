@@ -13,7 +13,8 @@ use Application\Entity\Db\TypePieceJointeStatut;
     <?php 
     $tpj = $tpjs->getType();
     $pj  = isset($this->piecesJointesFournies[$tpj->getId()]) ? $this->piecesJointesFournies[$tpj->getId()] : null;
-
+    $pjValidee = $pj && $pj->getValidation();
+    
     $validationBar = $this->partial('application/piece-jointe/partial/validation-bar', ['pj' => $pj]);
 
     $obligatoire = $tpjs->getObligatoireToString($this->totalHeuresReelles);
@@ -31,7 +32,7 @@ use Application\Entity\Db\TypePieceJointeStatut;
     $label = sprintf('%s<br /><small>%s</small>', $type, $obligatoire);
     ?>
 
-    <div class="panel panel-default">
+    <div class="panel panel-<?php echo $pjValidee ? 'success' : 'default' ?> upload-container">
         <div class="panel-heading">
             <h2>
                 <?php $urlValidationBar = $this->url('piece-jointe/intervenant/voir-type', ['typePieceJointe' => $tpj->getId(), 'vue' => urlencode('partial/validation-bar')], [], true); ?>
@@ -39,7 +40,7 @@ use Application\Entity\Db\TypePieceJointeStatut;
                 <?php echo $label ?>
             </h2>
         </div>
-        <div class="panel-body upload-container">
+        <div class="panel-body">
             <?php 
             $urlAjouter = $this->url('piece-jointe/intervenant/ajouter', ['typePieceJointe' => $tpj->getId()], [], true);
             $urlLister  = $this->url('piece-jointe/intervenant/lister',  ['typePieceJointe' => $tpj->getId()], [], true);
@@ -66,7 +67,6 @@ use Application\Entity\Db\TypePieceJointeStatut;
             </div>
         </div>
     </div>
-    <!--<hr />-->
 <?php endforeach ?>
 
 <br />
@@ -111,6 +111,7 @@ $(function() {
      */
     $("body").on(uploadEventFileUploaded + " " + uploadEventFileDeleted + " " + eventFileValidated, function(event, container) {
         $("div.status").refresh([], function() { $(this).hide().fadeIn(); });
+        console.log(container);
         if (container) {
             var validationBar = $("div.validation-bar", container);
             validationBar.refresh([], function() { $(this).hide().fadeIn(); });

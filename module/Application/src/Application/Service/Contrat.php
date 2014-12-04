@@ -8,6 +8,7 @@ use Application\Entity\Db\TypeContrat as TypeContratEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Fichier as FichierEntity;
+use Common\Exception\LogicException;
 
 /**
  * Description of Contrat
@@ -56,6 +57,35 @@ class Contrat extends AbstractEntityService
         }
         
         return $entity;
+    }
+    
+    /**
+     * Suppression (historisation) d'un projet de contrat/avenant.
+     * 
+     * @param \Application\Entity\Db\Contrat $contrat
+     * @return self
+     */
+    public function supprimer(ContratEntity $contrat)
+    {
+        if ($contrat->getValidation()) {
+            throw new LogicException("Impossible de supprimer un contrat/avenant validé.");
+        }
+        
+        // recherche des VH liés au contrat
+        $serviceVH = $this->getServiceLocator()->get('ApplicationVolumeHoraire');
+        $qb = $serviceVH->finderByContrat($contrat);
+        $vhs = $qb->getQuery()->getResult();
+        
+        // détachement du contrat et des VH
+        foreach ($vhs as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            $contrat->removeVolumeHoraire($vh); // l'ordre importe!
+            $vh->setContrat(null);
+        }
+        $this->getEntityManager()->flush();
+        
+        $this->delete($contrat);
+        
+        return $this;
     }
     
     /**

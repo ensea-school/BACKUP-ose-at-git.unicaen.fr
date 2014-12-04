@@ -273,6 +273,49 @@ class ContratController extends AbstractActionController implements ContextProvi
     }
     
     /**
+     * Suppression d'un projet de contrat/avenant par la composante d'intervention.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws Common\Exception\MessageException
+     */
+    public function supprimerAction()
+    {
+        $this->contrat   = $this->context()->mandatory()->contratFromRoute();
+        $contratToString = lcfirst($this->contrat->toString(true, true));
+        
+//        $rule = new \Application\Rule\Intervenant\PeutValiderContratRule($this->intervenant, $this->contrat);
+//        if (!$rule->execute()) {
+//            throw new \Common\Exception\MessageException("Impossible de valider $contratToString.", null, new \Exception($rule->getMessage()));
+//        }
+        if (!$this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_DELETE)) {
+            throw new \Common\Exception\MessageException("La suppression $contratToString n'est pas possible.");
+        }
+        
+        $result = $this->confirm()->execute();
+
+        if (is_array($result)) {
+            // confirmation postée
+            try {
+                $this->getServiceContrat()->supprimer($this->contrat); 
+                $this->flashMessenger()->addSuccessMessage("Suppression $contratToString effectuée avec succès.");
+            }
+            catch(\Exception $e) {
+                $e = \Application\Exception\DbException::translate($e);
+                $this->confirm()->setMessages([$e->getMessage()]);
+            }
+        }
+        
+        $viewModel = $this->confirm()->getViewModel();
+        
+        $viewModel->setVariables([
+            'title'   => "Suppression $contratToString",
+            'contrat' => $this->contrat,
+        ]);
+        
+        return $viewModel;
+    }
+    
+    /**
      * Validation du contrat/avenant par la composante d'intervention.
      * 
      * @return \Zend\View\Model\ViewModel

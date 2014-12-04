@@ -109,18 +109,20 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
         </dd>
         
     <?php endif ?>
+</dl>
         
-    <div style="page-break-inside: avoid;">
+<div style="page-break-inside: avoid;">
+    <dl class="articles">
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
             <p>L'intéressé<?php echo $e ?> sera rémunéré<?php echo $e ?> au taux horaire en vigueur pour les travaux dirigés fixé par arrêté publié au Journal Officiel.</p>
             <p>Le paiement a lieu au vu de l'état liquidatif visé par le directeur de la composante et de la production d'un dossier complet.</p>
             <p>Une inexécution partielle du service imputable à l'intéressé<?php echo $e ?> entraîne un abattement correspondant aux heures non faites.</p>
         </dd>
-    </div>
-</dl>
+    </dl>
+</div>
 
-<p class="fait">Fait &agrave; <?php echo $lieuSignature ?>, le <?php echo $dateSignature ?></p>
+<p class="fait">Fait à <?php echo $lieuSignature ?>, le <?php echo $dateSignature ?></p>
 
 <table class="signatures">
     <tr>

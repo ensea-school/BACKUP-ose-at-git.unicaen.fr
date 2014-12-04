@@ -22,6 +22,11 @@ class FormuleResultat
     /**
      * @var float
      */
+    private $heuresSolde;
+
+    /**
+     * @var float
+     */
     private $heuresComplFc;
 
     /**
@@ -43,6 +48,11 @@ class FormuleResultat
      * @var float
      */
     private $heuresComplTotal;
+
+    /**
+     * @var float
+     */
+    private $service;
 
     /**
      * @var float
@@ -134,6 +144,29 @@ class FormuleResultat
     public function getEnseignements()
     {
         return $this->enseignements;
+    }
+
+    /**
+     * Set heuresSolde
+     *
+     * @param float $heuresSolde
+     * @return FormuleResultat
+     */
+    public function setHeuresSolde($heuresSolde)
+    {
+        $this->heuresSolde = $heuresSolde;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresSolde
+     *
+     * @return float
+     */
+    public function getHeuresSolde()
+    {
+        return $this->heuresSolde;
     }
 
     /**
@@ -249,6 +282,29 @@ class FormuleResultat
     public function getHeuresComplTotal()
     {
         return $this->heuresComplTotal;
+    }
+
+    /**
+     * Set service
+     *
+     * @param float $service
+     * @return FormuleResultat
+     */
+    public function setService($service)
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return float 
+     */
+    public function getService()
+    {
+        return $this->service;
     }
 
     /**

@@ -56,20 +56,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
      */
     public function getTypesIntervention()
     {
-        if ($this->resumeServices){
-            $typesIntervention = array();
-            foreach( $this->resumeServices as $line ) {
-                if (isset($line['service'])){
-                    foreach( $line['service'] as $tiId => $null ){
-                        $typesIntervention[$tiId] = $tiId;
-                    }
-                }
-            }
-            return $this->getServiceTypeIntervention()->get($typesIntervention);
-        }else{
-            return $this->getServiceTypeIntervention()->getTypesIntervention();
-            // Types d'intervention par défaut
-        }
+
     }
 
     /**
@@ -79,22 +66,27 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
      */
     public function render()
     {
-        $typesIntervention = $this->getTypesIntervention();
+        if (! $this->resumeServices) return '';
+
+        $typesIntervention = $this->resumeServices['types-intervention'];
         $totaux = array(
             'intervenants'          => 0,
             'heures'                => 0,
-            'types_intervention'    => [],
-            'referentiel'           => 0,
+            'heures-compl'          => 0,
+            'types-intervention'    => [],
+            'heures-referentiel'    => 0,
         );
-
+        $urlTriIntervenant = $this->getView()->url( 'service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'intervenant']]);
+        //$urlTriReferentiel = $this->getView()->url( 'service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'referentiel']]);
+        $urlTriHetd = $this->getView()->url( 'service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'hetd']]);
         $res  = '<table class="table table-hover table-bordered">'."\n";
         $res .= '<thead>'."\n";
         $res .= '<tr>'."\n";
-        $res .= '    <th style="width:40%" rowspan="2">Intervenant</th>'."\n";
+        $res .= '    <th style="width:40%" rowspan="2"><a href="'.$urlTriIntervenant.'">Intervenant</a></th>'."\n";
         $res .= '    <th style="width:40%" colspan="'.count($typesIntervention).'">Enseignements</th>'."\n";
         $res .= '    <th style="width:10%" rowspan="2">Référentiel</th>'."\n";
         $res .= '    <th style="width:10%" rowspan="2">Service dû</th>'."\n";
-        $res .= '    <th style="width:10%" rowspan="2">Solde HETD</th>'."\n";
+        $res .= '    <th style="width:10%" rowspan="2"><a href="'.$urlTriHetd.'">Solde HETD</a></th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
         foreach( $typesIntervention as $ti ){
@@ -103,47 +95,33 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</tr>'."\n";
         $res .= '</thead>'."\n";
         $res .= '<tbody>'."\n";
-        foreach( $this->resumeServices as $intervenantId => $line ) {
+        foreach( $this->resumeServices['data'] as $line ) {
             $na = '<abbr title="Non applicable (intervenant vacataire))">NA</abbr>';
-            $intervenantPermanent = $line['intervenant']['TYPE_INTERVENANT_CODE'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
 
-            if (isset($line['intervenant']['HEURES_COMP'])){
-                $solde = (float)$line['intervenant']['HEURES_COMP'];
-            }else{
-                $solde = 0;
-            }
-
-            if (isset($line['intervenant']['SERVICE_DU'])){
-                $serviceDu = (float)$line['intervenant']['SERVICE_DU'];
-            }else{
-                $serviceDu = 0;
-            }
+            $intervenantPermanent = $line['intervenant-type-code'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
 
             $res .= '<tr>'."\n";
-            $url = $this->getView()->url('intervenant/services', array('intervenant' => $line['intervenant']['SOURCE_CODE']));
+            $url = $this->getView()->url('intervenant/services', ['intervenant' => $line['intervenant-code']]);
 
-            $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant']['NOM_USUEL']) . ' ' . $line['intervenant']['PRENOM'].'</a></td>'."\n";
+            $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant-nom']).'</a></td>'."\n";
             $totaux['intervenants']++;
             foreach( $typesIntervention as $ti ){
-                if (! isset($totaux['types_intervention'][$ti->getId()])){
-                    $totaux['types_intervention'][$ti->getId()] = 0;
+                if (! isset($totaux['types-intervention'][$ti->getId()])){
+                    $totaux['types-intervention'][$ti->getId()] = 0;
                 }
-                if (isset($line['service'][$ti->getId()])){
-                    $totaux['types_intervention'][$ti->getId()] += $line['service'][$ti->getId()];
-                    $totaux['heures'] += $line['service'][$ti->getId()];
-                    $res .= '<td style="text-align:right">'.$this->formatHeures($line['service'][$ti->getId()]).'</td>'."\n";
+                if (isset($line['types-intervention'][$ti->getId()])){
+                    $totaux['types-intervention'][$ti->getId()] += $line['types-intervention'][$ti->getId()];
+                    $totaux['heures'] += $line['types-intervention'][$ti->getId()];
+                    $res .= '<td style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($line['types-intervention'][$ti->getId()]).'</td>'."\n";
                 }else{
-                    $res .= '<td style="text-align:right">'.$this->formatHeures(0).'</td>'."\n";
+                    $res .= '<td style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures(0).'</td>'."\n";
                 }
             }
-            if (array_key_exists('referentiel', $line)){
-                $totaux['referentiel'] += $line['referentiel'];
-                $res .= '<td style="text-align:right">'.$this->formatHeures($line['referentiel']).'</td>'."\n";
-            }else{
-                $res .= '<td style="text-align:right">'.($intervenantPermanent ? $this->formatHeures(0) : $na).'</td>'."\n";
-            }
-            $res .= $this->renderServiceDu( $serviceDu );
-            $res .= $this->renderSoldeHetd($solde, $intervenantPermanent);
+            $totaux['heures-referentiel'] += $line['heures-referentiel'];
+            $totaux['heures-compl'] += $line['heures-compl'];
+            $res .= '<td style="text-align:right;white-space:nowrap">'.($intervenantPermanent ? \Common\Util::formattedHeures($line['heures-referentiel']) : $na).'</td>'."\n";
+            $res .= $this->renderServiceDu( $line['heures-service-du'] );
+            $res .= $this->renderSoldeHetd($line['heures-solde'], $intervenantPermanent);
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";
@@ -151,14 +129,15 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '<tr>'."\n";
         $res .= '<th rowspan="2" style="text-align:right">'.$totaux['intervenants'].' intervenants</th>'."\n";
         foreach( $typesIntervention as $ti ){
-            $heures = isset($totaux['types_intervention'][$ti->getId()]) ? $totaux['types_intervention'][$ti->getId()] : 0;
-            $res .= '        <th style="text-align:right"><abbr title="'.$ti->getLibelle().'">'.$this->formatHeures($heures).'</abbr></th>'."\n";
+            $heures = isset($totaux['types-intervention'][$ti->getId()]) ? $totaux['types-intervention'][$ti->getId()] : 0;
+            $res .= '        <th style="text-align:right;white-space:nowrap"><abbr title="'.$ti->getLibelle().'">'.\Common\Util::formattedHeures($heures).'</abbr></th>'."\n";
         }
-        $res .= '<th rowspan="2" style="text-align:right">'.$this->formatHeures($totaux['referentiel']).'</th>'."\n";
+        $res .= '<th rowspan="2" style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-referentiel']).'</th>'."\n";
         $res .= '<th rowspan="2">&nbsp;</th>'."\n";
+        $res .= '<th rowspan="2"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-compl']).'</span></th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
-        $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right">Total des heures de service : '.$this->formatHeures($totaux['heures']).'</th>'."\n";
+        $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right;white-space:nowrap">Total des heures de service : '.\Common\Util::formattedHeures($totaux['heures']).'</th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '</tfoot>'."\n";
         $res .= '</table>'."\n";
@@ -170,10 +149,10 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $class = '';
         if (is_numeric($serviceDu)){
             if ($serviceDu < 0) $class = ' class="bg-danger"';
-            $serviceDu = $this->formatHeures($serviceDu);
+            $serviceDu = \Common\Util::formattedHeures($serviceDu);
         }
 
-        $res = '<td style="text-align:right"'.$class.'>'.$serviceDu.'</td>'."\n";
+        $res = '<td style="text-align:right;white-space:nowrap"'.$class.'>'.$serviceDu.'</td>'."\n";
         return $res;
     }
 
@@ -185,27 +164,14 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             if ($intervanantPermanent){
             if ($solde > 0){ $class = ' class="bg-warning"'; $plus = '+';}
             if ($solde < 0) $class = ' class="bg-danger"';
-            $solde = $plus.$this->formatHeures($solde);
+            $solde = $plus.\Common\Util::formattedHeures($solde);
             }else{
-                $solde = $this->formatHeures($solde);
+                $solde = \Common\Util::formattedHeures($solde);
         }
         }
 
-        $res = '<td style="text-align:right"'.$class.'>'.$solde.'</td>'."\n";
+        $res = '<td style="text-align:right;white-space:nowrap"'.$class.'>'.$solde.'</td>'."\n";
         return $res;
-    }
-
-    /**
-     *
-     * @param float $heures
-     * @return string
-     */
-    protected function formatHeures($heures)
-    {
-        $heures = round( (float)$heures, 2);
-        $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2);
-        $heures = str_replace( ',00', '<span style="color:gray">,00</span>', $heures );
-        return $heures;
     }
 
     /**

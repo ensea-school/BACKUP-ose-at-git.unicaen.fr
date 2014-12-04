@@ -151,6 +151,7 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
         /* @var $elementPedagogique \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
         $elementPedagogique->setName('element-pedagogique');
         $elementPedagogique->setLabel('Enseignement :');
+        $elementPedagogique->setNiveauEnabled(false);
         $this->add( $elementPedagogique );
 
 

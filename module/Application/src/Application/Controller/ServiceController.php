@@ -124,7 +124,6 @@ class ServiceController extends AbstractActionController
         /* Préparation et affichage */
         if ('afficher' === $action || $totaux){
             $qb = $this->getFilteredServices($intervenant, $recherche);
-            //\Test\Util::dumpSql($qb->getQuery()->getSql());
             $services = $this->getServiceService()->getList($qb);
             $this->getServiceService()->setTypeVolumehoraire($services, $recherche->getTypeVolumeHoraire());
 
@@ -194,7 +193,7 @@ class ServiceController extends AbstractActionController
             'Enseignement',
             'Commentaires',
             'Période',
-            'Pondération enseignement',
+            'Majoration',
             'Source enseignement',
 
             'Service statutaire',
@@ -212,40 +211,42 @@ class ServiceController extends AbstractActionController
 
         $csvModel->setHeader( $head );
         foreach( $data['data'] as $d ){
-            $line = [
-                $d['intervenant-code'],
-                $d['intervenant-nom'],
-                $d['intervenant-statut-libelle'],
-                $d['intervenant-type-libelle'],
-                $d['service-structure-aff-libelle'],
+            if ($d['heures-reelles'] + $d['heures-non-payees'] > 0){
+                $line = [
+                    $d['intervenant-code'],
+                    $d['intervenant-nom'],
+                    $d['intervenant-statut-libelle'],
+                    $d['intervenant-type-libelle'],
+                    $d['service-structure-aff-libelle'],
 
-                $d['service-structure-ens-libelle'],
-                $d['etape-code'],
-                $d['etape-libelle'] ? $d['etape-libelle'] : $d['etablissement-libelle'],
-                $d['element-code'],
-                $d['element-libelle'],
-                $d['commentaires'],
-                $d['element-periode-libelle'],
-                $d['element-ponderation-compl'],
-                $d['element-source-libelle'],
+                    $d['service-structure-ens-libelle'],
+                    $d['etape-code'],
+                    $d['etape-libelle'] ? $d['etape-libelle'] : $d['etablissement-libelle'],
+                    $d['element-code'],
+                    $d['element-libelle'],
+                    $d['commentaires'],
+                    $d['element-periode-libelle'],
+                    $d['element-ponderation-compl'],
+                    $d['element-source-libelle'],
 
-                $d['heures-service-statutaire'],
-                $d['heures-service-du-modifie'],
-                $d['heures-reelles'],
-                $d['heures-assurees'],
-                $d['heures-compl'] > 0 ? $d['heures-compl'] : $d['heures-sous-service'] * -1,
-                $d['heures-non-payees'],
-                $d['heures-referentiel'],
-            ];
-            foreach( $data['types-intervention'] as $typeIntervention ){
-                /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
-                if (isset($d['types-intervention'][$typeIntervention->getId()])){
-                    $line[] = $d['types-intervention'][$typeIntervention->getId()];
-                }else{
-                    $line[] = 0;
+                    $d['heures-service-statutaire'],
+                    $d['heures-service-du-modifie'],
+                    $d['heures-reelles'],
+                    $d['heures-assurees'],
+                    $d['heures-solde'],
+                    $d['heures-non-payees'],
+                    $d['heures-referentiel'],
+                ];
+                foreach( $data['types-intervention'] as $typeIntervention ){
+                    /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
+                    if (isset($d['types-intervention'][$typeIntervention->getId()])){
+                        $line[] = $d['types-intervention'][$typeIntervention->getId()];
+                    }else{
+                        $line[] = 0;
+                    }
                 }
+                $csvModel->addLine($line);
             }
-            $csvModel->addLine($line);
         }
         $csvModel->setFilename('service.csv');
         return $csvModel;
@@ -260,27 +261,39 @@ class ServiceController extends AbstractActionController
     {
         $intervenant        = $this->context()->intervenantFromRoute();
         $canAddService      = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
+        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $action = $this->getRequest()->getQuery('action', null);
+        $tri = null;
+        if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
+
+        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException();
+        }
 
         $this->initFilters();
+        if ($intervenant){
+            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
+        }
 
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            return $this->redirect()->toRoute('intervenant/services', array('intervenant' => $role->getIntervenant()->getSourceCode()));
+        if (! $intervenant){
+            $this->rechercheAction();
+            $recherche = $this->getServiceService()->loadRecherche();
+        }else{
+            $recherche = new Recherche;
+            $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getPrevu() );
+            $recherche->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
         }
 
         $viewModel = new \Zend\View\Model\ViewModel();
 
-        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $action = $this->getRequest()->getQuery('action', null);
         $params = $this->getEvent()->getRouteMatch()->getParams();
         $params['action'] = 'recherche';
         $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
         $viewModel->addChild($listeViewModel, 'recherche');
 
         $recherche = $this->getServiceService()->loadRecherche();
-        if ('afficher' == $action ){
-            $resumeServices = $this->getServiceService()->getResumeService($recherche);
+        if ('afficher' == $action || 'trier' == $action ){
+            $resumeServices = $this->getServiceService()->getTableauBordResume($recherche, $tri);
         }else{
             $resumeServices = null;
         }

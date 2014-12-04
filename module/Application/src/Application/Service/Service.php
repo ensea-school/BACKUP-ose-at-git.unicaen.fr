@@ -505,7 +505,6 @@ class Service extends AbstractEntityService
      * Retourne les données du TBL des services en fonction des critères de recherche transmis
      *
      * @param Recherche $recherche
-     * @param array $typesIntervention
      * @return array
      */
     public function getTableauBordExport( Recherche $recherche )
@@ -517,21 +516,22 @@ class Service extends AbstractEntityService
         $conditions = [
             'annee_id = '.$this->getContextProvider()->getGlobalContext()->getAnnee()->getId()
         ];
-        if ($c1 = $recherche->getTypeVolumeHoraire()  ) $conditions['type_volume_horaire_id'] = '(type_volume_horaire_id IS NULL OR type_volume_horaire_id = ' . $c1->getId().')';
-        if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = '(etat_volume_horaire_id IS NULL OR etat_volume_horaire_id = ' . $c2->getId().')';
-        if ($c3 = $recherche->getTypeIntervenant()    ) $conditions['type_intervenant_id']    = '(type_intervenant_id IS NULL OR type_intervenant_id = '    . $c3->getId().')';
-        if ($c4 = $recherche->getIntervenant()        ) $conditions['intervenant_id']         = '(intervenant_id IS NULL OR intervenant_id = '         . $c4->getId().')';
-        //if ($c5 = $recherche->getNiveauFormation()    ) $conditions['niveau_formation_id']    = '(niveau_formation_id IS NULL OR niveau_formation_id = '    . $c5->getId().')';
-        if ($c6 = $recherche->getEtape()              ) $conditions['etape_id']               = '(etape_id IS NULL OR etape_id = '               . $c6->getId().')';
-        if ($c7 = $recherche->getElementPedagogique() ) $conditions['element_pedagogique_id'] = '(element_pedagogique_id IS NULL OR element_pedagogique_id = ' . $c7->getId().')';
-        if ($c8 = $recherche->getStructureAff()       ) $conditions['structure_aff_id']       = '(structure_aff_id IS NULL OR structure_aff_id = '       . $c8->getId().')';
-        if ($c9 = $recherche->getStructureEns()       ) $conditions['structure_ens_id']       = '(structure_ens_id IS NULL OR structure_ens_id = '       . $c9->getId().')';
+        if ($c1 = $recherche->getTypeVolumeHoraire()  ) $conditions['type_volume_horaire_id'] = '(type_volume_horaire_id = -1 OR type_volume_horaire_id = ' . $c1->getId().')';
+        if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = '(etat_volume_horaire_id = -1 OR etat_volume_horaire_id = ' . $c2->getId().')';
+        if ($c3 = $recherche->getTypeIntervenant()    ) $conditions['type_intervenant_id']    = '(type_intervenant_id = -1 OR type_intervenant_id = '    . $c3->getId().')';
+        if ($c4 = $recherche->getIntervenant()        ) $conditions['intervenant_id']         = '(intervenant_id = -1 OR intervenant_id = '         . $c4->getId().')';
+        //if ($c5 = $recherche->getNiveauFormation()    ) $conditions['niveau_formation_id']    = '(niveau_formation_id = -1 OR niveau_formation_id = '    . $c5->getId().')';
+        if ($c6 = $recherche->getEtape()              ) $conditions['etape_id']               = '(etape_id = -1 OR etape_id = '               . $c6->getId().')';
+        if ($c7 = $recherche->getElementPedagogique() ) $conditions['element_pedagogique_id'] = '(element_pedagogique_id = -1 OR element_pedagogique_id = ' . $c7->getId().')';
+        if ($c8 = $recherche->getStructureAff()       ) $conditions['structure_aff_id']       = '(structure_aff_id = -1 OR structure_aff_id = '       . $c8->getId().')';
+        if ($c9 = $recherche->getStructureEns()       ) $conditions['structure_ens_id']       = '(structure_ens_id = -1 OR structure_ens_id = '       . $c9->getId().')';
 
         $sql = 'SELECT * FROM V_TBL_SERVICE_EXPORT WHERE '.implode( ' AND ', $conditions ).' '
               .'ORDER BY INTERVENANT_NOM, SERVICE_STRUCTURE_AFF_LIBELLE, SERVICE_STRUCTURE_ENS_LIBELLE, ETAPE_LIBELLE, ELEMENT_LIBELLE';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while( $d = $stmt->fetch()){
             $sid = $d['SERVICE_ID'];
+            if (null == $sid) $sid = 'R_'.uniqid();
             $iid = $d['INTERVENANT_ID'];
             $res[$sid] = [
 
@@ -554,11 +554,11 @@ class Service extends AbstractEntityService
 
                 'heures-service-statutaire'     => (float)  $d['HEURES_SERVICE_STATUTAIRE'],
                 'heures-service-du-modifie'     => (float)  $d['HEURES_SERVICE_DU_MODIFIE'],
-                'heures-reelles'                => (float)  $d['HEURES_REFERENTIEL'], // Attention : le référentiel est à compter dans les heures!!
+                'heures-reelles'                => (float)  $d['HEURES_REELLES'],
                 'heures-assurees'               => (float)  $d['HEURES_ASSUREES'],
-                'heures-compl'                  => (float)  $d['HEURES_COMPL'],
-                'heures-sous-service'           => (float)  $d['HEURES_SOUS_SERVICE'],
+                'heures-solde'                  => (float)  $d['HEURES_SOLDE'],
                 'heures-non-payees'             => (float)  $d['HEURES_NON_PAYEES'],
+                'heures-service'                => (float)  $d['HEURES_SERVICE'],
                 'heures-referentiel'            => (float)  $d['HEURES_REFERENTIEL'],
 
                 'types-intervention'            => [],
@@ -568,20 +568,134 @@ class Service extends AbstractEntityService
         }
 
         if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = 'etat_volume_horaire_ordre >= ' . $c2->getId();
-        $sql = 'SELECT * FROM V_TBL_SERVICE_EXPORT_VH WHERE '.implode( ' AND ', $conditions );
+        $sql = '
+        SELECT
+            SERVICE_ID,
+            TYPE_INTERVENTION_ID,
+            SUM(HEURES) HEURES
+        FROM
+            V_TBL_SERVICE_EXPORT_VH
+        WHERE
+            '.implode( ' AND ', $conditions ).'
+        GROUP BY
+            SERVICE_ID, TYPE_INTERVENTION_ID
+        HAVING
+            SUM(HEURES) <> 0
+        ';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while( $d = $stmt->fetch()){
             $sid = $d['SERVICE_ID'];
             $tid = $d['TYPE_INTERVENTION_ID'];
-            if (! isset($res[$sid]['types-intervention'][$tid])){
-                $res[$sid]['types-intervention'][$tid] = 0;
-            }
+            $res[$sid]['types-intervention'][$tid] = (float)$d['HEURES'];
             if (! isset($typesIntervention[$tid])){
                 $typesIntervention[$tid] = $this->getServiceTypeIntervention()->get($tid);
-            }if (! isset($res[$sid]['heures-reelles'])){var_dump($d);}
-            $res[$sid]['types-intervention'][$tid] += (float)$d['HEURES'];
-            $res[$sid]['heures-reelles'] += (float)$d['HEURES'];
+            }
         }
+
+        foreach( $res as $serviceId => $d ){
+            if (empty($d['types-intervention']) && 0 == $d['heures-referentiel'] && 0 == $d['heures-non-payees']){
+                unset( $res[$serviceId]); // pas d'affichage pour quelqu'un qui n'a rien
+            }
+        }
+
+        usort( $typesIntervention, function($ti1,$ti2){
+            return $ti1->getOrdre() > $ti2->getOrdre();
+        } );
+
+        return [
+            'data'                   => $res,
+            'types-intervention'     => $typesIntervention,
+        ];
+    }
+
+    /**
+     * Retourne les données du TBL des services en fonction des critères de recherche transmis
+     *
+     * @param Recherche $recherche
+     * @return array
+     */
+    public function getTableauBordResume( Recherche $recherche, $tri=null )
+    {
+        $res = [];
+        $resInt = [];
+        $typesIntervention = [];
+
+        $conditions = [
+            'annee_id = '.$this->getContextProvider()->getGlobalContext()->getAnnee()->getId()
+        ];
+        if ($c1 = $recherche->getTypeVolumeHoraire()  ) $conditions['type_volume_horaire_id'] = '(type_volume_horaire_id = -1 OR type_volume_horaire_id = ' . $c1->getId().')';
+        if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = '(etat_volume_horaire_id = -1 OR etat_volume_horaire_id = ' . $c2->getId().')';
+        if ($c3 = $recherche->getTypeIntervenant()    ) $conditions['type_intervenant_id']    = '(type_intervenant_id = -1 OR type_intervenant_id = '    . $c3->getId().')';
+        if ($c4 = $recherche->getIntervenant()        ) $conditions['intervenant_id']         = '(intervenant_id = -1 OR intervenant_id = '         . $c4->getId().')';
+        //if ($c5 = $recherche->getNiveauFormation()    ) $conditions['niveau_formation_id']    = '(niveau_formation_id = -1 OR niveau_formation_id = '    . $c5->getId().')';
+        if ($c6 = $recherche->getEtape()              ) $conditions['etape_id']               = '(etape_id = -1 OR etape_id = '               . $c6->getId().')';
+        if ($c7 = $recherche->getElementPedagogique() ) $conditions['element_pedagogique_id'] = '(element_pedagogique_id = -1 OR element_pedagogique_id = ' . $c7->getId().')';
+        if ($c8 = $recherche->getStructureAff()       ) $conditions['structure_aff_id']       = '(structure_aff_id = -1 OR structure_aff_id = '       . $c8->getId().')';
+        if ($c9 = $recherche->getStructureEns()       ) $conditions['structure_ens_id']       = '(structure_ens_id = -1 OR structure_ens_id = '       . $c9->getId().')';
+
+        switch( $tri ){
+            case 'intervenant': $orderBy = 'INTERVENANT_NOM'; break;
+            case 'hetd': $orderBy = 'HEURES_SOLDE'; break;
+            default: $orderBy = 'INTERVENANT_NOM'; break;
+        }
+
+        $sql = 'SELECT * FROM V_TBL_SERVICE_RESUME WHERE '.implode( ' AND ', $conditions ).' '
+              .'ORDER BY '.$orderBy;
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while( $d = $stmt->fetch()){
+            $iid = $d['INTERVENANT_ID'];
+            $res[$iid] = [
+                'intervenant-code'              =>          $d['INTERVENANT_CODE'],
+                'intervenant-nom'               =>          $d['INTERVENANT_NOM'],
+                'intervenant-type-code'         =>          $d['INTERVENANT_TYPE_CODE'],
+                'heures-service-du'             => (float)  $d['SERVICE_DU'],
+                'heures-solde'                  => (float)  $d['HEURES_SOLDE'],
+                'heures-compl'                  => (float)  $d['HEURES_COMPL'],
+                'heures-referentiel'            => 0,
+                'types-intervention'            => [],
+            ];
+        }
+
+        $sql = 'SELECT * FROM V_TBL_SERVICE_RESUME_REF WHERE '.implode( ' AND ', $conditions );
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while( $d = $stmt->fetch()){
+            $iid = $d['INTERVENANT_ID'];
+            if (isset( $res[$iid] )){ // à cause des filtres, plus complets sur la requête principale!!
+                $res[$iid]['heures-referentiel'] += (float) $d['HEURES_REFERENTIEL'];
+            }
+        }
+
+        if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = 'etat_volume_horaire_ordre >= ' . $c2->getId();
+        $sql = '
+        SELECT
+            INTERVENANT_ID,
+            TYPE_INTERVENTION_ID,
+            SUM(HEURES) HEURES
+        FROM
+            V_TBL_SERVICE_RESUME_VH
+        WHERE
+            '.implode( ' AND ', $conditions ).'
+        GROUP BY
+            INTERVENANT_ID, TYPE_INTERVENTION_ID
+        HAVING
+            SUM(HEURES) <> 0
+        ';
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        while( $d = $stmt->fetch()){
+            $iid = $d['INTERVENANT_ID'];
+            $tid = $d['TYPE_INTERVENTION_ID'];
+            $res[$iid]['types-intervention'][$tid] = (float)$d['HEURES'];
+            if (! isset($typesIntervention[$tid])){
+                $typesIntervention[$tid] = $this->getServiceTypeIntervention()->get($tid);
+            }
+        }
+
+        foreach( $res as $intervenantId => $d ){
+            if (empty($d['types-intervention']) && 0 == $d['heures-referentiel']){
+                unset( $res[$intervenantId]); // pas d'affichage pour quelqu'un qui n'a rien
+            }
+        }
+
         usort( $typesIntervention, function($ti1,$ti2){
             return $ti1->getOrdre() > $ti2->getOrdre();
         } );
@@ -638,7 +752,7 @@ class Service extends AbstractEntityService
 
         $queryServices = <<<EOS
 select
-  
+
   NOM_USUEL ,
   PRENOM ,
   INTERVENANT_ID ,
@@ -733,47 +847,6 @@ EOS;
         return $data;
     }
     
-    /**
-     * Retourne le total des heures RÉELLES de référentiel et de service d'un intervenant.
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return float
-     */
-    public function getTotalHeuresReelles(\Application\Entity\Db\Intervenant $intervenant)
-    {
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        
-        /**
-         * Service
-         */
-        $sql = <<<EOS
-select sum(v.TOTAL_HEURES) as TOTAL_HEURES
-from V_RESUME_SERVICE v
-where v.INTERVENANT_ID = :intervenant and v.ANNEE_ID = :annee
-EOS;
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, array(
-            'intervenant' => $intervenant->getId(),
-            'annee' => $annee->getId()));
-        $r = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-        $totalService = isset($r[0]) ? (float)$r[0] : 0.0;
-        
-        /**
-         * Référentiel
-         */
-        $sql = <<<EOS
-select sum(v.TOTAL_HEURES) as TOTAL_HEURES
-from V_RESUME_REFERENTIEL v
-where v.INTERVENANT_ID = :intervenant and v.ANNEE_ID = :annee
-EOS;
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, array(
-            'intervenant' => $intervenant->getId(),
-            'annee' => $annee->getId()));
-        $r = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-        $totalRef = isset($r[0]) ? (float)$r[0] : 0.0;
-
-        return $totalService + $totalRef;
-    }
-
     /**
      * Détermine si un service est assuré localement (c'est-à-dire dans l'université) ou sur un autre établissement
      *

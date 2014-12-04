@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 
 
 /**

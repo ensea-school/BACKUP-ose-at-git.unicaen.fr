@@ -540,7 +540,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function getNumeroInseeCle()
     {
-        return $this->numeroInseeCle;
+        return $this->numeroInseeCle ? sprintf('%02d', $this->numeroInseeCle) : $this->numeroInseeCle;
     }
 
     /**

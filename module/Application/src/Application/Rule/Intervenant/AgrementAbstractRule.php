@@ -2,6 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
+use Application\Interfaces\TypeAgrementAwareInterface;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Structure;
 use Application\Service\Agrement as AgrementService;
@@ -16,7 +17,7 @@ use Doctrine\ORM\EntityManager;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AgrementAbstractRule extends AbstractIntervenantRule
+abstract class AgrementAbstractRule extends AbstractIntervenantRule implements TypeAgrementAwareInterface
 {
     use TypeAgrementAwareTrait;
 

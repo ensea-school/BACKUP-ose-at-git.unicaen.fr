@@ -51,46 +51,55 @@ class WorkflowController extends AbstractActionController implements ContextProv
         ]);
     }
     
-    public function intervenantsAction()
+    public function iesAction()
     {
-        $role     = $this->getContextProvider()->getSelectedIdentityRole();
-        $wf       = $this->getWorkflowIntervenant()->setRole($role); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
-        $wfQb     = $this->getServiceLocator()->get('WorkflowQueryBuilder')->setWorkflowIntervenant($wf);
-        $stepKeys = [
-//            WorkflowIntervenant::KEY_DONNEES_PERSO_SAISIE, 
-//            WorkflowIntervenant::KEY_SERVICE_SAISIE, 
-//            WorkflowIntervenant::KEY_PIECES_JOINTES, 
-//            WorkflowIntervenant::KEY_DONNEES_PERSO_VALIDATION,
-//            WorkflowIntervenant::KEY_SERVICE_VALIDATION,
-            WorkflowIntervenant::KEY_CONSEIL_RESTREINT,
-//            WorkflowIntervenant::KEY_CONSEIL_ACADEMIQUE,
-//            WorkflowIntervenant::KEY_CONTRAT,
-        ];
+        $service = $this->getServiceLocator()->get('WfIntervenantEtapeService'); /* @var $service \Application\Service\WfIntervenantEtape */
         
-        echo '<pre>' . print_r($wfQb->getNotCrossingQuerySQL(WorkflowIntervenant::KEY_CONSEIL_RESTREINT), true) . '</pre>';
-        die;
-        $qb = $this->em()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
-                ->where($this->em()->getExpressionBuilder()->in("i.id", ":ids"))
-                ->orderBy("i.nomUsuel, i.prenom");
+        $service->createIntervenantsEtapes();
         
-        $data = new \SplObjectStorage();
-        foreach ($stepKeys as $stepKey) {
-            $step         = $wf->getStep($stepKey);
-            
-            $result       = $wfQb->executeNotCrossingQuerySQL($stepKey);
-            $intervenants = $qb->setParameter('ids', array_keys($result))->getQuery()->getResult();
-//            $result       = $wfQb->executeNotCrossingCountQuerySQL($stepKey);
-//            $intervenants = [];
-//            var_dump($result);
-            
-            $data->attach($step, $intervenants);
-            
-        }
-        
-        return new ViewModel([ 
-            'role' => $role,
-            'wf'   => $wf,
-            'data' => $data,
-        ]);
+        die('Done!');
     }
+    
+//    public function intervenantsAction()
+//    {
+//        $role     = $this->getContextProvider()->getSelectedIdentityRole();
+//        $wf       = $this->getWorkflowIntervenant()->setRole($role); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
+//        $wfQb     = $this->getServiceLocator()->get('WorkflowQueryBuilder')->setWorkflowIntervenant($wf);
+//        $stepKeys = [
+////            WorkflowIntervenant::DONNEES_PERSO_SAISIE, 
+////            WorkflowIntervenant::SERVICE_SAISIE, 
+////            WorkflowIntervenant::PIECES_JOINTES, 
+////            WorkflowIntervenant::DONNEES_PERSO_VALIDATION,
+////            WorkflowIntervenant::SERVICE_VALIDATION,
+//            WorkflowIntervenant::CONSEIL_RESTREINT,
+////            WorkflowIntervenant::CONSEIL_ACADEMIQUE,
+////            WorkflowIntervenant::CONTRAT,
+//        ];
+//        
+//        echo '<pre>' . print_r($wfQb->getNotCrossingQuerySQL(WorkflowIntervenant::CONSEIL_RESTREINT), true) . '</pre>';
+//        die;
+//        $qb = $this->em()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
+//                ->where($this->em()->getExpressionBuilder()->in("i.id", ":ids"))
+//                ->orderBy("i.nomUsuel, i.prenom");
+//        
+//        $data = new \SplObjectStorage();
+//        foreach ($stepKeys as $stepKey) {
+//            $step         = $wf->getStep($stepKey);
+//            
+//            $result       = $wfQb->executeNotCrossingQuerySQL($stepKey);
+//            $intervenants = $qb->setParameter('ids', array_keys($result))->getQuery()->getResult();
+////            $result       = $wfQb->executeNotCrossingCountQuerySQL($stepKey);
+////            $intervenants = [];
+////            var_dump($result);
+//            
+//            $data->attach($step, $intervenants);
+//            
+//        }
+//        
+//        return new ViewModel([ 
+//            'role' => $role,
+//            'wf'   => $wf,
+//            'data' => $data,
+//        ]);
+//    }
 }

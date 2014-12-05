@@ -69,7 +69,7 @@ abstract class AbstractWorkflow extends AbstractService
         
         foreach ($this->getSteps() as $key => $step) { /* @var $step Step */
             $rule = $this->getCrossingRule($key);
-
+            
             /**
              * Si l'étape n'est pas franchissable, c'est l'étape courante : 
              * elle sera déclarée "courante" et "non franchie" plus bas.

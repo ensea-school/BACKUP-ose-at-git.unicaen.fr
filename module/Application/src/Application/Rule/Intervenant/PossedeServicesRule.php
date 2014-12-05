@@ -2,6 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
+use Application\Interfaces\AnneeAwareInterface;
 use Application\Traits\AnneeAwareTrait;
 use Application\Traits\StructureAwareTrait;
 use Common\Exception\LogicException;
@@ -11,7 +12,7 @@ use Common\Exception\LogicException;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PossedeServicesRule extends AbstractIntervenantRule
+class PossedeServicesRule extends AbstractIntervenantRule implements AnneeAwareInterface
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;

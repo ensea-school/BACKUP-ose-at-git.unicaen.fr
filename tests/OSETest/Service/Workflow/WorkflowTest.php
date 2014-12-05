@@ -38,52 +38,13 @@ class WorkflowTest extends BaseTestCase
     {
         parent::setUp();
         
-        $this->wf = $this->getServiceManager()->get('Workflow');
+        $this->wf = $this->getServiceManager()->get('WorkflowIntervenant');
     }
     
-    public function getRuleKeys()
+    public function testCreateSteps()
     {
-        return [
-//            [Workflow::KEY_DONNEES_PERSO_SAISIE], 
-//            [Workflow::KEY_SERVICE_SAISIE], 
-//            [Workflow::KEY_PIECES_JOINTES], 
-//            [Workflow::KEY_DONNEES_PERSO_VALIDATION],
-//            [Workflow::KEY_SERVICE_VALIDATION],
-            [Workflow::KEY_CONSEIL_RESTREINT],
-            [Workflow::KEY_CONSEIL_ACADEMIQUE],
-            [Workflow::KEY_CONTRAT],
-        ];
-    }
-    
-    /**
-     * @dataProvider getRuleKeys
-     */
-    public function testGetCrossingQuerySQL($stepKey)
-    {
-        $sql = $this->wf->getCrossingQuerySQL($stepKey);
-        $this->assertInternalType('string', $sql);
-        $this->assertNotEmpty($sql);
-        
-//        var_dump($this->wf->getNotCrossingQuerySQL(Workflow::KEY_CONSEIL_RESTREINT));
-    }
-    
-    /**
-     * @dataProvider getRuleKeys
-     */
-    public function testExecuteNotCrossingQuerySQLSansRole($stepKey)
-    {
-        $result = $this->wf->executeNotCrossingQuerySQL($stepKey);
-        $this->assertInternalType('array', $result);
-        
-        var_dump(PHP_EOL . "=================== " . $stepKey . " =================== " . PHP_EOL);
-        var_dump($this->wf->getNotCrossingQuerySQL($stepKey));
-        $em = $this->wf->getEntityManager();
-        $intervenantIds = array_keys($result);
-        $intervenants = [];
-        foreach ($intervenantIds as $id) {
-            $intervenants[] = "" . $em->find('Application\Entity\Db\Intervenant', $id);
-        }
-        var_dump($intervenants);
+        $this->assertNotEmpty($this->wf->getRules());
+        $this->assertNotEmpty($this->wf->getSteps());
     }
     
     public function testSpecifierUnRoleImpacteLaStructure()
@@ -135,6 +96,14 @@ class WorkflowTest extends BaseTestCase
             $this->getEntityManager()->remove($this->ie);
         }
         if ($this->ip) {
+            // NB: Un service dû est créé par un trigger Oracle lorsqu'un intervenant permanent est créé.
+            //     La suppression de l'intervenant est empêchée par la contrainte de clé étrangère correspondante dans la table SERVICE_DU.
+            //     Il n'est pas possible d'ajouter un ON DELETE CASCADE dans la table SERVICE_DU pour une raison obscure.
+            //     Donc on a ajouté un "cascade-remove" sur la relation "serviceDu" de l'entité Intervenant.
+            //     Mais comme le service dû est créé dans le dos de Doctrine (trigger), un refresh est nécessaire pour que Doctrine 
+            //     découvre le ServiceDu lié !
+            $this->getEntityManager()->refresh($this->ip);
+            
             $this->getEntityManager()->remove($this->ip);
         }
         $this->getEntityManager()->flush();

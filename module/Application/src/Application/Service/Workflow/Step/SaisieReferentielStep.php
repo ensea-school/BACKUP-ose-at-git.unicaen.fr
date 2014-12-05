@@ -19,7 +19,7 @@ class SaisieReferentielStep extends Step
             IntervenantPermanentRole::ROLE_ID => "Je visualise mon référentiel",
             IntervenantExterieurRole::ROLE_ID => "Je visualise mon référentiel",
             ComposanteRole::ROLE_ID           => "J'accède aux référentiel de l'intervenant",
-            'default'                         => "J'accède aux référentiel de l'intervenant",
+            'default'                         => "Référentiel",
         );
         $descriptions = array(
             IntervenantPermanentRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",

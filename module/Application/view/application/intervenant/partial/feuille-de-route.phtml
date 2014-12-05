@@ -11,6 +11,7 @@
     <div class="col-md-9">
         <ul class="list-group">
             <?php foreach ($wf->getSteps() as $step): /* @var $step \Application\Service\Workflow\Step */ ?>
+            <?php if (!$step->getVisible()) continue; ?>
             <li class="list-group-item">
                         <!--<a class="details pull-right" href="#" title="Cliquez pour afficher plus d'informations"><small>En savoir plus...</small></a>-->
                         <?php 

@@ -14,62 +14,123 @@ use Zend\Permissions\Acl\Role\RoleInterface;
 abstract class Step
 {
     /**
-     * @var int
+     * Retourne cette étape dans un format lisible.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLabel() . "[{$this->getKey()}]";
+    }
+    
+    /**
+     * @var integer
      */
     private $index;
     
+    /**
+     * @return integer
+     */
     public function getIndex()
     {
         return $this->index;
     }
 
+    /**
+     * @param integer $index
+     * @return self
+     */
     public function setIndex($index)
     {
         $this->index = $index;
         return $this;
     }
-//    
-//    /**
-//     * @var string
-//     */
-//    private $key;
-//    
-//    public function getKey()
-//    {
-//        return $this->key;
-//    }
-//
-//    public function setKey($key)
-//    {
-//        $this->key = $key;
-//        return $this;
-//    }
+    
+    /**
+     * @var string
+     */
+    private $key;
+    
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     * @return self
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+        return $this;
+    }
     
     /**
      * @var array
      */
     private $labels;
     
+    /**
+     * @return array
+     */
     public function getLabels()
     {
         return $this->labels;
     }
     
-    public function getLabel(RoleInterface $role)
+    /**
+     * 
+     * @param \Zend\Permissions\Acl\Role\RoleInterface $role
+     * @return string
+     * @throws LogicException
+     */
+    public function getLabel(RoleInterface $role = null)
     {
-        $roleId = $role->getRoleId();
-        if ($role instanceof ComposanteRole) {
-            $roleId = ComposanteRole::ROLE_ID;
-        }
-        if (!isset($this->labels[$roleId])) {
-            if (!isset($this->labels['default'])) {
-                throw new LogicException("Aucun label par défaut n'a été spécifié pour l'étape '" . get_class() . "'.");
+        $key = null;
+        
+        if ($role) {
+            $key = $role->getRoleId();
+            if ($role instanceof ComposanteRole) {
+                $key = ComposanteRole::ROLE_ID;
             }
-            return $this->labels['default'];
         }
-        return $this->labels[$roleId];
+        
+        if (!$key || !isset($this->labels[$key])) {
+            $key = 'default';
+        }
+        
+        if (!isset($this->labels[$key])) {
+            throw new LogicException("Aucun label n'a été spécifié pour l'étape '" . get_class() . "' et la clé '$key'.");
+        }
+            
+        return $this->labels[$key];
+    }
+    
+    /**
+     * 
+     * @param string $label
+     * @param string $key
+     * @return self
+     */
+    public function setLabel($label, $key = null)
+    {
+        if (!$key) {
+            $key = 'default';
+        }
+            
+        $this->labels[$key] = $label;
+            
+        return $this;
     }
 
+    /**
+     * @param array $labels
+     * @return self
+     */
     protected function setLabels($labels)
     {
         $this->labels = $labels;
@@ -171,6 +232,54 @@ EOS;
     public function setIsCurrent($isCurrent = true)
     {
         $this->isCurrent = $isCurrent;
+        return $this;
+    }
+    
+    /**
+     * @var bool
+     */
+    private $crossable = null;
+    
+    public function getCrossable()
+    {
+        return $this->crossable;
+    }
+
+    public function setCrossable($crossable = true)
+    {
+        $this->crossable = $crossable;
+        return $this;
+    }
+    
+    /**
+     * @var bool
+     */
+    private $visible = false;
+    
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    public function setVisible($visible = true)
+    {
+        $this->visible = $visible;
+        return $this;
+    }
+    
+    /**
+     * @var \Application\Entity\Db\WfEtape
+     */
+    private $wfEtape = false;
+    
+    public function getWfEtape()
+    {
+        return $this->wfEtape;
+    }
+
+    public function setWfEtape($wfEtape = true)
+    {
+        $this->wfEtape = $wfEtape;
         return $this;
     }
 }

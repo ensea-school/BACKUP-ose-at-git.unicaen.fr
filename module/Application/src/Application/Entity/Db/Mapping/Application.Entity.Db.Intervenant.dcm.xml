@@ -95,11 +95,17 @@
         <join-column name="TYPE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="serviceDu" target-entity="Application\Entity\Db\ServiceDu" mapped-by="intervenant">
+        <cascade>
+            <cascade-remove/>
+        </cascade>
+    </one-to-many>
     <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant" />
     <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant" />
     <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant" />
     <one-to-many field="validation" target-entity="Application\Entity\Db\Validation" mapped-by="intervenant" />
     <one-to-many field="agrement" target-entity="Application\Entity\Db\Agrement" mapped-by="intervenant" />
     <one-to-one field="utilisateur" target-entity="Application\Entity\Db\Utilisateur" mapped-by="intervenant" />
+    <one-to-many field="wfIntervenantEtape" target-entity="Application\Entity\Db\WfIntervenantEtape" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

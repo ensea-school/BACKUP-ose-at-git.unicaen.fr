@@ -12,6 +12,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\TypeValidation;
+use Application\Service\Workflow\Event\WorkflowEventAwareTrait;
 
 /**
  * Description of DossierController
@@ -25,6 +26,7 @@ class DossierController extends AbstractActionController implements ContextProvi
 {
     use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
+    use WorkflowEventAwareTrait;
     
     /**
      * @var \Application\Entity\Db\IntervenantExterieur
@@ -116,10 +118,8 @@ class DossierController extends AbstractActionController implements ContextProvi
             $data = $this->getRequest()->getPost();
             $this->form->setData($data);
             if ($this->form->isValid()) {
-                $this->em()->persist($dossier);
+                $this->getDossierService()->enregistrerDossier($dossier, $this->intervenant);
 //                $notified = $this->notify($this->intervenant);
-                $this->em()->persist($this->intervenant);
-                $this->em()->flush();
                 $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
 //                if ($notified) {
 //                    $this->flashMessenger()->addInfoMessage(

@@ -20,7 +20,7 @@ use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
-use Application\Assertion\ContratAssertion as CA;
+use Application\Assertion\ContratAssertion;
     
 return array(
     'router' => array(
@@ -204,7 +204,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => array(
-                        'creer', 'valider', 'devalider', 'saisir-retour', 
+                        'creer', 'exporter', 'valider', 'devalider', 'saisir-retour', 
                         'deposer-fichier', 'supprimer-fichier', 
                     ),
                     'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
@@ -212,7 +212,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => array(
-                        'index', 'voir', 'exporter', 
+                        'index', 'voir', 
                         'telecharger-fichier', 'lister-fichier', 
                     ),
                     'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
@@ -230,13 +230,21 @@ return array(
                     array(
                         array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID), 
                         'Contrat', 
-                        array(CA::PRIVILEGE_READ), 
+                        array(ContratAssertion::PRIVILEGE_READ), 
                         'ContratAssertion',
                     ),
                     array(
                         array(ComposanteRole::ROLE_ID), 
                         'Contrat', 
-                        array(CA::PRIVILEGE_CREATE, CA::PRIVILEGE_DELETE, CA::PRIVILEGE_UPDATE, CA::PRIVILEGE_DATE_RETOUR, CA::PRIVILEGE_DEPOSER), 
+                        array(
+                            ContratAssertion::PRIVILEGE_CREATE, 
+                            ContratAssertion::PRIVILEGE_DELETE, 
+                            ContratAssertion::PRIVILEGE_UPDATE, 
+                            ContratAssertion::PRIVILEGE_EXPORTER,
+                            ContratAssertion::PRIVILEGE_VALIDER,
+                            ContratAssertion::PRIVILEGE_DEVALIDER, 
+                            ContratAssertion::PRIVILEGE_DATE_RETOUR, 
+                            ContratAssertion::PRIVILEGE_DEPOSER), 
                         'ContratAssertion',
                     ),
                 ),

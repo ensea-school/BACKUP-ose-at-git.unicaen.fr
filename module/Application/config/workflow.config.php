@@ -25,16 +25,38 @@ return array(
     'router' => array(
         'routes' => array(
             'workflow' => array(
-                'type'    => 'Segment',
+                'type'    => 'Literal',
                 'options' => array(
-                    'route' => '/workflow/:intervenant/:action',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'intervenant' => '[0-9]*',
-                    ),
+                    'route'    => '/workflow',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Workflow',
+                    ),
+                ),
+                'may_terminate' => false,
+                'child_routes' => array(
+                    'nav-next' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:intervenant',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'nav-next',
+                            ),
+                        ),
+                    ),
+                    'ies' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/ies',
+                            'constraints' => array(
+                            ),
+                            'defaults' => array(
+                                'action' => 'ies',
+                            ),
+                        ),
                     ),
                 ),
             ),
@@ -54,7 +76,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Workflow',
-                    'action'     => array('nav-next', 'intervenants'),
+                    'action'     => array('nav-next', 'intervenants', 'ies'),
                     'roles'      => array('user'),
                 ),
             ),
@@ -87,8 +109,12 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'WorkflowIntervenant'  => 'Application\\Service\\Workflow\\WorkflowIntervenant',
-            'WorkflowQueryBuilder' => 'Application\\Service\\Workflow\\WorkflowQueryBuilder',
+            'WfEtapeService'            => 'Application\\Service\\WfEtape',
+            'WfIntervenantEtapeService' => 'Application\\Service\\WfIntervenantEtape',
+            'WorkflowIntervenant'       => 'Application\\Service\\Workflow\\WorkflowIntervenant',
+            'DbFunctionRule'            => 'Application\Rule\Intervenant\DbFunctionRule',
+        ),
+        'factories' => array(
         ),
         'initializers' => array(
             'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',

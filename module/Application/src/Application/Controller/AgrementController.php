@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Service\Agrement as AgrementService;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
@@ -316,10 +317,7 @@ implements ContextProviderAwareInterface,
             $data = $this->getRequest()->getPost();
             $this->formSaisie->setData($data);
             if ($this->formSaisie->isValid()) {
-                if (!$this->agrement->getId()) {
-                    $this->em()->persist($this->agrement);
-                }
-                $this->em()->flush($this->agrement);
+                $this->getAgrementService()->enregistrerAgrement($this->agrement);
             }
         }
 
@@ -363,7 +361,8 @@ implements ContextProviderAwareInterface,
         /**
          * Recherche des intervenants candidats :
          * - ayant des services sur la structure adéquate éventuelle
-         * - et en attente du type d'agrément spécifié dans la requête
+         * - et nécessitant le type d'agrément spécifié dans la requête
+         * @todo exploiter WfIntervenantEtape
          */
         $serviceIntervenant = $this->getIntervenantService();
         $serviceService = $this->getServiceService();
@@ -380,15 +379,19 @@ implements ContextProviderAwareInterface,
         $serviceService->finderByAnnee($this->getContextProvider()->getGlobalContext()->getAnnee(), $qb);
         $serviceIntervenant->join($serviceService, $qb, "service"); //print_r($qb->getQuery()->getDQL());
         $intervenantsCandidats = $serviceIntervenant->getList($qb);
-        
+
         /**
          * Parcours des intervenants candidats pour ne retenir que ceux qui sont à l'étape agrément
          * dans leur workflow 
+         * @todo exploiter WfIntervenantEtape
          */
         $intervenants = [];
         foreach ($intervenantsCandidats as $i) {
             $wf = $this->getWorkflowIntervenant();
-            $wf->setIntervenant($i)->setRole($this->role);
+            $wf
+                    ->setIntervenant($i)
+                    ->setRole($this->role);
+            
             $step = $wf->getCurrentStep();
             if ($step instanceof \Application\Service\Workflow\Step\AgrementStep && $step->getTypeAgrement() === $this->typeAgrement) {
                 $intervenants[$i->getId()] = $i;
@@ -409,7 +412,8 @@ implements ContextProviderAwareInterface,
                     foreach ($data['intervenants'] as $id) {
                         $agrement = clone $this->agrement;
                         $agrement->setIntervenant($intervenants[$id]);
-                        $this->getAgrementService()->save($agrement);
+                        
+                        $this->getAgrementService()->enregistrerAgrement($agrement);
                     }
                     $this->flashMessenger()->addSuccessMessage(count($data['intervenants']) . " agrément(s) enregistré(s) avec succès.");
                     $this->redirect()->toRoute(null, [], [], true);

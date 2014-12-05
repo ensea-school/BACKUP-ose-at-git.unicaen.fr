@@ -242,6 +242,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    protected $serviceDu;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
     protected $validation;
 
     /**
@@ -258,6 +263,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @var boolean
      */
     protected $premierRecrutement;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $wfIntervenantEtape;
 
     /**
      * Constructor
@@ -1193,6 +1203,39 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Add serviceDu
+     *
+     * @param \Application\Entity\Db\ServiceDuIntervenant $serviceDu
+     * @return Intervenant
+     */
+    public function addServiceDu(\Application\Entity\Db\ServiceDuIntervenant $serviceDu)
+    {
+        $this->serviceDu[] = $serviceDu;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviceDu
+     *
+     * @param \Application\Entity\Db\ServiceDuIntervenant $serviceDu
+     */
+    public function removeServiceDu(\Application\Entity\Db\ServiceDuIntervenant $serviceDu)
+    {
+        $this->serviceDu->removeElement($serviceDu);
+    }
+
+    /**
+     * Get serviceDu
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServiceDu()
+    {
+        return $this->serviceDu;
+    }
+
+    /**
      * Add agrement
      *
      * @param \Application\Entity\Db\Agrement $agrement
@@ -1260,7 +1303,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function estPermanent()
     {
-        return $this->getType()->getCode() === TypeIntervenant::CODE_PERMANENT;
+        return $this->getStatut()->estPermanent();
     }
     
     /**
@@ -1389,6 +1432,39 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getPremierRecrutement()
     {
         return $this->premierRecrutement;
+    }
+
+    /**
+     * Add wfIntervenantEtape
+     *
+     * @param \Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape
+     * @return Intervenant
+     */
+    public function addWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
+    {
+        $this->wfIntervenantEtape[] = $wfIntervenantEtape;
+
+        return $this;
+    }
+
+    /**
+     * Remove wfIntervenantEtape
+     *
+     * @param \Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape
+     */
+    public function removeWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
+    {
+        $this->wfIntervenantEtape->removeElement($wfIntervenantEtape);
+    }
+
+    /**
+     * Get wfIntervenantEtape
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWfIntervenantEtape()
+    {
+        return $this->wfIntervenantEtape;
     }
 
     /**

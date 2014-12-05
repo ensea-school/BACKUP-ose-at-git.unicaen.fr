@@ -7,7 +7,6 @@ use Application\Interfaces\IntervenantAwareInterface;
 use Application\Interfaces\StructureAwareInterface;
 use Application\Interfaces\AnneeAwareInterface;
 use Application\Interfaces\TypeAgrementAwareInterface;
-use Application\Entity\Db\WfEtape;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
@@ -110,105 +109,23 @@ class Workflow extends AbstractWorkflow
         $this->steps = [];
         $this->rules = [];
         
-        $service = $this->getServiceWfIntervenantEtape();
+        $etapes = $this->getServiceWfEtape()->findAll();     
         
-        // Fetch de la progression de l'intervenant (création si inexistante)
-        $ies = $service->findIntervenantEtape($this->getIntervenant());
-        if (!count($ies)) {
-            $service->createIntervenantEtapes($this->getIntervenant());
-            $ies = $service->findIntervenantEtape($this->getIntervenant());
-        }
-        
-        $dbFunctionRule = $this->getServiceLocator()->get('DbFunctionRule');
-        $currentFound   = false;
-        
-        foreach ($ies as $ie) {
-            $etape = $ie->getEtape();
-            $key   = $etape->getCode();
+        foreach ($etapes as $key => $etape) {
+            // Règle de pertinence de l'étape
+            $relevanceRule = $this->createRule($etape->getPertinRuleClass(), $key);
+            // Règle de franchissement de l'étape
+            $crossingRule  = $this->createRule($etape->getFranchRuleClass(), $key);
             
-            $relevanceRule = clone $dbFunctionRule;
-            $relevanceRule
-                    ->setFunction($etape->getPertinFunc())
-                    ->setIntervenant($this->getIntervenant())
-                    ->setStructure($this->getStructure());
-            $crossingRule = clone $dbFunctionRule;
-            $crossingRule
-                    ->setFunction($etape->getFranchFunc())
-                    ->setIntervenant($this->getIntervenant())
-                    ->setStructure($this->getStructure());
+            // Les règles métiers de toutes les étapes existantes sont disponibles dans le WF.
             $this->addRule($key, $relevanceRule, $crossingRule);
-            
-            $isCurrent = $ie->getCourante();
-            $done      = $ie->getFranchie();
-            
-            /**
-             * Certaines étapes du workflow peuvent être "déclinées" par structure d'enseignement,
-             * exemple: l'étape "validation des enseignements".
-             * 
-             * La progression de l'intervenant dans le wf stockée en base de données
-             * ne gère pas cette déclinaison par structure : l'étape "validation des enseignements"
-             * marquée "franchie" signifie que des enseignements ont bien été validés mais 
-             * sans considération pour la structure d'enseignement précise.
-             * 
-             * Le caractère "franchie" de certaines étapes peut être réévalué pour une structure d'enseignement
-             * précise. Cela est utile pour le rôle gestionnaire par exemple : ce dernier s'exerçant sur
-             * une structure de responsabilité précise, on veut savoir si une étape franchie l'est bien
-             * pour cette structure de responsabilité en particulier.
-             */
-            if ($currentFound) {
-                $isCurrent = false;
-                $done      = false;
+            // Mais seules les étapes pertinentes sont ajoutées au WF.
+            if (!$relevanceRule || $relevanceRule->execute()) {
+                $step = $this->createStep($etape->getStepClass(), $key, $etape->getVisible());
+                $this->addStep($step);
             }
-            if ($done && !$currentFound && $etape->getStructureDependant() && $this->getStructure()) {
-                if ($crossingRule->isRelevant() && !$crossingRule->execute()) {
-                    $isCurrent = true;
-                    $done = false;
-                    $currentFound = true;
-                }
-            }
-            
-//            $step = $this->createStep($etape->getStepClass(), $key, $etape->getVisible());
-            $step = $this->createStep($etape);
-            $step
-                    ->setLabel($etape->getLibelle())
-                    ->setIsCurrent($isCurrent)
-                    ->setDone($done);
-            $this->addStep($step);
         }
 
-        return $this;
-    }
-    /**
-     * Parcourt les étapes pour déterminer l'étape courante (i.e. 1ere étape non franchissable trouvée).
-     * 
-     * @return self
-     */
-    protected function processSteps()
-    {
-        $currentStep = null;
-        
-        /**
-         * Recherche de l'étape courante.
-         */
-        foreach ($this->getSteps() as $step) { /* @var $step Step */
-            if ($step->getIsCurrent()) {
-                $currentStep = $step;
-                break;
-            }
-        }
-        
-        /**
-         * Si aucune étape courante n'est trouvée, ce sera la dernière étape qui fera office.
-         */
-        if (!$currentStep) {
-            $currentStep = $this->getLastStep();
-        }
-
-        /**
-         * Etape courante.
-         */
-        $this->setCurrentStep($currentStep);
-            
         return $this;
     }
     
@@ -272,37 +189,18 @@ class Workflow extends AbstractWorkflow
      * @param string $stepClass Classe à instancier
      * @param string $key Clé de l'étape.
      * @param boolean $visible Témoin de visibilité de l'étape
-     * @return Step
+     * @return AbstractIntervenantRule
      */
-//    protected function createStep($stepClass, $key, $visible = true)
-//    {
-//        if (!$stepClass) {
-//            $stepClass = 'Application\Service\Workflow\Step\GenericStep';
-//        }
-//        
-//        $step = new $stepClass();
-//        $step
-//                ->setKey($key)
-//                ->setVisible($visible);
-//        
-//        if ($step instanceof TypeAgrementAwareInterface) {
-//            $typeAgrement = $this->getServiceTypeAgrement()->getRepo()->findOneByCode($key);
-//            $step->setTypeAgrement($typeAgrement);
-//        }
-//        
-//        return $step;
-//    }
-    protected function createStep(WfEtape $wfEtape)
+    protected function createStep($stepClass, $key, $visible = true)
     {
-        $stepClass = $wfEtape->getStepClass() ? : 'Application\Service\Workflow\Step\GenericStep';
-        $key       = $wfEtape->getCode();
-        $visible   = $wfEtape->getVisible();
-
+        if (!$stepClass) {
+            $stepClass = 'Application\Service\Workflow\Step\GenericStep';
+        }
+        
         $step = new $stepClass();
         $step
                 ->setKey($key)
-                ->setVisible($visible)
-                ->setWfEtape($wfEtape);
+                ->setVisible($visible);
         
         if ($step instanceof TypeAgrementAwareInterface) {
             $typeAgrement = $this->getServiceTypeAgrement()->getRepo()->findOneByCode($key);

@@ -3,6 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Rule\AbstractRule;
+use Application\Interfaces\IntervenantAwareInterface;
 use Application\Service\Intervenant as IntervenantService;
 use Application\Traits\IntervenantAwareTrait;
 use Doctrine\ORM\QueryBuilder;
@@ -12,7 +13,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AbstractIntervenantRule extends AbstractRule
+abstract class AbstractIntervenantRule extends AbstractRule implements IntervenantAwareInterface
 {
     use IntervenantAwareTrait;
     

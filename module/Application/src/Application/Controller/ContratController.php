@@ -223,7 +223,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $contrat = $this->getServiceContrat()->newEntity(TypeContrat::CODE_CONTRAT)
                 ->setIntervenant($this->getIntervenant())
                 ->setStructure($this->getStructure());
-        if (!$this->isAllowed($contrat, 'create')) {
+        if (!$this->isAllowed($contrat, ContratAssertion::PRIVILEGE_CREATE)) {
             throw new \Common\Exception\MessageException("La création de contrat/avenant n'est pas encore possible.");
         }
         
@@ -316,9 +316,6 @@ class ContratController extends AbstractActionController implements ContextProvi
             if ($form->isValid()) {
                 $this->getServiceContrat()->requalifier($this->contrat); // requalification SI BESOIN
                 $this->validation = $this->getServiceContrat()->valider($this->contrat);
-                $this->em()->persist($this->validation);
-                $this->em()->persist($this->contrat);
-                $this->em()->flush();
                 
                 $this->flashMessenger()->addSuccessMessage(
                         "Validation " . lcfirst($this->contrat->toString(true, true)) . " enregistrée avec succès.");
@@ -368,8 +365,6 @@ class ContratController extends AbstractActionController implements ContextProvi
 
         if ($this->getRequest()->isPost()) {
             $this->getServiceContrat()->devalider($this->contrat);
-            $this->em()->persist($this->contrat);
-            $this->em()->flush();
 
             $this->flashMessenger()->clearMessages()->addSuccessMessage(
                     "Validation " . lcfirst($this->contrat->toString(true, true)) . " supprimée avec succès.");
@@ -685,51 +680,12 @@ class ContratController extends AbstractActionController implements ContextProvi
         return $this->structure;
     }
     
-    private function getValidationService()
-    {
-        $serviceValidation = $this->getServiceValidation();
-        $qb = $serviceValidation->finderByType($code = TypeValidation::CODE_SERVICES_PAR_COMP);
-        $qb = $serviceValidation->finderByIntervenant($this->intervenant, $qb);
-        $validation = $serviceValidation->finderByStructureIntervention($structure, $qb)->getQuery()->getOneOrNullResult();
-        if ($validation) {
-            $this->validation[$key]['validation'] = $validation;
-        }
-    }
-    
-    private function getTypeContrat()
-    {
-        return $this->em()->getRepository('Application\Entity\Db\TypeContrat')
-                ->findOneByCode(TypeContrat::CODE_CONTRAT);
-    }
-    
-    private function getTypeAvenant()
-    {
-        return $this->em()->getRepository('Application\Entity\Db\TypeContrat')
-                ->findOneByCode(TypeContrat::CODE_AVENANT);
-    }
-    
-    /**
-     * @return \Application\Service\Validation
-     */
-    private function getServiceValidation()
-    {
-        return $this->getServiceLocator()->get('ApplicationValidation');
-    }
-    
     /**
      * @return \Application\Service\Contrat
      */
     private function getServiceContrat()
     {
         return $this->getServiceLocator()->get('ApplicationContrat');
-    }
-    
-    /**
-     * @return \Application\Service\TypeContrat
-     */
-    private function getServiceTypeContrat()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeContrat');
     }
     
     /**
@@ -741,35 +697,11 @@ class ContratController extends AbstractActionController implements ContextProvi
     }
     
     /**
-     * @return \Application\Service\VolumeHoraire
-     */
-    private function getServiceVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-    }
-    
-    /**
      * @return \Application\Service\TypeVolumeHoraire
      */
     private function getServiceTypeVolumeHoraire()
     {
         return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
-    }
-    
-    /**
-     * @return \Application\Service\TypeValidation
-     */
-    private function getServiceTypeValidation()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeValidation');
-    }
-    
-    /**
-     * @return \Application\Service\TypeAgrement
-     */
-    private function getServiceTypeAgrement()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeAgrement');
     }
 
     /**

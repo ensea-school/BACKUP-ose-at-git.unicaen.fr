@@ -2,10 +2,17 @@
 
 namespace Application\Service;
 
-use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeValidation as TypeValidationEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Acl\ComposanteRole;
+use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+use Application\Entity\Db\Validation as ValidationEntity;
+use Application\Exception\DbException;
+use Application\Rule\Validation\PeutSupprimerValidationRule;
+use Common\Exception\RuntimeException;
+use Doctrine\ORM\QueryBuilder;
+use Exception;
 
 /**
  * Description of Validation
@@ -14,7 +21,6 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
  */
 class Validation extends AbstractEntityService
 {
-
     /**
      * retourne la classe des entités
      *
@@ -35,7 +41,64 @@ class Validation extends AbstractEntityService
     {
         return 'v';
     }
+    
+    /**
+     * Enregistre une nouvelle validation de données personnelles.
+     * 
+     * NB: tout le travail est déjà fait via un formulaire en fait! 
+     * Cette méthode existe surtout pour déclencher l'événement de workflow.
+     * 
+     * @param ValidationEntity $validation
+     * @return void
+     */
+    public function enregistrerValidationDossier(ValidationEntity $validation)
+    {
+        $this->getEntityManager()->persist($validation);
+        $this->getEntityManager()->flush();
+    }
+    
+    /**
+     * Enregistre une nouvelle validation de services.
+     * 
+     * @param ValidationEntity $validation
+     * @return void
+     */
+    public function enregistrerValidationServices(ValidationEntity $validation, $services)
+    {
+        // peuplement de la nouvelle validation avec les volumes horaires non validés
+        foreach ($services as $s) { /* @var $s \Application\Entity\Db\Service */
+            foreach ($s->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+                $validation->addVolumeHoraire($vh);
+            }
+        }
+        $this->save($validation);
+    }
+    
+    /**
+     * Suppression d'une validation (historisation par défaut).
+     * 
+     * @param \Application\Entity\Db\Validation $validation
+     * @throws DbException En cas d'erreur en base de données
+     */
+    public function supprimer(ValidationEntity $validation)
+    {
+        $softDelete = true;
+        
+        // NB: une validation de contrat doit être supprimée! Il existe une relation ManyToOne de Contrat vers Validation
+        // et si la validation est seulement historisée, Doctrine ne trouve plus la Validation référencée dans Contrat 
+        // (EntityNotFoundException) si le filtre 'historique' est actif.
+        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_CONTRAT_PAR_COMP) {
+            $softDelete = false;
+        }
 
+        try {
+            $this->delete($validation, $softDelete);
+        }
+        catch (Exception $e) {
+            throw new DbException(DbException::translate($e)->getMessage());
+        }
+    }
+    
     /**
      * Retourne une nouvelle entité de la classe donnée
      * 
@@ -156,7 +219,7 @@ class Validation extends AbstractEntityService
         $qb = $this->getServiceLocator()->get('ApplicationTypeValidation')->finderByCode($code = $type);
         $type = $qb->getQuery()->getOneOrNullResult();
         if (!$type) {
-            throw new \Common\Exception\RuntimeException("Aucun type de validation trouvé avec le code '$code'.");
+            throw new RuntimeException("Aucun type de validation trouvé avec le code '$code'.");
         }
         
         return $type;
@@ -225,10 +288,10 @@ class Validation extends AbstractEntityService
         $rule->setTypeValidation($this->normalizeTypeValidation($type));
         if (!$rule->execute()) {
             $message = "";
-            if ($role instanceof \Application\Acl\IntervenantRole) {
+            if ($role instanceof IntervenantRole) {
                 $message = "Vous ne pouvez pas valider. ";
             }
-            elseif ($role instanceof \Application\Acl\ComposanteRole) {
+            elseif ($role instanceof ComposanteRole) {
                 $message = "Vous ne pouvez pas valider pour $intervenant. ";
             }
             
@@ -246,28 +309,12 @@ class Validation extends AbstractEntityService
      */
     public function canDelete($validation, $runEx = false)
     {
-        $rule = new \Application\Rule\Validation\PeutSupprimerValidationRule($validation);
+        $rule = new PeutSupprimerValidationRule($validation);
         if (!$rule->execute()) {
             $message = "Vous ne pouvez pas supprimer la validation. ";
             return $this->cannotDoThat($message . $rule->getMessage(), $runEx);
         }
         
         return true;
-    }
-
-    /**
-     * Supprime (historise par défaut) le service spécifié.
-     *
-     * @param \Application\Entity\Db\Validation $entity     Entité à détruire
-     * @param bool $softDelete
-     * @return self
-     */
-    public function delete($entity, $softDelete = true)
-    {
-//        foreach ($entity->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
-//            $entity->removeVolumeHoraire($vh);
-//        }
-//        
-        return parent::delete($entity, $softDelete);
     }
 }

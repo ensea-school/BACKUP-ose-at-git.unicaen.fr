@@ -21,6 +21,7 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
 {
     use WorkflowIntervenantAwareTrait;
  
+    const PRIVILEGE_EXPORTER    = 'exporter';
     const PRIVILEGE_VALIDER     = 'valider';
     const PRIVILEGE_DEVALIDER   = 'devalider';
     const PRIVILEGE_DATE_RETOUR = 'date_retour';
@@ -121,7 +122,7 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
                 return false;
             }
             
-            $contratStepKey = WorkflowIntervenant::KEY_CONTRAT;
+            $contratStepKey = WorkflowIntervenant::CONTRAT;
             
             // l'étape Contrat du workflow doit être atteignable
             if (!$this->getWorkflow()->isStepReachable($contratStepKey)) {

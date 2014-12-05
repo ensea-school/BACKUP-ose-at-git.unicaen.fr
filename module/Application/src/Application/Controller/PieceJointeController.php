@@ -8,13 +8,11 @@ use Application\Entity\Db\Fichier;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointe;
-use Application\Form\Joindre;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\PieceJointe as PieceJointeService;
 use Application\Service\Process\PieceJointeProcess;
-use Application\Service\Service;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
@@ -73,7 +71,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
         if (!$this->getIntervenant() instanceof IntervenantExterieur) {
             throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
         }
-            
+        
         $dossier = $this->getIntervenant()->getDossier();
         if (!$dossier) {
             throw new MessageException("L'intervenant {$this->getIntervenant()} n'a aucune donnée personnelle enregistrée.");
@@ -173,7 +171,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
             return $result;
         }
         if (is_array($result)) {
-            $this->getServicePieceJointe()->createFromFiles($result['files'], $intervenant, $typePieceJointe);
+            $this->getServicePieceJointe()->ajouterFichiers($result['files'], $intervenant, $typePieceJointe);
             $this->notifyPiecesJointesFournies();
         }
         
@@ -272,21 +270,8 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $fichier = $this->getFichier(false);
         
         if ($fichier) {
-            if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_DELETE)) {
-                throw new UnAuthorizedException("Suppression du fichier interdite!");
-            }
-            $pj->removeFichier($fichier);
-            $this->em()->remove($fichier);
+            $this->getServicePieceJointe()->supprimerFichier($fichier, $pj, $this->getIntervenant());
         }
-        
-        if (!count($pj->getFichier())) {
-            if (!$this->isAllowed($pj, PieceJointeAssertion::PRIVILEGE_DELETE)) {
-                throw new UnAuthorizedException("Suppression de la pièce jointe interdite!");
-            }
-            $this->em()->remove($pj);
-        }
-        
-        $this->em()->flush();
             
         return $this->redirect()->toRoute('piece-jointe/intervenant/lister', ['typePieceJointe' => $tpj->getId()], [], true);
     }
@@ -395,29 +380,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
     }
     
     /**
-     * @return array
-     */
-    private function getDestinatairesPiecesJointes()
-    {
-        $template      = '<a href="mailto:%s">%s</a>';
-        $destinataires = [];
-        
-        if (($contactPj = $this->getIntervenant()->getStructure()->getContactPj())) {
-            foreach (explode(',', $contactPj) as $mail) {
-                $destinataires[] = sprintf($template, $mail = trim($mail), $mail);
-            }
-        }
-        else {
-            foreach ($this->getPieceJointeProcess()->getRolesDestinatairesPiecesJointes() as $r) {
-                $mailto = sprintf($template, $mail = $r->getPersonnel()->getEmail(), $mail);
-                $destinataires[] = sprintf("%s : %s", $r->getPersonnel(), $mailto);
-            }
-        }
-        
-        return $destinataires;
-    }
-    
-    /**
      * @var IntervenantExterieur
      */
     private $intervenant;
@@ -514,13 +476,5 @@ class PieceJointeController extends AbstractActionController implements ContextP
     private function getServicePieceJointe()
     {
         return $this->getServiceLocator()->get('ApplicationPieceJointe');
-    }
-    
-    /**
-     * @return Service
-     */
-    private function getServiceService()
-    {
-        return $this->getServiceLocator()->get('ApplicationService');
     }
 }

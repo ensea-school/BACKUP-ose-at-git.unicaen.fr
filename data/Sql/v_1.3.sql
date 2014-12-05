@@ -104,6 +104,34 @@ INSERT INTO "OSE"."PARAMETRE" (ID, NOM, VALEUR, DESCRIPTION, VALIDITE_DEBUT, HIS
 --EFFECTIFS_ID_SEQ
 ---------------------------
  CREATE SEQUENCE "OSE"."EFFECTIFS_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 11071 NOCACHE NOORDER NOCYCLE;
+
+
+---------------------------
+--Nouveau TABLE
+--ETAT_VOLUME_HORAIRE
+---------------------------
+  CREATE TABLE "OSE"."ETAT_VOLUME_HORAIRE" 
+   (	"ID" NUMBER(*,0) NOT NULL ENABLE,
+	"CODE" VARCHAR2(30 CHAR) NOT NULL ENABLE,
+	"LIBELLE" VARCHAR2(80 CHAR) NOT NULL ENABLE,
+	"ORDRE" NUMBER(*,0) NOT NULL ENABLE,
+	"HISTO_CREATION" DATE DEFAULT SYSDATE NOT NULL ENABLE,
+	"HISTO_CREATEUR_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"HISTO_MODIFICATION" DATE DEFAULT SYSDATE NOT NULL ENABLE,
+	"HISTO_MODIFICATEUR_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"HISTO_DESTRUCTION" DATE,
+	"HISTO_DESTRUCTEUR_ID" NUMBER(*,0),
+	CONSTRAINT "ETAT_VOLUME_HORAIRE_PK" PRIMARY KEY ("ID") ENABLE,
+	CONSTRAINT "ETAT_VOLUME_HORAIRE__UN" UNIQUE ("CODE","HISTO_DESTRUCTION") ENABLE,
+	CONSTRAINT "ETAT_VOLUME_HORAIRE_HCFK" FOREIGN KEY ("HISTO_CREATEUR_ID")
+	 REFERENCES "OSE"."UTILISATEUR" ("ID") ENABLE,
+	CONSTRAINT "ETAT_VOLUME_HORAIRE_HDFK" FOREIGN KEY ("HISTO_DESTRUCTEUR_ID")
+	 REFERENCES "OSE"."UTILISATEUR" ("ID") ENABLE,
+	CONSTRAINT "ETAT_VOLUME_HORAIRE_HMFK" FOREIGN KEY ("HISTO_MODIFICATEUR_ID")
+	 REFERENCES "OSE"."UTILISATEUR" ("ID") ENABLE
+   );
+
+
 ---------------------------
 --Nouveau TABLE
 --FORMULE_VOLUME_HORAIRE
@@ -151,6 +179,7 @@ ALTER TABLE "OSE"."ELEMENT_PEDAGOGIQUE" MODIFY ("FC" NOT NULL ENABLE);
 ALTER TABLE "OSE"."ELEMENT_PEDAGOGIQUE" MODIFY ("FI" NUMBER(1,0) DEFAULT 1);
 ALTER TABLE "OSE"."ELEMENT_PEDAGOGIQUE" MODIFY ("FI" NOT NULL ENABLE);
 ALTER TABLE "OSE"."ELEMENT_PEDAGOGIQUE" MODIFY ("TAUX_FOAD" FLOAT(126) DEFAULT 0);
+update "OSE"."ELEMENT_PEDAGOGIQUE" set taux_foad = 0 where taux_foad IS NULL;
 ALTER TABLE "OSE"."ELEMENT_PEDAGOGIQUE" MODIFY ("TAUX_FOAD" NOT NULL ENABLE);
 
 ---------------------------
@@ -305,6 +334,7 @@ ALTER TABLE "OSE"."SERVICE_DU" ADD CONSTRAINT "SERVICE_DU_INTERVENANT_FK" FOREIG
 --STATUT_INTERVENANT
 ---------------------------
 ALTER TABLE "OSE"."STATUT_INTERVENANT" ADD ("PEUT_SAISIR_MOTIF_NON_PAIEMENT" NUMBER(1,0) DEFAULT 0 NOT NULL ENABLE);
+update statut_intervenant set PEUT_SAISIR_MOTIF_NON_PAIEMENT = 1 where type_intervenant_id = (select id from type_intervenant where code = 'P');
 
 ---------------------------
 --Nouveau TABLE
@@ -443,30 +473,7 @@ ALTER TABLE "OSE"."MOTIF_MODIFICATION_SERVICE" ADD CONSTRAINT "MOTIF_MODIFICATIO
 	CONSTRAINT "FRM_TYPE_VOLUME_HORAIRE_FK" FOREIGN KEY ("TYPE_VOLUME_HORAIRE_ID")
 	 REFERENCES "OSE"."TYPE_VOLUME_HORAIRE" ("ID") ON DELETE CASCADE ENABLE
    );
----------------------------
---Nouveau TABLE
---ETAT_VOLUME_HORAIRE
----------------------------
-  CREATE TABLE "OSE"."ETAT_VOLUME_HORAIRE" 
-   (	"ID" NUMBER(*,0) NOT NULL ENABLE,
-	"CODE" VARCHAR2(30 CHAR) NOT NULL ENABLE,
-	"LIBELLE" VARCHAR2(80 CHAR) NOT NULL ENABLE,
-	"ORDRE" NUMBER(*,0) NOT NULL ENABLE,
-	"HISTO_CREATION" DATE DEFAULT SYSDATE NOT NULL ENABLE,
-	"HISTO_CREATEUR_ID" NUMBER(*,0) NOT NULL ENABLE,
-	"HISTO_MODIFICATION" DATE DEFAULT SYSDATE NOT NULL ENABLE,
-	"HISTO_MODIFICATEUR_ID" NUMBER(*,0) NOT NULL ENABLE,
-	"HISTO_DESTRUCTION" DATE,
-	"HISTO_DESTRUCTEUR_ID" NUMBER(*,0),
-	CONSTRAINT "ETAT_VOLUME_HORAIRE_PK" PRIMARY KEY ("ID") ENABLE,
-	CONSTRAINT "ETAT_VOLUME_HORAIRE__UN" UNIQUE ("CODE","HISTO_DESTRUCTION") ENABLE,
-	CONSTRAINT "ETAT_VOLUME_HORAIRE_HCFK" FOREIGN KEY ("HISTO_CREATEUR_ID")
-	 REFERENCES "OSE"."UTILISATEUR" ("ID") ENABLE,
-	CONSTRAINT "ETAT_VOLUME_HORAIRE_HDFK" FOREIGN KEY ("HISTO_DESTRUCTEUR_ID")
-	 REFERENCES "OSE"."UTILISATEUR" ("ID") ENABLE,
-	CONSTRAINT "ETAT_VOLUME_HORAIRE_HMFK" FOREIGN KEY ("HISTO_MODIFICATEUR_ID")
-	 REFERENCES "OSE"."UTILISATEUR" ("ID") ENABLE
-   );
+
 ---------------------------
 --Modifié TABLE
 --AFFECTATION_RECHERCHE
@@ -514,6 +521,403 @@ ALTER TABLE "OSE"."AFFECTATION_RECHERCHE" DROP CONSTRAINT "AFFECTATION_IS_UN";
 	CONSTRAINT "EFFECTIFS_SOURCE_FK" FOREIGN KEY ("SOURCE_ID")
 	 REFERENCES "OSE"."SOURCE" ("ID") ON DELETE CASCADE ENABLE
    );
+   
+/
+
+---------------------------
+--Modifié PACKAGE
+--OSE_PARAMETRE
+---------------------------
+CREATE OR REPLACE PACKAGE "OSE"."OSE_PARAMETRE" AS 
+
+  function get_etablissement return Numeric;
+  function get_annee return Numeric;
+  function get_ose_user return Numeric;
+  function get_drh_structure_id return Numeric;
+  function get_date_fin_saisie_permanents RETURN DATE;
+  function get_formule_package_name RETURN VARCHAR2;
+  function get_formule_function_name RETURN VARCHAR2;
+
+END OSE_PARAMETRE;
+/
+   
+---------------------------
+--Modifié PACKAGE BODY
+--OSE_PARAMETRE
+---------------------------
+CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_PARAMETRE" AS
+
+  cache_ose_user NUMERIC;
+  cache_annee_id NUMERIC;
+
+  function get_etablissement return Numeric AS
+    etab_id numeric;
+  BEGIN
+    select to_number(valeur) into etab_id from parametre where nom = 'etablissement';
+    RETURN etab_id;
+  END get_etablissement;
+
+  function get_annee return Numeric AS
+    annee_id numeric;
+  BEGIN
+    IF cache_annee_id IS NOT NULL THEN RETURN cache_annee_id; END IF;
+    select to_number(valeur) into annee_id from parametre where nom = 'annee';
+    cache_annee_id := annee_id;
+    RETURN cache_annee_id;
+  END get_annee;
+
+  function get_ose_user return Numeric AS
+    ose_user_id numeric;
+  BEGIN
+    IF cache_ose_user IS NOT NULL THEN RETURN cache_ose_user; END IF;
+    select to_number(valeur) into ose_user_id from parametre where nom = 'oseuser';
+    cache_ose_user := ose_user_id;
+    RETURN cache_ose_user;
+  END get_ose_user;
+
+  function get_drh_structure_id return Numeric AS
+    drh_structure_id numeric;
+  BEGIN
+    select to_number(valeur) into drh_structure_id from parametre where nom = 'drh_structure_id';
+    RETURN drh_structure_id;
+  END get_drh_structure_id;
+
+  FUNCTION get_date_fin_saisie_permanents RETURN DATE IS
+    date_fin_saisie_permanents date;
+  BEGIN
+    select TO_DATE(valeur, 'dd/mm/yyyy') into date_fin_saisie_permanents from parametre where nom = 'date_fin_saisie_permanents';
+    RETURN date_fin_saisie_permanents;
+  END;
+
+  FUNCTION get_formule_package_name RETURN VARCHAR2 IS
+    formule_package_name VARCHAR2(30);
+  BEGIN
+    SELECT valeur INTO formule_package_name FROM parametre WHERE nom = 'formule_package_name';
+    RETURN formule_package_name;
+  END;
+  
+  FUNCTION get_formule_function_name RETURN VARCHAR2 IS
+    formule_function_name VARCHAR2(30);
+  BEGIN
+    SELECT valeur INTO formule_function_name FROM parametre WHERE nom = 'formule_function_name';
+    RETURN formule_function_name;
+  END;
+
+END OSE_PARAMETRE;
+/
+   
+   
+   
+   
+/
+---------------------------
+--Modifié PACKAGE
+--OSE_DIVERS
+---------------------------
+CREATE OR REPLACE PACKAGE "OSE"."OSE_DIVERS" AS 
+
+  FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC;
+
+  FUNCTION GET_TYPE_MODULATEUR_IDS( STRUCTURE_ID NUMERIC, DATE_OBS DATE DEFAULT SYSDATE ) RETURN types_modulateurs;
+
+  FUNCTION implode(i_query VARCHAR2, i_seperator VARCHAR2 DEFAULT ',') RETURN VARCHAR2;
+
+  FUNCTION intervenant_est_permanent( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION intervenant_est_non_autorise( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION intervenant_peut_saisir_serv( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION STRUCTURE_DANS_STRUCTURE( structure_testee NUMERIC, structure_cible NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION STR_REDUCE( str CLOB ) RETURN CLOB;
+  
+  FUNCTION LIKED( haystack CLOB, needle CLOB ) RETURN NUMERIC;
+
+  FUNCTION COMPRISE_ENTRE( date_debut DATE, date_fin DATE DEFAULT NULL, date_obs DATE DEFAULT SYSDATE ) RETURN NUMERIC;
+
+  PROCEDURE DO_NOTHING;
+
+  FUNCTION VOLUME_HORAIRE_VALIDE( volume_horaire_id NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION CALCUL_TAUX_FI( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+  
+  FUNCTION CALCUL_TAUX_FC( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+  
+  FUNCTION CALCUL_TAUX_FA( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+
+  FUNCTION STRUCTURE_UNIV_GET_ID RETURN NUMERIC;
+
+END OSE_DIVERS;
+/
+   
+---------------------------
+--Modifié PACKAGE BODY
+--OSE_DIVERS
+---------------------------
+CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_DIVERS" AS
+
+FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC IS
+  statut statut_intervenant%rowtype;
+  itype  type_intervenant%rowtype;
+  res NUMERIC;
+BEGIN
+  res := 1;
+  SELECT si.* INTO statut FROM statut_intervenant si JOIN intervenant i ON i.statut_id = si.id WHERE i.id = intervenant_id;
+  SELECT ti.* INTO itype  FROM type_intervenant ti WHERE ti.id = statut.type_intervenant_id;
+  IF 'saisie_service' = privilege_name THEN
+    res := statut.peut_saisir_service;
+    IF itype.code = 'P' AND SYSDATE >= OSE_PARAMETRE.get_date_fin_saisie_permanents THEN
+      res := 0;
+    END IF;
+  ELSIF 'saisie_service_exterieur' = privilege_name THEN
+    --IF INTERVENANT_HAS_PRIVILEGE( intervenant_id, 'saisie_service' ) = 0 OR itype.code = 'E' THEN -- cascade
+    IF itype.code = 'E' THEN
+      res := 0;
+    END IF;
+  ELSIF 'saisie_service_referentiel' = privilege_name THEN
+    IF itype.code = 'E' THEN
+      res := 0;
+    END IF;
+  ELSIF 'saisie_service_referentiel_autre_structure' = privilege_name THEN
+    res := 1;
+  ELSIF 'saisie_motif_non_paiement' = privilege_name THEN
+    res := statut.peut_saisir_motif_non_paiement;
+  ELSE
+    raise_application_error(-20101, 'Le privilège "' || privilege_name || '" n''existe pas.');
+  END IF;
+  RETURN res;
+END;
+
+FUNCTION GET_TYPE_MODULATEUR_IDS( STRUCTURE_ID NUMERIC, DATE_OBS DATE DEFAULT SYSDATE ) RETURN types_modulateurs AS
+   VSID NUMERIC;
+   tm_result types_modulateurs;
+BEGIN
+  VSID := STRUCTURE_ID;
+  SELECT DISTINCT
+    tms.type_modulateur_id BULK COLLECT INTO tm_result
+  FROM
+    structure s
+    LEFT JOIN type_modulateur_structure tms ON tms.structure_id = s.id
+  WHERE
+    tms.type_modulateur_id IS NOT NULL
+    AND DATE_OBS BETWEEN TMS.VALIDITE_DEBUT AND NVL(TMS.VALIDITE_FIN,DATE_OBS) -- respect des validités
+    AND DATE_OBS >= TMS.HISTO_CREATION                                         -- respect de la date de création
+    AND (TMS.HISTO_DESTRUCTION IS NULL OR TMS.HISTO_DESTRUCTION >= DATE_OBS)   -- respect des destructions
+  START WITH
+    s.id = VSID
+  CONNECT BY
+    PRIOR s.parente_id = s.id
+  ;
+  
+  RETURN tm_result;
+END;
+
+FUNCTION implode(i_query VARCHAR2, i_seperator VARCHAR2 DEFAULT ',') RETURN VARCHAR2 AS
+  l_return CLOB:='';
+  l_temp CLOB;
+  TYPE r_cursor is REF CURSOR;
+  rc r_cursor;
+BEGIN
+  OPEN rc FOR i_query;
+  LOOP
+    FETCH rc INTO L_TEMP;
+    EXIT WHEN RC%NOTFOUND;
+    l_return:=l_return||L_TEMP||i_seperator;
+  END LOOP;
+  RETURN RTRIM(l_return,i_seperator);
+END;
+
+FUNCTION intervenant_est_permanent( INTERVENANT_ID NUMERIC ) RETURN NUMERIC AS
+  resultat NUMERIC;
+BEGIN
+  SELECT COUNT(*) INTO resultat FROM intervenant_permanent WHERE id = INTERVENANT_ID;
+  RETURN resultat;
+END;
+
+FUNCTION intervenant_est_non_autorise( INTERVENANT_ID NUMERIC ) RETURN NUMERIC AS
+  resultat NUMERIC;
+BEGIN
+  SELECT COUNT(*) INTO resultat FROM intervenant i JOIN statut_intervenant si ON si.id = i.statut_id AND si.non_autorise = 1 WHERE i.id = INTERVENANT_ID;
+  RETURN resultat;
+END;
+
+FUNCTION intervenant_peut_saisir_serv( INTERVENANT_ID NUMERIC ) RETURN NUMERIC AS
+  resultat NUMERIC;
+BEGIN
+  SELECT COUNT(*) INTO resultat FROM intervenant i JOIN statut_intervenant si ON si.id = i.statut_id AND si.peut_saisir_service = 1 WHERE i.id = INTERVENANT_ID;
+  RETURN resultat;
+END;
+
+FUNCTION STRUCTURE_DANS_STRUCTURE( structure_testee NUMERIC, structure_cible NUMERIC ) RETURN NUMERIC AS
+  RESULTAT NUMERIC;
+BEGIN
+  IF structure_testee = structure_cible THEN RETURN 1; END IF;
+  
+  select count(*) into resultat
+  from structure
+  WHERE structure.id = structure_testee
+  start with parente_id = structure_cible
+  connect by parente_id = prior id;
+
+  RETURN RESULTAT;
+END;
+
+FUNCTION STR_REDUCE( str CLOB ) RETURN CLOB IS
+BEGIN
+  RETURN NLS_LOWER(str, 'NLS_SORT = BINARY_AI');
+END;
+
+FUNCTION LIKED( haystack CLOB, needle CLOB ) RETURN NUMERIC IS
+BEGIN
+  RETURN CASE WHEN STR_REDUCE(haystack) LIKE STR_REDUCE(needle) THEN 1 ELSE 0 END;
+END;
+
+FUNCTION COMPRISE_ENTRE( date_debut DATE, date_fin DATE DEFAULT NULL, date_obs DATE DEFAULT SYSDATE ) RETURN NUMERIC IS
+  res NUMERIC;
+BEGIN
+  res := CASE WHEN date_obs >= date_debut THEN 1 ELSE 0 END;
+  IF 1 = res AND date_fin IS NOT NULL THEN
+    res := CASE WHEN date_obs < date_fin THEN 1 ELSE 0 END;
+  END IF;
+  RETURN res;
+END;
+
+PROCEDURE DO_NOTHING IS
+BEGIN
+  RETURN;
+END;
+
+FUNCTION VOLUME_HORAIRE_VALIDE( volume_horaire_id NUMERIC ) RETURN NUMERIC IS
+  res NUMERIC;
+BEGIN
+  SELECT count(*) INTO res FROM
+    validation v
+    JOIN validation_vol_horaire vvh ON vvh.validation_id = v.id
+  WHERE
+    1 = ose_divers.comprise_entre( v.histo_creation, v.histo_destruction );
+  RETURN CASE WHEN res > 0 THEN 1 ELSE 0 END;
+END;
+
+FUNCTION CALCUL_TAUX_FI( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
+  nt FLOAT;
+BEGIN
+  nt := fi + fc + fa;
+  IF nt = 0 THEN RETURN 1; END IF;
+  IF fi >= fc AND fi >= fa THEN
+    RETURN 1 - ROUND( fc / nt, arrondi ) - ROUND( fa / nt, arrondi );
+  ELSE
+    RETURN ROUND( fi / nt, arrondi );
+  END IF;
+END;
+  
+FUNCTION CALCUL_TAUX_FC( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
+  nt FLOAT;
+BEGIN
+  nt := fi + fc + fa;
+  IF nt = 0 THEN RETURN 0; END IF;
+  IF fi >= fc AND fi >= fa THEN
+    RETURN ROUND( fc / nt, arrondi );
+  ELSIF fc >= fi AND fc >= fa THEN
+    RETURN 1 - ROUND( fi / nt, arrondi ) - ROUND( fa / nt, arrondi );  
+  ELSE
+    RETURN ROUND( fc / nt, arrondi );
+  END IF;
+END;
+  
+FUNCTION CALCUL_TAUX_FA( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
+  nt FLOAT;
+BEGIN
+  nt := fi + fc + fa;
+  IF nt = 0 THEN RETURN 0; END IF;
+  IF fi >= fc AND fi >= fa THEN
+    RETURN ROUND( fa / nt, arrondi );
+  ELSIF fc >= fi AND fc >= fa THEN
+    RETURN ROUND( fa / nt, arrondi );
+  ELSE
+    RETURN 1 - ROUND( fc / nt, arrondi ) - ROUND( fi / nt, arrondi );
+  END IF;
+END;
+
+FUNCTION STRUCTURE_UNIV_GET_ID RETURN NUMERIC IS
+  res NUMERIC;
+BEGIN
+  SELECT id INTO res FROM structure WHERE niveau = 1 AND ROWNUM = 1;
+  RETURN res;
+END;
+
+END OSE_DIVERS;
+/
+   
+   
+---------------------------
+--Nouveau VIEW
+--V_VOLUME_HORAIRE_ETAT
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_VOLUME_HORAIRE_ETAT" 
+ ( "VOLUME_HORAIRE_ID", "ETAT_VOLUME_HORAIRE_ID"
+  )  AS 
+  SELECT 
+  vh.id volume_horaire_id,
+  evh.id etat_volume_horaire_id
+FROM
+  volume_horaire vh
+  LEFT JOIN contrat c ON c.id = vh.contrat_id AND 1 = ose_divers.comprise_entre( c.histo_creation, c.histo_destruction )
+  LEFT JOIN validation cv ON cv.id = c.validation_id AND 1 = ose_divers.comprise_entre( cv.histo_creation, cv.histo_destruction )
+  JOIN etat_volume_horaire evh ON evh.code = CASE
+    WHEN c.date_retour_signe IS NOT NULL THEN 'contrat-signe'
+    WHEN cv.id IS NOT NULL THEN 'contrat-edite'
+    WHEN EXISTS(
+      SELECT * FROM validation v JOIN validation_vol_horaire vvh ON vvh.validation_id = v.id
+      WHERE vvh.volume_horaire_id = vh.id AND 1 = ose_divers.comprise_entre( v.histo_creation, v.histo_destruction )
+    ) THEN 'valide'
+    ELSE 'saisi'
+  END;
+   
+---------------------------
+--Nouveau VIEW
+--V_NIVEAU_FORMATION
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_NIVEAU_FORMATION" 
+ ( "ID", "CODE", "LIBELLE_LONG", "NIVEAU", "GROUPE_TYPE_FORMATION_ID"
+  )  AS 
+  SELECT DISTINCT
+  gtf.id * 256 + e.niveau id,
+  gtf.libelle_court || e.niveau code,
+  gtf.libelle_long,
+  e.niveau,
+  gtf.id groupe_type_formation_id
+FROM
+  etape e
+  JOIN type_formation tf ON tf.id = e.type_formation_id AND ose_divers.comprise_entre( tf.histo_creation, tf.histo_destruction ) = 1
+  JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id AND ose_divers.comprise_entre( gtf.histo_creation, gtf.histo_destruction ) = 1
+WHERE
+  ose_divers.comprise_entre( e.histo_creation, e.histo_destruction ) = 1
+  AND gtf.pertinence_niveau = 1
+  AND e.niveau IS NOT NULL
+ORDER BY
+  gtf.libelle_long, e.niveau;
+   
+---------------------------
+--Nouveau VIEW
+--V_ETAPE_NIVEAU_FORMATION
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_ETAPE_NIVEAU_FORMATION" 
+ ( "ETAPE_ID", "NIVEAU_FORMATION_ID"
+  )  AS 
+  SELECT
+  e.id etape_id,
+  nf.id niveau_formation_id
+FROM
+  etape e
+  JOIN type_formation tf ON tf.id = e.type_formation_id AND ose_divers.comprise_entre( tf.histo_creation, tf.histo_destruction ) = 1
+  JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id AND ose_divers.comprise_entre( gtf.histo_creation, gtf.histo_destruction ) = 1
+  JOIN v_niveau_formation nf ON nf.code = gtf.libelle_court || e.niveau
+WHERE
+  ose_divers.comprise_entre( e.histo_creation, e.histo_destruction ) = 1
+  AND gtf.pertinence_niveau = 1
+  AND e.niveau IS NOT NULL;
+
 ---------------------------
 --Nouveau VIEW
 --V_TBL_SERVICE_RESUME_VH
@@ -548,29 +952,7 @@ FROM
   LEFT JOIN element_pedagogique       ep ON ep.id   = s.element_pedagogique_id
   LEFT JOIN etape                    etp ON etp.id  = ep.etape_id
   LEFT JOIN v_etape_niveau_formation enf ON enf.etape_id = etp.id;
----------------------------
---Nouveau VIEW
---V_NIVEAU_FORMATION
----------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_NIVEAU_FORMATION" 
- ( "ID", "CODE", "LIBELLE_LONG", "NIVEAU", "GROUPE_TYPE_FORMATION_ID"
-  )  AS 
-  SELECT DISTINCT
-  gtf.id * 256 + e.niveau id,
-  gtf.libelle_court || e.niveau code,
-  gtf.libelle_long,
-  e.niveau,
-  gtf.id groupe_type_formation_id
-FROM
-  etape e
-  JOIN type_formation tf ON tf.id = e.type_formation_id AND ose_divers.comprise_entre( tf.histo_creation, tf.histo_destruction ) = 1
-  JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id AND ose_divers.comprise_entre( gtf.histo_creation, gtf.histo_destruction ) = 1
-WHERE
-  ose_divers.comprise_entre( e.histo_creation, e.histo_destruction ) = 1
-  AND gtf.pertinence_niveau = 1
-  AND e.niveau IS NOT NULL
-ORDER BY
-  gtf.libelle_long, e.niveau;
+
 ---------------------------
 --Nouveau VIEW
 --V_TBL_SERVICE_EXPORT_VH
@@ -620,9 +1002,9 @@ CREATE OR REPLACE FORCE VIEW "OSE"."V_TBL_SERVICE_RESUME_REF"
   -1                              service_id,
   i.id                            intervenant_id,
   ti.id                           type_intervenant_id,
-  i.structure_id                  structure_aff_id,
+  fref.structure_aff_id           structure_aff_id,
   
-  fref.structure_id               structure_ens_id,
+  fref.structure_ens_id           structure_ens_id,
   -1                              niveau_formation_id,
   -1                              etape_id,
   -1                              element_pedagogique_id,
@@ -634,6 +1016,62 @@ FROM
   JOIN statut_intervenant             si ON si.id   = i.statut_id            
   JOIN type_intervenant               ti ON ti.id   = si.type_intervenant_id 
   JOIN formule_referentiel          fref ON FREF.INTERVENANT_ID = FR.INTERVENANT_ID AND FREF.ANNEE_ID = FR.ANNEE_ID;
+
+---------------------------
+--Nouveau MATERIALIZED VIEW
+--MV_ELEMENT_TAUX_REGIMES
+---------------------------
+CREATE MATERIALIZED VIEW "OSE"."MV_ELEMENT_TAUX_REGIMES" ("Z_ELEMENT_PEDAGOGIQUE_ID","ANNEE_ID","TAUX_FI","TAUX_FC","TAUX_FA","SOURCE_ID","SOURCE_CODE") 
+  BUILD IMMEDIATE
+  USING INDEX REFRESH FORCE ON DEMAND
+  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
+  DISABLE QUERY REWRITE AS 
+  SELECT
+  source_code z_element_pedagogique_id,
+  to_number(annee_id) + 1 annee_id,
+  OSE_DIVERS.CALCUL_TAUX_FI( effectif_fi, effectif_fc, effectif_fa ) taux_fi,
+  OSE_DIVERS.CALCUL_TAUX_FC( effectif_fi, effectif_fc, effectif_fa ) taux_fc,
+  OSE_DIVERS.CALCUL_TAUX_FA( effectif_fi, effectif_fc, effectif_fa ) taux_fa,
+  ose_import.get_source_id('Apogee') source_id,
+  annee_id || '-' || source_code source_code
+FROM
+  ucbn_ose_element_effectifs@apoprod e
+WHERE
+  (effectif_fi + effectif_fc + effectif_fa) > 0
+  AND NOT EXISTS(
+    SELECT * FROM element_taux_regimes etr JOIN element_pedagogique ep ON ep.id = etr.element_pedagogique_id WHERE
+      ep.source_code = e.source_code
+      AND etr.annee_id = to_number(e.annee_id) + 1
+      AND etr.source_id <> ose_import.get_source_id('Apogee')
+  );
+
+---------------------------
+--Nouveau VIEW
+--SRC_ELEMENT_TAUX_REGIMES
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."SRC_ELEMENT_TAUX_REGIMES" 
+ ( "ID", "ELEMENT_PEDAGOGIQUE_ID", "ANNEE_ID", "TAUX_FI", "TAUX_FC", "TAUX_FA", "SOURCE_ID", "SOURCE_CODE"
+  )  AS 
+  SELECT
+  null ID,
+  ep.id element_pedagogique_id,
+  etr.annee_id,
+  etr.taux_fi,
+  etr.taux_fc,
+  etr.taux_fa,
+  etr.source_id,
+  etr.source_code
+FROM
+  MV_ELEMENT_TAUX_REGIMES etr
+  LEFT JOIN ELEMENT_PEDAGOGIQUE ep ON ep.source_code = etr.z_element_pedagogique_id
+WHERE
+  NOT EXISTS(
+    SELECT * FROM element_taux_regimes etr_tbl WHERE
+      etr_tbl.element_pedagogique_id = ep.id
+      AND etr_tbl.annee_id = etr.annee_id
+      AND etr_tbl.source_id <> etr.source_id
+  );
+
 ---------------------------
 --Nouveau VIEW
 --V_DIFF_ELEMENT_TAUX_REGIMES
@@ -673,6 +1111,47 @@ WHERE
   OR D.TAUX_FC <> S.TAUX_FC OR (D.TAUX_FC IS NULL AND S.TAUX_FC IS NOT NULL) OR (D.TAUX_FC IS NOT NULL AND S.TAUX_FC IS NULL)
   OR D.TAUX_FI <> S.TAUX_FI OR (D.TAUX_FI IS NULL AND S.TAUX_FI IS NOT NULL) OR (D.TAUX_FI IS NOT NULL AND S.TAUX_FI IS NULL)
 ) diff JOIN source on source.id = diff.source_id WHERE import_action IS NOT NULL AND source.importable = 1;
+
+---------------------------
+--Nouveau MATERIALIZED VIEW
+--MV_EFFECTIFS
+---------------------------
+CREATE MATERIALIZED VIEW "OSE"."MV_EFFECTIFS" ("Z_ELEMENT_PEDAGOGIQUE_ID","ANNEE_ID","FI","FC","FA","SOURCE_ID","SOURCE_CODE") 
+  BUILD IMMEDIATE
+  USING INDEX REFRESH COMPLETE ON DEMAND
+  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
+  DISABLE QUERY REWRITE AS 
+  SELECT
+  source_code z_element_pedagogique_id,
+  to_number(annee_id),
+  effectif_fi fi,
+  effectif_fc fc,
+  effectif_fa fa,
+  ose_import.get_source_id('Apogee') source_id,
+  annee_id || '-' || source_code source_code
+
+from ucbn_ose_element_effectifs@apoprod;
+
+---------------------------
+--Nouveau VIEW
+--SRC_EFFECTIFS
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."SRC_EFFECTIFS" 
+ ( "ID", "ELEMENT_PEDAGOGIQUE_ID", "ANNEE_ID", "FI", "FC", "FA", "SOURCE_ID", "SOURCE_CODE"
+  )  AS 
+  SELECT
+  null id,
+  ep.id element_pedagogique_id,
+  e.annee_id annee_id,
+  e.fi fi,
+  e.fc fc,
+  e.fa fa,
+  e.source_id source_id,
+  e.source_code source_code
+from
+  mv_effectifs e
+  LEFT JOIN element_pedagogique ep ON ep.source_code = e.z_element_pedagogique_id;
+
 ---------------------------
 --Nouveau VIEW
 --V_DIFF_EFFECTIFS
@@ -712,29 +1191,7 @@ WHERE
   OR D.FC <> S.FC OR (D.FC IS NULL AND S.FC IS NOT NULL) OR (D.FC IS NOT NULL AND S.FC IS NULL)
   OR D.FI <> S.FI OR (D.FI IS NULL AND S.FI IS NOT NULL) OR (D.FI IS NOT NULL AND S.FI IS NULL)
 ) diff JOIN source on source.id = diff.source_id WHERE import_action IS NOT NULL AND source.importable = 1;
----------------------------
---Nouveau VIEW
---V_VOLUME_HORAIRE_ETAT
----------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_VOLUME_HORAIRE_ETAT" 
- ( "VOLUME_HORAIRE_ID", "ETAT_VOLUME_HORAIRE_ID"
-  )  AS 
-  SELECT 
-  vh.id volume_horaire_id,
-  evh.id etat_volume_horaire_id
-FROM
-  volume_horaire vh
-  LEFT JOIN contrat c ON c.id = vh.contrat_id AND 1 = ose_divers.comprise_entre( c.histo_creation, c.histo_destruction )
-  LEFT JOIN validation cv ON cv.id = c.validation_id AND 1 = ose_divers.comprise_entre( cv.histo_creation, cv.histo_destruction )
-  JOIN etat_volume_horaire evh ON evh.code = CASE
-    WHEN c.date_retour_signe IS NOT NULL THEN 'contrat-signe'
-    WHEN cv.id IS NOT NULL THEN 'contrat-edite'
-    WHEN EXISTS(
-      SELECT * FROM validation v JOIN validation_vol_horaire vvh ON vvh.validation_id = v.id
-      WHERE vvh.volume_horaire_id = vh.id AND 1 = ose_divers.comprise_entre( v.histo_creation, v.histo_destruction )
-    ) THEN 'valide'
-    ELSE 'saisi'
-  END;
+
 ---------------------------
 --Nouveau VIEW
 --V_TBL_SERVICE_EXPORT
@@ -928,25 +1385,7 @@ UNION
   join SERVICE_REFERENTIEL s on s.INTERVENANT_ID = i.id and s.HISTO_DESTRUCTEUR_ID is null and sysdate between s.VALIDITE_DEBUT and nvl(s.VALIDITE_FIN, sysdate)
   where i.HISTO_DESTRUCTEUR_ID is null
   group by i.NOM_USUEL, i.PRENOM, i.id, i.SOURCE_CODE, s.annee_id, 'referentiel';
----------------------------
---Nouveau VIEW
---SRC_EFFECTIFS
----------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."SRC_EFFECTIFS" 
- ( "ID", "ELEMENT_PEDAGOGIQUE_ID", "ANNEE_ID", "FI", "FC", "FA", "SOURCE_ID", "SOURCE_CODE"
-  )  AS 
-  SELECT
-  null id,
-  ep.id element_pedagogique_id,
-  e.annee_id annee_id,
-  e.fi fi,
-  e.fc fc,
-  e.fa fa,
-  e.source_id source_id,
-  e.source_code source_code
-from
-  mv_effectifs e
-  LEFT JOIN element_pedagogique ep ON ep.source_code = e.z_element_pedagogique_id;
+
 ---------------------------
 --Nouveau VIEW
 --V_WF_INTERVENANT_ETAPE
@@ -959,25 +1398,7 @@ CREATE OR REPLACE FORCE VIEW "OSE"."V_WF_INTERVENANT_ETAPE"
   inner join intervenant i on i.id = ie.intervenant_id
   inner join wf_etape e on e.id = ie.etape_id
   order by i.nom_usuel, i.id, ie.ordre asc;
----------------------------
---Nouveau VIEW
---V_ETAPE_NIVEAU_FORMATION
----------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."V_ETAPE_NIVEAU_FORMATION" 
- ( "ETAPE_ID", "NIVEAU_FORMATION_ID"
-  )  AS 
-  SELECT
-  e.id etape_id,
-  nf.id niveau_formation_id
-FROM
-  etape e
-  JOIN type_formation tf ON tf.id = e.type_formation_id AND ose_divers.comprise_entre( tf.histo_creation, tf.histo_destruction ) = 1
-  JOIN groupe_type_formation gtf ON gtf.id = tf.groupe_id AND ose_divers.comprise_entre( gtf.histo_creation, gtf.histo_destruction ) = 1
-  JOIN v_niveau_formation nf ON nf.code = gtf.libelle_court || e.niveau
-WHERE
-  ose_divers.comprise_entre( e.histo_creation, e.histo_destruction ) = 1
-  AND gtf.pertinence_niveau = 1
-  AND e.niveau IS NOT NULL;
+
 ---------------------------
 --Nouveau VIEW
 --V_TBL_SERVICE_RESUME
@@ -1072,32 +1493,7 @@ WHERE
   OR D.TAUX_FI <> S.TAUX_FI OR (D.TAUX_FI IS NULL AND S.TAUX_FI IS NOT NULL) OR (D.TAUX_FI IS NOT NULL AND S.TAUX_FI IS NULL)
   OR D.TAUX_FOAD <> S.TAUX_FOAD OR (D.TAUX_FOAD IS NULL AND S.TAUX_FOAD IS NOT NULL) OR (D.TAUX_FOAD IS NOT NULL AND S.TAUX_FOAD IS NULL)
 ) diff JOIN source on source.id = diff.source_id WHERE import_action IS NOT NULL AND source.importable = 1;
----------------------------
---Nouveau VIEW
---SRC_ELEMENT_TAUX_REGIMES
----------------------------
-CREATE OR REPLACE FORCE VIEW "OSE"."SRC_ELEMENT_TAUX_REGIMES" 
- ( "ID", "ELEMENT_PEDAGOGIQUE_ID", "ANNEE_ID", "TAUX_FI", "TAUX_FC", "TAUX_FA", "SOURCE_ID", "SOURCE_CODE"
-  )  AS 
-  SELECT
-  null ID,
-  ep.id element_pedagogique_id,
-  etr.annee_id,
-  etr.taux_fi,
-  etr.taux_fc,
-  etr.taux_fa,
-  etr.source_id,
-  etr.source_code
-FROM
-  MV_ELEMENT_TAUX_REGIMES etr
-  LEFT JOIN ELEMENT_PEDAGOGIQUE ep ON ep.source_code = etr.z_element_pedagogique_id
-WHERE
-  NOT EXISTS(
-    SELECT * FROM element_taux_regimes etr_tbl WHERE
-      etr_tbl.element_pedagogique_id = ep.id
-      AND etr_tbl.annee_id = etr.annee_id
-      AND etr_tbl.source_id <> etr.source_id
-  );
+
 ---------------------------
 --Nouveau VIEW
 --V_CTL_SERVICES_ODF_HISTO
@@ -1190,7 +1586,7 @@ FROM
   JOIN MV_HARP_INDIVIDU_STATUT his ON his.no_individu = ltrim(TO_CHAR(i.no_individu,'99999999'))
   LEFT JOIN validite ON (validite.no_individu = i.no_individu)
 WHERE
-  'P' = his.type_intervenant
+  'P' = his.type_intervenant;
 ---------------------------
 --Modifié MATERIALIZED VIEW
 --MV_INTERVENANT_EXTERIEUR
@@ -1417,52 +1813,8 @@ FROM
   LEFT JOIN affectation_recherche@harpprod ar ON ar.no_dossier_pers = i.no_individu
 
 ) tmp1
----------------------------
---Nouveau MATERIALIZED VIEW
---MV_ELEMENT_TAUX_REGIMES
----------------------------
-CREATE MATERIALIZED VIEW "OSE"."MV_ELEMENT_TAUX_REGIMES" ("Z_ELEMENT_PEDAGOGIQUE_ID","ANNEE_ID","TAUX_FI","TAUX_FC","TAUX_FA","SOURCE_ID","SOURCE_CODE") 
-  BUILD IMMEDIATE
-  USING INDEX REFRESH FORCE ON DEMAND
-  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
-  DISABLE QUERY REWRITE AS 
-  SELECT
-  source_code z_element_pedagogique_id,
-  to_number(annee_id) + 1 annee_id,
-  OSE_DIVERS.CALCUL_TAUX_FI( effectif_fi, effectif_fc, effectif_fa ) taux_fi,
-  OSE_DIVERS.CALCUL_TAUX_FC( effectif_fi, effectif_fc, effectif_fa ) taux_fc,
-  OSE_DIVERS.CALCUL_TAUX_FA( effectif_fi, effectif_fc, effectif_fa ) taux_fa,
-  ose_import.get_source_id('Apogee') source_id,
-  annee_id || '-' || source_code source_code
-FROM
-  ucbn_ose_element_effectifs@apoprod e
-WHERE
-  (effectif_fi + effectif_fc + effectif_fa) > 0
-  AND NOT EXISTS(
-    SELECT * FROM element_taux_regimes etr JOIN element_pedagogique ep ON ep.id = etr.element_pedagogique_id WHERE
-      ep.source_code = e.source_code
-      AND etr.annee_id = to_number(e.annee_id) + 1
-      AND etr.source_id <> ose_import.get_source_id('Apogee')
-  )
----------------------------
---Nouveau MATERIALIZED VIEW
---MV_EFFECTIFS
----------------------------
-CREATE MATERIALIZED VIEW "OSE"."MV_EFFECTIFS" ("Z_ELEMENT_PEDAGOGIQUE_ID","ANNEE_ID","FI","FC","FA","SOURCE_ID","SOURCE_CODE") 
-  BUILD IMMEDIATE
-  USING INDEX REFRESH COMPLETE ON DEMAND
-  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
-  DISABLE QUERY REWRITE AS 
-  SELECT
-  source_code z_element_pedagogique_id,
-  to_number(annee_id),
-  effectif_fi fi,
-  effectif_fc fc,
-  effectif_fa fa,
-  ose_import.get_source_id('Apogee') source_id,
-  annee_id || '-' || source_code source_code
 
-from ucbn_ose_element_effectifs@apoprod
+
 ---------------------------
 --Nouveau INDEX
 --MOTIF_MODIFICATION_SERVIC_UK1
@@ -2695,22 +3047,7 @@ CREATE OR REPLACE PACKAGE "OSE"."OSE_TEST" AS
   FUNCTION GET_TYPE_VALIDATION( code VARCHAR2 DEFAULT NULL ) RETURN type_validation%rowtype;
 END OSE_TEST;
 /
----------------------------
---Modifié PACKAGE
---OSE_PARAMETRE
----------------------------
-CREATE OR REPLACE PACKAGE "OSE"."OSE_PARAMETRE" AS 
 
-  function get_etablissement return Numeric;
-  function get_annee return Numeric;
-  function get_ose_user return Numeric;
-  function get_drh_structure_id return Numeric;
-  function get_date_fin_saisie_permanents RETURN DATE;
-  function get_formule_package_name RETURN VARCHAR2;
-  function get_formule_function_name RETURN VARCHAR2;
-
-END OSE_PARAMETRE;
-/
 ---------------------------
 --Modifié PACKAGE
 --OSE_IMPORT
@@ -2847,46 +3184,7 @@ CREATE OR REPLACE PACKAGE "OSE"."OSE_FORMULE" AS
   PROCEDURE RUN_SIGNAL;
 
 END OSE_FORMULE;
-/
----------------------------
---Modifié PACKAGE
---OSE_DIVERS
----------------------------
-CREATE OR REPLACE PACKAGE "OSE"."OSE_DIVERS" AS 
 
-  FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC;
-
-  FUNCTION GET_TYPE_MODULATEUR_IDS( STRUCTURE_ID NUMERIC, DATE_OBS DATE DEFAULT SYSDATE ) RETURN types_modulateurs;
-
-  FUNCTION implode(i_query VARCHAR2, i_seperator VARCHAR2 DEFAULT ',') RETURN VARCHAR2;
-
-  FUNCTION intervenant_est_permanent( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION intervenant_est_non_autorise( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION intervenant_peut_saisir_serv( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION STRUCTURE_DANS_STRUCTURE( structure_testee NUMERIC, structure_cible NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION STR_REDUCE( str CLOB ) RETURN CLOB;
-  
-  FUNCTION LIKED( haystack CLOB, needle CLOB ) RETURN NUMERIC;
-
-  FUNCTION COMPRISE_ENTRE( date_debut DATE, date_fin DATE DEFAULT NULL, date_obs DATE DEFAULT SYSDATE ) RETURN NUMERIC;
-
-  PROCEDURE DO_NOTHING;
-
-  FUNCTION VOLUME_HORAIRE_VALIDE( volume_horaire_id NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION CALCUL_TAUX_FI( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
-  
-  FUNCTION CALCUL_TAUX_FC( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
-  
-  FUNCTION CALCUL_TAUX_FA( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
-
-  FUNCTION STRUCTURE_UNIV_GET_ID RETURN NUMERIC;
-
-END OSE_DIVERS;
 /
 ---------------------------
 --Nouveau PACKAGE BODY
@@ -6213,70 +6511,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_TEST" AS
   
 END OSE_TEST;
 /
----------------------------
---Modifié PACKAGE BODY
---OSE_PARAMETRE
----------------------------
-CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_PARAMETRE" AS
 
-  cache_ose_user NUMERIC;
-  cache_annee_id NUMERIC;
-
-  function get_etablissement return Numeric AS
-    etab_id numeric;
-  BEGIN
-    select to_number(valeur) into etab_id from parametre where nom = 'etablissement';
-    RETURN etab_id;
-  END get_etablissement;
-
-  function get_annee return Numeric AS
-    annee_id numeric;
-  BEGIN
-    IF cache_annee_id IS NOT NULL THEN RETURN cache_annee_id; END IF;
-    select to_number(valeur) into annee_id from parametre where nom = 'annee';
-    cache_annee_id := annee_id;
-    RETURN cache_annee_id;
-  END get_annee;
-
-  function get_ose_user return Numeric AS
-    ose_user_id numeric;
-  BEGIN
-    IF cache_ose_user IS NOT NULL THEN RETURN cache_ose_user; END IF;
-    select to_number(valeur) into ose_user_id from parametre where nom = 'oseuser';
-    cache_ose_user := ose_user_id;
-    RETURN cache_ose_user;
-  END get_ose_user;
-
-  function get_drh_structure_id return Numeric AS
-    drh_structure_id numeric;
-  BEGIN
-    select to_number(valeur) into drh_structure_id from parametre where nom = 'drh_structure_id';
-    RETURN drh_structure_id;
-  END get_drh_structure_id;
-
-  FUNCTION get_date_fin_saisie_permanents RETURN DATE IS
-    date_fin_saisie_permanents date;
-  BEGIN
-    select TO_DATE(valeur, 'dd/mm/yyyy') into date_fin_saisie_permanents from parametre where nom = 'date_fin_saisie_permanents';
-    RETURN date_fin_saisie_permanents;
-  END;
-
-  FUNCTION get_formule_package_name RETURN VARCHAR2 IS
-    formule_package_name VARCHAR2(30);
-  BEGIN
-    SELECT valeur INTO formule_package_name FROM parametre WHERE nom = 'formule_package_name';
-    RETURN formule_package_name;
-  END;
-  
-  FUNCTION get_formule_function_name RETURN VARCHAR2 IS
-    formule_function_name VARCHAR2(30);
-  BEGIN
-    SELECT valeur INTO formule_function_name FROM parametre WHERE nom = 'formule_function_name';
-    RETURN formule_function_name;
-  END;
-
-END OSE_PARAMETRE;
-/
 ---------------------------
 --Modifié PACKAGE BODY
 --OSE_IMPORT
@@ -8629,207 +8864,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
 
 END OSE_FORMULE;
 /
----------------------------
---Modifié PACKAGE BODY
---OSE_DIVERS
----------------------------
-CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_DIVERS" AS
-
-FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC IS
-  statut statut_intervenant%rowtype;
-  itype  type_intervenant%rowtype;
-  res NUMERIC;
-BEGIN
-  res := 1;
-  SELECT si.* INTO statut FROM statut_intervenant si JOIN intervenant i ON i.statut_id = si.id WHERE i.id = intervenant_id;
-  SELECT ti.* INTO itype  FROM type_intervenant ti WHERE ti.id = statut.type_intervenant_id;
-  IF 'saisie_service' = privilege_name THEN
-    res := statut.peut_saisir_service;
-    IF itype.code = 'P' AND SYSDATE >= OSE_PARAMETRE.get_date_fin_saisie_permanents THEN
-      res := 0;
-    END IF;
-  ELSIF 'saisie_service_exterieur' = privilege_name THEN
-    --IF INTERVENANT_HAS_PRIVILEGE( intervenant_id, 'saisie_service' ) = 0 OR itype.code = 'E' THEN -- cascade
-    IF itype.code = 'E' THEN
-      res := 0;
-    END IF;
-  ELSIF 'saisie_service_referentiel' = privilege_name THEN
-    IF itype.code = 'E' THEN
-      res := 0;
-    END IF;
-  ELSIF 'saisie_service_referentiel_autre_structure' = privilege_name THEN
-    res := 1;
-  ELSIF 'saisie_motif_non_paiement' = privilege_name THEN
-    res := statut.peut_saisir_motif_non_paiement;
-  ELSE
-    raise_application_error(-20101, 'Le privilège "' || privilege_name || '" n''existe pas.');
-  END IF;
-  RETURN res;
-END;
-
-FUNCTION GET_TYPE_MODULATEUR_IDS( STRUCTURE_ID NUMERIC, DATE_OBS DATE DEFAULT SYSDATE ) RETURN types_modulateurs AS
-   VSID NUMERIC;
-   tm_result types_modulateurs;
-BEGIN
-  VSID := STRUCTURE_ID;
-  SELECT DISTINCT
-    tms.type_modulateur_id BULK COLLECT INTO tm_result
-  FROM
-    structure s
-    LEFT JOIN type_modulateur_structure tms ON tms.structure_id = s.id
-  WHERE
-    tms.type_modulateur_id IS NOT NULL
-    AND DATE_OBS BETWEEN TMS.VALIDITE_DEBUT AND NVL(TMS.VALIDITE_FIN,DATE_OBS) -- respect des validités
-    AND DATE_OBS >= TMS.HISTO_CREATION                                         -- respect de la date de création
-    AND (TMS.HISTO_DESTRUCTION IS NULL OR TMS.HISTO_DESTRUCTION >= DATE_OBS)   -- respect des destructions
-  START WITH
-    s.id = VSID
-  CONNECT BY
-    PRIOR s.parente_id = s.id
-  ;
-  
-  RETURN tm_result;
-END;
-
-FUNCTION implode(i_query VARCHAR2, i_seperator VARCHAR2 DEFAULT ',') RETURN VARCHAR2 AS
-  l_return CLOB:='';
-  l_temp CLOB;
-  TYPE r_cursor is REF CURSOR;
-  rc r_cursor;
-BEGIN
-  OPEN rc FOR i_query;
-  LOOP
-    FETCH rc INTO L_TEMP;
-    EXIT WHEN RC%NOTFOUND;
-    l_return:=l_return||L_TEMP||i_seperator;
-  END LOOP;
-  RETURN RTRIM(l_return,i_seperator);
-END;
-
-FUNCTION intervenant_est_permanent( INTERVENANT_ID NUMERIC ) RETURN NUMERIC AS
-  resultat NUMERIC;
-BEGIN
-  SELECT COUNT(*) INTO resultat FROM intervenant_permanent WHERE id = INTERVENANT_ID;
-  RETURN resultat;
-END;
-
-FUNCTION intervenant_est_non_autorise( INTERVENANT_ID NUMERIC ) RETURN NUMERIC AS
-  resultat NUMERIC;
-BEGIN
-  SELECT COUNT(*) INTO resultat FROM intervenant i JOIN statut_intervenant si ON si.id = i.statut_id AND si.non_autorise = 1 WHERE i.id = INTERVENANT_ID;
-  RETURN resultat;
-END;
-
-FUNCTION intervenant_peut_saisir_serv( INTERVENANT_ID NUMERIC ) RETURN NUMERIC AS
-  resultat NUMERIC;
-BEGIN
-  SELECT COUNT(*) INTO resultat FROM intervenant i JOIN statut_intervenant si ON si.id = i.statut_id AND si.peut_saisir_service = 1 WHERE i.id = INTERVENANT_ID;
-  RETURN resultat;
-END;
-
-FUNCTION STRUCTURE_DANS_STRUCTURE( structure_testee NUMERIC, structure_cible NUMERIC ) RETURN NUMERIC AS
-  RESULTAT NUMERIC;
-BEGIN
-  IF structure_testee = structure_cible THEN RETURN 1; END IF;
-  
-  select count(*) into resultat
-  from structure
-  WHERE structure.id = structure_testee
-  start with parente_id = structure_cible
-  connect by parente_id = prior id;
-
-  RETURN RESULTAT;
-END;
-
-FUNCTION STR_REDUCE( str CLOB ) RETURN CLOB IS
-BEGIN
-  RETURN NLS_LOWER(str, 'NLS_SORT = BINARY_AI');
-END;
-
-FUNCTION LIKED( haystack CLOB, needle CLOB ) RETURN NUMERIC IS
-BEGIN
-  RETURN CASE WHEN STR_REDUCE(haystack) LIKE STR_REDUCE(needle) THEN 1 ELSE 0 END;
-END;
-
-FUNCTION COMPRISE_ENTRE( date_debut DATE, date_fin DATE DEFAULT NULL, date_obs DATE DEFAULT SYSDATE ) RETURN NUMERIC IS
-  res NUMERIC;
-BEGIN
-  res := CASE WHEN date_obs >= date_debut THEN 1 ELSE 0 END;
-  IF 1 = res AND date_fin IS NOT NULL THEN
-    res := CASE WHEN date_obs < date_fin THEN 1 ELSE 0 END;
-  END IF;
-  RETURN res;
-END;
-
-PROCEDURE DO_NOTHING IS
-BEGIN
-  RETURN;
-END;
-
-FUNCTION VOLUME_HORAIRE_VALIDE( volume_horaire_id NUMERIC ) RETURN NUMERIC IS
-  res NUMERIC;
-BEGIN
-  SELECT count(*) INTO res FROM
-    validation v
-    JOIN validation_vol_horaire vvh ON vvh.validation_id = v.id
-  WHERE
-    1 = ose_divers.comprise_entre( v.histo_creation, v.histo_destruction );
-  RETURN CASE WHEN res > 0 THEN 1 ELSE 0 END;
-END;
-
-FUNCTION CALCUL_TAUX_FI( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
-  nt FLOAT;
-BEGIN
-  nt := fi + fc + fa;
-  IF nt = 0 THEN RETURN 1; END IF;
-  IF fi >= fc AND fi >= fa THEN
-    RETURN 1 - ROUND( fc / nt, arrondi ) - ROUND( fa / nt, arrondi );
-  ELSE
-    RETURN ROUND( fi / nt, arrondi );
-  END IF;
-END;
-  
-FUNCTION CALCUL_TAUX_FC( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
-  nt FLOAT;
-BEGIN
-  nt := fi + fc + fa;
-  IF nt = 0 THEN RETURN 0; END IF;
-  IF fi >= fc AND fi >= fa THEN
-    RETURN ROUND( fc / nt, arrondi );
-  ELSIF fc >= fi AND fc >= fa THEN
-    RETURN 1 - ROUND( fi / nt, arrondi ) - ROUND( fa / nt, arrondi );  
-  ELSE
-    RETURN ROUND( fc / nt, arrondi );
-  END IF;
-END;
-  
-FUNCTION CALCUL_TAUX_FA( fi FLOAT, fc FLOAT, fa FLOAT, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT IS
-  nt FLOAT;
-BEGIN
-  nt := fi + fc + fa;
-  IF nt = 0 THEN RETURN 0; END IF;
-  IF fi >= fc AND fi >= fa THEN
-    RETURN ROUND( fa / nt, arrondi );
-  ELSIF fc >= fi AND fc >= fa THEN
-    RETURN ROUND( fa / nt, arrondi );
-  ELSE
-    RETURN 1 - ROUND( fc / nt, arrondi ) - ROUND( fi / nt, arrondi );
-  END IF;
-END;
-
-FUNCTION STRUCTURE_UNIV_GET_ID RETURN NUMERIC IS
-  res NUMERIC;
-BEGIN
-  SELECT id INTO res FROM structure WHERE niveau = 1 AND ROWNUM = 1;
-  RETURN res;
-END;
-
-END OSE_DIVERS;
-/
-
-
-
-
 
 
 -- ********************************************************************* --

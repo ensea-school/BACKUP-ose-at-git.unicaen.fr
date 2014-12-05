@@ -1,4 +1,5 @@
 select
+  i.id i_id,
   s.id s_id,
   vh.ID vh_id, 
   epp.libelle_long periode_ep,
@@ -25,7 +26,7 @@ from
   LEFT JOIN validation v ON v.id = VVH.VALIDATION_ID
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
-  i.source_code = 47955
+  i.source_code = '91521'
   --AND vh.histo_destruction IS NULL
   --AND ti.code = 'TP'
 order by
@@ -38,37 +39,5 @@ DELETE FROM VALIDATION_VOL_HORAIRE WHERE VALIDATION_ID = 42 AND VOLUME_HORAIRE_I
 SELECT COUNT(*) FROM VALIDATION_VOL_HORAIRE WHERE VOLUME_HORAIRE_ID = 187;
 DELETE FROM volume_horaire WHERE id IN (727);
 update volume_horaire set heures = 3 where id=728;
-update volume_horaire set histo_destruction = null, histo_destructeur_id = null where id = 728;
-
-
-SELECT COUNT(*)
-  FROM 
-    VALIDATION_VOL_HORAIRE vvh
-    JOIN validation v ON v.id = VVH.VALIDATION_ID
-  WHERE
-    V.HISTO_DESTRUCTION IS NULL
-    AND vvh.VOLUME_HORAIRE_ID = 699;
-    
-    
-INSERT INTO ETAT_VOLUME_HORAIRE (
-    CODE,
-    LIBELLE,
-    ID, HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
-)VALUES(
-    'contrat-valide',
-    'Contrat validé',
-    ETAT_VOLUME_HORAIRE_ID_SEQ.NEXTVAL, 1, 1
-);
-
-
-
-
-
-
-
-
-
-
-
-
+update volume_horaire set histo_destruction = null, histo_destructeur_id = null where id = 24883;
 

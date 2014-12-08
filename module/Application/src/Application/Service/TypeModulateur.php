@@ -63,22 +63,30 @@ class TypeModulateur extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        if (! array_key_exists($structure->getId(), $this->finderByStructureCache)){
-            $sql = "SELECT value(tm) tmid FROM table(OSE_DIVERS.GET_TYPE_MODULATEUR_IDS(:structure_id)) tm";
-            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, array('structure_id' => $structure->getId()));
-            $this->finderByStructureCache[$structure->getId()] = $stmt->fetchAll();
-        }
+        $pid = 'str'.uniqid();
+        $qb->andWhere(":$pid MEMBER OF $alias.structure")->setParameter($pid, $structure);
 
-        if (! empty($this->finderByStructureCache[$structure->getId()])){
-            $or = $qb->expr()->orX();
-            foreach( $this->finderByStructureCache[$structure->getId()] as $row ){
-                $or->add($alias.'.id = '.(int)$row['TMID']);
-            }
-            $qb->andWhere($or);
-        }else{
-            $qb->andWhere( '1 = 2' ); // Pas de types de modulateurs trouvés
-        }
         return $qb;
+    }
+
+    /**
+     * Retourne une entité à partir de son code
+     * Retourne null si le code est null
+     *
+     * @param string|string[] $code
+     * @return mixed|null
+     */
+    public function getByCode($code)
+    {
+        if(is_array($code)){
+            list($qb,$alias) = $this->initQuery();
+            $qb->andWhere($alias.'.code IN (:'.$alias.'_code)')->setParameter($alias.'_code', $code);
+            return $this->getList( $qb );
+        }elseif ($code){
+            return $this->getRepo()->findOneBy(array('code' => $code));
+        }else{
+            return null;
+        }
     }
 
     /**
@@ -93,22 +101,9 @@ class TypeModulateur extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        /* Filtre par la structure de l'élément pédagogique */
-        if ($element->getStructure()){
-            $qb = $this->finderByStructure($element->getStructure());
-        }
-
-        /* Filtre par les paramètres intrinsèques à l'élément pédagogique */
-        $codes = $this->getServiceLocator()->get('ProcessModulateur')->getTypeModulateurCodes($element);
-        if (! empty($codes)){
-            $or = $qb->expr()->orX();
-            foreach( $codes as $code ){
-                $or->add($alias.'.code = \''.(string)$code."'");
-            }
-            $qb->andWhere($or);
-        }else{
-            $qb->andWhere( '1 = 2' ); // Aucun modulateur ne doit être trouvé
-        }
+        $pid = 'ep'.uniqid();
+        $qb->andWhere(":$pid MEMBER OF $alias.elementPedagogique")->setParameter($pid, $element);
+        
         return $qb;
     }
 
@@ -116,14 +111,9 @@ class TypeModulateur extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        /* Filtre par la structure de l'étape */
-        if ($etape->getStructure()){
-            $qb = $this->finderByStructure($etape->getStructure());
-        }
+        $pid = 'etp'.uniqid();
+        $qb->andWhere(":$pid MEMBER OF $alias.etape")->setParameter($pid, $etape);
 
-        foreach( $etape->getElementPedagogique() as $element ){
-            $qb = $this->finderByElementPedagogique($element, $qb, $alias);
-        }
         return $qb;
     }
 

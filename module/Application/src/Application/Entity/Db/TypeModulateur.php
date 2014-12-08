@@ -89,6 +89,21 @@ class TypeModulateur implements HistoriqueAwareInterface
     protected $histoCreateur;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $elementPedagogique;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $etape;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $structure;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -441,5 +456,35 @@ class TypeModulateur implements HistoriqueAwareInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Get elementPedagogique
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getElementPedagogique()
+    {
+        return $this->elementPedagogique;
+    }
+
+    /**
+     * Get etape
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEtape()
+    {
+        return $this->etape;
+    }
+
+    /**
+     * Get structure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStructure()
+    {
+        return $this->structure;
     }
 }

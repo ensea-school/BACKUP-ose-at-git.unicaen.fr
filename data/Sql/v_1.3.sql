@@ -10,11 +10,10 @@ update element_pedagogique set fc = 0 WHERE fc IS NULL;
 update element_pedagogique set fa = 0 WHERE fa IS NULL;
 
 INSERT INTO "OSE"."PARAMETRE" (ID, NOM, VALEUR, DESCRIPTION, VALIDITE_DEBUT, HISTO_CREATION, HISTO_CREATEUR_ID, HISTO_MODIFICATION, HISTO_MODIFICATEUR_ID) 
-  VALUES ('9', 'formule_package_name', 'OSE_FORMULE', 'Nom du package contenant la formule de calcul', TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '1');
+  VALUES ('9', 'formule_package_name', 'UNICAEN_OSE_FORMULE', 'Nom du package contenant la formule de calcul', TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '1');
 
 INSERT INTO "OSE"."PARAMETRE" (ID, NOM, VALEUR, DESCRIPTION, VALIDITE_DEBUT, HISTO_CREATION, HISTO_CREATEUR_ID, HISTO_MODIFICATION, HISTO_MODIFICATEUR_ID) 
-  VALUES ('10', 'formule_procedure_name', 'CALCUL_UNICAEN_V2', 'Nom de la procédure permettant d''exécuter la formule de calcul', TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '1');
-
+  VALUES ('10', 'formule_function_name', 'CALCUL_RESULTAT_V2', 'Nom de la procédure permettant d''exécuter la formule de calcul', TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2014-11-03 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '1');
 
 
 
@@ -130,6 +129,11 @@ INSERT INTO "OSE"."PARAMETRE" (ID, NOM, VALEUR, DESCRIPTION, VALIDITE_DEBUT, HIS
 	CONSTRAINT "ETAT_VOLUME_HORAIRE_HMFK" FOREIGN KEY ("HISTO_MODIFICATEUR_ID")
 	 REFERENCES "OSE"."UTILISATEUR" ("ID") ENABLE
    );
+
+Insert into ETAT_VOLUME_HORAIRE (ID,CODE,LIBELLE,ORDRE,HISTO_CREATION,HISTO_CREATEUR_ID,HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID,HISTO_DESTRUCTION,HISTO_DESTRUCTEUR_ID) values ('1','saisi','Saisi','1',sysdate,1,sysdate,1,null,null);
+Insert into ETAT_VOLUME_HORAIRE (ID,CODE,LIBELLE,ORDRE,HISTO_CREATION,HISTO_CREATEUR_ID,HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID,HISTO_DESTRUCTION,HISTO_DESTRUCTEUR_ID) values ('2','valide','Validé','2',sysdate,1,sysdate,1,null,null);
+Insert into ETAT_VOLUME_HORAIRE (ID,CODE,LIBELLE,ORDRE,HISTO_CREATION,HISTO_CREATEUR_ID,HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID,HISTO_DESTRUCTION,HISTO_DESTRUCTEUR_ID) values ('3','contrat-edite','Contrat édité','3',sysdate,1,sysdate,1,null,null);
+Insert into ETAT_VOLUME_HORAIRE (ID,CODE,LIBELLE,ORDRE,HISTO_CREATION,HISTO_CREATEUR_ID,HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID,HISTO_DESTRUCTION,HISTO_DESTRUCTEUR_ID) values ('4','contrat-signe','Contrat signé','4',sysdate,1,sysdate,1,null,null);
 
 
 ---------------------------
@@ -1548,6 +1552,76 @@ WHERE
   )
 order by
   nom_usuel, prenom, etape, "ELEMENT", heures;
+
+---------------------------
+--Nouveau MATERIALIZED VIEW
+--MV_HARP_INDIVIDU_STATUT
+---------------------------
+CREATE MATERIALIZED VIEW "OSE"."MV_HARP_INDIVIDU_STATUT" ("NO_INDIVIDU","STATUT","TYPE_INTERVENANT") 
+  BUILD IMMEDIATE
+  USING INDEX REFRESH COMPLETE ON DEMAND
+  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
+  DISABLE QUERY REWRITE AS 
+  SELECT
+  no_individu, 
+  statut,
+  ti.code type_intervenant
+FROM
+(
+SELECT
+  i.no_individu,
+  CASE
+    WHEN NVL(c.ordre,99999) > NVL(tp.ordre,99999) THEN COALESCE(tp.statut, c.statut, 'AUTRES')
+    WHEN NVL(c.ordre,99999) <= NVL(tp.ordre,99999) THEN COALESCE(c.statut, tp.statut, 'AUTRES')
+  END statut
+FROM
+  individu@harpprod i
+  LEFT JOIN (SELECT DISTINCT
+      ct.no_dossier_pers no_dossier_pers,
+      si.source_code statut,
+      si.ordre,
+      min(si.ordre) over(partition BY ct.no_dossier_pers) AS min_ordre
+    FROM
+      contrat_travail@harpprod ct
+      JOIN contrat_avenant@harpprod ca ON ca.no_dossier_pers = ct.no_dossier_pers AND ca.no_contrat_travail = ct.no_contrat_travail
+      JOIN statut_intervenant si ON si.source_code = CASE 
+        WHEN ct.c_type_contrat_trav IN ('MC','MA')                THEN 'ASS_MI_TPS'
+        WHEN ct.c_type_contrat_trav IN ('AT')                     THEN 'ATER'
+        WHEN ct.c_type_contrat_trav IN ('AX')                     THEN 'ATER_MI_TPS'
+        WHEN ct.c_type_contrat_trav IN ('DO')                     THEN 'DOCTOR'
+        WHEN ct.c_type_contrat_trav IN ('GI','PN')                THEN 'ENS_CONTRACT'
+        WHEN ct.c_type_contrat_trav IN ('LT','LB')                THEN 'LECTEUR'
+        WHEN ct.c_type_contrat_trav IN ('MB')                     THEN 'MAITRE_LANG'
+        WHEN ct.c_type_contrat_trav IN ('C3','CA','CB','CD','HA','HS','S3','SX','SW','SY','CS','SZ','VA') THEN 'BIATSS'
+        WHEN ct.c_type_contrat_trav IN ('CU','AH','CG','MM','PM','IN','DN','ET','NF') THEN 'NON_AUTORISE'
+                                                                  ELSE 'AUTRES'
+      END
+    WHERE
+      SYSDATE BETWEEN ca.d_deb_contrat_trav AND NVL(ca.d_fin_contrat_trav,SYSDATE)
+  ) c ON c.no_dossier_pers = i.no_individu AND c.ordre = c.min_ordre
+  LEFT JOIN (SELECT DISTINCT
+      a.no_dossier_pers,
+      si.source_code statut,
+      si.ordre,
+      min(si.ordre) over(partition BY a.no_dossier_pers) AS min_ordre
+    FROM
+      affectation@harpprod a
+      JOIN carriere@harpprod c ON  c.no_dossier_pers = a.no_dossier_pers AND c.no_seq_carriere = a.no_seq_carriere
+      JOIN statut_intervenant si ON si.source_code = CASE 
+        WHEN c.c_type_population IN ('DA','OA','DC')                THEN 'ENS_2ND_DEG'
+        WHEN c.c_type_population IN ('SA')                          THEN 'ENS_CH'
+        WHEN c.c_type_population IN ('AA','AC','BA','IA','MA')      THEN 'BIATSS'
+        WHEN c.c_type_population IN ('MG','SB')                     THEN 'NON_AUTORISE'
+                                                                    ELSE 'AUTRES'
+      END
+    WHERE
+      (SYSDATE BETWEEN a.d_deb_affectation AND COALESCE(a.d_fin_affectation,SYSDATE))
+  ) tp ON tp.no_dossier_pers = i.no_individu AND tp.ordre = tp.min_ordre
+  
+) tmp
+JOIN statut_intervenant si ON si.source_code = tmp.statut
+JOIN type_intervenant ti ON ti.id = si.type_intervenant_id;
+
 ---------------------------
 --Modifié MATERIALIZED VIEW
 --MV_INTERVENANT_PERMANENT
@@ -1629,7 +1703,68 @@ FROM
   LEFT JOIN SITUATION_FAMILIALE s on (s.code = p.C_SITUATION_FAMILLE)
   LEFT JOIN validite ON (validite.no_individu = i.no_individu)
 WHERE
-  'E' = his.type_intervenant
+  'E' = his.type_intervenant;
+
+---------------------------
+--Nouveau MATERIALIZED VIEW
+--MV_HARP_INDIVIDU_BANQUE
+---------------------------
+CREATE MATERIALIZED VIEW "OSE"."MV_HARP_INDIVIDU_BANQUE" ("NO_INDIVIDU","IBAN","BIC") 
+  BUILD IMMEDIATE
+  USING INDEX REFRESH COMPLETE ON DEMAND
+  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
+  DISABLE QUERY REWRITE AS 
+  WITH comptes AS (SELECT
+  i.no_dossier_pers no_individu,
+  rank() over(partition by i.no_dossier_pers order by d_creation) rank_compte,
+  count(*) over(partition by i.no_dossier_pers) nombre_comptes,
+  CASE WHEN i.no_dossier_pers IS NOT NULL THEN
+    trim( NVL(i.c_pays_iso || i.cle_controle,'FR00') || ' ' ||
+    substr(i.c_banque,0,4) || ' ' ||
+    substr(i.c_banque,5,1) || substr(i.c_guichet,0,3) || ' ' ||
+    substr(i.c_guichet,4,2) || substr(i.no_compte,0,2) || ' ' ||
+    substr(i.no_compte,3,4) || ' ' ||
+    substr(i.no_compte,7,4) || ' ' ||
+    substr(i.no_compte,11) || i.cle_rib) ELSE NULL END IBAN,
+  CASE WHEN i.no_dossier_pers IS NOT NULL THEN i.c_banque_bic || ' ' || i.c_pays_bic || ' ' || i.c_emplacement || ' ' || i.c_branche ELSE NULL END BIC
+from
+  individu_banque@harpprod i
+)
+SELECT no_individu, iban, bic FROM comptes WHERE rank_compte = nombre_comptes;
+
+---------------------------
+--Nouveau MATERIALIZED VIEW
+--MV_HARP_IND_DER_STRUCT
+---------------------------
+CREATE MATERIALIZED VIEW "OSE"."MV_HARP_IND_DER_STRUCT" ("NO_INDIVIDU","DATE_DEPART","C_STRUCTURE") 
+  BUILD IMMEDIATE
+  USING INDEX REFRESH COMPLETE ON DEMAND
+  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
+  DISABLE QUERY REWRITE AS 
+  SELECT
+  no_individu,
+  CASE date_depart WHEN to_date('01/01/1000','DD/MM/YYYY') THEN NULL else date_depart END date_depart,
+  pbs_divers__cicg.c_structure_globale@harpprod(no_individu, CASE date_depart WHEN to_date('01/01/1000','DD/MM/YYYY') THEN SYSDATE else date_depart END ) c_structure
+FROM
+(
+SELECT DISTINCT
+  i.no_individu,
+  MAX(greatest(
+    CASE WHEN aa.no_seq_affectation IS NOT NULL THEN nvl(aa.d_fin_affectation,SYSDATE) ELSE to_date('01/01/1000','DD/MM/YYYY') END,
+    CASE WHEN ar.no_seq_affe_rech IS NOT NULL THEN nvl(ar.d_fin_affe_rech,SYSDATE) ELSE to_date('01/01/1000','DD/MM/YYYY') END,
+    CASE WHEN ufe.no_individu IS NOT NULL THEN nvl(ufe.fin,SYSDATE) ELSE to_date('01/01/1000','DD/MM/YYYY') END,
+    CASE WHEN cc.no_seq_chercheur IS NOT NULL THEN nvl(cc.d_fin_str_trav,SYSDATE) ELSE to_date('01/01/1000','DD/MM/YYYY') END
+  )) over(partition by i.no_individu)
+   date_depart
+FROM
+  individu@harpprod i
+  LEFT JOIN ucbn_flag_enseignant@harpprod ufe ON ufe.no_individu = i.no_individu
+  LEFT JOIN chercheur@harpprod cc ON cc.no_individu = i.no_individu
+  LEFT JOIN affectation@harpprod aa ON aa.no_dossier_pers = i.no_individu
+  LEFT JOIN affectation_recherche@harpprod ar ON ar.no_dossier_pers = i.no_individu
+
+) tmp1;
+
 ---------------------------
 --Modifié MATERIALIZED VIEW
 --MV_INTERVENANT
@@ -1686,165 +1821,10 @@ FROM
   LEFT JOIN individu_e_mail@harpprod    individu_e_mail ON (individu_e_mail.no_individu = individu.no_individu)
   LEFT JOIN individu_telephone@harpprod individu_telephone ON (individu_telephone.no_individu = individu.no_individu AND individu_telephone.tem_tel_principal='O' AND individu_telephone.tem_tel='O')
   LEFT JOIN code_insee@harpprod         code_insee ON (code_insee.no_dossier_pers = individu.no_individu)
-  LEFT JOIN mv_harp_individu_banque      ib ON (ib.no_individu = individu.no_individu)
----------------------------
---Nouveau MATERIALIZED VIEW
---MV_HARP_INDIVIDU_STATUT
----------------------------
-CREATE MATERIALIZED VIEW "OSE"."MV_HARP_INDIVIDU_STATUT" ("NO_INDIVIDU","STATUT","TYPE_INTERVENANT") 
-  BUILD IMMEDIATE
-  USING INDEX REFRESH COMPLETE ON DEMAND
-  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
-  DISABLE QUERY REWRITE AS 
-  SELECT
-  no_individu, 
-  statut,
-  ti.code type_intervenant
-FROM
-(
-SELECT
-  i.no_individu,
-  CASE
-    WHEN NVL(c.ordre,99999) > NVL(tp.ordre,99999) THEN COALESCE(tp.statut, c.statut, 'AUTRES')
-    WHEN NVL(c.ordre,99999) <= NVL(tp.ordre,99999) THEN COALESCE(c.statut, tp.statut, 'AUTRES')
-  END statut
-FROM
-  individu@harpprod i
-  LEFT JOIN (SELECT DISTINCT
-      ct.no_dossier_pers no_dossier_pers,
-      si.source_code statut,
-      si.ordre,
-      min(si.ordre) over(partition BY ct.no_dossier_pers) AS min_ordre
-    FROM
-      contrat_travail@harpprod ct
-      JOIN contrat_avenant@harpprod ca ON ca.no_dossier_pers = ct.no_dossier_pers AND ca.no_contrat_travail = ct.no_contrat_travail
-      JOIN statut_intervenant si ON si.source_code = CASE 
-        WHEN ct.c_type_contrat_trav IN ('MC','MA')                THEN 'ASS_MI_TPS'
-        WHEN ct.c_type_contrat_trav IN ('AT')                     THEN 'ATER'
-        WHEN ct.c_type_contrat_trav IN ('AX')                     THEN 'ATER_MI_TPS'
-        WHEN ct.c_type_contrat_trav IN ('DO')                     THEN 'DOCTOR'
-        WHEN ct.c_type_contrat_trav IN ('GI','PN')                THEN 'ENS_CONTRACT'
-        WHEN ct.c_type_contrat_trav IN ('LT','LB')                THEN 'LECTEUR'
-        WHEN ct.c_type_contrat_trav IN ('MB')                     THEN 'MAITRE_LANG'
-        WHEN ct.c_type_contrat_trav IN ('C3','CA','CB','CD','HA','HS','S3','SX','SW','SY','CS','SZ','VA') THEN 'BIATSS'
-        WHEN ct.c_type_contrat_trav IN ('CU','AH','CG','MM','PM','IN','DN','ET','NF') THEN 'NON_AUTORISE'
-                                                                  ELSE 'AUTRES'
-      END
-    WHERE
-      SYSDATE BETWEEN ca.d_deb_contrat_trav AND NVL(ca.d_fin_contrat_trav,SYSDATE)
-  ) c ON c.no_dossier_pers = i.no_individu AND c.ordre = c.min_ordre
-  LEFT JOIN (SELECT DISTINCT
-      a.no_dossier_pers,
-      si.source_code statut,
-      si.ordre,
-      min(si.ordre) over(partition BY a.no_dossier_pers) AS min_ordre
-    FROM
-      affectation@harpprod a
-      JOIN carriere@harpprod c ON  c.no_dossier_pers = a.no_dossier_pers AND c.no_seq_carriere = a.no_seq_carriere
-      JOIN statut_intervenant si ON si.source_code = CASE 
-        WHEN c.c_type_population IN ('DA','OA','DC')                THEN 'ENS_2ND_DEG'
-        WHEN c.c_type_population IN ('SA')                          THEN 'ENS_CH'
-        WHEN c.c_type_population IN ('AA','AC','BA','IA','MA')      THEN 'BIATSS'
-        WHEN c.c_type_population IN ('MG','SB')                     THEN 'NON_AUTORISE'
-                                                                    ELSE 'AUTRES'
-      END
-    WHERE
-      (SYSDATE BETWEEN a.d_deb_affectation AND COALESCE(a.d_fin_affectation,SYSDATE))
-  ) tp ON tp.no_dossier_pers = i.no_individu AND tp.ordre = tp.min_ordre
-  
-) tmp
-JOIN statut_intervenant si ON si.source_code = tmp.statut
-JOIN type_intervenant ti ON ti.id = si.type_intervenant_id
----------------------------
---Nouveau MATERIALIZED VIEW
---MV_HARP_INDIVIDU_BANQUE
----------------------------
-CREATE MATERIALIZED VIEW "OSE"."MV_HARP_INDIVIDU_BANQUE" ("NO_INDIVIDU","IBAN","BIC") 
-  BUILD IMMEDIATE
-  USING INDEX REFRESH COMPLETE ON DEMAND
-  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
-  DISABLE QUERY REWRITE AS 
-  WITH comptes AS (SELECT
-  i.no_dossier_pers no_individu,
-  rank() over(partition by i.no_dossier_pers order by d_creation) rank_compte,
-  count(*) over(partition by i.no_dossier_pers) nombre_comptes,
-  CASE WHEN i.no_dossier_pers IS NOT NULL THEN
-    trim( NVL(i.c_pays_iso || i.cle_controle,'FR00') || ' ' ||
-    substr(i.c_banque,0,4) || ' ' ||
-    substr(i.c_banque,5,1) || substr(i.c_guichet,0,3) || ' ' ||
-    substr(i.c_guichet,4,2) || substr(i.no_compte,0,2) || ' ' ||
-    substr(i.no_compte,3,4) || ' ' ||
-    substr(i.no_compte,7,4) || ' ' ||
-    substr(i.no_compte,11) || i.cle_rib) ELSE NULL END IBAN,
-  CASE WHEN i.no_dossier_pers IS NOT NULL THEN i.c_banque_bic || ' ' || i.c_pays_bic || ' ' || i.c_emplacement || ' ' || i.c_branche ELSE NULL END BIC
-from
-  individu_banque@harpprod i
-)
-SELECT no_individu, iban, bic FROM comptes WHERE rank_compte = nombre_comptes
----------------------------
---Nouveau MATERIALIZED VIEW
---MV_HARP_IND_DER_STRUCT
----------------------------
-CREATE MATERIALIZED VIEW "OSE"."MV_HARP_IND_DER_STRUCT" ("NO_INDIVIDU","DATE_DEPART","C_STRUCTURE") 
-  BUILD IMMEDIATE
-  USING INDEX REFRESH COMPLETE ON DEMAND
-  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
-  DISABLE QUERY REWRITE AS 
-  SELECT
-  no_individu,
-  CASE date_depart WHEN to_date('01/01/1000','DD/MM/YYYY') THEN NULL else date_depart END date_depart,
-  pbs_divers__cicg.c_structure_globale@harpprod(no_individu, CASE date_depart WHEN to_date('01/01/1000','DD/MM/YYYY') THEN SYSDATE else date_depart END ) c_structure
-FROM
-(
-SELECT DISTINCT
-  i.no_individu,
-  MAX(greatest(
-    CASE WHEN aa.no_seq_affectation IS NOT NULL THEN nvl(aa.d_fin_affectation,SYSDATE) ELSE to_date('01/01/1000','DD/MM/YYYY') END,
-    CASE WHEN ar.no_seq_affe_rech IS NOT NULL THEN nvl(ar.d_fin_affe_rech,SYSDATE) ELSE to_date('01/01/1000','DD/MM/YYYY') END,
-    CASE WHEN ufe.no_individu IS NOT NULL THEN nvl(ufe.fin,SYSDATE) ELSE to_date('01/01/1000','DD/MM/YYYY') END,
-    CASE WHEN cc.no_seq_chercheur IS NOT NULL THEN nvl(cc.d_fin_str_trav,SYSDATE) ELSE to_date('01/01/1000','DD/MM/YYYY') END
-  )) over(partition by i.no_individu)
-   date_depart
-FROM
-  individu@harpprod i
-  LEFT JOIN ucbn_flag_enseignant@harpprod ufe ON ufe.no_individu = i.no_individu
-  LEFT JOIN chercheur@harpprod cc ON cc.no_individu = i.no_individu
-  LEFT JOIN affectation@harpprod aa ON aa.no_dossier_pers = i.no_individu
-  LEFT JOIN affectation_recherche@harpprod ar ON ar.no_dossier_pers = i.no_individu
+  LEFT JOIN mv_harp_individu_banque      ib ON (ib.no_individu = individu.no_individu);
 
-) tmp1
+  CREATE UNIQUE INDEX "OSE"."FORMULE_SERVICE_DU_MAJ_PK" ON "OSE"."FORMULE_SERVICE_DU_MAJ" ("INTERVENANT_ID","ANNEE_ID");
 
-
----------------------------
---Nouveau INDEX
---MOTIF_MODIFICATION_SERVIC_UK1
----------------------------
-  CREATE UNIQUE INDEX "OSE"."MOTIF_MODIFICATION_SERVIC_UK1" ON "OSE"."MOTIF_MODIFICATION_SERVICE" ("CODE");
----------------------------
---Nouveau INDEX
---FORMULE_SERVICE_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_SERVICE_PK" ON "OSE"."FORMULE_SERVICE" ("ID");
----------------------------
---Nouveau INDEX
---WF_INTERVENANT_ETAPE_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."WF_INTERVENANT_ETAPE_PK" ON "OSE"."WF_INTERVENANT_ETAPE" ("ID");
----------------------------
---Nouveau INDEX
---FORMULE_REFERENTIEL_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_REFERENTIEL_PK" ON "OSE"."FORMULE_REFERENTIEL" ("ID");
----------------------------
---Nouveau INDEX
---FORMULE_SERVICE_DU__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_SERVICE_DU__UN" ON "OSE"."FORMULE_SERVICE_DU" ("INTERVENANT_ID","ANNEE_ID");
----------------------------
---Nouveau INDEX
---ELEMENT_TAUX_REGIMES__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."ELEMENT_TAUX_REGIMES__UN" ON "OSE"."ELEMENT_TAUX_REGIMES" ("SOURCE_CODE","HISTO_DESTRUCTION");
 ---------------------------
 --Nouveau INDEX
 --MV_ROLE_PK
@@ -1862,94 +1842,9 @@ FROM
   CREATE UNIQUE INDEX "OSE"."MV_INTERVENANT_PK" ON "OSE"."MV_INTERVENANT" ("SOURCE_CODE");
 ---------------------------
 --Nouveau INDEX
---WF_ETAPE_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."WF_ETAPE_PK" ON "OSE"."WF_ETAPE" ("ID");
----------------------------
---Nouveau INDEX
---ELEMENT_TAUX_REGIMES__UNV1
----------------------------
-  CREATE UNIQUE INDEX "OSE"."ELEMENT_TAUX_REGIMES__UNV1" ON "OSE"."ELEMENT_TAUX_REGIMES" ("ELEMENT_PEDAGOGIQUE_ID","ANNEE_ID","HISTO_DESTRUCTION");
----------------------------
---Nouveau INDEX
---FORMULE_VOLUME_HORAIRE_UK1
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_VOLUME_HORAIRE_UK1" ON "OSE"."FORMULE_VOLUME_HORAIRE" ("VOLUME_HORAIRE_ID");
----------------------------
---Nouveau INDEX
---WF_ETAPE_TO_ETAPE_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."WF_ETAPE_TO_ETAPE_PK" ON "OSE"."WF_ETAPE_TO_ETAPE" ("DEPART_ETAPE_ID","ARRIVEE_ETAPE_ID");
----------------------------
---Nouveau INDEX
---FORMULE_SERVICE_MAJ_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_SERVICE_MAJ_PK" ON "OSE"."FORMULE_SERVICE_MAJ" ("ID");
----------------------------
---Nouveau INDEX
---FORMULE_REFERENTIEL_MAJ_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_REFERENTIEL_MAJ_PK" ON "OSE"."FORMULE_REFERENTIEL_MAJ" ("ID");
----------------------------
---Nouveau INDEX
---TEST_BUFFER_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."TEST_BUFFER_PK" ON "OSE"."TEST_BUFFER" ("ID");
----------------------------
---Nouveau INDEX
---WF_ETAPE_CODE_UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."WF_ETAPE_CODE_UN" ON "OSE"."WF_ETAPE" ("CODE");
----------------------------
---Nouveau INDEX
---FORMULE_RESULTAT_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_RESULTAT_PK" ON "OSE"."FORMULE_RESULTAT" ("ID");
----------------------------
---Nouveau INDEX
---FORMULE_VOLUME_HORAIRE_MAJ_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_VOLUME_HORAIRE_MAJ_PK" ON "OSE"."FORMULE_VOLUME_HORAIRE_MAJ" ("ID");
----------------------------
---Nouveau INDEX
---FORMULE_RESULTAT_MAJ__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_RESULTAT_MAJ__UN" ON "OSE"."FORMULE_RESULTAT_MAJ" ("INTERVENANT_ID","ANNEE_ID","TYPE_VOLUME_HORAIRE_ID","ETAT_VOLUME_HORAIRE_ID");
----------------------------
---Nouveau INDEX
---FORMULE_SERVICE_DU_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_SERVICE_DU_PK" ON "OSE"."FORMULE_SERVICE_DU" ("ID");
----------------------------
---Nouveau INDEX
---ETAT_VOLUME_HORAIRE__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."ETAT_VOLUME_HORAIRE__UN" ON "OSE"."ETAT_VOLUME_HORAIRE" ("CODE","HISTO_DESTRUCTION");
----------------------------
---Nouveau INDEX
---ELEMENT_TAUX_REGIMES_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."ELEMENT_TAUX_REGIMES_PK" ON "OSE"."ELEMENT_TAUX_REGIMES" ("ID");
----------------------------
---Nouveau INDEX
---EFFECTIFS__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."EFFECTIFS__UN" ON "OSE"."EFFECTIFS" ("SOURCE_CODE");
----------------------------
---Nouveau INDEX
---ETAT_VOLUME_HORAIRE_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."ETAT_VOLUME_HORAIRE_PK" ON "OSE"."ETAT_VOLUME_HORAIRE" ("ID");
----------------------------
---Nouveau INDEX
 --MV_HARP_INDIVIDU_STATUT_PK
 ---------------------------
   CREATE UNIQUE INDEX "OSE"."MV_HARP_INDIVIDU_STATUT_PK" ON "OSE"."MV_HARP_INDIVIDU_STATUT" ("NO_INDIVIDU");
----------------------------
---Nouveau INDEX
---FORMULE_SERVICE_MAJ__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_SERVICE_MAJ__UN" ON "OSE"."FORMULE_SERVICE_MAJ" ("SERVICE_ID");
 ---------------------------
 --Nouveau INDEX
 --MV_INTERVENANT_EXTERIEUR_PK
@@ -1957,254 +1852,15 @@ FROM
   CREATE UNIQUE INDEX "OSE"."MV_INTERVENANT_EXTERIEUR_PK" ON "OSE"."MV_INTERVENANT_EXTERIEUR" ("SOURCE_CODE");
 ---------------------------
 --Nouveau INDEX
---FORMULE_RESULTAT_MAJ_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_RESULTAT_MAJ_PK" ON "OSE"."FORMULE_RESULTAT_MAJ" ("ID");
----------------------------
---Nouveau INDEX
---FORMULE_RESULTAT__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_RESULTAT__UN" ON "OSE"."FORMULE_RESULTAT" ("INTERVENANT_ID","ANNEE_ID","TYPE_VOLUME_HORAIRE_ID","ETAT_VOLUME_HORAIRE_ID");
----------------------------
---Nouveau INDEX
---FORMULE_REFERENTIEL_UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_REFERENTIEL_UN" ON "OSE"."FORMULE_REFERENTIEL" ("INTERVENANT_ID","ANNEE_ID","STRUCTURE_ENS_ID");
----------------------------
---Nouveau INDEX
---FORMULE_REFERENTIEL_MAJ__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_REFERENTIEL_MAJ__UN" ON "OSE"."FORMULE_REFERENTIEL_MAJ" ("INTERVENANT_ID","ANNEE_ID","STRUCTURE_ENS_ID");
----------------------------
---Nouveau INDEX
---FSDM_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FSDM_PK" ON "OSE"."FORMULE_SERVICE_DU_MAJ" ("ID");
----------------------------
---Nouveau INDEX
---FORMULE_SERVICE_DU_MAJ_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_SERVICE_DU_MAJ_PK" ON "OSE"."FORMULE_SERVICE_DU_MAJ" ("INTERVENANT_ID","ANNEE_ID");
----------------------------
---Nouveau INDEX
---EFFECTIFS_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."EFFECTIFS_PK" ON "OSE"."EFFECTIFS" ("ID");
----------------------------
---Nouveau INDEX
 --MV_HARP_IND_DER_STRUCT_PK
 ---------------------------
   CREATE UNIQUE INDEX "OSE"."MV_HARP_IND_DER_STRUCT_PK" ON "OSE"."MV_HARP_IND_DER_STRUCT" ("NO_INDIVIDU");
 ---------------------------
 --Nouveau INDEX
---FORMULE_SERVICE__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_SERVICE__UN" ON "OSE"."FORMULE_SERVICE" ("SERVICE_ID");
----------------------------
---Nouveau INDEX
---FORMULE_VOLUME_HORAIRE_PK
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_VOLUME_HORAIRE_PK" ON "OSE"."FORMULE_VOLUME_HORAIRE" ("ID");
----------------------------
---Nouveau INDEX
---FORMULE_VOLUME_HORAIRE_MAJ__UN
----------------------------
-  CREATE UNIQUE INDEX "OSE"."FORMULE_VOLUME_HORAIRE_MAJ__UN" ON "OSE"."FORMULE_VOLUME_HORAIRE_MAJ" ("VOLUME_HORAIRE_ID");
----------------------------
---Nouveau INDEX
 --MV_INTERVENANT_PERMANENT_PK
 ---------------------------
   CREATE UNIQUE INDEX "OSE"."MV_INTERVENANT_PERMANENT_PK" ON "OSE"."MV_INTERVENANT_PERMANENT" ("SOURCE_CODE");
----------------------------
---Nouveau TRIGGER
---WF_TRG_VH_VALIDATION_S
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_VH_VALIDATION_S"
-  AFTER INSERT OR DELETE ON "OSE"."VALIDATION_VOL_HORAIRE"
-  BEGIN
-  ose_workflow.update_intervenants_etapes();
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_VH_VALIDATION
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_VH_VALIDATION"
-  AFTER INSERT OR DELETE ON "OSE"."VALIDATION_VOL_HORAIRE"
-  REFERENCING FOR EACH ROW
-  DECLARE
-  vh_id NUMERIC;
-  intervenant_id NUMERIC;
-BEGIN
-  vh_id := CASE WHEN inserting THEN :NEW.volume_horaire_id ELSE :OLD.volume_horaire_id END;
-  SELECT s.intervenant_id INTO intervenant_id FROM service s JOIN volume_horaire vh ON vh.service_id = s.ID WHERE vh.ID = vh_id;
-  ose_workflow.add_intervenant_to_update (intervenant_id); 
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_SERVICE_S
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_SERVICE_S"
-  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTION ON "OSE"."SERVICE"
-  BEGIN
-  ose_workflow.update_intervenants_etapes();
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_SERVICE
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_SERVICE"
-  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTION ON "OSE"."SERVICE"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  ose_workflow.add_intervenant_to_update (CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END); 
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_PJ_VALIDATION_S
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_PJ_VALIDATION_S"
-  AFTER UPDATE OF VALIDATION_ID ON "OSE"."PIECE_JOINTE"
-  BEGIN
-  ose_workflow.update_intervenants_etapes();
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_PJ_VALIDATION
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_PJ_VALIDATION"
-  AFTER UPDATE OF VALIDATION_ID ON "OSE"."PIECE_JOINTE"
-  REFERENCING FOR EACH ROW
-  DECLARE
-  intervenant_id NUMERIC;
-BEGIN
-  SELECT ID INTO intervenant_id FROM intervenant_exterieur ie WHERE ie.dossier_id = :NEW.dossier_id;
-  ose_workflow.add_intervenant_to_update (intervenant_id); 
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_INTERV_DOSSIER_S
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_INTERV_DOSSIER_S"
-  AFTER UPDATE OF DOSSIER_ID ON "OSE"."INTERVENANT_EXTERIEUR"
-  BEGIN
-  ose_workflow.update_intervenants_etapes(); 
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_INTERV_DOSSIER
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_INTERV_DOSSIER"
-  AFTER UPDATE OF DOSSIER_ID ON "OSE"."INTERVENANT_EXTERIEUR"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  ose_workflow.add_intervenant_to_update (:NEW.ID); 
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_DOSSIER_VALIDATION_S
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER_VALIDATION_S"
-  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTION ON "OSE"."VALIDATION"
-  BEGIN
-  ose_workflow.update_intervenants_etapes();
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_DOSSIER_VALIDATION
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER_VALIDATION"
-  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTION ON "OSE"."VALIDATION"
-  REFERENCING FOR EACH ROW
-  DECLARE
-  type_validation_id NUMERIC;
-  code VARCHAR2(128);
-  intervenant_id NUMERIC;
-BEGIN
-  type_validation_id := CASE WHEN deleting THEN :OLD.type_validation_id ELSE :NEW.type_validation_id END;
-  SELECT code INTO code FROM type_validation WHERE id = type_validation_id;
-  --DBMS_OUTPUT.put_line (code);
-  IF code = 'DONNEES_PERSO_PAR_COMP' THEN
-    intervenant_id := CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END;
-    --DBMS_OUTPUT.put_line ('wf_trg_dossier_validation');
-    ose_workflow.add_intervenant_to_update (intervenant_id); 
-  END IF;
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_DOSSIER_S
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER_S"
-  AFTER DELETE OR UPDATE ON "OSE"."DOSSIER"
-  BEGIN
-  ose_workflow.update_intervenants_etapes();
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_DOSSIER
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER"
-  AFTER DELETE OR UPDATE ON "OSE"."DOSSIER"
-  REFERENCING FOR EACH ROW
-  DECLARE
-  intervenant_id NUMERIC;
-BEGIN
-  SELECT ID INTO intervenant_id FROM intervenant_exterieur WHERE dossier_id = :OLD.ID;
-  ose_workflow.add_intervenant_to_update (intervenant_id); 
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_CONTRAT_S
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_CONTRAT_S"
-  AFTER UPDATE OF VALIDATION_ID ON "OSE"."CONTRAT"
-  BEGIN
-  ose_workflow.update_intervenants_etapes();
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_CONTRAT
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_CONTRAT"
-  AFTER UPDATE OF VALIDATION_ID ON "OSE"."CONTRAT"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  ose_workflow.add_intervenant_to_update (CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END); 
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_AGREMENT_S
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_AGREMENT_S"
-  AFTER INSERT OR DELETE ON "OSE"."AGREMENT"
-  BEGIN
-  ose_workflow.update_intervenants_etapes();
-END;
-/
----------------------------
---Nouveau TRIGGER
---WF_TRG_AGREMENT
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_AGREMENT"
-  AFTER INSERT OR DELETE ON "OSE"."AGREMENT"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  ose_workflow.add_intervenant_to_update (CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END); 
-END;
-/
+
 ---------------------------
 --Modifié TRIGGER
 --VOLUME_HORAIRE_CK
@@ -2323,370 +1979,7 @@ BEGIN
 
 END;
 /
----------------------------
---Nouveau TRIGGER
---F_VOLUME_HORAIRE
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE"
-  AFTER INSERT OR UPDATE ON "OSE"."VOLUME_HORAIRE"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  IF UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( :OLD.id );
-  END IF;
-  IF INSERTING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( :NEW.id );
-  END IF;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_VALIDATION_VOL_HORAIRE
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE"
-  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."VALIDATION_VOL_HORAIRE"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  IF INSERTING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( :NEW.volume_horaire_id );
-  END IF;
-  IF DELETING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( :OLD.volume_horaire_id );
-  END IF;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_VALIDATION
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION"
-  AFTER UPDATE ON "OSE"."VALIDATION"
-  REFERENCING FOR EACH ROW
-  BEGIN
 
-  FOR p IN ( -- validations de volume horaire
-
-    SELECT
-      vh.id volume_horaire_id
-    FROM
-      validation_vol_horaire vvh
-      JOIN volume_horaire vh ON vh.id = vvh.volume_horaire_id AND 1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
-    WHERE
-      (vvh.validation_id = :OLD.ID OR vvh.validation_id = :NEW.id)
-
-  ) LOOP
-
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
-
-  END LOOP;
-
-  FOR p IN ( -- validations de contrat
-
-    SELECT
-      vh.id volume_horaire_id
-    FROM
-      contrat c
-      JOIN volume_horaire vh ON vh.contrat_id = c.id AND 1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
-    WHERE
-      (c.validation_id = :OLD.ID OR c.validation_id = :NEW.id)
-
-  ) LOOP
-
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
-
-  END LOOP;
-
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_TYPE_INTERVENTION
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_TYPE_INTERVENTION"
-  AFTER UPDATE ON "OSE"."TYPE_INTERVENTION"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  FOR p IN (
-  
-    SELECT
-      vh.id volume_horaire_id
-    FROM
-      volume_horaire vh
-    WHERE
-      1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
-      AND (vh.type_intervention_id = :NEW.id OR vh.type_intervention_id = :OLD.id)
-  
-  ) LOOP
-  
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
-  
-  END LOOP;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_SERVICE_REFERENTIEL
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_REFERENTIEL"
-  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."SERVICE_REFERENTIEL"
-  REFERENCING FOR EACH ROW
-  BEGIN
-
-  IF DELETING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_REFERENTIEL( :OLD.intervenant_id, :OLD.annee_id, :OLD.structure_id );
-  END IF;
-  IF INSERTING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_REFERENTIEL( :NEW.intervenant_id, :NEW.annee_id, :NEW.structure_id );
-  END IF;
-  OSE_FORMULE.RUN_SIGNAL;
-
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_SERVICE_DU
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_DU"
-  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."SERVICE_DU"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  IF DELETING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :OLD.intervenant_id, :OLD.annee_id );
-  END IF;
-  IF INSERTING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :NEW.intervenant_id, :NEW.annee_id );
-  END IF;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_SERVICE
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE"
-  AFTER INSERT OR UPDATE ON "OSE"."SERVICE"
-  REFERENCING FOR EACH ROW
-  BEGIN
-
-  IF :OLD.id IS NOT NULL THEN
-    OSE_FORMULE.IDT_MAJ_SERVICE( :OLD.id );
-  END IF;
-  IF :NEW.id IS NOT NULL THEN
-    OSE_FORMULE.IDT_MAJ_SERVICE( :NEW.id );
-  END IF;
-  FOR p IN (
-  
-    SELECT
-      vh.id volume_horaire_id
-    FROM
-      volume_horaire vh
-    WHERE
-      (vh.service_id = :NEW.id OR vh.service_id = :OLD.id)
-      --AND 1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction ) -- pas d'historique car des VH peuvent être restaurés!!
-      
-  ) LOOP
-  
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
-    
-  END LOOP;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_MOTIF_MODIFICATION_SERVICE
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_MOTIF_MODIFICATION_SERVICE"
-  AFTER DELETE OR UPDATE ON "OSE"."MOTIF_MODIFICATION_SERVICE"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  FOR p IN (
-  
-    SELECT DISTINCT
-      intervenant_id, 
-      annee_id
-    FROM
-      modification_service_du msd
-    WHERE
-      1 = OSE_DIVERS.COMPRISE_ENTRE( msd.histo_creation, msd.histo_destruction )
-      AND (msd.motif_id = :NEW.id OR msd.motif_id = :OLD.id)
-      
-  ) LOOP
-  
-    OSE_FORMULE.IDT_MAJ_SERVICE_DU( p.intervenant_id, p.annee_id );
-  
-  END LOOP;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_MODULATEUR
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_MODULATEUR"
-  AFTER DELETE OR UPDATE ON "OSE"."MODULATEUR"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  FOR p IN (
-
-    SELECT
-      s.id service_id
-    FROM
-      service s
-      JOIN element_modulateur em ON 
-        em.element_id   = s.element_pedagogique_id 
-        AND em.annee_id = s.annee_id 
-        AND 1 = ose_divers.comprise_entre( em.histo_creation, em.histo_destruction )
-    WHERE
-      1 = OSE_DIVERS.COMPRISE_ENTRE( s.histo_creation, s.histo_destruction )
-      AND (em.modulateur_id = :OLD.id OR em.modulateur_id = :NEW.id)
-
-  ) LOOP
-
-    OSE_FORMULE.IDT_MAJ_SERVICE( p.service_id );
-
-  END LOOP;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_MODIF_SERVICE_DU
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_MODIF_SERVICE_DU"
-  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."MODIFICATION_SERVICE_DU"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  IF DELETING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :OLD.intervenant_id, :OLD.annee_id );
-  END IF;
-  IF INSERTING OR UPDATING THEN
-    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :NEW.intervenant_id, :NEW.annee_id );
-  END IF;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_INTERVENANT
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT"
-  AFTER UPDATE ON "OSE"."INTERVENANT"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  IF :OLD.id IS NOT NULL THEN
-    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :OLD.id, OSE_PARAMETRE.GET_ANNEE );
-  END IF;
-  IF :NEW.id IS NOT NULL THEN
-    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :NEW.id, OSE_PARAMETRE.GET_ANNEE );
-  END IF;
-
-  FOR p IN (
-
-    SELECT
-      s.id  service_id,
-      vh.id volume_horaire_id
-    FROM
-      service s
-      LEFT JOIN volume_horaire vh ON vh.service_id = s.id AND 1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
-    WHERE
-      1 = ose_divers.comprise_entre( s.histo_creation, s.histo_destruction )
-      AND (s.intervenant_id = :NEW.id OR s.intervenant_id = :OLD.id)
-  
-  ) LOOP
-  
-    OSE_FORMULE.IDT_MAJ_SERVICE( p.service_id );  
-    IF p.volume_horaire_id IS NOT NULL THEN
-      OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
-    END IF;
-
-  END LOOP;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_ELEMENT_PEDAGOGIQUE
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_PEDAGOGIQUE"
-  AFTER UPDATE ON "OSE"."ELEMENT_PEDAGOGIQUE"
-  REFERENCING FOR EACH ROW
-  BEGIN
-
-  FOR p IN (
-
-    SELECT
-      s.id service_id
-    FROM
-      service s
-    WHERE
-      (s.element_pedagogique_id = :NEW.id OR s.element_pedagogique_id = :OLD.id)
-      AND 1 = ose_divers.comprise_entre( s.histo_creation, s.histo_destruction )
-
-  ) LOOP
-
-    OSE_FORMULE.IDT_MAJ_SERVICE( p.service_id );
-
-  END LOOP;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_ELEMENT_MODULATEUR
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_MODULATEUR"
-  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."ELEMENT_MODULATEUR"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  FOR p IN (
-  
-    SELECT
-      id service_id
-    FROM
-      service s
-    WHERE
-      1 = OSE_DIVERS.COMPRISE_ENTRE( s.histo_creation, s.histo_destruction )
-      AND (s.element_pedagogique_id = :OLD.element_id OR s.element_pedagogique_id = :NEW.element_id)
-      
-  ) LOOP
-  
-    OSE_FORMULE.IDT_MAJ_SERVICE( p.service_id );
-    
-  END LOOP;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
----------------------------
---Nouveau TRIGGER
---F_CONTRAT
----------------------------
-  CREATE OR REPLACE TRIGGER "OSE"."F_CONTRAT"
-  AFTER DELETE OR UPDATE ON "OSE"."CONTRAT"
-  REFERENCING FOR EACH ROW
-  BEGIN
-  FOR p IN (
-
-    SELECT
-      vh.id volume_horaire_id
-    FROM
-      volume_horaire vh 
-    WHERE
-      1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
-      AND (vh.contrat_id = :OLD.id OR vh.contrat_id = :NEW.id)
-
-  ) LOOP
-
-    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
-
-  END LOOP;
-  OSE_FORMULE.RUN_SIGNAL;
-END;
-/
 ---------------------------
 --Nouveau TRIGGER
 --ELEMENT_PEDAGOGIQUE_CK
@@ -4366,11 +3659,204 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
 
 END OSE_WORKFLOW;
 /
+
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_VH_VALIDATION_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_VH_VALIDATION_S"
+  AFTER INSERT OR DELETE ON "OSE"."VALIDATION_VOL_HORAIRE"
+  BEGIN
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_VH_VALIDATION
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_VH_VALIDATION"
+  AFTER INSERT OR DELETE ON "OSE"."VALIDATION_VOL_HORAIRE"
+  REFERENCING FOR EACH ROW
+  DECLARE
+  vh_id NUMERIC;
+  intervenant_id NUMERIC;
+BEGIN
+  vh_id := CASE WHEN inserting THEN :NEW.volume_horaire_id ELSE :OLD.volume_horaire_id END;
+  SELECT s.intervenant_id INTO intervenant_id FROM service s JOIN volume_horaire vh ON vh.service_id = s.ID WHERE vh.ID = vh_id;
+  ose_workflow.add_intervenant_to_update (intervenant_id); 
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_SERVICE_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_SERVICE_S"
+  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTION ON "OSE"."SERVICE"
+  BEGIN
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_SERVICE
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_SERVICE"
+  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTION ON "OSE"."SERVICE"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  ose_workflow.add_intervenant_to_update (CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END); 
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_PJ_VALIDATION_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_PJ_VALIDATION_S"
+  AFTER UPDATE OF VALIDATION_ID ON "OSE"."PIECE_JOINTE"
+  BEGIN
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_PJ_VALIDATION
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_PJ_VALIDATION"
+  AFTER UPDATE OF VALIDATION_ID ON "OSE"."PIECE_JOINTE"
+  REFERENCING FOR EACH ROW
+  DECLARE
+  intervenant_id NUMERIC;
+BEGIN
+  SELECT ID INTO intervenant_id FROM intervenant_exterieur ie WHERE ie.dossier_id = :NEW.dossier_id;
+  ose_workflow.add_intervenant_to_update (intervenant_id); 
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_INTERV_DOSSIER_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_INTERV_DOSSIER_S"
+  AFTER UPDATE OF DOSSIER_ID ON "OSE"."INTERVENANT_EXTERIEUR"
+  BEGIN
+  ose_workflow.update_intervenants_etapes(); 
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_INTERV_DOSSIER
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_INTERV_DOSSIER"
+  AFTER UPDATE OF DOSSIER_ID ON "OSE"."INTERVENANT_EXTERIEUR"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  ose_workflow.add_intervenant_to_update (:NEW.ID); 
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_DOSSIER_VALIDATION_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER_VALIDATION_S"
+  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTION ON "OSE"."VALIDATION"
+  BEGIN
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_DOSSIER_VALIDATION
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER_VALIDATION"
+  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTION ON "OSE"."VALIDATION"
+  REFERENCING FOR EACH ROW
+  DECLARE
+  type_validation_id NUMERIC;
+  code VARCHAR2(128);
+  intervenant_id NUMERIC;
+BEGIN
+  type_validation_id := CASE WHEN deleting THEN :OLD.type_validation_id ELSE :NEW.type_validation_id END;
+  SELECT code INTO code FROM type_validation WHERE id = type_validation_id;
+  --DBMS_OUTPUT.put_line (code);
+  IF code = 'DONNEES_PERSO_PAR_COMP' THEN
+    intervenant_id := CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END;
+    --DBMS_OUTPUT.put_line ('wf_trg_dossier_validation');
+    ose_workflow.add_intervenant_to_update (intervenant_id); 
+  END IF;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_DOSSIER_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER_S"
+  AFTER DELETE OR UPDATE ON "OSE"."DOSSIER"
+  BEGIN
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_DOSSIER
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER"
+  AFTER DELETE OR UPDATE ON "OSE"."DOSSIER"
+  REFERENCING FOR EACH ROW
+  DECLARE
+  intervenant_id NUMERIC;
+BEGIN
+  SELECT ID INTO intervenant_id FROM intervenant_exterieur WHERE dossier_id = :OLD.ID;
+  ose_workflow.add_intervenant_to_update (intervenant_id); 
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_CONTRAT_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_CONTRAT_S"
+  AFTER UPDATE OF VALIDATION_ID ON "OSE"."CONTRAT"
+  BEGIN
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_CONTRAT
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_CONTRAT"
+  AFTER UPDATE OF VALIDATION_ID ON "OSE"."CONTRAT"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  ose_workflow.add_intervenant_to_update (CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END); 
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_AGREMENT_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_AGREMENT_S"
+  AFTER INSERT OR DELETE ON "OSE"."AGREMENT"
+  BEGIN
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_AGREMENT
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_AGREMENT"
+  AFTER INSERT OR DELETE ON "OSE"."AGREMENT"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  ose_workflow.add_intervenant_to_update (CASE WHEN deleting THEN :OLD.intervenant_id ELSE :NEW.intervenant_id END); 
+END;
+/
+
+
 ---------------------------
 --Nouveau PACKAGE BODY
 --OSE_TEST_FORMULE
 ---------------------------
-CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_TEST_FORMULE" AS
+create or replace PACKAGE BODY OSE_TEST_FORMULE AS
 
   annee_id numeric;
 
@@ -4432,10 +3918,10 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_TEST_FORMULE" AS
     update_identified NUMERIC;
   BEGIN
     IF maj_idt THEN
-      SELECT count(*) INTO update_identified FROM formule_referentiel_maj WHERE intervenant_id = params.INTERVENANT_ID AND annee_id = params.annee_id AND structure_id = params.structure_id;
+      SELECT count(*) INTO update_identified FROM formule_referentiel_maj WHERE intervenant_id = params.INTERVENANT_ID AND annee_id = params.annee_id AND structure_ens_id = params.structure_ens_id;
       ose_formule.MAJ_ALL_IDT; -- PROVISOIRE
     END IF;
-    tested := OSE_FORMULE.GET_REFERENTIEL( params.INTERVENANT_ID, params.annee_id, params.structure_id );
+    tested := OSE_FORMULE.GET_REFERENTIEL( params.INTERVENANT_ID, params.annee_id, params.structure_ens_id );
     expected := params;
 
     IF MSG IS NOT NULL THEN
@@ -8827,7 +8313,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
     );
     OSE_FORMULE.MAJ_ALL_IDT;
 
-    DBMS_ALERT.WAITONE('ose_formule_maj', v_mesg, v_status); 
+    --DBMS_ALERT.WAITONE('ose_formule_maj', v_mesg, v_status); 
     --IF v_status = 0 THEN EXECUTE_SIGNAL; END IF;
   END;
 
@@ -8852,19 +8338,411 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_FORMULE" AS
   PROCEDURE UNREGISTER_SIGNAL IS
   BEGIN
     RETURN;
-    DBMS_ALERT.REMOVE('ose_formule_maj');
+    --DBMS_ALERT.REMOVE('ose_formule_maj');
   END;
 
 
   PROCEDURE RUN_SIGNAL IS
   BEGIN
     RETURN;
-    DBMS_ALERT.SIGNAL('ose_formule_maj', 'test'); 
+    --DBMS_ALERT.SIGNAL('ose_formule_maj', 'test'); 
   END;
 
 END OSE_FORMULE;
 /
 
+---------------------------
+--Nouveau TRIGGER
+--F_VOLUME_HORAIRE
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_VOLUME_HORAIRE"
+  AFTER INSERT OR UPDATE ON "OSE"."VOLUME_HORAIRE"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  IF UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( :OLD.id );
+  END IF;
+  IF INSERTING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( :NEW.id );
+  END IF;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_VALIDATION_VOL_HORAIRE
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE"
+  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."VALIDATION_VOL_HORAIRE"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  IF INSERTING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( :NEW.volume_horaire_id );
+  END IF;
+  IF DELETING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( :OLD.volume_horaire_id );
+  END IF;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_VALIDATION
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION"
+  AFTER UPDATE ON "OSE"."VALIDATION"
+  REFERENCING FOR EACH ROW
+  BEGIN
+
+  FOR p IN ( -- validations de volume horaire
+
+    SELECT
+      vh.id volume_horaire_id
+    FROM
+      validation_vol_horaire vvh
+      JOIN volume_horaire vh ON vh.id = vvh.volume_horaire_id AND 1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
+    WHERE
+      (vvh.validation_id = :OLD.ID OR vvh.validation_id = :NEW.id)
+
+  ) LOOP
+
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
+
+  END LOOP;
+
+  FOR p IN ( -- validations de contrat
+
+    SELECT
+      vh.id volume_horaire_id
+    FROM
+      contrat c
+      JOIN volume_horaire vh ON vh.contrat_id = c.id AND 1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
+    WHERE
+      (c.validation_id = :OLD.ID OR c.validation_id = :NEW.id)
+
+  ) LOOP
+
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
+
+  END LOOP;
+
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_TYPE_INTERVENTION
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_TYPE_INTERVENTION"
+  AFTER UPDATE ON "OSE"."TYPE_INTERVENTION"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  FOR p IN (
+  
+    SELECT
+      vh.id volume_horaire_id
+    FROM
+      volume_horaire vh
+    WHERE
+      1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
+      AND (vh.type_intervention_id = :NEW.id OR vh.type_intervention_id = :OLD.id)
+  
+  ) LOOP
+  
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
+  
+  END LOOP;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_SERVICE_REFERENTIEL
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_REFERENTIEL"
+  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."SERVICE_REFERENTIEL"
+  REFERENCING FOR EACH ROW
+  BEGIN
+
+  IF DELETING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_REFERENTIEL( :OLD.intervenant_id, :OLD.annee_id, :OLD.structure_id );
+  END IF;
+  IF INSERTING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_REFERENTIEL( :NEW.intervenant_id, :NEW.annee_id, :NEW.structure_id );
+  END IF;
+  OSE_FORMULE.RUN_SIGNAL;
+
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_SERVICE_DU
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE_DU"
+  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."SERVICE_DU"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  IF DELETING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :OLD.intervenant_id, :OLD.annee_id );
+  END IF;
+  IF INSERTING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :NEW.intervenant_id, :NEW.annee_id );
+  END IF;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_SERVICE
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_SERVICE"
+  AFTER INSERT OR UPDATE ON "OSE"."SERVICE"
+  REFERENCING FOR EACH ROW
+  BEGIN
+
+  IF :OLD.id IS NOT NULL THEN
+    OSE_FORMULE.IDT_MAJ_SERVICE( :OLD.id );
+  END IF;
+  IF :NEW.id IS NOT NULL THEN
+    OSE_FORMULE.IDT_MAJ_SERVICE( :NEW.id );
+  END IF;
+  FOR p IN (
+  
+    SELECT
+      vh.id volume_horaire_id
+    FROM
+      volume_horaire vh
+    WHERE
+      (vh.service_id = :NEW.id OR vh.service_id = :OLD.id)
+      --AND 1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction ) -- pas d'historique car des VH peuvent être restaurés!!
+      
+  ) LOOP
+  
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
+    
+  END LOOP;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_MOTIF_MODIFICATION_SERVICE
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_MOTIF_MODIFICATION_SERVICE"
+  AFTER DELETE OR UPDATE ON "OSE"."MOTIF_MODIFICATION_SERVICE"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  FOR p IN (
+  
+    SELECT DISTINCT
+      intervenant_id, 
+      annee_id
+    FROM
+      modification_service_du msd
+    WHERE
+      1 = OSE_DIVERS.COMPRISE_ENTRE( msd.histo_creation, msd.histo_destruction )
+      AND (msd.motif_id = :NEW.id OR msd.motif_id = :OLD.id)
+      
+  ) LOOP
+  
+    OSE_FORMULE.IDT_MAJ_SERVICE_DU( p.intervenant_id, p.annee_id );
+  
+  END LOOP;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_MODULATEUR
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_MODULATEUR"
+  AFTER DELETE OR UPDATE ON "OSE"."MODULATEUR"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  FOR p IN (
+
+    SELECT
+      s.id service_id
+    FROM
+      service s
+      JOIN element_modulateur em ON 
+        em.element_id   = s.element_pedagogique_id 
+        AND em.annee_id = s.annee_id 
+        AND 1 = ose_divers.comprise_entre( em.histo_creation, em.histo_destruction )
+    WHERE
+      1 = OSE_DIVERS.COMPRISE_ENTRE( s.histo_creation, s.histo_destruction )
+      AND (em.modulateur_id = :OLD.id OR em.modulateur_id = :NEW.id)
+
+  ) LOOP
+
+    OSE_FORMULE.IDT_MAJ_SERVICE( p.service_id );
+
+  END LOOP;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_MODIF_SERVICE_DU
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_MODIF_SERVICE_DU"
+  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."MODIFICATION_SERVICE_DU"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  IF DELETING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :OLD.intervenant_id, :OLD.annee_id );
+  END IF;
+  IF INSERTING OR UPDATING THEN
+    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :NEW.intervenant_id, :NEW.annee_id );
+  END IF;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_INTERVENANT
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_INTERVENANT"
+  AFTER UPDATE ON "OSE"."INTERVENANT"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  IF :OLD.id IS NOT NULL THEN
+    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :OLD.id, OSE_PARAMETRE.GET_ANNEE );
+  END IF;
+  IF :NEW.id IS NOT NULL THEN
+    OSE_FORMULE.IDT_MAJ_SERVICE_DU( :NEW.id, OSE_PARAMETRE.GET_ANNEE );
+  END IF;
+
+  FOR p IN (
+
+    SELECT
+      s.id  service_id,
+      vh.id volume_horaire_id
+    FROM
+      service s
+      LEFT JOIN volume_horaire vh ON vh.service_id = s.id AND 1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
+    WHERE
+      1 = ose_divers.comprise_entre( s.histo_creation, s.histo_destruction )
+      AND (s.intervenant_id = :NEW.id OR s.intervenant_id = :OLD.id)
+  
+  ) LOOP
+  
+    OSE_FORMULE.IDT_MAJ_SERVICE( p.service_id );  
+    IF p.volume_horaire_id IS NOT NULL THEN
+      OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
+    END IF;
+
+  END LOOP;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_ELEMENT_PEDAGOGIQUE
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_PEDAGOGIQUE"
+  AFTER UPDATE ON "OSE"."ELEMENT_PEDAGOGIQUE"
+  REFERENCING FOR EACH ROW
+  BEGIN
+
+  FOR p IN (
+
+    SELECT
+      s.id service_id
+    FROM
+      service s
+    WHERE
+      (s.element_pedagogique_id = :NEW.id OR s.element_pedagogique_id = :OLD.id)
+      AND 1 = ose_divers.comprise_entre( s.histo_creation, s.histo_destruction )
+
+  ) LOOP
+
+    OSE_FORMULE.IDT_MAJ_SERVICE( p.service_id );
+
+  END LOOP;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_ELEMENT_MODULATEUR
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_ELEMENT_MODULATEUR"
+  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."ELEMENT_MODULATEUR"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  FOR p IN (
+  
+    SELECT
+      id service_id
+    FROM
+      service s
+    WHERE
+      1 = OSE_DIVERS.COMPRISE_ENTRE( s.histo_creation, s.histo_destruction )
+      AND (s.element_pedagogique_id = :OLD.element_id OR s.element_pedagogique_id = :NEW.element_id)
+      
+  ) LOOP
+  
+    OSE_FORMULE.IDT_MAJ_SERVICE( p.service_id );
+    
+  END LOOP;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_CONTRAT
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_CONTRAT"
+  AFTER DELETE OR UPDATE ON "OSE"."CONTRAT"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  FOR p IN (
+
+    SELECT
+      vh.id volume_horaire_id
+    FROM
+      volume_horaire vh 
+    WHERE
+      1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
+      AND (vh.contrat_id = :OLD.id OR vh.contrat_id = :NEW.id)
+
+  ) LOOP
+
+    OSE_FORMULE.IDT_MAJ_VOLUME_HORAIRE( p.volume_horaire_id );
+
+  END LOOP;
+  OSE_FORMULE.RUN_SIGNAL;
+END;
+/
+
+
+BEGIN
+    DBMS_SCHEDULER.CREATE_JOB (
+            job_name => '"OSE"."OSE_FORMULE_REFRESH"',
+            job_type => 'STORED_PROCEDURE',
+            job_action => 'OSE.OSE_FORMULE.MAJ_ALL',
+            number_of_arguments => 0,
+            start_date => NULL,
+            repeat_interval => 'FREQ=DAILY;BYDAY=MON,TUE,WED,THU,FRI,SAT,SUN;BYHOUR=5;BYMINUTE=0;BYSECOND=0',
+            end_date => NULL,
+            enabled => FALSE,
+            auto_drop => FALSE,
+            comments => '');
+
+         
+     
+ 
+    DBMS_SCHEDULER.SET_ATTRIBUTE( 
+             name => '"OSE"."OSE_FORMULE_REFRESH"', 
+             attribute => 'logging_level', value => DBMS_SCHEDULER.LOGGING_OFF);
+      
+  
+    
+    DBMS_SCHEDULER.enable(
+             name => '"OSE"."OSE_FORMULE_REFRESH"');
+END;
+/
 
 -- ********************************************************************* --
 -- *          à faire APRÈS avoir mis à jour le code source            * --

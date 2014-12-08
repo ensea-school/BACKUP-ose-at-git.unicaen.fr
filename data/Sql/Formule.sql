@@ -1,3 +1,8 @@
+ALTER TABLE contrat DISABLE ALL TRIGGERS;
+ALTER TABLE contrat ENABLE ALL TRIGGERS;
+
+/
+
 DECLARE
   prevu NUMERIC;
 BEGIN                
@@ -6,8 +11,8 @@ BEGIN
   -- SET SERVEROUTPUT ON;
   DBMS_OUTPUT.ENABLE(99999999999999);
 
-  --ose_test.show_succes;
-  ose_test.hide_succes;
+  ose_test.show_succes;
+  --ose_test.hide_succes;
   ose_test.init;
   FOR i IN (
     SELECT id FROM intervenant
@@ -15,7 +20,7 @@ BEGIN
       histo_destruction IS NULL
       AND exists(select * from service where intervenant_id = intervenant.id)
       AND id=9999999
-      AND rownum between 1 and 500
+      AND rownum between 1 and 5
   ) LOOP
     ose_test.echo(' '); ose_test.echo('INTERVENANT_ID = ' || i.id);
     OSE_TEST_FORMULE.TEST_MODIFY_INTERVENANT(i.id);
@@ -44,8 +49,8 @@ BEGIN
     SELECT id FROM volume_horaire WHERE
       histo_destruction IS NULL
       --AND id=765
-      AND id=9999999
-      AND rownum between 1 and 500
+      --AND id=9999999
+      AND rownum between 1 and 5
   ) LOOP
     ose_test.echo(' ');ose_test.echo('VOLUME_HORAIRE_ID = ' || vh.id);
     OSE_TEST_FORMULE.TEST_MODIFY_TYPE_INTERVENTION( vh.id );
@@ -62,8 +67,8 @@ END;
 BEGIN
 --  OSE_FORMULE.MAJ_ALL_IDT;
 
-  OSE_FORMULE.MAJ_RESULTAT( 15914, 2014 );
---  OSE_FORMULE.MAJ_ALL;
+--  OSE_FORMULE.MAJ_RESULTAT( 17599, 2014 );
+  OSE_FORMULE.MAJ_ALL;
 END;
 
 /
@@ -78,4 +83,4 @@ SELECT * FROM formule_volume_horaire WHERE intervenant_id = 17599;
 
 SELECT * FROM formule_referentiel WHERE intervenant_id = 28263;
 
-SELECT * FROM formule_resultat WHERE intervenant_id = 28263;
+SELECT * FROM formule_resultat WHERE intervenant_id = (select id from intervenant where source_code = '3784');

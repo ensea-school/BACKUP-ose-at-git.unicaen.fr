@@ -531,7 +531,7 @@ class Service extends AbstractEntityService
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while( $d = $stmt->fetch()){
             $sid = $d['SERVICE_ID'];
-            if (null == $sid) $sid = 'R_'.uniqid();
+            if (-1 == $sid) $sid = 'R_'.uniqid();
             $iid = $d['INTERVENANT_ID'];
             $res[$sid] = [
 

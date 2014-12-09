@@ -165,7 +165,7 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
         $etatVolumeHoraire = new Select('etat-volume-horaire');
         $etatVolumeHoraire->setLabel('État :');
         $etatVolumeHoraire->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $this->getServiceEtatVolumeHoraire()->getList() ) );
-        $typeVolumeHoraire->setValue( $this->getServiceEtatVolumeHoraire()->getSaisi()->getId() );
+        $etatVolumeHoraire->setValue( $this->getServiceEtatVolumeHoraire()->getSaisi()->getId() );
         $this->add($etatVolumeHoraire);
 
 

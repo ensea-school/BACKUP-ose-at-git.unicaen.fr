@@ -1,4 +1,8 @@
-<!DOCTYPE html><html lang="fr">
+<?php
+
+ $root = substr( $_SERVER['SCRIPT_NAME'], 0, -10 );
+
+?><!DOCTYPE html><html lang="fr">
     <head>
         <!-- Meta -->
         <meta charset="utf-8">
@@ -10,10 +14,10 @@
         <!-- Links -->
         <link href="//www.unicaen.fr/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
 <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.css" media="screen" rel="stylesheet" type="text/css">
-<link href="/ose/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
-<link href="/ose/css/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css">
-<link href="/ose/css/unicaen.css" media="screen" rel="stylesheet" type="text/css">
-<link href="/ose/css/app.css" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo $root ?>/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo $root ?>/css/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo $root ?>/css/unicaen.css" media="screen" rel="stylesheet" type="text/css">
+<link href="<?php echo $root ?>/css/app.css" media="screen" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -85,11 +89,6 @@
 
         <a href="#" class="scrollup" title="Remonter en haut de cette page"><img alt="Remonter" src="/ose/css/icon-top.png"/></a>
 
-        <!-- Scripts -->
-        <script type="text/javascript" src="/ose/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/ose/js/unicaen.js"></script>
-<script type="text/javascript" src="/ose/js/util.js"></script>
-<script type="text/javascript" src="/ose/js/app.js"></script>
     </body>
 </html>
 <?php die();

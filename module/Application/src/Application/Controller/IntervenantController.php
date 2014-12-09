@@ -202,16 +202,27 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirHeuresCompAction()
     {
-        $viewModel        = new \Zend\View\Model\ViewModel();
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'total-heures-comp';
-        $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
-        $viewModel->addChild($totalViewModel, 'totalHeuresComp');
-/** @todo refaire la sortie heures-comp */
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        $form = $this->getFormHeuresComp();
 
-        $viewModel->setVariables( compact('intervenant') );
-        return $viewModel;
+        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
+        /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
+        if (! isset($typeVolumeHoraire)){
+            throw new LogicException('Type de volume horaire erroné');
+        }
+
+        $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
+        /* @var $etatVolumeHoraire \Application\Entity\Db\EtatVolumeHoraire */
+        if (! isset($etatVolumeHoraire)){
+            throw new LogicException('Etat de volume horaire erroné');
+        }
+
+        $form->setData([
+            'type-volume-horaire' => $typeVolumeHoraire->getId(),
+            'etat-volume-horaire' => $etatVolumeHoraire->getId(),
+        ]);
+
+        return compact('form','intervenant','typeVolumeHoraire','etatVolumeHoraire');
     }
 
     public function formuleTotauxHetdAction()
@@ -351,5 +362,14 @@ class IntervenantController extends AbstractActionController implements ContextP
         $container->intervenants = $intervenants;
         
         return $this;
+    }
+
+    /**
+     *
+     * @return \Application\Form\Intervenant\HeuresCompForm
+     */
+    protected function getFormHeuresComp()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantHeuresCompForm');
     }
 }

@@ -8936,10 +8936,73 @@ BEGIN
 END;
 /
 
+
+
+
+  CREATE OR REPLACE FORCE VIEW "OSE"."SRC_ELEMENT_PEDAGOGIQUE" ("ID", "LIBELLE", "ETAPE_ID", "STRUCTURE_ID", "PERIODE_ID", "TAUX_FI", "TAUX_FC", "TAUX_FA", "TAUX_FOAD", "FC", "FI", "FA", "SOURCE_ID", "SOURCE_CODE") AS 
+  SELECT
+  null id,
+  E.LIBELLE,
+  etp.id ETAPE_ID,
+  NVL(str.STRUCTURE_NIV2_ID,str.id) structure_id,
+  per.id periode_id,
+  CASE 
+    WHEN etr.id IS NOT NULL THEN etr.taux_fi
+    ELSE ose_divers.calcul_taux_fi( e.fi, e.fc, e.fa, e.fi, e.fc, e.fa )
+  END taux_fi,
+  CASE 
+    WHEN etr.id IS NOT NULL THEN etr.taux_fc
+    ELSE ose_divers.calcul_taux_fc( e.fi, e.fc, e.fa, e.fi, e.fc, e.fa )
+  END taux_fc,
+  CASE 
+    WHEN etr.id IS NOT NULL THEN etr.taux_fa
+    ELSE ose_divers.calcul_taux_fa( e.fi, e.fc, e.fa, e.fi, e.fc, e.fa )
+  END taux_fa,
+  e.taux_foad,
+  e.fc,
+  e.fi,
+  e.fa,
+  E.SOURCE_ID,
+  E.SOURCE_CODE
+FROM
+  MV_ELEMENT_PEDAGOGIQUE E
+  LEFT JOIN etape etp ON etp.source_code = E.Z_ETAPE_ID
+  LEFT JOIN structure str ON str.source_code = E.Z_STRUCTURE_ID
+  LEFT JOIN periode per ON per.libelle_court = E.Z_PERIODE_ID
+  LEFT JOIN element_pedagogique ep ON ep.source_code = e.source_code
+  LEFT JOIN element_taux_regimes etr ON
+    etr.element_pedagogique_id = ep.id
+    AND etr.annee_id = OSE_PARAMETRE.GET_ANNEE
+    AND 1 = OSE_DIVERS.COMPRISE_ENTRE( etr.histo_creation, etr.histo_destruction );
+
+
+DROP MATERIALIZED VIEW "OSE"."MV_ELEMENT_TAUX_REGIMES";
+  CREATE MATERIALIZED VIEW "OSE"."MV_ELEMENT_TAUX_REGIMES" ("Z_ELEMENT_PEDAGOGIQUE_ID", "ANNEE_ID", "TAUX_FI", "TAUX_FC", "TAUX_FA", "SOURCE_ID", "SOURCE_CODE") AS
+  SELECT
+  e.source_code z_element_pedagogique_id,
+  to_number(e.annee_id) + 1 annee_id,
+  OSE_DIVERS.CALCUL_TAUX_FI( effectif_fi, effectif_fc, effectif_fa, ep.fi, ep.fc, ep.fa ) taux_fi,
+  OSE_DIVERS.CALCUL_TAUX_FC( effectif_fi, effectif_fc, effectif_fa, ep.fi, ep.fc, ep.fa ) taux_fc,
+  OSE_DIVERS.CALCUL_TAUX_FA( effectif_fi, effectif_fc, effectif_fa, ep.fi, ep.fc, ep.fa ) taux_fa,
+  ose_import.get_source_id('Apogee') source_id,
+  e.annee_id || '-' || e.source_code source_code
+FROM
+  ucbn_ose_element_effectifs@apoprod e
+  JOIN element_pedagogique ep ON ep.source_code = e.source_code
+WHERE
+  (effectif_fi + effectif_fc + effectif_fa) > 0
+  AND NOT EXISTS(
+    SELECT * FROM element_taux_regimes etr JOIN element_pedagogique ep2 ON ep2.id = etr.element_pedagogique_id WHERE
+      ep2.source_code = e.source_code
+      AND etr.annee_id = to_number(e.annee_id) + 1
+      AND etr.source_id <> ose_import.get_source_id('Apogee')
+  );
+
+
 -- ********************************************************************* --
 -- *          à faire APRÈS avoir mis à jour le code source            * --
 -- ********************************************************************* --
-
+-- ++++++ OSE_DIVERS
 
 BEGIN DBMS_SCHEDULER.enable(name=>'"OSE"."OSE_SRC_SYNC"'); END; 
 /

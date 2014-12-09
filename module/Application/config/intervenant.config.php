@@ -57,10 +57,10 @@ return array(
                     'voir-heures-comp' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/voir-heures-comp[/:intervenant]',
+                            'route'    => '/voir-heures-comp/:intervenant',
                             'constraints' => array(
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'intervenant' => '[0-9]*',
+                                'action'            => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'intervenant'       => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'voir-heures-comp',
@@ -72,8 +72,10 @@ return array(
                         'options' => array(
                             'route'    => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
                             'constraints' => array(
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'intervenant' => '[0-9]*',
+                                'action'            => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'intervenant'       => '[0-9]*',
+                                'typeVolumeHoraire' => '[0-9]*',
+                                'etatVolumeHoraire' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'formule-totaux-hetd',
@@ -341,7 +343,7 @@ return array(
                     'action'     => array('choisir', 'rechercher', 'search'),
                     'roles'      => array(R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
-              /*  array(
+                /*array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir-heures-comp'),
                     'roles'      => array(R_DRH, R_ADMINISTRATEUR),
@@ -425,6 +427,7 @@ return array(
     'form_elements' => array(
         'invokables' => array(
             'IntervenantDossier' => 'Application\Form\Intervenant\Dossier',
+            'IntervenantHeuresCompForm'                     => 'Application\Form\Intervenant\HeuresCompForm',
             'IntervenantModificationServiceDuForm'          => 'Application\Form\Intervenant\ModificationServiceDuForm',
             'IntervenantModificationServiceDuFieldset'      => 'Application\Form\Intervenant\ModificationServiceDuFieldset',
             'IntervenantMotifModificationServiceDuFieldset' => 'Application\Form\Intervenant\MotifModificationServiceDuFieldset',

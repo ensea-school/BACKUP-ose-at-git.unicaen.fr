@@ -1,5 +1,9 @@
 <?php
 
+
+//$maintenanceText = 'OSE est en cours de mise à jour. Merci de revenir en fin de matinée.';
+//include 'maintenance.php';
+
 define('REQUEST_MICROTIME', microtime(true));
 /**
  * This makes our life easier when dealing with paths. Everything is relative

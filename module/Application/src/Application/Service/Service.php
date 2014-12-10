@@ -286,8 +286,31 @@ class Service extends AbstractEntityService
         $this->join( $serviceStructure, $qb, 'structureAff', false, null, 's_aff' );
         $this->leftJoin( $serviceStructure, $qb, 'structureEns', false, null, 's_ens' );
 
-        $filter = "($iAlias.structure = :composante OR s_aff = :composante OR s_ens = :composante)";
+        $filter = "(($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND ($iAlias.structure = :composante OR s_aff = :composante)) OR s_ens = :composante)";
         $qb->andWhere($filter)->setParameter('composante', $structure);
+
+        return $qb;
+    }
+
+    /**
+     *
+     * @param StructureEntity $structure
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByStructureAff(StructureEntity $structure, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $serviceStructure   = $this->getServiceStructure();
+        $serviceIntervenant = $this->getServiceIntervenant();
+        $iAlias             = $serviceIntervenant->getAlias();
+
+        $this->join( $serviceIntervenant, $qb, 'intervenant' );
+        $this->join( $serviceStructure, $qb, 'structureAff', false, null, 's_aff' );
+
+        $filter = "($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND s_aff = :structureAff)";
+        $qb->andWhere($filter)->setParameter('structureAff', $structure);
 
         return $qb;
     }
@@ -706,147 +729,6 @@ class Service extends AbstractEntityService
         ];
     }
 
-    /**
-     * 
-     * @param Recherche $filter
-     * @return array
-     */
-    public function getResumeService(Recherche $recherche)
-    {
-        $role           = $this->getContextProvider()->getSelectedIdentityRole();
-        if ($role instanceof \Application\Acl\ComposanteRole){
-            $structureEnsId = $role->getStructure()->getId();
-        }elseif ($recherche->getStructureEns()) {
-            $structureEnsId = $recherche->getStructureEns()->getId();
-        }else{
-            $structureEnsId = null;
-        }
-
-        $whereFilter          = array();
-        $filtreOffreFormation = false;
-        if ($recherche->getIntervenant()) {
-            $whereFilter[] = 'INTERVENANT_ID = ' . $recherche->getIntervenant()->getId();
-        }
-        if (isset($filter->structureEns)) {
-            $whereFilter[] = 'STRUCTURE_ENS_ID = ' . $filter->structureEns->getId();
-        }
-        if (isset($filter->statutInterv)) {
-            $e = new TypeIntervenantEntity();
-            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . $e->classToCode[$filter->statutInterv] . "'";
-        }
-        if (isset($filter->etape)) {
-            $whereFilter[] = 'ETAPE_ID = ' . $filter->etape->getId();
-            $filtreOffreFormation = true;
-        }
-        if (isset($filter->elementPedagogique)) {
-            $whereFilter[] = 'ELEMENT_PEDAGOGIQUE_ID = ' . $filter->elementPedagogique->getId();
-            $filtreOffreFormation = true;
-        }
-        $whereFilter = $whereFilter ? ' AND ' . implode(' AND ', $whereFilter) : null;
-
-        if ($structureEnsId){
-            $structureFilter = "(v.STRUCTURE_ENS_ID = $structureEnsId or v.STRUCTURE_AFF_ID = $structureEnsId)";
-        }else{
-            $structureFilter = "1=1";
-        }
-
-        $queryServices = <<<EOS
-select
-
-  NOM_USUEL ,
-  PRENOM ,
-  INTERVENANT_ID ,
-  SOURCE_CODE ,
-  TYPE_INTERVENANT_CODE ,
-  TYPE_INTERVENTION_ID ,
-  sum(TOTAL_HEURES) TOTAL_HEURES,
-  v.service_du SERVICE_DU,
-  v.heures_comp HEURES_COMP
-from V_RESUME_SERVICE v
-where $structureFilter
-  $whereFilter
-group by 
-  NOM_USUEL ,
-  PRENOM ,
-  INTERVENANT_ID ,
-  SOURCE_CODE ,
-  TYPE_INTERVENANT_CODE ,
-  TYPE_INTERVENTION_ID ,
-  v.service_du,
-  v.heures_comp
-EOS;
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($queryServices);
-        $data = $stmt->fetchAll();
-        $dataService = array();
-        foreach ($data as $r) {
-            $intervenantId = $r['INTERVENANT_ID'];
-            $typeId        = $r['TYPE_INTERVENTION_ID'];
-            $dataService[$intervenantId]['intervenant'] = $r;
-            if ($typeId) {
-                $dataService[$intervenantId]['service'][$typeId] = $r['TOTAL_HEURES'];
-            }
-        }
-//        var_dump($queryServices, $dataService);die;
-        
-        $whereFilter = array();
-        if (isset($filter->intervenant)) {
-            $whereFilter[] = 'INTERVENANT_ID = ' . $filter->intervenant->getId();
-        }
-        if (isset($filter->structureEns)) {
-            $whereFilter[] = 'STRUCTURE_ENS_ID = ' . $filter->structureEns->getId();
-        }
-        if (isset($filter->statutInterv)) {
-            $e = new TypeIntervenantEntity();
-            $whereFilter[] = "TYPE_INTERVENANT_CODE = '" . $e->classToCode[$filter->statutInterv] . "'";
-        }
-        $whereFilter = $whereFilter ? ' AND ' . implode(' AND ', $whereFilter) : null;
-        
-        $queryReferentiel = <<<EOS
-select 
-  NOM_USUEL ,
-  PRENOM ,
-  INTERVENANT_ID ,
-  SOURCE_CODE ,
-  TYPE_INTERVENANT_CODE ,
-  sum(TOTAL_HEURES) TOTAL_HEURES
-from V_RESUME_REFERENTIEL v
-where $structureFilter
-  $whereFilter
-group by 
-  NOM_USUEL ,
-  PRENOM ,
-  INTERVENANT_ID ,
-  SOURCE_CODE ,
-  TYPE_INTERVENANT_CODE 
-EOS;
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($queryReferentiel);
-        $data = $stmt->fetchAll();
-        $dataReferentiel = array();
-        foreach ($data as $r) {
-            $intervenantId = $r['INTERVENANT_ID'];
-            // NB: si un filtre 'etape' ou 'elementPedagogique' est spécifié, cela signifie que l'on recherche des 
-            // services prévisionnels. Pour chaque intervenant, on ne conserve donc une ligne de référentiel que s'il 
-            // existe du service prévisionnel pour ce même intervenant.
-            if ($filtreOffreFormation && !isset($dataService[$intervenantId])) {
-                continue;
-            }
-            $dataReferentiel[$intervenantId] = array(
-                'intervenant' => $r,
-                'referentiel' => $r['TOTAL_HEURES'],
-            );
-        }
-
-        $data = \Zend\Stdlib\ArrayUtils::merge($dataReferentiel, $dataService, true);
-
-        uasort($data, function($a, $b) { 
-            return strcmp(
-                    $a['intervenant']['NOM_USUEL'] . $a['intervenant']['PRENOM'], 
-                    $b['intervenant']['NOM_USUEL'] . $b['intervenant']['PRENOM']);
-        });
-        
-        return $data;
-    }
-    
     /**
      * Détermine si un service est assuré localement (c'est-à-dire dans l'université) ou sur un autre établissement
      *

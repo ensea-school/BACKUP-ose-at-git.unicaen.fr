@@ -54,23 +54,18 @@ class DbFunctionRule extends \Application\Rule\AbstractRule
         // prepare statement
         $stmt = $em->getConnection()->prepare($sql);
         
-        /**
-         * IN THIS CASE I assume that $returnValue is SQLT_CHR type and has lenght == 64 chars
-         * it is very important to set proper type and length - otherwise an oracle error will be rised
-         * for list of types @see http://www.php.net/manual/en/function.oci-bind-by-name.php
-         */
         $stmt->bindParam('res', $res);
         $stmt->bindValue('intervenant', $this->getIntervenant()->getId());
         $stmt->bindValue('structure', $this->getStructure() ? $this->getStructure()->getId() : null);
 
         // execute prepared statement
         $stmt->execute();
-        
-        var_dump(sprintf("%s(%s, %s) : %s", 
-                $this->function, 
-                $this->getIntervenant(), 
-                $this->getStructure() ?: 'null', 
-                $res));
+
+//        var_dump(sprintf("%s(%s, %s) : %s", 
+//                $this->function, 
+//                $this->getIntervenant(), 
+//                $this->getStructure() ?: 'null', 
+//                $res));
         
         return $res;
     }

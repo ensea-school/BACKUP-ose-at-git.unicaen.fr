@@ -167,7 +167,6 @@ class Workflow extends AbstractWorkflow
                 }
             }
             
-//            $step = $this->createStep($etape->getStepClass(), $key, $etape->getVisible());
             $step = $this->createStep($etape);
             $step
                     ->setLabel($etape->getLibelle())

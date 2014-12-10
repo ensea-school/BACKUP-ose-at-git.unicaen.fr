@@ -281,16 +281,17 @@ abstract class AbstractWorkflow extends AbstractService
             $step = $this->getStep($step);
         }
         
-        foreach ($this->getSteps() as $key => $s) { /* @var $s Step */
-            if ($s === $step) {
-                return true;
-            }
-            if (($rule = $this->getCrossingRule($key)) && $rule->isRelevant() && !$rule->execute()) {
-                return false;
-            }
-        }
-        
-        return false;
+//        foreach ($this->getSteps() as $key => $s) { /* @var $s Step */
+//            if ($s === $step) {
+//                return true;
+//            }
+//            if (($rule = $this->getCrossingRule($key)) && $rule->isRelevant() && !$rule->execute()) {
+//                return false;
+//            }
+//        }
+//        
+//        return false;
+        return $step->getDone() || $step->getIsCurrent();
     }
     
     /**
@@ -309,15 +310,16 @@ abstract class AbstractWorkflow extends AbstractService
             return $step->getCrossable();
         }
         
-        $reachable = $this->isStepReachable($step);
-        $crossable = false;
-        
-        if ($reachable) {
-            $rule = $this->getCrossingRule($step->getKey());
-            $crossable =  !$rule || $rule->isRelevant() && $rule->execute();
-        }
-        
-        return $reachable && $crossable;
+//        $reachable = $this->isStepReachable($step);
+//        $crossable = false;
+//        
+//        if ($reachable) {
+//            $rule = $this->getCrossingRule($step->getKey());
+//            $crossable =  !$rule || $rule->isRelevant() && $rule->execute();
+//        }
+//        
+//        return $reachable && $crossable;
+        return $step->getDone();
     }
     
     /**

@@ -44,13 +44,13 @@ class TypeVolumeHoraire extends AbstractEntityService
     }
 
     /**
-     * Retourne le type de volume horaire "Réel"
+     * Retourne le type de volume horaire "Réalisé"
      *
      * @return TypeVolumeHoraireEntity
      */
-    public function getReel()
+    public function getRealise()
     {
-        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_REEL));
+        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_REALISE));
     }
 
     /**
@@ -72,7 +72,7 @@ class TypeVolumeHoraire extends AbstractEntityService
     public function getList( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->addOrderBy("$alias.libelle");
+        $qb->addOrderBy("$alias.ordre");
         return parent::getList($qb, $alias);
     }
 

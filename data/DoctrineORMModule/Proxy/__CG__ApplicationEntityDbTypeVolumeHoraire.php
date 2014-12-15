@@ -64,10 +64,10 @@ class TypeVolumeHoraire extends \Application\Entity\Db\TypeVolumeHoraire impleme
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoCreateur');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'ordre', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoCreateur');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoCreateur');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'ordre', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypeVolumeHoraire' . "\0" . 'histoCreateur');
     }
 
     /**
@@ -281,6 +281,28 @@ class TypeVolumeHoraire extends \Application\Entity\Db\TypeVolumeHoraire impleme
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLibelle', array());
 
         return parent::getLibelle();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOrdre($ordre)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOrdre', array($ordre));
+
+        return parent::setOrdre($ordre);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOrdre()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrdre', array());
+
+        return parent::getOrdre();
     }
 
     /**

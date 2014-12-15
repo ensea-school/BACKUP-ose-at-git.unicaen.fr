@@ -175,7 +175,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param \Application\Service\AbstractEntityService|string $service
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param string $relation
-     * @param boolean $addSelect
+     * @param boolean|array|null $addSelect
      * @param string $leftAlias
      * @param string $rightAlias
      * @return self
@@ -197,8 +197,11 @@ abstract class AbstractEntityService extends AbstractService
         }
 
         $qb->$method( $leftAlias.'.'.$relation, $rightAlias );
-        if ($addSelect){
+        if (true === $addSelect){
             $qb->addSelect( $rightAlias );
+        }elseif(is_array($addSelect)){
+            //$qb->addSelect( $rightAlias );
+            $qb->addSelect( 'partial '.$rightAlias.'.{'.implode( ', ', $addSelect).'}' );
         }
         return $this;
     }

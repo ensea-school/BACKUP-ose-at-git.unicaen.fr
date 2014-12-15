@@ -17,7 +17,7 @@ interface IntervenantAwareInterface
      * @param Intervenant $intervenant Intervenant concerné
      * @return self
      */
-    public function setIntervenant(Intervenant $intervenant);
+    public function setIntervenant(Intervenant $intervenant = null);
     
     /**
      * Retourne l'intervenant concerné.

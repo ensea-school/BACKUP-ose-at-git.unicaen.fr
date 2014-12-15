@@ -64,10 +64,10 @@ class Etape extends \Application\Entity\Db\Etape implements \Doctrine\ORM\Proxy\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'niveau', 'sourceCode', 'specifiqueEchanges', 'validiteDebut', 'validiteFin', 'id', 'elementPedagogique', 'cheminPedagogique', 'structure', 'typeFormation', 'source', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'niveau', '' . "\0" . 'Application\\Entity\\Db\\Etape' . "\0" . 'niveauFormation', 'sourceCode', 'specifiqueEchanges', 'validiteDebut', 'validiteFin', 'id', 'elementPedagogique', 'cheminPedagogique', 'structure', 'typeFormation', 'source', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'niveau', 'sourceCode', 'specifiqueEchanges', 'validiteDebut', 'validiteFin', 'id', 'elementPedagogique', 'cheminPedagogique', 'structure', 'typeFormation', 'source', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'niveau', '' . "\0" . 'Application\\Entity\\Db\\Etape' . "\0" . 'niveauFormation', 'sourceCode', 'specifiqueEchanges', 'validiteDebut', 'validiteFin', 'id', 'elementPedagogique', 'cheminPedagogique', 'structure', 'typeFormation', 'source', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
     }
 
     /**
@@ -303,6 +303,17 @@ class Etape extends \Application\Entity\Db\Etape implements \Doctrine\ORM\Proxy\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNiveau', array());
 
         return parent::getNiveau();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNiveauFormation()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNiveauFormation', array());
+
+        return parent::getNiveauFormation();
     }
 
     /**

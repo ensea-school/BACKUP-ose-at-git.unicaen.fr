@@ -360,4 +360,10 @@ class GroupeTypeFormation
     {
         return $this->histoCreateur;
     }
+
+    public function __toString()
+    {
+        return $this->getLibelleLong();
+    }
+
 }

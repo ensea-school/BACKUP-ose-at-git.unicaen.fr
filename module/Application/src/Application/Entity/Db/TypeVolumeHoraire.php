@@ -7,9 +7,9 @@ namespace Application\Entity\Db;
  */
 class TypeVolumeHoraire implements HistoriqueAwareInterface
 {
-    const CODE_PREVU = 'PREVU';
-    const CODE_REEL  = 'REEL';
-    const CODE_PAYE  = 'PAYE';
+    const CODE_PREVU    = 'PREVU';
+    const CODE_REALISE  = 'REALISE';
+    const CODE_PAYE     = 'PAYE';
     
     /**
      * @var string
@@ -35,6 +35,11 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
      * @var string
      */
     private $libelle;
+
+    /**
+     * @var integer
+     */
+    private $ordre;
 
     /**
      * @var integer
@@ -170,6 +175,29 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return TypeVolumeHoraire
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
     }
 
     /**

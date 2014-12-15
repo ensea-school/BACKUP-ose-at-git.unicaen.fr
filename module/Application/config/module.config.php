@@ -73,6 +73,7 @@ $main =  array(
                 'subscribers' => array(
                     'Doctrine\DBAL\Event\Listeners\OracleSessionInit',
                     'Common\ORM\Event\Listeners\HistoriqueListener',
+                    'Common\ORM\Event\Listeners\FormuleListener',
                     'Common\ORM\Event\Listeners\ValiditeListener',
                 ),
             ),
@@ -202,6 +203,7 @@ $main =  array(
             'ApplicationContextProvider'                     => 'Application\\Service\\ContextProvider',
             'ApplicationlocalContext'                        => 'Application\\Service\\LocalContext',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
+            'ApplicationUtilisateur'                         => 'Application\\Service\\Utilisateur',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
             'ApplicationSource'                              => 'Application\\Service\\Source',
             'ApplicationRole'                                => 'Application\\Service\\Role',

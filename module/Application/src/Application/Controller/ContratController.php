@@ -273,6 +273,49 @@ class ContratController extends AbstractActionController implements ContextProvi
     }
     
     /**
+     * Suppression d'un projet de contrat/avenant par la composante d'intervention.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws Common\Exception\MessageException
+     */
+    public function supprimerAction()
+    {
+        $this->contrat   = $this->context()->mandatory()->contratFromRoute();
+        $contratToString = lcfirst($this->contrat->toString(true, true));
+        
+//        $rule = new \Application\Rule\Intervenant\PeutValiderContratRule($this->intervenant, $this->contrat);
+//        if (!$rule->execute()) {
+//            throw new \Common\Exception\MessageException("Impossible de valider $contratToString.", null, new \Exception($rule->getMessage()));
+//        }
+        if (!$this->isAllowed($this->contrat, ContratAssertion::PRIVILEGE_DELETE)) {
+            throw new \Common\Exception\MessageException("La suppression $contratToString n'est pas possible.");
+        }
+        
+        $result = $this->confirm()->execute();
+
+        if (is_array($result)) {
+            // confirmation postée
+            try {
+                $this->getServiceContrat()->supprimer($this->contrat); 
+                $this->flashMessenger()->addSuccessMessage("Suppression $contratToString effectuée avec succès.");
+            }
+            catch(\Exception $e) {
+                $e = \Application\Exception\DbException::translate($e);
+                $this->confirm()->setMessages([$e->getMessage()]);
+            }
+        }
+        
+        $viewModel = $this->confirm()->getViewModel();
+        
+        $viewModel->setVariables([
+            'title'   => "Suppression $contratToString",
+            'contrat' => $this->contrat,
+        ]);
+        
+        return $viewModel;
+    }
+    
+    /**
      * Validation du contrat/avenant par la composante d'intervention.
      * 
      * @return \Zend\View\Model\ViewModel
@@ -461,11 +504,11 @@ class ContratController extends AbstractActionController implements ContextProvi
         $dateNaissance   = $this->intervenant->getDateNaissanceToString();
         $estATV          = $this->intervenant->getStatut()->estAgentTemporaireVacataire();
         $estUnProjet     = $this->contrat->getValidation() ? false : true;
+        $contratIniModif = $estUnAvenant && $this->contrat->getContrat()->getStructure() === $this->contrat->getStructure() ? true : false;
         $dateSignature   = $estUnProjet ? $this->contrat->getHistoCreation() : $this->contrat->getValidation()->getHistoCreation();
-        $services        = $this->getServicesContrats(array($this->contrat))[$this->contrat->getId()];
         $servicesRecaps  = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
-        $totalHETD       = $this->getFormuleHetd()->getHetd($this->intervenant);
-
+        $totalHETD       = $this->getTotalHetdIntervenant();
+        
         if ($this->intervenant->getDossier()) {
             $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
             $numeroINSEE           = $this->intervenant->getDossier()->getNumeroInsee();
@@ -485,6 +528,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         $variables = array(
             'estUnAvenant'            => $estUnAvenant,
             'estUnProjet'             => $estUnProjet,
+            'contratIniModif'         => $contratIniModif,
             'etablissement'           => "L'université de Caen",
             'etablissementRepresente' => ", représentée par son Président, Pierre SINEUX",
             'nomIntervenant'          => $nomIntervenant,
@@ -497,7 +541,6 @@ class ContratController extends AbstractActionController implements ContextProvi
             'annee'                   => $annee,
             'dateSignature'           => $dateSignature->format(Constants::DATE_FORMAT),
             'lieuSignature'           => "Caen",
-            'services'                => $services,
             'servicesRecaps'          => $servicesRecaps,
             'totalHETD'               => \UnicaenApp\Util::formattedFloat($totalHETD, \NumberFormatter::DECIMAL, 2),
         );
@@ -518,6 +561,20 @@ class ContratController extends AbstractActionController implements ContextProvi
         $exp->addBodyScript('application/contrat/contrat-pdf.phtml', true, $variables, 1);
 
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalHetdIntervenant()
+    {   
+        $annee             = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
+        
+        $fr = $this->intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+
+        return $fr->getServiceAssure();
     }
     
     /**
@@ -702,13 +759,5 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getServiceTypeVolumeHoraire()
     {
         return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\Process\FormuleHetd
-     */
-    public function getFormuleHetd()
-    {
-        return $this->getServiceLocator()->get('processFormuleHetd');
     }
 }

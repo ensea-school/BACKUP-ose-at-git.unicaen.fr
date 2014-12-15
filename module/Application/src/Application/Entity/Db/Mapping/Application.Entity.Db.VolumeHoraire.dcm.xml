@@ -77,5 +77,15 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
+    <many-to-many field="etatVolumeHoraire" target-entity="Application\Entity\Db\EtatVolumeHoraire">
+        <join-table name="V_VOLUME_HORAIRE_ETAT">
+            <join-columns>
+                <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID" unique="true"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

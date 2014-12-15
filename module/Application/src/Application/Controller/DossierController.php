@@ -12,7 +12,6 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\TypeValidation;
-use Application\Service\Workflow\Event\WorkflowEventAwareTrait;
 
 /**
  * Description of DossierController
@@ -26,7 +25,6 @@ class DossierController extends AbstractActionController implements ContextProvi
 {
     use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
-    use WorkflowEventAwareTrait;
     
     /**
      * @var \Application\Entity\Db\IntervenantExterieur

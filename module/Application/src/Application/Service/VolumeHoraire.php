@@ -7,6 +7,7 @@ use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
 
 /**
  * Description of VolumeHoraire
@@ -112,6 +113,46 @@ class VolumeHoraire extends AbstractEntityService
                 ->join("v.typeValidation", 'tv')
                 ->andWhere("tv = :tv")->setParameter('tv', $type);
 
+        return $qb;
+    }
+
+    /**
+     *
+     * @param EtatVolumeHoraireEntity $etatVolumeHoraire
+     * @param QueryBuilder $qb
+     * @param string $alias
+     * @return QueryBuilder
+     */
+    public function finderByEtatVolumeHoraire( EtatVolumeHoraireEntity $etatVolumeHoraire=null, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        if ($etatVolumeHoraire){
+            $sEtatVolumeHoraire = $this->getServiceLocator()->get('applicationEtatVolumeHoraire'); /* @var $sEtatVolumeHoraire EtatVolumeHoraire */
+
+            $this->join( $sEtatVolumeHoraire, $qb, 'etatVolumeHoraire' );
+
+            $qb->andWhere( $sEtatVolumeHoraire->getAlias().'.ordre >= '.$etatVolumeHoraire->getOrdre() );
+        }
+        return $qb;
+    }
+
+    /**
+     *
+     * @param EtatVolumeHoraireEntity $etatVolumeHoraire
+     * @param QueryBuilder $qb
+     * @param string $alias
+     * @return QueryBuilder
+     */
+    public function finderByStrictEtatVolumeHoraire( EtatVolumeHoraireEntity $etatVolumeHoraire=null, QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+        if ($etatVolumeHoraire){
+            $sEtatVolumeHoraire = $this->getServiceLocator()->get('applicationEtatVolumeHoraire'); /* @var $sEtatVolumeHoraire EtatVolumeHoraire */
+
+            $this->join( $sEtatVolumeHoraire, $qb, 'etatVolumeHoraire' );
+
+            $sEtatVolumeHoraire->finderById( $etatVolumeHoraire->getId(), $qb );
+        }
         return $qb;
     }
 

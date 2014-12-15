@@ -56,6 +56,18 @@ class IntervenantExterieur extends Intervenant
     }
     
     /**
+     * Get estUneFemme
+     *
+     * @return bool 
+     */
+    public function estUneFemme()
+    {
+        $civilite = $this->getDossier() ? $this->getDossier()->getCivilite() : $this->getCivilite();
+        
+        return Civilite::SEXE_F === $civilite->getSexe();
+    }
+    
+    /**
      * Set validiteDebut
      *
      * @param \DateTime $validiteDebut

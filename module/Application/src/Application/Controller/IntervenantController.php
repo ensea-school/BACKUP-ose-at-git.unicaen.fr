@@ -202,30 +202,43 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirHeuresCompAction()
     {
-        $viewModel        = new \Zend\View\Model\ViewModel();
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'total-heures-comp';
-        $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
-        $viewModel->addChild($totalViewModel, 'totalHeuresComp');
-
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
+        $form = $this->getFormHeuresComp();
 
-        $viewModel->setVariables( compact('intervenant', 'formule') );
-        return $viewModel;
+        $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
+        /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
+        if (! isset($typeVolumeHoraire)){
+            throw new LogicException('Type de volume horaire erroné');
+        }
+
+        $etatVolumeHoraire = $this->context()->etatVolumeHoraireFromQuery('etat-volume-horaire', $form->get('etat-volume-horaire')->getValue());
+        /* @var $etatVolumeHoraire \Application\Entity\Db\EtatVolumeHoraire */
+        if (! isset($etatVolumeHoraire)){
+            throw new LogicException('Etat de volume horaire erroné');
+        }
+
+        $form->setData([
+            'type-volume-horaire' => $typeVolumeHoraire->getId(),
+            'etat-volume-horaire' => $etatVolumeHoraire->getId(),
+        ]);
+
+        return compact('form','intervenant','typeVolumeHoraire','etatVolumeHoraire');
     }
 
-    public function totalHeuresCompAction()
+    public function formuleTotauxHetdAction()
     {
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        $formule = $this->getServiceLocator()->get('ProcessFormuleHetd');
-        return compact('intervenant', 'formule');
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant Intervenant */
+        $annee = $this->context()->getGlobalContext()->getAnnee();
+        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
+        $formuleResultat = $intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+        return compact('formuleResultat');
     }
 
     public function feuilleDeRouteAction()
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
+
         $this->em()->getFilters()->enable('historique');
 
         if ($role instanceof \Application\Acl\IntervenantRole) {
@@ -234,7 +247,7 @@ class IntervenantController extends AbstractActionController implements ContextP
         else {
             $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
-        
+
         if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
             throw new \Common\Exception\MessageException("Pas encore implémenté pour IntervenantPermanent");
         }
@@ -349,5 +362,14 @@ class IntervenantController extends AbstractActionController implements ContextP
         $container->intervenants = $intervenants;
         
         return $this;
+    }
+
+    /**
+     *
+     * @return \Application\Form\Intervenant\HeuresCompForm
+     */
+    protected function getFormHeuresComp()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantHeuresCompForm');
     }
 }

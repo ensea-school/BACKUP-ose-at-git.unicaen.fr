@@ -8,10 +8,10 @@
 ?>
 
 <div id="filtres" data-url="<?php echo $this->url('service/default', array('action'=>'filtres')) ?>">
-    <?php echo $this->filtresListe; ?>
+    <?php echo $this->recherche; ?>
 </div>
 
-<?php if ('afficher' === $action ): ?>
+<?php if ('afficher' === $action || 'trier' === $action): ?>
 
 <?php if ($canAddService): ?>
 <?php $url = $this->url('service/default', array('action' => 'saisie')); ?>

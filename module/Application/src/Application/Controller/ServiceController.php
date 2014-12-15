@@ -10,6 +10,7 @@ use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\IntervenantPermanent;
+use Application\Entity\Service\Recherche;
 
 /**
  * Description of ServiceController
@@ -36,55 +37,57 @@ class ServiceController extends AbstractActionController
     /**
      *
      * @param Intervenant|null $intervenant
-     * @param StdClass|null $filter
-     * @return \Application\Entity\Db\Service[]
+     * @param Recherche $recherche
+     * @return \Doctrine\ORM\QueryBuilder
      */
-    private function getFilteredServices($intervenant, $filter)
+    private function getFilteredServices($intervenant, $recherche)
     {
-        $typeVolumeHoraire         = $this->getServiceTypeVolumehoraire()->getPrevu();
+                //\Test\Util::sqlLog($this->getServiceService()->getEntityManager());
         $role                      = $this->getContextProvider()->getSelectedIdentityRole();
 
         $service                   = $this->getServiceService();
         $volumeHoraireService      = $this->getServiceLocator()->get('applicationVolumehoraire');       /* @var $volumeHoraireService \Application\Service\VolumeHoraire */
         $elementPedagogiqueService = $this->getServiceLocator()->get('applicationElementPedagogique');  /* @var $elementPedagogiqueService \Application\Service\ElementPedagogique */
+        $intervenantService        = $this->getServiceLocator()->get('applicationIntervenant');         /* @var $intervenantService \Application\Service\Intervenant */
 
         $this->initFilters();
         $qb = $service->initQuery()[0];
 
         $service
-            ->join(     'applicationIntervenant',       $qb, 'intervenant',         true )
-            ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  true )
-            ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       true );
+            ->join(     'applicationIntervenant',       $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
+            ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
+            ->leftjoin( $volumeHoraireService,          $qb, 'volumeHoraire',       ['id', 'heures'] );
+
+//        $intervenantService
+//            ->leftJoin( 'applicationUtilisateur',       $qb, 'utilisateur',         true );
 
         $elementPedagogiqueService
-            ->leftJoin( 'applicationEtape',             $qb, 'etape',               true )
-            ->leftJoin( 'applicationPeriode',           $qb, 'periode',             true )
-            ->leftJoin( 'applicationTypeIntervention',  $qb, 'typeIntervention',    true );
+            ->leftJoin( 'applicationEtape',             $qb, 'etape',               ['id', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
+            ->leftJoin( 'applicationPeriode',           $qb, 'periode',             ['id', 'code', 'libelleLong', 'libelleCourt', 'ordre'] )
+            ->leftJoin( 'applicationTypeIntervention',  $qb, 'typeIntervention',    ['id', 'code', 'libelle', 'ordre'] );
 
         $volumeHoraireService
-            ->leftJoin( 'applicationMotifNonPaiement',  $qb, 'motifNonPaiement',    true );
+            ->leftJoin( 'applicationMotifNonPaiement',  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] );
 
         $service->finderByContext($qb);
-        $service->finderByFilterObject($filter, null, $qb);
+        $service->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb);
+
         if ($intervenant){
             $service->finderByIntervenant($intervenant, $qb);
         }
         if (! $intervenant && $role instanceof \Application\Acl\ComposanteRole){
             $service->finderByComposante($role->getStructure(), $qb);
         }
-        $services = $service->getList($qb);
-        $service->setTypeVolumehoraire($services, $typeVolumeHoraire);
-        return $services;
+        return $qb;
     }
 
     public function indexAction()
-    { 
+    {
         $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
         $role                     = $this->getContextProvider()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
         $annee                    = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel                = new \Zend\View\Model\ViewModel();
-        $typeVolumeHoraire        = $this->getServiceTypeVolumehoraire()->getPrevu();
         $canAddService            = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
         $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
                 $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
@@ -96,37 +99,40 @@ class ServiceController extends AbstractActionController
         if (! $intervenant){
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
             $params = $this->getEvent()->getRouteMatch()->getParams();
-            $params['action'] = 'filtres';
-            $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-            $viewModel->addChild($listeViewModel, 'filtresListe');
+            $params['action'] = 'recherche';
+            $rechercheViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
+            $viewModel->addChild($rechercheViewModel, 'recherche');
             
-            $filter = $this->getFormServiceRecherche()->hydrateFromSession();
-            $this->getContextProvider()->getLocalContext()->fromArray( // sauvegarde des filtres dans le contexte local
-                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
-            );
+            $recherche = $this->getServiceService()->loadRecherche();
         }else{
             $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action = 'afficher'; // Affichage par défaut
-            $filter = null;
+            $recherche = new Recherche;
+            $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getPrevu() );
+            $recherche->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
 
-            //$params           = $this->getEvent()->getRouteMatch()->getParams();
-        /*    $params           = [];
-            $params['intervenant'] = $intervenant->getSourceCode();
-            $params['action'] = 'total-heures-comp';
+            $params = [
+                'intervenant'   => $intervenant->getSourceCode(),
+                'action'        => 'formule-totaux-hetd',
+            ];
+            $this->getEvent()->setParam('typeVolumeHoraire', $recherche->getTypeVolumeHoraire() );
+            $this->getEvent()->setParam('etatVolumeHoraire', $recherche->getEtatVolumeHoraire() );
             $totalViewModel   = $this->forward()->dispatch('Application\Controller\Intervenant', $params);
-            $viewModel->addChild($totalViewModel, 'totalHeuresComp');*/
+            $viewModel->addChild($totalViewModel, 'formuleTotauxHetd');
         }
 
         /* Préparation et affichage */
         if ('afficher' === $action || $totaux){
-            $services = $this->getFilteredServices($intervenant, $filter);
+            $qb = $this->getFilteredServices($intervenant, $recherche);
+            $services = $this->getServiceService()->getList($qb);
+            $this->getServiceService()->setTypeVolumehoraire($services, $recherche->getTypeVolumeHoraire());
 
             // services référentiels : délégation au contrôleur
             if (! $totaux){
                 $controller       = 'Application\Controller\ServiceReferentiel';
                 $params           = $this->getEvent()->getRouteMatch()->getParams();
                 $params['action'] = 'voirListe';
-                $params['filter'] = $filter;
+                $params['recherche'] = $recherche; /** @todo recherche également au niveau du service référentiel */
                 $params['query']  = $this->params()->fromQuery();
                 $params['renderIntervenants'] = ! $intervenant;
                 $listeViewModel   = $this->forward()->dispatch($controller, $params);
@@ -136,6 +142,7 @@ class ServiceController extends AbstractActionController
             $services = [];
         }
         $renderReferentiel  = !$intervenant instanceof IntervenantExterieur;
+        $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'renderReferentiel','canAddService', 'canAddServiceReferentiel'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
@@ -159,66 +166,87 @@ class ServiceController extends AbstractActionController
         }
 
         if (! $intervenant){
-            $this->filtresAction();
-            $filter = $this->getFormServiceRecherche()->hydrateFromSession();
+            $this->rechercheAction();
+            $recherche = $this->getServiceService()->loadRecherche();
         }else{
-            $filter = null;
+            $recherche = new Recherche;
+            $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getPrevu() );
+            $recherche->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
         }
 
         /* Préparation et affichage */
-
-        $services = $this->getFilteredServices($intervenant, $filter);
+        $data = $this->getServiceService()->getTableauBordExport($recherche);
+        //var_dump($data);
 
         $csvModel = new \UnicaenApp\View\Model\CsvModel();
         $head = [
-            'Code Intervenant',
+            'Code intervenant',
             'Intervenant',
-            'Statut',
-            'Type',
-            'Fc. Référentiel',
+            'Statut intervenant',
+            'Type d\'intervenant',
             'Structure d\'affectation',
-            'Composante d\'enseignement',
+
+            'Structure d\'enseignement',
             'Code formation',
             'Formation ou établissement',
             'Code enseignement',
             'Enseignement',
-        ];
-        $typesIntervention = [];
-        foreach( $services as $service ){
-            $tis = $service->getVolumeHoraireListe()->getTypesIntervention();
-            foreach( $tis as $ti ){
-                if (! isset($typesIntervention[$ti->getId()])){
-                    $typesIntervention[$ti->getId()] = $ti;
-                }
-            }
+            'Commentaires',
+            'Période',
+            'Majoration',
+            'Source enseignement',
 
-        }
-        usort( $typesIntervention, function($ti1,$ti2){
-            return $ti1->getOrdre() > $ti2->getOrdre();
-        } );
-        foreach( $typesIntervention as $typeIntervention ){
+            'Service statutaire',
+            'Modification de service du',
+            'Heures (réelles)',
+            'Heures (HETD)',
+            'Solde (HETD)',
+            'Heures non payées',
+            'Référentiel',
+        ];
+        foreach( $data['types-intervention'] as $typeIntervention ){
+            /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
             $head[] = $typeIntervention->getCode();
         }
 
         $csvModel->setHeader( $head );
-        foreach( $services as $service ){ /* @var $service \Application\Entity\Db\Service */
-            $line = [
-                'code_intervenant'  => $service->getIntervenant()->getSourceCode(),
-                'intervenant'       => (string)$service->getIntervenant(),
-                'statut'            => (string)$service->getIntervenant()->getStatut(),
-                'type'              => (string)$service->getIntervenant()->getStatut()->getTypeIntervenant(),
-                'referentiel'       => $this->getServiceLocator()->get('ProcessFormuleHetd')->getServiceReferentiel($service->getIntervenant()),
-                'str_aff'           => (string)$service->getStructureAff(),
-                'str_ens'           => (string)$service->getStructureEns(),
-                'code_etape'        => $service->getElementPedagogique() ? $service->getElementPedagogique()->getEtape()->getSourceCode() : '',
-                'etape'             => $service->getElementPedagogique() ? (string)$service->getElementPedagogique()->getEtape() : (string)$service->getEtablissement(),
-                'code_element'      => $service->getElementPedagogique() ? $service->getElementPedagogique()->getSourceCode() : '',
-                'element'           => $service->getElementPedagogique() ? (string)$service->getElementPedagogique() : '',
-            ];
-            foreach( $typesIntervention as $typeIntervention ){
-                $line[$typeIntervention->getCode()] = $service->getVolumeHoraireListe(null, $typeIntervention)->getHeures();
+        foreach( $data['data'] as $d ){
+            if ($d['heures-reelles'] + $d['heures-non-payees'] > 0){
+                $line = [
+                    $d['intervenant-code'],
+                    $d['intervenant-nom'],
+                    $d['intervenant-statut-libelle'],
+                    $d['intervenant-type-libelle'],
+                    $d['service-structure-aff-libelle'],
+
+                    $d['service-structure-ens-libelle'],
+                    $d['etape-code'],
+                    $d['etape-libelle'] ? $d['etape-libelle'] : $d['etablissement-libelle'],
+                    $d['element-code'],
+                    $d['element-libelle'],
+                    $d['commentaires'],
+                    $d['element-periode-libelle'],
+                    $d['element-ponderation-compl'],
+                    $d['element-source-libelle'],
+
+                    $d['heures-service-statutaire'],
+                    $d['heures-service-du-modifie'],
+                    $d['heures-reelles'],
+                    $d['heures-assurees'],
+                    $d['heures-solde'],
+                    $d['heures-non-payees'],
+                    $d['heures-referentiel'],
+                ];
+                foreach( $data['types-intervention'] as $typeIntervention ){
+                    /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
+                    if (isset($d['types-intervention'][$typeIntervention->getId()])){
+                        $line[] = $d['types-intervention'][$typeIntervention->getId()];
+                    }else{
+                        $line[] = 0;
+                    }
+                }
+                $csvModel->addLine($line);
             }
-            $csvModel->addLine($line);
         }
         $csvModel->setFilename('service.csv');
         return $csvModel;
@@ -233,37 +261,43 @@ class ServiceController extends AbstractActionController
     {
         $intervenant        = $this->context()->intervenantFromRoute();
         $canAddService      = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
-
-        $this->initFilters();
-
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            return $this->redirect()->toRoute('intervenant/services', array('intervenant' => $role->getIntervenant()->getSourceCode()));
-        }
-        
-        $viewModel = new \Zend\View\Model\ViewModel();
-
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $action = $this->getRequest()->getQuery('action', null);
+        $tri = null;
+        if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
+
+        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
+            throw new \BjyAuthorize\Exception\UnAuthorizedException();
+        }
+
+        $this->initFilters();
+        if ($intervenant){
+            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
+        }
+
+        if (! $intervenant){
+            $this->rechercheAction();
+            $recherche = $this->getServiceService()->loadRecherche();
+        }else{
+            $recherche = new Recherche;
+            $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getPrevu() );
+            $recherche->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
+        }
+
+        $viewModel = new \Zend\View\Model\ViewModel();
+
         $params = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'filtres';
+        $params['action'] = 'recherche';
         $listeViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-        $viewModel->addChild($listeViewModel, 'filtresListe');
+        $viewModel->addChild($listeViewModel, 'recherche');
 
-        $filter = $this->getFormServiceRecherche()->hydrateFromSession();
-
-        // sauvegarde des filtres dans le contexte local
-        $this->getContextProvider()->getLocalContext()->fromArray(
-                (new \Zend\Stdlib\Hydrator\ObjectProperty())->extract($filter)
-        );
-
-        if ('afficher' == $action ){
-            $resumeServices = $this->getServiceService()->getResumeService($filter);
+        $recherche = $this->getServiceService()->loadRecherche();
+        if ('afficher' == $action || 'trier' == $action ){
+            $resumeServices = $this->getServiceService()->getTableauBordResume($recherche, $tri);
         }else{
             $resumeServices = null;
         }
-   
+
         $viewModel->setVariables( compact('annee','action','resumeServices','canAddService') );
         return $viewModel;
     }
@@ -272,22 +306,34 @@ class ServiceController extends AbstractActionController
     {
         $this->initFilters();
 
-        $filter = $this->getFormServiceRecherche()->hydrateFromSession();
+        $filter = $this->getFormRecherche()->hydrateFromSession();
 
         return compact('filter');
     }
 
-    public function filtresAction()
+    public function rechercheAction()
     {
-        /* Initialisation, si ce n'est pas un intervenant, du formulaire de recherche */
-        $rechercheForm = $this->getFormServiceRecherche();
-        $rechercheForm->populateOptions();
-        $rechercheForm->setDataFromSession();
-        $rechercheForm->setData( $this->getRequest()->getQuery() );
-        if ($rechercheForm->isValid()){
-            $rechercheForm->sessionUpdate();
+        $errors = [];
+        $service = $this->getServiceService();
+        $rechercheForm = $this->getFormRecherche();
+        $entity = $service->loadRecherche();
+        $rechercheForm->bind($entity);
+
+        $request = $this->getRequest();
+        /* @var $request Http\Request */
+        if ('afficher' === $request->getQuery('action', null)){
+            $rechercheForm->setData($request->getQuery());
+            if ($rechercheForm->isValid()) {
+                try {
+                    $service->saveRecherche($entity);
+                }catch (\Exception $e) {
+                    $errors[] = $e->getMessage();
+                }
+            }else{
+                $errors[] = 'Les données de recherche saisies sont invalides.';
+            }
         }
-        return compact('rechercheForm');
+        return compact('rechercheForm', $errors);
     }
 
     public function voirAction()
@@ -467,9 +513,9 @@ class ServiceController extends AbstractActionController
     /**
      * @return \Application\Form\Service\Recherche
      */
-    protected function getFormServiceRecherche()
+    protected function getFormRecherche()
     {
-        return $this->getServiceLocator()->get('FormElementManager')->get('ServiceRecherche');
+        return $this->getServiceLocator()->get('FormElementManager')->get('ServiceRechercheForm');
     }
 
     /**
@@ -518,6 +564,14 @@ class ServiceController extends AbstractActionController
     protected function getServiceServiceReferentiel()
     {
         return $this->getServiceLocator()->get('applicationServiceReferentiel');
+    }
+
+    /**
+     * @return \Application\Service\EtatVolumeHoraire
+     */
+    protected function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 
     /**

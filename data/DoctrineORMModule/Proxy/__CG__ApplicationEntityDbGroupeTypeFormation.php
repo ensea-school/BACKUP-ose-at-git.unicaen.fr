@@ -452,4 +452,15 @@ class GroupeTypeFormation extends \Application\Entity\Db\GroupeTypeFormation imp
         return parent::getHistoCreateur();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', array());
+
+        return parent::__toString();
+    }
+
 }

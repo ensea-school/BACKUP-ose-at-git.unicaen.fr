@@ -10,7 +10,9 @@ return array(
                 'options' => array(
                     'route'    => '/recherche/:action',
                     'constraints' => array(
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'            => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'typeIntervenant'   => '[0-9]*',
+                        'structure'         => '[0-9]*',
                     ),
                     'defaults' => array(
                         'controller' => 'Application\Controller\Recherche',

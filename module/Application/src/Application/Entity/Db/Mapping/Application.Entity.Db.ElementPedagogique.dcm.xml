@@ -86,5 +86,15 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
+    <many-to-many field="typeModulateur" target-entity="Application\Entity\Db\TypeModulateur">
+        <join-table name="V_ELEMENT_TYPE_MODULATEUR">
+            <join-columns>
+                <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

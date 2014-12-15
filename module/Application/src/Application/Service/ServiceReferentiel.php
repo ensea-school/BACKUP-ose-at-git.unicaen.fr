@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 
 
 /**
@@ -23,7 +24,7 @@ class ServiceReferentiel extends AbstractEntityService
     {
         return 'Application\Entity\Db\ServiceReferentiel';
     }
-    
+
     /**
      * Retourne l'alias d'entité courante
      *
@@ -52,6 +53,56 @@ class ServiceReferentiel extends AbstractEntityService
 
         return array($qb,$alias);
     }
+
+    /**
+     *
+     * @param TypeIntervenantEntity $typeIntervenant
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByTypeIntervenant(TypeIntervenantEntity $typeIntervenant=null, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if ($typeIntervenant){
+            $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', $alias );
+            $this->getServiceIntervenant()->finderByType( $typeIntervenant, $qb );
+        }
+        return $qb;
+    }
+
+
+    /**
+     *
+     * @param StructureEntity $structure
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByStructureAff(StructureEntity $structure=null, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if ($structure){
+            $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', $alias );
+            $this->getServiceIntervenant()->finderByStructure( $structure, $qb );
+        }
+        return $qb;
+    }
+
+
+    /**
+     *
+     * @param StructureEntity $structure
+     * @param QueryBuilder|null $queryBuilder
+     * @return QueryBuilder
+     */
+    public function finderByStructureEns(StructureEntity $structure=null, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if ($structure){
+            $this->finderByStructure( $structure, $qb, $alias );
+        }
+        return $qb;
+    }
+
 
     /**
      * Retourne le query builder permettant de rechercher les services référentiels

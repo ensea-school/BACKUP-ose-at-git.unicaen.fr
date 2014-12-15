@@ -79,7 +79,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         $service        = $this->getServiceServiceReferentiel();
         $intervenant    = $this->context()->intervenantFromRoute();
         if (! $intervenant) $intervenant = $this->context()->intervenantFromQuery('intervenant-filter');
-        $filter         = $this->params('filter');
+        $recherche      = $this->params('recherche');
         $qb = $service->finderByContext();
         if ($intervenant) {
             $service->finderByIntervenant( $intervenant, $qb );
@@ -91,13 +91,7 @@ class ServiceReferentielController extends AbstractActionController implements C
             }
         }
 
-        if (isset($filter->structureEns)){
-            $service->finderByStructure( $filter->structureEns, $qb );
-        }
-        if (isset($filter->intervenant)){
-            $service->finderByIntervenant( $filter->intervenant, $qb );
-        }
-
+        $service->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb);
         $services = $service->getList( $qb );
         return compact('services', 'intervenant', 'renderIntervenants');
     }

@@ -59,9 +59,20 @@ return array(
                     'recherche' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/recherche[/:term]',
+                            'route'    => '/recherche',
                             'defaults' => array(
                                 'action' => 'recherche',
+                            ),
+                        ),
+                        'child_routes' => array(
+                            'default' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/',
+                                    'defaults' => array(
+                                        'action' => 'recherche',
+                                    ),
+                                ),
                             ),
                         ),
                     ),
@@ -187,7 +198,7 @@ return array(
                     'roles' => [R_ROLE],
                 ), array(
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('resume','resume-refresh','filtres'),
+                    'action' => array('resume','resume-refresh','recherche'),
                     'roles' => [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD]
                 ), array(
                     'controller' => 'Application\Controller\ServiceReferentiel',
@@ -246,22 +257,19 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationService'                  => 'Application\\Service\\Service',
-            'ApplicationServiceReferentiel'       => 'Application\\Service\\ServiceReferentiel',
-            'ApplicationFonctionReferentiel'      => 'Application\\Service\\FonctionReferentiel',
-            'ApplicationServiceValidation'        => 'Application\\Service\\ServiceValidation',
-            'ApplicationPeriode'                  => 'Application\\Service\\Periode',
-            'ApplicationMotifNonPaiement'         => 'Application\\Service\\MotifNonPaiement',
-            'ApplicationModificationServiceDu'    => 'Application\\Service\\ModificationServiceDu',
-            'ApplicationTypeVolumeHoraire'        => 'Application\\Service\\TypeVolumeHoraire',
-            'FormServiceRechercheHydrator'        => 'Application\Form\Service\RechercheHydrator',
-            'FormServiceSaisieFieldsetHydrator'   => 'Application\Form\Service\SaisieFieldsetHydrator',
-            'FormServiceSaisieHydrator'           => 'Application\Form\Service\SaisieHydrator',
-            'ProcessFormuleHetd'                  => 'Application\\Service\\Process\\FormuleHetd',
-            'ServiceAssertion'                    => 'Application\\Assertion\\ServiceAssertion',
-            'ServiceReferentielAssertion'         => 'Application\\Assertion\\ServiceReferentielAssertion',
-            'PeutValiderServiceRule'              => 'Application\Rule\Intervenant\PeutValiderServiceRule',
-            'PeutSaisirModificationServiceDuRule' => 'Application\Rule\Intervenant\PeutSaisirModificationServiceDuRule',
+            'ApplicationService'                => 'Application\\Service\\Service',
+            'ApplicationServiceReferentiel'     => 'Application\\Service\\ServiceReferentiel',
+            'ApplicationFonctionReferentiel'     => 'Application\\Service\\FonctionReferentiel',
+            'ApplicationServiceValidation'      => 'Application\\Service\\ServiceValidation',
+            'ApplicationPeriode'                => 'Application\\Service\\Periode',
+            'ApplicationMotifNonPaiement'       => 'Application\\Service\\MotifNonPaiement',
+            'ApplicationModificationServiceDu'  => 'Application\\Service\\ModificationServiceDu',
+            'ServiceRechercheHydrator'          => 'Application\Entity\Service\RechercheHydrator',
+            'ServiceRechercheFormHydrator'      => 'Application\Form\Service\RechercheFormHydrator',
+            'FormServiceSaisieFieldsetHydrator' => 'Application\Form\Service\SaisieFieldsetHydrator',
+            'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',
+            'ServiceAssertion'                  => 'Application\\Assertion\\ServiceAssertion',
+            'ServiceReferentielAssertion'       => 'Application\\Assertion\\ServiceReferentielAssertion',
         ),
         'factories' => array(
         ),
@@ -273,9 +281,7 @@ return array(
         'invokables' => array(
             'ServiceSaisie'         => 'Application\\Form\\Service\\Saisie',
             'ServiceSaisieFieldset' => 'Application\\Form\\Service\\SaisieFieldset',
-        ),
-        'factories' => array(
-            'ServiceRecherche' => 'Application\\Form\\Service\\RechercheFactory',
+            'ServiceRechercheForm'  => 'Application\\Form\\Service\\RechercheForm',
         ),
     ),
     'view_helpers' => array(

@@ -19,7 +19,7 @@ trait TypeVolumeHoraireAwareTrait
     /**
      * Spécifie le type de volume horaire concerné.
      *
-     * @param TypeVolumeHoraire $typeVolumeHoraire Type de rôle concerné
+     * @param TypeVolumeHoraire $typeVolumeHoraire le type de volume horaire concerné
      */
     public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire = null)
     {
@@ -27,7 +27,7 @@ trait TypeVolumeHoraireAwareTrait
 
         return $this;
     }
-
+ 
     /**
      * Retourne le type de volume horaire concerné.
      *

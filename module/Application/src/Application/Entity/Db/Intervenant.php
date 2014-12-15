@@ -270,6 +270,31 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $wfIntervenantEtape;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleReferentiel;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultat;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleService;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleServiceDu;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleVolumeHoraire;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -530,7 +555,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function getNumeroInseeCle()
     {
-        return $this->numeroInseeCle;
+        return $this->numeroInseeCle ? sprintf('%02d', $this->numeroInseeCle) : $this->numeroInseeCle;
     }
 
     /**
@@ -1465,6 +1490,138 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getWfIntervenantEtape()
     {
         return $this->wfIntervenantEtape;
+    }
+
+    /**
+     * Get formuleReferentiel
+     *
+     * @param Annee $annee
+     * @param Structure|null $structure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleReferentiel( Annee $annee, Structure $structure=null )
+    {
+        $filter = function( FormuleReferentiel $formuleReferentiel ) use ($annee, $structure) {
+            if ($annee && $annee !== $formuleReferentiel->getAnnee()) {
+                return false;
+            }
+            if ($structure && $structure !== $formuleReferentiel->getStructure()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleReferentiel->filter($filter);
+    }
+
+    /**
+     * Get formuleResultat
+     *
+     * @param Annee $annee
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumehoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleResultat( Annee $annee, TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumehoraire=null )
+    {
+        $filter = function( FormuleResultat $formuleResultat ) use ($annee, $typeVolumeHoraire, $etatVolumehoraire) {
+            if ($annee && $annee !== $formuleResultat->getAnnee()) {
+                return false;
+            }
+            if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleResultat->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if ($etatVolumehoraire && $etatVolumehoraire !== $formuleResultat->getEtatVolumeHoraire()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleResultat->filter($filter);
+    }
+
+    /**
+     * Get unique formuleResultat
+     *
+     * @param Annee $annee
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumehoraire
+     *
+     * @return FormuleResultat
+     */
+    public function getUniqueFormuleResultat( Annee $annee, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire )
+    {
+        $formuleResultat = $this->getFormuleResultat($annee, $typeVolumeHoraire, $etatVolumehoraire)->first();
+        if (false === $formuleResultat){
+            $formuleResultat = new FormuleResultat;
+            $formuleResultat->setIntervenant($this);
+            $formuleResultat->setAnnee($annee);
+            $formuleResultat->setTypeVolumeHoraire($typeVolumeHoraire);
+            $formuleResultat->setEtatVolumeHoraire($etatVolumehoraire);
+        }
+        return $formuleResultat;
+    }
+
+    /**
+     * Get formuleService
+     *
+     * @param Annee $annee
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleService( Annee $annee )
+    {
+        $filter = function( FormuleService $formuleService ) use ($annee) {
+            if ($annee && $annee !== $formuleService->getAnnee()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleService->filter($filter);
+    }
+
+    /**
+     * Get formuleServiceDu
+     *
+     * @param Annee $annee
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleServiceDu( Annee $annee )
+    {
+        $filter = function( FormuleServiceDu $formuleServiceDu ) use ($annee) {
+            if ($annee && $annee !== $formuleServiceDu->getAnnee()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleServiceDu->filter($filter);
+    }
+
+    /**
+     * Get formuleVolumeHoraire
+     *
+     * @param Annee $annee
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumehoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleVolumeHoraire( Annee $annee, TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumehoraire=null )
+    {
+        $filter = function( FormuleVolumeHoraire $formuleVolumeHoraire ) use ($annee, $typeVolumeHoraire, $etatVolumehoraire) {
+            if ($annee && $annee !== $formuleVolumeHoraire->getAnnee()) {
+                return false;
+            }
+            if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleVolumeHoraire->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if ($etatVolumehoraire && $etatVolumehoraire->getOrdre() > $formuleVolumeHoraire->getEtatVolumeHoraire()->getOrdre()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleVolumeHoraire->filter($filter);
     }
 
     /**

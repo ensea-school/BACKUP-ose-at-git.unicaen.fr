@@ -73,6 +73,18 @@ return array(
                             ),
                         ),
                     ),
+                    'supprimer' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:contrat/supprimer',
+                            'constraints' => array(
+                                'contrat' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'supprimer',
+                            ),
+                        ),
+                    ),
                     'valider' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -204,7 +216,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Contrat',
                     'action'     => array(
-                        'creer', 'exporter', 'valider', 'devalider', 'saisir-retour', 
+                        'creer', 'supprimer', 'exporter', 'valider', 'devalider', 'saisir-retour', 
                         'deposer-fichier', 'supprimer-fichier', 
                     ),
                     'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),

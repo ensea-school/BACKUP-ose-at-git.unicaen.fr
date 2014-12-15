@@ -1,3 +1,8 @@
+ALTER TABLE contrat DISABLE ALL TRIGGERS;
+ALTER TABLE contrat ENABLE ALL TRIGGERS;
+
+/
+
 DECLARE
   prevu NUMERIC;
 BEGIN                
@@ -6,23 +11,23 @@ BEGIN
   -- SET SERVEROUTPUT ON;
   DBMS_OUTPUT.ENABLE(99999999999999);
 
-  --ose_test.show_succes;
-  ose_test.hide_succes;
+  ose_test.show_succes;
+  --ose_test.hide_succes;
   ose_test.init;
   FOR i IN (
-    SELECT id FROM intervenant 
+    SELECT id FROM intervenant
     where 
       histo_destruction IS NULL
       AND exists(select * from service where intervenant_id = intervenant.id)
-      --AND id=9999999
-      AND rownum between 1 and 500
+      AND id=9999999
+      AND rownum between 1 and 5
   ) LOOP
     ose_test.echo(' '); ose_test.echo('INTERVENANT_ID = ' || i.id);
     OSE_TEST_FORMULE.TEST_MODIFY_INTERVENANT(i.id);
     OSE_TEST_FORMULE.TEST_MODIFY_SERVICE_DU(i.id);
     OSE_TEST_FORMULE.TEST_MODIFY_SERVICE_DU_MODIF(i.id);
-    OSE_TEST_FORMULE.TEST_MODIFY_SERVICE_REF(i.id);
     OSE_TEST_FORMULE.TEST_MODIFY_MOTIF_MOD_SERV(i.id);
+    OSE_TEST_FORMULE.TEST_MODIFY_REFERENTIEL(i.id);
     OSE_TEST_FORMULE.TEST_MODIFY_SERVICE(i.id);
     ose_divers.do_nothing;
   END LOOP;
@@ -30,7 +35,7 @@ BEGIN
   FOR s IN (
     SELECT id FROM service WHERE
       histo_destruction IS NULL
-      --AND id=9999999
+      AND id=9999999
       --AND id=468
       AND rownum between 1 and 500
   ) LOOP
@@ -45,7 +50,7 @@ BEGIN
       histo_destruction IS NULL
       --AND id=765
       --AND id=9999999
-      AND rownum between 1 and 500
+      AND rownum between 1 and 5
   ) LOOP
     ose_test.echo(' ');ose_test.echo('VOLUME_HORAIRE_ID = ' || vh.id);
     OSE_TEST_FORMULE.TEST_MODIFY_TYPE_INTERVENTION( vh.id );
@@ -55,3 +60,27 @@ BEGIN
 
   ose_test.show_stats;
 END;
+
+
+/
+
+BEGIN
+--  OSE_FORMULE.MAJ_ALL_IDT;
+
+--  OSE_FORMULE.MAJ_RESULTAT( 17599, 2014 );
+  OSE_FORMULE.MAJ_ALL;
+END;
+
+/
+
+-- 25839 ou 17599
+
+select * from intervenant where nom_usuel like 'Sorel';
+SELECT * FROM formule_service_du WHERE intervenant_id = 28263;
+SELECT * FROM formule_referentiel WHERE intervenant_id = 28263;
+SELECT * FROM formule_service WHERE intervenant_id = 28263;
+SELECT * FROM formule_volume_horaire WHERE intervenant_id = 17599;
+
+SELECT * FROM formule_referentiel WHERE intervenant_id = 28263;
+
+SELECT * FROM formule_resultat WHERE intervenant_id = (select id from intervenant where source_code = '3784');

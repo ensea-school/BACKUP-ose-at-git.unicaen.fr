@@ -18,6 +18,9 @@ class NiveauEtape extends AbstractService
      */
     public function get($id)
     {
+        if (null === $id || 0 === $id || '-' === $id){
+            return null;
+        }
         $tiretPos = strrpos($id,'-');
         $groupeTypeFormationLibelleCourt = substr( $id, 0, $tiretPos );
         $niv = substr( $id, $tiretPos+1 );

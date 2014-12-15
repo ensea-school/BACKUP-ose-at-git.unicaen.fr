@@ -17,7 +17,7 @@ use Application\Assertion\PieceJointeAssertion;
 <!-- affichage de la validation éventuelle de la pièce jointe entière -->
 <?php if ($this->pj && $this->pj->getValidation()): ?>
     <?php $title = (string) $this->pj->getValidation() ?>
-    <span class="label label-success" title="<?php echo $title ?>"><span class="glyphicon glyphicon-thumbs-up"></span> Validée</span>
+    <!--<span class="label label-success" title="<?php echo $title ?>"><span class="glyphicon glyphicon-thumbs-up"></span> Validée</span>-->
 <?php endif ?>
 
 <!-- actions de dévalidation de la pièce jointe entière -->

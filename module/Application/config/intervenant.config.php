@@ -2,25 +2,6 @@
 
 namespace Application;
 
-use Application\Acl\Role;
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\DirecteurComposanteRole;
-use Application\Acl\GestionnaireComposanteRole;
-use Application\Acl\ResponsableComposanteRole;
-use Application\Acl\SuperviseurComposanteRole;
-use Application\Acl\ResponsableRechercheLaboRole;
-use Application\Acl\DrhRole;
-use Application\Acl\GestionnaireDrhRole;
-use Application\Acl\ResponsableDrhRole;
-use Application\Acl\EtablissementRole;
-use Application\Acl\SuperviseurEtablissementRole;
-use Application\Acl\IntervenantRole;
-use Application\Acl\IntervenantPermanentRole;
-use Application\Acl\IntervenantExterieurRole;
-use Application\Acl\FoadRole;
-use Application\Acl\ResponsableFoadRole;
-
 return array(
     'router' => array(
         'routes' => array(
@@ -76,26 +57,28 @@ return array(
                     'voir-heures-comp' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/voir-heures-comp[/:intervenant]',
+                            'route'    => '/voir-heures-comp/:intervenant',
                             'constraints' => array(
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'intervenant' => '[0-9]*',
+                                'action'            => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'intervenant'       => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'voir-heures-comp',
                             ),
                         ),
                     ),
-                    'total-heures-comp' => array(
+                    'formule-totaux-hetd' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/total-heures-comp[/:intervenant]',
+                            'route'    => '/formule-totaux-hetd/:intervenant/:typeVolumeHoraire/:etatVolumeHoraire',
                             'constraints' => array(
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'intervenant' => '[0-9]*',
+                                'action'            => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'intervenant'       => '[0-9]*',
+                                'typeVolumeHoraire' => '[0-9]*',
+                                'etatVolumeHoraire' => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action' => 'total-heures-comp',
+                                'action' => 'formule-totaux-hetd',
                             ),
                         ),
                     ),
@@ -341,8 +324,8 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => array('total-heures-comp'),
-                    'roles'      => $R_ALL,
+                    'action'     => array('formule-totaux-hetd'),
+                    'roles'      => $R_ALL, /** @todo à sécuriser à l'aide d'une assertion pour éviter qu'un intervenant ne puisse voir les HETD des autres */
                     'assertion'  => 'IntervenantAssertion',
                 ),
                 array(
@@ -353,27 +336,27 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir', 'index', 'feuille-de-route'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID,  AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_INTERVENANT, R_COMPOSANTE,  R_ADMINISTRATEUR),
                 ),
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('choisir', 'rechercher', 'search'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
-                array(
+                /*array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir-heures-comp'),
-                    'roles'      => array(DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
+                    'roles'      => array(R_DRH, R_ADMINISTRATEUR),
+                ),*/
                 array(
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => array('voir', 'modifier'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_INTERVENANT_EXTERIEUR, R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
                 array(
                     'controller' => 'Application\Controller\ModificationServiceDu',
                     'action'     => array('saisir'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'roles'      => array(R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
             ),
         ),
@@ -414,6 +397,7 @@ return array(
             'ApplicationIntervenant'       => 'Application\\Service\\Intervenant',
             'ApplicationCivilite'          => 'Application\\Service\\Civilite',
             'ApplicationStatutIntervenant' => 'Application\\Service\\StatutIntervenant',
+            'ApplicationTypeIntervenant'   => 'Application\\Service\\TypeIntervenant',
             'ApplicationDossier'           => 'Application\\Service\\Dossier',
             'IntervenantAssertion'         => 'Application\\Assertion\\IntervenantAssertion',
             'PeutSaisirDossierRule'        => 'Application\Rule\Intervenant\PeutSaisirDossierRule',
@@ -435,6 +419,7 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
+            'formuleTotauxHetd' => 'Application\View\Helper\Intervenant\TotauxHetdViewHelper',
         ),
         'initializers' => array(
         ),
@@ -442,6 +427,7 @@ return array(
     'form_elements' => array(
         'invokables' => array(
             'IntervenantDossier' => 'Application\Form\Intervenant\Dossier',
+            'IntervenantHeuresCompForm'                     => 'Application\Form\Intervenant\HeuresCompForm',
             'IntervenantModificationServiceDuForm'          => 'Application\Form\Intervenant\ModificationServiceDuForm',
             'IntervenantModificationServiceDuFieldset'      => 'Application\Form\Intervenant\ModificationServiceDuFieldset',
             'IntervenantMotifModificationServiceDuFieldset' => 'Application\Form\Intervenant\MotifModificationServiceDuFieldset',

@@ -4,7 +4,9 @@ select
   s.libelle_court structure,
   p.nom_usuel nom,
   p.prenom prenom,
-  src.libelle source
+  src.libelle source,
+  r.id,
+  r.source_code
 from
   role r
   JOIN personnel p ON p.id = r.personnel_id AND p.histo_destruction IS NULL
@@ -26,17 +28,31 @@ INSERT INTO ROLE (
     SOURCE_CODE,
     ID, SOURCE_ID, HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
 )VALUES(
-    NULL, --(SELECT ID FROM structure WHERE source_code = ''),
-    (SELECT ID FROM personnel WHERE source_code ='35076'),
-    (SELECT ID FROM TYPE_ROLE WHERE code = 'superviseur-etablissement'),
-    'superviseur_gouvary',
+    (SELECT ID FROM structure WHERE source_code = 'U26'),
+    (SELECT ID FROM personnel WHERE source_code ='788'),
+    (SELECT ID FROM TYPE_ROLE WHERE code = 'gestionnaire-composante'),
+    'gest-788',
     ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 1, 1
 );
 
-select * from personnel where nom_usuel like 'Gouvary%';
+INSERT INTO ROLE (
+    STRUCTURE_ID,
+    PERSONNEL_ID,
+    TYPE_ID,
+    SOURCE_CODE,
+    ID, SOURCE_ID, HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
+)VALUES(
+    (SELECT ID FROM structure WHERE source_code = 'U26'),
+    (SELECT ID FROM personnel WHERE source_code ='4650'),
+    (SELECT ID FROM TYPE_ROLE WHERE code = 'administrateur'),
+    'gestionnaire-drh-alcalde',
+    ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 1, 1
+);
+
+select * from personnel where nom_usuel like 'Cador%';
 select * from type_role;
 
-
+delete from role where id = 492;
 
 SELECT 
   z_structure_id,
@@ -78,7 +94,7 @@ GROUP BY
 
 select * from fonction_structurelle@harpprod fs;
 
-select * from structure@harpprod where lc_structure = 'DRH';
+select * from structure@harpprod where lc_structure like 'UFR%Géo%';
 
 select * from individu_fonct_struct@harpprod ifs where no_dossier_pers = 16956;
 

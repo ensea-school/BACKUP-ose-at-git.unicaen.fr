@@ -36,5 +36,35 @@
     </many-to-one>
     <!-- NB: Ajout de relations à la main -->
     <one-to-many field="modulateur" target-entity="Application\Entity\Db\Modulateur" mapped-by="typeModulateur" />
+    <many-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
+        <join-table name="V_ELEMENT_TYPE_MODULATEUR">
+            <join-columns>
+                <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
+    <many-to-many field="structure" target-entity="Application\Entity\Db\Structure">
+        <join-table name="V_STRUCTURE_TYPE_MODULATEUR">
+            <join-columns>
+                <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
+    <many-to-many field="etape" target-entity="Application\Entity\Db\Etape">
+        <join-table name="V_ETAPE_TYPE_MODULATEUR">
+            <join-columns>
+                <join-column name="TYPE_MODULATEUR_ID" referenced-column-name="ID"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

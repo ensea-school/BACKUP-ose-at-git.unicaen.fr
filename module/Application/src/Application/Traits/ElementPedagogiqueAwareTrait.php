@@ -19,7 +19,7 @@ trait ElementPedagogiqueAwareTrait
     /**
      * Spécifie l'élément pédagogique concerné.
      *
-     * @param ElementPedagogique $elementPedagogique ElementPedagogique concerné
+     * @param ElementPedagogique $elementPedagogique l'élément pédagogique concerné
      */
     public function setElementPedagogique(ElementPedagogique $elementPedagogique = null)
     {
@@ -27,7 +27,7 @@ trait ElementPedagogiqueAwareTrait
 
         return $this;
     }
-    
+
     /**
      * Retourne l'élément pédagogique concerné.
      *

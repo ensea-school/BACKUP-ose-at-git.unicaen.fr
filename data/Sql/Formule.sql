@@ -60,27 +60,39 @@ BEGIN
 
   ose_test.show_stats;
 END;
-
-
+/
+SET SERVEROUTPUT ON;
 /
 
 BEGIN
 --  OSE_FORMULE.MAJ_ALL_IDT;
 
---  OSE_FORMULE.MAJ_RESULTAT( 17599, 2014 );
-  OSE_FORMULE.MAJ_ALL;
+  OSE_FORMULE.MAJ_RESULTAT( 553, 2014, 1, 1 );
+--  OSE_FORMULE.MAJ_ALL;
 END;
 
 /
 
 -- 25839 ou 17599
 
-select * from intervenant where nom_usuel like 'Sorel';
-SELECT * FROM formule_service_du WHERE intervenant_id = 28263;
-SELECT * FROM formule_referentiel WHERE intervenant_id = 28263;
-SELECT * FROM formule_service WHERE intervenant_id = 28263;
-SELECT * FROM formule_volume_horaire WHERE intervenant_id = 17599;
+select * from intervenant where source_code like '18009';
+SELECT * FROM formule_service_du WHERE intervenant_id = (select id from intervenant where source_code = '18009');
+SELECT * FROM formule_referentiel WHERE intervenant_id = (select id from intervenant where source_code = '18009');
+SELECT * FROM formule_service WHERE intervenant_id = (select id from intervenant where source_code = '18009');
+SELECT * FROM formule_volume_horaire WHERE intervenant_id = (select id from intervenant where source_code = '18009');
 
 SELECT * FROM formule_referentiel WHERE intervenant_id = 28263;
 
-SELECT * FROM formule_resultat WHERE intervenant_id = (select id from intervenant where source_code = '3784');
+SELECT * FROM formule_resultat WHERE intervenant_id = (select id from intervenant where source_code = '18009');
+
+
+update service set histo_destruction = sysdate, histo_destructeur_id = 1 where id = 16425;
+
+/
+begin
+
+--ose_formule.MAJ_SERVICE(16425);
+
+ose_formule.MAJ_resultat(553, 2014);
+
+end;

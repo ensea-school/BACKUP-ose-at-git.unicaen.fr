@@ -163,25 +163,32 @@ class Service extends AbstractEntityService
      */
     public function save($entity)
     {
-        if (! $entity->getEtablissement()){
-            $entity->setEtablissement( $this->getContextProvider()->getGlobalContext()->getEtablissement() );
-        }
-        if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
-        }
-        if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
-            throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
-        }
-        $result = parent::save($entity);
-        /* Sauvegarde automatique des volumes horaires associés */
-        $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
-        /* @var $serviceVolumeHoraire VolumeHoraire */
-        foreach( $entity->getVolumeHoraire() as $volumeHoraire ){
-            if ($volumeHoraire->getRemove()){
-                $serviceVolumeHoraire->delete($volumeHoraire);
-            }else{
-                $serviceVolumeHoraire->save( $volumeHoraire );
+        $this->getEntityManager()->getConnection()->beginTransaction();
+        try{
+            if (! $entity->getEtablissement()){
+                $entity->setEtablissement( $this->getContextProvider()->getGlobalContext()->getEtablissement() );
             }
+            if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+                $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+            }
+            if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
+                throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
+            }
+            $result = parent::save($entity);
+            /* Sauvegarde automatique des volumes horaires associés */
+            $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
+            /* @var $serviceVolumeHoraire VolumeHoraire */
+            foreach( $entity->getVolumeHoraire() as $volumeHoraire ){
+                if ($volumeHoraire->getRemove()){
+                    $serviceVolumeHoraire->delete($volumeHoraire);
+                }else{
+                    $serviceVolumeHoraire->save( $volumeHoraire );
+                }
+            }
+            $this->getEntityManager()->getConnection()->commit();
+        }catch (Exception $e ){
+            $this->getEntityManager()->getConnection()->rollBack();
+            throw $e;
         }
         return $result;
     }

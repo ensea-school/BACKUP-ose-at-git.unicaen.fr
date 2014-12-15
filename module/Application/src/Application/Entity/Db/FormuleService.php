@@ -54,19 +54,22 @@ class FormuleService
      */
     private $annee;
 
+    /**
+     *
+     * @var Structure
+     */
+    private $structureAff;
 
     /**
-     * Set ponderationServiceCompl
      *
-     * @param float $ponderationServiceCompl
-     * @return FormuleService
+     * @var Structure
      */
-    public function setPonderationServiceCompl($ponderationServiceCompl)
-    {
-        $this->ponderationServiceCompl = $ponderationServiceCompl;
+    private $structureEns;
 
-        return $this;
-    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleVolumeHoraire;
 
     /**
      * Get ponderationServiceCompl
@@ -76,19 +79,6 @@ class FormuleService
     public function getPonderationServiceCompl()
     {
         return $this->ponderationServiceCompl;
-    }
-
-    /**
-     * Set ponderationServiceDu
-     *
-     * @param float $ponderationServiceDu
-     * @return FormuleService
-     */
-    public function setPonderationServiceDu($ponderationServiceDu)
-    {
-        $this->ponderationServiceDu = $ponderationServiceDu;
-
-        return $this;
     }
 
     /**
@@ -102,19 +92,6 @@ class FormuleService
     }
 
     /**
-     * Set tauxFa
-     *
-     * @param float $tauxFa
-     * @return FormuleService
-     */
-    public function setTauxFa($tauxFa)
-    {
-        $this->tauxFa = $tauxFa;
-
-        return $this;
-    }
-
-    /**
      * Get tauxFa
      *
      * @return float 
@@ -125,19 +102,6 @@ class FormuleService
     }
 
     /**
-     * Set tauxFc
-     *
-     * @param float $tauxFc
-     * @return FormuleService
-     */
-    public function setTauxFc($tauxFc)
-    {
-        $this->tauxFc = $tauxFc;
-
-        return $this;
-    }
-
-    /**
      * Get tauxFc
      *
      * @return float 
@@ -145,19 +109,6 @@ class FormuleService
     public function getTauxFc()
     {
         return $this->tauxFc;
-    }
-
-    /**
-     * Set tauxFi
-     *
-     * @param float $tauxFi
-     * @return FormuleService
-     */
-    public function setTauxFi($tauxFi)
-    {
-        $this->tauxFi = $tauxFi;
-
-        return $this;
     }
 
     /**
@@ -181,19 +132,6 @@ class FormuleService
     }
 
     /**
-     * Set service
-     *
-     * @param \Application\Entity\Db\Service $service
-     * @return FormuleService
-     */
-    public function setService(\Application\Entity\Db\Service $service = null)
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
-    /**
      * Get service
      *
      * @return \Application\Entity\Db\Service 
@@ -201,19 +139,6 @@ class FormuleService
     public function getService()
     {
         return $this->service;
-    }
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return FormuleService
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
     }
 
     /**
@@ -227,19 +152,6 @@ class FormuleService
     }
 
     /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return FormuleService
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
      * Get annee
      *
      * @return \Application\Entity\Db\Annee 
@@ -247,5 +159,70 @@ class FormuleService
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+    /**
+     * Get structure d'affectation
+     *
+     * @return \Application\Entity\Db\Structure
+     */
+    public function getStructureAff()
+    {
+        return $this->structureAff;
+    }
+
+    /**
+     * Get structure d'enseignement
+     *
+     * @return \Application\Entity\Db\Structure
+     */
+    public function getStructureEns()
+    {
+        return $this->structureEns;
+    }
+
+    /**
+     * Get formuleVolumeHoraire
+     *
+     * @param TypeIntervention  $typeIntervention
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumehoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleVolumeHoraire( TypeIntervention $typeIntervention=null, TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumehoraire=null )
+    {
+        $filter = function( FormuleVolumeHoraire $formuleVolumeHoraire ) use ($typeIntervention, $typeVolumeHoraire, $etatVolumehoraire) {
+            if ($typeIntervention && $typeIntervention !== $formuleVolumeHoraire->getTypeIntervention()) {
+                return false;
+            }
+            if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleVolumeHoraire->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if ($etatVolumehoraire && $etatVolumehoraire->getOrdre() > $formuleVolumeHoraire->getEtatVolumeHoraire()->getOrdre()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleVolumeHoraire->filter($filter);
+    }
+
+    /**
+     * Get formuleVolumeHoraire
+     *
+     * @param TypeIntervention  $typeIntervention
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @param EtatVolumeHoraire $etatVolumehoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHeures( TypeIntervention $typeIntervention, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire )
+    {
+        $heures = 0;
+        $formuleVolumehoraire = $this->getFormuleVolumeHoraire($typeIntervention, $typeVolumeHoraire, $etatVolumehoraire);
+        foreach( $formuleVolumehoraire as $fvh ){
+            $heures += $fvh->getHeures();
+        }
+        return $heures;
     }
 }

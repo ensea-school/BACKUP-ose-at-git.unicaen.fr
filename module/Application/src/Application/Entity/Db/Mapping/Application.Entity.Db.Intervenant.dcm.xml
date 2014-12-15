@@ -103,7 +103,7 @@
     <one-to-many field="formuleReferentiel" target-entity="Application\Entity\Db\FormuleReferentiel" mapped-by="intervenant" />
     <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant" />
     <one-to-many field="formuleService" target-entity="Application\Entity\Db\FormuleService" mapped-by="intervenant" />
-    <one-to-many field="formuleServiceDu" target-entity="Application\Entity\Db\FormuleServiceDu" mapped-by="intervenant" />
+    <one-to-many field="formuleServiceModifie" target-entity="Application\Entity\Db\FormuleServiceModifie" mapped-by="intervenant" />
     <one-to-many field="formuleVolumeHoraire" target-entity="Application\Entity\Db\FormuleVolumeHoraire" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

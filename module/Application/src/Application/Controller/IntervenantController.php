@@ -203,7 +203,9 @@ class IntervenantController extends AbstractActionController implements ContextP
     public function voirHeuresCompAction()
     {
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        /* @var $intervenant \Application\Entity\Db\Intervenant */
         $form = $this->getFormHeuresComp();
+        $annee = $this->context()->getGlobalContext()->getAnnee();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
         /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
@@ -222,7 +224,64 @@ class IntervenantController extends AbstractActionController implements ContextP
             'etat-volume-horaire' => $etatVolumeHoraire->getId(),
         ]);
 
-        return compact('form','intervenant','typeVolumeHoraire','etatVolumeHoraire');
+        $data = [
+            'structure-affectation'         => $intervenant->getStructure(),
+            'heures-service-statutaire'     => $intervenant->getStatut()->getServiceStatutaire(),
+            'heures-modification-service'   => $intervenant->getServiceModifie($annee),
+            'services'                      => [],
+            'referentiel'                   => [],
+            'types-intervention'            => [],
+        ];
+
+        $referentiels = $intervenant->getFormuleReferentiel($annee);
+        foreach( $referentiels as $referentiel ){
+            /* @var $referentiel \Application\Entity\Db\FormuleReferentiel */
+
+            if (! isset($data['referentiel'][$referentiel->getStructure()->getId()])){
+                $data['referentiel'][$referentiel->getStructure()->getId()] = [
+                    'structure' => $referentiel->getStructure(),
+                    'heures'    => 0,
+                ];
+            }
+            $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures();
+        }
+
+        $services = $intervenant->getFormuleService($annee);
+        foreach( $services as $service ){
+            $typesIntervention = [];
+            $totalHeures = 0;
+
+            $fvhs = $service->getFormuleVolumeHoraire(null, $typeVolumeHoraire, $etatVolumeHoraire);
+            foreach( $fvhs as $fvh ){
+                $totalHeures += $fvh->getHeures();
+                if (! isset($typesIntervention[$fvh->getTypeIntervention()->getId()])) $typesIntervention[$fvh->getTypeIntervention()->getId()] = [
+                    'type-intervention' => $fvh->getTypeIntervention(),
+                    'heures'            => 0
+                ];
+                $typesIntervention[$fvh->getTypeIntervention()->getId()]['heures'] += $fvh->getHeures();
+            }
+
+            if ($totalHeures > 0){
+                $data['services'][$service->getId()] = [
+                    'service'                   => $service->getService(),
+                    'taux-fi'                   => $service->getTauxFi(),
+                    'taux-fa'                   => $service->getTauxFa(),
+                    'taux-fc'                   => $service->getTauxFc(),
+                    'ponderation-service-compl' => $service->getPonderationServiceCompl(),
+                    'heures'                    => []
+                ];
+                foreach( $typesIntervention as $ti ){
+                    if ( $ti['heures'] > 0 ){
+                        $data['types-intervention'][$ti['type-intervention']->getId()] = $ti['type-intervention'];
+                        $data['services'][$service->getId()]['heures'][$ti['type-intervention']->getId()] = $ti['heures'];
+                    }
+                }
+            }
+        }
+
+        usort($data['types-intervention'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
+
+        return compact('annee', 'form','intervenant','typeVolumeHoraire','etatVolumeHoraire', 'data');
     }
 
     public function formuleTotauxHetdAction()
@@ -371,5 +430,13 @@ class IntervenantController extends AbstractActionController implements ContextP
     protected function getFormHeuresComp()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantHeuresCompForm');
+    }
+
+    /**
+     * @return \Application\Service\Intervenant
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->get('applicationIntervenant');
     }
 }

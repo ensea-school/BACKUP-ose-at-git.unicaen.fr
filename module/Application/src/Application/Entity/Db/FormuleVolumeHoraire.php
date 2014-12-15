@@ -55,6 +55,11 @@ class FormuleVolumeHoraire
     private $etatVolumeHoraire;
 
     /**
+     * @var integer
+     */
+    private $etatVolumeHoraireOrdre;
+
+    /**
      * @var \Application\Entity\Db\Intervenant
      */
     private $intervenant;
@@ -63,20 +68,6 @@ class FormuleVolumeHoraire
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
-
-
-    /**
-     * Set heures
-     *
-     * @param float $heures
-     * @return FormuleVolumeHoraire
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = $heures;
-
-        return $this;
-    }
 
     /**
      * Get heures
@@ -89,19 +80,6 @@ class FormuleVolumeHoraire
     }
 
     /**
-     * Set tauxServiceCompl
-     *
-     * @param float $tauxServiceCompl
-     * @return FormuleVolumeHoraire
-     */
-    public function setTauxServiceCompl($tauxServiceCompl)
-    {
-        $this->tauxServiceCompl = $tauxServiceCompl;
-
-        return $this;
-    }
-
-    /**
      * Get tauxServiceCompl
      *
      * @return float 
@@ -109,19 +87,6 @@ class FormuleVolumeHoraire
     public function getTauxServiceCompl()
     {
         return $this->tauxServiceCompl;
-    }
-
-    /**
-     * Set tauxServiceDu
-     *
-     * @param float $tauxServiceDu
-     * @return FormuleVolumeHoraire
-     */
-    public function setTauxServiceDu($tauxServiceDu)
-    {
-        $this->tauxServiceDu = $tauxServiceDu;
-
-        return $this;
     }
 
     /**
@@ -145,19 +110,6 @@ class FormuleVolumeHoraire
     }
 
     /**
-     * Set typeVolumeHoraire
-     *
-     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
-     * @return FormuleVolumeHoraire
-     */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-
-        return $this;
-    }
-
-    /**
      * Get typeVolumeHoraire
      *
      * @return \Application\Entity\Db\TypeVolumeHoraire 
@@ -165,19 +117,6 @@ class FormuleVolumeHoraire
     public function getTypeVolumeHoraire()
     {
         return $this->typeVolumeHoraire;
-    }
-
-    /**
-     * Set volumeHoraire
-     *
-     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
-     * @return FormuleVolumeHoraire
-     */
-    public function setVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire = null)
-    {
-        $this->volumeHoraire = $volumeHoraire;
-
-        return $this;
     }
 
     /**
@@ -191,19 +130,6 @@ class FormuleVolumeHoraire
     }
 
     /**
-     * Set typeIntervention
-     *
-     * @param \Application\Entity\Db\TypeIntervention $typeIntervention
-     * @return FormuleVolumeHoraire
-     */
-    public function setTypeIntervention(\Application\Entity\Db\TypeIntervention $typeIntervention = null)
-    {
-        $this->typeIntervention = $typeIntervention;
-
-        return $this;
-    }
-
-    /**
      * Get typeIntervention
      *
      * @return \Application\Entity\Db\TypeIntervention 
@@ -211,19 +137,6 @@ class FormuleVolumeHoraire
     public function getTypeIntervention()
     {
         return $this->typeIntervention;
-    }
-
-    /**
-     * Set service
-     *
-     * @param \Application\Entity\Db\Service $service
-     * @return FormuleVolumeHoraire
-     */
-    public function setService(\Application\Entity\Db\Service $service = null)
-    {
-        $this->service = $service;
-
-        return $this;
     }
 
     /**
@@ -237,19 +150,6 @@ class FormuleVolumeHoraire
     }
 
     /**
-     * Set etatVolumeHoraire
-     *
-     * @param \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire
-     * @return FormuleVolumeHoraire
-     */
-    public function setEtatVolumeHoraire(\Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = null)
-    {
-        $this->etatVolumeHoraire = $etatVolumeHoraire;
-
-        return $this;
-    }
-
-    /**
      * Get etatVolumeHoraire
      *
      * @return \Application\Entity\Db\EtatVolumeHoraire 
@@ -260,16 +160,13 @@ class FormuleVolumeHoraire
     }
 
     /**
-     * Set intervenant
+     * Get etatVolumeHoraireOrdre
      *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return FormuleVolumeHoraire
+     * @return integer
      */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    public function getEtatVolumeHoraireOrdre()
     {
-        $this->intervenant = $intervenant;
-
-        return $this;
+        return $this->etatVolumeHoraireOrdre;
     }
 
     /**
@@ -280,19 +177,6 @@ class FormuleVolumeHoraire
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return FormuleVolumeHoraire
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
     }
 
     /**

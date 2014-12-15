@@ -13,7 +13,6 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="aPayer" type="float" column="A_PAYER" precision="126" scale="0" nullable="false"/>
     <field name="enseignements" type="float" column="ENSEIGNEMENTS" precision="126" scale="0" nullable="false"/>
     <field name="service" type="float" column="SERVICE" precision="126" scale="0" nullable="false"/>
     <field name="heuresSolde" type="float" column="HEURES_SOLDE" precision="126" scale="0" nullable="false"/>

@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\Finder\FinderIntervenantPermanentWithServiceReferentiel;
 use Application\Entity\Db\Finder\FinderIntervenantPermanentWithModificationServiceDu;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Annee as AnneeEntity;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Import\Processus\Import;
@@ -136,6 +137,16 @@ class Intervenant extends AbstractEntityService
         }
         
         return $intervenant;
+    }
+
+    public function calculFormule( IntervenantEntity $intervenant, AnneeEntity $annee=null )
+    {
+        if (empty($annee)) $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+
+        $intervenantId = $intervenant->getId();
+        $anneeId = $annee->getId();
+        $sql = "BEGIN OSE_FORMULE.CALCULER( $intervenantId, $anneeId ); END;";
+        $this->getEntityManager()->getConnection()->executeQuery($sql);
     }
 
     /**

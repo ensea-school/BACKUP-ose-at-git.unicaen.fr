@@ -5,10 +5,11 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FormuleReferentiel
+ * FormuleServiceDu
  */
-class FormuleReferentiel
+class FormuleServiceModifie
 {
+
     /**
      * @var float
      */
@@ -20,25 +21,15 @@ class FormuleReferentiel
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
-
-    /**
      * @var \Application\Entity\Db\Intervenant
      */
     private $intervenant;
 
     /**
-     *
-     * @var FonctionReferentiel
-     */
-    private $fonction;
-
-    /**
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
+
 
 
     /**
@@ -62,16 +53,6 @@ class FormuleReferentiel
     }
 
     /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-    /**
      * Get intervenant
      *
      * @return \Application\Entity\Db\Intervenant 
@@ -79,16 +60,6 @@ class FormuleReferentiel
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-    /**
-     * Get fonction
-     *
-     * @return \Application\Entity\Db\FonctionReferentiel
-     */
-    public function getFonction()
-    {
-        return $this->fonction;
     }
 
     /**

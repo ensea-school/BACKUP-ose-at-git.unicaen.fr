@@ -64,10 +64,10 @@ class FonctionReferentiel extends \Application\Entity\Db\FonctionReferentiel imp
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'plafond', 'validiteDebut', 'validiteFin', 'id', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+            return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'plafond', 'validiteDebut', 'validiteFin', 'id', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'structure');
         }
 
-        return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'plafond', 'validiteDebut', 'validiteFin', 'id', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+        return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'plafond', 'validiteDebut', 'validiteFin', 'id', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'structure');
     }
 
     /**
@@ -450,6 +450,28 @@ class FonctionReferentiel extends \Application\Entity\Db\FonctionReferentiel imp
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
 
         return parent::getHistoCreateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStructure', array($structure));
+
+        return parent::setStructure($structure);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStructure()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStructure', array());
+
+        return parent::getStructure();
     }
 
     /**

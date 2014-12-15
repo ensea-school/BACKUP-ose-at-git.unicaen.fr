@@ -343,11 +343,11 @@ return array(
                     'action'     => array('choisir', 'rechercher', 'search'),
                     'roles'      => array(R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
-                /*array(
+                array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir-heures-comp'),
                     'roles'      => array(R_DRH, R_ADMINISTRATEUR),
-                ),*/
+                ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => array('voir', 'modifier'),
@@ -406,7 +406,6 @@ return array(
             'ApplicationStatutIntervenant'     => 'Application\\Service\\StatutIntervenant',
             'ApplicationTypeIntervenant'       => 'Application\\Service\\TypeIntervenant',
             'ApplicationDossier'               => 'Application\\Service\\Dossier',
-            'ApplicationFormule'               => 'Application\\Service\\Formule',
             'WorkflowIntervenant'              => 'Application\\Service\\Workflow\\WorkflowIntervenant',
             'IntervenantAssertion'             => 'Application\\Assertion\\IntervenantAssertion',
         ),

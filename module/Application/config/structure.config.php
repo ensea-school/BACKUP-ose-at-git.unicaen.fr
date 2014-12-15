@@ -131,6 +131,7 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'structureDl'       => 'Application\View\Helper\StructureDl',
+            'structure'         => 'Application\View\Helper\StructureViewHelper',
         ),
     ),
 );

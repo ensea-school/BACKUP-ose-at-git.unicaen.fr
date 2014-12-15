@@ -73,7 +73,6 @@ $main =  array(
                 'subscribers' => array(
                     'Doctrine\DBAL\Event\Listeners\OracleSessionInit',
                     'Common\ORM\Event\Listeners\HistoriqueListener',
-                    'Common\ORM\Event\Listeners\FormuleListener',
                     'Common\ORM\Event\Listeners\ValiditeListener',
                 ),
             ),

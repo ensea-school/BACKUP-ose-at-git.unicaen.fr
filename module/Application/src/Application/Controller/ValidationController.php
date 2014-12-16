@@ -216,7 +216,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         $serviceValidation = $this->getServiceValidation();
         $typeValidation    = TypeValidation::CODE_DONNEES_PERSO_PAR_COMP;
         
-        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
+//        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
 
         $this->formValider = $this->getFormDossier()->setIntervenant($this->intervenant)->init();
         

@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\WfEtape as WfEtapeEntity;
 use Application\Entity\Db\WfIntervenantEtape as WfIntervenantEtapeEntity;
 use Application\Service\AbstractEntityService;
@@ -183,33 +184,45 @@ class WfIntervenantEtape extends AbstractEntityService
     }
     
     /**
-     * Recherche d'une seule étape ou de toutes les étapes dans la progression d'un intervenant.
+     * Recherche dans la progression d'un intervenant.
      * 
      * @param IntervenantEntity $intervenant Intervenant concerné
+     * @param null|StructureEntity $structure Structure concernée : 
+     * null = aucune (valeur par défaut), 
+     * StructureEntity = structure précise
      * @param string|WfEtapeEntity $etape Etape précise éventuelle
      * @return WfIntervenantEtapeEntity|null|array
      * @throws RuntimeException
      */
-    public function findIntervenantEtape(IntervenantEntity $intervenant, $etape = null)
+    public function findIntervenantEtape(IntervenantEntity $intervenant, StructureEntity $structure = null, $etape = null)
     {
         if (is_string($etape)) {
             $etape = $this->getServiceWfEtape()->getByCode($etape);
         }
         
         $qb = $this->finderByIntervenant($intervenant); /* @var $qb QueryBuilder */
+        if (null === $structure) {
+            $qb->andWhere("ie.structure is null");
+        }
+        else {
+            $qb
+                    ->join("ie.etape", "e")
+                    ->andWhere("e.structureDependant = 0 OR e.structureDependant = 1 AND ie.structure = :struct")
+                    ->setParameter('struct', $structure);
+        }
         if ($etape) {
             $this->finderByEtape($etape, $qb);
         }
         $result = $qb->getQuery()->getResult();
 
-        if ($etape) {
-            $nb = count($result);
-            if ($nb > 1) {
-                throw new RuntimeException("Anomalie rencontrée: l'étape '$etape' figure $nb fois dans la progression!");
-            }
-            
-            return $nb ? reset($result) : null;
-        }
+//        if ($etape) {
+//            $nb = count($result);
+//            if ($nb > 1) {
+//                throw new RuntimeException("Anomalie rencontrée: l'étape '$etape' figure $nb fois dans la progression!");
+//            }
+//            
+//            return $nb ? reset($result) : null;
+//        }
         
         return $result;
     }

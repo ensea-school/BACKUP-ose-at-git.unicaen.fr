@@ -281,17 +281,16 @@ abstract class AbstractWorkflow extends AbstractService
             $step = $this->getStep($step);
         }
         
-//        foreach ($this->getSteps() as $key => $s) { /* @var $s Step */
-//            if ($s === $step) {
-//                return true;
-//            }
-//            if (($rule = $this->getCrossingRule($key)) && $rule->isRelevant() && !$rule->execute()) {
-//                return false;
-//            }
-//        }
-//        
-//        return false;
-        return $step->getDone() || $step->getIsCurrent();
+        foreach ($this->getSteps() as $s) { /* @var $s Step */
+            if ($s === $step) {
+                return true;
+            }
+            if (!$s->getDone()) {
+                return false;
+            }
+        }
+        
+        return false;
     }
     
     /**

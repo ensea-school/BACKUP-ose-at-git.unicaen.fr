@@ -91,6 +91,13 @@ class Validation extends AbstractEntityService
             $softDelete = false;
         }
 
+        // Validation de services : il faut supprimer les liens Validation --> VolumeHoraire
+        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_SERVICES_PAR_COMP) {
+            foreach ($validation->getVolumeHoraire() as $vh) {
+                $validation->removeVolumeHoraire($vh);
+            }
+        }
+        
         try {
             $this->delete($validation, $softDelete);
         }

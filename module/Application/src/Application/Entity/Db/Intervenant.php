@@ -128,11 +128,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $prenom;
 
     /**
-     * @var boolean
-     */
-    protected $primeExcellenceScient;
-
-    /**
      * @var string
      */
     protected $sourceCode;
@@ -679,29 +674,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getPrenom()
     {
         return $this->prenom;
-    }
-
-    /**
-     * Set primeExcellenceScient
-     *
-     * @param boolean $primeExcellenceScient
-     * @return Intervenant
-     */
-    public function setPrimeExcellenceScient($primeExcellenceScient)
-    {
-        $this->primeExcellenceScient = $primeExcellenceScient;
-
-        return $this;
-    }
-
-    /**
-     * Get primeExcellenceScient
-     *
-     * @return boolean 
-     */
-    public function getPrimeExcellenceScient()
-    {
-        return $this->primeExcellenceScient;
     }
 
     /**

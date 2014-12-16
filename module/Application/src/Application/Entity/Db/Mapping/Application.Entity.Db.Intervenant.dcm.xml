@@ -41,7 +41,6 @@
     <field name="paysNationaliteCodeInsee" type="string" column="PAYS_NATIONALITE_CODE_INSEE" length="3" nullable="false"/>
     <field name="paysNationaliteLibelle" type="string" column="PAYS_NATIONALITE_LIBELLE" length="30" nullable="false"/>
     <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
-    <field name="primeExcellenceScient" type="boolean" column="PRIME_EXCELLENCE_SCIENT" nullable="true"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
     <field name="telMobile" type="string" column="TEL_MOBILE" length="20" nullable="true"/>
     <field name="telPro" type="string" column="TEL_PRO" length="20" nullable="true"/>

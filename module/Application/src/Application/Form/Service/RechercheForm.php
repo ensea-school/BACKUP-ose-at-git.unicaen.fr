@@ -110,6 +110,7 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
                     $this->getServiceTypeIntervenant()->getPermanent()->getId() => "Permanent",
                     $this->getServiceTypeIntervenant()->getExterieur()->getId() => "Vacataire"))
                 ->setValue('')
+                ->setAttribute('data-intervenant-exterieur-id', $this->getServiceTypeIntervenant()->getExterieur()->getId())
                 ->setLabel("Statut :");
         $this->add($typeIntervenant);
 

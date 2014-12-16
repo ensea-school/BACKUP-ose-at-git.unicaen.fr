@@ -17,7 +17,7 @@ if ($rechercheForm):
           <div class="col-sm-2"><label class="control-label">Intervenant</label></div>
           <div class="col-sm-5"><label class="control-label"><?php echo $rechercheForm->get('type-intervenant')->getLabel() ?></label><br />
           <?php echo $this->formRadio($rechercheForm->get('type-intervenant')); ?></div>
-          <div class="col-sm-5"><?php echo $this->formControlGroup($rechercheForm->get('structure-aff')); ?></div>
+          <div class="col-sm-5" id="structure-aff-div"><?php echo $this->formControlGroup($rechercheForm->get('structure-aff')); ?></div>
         </div>
         <div class="row">
           <div class="col-sm-2">&nbsp;</div>

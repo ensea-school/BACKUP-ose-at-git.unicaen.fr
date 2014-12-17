@@ -15,7 +15,7 @@ from
   LEFT JOIN structure s ON s.id = r.structure_id AND s.histo_destruction IS NULL
 WHERE
   r.histo_destruction IS NULL
-  AND r.source_id = OSE_IMPORT.GET_SOURCE_ID('OSE')
+  AND r.source_id <> OSE_IMPORT.GET_SOURCE_ID('OSE')
 ORDER BY
   structure, nom, source, type_role;
 

@@ -7,7 +7,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 /**
  * ServiceReferentiel
  */
-class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInterface, ResourceInterface
+class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * Retourne la représentation littérale de cet objet.
@@ -31,7 +31,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
      */
     public function __construct(Annee $annee = null)
     {
-        $this->setValiditeDebut(new \DateTime());
         $this->setAnnee($annee);
     }
     
@@ -54,16 +53,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
      * @var \DateTime
      */
     protected $histoModification;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var string
@@ -201,52 +190,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getHistoModification()
     {
         return $this->histoModification;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return ServiceReferentiel
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return ServiceReferentiel
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

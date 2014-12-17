@@ -425,7 +425,6 @@ class ContratController extends AbstractActionController implements ContextProvi
     public function saisirRetourAction()
     {
         $role              = $this->getContextProvider()->getSelectedIdentityRole();
-        $this->structure   = $role->getStructure();
         $this->contrat     = $this->context()->mandatory()->contratFromRoute();
         $this->intervenant = $this->contrat->getIntervenant();
         $form              = $this->getFormRetourContrat()->setContrat($this->contrat)->init();

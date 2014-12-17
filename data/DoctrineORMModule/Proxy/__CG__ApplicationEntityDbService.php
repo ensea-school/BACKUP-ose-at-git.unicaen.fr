@@ -64,10 +64,10 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire');
     }
 
     /**
@@ -237,50 +237,6 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoModification', array());
 
         return parent::getHistoModification();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValiditeDebut', array($validiteDebut));
-
-        return parent::setValiditeDebut($validiteDebut);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getValiditeDebut()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValiditeDebut', array());
-
-        return parent::getValiditeDebut();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setValiditeFin($validiteFin)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValiditeFin', array($validiteFin));
-
-        return parent::setValiditeFin($validiteFin);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getValiditeFin()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValiditeFin', array());
-
-        return parent::getValiditeFin();
     }
 
     /**

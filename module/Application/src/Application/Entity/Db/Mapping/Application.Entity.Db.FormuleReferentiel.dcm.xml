@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\FormuleReferentiel" table="FORMULE_REFERENTIEL">
-    <indexes>
-      <index name="IDX_96C6FA3CAA401F5C" columns="ANNEE_ID"/>
-      <index name="IDX_96C6FA3C78FF2BCB" columns="INTERVENANT_ID"/>
-      <index name="IDX_96C6FA3C884B0F7B" columns="STRUCTURE_ID"/>
-    </indexes>
-    <unique-constraints>
-      <unique-constraint name="formule_referentiel_un" columns="INTERVENANT_ID,ANNEE_ID,STRUCTURE_ID"/>
-    </unique-constraints>
+  <entity name="Application\Entity\Db\FormuleReferentiel" table="V_FORMULE_REFERENTIEL">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="referentiel" type="float" column="REFERENTIEL" precision="126" scale="0" nullable="false"/>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
@@ -26,6 +18,11 @@
     <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
       <join-columns>
         <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="fonction" target-entity="Application\Entity\Db\FonctionReferentiel">
+      <join-columns>
+        <join-column name="FONCTION_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

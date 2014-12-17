@@ -64,10 +64,10 @@ class Periode extends \Application\Entity\Db\Periode implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'ordre', 'id', 'code', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'enseignement', 'libelleCourt', 'libelleLong', 'paiement');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'ordre', 'id', 'code', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'enseignement', 'libelleCourt', 'libelleLong', 'paiement');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'ordre', 'id', 'code', 'typeIntervenant', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'enseignement', 'libelleCourt', 'libelleLong', 'paiement');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'ordre', 'id', 'code', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'enseignement', 'libelleCourt', 'libelleLong', 'paiement');
     }
 
     /**
@@ -296,28 +296,6 @@ class Periode extends \Application\Entity\Db\Periode implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
 
         return parent::getId();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTypeIntervenant(\Application\Entity\Db\TypeIntervenant $typeIntervenant = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTypeIntervenant', array($typeIntervenant));
-
-        return parent::setTypeIntervenant($typeIntervenant);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTypeIntervenant()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeIntervenant', array());
-
-        return parent::getTypeIntervenant();
     }
 
     /**

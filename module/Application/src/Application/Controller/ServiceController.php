@@ -198,8 +198,8 @@ class ServiceController extends AbstractActionController
 
             'Service statutaire',
             'Modification de service du',
-            'Heures (réelles)',
-            'Heures (HETD)',
+            'Total Heures effectives',
+            'Total HETD',
             'Solde (HETD)',
             'Heures non payées',
             'Référentiel',

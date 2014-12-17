@@ -2,17 +2,11 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FormuleResultat
  */
 class FormuleResultat
 {
-    /**
-     * @var float
-     */
-    private $aPayer;
 
     /**
      * @var float
@@ -99,19 +93,14 @@ class FormuleResultat
      */
     private $annee;
 
-
-    /**
-     * Set aPayer
-     *
-     * @param float $aPayer
-     * @return FormuleResultat
-     */
-    public function setAPayer($aPayer)
+    public function init( Intervenant $intervenant, Annee $annee, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
     {
-        $this->aPayer = $aPayer;
-
-        return $this;
+        $this->intervenant = $intervenant;
+        $this->annee = $annee;
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+        $this->etatVolumeHoraire = $etatVolumeHoraire;
     }
+
 
     /**
      * Get aPayer
@@ -121,19 +110,6 @@ class FormuleResultat
     public function getAPayer()
     {
         return $this->aPayer;
-    }
-
-    /**
-     * Set enseignements
-     *
-     * @param float $enseignements
-     * @return FormuleResultat
-     */
-    public function setEnseignements($enseignements)
-    {
-        $this->enseignements = $enseignements;
-
-        return $this;
     }
 
     /**
@@ -147,19 +123,6 @@ class FormuleResultat
     }
 
     /**
-     * Set heuresSolde
-     *
-     * @param float $heuresSolde
-     * @return FormuleResultat
-     */
-    public function setHeuresSolde($heuresSolde)
-    {
-        $this->heuresSolde = $heuresSolde;
-
-        return $this;
-    }
-
-    /**
      * Get heuresSolde
      *
      * @return float
@@ -167,19 +130,6 @@ class FormuleResultat
     public function getHeuresSolde()
     {
         return $this->heuresSolde;
-    }
-
-    /**
-     * Set heuresComplFc
-     *
-     * @param float $heuresComplFc
-     * @return FormuleResultat
-     */
-    public function setHeuresComplFc($heuresComplFc)
-    {
-        $this->heuresComplFc = $heuresComplFc;
-
-        return $this;
     }
 
     /**
@@ -193,19 +143,6 @@ class FormuleResultat
     }
 
     /**
-     * Set heuresComplFa
-     *
-     * @param float $heuresComplFa
-     * @return FormuleResultat
-     */
-    public function setHeuresComplFa($heuresComplFa)
-    {
-        $this->heuresComplFa = $heuresComplFa;
-
-        return $this;
-    }
-
-    /**
      * Get heuresComplFa
      *
      * @return float
@@ -213,19 +150,6 @@ class FormuleResultat
     public function getHeuresComplFa()
     {
         return $this->heuresComplFa;
-    }
-
-    /**
-     * Set heuresComplFi
-     *
-     * @param float $heuresComplFi
-     * @return FormuleResultat
-     */
-    public function setHeuresComplFi($heuresComplFi)
-    {
-        $this->heuresComplFi = $heuresComplFi;
-
-        return $this;
     }
 
     /**
@@ -239,19 +163,6 @@ class FormuleResultat
     }
 
     /**
-     * Set heuresComplReferentiel
-     *
-     * @param float $heuresComplReferentiel
-     * @return FormuleResultat
-     */
-    public function setHeuresComplReferentiel($heuresComplReferentiel)
-    {
-        $this->heuresComplReferentiel = $heuresComplReferentiel;
-
-        return $this;
-    }
-
-    /**
      * Get heuresComplReferentiel
      *
      * @return float 
@@ -259,19 +170,6 @@ class FormuleResultat
     public function getHeuresComplReferentiel()
     {
         return $this->heuresComplReferentiel;
-    }
-
-    /**
-     * Set heuresComplTotal
-     *
-     * @param float $heuresComplTotal
-     * @return FormuleResultat
-     */
-    public function setHeuresComplTotal($heuresComplTotal)
-    {
-        $this->heuresComplTotal = $heuresComplTotal;
-
-        return $this;
     }
 
     /**
@@ -285,19 +183,6 @@ class FormuleResultat
     }
 
     /**
-     * Set service
-     *
-     * @param float $service
-     * @return FormuleResultat
-     */
-    public function setService($service)
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
-    /**
      * Get service
      *
      * @return float 
@@ -305,19 +190,6 @@ class FormuleResultat
     public function getService()
     {
         return $this->service;
-    }
-
-    /**
-     * Set referentiel
-     *
-     * @param float $referentiel
-     * @return FormuleResultat
-     */
-    public function setReferentiel($referentiel)
-    {
-        $this->referentiel = $referentiel;
-
-        return $this;
     }
 
     /**
@@ -331,19 +203,6 @@ class FormuleResultat
     }
 
     /**
-     * Set serviceAssure
-     *
-     * @param float $serviceAssure
-     * @return FormuleResultat
-     */
-    public function setServiceAssure($serviceAssure)
-    {
-        $this->serviceAssure = $serviceAssure;
-
-        return $this;
-    }
-
-    /**
      * Get serviceAssure
      *
      * @return float 
@@ -354,19 +213,6 @@ class FormuleResultat
     }
 
     /**
-     * Set serviceDu
-     *
-     * @param float $serviceDu
-     * @return FormuleResultat
-     */
-    public function setServiceDu($serviceDu)
-    {
-        $this->serviceDu = $serviceDu;
-
-        return $this;
-    }
-
-    /**
      * Get serviceDu
      *
      * @return float 
@@ -374,19 +220,6 @@ class FormuleResultat
     public function getServiceDu()
     {
         return $this->serviceDu;
-    }
-
-    /**
-     * Set sousService
-     *
-     * @param float $sousService
-     * @return FormuleResultat
-     */
-    public function setSousService($sousService)
-    {
-        $this->sousService = $sousService;
-
-        return $this;
     }
 
     /**
@@ -410,19 +243,6 @@ class FormuleResultat
     }
 
     /**
-     * Set typeVolumeHoraire
-     *
-     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
-     * @return FormuleResultat
-     */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-
-        return $this;
-    }
-
-    /**
      * Get typeVolumeHoraire
      *
      * @return \Application\Entity\Db\TypeVolumeHoraire 
@@ -430,19 +250,6 @@ class FormuleResultat
     public function getTypeVolumeHoraire()
     {
         return $this->typeVolumeHoraire;
-    }
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return FormuleResultat
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
     }
 
     /**
@@ -456,19 +263,6 @@ class FormuleResultat
     }
 
     /**
-     * Set etatVolumeHoraire
-     *
-     * @param \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire
-     * @return FormuleResultat
-     */
-    public function setEtatVolumeHoraire(\Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = null)
-    {
-        $this->etatVolumeHoraire = $etatVolumeHoraire;
-
-        return $this;
-    }
-
-    /**
      * Get etatVolumeHoraire
      *
      * @return \Application\Entity\Db\EtatVolumeHoraire 
@@ -476,19 +270,6 @@ class FormuleResultat
     public function getEtatVolumeHoraire()
     {
         return $this->etatVolumeHoraire;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return FormuleResultat
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
     }
 
     /**

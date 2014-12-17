@@ -343,11 +343,11 @@ return array(
                     'action'     => array('choisir', 'rechercher', 'search'),
                     'roles'      => array(R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
-                /*array(
+                array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir-heures-comp'),
                     'roles'      => array(R_DRH, R_ADMINISTRATEUR),
-                ),*/
+                ),
                 array(
                     'controller' => 'Application\Controller\Dossier',
                     'action'     => array('voir', 'modifier'),

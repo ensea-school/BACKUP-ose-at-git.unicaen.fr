@@ -41,7 +41,6 @@
     <field name="paysNationaliteCodeInsee" type="string" column="PAYS_NATIONALITE_CODE_INSEE" length="3" nullable="false"/>
     <field name="paysNationaliteLibelle" type="string" column="PAYS_NATIONALITE_LIBELLE" length="30" nullable="false"/>
     <field name="prenom" type="string" column="PRENOM" length="60" nullable="false"/>
-    <field name="primeExcellenceScient" type="boolean" column="PRIME_EXCELLENCE_SCIENT" nullable="true"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
     <field name="telMobile" type="string" column="TEL_MOBILE" length="20" nullable="true"/>
     <field name="telPro" type="string" column="TEL_PRO" length="20" nullable="true"/>
@@ -95,11 +94,6 @@
         <join-column name="TYPE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="serviceDu" target-entity="Application\Entity\Db\ServiceDu" mapped-by="intervenant">
-        <cascade>
-            <cascade-remove/>
-        </cascade>
-    </one-to-many>
     <one-to-many field="affectation" target-entity="Application\Entity\Db\AffectationRecherche" mapped-by="intervenant" />
     <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant" />
     <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant" />
@@ -110,7 +104,7 @@
     <one-to-many field="formuleReferentiel" target-entity="Application\Entity\Db\FormuleReferentiel" mapped-by="intervenant" />
     <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant" />
     <one-to-many field="formuleService" target-entity="Application\Entity\Db\FormuleService" mapped-by="intervenant" />
-    <one-to-many field="formuleServiceDu" target-entity="Application\Entity\Db\FormuleServiceDu" mapped-by="intervenant" />
+    <one-to-many field="formuleServiceModifie" target-entity="Application\Entity\Db\FormuleServiceModifie" mapped-by="intervenant" />
     <one-to-many field="formuleVolumeHoraire" target-entity="Application\Entity\Db\FormuleVolumeHoraire" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

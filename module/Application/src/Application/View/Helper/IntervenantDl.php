@@ -186,11 +186,6 @@ class IntervenantDl extends AbstractDl
                     $this->entity->getTypePoste() ?: "(Inconnu)"
                 );
             }
-
-            $metier[] = sprintf($tplDtdd,
-                "Prime d'excell. scientif. :", 
-                null !== ($pes = $this->entity->getPrimeExcellenceScient()) ? ($pes ? 'Oui' : 'Non') : "(Inconnue)"
-            );
         }
         
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-metier'), implode(PHP_EOL, $metier)) . PHP_EOL;

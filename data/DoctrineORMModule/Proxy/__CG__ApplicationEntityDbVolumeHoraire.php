@@ -64,10 +64,10 @@ class VolumeHoraire extends \Application\Entity\Db\VolumeHoraire implements \Doc
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', 'remove');
+            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove');
         }
 
-        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'validiteDebut', 'validiteFin', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', 'remove');
+        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove');
     }
 
     /**
@@ -292,50 +292,6 @@ class VolumeHoraire extends \Application\Entity\Db\VolumeHoraire implements \Doc
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoModification', array());
 
         return parent::getHistoModification();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValiditeDebut', array($validiteDebut));
-
-        return parent::setValiditeDebut($validiteDebut);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getValiditeDebut()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValiditeDebut', array());
-
-        return parent::getValiditeDebut();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setValiditeFin($validiteFin)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValiditeFin', array($validiteFin));
-
-        return parent::setValiditeFin($validiteFin);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getValiditeFin()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValiditeFin', array());
-
-        return parent::getValiditeFin();
     }
 
     /**
@@ -582,6 +538,17 @@ class VolumeHoraire extends \Application\Entity\Db\VolumeHoraire implements \Doc
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValidation', array($type));
 
         return parent::getValidation($type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEtatVolumeHoraire()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEtatVolumeHoraire', array());
+
+        return parent::getEtatVolumeHoraire();
     }
 
 }

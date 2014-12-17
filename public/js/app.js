@@ -202,8 +202,8 @@ Service.initRecherche = function(){
     var structureAffName = 'form.service-recherche select[name=\"structure-aff\"]';
     var intervenantName = 'form.service-recherche input[name=\"intervenant[label]\"]';
     var changeIntervenant = function(){
-        var structure_aff = $( "form.service-recherche select[name=\"structure-aff\"]" ).val();
-        var type_intervenant = $('input[name=type-intervenant]:checked', 'form.service-recherche').val();
+        var structure_aff = $( "form.service-recherche select[name=\"structure-aff\"]" );
+        var type_intervenant = $('input[name=type-intervenant]:checked', 'form.service-recherche');
         var url = $( intervenantName ).autocomplete( "option", "source" );
         var pi = url.indexOf('?');
 
@@ -211,11 +211,18 @@ Service.initRecherche = function(){
             url = url.substring( 0, pi );
         }
         url += '?' + $.param( {
-            typeIntervenant     : type_intervenant,
-            structure           : structure_aff,
+            typeIntervenant     : type_intervenant.val(),
+            structure           : structure_aff.val(),
             'having-services'   : 1
         } );
         $( intervenantName ).autocomplete( "option", "source", url );
+
+        if (type_intervenant.val() !== undefined && type_intervenant.data('intervenant-exterieur-id') == type_intervenant.val()){
+            $('#structure-aff-div').hide();
+            structure_aff.val('');
+        }else{
+            $('#structure-aff-div').show();
+        }
     }
 
     $( structureAffName ).change( changeIntervenant );

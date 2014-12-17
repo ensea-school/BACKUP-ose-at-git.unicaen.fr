@@ -53,11 +53,6 @@ class Periode
     protected $code;
 
     /**
-     * @var \Application\Entity\Db\TypeIntervenant
-     */
-    protected $typeIntervenant;
-
-    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoModificateur;
@@ -204,29 +199,6 @@ class Periode
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set typeIntervenant
-     *
-     * @param \Application\Entity\Db\TypeIntervenant $typeIntervenant
-     * @return Periode
-     */
-    public function setTypeIntervenant(\Application\Entity\Db\TypeIntervenant $typeIntervenant = null)
-    {
-        $this->typeIntervenant = $typeIntervenant;
-
-        return $this;
-    }
-
-    /**
-     * Get typeIntervenant
-     *
-     * @return \Application\Entity\Db\TypeIntervenant 
-     */
-    public function getTypeIntervenant()
-    {
-        return $this->typeIntervenant;
     }
 
     /**

@@ -97,6 +97,7 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'etablissementDl'   => 'Application\View\Helper\EtablissementDl',
+            'etablissement'     => 'Application\View\Helper\EtablissementViewHelper',
         ),
     ),
 );

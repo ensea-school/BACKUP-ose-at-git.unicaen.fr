@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * VolumeHoraire
  */
-class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
+class VolumeHoraire implements HistoriqueAwareInterface
 {
     /**
      * @var float
@@ -26,16 +26,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
      * @var \DateTime
      */
     protected $histoModification;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -227,52 +217,6 @@ class VolumeHoraire implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getHistoModification()
     {
         return $this->histoModification;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return VolumeHoraire
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return VolumeHoraire
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

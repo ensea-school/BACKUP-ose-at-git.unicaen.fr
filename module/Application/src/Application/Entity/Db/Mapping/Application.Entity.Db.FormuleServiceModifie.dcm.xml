@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\FormuleServiceDu" table="FORMULE_SERVICE_DU">
-    <indexes>
-      <index name="IDX_142111ADAA401F5C" columns="ANNEE_ID"/>
-      <index name="IDX_142111AD78FF2BCB" columns="INTERVENANT_ID"/>
-    </indexes>
-    <unique-constraints>
-      <unique-constraint name="formule_service_du__un" columns="INTERVENANT_ID,ANNEE_ID"/>
-    </unique-constraints>
+  <entity name="Application\Entity\Db\FormuleServiceModifie" table="V_FORMULE_SERVICE_MODIFIE">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="serviceDu" type="float" column="SERVICE_DU" precision="126" scale="0" nullable="false"/>
-    <field name="serviceDuModification" type="float" column="SERVICE_DU_MODIFICATION" precision="126" scale="0" nullable="false"/>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>

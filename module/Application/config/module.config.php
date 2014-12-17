@@ -276,5 +276,6 @@ return array_merge_recursive(
     include 'validation.config.php',
     include 'agrement.config.php',
     include 'gestion.config.php',
-    include 'workflow.config.php'
+    include 'workflow.config.php',
+    include 'indicateur.config.php'
 );

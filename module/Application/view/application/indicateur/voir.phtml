@@ -1,0 +1,18 @@
+<?php 
+use Application\Entity\Db\Indicateur;
+use Application\Service\Indicateur\AbstractIndicateurImpl;
+/* @var $indicateurImpl AbstractIndicateurImpl */
+?>
+
+<?php $this->headTitle()->append($this->indicateur . "")->append($title = "Indicateur") ?>
+
+<h1 class="page-header"><?php echo $indicateurImpl->getTitle() ?></h1>
+
+<ul>
+<?php foreach ($indicateurImpl->getResult() as $r): ?>
+    <li><a href="<?php echo $indicateurImpl->getResultUrl($r) ?>"><?php echo $r ?></a></li>
+<?php endforeach; ?>
+</ul>
+
+<?php
+//var_dump(\UnicaenApp\Util::collectionAsOptions($indicateurImpl->getResult()));

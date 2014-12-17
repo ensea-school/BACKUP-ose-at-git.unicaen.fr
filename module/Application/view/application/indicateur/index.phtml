@@ -1,0 +1,28 @@
+<?php 
+use Application\Entity\Db\Indicateur;
+use Application\Service\Indicateur\AbstractIndicateurImpl;
+?>
+
+<?php $this->headTitle()/*->append($this->intervenant->getNomUsuel())*/->append($title = "Indicateurs") ?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php 
+$indicateursParType = [];
+foreach ($this->indicateursImpl as $indicateurImpl) {
+    $indicateursParType[$indicateurImpl->getEntity()->getType()][] = $indicateurImpl;
+}
+?>
+<ul>
+<?php foreach ($indicateursParType as $type => $indicateursImpl): /* @var $indicateurs AbstractIndicateurImpl[] */ ?>
+    <li>
+        <h2><?php echo $type ?></h2>
+        <ul>
+        <?php foreach ($indicateursImpl as $indicateurImpl): /* @var $indicateurImpl AbstractIndicateurImpl */ ?>
+            <?php $entity = $indicateurImpl->getEntity();  /* @var $entity Indicateur */ ?>
+            <li><a href="<?php echo $this->url('indicateur/voir', ['indicateur' => $entity->getId()]) ?>"><?php echo $indicateurImpl ?></a></li>
+        <?php endforeach; ?>
+        </ul>
+    </li>
+<?php endforeach; ?>
+</ul>

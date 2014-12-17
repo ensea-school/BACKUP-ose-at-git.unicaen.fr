@@ -141,31 +141,31 @@ class Workflow extends AbstractWorkflow
             $isCurrent = $ie->getCourante();
             $done      = $ie->getFranchie();
             
-            /**
-             * Certaines étapes du workflow peuvent être "déclinées" par structure d'enseignement,
-             * exemple: l'étape "validation des enseignements".
-             * 
-             * La progression de l'intervenant dans le wf stockée en base de données
-             * ne gère pas cette déclinaison par structure : l'étape "validation des enseignements"
-             * marquée "franchie" signifie que des enseignements ont bien été validés mais 
-             * sans considération pour la structure d'enseignement précise.
-             * 
-             * Le caractère "franchie" de certaines étapes peut être réévalué pour une structure d'enseignement
-             * précise. Cela est utile pour le rôle gestionnaire par exemple : ce dernier s'exerçant sur
-             * une structure de responsabilité précise, on veut savoir si une étape franchie l'est bien
-             * pour cette structure de responsabilité en particulier.
-             */
-            if ($currentFound) {
-                $isCurrent = false;
-                $done      = false;
-            }
-            if ($done && !$currentFound && $etape->getStructureDependant() && $this->getStructure()) {
-                if ($crossingRule->isRelevant() && !$crossingRule->execute()) {
-                    $isCurrent = true;
-                    $done = false;
-                    $currentFound = true;
-                }
-            }
+//            /**
+//             * Certaines étapes du workflow peuvent être "déclinées" par structure d'enseignement,
+//             * exemple: l'étape "validation des enseignements".
+//             * 
+//             * La progression de l'intervenant dans le wf stockée en base de données
+//             * ne gère pas cette déclinaison par structure : l'étape "validation des enseignements"
+//             * marquée "franchie" signifie que des enseignements ont bien été validés mais 
+//             * sans considération pour la structure d'enseignement précise.
+//             * 
+//             * Le caractère "franchie" de certaines étapes peut être réévalué pour une structure d'enseignement
+//             * précise. Cela est utile pour le rôle gestionnaire par exemple : ce dernier s'exerçant sur
+//             * une structure de responsabilité précise, on veut savoir si une étape franchie l'est bien
+//             * pour cette structure de responsabilité en particulier.
+//             */
+//            if ($currentFound) {
+//                $isCurrent = false;
+//                $done      = false;
+//            }
+//            if ($done && !$currentFound && $etape->getStructureDependant() && $this->getStructure()) {
+//                if ($crossingRule->isRelevant() && !$crossingRule->execute()) {
+//                    $isCurrent = true;
+//                    $done = false;
+//                    $currentFound = true;
+//                }
+//            }
             
             $step = $this->createStep($etape);
             $step

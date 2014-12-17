@@ -16,6 +16,11 @@ class WfIntervenantEtape
      * @var boolean
      */
     private $courante = false;
+    
+    /**
+     * @var boolean
+     */
+    private $atteignable = false;
 
     /**
      * @var \DateTime
@@ -96,6 +101,29 @@ class WfIntervenantEtape
     public function getCourante()
     {
         return $this->courante;
+    }
+
+    /**
+     * Set atteignable
+     *
+     * @param boolean $atteignable
+     * @return WfIntervenantEtape
+     */
+    public function setAtteignable($atteignable)
+    {
+        $this->atteignable = $atteignable;
+
+        return $this;
+    }
+
+    /**
+     * Get atteignable
+     *
+     * @return boolean 
+     */
+    public function getAtteignable()
+    {
+        return $this->atteignable;
     }
 
     /**

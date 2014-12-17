@@ -6,8 +6,7 @@
     </id>
     <field name="courante" type="boolean" column="COURANTE" nullable="false"/>
     <field name="franchie" type="boolean" column="FRANCHIE" nullable="false"/>
-<!--    <field name="dateEntree" type="datetime" column="DATE_ENTREE" nullable="true"/>
-    <field name="dateSortie" type="datetime" column="DATE_SORTIE" nullable="true"/>-->
+    <field name="atteignable" type="boolean" column="ATTEIGNABLE" nullable="false"/>
     <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
     
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">

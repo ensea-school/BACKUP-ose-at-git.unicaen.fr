@@ -16,7 +16,7 @@
                         <!--<a class="details pull-right" href="#" title="Cliquez pour afficher plus d'informations"><small>En savoir plus...</small></a>-->
                         <?php 
                         $etape  = sprintf('<span class="label label-primary">%s</span> ', $step->getIndex());
-                        $etape .= (!$step->getRoute() || $wf->isStepAfterCurrentStep($step)) ?
+                        $etape .= (!$step->getRoute() || $wf->isStepAfterCurrentStep($step) && !$step->getDone()) ?
                             $step->getLabel($role) : 
                             sprintf('<a title="%s" href="%s">%s</a>', 
                                 "Cliquez sur ce lien pour accéder à la page correspondant à cette étape", 

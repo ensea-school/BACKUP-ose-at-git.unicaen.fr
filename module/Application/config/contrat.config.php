@@ -240,13 +240,13 @@ return array(
             'BjyAuthorize\Provider\Rule\Config' => array(
                 'allow' => array(
                     array(
-                        array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID), 
+                        array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID), 
                         'Contrat', 
                         array(ContratAssertion::PRIVILEGE_READ), 
                         'ContratAssertion',
                     ),
                     array(
-                        array(ComposanteRole::ROLE_ID), 
+                        array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID), 
                         'Contrat', 
                         array(
                             ContratAssertion::PRIVILEGE_CREATE, 

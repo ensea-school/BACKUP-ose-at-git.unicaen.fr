@@ -67,7 +67,6 @@ class Service extends AbstractEntityService
     {
         $entity = parent::newEntity();
         $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
-        $entity->setValiditeDebut(new \DateTime );
         if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }

@@ -8,7 +8,7 @@ end;
 
 /
 
-
+select to_char(sysdate, 'DD/MM/YYYY HH24:MI:SS') from dual;
 
 select id from intervenant where source_code = '18009'; -- 553
 
@@ -68,3 +68,19 @@ where
   --AND ti.code = 'TP'
 order by
   s_id, type_volume_horaire, periode, TI.ORDRE;
+  
+  
+  
+  
+  
+  
+  
+select
+  i.id, i.source_code
+from
+  intervenant i
+  join statut_intervenant si on si.id = i.statut_id
+where
+  si.peut_saisir_service = 1
+  AND not exists( select 1 from service where intervenant_id = i.id )
+  AND not exists( select 1 from service_referentiel where intervenant_id = i.id )

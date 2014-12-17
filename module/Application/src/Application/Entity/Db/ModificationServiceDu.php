@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * ModificationServiceDu
  */
-class ModificationServiceDu implements HistoriqueAwareInterface, ValiditeAwareInterface
+class ModificationServiceDu implements HistoriqueAwareInterface
 {
     /**
      * Retourne la représentation littérale de cet objet.
@@ -29,7 +29,6 @@ class ModificationServiceDu implements HistoriqueAwareInterface, ValiditeAwareIn
      */
     public function __construct(Annee $annee = null)
     {
-        $this->setValiditeDebut(new \DateTime());
         $this->setAnnee($annee);
     }
     
@@ -57,16 +56,6 @@ class ModificationServiceDu implements HistoriqueAwareInterface, ValiditeAwareIn
      * @var \DateTime
      */
     protected $histoModification;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -217,52 +206,6 @@ class ModificationServiceDu implements HistoriqueAwareInterface, ValiditeAwareIn
     public function getHistoModification()
     {
         return $this->histoModification;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return ModificationServiceDu
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return ModificationServiceDu
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

@@ -49,7 +49,6 @@ class VolumeHoraire extends AbstractEntityService
         
         $entity = parent::newEntity();
         $entity
-                ->setValiditeDebut(new \DateTime())
                 ->setTypeVolumeHoraire($type);
         
         return $entity;

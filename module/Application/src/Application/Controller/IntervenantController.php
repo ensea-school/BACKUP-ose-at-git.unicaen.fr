@@ -231,6 +231,7 @@ class IntervenantController extends AbstractActionController implements ContextP
             'services'                      => [],
             'referentiel'                   => [],
             'types-intervention'            => [],
+            'has-ponderation-service-compl' => false,
         ];
 
         $referentiels = $intervenant->getFormuleReferentiel($annee);
@@ -241,13 +242,19 @@ class IntervenantController extends AbstractActionController implements ContextP
                 $data['referentiel'][$referentiel->getStructure()->getId()] = [
                     'structure' => $referentiel->getStructure(),
                     'heures'    => 0,
+                    'hetd'      => 0,
+                    'hetd-compl'=> 0,
                 ];
             }
             $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures();
+            $frr = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
+            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr->getHeuresService();
+            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr->getHeuresComplReferentiel();
         }
 
         $services = $intervenant->getFormuleService($annee);
         foreach( $services as $service ){
+            /* @var $service \Application\Entity\Db\FormuleService */
             $typesIntervention = [];
             $totalHeures = 0;
 
@@ -262,13 +269,21 @@ class IntervenantController extends AbstractActionController implements ContextP
             }
 
             if ($totalHeures > 0){
+                $frs = $service->getService()->getUniqueFormuleResultatService( $typeVolumeHoraire, $etatVolumeHoraire );
+                if (1.0 !== $service->getPonderationServiceCompl()){
+                    $data['has-ponderation-service-compl'] = true;
+                }
                 $data['services'][$service->getId()] = [
                     'service'                   => $service->getService(),
                     'taux-fi'                   => $service->getTauxFi(),
                     'taux-fa'                   => $service->getTauxFa(),
                     'taux-fc'                   => $service->getTauxFc(),
                     'ponderation-service-compl' => $service->getPonderationServiceCompl(),
-                    'heures'                    => []
+                    'heures'                    => [],
+                    'hetd'                      => $frs->getHeuresService(),
+                    'hetd-compl-fi'             => $frs->getHeuresComplFi(),
+                    'hetd-compl-fa'             => $frs->getHeuresComplFa(),
+                    'hetd-compl-fc'             => $frs->getHeuresComplFc(),
                 ];
                 foreach( $typesIntervention as $ti ){
                     if ( $ti['heures'] > 0 ){

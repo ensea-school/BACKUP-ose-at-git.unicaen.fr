@@ -74,6 +74,16 @@ class FormuleResultat
     private $id;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultatService;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultatReferentiel;
+
+    /**
      * @var \Application\Entity\Db\TypeVolumeHoraire
      */
     private $typeVolumeHoraire;
@@ -92,6 +102,17 @@ class FormuleResultat
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->formuleResultatService = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 
     public function init( Intervenant $intervenant, Annee $annee, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
     {
@@ -240,6 +261,26 @@ class FormuleResultat
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get formuleResultatService
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleResultatService()
+    {
+        return $this->formuleResultatService;
+    }
+
+    /**
+     * Get formuleResultatReferentiel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleResultatReferentiel()
+    {
+        return $this->formuleResultatReferentiel;
     }
 
     /**

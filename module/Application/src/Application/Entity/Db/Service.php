@@ -90,7 +90,10 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
      */
     protected $typeVolumeHoraire;
 
-
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultatService;
 
 
     /**
@@ -476,6 +479,35 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     {
         $this->typeVolumeHoraire = $typeVolumeHoraire;
         return $this;
+    }
+
+    /**
+     * Get formuleResultatService
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleResultatService(TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
+    {
+        $filter = function( FormuleResultatService $formuleResultatService ) use ($typeVolumeHoraire, $etatVolumeHoraire) {
+            if ($typeVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if ($etatVolumeHoraire->getOrdre() > $formuleResultatService->getFormuleResultat()->getEtatVolumeHoraire()->getOrdre()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleResultatService;
+    }
+
+    /**
+     * Get formuleResultatService
+     *
+     * @return FormuleResultatService
+     */
+    public function getUniqueFormuleResultatService(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
+    {
+        return $this->getFormuleResultatService($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
 
     /**

@@ -20,6 +20,11 @@ class FormuleReferentiel
     private $id;
 
     /**
+     * @var \Application\Entity\Db\ServiceReferentiel
+     */
+    private $serviceReferentiel;
+
+    /**
      * @var \Application\Entity\Db\Structure
      */
     private $structure;
@@ -59,6 +64,16 @@ class FormuleReferentiel
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get serviceReferentiel
+     *
+     * @return \Application\Entity\Db\ServiceReferentiel
+     */
+    public function getServiceReferentiel()
+    {
+        return $this->serviceReferentiel;
     }
 
     /**

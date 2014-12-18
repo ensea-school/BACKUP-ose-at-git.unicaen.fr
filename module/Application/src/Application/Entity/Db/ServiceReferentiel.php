@@ -99,6 +99,11 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
      */
     protected $annee;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultatReferentiel;
+
 
     /**
      * Set heures
@@ -384,6 +389,35 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+    /**
+     * Get formuleResultatReferentiel
+     *
+     * @return Application\Entity\Db\FormuleResultatReferentiel
+     */
+    public function getFormuleResultatReferentiel( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
+    {
+        $filter = function( FormuleResultatReferentiel $formuleResultatReferentiel ) use ($typeVolumeHoraire, $etatVolumeHoraire) {
+            if ($typeVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if ($etatVolumeHoraire->getOrdre() > $formuleResultatReferentiel->getFormuleResultat()->getEtatVolumeHoraire()->getOrdre()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleResultatReferentiel;
+    }
+
+    /**
+     * Get formuleResultatReferentiel
+     *
+     * @return FormuleResultatReferentiel
+     */
+    public function getUniqueFormuleResultatReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
+    {
+        return $this->getFormuleResultatReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
 
     /**

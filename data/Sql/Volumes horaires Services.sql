@@ -26,8 +26,8 @@ from
   LEFT JOIN validation v ON v.id = VVH.VALIDATION_ID
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
-  i.source_code = '91521'
-  --AND vh.histo_destruction IS NULL
+  i.id = 480
+  AND vh.histo_destruction IS NULL
   --AND ti.code = 'TP'
 order by
   s_id, type_volume_horaire, periode, TI.ORDRE;

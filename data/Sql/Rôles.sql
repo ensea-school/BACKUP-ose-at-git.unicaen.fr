@@ -15,7 +15,7 @@ from
   LEFT JOIN structure s ON s.id = r.structure_id AND s.histo_destruction IS NULL
 WHERE
   r.histo_destruction IS NULL
-  AND r.source_id <> OSE_IMPORT.GET_SOURCE_ID('OSE')
+  AND r.source_id = OSE_IMPORT.GET_SOURCE_ID('OSE')
 ORDER BY
   structure, nom, source, type_role;
 
@@ -35,21 +35,8 @@ INSERT INTO ROLE (
     ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 1, 1
 );
 
-INSERT INTO ROLE (
-    STRUCTURE_ID,
-    PERSONNEL_ID,
-    TYPE_ID,
-    SOURCE_CODE,
-    ID, SOURCE_ID, HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
-)VALUES(
-    (SELECT ID FROM structure WHERE source_code = 'U26'),
-    (SELECT ID FROM personnel WHERE source_code ='4650'),
-    (SELECT ID FROM TYPE_ROLE WHERE code = 'administrateur'),
-    'gestionnaire-drh-alcalde',
-    ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 1, 1
-);
 
-select * from personnel where nom_usuel like 'Cador%';
+select * from personnel where nom_usuel like 'Jestin%';
 select * from type_role;
 
 delete from role where id = 492;

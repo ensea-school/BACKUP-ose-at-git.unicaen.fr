@@ -75,7 +75,7 @@ END;
 
 -- 25839 ou 17599
 
-select * from intervenant where source_code like '18009';
+select * from intervenant where id = 480;
 SELECT * FROM formule_service_du WHERE intervenant_id = (select id from intervenant where source_code = '18009');
 SELECT * FROM formule_referentiel WHERE intervenant_id = (select id from intervenant where source_code = '18009');
 SELECT * FROM formule_service WHERE intervenant_id = (select id from intervenant where source_code = '18009');
@@ -91,8 +91,25 @@ update service set histo_destruction = sysdate, histo_destructeur_id = 1 where i
 /
 begin
 
---ose_formule.MAJ_SERVICE(16425);
-
-ose_formule.MAJ_resultat(553, 2014);
-
+  ose_formule.calculer_tout;
 end;
+
+
+/
+
+
+select
+  i.id,
+  i.source_code,
+  i.nom_usuel || ' ' || i.prenom nom,
+  round(fr.service_assure,2),
+  round(nvl((SELECT sum(frs.service_assure) FROM formule_resultat_service frs WHERE frs.formule_resultat_id = fr.id),0),2) frs_sa,
+  round(nvl((SELECT sum(frr.service_assure) FROM formule_resultat_referentiel frr WHERE frr.formule_resultat_id = fr.id),0),2) frr_sa
+from
+  formule_resultat fr 
+  join intervenant i on i.id = fr.intervenant_id
+where
+  fr.etat_volume_horaire_id = 1
+  AND fr.type_volume_horaire_id = 1
+  AND fr.annee_id = 2014
+  AND i.id = 553

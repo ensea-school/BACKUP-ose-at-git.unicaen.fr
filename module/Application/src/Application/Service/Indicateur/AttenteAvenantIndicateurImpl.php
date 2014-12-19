@@ -2,6 +2,12 @@
 
 namespace Application\Service\Indicateur;
 
+use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\WfEtape;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
+use Traversable;
+
 /**
  * 
  *
@@ -9,18 +15,11 @@ namespace Application\Service\Indicateur;
  */
 class AttenteAvenantIndicateurImpl extends AbstractIndicateurImpl
 {
-    const PATTERN_TITLE = "%s vacataires sont en attente de leur avenant";
+    protected $titlePattern = "%s vacataires sont en attente de leur avenant";
     
     /**
      * 
-     */
-    public function getTitle()
-    {
-        return sprintf(static::PATTERN_TITLE, $this->getResultCount());
-    }
-    
-    /**
-     * 
+     * @return Traversable
      */
     public function getResult()
     {
@@ -45,29 +44,58 @@ class AttenteAvenantIndicateurImpl extends AbstractIndicateurImpl
         return $this->getHelperUrl()->fromRoute('intervenant/contrat', ['intervenant' => $result->getSourceCode()]);
     }
     
-    protected function getResultCount()
+    /**
+     * 
+     * @return integer
+     */
+    public function getResultCount()
     {
         if (null !== $this->result) {
             return count($this->result);
         }
         
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT ie)");
-//        print_r($qb->getQuery()->getSQL());
+        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
+//        print_r($qb->getQuery()->getSQL());die;
         
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
     
+    /**
+     * @return QueryBuilder
+     */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("ie");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
         $qb
-                ->join("ie.contrat", "c")
-                ->join("ie.service", "s")
-                ->join("s.volumeHoraire", "vh", \Doctrine\ORM\Query\Expr\Join::WITH, "vh.contrat IS NULL");
+                ->join("i.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
+                ->join("i.service", "s")
+                ->join("s.volumeHoraire", "vh")
+                ->join("vh.validation", "v");
         
         if ($this->getStructure()) {
             $qb
                     ->andWhere("s.structureEns = :structure")
+                    ->setParameter('structure', $this->getStructure());
+        }
+        
+        /**
+         * L'intervenant doit posséder un contrat initial validé.
+         */
+        $qb
+                ->join("i.contrat", "ci", Join::WITH, "ci.validation IS NOT NULL")
+                ->join("ci.typeContrat", "tc", Join::WITH, "tc.code = :codeTypeContratInitial")
+                ->setParameter('codeTypeContratInitial', \Application\Entity\Db\TypeContrat::CODE_CONTRAT);
+        
+        /**
+         * L'étape Contrat doit être l'étape courante pour la composante d'enseignement concernée.
+         */
+        $qb
+                ->join("i.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
+                ->join("p.etape", "e", Join::WITH, "e.code = :code")
+                ->setParameter('code', WfEtape::CODE_CONTRAT);
+        if ($this->getStructure()) {
+            $qb
+                    ->andWhere("p.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
         

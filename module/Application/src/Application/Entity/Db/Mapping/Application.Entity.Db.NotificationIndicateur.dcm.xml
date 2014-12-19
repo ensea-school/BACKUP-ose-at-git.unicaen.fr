@@ -5,7 +5,8 @@
       <generator strategy="SEQUENCE"/>
     </id>
     <field name="frequence" type="string" column="FREQUENCE" length="128" nullable="false"/>
-    <field name="dateDerniereNotif" type="datetime" column="DATE_DERNIERE_NOTIF" nullable="true"/>
+    <field name="dateAbonnement" type="datetime" column="DATE_ABONNEMENT" nullable="false"/>
+    <field name="dateDernNotif" type="datetime" column="DATE_DERN_NOTIF" nullable="true"/>
     <many-to-one field="indicateur" target-entity="Application\Entity\Db\Indicateur">
       <join-columns>
         <join-column name="INDICATEUR_ID" referenced-column-name="ID"/>

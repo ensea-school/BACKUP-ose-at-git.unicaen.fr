@@ -25,9 +25,9 @@ class Indicateur
     private $code;
     
     /**
-     * @var string
+     * @var boolean
      */
-    private $class;
+    private $enabled;
     
     /**
      * @var string
@@ -38,6 +38,11 @@ class Indicateur
      * @var string
      */
     private $libelle;
+    
+    /**
+     * @var integer
+     */
+    private $ordre;
 
     /**
      * @var boolean
@@ -52,7 +57,7 @@ class Indicateur
     {
         return $this->getLibelle();
     }
-    
+            
     /**
      * Get id
      *
@@ -87,26 +92,26 @@ class Indicateur
     }
 
     /**
-     * Set class
+     * Set enabled
      *
-     * @param string $class
+     * @param boolean $enabled
      * @return Indicateur
      */
-    public function setClass($class)
+    public function setEnabled($enabled)
     {
-        $this->class = $class;
+        $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get class
+     * Get enabled
      *
-     * @return string 
+     * @return boolean 
      */
-    public function getClass()
+    public function getEnabled()
     {
-        return $this->class;
+        return $this->enabled;
     }
     
     /**
@@ -156,25 +161,25 @@ class Indicateur
     }
 
     /**
-     * Set structureDependant
+     * Set ordre
      *
-     * @param boolean $structureDependant
-     * @return WfEtape
+     * @param integer $ordre
+     * @return Indicateur
      */
-    public function setStructureDependant($structureDependant)
+    public function setOrdre($ordre)
     {
-        $this->structureDependant = $structureDependant;
+        $this->ordre = $ordre;
 
         return $this;
     }
 
     /**
-     * Get structureDependant
+     * Get ordre
      *
-     * @return boolean 
+     * @return integer 
      */
-    public function getStructureDependant()
+    public function getOrdre()
     {
-        return $this->structureDependant;
+        return $this->ordre;
     }
 }

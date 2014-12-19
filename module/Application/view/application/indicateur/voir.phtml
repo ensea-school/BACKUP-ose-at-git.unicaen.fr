@@ -10,7 +10,8 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
 
 <ul>
 <?php foreach ($indicateurImpl->getResult() as $r): ?>
-    <li><a href="<?php echo $indicateurImpl->getResultUrl($r) ?>"><?php echo $r ?></a></li>
+    <li><a href="<?php echo $indicateurImpl->getResultUrl($r) ?>"
+           title="Cliquez pour vous rendre à la page concernée"><?php echo $r ?></a></li>
 <?php endforeach; ?>
 </ul>
 

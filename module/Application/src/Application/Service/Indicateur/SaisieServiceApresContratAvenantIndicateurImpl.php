@@ -5,6 +5,7 @@ namespace Application\Service\Indicateur;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Traversable;
 
 /**
  * 
@@ -13,18 +14,26 @@ use Doctrine\ORM\QueryBuilder;
  */
 class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIndicateurImpl
 {
-    const PATTERN_TITLE = "%s vacataires ont saisi des heures d'enseignement supplémentaires depuis l'édition de leur contrat ou avenant";
+    protected $titlePattern = "%s vacataires ont saisi des heures d'enseignement supplémentaires depuis l'édition de leur contrat ou avenant";
     
     /**
      * 
+     * @return string
      */
     public function getTitle()
     {
-        return sprintf(static::PATTERN_TITLE, $this->getResultCount());
+        $title = sprintf($this->titlePattern, $this->getResultCount());
+        
+        if ($this->getStructure()) {
+            $title .= " ({$this->getStructure()})";
+        }
+        
+        return $title;
     }
     
     /**
      * 
+     * @return Traversable
      */
     public function getResult()
     {
@@ -46,14 +55,14 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIndicateurI
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/contrat', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute('intervenant/validation-service', ['intervenant' => $result->getSourceCode()]);
     }
     
     /**
      * 
      * @return int
      */
-    protected function getResultCount()
+    public function getResultCount()
     {
         if (null !== $this->result) {
             return count($this->result);
@@ -76,10 +85,16 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIndicateurI
                 ->join("ie.contrat", "c")
                 ->join("ie.service", "s")
                 ->join("s.volumeHoraire", "vh", Join::WITH, "vh.contrat IS NULL");
+     
+        /**
+         * NB: pas besoin de consulter la progression dans le workflow car si l'intervenant a déjà un contrat/avenant,
+         * c'est qu'il a bien atteint l'étape "contrat".
+         */
         
         if ($this->getStructure()) {
             $qb
                     ->andWhere("s.structureEns = :structure")
+                    ->andWhere("c.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
         

@@ -13,9 +13,9 @@ use Traversable;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
+class AgrementMaisPasContratIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires sont en attente de leur contrat initial";
+    protected $titlePattern = "%s vacataires ont reçu l'agrément du Conseil Académique et n'ont pas encore de contrat/avenant";
     
     /**
      * 
@@ -25,7 +25,7 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
     {
         if (null === $this->result) {
             $qb = $this->getQueryBuilder();
-            print_r($qb->getQuery()->getSQL());
+//            print_r($qb->getQuery()->getSQL());
 
             $this->result = $qb->getQuery()->getResult();
         }
@@ -65,31 +65,27 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
         $qb
                 ->join("i.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
-                ->join("i.service", "s")
-                ->join("s.volumeHoraire", "vh")
-                ->join("vh.validation", "v");
-        
-        /**
-         * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape Contrat doivent avoir été franchies
-         */
-        $qb
+                ->join("i.agrement", "a")
+                ->join("a.type", "ta", Join::WITH, "ta.code = :cta")
+                ->setParameter('cta', \Application\Entity\Db\TypeAgrement::CODE_CONSEIL_ACADEMIQUE)
+                // l'étape Contrat doit être courante
                 ->join("i.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
-                ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
-                ->setParameter('codeEtape', WfEtape::CODE_CONTRAT);
+                ->join("p.etape", "e", Join::WITH, "e.code = :ce")
+                ->setParameter('ce', WfEtape::CODE_CONTRAT);
         
-        /**
-         * Aucun contrat validé ne doit exister
-         */
-        $notExists = 
-                "SELECT c FROM Application\Entity\Db\Contrat c " .
-                "JOIN c.typeContrat tc WITH tc.code = :codeTypeContrat " .
-                "WHERE c.intervenant = i AND c.validation IS NOT NULL ";
-        $qb
-                ->andWhere("NOT EXISTS ( $notExists )")
-                ->setParameter('codeTypeContrat', \Application\Entity\Db\TypeContrat::CODE_CONTRAT);
+        if ($this->getStructure()) {
+            $qb
+                    ->leftJoin("i.contrat", "c", Join::WITH, "c.validation IS NOT NULL AND c.structure = :structure")
+                    ->setParameter('structure', $this->getStructure());
+        }
+        else {
+            $qb->leftJoin("i.contrat", "c", Join::WITH, "c.validation IS NOT NULL");
+        }
+        
+        $qb->andWhere("c.id IS NULL");
          
         return $qb;
     }

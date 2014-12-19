@@ -9,8 +9,15 @@ use DateTime;
  */
 class NotificationIndicateur
 {
-    const FREQUENCE_JOUR    = "Jour";
-    const FREQUENCE_SEMAINE = "Semaine";
+    const FREQUENCE_HEURE   = "heure";
+    const FREQUENCE_JOUR    = "jour";
+    const FREQUENCE_SEMAINE = "semaine";
+    
+    static public $frequences = [
+        self::FREQUENCE_HEURE => "Une par heure",
+        self::FREQUENCE_JOUR => "Une par jour",
+        self::FREQUENCE_SEMAINE => "Une par semaine",
+    ];
     
     /**
      * @var integer
@@ -40,7 +47,12 @@ class NotificationIndicateur
     /**
      * @var DateTime
      */
-    protected $dateNotification;
+    protected $dateAbonnement;
+
+    /**
+     * @var DateTime
+     */
+    protected $dateDernNotif;
 
     /**
      * Get id
@@ -145,25 +157,63 @@ class NotificationIndicateur
     }
     
     /**
-     * Set frequence
+     * Set dateDernNotif
      *
      * @param DateTime $date
      * @return NotificationIndicateur
      */
-    public function setDateNotification(DateTime $date)
+    public function setDateDernNotif(DateTime $date)
     {
-        $this->frequence = $date;
+        $this->dateDernNotif = $date;
 
         return $this;
     }
 
     /**
-     * Get frequence
+     * Get dateDernNotif
      *
      * @return DateTime 
      */
-    public function getDateNotification()
+    public function getDateDernNotif()
     {
-        return $this->frequence;
+        return $this->dateDernNotif;
+    }
+    
+    /**
+     * Set dateAbonnement
+     *
+     * @param DateTime $date
+     * @return NotificationIndicateur
+     */
+    public function setDateAbonnement(DateTime $date)
+    {
+        $this->dateAbonnement = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAbonnement
+     *
+     * @return DateTime 
+     */
+    public function getDateAbonnement()
+    {
+        return $this->dateAbonnement;
+    }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getExtraInfos()
+    {
+        $infos = "Abonnement : " . $this->getDateAbonnement()->format(\Common\Constants::DATETIME_FORMAT);
+        
+        if (($dernNotif = $this->getDateDernNotif())) {
+            $infos .= "<br />Dernière notification : " . $dernNotif->format(\Common\Constants::DATETIME_FORMAT);
+        }
+        
+        return $infos;
     }
 }

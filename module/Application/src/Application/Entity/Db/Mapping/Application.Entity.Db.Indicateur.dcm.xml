@@ -7,6 +7,7 @@
     <field name="code" type="string" column="CODE" length="128" nullable="false"/>
     <field name="type" type="string" column="TYPE" length="64" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="512" nullable="false"/>
-    <field name="class" type="string" column="CLASS" length="256" nullable="false"/>
+    <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
+    <field name="enabled" type="boolean" column="ENABLED" nullable="false"/>
   </entity>
 </doctrine-mapping>

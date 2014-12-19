@@ -2,19 +2,24 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Application\Acl\ComposanteRole;
+use Application\Controller\Plugin\Context;
+use Application\Entity\Db\Structure as StructureEntity;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Indicateur as IndicateurService;
-use Application\Entity\Db\Structure as StructureEntity;
-use Application\Acl\ComposanteRole;
+use Application\Service\NotificationIndicateur as NotificationIndicateurService;
+use Doctrine\ORM\EntityManager;
+use Exception;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 /**
  * Opérations autour des notifications.
  *
- * @method \Doctrine\ORM\EntityManager em()
- * @method Plugin\Context              context()
+ * @method EntityManager em()
+ * @method Context              context()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -31,15 +36,30 @@ class IndicateurController extends AbstractActionController implements ContextPr
     {
         $indicateurs     = $this->getServiceIndicateur()->getList();
         $indicateursImpl = $this->getServiceIndicateur()->getIndicateursImpl($indicateurs, $this->getStructure());
+        $serviceNotif    = $this->getServiceNotificationIndicateur();
+        $personnel       = $this->getContextProvider()->getGlobalContext()->getPersonnel();
+        
+        $qb = $serviceNotif->finderByPersonnel($personnel);
+        $abonnements = $abonnementsInfos = [];
+        foreach ($qb->getQuery()->getResult() as $notificationIndicateur) {
+            $indicateur = $notificationIndicateur->getIndicateur();
+            $abonnements[$indicateur->getId()] = $notificationIndicateur;
+            $abonnementsInfos[$indicateur->getId()] = $notificationIndicateur->getExtraInfos();
+        }
         
         $viewModel = new ViewModel();
         $viewModel->setVariables([
-            'indicateurs'     => $indicateurs,
-            'indicateursImpl' => $indicateursImpl,
+            'indicateurs'      => $indicateurs,
+            'indicateursImpl'  => $indicateursImpl,
+            'abonnementUrl'    => $this->url()->fromRoute('indicateur/abonner', ['indicateur' => '_indicateur_']),
+            'abonnements'      => $abonnements,
+            'abonnementsInfos' => $abonnementsInfos,
         ]);
-        
+
         return $viewModel;
     }
+    
+    
     
     /**
      * Détails d'un indicateur.
@@ -50,7 +70,6 @@ class IndicateurController extends AbstractActionController implements ContextPr
     {
         $indicateur     = $this->context()->mandatory()->indicateurFromRoute();
         $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $this->getStructure());
-//        var_dump(get_class($impl));
         
         $viewModel = new ViewModel();
         $viewModel->setVariables([
@@ -59,7 +78,32 @@ class IndicateurController extends AbstractActionController implements ContextPr
         ]);
         
         return $viewModel;
-    }    
+    }  
+    
+    public function abonnerAction()
+    {
+        $indicateur   = $this->context()->mandatory()->indicateurFromRoute();
+        $frequence    = $this->params()->fromPost('abonnement');
+        $personnel    = $this->getContextProvider()->getGlobalContext()->getPersonnel();
+        $serviceNotif = $this->getServiceNotificationIndicateur();
+        $status       = 'success';
+        
+        try {
+            $notificationIndicateur = $serviceNotif->abonner($personnel, $indicateur, $frequence);
+            $message = $serviceNotif->getMessage(PHP_EOL);
+        }
+        catch (Exception $e) {
+            $status  = 'failure';
+            $message = "Abonnement de $personnel impossible: {$e->getMessage()})";
+        }
+        
+        return new JsonModel([
+            'status'  => $status,
+            'message' => $message,
+            'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
+        ]);
+    }
+    
     
     /**
      * @return StructureEntity
@@ -81,5 +125,13 @@ class IndicateurController extends AbstractActionController implements ContextPr
     private function getServiceIndicateur()
     {
         return $this->getServiceLocator()->get('IndicateurService');
+    }
+    
+    /**
+     * @return NotificationIndicateurService
+     */
+    private function getServiceNotificationIndicateur()
+    {
+        return $this->getServiceLocator()->get('NotificationIndicateurService');
     }
 }

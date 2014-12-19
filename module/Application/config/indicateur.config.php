@@ -48,6 +48,18 @@ return array(
                             ),
                         ),
                     ),
+                    'abonner' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:indicateur/abonner',
+                            'constraints' => array(
+                                'indicateur' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'abonner',
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -66,7 +78,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Indicateur',
-                    'action'     => array('index', 'voir'),
+                    'action'     => array('index', 'voir', 'abonner'),
                     'roles'      => array('user'),
                 ),
             ),
@@ -99,6 +111,14 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'IndicateurService'                => 'Application\\Service\\Indicateur',
+            'NotificationIndicateurService'    => 'Application\\Service\\NotificationIndicateur',
+            
+            'AttenteValidationDonneesPerso'    => 'Application\\Service\\Indicateur\\AttenteValidationDonneesPersoIndicateurImpl',
+            'AttentePieceJustifValidee'        => 'Application\\Service\\Indicateur\\AttentePieceJustifValideeIndicateurImpl',
+            'AttenteValidationEns'             => 'Application\\Service\\Indicateur\\AttenteValidationEnsIndicateurImpl',
+            'AttenteAgrementCR'                => 'Application\\Service\\Indicateur\\AttenteAgrementCRIndicateurImpl',
+            'AttenteAgrementCA'                => 'Application\\Service\\Indicateur\\AttenteAgrementCAIndicateurImpl',
+            'AgrementMaisPasContrat'           => 'Application\\Service\\Indicateur\\AgrementMaisPasContratIndicateurImpl',
             'SaisieServiceApresContratAvenant' => 'Application\\Service\\Indicateur\\SaisieServiceApresContratAvenantIndicateurImpl',
             'AttenteContrat'                   => 'Application\\Service\\Indicateur\\AttenteContratIndicateurImpl',
             'AttenteAvenant'                   => 'Application\\Service\\Indicateur\\AttenteAvenantIndicateurImpl',

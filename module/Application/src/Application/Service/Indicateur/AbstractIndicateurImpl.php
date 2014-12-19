@@ -12,10 +12,12 @@ use Application\Entity\Db\Indicateur as IndicateurEntity;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AbstractIndicateurImpl extends AbstractService
+abstract class AbstractIndicateurImpl extends AbstractService implements IndicateurImplInterface
 {
     use StructureAwareTrait;
     
+    protected $titlePattern;
+            
     /**
      * 
      * @return string
@@ -52,21 +54,20 @@ abstract class AbstractIndicateurImpl extends AbstractService
     }
     
     protected $result;
-    
-    /**
-     * 
-     */
-    abstract public function getResult();
 
     /**
      * 
      */
-    abstract public function getTitle();
-    
-    /**
-     * 
-     */
-    abstract public function getResultUrl($result);
+    public function getTitle()
+    {
+        $title = sprintf($this->titlePattern, $this->getResultCount());
+        
+        if ($this->getStructure()) {
+            $title .= " ({$this->getStructure()})";
+        }
+        
+        return $title;
+    }
     
     /**
      * Retourne le plugin Url permettant de générer l'URL associé à un résultat d'indicateur.

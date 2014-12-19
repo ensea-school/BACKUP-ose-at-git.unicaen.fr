@@ -123,3 +123,7 @@ a.btn.loading, button.loading {
     /*opacity: 0.5;*/
     background-position: center center;
 }
+select.loading {
+    background-position: 3px center;
+    color: transparent;
+}

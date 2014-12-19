@@ -13,9 +13,9 @@ use Traversable;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
+class AttenteValidationEnsIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires sont en attente de leur contrat initial";
+    protected $titlePattern = "%s vacataires sont en attente de validation de leurs enseignements";
     
     /**
      * 
@@ -25,8 +25,9 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
     {
         if (null === $this->result) {
             $qb = $this->getQueryBuilder();
-            print_r($qb->getQuery()->getSQL());
-
+            $qb->addOrderBy("i.nomUsuel, i.prenom");
+//            print_r($qb->getQuery()->getSQL());
+            
             $this->result = $qb->getQuery()->getResult();
         }
             
@@ -41,7 +42,7 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/contrat', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute('intervenant/validation-service', ['intervenant' => $result->getSourceCode()]);
     }
     
     /**
@@ -67,29 +68,20 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
     {
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i");
         $qb
-                ->join("i.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
                 ->join("i.service", "s")
-                ->join("s.volumeHoraire", "vh")
-                ->join("vh.validation", "v");
+                ->join("s.volumeHoraire", "vh");
+        
+        if ($this->getStructure()) {
+            $qb
+                    ->andWhere("s.structureEns = :structure")
+                    ->setParameter('structure', $this->getStructure());
+        }
         
         /**
-         * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape Contrat doivent avoir été franchies
+         * Les volumes horaires ne doivent pas être validés.
          */
         $qb
-                ->join("i.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
-                ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
-                ->setParameter('codeEtape', WfEtape::CODE_CONTRAT);
-        
-        /**
-         * Aucun contrat validé ne doit exister
-         */
-        $notExists = 
-                "SELECT c FROM Application\Entity\Db\Contrat c " .
-                "JOIN c.typeContrat tc WITH tc.code = :codeTypeContrat " .
-                "WHERE c.intervenant = i AND c.validation IS NOT NULL ";
-        $qb
-                ->andWhere("NOT EXISTS ( $notExists )")
-                ->setParameter('codeTypeContrat', \Application\Entity\Db\TypeContrat::CODE_CONTRAT);
+                ->andWhere("vh.validation IS EMPTY");
          
         return $qb;
     }

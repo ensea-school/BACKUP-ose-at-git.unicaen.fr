@@ -31,7 +31,7 @@ class IntervenantController extends AbstractActionController implements ContextP
      * @var Intervenant
      */
     private $intervenant;
-    
+
     /**
      * 
      * @return \Zend\View\Model\ViewModel
@@ -202,6 +202,10 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirHeuresCompAction()
     {
+        $this->em()->getFilters()->enable('historique')
+                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
+                ->disableForEntity('Application\Entity\Db\Etablissement');
+
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         $form = $this->getFormHeuresComp();

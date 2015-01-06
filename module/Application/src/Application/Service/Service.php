@@ -173,11 +173,27 @@ class Service extends AbstractEntityService
             if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
             }
-            $result = parent::save($entity);
+
+            $serviceAllreadyExists = null;
+            if (empty($entity->getId())){ // uniquement pour les nouveaux services!!
+                $serviceAllreadyExists = $this->getRepo()->findOneBy([
+                    'intervenant'           => $entity->getIntervenant(),
+                    'elementPedagogique'    => $entity->getElementPedagogique(),
+                    'annee'                 => $entity->getAnnee(),
+                    'etablissement'         => $entity->getEtablissement(),
+                ]);
+            }
+            if ($serviceAllreadyExists){
+                $result = $serviceAllreadyExists;
+            }else{
+                $result = parent::save($entity);
+            }
+
             /* Sauvegarde automatique des volumes horaires associés */
             $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraire');
             /* @var $serviceVolumeHoraire VolumeHoraire */
             foreach( $entity->getVolumeHoraire() as $volumeHoraire ){
+                if ($result !== $entity) $volumeHoraire->setService($result);
                 if ($volumeHoraire->getRemove()){
                     $serviceVolumeHoraire->delete($volumeHoraire);
                 }else{

@@ -1,6 +1,13 @@
 <?php
 
-$title = 'Enseignements';
+/* @var $typeVolumeHoraire Application\Entity\Db\TypeVolumeHoraire */
+
+$titles = [
+  'PREVU'  => 'Enseignements',
+  'REALISE' => 'Constatation des enseignements réalisés',
+];
+
+$title = $titles[$typeVolumeHoraire->getCode()];
 if ($intervenant && $intervenant instanceof Application\Entity\Db\IntervenantPermanent){
     $title .= ' et référentiel';
 }
@@ -45,7 +52,7 @@ if ($intervenant){
     <?php endif; ?>
 
     <?php if ($canAddService): ?>
-    <?php $url = $this->url('service/default', array('action' => 'saisie')); ?>
+    <?php $url = $this->url('service/saisie', [], ['query' => ['type-volume-horaire' => $typeVolumeHoraire->getId()]]); ?>
     <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>"
        title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
     <?php endif; ?>

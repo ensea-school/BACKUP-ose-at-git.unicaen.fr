@@ -94,7 +94,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             ),
         ));
 
-        $this->setAttribute('action', $url(null, array(), array(), true));
+        $this->setAttribute('action', $url(null, [], [], true));
     }
 
     public function initFromContext()

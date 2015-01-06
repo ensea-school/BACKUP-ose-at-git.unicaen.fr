@@ -2,179 +2,191 @@
 
 namespace Application;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'service' => array(
+return [
+    'router' => [
+        'routes' => [
+            'service' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/service',
-                    'defaults' => array(
+                    'defaults' => [
                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Service',
                         'action'        => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'resume' => array(
+                'child_routes' => [
+                    'resume' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/resume',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'resume',
-                            ),
-                        ),
-                    ),
-                    'export' => array(
+                            ],
+                        ],
+                    ],
+                    'export' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/export',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'export',
-                            ),
-                        ),
-                    ),
-                    'resume-refresh' => array(
+                            ],
+                        ],
+                    ],
+                    'resume-refresh' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/resume-refresh',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'resumeRefresh',
-                            ),
-                        ),
-                    ),
-                    'modifier' => array(
+                            ],
+                        ],
+                    ],
+                    'modifier' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/modifier/:id',
-                            'constraints' => array(
+                            'constraints' => [
                                 'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'modifier',
-                            ),
-                        ),
-                    ),
-                    'recherche' => array(
+                            ],
+                        ],
+                    ],
+                    'recherche' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/recherche',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'recherche',
-                            ),
-                        ),
-                        'child_routes' => array(
-                            'default' => array(
+                            ],
+                        ],
+                        'child_routes' => [
+                            'default' => [
                                 'type'    => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'    => '/',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'action' => 'recherche',
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                    'rafraichir-ligne' => array(
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'rafraichir-ligne' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/rafraichir-ligne/:service/:typeVolumeHoraire',
-                            'constraints' => array(
+                            'constraints' => [
                                 'service'=> '[0-9]*',
                                 'typeVolumeHoraire' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'rafraichir-ligne',
-                            ),
-                        ),
-                    ),
-                    'intervenant' => array(
+                            ],
+                        ],
+                    ],
+                    'intervenant' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/intervenant/:intervenant',
-                            'constraints' => array(
+                            'constraints' => [
                                 'intervenant'     => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                    'default' => array(
+                            ],
+                        ],
+                    ],
+                    'saisie' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
+                            'route'    => '/saisie[/:id]',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'saisie',
+                            ],
+                        ],
+                    ],
+                    'default' => [
+                        'type'    => 'Segment',
+                        'options' => [
                             'route'    => '/:action[/:id]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
                                 'id'     => '[0-9]*',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'service-ref' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'service-ref' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/service-referentiel',
-                    'defaults' => array(
+                    'defaults' => [
                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'   => 'ServiceReferentiel',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => FALSE,
-                'child_routes' => array(
-                    'modifier' => array(
+                'child_routes' => [
+                    'modifier' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/modifier/:id',
-                            'constraints' => array(
+                            'constraints' => [
                                 'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'modifier',
-                            ),
-                        ),
-                    ),
-                    'recherche' => array(
+                            ],
+                        ],
+                    ],
+                    'recherche' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/recherche[/:term]',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'recherche',
-                            ),
-                        ),
-                    ),
-                    'default' => array(
+                            ],
+                        ],
+                    ],
+                    'default' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/:action[/:id]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'service' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'service' => [
                         'label'    => 'Enseignements',
                         'title'    => "Résumé des enseignements",
                         'route'    => 'service/resume',
                         'resource' => 'controller/Application\Controller\Service:resume',
-                        'pages' => array(
+                        'pages' => [
 //                            'consultation' => array(
 //                                'label'  => "Consultation",
 //                                'title'  => "Consultation des services",
@@ -183,80 +195,80 @@ return array(
 //                                'withtarget' => true,
 //                                'pages' => array(),
 //                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'),
+                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'],
                     'roles' => [R_ROLE],
-                ), array(
+                ], [
                     'controller' => 'Application\Controller\Service',
-                    'action' => array('resume','resume-refresh','recherche'),
+                    'action' => ['resume','resume-refresh','recherche'],
                     'roles' => [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD]
-                ), array(
+                ], [
                     'controller' => 'Application\Controller\ServiceReferentiel',
-                    'action' => array('index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'),
+                    'action' => ['index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'],
                     'roles' => [R_ROLE],
-                ),
-            ),
-        ),
-        'resource_providers' => array(
-            'BjyAuthorize\Provider\Resource\Config' => array(
+                ],
+            ],
+        ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
                 'Service' => [],
                 'ServiceReferentiel' => [],
                 'ServiceListView' => [],
                 'ServiceController' => [],
-            ),
-        ),
-        'rule_providers' => array(
-            'BjyAuthorize\Provider\Rule\Config' => array(
-                'allow' => array(
-                    array(
+            ],
+        ],
+        'rule_providers' => [
+            'BjyAuthorize\Provider\Rule\Config' => [
+                'allow' => [
+                    [
                         [R_ROLE],
                         'Service',
-                        array('create', 'read', 'delete', 'update'),
+                        ['create', 'read', 'delete', 'update'],
                         'ServiceAssertion',
-                    ),
-                    array(
+                    ],
+                    [
                         [R_COMPOSANTE],
                         'ServiceListView',
-                        array('info-only-structure'),
+                        ['info-only-structure'],
                         'ServiceAssertion',
-                    ),
-                    array(
+                    ],
+                    [
                         [R_INTERVENANT],
                         'ServiceListView',
-                        array('aide-intervenant'),
+                        ['aide-intervenant'],
                         'ServiceAssertion',
-                    ),
+                    ],
                     [
                         [R_INTERVENANT_PERMANENT, R_COMPOSANTE, R_ADMINISTRATEUR],
                         'ServiceReferentiel',
                         ['create', 'read', 'delete', 'update'],
                         'ServiceReferentielAssertion'
                     ]
-                ),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+                ],
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Service'            => 'Application\Controller\ServiceController',
             'Application\Controller\ServiceReferentiel' => 'Application\Controller\ServiceReferentielController',
-        ),
-        'initializers' => array(
+        ],
+        'initializers' => [
             'Application\Service\Initializer\ServiceServiceAwareInitializer',
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
             'ApplicationService'                => 'Application\\Service\\Service',
             'ApplicationServiceReferentiel'     => 'Application\\Service\\ServiceReferentiel',
             'ApplicationFonctionReferentiel'     => 'Application\\Service\\FonctionReferentiel',
@@ -270,38 +282,38 @@ return array(
             'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',
             'ServiceAssertion'                  => 'Application\\Assertion\\ServiceAssertion',
             'ServiceReferentielAssertion'       => 'Application\\Assertion\\ServiceReferentielAssertion',
-        ),
-        'factories' => array(
-        ),
-        'initializers' => array(
+        ],
+        'factories' => [
+        ],
+        'initializers' => [
             'Application\Service\Initializer\ServiceServiceAwareInitializer',
-        ),
-    ),
-    'form_elements' => array(
-        'invokables' => array(
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
             'ServiceSaisie'         => 'Application\\Form\\Service\\Saisie',
             'ServiceSaisieFieldset' => 'Application\\Form\\Service\\SaisieFieldset',
             'ServiceRechercheForm'  => 'Application\\Form\\Service\\RechercheForm',
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
             'serviceDl'               => 'Application\View\Helper\Service\Dl',
             'serviceReferentielDl'    => 'Application\View\Helper\ServiceReferentiel\Dl',
             'serviceSaisieForm'       => 'Application\View\Helper\Service\SaisieForm',
             'serviceResume'           => 'Application\View\Helper\Service\Resume',
-        ),
-        'factories' => array(
+        ],
+        'factories' => [
             'serviceListe'            => 'Application\View\Helper\Service\ListeFactory',
             'serviceLigne'            => 'Application\View\Helper\Service\LigneFactory',
             'serviceReferentielListe' => 'Application\View\Helper\ServiceReferentiel\ListeFactory',
             'serviceReferentielLigne' => 'Application\View\Helper\ServiceReferentiel\LigneFactory',
-        ),
-        'javascript' => array(
+        ],
+        'javascript' => [
             '/test.js'
-        ),
-        'css' => array(
-            
-        ),
-    ),
-);
+        ],
+        'css' => [
+
+        ],
+    ],
+];

@@ -96,33 +96,33 @@ function Service( id ) {
         });
     }
 
-    this.onAfterAdd = function(){
-        var url = Url("service/rafraichir-ligne/"+this.id+"/"+$("#services").data('type-volume-horaire'), {
-            'only-content'                  : 0,
-            'details'                       : 1,
-            'intervenant'                   : $("#services").data('intervenant'),
-            'structure'                     : $("#services").data('structure'),
-            'types-intervention'            : $("#services").data('types-intervention'),
-            'types-intervention-visibility' : $("#services").data('types-intervention-visibility'),
-        });
-        $.get( url, function( data ) {
-            $( "#service-resume" ).refresh(); // Si on est dans le résumé
-            $('#services > tbody:last').append(data);
+    this.onAfterSaisie = function(){
+        if ( $( "#service-"+this.id+"-ligne" ).length ){ // simple modification
+            $( "#service-"+this.id+"-ligne" ).refresh( {
+                details                         : $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
+                'types-intervention-visibility' : $("#services").data('types-intervention-visibility'),
+            } );
+            $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
             Service.refreshFiltres();
             Service.refreshTotaux();
             Service.refreshWorkflowNavigation();
-        });
-    }
-
-    this.onAfterModify = function(){
-        $( "#service-"+this.id+"-ligne" ).refresh( {
-            details                         : $('#service-'+this.id+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
-            'types-intervention-visibility' : $("#services").data('types-intervention-visibility'),
-        } );
-        $( "#service-"+this.id+"-volume-horaire-td" ).refresh();
-        Service.refreshFiltres();
-        Service.refreshTotaux();
-        Service.refreshWorkflowNavigation();
+        }else{ // nouveau service
+            var url = Url("service/rafraichir-ligne/"+this.id+"/"+$("#services").data('type-volume-horaire'), {
+                'only-content'                  : 0,
+                'details'                       : 1,
+                'intervenant'                   : $("#services").data('intervenant'),
+                'structure'                     : $("#services").data('structure'),
+                'types-intervention'            : $("#services").data('types-intervention'),
+                'types-intervention-visibility' : $("#services").data('types-intervention-visibility'),
+            });
+            $.get( url, function( data ) {
+                $( "#service-resume" ).refresh(); // Si on est dans le résumé
+                $('#services > tbody:last').append(data);
+                Service.refreshFiltres();
+                Service.refreshTotaux();
+                Service.refreshWorkflowNavigation();
+            });
+        }
     }
 
     this.onAfterDelete = function(){
@@ -154,7 +154,7 @@ Service.init = function(){
             }
 
             if (id){
-                Service.get(id).onAfterModify();
+                Service.get(id).onAfterSaisie();
             }
         }
     });
@@ -170,7 +170,7 @@ Service.init = function(){
             }
 
             if (id){
-                Service.get(id).onAfterAdd();
+                Service.get(id).onAfterSaisie();
             }
         }
     });

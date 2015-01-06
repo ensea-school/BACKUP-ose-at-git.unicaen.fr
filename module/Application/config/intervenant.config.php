@@ -130,6 +130,21 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
                                 'action' => 'index',
+                                'type-volume-horaire-code' => 'PREVU',
+                            ),
+                        ),
+                    ),
+                    'services-realises' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:intervenant/services-realises',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\Service',
+                                'action' => 'index',
+                                'type-volume-horaire-code' => 'REALISE',
                             ),
                         ),
                     ),
@@ -313,6 +328,17 @@ return array(
                                 'resource' => 'controller/Application\Controller\Contrat:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
+                           /* 'services-realises' => array(
+                                'label'  => "Enseignements réalisés",
+                                'title'  => "Constatation des enseignements réalisés",
+                                'route'  => 'intervenant/services-realises',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Service:index',
+                                'visible' => 'IntervenantNavigationPageVisibility',
+                            ),*/
                         ),
                     ),
                 ),

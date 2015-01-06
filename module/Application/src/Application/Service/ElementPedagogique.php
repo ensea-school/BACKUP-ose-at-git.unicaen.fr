@@ -314,6 +314,7 @@ EOS;
      * Sauvegarde une entité
      *
      * @param \Application\Entity\Db\ElementPedagogique $entity
+     * @return ElementPedagogiqueEntity
      * @throws \Common\Exception\RuntimeException
      */
     public function save($entity)
@@ -330,7 +331,7 @@ EOS;
             $this->getEntityManager()->persist($cp);
         }
         
-        parent::save($entity);
+        $result = parent::save($entity);
         /* Sauvegarde automatique des éléments-modulateurs associés */
         $serviceElementModulateur = $this->getServiceLocator()->get('applicationElementModulateur');
         /* @var $serviceElementModulateur ElementModulateur */
@@ -341,6 +342,7 @@ EOS;
                 $serviceElementModulateur->save( $elementModulateur );
             }
         }
+        return $result;
     }
 
     /**

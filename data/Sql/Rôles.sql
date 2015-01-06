@@ -28,15 +28,15 @@ INSERT INTO ROLE (
     SOURCE_CODE,
     ID, SOURCE_ID, HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
 )VALUES(
-    (SELECT ID FROM structure WHERE source_code = 'U26'),
-    (SELECT ID FROM personnel WHERE source_code ='788'),
+    (SELECT ID FROM structure WHERE source_code = 'U04'),
+    (SELECT ID FROM personnel WHERE source_code ='93572'),
     (SELECT ID FROM TYPE_ROLE WHERE code = 'gestionnaire-composante'),
-    'gest-788',
+    'gest-93572',
     ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 1, 1
 );
 
 
-select * from personnel where nom_usuel like 'Jestin%';
+select * from personnel where nom_usuel like '%Dady%';
 select * from type_role;
 
 delete from role where id = 492;
@@ -81,7 +81,7 @@ GROUP BY
 
 select * from fonction_structurelle@harpprod fs;
 
-select * from structure@harpprod where lc_structure like 'UFR%Géo%';
+select * from structure@harpprod where lc_structure like 'UFR%Scien%';
 
 select * from individu_fonct_struct@harpprod ifs where no_dossier_pers = 16956;
 

@@ -1454,7 +1454,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function getFormuleServiceModifie( Annee $annee )
     {
-        $filter = function( FormuleServiceDu $formuleServiceModifie ) use ($annee) {
+        $filter = function( FormuleServiceModifie $formuleServiceModifie ) use ($annee) {
             if ($annee && $annee !== $formuleServiceModifie->getAnnee()) {
                 return false;
             }

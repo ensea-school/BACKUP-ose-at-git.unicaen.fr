@@ -713,9 +713,11 @@ class Service extends AbstractEntityService
         while( $d = $stmt->fetch()){
             $iid = $d['INTERVENANT_ID'];
             $tid = $d['TYPE_INTERVENTION_ID'];
-            $res[$iid]['types-intervention'][$tid] = (float)$d['HEURES'];
-            if (! isset($typesIntervention[$tid])){
-                $typesIntervention[$tid] = $this->getServiceTypeIntervention()->get($tid);
+            if (isset( $res[$iid] )){
+                $res[$iid]['types-intervention'][$tid] = (float)$d['HEURES'];
+                if (! isset($typesIntervention[$tid])){
+                    $typesIntervention[$tid] = $this->getServiceTypeIntervention()->get($tid);
+                }
             }
         }
 

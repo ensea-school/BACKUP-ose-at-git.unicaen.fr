@@ -118,7 +118,7 @@ return array(
             'AttenteValidationEns'             => 'Application\\Service\\Indicateur\\AttenteValidationEnsIndicateurImpl',
             'AttenteAgrementCR'                => 'Application\\Service\\Indicateur\\AttenteAgrementCRIndicateurImpl',
             'AttenteAgrementCA'                => 'Application\\Service\\Indicateur\\AttenteAgrementCAIndicateurImpl',
-            'AgrementMaisPasContrat'           => 'Application\\Service\\Indicateur\\AgrementMaisPasContratIndicateurImpl',
+            'AgrementCAMaisPasContrat'         => 'Application\\Service\\Indicateur\\AgrementCAMaisPasContratIndicateurImpl',
             'SaisieServiceApresContratAvenant' => 'Application\\Service\\Indicateur\\SaisieServiceApresContratAvenantIndicateurImpl',
             'AttenteContrat'                   => 'Application\\Service\\Indicateur\\AttenteContratIndicateurImpl',
             'AttenteAvenant'                   => 'Application\\Service\\Indicateur\\AttenteAvenantIndicateurImpl',

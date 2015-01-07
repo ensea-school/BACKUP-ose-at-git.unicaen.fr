@@ -59,7 +59,6 @@ class AttenteAvenantIndicateurImpl extends AbstractIndicateurImpl
         }
         
         $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-//        print_r($qb->getQuery()->getSQL());die;
         
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

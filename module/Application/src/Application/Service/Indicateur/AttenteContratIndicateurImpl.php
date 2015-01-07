@@ -59,7 +59,6 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
         }
         
         $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-//        print_r($qb->getQuery()->getSQL());die;
         
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -96,5 +95,16 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
                 ->setParameter('codeTypeContrat', \Application\Entity\Db\TypeContrat::CODE_CONTRAT);
          
         return $qb;
+    }
+    
+    /**
+     * Surcharge pour ne renvoyer aucune structure car la contrat initial peut être
+     * établi par n'importe quelle composante d'enseignement.
+     * 
+     * @return null
+     */
+    public function getStructure()
+    {
+        return null;
     }
 }

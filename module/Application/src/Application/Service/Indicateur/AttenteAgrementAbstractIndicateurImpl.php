@@ -16,18 +16,18 @@ use Traversable;
  */
 abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern   = "%s vacataire est en attente d'agrément du %s";
-    protected $pluralTitlePattern = "%s vacataires sont en attente d'agrément du %s";
-    protected $codeTypeAgrement           = TypeAgrement::CODE_CONSEIL_RESTREINT;
-    protected $codeEtape                  = WfEtape::CODE_CONSEIL_RESTREINT;
+    protected $singularTitlePattern = "%s vacataire est en attente d'agrément du %s";
+    protected $pluralTitlePattern   = "%s vacataires sont en attente d'agrément du %s";
+    protected $codeTypeAgrement     = TypeAgrement::CODE_CONSEIL_RESTREINT;
+    protected $codeEtape            = WfEtape::CODE_CONSEIL_RESTREINT;
 
     /**
      * 
      */
     public function getTitle()
     {
-        $this->singularTitlePattern   = sprintf($this->singularTitlePattern,   '%s', $this->getTypeAgrement());
-        $this->pluralTitlePattern = sprintf($this->pluralTitlePattern, '%s', $this->getTypeAgrement());
+        $this->singularTitlePattern = sprintf($this->singularTitlePattern, '%s', $this->getTypeAgrement());
+        $this->pluralTitlePattern   = sprintf($this->pluralTitlePattern,   '%s', $this->getTypeAgrement());
         
         return parent::getTitle();
     }
@@ -40,7 +40,6 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurI
     {
         if (null === $this->result) {
             $qb = $this->getQueryBuilder();
-//            print_r($qb->getQuery()->getSQL());
 
             $this->result = $qb->getQuery()->getResult();
         }
@@ -73,7 +72,6 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurI
         }
         
         $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-//        print_r($qb->getQuery()->getSQL());die;
         
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

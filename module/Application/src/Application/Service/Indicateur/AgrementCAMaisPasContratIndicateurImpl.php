@@ -13,10 +13,10 @@ use Traversable;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AgrementMaisPasContratIndicateurImpl extends AbstractIndicateurImpl
+class AgrementCAMaisPasContratIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern   = "%s vacataire a reçu l'agrément du Conseil Académique et n'a pas encore de contrat/avenant";
-    protected $pluralTitlePattern = "%s vacataires ont reçu l'agrément du Conseil Académique et n'ont pas encore de contrat/avenant";
+    protected $singularTitlePattern = "%s vacataire a reçu l'agrément du Conseil Académique et n'a pas encore de contrat/avenant";
+    protected $pluralTitlePattern   = "%s vacataires ont reçu l'agrément du Conseil Académique et n'ont pas encore de contrat/avenant";
     
     /**
      * 
@@ -59,7 +59,6 @@ class AgrementMaisPasContratIndicateurImpl extends AbstractIndicateurImpl
         }
         
         $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-//        print_r($qb->getQuery()->getSQL());die;
         
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

@@ -15,7 +15,8 @@ use Traversable;
  */
 class AttenteAvenantIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires sont en attente de leur avenant";
+    protected $singularTitlePattern   = "%s vacataire est en attente de son avenant";
+    protected $pluralTitlePattern = "%s vacataires sont en attente de leur avenant";
     
     /**
      * 
@@ -41,7 +42,10 @@ class AttenteAvenantIndicateurImpl extends AbstractIndicateurImpl
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/contrat', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute(
+                'intervenant/contrat', 
+                ['intervenant' => $result->getSourceCode()], 
+                ['force_canonical' => true]);
     }
     
     /**

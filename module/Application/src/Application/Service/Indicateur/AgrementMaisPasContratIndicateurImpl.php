@@ -15,7 +15,8 @@ use Traversable;
  */
 class AgrementMaisPasContratIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires ont reçu l'agrément du Conseil Académique et n'ont pas encore de contrat/avenant";
+    protected $singularTitlePattern   = "%s vacataire a reçu l'agrément du Conseil Académique et n'a pas encore de contrat/avenant";
+    protected $pluralTitlePattern = "%s vacataires ont reçu l'agrément du Conseil Académique et n'ont pas encore de contrat/avenant";
     
     /**
      * 
@@ -41,7 +42,10 @@ class AgrementMaisPasContratIndicateurImpl extends AbstractIndicateurImpl
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/contrat', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute(
+                'intervenant/contrat', 
+                ['intervenant' => $result->getSourceCode()], 
+                ['force_canonical' => true]);
     }
     
     /**

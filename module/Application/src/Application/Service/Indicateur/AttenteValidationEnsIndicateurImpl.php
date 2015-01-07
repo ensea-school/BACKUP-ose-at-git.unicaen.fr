@@ -3,8 +3,6 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\WfEtape;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Traversable;
 
@@ -15,7 +13,8 @@ use Traversable;
  */
 class AttenteValidationEnsIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires sont en attente de validation de leurs enseignements";
+    protected $singularTitlePattern   = "%s vacataire est en attente de validation de ses enseignements";
+    protected $pluralTitlePattern = "%s vacataires sont en attente de validation de leurs enseignements";
     
     /**
      * 
@@ -42,7 +41,10 @@ class AttenteValidationEnsIndicateurImpl extends AbstractIndicateurImpl
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/validation-service', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute(
+                'intervenant/validation-service', 
+                ['intervenant' => $result->getSourceCode()], 
+                ['force_canonical' => true]);
     }
     
     /**

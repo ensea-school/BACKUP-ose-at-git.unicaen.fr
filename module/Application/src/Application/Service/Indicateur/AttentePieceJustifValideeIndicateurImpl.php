@@ -15,7 +15,8 @@ use Traversable;
  */
 class AttentePieceJustifValideeIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires ne sont pas en règle concernant leurs pièces justificatives  <em>obligatoires</em>";
+    protected $singularTitlePattern   = "%s vacataire n'est pas en règle concernant ses pièces justificatives  <em>obligatoires</em>";
+    protected $pluralTitlePattern = "%s vacataires ne sont pas en règle concernant leurs pièces justificatives  <em>obligatoires</em>";
     
     /**
      * 
@@ -41,7 +42,10 @@ class AttentePieceJustifValideeIndicateurImpl extends AbstractIndicateurImpl
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('piece-jointe/intervenant', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute(
+                'piece-jointe/intervenant', 
+                ['intervenant' => $result->getSourceCode()], 
+                ['force_canonical' => true]);
     }
     
     /**

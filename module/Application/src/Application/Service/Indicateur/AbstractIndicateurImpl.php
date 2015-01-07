@@ -16,7 +16,8 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
 {
     use StructureAwareTrait;
     
-    protected $titlePattern;
+    protected $singularTitlePattern;
+    protected $pluralTitlePattern;
             
     /**
      * 
@@ -60,7 +61,8 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
      */
     public function getTitle()
     {
-        $title = sprintf($this->titlePattern, $this->getResultCount());
+        $pattern = $this->getResultCount() === 1 ? $this->singularTitlePattern : $this->pluralTitlePattern;
+        $title   = sprintf($pattern, $this->getResultCount());
         
         if ($this->getStructure()) {
             $title .= " ({$this->getStructure()})";

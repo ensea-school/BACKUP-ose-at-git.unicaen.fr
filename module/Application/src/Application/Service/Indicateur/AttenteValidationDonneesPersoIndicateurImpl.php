@@ -15,7 +15,8 @@ use Traversable;
  */
 class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires sont en attente de validation de leurs données personnelles";
+    protected $singularTitlePattern   = "%s vacataire est en attente de validation de ses données personnelles";
+    protected $pluralTitlePattern = "%s vacataires sont en attente de validation de leurs données personnelles";
     
     /**
      * 
@@ -41,7 +42,10 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIndicateurImpl
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/validation-dossier', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute(
+                'intervenant/validation-dossier', 
+                ['intervenant' => $result->getSourceCode()], 
+                ['force_canonical' => true]);
     }
     
     /**

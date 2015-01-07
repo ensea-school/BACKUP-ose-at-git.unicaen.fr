@@ -15,7 +15,8 @@ use Traversable;
  */
 class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires sont en attente de leur contrat initial";
+    protected $singularTitlePattern   = "%s vacataire est en attente de son contrat initial";
+    protected $pluralTitlePattern = "%s vacataires sont en attente de leur contrat initial";
     
     /**
      * 
@@ -25,7 +26,7 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
     {
         if (null === $this->result) {
             $qb = $this->getQueryBuilder();
-            print_r($qb->getQuery()->getSQL());
+//            print_r($qb->getQuery()->getSQL());
 
             $this->result = $qb->getQuery()->getResult();
         }
@@ -41,7 +42,10 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/contrat', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute(
+                'intervenant/contrat', 
+                ['intervenant' => $result->getSourceCode()], 
+                ['force_canonical' => true]);
     }
     
     /**

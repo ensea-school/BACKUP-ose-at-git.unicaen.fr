@@ -14,22 +14,8 @@ use Traversable;
  */
 class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern = "%s vacataires ont saisi des heures d'enseignement supplémentaires depuis l'édition de leur contrat ou avenant";
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getTitle()
-    {
-        $title = sprintf($this->titlePattern, $this->getResultCount());
-        
-        if ($this->getStructure()) {
-            $title .= " ({$this->getStructure()})";
-        }
-        
-        return $title;
-    }
+    protected $singularTitlePattern   = "%s vacataire a saisi des heures d'enseignement supplémentaires depuis l'édition de son contrat ou avenant";
+    protected $pluralTitlePattern = "%s vacataires ont saisi des heures d'enseignement supplémentaires depuis l'édition de leur contrat ou avenant";
     
     /**
      * 
@@ -55,7 +41,10 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIndicateurI
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/validation-service', ['intervenant' => $result->getSourceCode()]);
+        return $this->getHelperUrl()->fromRoute(
+                'intervenant/validation-service', 
+                ['intervenant' => $result->getSourceCode()], 
+                ['force_canonical' => true]);
     }
     
     /**

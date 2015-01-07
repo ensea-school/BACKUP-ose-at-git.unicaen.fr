@@ -16,22 +16,20 @@ use Traversable;
  */
 abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $titlePattern     = "%s vacataires sont en attente d'agrément %s";
-    protected $codeTypeAgrement = TypeAgrement::CODE_CONSEIL_RESTREINT;
-    protected $codeEtape        = WfEtape::CODE_CONSEIL_RESTREINT;
-    
+    protected $singularTitlePattern   = "%s vacataire est en attente d'agrément du %s";
+    protected $pluralTitlePattern = "%s vacataires sont en attente d'agrément du %s";
+    protected $codeTypeAgrement           = TypeAgrement::CODE_CONSEIL_RESTREINT;
+    protected $codeEtape                  = WfEtape::CODE_CONSEIL_RESTREINT;
+
     /**
      * 
      */
     public function getTitle()
     {
-        $title = sprintf($this->titlePattern, $this->getResultCount(), $this->getTypeAgrement());
+        $this->singularTitlePattern   = sprintf($this->singularTitlePattern,   '%s', $this->getTypeAgrement());
+        $this->pluralTitlePattern = sprintf($this->pluralTitlePattern, '%s', $this->getTypeAgrement());
         
-        if ($this->getStructure()) {
-            $title .= " ({$this->getStructure()})";
-        }
-        
-        return $title;
+        return parent::getTitle();
     }
     
     /**
@@ -58,10 +56,10 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurI
      */
     public function getResultUrl($result)
     {
-        return $this->getHelperUrl()->fromRoute('intervenant/agrement/liste', [
-            'intervenant'  => $result->getSourceCode(),
-            'typeAgrement' => $this->getTypeAgrement()->getId(),
-        ]);
+        return $this->getHelperUrl()->fromRoute(
+                'intervenant/agrement/liste', 
+                ['intervenant'  => $result->getSourceCode(), 'typeAgrement' => $this->getTypeAgrement()->getId()], 
+                ['force_canonical' => true]);
     }
     
     /**

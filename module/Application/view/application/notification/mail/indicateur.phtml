@@ -3,8 +3,6 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
 /* @var $indicateurImpl AbstractIndicateurImpl */
 ?>
 
-<?php $this->headTitle()->append($this->indicateur . "")->append($title = "Indicateur") ?>
-
 <h1 class="page-header"><?php echo $indicateurImpl->getTitle() ?></h1>
 
 <ul>
@@ -13,6 +11,3 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
            title="Cliquez pour vous rendre à la page concernée"><?php echo $r ?></a></li>
 <?php endforeach; ?>
 </ul>
-
-<?php
-//var_dump(\UnicaenApp\Util::collectionAsOptions($indicateurImpl->getResult()));

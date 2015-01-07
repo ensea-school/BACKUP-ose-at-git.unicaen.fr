@@ -1,5 +1,6 @@
 <?php 
 use Application\Entity\Db\Indicateur;
+use Application\Entity\Db\NotificationIndicateur;
 use Application\Service\Indicateur\AbstractIndicateurImpl;
 ?>
 
@@ -37,26 +38,27 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
                     $abonnement = array_key_exists($key = $indicateurEntity->getId(), $this->abonnements) ?
                         $this->abonnements[$key] :
                         null; /* @var $abonnement \Application\Entity\Db\NotificationIndicateur */
-                    $frequence  = $abonnement ? $abonnement->getFrequence() : "";
-                    $isSelected = function($code) use ($frequence) { return $frequence === $code ? 'selected' : null; };
+                    $frequence  = $abonnement ? "".$abonnement->getFrequence() : "";
+                    $isSelected = function($code) use ($frequence) { return $frequence === "".$code ? 'selected' : null; };
                     $dernNotif  = $abonnement ? $abonnement->getDateDernNotif() : null;
                     ?>
                     <select class="abonnement" name="abonnement" data-id="<?php echo $indicateurEntity->getId() ?>">
-                        <option value=""        <?php echo $isSelected("") ?>       >Aucune</option>
-                        <option value="heure"   <?php echo $isSelected("heure") ?>  >Une par heure</option>
-                        <option value="jour"    <?php echo $isSelected("jour") ?>   >Une par jour</option>
-                        <option value="semaine" <?php echo $isSelected("semaine") ?>>Une par semaine</option>
+                        <option value=""                                                               <?php echo $isSelected("") ?>  >Aucune</option>
+                        <option value="<?php echo $val = NotificationIndicateur::FREQUENCE_HEURE ?>"   <?php echo $isSelected($val) ?>>Une par heure</option>
+                        <option value="<?php echo $val = NotificationIndicateur::FREQUENCE_JOUR ?>"    <?php echo $isSelected($val) ?>>Une par jour</option>
+                        <option value="<?php echo $val = NotificationIndicateur::FREQUENCE_SEMAINE ?>" <?php echo $isSelected($val) ?>>Une par semaine</option>
                     </select>
                     <?php
+                    $infos = null;
                     $displayInfos = 'display: none';
                     if (array_key_exists($key = $indicateurEntity->getId(), $this->abonnementsInfos)) {
-                        $title = $this->abonnementsInfos[$key];
+                        $infos = $this->abonnementsInfos[$key];
                         $displayInfos = null;
                     }
                     ?>
                     <span class="indicateur-info glyphicon glyphicon-info-sign" aria-hidden="true"
                           data-toggle="tooltip" data-placement="right" data-html="true" 
-                          title="<?php echo $title ?>"
+                          title="<?php echo $infos ?>"
                           style="<?php echo $displayInfos ?>"></span>
                 </td>
             </tr>
@@ -80,58 +82,11 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
                             select.val(select.data('previousValue'));
                         }
                         select.removeClass("loading");
-                        var infos = $(".indicateur-info", select.parent()).prop('title', data.infos);
+                        var infos = $(".indicateur-info", select.parent()).attr('title', data.infos).tooltip('destroy').tooltip();
                         data.infos ? infos.show() : infos.hide();
                         alertFlash(data.message, data.status, 5000);
                     });
                 });
         $(".glyphicon.glyphicon-info-sign").tooltip();
     });
-
-/**
- * Affiche une alerte temporaire.
- * 
- * @param string message
- * @param string severity 'info', 'success', 'warning' ou 'error'
- * @param int duration Durée d'affichage de l'alerte en ms
- * @returns void
- * @todo À extraire vers UnicaenApp.
- */
-function alertFlash(message, severity, duration)
-{
-    var alertClasses = {
-        info:    'info',
-        success: 'success',
-        warning: 'warning',
-        error:   'danger'
-    };
-    var iconClasses = {
-        info:    'info-sign',
-        success: 'ok-sign',
-        warning: 'warning-sign',
-        error:   'exclamation-sign'
-    };
-    var alertClass = 'alert-' + alertClasses[severity];
-    var divId = "alert-div-" + Math.floor((Math.random() * 100000) + 1);
-    
-    var alertDiv = $(
-'<div id="' + divId + '" class="alert fade in navbar-fixed-bottom" role="alert" style="display: none;">' +
-'    <div class="container">' +
-'        <p class="text-center"><span class="icon glyphicon"></span> <span class="message"></span></p>' +
-'    </div>' +
-'</div>'
-    ).appendTo("body");
-    
-    alertDiv.addClass(alertClass);
-    $("p .message", alertDiv).html(message);
-    $("p .icon", alertDiv).addClass('glyphicon-' + iconClasses[severity]);
-        
-    alertDiv.slideToggle(500, function() {
-        window.setTimeout(function() {
-            alertDiv.slideToggle(500, function() {
-                $(this).removeClass(alertClass)
-            });
-        }, duration);
-    });
-}
 </script>

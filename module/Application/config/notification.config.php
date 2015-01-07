@@ -24,45 +24,45 @@ use Application\Acl\ResponsableFoadRole;
 return array(
     'router' => array(
         'routes' => array(
-            'indicateur' => array(
+            'notification' => array(
                 'type'    => 'Literal',
                 'options' => array(
-                    'route'    => '/indicateur',
+                    'route'    => '/notification',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Indicateur',
-                        'action'        => 'index',
+                        'controller'    => 'Notification',
                     ),
                 ),
-                'may_terminate' => true,
+                'may_terminate' => false,
                 'child_routes' => array(
-                    'voir' => array(
+                    'notifier-indicateurs' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:indicateur',
-                            'constraints' => array(
-                                'indicateur' => '[0-9]*',
-                            ),
+                            'route' => '/notifier-indicateurs',
                             'defaults' => array(
-                                'action' => 'voir',
-                            ),
-                        ),
-                    ),
-                    'abonner' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route' => '/:indicateur/abonner',
-                            'constraints' => array(
-                                'indicateur' => '[0-9]*',
-                            ),
-                            'defaults' => array(
-                                'action' => 'abonner',
+                                'action' => 'notifier-indicateurs',
                             ),
                         ),
                     ),
                 ),
             ),
         ),
+    ),
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'notifier-indicateurs' => array(
+                    'type'    => 'Simple',
+                    'options' => array(
+                        'route'    => 'notifier indicateurs --requestUriHost= [--requestUriScheme=]',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Notification',
+                            'action'     => 'notifier-indicateurs'
+                        )
+                    )
+                )
+            )
+        )
     ),
     'navigation' => array(
         'default' => array(
@@ -77,9 +77,9 @@ return array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
-                    'controller' => 'Application\Controller\Indicateur',
-                    'action'     => array('index', 'voir', 'abonner'),
-                    'roles'      => array('user'),
+                    'controller' => 'Application\Controller\Notification',
+                    'action'     => array('notifier-indicateurs'),
+                    'roles'      => array(),
                 ),
             ),
         ),
@@ -103,26 +103,13 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Indicateur' => 'Application\Controller\IndicateurController',
+            'Application\Controller\Notification' => 'Application\Controller\NotificationController',
         ),
         'initializers' => array(
         ),
     ),
     'service_manager' => array(
         'invokables' => array(
-            'IndicateurService'                => 'Application\\Service\\Indicateur',
-            'NotificationIndicateurService'    => 'Application\\Service\\NotificationIndicateur',
-            
-            'AttenteValidationDonneesPerso'    => 'Application\\Service\\Indicateur\\AttenteValidationDonneesPersoIndicateurImpl',
-            'AttentePieceJustifValidee'        => 'Application\\Service\\Indicateur\\AttentePieceJustifValideeIndicateurImpl',
-            'AttenteValidationEns'             => 'Application\\Service\\Indicateur\\AttenteValidationEnsIndicateurImpl',
-            'AttenteAgrementCR'                => 'Application\\Service\\Indicateur\\AttenteAgrementCRIndicateurImpl',
-            'AttenteAgrementCA'                => 'Application\\Service\\Indicateur\\AttenteAgrementCAIndicateurImpl',
-            'AgrementMaisPasContrat'           => 'Application\\Service\\Indicateur\\AgrementMaisPasContratIndicateurImpl',
-            'SaisieServiceApresContratAvenant' => 'Application\\Service\\Indicateur\\SaisieServiceApresContratAvenantIndicateurImpl',
-            'AttenteContrat'                   => 'Application\\Service\\Indicateur\\AttenteContratIndicateurImpl',
-            'AttenteAvenant'                   => 'Application\\Service\\Indicateur\\AttenteAvenantIndicateurImpl',
-            'ContratAvenantDeposes'            => 'Application\\Service\\Indicateur\\ContratAvenantDeposesIndicateurImpl',
         ),
         'factories' => array(
         ),

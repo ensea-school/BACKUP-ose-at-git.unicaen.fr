@@ -9,9 +9,9 @@ use DateTime;
  */
 class NotificationIndicateur
 {
-    const FREQUENCE_HEURE   = "heure";
-    const FREQUENCE_JOUR    = "jour";
-    const FREQUENCE_SEMAINE = "semaine";
+    const FREQUENCE_HEURE   = 3600;   // 60*60
+    const FREQUENCE_JOUR    = 86400;  // 60*60*24
+    const FREQUENCE_SEMAINE = 604800; // 60*60*24*7;
     
     static public $frequences = [
         self::FREQUENCE_HEURE => "Une par heure",
@@ -136,7 +136,7 @@ class NotificationIndicateur
     /**
      * Set frequence
      *
-     * @param string $frequence
+     * @param integer $frequence
      * @return NotificationIndicateur
      */
     public function setFrequence($frequence)
@@ -149,12 +149,31 @@ class NotificationIndicateur
     /**
      * Get frequence
      *
-     * @return string 
+     * @return integer 
      */
     public function getFrequence()
     {
         return $this->frequence;
     }
+//
+//    /**
+//     * Get frequence
+//     *
+//     * @return string 
+//     */
+//    public function getFrequenceInSeconds()
+//    {
+//        switch ($this->getFrequence()) {
+//            case self::FREQUENCE_HEURE:
+//                return 60*60;
+//            case self::FREQUENCE_JOUR:
+//                return 60*60*24;
+//            case self::FREQUENCE_SEMAINE:
+//                return 60*60*24*7;
+//            default:
+//                throw new \DomainException("Fréquence rencontrée inattendue: '{$this->getFrequence()}'.");
+//        }
+//    }
     
     /**
      * Set dateDernNotif

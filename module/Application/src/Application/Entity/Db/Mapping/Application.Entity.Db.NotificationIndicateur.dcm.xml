@@ -4,7 +4,7 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="frequence" type="string" column="FREQUENCE" length="128" nullable="false"/>
+    <field name="frequence" type="integer" column="FREQUENCE" nullable="false"/>
     <field name="dateAbonnement" type="datetime" column="DATE_ABONNEMENT" nullable="false"/>
     <field name="dateDernNotif" type="datetime" column="DATE_DERN_NOTIF" nullable="true"/>
     <many-to-one field="indicateur" target-entity="Application\Entity\Db\Indicateur">

@@ -55,11 +55,9 @@ class IndicateurController extends AbstractActionController implements ContextPr
             'abonnements'      => $abonnements,
             'abonnementsInfos' => $abonnementsInfos,
         ]);
-
+        
         return $viewModel;
     }
-    
-    
     
     /**
      * Détails d'un indicateur.
@@ -78,18 +76,28 @@ class IndicateurController extends AbstractActionController implements ContextPr
         ]);
         
         return $viewModel;
-    }  
+    }
     
+    /**
+     * Réponse aux requêtes AJAX d'abonnement de l'utilisateur connecté aux notifications concernant un indicateur.
+     * 
+     * @return JsonModel
+     */
     public function abonnerAction()
     {
+        if (!$this->getRequest()->isXmlHttpRequest()) {
+            return $this->redirect()->toRoute('home');
+        }
+        
         $indicateur   = $this->context()->mandatory()->indicateurFromRoute();
         $frequence    = $this->params()->fromPost('abonnement');
         $personnel    = $this->getContextProvider()->getGlobalContext()->getPersonnel();
         $serviceNotif = $this->getServiceNotificationIndicateur();
         $status       = 'success';
         
+        $notificationIndicateur = null;
         try {
-            $notificationIndicateur = $serviceNotif->abonner($personnel, $indicateur, $frequence);
+            $notificationIndicateur = $serviceNotif->abonner($personnel, $indicateur, $frequence, $this->getStructure());
             $message = $serviceNotif->getMessage(PHP_EOL);
         }
         catch (Exception $e) {
@@ -103,7 +111,6 @@ class IndicateurController extends AbstractActionController implements ContextPr
             'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
         ]);
     }
-    
     
     /**
      * @return StructureEntity

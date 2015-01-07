@@ -175,7 +175,7 @@ class Service extends AbstractEntityService
             }
 
             $serviceAllreadyExists = null;
-            if (empty($entity->getId())){ // uniquement pour les nouveaux services!!
+            if (! $entity->getId()){ // uniquement pour les nouveaux services!!
                 $serviceAllreadyExists = $this->getRepo()->findOneBy([
                     'intervenant'           => $entity->getIntervenant(),
                     'elementPedagogique'    => $entity->getElementPedagogique(),

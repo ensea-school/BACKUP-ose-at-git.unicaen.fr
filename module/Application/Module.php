@@ -14,8 +14,11 @@ use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\Feature\ControllerPluginProviderInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 
-class Module implements ControllerPluginProviderInterface, ViewHelperProviderInterface
+class Module implements ControllerPluginProviderInterface, ViewHelperProviderInterface, ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
     public function onBootstrap(MvcEvent $e)
     {
@@ -42,7 +45,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'injectRouteEntitiesInEvent'), -90);
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkRouteParams'), -100);
     }
-
+    
     public function injectJsFiles(ServiceLocatorInterface $serviceLocator)
     {
         $basePath = dirname($_SERVER['PHP_SELF']);
@@ -154,6 +157,21 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                 'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
             ),
         );
+    }
+    
+    public function getConsoleUsage(ConsoleAdapterInterface $console)
+    {
+        return array(
+            "Notifications",
+            'notifier indicateurs --requestUriHost= [--requestUriScheme=]' => "Notification par mail des personnes abonnées à des indicateurs",
+            array('--requestUriHost',   "Obligatoire", "Exemples: \"/ose.unicaen.fr\", \"/test.unicaen.fr/ose\"."),
+            array('--requestUriScheme', "Facultatif",  "Exemples: \"http\" (par défaut), \"https\"."),
+        );
+    }
+    
+    public function getConsoleBanner(ConsoleAdapterInterface $console)
+    {
+        return "OSE Application Module";
     }
 }
 

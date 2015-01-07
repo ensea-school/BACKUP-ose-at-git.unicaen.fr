@@ -84,12 +84,13 @@ class Validation extends AbstractEntityService
     {
         $softDelete = true;
         
-        // NB: une validation de contrat doit être supprimée! Il existe une relation ManyToOne de Contrat vers Validation
-        // et si la validation est seulement historisée, Doctrine ne trouve plus la Validation référencée dans Contrat 
-        // (EntityNotFoundException) si le filtre 'historique' est actif.
-        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_CONTRAT_PAR_COMP) {
-            $softDelete = false;
-        }
+//      La suppression physique d'une validation peut poser problème dans certains cas (trigger).
+//        // NB: une validation de contrat doit être supprimée! Il existe une relation ManyToOne de Contrat vers Validation
+//        // et si la validation est seulement historisée, Doctrine ne trouve plus la Validation référencée dans Contrat 
+//        // (EntityNotFoundException) si le filtre 'historique' est actif.
+//        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_CONTRAT_PAR_COMP) {
+//            $softDelete = false;
+//        }
 
         // Validation de services : il faut supprimer les liens Validation --> VolumeHoraire
         if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_SERVICES_PAR_COMP) {
@@ -102,6 +103,7 @@ class Validation extends AbstractEntityService
             $this->delete($validation, $softDelete);
         }
         catch (Exception $e) {
+            var_dump($e);
             throw new DbException(DbException::translate($e)->getMessage());
         }
     }

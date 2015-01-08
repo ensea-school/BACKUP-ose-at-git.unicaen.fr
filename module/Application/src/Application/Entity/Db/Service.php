@@ -492,12 +492,12 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
             if ($typeVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getTypeVolumeHoraire()) {
                 return false;
             }
-            if ($etatVolumeHoraire->getOrdre() > $formuleResultatService->getFormuleResultat()->getEtatVolumeHoraire()->getOrdre()) {
+            if ($etatVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getEtatVolumeHoraire()) {
                 return false;
             }
             return true;
         };
-        return $this->formuleResultatService;
+        return $this->formuleResultatService->filter($filter);
     }
 
     /**

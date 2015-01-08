@@ -100,7 +100,7 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl impleme
      */
     public function getResultCount()
     {
-        $qb = $this->getTitleQueryBuilder()->select("COUNT(c)");
+        $qb = $this->getTitleQueryBuilder()->select("COUNT(DISTINCT c)");
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

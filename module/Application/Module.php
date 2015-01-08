@@ -163,7 +163,8 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     {
         return array(
             "Notifications",
-            'notifier indicateurs --requestUriHost= [--requestUriScheme=]' => "Notification par mail des personnes abonnées à des indicateurs",
+            'notifier indicateurs [--force] --requestUriHost= [--requestUriScheme=]' => "Notification par mail des personnes abonnées à des indicateurs",
+            array('--force', "Facultatif",  "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."),
             array('--requestUriHost',   "Obligatoire", "Exemples: \"/ose.unicaen.fr\", \"/test.unicaen.fr/ose\"."),
             array('--requestUriScheme', "Facultatif",  "Exemples: \"http\" (par défaut), \"https\"."),
         );

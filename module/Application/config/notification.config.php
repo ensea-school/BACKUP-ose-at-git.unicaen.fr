@@ -54,7 +54,7 @@ return array(
                 'notifier-indicateurs' => array(
                     'type'    => 'Simple',
                     'options' => array(
-                        'route'    => 'notifier indicateurs --requestUriHost= [--requestUriScheme=]',
+                        'route'    => 'notifier indicateurs [--force] --requestUriHost= [--requestUriScheme=]',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Notification',
                             'action'     => 'notifier-indicateurs'

@@ -155,25 +155,16 @@ class NotificationIndicateur
     {
         return $this->frequence;
     }
-//
-//    /**
-//     * Get frequence
-//     *
-//     * @return string 
-//     */
-//    public function getFrequenceInSeconds()
-//    {
-//        switch ($this->getFrequence()) {
-//            case self::FREQUENCE_HEURE:
-//                return 60*60;
-//            case self::FREQUENCE_JOUR:
-//                return 60*60*24;
-//            case self::FREQUENCE_SEMAINE:
-//                return 60*60*24*7;
-//            default:
-//                throw new \DomainException("Fréquence rencontrée inattendue: '{$this->getFrequence()}'.");
-//        }
-//    }
+
+    /**
+     * Get frequence
+     *
+     * @return string 
+     */
+    public function getFrequenceToString()
+    {
+        return static::$frequences[$this->getFrequence()];
+    }
     
     /**
      * Set dateDernNotif

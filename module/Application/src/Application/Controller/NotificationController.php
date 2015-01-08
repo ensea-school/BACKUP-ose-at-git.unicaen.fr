@@ -37,8 +37,9 @@ class NotificationController extends AbstractActionController implements Context
      * Notifications par mail des personnes abonnées à des indicateurs.
      * 
      * Accessible en ligne de commande, par exemple (on suppose que l'on est situé dans le répertoire de l'appli) :
-     *      php public/index.php notifier indicateurs --requestUriHost=/localhost/ose --requestUriScheme=http
+     *      php public/index.php notifier indicateurs --force --requestUriHost=/localhost/ose --requestUriScheme=http
      * Arguments de la ligne de commande : 
+     * - <code>force</code> (facultatif)
      * - <code>requestUriHost</code> (obligatoire),
      * - <code>requestUriScheme</code> (facultatif, "http" par défaut).
      */
@@ -46,7 +47,8 @@ class NotificationController extends AbstractActionController implements Context
     {
         $request  = $this->getRequest();
         $renderer = $this->getServiceLocator()->get('view_manager')->getRenderer();  /* @var $renderer PhpRenderer */
-        $nis      = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs();
+        $force    = (bool) $request->getParam('force');
+        $nis      = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs($force);
         
         if ($request instanceof ConsoleRequest) {
             // S'il s'agit d'une requête de type Console (CLI), le plugin de contrôleur Url utilisé par les indicateurs
@@ -93,16 +95,20 @@ class NotificationController extends AbstractActionController implements Context
             $message       = new MailMessage();
             $message->setEncoding('UTF-8')
                     ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
-                    ->setSubject(sprintf("[%s Notif] %s", $app, $indicateurImpl->getTitle()))
+                    ->setSubject(sprintf("[%s Notif %s] %s", $app, $ni->getFrequenceToString(), $indicateurImpl->getTitle()))
                     ->setBody($body)
                     ->addTo($ni->getPersonnel()->getEmail(), "" . $ni->getPersonnel());
                     
             // envoi
             $this->mail()->send($message);
             
-            // enregistrement de la date de dernière notification
-            $ni->setDateDernNotif(new DateTime());
-            $this->em()->flush($ni);
+            if (!$force) {
+                // enregistrement de la date de dernière notification
+                $now = new DateTime();
+                $now->setTime($now->format('H'), 0, 0); // raz minutes et secondes
+                $ni->setDateDernNotif($now);
+                $this->em()->flush($ni);
+            }
         }
         
         // S'il s'agit d'une requête de type Console (CLI), rétablissement du router initial (cf. commentaires plus haut).

@@ -102,19 +102,25 @@ class NotificationIndicateur extends AbstractEntityService
      * - aucune notification n'a encore été faite (i.e. date de dernière notification = null) ;
      * - l'âge de la dernière notification est supérieur à la fréquence de notification.
      * 
+     * @param bool $force Si true, toutes les notifications sont considérées comme devant être faites
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function findNotificationsIndicateurs()
+    public function findNotificationsIndicateurs($force = false)
     {
+        $now = new DateTime();
+        $now->setTime($now->format('H'), 0, 0); // raz minutes et secondes
+            
         $qb = $this->getRepo()->createQueryBuilder("ni")
                 ->select("ni, p, i")
                 ->join("ni.personnel", "p")
                 ->join("ni.indicateur", "i")
-                ->orderBy("i.ordre")
-                ->andWhere("ni.dateDernNotif IS NULL OR ni.dateDernNotif + ni.frequence/(24*60*60) <= :now")
-                ->setParameter('now', new DateTime());
-//        print_r($qb->getQuery()->getSQL());
-//        var_dump($qb->getQuery()->getParameters());
+                ->orderBy("i.ordre");
+        
+        if (!$force) {
+            $qb
+                    ->andWhere("ni.dateDernNotif IS NULL OR ni.dateDernNotif + ni.frequence/(24*60*60) <= :now")
+                    ->setParameter('now', $now);
+        }
         
         return $qb->getQuery()->getResult();
     }

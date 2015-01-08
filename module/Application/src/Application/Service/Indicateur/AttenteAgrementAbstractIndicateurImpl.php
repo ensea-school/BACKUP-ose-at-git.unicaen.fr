@@ -23,13 +23,15 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurI
 
     /**
      * 
+     * @param bool $appendStructure
+     * @return string
      */
-    public function getTitle()
+    public function getTitle($appendStructure = true)
     {
         $this->singularTitlePattern = sprintf($this->singularTitlePattern, '%s', $this->getTypeAgrement());
         $this->pluralTitlePattern   = sprintf($this->pluralTitlePattern,   '%s', $this->getTypeAgrement());
         
-        return parent::getTitle();
+        return parent::getTitle($appendStructure);
     }
     
     /**

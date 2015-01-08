@@ -44,8 +44,10 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl impleme
     
     /**
      * 
+     * @param bool $appendStructure
+     * @return string
      */
-    public function getTitle()
+    public function getTitle($appendStructure = true)
     {
         if ($this->getDate()) {
             $suffix = " depuis le " . $this->getDate()->format(Constants::DATETIME_FORMAT);

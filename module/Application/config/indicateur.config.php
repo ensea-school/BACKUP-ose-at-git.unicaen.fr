@@ -134,6 +134,10 @@ return array(
             'AttenteAvenant'                   => 'Application\\Service\\Indicateur\\AttenteAvenantIndicateurImpl',
             'ContratAvenantDeposes'            => 'Application\\Service\\Indicateur\\ContratAvenantDeposesIndicateurImpl',
             'DonneesPersoDiffImport'           => 'Application\\Service\\Indicateur\\DonneesPersoDiffImportIndicateurImpl',
+            'AttenteRetourContrat'             => 'Application\\Service\\Indicateur\\AttenteRetourContratIndicateurImpl',
+            'PermAffectAutreIntervMeme'        => 'Application\\Service\\Indicateur\\PermAffectAutreIntervMemeIndicateurImpl',
+            'PermAffectMemeIntervAutre'        => 'Application\\Service\\Indicateur\\PermAffectMemeIntervAutreIndicateurImpl',
+            'BiatssAffectMemeIntervAutre'      => 'Application\\Service\\Indicateur\\BiatssAffectMemeIntervAutreIndicateurImpl',
         ),
         'factories' => array(
         ),

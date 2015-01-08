@@ -21,8 +21,10 @@ interface IndicateurImplInterface
 
     /**
      * 
+     * @param bool $appendStructure
+     * @return string
      */
-    public function getTitle();
+    public function getTitle($appendStructure = true);
     
     /**
      * 

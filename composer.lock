@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "85ea70b8db848745846e4ad2d673cec9",
+    "hash": "748ee1c993c5f0ae90ee21769545e4da",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -1118,7 +1118,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@549"
+                "reference": "/trunk/@528"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -2807,6 +2807,48 @@
             "time": "2014-04-15 15:28:48"
         },
         {
+            "name": "zendframework/zend-text",
+            "version": "2.3.1",
+            "target-dir": "Zend/Text",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/Component_ZendText.git",
+                "reference": "74215098b67b89e61ed8d1bf82c4fe79fa311885"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/Component_ZendText/zipball/74215098b67b89e61ed8d1bf82c4fe79fa311885",
+                "reference": "74215098b67b89e61ed8d1bf82c4fe79fa311885",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.23",
+                "zendframework/zend-servicemanager": "self.version",
+                "zendframework/zend-stdlib": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev",
+                    "dev-develop": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend\\Text\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "keywords": [
+                "text",
+                "zf2"
+            ],
+            "time": "2014-04-15 15:29:13"
+        },
+        {
             "name": "zendframework/zend-uri",
             "version": "2.3.1",
             "target-dir": "Zend/Uri",
@@ -3737,6 +3779,7 @@
         "bjyoungblood/bjy-authorize": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }

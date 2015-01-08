@@ -60,11 +60,11 @@ class IndicateurController extends AbstractActionController implements ContextPr
     }
     
     /**
-     * Détails d'un indicateur.
+     * Affichage du résultat complet renvoyé par un indicateur.
      * 
      * @return ViewModel
      */
-    public function voirAction()
+    public function resultAction()
     {
         $indicateur     = $this->context()->mandatory()->indicateurFromRoute();
         $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $this->getStructure());
@@ -73,6 +73,23 @@ class IndicateurController extends AbstractActionController implements ContextPr
         $viewModel->setVariables([
             'indicateur'     => $indicateur,
             'indicateurImpl' => $indicateurImpl,
+        ]);
+        
+        return $viewModel;
+    }
+    
+    /**
+     * Affichage d'un item du résultat renvoyé par un indicateur.
+     * 
+     * @return ViewModel
+     */
+    public function resultItemDonneesPersoDiffImportAction()
+    {
+        $intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        
+        $viewModel = new ViewModel();
+        $viewModel->setVariables([
+            'intervenant' => $intervenant,
         ]);
         
         return $viewModel;

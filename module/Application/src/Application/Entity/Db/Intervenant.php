@@ -171,6 +171,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $adresse;
 
     /**
+     * @var \Application\Entity\Db\Adresse
+     */
+    protected $adressePrinc;
+
+    /**
      * @var \Application\Entity\Db\Source
      */
     protected $source;
@@ -289,6 +294,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     private $formuleVolumeHoraire;
 
+    /**
+     * @var \Application\Entity\Db\VIndicDiffDossier
+     */
+    private $vIndicDiffDossier;
+    
     /**
      * Constructor
      */
@@ -883,6 +893,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Get adresse princ
+     *
+     * @return \Application\Entity\Db\AdresseIntervenant
+     */
+    public function getAdressePrinc()
+    {
+        return $this->adressePrinc;
+    }
+
+    /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
@@ -1462,6 +1482,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getWfIntervenantEtape()
     {
         return $this->wfIntervenantEtape;
+    }
+
+    /**
+     * Get vIndicDiffDossier
+     *
+     * @return \Application\Entity\Db\VIndicDiffDossier 
+     */
+    public function getVIndicDiffDossier()
+    {
+        return $this->vIndicDiffDossier;
     }
 
     /**

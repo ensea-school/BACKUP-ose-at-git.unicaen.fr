@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\VIndicDiffDossier" table="V_INDIC_DIFF_DOSSIER">
+    <id name="id" type="integer" column="ID"/>
+    <field name="adresseDossier" type="text" column="ADRESSE_DOSSIER" nullable="true"/>
+    <field name="adresseImport" type="text" column="ADRESSE_IMPORT" nullable="true"/>
+    <field name="ribDossier" type="text" column="RIB_DOSSIER" nullable="true"/>
+    <field name="ribImport" type="text" column="RIB_IMPORT" nullable="true"/>
+    <field name="nomUsuelDossier" type="text" column="NOM_USUEL_DOSSIER" nullable="true"/>
+    <field name="nomUsuelImport" type="text" column="NOM_USUEL_IMPORT" nullable="true"/>
+    <field name="prenomDossier" type="text" column="PRENOM_DOSSIER" nullable="true"/>
+    <field name="prenomImport" type="text" column="PRENOM_IMPORT" nullable="true"/>
+    <one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="vIndicDiffDossier">
+      <join-columns>
+        <join-column name="ID" referenced-column-name="ID"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

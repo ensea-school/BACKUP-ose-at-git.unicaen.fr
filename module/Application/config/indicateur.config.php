@@ -36,7 +36,7 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'voir' => array(
+                    'result' => array(
                         'type'    => 'Segment',
                         'options' => array(
                             'route' => '/:indicateur',
@@ -44,7 +44,7 @@ return array(
                                 'indicateur' => '[0-9]*',
                             ),
                             'defaults' => array(
-                                'action' => 'voir',
+                                'action' => 'result',
                             ),
                         ),
                     ),
@@ -57,6 +57,16 @@ return array(
                             ),
                             'defaults' => array(
                                 'action' => 'abonner',
+                            ),
+                        ),
+                    ),
+                    'result-item' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/result-item/:action/:intervenant',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'intervenant' => '[0-9]*',
                             ),
                         ),
                     ),
@@ -78,7 +88,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Indicateur',
-                    'action'     => array('index', 'voir', 'abonner'),
+                    'action'     => array('index', 'result', 'abonner', 'result-item-donnees-perso-diff-import'),
                     'roles'      => array('user'),
                 ),
             ),
@@ -123,6 +133,7 @@ return array(
             'AttenteContrat'                   => 'Application\\Service\\Indicateur\\AttenteContratIndicateurImpl',
             'AttenteAvenant'                   => 'Application\\Service\\Indicateur\\AttenteAvenantIndicateurImpl',
             'ContratAvenantDeposes'            => 'Application\\Service\\Indicateur\\ContratAvenantDeposesIndicateurImpl',
+            'DonneesPersoDiffImport'           => 'Application\\Service\\Indicateur\\DonneesPersoDiffImportIndicateurImpl',
         ),
         'factories' => array(
         ),

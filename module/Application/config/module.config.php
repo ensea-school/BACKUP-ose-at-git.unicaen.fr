@@ -41,6 +41,7 @@ $main =  array(
                 'string_functions' => array(
                     'CONVERT'  => 'Common\ORM\Query\Functions\Convert',
                     'CONTAINS' => 'Common\ORM\Query\Functions\Contains',
+                    'REPLACE'  => 'Common\ORM\Query\Functions\Replace',
                     'OSE_DIVERS.STRUCTURE_DANS_STRUCTURE' => 'Common\ORM\Query\Functions\OseDivers\StructureDansStructure',
                 ),
                 'filters' => array(

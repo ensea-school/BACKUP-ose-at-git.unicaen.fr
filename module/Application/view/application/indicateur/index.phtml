@@ -27,7 +27,7 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
             <tr>
                 <td class="intitule">
                 <?php if ($indicateurImpl->getResultCount()): ?>
-                    <a href="<?php echo $this->url('indicateur/voir', ['indicateur' => $indicateurEntity->getId()]) ?>"
+                    <a href="<?php echo $this->url('indicateur/result', ['indicateur' => $indicateurEntity->getId()]) ?>"
                        title="Cliquez pour vous rendre à la page concernée"><?php echo $indicateurImpl ?></a>
                 <?php else: ?>
                     <?php echo $indicateurImpl ?>

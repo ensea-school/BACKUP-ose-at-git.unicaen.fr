@@ -54,7 +54,9 @@ class NotificationIndicateur extends AbstractEntityService
         // recherche d'abonnement existant
         $qb = $this->finderByPersonnel($personnel);
         $this->finderByIndicateur($indicateur, $qb);
-        $this->finderByStructure($structure, $qb);
+        if ($structure) {
+            $this->finderByStructure($structure, $qb);
+        }
         $abonnement = $qb->getQuery()->getOneOrNullResult();
         
         $structureStr = $structure ? "pour la structure $structure" : null;

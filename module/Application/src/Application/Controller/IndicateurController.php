@@ -118,8 +118,8 @@ class IndicateurController extends AbstractActionController implements ContextPr
             $message = $serviceNotif->getMessage(PHP_EOL);
         }
         catch (Exception $e) {
-            $status  = 'failure';
-            $message = "Abonnement de $personnel impossible: {$e->getMessage()})";
+            $status  = 'error';
+            $message = "Abonnement de $personnel impossible: {$e->getMessage()}";
         }
         
         return new JsonModel([
@@ -127,6 +127,39 @@ class IndicateurController extends AbstractActionController implements ContextPr
             'message' => $message,
             'infos'   => $notificationIndicateur ? $notificationIndicateur->getExtraInfos() : null,
         ]);
+    }
+    
+    /**
+     * 
+     */
+    public function abonnementsAction()
+    {
+        $personnel    = $this->context()->mandatory()->personnelFromRoute();
+        $serviceNotif = $this->getServiceNotificationIndicateur();
+        
+        $qb = $serviceNotif->finderByPersonnel($personnel);
+        $qb
+                ->join("ni.indicateur", "i")
+                ->orderBy("i.ordre");
+        $abonnements = $abonnementsInfos = $indicateurs = [];
+        foreach ($qb->getQuery()->getResult() as $notificationIndicateur) {
+            $indicateur = $notificationIndicateur->getIndicateur();
+            $indicateurs[$indicateur->getId()] = $indicateur;
+            $abonnements[$indicateur->getId()] = $notificationIndicateur;
+            $abonnementsInfos[$indicateur->getId()] = $notificationIndicateur->getExtraInfos();
+        }
+        
+        $indicateursImpl = $this->getServiceIndicateur()->getIndicateursImpl($indicateurs, $this->getStructure());
+        
+        $viewModel = new ViewModel();
+        $viewModel->setVariables([
+            'indicateurs'      => $indicateurs,
+            'indicateursImpl'  => $indicateursImpl,
+            'abonnements'      => $abonnements,
+            'abonnementsInfos' => $abonnementsInfos,
+        ]);
+        
+        return $viewModel;
     }
     
     /**

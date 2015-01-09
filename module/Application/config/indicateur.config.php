@@ -60,6 +60,18 @@ return array(
                             ),
                         ),
                     ),
+                    'abonnements' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:personnel/abonnements',
+                            'constraints' => array(
+                                'personnel' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'abonnements',
+                            ),
+                        ),
+                    ),
                     'result-item' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -88,7 +100,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Indicateur',
-                    'action'     => array('index', 'result', 'abonner', 'result-item-donnees-perso-diff-import'),
+                    'action'     => array('index', 'result', 'abonner', 'abonnements', 'result-item-donnees-perso-diff-import'),
                     'roles'      => array('user'),
                 ),
             ),

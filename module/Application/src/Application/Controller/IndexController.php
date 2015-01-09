@@ -2,13 +2,15 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Acl\IntervenantRole;
+use Application\Controller\Plugin\Intervenant;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
  * 
- * @method \Application\Controller\Plugin\Intervenant intervenant() Description
  */
 class IndexController extends AbstractActionController implements ContextProviderAwareInterface
 {
@@ -22,10 +24,16 @@ class IndexController extends AbstractActionController implements ContextProvide
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        $view = new \Zend\View\Model\ViewModel(array(
+        $view = new ViewModel(array(
             'annee' => $this->getContextProvider()->getGlobalContext()->getAnnee(),
             'role'  => $role,
         ));
+        
+        if ($role && !$role instanceof IntervenantRole) {
+            $personnel = $this->getContextProvider()->getGlobalContext()->getPersonnel();
+            // URL de la page affichant les indicateurs auxquels est abonné l'utilisateur
+            $view->setVariable('abonnementsUrl', $this->url()->fromRoute('indicateur/abonnements', ['personnel' => $personnel->getId()]));
+        }
         
         return $view;
     }
@@ -38,7 +46,7 @@ class IndexController extends AbstractActionController implements ContextProvide
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        $view = new \Zend\View\Model\ViewModel(array(
+        $view = new ViewModel(array(
             'annee' => $this->getContextProvider()->getGlobalContext()->getAnnee(),
             'role'  => $role,
             'title' => "Gestion",

@@ -27,7 +27,7 @@ return array(
             'indicateur' => array(
                 'type'    => 'Literal',
                 'options' => array(
-                    'route'    => '/indicateur',
+                    'route'    => '/gestion/indicateur',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Indicateur',
@@ -90,7 +90,16 @@ return array(
         'default' => array(
             'home' => array(
                 'pages' => array(
-                    
+                    'gestion' => array(
+                        'pages' => array(
+                            'indicateurs' => array(
+                                'label'    => "Indicateurs",
+                                'title'    => "Indicateurs",
+                                'route'    => 'indicateur',
+                                'resource' => 'controller/Application\Controller\Indicateur:index',
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),

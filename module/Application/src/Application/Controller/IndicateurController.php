@@ -130,7 +130,9 @@ class IndicateurController extends AbstractActionController implements ContextPr
     }
     
     /**
+     * Indicateurs auxquels est abonné l'utilisateur (un Personnel) spécifié dans la requête.
      * 
+     * @return ViewModel
      */
     public function abonnementsAction()
     {

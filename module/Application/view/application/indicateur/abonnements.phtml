@@ -1,8 +1,14 @@
+
 <?php
-echo $this->partial('application/indicateur/partial/list', [
-    'indicateursImpl'  => $this->indicateursImpl,
-    'abonnements'      => $this->abonnements,
-    'abonnementsInfos' => $this->abonnementsInfos,
-//    'abonnementUrl'    => $this->abonnementUrl,
-    'showAbonnement'   => false,
-]);
+if (count($this->indicateursImpl)) {
+    echo $this->partial('application/indicateur/partial/list', [
+        'indicateursImpl'  => $this->indicateursImpl,
+        'abonnements'      => $this->abonnements,
+        'abonnementsInfos' => $this->abonnementsInfos,
+    //    'abonnementUrl'    => $this->abonnementUrl,
+        'showAbonnement'   => false,
+    ]);
+}
+else {
+    echo "Aucun.";
+}

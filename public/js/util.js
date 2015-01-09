@@ -544,3 +544,16 @@ function alertFlash(message, severity, duration)
         }, duration);
     });
 }
+
+/**
+ * Lancement périodique d'une requête dans le seul but de rafraîchir la session de l'utilisateur.
+ * 
+ * @param url URL de la requête
+ * @param refreshTimeInMs Période en millisecondes
+ */
+function refreshSession(url, refreshTimeInMs)
+{
+    window.setInterval(function() {
+        $.get(url, { ts: Date.now() }); // le timestamp empêche simplement la mise en cache par le navigateur
+    }, refreshTimeInMs);
+}

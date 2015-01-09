@@ -18,6 +18,10 @@ $settings = array(
         'mentionsLegales'        => "http://www.unicaen.fr/outils-portail-institutionnel/mentions-legales/",
         'informatiqueEtLibertes' => "http://www.unicaen.fr/outils-portail-institutionnel/informatique-et-libertes/",
     ),
+    /**
+     * Période d'exécution de la requête de rafraîchissement de la session utilisateur, en millisecondes.
+     */
+    'session_refresh_period' => 600000, // 10*60*1000 ms = 10 min
 );
 
 /**

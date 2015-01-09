@@ -208,7 +208,7 @@ class Etape extends AbstractEntityService
     public function save($entity)
     {
         $this->canSave($entity,true);
-        parent::save($entity);
+        return parent::save($entity);
     }
 
     public function delete($entity, $softDelete = true)

@@ -3,7 +3,7 @@
 /* Fermeture du service *
 if (! in_array($_SERVER['REMOTE_ADDR'],[
     '127.0.0.1',
-    '10.60.11.40', // Laurent
+    '10.14.1.40', // Laurent
     '10.14.1.38', // Bertrand
 ])){
     $maintenanceText = 'OSE est en cours de mise à jour. Merci de revenir en fin de matinée.';

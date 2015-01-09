@@ -321,7 +321,7 @@ abstract class AbstractEntityService extends AbstractService
      *
      * @param mixed $entity
      * @throws \Common\Exception\RuntimeException
-     * @return self
+     * @return mixed
      */
     public function save($entity)
     {
@@ -332,7 +332,7 @@ abstract class AbstractEntityService extends AbstractService
         }
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush($entity);
-        return $this;
+        return $entity;
     }
 
     /**

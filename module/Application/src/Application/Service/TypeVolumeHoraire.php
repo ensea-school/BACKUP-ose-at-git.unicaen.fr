@@ -64,6 +64,17 @@ class TypeVolumeHoraire extends AbstractEntityService
     }
 
     /**
+     *
+     * @param string $code
+     * @return TypeVolumeHoraireEntity
+     */
+    public function getByCode( $code )
+    {
+        if (null == $code) return null;
+        return $this->getRepo()->findOneBy(['code' => $code]);
+    }
+
+    /**
      * Retourne la liste des types de volumes horaires
      *
      * @param QueryBuilder|null $queryBuilder

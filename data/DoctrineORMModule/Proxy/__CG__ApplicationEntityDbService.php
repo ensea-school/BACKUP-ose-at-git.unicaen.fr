@@ -64,10 +64,10 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Service' . "\0" . 'formuleResultatService');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Service' . "\0" . 'formuleResultatService');
     }
 
     /**
@@ -516,6 +516,28 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTypeVolumeHoraire', array($typeVolumeHoraire));
 
         return parent::setTypeVolumeHoraire($typeVolumeHoraire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormuleResultatService(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleResultatService', array($typeVolumeHoraire, $etatVolumeHoraire));
+
+        return parent::getFormuleResultatService($typeVolumeHoraire, $etatVolumeHoraire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUniqueFormuleResultatService(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUniqueFormuleResultatService', array($typeVolumeHoraire, $etatVolumeHoraire));
+
+        return parent::getUniqueFormuleResultatService($typeVolumeHoraire, $etatVolumeHoraire);
     }
 
     /**

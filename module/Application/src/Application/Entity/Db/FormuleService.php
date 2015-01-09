@@ -216,7 +216,7 @@ class FormuleService
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getHeures( TypeIntervention $typeIntervention, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire )
+    public function getHeures( TypeIntervention $typeIntervention=null, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire )
     {
         $heures = 0;
         $formuleVolumehoraire = $this->getFormuleVolumeHoraire($typeIntervention, $typeVolumeHoraire, $etatVolumehoraire);

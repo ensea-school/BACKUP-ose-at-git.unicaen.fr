@@ -83,6 +83,7 @@ class ServiceController extends AbstractActionController
 
     public function indexAction()
     {
+        $typeVolumeHoraireCode    = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU' );
         $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
         $role                     = $this->getContextProvider()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
@@ -108,7 +109,7 @@ class ServiceController extends AbstractActionController
             $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action = 'afficher'; // Affichage par défaut
             $recherche = new Recherche;
-            $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getPrevu() );
+            $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode) );
             $recherche->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
 
             $params = [
@@ -454,9 +455,13 @@ class ServiceController extends AbstractActionController
     public function saisieAction()
     {
         $this->initFilters();
-
         $id = (int)$this->params()->fromRoute('id');
-        $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
+        $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire');
+        if (empty($typeVolumeHoraire)){
+            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
+        }else{
+            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get( $typeVolumeHoraire );
+        }
         $service = $this->getServiceService();
         //$role    = $this->getContextProvider()->getSelectedIdentityRole();
         $form    = $this->getFormSaisie();
@@ -474,20 +479,21 @@ class ServiceController extends AbstractActionController
             $form->initFromContext();
             $title   = "Ajout d'enseignement";
         }
+        $form->setAttribute('action', $this->url()->fromRoute('service/saisie', ['id' => $entity->getId()], ['query' => ['type-volume-horaire' => $typeVolumeHoraire->getId()]], true));
 
         $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
         $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
         if (! $this->isAllowed($assertionEntity, 'create') || ! $this->isAllowed($assertionEntity, 'update')) {
             throw new MessageException("Cette opération n'est pas autorisée.");
         }
-        
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
             $form->saveToContext();
             if ($form->isValid()) {
                 try {
-                    $service->save($entity);
+                    $entity = $service->save($entity);
                     $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                 }
                 catch (\Exception $e) {

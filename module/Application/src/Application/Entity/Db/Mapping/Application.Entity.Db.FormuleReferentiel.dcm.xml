@@ -25,5 +25,10 @@
         <join-column name="FONCTION_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-one field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel">
+      <join-columns>
+        <join-column name="ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
   </entity>
 </doctrine-mapping>

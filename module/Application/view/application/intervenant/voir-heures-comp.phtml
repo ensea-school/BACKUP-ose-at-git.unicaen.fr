@@ -8,9 +8,11 @@
 /* @var $data array */
 
 $resultat = $intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
-
 $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.") ?>
 
+<style>
+    th { background-color: #eee }
+</style>
 <h1 class="page-header"><?php echo $intervenant ?> <small><?php echo $intervenant->getType() ?></small></h1>
 <?php echo $this->form()->openTag($form->prepare()); ?>
 <div class="row">
@@ -47,9 +49,12 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
 <tr>
     <th rowspan="4">Elément ou établissement</th>
     <th colspan="3">Taux</th>
+    <?php if ($data['has-ponderation-service-compl']): ?>
     <th rowspan="4">Majoration FC</th>
+    <?php endif; ?>
     <th rowspan="4">Composante d'intervention</th>
     <th style="white-space:nowrap" colspan="<?php echo count($data['types-intervention']); ?>">Types d'intervention</th>
+    <th colspan="3">HETD</th>
 </tr>
 <tr>
     <th rowspan="3">FI</th>
@@ -58,11 +63,15 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
     <?php foreach( $data['types-intervention'] as $ti ): ?>
     <th><abbr title="<?php echo $ti->getLibelle() ?>"><?php echo $ti->getCode() ?></abbr></th>
     <?php endforeach; ?>
+    <th rowspan="3">Dans le service</th>
+    <th colspan="2">Au-delà du service</th>
 </tr>
 <tr>
     <?php foreach( $data['types-intervention'] as $ti ): ?>
     <td class="nombre"><abbr title="Pondération des heures de services"><?php echo \Common\Util::formattedHeures($ti->getTauxHetdService()) ?></abbr></td>
     <?php endforeach; ?>
+    <th rowspan="2"><abbr title="Formation initiale">FI</abbr></th>
+    <th rowspan="2"><abbr title="Formation continue">FC</abbr></th>
 </tr>
 <tr>
     <?php foreach( $data['types-intervention'] as $ti ): ?>
@@ -82,11 +91,16 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
         <td class="nombre"><?php echo \Common\Util::formattedPourcentage($ls['taux-fi']) ?></td>
         <td class="nombre"><?php echo \Common\Util::formattedPourcentage($ls['taux-fa']) ?></td>
         <td class="nombre"><?php echo \Common\Util::formattedPourcentage($ls['taux-fc']) ?></td>
+        <?php if ($data['has-ponderation-service-compl']): ?>
         <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['ponderation-service-compl'])?></td>
+        <?php endif; ?>
         <td><?php echo $this->structure( $ls['service']->getStructureEns() )->renderLink() ?></td>
         <?php foreach( $data['types-intervention'] as $ti ): ?>
         <td class="nombre"><?php echo isset($ls['heures'][$ti->getId()]) ? \Common\Util::formattedHeures($ls['heures'][$ti->getId()]) : null ?></td>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['hetd'])?></td>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['hetd-compl-fi'])?></td>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['hetd-compl-fc'])?></td>
     </tr>
 <?php endforeach; ?>
 </table>
@@ -95,12 +109,16 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
 <table class="table table-bordered table-condensed table-extra-condensed" style="width:auto">
     <tr>
         <th>Structure</th>
-        <th>Heures</th>
+        <th>Heures réelles</th>
+        <th><abbr title="Heures Equivalent TD dans le service">HETD service</abbr></th>
+        <th><abbr title="Heures Equivalent TD au-delà du service">HETD compl.</abbr></th>
     </tr>
     <?php foreach( $data['referentiel'] as $ref ): ?>
     <tr>
         <td><?php echo $this->structure( $ref['structure'] )->renderLink() ?></td>
         <td class="nombre"><?php echo \Common\Util::formattedHeures($ref['heures']) ?></td>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ref['hetd']) ?></td>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ref['hetd-compl']) ?></td>
     </tr>
     <?php endforeach; ?>
 </table>

@@ -313,7 +313,7 @@ VolumeHoraire.init = function(){
 
     $("body").on('save-volume-horaire', function(event,data){
         event.a.popover('hide');
-        Service.get( event.a.data('service') ).onAfterModify();
+        Service.get( event.a.data('service') ).onAfterSaisie();
     });
 }
 

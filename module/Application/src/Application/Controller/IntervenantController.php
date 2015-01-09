@@ -263,13 +263,16 @@ class IntervenantController extends AbstractActionController implements ContextP
             $totalHeures = 0;
 
             $fvhs = $service->getFormuleVolumeHoraire(null, $typeVolumeHoraire, $etatVolumeHoraire);
-            foreach( $fvhs as $fvh ){
+            foreach( $fvhs as $fvh ){ /* @var $fvh \Application\Entity\Db\FormuleVolumeHoraire */
                 $totalHeures += $fvh->getHeures();
                 if (! isset($typesIntervention[$fvh->getTypeIntervention()->getId()])) $typesIntervention[$fvh->getTypeIntervention()->getId()] = [
                     'type-intervention' => $fvh->getTypeIntervention(),
-                    'heures'            => 0
+                    'heures'            => 0,
+                    'hetd'              => 0,
                 ];
                 $typesIntervention[$fvh->getTypeIntervention()->getId()]['heures'] += $fvh->getHeures();
+                $hetd = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()->first()->getServiceAssure();
+                $typesIntervention[$fvh->getTypeIntervention()->getId()]['hetd'] += $hetd;
             }
 
             if ($totalHeures > 0){
@@ -284,15 +287,17 @@ class IntervenantController extends AbstractActionController implements ContextP
                     'taux-fc'                   => $service->getTauxFc(),
                     'ponderation-service-compl' => $service->getPonderationServiceCompl(),
                     'heures'                    => [],
-                    'hetd'                      => $frs->getHeuresService(),
-                    'hetd-compl-fi'             => $frs->getHeuresComplFi(),
-                    'hetd-compl-fa'             => $frs->getHeuresComplFa(),
-                    'hetd-compl-fc'             => $frs->getHeuresComplFc(),
+                    'hetd'                      => [],
+                    'total-hetd'                => $frs->getHeuresService(),
+                    'total-hetd-compl-fi'       => $frs->getHeuresComplFi(),
+                    'total-hetd-compl-fa'       => $frs->getHeuresComplFa(),
+                    'total-hetd-compl-fc'       => $frs->getHeuresComplFc(),
                 ];
                 foreach( $typesIntervention as $ti ){
                     if ( $ti['heures'] > 0 ){
                         $data['types-intervention'][$ti['type-intervention']->getId()] = $ti['type-intervention'];
                         $data['services'][$service->getId()]['heures'][$ti['type-intervention']->getId()] = $ti['heures'];
+                        $data['services'][$service->getId()]['hetd'][$ti['type-intervention']->getId()] = $ti['hetd'];
                     }
                 }
             }

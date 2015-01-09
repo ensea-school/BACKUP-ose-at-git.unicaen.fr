@@ -95,6 +95,21 @@ class VolumeHoraire implements HistoriqueAwareInterface
     protected $remove=false;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultatVolumeHoraire;
+
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->formuleResultatVolumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * 
      * @return string
      */
@@ -478,4 +493,15 @@ class VolumeHoraire implements HistoriqueAwareInterface
     {
         return $this->etatVolumeHoraire->first();
     }
+
+    /**
+     * Get formuleResultatVolumeHoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleResultatVolumeHoraire()
+    {
+        return $this->formuleResultatVolumeHoraire;
+    }
+
 }

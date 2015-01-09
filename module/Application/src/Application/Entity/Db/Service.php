@@ -103,6 +103,7 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     {
         $this->volumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
         $this->validationService = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatService = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

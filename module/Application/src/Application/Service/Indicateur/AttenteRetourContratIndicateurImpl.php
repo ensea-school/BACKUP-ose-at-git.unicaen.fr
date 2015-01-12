@@ -15,8 +15,8 @@ use Traversable;
  */
 class AttenteRetourContratIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern = "%s contrat de vacataires est en ettente de retour";
-    protected $pluralTitlePattern   = "%s contrats de vacataires sont en ettente de retour";
+    protected $singularTitlePattern = "%s contrat de vacataires est en attente de retour";
+    protected $pluralTitlePattern   = "%s contrats de vacataires sont en attente de retour";
 
     /**
      * 

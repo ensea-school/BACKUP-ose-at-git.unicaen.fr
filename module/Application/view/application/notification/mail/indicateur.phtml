@@ -11,3 +11,6 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
            title="Cliquez pour vous rendre à la page concernée"><?php echo $r ?></a></li>
 <?php endforeach; ?>
 </ul>
+
+<a href="<?php echo $this->url('indicateur', [], ['force_canonical' => true]) ?>" 
+   title="Cliquez pour vous rendre à la page de gestion de vos abonnements aux indicateurs">Gérer vos abonnements à des indicateurs</a>

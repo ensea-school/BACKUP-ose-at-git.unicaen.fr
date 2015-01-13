@@ -1,5 +1,6 @@
 <?php 
 use Application\Service\Indicateur\AbstractIndicateurImpl;
+use Common\Constants;
 /* @var $indicateurImpl AbstractIndicateurImpl */
 ?>
 
@@ -12,5 +13,8 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
 <?php endforeach; ?>
 </ul>
 
-<a href="<?php echo $this->url('indicateur', [], ['force_canonical' => true]) ?>" 
-   title="Cliquez pour vous rendre à la page de gestion de vos abonnements aux indicateurs">Gérer vos abonnements à des indicateurs</a>
+<p>
+    Vous vous êtes abonné(e) à cet indicateur le <?php echo $this->ni->getDateAbonnement()->format(Constants::DATETIME_FORMAT) ?>.<br />
+    <a href="<?php echo $this->url('indicateur', [], ['force_canonical' => true]) ?>" 
+       title="Cliquez pour vous rendre à la page de gestion de vos abonnements aux indicateurs">Gérer vos abonnements à des indicateurs</a>
+</p>

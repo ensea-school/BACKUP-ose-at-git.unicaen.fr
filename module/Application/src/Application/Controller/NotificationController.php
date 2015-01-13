@@ -84,6 +84,7 @@ class NotificationController extends AbstractActionController implements Context
             // corps au format HTML
             $html = $renderer->render('application/notification/mail/indicateur', [
                 'indicateurImpl' => $indicateurImpl,
+                'ni'             => $ni,
             ]);
             $part          = new MimePart($html);
             $part->type    = Mime::TYPE_HTML;

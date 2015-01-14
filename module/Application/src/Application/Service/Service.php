@@ -554,12 +554,18 @@ class Service extends AbstractEntityService
      */
     public function getTableauBordExport( Recherche $recherche )
     {
-        $res = [];
-        $resInt = [];
+        // initialisation
+        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $data = [];
+        $shown = [];
         $typesIntervention = [];
+        $numericColunms = ['heures-service-statutaire', 'heures-service-du-modifie', 'heures-non-payees', 'heures-ref', 'hetd', 'hetd-solde'];
+        $addableColumns = ['__total__','heures-non-payees','heures-ref','hetd'];
 
+
+        // requêtage
         $conditions = [
-            'annee_id = '.$this->getContextProvider()->getGlobalContext()->getAnnee()->getId()
+            'annee_id = '.$annee->getId()
         ];
         if ($c1 = $recherche->getTypeVolumeHoraire()  ) $conditions['type_volume_horaire_id'] = '(type_volume_horaire_id = -1 OR type_volume_horaire_id = ' . $c1->getId().')';
         if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = '(etat_volume_horaire_id = -1 OR etat_volume_horaire_id = ' . $c2->getId().')';
@@ -574,82 +580,127 @@ class Service extends AbstractEntityService
         $sql = 'SELECT * FROM V_TBL_SERVICE_EXPORT WHERE '.implode( ' AND ', $conditions ).' '
               .'ORDER BY INTERVENANT_NOM, SERVICE_STRUCTURE_AFF_LIBELLE, SERVICE_STRUCTURE_ENS_LIBELLE, ETAPE_LIBELLE, ELEMENT_LIBELLE';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+
+        // récupération des données
         while( $d = $stmt->fetch()){
-            $sid = $d['SERVICE_ID'];
-            if (-1 == $sid) $sid = 'R_'.uniqid();
-            $iid = $d['INTERVENANT_ID'];
-            $res[$sid] = [
+            $sid = $d['SERVICE_ID'] ? $d['SERVICE_ID'].'_'.$d['PERIODE_ID'] : $d['ID'];
+            $ds = [
+                '__total__'                     => (float)$d['HEURES_NON_PAYEES'] + (float)$d['HETD'] + (float)$d['HEURES_REF'] + (float) $d['HEURES'],
+                'annee-libelle'                 =>          (string)$annee,
 
                 'intervenant-code'              =>          $d['INTERVENANT_CODE'],
                 'intervenant-nom'               =>          $d['INTERVENANT_NOM'],
                 'intervenant-statut-libelle'    =>          $d['INTERVENANT_STATUT_LIBELLE'],
                 'intervenant-type-libelle'      =>          $d['INTERVENANT_TYPE_LIBELLE'],
+                'heures-service-statutaire'     => (float)  $d['HEURES_SERVICE_STATUTAIRE'],
+                'heures-service-du-modifie'     => (float)  $d['HEURES_SERVICE_DU_MODIFIE'],
                 'service-structure-aff-libelle' =>          $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
 
                 'service-structure-ens-libelle' =>          $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
-                'etablissement-libelle'         =>          $d['ETABLISSEMENT_LIBELLE'],
                 'etape-code'                    =>          $d['ETAPE_CODE'],
-                'etape-libelle'                 =>          $d['ETAPE_LIBELLE'],
+                'etape-etablissement-libelle'   =>          $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
                 'element-code'                  =>          $d['ELEMENT_CODE'],
                 'element-libelle'               =>          $d['ELEMENT_LIBELLE'],
-                'element-periode-libelle'       =>          $d['ELEMENT_PERIODE_LIBELLE'],
+                'commentaires'                  =>          $d['COMMENTAIRES'],
                 'element-ponderation-compl'     => $d['ELEMENT_PONDERATION_COMPL'] === null ? null : (float)$d['ELEMENT_PONDERATION_COMPL'],
                 'element-source-libelle'        =>          $d['ELEMENT_SOURCE_LIBELLE'],
-                'commentaires'                  =>          $d['COMMENTAIRES'],
 
-                'heures-service-statutaire'     => (float)  $d['HEURES_SERVICE_STATUTAIRE'],
-                'heures-service-du-modifie'     => (float)  $d['HEURES_SERVICE_DU_MODIFIE'],
-                'heures-reelles'                => (float)  $d['HEURES_REELLES'],
-                'heures-assurees'               => (float)  $d['HEURES_ASSUREES'],
-                'heures-solde'                  => (float)  $d['HEURES_SOLDE'],
+                'periode-libelle'               =>          $d['PERIODE_LIBELLE'],
                 'heures-non-payees'             => (float)  $d['HEURES_NON_PAYEES'],
-                'heures-service'                => (float)  $d['HEURES_SERVICE'],
-                'heures-referentiel'            => (float)  $d['HEURES_REFERENTIEL'],
-
-                'types-intervention'            => [],
+                // types d'intervention traités en aval
+                'heures-ref'                    => (float)  $d['HEURES_REF'],
+                'hetd'                          => (float)  $d['HETD'],
+                'hetd-solde'                    => (float)  $d['HETD_SOLDE'],
             ];
-            if (! isset($resInt[$iid])) $resInt[$iid] = [];
-            $resInt[$iid][] = $sid;
-        }
 
-        if ($c2 = $recherche->getEtatVolumeHoraire()  ) $conditions['etat_volume_horaire_id'] = 'etat_volume_horaire_ordre >= ' . $c2->getId();
-        $sql = '
-        SELECT
-            SERVICE_ID,
-            TYPE_INTERVENTION_ID,
-            SUM(HEURES) HEURES
-        FROM
-            V_TBL_SERVICE_EXPORT_VH
-        WHERE
-            '.implode( ' AND ', $conditions ).'
-        GROUP BY
-            SERVICE_ID, TYPE_INTERVENTION_ID
-        HAVING
-            SUM(HEURES) <> 0
-        ';
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-        while( $d = $stmt->fetch()){
-            $sid = $d['SERVICE_ID'];
-            $tid = $d['TYPE_INTERVENTION_ID'];
-            $res[$sid]['types-intervention'][$tid] = (float)$d['HEURES'];
-            if (! isset($typesIntervention[$tid])){
-                $typesIntervention[$tid] = $this->getServiceTypeIntervention()->get($tid);
+            if ($d['TYPE_INTERVENTION_ID'] != null){
+                $tid = $d['TYPE_INTERVENTION_ID'];
+                if (! isset($typesIntervention[$tid])){
+                    $typesIntervention[$tid] = $this->getServiceTypeIntervention()->get($tid);
+                }
+                $typeIntervention = $typesIntervention[$tid];
+                $ds['type-intervention-'.$typeIntervention->getCode()] = (float) $d['HEURES'];               
+            }
+            foreach( $ds as $column => $value ){
+                if (! isset($shown[$column])) $shown[$column] = 0;
+                if (is_float($value)){
+                    $shown[$column] += $value;
+                }else{
+                    $shown[$column] += empty($value) ? 0 : 1;
+                }
+            }
+            if (! isset($data[$sid])){
+                $data[$sid] = $ds;
+            }else{
+                foreach( $ds as $column => $value ){
+                    if (in_array($column,$addableColumns) || 0 === strpos( $column, 'type-intervention-')){
+                        if (! isset($data[$sid][$column])) $data[$sid][$column] = $value; // pour les types d'intervention no initialisés
+                                                      else $data[$sid][$column] += $value;
+                    }
+                }
             }
         }
 
-        foreach( $res as $serviceId => $d ){
-            if (empty($d['types-intervention']) && 0 == $d['heures-referentiel'] && 0 == $d['heures-non-payees']){
-                unset( $res[$serviceId]); // pas d'affichage pour quelqu'un qui n'a rien
-            }
-        }
+        // tri et préparation des entêtes
+        $head = [
+            'annee-libelle'                 => 'Année universitaire',
 
+            'intervenant-code'              => 'Code intervenant',
+            'intervenant-nom'               => 'Intervenant',
+            'intervenant-statut-libelle'    => 'Statut intervenant',
+            'intervenant-type-libelle'      => 'Type d\'intervenant',
+            'heures-service-statutaire'     => 'Service statutaire',
+            'heures-service-du-modifie'     => 'Modification de service du',
+            'service-structure-aff-libelle' => 'Structure d\'affectation',
+
+            'service-structure-ens-libelle' => 'Structure d\'enseignement',
+            'etape-code'                    => 'Code formation',
+            'etape-etablissement-libelle'   => 'Formation ou établissement',
+            'element-code'                  => 'Code enseignement',
+            'element-libelle'               => 'Enseignement',
+            'commentaires'                  => 'Commentaires',
+            'element-ponderation-compl'     => 'Majoration',
+            'element-source-libelle'        => 'Source enseignement',
+
+            'periode-libelle'               => 'Période',
+            'heures-non-payees'             => 'Heures non payées',
+        ];
         usort( $typesIntervention, function($ti1,$ti2){
             return $ti1->getOrdre() > $ti2->getOrdre();
         } );
+        foreach( $typesIntervention as $typeIntervention ){
+            /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
+            $head['type-intervention-'.$typeIntervention->getCode()] = $typeIntervention->getCode();
+        }
+        $head['heures-ref'] = 'Référentiel';
+        $head['hetd']       = 'Total HETD';
+        $head['hetd-solde'] = 'Solde HETD';
+
+        // suppression des informations superflues
+        foreach( $shown as $column => $visibility ){
+            if (isset($head[$column]) && empty($visibility)){
+                unset($head[$column]);
+            }
+        }
+        $columns = array_keys( $head );
+        foreach( $data as $sid => $d ){
+            if (0 == $d['__total__']){
+                unset( $data[$sid]); // pas d'affichage pour quelqu'un qui n'a rien
+            }else{
+                $data[$sid] = [];
+                foreach( $columns as $column ){
+                    $value = isset($d[$column]) ? $d[$column] : null;
+                    if (null === $value && (in_array($column,$numericColunms) || 0 === strpos( $column, 'type-intervention-'))){
+                        $value = 0;
+                    }
+                    $data[$sid][$column] = $value;
+                }
+            }
+        }
 
         return [
-            'data'                   => $res,
-            'types-intervention'     => $typesIntervention,
+            'head'                  => $head,
+            'data'                  => $data,
         ];
     }
 
@@ -686,6 +737,7 @@ class Service extends AbstractEntityService
 
         $sql = 'SELECT * FROM V_TBL_SERVICE_RESUME WHERE '.implode( ' AND ', $conditions ).' '
               .'ORDER BY '.$orderBy;
+           
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         while( $d = $stmt->fetch()){
             $iid = $d['INTERVENANT_ID'];
@@ -702,7 +754,7 @@ class Service extends AbstractEntityService
         }
 
         $sql = 'SELECT * FROM V_TBL_SERVICE_RESUME_REF WHERE '.implode( ' AND ', $conditions );
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql); 
         while( $d = $stmt->fetch()){
             $iid = $d['INTERVENANT_ID'];
             if (isset( $res[$iid] )){ // à cause des filtres, plus complets sur la requête principale!!

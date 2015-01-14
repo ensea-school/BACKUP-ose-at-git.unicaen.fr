@@ -177,78 +177,10 @@ class ServiceController extends AbstractActionController
 
         /* Préparation et affichage */
         $data = $this->getServiceService()->getTableauBordExport($recherche);
-        //var_dump($data);
 
         $csvModel = new \UnicaenApp\View\Model\CsvModel();
-        $head = [
-            'Code intervenant',
-            'Intervenant',
-            'Statut intervenant',
-            'Type d\'intervenant',
-            'Structure d\'affectation',
-
-            'Structure d\'enseignement',
-            'Code formation',
-            'Formation ou établissement',
-            'Code enseignement',
-            'Enseignement',
-            'Commentaires',
-            'Période',
-            'Majoration',
-            'Source enseignement',
-
-            'Service statutaire',
-            'Modification de service du',
-            'Total Heures effectives',
-            'Total HETD',
-            'Solde (HETD)',
-            'Heures non payées',
-            'Référentiel',
-        ];
-        foreach( $data['types-intervention'] as $typeIntervention ){
-            /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
-            $head[] = $typeIntervention->getCode();
-        }
-
-        $csvModel->setHeader( $head );
-        foreach( $data['data'] as $d ){
-            if ($d['heures-reelles'] + $d['heures-non-payees'] > 0){
-                $line = [
-                    $d['intervenant-code'],
-                    $d['intervenant-nom'],
-                    $d['intervenant-statut-libelle'],
-                    $d['intervenant-type-libelle'],
-                    $d['service-structure-aff-libelle'],
-
-                    $d['service-structure-ens-libelle'],
-                    $d['etape-code'],
-                    $d['etape-libelle'] ? $d['etape-libelle'] : $d['etablissement-libelle'],
-                    $d['element-code'],
-                    $d['element-libelle'],
-                    $d['commentaires'],
-                    $d['element-periode-libelle'],
-                    $d['element-ponderation-compl'],
-                    $d['element-source-libelle'],
-
-                    $d['heures-service-statutaire'],
-                    $d['heures-service-du-modifie'],
-                    $d['heures-reelles'],
-                    $d['heures-assurees'],
-                    $d['heures-solde'],
-                    $d['heures-non-payees'],
-                    $d['heures-referentiel'],
-                ];
-                foreach( $data['types-intervention'] as $typeIntervention ){
-                    /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
-                    if (isset($d['types-intervention'][$typeIntervention->getId()])){
-                        $line[] = $d['types-intervention'][$typeIntervention->getId()];
-                    }else{
-                        $line[] = 0;
-                    }
-                }
-                $csvModel->addLine($line);
-            }
-        }
+        $csvModel->setHeader($data['head']);
+        $csvModel->addLines($data['data']);
         $csvModel->setFilename('service.csv');
         return $csvModel;
     }

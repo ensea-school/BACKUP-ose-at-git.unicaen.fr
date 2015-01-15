@@ -176,7 +176,7 @@ class ServiceController extends AbstractActionController
         }
 
         /* Préparation et affichage */
-        $data = $this->getServiceService()->getTableauBordExport($recherche);
+        $data = $this->getServiceService()->getTableauBord($recherche, ['ignored-columns' => ['intervenant-type-code']]);
 
         $csvModel = new \UnicaenApp\View\Model\CsvModel();
         $csvModel->setHeader($data['head']);
@@ -226,7 +226,7 @@ class ServiceController extends AbstractActionController
 
         $recherche = $this->getServiceService()->loadRecherche();
         if ('afficher' == $action || 'trier' == $action ){
-            $resumeServices = $this->getServiceService()->getTableauBordResume($recherche, $tri);
+            $resumeServices = $this->getServiceService()->getTableauBord($recherche, ['tri' => $tri, 'isoler-non-payes' => false, 'regroupement' => 'intervenant']);
         }else{
             $resumeServices = null;
         }

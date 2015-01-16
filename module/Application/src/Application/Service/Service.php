@@ -567,6 +567,7 @@ class Service extends AbstractEntityService
         $data = [];
         $shown = [];
         $typesIntervention = [];
+        $invertTi = [];
         $numericColunms = ['heures-service-statutaire', 'heures-service-du-modifie', 'heures-non-payees', 'heures-ref', 'hetd', 'hetd-solde'];
         $addableColumns = ['__total__','heures-non-payees','heures-ref','hetd'];
 
@@ -626,6 +627,9 @@ class Service extends AbstractEntityService
                 'etape-etablissement-libelle'   =>          $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
                 'element-code'                  =>          $d['ELEMENT_CODE'],
                 'element-libelle'               =>          $d['ELEMENT_LIBELLE'],
+                'element-taux-fi'               => (float)  $d['ELEMENT_TAUX_FI'],
+                'element-taux-fc'               => (float)  $d['ELEMENT_TAUX_FC'],
+                'element-taux-fa'               => (float)  $d['ELEMENT_TAUX_FA'],
                 'commentaires'                  =>          $d['COMMENTAIRES'],
                 'element-ponderation-compl'     => $d['ELEMENT_PONDERATION_COMPL'] === null ? null : (float)$d['ELEMENT_PONDERATION_COMPL'],
                 'element-source-libelle'        =>          $d['ELEMENT_SOURCE_LIBELLE'],
@@ -644,6 +648,7 @@ class Service extends AbstractEntityService
                     $typesIntervention[$tid] = $this->getServiceTypeIntervention()->get($tid);
                 }
                 $typeIntervention = $typesIntervention[$tid];
+                $invertTi['type-intervention-'.$typeIntervention->getCode()] = $typeIntervention->getId();
                 $ds['type-intervention-'.$typeIntervention->getCode()] = (float) $d['HEURES'];               
             }
             foreach( $ds as $column => $value ){
@@ -693,6 +698,9 @@ class Service extends AbstractEntityService
             'etape-etablissement-libelle'   => 'Formation ou établissement',
             'element-code'                  => 'Code enseignement',
             'element-libelle'               => 'Enseignement',
+            'element-taux-fi'               => 'Taux FI',
+            'element-taux-fc'               => 'Taux FC',
+            'element-taux-fa'               => 'Taux FA',
             'commentaires'                  => 'Commentaires',
             'element-ponderation-compl'     => 'Majoration',
             'element-source-libelle'        => 'Source enseignement',
@@ -700,7 +708,7 @@ class Service extends AbstractEntityService
             'periode-libelle'               => 'Période',
             'heures-non-payees'             => 'Heures non payées',
         ];
-        usort( $typesIntervention, function($ti1,$ti2){
+        uasort( $typesIntervention, function($ti1,$ti2){
             return $ti1->getOrdre() > $ti2->getOrdre();
         } );
         foreach( $typesIntervention as $typeIntervention ){
@@ -715,6 +723,9 @@ class Service extends AbstractEntityService
         foreach( $shown as $column => $visibility ){
             if (isset($head[$column]) && empty($visibility)){
                 unset($head[$column]);
+                if (isset($invertTi[$column])){
+                    unset($typesIntervention[$invertTi[$column]]);
+                }
             }
         }
         $columns = array_keys( $head );

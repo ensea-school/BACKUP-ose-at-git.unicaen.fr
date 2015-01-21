@@ -110,7 +110,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Indicateur',
                     'action'     => array('index', 'result', 'abonner', 'abonnements', 'result-item-donnees-perso-diff-import'),
-                    'roles'      => array('user'),
+                    'roles'      => array(GestionnaireComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
             ),
         ),

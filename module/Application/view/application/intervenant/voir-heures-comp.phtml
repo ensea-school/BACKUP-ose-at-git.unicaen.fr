@@ -96,11 +96,15 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
         <?php endif; ?>
         <td><?php echo $this->structure( $ls['service']->getStructureEns() )->renderLink() ?></td>
         <?php foreach( $data['types-intervention'] as $ti ): ?>
-        <td class="nombre"><?php echo isset($ls['heures'][$ti->getId()]) ? \Common\Util::formattedHeures($ls['heures'][$ti->getId()]) : null ?></td>
+        <td class="nombre">
+            <abbr title="Equivalence en HETD : <?php echo isset($ls['hetd'][$ti->getId()]) ? strip_tags(\Common\Util::formattedHeures($ls['hetd'][$ti->getId()])) : null ?>">
+                <?php echo isset($ls['heures'][$ti->getId()]) ? \Common\Util::formattedHeures($ls['heures'][$ti->getId()]) : null ?>
+            </abbr>
+        </td>
         <?php endforeach; ?>
-        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['hetd'])?></td>
-        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['hetd-compl-fi'])?></td>
-        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['hetd-compl-fc'])?></td>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['total-hetd'])?></td>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['total-hetd-compl-fi'])?></td>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['total-hetd-compl-fc'])?></td>
     </tr>
 <?php endforeach; ?>
 </table>

@@ -70,11 +70,11 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
 
         $typesIntervention = $this->resumeServices['types-intervention'];
         $totaux = array(
-            'intervenants'          => 0,
-            'heures'                => 0,
-            'heures-compl'          => 0,
-            'types-intervention'    => [],
-            'heures-referentiel'    => 0,
+            'intervenant'       => 0,
+            'heures'            => 0,
+            'hetd'              => 0,
+            'type-intervention' => [],
+            'heures-ref'        => 0,
         );
         $urlTriIntervenant = $this->getView()->url( 'service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'intervenant']]);
         //$urlTriReferentiel = $this->getView()->url( 'service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'referentiel']]);
@@ -90,12 +90,18 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
         foreach( $typesIntervention as $ti ){
+            $totaux['type-intervention-'.$ti->getCode()] = 0;
             $res .= '        <th><abbr title="'.$ti->getLibelle().'">'.$ti.'</abbr></th>'."\n";
         }
         $res .= '</tr>'."\n";
         $res .= '</thead>'."\n";
         $res .= '<tbody>'."\n";
         foreach( $this->resumeServices['data'] as $line ) {
+            if (! isset($line['heures-ref'])) $line['heures-ref'] = 0;
+            if (! isset($line['heures-service-statutaire'])) $line['heures-service-statutaire'] = 0;
+            if (! isset($line['heures-service-du-modifie'])) $line['heures-service-du-modifie'] = 0;
+
+
             $na = '<abbr title="Non applicable (intervenant vacataire))">NA</abbr>';
 
             $intervenantPermanent = $line['intervenant-type-code'] === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT;
@@ -104,37 +110,29 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             $url = $this->getView()->url('intervenant/services', ['intervenant' => $line['intervenant-code']]);
 
             $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant-nom']).'</a></td>'."\n";
-            $totaux['intervenants']++;
+            $totaux['intervenant']++;
             foreach( $typesIntervention as $ti ){
-                if (! isset($totaux['types-intervention'][$ti->getId()])){
-                    $totaux['types-intervention'][$ti->getId()] = 0;
-                }
-                if (isset($line['types-intervention'][$ti->getId()])){
-                    $totaux['types-intervention'][$ti->getId()] += $line['types-intervention'][$ti->getId()];
-                    $totaux['heures'] += $line['types-intervention'][$ti->getId()];
-                    $res .= '<td style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($line['types-intervention'][$ti->getId()]).'</td>'."\n";
-                }else{
-                    $res .= '<td style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures(0).'</td>'."\n";
-                }
+                $totaux['type-intervention-'.$ti->getCode()] += $line['type-intervention-'.$ti->getCode()];
+                $totaux['heures'] += $line['type-intervention-'.$ti->getCode()];
+                $res .= '<td style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($line['type-intervention-'.$ti->getCode()]).'</td>'."\n";
             }
-            $totaux['heures-referentiel'] += $line['heures-referentiel'];
-            $totaux['heures-compl'] += $line['heures-compl'];
-            $res .= '<td style="text-align:right;white-space:nowrap">'.($intervenantPermanent ? \Common\Util::formattedHeures($line['heures-referentiel']) : $na).'</td>'."\n";
-            $res .= $this->renderServiceDu( $line['heures-service-du'] );
-            $res .= $this->renderSoldeHetd($line['heures-solde'], $intervenantPermanent);
+            $totaux['heures-ref'] += $line['heures-ref'];
+            $totaux['hetd'] += $line['hetd'];
+            $res .= '<td style="text-align:right;white-space:nowrap">'.($intervenantPermanent ? \Common\Util::formattedHeures($line['heures-ref']) : $na).'</td>'."\n";
+            $res .= $this->renderServiceDu( $line['heures-service-statutaire'] - $line['heures-service-du-modifie'] );
+            $res .= $this->renderSoldeHetd($line['hetd-solde'], $intervenantPermanent);
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";
         $res .= '<tfoot>'."\n";
         $res .= '<tr>'."\n";
-        $res .= '<th rowspan="2" style="text-align:right">'.$totaux['intervenants'].' intervenants</th>'."\n";
+        $res .= '<th rowspan="2" style="text-align:right">'.$totaux['intervenant'].' intervenants</th>'."\n";
         foreach( $typesIntervention as $ti ){
-            $heures = isset($totaux['types-intervention'][$ti->getId()]) ? $totaux['types-intervention'][$ti->getId()] : 0;
-            $res .= '        <th style="text-align:right;white-space:nowrap"><abbr title="'.$ti->getLibelle().'">'.\Common\Util::formattedHeures($heures).'</abbr></th>'."\n";
+            $res .= '        <th style="text-align:right;white-space:nowrap"><abbr title="'.$ti->getLibelle().'">'.\Common\Util::formattedHeures($totaux['type-intervention-'.$ti->getCode()]).'</abbr></th>'."\n";
         }
-        $res .= '<th rowspan="2" style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-referentiel']).'</th>'."\n";
+        $res .= '<th rowspan="2" style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-ref']).'</th>'."\n";
         $res .= '<th rowspan="2">&nbsp;</th>'."\n";
-        $res .= '<th rowspan="2"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-compl']).'</span></th>'."\n";
+        $res .= '<th rowspan="2"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\Common\Util::formattedHeures($totaux['hetd']).'</span></th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
         $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right;white-space:nowrap">Total des heures de service : '.\Common\Util::formattedHeures($totaux['heures']).'</th>'."\n";

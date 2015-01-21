@@ -64,10 +64,10 @@ class VolumeHoraire extends \Application\Entity\Db\VolumeHoraire implements \Doc
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove');
+            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'formuleResultatVolumeHoraire');
         }
 
-        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove');
+        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'formuleResultatVolumeHoraire');
     }
 
     /**
@@ -549,6 +549,17 @@ class VolumeHoraire extends \Application\Entity\Db\VolumeHoraire implements \Doc
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEtatVolumeHoraire', array());
 
         return parent::getEtatVolumeHoraire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormuleResultatVolumeHoraire()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleResultatVolumeHoraire', array());
+
+        return parent::getFormuleResultatVolumeHoraire();
     }
 
 }

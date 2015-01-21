@@ -64,10 +64,10 @@ class TypeAgrementStatut extends \Application\Entity\Db\TypeAgrementStatut imple
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'seuilHetd');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'seuilHetd', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'seuilHeures');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'seuilHetd');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'premierRecrutement', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'seuilHetd', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'statut', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'obligatoire', '' . "\0" . 'Application\\Entity\\Db\\TypeAgrementStatut' . "\0" . 'seuilHeures');
     }
 
     /**
@@ -173,6 +173,17 @@ class TypeAgrementStatut extends \Application\Entity\Db\TypeAgrementStatut imple
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getSeuilHeures()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSeuilHeures', array());
+
+        return parent::getSeuilHeures();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -422,45 +433,34 @@ class TypeAgrementStatut extends \Application\Entity\Db\TypeAgrementStatut imple
     /**
      * {@inheritDoc}
      */
-    public function getSeuilHetd()
+    public function isObligatoire($totalHeuresReellesIntervenant)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSeuilHetd', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isObligatoire', array($totalHeuresReellesIntervenant));
 
-        return parent::getSeuilHetd();
+        return parent::isObligatoire($totalHeuresReellesIntervenant);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isObligatoire($totalHETDIntervenant)
+    public function getObligatoireToString($totalHeuresReellesIntervenant)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isObligatoire', array($totalHETDIntervenant));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getObligatoireToString', array($totalHeuresReellesIntervenant));
 
-        return parent::isObligatoire($totalHETDIntervenant);
+        return parent::getObligatoireToString($totalHeuresReellesIntervenant);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getObligatoireToString($totalHETDIntervenant)
+    public function isSeuilHeuresDepasse($totalHETDIntervenant)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getObligatoireToString', array($totalHETDIntervenant));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isSeuilHeuresDepasse', array($totalHETDIntervenant));
 
-        return parent::getObligatoireToString($totalHETDIntervenant);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isSeuilHETDDepasse($totalHETDIntervenant)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isSeuilHETDDepasse', array($totalHETDIntervenant));
-
-        return parent::isSeuilHETDDepasse($totalHETDIntervenant);
+        return parent::isSeuilHeuresDepasse($totalHETDIntervenant);
     }
 
 }

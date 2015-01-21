@@ -64,10 +64,10 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Service' . "\0" . 'formuleResultatService');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Service' . "\0" . 'formuleService', '' . "\0" . 'Application\\Entity\\Db\\Service' . "\0" . 'formuleResultatService');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Service' . "\0" . 'formuleResultatService');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'volumeHoraire', 'intervenant', 'structureAff', 'structureEns', 'histoModificateur', 'histoDestructeur', 'elementPedagogique', 'etablissement', 'histoCreateur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Service' . "\0" . 'formuleService', '' . "\0" . 'Application\\Entity\\Db\\Service' . "\0" . 'formuleResultatService');
     }
 
     /**
@@ -516,6 +516,17 @@ class Service extends \Application\Entity\Db\Service implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTypeVolumeHoraire', array($typeVolumeHoraire));
 
         return parent::setTypeVolumeHoraire($typeVolumeHoraire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormuleService()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleService', array());
+
+        return parent::getFormuleService();
     }
 
     /**

@@ -14,7 +14,6 @@
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
@@ -54,6 +53,8 @@
         <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="formuleResultatReferentiel" target-entity="Application\Entity\Db\FormuleResultatReferentiel" mapped-by="serviceReferentiel" />
+    <one-to-many field="volumeHoraireReferentiel" target-entity="Application\Entity\Db\VolumeHoraireReferentiel" mapped-by="serviceReferentiel" />
+    <one-to-one field="formuleServiceReferentiel" target-entity="Application\Entity\Db\FormuleServiceReferentiel" mapped-by="serviceReferentiel" />
+    <one-to-many field="formuleResultatServiceReferentiel" target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel" mapped-by="serviceReferentiel" />
   </entity>
 </doctrine-mapping>

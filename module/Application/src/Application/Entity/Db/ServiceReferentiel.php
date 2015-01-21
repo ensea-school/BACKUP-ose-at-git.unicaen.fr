@@ -10,36 +10,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
-     * Retourne la représentation littérale de cet objet.
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
-        
-        return sprintf("%s%s : %s (%sh)", 
-                $this->getAnnee(), 
-                $this->getStructure() ? " - " . $this->getStructure() : null, 
-                $this->getFonction(), 
-                $heures);
-    }
-
-    /**
-     * 
-     * @param \Application\Entity\Db\Annee $annee
-     */
-    public function __construct(Annee $annee = null)
-    {
-        $this->setAnnee($annee);
-    }
-    
-    /**
-     * @var float
-     */
-    protected $heures;
-
-    /**
      * @var \DateTime
      */
     protected $histoCreation;
@@ -102,30 +72,44 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $formuleResultatReferentiel;
+    private $volumeHoraireReferentiel;
+
+    /**
+     * @var FormuleServiceReferentiel
+     */
+    private $formuleServiceReferentiel;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultatServiceReferentiel;
 
 
     /**
-     * Set heures
+     * Retourne la représentation littérale de cet objet.
      *
-     * @param float $heures
-     * @return ServiceReferentiel
+     * @return string
      */
-    public function setHeures($heures)
+    public function __toString()
     {
-        $this->heures = $heures;
+        $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
 
-        return $this;
+        return sprintf("%s%s : %s (%sh)",
+                $this->getAnnee(),
+                $this->getStructure() ? " - " . $this->getStructure() : null,
+                $this->getFonction(),
+                $heures);
     }
 
     /**
-     * Get heures
      *
-     * @return float 
+     * @param \Application\Entity\Db\Annee $annee
      */
-    public function getHeures()
+    public function __construct(Annee $annee = null)
     {
-        return $this->heures;
+        $this->setAnnee($annee);
+        $this->volumeHoraireReferentiel             = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatServiceReferentiel    = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -392,32 +376,52 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     }
 
     /**
-     * Get formuleResultatReferentiel
+     * Get volumeHoraireReferentiel
      *
-     * @return Application\Entity\Db\FormuleResultatReferentiel
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormuleResultatReferentiel( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
+    public function getVolumeHoraireReferentiel()
     {
-        $filter = function( FormuleResultatReferentiel $formuleResultatReferentiel ) use ($typeVolumeHoraire, $etatVolumeHoraire) {
-            if ($typeVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getTypeVolumeHoraire()) {
+        return $this->volumeHoraireReferentiel;
+    }
+
+    /**
+     * Get formuleServiceReferentiel
+     *
+     * @return FormuleServiceReferentiel
+     */
+    public function getFormuleServiceReferentiel()
+    {
+        return $this->formuleServiceReferentiel;
+    }
+
+    /**
+     * Get formuleResultatServiceReferentiel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleResultatServiceReferentiel( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
+    {
+        $filter = function( FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel ) use ($typeVolumeHoraire, $etatVolumeHoraire) {
+            if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatServiceReferentiel->getFormuleResultat()->getTypeVolumeHoraire()) {
                 return false;
             }
-            if ($etatVolumeHoraire->getOrdre() > $formuleResultatReferentiel->getFormuleResultat()->getEtatVolumeHoraire()->getOrdre()) {
+            if (isset($etatVolumeHoraire) && $etatVolumeHoraire !== $formuleResultatServiceReferentiel->getFormuleResultat()->getEtatVolumeHoraire()) {
                 return false;
             }
             return true;
         };
-        return $this->formuleResultatReferentiel;
+        return $this->formuleResultatServiceReferentiel->filter($filter);
     }
 
     /**
      * Get formuleResultatReferentiel
      *
-     * @return FormuleResultatReferentiel
+     * @return FormuleResultatServiceReferentiel
      */
-    public function getUniqueFormuleResultatReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
+    public function getUniqueFormuleResultatServiceReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
     {
-        return $this->getFormuleResultatReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
+        return $this->getFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
 
     /**

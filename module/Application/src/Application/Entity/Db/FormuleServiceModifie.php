@@ -5,11 +5,10 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FormuleServiceDu
+ * FormuleServiceModifie
  */
 class FormuleServiceModifie
 {
-
     /**
      * @var float
      */
@@ -21,9 +20,9 @@ class FormuleServiceModifie
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Intervenant
+     * @var \Application\Entity\Db\FormuleIntervenant
      */
-    private $intervenant;
+    private $formuleIntervenant;
 
     /**
      * @var \Application\Entity\Db\Annee
@@ -31,6 +30,18 @@ class FormuleServiceModifie
     private $annee;
 
 
+    /**
+     * Set heures
+     *
+     * @param float $heures
+     * @return FormuleServiceModifie
+     */
+    public function setHeures($heures)
+    {
+        $this->heures = $heures;
+
+        return $this;
+    }
 
     /**
      * Get heures
@@ -40,6 +51,19 @@ class FormuleServiceModifie
     public function getHeures()
     {
         return $this->heures;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return FormuleServiceModifie
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -53,13 +77,39 @@ class FormuleServiceModifie
     }
 
     /**
-     * Get intervenant
+     * Set formuleIntervenant
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @param \Application\Entity\Db\FormuleIntervenant $formuleIntervenant
+     * @return FormuleServiceModifie
      */
-    public function getIntervenant()
+    public function setFormuleIntervenant(\Application\Entity\Db\FormuleIntervenant $formuleIntervenant = null)
     {
-        return $this->intervenant;
+        $this->formuleIntervenant = $formuleIntervenant;
+
+        return $this;
+    }
+
+    /**
+     * Get formuleIntervenant
+     *
+     * @return \Application\Entity\Db\FormuleIntervenant 
+     */
+    public function getFormuleIntervenant()
+    {
+        return $this->formuleIntervenant;
+    }
+
+    /**
+     * Set annee
+     *
+     * @param \Application\Entity\Db\Annee $annee
+     * @return FormuleServiceModifie
+     */
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
+    {
+        $this->annee = $annee;
+
+        return $this;
     }
 
     /**

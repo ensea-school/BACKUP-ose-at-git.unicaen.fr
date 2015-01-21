@@ -287,4 +287,15 @@ class RoleUtilisateur extends \Application\Entity\Db\RoleUtilisateur implements 
         return parent::getUtilisateur();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', array());
+
+        return parent::__toString();
+    }
+
 }

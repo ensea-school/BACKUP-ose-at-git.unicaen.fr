@@ -64,10 +64,10 @@ class TypeModulateur extends \Application\Entity\Db\TypeModulateur implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'obligatoire', 'publique', 'saisieParEnseignant', 'validiteDebut', 'validiteFin', 'id', 'modulateur', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+            return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'obligatoire', 'publique', 'saisieParEnseignant', 'validiteDebut', 'validiteFin', 'id', 'modulateur', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'elementPedagogique', 'etape', 'structure');
         }
 
-        return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'obligatoire', 'publique', 'saisieParEnseignant', 'validiteDebut', 'validiteFin', 'id', 'modulateur', 'histoModificateur', 'histoDestructeur', 'histoCreateur');
+        return array('__isInitialized__', 'code', 'histoCreation', 'histoDestruction', 'histoModification', 'libelle', 'obligatoire', 'publique', 'saisieParEnseignant', 'validiteDebut', 'validiteFin', 'id', 'modulateur', 'histoModificateur', 'histoDestructeur', 'histoCreateur', 'elementPedagogique', 'etape', 'structure');
     }
 
     /**
@@ -516,6 +516,39 @@ class TypeModulateur extends \Application\Entity\Db\TypeModulateur implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
 
         return parent::getHistoCreateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getElementPedagogique()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElementPedagogique', array());
+
+        return parent::getElementPedagogique();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEtape()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEtape', array());
+
+        return parent::getEtape();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStructure()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStructure', array());
+
+        return parent::getStructure();
     }
 
 }

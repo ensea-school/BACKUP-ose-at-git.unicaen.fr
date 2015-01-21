@@ -123,6 +123,11 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Validation',
+                    'action'     => array('referentiel'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Validation',
                     'action'     => array('supprimer'),
                     'roles'      => array(ComposanteRole::ROLE_ID),
                 ),

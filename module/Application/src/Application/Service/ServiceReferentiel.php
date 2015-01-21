@@ -3,8 +3,11 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\ServiceReferentiel as ServiceReferentielEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 
 
 /**
@@ -157,6 +160,95 @@ class ServiceReferentiel extends AbstractEntityService
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy( $this->getServiceIntervenant()->getAlias().'.nomUsuel, '.$this->getServiceStructure()->getAlias().'.libelleCourt' );
         return parent::getList($qb, $alias);
+    }
+
+    /**
+     *
+     * @param ServiceReferentielEntity[] $servicesReferentiels
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
+     */
+    public function setTypeVolumeHoraire($servicesReferentiels, TypeVolumeHoraireEntity $typeVolumeHoraire)
+    {
+        foreach ( $servicesReferentiels as $serviceReferentiel) {
+            $serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
+        }
+    }
+    
+    /**
+     * 
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structureRef
+     * @return QueryBuilder
+     */
+    public function finderReferentielsNonValides(
+            IntervenantEntity $intervenant = null,
+            StructureEntity $structureRef = null)
+    {
+        $dqlNotExists = <<<EOS
+SELECT vhv FROM Application\Entity\Db\VolumeHoraireRef vhv 
+JOIN vhv.validation v 
+WHERE vhv = vh
+EOS;
+        
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select("s2, i, vh, f, strref")
+                ->from("Application\Entity\Db\ServiceReferentiel", 's2')
+                ->join("s2.intervenant", "i")
+                ->join("s2.volumeHoraireRef", 'vh')
+                ->join("s2.structure", 'strref')
+                ->join("s2.fonction", 'f')
+//                ->andWhere("NOT EXISTS ($dqlNotExists)")
+                ->addOrderBy("strref.libelleCourt", 'asc')
+                ->addOrderBy("s2.histoModification", 'asc');
+        
+        if ($intervenant) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
+        }
+//        if ($structureRef) {
+//            $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
+//        }
+        
+        print_r($qb->getQuery()->getSQL());
+        
+        return $qb;
+    }
+    
+    /**
+     * 
+     * @param TypeValidationEntity $validation
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structureRef
+     * @param StructureEntity $structureValidation
+     * @return QueryBuilder
+     */
+    public function finderReferentielsValides(
+            ValidationEntity $validation = null, 
+            IntervenantEntity $intervenant = null, 
+            StructureEntity $structureRef = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select("s, i, vh, f, strref")
+                ->from("Application\Entity\Db\ServiceReferentiel", 's')
+                ->join("s.intervenant", "i")
+                ->join("s.volumeHoraireRef", 'vh')
+                ->join("s.structure", 'strref')
+                ->join("s.fonction", 'f')
+                ->join("vh.validation", "v")
+                ->join("v.typeValidation", 'tv')
+                ->join("v.structure", 'str') // validés par la structure spécifiée
+                ->orderBy("v.histoModification", 'desc')
+                ->addOrderBy("strref.libelleCourt", 'asc');
+        
+        if ($validation) {
+            $qb->andWhere("v = :validation")->setParameter('validation', $validation);
+        }
+        if ($intervenant) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
+        }
+        if ($structureRef) {
+            $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
+        }
+        return $qb;
     }
 
     /**

@@ -59,7 +59,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function render()
     {
         $parts = array();
-        
+        var_dump($this->service->getFonction());
         $parts['intervenant'] = '<td>' . $this->renderIntervenant($this->service->getIntervenant()) . "</td>\n";
         $parts[]              = '<td>' . $this->renderStructure($this->service->getStructure()) . "</td>\n";
         $parts['annee']       = '<td>' . $this->renderAnnee($this->service->getAnnee()) . "</td>\n";

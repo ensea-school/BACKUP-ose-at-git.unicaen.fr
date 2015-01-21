@@ -28,6 +28,11 @@ class ValidationController extends AbstractActionController implements ContextPr
      * @var \Application\Entity\Db\Service[]
      */
     private $services;
+    
+    /**
+     * @var \Application\Entity\Db\ServiceReferentiel[]
+     */
+    private $referentiels;
 
     /**
      * @var \Application\Entity\Db\Validation[]
@@ -479,10 +484,177 @@ class ValidationController extends AbstractActionController implements ContextPr
             
             $qb = $serviceService->finderServicesValides($validation, $this->intervenant, $structureEns, $structureValidation);
             $servicesValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
-            $serviceService->setTypeVolumehoraire($servicesValides, $typeVolumeHoraire);
+            $serviceService->setTypeVolumeHoraire($servicesValides, $typeVolumeHoraire);
             
             $this->validations[$validation->getId()] = $validation;
             $this->services[$validation->getId()]    = $servicesValides;
+        }
+//        var_dump(count($validationsServices) . " validations tourvées :");
+//        foreach ($validations as $id => $validation) {
+//            $ss = $services[$id];
+//            var_dump(count($ss) . " services associés.");
+//            foreach ($ss as $s) {
+//                var_dump(count($s->getVolumeHoraire()) . " volumes associés :", \UnicaenApp\Util::collectionAsOptions($s->getVolumeHoraire()));
+//            }
+//        }
+        
+        return $this;
+    }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws \Common\Exception\MessageException
+     */
+    public function referentielAction()
+    {
+//        $role = $this->getContextProvider()->getSelectedIdentityRole();
+//        
+//        if ($role instanceof ComposanteRole) {
+            return $this->modifierReferentielAction();
+//        }
+//        else {
+//            return $this->voirServiceAction();
+//        }
+    }
+    
+    /**
+     * Validation du référentiel par la composante d'affectation de l'intervenant.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     * @throws RuntimeException
+     */
+    public function modifierReferentielAction()
+    {
+        $this->readonly = false;
+        
+        $serviceReferentiel     = $this->getServiceReferentiel();
+        $serviceValidation      = $this->getServiceValidation();
+        $role                   = $this->getContextProvider()->getSelectedIdentityRole();
+        $this->intervenant      = $this->context()->mandatory()->intervenantFromRoute();
+        $this->formValider      = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
+        $this->title            = "Validation du référentiel <small>$this->intervenant</small>";
+        $structureAffect        = $this->intervenant->getStructure();
+        $typeVolumeHoraire      = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $typeValidation         = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_REFERENTIEL)->getQuery()->getOneOrNullResult();
+        $structureRef           = null;
+        $structureValidation    = null;
+        $referentielsNonValides = [];
+        $messages               = [];
+
+        $this->em()->getFilters()->enable('historique');
+        
+        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
+        
+        // NB :
+        // - un gestionnaire de composante ne peut valider que le référentiel pour lequel la fonction 
+        //   s'exerce sur sa composante ;
+        // - un administrateur DRH peut valider le référentiel pour lequel la fonction s'exerce sur l'établissement 
+        //   ou sur une composante.
+        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
+            $structureRef        = $role->getStructure();
+            $structureValidation = $role->getStructure();
+        }
+        else {
+            $structureRef        = null;
+            $structureValidation = null;
+        }
+        
+        // collecte des validations et des référentiels associés
+        $this->collectValidationsReferentiels($typeValidation, $structureRef, $structureValidation);
+        
+        $this->em()->clear('Application\Entity\Db\ServiceReferentiel'); // INDISPENSABLE entre 2 requêtes sur ServiceReferentiel !
+        
+        // recherche des référentiels de l'intervenant non encore validés
+        $qb = $serviceReferentiel->finderReferentielsNonValides($this->intervenant, $structureRef);
+        $referentielsNonValides = $qb->getQuery()->getResult();
+        $serviceReferentiel->setTypeVolumeHoraire($referentielsNonValides, $typeVolumeHoraire);
+
+        if (!count($referentielsNonValides)) {
+            $this->validation = current($this->validations);
+            $message = sprintf("Aucun référentiel à valider%s n'a été trouvé.", 
+                    $structureRef ? " concernant la composante &laquo; $structureRef &raquo;" : null);
+            $messages[] = $message;
+        }
+        
+        if (count($referentielsNonValides) && !$this->validation) {
+            $this->validation = $serviceValidation->newEntity($typeValidation)
+                    ->setIntervenant($this->intervenant)
+                    ->setStructure($structureValidation ?: $structureAffect);
+            
+            $this->validations  = [$this->validation->getId() => $this->validation] + $this->validations;
+            $this->referentiels = [$this->validation->getId() => $referentielsNonValides] + $this->referentiels;
+            
+            $this->formValider->bind($this->validation);
+            
+            $messages[] = "Du référentiel à valider a été trouvé...";
+        }
+
+        $this->view = new \Zend\View\Model\ViewModel(array(
+            'role'              => $role,
+            'typeVolumeHoraire' => $typeVolumeHoraire,
+            'intervenant'       => $this->intervenant,
+            'validations'       => $this->validations,
+            'referentiels'      => $this->referentiels,
+            'formValider'       => $this->formValider,
+            'title'             => $this->title,
+            'readonly'          => $this->readonly,
+            'messages'          => $messages,
+        ));
+        $this->view->setTemplate('application/validation/referentiel');
+        
+        if (!$this->readonly && $this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+            $this->formValider->setData($data);
+            if ($this->formValider->isValid()) {
+                // peuplement de la nouvelle validation avec les volumes horaires non validés
+                foreach ($referentielsNonValides as $s) { /* @var $s \Application\Entity\Db\ServiceReferentiel */
+                    foreach ($s->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraireRef */
+                        $this->validation->addVolumeHoraireRef($vh);
+                    }
+                }
+                $serviceValidation->save($this->validation);
+                $this->flashMessenger()->addSuccessMessage("Validation enregistrée avec succès.");
+                
+                return $this->redirect()->toRoute(null, array(), array(), true);
+            }
+        }
+        
+        return $this->view;
+    }
+    
+    /**
+     * 
+     * @param TypeValidation $typeValidation
+     * @param Structure $structureRef
+     * @param Structure $structureValidation
+     * @return \Application\Controller\ValidationController
+     */
+    public function collectValidationsReferentiels(
+            TypeValidation $typeValidation, 
+            Structure $structureRef = null, 
+            Structure $structureValidation = null)
+    {
+        $serviceReferentiel = $this->getServiceReferentiel();
+        $serviceValidation  = $this->getServiceValidation();
+        $typeVolumeHoraire  = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        
+        $this->referentiels = [];
+        $this->validations  = [];
+        
+        // recherche des référentiels de l'intervenant déjà validés par la structure spécifiée
+        $qb = $serviceValidation->finderValidationsReferentiels($typeValidation, $this->intervenant, $structureRef, $structureValidation);
+        $validationsReferentiels = $qb->getQuery()->getResult();
+        foreach ($validationsReferentiels as $validation) { /* @var $validation \Application\Entity\Db\Validation */
+            
+            $this->em()->clear('Application\Entity\Db\ServiceReferentiel'); // INDISPENSABLE entre 2 requêtes concernant le référentiel !
+            
+            $qb = $serviceReferentiel->finderReferentielsValides($validation, $this->intervenant, $structureRef, $structureValidation);
+            $referentielsValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
+            $serviceReferentiel->setTypeVolumehoraire($referentielsValides, $typeVolumeHoraire);
+            
+            $this->validations[$validation->getId()]  = $validation;
+            $this->referentiels[$validation->getId()] = $referentielsValides;
         }
 //        var_dump(count($validationsServices) . " validations tourvées :");
 //        foreach ($validations as $id => $validation) {
@@ -622,6 +794,14 @@ class ValidationController extends AbstractActionController implements ContextPr
     private function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
+    }
+    
+    /**
+     * @return \Application\Service\ServiceReferentiel
+     */
+    private function getServiceReferentiel()
+    {
+        return $this->getServiceLocator()->get('ApplicationServiceReferentiel');
     }
     
     /**

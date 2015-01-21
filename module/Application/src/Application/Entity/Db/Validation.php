@@ -63,6 +63,11 @@ class Validation implements HistoriqueAwareInterface
     private $volumeHoraire;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $volumeHoraireRef;
+
+    /**
      * Représentation littérale de cvet objet.
      * 
      * @return string
@@ -322,5 +327,38 @@ class Validation implements HistoriqueAwareInterface
     public function getVolumeHoraire()
     {
         return $this->volumeHoraire;
+    }
+
+    /**
+     * Add volumeHoraireRef
+     *
+     * @param \Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef
+     * @return self
+     */
+    public function addVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef)
+    {
+        $this->volumeHoraireRef[] = $volumeHoraireRef;
+
+        return $this;
+    }
+
+    /**
+     * Remove volumeHoraireRef
+     *
+     * @param \Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef
+     */
+    public function removeVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef)
+    {
+        $this->volumeHoraireRef->removeElement($volumeHoraireRef);
+    }
+
+    /**
+     * Get volumeHoraireRef
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVolumeHoraireRef()
+    {
+        return $this->volumeHoraireRef;
     }
 }

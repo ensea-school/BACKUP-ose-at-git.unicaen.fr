@@ -54,6 +54,11 @@
         <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="volumeHoraireRef" target-entity="Application\Entity\Db\VolumeHoraireRef" mapped-by="serviceReferentiel">
+        <cascade>
+            <cascade-all/>
+        </cascade>
+    </one-to-many>
     <one-to-many field="formuleResultatReferentiel" target-entity="Application\Entity\Db\FormuleResultatReferentiel" mapped-by="serviceReferentiel" />
   </entity>
 </doctrine-mapping>

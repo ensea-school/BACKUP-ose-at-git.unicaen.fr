@@ -100,9 +100,21 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     protected $annee;
 
     /**
+     * Type de volume horaire
+     *
+     * @var TypeVolumeHoraire
+     */
+    protected $typeVolumeHoraire;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultatReferentiel;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $volumeHoraireRef;
 
 
     /**
@@ -228,6 +240,44 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add volumeHoraireRef
+     *
+     * @param \Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef
+     * @return Service
+     */
+    public function addVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef)
+    {
+        $this->volumeHoraireRef[] = $volumeHoraireRef;
+
+        return $this;
+    }
+
+    /**
+     * Remove volumeHoraireRef
+     *
+     * @param \Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef
+     */
+    public function removeVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef)
+    {
+        $this->volumeHoraireRef->removeElement($volumeHoraireRef);
+    }
+
+    /**
+     * Get volumeHoraireRef
+     *
+     * @param \Application\Entity\Db\Validation $validation
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVolumeHoraireRef(\Application\Entity\Db\Validation $validation = null)
+    {
+        if ($validation) {
+            $closure = function (VolumeHoraireRef $vh) use ($validation) { return $vh->getValidation()->contains($validation); };
+            return $this->volumeHoraireRef->filter($closure);
+        }
+        return $this->volumeHoraireRef;
     }
 
     /**
@@ -389,6 +439,26 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+    /**
+     *
+     * @return TypeVolumeHoraire
+     */
+    public function getTypeVolumeHoraire()
+    {
+        return $this->typeVolumeHoraire;
+    }
+
+    /**
+     *
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @return self
+     */
+    public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire)
+    {
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+        return $this;
     }
 
     /**

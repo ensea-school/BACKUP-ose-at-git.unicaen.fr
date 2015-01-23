@@ -26,7 +26,7 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
             'name' => 'valide',
             'type'  => 'Checkbox',
             'options' => array(
-                'label' => "Cochez pour valider les enseignements",
+                'label' => "Cochez pour valider",
                 'use_hidden_element' => false,
                 'checked_value' => 1,
                 'unchecked_value' => 0

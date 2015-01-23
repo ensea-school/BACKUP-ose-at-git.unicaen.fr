@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * Validation
  */
-class Validation implements HistoriqueAwareInterface
+class Validation implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * @var \DateTime
@@ -360,5 +362,16 @@ class Validation implements HistoriqueAwareInterface
     public function getVolumeHoraireRef()
     {
         return $this->volumeHoraireRef;
+    }
+    
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'Validation';
     }
 }

@@ -59,7 +59,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function render()
     {
         $parts = array();
-        var_dump($this->service->getFonction());
+        
         $parts['intervenant'] = '<td>' . $this->renderIntervenant($this->service->getIntervenant()) . "</td>\n";
         $parts[]              = '<td>' . $this->renderStructure($this->service->getStructure()) . "</td>\n";
         $parts['annee']       = '<td>' . $this->renderAnnee($this->service->getAnnee()) . "</td>\n";
@@ -129,7 +129,7 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
             return '';
         }
         
-        $out = sprintf("<span title=\"\">%s</span>", $fonction);
+        $out = sprintf("<span title=\"%s\">%s</span>", $fonction->getLibelleLong(), $fonction);
         
         if ($fonction->getHistoDestruction()) {
             $out = sprintf("<span class=\"bg-danger\"><abbr title=\"Cette fonction n'existe plus\">%s</abbr></span>", $out);

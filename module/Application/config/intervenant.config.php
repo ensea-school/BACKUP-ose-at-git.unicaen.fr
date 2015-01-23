@@ -336,7 +336,7 @@ return array(
                                 ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:referentiel',
-                                'visible' => 'IntervenantNavigationPageVisibility',
+//                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'agrement' => array(
                                 // coquille vide qui réserve l'emplacement du menu "Agréments"

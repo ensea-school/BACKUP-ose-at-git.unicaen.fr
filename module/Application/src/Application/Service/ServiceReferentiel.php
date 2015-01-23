@@ -8,6 +8,7 @@ use Application\Entity\Db\ServiceReferentiel as ServiceReferentielEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\Validation as ValidationEntity;
 
 
 /**
@@ -197,18 +198,18 @@ EOS;
                 ->join("s2.volumeHoraireRef", 'vh')
                 ->join("s2.structure", 'strref')
                 ->join("s2.fonction", 'f')
-//                ->andWhere("NOT EXISTS ($dqlNotExists)")
+                ->andWhere("NOT EXISTS ($dqlNotExists)")
                 ->addOrderBy("strref.libelleCourt", 'asc')
                 ->addOrderBy("s2.histoModification", 'asc');
         
         if ($intervenant) {
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
         }
-//        if ($structureRef) {
-//            $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
-//        }
+        if ($structureRef) {
+            $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
+        }
         
-        print_r($qb->getQuery()->getSQL());
+//        print_r($qb->getQuery()->getSQL());
         
         return $qb;
     }

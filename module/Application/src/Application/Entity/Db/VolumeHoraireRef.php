@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * VolumeHoraireRef
  */
-class VolumeHoraireRef
+class VolumeHoraireRef implements HistoriqueAwareInterface
 {
     /**
      * @var float

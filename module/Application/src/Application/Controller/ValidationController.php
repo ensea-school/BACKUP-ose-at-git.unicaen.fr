@@ -263,11 +263,23 @@ class ValidationController extends AbstractActionController implements ContextPr
      * 
      * @return \Zend\View\Model\ViewModel
      * @throws \Common\Exception\MessageException
+     * 
+     * @todo voirServiceAction et modifierServiceAction doivent sans doute pouvoir être fusionnée...
      */
     public function serviceAction()
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
+        /**
+         * Initialisation des filtres Doctrine pour les historique.
+         * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+         * (services sur des enseignements fermés, etc.)
+         */
+        $this->em()->getFilters()->enable('historique')
+                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
+                ->disableForEntity('Application\Entity\Db\Etape')
+                ->disableForEntity('Application\Entity\Db\Etablissement');
+    
         if ($role instanceof ComposanteRole) {
             return $this->modifierServiceAction();
         }
@@ -280,6 +292,10 @@ class ValidationController extends AbstractActionController implements ContextPr
      * 
      * @return \Zend\View\Model\ViewModel
      * @throws \Common\Exception\MessageException
+     * 
+     * @todo voirServiceAction et modifierServiceAction doivent sans doute pouvoir être fusionnée...
+     * @todo Pb : ne convient qu'au profil Gestionnaire de composante ; le profil Intervenant 
+     * ne voit que les validations faites par sa composante d'affectation!
      */
     public function voirServiceAction()
     { 
@@ -358,6 +374,8 @@ class ValidationController extends AbstractActionController implements ContextPr
      * 
      * @return \Zend\View\Model\ViewModel
      * @throws RuntimeException
+     * 
+     * @todo voirServiceAction et modifierServiceAction doivent sans doute pouvoir être fusionnée...
      */
     public function modifierServiceAction()
     {
@@ -502,32 +520,16 @@ class ValidationController extends AbstractActionController implements ContextPr
     }
     
     /**
+     * (Dé)Validation du référentiel.
      * 
-     * @return \Zend\View\Model\ViewModel
-     * @throws \Common\Exception\MessageException
-     */
-    public function referentielAction()
-    {
-//        $role = $this->getContextProvider()->getSelectedIdentityRole();
-//        
-//        if ($role instanceof ComposanteRole) {
-            return $this->modifierReferentielAction();
-//        }
-//        else {
-//            return $this->voirServiceAction();
-//        }
-    }
-    
-    /**
-     * Validation du référentiel par la composante d'affectation de l'intervenant.
+     * Un gestionnaire de composante (dé)valide le référentiel des intervenants affectés à sa composante.
+     * NB: un rôle sans structure (ex: administrateur) peut aussi (dé)valider (ssi il est habilité).
      * 
      * @return \Zend\View\Model\ViewModel
      * @throws RuntimeException
      */
-    public function modifierReferentielAction()
+    public function referentielAction()
     {
-        $this->readonly = false;
-        
         $serviceReferentiel     = $this->getServiceReferentiel();
         $serviceValidation      = $this->getServiceValidation();
         $role                   = $this->getContextProvider()->getSelectedIdentityRole();
@@ -537,22 +539,19 @@ class ValidationController extends AbstractActionController implements ContextPr
         $structureAffect        = $this->intervenant->getStructure();
         $typeVolumeHoraire      = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $typeValidation         = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_REFERENTIEL)->getQuery()->getOneOrNullResult();
-        $structureRef           = null;
-        $structureValidation    = null;
         $referentielsNonValides = [];
         $messages               = [];
-
+        
         $this->em()->getFilters()->enable('historique');
         
-        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
-        
-        // NB :
-        // - un gestionnaire de composante ne peut valider que le référentiel pour lequel la fonction 
-        //   s'exerce sur sa composante ;
-        // - un administrateur DRH peut valider le référentiel pour lequel la fonction s'exerce sur l'établissement 
-        //   ou sur une composante.
         if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
-            $structureRef        = $role->getStructure();
+            if ($role->getStructure() !== $structureAffect) {
+                $structureValidation = $structureAffect;
+                $messages['warning'] = "Le référentiel de cet intervenant ne peut être "
+                        . "validé que par la structure &laquo; $structureValidation &raquo;.";
+            }
+            
+            $structureRef        = null;
             $structureValidation = $role->getStructure();
         }
         else {
@@ -569,7 +568,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         $qb = $serviceReferentiel->finderReferentielsNonValides($this->intervenant, $structureRef);
         $referentielsNonValides = $qb->getQuery()->getResult();
         $serviceReferentiel->setTypeVolumeHoraire($referentielsNonValides, $typeVolumeHoraire);
-
+        
         if (!count($referentielsNonValides)) {
             $this->validation = current($this->validations);
             $message = sprintf("Aucun référentiel à valider%s n'a été trouvé.", 
@@ -591,25 +590,32 @@ class ValidationController extends AbstractActionController implements ContextPr
         }
 
         $this->view = new \Zend\View\Model\ViewModel(array(
-            'role'              => $role,
-            'typeVolumeHoraire' => $typeVolumeHoraire,
-            'intervenant'       => $this->intervenant,
-            'validations'       => $this->validations,
-            'referentiels'      => $this->referentiels,
-            'formValider'       => $this->formValider,
-            'title'             => $this->title,
-            'readonly'          => $this->readonly,
-            'messages'          => $messages,
+            'role'                 => $role,
+            'typeVolumeHoraire'    => $typeVolumeHoraire,
+            'intervenant'          => $this->intervenant,
+            'validations'          => $this->validations,
+            'referentiels'         => $this->referentiels,
+            'formValider'          => $this->formValider,
+            'title'                => $this->title,
+            'messages'             => $messages,
         ));
         $this->view->setTemplate('application/validation/referentiel');
         
-        if (!$this->readonly && $this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {
+            
+            $allowed = 
+                    $this->isAllowed($this->validation, 'create') ||
+                    $this->isAllowed($this->validation, 'delete');
+            if (!$allowed) {
+                return $this->redirect()->toRoute(null, array(), array(), true);
+            }
+            
             $data = $this->getRequest()->getPost();
             $this->formValider->setData($data);
             if ($this->formValider->isValid()) {
                 // peuplement de la nouvelle validation avec les volumes horaires non validés
                 foreach ($referentielsNonValides as $s) { /* @var $s \Application\Entity\Db\ServiceReferentiel */
-                    foreach ($s->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraireRef */
+                    foreach ($s->getVolumeHoraireRef() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraireRef */
                         $this->validation->addVolumeHoraireRef($vh);
                     }
                 }
@@ -693,10 +699,12 @@ class ValidationController extends AbstractActionController implements ContextPr
         $role       = $this->getContextProvider()->getSelectedIdentityRole();
         $validation = $this->context()->mandatory()->validationFromRoute(); /* @var $validation \Application\Entity\Db\Validation */
         
-        if ($validation->getStructure() !== $role->getStructure()) {
-            throw new RuntimeException("Suppression de la validation interdite.");
+        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
+            if ($validation->getStructure() !== $role->getStructure()) {
+                throw new RuntimeException("Suppression de la validation interdite.");
+            }
         }
-        
+    
         $title     = "Suppression de la validation";
         $form      = new \Application\Form\Supprimer('suppr');
         $viewModel = new \Zend\View\Model\ViewModel();

@@ -43,7 +43,7 @@
                     <?php echo $servicesValidation ?>
                     <?php if (!$readonly): ?>
                         <div class="row">
-                            <div class="col-sm-5">
+                            <div class="col-md-3">
                                 <?php 
                                 echo $this->form()->openTag($formValider);
                                 echo $this->formControlGroup($formValider->get('valide')->setAttribute('disabled', $readonly));

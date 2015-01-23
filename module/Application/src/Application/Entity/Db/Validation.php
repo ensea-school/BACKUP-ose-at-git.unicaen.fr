@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * Validation
  */
-class Validation implements HistoriqueAwareInterface
+class Validation implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * @var \DateTime
@@ -61,6 +63,11 @@ class Validation implements HistoriqueAwareInterface
      * @var \Doctrine\Common\Collections\Collection
      */
     private $volumeHoraire;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $volumeHoraireReferentiel;
 
     /**
      * Représentation littérale de cvet objet.
@@ -322,5 +329,49 @@ class Validation implements HistoriqueAwareInterface
     public function getVolumeHoraire()
     {
         return $this->volumeHoraire;
+    }
+
+    /**
+     * Add volumeHoraireReferentiel
+     *
+     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
+     * @return self
+     */
+    public function addVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    {
+        $this->volumeHoraireReferentiel[] = $volumeHoraireReferentiel;
+
+        return $this;
+    }
+
+    /**
+     * Remove volumeHoraireReferentiel
+     *
+     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
+     */
+    public function removeVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    {
+        $this->volumeHoraireReferentiel->removeElement($volumeHoraireReferentiel);
+    }
+
+    /**
+     * Get volumeHoraireReferentiel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVolumeHoraireReferentiel()
+    {
+        return $this->volumeHoraireReferentiel;
+    }
+    
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'Validation';
     }
 }

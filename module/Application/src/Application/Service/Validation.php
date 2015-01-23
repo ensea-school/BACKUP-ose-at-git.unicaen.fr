@@ -208,6 +208,50 @@ class Validation extends AbstractEntityService
     }
     
     /**
+     * 
+     * @param TypeValidationEntity $typeValidation
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structureRef
+     * @param StructureEntity $structureValidation
+     * @return QueryBuilder
+     */
+    public function finderValidationsReferentiels(
+            TypeValidationEntity $typeValidation = null, 
+            IntervenantEntity $intervenant = null, 
+            StructureEntity $structureRef = null, 
+            StructureEntity $structureValidation = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+                ->select("v, tv, str, i, vh, s, strref")
+                ->from('Application\Entity\Db\Validation', 'v')
+                ->join("v.typeValidation", 'tv')
+                ->join("v.structure", 'str')
+                ->join("v.intervenant", "i")
+                ->join("v.volumeHoraireReferentiel", 'vh')
+                ->join("vh.serviceReferentiel", 's')
+                ->join("s.structure", 'strref')
+                ->orderBy("v.histoModification", 'desc')
+                ->addOrderBy("strref.libelleCourt", 'asc');
+        
+        if ($typeValidation) {
+            $qb->andWhere("tv = :tv")->setParameter('tv', $typeValidation);
+        }
+        if ($intervenant) {
+            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
+        }
+        if ($structureRef) {
+            $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
+        }
+        if ($structureValidation) {
+            $qb->andWhere("str = :structureValidation")->setParameter('structureValidation', $structureValidation);
+        }
+        
+//        var_dump($qb->getQuery()->getSQL());
+        
+        return $qb;
+    }
+    
+    /**
      * Détermine si on peut saisir une validation de services.
      *
      * @param \Application\Entity\Db\Intervenant $intervenant Intervenant concerné

@@ -21,6 +21,8 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
 
+use Application\Assertion\AbstractAssertion;
+
 return array(
     'router' => array(
         'routes' => array(
@@ -123,8 +125,40 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Validation',
+                    'action'     => array('referentiel'),
+                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Validation',
                     'action'     => array('supprimer'),
-                    'roles'      => array(ComposanteRole::ROLE_ID),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                ),
+            ),
+        ),
+        'resource_providers' => array(
+            'BjyAuthorize\Provider\Resource\Config' => array(
+                'Validation' => array(),
+            ),
+        ),
+        'rule_providers' => array(
+            'BjyAuthorize\Provider\Rule\Config' => array(
+                'allow' => array(
+                    array(
+                        array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID), 
+                        'Validation', 
+                        array(AbstractAssertion::PRIVILEGE_READ), 
+                        'ValidationAssertion',
+                    ),
+                    array(
+                        array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID), 
+                        'Validation', 
+                        array(
+                            AbstractAssertion::PRIVILEGE_CREATE, 
+                            AbstractAssertion::PRIVILEGE_DELETE, 
+                            AbstractAssertion::PRIVILEGE_UPDATE, 
+                        ), 
+                        'ValidationAssertion',
+                    ),
                 ),
             ),
         ),
@@ -138,6 +172,8 @@ return array(
         'invokables' => array(
             'ApplicationTypeValidation'        => 'Application\\Service\\TypeValidation',
             'ApplicationValidation'            => 'Application\\Service\\Validation',
+            'ValidationAssertion'              => 'Application\\Assertion\\ValidationAssertionProxy',
+            'ValidationReferentielAssertion'   => 'Application\\Assertion\\ValidationReferentielAssertion',
         ),
         'initializers' => array(
         ),

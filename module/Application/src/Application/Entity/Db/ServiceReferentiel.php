@@ -10,6 +10,11 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
+     * @var float
+     */
+    protected $heures;
+
+    /**
      * @var \DateTime
      */
     protected $histoCreation;
@@ -70,6 +75,13 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     protected $annee;
 
     /**
+     * Type de volume horaire
+     *
+     * @var TypeVolumeHoraire
+     */
+    protected $typeVolumeHoraire;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $volumeHoraireReferentiel;
@@ -83,7 +95,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultatServiceReferentiel;
-
 
     /**
      * Retourne la représentation littérale de cet objet.
@@ -110,6 +121,29 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
         $this->setAnnee($annee);
         $this->volumeHoraireReferentiel             = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleResultatServiceReferentiel    = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set heures
+     *
+     * @param int $heures 
+     * @return self 
+     */
+    public function setHeures($heures)
+    {
+        $this->heures = $heures;
+        
+        return $this;
+    }
+
+    /**
+     * Get heures
+     *
+     * @return float 
+     */
+    public function getHeures()
+    {
+        return $this->heures;
     }
 
     /**
@@ -373,6 +407,29 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+    /**
+     * Add volumeHoraireReferentiel
+     *
+     * @param VolumeHoraireReferentiel $volumeHoraireReferentiel
+     * @return Service
+     */
+    public function addVolumeHoraireReferentiel(VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    {
+        $this->volumeHoraireReferentiel[] = $volumeHoraireReferentiel;
+
+        return $this;
+    }
+
+    /**
+     * Remove volumeHoraireReferentiel
+     *
+     * @param VolumeHoraireReferentiel $volumeHoraireReferentiel
+     */
+    public function removeVolumeHoraireReferentiel(VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    {
+        $this->volumeHoraireReferentiel->removeElement($volumeHoraireReferentiel);
     }
 
     /**

@@ -1,0 +1,32 @@
+<?php
+$validation        = $this->validation; /* @var $validation \Application\Entity\Db\Validation */
+$services          = $this->referentiels;
+$typeVolumeHoraire = $this->typeVolumeHoraire;
+$display           = $validation->getId() ? 'display: none' : '';
+$intituleConcernes = $validation->getId() ? "Référentiel concerné par la validation :" : "Référentiel à valider :";
+?>
+<p>
+    <strong><?php echo $intituleConcernes ?></strong><br />
+    <small><a title="Cliquez pour afficher/masquer le référentiel concerné par cette validation"
+        href="#" 
+        class="voir-enseignements" 
+        id="validation-<?php echo $validation->getId() ?>-toggle"
+        data-target="#validation-<?php echo $validation->getId() ?>"
+        >Afficher/masquer</a></small>
+</p>
+<div style="<?php echo $display ?>" class="details-enseignements" id="validation-<?php echo $validation->getId() ?>">
+    <?php echo $this->serviceReferentielListe($services[$validation->getId()])
+            ->setIntervenant($this->intervenant)
+            ->setRenderIntervenants(false)
+            ->render(); ?>
+</div>
+
+<script>
+$(function() {
+    // affichage/masquage du référentiel concerné
+    $("#validation-<?php echo $validation->getId() ?>-toggle").click(function() { 
+        $($(this).data('target')).slideToggle(); 
+        return false;
+    });
+});
+</script>

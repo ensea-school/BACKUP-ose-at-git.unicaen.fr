@@ -174,6 +174,19 @@ return array(
                             ),
                         ),
                     ),
+                    'validation-referentiel' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:intervenant/validation/referentiel',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Validation',
+                                'action' => 'referentiel',
+                            ),
+                        ),
+                    ),
                     'contrat' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -313,6 +326,17 @@ return array(
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:service',
                                 'visible' => 'IntervenantNavigationPageVisibility',
+                            ),
+                            'validation-referentiel' => array(
+                                'label'  => "Validation du référentiel",
+                                'title'  => "Validation du référentiel de l'intervenant",
+                                'route'  => 'intervenant/validation-referentiel',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Validation:referentiel',
+//                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'agrement' => array(
                                 // coquille vide qui réserve l'emplacement du menu "Agréments"

@@ -268,12 +268,23 @@ class FormuleIntervenant extends \Application\Entity\Db\FormuleIntervenant imple
     /**
      * {@inheritDoc}
      */
-    public function getFormuleServiceModifie()
+    public function getFormuleServiceModifie(\Application\Entity\Db\Annee $annee = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleServiceModifie', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleServiceModifie', array($annee));
 
-        return parent::getFormuleServiceModifie();
+        return parent::getFormuleServiceModifie($annee);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUniqueFormuleServiceModifie(\Application\Entity\Db\Annee $annee)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUniqueFormuleServiceModifie', array($annee));
+
+        return parent::getUniqueFormuleServiceModifie($annee);
     }
 
     /**

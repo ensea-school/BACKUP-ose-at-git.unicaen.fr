@@ -1,4 +1,4 @@
-<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Validation des enseignements") ?>
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Validation du référentiel") ?>
 
 <h1 class="page-header"><?php echo $title ?></small></h1>
 
@@ -21,9 +21,9 @@
     <tbody>
     <?php foreach ($validations as $validation): ?>
         
-        <?php $servicesValidation = $this->partial('application/validation/partial/services-validation', array(
+        <?php $referentielsValidation = $this->partial('application/validation/partial/referentiels-validation', array(
             'validation' => $validation,
-            'services' => $services,
+            'referentiels' => $referentiels,
             'typeVolumeHoraire' => $typeVolumeHoraire,
         )) ?>
         
@@ -34,19 +34,20 @@
             <td>
                 <?php if ($validation->getId()): ?>
                     <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
-                    <?php echo $servicesValidation ?>
-                    <?php if (!$readonly): ?>
+                    <?php echo $referentielsValidation ?>
+                    <?php if ($this->isAllowed($validation, 'delete')): ?>
                         <a href="<?php echo $this->url('validation/supprimer', array('validation' => $validation->getId())) ?>"
-                           class="validation-delete ajax-modal btn btn-primary" data-event="validation-delete-event">Supprimer cette validation</a>
+                           class="validation-delete ajax-modal btn btn-primary" 
+                           data-event="validation-delete-event">Supprimer cette validation</a>
                     <?php endif ?>
                 <?php else: ?>
-                    <?php echo $servicesValidation ?>
-                    <?php if (!$readonly): ?>
+                    <?php echo $referentielsValidation ?>
+                    <?php if ($this->isAllowed($validation, 'create')): ?>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-sm-3">
                                 <?php 
                                 echo $this->form()->openTag($formValider);
-                                echo $this->formControlGroup($formValider->get('valide')->setAttribute('disabled', $readonly));
+                                echo $this->formControlGroup($formValider->get('valide'));
                                 echo $this->formHidden($formValider->get('security'));
                                 echo $this->formSubmit($formValider->get('submit')->setAttribute('class', 'btn btn-primary'));
                                 echo $this->form()->closeTag(); 

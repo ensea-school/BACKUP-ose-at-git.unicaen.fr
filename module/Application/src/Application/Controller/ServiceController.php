@@ -130,10 +130,11 @@ class ServiceController extends AbstractActionController
 
             // services référentiels : délégation au contrôleur
             if (! $totaux){
+                $rech             = clone $recherche;
                 $controller       = 'Application\Controller\ServiceReferentiel';
                 $params           = $this->getEvent()->getRouteMatch()->getParams();
                 $params['action'] = 'voirListe';
-                $params['recherche'] = $recherche; /** @todo recherche également au niveau du service référentiel */
+                $params['recherche'] = $rech->setTypeVolumeHoraire(null); /** @todo recherche également au niveau du service référentiel */
                 $params['query']  = $this->params()->fromQuery();
                 $params['renderIntervenants'] = ! $intervenant;
                 $listeViewModel   = $this->forward()->dispatch($controller, $params);

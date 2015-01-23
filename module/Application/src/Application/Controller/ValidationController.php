@@ -567,7 +567,6 @@ class ValidationController extends AbstractActionController implements ContextPr
         // recherche des référentiels de l'intervenant non encore validés
         $qb = $serviceReferentiel->finderReferentielsNonValides($this->intervenant, $structureRef);
         $referentielsNonValides = $qb->getQuery()->getResult();
-        $serviceReferentiel->setTypeVolumeHoraire($referentielsNonValides, $typeVolumeHoraire);
         
         if (!count($referentielsNonValides)) {
             $this->validation = current($this->validations);
@@ -615,7 +614,7 @@ class ValidationController extends AbstractActionController implements ContextPr
             if ($this->formValider->isValid()) {
                 // peuplement de la nouvelle validation avec les volumes horaires non validés
                 foreach ($referentielsNonValides as $s) { /* @var $s \Application\Entity\Db\ServiceReferentiel */
-                    foreach ($s->getVolumeHoraireRef() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraireRef */
+                    foreach ($s->getVolumeHoraireRef() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraireReferentiel */
                         $this->validation->addVolumeHoraireRef($vh);
                     }
                 }
@@ -657,7 +656,6 @@ class ValidationController extends AbstractActionController implements ContextPr
             
             $qb = $serviceReferentiel->finderReferentielsValides($validation, $this->intervenant, $structureRef, $structureValidation);
             $referentielsValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
-            $serviceReferentiel->setTypeVolumehoraire($referentielsValides, $typeVolumeHoraire);
             
             $this->validations[$validation->getId()]  = $validation;
             $this->referentiels[$validation->getId()] = $referentielsValides;

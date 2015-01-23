@@ -623,6 +623,9 @@ class Service extends AbstractEntityService
                 'service-structure-aff-libelle' =>          $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
 
                 'service-structure-ens-libelle' =>          $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
+                'groupe-type-formation-libelle' =>          $d['GROUPE_TYPE_FORMATION_LIBELLE'],
+                'type-formation-libelle'        =>          $d['TYPE_FORMATION_LIBELLE'],
+                'etape-niveau'                  => empty($d['ETAPE_NIVEAU']) ? null : (int)$d['ETAPE_NIVEAU'],
                 'etape-code'                    =>          $d['ETAPE_CODE'],
                 'etape-etablissement-libelle'   =>          $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
                 'element-code'                  =>          $d['ELEMENT_CODE'],
@@ -694,6 +697,9 @@ class Service extends AbstractEntityService
             'service-structure-aff-libelle' => 'Structure d\'affectation',
 
             'service-structure-ens-libelle' => 'Structure d\'enseignement',
+            'groupe-type-formation-libelle' => 'Groupe de type de formation',
+            'type-formation-libelle'        => 'Type de formation',
+            'etape-niveau'                  => 'Niveau',
             'etape-code'                    => 'Code formation',
             'etape-etablissement-libelle'   => 'Formation ou établissement',
             'element-code'                  => 'Code enseignement',

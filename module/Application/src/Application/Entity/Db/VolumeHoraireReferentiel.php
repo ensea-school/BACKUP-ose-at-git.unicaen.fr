@@ -3,9 +3,9 @@
 namespace Application\Entity\Db;
 
 /**
- * VolumeHoraireRef
+ * VolumeHoraireReferentiel
  */
-class VolumeHoraireRef implements HistoriqueAwareInterface
+class VolumeHoraireReferentiel
 {
     /**
      * @var float
@@ -63,18 +63,35 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
     private $validation;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $etatVolumeHoraireReferentiel;
+
+    /**
+     * @var FormuleVolumeHoraireReferentiel
+     */
+    private $formuleVolumeHoraireReferentiel;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultatVolumeHoraireReferentiel;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->validation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation                               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->etatVolumeHoraireReferentiel             = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatVolumeHoraireReferentiel  = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Set heures
      *
      * @param float $heures
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setHeures($heures)
     {
@@ -97,7 +114,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setHistoCreation($histoCreation)
     {
@@ -120,7 +137,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -143,7 +160,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setHistoModification($histoModification)
     {
@@ -176,7 +193,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Set typeVolumeHoraire
      *
      * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
     {
@@ -199,7 +216,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -222,7 +239,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -245,7 +262,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -268,7 +285,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Set serviceReferentiel
      *
      * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function setServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel = null)
     {
@@ -291,7 +308,7 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
      * Add validation
      *
      * @param \Application\Entity\Db\Validation $validation
-     * @return VolumeHoraireRef
+     * @return VolumeHoraireReferentiel
      */
     public function addValidation(\Application\Entity\Db\Validation $validation)
     {
@@ -318,5 +335,54 @@ class VolumeHoraireRef implements HistoriqueAwareInterface
     public function getValidation()
     {
         return $this->validation;
+    }
+
+    /**
+     * Get etatVolumeHoraireReferentiel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEtatVolumeHoraireReferentiel()
+    {
+        return $this->etatVolumeHoraireReferentiel;
+    }
+
+    /**
+     * Get formuleVolumeHoraireReferentiel
+     *
+     * @return FormuleVolumeHoraireReferentiel
+     */
+    public function getFormuleVolumeHoraireReferentiel()
+    {
+        return $this->formuleVolumeHoraireReferentiel;
+    }
+
+    /**
+     * Get formuleResultatVolumeHoraireReferentiel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleResultatVolumeHoraireReferentiel( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
+    {
+        $filter = function( FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel ) use ($typeVolumeHoraire, $etatVolumeHoraire) {
+            if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatVolumeHoraireReferentiel->getFormuleResultat()->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if (isset($etatVolumeHoraire) && $etatVolumeHoraire !== $formuleResultatVolumeHoraireReferentiel->getFormuleResultat()->getEtatVolumeHoraire()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleResultatVolumeHoraireReferentiel->filter($filter);
+    }
+
+    /**
+     * Get formuleResultatVolumeHoraireReferentiel
+     *
+     * @return FormuleResultatVolumeHoraireReferentiel
+     */
+    public function getUniqueFormuleResultatVolumeHoraireReferentiel(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
+    {
+        return $this->getFormuleResultatVolumeHoraireReferentiel($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
 }

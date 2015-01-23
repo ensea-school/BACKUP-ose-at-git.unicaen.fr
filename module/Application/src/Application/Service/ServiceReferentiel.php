@@ -186,7 +186,7 @@ class ServiceReferentiel extends AbstractEntityService
             StructureEntity $structureRef = null)
     {
         $dqlNotExists = <<<EOS
-SELECT vhv FROM Application\Entity\Db\VolumeHoraireRef vhv 
+SELECT vhv FROM Application\Entity\Db\VolumeHoraireReferentiel vhv 
 JOIN vhv.validation v 
 WHERE vhv = vh
 EOS;
@@ -195,7 +195,7 @@ EOS;
                 ->select("s2, i, vh, f, strref")
                 ->from("Application\Entity\Db\ServiceReferentiel", 's2')
                 ->join("s2.intervenant", "i")
-                ->join("s2.volumeHoraireRef", 'vh')
+                ->join("s2.volumeHoraireReferentiel", 'vh')
                 ->join("s2.structure", 'strref')
                 ->join("s2.fonction", 'f')
                 ->andWhere("NOT EXISTS ($dqlNotExists)")
@@ -231,7 +231,7 @@ EOS;
                 ->select("s, i, vh, f, strref")
                 ->from("Application\Entity\Db\ServiceReferentiel", 's')
                 ->join("s.intervenant", "i")
-                ->join("s.volumeHoraireRef", 'vh')
+                ->join("s.volumeHoraireReferentiel", 'vh')
                 ->join("s.structure", 'strref')
                 ->join("s.fonction", 'f')
                 ->join("vh.validation", "v")

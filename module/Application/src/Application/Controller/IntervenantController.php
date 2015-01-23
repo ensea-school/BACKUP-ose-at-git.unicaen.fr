@@ -231,14 +231,14 @@ class IntervenantController extends AbstractActionController implements ContextP
         $data = [
             'structure-affectation'         => $intervenant->getStructure(),
             'heures-service-statutaire'     => $intervenant->getStatut()->getServiceStatutaire(),
-            'heures-modification-service'   => $intervenant->getServiceModifie($annee),
+            'heures-modification-service'   => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie($annee)->getHeures(),
             'services'                      => [],
             'referentiel'                   => [],
             'types-intervention'            => [],
             'has-ponderation-service-compl' => false,
         ];
 
-        $referentiels = $intervenant->getFormuleReferentiel($annee);
+        $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel($annee);
         foreach( $referentiels as $referentiel ){
             /* @var $referentiel \Application\Entity\Db\FormuleReferentiel */
 
@@ -251,12 +251,12 @@ class IntervenantController extends AbstractActionController implements ContextP
                 ];
             }
             $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures();
-            $frr = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
+            $frr = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
             $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr->getHeuresService();
             $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr->getHeuresComplReferentiel();
         }
 
-        $services = $intervenant->getFormuleService($annee);
+        $services = $intervenant->getFormuleIntervenant()->getFormuleService($annee);
         foreach( $services as $service ){
             /* @var $service \Application\Entity\Db\FormuleService */
             $typesIntervention = [];
@@ -281,17 +281,18 @@ class IntervenantController extends AbstractActionController implements ContextP
                     $data['has-ponderation-service-compl'] = true;
                 }
                 $data['services'][$service->getId()] = [
-                    'service'                   => $service->getService(),
-                    'taux-fi'                   => $service->getTauxFi(),
-                    'taux-fa'                   => $service->getTauxFa(),
-                    'taux-fc'                   => $service->getTauxFc(),
-                    'ponderation-service-compl' => $service->getPonderationServiceCompl(),
-                    'heures'                    => [],
-                    'hetd'                      => [],
-                    'total-hetd'                => $frs->getHeuresService(),
-                    'total-hetd-compl-fi'       => $frs->getHeuresComplFi(),
-                    'total-hetd-compl-fa'       => $frs->getHeuresComplFa(),
-                    'total-hetd-compl-fc'       => $frs->getHeuresComplFc(),
+                    'service'                       => $service->getService(),
+                    'taux-fi'                       => $service->getTauxFi(),
+                    'taux-fa'                       => $service->getTauxFa(),
+                    'taux-fc'                       => $service->getTauxFc(),
+                    'ponderation-service-compl'     => $service->getPonderationServiceCompl(),
+                    'heures'                        => [],
+                    'hetd'                          => [],
+                    'total-hetd'                    => $frs->getHeuresService(),
+                    'total-hetd-compl-fi'           => $frs->getHeuresComplFi(),
+                    'total-hetd-compl-fa'           => $frs->getHeuresComplFa(),
+                    'total-hetd-compl-fc'           => $frs->getHeuresComplFc(),
+                    'total-hetd-compl-fc-majorees'  => $frs->getHeuresComplFcMajorees(),
                 ];
                 foreach( $typesIntervention as $ti ){
                     if ( $ti['heures'] > 0 ){

@@ -67,7 +67,7 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $volumeHoraireRef;
+    private $volumeHoraireReferentiel;
 
     /**
      * Représentation littérale de cvet objet.
@@ -332,36 +332,36 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
     }
 
     /**
-     * Add volumeHoraireRef
+     * Add volumeHoraireReferentiel
      *
-     * @param \Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef
+     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
      * @return self
      */
-    public function addVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef)
+    public function addVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
-        $this->volumeHoraireRef[] = $volumeHoraireRef;
+        $this->volumeHoraireReferentiel[] = $volumeHoraireReferentiel;
 
         return $this;
     }
 
     /**
-     * Remove volumeHoraireRef
+     * Remove volumeHoraireReferentiel
      *
-     * @param \Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef
+     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
      */
-    public function removeVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef)
+    public function removeVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
-        $this->volumeHoraireRef->removeElement($volumeHoraireRef);
+        $this->volumeHoraireReferentiel->removeElement($volumeHoraireReferentiel);
     }
 
     /**
-     * Get volumeHoraireRef
+     * Get volumeHoraireReferentiel
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getVolumeHoraireRef()
     {
-        return $this->volumeHoraireRef;
+        return $this->volumeHoraireReferentiel;
     }
     
     /**

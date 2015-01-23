@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\FormuleReferentiel" table="V_FORMULE_REFERENTIEL">
-    <id name="id" type="integer" column="ID">
-      <generator strategy="SEQUENCE"/>
-    </id>
-    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
+  <entity name="Application\Entity\Db\FormuleServiceReferentiel" table="V_FORMULE_SERVICE_REF" read-only="true">
+    <id name="id" type="integer" column="ID" />
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
@@ -20,15 +12,21 @@
         <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="fonction" target-entity="Application\Entity\Db\FonctionReferentiel">
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
-        <join-column name="FONCTION_ID" referenced-column-name="ID"/>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel">
+    <many-to-one field="formuleIntervenant" target-entity="Application\Entity\Db\FormuleIntervenant">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-many field="formuleVolumeHoraireReferentiel" target-entity="Application\Entity\Db\FormuleVolumeHoraireReferentiel" mapped-by="serviceReferentiel" />
+    <one-to-one field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel">
       <join-columns>
         <join-column name="ID" referenced-column-name="ID"/>
       </join-columns>
-    </many-to-one>
+    </one-to-one>
   </entity>
 </doctrine-mapping>

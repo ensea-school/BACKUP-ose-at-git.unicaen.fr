@@ -85,6 +85,7 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
+    <one-to-one field="formuleVolumeHoraire" target-entity="Application\Entity\Db\FormuleVolumeHoraire" mapped-by="volumeHoraire" />
     <one-to-many field="formuleResultatVolumeHoraire" target-entity="Application\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="volumeHoraire" />
   </entity>
 </doctrine-mapping>

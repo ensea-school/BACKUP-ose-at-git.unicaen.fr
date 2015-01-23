@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\VolumeHoraireRef" table="VOLUME_HORAIRE_REF">
+  <entity name="Application\Entity\Db\VolumeHoraireReferentiel" table="VOLUME_HORAIRE_REF">
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
@@ -43,16 +43,17 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
-<!--    <many-to-many field="etatVolumeHoraire" target-entity="Application\Entity\Db\EtatVolumeHoraire">
-        <join-table name="V_VOLUME_HORAIRE_ETAT">
+    <many-to-many field="etatVolumeHoraireReferentiel" target-entity="Application\Entity\Db\EtatVolumeHoraire">
+        <join-table name="V_VOLUME_HORAIRE_REF_ETAT">
             <join-columns>
-                <join-column name="VOLUME_HORAIRE_ID" referenced-column-name="ID" unique="true"/>
+                <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID" unique="true"/>
             </join-columns>
             <inverse-join-columns>
                 <join-column name="ETAT_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
             </inverse-join-columns>
         </join-table>
     </many-to-many>
-    <one-to-many field="formuleResultatVolumeHoraire" target-entity="Application\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="volumeHoraire" />-->
+    <one-to-one field="formuleVolumeHoraireReferentiel" target-entity="Application\Entity\Db\FormuleVolumeHoraireReferentiel" mapped-by="volumeHoraireReferentiel" />
+    <one-to-many field="formuleResultatVolumeHoraireReferentiel" target-entity="Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel" mapped-by="volumeHoraireReferentiel" />
   </entity>
 </doctrine-mapping>

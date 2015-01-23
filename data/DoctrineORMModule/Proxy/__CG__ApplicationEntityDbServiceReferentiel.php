@@ -64,10 +64,10 @@ class ServiceReferentiel extends \Application\Entity\Db\ServiceReferentiel imple
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'commentaires', 'id', 'intervenant', 'structure', 'fonction', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\ServiceReferentiel' . "\0" . 'formuleResultatReferentiel', 'volumeHoraireRef');
+            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'commentaires', 'id', 'intervenant', 'structure', 'fonction', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\ServiceReferentiel' . "\0" . 'volumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\ServiceReferentiel' . "\0" . 'formuleServiceReferentiel', '' . "\0" . 'Application\\Entity\\Db\\ServiceReferentiel' . "\0" . 'formuleResultatServiceReferentiel');
         }
 
-        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'commentaires', 'id', 'intervenant', 'structure', 'fonction', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\ServiceReferentiel' . "\0" . 'formuleResultatReferentiel', 'volumeHoraireRef');
+        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'commentaires', 'id', 'intervenant', 'structure', 'fonction', 'histoModificateur', 'histoCreateur', 'histoDestructeur', 'annee', 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\ServiceReferentiel' . "\0" . 'volumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\ServiceReferentiel' . "\0" . 'formuleServiceReferentiel', '' . "\0" . 'Application\\Entity\\Db\\ServiceReferentiel' . "\0" . 'formuleResultatServiceReferentiel');
     }
 
     /**
@@ -312,39 +312,6 @@ class ServiceReferentiel extends \Application\Entity\Db\ServiceReferentiel imple
     /**
      * {@inheritDoc}
      */
-    public function addVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addVolumeHoraireRef', array($volumeHoraireRef));
-
-        return parent::addVolumeHoraireRef($volumeHoraireRef);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireRef $volumeHoraireRef)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeVolumeHoraireRef', array($volumeHoraireRef));
-
-        return parent::removeVolumeHoraireRef($volumeHoraireRef);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getVolumeHoraireRef(\Application\Entity\Db\Validation $validation = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireRef', array($validation));
-
-        return parent::getVolumeHoraireRef($validation);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setIntervenant(\Application\Entity\Db\IntervenantPermanent $intervenant = NULL)
     {
 
@@ -499,45 +466,67 @@ class ServiceReferentiel extends \Application\Entity\Db\ServiceReferentiel imple
     /**
      * {@inheritDoc}
      */
-    public function getTypeVolumeHoraire()
+    public function addVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeVolumeHoraire', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addVolumeHoraireReferentiel', array($volumeHoraireReferentiel));
 
-        return parent::getTypeVolumeHoraire();
+        return parent::addVolumeHoraireReferentiel($volumeHoraireReferentiel);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire)
+    public function removeVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTypeVolumeHoraire', array($typeVolumeHoraire));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeVolumeHoraireReferentiel', array($volumeHoraireReferentiel));
 
-        return parent::setTypeVolumeHoraire($typeVolumeHoraire);
+        return parent::removeVolumeHoraireReferentiel($volumeHoraireReferentiel);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getFormuleResultatReferentiel(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = NULL)
+    public function getVolumeHoraireReferentiel()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleResultatReferentiel', array($typeVolumeHoraire, $etatVolumeHoraire));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireReferentiel', array());
 
-        return parent::getFormuleResultatReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
+        return parent::getVolumeHoraireReferentiel();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getUniqueFormuleResultatReferentiel(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire)
+    public function getFormuleServiceReferentiel()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUniqueFormuleResultatReferentiel', array($typeVolumeHoraire, $etatVolumeHoraire));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleServiceReferentiel', array());
 
-        return parent::getUniqueFormuleResultatReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
+        return parent::getFormuleServiceReferentiel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormuleResultatServiceReferentiel(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleResultatServiceReferentiel', array($typeVolumeHoraire, $etatVolumeHoraire));
+
+        return parent::getFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUniqueFormuleResultatServiceReferentiel(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUniqueFormuleResultatServiceReferentiel', array($typeVolumeHoraire, $etatVolumeHoraire));
+
+        return parent::getUniqueFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
     }
 
     /**

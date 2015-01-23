@@ -2,51 +2,22 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * FormuleResultat
  */
 class FormuleResultat
 {
+    /**
+     * @var float
+     */
+    private $serviceDu;
 
     /**
      * @var float
      */
     private $enseignements;
-
-    /**
-     * @var float
-     */
-    private $heuresSolde;
-
-    /**
-     * @var float
-     */
-    private $heuresComplFc;
-
-    /**
-     * @var float
-     */
-    private $heuresComplFa;
-
-    /**
-     * @var float
-     */
-    private $heuresComplFi;
-
-    /**
-     * @var float
-     */
-    private $heuresComplReferentiel;
-
-    /**
-     * @var float
-     */
-    private $heuresComplTotal;
-
-    /**
-     * @var float
-     */
-    private $service;
 
     /**
      * @var float
@@ -61,7 +32,42 @@ class FormuleResultat
     /**
      * @var float
      */
-    private $serviceDu;
+    private $service;
+
+    /**
+     * @var float
+     */
+    private $heuresSolde;
+
+    /**
+     * @var float
+     */
+    private $heuresComplFi;
+
+    /**
+     * @var float
+     */
+    private $heuresComplFa;
+
+    /**
+     * @var float
+     */
+    private $heuresComplFc;
+
+    /**
+     * @var float
+     */
+    private $heuresComplFcMajorees;
+
+    /**
+     * @var float
+     */
+    private $heuresComplReferentiel;
+
+    /**
+     * @var float
+     */
+    private $heuresComplTotal;
 
     /**
      * @var float
@@ -81,12 +87,17 @@ class FormuleResultat
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $formuleResultatReferentiel;
+    private $formuleResultatServiceReferentiel;
 
     /**
-     * @var \Application\Entity\Db\TypeVolumeHoraire
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $typeVolumeHoraire;
+    private $formuleResultatVolumeHoraire;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleResultatVolumeHoraireReferentiel;
 
     /**
      * @var \Application\Entity\Db\Intervenant
@@ -94,15 +105,19 @@ class FormuleResultat
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\EtatVolumeHoraire
-     */
-    private $etatVolumeHoraire;
-
-    /**
      * @var \Application\Entity\Db\Annee
      */
     private $annee;
 
+    /**
+     * @var \Application\Entity\Db\TypeVolumeHoraire
+     */
+    private $typeVolumeHoraire;
+
+    /**
+     * @var \Application\Entity\Db\EtatVolumeHoraire
+     */
+    private $etatVolumeHoraire;
 
     /**
      * Constructor
@@ -110,127 +125,22 @@ class FormuleResultat
     public function __construct()
     {
         $this->formuleResultatService = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultatReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-
-    public function init( Intervenant $intervenant, Annee $annee, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
-    {
-        $this->intervenant = $intervenant;
-        $this->annee = $annee;
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-        $this->etatVolumeHoraire = $etatVolumeHoraire;
-    }
-
-
-    /**
-     * Get aPayer
-     *
-     * @return float 
-     */
-    public function getAPayer()
-    {
-        return $this->aPayer;
+        $this->formuleResultatServiceReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatVolumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatVolumeHoraireReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get enseignements
+     * Set serviceDu
      *
-     * @return float 
+     * @param float $serviceDu
+     * @return FormuleResultat
      */
-    public function getEnseignements()
+    public function setServiceDu($serviceDu)
     {
-        return $this->enseignements;
-    }
+        $this->serviceDu = $serviceDu;
 
-    /**
-     * Get heuresSolde
-     *
-     * @return float
-     */
-    public function getHeuresSolde()
-    {
-        return $this->heuresSolde;
-    }
-
-    /**
-     * Get heuresComplFc
-     *
-     * @return float 
-     */
-    public function getHeuresComplFc()
-    {
-        return $this->heuresComplFc;
-    }
-
-    /**
-     * Get heuresComplFa
-     *
-     * @return float
-     */
-    public function getHeuresComplFa()
-    {
-        return $this->heuresComplFa;
-    }
-
-    /**
-     * Get heuresComplFi
-     *
-     * @return float 
-     */
-    public function getHeuresComplFi()
-    {
-        return $this->heuresComplFi;
-    }
-
-    /**
-     * Get heuresComplReferentiel
-     *
-     * @return float 
-     */
-    public function getHeuresComplReferentiel()
-    {
-        return $this->heuresComplReferentiel;
-    }
-
-    /**
-     * Get heuresComplTotal
-     *
-     * @return float
-     */
-    public function getHeuresComplTotal()
-    {
-        return $this->heuresComplTotal;
-    }
-
-    /**
-     * Get service
-     *
-     * @return float 
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    /**
-     * Get referentiel
-     *
-     * @return float 
-     */
-    public function getReferentiel()
-    {
-        return $this->referentiel;
-    }
-
-    /**
-     * Get serviceAssure
-     *
-     * @return float 
-     */
-    public function getServiceAssure()
-    {
-        return $this->serviceAssure;
+        return $this;
     }
 
     /**
@@ -244,6 +154,272 @@ class FormuleResultat
     }
 
     /**
+     * Set enseignements
+     *
+     * @param float $enseignements
+     * @return FormuleResultat
+     */
+    public function setEnseignements($enseignements)
+    {
+        $this->enseignements = $enseignements;
+
+        return $this;
+    }
+
+    /**
+     * Get enseignements
+     *
+     * @return float 
+     */
+    public function getEnseignements()
+    {
+        return $this->enseignements;
+    }
+
+    /**
+     * Set referentiel
+     *
+     * @param float $referentiel
+     * @return FormuleResultat
+     */
+    public function setReferentiel($referentiel)
+    {
+        $this->referentiel = $referentiel;
+
+        return $this;
+    }
+
+    /**
+     * Get referentiel
+     *
+     * @return float 
+     */
+    public function getReferentiel()
+    {
+        return $this->referentiel;
+    }
+
+    /**
+     * Set serviceAssure
+     *
+     * @param float $serviceAssure
+     * @return FormuleResultat
+     */
+    public function setServiceAssure($serviceAssure)
+    {
+        $this->serviceAssure = $serviceAssure;
+
+        return $this;
+    }
+
+    /**
+     * Get serviceAssure
+     *
+     * @return float 
+     */
+    public function getServiceAssure()
+    {
+        return $this->serviceAssure;
+    }
+
+    /**
+     * Set service
+     *
+     * @param float $service
+     * @return FormuleResultat
+     */
+    public function setService($service)
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * Get service
+     *
+     * @return float 
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
+
+    /**
+     * Set heuresSolde
+     *
+     * @param float $heuresSolde
+     * @return FormuleResultat
+     */
+    public function setHeuresSolde($heuresSolde)
+    {
+        $this->heuresSolde = $heuresSolde;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresSolde
+     *
+     * @return float 
+     */
+    public function getHeuresSolde()
+    {
+        return $this->heuresSolde;
+    }
+
+    /**
+     * Set heuresComplFi
+     *
+     * @param float $heuresComplFi
+     * @return FormuleResultat
+     */
+    public function setHeuresComplFi($heuresComplFi)
+    {
+        $this->heuresComplFi = $heuresComplFi;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFi
+     *
+     * @return float 
+     */
+    public function getHeuresComplFi()
+    {
+        return $this->heuresComplFi;
+    }
+
+    /**
+     * Set heuresComplFa
+     *
+     * @param float $heuresComplFa
+     * @return FormuleResultat
+     */
+    public function setHeuresComplFa($heuresComplFa)
+    {
+        $this->heuresComplFa = $heuresComplFa;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFa
+     *
+     * @return float 
+     */
+    public function getHeuresComplFa()
+    {
+        return $this->heuresComplFa;
+    }
+
+    /**
+     * Set heuresComplFc
+     *
+     * @param float $heuresComplFc
+     * @return FormuleResultat
+     */
+    public function setHeuresComplFc($heuresComplFc)
+    {
+        $this->heuresComplFc = $heuresComplFc;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFc
+     *
+     * @return float 
+     */
+    public function getHeuresComplFc()
+    {
+        return $this->heuresComplFc;
+    }
+
+    /**
+     * Set heuresComplFcMajorees
+     *
+     * @param float $heuresComplFcMajorees
+     * @return FormuleResultat
+     */
+    public function setHeuresComplFcMajorees($heuresComplFcMajorees)
+    {
+        $this->heuresComplFcMajorees = $heuresComplFcMajorees;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFcMajorees
+     *
+     * @return float 
+     */
+    public function getHeuresComplFcMajorees()
+    {
+        return $this->heuresComplFcMajorees;
+    }
+
+    /**
+     * Set heuresComplReferentiel
+     *
+     * @param float $heuresComplReferentiel
+     * @return FormuleResultat
+     */
+    public function setHeuresComplReferentiel($heuresComplReferentiel)
+    {
+        $this->heuresComplReferentiel = $heuresComplReferentiel;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplReferentiel
+     *
+     * @return float 
+     */
+    public function getHeuresComplReferentiel()
+    {
+        return $this->heuresComplReferentiel;
+    }
+
+    /**
+     * Set heuresComplTotal
+     *
+     * @param float $heuresComplTotal
+     * @return FormuleResultat
+     */
+    public function setHeuresComplTotal($heuresComplTotal)
+    {
+        $this->heuresComplTotal = $heuresComplTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplTotal
+     *
+     * @return float 
+     */
+    public function getHeuresComplTotal()
+    {
+        return $this->heuresComplTotal;
+    }
+
+    /**
+     * Set sousService
+     *
+     * @param float $sousService
+     * @return FormuleResultat
+     */
+    public function setSousService($sousService)
+    {
+        $this->sousService = $sousService;
+
+        return $this;
+    }
+
+    /**
      * Get sousService
      *
      * @return float 
@@ -251,6 +427,19 @@ class FormuleResultat
     public function getSousService()
     {
         return $this->sousService;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return FormuleResultat
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -264,9 +453,32 @@ class FormuleResultat
     }
 
     /**
+     * Add formuleResultatService
+     *
+     * @param \Application\Entity\Db\FormuleResultatService $formuleResultatService
+     * @return FormuleResultat
+     */
+    public function addFormuleResultatService(\Application\Entity\Db\FormuleResultatService $formuleResultatService)
+    {
+        $this->formuleResultatService[] = $formuleResultatService;
+
+        return $this;
+    }
+
+    /**
+     * Remove formuleResultatService
+     *
+     * @param \Application\Entity\Db\FormuleResultatService $formuleResultatService
+     */
+    public function removeFormuleResultatService(\Application\Entity\Db\FormuleResultatService $formuleResultatService)
+    {
+        $this->formuleResultatService->removeElement($formuleResultatService);
+    }
+
+    /**
      * Get formuleResultatService
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getFormuleResultatService()
     {
@@ -274,23 +486,115 @@ class FormuleResultat
     }
 
     /**
-     * Get formuleResultatReferentiel
+     * Add formuleResultatServiceReferentiel
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel
+     * @return FormuleResultat
      */
-    public function getFormuleResultatReferentiel()
+    public function addFormuleResultatServiceReferentiel(\Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel)
     {
-        return $this->formuleResultatReferentiel;
+        $this->formuleResultatServiceReferentiel[] = $formuleResultatServiceReferentiel;
+
+        return $this;
     }
 
     /**
-     * Get typeVolumeHoraire
+     * Remove formuleResultatServiceReferentiel
      *
-     * @return \Application\Entity\Db\TypeVolumeHoraire 
+     * @param \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel
      */
-    public function getTypeVolumeHoraire()
+    public function removeFormuleResultatServiceReferentiel(\Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel)
     {
-        return $this->typeVolumeHoraire;
+        $this->formuleResultatServiceReferentiel->removeElement($formuleResultatServiceReferentiel);
+    }
+
+    /**
+     * Get formuleResultatServiceReferentiel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFormuleResultatServiceReferentiel()
+    {
+        return $this->formuleResultatServiceReferentiel;
+    }
+
+    /**
+     * Add formuleResultatVolumeHoraire
+     *
+     * @param \Application\Entity\Db\FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire
+     * @return FormuleResultat
+     */
+    public function addFormuleResultatVolumeHoraire(\Application\Entity\Db\FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire)
+    {
+        $this->formuleResultatVolumeHoraire[] = $formuleResultatVolumeHoraire;
+
+        return $this;
+    }
+
+    /**
+     * Remove formuleResultatVolumeHoraire
+     *
+     * @param \Application\Entity\Db\FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire
+     */
+    public function removeFormuleResultatVolumeHoraire(\Application\Entity\Db\FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire)
+    {
+        $this->formuleResultatVolumeHoraire->removeElement($formuleResultatVolumeHoraire);
+    }
+
+    /**
+     * Get formuleResultatVolumeHoraire
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFormuleResultatVolumeHoraire()
+    {
+        return $this->formuleResultatVolumeHoraire;
+    }
+
+    /**
+     * Add formuleResultatVolumeHoraireReferentiel
+     *
+     * @param \Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel
+     * @return FormuleResultat
+     */
+    public function addFormuleResultatVolumeHoraireReferentiel(\Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel)
+    {
+        $this->formuleResultatVolumeHoraireReferentiel[] = $formuleResultatVolumeHoraireReferentiel;
+
+        return $this;
+    }
+
+    /**
+     * Remove formuleResultatVolumeHoraireReferentiel
+     *
+     * @param \Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel
+     */
+    public function removeFormuleResultatVolumeHoraireReferentiel(\Application\Entity\Db\FormuleResultatVolumeHoraireReferentiel $formuleResultatVolumeHoraireReferentiel)
+    {
+        $this->formuleResultatVolumeHoraireReferentiel->removeElement($formuleResultatVolumeHoraireReferentiel);
+    }
+
+    /**
+     * Get formuleResultatVolumeHoraireReferentiel
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFormuleResultatVolumeHoraireReferentiel()
+    {
+        return $this->formuleResultatVolumeHoraireReferentiel;
+    }
+
+    /**
+     * Set intervenant
+     *
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return FormuleResultat
+     */
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
+    {
+        $this->intervenant = $intervenant;
+
+        return $this;
     }
 
     /**
@@ -304,13 +608,16 @@ class FormuleResultat
     }
 
     /**
-     * Get etatVolumeHoraire
+     * Set annee
      *
-     * @return \Application\Entity\Db\EtatVolumeHoraire 
+     * @param \Application\Entity\Db\Annee $annee
+     * @return FormuleResultat
      */
-    public function getEtatVolumeHoraire()
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
     {
-        return $this->etatVolumeHoraire;
+        $this->annee = $annee;
+
+        return $this;
     }
 
     /**
@@ -321,5 +628,51 @@ class FormuleResultat
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+    /**
+     * Set typeVolumeHoraire
+     *
+     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
+     * @return FormuleResultat
+     */
+    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
+    {
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+
+        return $this;
+    }
+
+    /**
+     * Get typeVolumeHoraire
+     *
+     * @return \Application\Entity\Db\TypeVolumeHoraire 
+     */
+    public function getTypeVolumeHoraire()
+    {
+        return $this->typeVolumeHoraire;
+    }
+
+    /**
+     * Set etatVolumeHoraire
+     *
+     * @param \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire
+     * @return FormuleResultat
+     */
+    public function setEtatVolumeHoraire(\Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = null)
+    {
+        $this->etatVolumeHoraire = $etatVolumeHoraire;
+
+        return $this;
+    }
+
+    /**
+     * Get etatVolumeHoraire
+     *
+     * @return \Application\Entity\Db\EtatVolumeHoraire 
+     */
+    public function getEtatVolumeHoraire()
+    {
+        return $this->etatVolumeHoraire;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * FormuleResultatVolumeHoraire
  */
@@ -15,12 +17,12 @@ class FormuleResultatVolumeHoraire
     /**
      * @var float
      */
-    private $heuresComplFa;
+    private $heuresService;
 
     /**
      * @var float
      */
-    private $heuresComplFc;
+    private $heuresComplFa;
 
     /**
      * @var float
@@ -30,7 +32,12 @@ class FormuleResultatVolumeHoraire
     /**
      * @var float
      */
-    private $heuresService;
+    private $heuresComplFc;
+
+    /**
+     * @var float
+     */
+    private $heuresComplFcMajorees;
 
     /**
      * @var integer
@@ -38,20 +45,33 @@ class FormuleResultatVolumeHoraire
     private $id;
 
     /**
-     * @var \Application\Entity\Db\VolumeHoraire
-     */
-    private $volumeHoraire;
-
-    /**
      * @var \Application\Entity\Db\FormuleResultat
      */
     private $formuleResultat;
 
+    /**
+     * @var \Application\Entity\Db\VolumeHoraire
+     */
+    private $volumeHoraire;
+
+
+    /**
+     * Set serviceAssure
+     *
+     * @param float $serviceAssure
+     * @return FormuleResultatVolumeHoraire
+     */
+    public function setServiceAssure($serviceAssure)
+    {
+        $this->serviceAssure = $serviceAssure;
+
+        return $this;
+    }
 
     /**
      * Get serviceAssure
      *
-     * @return float
+     * @return float 
      */
     public function getServiceAssure()
     {
@@ -59,33 +79,16 @@ class FormuleResultatVolumeHoraire
     }
 
     /**
-     * Get heuresComplFa
+     * Set heuresService
      *
-     * @return float 
+     * @param float $heuresService
+     * @return FormuleResultatVolumeHoraire
      */
-    public function getHeuresComplFa()
+    public function setHeuresService($heuresService)
     {
-        return $this->heuresComplFa;
-    }
+        $this->heuresService = $heuresService;
 
-    /**
-     * Get heuresComplFc
-     *
-     * @return float 
-     */
-    public function getHeuresComplFc()
-    {
-        return $this->heuresComplFc;
-    }
-
-    /**
-     * Get heuresComplFi
-     *
-     * @return float 
-     */
-    public function getHeuresComplFi()
-    {
-        return $this->heuresComplFi;
+        return $this;
     }
 
     /**
@@ -99,6 +102,111 @@ class FormuleResultatVolumeHoraire
     }
 
     /**
+     * Set heuresComplFa
+     *
+     * @param float $heuresComplFa
+     * @return FormuleResultatVolumeHoraire
+     */
+    public function setHeuresComplFa($heuresComplFa)
+    {
+        $this->heuresComplFa = $heuresComplFa;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFa
+     *
+     * @return float 
+     */
+    public function getHeuresComplFa()
+    {
+        return $this->heuresComplFa;
+    }
+
+    /**
+     * Set heuresComplFi
+     *
+     * @param float $heuresComplFi
+     * @return FormuleResultatVolumeHoraire
+     */
+    public function setHeuresComplFi($heuresComplFi)
+    {
+        $this->heuresComplFi = $heuresComplFi;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFi
+     *
+     * @return float 
+     */
+    public function getHeuresComplFi()
+    {
+        return $this->heuresComplFi;
+    }
+
+    /**
+     * Set heuresComplFc
+     *
+     * @param float $heuresComplFc
+     * @return FormuleResultatVolumeHoraire
+     */
+    public function setHeuresComplFc($heuresComplFc)
+    {
+        $this->heuresComplFc = $heuresComplFc;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFc
+     *
+     * @return float 
+     */
+    public function getHeuresComplFc()
+    {
+        return $this->heuresComplFc;
+    }
+
+    /**
+     * Set heuresComplFcMajorees
+     *
+     * @param float $heuresComplFcMajorees
+     * @return FormuleResultatVolumeHoraire
+     */
+    public function setHeuresComplFcMajorees($heuresComplFcMajorees)
+    {
+        $this->heuresComplFcMajorees = $heuresComplFcMajorees;
+
+        return $this;
+    }
+
+    /**
+     * Get heuresComplFcMajorees
+     *
+     * @return float 
+     */
+    public function getHeuresComplFcMajorees()
+    {
+        return $this->heuresComplFcMajorees;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return FormuleResultatVolumeHoraire
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -109,13 +217,16 @@ class FormuleResultatVolumeHoraire
     }
 
     /**
-     * Get volumeHoraire
+     * Set formuleResultat
      *
-     * @return \Application\Entity\Db\VolumeHoraire 
+     * @param \Application\Entity\Db\FormuleResultat $formuleResultat
+     * @return FormuleResultatVolumeHoraire
      */
-    public function getVolumeHoraire()
+    public function setFormuleResultat(\Application\Entity\Db\FormuleResultat $formuleResultat = null)
     {
-        return $this->volumeHoraire;
+        $this->formuleResultat = $formuleResultat;
+
+        return $this;
     }
 
     /**
@@ -126,5 +237,28 @@ class FormuleResultatVolumeHoraire
     public function getFormuleResultat()
     {
         return $this->formuleResultat;
+    }
+
+    /**
+     * Set volumeHoraire
+     *
+     * @param \Application\Entity\Db\VolumeHoraire $volumeHoraire
+     * @return FormuleResultatVolumeHoraire
+     */
+    public function setVolumeHoraire(\Application\Entity\Db\VolumeHoraire $volumeHoraire = null)
+    {
+        $this->volumeHoraire = $volumeHoraire;
+
+        return $this;
+    }
+
+    /**
+     * Get volumeHoraire
+     *
+     * @return \Application\Entity\Db\VolumeHoraire 
+     */
+    public function getVolumeHoraire()
+    {
+        return $this->volumeHoraire;
     }
 }

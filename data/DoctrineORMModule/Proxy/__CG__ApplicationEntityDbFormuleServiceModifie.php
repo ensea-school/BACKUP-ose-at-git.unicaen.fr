@@ -64,10 +64,10 @@ class FormuleServiceModifie extends \Application\Entity\Db\FormuleServiceModifie
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'heures', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'annee');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'heures', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'formuleIntervenant', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'annee');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'heures', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'annee');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'heures', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'formuleIntervenant', '' . "\0" . 'Application\\Entity\\Db\\FormuleServiceModifie' . "\0" . 'annee');
     }
 
     /**
@@ -176,12 +176,34 @@ class FormuleServiceModifie extends \Application\Entity\Db\FormuleServiceModifie
     /**
      * {@inheritDoc}
      */
+    public function setHeures($heures)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHeures', array($heures));
+
+        return parent::setHeures($heures);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getHeures()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHeures', array());
 
         return parent::getHeures();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setId($id)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setId', array($id));
+
+        return parent::setId($id);
     }
 
     /**
@@ -202,12 +224,34 @@ class FormuleServiceModifie extends \Application\Entity\Db\FormuleServiceModifie
     /**
      * {@inheritDoc}
      */
-    public function getIntervenant()
+    public function setFormuleIntervenant(\Application\Entity\Db\FormuleIntervenant $formuleIntervenant = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIntervenant', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormuleIntervenant', array($formuleIntervenant));
 
-        return parent::getIntervenant();
+        return parent::setFormuleIntervenant($formuleIntervenant);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormuleIntervenant()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleIntervenant', array());
+
+        return parent::getFormuleIntervenant();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAnnee(\Application\Entity\Db\Annee $annee = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAnnee', array($annee));
+
+        return parent::setAnnee($annee);
     }
 
     /**

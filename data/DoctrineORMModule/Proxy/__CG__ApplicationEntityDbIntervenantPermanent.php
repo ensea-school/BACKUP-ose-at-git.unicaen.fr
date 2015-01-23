@@ -64,10 +64,10 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation', 'agrement', 'utilisateur');
+            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'serviceReferentiel', 'validation', 'agrement', 'utilisateur');
         }
 
-        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'serviceReferentiel', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'validation', 'agrement', 'utilisateur');
+        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'serviceReferentiel', 'validation', 'agrement', 'utilisateur');
     }
 
     /**
@@ -220,28 +220,6 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     /**
      * {@inheritDoc}
      */
-    public function addServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addServiceReferentiel', array($serviceReferentiel));
-
-        return parent::addServiceReferentiel($serviceReferentiel);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel, $softDelete = true)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeServiceReferentiel', array($serviceReferentiel, $softDelete));
-
-        return parent::removeServiceReferentiel($serviceReferentiel, $softDelete);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function addModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu)
     {
 
@@ -281,39 +259,6 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCorps', array());
 
         return parent::getCorps();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getServiceReferentiel(\Application\Entity\Db\Annee $annee = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getServiceReferentiel', array($annee));
-
-        return parent::getServiceReferentiel($annee);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getServiceReferentielToStrings(\Application\Entity\Db\Annee $annee = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getServiceReferentielToStrings', array($annee));
-
-        return parent::getServiceReferentielToStrings($annee);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeAllServiceReferentiel(\Application\Entity\Db\Annee $annee = NULL, $softDelete = true)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeAllServiceReferentiel', array($annee, $softDelete));
-
-        return parent::removeAllServiceReferentiel($annee, $softDelete);
     }
 
     /**
@@ -1192,6 +1137,61 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     /**
      * {@inheritDoc}
      */
+    public function addServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addServiceReferentiel', array($serviceReferentiel));
+
+        return parent::addServiceReferentiel($serviceReferentiel);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel, $softDelete = true)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeServiceReferentiel', array($serviceReferentiel, $softDelete));
+
+        return parent::removeServiceReferentiel($serviceReferentiel, $softDelete);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getServiceReferentiel(\Application\Entity\Db\Annee $annee = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getServiceReferentiel', array($annee));
+
+        return parent::getServiceReferentiel($annee);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getServiceReferentielToStrings(\Application\Entity\Db\Annee $annee = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getServiceReferentielToStrings', array($annee));
+
+        return parent::getServiceReferentielToStrings($annee);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeAllServiceReferentiel(\Application\Entity\Db\Annee $annee = NULL, $softDelete = true)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeAllServiceReferentiel', array($annee, $softDelete));
+
+        return parent::removeAllServiceReferentiel($annee, $softDelete);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getValidation(\Application\Entity\Db\TypeValidation $type = NULL)
     {
 
@@ -1357,17 +1357,6 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     /**
      * {@inheritDoc}
      */
-    public function getFormuleReferentiel(\Application\Entity\Db\Annee $annee, \Application\Entity\Db\Structure $structure = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleReferentiel', array($annee, $structure));
-
-        return parent::getFormuleReferentiel($annee, $structure);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getFormuleResultat(\Application\Entity\Db\Annee $annee, \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumehoraire = NULL)
     {
 
@@ -1390,45 +1379,34 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     /**
      * {@inheritDoc}
      */
-    public function getFormuleService(\Application\Entity\Db\Annee $annee)
+    public function getFormuleIntervenant()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleService', array($annee));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleIntervenant', array());
 
-        return parent::getFormuleService($annee);
+        return parent::getFormuleIntervenant();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getFormuleServiceModifie(\Application\Entity\Db\Annee $annee)
+    public function getPremierRecrutement()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleServiceModifie', array($annee));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPremierRecrutement', array());
 
-        return parent::getFormuleServiceModifie($annee);
+        return parent::getPremierRecrutement();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getServiceModifie(\Application\Entity\Db\Annee $annee)
+    public function setPremierRecrutement($premierRecrutement)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getServiceModifie', array($annee));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPremierRecrutement', array($premierRecrutement));
 
-        return parent::getServiceModifie($annee);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFormuleVolumeHoraire(\Application\Entity\Db\Annee $annee, \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleVolumeHoraire', array($annee, $typeVolumeHoraire, $etatVolumeHoraire));
-
-        return parent::getFormuleVolumeHoraire($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+        return parent::setPremierRecrutement($premierRecrutement);
     }
 
     /**

@@ -64,10 +64,10 @@ class MiseEnPaiement extends \Application\Entity\Db\MiseEnPaiement implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'dateMiseEnPaiement', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'dateValidation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'periodePaiement', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'formuleService', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'formuleReferentiel');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'dateMiseEnPaiement', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'dateValidation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'periodePaiement', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'formuleResultatService', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'formuleResultatServiceReferentiel');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'dateMiseEnPaiement', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'dateValidation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'periodePaiement', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'formuleService', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'formuleReferentiel');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'dateMiseEnPaiement', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'dateValidation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'periodePaiement', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'formuleResultatService', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\MiseEnPaiement' . "\0" . 'formuleResultatServiceReferentiel');
     }
 
     /**
@@ -389,23 +389,23 @@ class MiseEnPaiement extends \Application\Entity\Db\MiseEnPaiement implements \D
     /**
      * {@inheritDoc}
      */
-    public function setFormuleService(\Application\Entity\Db\FormuleResultatService $formuleService = NULL)
+    public function setFormuleResultatService(\Application\Entity\Db\FormuleResultatService $formuleResultatService = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormuleService', array($formuleService));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormuleResultatService', array($formuleResultatService));
 
-        return parent::setFormuleService($formuleService);
+        return parent::setFormuleResultatService($formuleResultatService);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getFormuleService()
+    public function getFormuleResultatService()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleService', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleResultatService', array());
 
-        return parent::getFormuleService();
+        return parent::getFormuleResultatService();
     }
 
     /**
@@ -433,23 +433,23 @@ class MiseEnPaiement extends \Application\Entity\Db\MiseEnPaiement implements \D
     /**
      * {@inheritDoc}
      */
-    public function setFormuleReferentiel(\Application\Entity\Db\FormuleResultatReferentiel $formuleReferentiel = NULL)
+    public function setFormuleResultatServiceReferentiel(\Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormuleReferentiel', array($formuleReferentiel));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormuleResultatServiceReferentiel', array($formuleResultatServiceReferentiel));
 
-        return parent::setFormuleReferentiel($formuleReferentiel);
+        return parent::setFormuleResultatServiceReferentiel($formuleResultatServiceReferentiel);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getFormuleReferentiel()
+    public function getFormuleResultatServiceReferentiel()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleReferentiel', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleResultatServiceReferentiel', array());
 
-        return parent::getFormuleReferentiel();
+        return parent::getFormuleResultatServiceReferentiel();
     }
 
 }

@@ -91,6 +91,11 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     protected $typeVolumeHoraire;
 
     /**
+     * @var FormuleService
+     */
+    private $formuleService;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultatService;
@@ -102,7 +107,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function __construct()
     {
         $this->volumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->validationService = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleResultatService = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -483,6 +487,16 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     }
 
     /**
+     * Get formuleService
+     *
+     * @return FormuleService
+     */
+    public function getFormuleService()
+    {
+        return $this->formuleService;
+    }
+
+    /**
      * Get formuleResultatService
      *
      * @return \Doctrine\Common\Collections\Collection
@@ -490,10 +504,10 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function getFormuleResultatService(TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
     {
         $filter = function( FormuleResultatService $formuleResultatService ) use ($typeVolumeHoraire, $etatVolumeHoraire) {
-            if ($typeVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getTypeVolumeHoraire()) {
+            if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getTypeVolumeHoraire()) {
                 return false;
             }
-            if ($etatVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getEtatVolumeHoraire()) {
+            if (isset($etatVolumeHoraire) && $etatVolumeHoraire !== $formuleResultatService->getFormuleResultat()->getEtatVolumeHoraire()) {
                 return false;
             }
             return true;

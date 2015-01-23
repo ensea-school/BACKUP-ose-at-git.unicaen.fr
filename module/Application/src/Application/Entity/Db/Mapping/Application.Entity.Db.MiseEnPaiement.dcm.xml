@@ -38,9 +38,9 @@
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="formuleService" target-entity="Application\Entity\Db\FormuleResultatService">
+    <many-to-one field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService">
       <join-columns>
-        <join-column name="FORMULE_SERVICE_ID" referenced-column-name="ID"/>
+        <join-column name="FORMULE_RES_SERVICE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
@@ -48,9 +48,9 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="formuleReferentiel" target-entity="Application\Entity\Db\FormuleResultatReferentiel">
+    <many-to-one field="formuleResultatServiceReferentiel" target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel">
       <join-columns>
-        <join-column name="FORMULE_REFERENTIEL_ID" referenced-column-name="ID"/>
+        <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

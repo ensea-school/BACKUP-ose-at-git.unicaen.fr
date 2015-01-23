@@ -227,7 +227,7 @@ class Validation extends AbstractEntityService
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str')
                 ->join("v.intervenant", "i")
-                ->join("v.volumeHoraireRef", 'vh')
+                ->join("v.volumeHoraireReferentiel", 'vh')
                 ->join("vh.serviceReferentiel", 's')
                 ->join("s.structure", 'strref')
                 ->orderBy("v.histoModification", 'desc')

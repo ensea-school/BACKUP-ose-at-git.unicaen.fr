@@ -64,10 +64,10 @@ class FormuleService extends \Application\Entity\Db\FormuleService implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'ponderationServiceCompl', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'ponderationServiceDu', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFa', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFc', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFi', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'service', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'annee', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'structureAff', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'structureEns', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'formuleVolumeHoraire');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFa', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFc', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFi', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'ponderationServiceDu', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'ponderationServiceCompl', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'service', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'formuleVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'annee', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'formuleIntervenant');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'ponderationServiceCompl', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'ponderationServiceDu', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFa', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFc', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFi', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'service', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'annee', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'structureAff', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'structureEns', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'formuleVolumeHoraire');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFa', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFc', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'tauxFi', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'ponderationServiceDu', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'ponderationServiceCompl', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'service', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'formuleVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'annee', '' . "\0" . 'Application\\Entity\\Db\\FormuleService' . "\0" . 'formuleIntervenant');
     }
 
     /**
@@ -176,23 +176,12 @@ class FormuleService extends \Application\Entity\Db\FormuleService implements \D
     /**
      * {@inheritDoc}
      */
-    public function getPonderationServiceCompl()
+    public function setTauxFa($tauxFa)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPonderationServiceCompl', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTauxFa', array($tauxFa));
 
-        return parent::getPonderationServiceCompl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPonderationServiceDu()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPonderationServiceDu', array());
-
-        return parent::getPonderationServiceDu();
+        return parent::setTauxFa($tauxFa);
     }
 
     /**
@@ -209,6 +198,17 @@ class FormuleService extends \Application\Entity\Db\FormuleService implements \D
     /**
      * {@inheritDoc}
      */
+    public function setTauxFc($tauxFc)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTauxFc', array($tauxFc));
+
+        return parent::setTauxFc($tauxFc);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getTauxFc()
     {
 
@@ -220,12 +220,78 @@ class FormuleService extends \Application\Entity\Db\FormuleService implements \D
     /**
      * {@inheritDoc}
      */
+    public function setTauxFi($tauxFi)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTauxFi', array($tauxFi));
+
+        return parent::setTauxFi($tauxFi);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getTauxFi()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTauxFi', array());
 
         return parent::getTauxFi();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPonderationServiceDu($ponderationServiceDu)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPonderationServiceDu', array($ponderationServiceDu));
+
+        return parent::setPonderationServiceDu($ponderationServiceDu);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPonderationServiceDu()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPonderationServiceDu', array());
+
+        return parent::getPonderationServiceDu();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPonderationServiceCompl($ponderationServiceCompl)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPonderationServiceCompl', array($ponderationServiceCompl));
+
+        return parent::setPonderationServiceCompl($ponderationServiceCompl);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPonderationServiceCompl()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPonderationServiceCompl', array());
+
+        return parent::getPonderationServiceCompl();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setId($id)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setId', array($id));
+
+        return parent::setId($id);
     }
 
     /**
@@ -246,12 +312,78 @@ class FormuleService extends \Application\Entity\Db\FormuleService implements \D
     /**
      * {@inheritDoc}
      */
+    public function setService(\Application\Entity\Db\Service $service = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setService', array($service));
+
+        return parent::setService($service);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getService()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getService', array());
 
         return parent::getService();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addFormuleVolumeHoraire(\Application\Entity\Db\FormuleVolumeHoraire $formuleVolumeHoraire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addFormuleVolumeHoraire', array($formuleVolumeHoraire));
+
+        return parent::addFormuleVolumeHoraire($formuleVolumeHoraire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeFormuleVolumeHoraire(\Application\Entity\Db\FormuleVolumeHoraire $formuleVolumeHoraire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeFormuleVolumeHoraire', array($formuleVolumeHoraire));
+
+        return parent::removeFormuleVolumeHoraire($formuleVolumeHoraire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormuleVolumeHoraire()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleVolumeHoraire', array());
+
+        return parent::getFormuleVolumeHoraire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHeures(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = NULL, \Application\Entity\Db\TypeIntervention $typeIntervention = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHeures', array($typeVolumeHoraire, $etatVolumeHoraire, $typeIntervention));
+
+        return parent::getHeures($typeVolumeHoraire, $etatVolumeHoraire, $typeIntervention);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIntervenant', array($intervenant));
+
+        return parent::setIntervenant($intervenant);
     }
 
     /**
@@ -268,6 +400,17 @@ class FormuleService extends \Application\Entity\Db\FormuleService implements \D
     /**
      * {@inheritDoc}
      */
+    public function setAnnee(\Application\Entity\Db\Annee $annee = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAnnee', array($annee));
+
+        return parent::setAnnee($annee);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getAnnee()
     {
 
@@ -279,45 +422,23 @@ class FormuleService extends \Application\Entity\Db\FormuleService implements \D
     /**
      * {@inheritDoc}
      */
-    public function getStructureAff()
+    public function setFormuleIntervenant(\Application\Entity\Db\FormuleIntervenant $formuleIntervenant = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStructureAff', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormuleIntervenant', array($formuleIntervenant));
 
-        return parent::getStructureAff();
+        return parent::setFormuleIntervenant($formuleIntervenant);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getStructureEns()
+    public function getFormuleIntervenant()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStructureEns', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleIntervenant', array());
 
-        return parent::getStructureEns();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFormuleVolumeHoraire(\Application\Entity\Db\TypeIntervention $typeIntervention = NULL, \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumehoraire = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleVolumeHoraire', array($typeIntervention, $typeVolumeHoraire, $etatVolumehoraire));
-
-        return parent::getFormuleVolumeHoraire($typeIntervention, $typeVolumeHoraire, $etatVolumehoraire);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getHeures(\Application\Entity\Db\TypeIntervention $typeIntervention = NULL, \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire, \Application\Entity\Db\EtatVolumeHoraire $etatVolumehoraire)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHeures', array($typeIntervention, $typeVolumeHoraire, $etatVolumehoraire));
-
-        return parent::getHeures($typeIntervention, $typeVolumeHoraire, $etatVolumehoraire);
+        return parent::getFormuleIntervenant();
     }
 
 }

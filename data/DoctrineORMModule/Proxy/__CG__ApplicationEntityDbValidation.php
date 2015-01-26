@@ -433,34 +433,34 @@ class Validation extends \Application\Entity\Db\Validation implements \Doctrine\
     /**
      * {@inheritDoc}
      */
-    public function addVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function addVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addVolumeHoraireRef', array($volumeHoraireReferentiel));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addVolumeHoraireReferentiel', array($volumeHoraireReferentiel));
 
-        return parent::addVolumeHoraireRef($volumeHoraireReferentiel);
+        return parent::addVolumeHoraireReferentiel($volumeHoraireReferentiel);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function removeVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    public function removeVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeVolumeHoraireRef', array($volumeHoraireReferentiel));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeVolumeHoraireReferentiel', array($volumeHoraireReferentiel));
 
-        return parent::removeVolumeHoraireRef($volumeHoraireReferentiel);
+        return parent::removeVolumeHoraireReferentiel($volumeHoraireReferentiel);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getVolumeHoraireRef()
+    public function getVolumeHoraireReferentiel()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireRef', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireReferentiel', array());
 
-        return parent::getVolumeHoraireRef();
+        return parent::getVolumeHoraireReferentiel();
     }
 
     /**

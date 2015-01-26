@@ -37,7 +37,7 @@
         <p><?php echo $message ?></p>
         <?php endif; ?>
         <p><a class="btn btn-primary btn-large" href="<?php echo $url ?>"><?php echo $label ?></a></p>
-
+        
     <?php else: ?>
 
         <a class="btn btn-success btn-large" href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Connectez-vous...') ?></a>
@@ -45,6 +45,23 @@
     <?php endif; ?>
 </div>
 
+<!-------------------------- Indicateurs (AJAX) -------------------------->
+<?php if (isset($this->abonnementsUrl)): ?>
+<script>
+    $(function() {
+        var url = '<?php echo $this->abonnementsUrl ?>';
+        $(".abonnements").hide();
+        $("#abonnements").load(url, [], function() { 
+            $(".abonnements").fadeIn();
+            $(this).hide().fadeIn(); 
+        });
+    });
+</script>
+<h2 class="abonnements">Vos indicateurs <a class="btn btn-default btn-sm pull-right" href="<?php echo $this->url('indicateur') ?>">Gérer vos abonnements à des indicateurs</a></h2>
+<div id="abonnements"><div class="loading"></div></div>
+<?php endif ?>
+        
+<!----------------------------- Feuille de route --------------------------->
 <?php if (isset($wf)): ?>
 <h2>Feuille de route</h2>
 <?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', array('wf' => $wf, 'role' => $role)); ?>

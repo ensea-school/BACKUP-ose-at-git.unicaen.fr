@@ -105,6 +105,11 @@ class Contrat extends AbstractEntityService
         
         $contrat->setValidation($validation);
                 
+        $this->getEntityManager()->persist($validation);
+        
+        $this->getEntityManager()->flush($validation);
+        $this->getEntityManager()->flush($contrat);
+        
         return $validation;
     }
     
@@ -123,6 +128,8 @@ class Contrat extends AbstractEntityService
                 ->setContrat(null)
                 ->setNumeroAvenant(0)
                 ->setDateRetourSigne(null);
+        
+        $this->getEntityManager()->flush($contrat);
         
         return $this;
     }

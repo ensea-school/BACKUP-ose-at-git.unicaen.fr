@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * TypePieceJointe
  */
-class TypePieceJointe
+class TypePieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     const CV               = "CV";
     const RIB              = "RIB";
@@ -81,6 +81,11 @@ class TypePieceJointe
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoCreateur;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typePieceJointeStatut;
 
 
     /**
@@ -344,5 +349,15 @@ class TypePieceJointe
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Get typePieceJointeStatut
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypePieceJointeStatut()
+    {
+        return $this->typePieceJointeStatut;
     }
 }

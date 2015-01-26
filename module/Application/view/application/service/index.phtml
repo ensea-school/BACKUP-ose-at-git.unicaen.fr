@@ -71,8 +71,8 @@ if ($intervenant){
     <?php echo $this->formuleTotauxHetd; ?>
     <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
         <hr />
-        <?php $url = $this->url('workflow', 
-                array('action' => 'nav-next', 'intervenant' => $role->getIntervenant()->getSourceCode()),
+        <?php $url = $this->url('workflow/nav-next', 
+                array('intervenant' => $role->getIntervenant()->getSourceCode()),
                 array('query' => array('route' => 'intervenant/services', 'prepend' => $prepend = "J'ai terminé ma saisie, "))) ?>
         <div id="wf-nav-next" data-url="<?php echo $url ?>">
             <?php echo $this->workflow($role->getIntervenant(), $role)->navNext($prepend) ?>

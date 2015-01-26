@@ -127,6 +127,10 @@ h1.page-header {
     margin-top: 10px;
 }
 
+.modal-body h1 {
+    margin-top: 0;
+}
+
 /* Autocomplete jQuery */
 .ui-autocomplete {
     max-height: 300px;

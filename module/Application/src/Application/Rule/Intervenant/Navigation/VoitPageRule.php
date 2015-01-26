@@ -2,7 +2,7 @@
 
 namespace Application\Rule\Intervenant\Navigation;
 
-use Application\Rule\Intervenant\IntervenantRule;
+use Application\Rule\AbstractRule;
 use Application\Entity\Db\Intervenant;
 use Application\Service\Workflow\AbstractWorkflow;
 
@@ -11,8 +11,9 @@ use Application\Service\Workflow\AbstractWorkflow;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class VoitPageRule extends IntervenantRule
+class VoitPageRule extends AbstractRule
 {
+    use \Application\Traits\IntervenantAwareTrait;
     use \Application\Traits\AnneeAwareTrait;
     
     /**
@@ -33,8 +34,8 @@ class VoitPageRule extends IntervenantRule
      */
     public function __construct(Intervenant $intervenant, array $page, AbstractWorkflow $wf)
     {
-        parent::__construct($intervenant);
-        
+        parent::__construct();
+        $this->setIntervenant($intervenant);
         $this->page = $page;
         $this->wf   = $wf;
     }

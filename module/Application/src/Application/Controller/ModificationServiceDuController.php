@@ -32,8 +32,9 @@ class ModificationServiceDuController extends AbstractActionController implement
         $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant IntervenantPermanent */
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
         
-        $rule = new \Application\Rule\Intervenant\PeutSaisirModificationServiceDuRule($intervenant);
-        $rule->setStructure($role instanceof ComposanteRole ? $role->getStructure() : null);
+        $rule = $this->getServiceLocator()->get('PeutSaisirModificationServiceDuRule')
+                ->setIntervenant($intervenant)
+                ->setStructure($role instanceof ComposanteRole ? $role->getStructure() : null);
         if (!$rule->execute()) {
             throw new MessageException("La modification de service dû n'est pas possible. ", null, new \Exception($rule->getMessage()));
         }

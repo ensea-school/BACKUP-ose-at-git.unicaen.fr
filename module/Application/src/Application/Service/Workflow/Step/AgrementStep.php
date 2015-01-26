@@ -2,6 +2,8 @@
 
 namespace Application\Service\Workflow\Step;
 
+use Application\Interfaces\TypeAgrementAwareInterface;
+use Application\Traits\TypeAgrementAwareTrait;
 use Application\Acl\IntervenantPermanentRole;
 use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\ComposanteRole;
@@ -12,25 +14,12 @@ use Application\Entity\Db\TypeAgrement;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AgrementStep extends Step
+class AgrementStep extends Step implements TypeAgrementAwareInterface
 {
-    /**
-     * @var TypeAgrement
-     */
-    private $typeAgrement;
+    use TypeAgrementAwareTrait;
     
-    public function __construct(TypeAgrement $typeAgrement)
+    public function __construct()
     {
-        $this->typeAgrement = $typeAgrement;
-        
-        $this->setRouteParams(array('typeAgrement' => $this->typeAgrement->getId()));
-        
-        $labels = array(
-            IntervenantPermanentRole::ROLE_ID => sprintf("Je visualise l'agrément &laquo; %s &raquo;", $this->typeAgrement),
-            IntervenantExterieurRole::ROLE_ID => sprintf("Je visualise l'agrément &laquo; %s &raquo;", $this->typeAgrement),
-            ComposanteRole::ROLE_ID           => sprintf("Je visualise l'agrément &laquo; %s &raquo; de l'intervenant", $this->typeAgrement),
-            'default'                         => sprintf("Je visualise l'agrément &laquo; %s &raquo; de l'intervenant", $this->typeAgrement),
-        );
         $descriptions = array(
             IntervenantPermanentRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",
             IntervenantExterieurRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",
@@ -38,17 +27,40 @@ class AgrementStep extends Step
         );
         
         $this
-                
-                ->setLabels($labels)
                 ->setDescriptions($descriptions)
                 ->setRoute('intervenant/agrement/liste');
     }
     
     /**
-     * @return TypeAgrement
+     * @return self
      */
-    public function getTypeAgrement()
+    protected function init()
     {
-        return $this->typeAgrement;
+        $this->setRouteParams(array('typeAgrement' => $this->getTypeAgrement()->getId()));
+        
+        $labels = array(
+            IntervenantPermanentRole::ROLE_ID => sprintf("Je visualise l'agrément '%s';", $this->getTypeAgrement()),
+            IntervenantExterieurRole::ROLE_ID => sprintf("Je visualise l'agrément '%s'", $this->getTypeAgrement()),
+            ComposanteRole::ROLE_ID           => sprintf("Je visualise l'agrément '%s' de l'intervenant", $this->getTypeAgrement()),
+            'default'                         => sprintf("Agrément '%s'", $this->getTypeAgrement()),
+        );
+        
+        $this->setLabels($labels);
+        
+        return $this;
+    }
+    
+    /**
+     * Spécifie le type d'agrément concerné.
+     * 
+     * @param TypeAgrement $typeAgrement type d'agrément concerné
+     */
+    public function setTypeAgrement(TypeAgrement $typeAgrement = null)
+    {
+        $this->typeAgrement = $typeAgrement;
+        
+        $this->init();
+        
+        return $this;
     }
 }

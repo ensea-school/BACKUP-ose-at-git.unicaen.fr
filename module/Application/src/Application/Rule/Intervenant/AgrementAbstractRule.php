@@ -2,32 +2,23 @@
 
 namespace Application\Rule\Intervenant;
 
+use Application\Interfaces\TypeAgrementAwareInterface;
 use Application\Entity\Db\Agrement;
-use Application\Entity\Db\Dossier;
-use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\Structure;
-use Application\Rule\AbstractRule;
 use Application\Service\Agrement as AgrementService;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\TypeAgrementStatut;
+use Application\Service\TypeAgrement as TypeAgrementService;
 use Application\Service\TypeAgrementStatut as TypeAgrementStatutService;
-use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\TypeAgrementAwareTrait;
 use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Description of AgrementFourniRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AgrementAbstractRule extends AbstractRule implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+abstract class AgrementAbstractRule extends AbstractIntervenantRule implements TypeAgrementAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
-    use IntervenantAwareTrait;
     use TypeAgrementAwareTrait;
 
     /**
@@ -36,26 +27,34 @@ abstract class AgrementAbstractRule extends AbstractRule implements ServiceLocat
      */
     protected function getTypesAgrementStatut()
     {
-        $qb = $this->getServiceTypeAgrementStatut()->finderByStatutIntervenant($this->getIntervenant()->getStatut());
-        if ($this->getIntervenant() instanceof IntervenantExterieur 
-                && ($dossier = $this->getIntervenant()->getDossier())) { /* @var $dossier Dossier */
-            $this->getServiceTypeAgrementStatut()->finderByPremierRecrutement($dossier->getPremierRecrutement(), $qb);
-        }
-        $typesAgrementStatut = $this->getServiceTypeAgrementStatut()->getList($qb);
+        $service = $this->getServiceTypeAgrementStatut();
+                
+        $qb = $service->finderByStatutIntervenant($this->getIntervenant()->getStatut());
+//        if (null !== $this->getIntervenant()->getPremierRecrutement()) {
+            $service->finderByPremierRecrutement($this->getIntervenant()->getPremierRecrutement(), $qb);
+//        }
+        $typesAgrementStatut = $service->getList($qb);
         
         return $typesAgrementStatut;
     }
     
     /**
+     * Si un intervenant est spécifié, retourne les types d'agrément requis par son statut ;
+     * ou sinon tous les types d'agrément existant.
      * 
      * @return array id => TypeAgrement
      */
     public function getTypesAgrementAttendus()
     {
-        $typesAgrementAttendus = array();
-        foreach ($this->getTypesAgrementStatut() as $tas) { /* @var $tas TypeAgrementStatut */
-            $type = $tas->getType();
-            $typesAgrementAttendus[$type->getId()] = $type;
+        if ($this->getIntervenant()) {
+            $typesAgrementAttendus = array();
+            foreach ($this->getTypesAgrementStatut() as $tas) { /* @var $tas TypeAgrementStatut */
+                $type = $tas->getType();
+                $typesAgrementAttendus[$type->getId()] = $type;
+            }
+        }
+        else {
+            $typesAgrementAttendus = $this->getServiceTypeAgrement()->getList();
         }
         
         return $typesAgrementAttendus;
@@ -118,6 +117,14 @@ abstract class AgrementAbstractRule extends AbstractRule implements ServiceLocat
         $structuresEns = $qb->getQuery()->getResult();
         
         return $structuresEns;
+    }
+    
+    /**
+     * @return TypeAgrementService
+     */
+    protected function getServiceTypeAgrement()
+    {
+        return $this->getServiceLocator()->get('applicationTypeAgrement');
     }
     
     /**

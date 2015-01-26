@@ -481,12 +481,23 @@ class VolumeHoraire implements HistoriqueAwareInterface
 
     /**
      * Get validation
-     *
+     * 
+     * @param \Application\Entity\Db\TypeValidation $type
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getValidation()
+    public function getValidation(TypeValidation $type = null)
     {
-        return $this->validation;
+        if (null === $type) {
+            return $this->validation;
+        }
+        if (null === $this->validation) {
+            return null;
+        }
+        
+        $filter      = function(Validation $validation) use ($type) { return $type === $validation->getTypeValidation(); };
+        $validations = $this->validation->filter($filter);
+        
+        return $validations;
     }
 
     /**

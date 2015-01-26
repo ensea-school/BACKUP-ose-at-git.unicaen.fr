@@ -532,12 +532,12 @@ class VolumeHoraire extends \Application\Entity\Db\VolumeHoraire implements \Doc
     /**
      * {@inheritDoc}
      */
-    public function getValidation()
+    public function getValidation(\Application\Entity\Db\TypeValidation $type = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValidation', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValidation', array($type));
 
-        return parent::getValidation();
+        return parent::getValidation($type);
     }
 
     /**

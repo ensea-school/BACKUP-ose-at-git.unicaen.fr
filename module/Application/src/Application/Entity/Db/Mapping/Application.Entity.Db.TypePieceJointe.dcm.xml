@@ -32,5 +32,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="typePieceJointeStatut" target-entity="Application\Entity\Db\TypePieceJointeStatut" mapped-by="type" />
   </entity>
 </doctrine-mapping>

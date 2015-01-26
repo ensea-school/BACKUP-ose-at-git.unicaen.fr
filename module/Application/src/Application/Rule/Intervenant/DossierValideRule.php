@@ -3,45 +3,107 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\TypeValidation;
+use Application\Service\TypeValidation as TypeValidationService;
+use Common\Exception\LogicException;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Règle métier déterminant si les données personnelles d'un intervenant sont validées.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierValideRule extends IntervenantRule
+class DossierValideRule extends AbstractIntervenantRule
 {
-    use \Application\Traits\TypeValidationAwareTrait;
+    const MESSAGE_DOSSIER = 'messageDossier';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_DOSSIER => "Les données personnelles de l'intervenant n'ont pas encore été validées.",
+    );
     
+    /**
+     * Exécute la règle métier.
+     * 
+     * @return array [ integer => [ 'id' => {id} ] ]
+     */
     public function execute()
     {
-        if (!$this->getTypeValidation()) {
-            throw new \Common\Exception\LogicException("Type de validation non fourni.");
+        $this->message(null);
+        
+        $qb = $this->getQueryBuilder();
+        
+        /**
+         * Application de la règle à un intervenant précis
+         */
+        if ($this->getIntervenant()) {
+            $result = $qb->getQuery()->getScalarResult();
+            
+            if (!$result) {
+                $this->message(self::MESSAGE_DOSSIER);
+            }
+                
+            return $this->normalizeResult($result);
         }
         
-        $validationsDossier = $this->getIntervenant()->getValidation($this->getTypeValidation());
-        if (!count($validationsDossier)) {
-            $this->setMessage("Les données personnelles de {$this->getIntervenant()} n'ont pas encore été validées.");
-            return false;
-        }
+        /**
+         * Recherche des intervenants répondant à la règle
+         */
         
-        $this->validation = $validationsDossier->first();
-        
-        return true;
+        $result = $qb->getQuery()->getScalarResult();
+
+        return $this->normalizeResult($result);
     }
     
     public function isRelevant()
     {
-        return $this->getIntervenant() instanceof IntervenantExterieur && null !== $this->getIntervenant()->getDossier();
+        if ($this->getIntervenant()) {
+            return $this->getIntervenant() instanceof IntervenantExterieur && null !== $this->getIntervenant()->getDossier();
+        }
+        
+        return true;
     }
     
-    private $validation;
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {        
+        $em = $this->getServiceIntervenant()->getEntityManager();
+        $qb = $em->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.validation", "v")
+                ->join("v.typeValidation", "tv")
+                ->andWhere("tv = " . $this->getTypeValidationDossier()->getId());
+        
+        if ($this->getIntervenant()) {
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
+        }
+        
+        return $qb;
+    }
     
     /**
-     * @return \Application\Entity\Db\Validation
+     * @return TypeValidation
      */
-    public function getValidation()
+    private function getTypeValidationDossier()
     {
-        return $this->validation;
+        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        $typeValidation = $qb->getQuery()->getOneOrNullResult();
+        
+        return $typeValidation;
+    }
+    
+    /**
+     * 
+     * @return TypeValidationService
+     */
+    private function getServiceTypeValidation()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
 }

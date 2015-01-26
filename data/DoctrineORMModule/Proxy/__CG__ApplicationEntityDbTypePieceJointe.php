@@ -64,10 +64,10 @@ class TypePieceJointe extends \Application\Entity\Db\TypePieceJointe implements 
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'urlModeleDoc', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoCreateur');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'urlModeleDoc', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'typePieceJointeStatut');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'urlModeleDoc', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoCreateur');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'urlModeleDoc', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\TypePieceJointe' . "\0" . 'typePieceJointeStatut');
     }
 
     /**
@@ -439,6 +439,17 @@ class TypePieceJointe extends \Application\Entity\Db\TypePieceJointe implements 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
 
         return parent::getHistoCreateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTypePieceJointeStatut()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypePieceJointeStatut', array());
+
+        return parent::getTypePieceJointeStatut();
     }
 
 }

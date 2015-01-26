@@ -18,6 +18,17 @@ use Zend\Mvc\Controller\Plugin\Url;
 abstract class AbstractWorkflow extends AbstractService
 {
     /**
+     * Conditions (règles métier) :
+     * - de pertinence de chaque étape : une étape est pertinente si cette condition est satisfaite.
+     * - de réalisation de chaque étape : une étape est considérée comme réalisée si cette condition est satisfaite.
+     * 
+     * @var array clé => ['relevance' => RuleInterface, 'crossing' => RuleInterface]
+     */
+    protected $rules;
+    
+    /**
+     * Etapes.
+     * 
      * @var Step[] string => Step : mêmes clés que les conditions
      */
     protected $steps;
@@ -43,8 +54,8 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
-     * Parcourt les étapes jusqu'à ce que l'étape courante soit trouvée.
-     * L'étape courante est la première étape non encore réalisée trouvée.
+     * Parcourt les étapes pour déterminer l'étape courante (i.e. 1ere étape non franchissable trouvée).
+     * Chaque étape est marquée selon qu'elle est "courante" ou non et/ou "franchie" ou non.
      * 
      * @return self
      */
@@ -54,35 +65,85 @@ abstract class AbstractWorkflow extends AbstractService
             $this->createSteps();
         }
         
-        $this->setCurrentStep(null);
+        $currentStep = null;
         
-        foreach ($this->getSteps() as $index => $step) { /* @var $step Step */
-            if (($rule = $this->getConditions()[$index]) && $rule->isRelevant() && !$rule->execute()) {
-                $this->setCurrentStep($step->setIsCurrent());
-                break;
+        foreach ($this->getSteps() as $key => $step) { /* @var $step Step */
+            $rule = $this->getCrossingRule($key);
+
+            /**
+             * Si l'étape n'est pas franchissable, c'est l'étape courante : 
+             * elle sera déclarée "courante" et "non franchie" plus bas.
+             */
+            if ($rule && $rule->isRelevant() && !$rule->execute()) {
+                $currentStep = $step;
             }
+            /**
+             * Si elle franchissable et située APRÈS l'étape courante, elle est déclarée "non courante" et "non franchie".
+             */
+            elseif ($currentStep) {
+                $step
+                        ->setIsCurrent(false)
+                        ->setDone(false);
+            }
+            /**
+             * Si elle franchissable et située AVANT l'étape courante, elle est déclarée "non courante" et "franchie".
+             */
             else {
-                $step->setDone();
+                $step
+                        ->setIsCurrent(false)
+                        ->setDone(true);
             }
         }
         
+        /**
+         * Si aucune étape courante n'est trouvée, ce sera la dernière étape qui fera office.
+         */
+        if (!$currentStep) {
+            $currentStep = $this->getLastStep();
+        }
+
+        /**
+         * Etape courante.
+         */
+        $currentStep
+                    ->setIsCurrent(true)
+                    ->setDone(false);
+        
+        $this->setCurrentStep($currentStep);
+            
         return $this;
     }
     
     /**
-     * Ajoute une étape au workflow, associée à une condition de réalisation.
+     * Ajoute de règle : de pertinence et de franchissement.
      * 
-     * @param string $key Clé de l'étape dans la liste des étapes
-     * @param string $step Etape à ajouter
-     * @param RuleInterface $rule Condition de réalisation de l'étape
+     * @param string $key Clé de l'étape
+     * @param RuleInterface $relevanceRule Règle de pertinence
+     * @param RuleInterface $crossingRule  Règle de franchissement
      * @return self
      */
-    protected function addStep($key, Step $step, RuleInterface $rule = null)
+    protected function addRule($key, RuleInterface $relevanceRule = null, RuleInterface $crossingRule = null)
     {   
+        $this->rules[$key] = ['relevance' => $relevanceRule, 'crossing' => $crossingRule];
+
+        return $this;
+    }
+    
+    /**
+     * Ajoute une étape au workflow.
+     * 
+     * @param string $step Etape à ajouter
+     * @param string $key Clé facultative de l'étape dans la liste des étapes
+     * @return self
+     */
+    protected function addStep(Step $step, $key = null)
+    {
+        if (null !== $key) {
+            $step->setKey($key);
+        }
         $step->setIndex(count($this->getSteps()) + 1);
         
-        $this->steps[$key]      = $step;
-        $this->conditions[$key] = $rule;
+        $this->steps[$step->getKey()] = $step;
 
         return $this;
     }
@@ -94,31 +155,13 @@ abstract class AbstractWorkflow extends AbstractService
      * @return Step Etape
      * @throws RuntimeException Etape introuvable
      */
-    protected function getStep($key)
+    public function getStep($key)
     {
         if (!$this->containsStep($key)) {
             throw new RuntimeException("Aucune étape trouvée dans le workflow avec la clé '$key'.");
         }
         
         return $this->getSteps()[$key];
-    }
-    
-    /**
-     * Recherche la clé d'une étape dans la liste des étapes du workflow.
-     * 
-     * @param Step $step Etape dont on veut la clé
-     * @return string Clé trouvée
-     * @throws RuntimeException Etape introuvable
-     */
-    protected function getStepKey(Step $step)
-    {
-        foreach ($this->getSteps() as $key => $s) {
-            if ($step === $s) {
-                return $key;
-            }
-        }
-        
-        throw new RuntimeException("Etape spécifiée introuvable.");
     }
     
     /**
@@ -134,24 +177,53 @@ abstract class AbstractWorkflow extends AbstractService
         
         return $this->steps;
     }
-
-    /**
-     * Conditions de réalisation (règles métier) de chaque étape du workflow.
-     * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
-     * 
-     * @var RuleInterface[] string => RuleInterface : mêmes clés que les étapes
-     */
-    protected $conditions;
     
     /**
-     * Retourne les conditions de réalisation (les règles métier) associées à chaque étape du workflow.
-     * Une étape est considérée comme réalisée si sa "condition" est satisfaite.
+     * Retourne toutes les règles métiers du workflow.
      * 
-     * @return RuleInterface[] string => RuleInterface : mêmes clés que les étapes
+     * @return array clé => ['relevance' => RuleInterface, 'crossing' => RuleInterface] : mêmes clés que les conditions
      */
-    public function getConditions()
+    public function getRules()
     {
-        return $this->conditions;
+        if (null === $this->rules) {
+            $this->createSteps();
+        }
+        
+        return $this->rules;
+    }
+    
+    /**
+     * Retourne une règle métier de pertinence précise du workflow.
+     * 
+     * @param string $key Clé de l'étape
+     * @return RuleInterface
+     */
+    protected function getRelevanceRule($key)
+    {
+        $rules = $this->getRules();
+        
+        if (!isset($rules[$key]['relevance'])) {
+            return null;
+        }
+        
+        return $rules[$key]['relevance'];
+    }
+    
+    /**
+     * Retourne une règle métier de franchissement précise du workflow.
+     * 
+     * @param string $key Clé de l'étape
+     * @return RuleInterface
+     */
+    protected function getCrossingRule($key)
+    {
+        $rules = $this->getRules();
+        
+        if (!isset($rules[$key]['crossing'])) {
+            return null;
+        }
+        
+        return $rules[$key]['crossing'];
     }
 
     /**
@@ -172,6 +244,7 @@ abstract class AbstractWorkflow extends AbstractService
         if (null === $this->currentStep) {
             $this->processSteps();
         }
+        
         return $this->currentStep;
     }
 
@@ -188,7 +261,7 @@ abstract class AbstractWorkflow extends AbstractService
         }
         
         $this->currentStep = $currentStep;
-        
+    
         return $this;
     }
     
@@ -196,21 +269,24 @@ abstract class AbstractWorkflow extends AbstractService
      * Teste si l'étape spécifiée est atteignable ou non.
      * C'est le cas ssi toutes les étapes la précédant sont franchissables.
      * 
+     * NB: une étape n'est présente dans le workflow que si elle est pertinente, donc on 
+     * peut ne tester que la règle de franchissement de chaque étape présente.
+     * 
      * @param Step|string $step Etape ou clé de l'étape à atteindre
      * @return boolean <code>true</code> si celle-ci est atteignable, <code>false</code> sinon
      */
     public function isStepReachable($step)
     {
-        if (is_string($key = $step)) {
-            $step = $this->getStep($key);
+        if (is_string($step)) {
+            $step = $this->getStep($step);
         }
         
-        foreach ($this->getSteps() as $key => $s) { /* @var $s Step */
+        foreach ($this->getSteps() as $s) { /* @var $s Step */
             if ($s === $step) {
                 return true;
             }
-            if (($rule = $this->getConditions()[$key]) && $rule->isRelevant() && !$rule->execute()) {
-                break;
+            if (!$s->getDone()) {
+                return false;
             }
         }
         
@@ -219,21 +295,30 @@ abstract class AbstractWorkflow extends AbstractService
     
     /**
      * Teste si l'étape spécifié est franchissable ou non.
-     * C'est le cas ssi la condition associée à l'étape est satisfaite.
+     * C'est le cas ssi l'étape est atteignable et la règle de franchissement associée est satisfaite.
      * 
      * @param Step|string $step Etape ou clé de l'étape à franchir
      * @return boolean
      */
     public function isStepCrossable($step)
     {
-        $key = is_string($step) ? $step : $this->getStepKey($step);
-        $reachable = $this->isStepReachable($key);
-        
-        if ($reachable && ($rule = $this->getConditions()[$key]) && $rule->isRelevant() && $rule->execute()) {
-            return true;
+        if (is_string($step)) {
+            $step = $this->getStep($step);
+        }
+        if (is_bool($step->getCrossable())) {
+            return $step->getCrossable();
         }
         
-        return false;
+//        $reachable = $this->isStepReachable($step);
+//        $crossable = false;
+//        
+//        if ($reachable) {
+//            $rule = $this->getCrossingRule($step->getKey());
+//            $crossable =  !$rule || $rule->isRelevant() && $rule->execute();
+//        }
+//        
+//        return $reachable && $crossable;
+        return $step->getDone();
     }
     
     /**
@@ -245,8 +330,8 @@ abstract class AbstractWorkflow extends AbstractService
      */
     public function getNextStep($step = null)
     {
-        if (is_string($key = $step)) {
-            $step = $this->getStep($key);
+        if (is_string($step)) {
+            $step = $this->getStep($step);
         }
         
         if (null === $step) {
@@ -342,8 +427,8 @@ abstract class AbstractWorkflow extends AbstractService
         if (!$this->containsStep($step)) {
             throw new RuntimeException("Aucune étape trouvée dans le workflow avec la clé '$key'.");
         }
-        if (is_string($key = $step)) {
-            $step = $this->getStep($key);
+        if (is_string($step)) {
+            $step = $this->getStep($step);
         }
         
         $currentStep = $this->getCurrentStep();

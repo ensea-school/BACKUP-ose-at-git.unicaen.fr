@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * StatutIntervenant
  */
-class StatutIntervenant
+class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     const ENS_2ND_DEG    = 'ENS_2ND_DEG';
     const ENS_CH         = 'ENS_CH';
@@ -88,34 +88,6 @@ class StatutIntervenant
     }
     
     /**
-     * Indique si ce statut nécessite un contrat.
-     *
-     * @return bool 
-     */
-    public function necessiteContrat()
-    {
-        if ($this->estVacataire() || $this->estBiatss()) {
-            return true;
-        }
-
-        return false;
-    }
-    
-    /**
-     * Indique si ce statut permet la fourniture de pièces justificatives.
-     *
-     * @return bool 
-     */
-    public function peutSaisirPieceJointe()
-    {
-        if ($this->estVacataire() && !$this->estBiatss()) {
-            return true;
-        }
-
-        return false;
-    }
-    
-    /**
      * @var \Application\Entity\Db\Source
      */
     protected $source;
@@ -154,11 +126,6 @@ class StatutIntervenant
      * @var string
      */
     protected $libelle;
-
-    /**
-     * @var integer
-     */
-    protected $ordre;
 
     /**
      * @var float
@@ -228,12 +195,32 @@ class StatutIntervenant
     /**
      * @var boolean
      */
+    protected $peutSaisirReferentiel;
+
+    /**
+     * @var boolean
+     */
     protected $peutChoisirDansDossier;
     
     /**
      * @var boolean
      */
     protected $peutSaisirDossier;
+    
+    /**
+     * @var boolean
+     */
+    protected $peutAvoirContrat;
+    
+    /**
+     * @var integer
+     */
+    protected $ordre;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typePieceJointeStatut;
 
     /**
      *
@@ -251,6 +238,26 @@ class StatutIntervenant
     function getPeutSaisirService()
     {
         return $this->peutSaisirService;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    function getPeutSaisirReferentiel()
+    {
+        return $this->peutSaisirReferentiel;
+    }
+
+    /**
+     *
+     * @param boolean $peutSaisirReferentiel
+     * @return \Application\Entity\Db\StatutIntervenant
+     */
+    function setPeutSaisirReferentiel($peutSaisirReferentiel)
+    {
+        $this->peutSaisirReferentiel = $peutSaisirReferentiel;
+        return $this;
     }
 
     /**
@@ -316,6 +323,29 @@ class StatutIntervenant
     public function getPeutSaisirDossier()
     {
         return $this->peutSaisirDossier;
+    }
+    
+    /**
+     * Spécifie si ce statut permet l'établissement d'un contrat/avenant.
+     * 
+     * @param boolean $peutAvoirContrat
+     * @return self
+     */
+    public function setPeutAvoirContrat($peutAvoirContrat = true)
+    {
+        $this->peutAvoirContrat = $peutAvoirContrat;
+        
+        return $this;
+    }
+    
+    /**
+     * Indique si ce statut permet l'établissement d'un contrat/avenant.
+     *
+     * @return boolean 
+     */
+    public function getPeutAvoirContrat()
+    {
+        return $this->peutAvoirContrat;
     }
 
     /**
@@ -773,5 +803,15 @@ class StatutIntervenant
     public function getTypeAgrementStatut()
     {
         return $this->typeAgrementStatut;
+    }
+
+    /**
+     * Get typePieceJointeStatut
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypePieceJointeStatut()
+    {
+        return $this->typePieceJointeStatut;
     }
 }

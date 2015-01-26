@@ -36,6 +36,23 @@ class Agrement extends AbstractEntityService
     {
         return 'a';
     }
+    
+    /**
+     * Enregistre un agrément.
+     * 
+     * NB: tout le travail est déjà fait via un formulaire en fait! 
+     * Cette méthode existe surtout pour déclencher l'événement de workflow.
+     * 
+     * @param AgrementEntity $agrement
+     * @return void
+     */
+    public function enregistrerAgrement(AgrementEntity $agrement)
+    {
+        if (!$agrement->getId()) {
+            $this->getEntityManager()->persist($agrement);
+        }
+        $this->getEntityManager()->flush($agrement);
+    }
 
     /**
      * Retourne la liste des pièces jointes d'un type donné.

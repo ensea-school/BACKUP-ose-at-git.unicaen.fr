@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Corps
  */
-class Corps implements HistoriqueAwareInterface
+class Corps implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
      * @var \DateTime

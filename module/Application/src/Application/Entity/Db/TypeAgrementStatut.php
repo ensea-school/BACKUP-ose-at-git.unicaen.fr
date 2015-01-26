@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * TypeAgrementStatut
  */
-class TypeAgrementStatut
+class TypeAgrementStatut implements HistoriqueAwareInterface
 {
     use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
     
@@ -63,6 +63,21 @@ class TypeAgrementStatut
      * @var \Application\Entity\Db\StatutIntervenant
      */
     private $statut;
+
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf("Id=%s, Statut=%s, Type=%s, Oblig=%d, 1erRecrut=%d, Seuil=%s",
+                $this->getId(),
+                sprintf("%s (%s)", $this->getStatut(), $this->getStatut()->getId()),
+                sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
+                $this->getObligatoire(),
+                $this->getPremierRecrutement(),
+                $this->getSeuilHeures() ?: "Aucun");
+    }
 
     /**
      * Get seuilHeures

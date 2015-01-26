@@ -2,37 +2,80 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\IntervenantExterieur;
-
 /**
  * Règle métier déterminant si un intervenant peut joindre des pièces justificatives.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutSaisirPieceJointeRule extends IntervenantRule
-{
+class PeutSaisirPieceJointeRule extends AbstractIntervenantRule
+{    
+    const MESSAGE_STATUT = 'messageStatut';
+
+    /**
+     * Message template definitions
+     * @var array
+     */
+    protected $messageTemplates = array(
+        self::MESSAGE_STATUT => "Le statut &laquo; %value% &raquo; ne nécessite pas la fourniture de pièce justificative.",
+    );
+    
+    /**
+     * Exécute la règle métier.
+     * 
+     * @return array [ integer => [ 'id' => {id} ] ]
+     */
     public function execute()
     {
-//        if ($this->getIntervenant() instanceof IntervenantExterieur) {
-//            $dossier = $this->getIntervenant()->getDossier();
-//            if (!$dossier) {
-//                $this->setMessage("La saisie de pièce justificative requiert au préalable la saisie des données personnelles.");
-//                return false;
-//            }
-//        }
+        $this->message(null);
         
-        $statut = $this->getIntervenant()->getStatut();
+        $qb = $this->getQueryBuilder();
         
-        if (!$statut->peutSaisirPieceJointe()) {
-            $this->setMessage(sprintf("Le statut &laquo; %s &raquo; ne nécessite pas la fourniture de pièces justificatives.", $statut));
-            return false;
+        /**
+         * Application de la règle à un intervenant précis
+         */
+        if ($this->getIntervenant()) {
+            $result = $qb->getQuery()->getScalarResult();
+            
+            if (!$result) {
+                $statut = $this->getIntervenant()->getStatut();
+                $this->message(self::MESSAGE_STATUT, $statut);
+            }
+                
+            return $this->normalizeResult($result);
         }
         
-        return true;
+        /**
+         * Recherche des intervenants répondant à la règle
+         */
+        
+        $result = $qb->getQuery()->getScalarResult();
+
+        return $this->normalizeResult($result);
     }
     
     public function isRelevant()
     {
         return true;
+    }
+    
+    /**
+     * 
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        $em = $this->getServiceIntervenant()->getEntityManager();
+        $qb = $em->getRepository("Application\Entity\Db\Intervenant")->createQueryBuilder("i")
+                ->select("i.id")
+                ->join("i.statut", "si")
+                ->join("si.typePieceJointeStatut", "tpjs")
+                ->join("tpjs.type", "tpj") //  pour écarter les types historisés
+                ->andWhere("tpjs.premierRecrutement = i.premierRecrutement");
+        
+        if ($this->getIntervenant()) {
+            $qb->andWhere("i = " . $this->getIntervenant()->getId());
+        }
+        
+        return $qb;
     }
 }

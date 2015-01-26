@@ -2,8 +2,11 @@
 
 <phpunit bootstrap="./Bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="unit">
-            <directory>./OSETest</directory>
+        <testsuite name="entity">
+            <directory>./OSETest/Entity</directory>
+        </testsuite>
+        <testsuite name="rule">
+            <directory>./OSETest/Rule</directory>
         </testsuite>
     </testsuites>
 

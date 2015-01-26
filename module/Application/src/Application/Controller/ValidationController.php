@@ -11,6 +11,8 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\ServiceValidation;
+use Application\Form\Intervenant\ReferentielValidation;
+use Common\Exception\MessageException;
 
 /**
  * Description of ValidationController
@@ -55,11 +57,6 @@ class ValidationController extends AbstractActionController implements ContextPr
     private $intervenant;
     
     /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
-    
-    /**
      * @var ServiceValidation
      */
     private $formValider;
@@ -73,6 +70,16 @@ class ValidationController extends AbstractActionController implements ContextPr
      * @var \Zend\View\Model\ViewModel
      */
     private $view;
+    
+    /**
+     * 
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')
+                ->disableForEntity('Application\Entity\Db\Etape')
+                ->disableForEntity('Application\Entity\Db\ElementPedagogique');
+    }
     
     /**
      * 
@@ -185,7 +192,7 @@ class ValidationController extends AbstractActionController implements ContextPr
     {
         $this->title    = "Validation des données personnelles <small>$this->intervenant</small>";
         $this->readonly = false;
-            
+        
         $this->commonDossier();
         
         if ($this->validation->getId()) {
@@ -198,7 +205,7 @@ class ValidationController extends AbstractActionController implements ContextPr
             if ($this->formValider->isValid()) {
                 $complet = (bool) $data['valide'];
                 $this->updateValidation($complet);
-                
+        
                 return $this->redirect()->toRoute(null, array(), array(), true);
             }
         }
@@ -208,27 +215,13 @@ class ValidationController extends AbstractActionController implements ContextPr
         return $this->view;
     }
     
-    /**
-     * 
-     * @return \Zend\View\Model\ViewModel
-     */
-    private function getDossierModifierViewModel()
-    {
-        $controller       = 'Application\Controller\Dossier';
-        $params           = $this->getEvent()->getRouteMatch()->getParams();
-        $params['action'] = 'modifier';
-        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
-
-        return $viewModel;
-    }
-    
     private function commonDossier()
     {
         $role              = $this->getContextProvider()->getSelectedIdentityRole();
         $serviceValidation = $this->getServiceValidation();
         $typeValidation    = TypeValidation::CODE_DONNEES_PERSO_PAR_COMP;
         
-        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
+//        $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
 
         $this->formValider = $this->getFormDossier()->setIntervenant($this->intervenant)->init();
         
@@ -257,6 +250,20 @@ class ValidationController extends AbstractActionController implements ContextPr
             'title'       => $this->title,
         ));
         $this->view->setTemplate('application/validation/dossier');
+    }
+    
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function getDossierModifierViewModel()
+    {
+        $controller       = 'Application\Controller\Dossier';
+        $params           = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'modifier';
+        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
+
+        return $viewModel;
     }
     
     /**
@@ -299,6 +306,8 @@ class ValidationController extends AbstractActionController implements ContextPr
      */
     public function voirServiceAction()
     { 
+        $this->initFilters();
+        
         $this->readonly = true;
           
         $serviceStructure  = $this->getServiceStructure();
@@ -379,6 +388,8 @@ class ValidationController extends AbstractActionController implements ContextPr
      */
     public function modifierServiceAction()
     {
+        $this->initFilters();
+        
         $this->readonly = false;
         
         $serviceService      = $this->getServiceService();
@@ -457,13 +468,8 @@ class ValidationController extends AbstractActionController implements ContextPr
             $data = $this->getRequest()->getPost();
             $this->formValider->setData($data);
             if ($this->formValider->isValid()) {
-                // peuplement de la nouvelle validation avec les volumes horaires non validés
-                foreach ($servicesNonValides as $s) { /* @var $s \Application\Entity\Db\Service */
-                    foreach ($s->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
-                        $this->validation->addVolumeHoraire($vh);
-                    }
-                }
-                $serviceValidation->save($this->validation);
+                $serviceValidation->enregistrerValidationServices($this->validation, $servicesNonValides);
+                
                 $this->flashMessenger()->addSuccessMessage("Validation enregistrée avec succès.");
                 
                 return $this->redirect()->toRoute(null, array(), array(), true);
@@ -710,23 +716,16 @@ class ValidationController extends AbstractActionController implements ContextPr
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
 
         if ($this->getRequest()->isPost()) {
-            $softDelete = true;
-            // NB: une validation de contrat doit être supprimée! Il existe une relation ManyToOne de Contrat vers Validation
-            // et si la validation est seulement historisée, Doctrine ne trouve plus la Validation référencée dans Contrat 
-            // (EntityNotFoundException) si le filtre 'historique' est actif.
-            if ($validation->getTypeValidation()->getCode() === TypeValidation::CODE_CONTRAT_PAR_COMP) {
-                $softDelete = false;
-            }
-            
             $errors = array();
             try {
-                $this->getServiceValidation()->delete($validation, $softDelete);
+                $this->getServiceValidation()->supprimer($validation);
+                
                 $this->flashMessenger()->addSuccessMessage("Validation <strong>supprimée</strong> avec succès.");
             }
             catch(\Exception $e){
-                $e = \Application\Exception\DbException::translate($e);
                 $errors[\UnicaenApp\View\Helper\Messenger::ERROR] = $e->getMessage();
             }
+            
             $viewModel->setVariable('errors', $errors);
         }
 
@@ -743,23 +742,16 @@ class ValidationController extends AbstractActionController implements ContextPr
     protected function updateValidation($valide)
     {
         if ($valide) {
-            $this->em()->persist($this->validation);
+            $this->getServiceValidation()->enregistrerValidationDossier($this->validation);
         }
         else {
-            $this->validation->setHistoDestruction(new \DateTime());
+            $this->getServiceValidation()->supprimer($this->validation);
         }
         $this->em()->flush();
 
-        $this->notify($valide);
         $this->flashMessenger()->addSuccessMessage(sprintf("Validation <strong>%s</strong> avec succès.", $valide ? "enregistrée" : "supprimée"));
-//        $this->flashMessenger()->addInfoMessage("Un mail doit être envoyé pour informer l'intervenant, non ?...");
         
         return $this;
-    }
-    
-    protected function notify($complet)
-    {
-        
     }
     
     /**
@@ -781,6 +773,18 @@ class ValidationController extends AbstractActionController implements ContextPr
     {
         if (null === $this->formValider) {
             $this->formValider = new ServiceValidation();
+        }
+        
+        return $this->formValider;
+    }
+    
+    /**
+     * @return ReferentielValidation
+     */
+    protected function getFormValidationReferentiel()
+    {
+        if (null === $this->formValider) {
+            $this->formValider = new ReferentielValidation();
         }
         
         return $this->formValider;

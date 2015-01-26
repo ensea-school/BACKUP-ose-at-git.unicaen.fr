@@ -10,6 +10,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Interfaces\IntervenantAwareInterface;
 use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\ReadOnlyAwareTrait;
 use NumberFormatter;
 use UnicaenApp\Util;
 
@@ -23,6 +24,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
     use IntervenantAwareTrait;
+    use ReadOnlyAwareTrait;
 
     protected $services;
 
@@ -103,7 +105,9 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     protected function renderLigne($service)
     {
         $helper = $this->getView()->serviceReferentielLigne($service); /* @var $helper Ligne */
-        $helper->setRenderIntervenants($this->getRenderIntervenants());
+        $helper
+                ->setReadOnly($this->getReadOnly())
+                ->setRenderIntervenants($this->getRenderIntervenants());
         
         return $helper->render();
     }
@@ -136,7 +140,6 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function applyGlobalContext(array &$parts)
     {
         $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
         
         if (!$this->getRenderIntervenants()) {
             unset($parts['intervenant']);
@@ -173,12 +176,23 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     protected $renderIntervenants = true;
 
+    /**
+     * Indique si la colonne intervenant doit être générée ou non.
+     * 
+     * @return boolean
+     */
     public function getRenderIntervenants()
     {
         return $this->renderIntervenants;
     }
 
-    public function setRenderIntervenants($renderIntervenants)
+    /**
+     * Spécifie si la colonne intervenant doit être générée ou non.
+     * 
+     * @param boolean $renderIntervenants
+     * @return self
+     */
+    public function setRenderIntervenants($renderIntervenants = true)
     {
         $this->renderIntervenants = $renderIntervenants;
         return $this;

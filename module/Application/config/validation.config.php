@@ -120,7 +120,7 @@ return array(
                 ),
                 array(
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => array('service'),
+                    'action'     => array('service', 'referentiel'),
                     'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID),
                 ),
                 array(

@@ -497,3 +497,63 @@ function updateQueryStringParameter(uri, key, value)
         return uri + separator + key + "=" + value;
     }
 }
+
+/**
+ * Affiche une alerte temporaire.
+ * 
+ * @param string message
+ * @param string severity 'info', 'success', 'warning' ou 'error'
+ * @param int duration Durée d'affichage de l'alerte en ms
+ * @returns void
+ * @todo À extraire vers UnicaenApp.
+ */
+function alertFlash(message, severity, duration)
+{
+    var alertClasses = {
+        info:    'info',
+        success: 'success',
+        warning: 'warning',
+        error:   'danger'
+    };
+    var iconClasses = {
+        info:    'info-sign',
+        success: 'ok-sign',
+        warning: 'warning-sign',
+        error:   'exclamation-sign'
+    };
+    var alertClass = 'alert-' + alertClasses[severity];
+    var divId = "alert-div-" + Math.floor((Math.random() * 100000) + 1);
+    
+    var alertDiv = $(
+'<div id="' + divId + '" class="alert fade in navbar-fixed-bottom" role="alert" style="display: none;">' +
+'    <div class="container">' +
+'        <p class="text-center"><span class="icon glyphicon"></span> <span class="message"></span></p>' +
+'    </div>' +
+'</div>'
+    ).appendTo("body");
+    
+    alertDiv.addClass(alertClass);
+    $("p .message", alertDiv).html(message);
+    $("p .icon", alertDiv).addClass('glyphicon-' + iconClasses[severity]);
+        
+    alertDiv.slideToggle(500, function() {
+        window.setTimeout(function() {
+            alertDiv.slideToggle(500, function() {
+                $(this).removeClass(alertClass)
+            });
+        }, duration);
+    });
+}
+
+/**
+ * Lancement périodique d'une requête dans le seul but de rafraîchir la session de l'utilisateur.
+ * 
+ * @param url URL de la requête
+ * @param refreshTimeInMs Période en millisecondes
+ */
+function refreshSession(url, refreshTimeInMs)
+{
+    window.setInterval(function() {
+        $.get(url, { ts: Date.now() }); // le timestamp empêche simplement la mise en cache par le navigateur
+    }, refreshTimeInMs);
+}

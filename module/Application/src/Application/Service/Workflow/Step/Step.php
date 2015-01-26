@@ -2,7 +2,9 @@
 
 namespace Application\Service\Workflow\Step;
 
-use SplObjectStorage;
+use Application\Acl\ComposanteRole;
+use Common\Exception\LogicException;
+use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
  * Descriptions of Step
@@ -12,15 +14,32 @@ use SplObjectStorage;
 abstract class Step
 {
     /**
-     * @var int
+     * Retourne cette étape dans un format lisible.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLabel() . "[{$this->getKey()}]";
+    }
+    
+    /**
+     * @var integer
      */
     private $index;
     
+    /**
+     * @return integer
+     */
     public function getIndex()
     {
         return $this->index;
     }
 
+    /**
+     * @param integer $index
+     * @return self
+     */
     public function setIndex($index)
     {
         $this->index = $index;
@@ -28,33 +47,90 @@ abstract class Step
     }
     
     /**
-     * @var SplObjectStorage
+     * @var string
+     */
+    private $key;
+    
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     * @return self
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+        return $this;
+    }
+    
+    /**
+     * @var array
      */
     private $labels;
     
+    /**
+     * @return array
+     */
     public function getLabels()
     {
-//        if (null === $this->labels) {
-//            $this->labels = new \SplObjectStorage();
-//        }
         return $this->labels;
     }
     
-    public function getLabel(\Zend\Permissions\Acl\Role\RoleInterface $role)
+    /**
+     * 
+     * @param \Zend\Permissions\Acl\Role\RoleInterface $role
+     * @return string
+     * @throws LogicException
+     */
+    public function getLabel(RoleInterface $role = null)
     {
-        $roleId = $role->getRoleId();
-        if ($role instanceof \Application\Acl\ComposanteRole) {
-            $roleId = \Application\Acl\ComposanteRole::ROLE_ID;
-        }
-        if (!isset($this->labels[$roleId])) {
-            if (!isset($this->labels['default'])) {
-                throw new \Common\Exception\LogicException("Aucun label par défaut n'a été spécifié pour l'étape '" . get_class() . "'.");
+        $key = null;
+        
+        if ($role) {
+            $key = $role->getRoleId();
+            if ($role instanceof ComposanteRole) {
+                $key = ComposanteRole::ROLE_ID;
             }
-            return $this->labels['default'];
         }
-        return $this->labels[$roleId];
+        
+        if (!$key || !isset($this->labels[$key])) {
+            $key = 'default';
+        }
+        
+        if (!isset($this->labels[$key])) {
+            throw new LogicException("Aucun label n'a été spécifié pour l'étape '" . get_class() . "' et la clé '$key'.");
+        }
+            
+        return $this->labels[$key];
+    }
+    
+    /**
+     * 
+     * @param string $label
+     * @param string $key
+     * @return self
+     */
+    public function setLabel($label, $key = null)
+    {
+        if (!$key) {
+            $key = 'default';
+        }
+            
+        $this->labels[$key] = $label;
+            
+        return $this;
     }
 
+    /**
+     * @param array $labels
+     * @return self
+     */
     protected function setLabels($labels)
     {
         $this->labels = $labels;
@@ -73,7 +149,7 @@ abstract class Step
 <p>Aenean in fermentum dolor. Donec quis odio condimentum, mollis est ut, semper magna. Donec ornare euismod justo, et auctor mi rutrum ut. Vestibulum consequat orci vel nulla facilisis, quis vulputate elit tristique. Nulla nec convallis turpis. Integer nulla nisl, mollis quis magna a, accumsan bibendum felis. Integer fringilla pretium imperdiet. Duis pharetra nisi orci, vel vehicula lectus vehicula eu. Nullam placerat fringilla urna in faucibus. Pellentesque imperdiet interdum arcu sit amet venenatis. Maecenas nulla nunc, blandit a sem vel, vulputate pretium neque. Sed hendrerit nisi orci, eget aliquam justo malesuada quis. Sed ultricies risus sed justo egestas, vel cursus quam bibendum. Etiam eget convallis metus. Phasellus ac lacinia tellus.</p>
 <p>Pellentesque venenatis nisi et turpis commodo dapibus. Integer bibendum quis massa ac rutrum. Mauris dolor arcu, luctus pulvinar ligula eu, aliquet dapibus risus. Nulla nec lorem non purus tempor rhoncus mattis non lorem. Duis vehicula arcu eu bibendum sodales. Proin vitae turpis a neque tempus ornare. In hac habitasse platea dictumst. Morbi molestie egestas pellentesque. Fusce sit amet aliquam massa. Sed interdum sapien vel nibh egestas blandit. Nunc placerat ipsum ut dignissim sollicitudin. Fusce malesuada porta libero. Sed mi lectus, commodo a facilisis vel, eleifend ac tortor. Suspendisse auctor sem in massa auctor, id sollicitudin nisi dapibus.</p>
 EOS;
-        return $this->descriptions;
+//        return $this->descriptions;
     }
 
     protected function setDescriptions($descriptions)
@@ -82,11 +158,11 @@ EOS;
         return $this;
     }
     
-    public function getDescription(\Zend\Permissions\Acl\Role\RoleInterface $role)
+    public function getDescription(RoleInterface $role)
     {
         $roleId = $role->getRoleId();
-        if ($role instanceof \Application\Acl\ComposanteRole) {
-            $roleId = \Application\Acl\ComposanteRole::ROLE_ID;
+        if ($role instanceof ComposanteRole) {
+            $roleId = ComposanteRole::ROLE_ID;
         }
         if (!isset($this->descriptions[$roleId])) {
 //            throw new \Common\Exception\LogicException("Description not set for role '$roleId'!");
@@ -156,6 +232,54 @@ EOS;
     public function setIsCurrent($isCurrent = true)
     {
         $this->isCurrent = $isCurrent;
+        return $this;
+    }
+    
+    /**
+     * @var bool
+     */
+    private $crossable = null;
+    
+    public function getCrossable()
+    {
+        return $this->crossable;
+    }
+
+    public function setCrossable($crossable = true)
+    {
+        $this->crossable = $crossable;
+        return $this;
+    }
+    
+    /**
+     * @var bool
+     */
+    private $visible = false;
+    
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    public function setVisible($visible = true)
+    {
+        $this->visible = $visible;
+        return $this;
+    }
+    
+    /**
+     * @var \Application\Entity\Db\WfEtape
+     */
+    private $wfEtape = false;
+    
+    public function getWfEtape()
+    {
+        return $this->wfEtape;
+    }
+
+    public function setWfEtape($wfEtape = true)
+    {
+        $this->wfEtape = $wfEtape;
         return $this;
     }
 }

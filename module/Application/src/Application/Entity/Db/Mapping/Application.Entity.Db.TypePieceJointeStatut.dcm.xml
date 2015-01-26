@@ -13,6 +13,7 @@
     </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
+      <sequence-generator sequence-name="TYPE_PIECE_JOINTE_STATU_ID_SEQ" allocation-size="1"/>
     </id>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>

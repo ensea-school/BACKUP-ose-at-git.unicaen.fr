@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\WfIntervenantEtape" table="WF_INTERVENANT_ETAPE">
+    <id name="id" type="integer" column="ID">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="courante" type="boolean" column="COURANTE" nullable="false"/>
+    <field name="franchie" type="boolean" column="FRANCHIE" nullable="false"/>
+    <field name="atteignable" type="boolean" column="ATTEIGNABLE" nullable="false"/>
+    <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
+    
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="etape" target-entity="Application\Entity\Db\WfEtape">
+      <join-columns>
+        <join-column name="ETAPE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

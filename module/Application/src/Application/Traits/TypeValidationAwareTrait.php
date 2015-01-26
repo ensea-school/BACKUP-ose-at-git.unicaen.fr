@@ -21,7 +21,7 @@ trait TypeValidationAwareTrait
      * 
      * @param TypeValidation $typeValidation type de validation concerné
      */
-    public function setTypeValidation(TypeValidation $typeValidation)
+    public function setTypeValidation(TypeValidation $typeValidation = null)
     {
         $this->typeValidation = $typeValidation;
         

@@ -8,10 +8,8 @@ use Application\Entity\Db\PieceJointe as PieceJointeEntity;
 use Application\Entity\Db\Fichier as FichierEntity;
 use Application\Entity\Db\IntervenantExterieur as IntervenantExterieurEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Assertion\PieceJointeAssertion;
-use Application\Assertion\FichierAssertion;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Application\Acl\ComposanteRole;
 
@@ -22,7 +20,6 @@ use Application\Acl\ComposanteRole;
  */
 class PieceJointe extends AbstractEntityService
 {
-
     /**
      * retourne la classe des entités
      *
@@ -151,7 +148,7 @@ EOS;
      * @param boolean $deleteFiles Supprimer les fichiers après création de la PJ$
      * @return PieceJointeEntity[]
      */
-    public function createFromFiles($files, IntervenantExterieurEntity $intervenant, TypePieceJointeEntity $type, $deleteFiles = true)
+    public function ajouterFichiers($files, IntervenantExterieurEntity $intervenant, TypePieceJointeEntity $type, $deleteFiles = true)
     {
         if (!$files) {
            throw new \Common\Exception\LogicException("Aucune donnée sur les fichiers spécifiée.");
@@ -340,6 +337,32 @@ EOS;
     }
     
     /**
+     * Suppression d'un fichier déposé lié à une PJ.
+     * 
+     * NB: lorsqu'il n'y a plus aucun fichier, la PJ elle-même est supprimée.
+     * 
+     * @param \Application\Entity\Db\Fichier $fichier
+     * @param \Application\Entity\Db\PieceJointe $pj
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     * @return void
+     * @throws UnAuthorizedException
+     */
+    public function supprimerFichier(FichierEntity $fichier, PieceJointeEntity $pj, IntervenantEntity $intervenant)
+    {       
+        $pj->removeFichier($fichier);
+        $this->getEntityManager()->remove($fichier);
+        
+        if (!count($pj->getFichier())) {
+            if (!$this->getAuthorize()->isAllowed($pj, PieceJointeAssertion::PRIVILEGE_DELETE)) {
+                throw new UnAuthorizedException("Suppression de la pièce jointe interdite!");
+            }
+            $this->getEntityManager()->remove($pj);
+        }
+        
+        $this->getEntityManager()->flush();
+    }
+    
+    /**
      * Détermine si on peut saisir les pièces justificatives.
      *
      * @param \Application\Entity\Db\Intervenant $intervenant Intervenant concerné
@@ -349,9 +372,9 @@ EOS;
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        $rule = new \Application\Rule\Intervenant\PeutSaisirPieceJointeRule($intervenant);
+        $rule = $this->getServiceLocator()->get('PeutSaisirPieceJointeRule')->setIntervenant($intervenant);
         if (!$rule->execute()) {
-            $message = "?";
+            $message = "";
             if ($role instanceof \Application\Acl\IntervenantRole) {
                 $message = "Vous ne pouvez pas saisir de pièce justificative. ";
             }

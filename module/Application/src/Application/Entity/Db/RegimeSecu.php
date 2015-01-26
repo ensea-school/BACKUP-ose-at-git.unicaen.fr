@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * RegimeSecu
  */
-class RegimeSecu implements HistoriqueAwareInterface
+class RegimeSecu implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     /**
      * @var string

@@ -130,7 +130,7 @@ class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwar
             }
         }
         
-        $agrementStepKey = 'KEY_' . $this->resource->getType()->getCode();
+        $agrementStepKey = $this->resource->getType()->getCode();
         
         // l'étape Agrement du workflow doit être atteignable
         if (!$this->getWorkflow()->isStepReachable($agrementStepKey)) {

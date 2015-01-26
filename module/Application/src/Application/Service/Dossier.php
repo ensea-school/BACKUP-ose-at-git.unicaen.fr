@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Dossier as DossierEntity;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
 
 /**
  * Description of Dossier
@@ -11,8 +12,7 @@ use Application\Entity\Db\Dossier as DossierEntity;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class Dossier extends AbstractEntityService
-{
-
+{    
     /**
      * retourne la classe des entités
      *
@@ -34,6 +34,37 @@ class Dossier extends AbstractEntityService
     }
     
     /**
+     * Enregistrement d'un dossier.
+     * 
+     * NB: tout le travail est déjà fait via un formulaire en fait! 
+     * Cette méthode existe surtout pour déclencher l'événement de workflow.
+     * 
+     * @param \Application\Entity\Db\Dossier $dossier
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     */
+    public function enregistrerDossier(DossierEntity $dossier, IntervenantEntity $intervenant)
+    {
+        $this->getEntityManager()->persist($dossier);
+        $this->getEntityManager()->persist($intervenant);
+        
+        $this->getEntityManager()->flush();
+    }
+    
+    /**
+     * Suppression d'un dossier.
+     * 
+     * @param \Application\Entity\Db\Dossier $dossier
+     * @param \Application\Entity\Db\Intervenant $intervenant
+     */
+    public function supprimerDossier(DossierEntity $dossier, IntervenantEntity $intervenant)
+    {
+        $intervenant->setDossier(null);
+        $this->getEntityManager()->remove($dossier);
+        
+        $this->getEntityManager()->flush();
+    }
+    
+    /**
      * Détermine si on peut saisir un dossier
      *
      * @param \Application\Entity\Db\Intervenant $intervenant Eventuel intervenant concerné
@@ -50,7 +81,7 @@ class Dossier extends AbstractEntityService
             return $this->cannotDoThat("Anomalie : aucun intervenant spécifié.", $runEx);
         }
         
-        $rule = new \Application\Rule\Intervenant\PeutSaisirDossierRule($intervenant);
+        $rule = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($intervenant);
         if (!$rule->execute()) {
             $message = "";
             if ($role instanceof \Application\Acl\IntervenantRole) {

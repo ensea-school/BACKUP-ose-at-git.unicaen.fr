@@ -2,13 +2,15 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * TypeIntervention
  */
 class TypeIntervention
 {
+    const CODE_CM = 'CM';
+    const CODE_TD = 'TD';
+    const CODE_TP = 'TP';
+    
     /**
      * @var string
      */

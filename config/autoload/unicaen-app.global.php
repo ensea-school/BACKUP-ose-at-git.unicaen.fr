@@ -12,12 +12,16 @@ $settings = array(
     'app_infos' => array(
         'nom'     => "OSE",
         'desc'    => "Organisation des Services d'Enseignement",
-        'version' => "1.3.2",
-        'date'    => "15/01/2015",
+        'version' => "1.4.0beta",
+        'date'    => "21/01/2015",
         'contact' => array('mail' => "Contactez votre composante.", /*'tel' => "01 02 03 04 05"*/),
         'mentionsLegales'        => "http://www.unicaen.fr/outils-portail-institutionnel/mentions-legales/",
         'informatiqueEtLibertes' => "http://www.unicaen.fr/outils-portail-institutionnel/informatique-et-libertes/",
     ),
+    /**
+     * Période d'exécution de la requête de rafraîchissement de la session utilisateur, en millisecondes.
+     */
+    'session_refresh_period' => 600000, // 10*60*1000 ms = 10 min
 );
 
 /**

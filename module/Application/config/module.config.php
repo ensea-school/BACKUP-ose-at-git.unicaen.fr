@@ -41,6 +41,7 @@ $main =  array(
                 'string_functions' => array(
                     'CONVERT'  => 'Common\ORM\Query\Functions\Convert',
                     'CONTAINS' => 'Common\ORM\Query\Functions\Contains',
+                    'REPLACE'  => 'Common\ORM\Query\Functions\Replace',
                     'OSE_DIVERS.STRUCTURE_DANS_STRUCTURE' => 'Common\ORM\Query\Functions\OseDivers\StructureDansStructure',
                 ),
                 'filters' => array(
@@ -215,7 +216,6 @@ $main =  array(
             'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
         ),
         'abstract_factories' => array(
-            'Application\Rule\AbstractRuleFactory',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',
@@ -276,5 +276,8 @@ return array_merge_recursive(
     include 'validation.config.php',
     include 'agrement.config.php',
     include 'gestion.config.php',
-    include 'formule.config.php'
+    include 'formule.config.php',
+    include 'workflow.config.php',
+    include 'indicateur.config.php',
+    include 'notification.config.php'
 );

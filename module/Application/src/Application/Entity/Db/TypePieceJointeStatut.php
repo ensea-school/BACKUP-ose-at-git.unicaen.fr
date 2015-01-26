@@ -7,7 +7,7 @@ use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
 /**
  * TypePieceJointeStatut
  */
-class TypePieceJointeStatut
+class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareInterface
 {
     use ObligatoireSelonSeuilHeuresAwareTrait;
     
@@ -70,16 +70,35 @@ class TypePieceJointeStatut
      * @var \Application\Entity\Db\StatutIntervenant
      */
     private $statut;
-
+    
     /**
      * @var float
+     * @see ObligatoireSelonSeuilHeuresAwareTrait
+     * @todo A supprimer lorsque la colonne de la table sera renommée "SEUIL_HEURES"
      */
     private $seuilHetd;
+
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf("Id=%s, Statut=%s, TypePJ=%s, Oblig=%d, 1erRecrut=%d, Seuil=%s",
+                $this->getId(),
+                sprintf("%s (%s)", $this->getStatut(), $this->getStatut()->getId()),
+                sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
+                $this->getObligatoire(),
+                $this->getPremierRecrutement(),
+                $this->getSeuilHeures() ?: "Aucun");
+    }
 
     /**
      * Get seuilHeures
      *
      * @return integer 
+     * @see ObligatoireSelonSeuilHeuresAwareTrait
+     * @todo A supprimer lorsque la colonne de la table sera renommée "SEUIL_HEURES"
      */
     public function getSeuilHeures()
     {

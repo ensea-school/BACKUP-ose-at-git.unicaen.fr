@@ -33,7 +33,8 @@ class DossierHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
         
         $intervenant
                 ->setDossier($dossier)
-                ->setStatut($dossier->getStatut());
+                ->setStatut($dossier->getStatut())
+                ->setPremierRecrutement($dossier->getPremierRecrutement());
         
         return $intervenant;
     }

@@ -13,7 +13,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface
+abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ValiditeAwareInterface, ResourceInterface
 {    
     /**
      * @var \DateTime
@@ -171,6 +171,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $adresse;
 
     /**
+     * @var \Application\Entity\Db\Adresse
+     */
+    protected $adressePrinc;
+
+    /**
      * @var \Application\Entity\Db\Source
      */
     protected $source;
@@ -255,6 +260,21 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $utilisateur;
 
     /**
+     * @var boolean
+     */
+    protected $premierRecrutement;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $wfIntervenantEtape;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $formuleReferentiel;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultat;
@@ -265,10 +285,10 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $formuleIntervenant;
 
     /**
-     * @var boolean 
+     * @var \Application\Entity\Db\VIndicDiffDossier
      */
-    private $premierRecrutement;
-
+    private $vIndicDiffDossier;
+    
     /**
      * Constructor
      */
@@ -867,6 +887,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Get adresse princ
+     *
+     * @return \Application\Entity\Db\AdresseIntervenant
+     */
+    public function getAdressePrinc()
+    {
+        return $this->adressePrinc;
+    }
+
+    /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
@@ -1265,6 +1295,39 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Add serviceDu
+     *
+     * @param \Application\Entity\Db\ServiceDuIntervenant $serviceDu
+     * @return Intervenant
+     */
+    public function addServiceDu(\Application\Entity\Db\ServiceDuIntervenant $serviceDu)
+    {
+        $this->serviceDu[] = $serviceDu;
+
+        return $this;
+    }
+
+    /**
+     * Remove serviceDu
+     *
+     * @param \Application\Entity\Db\ServiceDuIntervenant $serviceDu
+     */
+    public function removeServiceDu(\Application\Entity\Db\ServiceDuIntervenant $serviceDu)
+    {
+        $this->serviceDu->removeElement($serviceDu);
+    }
+
+    /**
+     * Get serviceDu
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServiceDu()
+    {
+        return $this->serviceDu;
+    }
+
+    /**
      * Add agrement
      *
      * @param \Application\Entity\Db\Agrement $agrement
@@ -1326,13 +1389,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
     
     /**
-     * Get estPermanent
+     * Indique si cet intervenant est permanent.
      *
      * @return bool 
      */
     public function estPermanent()
     {
-        return $this instanceof IntervenantPermanent;
+        return $this->getStatut()->estPermanent();
     }
     
     /**
@@ -1441,6 +1504,94 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Set premierRecrutement
+     *
+     * @param null|boolean $premierRecrutement
+     * @return Dossier
+     */
+    public function setPremierRecrutement($premierRecrutement)
+    {
+        $this->premierRecrutement = $premierRecrutement;
+
+        return $this;
+    }
+
+    /**
+     * Get premierRecrutement
+     *
+     * @return null|boolean 
+     */
+    public function getPremierRecrutement()
+    {
+        return $this->premierRecrutement;
+    }
+
+    /**
+     * Add wfIntervenantEtape
+     *
+     * @param \Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape
+     * @return Intervenant
+     */
+    public function addWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
+    {
+        $this->wfIntervenantEtape[] = $wfIntervenantEtape;
+
+        return $this;
+    }
+
+    /**
+     * Remove wfIntervenantEtape
+     *
+     * @param \Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape
+     */
+    public function removeWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
+    {
+        $this->wfIntervenantEtape->removeElement($wfIntervenantEtape);
+    }
+
+    /**
+     * Get wfIntervenantEtape
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWfIntervenantEtape()
+    {
+        return $this->wfIntervenantEtape;
+    }
+
+    /**
+     * Get vIndicDiffDossier
+     *
+     * @return \Application\Entity\Db\VIndicDiffDossier 
+     */
+    public function getVIndicDiffDossier()
+    {
+        return $this->vIndicDiffDossier;
+    }
+
+    /**
+     * Get formuleReferentiel
+     *
+     * @param Annee $annee
+     * @param Structure|null $structure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFormuleReferentiel( Annee $annee, Structure $structure=null )
+    {
+        $filter = function( FormuleReferentiel $formuleReferentiel ) use ($annee, $structure) {
+            if ($annee && $annee !== $formuleReferentiel->getAnnee()) {
+                return false;
+            }
+            if ($structure && $structure !== $formuleReferentiel->getStructure()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleReferentiel->filter($filter);
+    }
+
+    /**
      * Get formuleResultat
      *
      * @param Annee $annee
@@ -1493,16 +1644,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getFormuleIntervenant()
     {
         return $this->formuleIntervenant;
-    }
-
-    function getPremierRecrutement()
-    {
-        return $this->premierRecrutement;
-    }
-
-    function setPremierRecrutement($premierRecrutement)
-    {
-        $this->premierRecrutement = $premierRecrutement;
     }
 
 

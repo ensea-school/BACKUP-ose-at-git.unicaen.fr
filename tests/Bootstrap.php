@@ -9,6 +9,8 @@ use RuntimeException;
 error_reporting(E_ALL | E_STRICT);
 chdir(__DIR__);
 
+define('CONFIG_DIR', realpath(__DIR__ . '/config'));
+
 /**
  * Test bootstrap, for setting up autoloading
  */

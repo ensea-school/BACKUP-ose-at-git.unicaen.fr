@@ -83,14 +83,15 @@ class DossierController extends AbstractActionController implements ContextProvi
         }
      
         $validation = null;
-        $dossierValide = new \Application\Rule\Intervenant\DossierValideRule($this->intervenant);
-        $dossierValide->setTypeValidation($this->getTypeValidationDossier());
+        $dossierValide = $this->getServiceLocator()->get('DossierValideRule')->setIntervenant($this->intervenant);
         if ($dossierValide->isRelevant() && $dossierValide->execute()) {
             $this->readonly = true;
-            $validation = $dossierValide->getValidation();
+            if (count($validations = $this->intervenant->getValidation($this->getTypeValidationDossier()))) {
+                $validation = $validations->first();
+            }
         }
         
-        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
         $url   = $step ? $wf->getStepUrl($step) : $this->url('home');
         if ($role instanceof IntervenantRole) {
@@ -115,10 +116,8 @@ class DossierController extends AbstractActionController implements ContextProvi
             $data = $this->getRequest()->getPost();
             $this->form->setData($data);
             if ($this->form->isValid()) {
-                $this->em()->persist($dossier);
+                $this->getDossierService()->enregistrerDossier($dossier, $this->intervenant);
 //                $notified = $this->notify($this->intervenant);
-                $this->em()->persist($this->intervenant);
-                $this->em()->flush();
                 $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
 //                if ($notified) {
 //                    $this->flashMessenger()->addInfoMessage(

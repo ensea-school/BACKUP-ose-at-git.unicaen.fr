@@ -1,3 +1,20 @@
+
+
+
+
+
+
+  delete from service_du where intervenant_id in (
+    select id from intervenant where intervenant.source_id = 3
+  );
+  delete from intervenant where intervenant.source_id = 3;
+  
+  
+  
+  
+
+
+
 INSERT INTO STATUT_INTERVENANT
   (
     ID,

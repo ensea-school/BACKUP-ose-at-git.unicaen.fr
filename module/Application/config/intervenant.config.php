@@ -202,20 +202,6 @@ return array(
                     ),
                 ),
             ),
-            'workflow' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route' => '/workflow/:intervenant/:action',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'intervenant' => '[0-9]*',
-                    ),
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Workflow',
-                    ),
-                ),
-            ),
         ),
     ),
     'navigation' => array(
@@ -270,16 +256,6 @@ return array(
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\ModificationServiceDu:saisir',
                             ),
-//                            'feuille-de-route' => array(
-//                                'label'  => "Feuille de route",
-//                                'title'  => "Feuille de route de l'intervenant {id}",
-//                                'route'  => 'intervenant/feuille-de-route',
-//                                'paramsInject' => array(
-//                                    'intervenant',
-//                                ),
-//                                'withtarget' => true,
-//                                'resource' => 'controller/Application\Controller\Intervenant:feuille-de-route',
-//                            ),
                             'dossier' => array(
                                 'label'  => "Données personnelles",
                                 'title'  => "Saisir les données personnelles d'un intervenant vacataire",
@@ -408,11 +384,6 @@ return array(
                     'action'     => array('saisir'),
                     'roles'      => array(R_COMPOSANTE, R_ADMINISTRATEUR),
                 ),
-                array(
-                    'controller' => 'Application\Controller\Workflow',
-                    'action'     => array('nav-next'),
-                    'roles'      => array('user'),
-                ),
             ),
         ),
         'resource_providers' => array(
@@ -438,39 +409,47 @@ return array(
             'Application\Controller\Intervenant'           => 'Application\Controller\IntervenantController',
             'Application\Controller\Dossier'               => 'Application\Controller\DossierController',
             'Application\Controller\ModificationServiceDu' => 'Application\Controller\ModificationServiceDuController',
-            'Application\Controller\Workflow'              => 'Application\Controller\WorkflowController',
         ),
         'aliases' => array(
             'IntervenantController' => 'Application\Controller\Intervenant',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'service_manager' => array(
         'invokables' => array(
-            'ApplicationOffreFormation'        => 'Application\\Service\\OffreFormation',
-            'ApplicationIntervenant'           => 'Application\\Service\\Intervenant',
-            'ApplicationCivilite'              => 'Application\\Service\\Civilite',
-            'ApplicationStatutIntervenant'     => 'Application\\Service\\StatutIntervenant',
-            'ApplicationTypeIntervenant'       => 'Application\\Service\\TypeIntervenant',
-            'ApplicationDossier'               => 'Application\\Service\\Dossier',
-            'WorkflowIntervenant'              => 'Application\\Service\\Workflow\\WorkflowIntervenant',
-            'IntervenantAssertion'             => 'Application\\Assertion\\IntervenantAssertion',
+            'ApplicationOffreFormation'           => 'Application\\Service\\OffreFormation',
+            'ApplicationIntervenant'              => 'Application\\Service\\Intervenant',
+            'ApplicationCivilite'                 => 'Application\\Service\\Civilite',
+            'ApplicationStatutIntervenant'        => 'Application\\Service\\StatutIntervenant',
+            'ApplicationTypeIntervenant'          => 'Application\\Service\\TypeIntervenant',
+            'ApplicationDossier'                  => 'Application\\Service\\Dossier',
+            'IntervenantAssertion'                => 'Application\\Assertion\\IntervenantAssertion',
+            'PeutSaisirDossierRule'               => 'Application\Rule\Intervenant\PeutSaisirDossierRule',
+            'PeutSaisirModificationServiceDuRule' => 'Application\Rule\Intervenant\PeutSaisirModificationServiceDuRule',
+            'PeutSaisirServiceRule'               => 'Application\Rule\Intervenant\PeutSaisirServiceRule',
+            'PeutSaisirReferentielRule'           => 'Application\Rule\Intervenant\PeutSaisirReferentielRule',
+            'PossedeDossierRule'                  => 'Application\Rule\Intervenant\PossedeDossierRule',
+            'PossedeServicesRule'                 => 'Application\Rule\Intervenant\PossedeServicesRule',
+            'PossedeReferentielRule'              => 'Application\Rule\Intervenant\PossedeReferentielRule',
+            'DossierValideRule'                   => 'Application\Rule\Intervenant\DossierValideRule',
+            'ServiceValideRule'                   => 'Application\Rule\Intervenant\ServiceValideRule',
+            'PeutValiderServiceRule'              => 'Application\Rule\Intervenant\PeutValiderServiceRule',
+            'ReferentielValideRule'               => 'Application\Rule\Intervenant\ReferentielValideRule',
+            'NecessiteAgrementRule'               => 'Application\Rule\Intervenant\NecessiteAgrementRule',
+            'AgrementFourniRule'                  => 'Application\Rule\Intervenant\AgrementFourniRule',
+            'EstAffecteRule'                      => 'Application\Rule\Intervenant\EstAffecteRule',
         ),
         'initializers' => array(
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'Workflow' => 'Application\View\Helper\Workflow',
             'formuleTotauxHetd' => 'Application\View\Helper\Intervenant\TotauxHetdViewHelper',
         ),
         'initializers' => array(
-            'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
         ),
     ),
     'form_elements' => array(

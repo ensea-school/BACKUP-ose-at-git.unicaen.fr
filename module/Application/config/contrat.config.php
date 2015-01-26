@@ -273,6 +273,8 @@ return array(
             'ApplicationContrat'          => 'Application\\Service\\Contrat',
             'ApplicationTypeContrat'      => 'Application\\Service\\TypeContrat',
             'ApplicationContratProcess'   => 'Application\\Service\\Process\\ContratProcess',
+            'NecessiteContratRule'        => 'Application\Rule\Intervenant\NecessiteContratRule',
+            'PossedeContratRule'          => 'Application\Rule\Intervenant\PossedeContratRule',
             'PeutCreerContratInitialRule' => 'Application\Rule\Intervenant\PeutCreerContratInitialRule',
             'PeutCreerAvenantRule'        => 'Application\Rule\Intervenant\PeutCreerAvenantRule',
             'ContratAssertion'            => 'Application\\Assertion\\ContratAssertion',

@@ -2,7 +2,7 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\Intervenant;
+use Application\Rule\AbstractRule;
 use Application\Entity\Db\TypeValidation;
 
 /**
@@ -10,15 +10,10 @@ use Application\Entity\Db\TypeValidation;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PeutValiderServiceRule extends IntervenantRule
+class PeutValiderServiceRule extends AbstractRule
 {
-    private $typeValidation;
-    
-    public function __construct(Intervenant $intervenant, TypeValidation $typeValidation)
-    {
-        parent::__construct($intervenant);
-        $this->typeValidation = $typeValidation;
-    }
+    use \Application\Traits\IntervenantAwareTrait;
+    use \Application\Traits\TypeValidationAwareTrait;
     
     /**
      * 
@@ -30,14 +25,16 @@ class PeutValiderServiceRule extends IntervenantRule
     {
         switch ($this->typeValidation->getCode()) {
             case TypeValidation::CODE_DONNEES_PERSO_PAR_COMP:
-                $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
+//                $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
+                $peutSaisirDossier = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
                 if (!$peutSaisirDossier->execute()) {
                     $this->setMessage($peutSaisirDossier->getMessage());
                     return false;
                 }
                 break;
             case TypeValidation::CODE_SERVICES_PAR_COMP:
-                $permetSaisieService = new PeutSaisirServiceRule($this->getIntervenant());
+//                $permetSaisieService = new PeutSaisirServiceRule($this->getIntervenant());
+                $permetSaisieService = $this->getServiceLocator()->get('PeutSaisirServiceRule')->setIntervenant($this->getIntervenant());
                 if (!$permetSaisieService->execute()) {
                     $this->setMessage($permetSaisieService->getMessage());
                     return false;

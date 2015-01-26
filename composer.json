@@ -1,6 +1,6 @@
 {
     "name": "unicaen/ose",
-    "description": "Orgsnisation des Services d'Enseignement (OSE)",
+    "description": "Organisation des Services d'Enseignement (OSE)",
     "repositories": [
         {
             "type": "composer",
@@ -30,6 +30,7 @@
 	"zendframework/zend-serializer":	"2.3.1",
 	"zendframework/zend-json":		"2.3.1",
         "zendframework/zend-form":              "2.3.1",
+        "zendframework/zend-text":              "2.3.1",
         
         "bjyoungblood/bjy-authorize": "dev-master",
         "zf-commons/zfc-user":                  "0.1.3",

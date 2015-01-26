@@ -29,8 +29,10 @@
     <field name="nonAutorise" type="boolean" column="NON_AUTORISE" nullable="false"/>
     <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
     <field name="peutSaisirService" type="boolean" column="PEUT_SAISIR_SERVICE" nullable="false"/>
+    <field name="peutSaisirReferentiel" type="boolean" column="PEUT_SAISIR_REFERENTIEL" nullable="false"/>
     <field name="peutChoisirDansDossier" type="boolean" column="PEUT_CHOISIR_DANS_DOSSIER" nullable="false"/>
     <field name="peutSaisirDossier" type="boolean" column="PEUT_SAISIR_DOSSIER" nullable="false"/>
+    <field name="peutAvoirContrat" type="boolean" column="PEUT_AVOIR_CONTRAT" nullable="false"/>
     <many-to-one field="typeIntervenant" target-entity="Application\Entity\Db\TypeIntervenant">
       <join-columns>
         <join-column name="TYPE_INTERVENANT_ID" referenced-column-name="ID"/>
@@ -57,5 +59,6 @@
       </join-columns>
     </many-to-one>
     <one-to-many field="typeAgrementStatut" target-entity="Application\Entity\Db\TypeAgrementStatut" mapped-by="statut" />
+    <one-to-many field="typePieceJointeStatut" target-entity="Application\Entity\Db\TypePieceJointeStatut" mapped-by="statut" />
   </entity>
 </doctrine-mapping>

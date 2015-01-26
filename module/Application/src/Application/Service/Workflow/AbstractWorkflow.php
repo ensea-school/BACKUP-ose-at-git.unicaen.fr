@@ -278,7 +278,12 @@ abstract class AbstractWorkflow extends AbstractService
     public function isStepReachable($step)
     {
         if (is_string($step)) {
-            $step = $this->getStep($step);
+            try {
+                $step = $this->getStep($step);
+            }
+            catch (RuntimeException $exc) {
+                return false;
+            }
         }
         
         foreach ($this->getSteps() as $s) { /* @var $s Step */

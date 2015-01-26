@@ -98,6 +98,13 @@ class Validation extends AbstractEntityService
                 $validation->removeVolumeHoraire($vh);
             }
         }
+
+        // Validation du référentiel : il faut supprimer les liens Validation --> VolumeHoraireReferentiel
+        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_REFERENTIEL) {
+            foreach ($validation->getVolumeHoraireReferentiel() as $vh) {
+                $validation->removeVolumeHoraireReferentiel($vh);
+            }
+        }
         
         try {
             $this->delete($validation, $softDelete);

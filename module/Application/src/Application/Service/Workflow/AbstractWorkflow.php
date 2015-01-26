@@ -308,7 +308,12 @@ abstract class AbstractWorkflow extends AbstractService
     public function isStepCrossable($step)
     {
         if (is_string($step)) {
-            $step = $this->getStep($step);
+            try {
+                $step = $this->getStep($step);
+            }
+            catch (RuntimeException $exc) {
+                return false;
+            }
         }
         if (is_bool($step->getCrossable())) {
             return $step->getCrossable();

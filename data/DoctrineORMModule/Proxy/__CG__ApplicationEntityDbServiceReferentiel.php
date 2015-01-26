@@ -297,28 +297,6 @@ class ServiceReferentiel extends \Application\Entity\Db\ServiceReferentiel imple
     /**
      * {@inheritDoc}
      */
-    public function setCommentaires($commentaires)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCommentaires', array($commentaires));
-
-        return parent::setCommentaires($commentaires);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCommentaires()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCommentaires', array());
-
-        return parent::getCommentaires();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getId()
     {
         if ($this->__isInitialized__ === false) {

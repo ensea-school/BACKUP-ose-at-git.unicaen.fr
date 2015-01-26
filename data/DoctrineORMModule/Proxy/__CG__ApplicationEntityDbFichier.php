@@ -345,6 +345,17 @@ class Fichier extends \Application\Entity\Db\Fichier implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
+    public function getDate()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDate', array());
+
+        return parent::getDate();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setValidation(\Application\Entity\Db\Validation $validation = NULL)
     {
 

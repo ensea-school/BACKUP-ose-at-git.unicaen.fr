@@ -1,39 +1,74 @@
 <?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Validation du référentiel") ?>
 
-<h1 class="page-header"><?php echo $title ?></h1>
+<h1 class="page-header"><?php echo $title ?></small></h1>
 
-<?php
-$this->messenger(true);
-if ($validation->getId()) {
-    $this->messenger()->addMessage(
-            sprintf("Le référentiel est validé. <br /><br />%s", $this->validationDl($validation)), 'success');
-}
-?>
+<?php echo $this->messenger()->addMessagesFromFlashMessenger()->addMessages($messages) ?>
 
-<?php echo $this->messenger() ?>
+<?php $formValider->prepare(); ?>
 
-<?php echo $this->serviceReferentielListe($services)->setRenderIntervenants(false)->setReadOnly()->render(); ?>
+<style>
+    th.structure, td.structure { width: 100px; }
+</style>
 
-<?php $form->prepare(); ?>
-<?php echo $this->form()->openTag($form); ?>
-<div class="row">
-    <div class="col-md-4">
-        <?php 
-        echo $this->formControlGroup($form->get('valide')->setAttribute('disabled', $readonly));
-        echo $this->formHidden($form->get('security'));
-        ?>
-    </div>
-</div>
-
-<hr />
-<?php if (!$readonly): ?>
-    <?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')); ?>
-<?php endif ?>
-<?php echo $this->form()->closeTag(); ?>
-
-
-<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
-    <hr />
-    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php if ($validations): ?>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="structure">Composante</th>
+            <th>Validation</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($validations as $validation): ?>
+        
+        <?php $referentielsValidation = $this->partial('application/validation/partial/referentiels-validation', array(
+            'validation' => $validation,
+            'referentiels' => $referentiels,
+            'typeVolumeHoraire' => $typeVolumeHoraire,
+        )) ?>
+        
+        <tr>
+            <td class="structure">
+                <p><?php echo $validation->getStructure() ?></p>
+            </td>
+            <td>
+                <?php if ($validation->getId()): ?>
+                    <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
+                    <?php echo $referentielsValidation ?>
+                    <?php if ($this->isAllowed($validation, 'delete')): ?>
+                        <a href="<?php echo $this->url('validation/supprimer', array('validation' => $validation->getId())) ?>"
+                           class="validation-delete ajax-modal btn btn-primary" 
+                           data-event="validation-delete-event">Supprimer cette validation</a>
+                    <?php endif ?>
+                <?php else: ?>
+                    <?php echo $referentielsValidation ?>
+                    <?php if ($this->isAllowed($validation, 'create')): ?>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <?php 
+                                echo $this->form()->openTag($formValider);
+                                echo $this->formControlGroup($formValider->get('valide'));
+                                echo $this->formHidden($formValider->get('security'));
+                                echo $this->formSubmit($formValider->get('submit')->setAttribute('class', 'btn btn-primary'));
+                                echo $this->form()->closeTag(); 
+                                ?>
+                            </div>
+                        </div>
+                    <?php endif ?>
+                <?php endif ?>
+            </td>
+        </tr>
+        
+    <?php endforeach; ?>
+    </tbody>
+</table>
 <?php endif; ?>
-    
+
+<script>
+$(function() {
+    $("body").on("validation-delete-event", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        window.location.reload();
+    });
+});
+</script>

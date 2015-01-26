@@ -285,11 +285,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $formuleIntervenant;
 
     /**
-     * @var boolean 
-     */
-    private $premierRecrutement;
-
-    /**
      * @var \Application\Entity\Db\VIndicDiffDossier
      */
     private $vIndicDiffDossier;
@@ -1649,16 +1644,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getFormuleIntervenant()
     {
         return $this->formuleIntervenant;
-    }
-
-    function getPremierRecrutement()
-    {
-        return $this->premierRecrutement;
-    }
-
-    function setPremierRecrutement($premierRecrutement)
-    {
-        $this->premierRecrutement = $premierRecrutement;
     }
 
 

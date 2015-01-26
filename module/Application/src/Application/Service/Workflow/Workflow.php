@@ -113,10 +113,10 @@ class Workflow extends AbstractWorkflow
         $service = $this->getServiceWfIntervenantEtape();
         
         // Fetch de la progression de l'intervenant (sans prendre en compte la structure), création si inexistante
-        $ies = $service->findIntervenantEtape($this->getIntervenant(), $this->getStructure());
+        $ies = $service->findIntervenantEtape($this->getIntervenant());
         if (!count($ies)) {
             $service->createIntervenantEtapes($this->getIntervenant());
-            $ies = $service->findIntervenantEtape($this->getIntervenant(), $this->getStructure());
+            $ies = $service->findIntervenantEtape($this->getIntervenant());
         }
         
         $dbFunctionRule = $this->getServiceLocator()->get('DbFunctionRule');

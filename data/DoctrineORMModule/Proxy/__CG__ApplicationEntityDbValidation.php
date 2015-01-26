@@ -64,10 +64,10 @@ class Validation extends \Application\Entity\Db\Validation implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'typeValidation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraire');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'typeValidation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraireReferentiel');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'typeValidation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraire');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'intervenant', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'typeValidation', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\Validation' . "\0" . 'volumeHoraireReferentiel');
     }
 
     /**
@@ -428,6 +428,50 @@ class Validation extends \Application\Entity\Db\Validation implements \Doctrine\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraire', array());
 
         return parent::getVolumeHoraire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addVolumeHoraireRef', array($volumeHoraireReferentiel));
+
+        return parent::addVolumeHoraireRef($volumeHoraireReferentiel);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeVolumeHoraireRef(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeVolumeHoraireRef', array($volumeHoraireReferentiel));
+
+        return parent::removeVolumeHoraireRef($volumeHoraireReferentiel);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVolumeHoraireRef()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVolumeHoraireRef', array());
+
+        return parent::getVolumeHoraireRef();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceId()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResourceId', array());
+
+        return parent::getResourceId();
     }
 
 }

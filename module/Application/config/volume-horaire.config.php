@@ -104,6 +104,7 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'ApplicationVolumeHoraire'                  => 'Application\\Service\\VolumeHoraire',
+            'ApplicationVolumeHoraireReferentiel'       => 'Application\\Service\\VolumeHoraireReferentiel',
             'ApplicationTypeVolumeHoraire'              => 'Application\\Service\\TypeVolumeHoraire',
             'ApplicationEtatVolumeHoraire'              => 'Application\\Service\\EtatVolumeHoraire',
             'FormVolumeHoraireSaisieMultipleHydrator'   => 'Application\Form\VolumeHoraire\SaisieMultipleHydrator',

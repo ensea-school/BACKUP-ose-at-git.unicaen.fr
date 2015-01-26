@@ -95,6 +95,11 @@ class VolumeHoraire implements HistoriqueAwareInterface
     protected $remove=false;
 
     /**
+     * @var FormuleVolumeHoraire
+     */
+    private $formuleVolumeHoraire;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleResultatVolumeHoraire;
@@ -506,13 +511,42 @@ class VolumeHoraire implements HistoriqueAwareInterface
     }
 
     /**
+     * Get formuleVolumeHoraire
+     *
+     * @return FormuleVolumeHoraire
+     */
+    public function getFormuleVolumeHoraire()
+    {
+        return $this->formuleVolumeHoraire;
+    }
+
+    /**
      * Get formuleResultatVolumeHoraire
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormuleResultatVolumeHoraire()
+    public function getFormuleResultatVolumeHoraire( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
     {
-        return $this->formuleResultatVolumeHoraire;
+        $filter = function( FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire ) use ($typeVolumeHoraire, $etatVolumeHoraire) {
+            if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatVolumeHoraire->getFormuleResultat()->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if (isset($etatVolumeHoraire) && $etatVolumeHoraire !== $formuleResultatVolumeHoraire->getFormuleResultat()->getEtatVolumeHoraire()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleResultatVolumeHoraire->filter($filter);
+    }
+
+    /**
+     * Get formuleResultatVolumeHoraire
+     *
+     * @return FormuleResultatVolumeHoraire
+     */
+    public function getUniqueFormuleResultatVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
+    {
+        return $this->getFormuleResultatVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
 
 }

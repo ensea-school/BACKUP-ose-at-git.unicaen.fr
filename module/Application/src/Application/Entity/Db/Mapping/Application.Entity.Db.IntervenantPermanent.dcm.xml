@@ -14,11 +14,6 @@
     <id name="id" association-key="true"/>
     <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
     <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
-    <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
-        <cascade>
-            <cascade-persist/>
-        </cascade>
-    </one-to-many>
     <many-to-one field="corps" target-entity="Application\Entity\Db\Corps">
       <join-columns>
         <join-column name="CORPS_ID" referenced-column-name="ID"/>

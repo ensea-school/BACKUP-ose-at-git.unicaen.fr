@@ -64,10 +64,10 @@ class VolumeHoraire extends \Application\Entity\Db\VolumeHoraire implements \Doc
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'formuleResultatVolumeHoraire');
+            return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'formuleVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'formuleResultatVolumeHoraire');
         }
 
-        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'formuleResultatVolumeHoraire');
+        return array('__isInitialized__', 'heures', 'histoCreation', 'histoDestruction', 'histoModification', 'id', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'service', 'motifNonPaiement', 'periode', 'typeIntervention', 'typeVolumeHoraire', 'contrat', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'etatVolumeHoraire', 'remove', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'formuleVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraire' . "\0" . 'formuleResultatVolumeHoraire');
     }
 
     /**
@@ -554,12 +554,34 @@ class VolumeHoraire extends \Application\Entity\Db\VolumeHoraire implements \Doc
     /**
      * {@inheritDoc}
      */
-    public function getFormuleResultatVolumeHoraire()
+    public function getFormuleVolumeHoraire()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleResultatVolumeHoraire', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleVolumeHoraire', array());
 
-        return parent::getFormuleResultatVolumeHoraire();
+        return parent::getFormuleVolumeHoraire();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormuleResultatVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleResultatVolumeHoraire', array($typeVolumeHoraire, $etatVolumeHoraire));
+
+        return parent::getFormuleResultatVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUniqueFormuleResultatVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUniqueFormuleResultatVolumeHoraire', array($typeVolumeHoraire, $etatVolumeHoraire));
+
+        return parent::getUniqueFormuleResultatVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire);
     }
 
 }

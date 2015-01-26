@@ -45,9 +45,10 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
                     ?>
                     <select class="abonnement" name="abonnement" data-id="<?php echo $indicateurEntity->getId() ?>">
                         <option value=""                                                               <?php echo $isSelected("") ?>  >Aucune</option>
-                        <option value="<?php echo $val = NotificationIndicateur::FREQUENCE_HEURE ?>"   <?php echo $isSelected($val) ?>>Une par heure</option>
-                        <option value="<?php echo $val = NotificationIndicateur::FREQUENCE_JOUR ?>"    <?php echo $isSelected($val) ?>>Une par jour</option>
-                        <option value="<?php echo $val = NotificationIndicateur::FREQUENCE_SEMAINE ?>" <?php echo $isSelected($val) ?>>Une par semaine</option>
+                        <option value="<?php echo $val = NotificationIndicateur::PERIODE_HEURE_3 ?>" <?php echo $isSelected($val) ?>>4 par jour</option>
+                        <option value="<?php echo $val = NotificationIndicateur::PERIODE_HEURE_6 ?>" <?php echo $isSelected($val) ?>>2 par jour</option>
+                        <option value="<?php echo $val = NotificationIndicateur::PERIODE_JOUR ?>"    <?php echo $isSelected($val) ?>>1 par jour</option>
+                        <option value="<?php echo $val = NotificationIndicateur::PERIODE_SEMAINE ?>" <?php echo $isSelected($val) ?>>1 par semaine</option>
                     </select>
                     <?php
                     $infos = null;

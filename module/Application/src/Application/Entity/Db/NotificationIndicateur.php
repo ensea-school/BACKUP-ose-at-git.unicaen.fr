@@ -9,14 +9,28 @@ use DateTime;
  */
 class NotificationIndicateur
 {
-    const FREQUENCE_HEURE   = 3600;   // 60*60
-    const FREQUENCE_JOUR    = 86400;  // 60*60*24
-    const FREQUENCE_SEMAINE = 604800; // 60*60*24*7;
+    const PERIODE_HEURE_3 = 10800;  // 60*60*3    = 3h
+    const PERIODE_HEURE_6 = 21600;  // 60*60*6    = 6h
+    const PERIODE_JOUR    = 86400;  // 60*60*24   = 1j
+    const PERIODE_SEMAINE = 604800; // 60*60*24*7 = 7j
     
+    /**
+     * Liste des féquences possibles.
+     * 
+     * Attention, les fréquences "4 par jour" (période = 3h) et "2 par jour" (période = 6h)
+     * n'ont de sens qu'en accord avec la configuration du CRON chargé d'exécuter le script de notification.
+     * Par exemple, un CRON configuré pour se réveiller chaque jour de 7h à 18h toutes les heures pourra
+     * honorer ces fréquences :
+     * - "4 par jour" (période = 3h) : notification possible à 7h, 10h, 13h puis 16h. 
+     * - "2 par jour" (période = 6h) : notification possible à 7h puis 13h.
+     * 
+     * @var array
+     */
     static public $frequences = [
-        self::FREQUENCE_HEURE => "Une par heure",
-        self::FREQUENCE_JOUR => "Une par jour",
-        self::FREQUENCE_SEMAINE => "Une par semaine",
+        self::PERIODE_HEURE_3 => "4 par jour",
+        self::PERIODE_HEURE_6 => "2 par jour",
+        self::PERIODE_JOUR    => "1 par jour",
+        self::PERIODE_SEMAINE => "1 par semaine",
     ];
     
     /**

@@ -51,6 +51,10 @@ class NotificationIndicateur extends AbstractEntityService
      */
     public function abonner(PersonnelEntity $personnel, IndicateurEntity $indicateur, $frequence, StructureEntity $structure = null)
     {
+        if ($frequence && !array_key_exists($frequence, NotificationIndicateurEntity::$frequences)) {
+            throw new LogicException("Fréquence spécifiée inconnue: $frequence.");
+        }
+        
         // recherche d'abonnement existant
         $qb = $this->finderByPersonnel($personnel);
         $this->finderByIndicateur($indicateur, $qb);
@@ -61,6 +65,7 @@ class NotificationIndicateur extends AbstractEntityService
         
         $structureStr = $structure ? "pour la structure $structure" : null;
         
+        // nouvel abonnement
         if (null === $abonnement) {
             $abonnement = new NotificationIndicateurEntity();
             $abonnement
@@ -73,7 +78,7 @@ class NotificationIndicateur extends AbstractEntityService
             $this->getEntityManager()->flush($abonnement);
             $message = "Abonnement de $personnel ({$personnel->getEmail()}) $structureStr enregistré avec succès.";
         }
-        // une frequence spécifiée = abonnement
+        // une frequence spécifiée = modification d'un abonnement
         elseif ($frequence) {
             if (!array_key_exists($frequence, NotificationIndicateurEntity::$frequences)) {
                 throw new LogicException("Fréquence spécifiée inconnue: '$frequence'.");

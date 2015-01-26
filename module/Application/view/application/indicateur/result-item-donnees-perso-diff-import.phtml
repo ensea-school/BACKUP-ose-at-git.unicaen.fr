@@ -1,0 +1,48 @@
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append($title = "Différences données personnelles / importées") ?>
+
+<h1 class="page-header"><?php echo $title ?> <small><?php echo $intervenant ?></small></h1>
+
+<?php $vidd = $intervenant->getVIndicDiffDossier(); ?>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Données concernées</th>
+            <th>Données personnelles saisies</th>
+            <th>Données importées</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if ($vidd->getAdresseDossier()): ?>
+        <tr>
+            <td>Adresse postale</td>
+            <td><pre><?php echo $vidd->getAdresseDossier() ?></pre></td>
+            <td><pre><?php echo $vidd->getAdresseImport() ?></pre></td>
+        </tr>
+        <?php endif; ?>
+        <?php if ($vidd->getRibDossier()): ?>
+        <tr>
+            <td>RIB</td>
+            <td><?php echo $vidd->getRibDossier() ?></td>
+            <td><?php echo $vidd->getRibImport() ?></td>
+        </tr>
+        <?php endif; ?>
+        <?php if ($vidd->getNomUsuelDossier()): ?>
+        <tr>
+            <td>Nom usuel</td>
+            <td><?php echo $vidd->getNomUsuelDossier() ?></td>
+            <td><?php echo $vidd->getNomUsuelImport() ?></td>
+        </tr>
+        <?php endif; ?>
+        <?php if ($vidd->getPrenomDossier()): ?>
+        <tr>
+            <td>Prénom</td>
+            <td><?php echo $vidd->getPrenomDossier() ?></td>
+            <td><?php echo $vidd->getPrenomImport() ?></td>
+        </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+
+<a href="<?php echo $this->url('intervenant/saisir-dossier', ['intervenant' => $intervenant->getSourceCode()]) ?>"
+   >Accéder à la page des données personnelles de <?php echo $intervenant ?></a>

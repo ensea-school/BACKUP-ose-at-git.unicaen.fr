@@ -1,0 +1,12 @@
+<?php $this->headTitle()->append($title = "Indicateurs") ?>
+
+<h1 class="page-header"><?php echo $title ?></h1>
+
+<?php
+echo $this->partial('application/indicateur/partial/list', [
+    'indicateursImpl'  => $this->indicateursImpl,
+    'abonnements'      => $this->abonnements,
+    'abonnementsInfos' => $this->abonnementsInfos,
+    'abonnementUrl'    => $this->abonnementUrl,
+    'showAbonnement'   => true,
+]);

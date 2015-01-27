@@ -14,12 +14,13 @@ class WfEtape
     const CODE_SERVICE_VALIDATION       = 'SERVICE_VALIDATION';
     const CODE_REFERENTIEL_SAISIE       = 'REFERENTIEL_SAISIE';
     const CODE_REFERENTIEL_VALIDATION   = 'REFERENTIEL_VALIDATION';
-    const CODE_PIECES_JOINTES           = 'PIECES_JOINTES';
+    const CODE_PJ_SAISIE                = 'PJ_SAISIE';
+    const CODE_PJ_VALIDATION            = 'PJ_VALIDATION';
     const CODE_CONSEIL_RESTREINT        = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
     const CODE_CONSEIL_ACADEMIQUE       = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
     const CODE_CONTRAT                  = 'CONTRAT';
     const CODE_FIN                      = 'FIN';
-    
+
     /**
      * @var string
      */

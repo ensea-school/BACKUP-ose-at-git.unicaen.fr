@@ -261,15 +261,27 @@ class FormuleService
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFormuleVolumeHoraire()
+    public function getFormuleVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null, TypeIntervention $typeIntervention=null)
     {
-        return $this->formuleVolumeHoraire;
+        $filter = function( FormuleVolumeHoraire $formuleVolumeHoraire ) use ($typeVolumeHoraire, $etatVolumeHoraire, $typeIntervention) {
+            if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleVolumeHoraire->getTypeVolumeHoraire()) {
+                return false;
+            }
+            if ($etatVolumeHoraire && $etatVolumeHoraire->getOrdre() > $formuleVolumeHoraire->getEtatVolumeHoraire()->getOrdre()) {
+                return false;
+            }
+            if ($typeIntervention && $typeIntervention !== $formuleVolumeHoraire->getTypeIntervention()) {
+                return false;
+            }
+            return true;
+        };
+        return $this->formuleVolumeHoraire->filter($filter);
     }
 
     public function getHeures(TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null, TypeIntervention $typeIntervention=null)
     {
         $heures = 0;
-        $vhs = $this->getFormuleVolumeHoraire();
+        $vhs = $this->getFormuleVolumeHoraire( $typeVolumeHoraire, $etatVolumeHoraire, $typeIntervention );
         foreach( $vhs as $vh ){
             /* @var $vh FormuleVolumeHoraire */
             $ok = true;

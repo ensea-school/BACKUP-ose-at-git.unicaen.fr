@@ -176,6 +176,17 @@ class FormuleResultat extends \Application\Entity\Db\FormuleResultat implements 
     /**
      * {@inheritDoc}
      */
+    public function init(\Application\Entity\Db\Intervenant $intervenant, \Application\Entity\Db\Annee $annee, \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'init', array($intervenant, $annee, $typeVolumeHoraire, $etatVolumeHoraire));
+
+        return parent::init($intervenant, $annee, $typeVolumeHoraire, $etatVolumeHoraire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setServiceDu($serviceDu)
     {
 

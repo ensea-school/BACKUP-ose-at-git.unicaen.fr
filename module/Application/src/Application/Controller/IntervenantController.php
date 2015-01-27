@@ -240,7 +240,7 @@ class IntervenantController extends AbstractActionController implements ContextP
 
         $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel($annee);
         foreach( $referentiels as $referentiel ){
-            /* @var $referentiel \Application\Entity\Db\FormuleReferentiel */
+            /* @var $referentiel \Application\Entity\Db\FormuleServiceReferentiel */
 
             if (! isset($data['referentiel'][$referentiel->getStructure()->getId()])){
                 $data['referentiel'][$referentiel->getStructure()->getId()] = [
@@ -250,10 +250,10 @@ class IntervenantController extends AbstractActionController implements ContextP
                     'hetd-compl'=> 0,
                 ];
             }
-            $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures();
+            $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures( $typeVolumeHoraire, $etatVolumeHoraire );
             $frr = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
-            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr->getHeuresService();
-            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr->getHeuresComplReferentiel();
+            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr ?$frr->getHeuresService() : 0;
+            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr ? $frr->getHeuresComplReferentiel() : 0;
         }
 
         $services = $intervenant->getFormuleIntervenant()->getFormuleService($annee);
@@ -262,7 +262,7 @@ class IntervenantController extends AbstractActionController implements ContextP
             $typesIntervention = [];
             $totalHeures = 0;
 
-            $fvhs = $service->getFormuleVolumeHoraire(null, $typeVolumeHoraire, $etatVolumeHoraire);
+            $fvhs = $service->getFormuleVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire);
             foreach( $fvhs as $fvh ){ /* @var $fvh \Application\Entity\Db\FormuleVolumeHoraire */
                 $totalHeures += $fvh->getHeures();
                 if (! isset($typesIntervention[$fvh->getTypeIntervention()->getId()])) $typesIntervention[$fvh->getTypeIntervention()->getId()] = [

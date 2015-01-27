@@ -130,6 +130,14 @@ class FormuleResultat
         $this->formuleResultatVolumeHoraireReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function init( Intervenant $intervenant, Annee $annee, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
+    {
+        $this->intervenant = $intervenant;
+        $this->annee = $annee;
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+        $this->etatVolumeHoraire = $etatVolumeHoraire;
+    }
+
     /**
      * Set serviceDu
      *

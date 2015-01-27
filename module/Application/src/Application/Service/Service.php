@@ -561,6 +561,7 @@ class Service extends AbstractEntityService
             'ignored-columns'   => [],              // Liste des colonnes à ne pas récupérer, hors colonnes liées aux types d'intervention!!
             'isoler-non-payes'  => true,            // boolean
             'regroupement'      => 'service',       // [service, intervenant]
+            'composante'        => null,            // Composante qui en fait la demande
         ];
         $options = array_merge($defaultOptions, $options );
         $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
@@ -571,7 +572,6 @@ class Service extends AbstractEntityService
         $numericColunms = ['heures-service-statutaire', 'heures-service-du-modifie', 'heures-non-payees', 'heures-ref', 'hetd', 'hetd-solde'];
         $addableColumns = ['__total__','heures-non-payees','heures-ref','hetd'];
 
-//var_dump($options);die();
         // requêtage
         $conditions = [
             'annee_id = '.$annee->getId()
@@ -585,6 +585,11 @@ class Service extends AbstractEntityService
         if ($c7 = $recherche->getElementPedagogique() ) $conditions['element_pedagogique_id'] = '(element_pedagogique_id = -1 OR element_pedagogique_id = ' . $c7->getId().')';
         if ($c8 = $recherche->getStructureAff()       ) $conditions['structure_aff_id']       = '(structure_aff_id = -1 OR structure_aff_id = '       . $c8->getId().')';
         if ($c9 = $recherche->getStructureEns()       ) $conditions['structure_ens_id']       = '(structure_ens_id = -1 OR structure_ens_id = '       . $c9->getId().')';
+
+        if ($options['composante'] instanceof StructureEntity ){
+            $id = (int)$options['composante']->getId();
+            $conditions['composante'] = "(structure_aff_id = -1 OR structure_aff_id = $id OR structure_ens_id = -1 OR structure_ens_id = $id)";
+        }
 
         switch( $options['tri'] ){
             case 'intervenant': $orderBy = 'INTERVENANT_NOM, SERVICE_STRUCTURE_AFF_LIBELLE, SERVICE_STRUCTURE_ENS_LIBELLE, ETAPE_LIBELLE, ELEMENT_LIBELLE'; break;

@@ -278,7 +278,10 @@ return array(
                                 'resource' => 'controller/Application\Controller\Service:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
-                            'pieces-jointes' => array(
+                            'pieces-jointes-saisie' => array(
+                                // coquille vide qui réserve l'emplacement du menu
+                            ),
+                            'pieces-jointes-validation' => array(
                                 // coquille vide qui réserve l'emplacement du menu
                             ),
                             'validation-dossier' => array(

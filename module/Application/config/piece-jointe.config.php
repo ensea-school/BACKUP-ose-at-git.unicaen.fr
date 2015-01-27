@@ -159,9 +159,20 @@ return array(
                 'pages' => array(
                     'intervenant' => array(
                         'pages' => array(
-                            'pieces-jointes' => array(
+                            'pieces-jointes-saisie' => array(
                                 'label'  => "Pièces justificatives",
                                 'title'  => "Pièces justificatives du dossier de l'intervenant",
+                                'route'  => 'piece-jointe/intervenant',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\PieceJointe:index',
+                                'visible' => 'IntervenantNavigationPageVisibility',
+                            ),
+                            'pieces-jointes-validation' => array(
+                                'label'  => "Validation des pièces justificatives",
+                                'title'  => "Validation des pièces justificatives du dossier de l'intervenant",
                                 'route'  => 'piece-jointe/intervenant',
                                 'paramsInject' => array(
                                     'intervenant',

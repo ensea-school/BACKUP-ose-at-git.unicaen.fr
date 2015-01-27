@@ -110,8 +110,26 @@ class Intervenant extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'int';
+    }
+    
+    /**
+     * Finder par étape courante dans le workflow de l'intervenant.
+     * 
+     * @param string $codeEtape Ex: \Application\Entity\Db\WfEtape::CODE_PIECES_JOINTES
+     * @param QueryBuilder $qb
+     */
+    public function finderByWfEtapeCourante($codeEtape, QueryBuilder $qb = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb);
+        $qb
+                ->join("$alias.wfIntervenantEtape", "p", \Doctrine\ORM\Query\Expr\Join::WITH, "p.courante = 1")
+                ->join("p.etape", "e", \Doctrine\ORM\Query\Expr\Join::WITH, "e.code = :codeEtape")
+                ->setParameter('codeEtape', $codeEtape);
+
+        return $qb;
     }
     
     /**

@@ -17,6 +17,11 @@ if ($intervenant){
 }else{  
     $this->headTitle()->append("Enseignements");
 }
+
+$serviceListe = $this->serviceListe( $services );
+$serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
+             ->setAddButtonVisibility($canAddService);
+
 ?>
 
 <h1 class="page-header"><?php echo $title; ?></h1>
@@ -39,7 +44,7 @@ if ($intervenant){
         . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures.")); ?>
 <?php endif; ?>
 
-<div id="filtres" data-url="<?php echo $this->url('service/default', array('action'=>'filtres')) ?>">
+<div id="filtres">
     <?php echo $this->recherche; ?>
 </div>
 <?php endif; ?>
@@ -51,12 +56,7 @@ if ($intervenant){
                 "Merci de saisir les heures effectuées <strong>sans majoration</strong>. Exemple: saisissez 1h CM et non 1,5h TD."); ?>
     <?php endif; ?>
 
-    <?php if ($canAddService): ?>
-    <?php $url = $this->url('service/saisie', [], ['query' => ['type-volume-horaire' => $typeVolumeHoraire->getId()]]); ?>
-    <a class="ajax-modal services btn btn-primary" data-event="service-add-message" href="<?php echo $url ?>"
-       title="Ajouter un nouvel enseignement"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
-    <?php endif; ?>
-    <?php echo $this->serviceListe( $services )->setTypeVolumeHoraire($typeVolumeHoraire)->setIntervenant($intervenant)->render(); ?>
+    <?php echo $serviceListe->render(); ?>
 
     <?php if ($renderReferentiel): ?>
         <h1>Référentiel</h1>

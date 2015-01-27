@@ -48,7 +48,6 @@ class ServiceController extends AbstractActionController
         $service                   = $this->getServiceService();
         $volumeHoraireService      = $this->getServiceLocator()->get('applicationVolumehoraire');       /* @var $volumeHoraireService \Application\Service\VolumeHoraire */
         $elementPedagogiqueService = $this->getServiceLocator()->get('applicationElementPedagogique');  /* @var $elementPedagogiqueService \Application\Service\ElementPedagogique */
-        $intervenantService        = $this->getServiceLocator()->get('applicationIntervenant');         /* @var $intervenantService \Application\Service\Intervenant */
 
         $this->initFilters();
         $qb = $service->initQuery()[0];
@@ -85,6 +84,7 @@ class ServiceController extends AbstractActionController
     {
         $typeVolumeHoraireCode    = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU' );
         $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
+        $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                     = $this->getContextProvider()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
         $annee                    = $this->getContextProvider()->getGlobalContext()->getAnnee();
@@ -138,14 +138,15 @@ class ServiceController extends AbstractActionController
                 $params['query']  = $this->params()->fromQuery();
                 $params['renderIntervenants'] = ! $intervenant;
                 $listeViewModel   = $this->forward()->dispatch($controller, $params);
-                $viewModel->addChild($listeViewModel, 'servicesRefListe');
+                //$viewModel->addChild($listeViewModel, 'servicesRefListe');
             }
         }else{
             $services = [];
         }
         $renderReferentiel  = !$intervenant instanceof IntervenantExterieur;
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'renderReferentiel','canAddService', 'canAddServiceReferentiel'));
+        $params = $viewHelperParams;
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'renderReferentiel','canAddService', 'canAddServiceReferentiel', 'params'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
@@ -157,6 +158,7 @@ class ServiceController extends AbstractActionController
     public function exportAction()
     {
         $intervenant        = $this->context()->intervenantFromRoute();
+        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
             throw new \BjyAuthorize\Exception\UnAuthorizedException();
@@ -177,7 +179,13 @@ class ServiceController extends AbstractActionController
         }
 
         /* Préparation et affichage */
-        $data = $this->getServiceService()->getTableauBord($recherche, ['ignored-columns' => ['intervenant-type-code']]);
+        $params = [
+            'ignored-columns' => ['intervenant-type-code'],
+        ];
+        if ($role instanceof \Application\Acl\ComposanteRole){
+            $params['composante'] = $role->getStructure();
+        }
+        $data = $this->getServiceService()->getTableauBord($recherche, $params);
 
         $csvModel = new \UnicaenApp\View\Model\CsvModel();
         $csvModel->setHeader($data['head']);
@@ -196,6 +204,7 @@ class ServiceController extends AbstractActionController
         $intervenant        = $this->context()->intervenantFromRoute();
         $canAddService      = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
         $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
         $action = $this->getRequest()->getQuery('action', null);
         $tri = null;
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
@@ -227,7 +236,15 @@ class ServiceController extends AbstractActionController
 
         $recherche = $this->getServiceService()->loadRecherche();
         if ('afficher' == $action || 'trier' == $action ){
-            $resumeServices = $this->getServiceService()->getTableauBord($recherche, ['tri' => $tri, 'isoler-non-payes' => false, 'regroupement' => 'intervenant']);
+            $params = [
+                'tri' => $tri,
+                'isoler-non-payes' => false,
+                'regroupement' => 'intervenant'
+            ];
+            if ($role instanceof \Application\Acl\ComposanteRole){
+                $params['composante'] = $role->getStructure();
+            }
+            $resumeServices = $this->getServiceService()->getTableauBord($recherche, $params);
         }else{
             $resumeServices = null;
         }
@@ -287,43 +304,12 @@ class ServiceController extends AbstractActionController
     {
         $this->initFilters();
 
-        $service = $this->context()->serviceFromRoute();
-        $typeVolumeHoraire  = $this->context()->typeVolumeHoraireFromRoute();
-        $service->setTypeVolumeHoraire($typeVolumeHoraire);
-
+        $params             = $this->params()->fromPost('params', $this->params()->fromQuery('params') );
         $details            = 1 == (int)$this->params()->fromQuery('details',               (int)$this->params()->fromPost('details',0));
         $onlyContent        = 1 == (int)$this->params()->fromQuery('only-content',          0);
-        $readOnly           = 1 == (int)$this->params()->fromQuery('read-only',             0);
-        $typesIntervention  = $this->params()->fromQuery('types-intervention',              null);
-        if ($typesIntervention){
-            $typesIntervention  = explode(',',$typesIntervention);
-            $typesIntervention = $this->getServiceTypeIntervention()->getByCode($typesIntervention);
-        }else{
-            $typesIntervention = [];
-        }
+        $service = $this->context()->serviceFromRoute('id'); // remplacer id par service au besoin, à cause des routes définies en config.
 
-        $tiv = $this->params()->fromQuery('types-intervention-visibility', $this->params()->fromPost('types-intervention-visibility',null) );
-        $typesInterventionVisibility = [];
-        if ($tiv){
-            $tiv = explode(',',$tiv);
-            foreach( $typesIntervention as $ti ){
-                $typesInterventionVisibility[$ti->getCode()] = in_array($ti->getCode(), $tiv);
-            }
-        }
-
-        $intervenant        = $this->params()->fromQuery('intervenant');
-        if ('false' === $intervenant) $intervenant = false;
-        if ('true' === $intervenant) $intervenant = true;
-        if ('' === $intervenant) $intervenant = null;
-        $intervenant = $this->getServiceLocator()->get('applicationIntervenant')->get((int)$intervenant);
-
-        $structure        = $this->params()->fromQuery('structure');
-        if ('false' === $structure) $structure = false;
-        if ('true' === $structure) $structure = true;
-        if ('' === $structure) $structure = null;
-        $structure = $this->getServiceLocator()->get('applicationStructure')->get((int)$structure);
-
-        return compact('service', 'typeVolumeHoraire', 'details', 'onlyContent', 'readOnly', 'intervenant', 'structure', 'typesIntervention', 'typesInterventionVisibility');
+        return compact('service', 'params', 'details', 'onlyContent');
     }
 
     public function volumesHorairesRefreshAction()
@@ -331,7 +317,12 @@ class ServiceController extends AbstractActionController
         $this->initFilters();
 
         $id = (int)$this->params()->fromRoute('id');
-        $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
+        $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire') );
+        if (empty($typeVolumeHoraire)){
+            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
+        }else{
+            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get( $typeVolumeHoraire );
+        }
         $service = $this->getServiceService();
         $form    = $this->getFormSaisie();
         $element = $this->context()->elementPedagogiqueFromPost('element');
@@ -389,7 +380,7 @@ class ServiceController extends AbstractActionController
     {
         $this->initFilters();
         $id = (int)$this->params()->fromRoute('id');
-        $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire');
+        $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire') );
         if (empty($typeVolumeHoraire)){
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
         }else{
@@ -412,7 +403,6 @@ class ServiceController extends AbstractActionController
             $form->initFromContext();
             $title   = "Ajout d'enseignement";
         }
-        $form->setAttribute('action', $this->url()->fromRoute('service/saisie', ['id' => $entity->getId()], ['query' => ['type-volume-horaire' => $typeVolumeHoraire->getId()]], true));
 
         $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
         $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);

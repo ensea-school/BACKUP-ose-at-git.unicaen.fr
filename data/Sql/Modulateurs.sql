@@ -23,3 +23,35 @@ ORDER BY
 update element_modulateur set modulateur_id = 2 where modulateur_id = 6 and histo_destruction is null;
 update modulateur set histo_destruction = sysdate, histo_destructeur_id = 2 where id = 6;
 update modulateur set ponderation_service_compl = 1.5 where id = 33;
+
+UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 3', code = 'IAE_FC_3' WHERE code = 'IAE_FC_IUP_BFA';
+UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 2', code = 'IAE_FC_2' WHERE code = 'IAE_FC_NM';
+UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 1', code = 'IAE_FC_1' WHERE code = 'IAE_FC_NL';
+
+INSERT INTO MODULATEUR
+  (
+    ID,
+    CODE,
+    LIBELLE,
+    TYPE_MODULATEUR_ID,
+    PONDERATION_SERVICE_DU,
+    PONDERATION_SERVICE_COMPL,
+    VALIDITE_DEBUT,
+    HISTO_CREATION,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATION,
+    HISTO_MODIFICATEUR_ID
+  )
+  VALUES
+  (
+    modulateur_id_seq.nextval,
+    'IAE_FC_4',
+    'Niveau 4',
+    (SELECT id FROM type_modulateur WHERE code = 'IAE_FC'),
+    1, 1.92,
+    SYSDATE,
+    SYSDATE,
+    (SELECT id FROM utilisateur WHERE username = 'lecluse'),
+    SYSDATE,
+    (SELECT id FROM utilisateur WHERE username = 'lecluse')
+  );

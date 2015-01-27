@@ -331,7 +331,7 @@ return array(
                                 'resource' => 'controller/Application\Controller\Contrat:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
-                           /* 'services-realises' => array(
+                            'services-realises' => array(
                                 'label'  => "Enseignements réalisés",
                                 'title'  => "Constatation des enseignements réalisés",
                                 'route'  => 'intervenant/services-realises',
@@ -341,7 +341,7 @@ return array(
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Service:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
-                            ),*/
+                            ),
                         ),
                     ),
                 ),

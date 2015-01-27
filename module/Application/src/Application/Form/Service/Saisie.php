@@ -6,6 +6,7 @@ use Zend\Form\Form;
 use Application\Entity\Db\Etablissement;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\Form\Element\Hidden;
 
 
 /**
@@ -52,17 +53,14 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
      * @param  int $flags
      * @return mixed|void
      * @throws Exception\InvalidArgumentException
-     *
+     */
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {
-        if ($object instanceof \Application\Entity\Db\Service){
-            $this->get('service')->setObject( $object);
-            foreach( $this->getPeriodes() as $periode ){
-                $this->get($periode->getCode())->setObject( $object->getVolumeHoraireListe($periode) );
-            }
+        if ($object instanceof \Application\Entity\Db\Service && $object->getTypeVolumeHoraire() ){
+            $this->get('type-volume-horaire')->setValue( $object->getTypeVolumeHoraire()->getId() );
         }
         return parent::bind($object, $flags);
-    }*/
+    }
 
 
     public function init()
@@ -84,6 +82,8 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
             $pf->setName($periode->getCode());
             $this->add($pf);
         }
+
+        $this->add( new Hidden('type-volume-horaire') );
 
         $this->add(array(
             'name' => 'submit',

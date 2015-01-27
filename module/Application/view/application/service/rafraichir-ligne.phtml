@@ -1,19 +1,15 @@
 <?php
 
+/* @var $service Application\Entity\Db\Service */
+/* @var $params array */
+
+$serviceListe = $this->serviceListe( [$service] );
+/* @var $serviceListe Application\View\Helper\Service\Liste */
+
+if (! empty($params)) $serviceListe->applyParams($params);
+
 if ($onlyContent){
-    echo $this->serviceLigne( $service )
-            ->setIntervenant($intervenant)
-            ->setStructure($structure)
-            ->setReadOnly($readOnly)
-            ->setTypesIntervention($typesIntervention)
-            ->setTypesInterventionVisibility($typesInterventionVisibility)
-            ->render($details);
+    echo $this->serviceLigne( $serviceListe, $service )->render($details);
 }else{
-    echo $this->serviceListe( array($service) )
-            ->setIntervenant($intervenant)
-            ->setStructure($structure)
-            ->setReadOnly($readOnly)
-            ->setTypesIntervention($typesIntervention)
-            ->setTypesInterventionVisibility($typesInterventionVisibility)
-            ->renderLigne( $service, $details );
+    echo $serviceListe->renderLigne( $service, $details );
 }

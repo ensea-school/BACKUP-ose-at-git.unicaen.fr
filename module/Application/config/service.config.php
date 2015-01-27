@@ -79,10 +79,9 @@ return [
                     'rafraichir-ligne' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/rafraichir-ligne/:service/:typeVolumeHoraire',
+                            'route'    => '/rafraichir-ligne/:service',
                             'constraints' => [
                                 'service'=> '[0-9]*',
-                                'typeVolumeHoraire' => '[0-9]*',
                             ],
                             'defaults' => [
                                 'action' => 'rafraichir-ligne',

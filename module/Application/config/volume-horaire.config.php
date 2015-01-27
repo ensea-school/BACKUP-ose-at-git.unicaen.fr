@@ -114,7 +114,6 @@ return array(
         'invokables' => array(
             'volumeHoraireDl'                           => 'Application\View\Helper\VolumeHoraire\Dl',
             'volumeHoraireListe'                        => 'Application\View\Helper\VolumeHoraire\Liste',
-            'volumeHoraireSaisieMultipleFieldset'       => 'Application\View\Helper\VolumeHoraire\SaisieMultipleFieldset',
         ),
     ),
     'form_elements' => array(

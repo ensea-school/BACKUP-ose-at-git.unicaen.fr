@@ -1,6 +1,11 @@
 <?php
 
-echo $this
-            ->serviceListe( $services )
-            ->setIntervenant( $intervenant )
-            ->renderTotaux();
+/* @var $services Application\Entity\Db\Service[] */
+/* @var $params array */
+
+$serviceListe = $this->serviceListe( $services );
+/* @var $serviceListe Application\View\Helper\Service\Liste */
+
+$serviceListe->applyParams($params);
+
+echo $serviceListe->renderTotaux();

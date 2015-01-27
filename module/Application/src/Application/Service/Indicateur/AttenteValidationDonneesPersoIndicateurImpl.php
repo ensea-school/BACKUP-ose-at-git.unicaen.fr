@@ -15,8 +15,8 @@ use Traversable;
  */
 class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern   = "%s vacataire est en attente de validation de ses données personnelles";
-    protected $pluralTitlePattern = "%s vacataires sont en attente de validation de leurs données personnelles";
+    protected $singularTitlePattern = "%s vacataire est en attente de validation de ses données personnelles";
+    protected $pluralTitlePattern   = "%s vacataires sont en attente de validation de leurs données personnelles";
     
     /**
      * 
@@ -69,7 +69,7 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
         $qb
                 ->join("i.statut", "st", Join::WITH, "st.peutSaisirDossier = 1");
         
@@ -81,6 +81,8 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIndicateurImpl
                 ->join("i.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
                 ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
                 ->setParameter('codeEtape', WfEtape::CODE_DONNEES_PERSO_VALIDATION);
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
          
         return $qb;
     }

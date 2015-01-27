@@ -3,6 +3,8 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\WfEtape;
+use Application\Service\Intervenant;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Traversable;
@@ -12,10 +14,10 @@ use Traversable;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIndicateurImpl
+class AttentePieceJustifIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern = "%s vacataire a saisi des heures d'enseignement supplémentaires depuis l'édition de son contrat ou avenant";
-    protected $pluralTitlePattern   = "%s vacataires ont saisi des heures d'enseignement supplémentaires depuis l'édition de leur contrat ou avenant";
+    protected $singularTitlePattern = "%s vacataire n'a pas fourni toutes les pièces justificatives obligatoires";
+    protected $pluralTitlePattern   = "%s vacataires n'ont pas fourni toutes les pièces justificatives obligatoires";
     
     /**
      * 
@@ -42,14 +44,14 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIndicateurI
     public function getResultUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
-                'intervenant/validation-service', 
+                'piece-jointe/intervenant', 
                 ['intervenant' => $result->getSourceCode()], 
                 ['force_canonical' => true]);
     }
     
     /**
      * 
-     * @return int
+     * @return integer
      */
     public function getResultCount()
     {
@@ -57,37 +59,35 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIndicateurI
             return count($this->result);
         }
         
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-//        print_r($qb->getQuery()->getSQL());
+        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT int)");
+//        print_r($qb->getQuery()->getSQL());die;
         
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
     
     /**
-     * 
      * @return QueryBuilder
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
-        $qb
-                ->join("i.contrat", "c")
-                ->join("i.service", "s")
-                ->join("s.volumeHoraire", "vh", Join::WITH, "vh.contrat IS NULL");
-     
-        /**
-         * NB: pas besoin de consulter la progression dans le workflow car si l'intervenant a déjà un contrat/avenant,
-         * c'est qu'il a bien atteint l'étape "contrat".
-         */
+        $service = $this->getServiceLocator()->get('ApplicationIntervenant'); /* @var $service Intervenant */
         
+        /**
+         * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape 
+         * "Pièces justificatives" doivent avoir été franchies.
+         */
+        $qb = $service->finderByWfEtapeCourante(WfEtape::CODE_PJ_SAISIE);
+        
+        /**
+         * L'intervenant doit intervenir dans la structure spécifiée.
+         */
         if ($this->getStructure()) {
             $qb
-                    ->andWhere("s.structureEns = :structure")
-                    ->andWhere("c.structure = :structure")
+                    ->join("int.service", "s", Join::WITH, "s.structureEns = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
         
-        $qb->orderBy("i.nomUsuel, i.prenom");
+        $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
     }

@@ -677,7 +677,8 @@ INSERT INTO TYPE_VALIDATION (
 -- indicateurs
 --
 Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationDonneesPerso','Info','AttenteValidationDonneesPerso','100','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttentePieceJustifValidee','Info','AttentePieceJustifValidee','200','1');
+Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttentePieceJustif','Info','AttentePieceJustif','200','1');
+Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationPieceJustif','Info','AttenteValidationPieceJustif','210','1');
 Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationEns','Info','AttenteValidationEnsIndicateurImpl','300','1');
 Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAgrementCR','Info','AttenteAgrementCR','400','1');
 Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAgrementCA','Info','AttenteAgrementCA','500','1');

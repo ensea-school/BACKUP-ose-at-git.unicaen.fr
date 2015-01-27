@@ -83,7 +83,7 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurI
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
         
         /**
          * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape 
@@ -93,6 +93,8 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurI
                 ->join("i.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
                 ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
                 ->setParameter('codeEtape', $this->codeEtape);
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
          
         return $qb;
     }

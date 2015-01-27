@@ -65,7 +65,7 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
         $qb
                 ->join("i.statut", "st", \Doctrine\ORM\Query\Expr\Join::WITH, "st.peutSaisirDossier = 1")
                 ->join("i.vIndicDiffDossier", "vidd")
@@ -74,6 +74,8 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIndicateurImpl
                         "vidd.ribDossier IS NOT NULL OR " . 
                         "vidd.nomUsuelDossier IS NOT NULL OR " . 
                         "vidd.prenomDossier IS NOT NULL");
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
         
         return $qb;
     }

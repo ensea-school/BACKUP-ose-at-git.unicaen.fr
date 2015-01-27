@@ -47,7 +47,7 @@ class Indicateur extends AbstractEntityService
         
         $qb
                 ->andWhere("$alias.enabled = 1")
-                ->addOrderBy("$alias.ordre");
+                ->addOrderBy("$alias.type, $alias.ordre");
         
         return parent::getList($qb, $alias);
     }

@@ -77,10 +77,12 @@ class AttenteRetourContratIndicateurImpl extends AbstractIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("ie");
-        $qb->join("ie.contrat", "c");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
+        $qb->join("i.contrat", "c");
         
         $this->initQueryBuilder($qb);
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
         
         return $qb;
     }

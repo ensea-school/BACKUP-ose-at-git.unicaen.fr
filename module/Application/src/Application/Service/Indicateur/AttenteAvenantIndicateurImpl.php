@@ -15,8 +15,8 @@ use Traversable;
  */
 class AttenteAvenantIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern   = "%s vacataire est en attente de son avenant";
-    protected $pluralTitlePattern = "%s vacataires sont en attente de leur avenant";
+    protected $singularTitlePattern = "%s vacataire est en attente de son avenant";
+    protected $pluralTitlePattern   = "%s vacataires sont en attente de leur avenant";
     
     /**
      * 
@@ -101,6 +101,8 @@ class AttenteAvenantIndicateurImpl extends AbstractIndicateurImpl
                     ->andWhere("p.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
         
         return $qb;
     }

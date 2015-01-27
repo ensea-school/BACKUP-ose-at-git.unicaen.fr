@@ -13,10 +13,10 @@ use Traversable;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttentePieceJustifValideeIndicateurImpl extends AbstractIndicateurImpl
+class AttenteValidationPieceJustifIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern   = "%s vacataire n'est pas en règle concernant ses pièces justificatives  <em>obligatoires</em>";
-    protected $pluralTitlePattern = "%s vacataires ne sont pas en règle concernant leurs pièces justificatives  <em>obligatoires</em>";
+    protected $singularTitlePattern = "%s vacataire est en attente de validation de ses pièces justificatives obligatoires";
+    protected $pluralTitlePattern   = "%s vacataires sont en attente de validation de leurs pièces justificatives obligatoires";
     
     /**
      * 
@@ -58,7 +58,7 @@ class AttentePieceJustifValideeIndicateurImpl extends AbstractIndicateurImpl
             return count($this->result);
         }
         
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
+        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT int)");
 //        print_r($qb->getQuery()->getSQL());die;
         
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -69,17 +69,25 @@ class AttentePieceJustifValideeIndicateurImpl extends AbstractIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i");
+        $service = $this->getServiceLocator()->get('ApplicationIntervenant');
         
         /**
          * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape 
-         * "Pièces justificatives" doivent avoir été franchies.
+         * "Validation des pièces justificatives" doivent avoir été franchies.
          */
-        $qb
-                ->join("i.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
-                ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
-                ->setParameter('codeEtape', WfEtape::CODE_PIECES_JOINTES);
-         
+        $qb = $service->finderByWfEtapeCourante(WfEtape::CODE_PJ_VALIDATION);
+        
+        /**
+         * L'intervenant doit intervenir dans la structure spécifiée.
+         */
+        if ($this->getStructure()) {
+            $qb
+                    ->join("int.service", "s", Join::WITH, "s.structureEns = :structure")
+                    ->setParameter('structure', $this->getStructure());
+        }
+        
+        $qb->orderBy("int.nomUsuel, int.prenom");
+        
         return $qb;
     }
 }

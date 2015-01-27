@@ -83,6 +83,8 @@ class PermAffectAutreIntervMemeIndicateurImpl extends AbstractIndicateurImpl
         $qb
                 ->andWhere("s.structureEns = :structure")
                 ->setParameter('structure', $this->getStructure());
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
          
         return $qb;
     }

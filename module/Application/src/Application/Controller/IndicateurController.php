@@ -47,10 +47,21 @@ class IndicateurController extends AbstractActionController implements ContextPr
             $abonnementsInfos[$indicateur->getId()] = $notificationIndicateur->getExtraInfos();
         }
         
+        // regroupement par catégorie
+        $tmp = $categories = [];
+        foreach ($indicateursImpl as $impl) {
+            $indicateur                            = $impl->getEntity();
+            $categorie                             = $indicateur->getType();
+            $categories[$categorie]                = $categorie;
+            $tmp[$categorie][$indicateur->getId()] = $impl;
+        }
+        $indicateursImpl = $tmp;
+        
         $viewModel = new ViewModel();
         $viewModel->setVariables([
             'indicateurs'      => $indicateurs,
             'indicateursImpl'  => $indicateursImpl,
+            'categories'       => $categories,
             'abonnementUrl'    => $this->url()->fromRoute('indicateur/abonner', ['indicateur' => '_indicateur_']),
             'abonnements'      => $abonnements,
             'abonnementsInfos' => $abonnementsInfos,

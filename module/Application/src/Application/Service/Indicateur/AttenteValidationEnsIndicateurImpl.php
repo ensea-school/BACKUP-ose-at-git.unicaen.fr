@@ -13,8 +13,8 @@ use Traversable;
  */
 class AttenteValidationEnsIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern   = "%s vacataire est en attente de validation de ses enseignements";
-    protected $pluralTitlePattern = "%s vacataires sont en attente de validation de leurs enseignements";
+    protected $singularTitlePattern = "%s vacataire est en attente de validation de ses enseignements";
+    protected $pluralTitlePattern   = "%s vacataires sont en attente de validation de leurs enseignements";
     
     /**
      * 
@@ -68,7 +68,7 @@ class AttenteValidationEnsIndicateurImpl extends AbstractIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
         $qb
                 ->join("i.service", "s")
                 ->join("s.volumeHoraire", "vh");
@@ -84,6 +84,8 @@ class AttenteValidationEnsIndicateurImpl extends AbstractIndicateurImpl
          */
         $qb
                 ->andWhere("vh.validation IS EMPTY");
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
          
         return $qb;
     }

@@ -145,7 +145,8 @@ return array(
             'NotificationIndicateurService'    => 'Application\\Service\\NotificationIndicateur',
             
             'AttenteValidationDonneesPerso'    => 'Application\\Service\\Indicateur\\AttenteValidationDonneesPersoIndicateurImpl',
-            'AttentePieceJustifValidee'        => 'Application\\Service\\Indicateur\\AttentePieceJustifValideeIndicateurImpl',
+            'AttentePieceJustif'               => 'Application\\Service\\Indicateur\\AttentePieceJustifIndicateurImpl',
+            'AttenteValidationPieceJustif'     => 'Application\\Service\\Indicateur\\AttenteValidationPieceJustifIndicateurImpl',
             'AttenteValidationEns'             => 'Application\\Service\\Indicateur\\AttenteValidationEnsIndicateurImpl',
             'AttenteAgrementCR'                => 'Application\\Service\\Indicateur\\AttenteAgrementCRIndicateurImpl',
             'AttenteAgrementCA'                => 'Application\\Service\\Indicateur\\AttenteAgrementCAIndicateurImpl',

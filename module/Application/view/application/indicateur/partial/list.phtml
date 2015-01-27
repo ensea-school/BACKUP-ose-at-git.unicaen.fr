@@ -8,6 +8,10 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
     .intitule { width: 70%; }
 </style>
 
+<?php foreach ($this->categories as $categorie): ?>
+
+<h2><?php echo $categorie ?></h2>
+
 <table class="table table-bordered table-condensed">
     <thead>
         <tr>
@@ -18,19 +22,27 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->indicateursImpl as $indicateurImpl): /* @var $indicateurs AbstractIndicateurImpl[] */ ?>
+        <?php foreach ($this->indicateursImpl[$categorie] as $indicateurImpl): /* @var $indicateurs AbstractIndicateurImpl[] */ ?>
             <?php 
             $indicateurEntity = $indicateurImpl->getEntity();  /* @var $indicateurEntity Indicateur */
             ?>
             <tr>
                 
                 <td class="intitule">
-                <?php if ($indicateurImpl->getResultCount()): ?>
-                    <a href="<?php echo $this->url('indicateur/result', ['indicateur' => $indicateurEntity->getId()]) ?>"
-                       title="Cliquez pour vous rendre à la page concernée"><?php echo $indicateurImpl ?></a>
-                <?php else: ?>
-                    <?php echo $indicateurImpl ?>
-                <?php endif ?>
+                    <?php if ($indicateurImpl->getResultCount()): ?>
+                        <a href="<?php echo $this->url('indicateur/result', ['indicateur' => $indicateurEntity->getId()]) ?>"
+                           title="Cliquez pour vous rendre à la page concernée"><?php echo $indicateurImpl ?></a>
+                    <?php else: ?>
+                        <?php echo $indicateurImpl ?>
+                    <?php endif ?>
+                    
+                    <!-- Détails concernant l'indicateur -->
+                    <small class="pull-right">
+                        <?php echo $this->toggleDetails($detailsDivId = uniqid("details-"), "Afficher/masquer la description") ?>
+                    </small>
+                    <p style="display: none" id="<?php echo $detailsDivId ?>" class="small">
+                        Aucune description disponible.
+                    </p>
                 </td>
                 
                 <?php if ($this->showAbonnement): ?>
@@ -44,7 +56,7 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
                     $dernNotif  = $abonnement ? $abonnement->getDateDernNotif() : null;
                     ?>
                     <select class="abonnement" name="abonnement" data-id="<?php echo $indicateurEntity->getId() ?>">
-                        <option value=""                                                               <?php echo $isSelected("") ?>  >Aucune</option>
+                        <option value=""                                                             <?php echo $isSelected("") ?>  >Aucune</option>
                         <option value="<?php echo $val = NotificationIndicateur::PERIODE_HEURE_3 ?>" <?php echo $isSelected($val) ?>>4 par jour</option>
                         <option value="<?php echo $val = NotificationIndicateur::PERIODE_HEURE_6 ?>" <?php echo $isSelected($val) ?>>2 par jour</option>
                         <option value="<?php echo $val = NotificationIndicateur::PERIODE_JOUR ?>"    <?php echo $isSelected($val) ?>>1 par jour</option>
@@ -69,6 +81,9 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<?php endforeach; ?>
+
 
 <?php if ($this->showAbonnement): ?>
 <script>

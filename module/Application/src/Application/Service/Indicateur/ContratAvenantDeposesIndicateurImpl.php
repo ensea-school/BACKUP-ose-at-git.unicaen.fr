@@ -142,9 +142,9 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl impleme
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("ie");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
         $qb
-                ->join("ie.contrat", "c")
+                ->join("i.contrat", "c")
                 ->join("c.fichier", "f");
      
         /**
@@ -163,6 +163,8 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl impleme
                     ->andWhere("c.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
         
         return $qb;
     }

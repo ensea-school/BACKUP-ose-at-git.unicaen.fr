@@ -89,6 +89,8 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIndicateurImpl
         }
         
         $qb->andWhere("c.id IS NULL");
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
          
         return $qb;
     }

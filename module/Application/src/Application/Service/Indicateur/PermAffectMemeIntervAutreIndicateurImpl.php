@@ -98,6 +98,8 @@ class PermAffectMemeIntervAutreIndicateurImpl extends AbstractIndicateurImpl
          * Intervenant dans une autre structure que celle spécifiée.
          */
         $qb->andWhere("s.structureEns <> :structure");
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
          
         return $qb;
     }

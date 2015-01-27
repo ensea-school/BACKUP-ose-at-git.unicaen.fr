@@ -15,8 +15,8 @@ use Traversable;
  */
 class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
 {
-    protected $singularTitlePattern   = "%s vacataire est en attente de son contrat initial";
-    protected $pluralTitlePattern = "%s vacataires sont en attente de leur contrat initial";
+    protected $singularTitlePattern = "%s vacataire est en attente de son contrat initial";
+    protected $pluralTitlePattern   = "%s vacataires sont en attente de leur contrat initial";
     
     /**
      * 
@@ -68,7 +68,7 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
         $qb
                 ->join("i.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
                 ->join("i.service", "s")
@@ -93,6 +93,8 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
         $qb
                 ->andWhere("NOT EXISTS ( $notExists )")
                 ->setParameter('codeTypeContrat', \Application\Entity\Db\TypeContrat::CODE_CONTRAT);
+        
+        $qb->orderBy("i.nomUsuel, i.prenom");
          
         return $qb;
     }

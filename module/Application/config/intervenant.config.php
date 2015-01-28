@@ -375,7 +375,7 @@ return array(
                 array(
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => array('voir-heures-comp'),
-                    'roles'      => array(R_DRH, R_ADMINISTRATEUR),
+                    'roles'      => array(R_DRH, R_ADMINISTRATEUR, R_COMPOSANTE, R_ETABLISSEMENT),
                 ),
                 array(
                     'controller' => 'Application\Controller\Dossier',

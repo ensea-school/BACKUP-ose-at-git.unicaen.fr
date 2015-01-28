@@ -4,17 +4,10 @@ use Application\Entity\Db\NotificationIndicateur;
 use Application\Service\Indicateur\AbstractIndicateurImpl;
 ?>
 
-<style>
-    .intitule { width: 70%; }
-</style>
-
-<?php foreach ($this->categories as $categorie): ?>
-
-<h2><?php echo $categorie ?></h2>
-
 <table class="table table-bordered table-condensed">
     <thead>
         <tr>
+            <th class="categorie">Catégorie</th>
             <th class="intitule">Intitulé de l'indicateur</th>
             <?php if ($this->showAbonnement): ?>
             <th class="notification">Notification par mail</th>
@@ -22,11 +15,14 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->indicateursImpl[$categorie] as $indicateurImpl): /* @var $indicateurs AbstractIndicateurImpl[] */ ?>
+        <?php foreach ($this->indicateursImpl as $indicateurImpl): /* @var $indicateurs AbstractIndicateurImpl[] */ ?>
             <?php 
             $indicateurEntity = $indicateurImpl->getEntity();  /* @var $indicateurEntity Indicateur */
             ?>
             <tr>
+                <td class="categorie">
+                    <?php echo $indicateurEntity->getType() ?>
+                </td>
                 
                 <td class="intitule">
                     <?php if ($indicateurImpl->getResultCount()): ?>
@@ -81,8 +77,6 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
         <?php endforeach; ?>
     </tbody>
 </table>
-
-<?php endforeach; ?>
 
 
 <?php if ($this->showAbonnement): ?>

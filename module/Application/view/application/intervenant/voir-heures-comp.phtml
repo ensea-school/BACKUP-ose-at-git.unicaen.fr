@@ -72,6 +72,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
     <?php endforeach; ?>
     <th rowspan="2"><abbr title="Formation initiale">FI</abbr></th>
     <th rowspan="2"><abbr title="Formation continue">FC</abbr></th>
+    <th rowspan="2"><abbr title="Formation continue (heures majorées)">FC Maj.</abbr></th>
 </tr>
 <tr>
     <?php foreach( $data['types-intervention'] as $ti ): ?>
@@ -105,6 +106,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
         <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['total-hetd'])?></td>
         <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['total-hetd-compl-fi'])?></td>
         <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['total-hetd-compl-fc'])?></td>
+        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['total-hetd-compl-fc-majorees'])?></td>
     </tr>
 <?php endforeach; ?>
 </table>
@@ -148,6 +150,10 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
 <div class="row">
     <div class="col-sm-4"><abbr title="Heures complémentaires (formation continue)">HC FC</abbr></div>
     <div class="col-sm-2 nombre"><?php echo \Common\Util::formattedHeures($resultat->getHeuresComplFc()) ?></div>
+</div>
+<div class="row">
+    <div class="col-sm-4"><abbr title="Heures complémentaires (formation continue, heures majorées)">HC FC MAJ</abbr></div>
+    <div class="col-sm-2 nombre"><?php echo \Common\Util::formattedHeures($resultat->getHeuresComplFcMajorees()) ?></div>
 </div>
 <div class="row">
     <div class="col-sm-4"><abbr title="Heures complémentaires (référentiel)">HC Référentiel</abbr></div>

@@ -356,12 +356,12 @@ class FormuleService extends \Application\Entity\Db\FormuleService implements \D
     /**
      * {@inheritDoc}
      */
-    public function getFormuleVolumeHoraire()
+    public function getFormuleVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = NULL, \Application\Entity\Db\TypeIntervention $typeIntervention = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleVolumeHoraire', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleVolumeHoraire', array($typeVolumeHoraire, $etatVolumeHoraire, $typeIntervention));
 
-        return parent::getFormuleVolumeHoraire();
+        return parent::getFormuleVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire, $typeIntervention);
     }
 
     /**

@@ -108,6 +108,11 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
                     <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplFc()) ?></td></tr>
                 <?php endif; ?>
 
+                <?php if ($fr->getHeuresComplFcMajorees() > 0): ?>
+                <tr><th style="padding-left:5em">Dont <abbr title="Formation continue">FC Majorées</abbr></th>
+                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplFcMajorees()) ?></td></tr>
+                <?php endif; ?>
+
                 <?php if ($fr->getHeuresComplReferentiel() > 0): ?>
                 <tr><th style="padding-left:5em">Dont référentiel</th>
                     <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplReferentiel()) ?></td></tr>

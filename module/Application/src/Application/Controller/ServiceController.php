@@ -138,7 +138,7 @@ class ServiceController extends AbstractActionController
                 $params['query']  = $this->params()->fromQuery();
                 $params['renderIntervenants'] = ! $intervenant;
                 $listeViewModel   = $this->forward()->dispatch($controller, $params);
-                //$viewModel->addChild($listeViewModel, 'servicesRefListe');
+                $viewModel->addChild($listeViewModel, 'servicesRefListe');
             }
         }else{
             $services = [];

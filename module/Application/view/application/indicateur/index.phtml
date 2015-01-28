@@ -2,10 +2,14 @@
 
 <h1 class="page-header"><?php echo $title ?></h1>
 
+<style>
+    .categorie { width: 180px; }
+    .notification { width: 180px; }
+</style>
+
 <?php
 echo $this->partial('application/indicateur/partial/list', [
     'indicateursImpl'  => $this->indicateursImpl,
-    'categories'       => $this->categories,
     'abonnements'      => $this->abonnements,
     'abonnementsInfos' => $this->abonnementsInfos,
     'abonnementUrl'    => $this->abonnementUrl,

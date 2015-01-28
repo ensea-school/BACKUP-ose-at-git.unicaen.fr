@@ -229,9 +229,9 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
 
     /**
      *
-     * @param \Application\Entity\Db\Periode $periode
+     * @param Periode $periode
      * @param TypeIntervention $typeIntervention
-     * @return VolumeHoraireListe
+     * @return \Application\Entity\VolumeHoraireListe
      */
     public function getVolumeHoraireListe( Periode $periode=null, TypeIntervention $typeIntervention=null )
     {

@@ -97,7 +97,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $service = $this->getService();
 
         $context = $this->getContextProvider()->getGlobalContext();
-        $vhl     = $this->getService()->getVolumeHoraireListe();
+        $vhl     = $this->getService()->getVolumeHoraireListe()->setTypeVolumeHoraire( $liste->getTypeVolumeHoraire() );
 
         $typesIntervention = $this->getListe()->getTypesIntervention();
 

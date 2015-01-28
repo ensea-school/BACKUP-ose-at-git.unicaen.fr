@@ -108,7 +108,7 @@ function ServiceListe( id ){
                 details : $('#service-'+serviceId+'-volume-horaire-tr').css('display') == 'none' ? '0' : '1',
                 params  : that.params
             }, function(){ that.onAfterChange(); } );
-            $( "#"+that.id+" #service-"+serviceId+"-volume-horaire-td" ).refresh();
+            $( "#"+that.id+" #service-"+serviceId+"-volume-horaire-td div#vhl" ).refresh();
         }else{ // nouveau service
             var url = Url("service/rafraichir-ligne/"+serviceId, {
                 'only-content'                  : 0,

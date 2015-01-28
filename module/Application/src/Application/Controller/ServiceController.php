@@ -51,7 +51,6 @@ class ServiceController extends AbstractActionController
 
         $this->initFilters();
         $qb = $service->initQuery()[0];
-
         $service
             ->join(     'applicationIntervenant',       $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
             ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
@@ -68,12 +67,18 @@ class ServiceController extends AbstractActionController
         $volumeHoraireService
             ->leftJoin( 'applicationMotifNonPaiement',  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] );
 
+        $volumeHoraireService->leftJoin( 'applicationEtatVolumeHoraire', $qb, 'etatVolumeHoraire', ['id','code','libelle'] );
+        $volumeHoraireService->leftJoin( 'ApplicationFormuleVolumeHoraire', $qb, 'formuleVolumeHoraire', ['id'] );
+
         $service->finderByContext($qb);
-        $service->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb);
+        $service->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire','etatVolumeHoraire']);
 
         if ($intervenant){
             $service->finderByIntervenant($intervenant, $qb);
         }
+
+        $qb->addOrderBy( $elementPedagogiqueService->getAlias().'.libelle' );
+
         if (! $intervenant && $role instanceof \Application\Acl\ComposanteRole){
             $service->finderByComposante($role->getStructure(), $qb);
         }
@@ -126,7 +131,6 @@ class ServiceController extends AbstractActionController
         if ('afficher' === $action || $totaux){
             $qb = $this->getFilteredServices($intervenant, $recherche);
             $services = $this->getServiceService()->getList($qb);
-            $this->getServiceService()->setTypeVolumehoraire($services, $recherche->getTypeVolumeHoraire());
 
             // services référentiels : délégation au contrôleur
             if (! $totaux){
@@ -143,10 +147,9 @@ class ServiceController extends AbstractActionController
         }else{
             $services = [];
         }
-        $renderReferentiel  = !$intervenant instanceof IntervenantExterieur;
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params = $viewHelperParams;
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'renderReferentiel','canAddService', 'canAddServiceReferentiel', 'params'));
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'canAddService', 'canAddServiceReferentiel', 'params'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
@@ -158,7 +161,7 @@ class ServiceController extends AbstractActionController
     public function exportAction()
     {
         $intervenant        = $this->context()->intervenantFromRoute();
-        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
+        $role               = $this->getContextProvider()->getSelectedIdentityRole();
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
             throw new \BjyAuthorize\Exception\UnAuthorizedException();

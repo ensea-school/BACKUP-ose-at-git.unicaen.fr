@@ -167,7 +167,7 @@ implements
         }
         $out .= $this->renderShowHide();
 
-        $out .= '<table class="table table-bordered service">';
+        $out .= '<table class="table table-condensed table-extra-condensed table-bordered service">';
         $out .= '<tr>';
 
         foreach( $this->getColumnsList() as $columnName ){
@@ -214,7 +214,9 @@ implements
     public function renderLigne( Service $service, $details=false, $show=true )
     {
         $ligneView = $this->getView()->serviceLigne( $this, $service );
-        $vhlView = $this->getView()->volumeHoraireListe( $service->getVolumeHoraireListe()->setTypeVolumeHoraire($this->getTypeVolumeHoraire()) )->setReadOnly($this->getReadOnly());
+
+        $volumeHoraireListe = $this->getView()->volumeHoraireListe( $service->getVolumeHoraireListe() );
+        /* @var $volumeHoraireListe \Application\View\Helper\VolumeHoraire\Liste */
 
         $attribs = [
             'id'        => 'service-'.$service->getId().'-ligne',
@@ -226,11 +228,28 @@ implements
         $out  = '<tr '.$this->htmlAttribs($attribs).'>';
         $out .= $ligneView->render($details);
         $out .= '</tr>';
-        $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>'
-                .'<td class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-td" data-url="'.$vhlView->getRefreshUrl().'" colspan="999">'
-                .$vhlView->render()
-                .'</td>'
-                .'</tr>';
+        $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>';
+        if ( $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE ){
+            $out .= '<td class="volume-horaire" style="padding-left:5em" id="service-'.$service->getId().'-volume-horaire-td" colspan="999">';
+
+            $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() );
+            $volumeHoraireListe->setReadOnly(true);
+            $out .= '<div style="float:left;width:15%"><h5>Prévisionnel :</h5></div>';
+            $out .= '<div id="vhl-prev" style="width:85%" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
+            
+            $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getTypeVolumeHoraire() );
+            $volumeHoraireListe->setReadOnly( $this->getReadOnly() );
+            $out .= '<div style="float:left;width:15%"><h5>Réalisé :</h5></div>';
+            $out .= '<div id="vhl" style="width:85%" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
+        }else{
+            $out .= '<td class="volume-horaire" style="padding-left:10em" id="service-'.$service->getId().'-volume-horaire-td" colspan="999">';
+
+            $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getTypeVolumeHoraire() );
+            $volumeHoraireListe->setReadOnly( $this->getReadOnly() );
+            $out .= '<div id="vhl" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
+        }
+        $out .= '</td>';
+        $out .= '</tr>';
         return $out;
     }
 
@@ -310,7 +329,7 @@ implements
 
             }
             foreach( $this->getServices() as $service ){
-                $data['total_general'] += $service->getVolumeHoraireListe()->setTypeIntervention(false)->getHeures();
+                $data['total_general'] += $service->getVolumeHoraireListe()->setTypeVolumeHoraire($this->getTypeVolumehoraire())->setTypeIntervention(false)->getHeures();
             }
             $this->totaux = $data;
         }

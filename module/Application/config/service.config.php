@@ -127,53 +127,53 @@ return [
                     ],
                 ],
             ],
-            'service-ref' => [
-                'type' => 'Literal',
-                'options' => [
-                    'route' => '/service-referentiel',
-                    'defaults' => [
-                       '__NAMESPACE__' => 'Application\Controller',
-                        'controller'   => 'ServiceReferentiel',
-                    ],
-                ],
-                'may_terminate' => FALSE,
-                'child_routes' => [
-                    'modifier' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/modifier/:id',
-                            'constraints' => [
-                                'id' => '[0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'modifier',
-                            ],
-                        ],
-                    ],
-                    'recherche' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/recherche[/:term]',
-                            'defaults' => [
-                                'action' => 'recherche',
-                            ],
-                        ],
-                    ],
-                    'default' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/:action[/:id]',
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     => '[0-9]*',
-                            ],
-                            'defaults' => [
-                                'action' => 'index',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+//            'service-ref' => [
+//                'type' => 'Literal',
+//                'options' => [
+//                    'route' => '/service-referentiel',
+//                    'defaults' => [
+//                       '__NAMESPACE__' => 'Application\Controller',
+//                        'controller'   => 'ServiceReferentiel',
+//                    ],
+//                ],
+//                'may_terminate' => FALSE,
+//                'child_routes' => [
+//                    'modifier' => [
+//                        'type'    => 'Segment',
+//                        'options' => [
+//                            'route'    => '/modifier/:id',
+//                            'constraints' => [
+//                                'id' => '[0-9]*',
+//                            ],
+//                            'defaults' => [
+//                                'action' => 'modifier',
+//                            ],
+//                        ],
+//                    ],
+//                    'recherche' => [
+//                        'type'    => 'Segment',
+//                        'options' => [
+//                            'route'    => '/recherche[/:term]',
+//                            'defaults' => [
+//                                'action' => 'recherche',
+//                            ],
+//                        ],
+//                    ],
+//                    'default' => [
+//                        'type'    => 'Segment',
+//                        'options' => [
+//                            'route'    => '/:action[/:id]',
+//                            'constraints' => [
+//                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+//                                'id'     => '[0-9]*',
+//                            ],
+//                            'defaults' => [
+//                                'action' => 'index',
+//                            ],
+//                        ],
+//                    ],
+//                ],
+//            ],
         ],
     ],
     'navigation' => [

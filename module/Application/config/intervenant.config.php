@@ -134,6 +134,20 @@ return array(
                             ),
                         ),
                     ),
+                    'referentiel' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:intervenant/referentiel',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\ServiceReferentiel',
+                                'action' => 'index',
+                                'type-volume-horaire-code' => 'PREVU',
+                            ),
+                        ),
+                    ),
                     'services-realises' => array(
                         'type'    => 'Segment',
                         'options' => array(

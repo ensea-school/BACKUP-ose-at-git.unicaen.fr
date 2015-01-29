@@ -233,11 +233,13 @@ implements
             $out .= '<td class="volume-horaire" style="padding-left:5em" id="service-'.$service->getId().'-volume-horaire-td" colspan="999">';
 
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() );
+            $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getValide() );
             $volumeHoraireListe->setReadOnly(true);
             $out .= '<div style="float:left;width:15%"><h5>Prévisionnel :</h5></div>';
             $out .= '<div id="vhl-prev" style="width:85%" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
             
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getTypeVolumeHoraire() );
+            $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
             $volumeHoraireListe->setReadOnly( $this->getReadOnly() );
             $out .= '<div style="float:left;width:15%"><h5>Réalisé :</h5></div>';
             $out .= '<div id="vhl" style="width:85%" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
@@ -245,6 +247,7 @@ implements
             $out .= '<td class="volume-horaire" style="padding-left:10em" id="service-'.$service->getId().'-volume-horaire-td" colspan="999">';
 
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getTypeVolumeHoraire() );
+            $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
             $volumeHoraireListe->setReadOnly( $this->getReadOnly() );
             $out .= '<div id="vhl" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
         }
@@ -348,6 +351,7 @@ implements
             'type-volume-horaire'           => $this->getTypeVolumeHoraire()->getId(),
             'columns-visibility'            => [],
             'types-intervention-visibility' => [],
+            'in-realise'                    => $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE,
         ];
         foreach( $this->getColumnsList() as $columnName ){
             $params['columns-visibility'][$columnName] = $this->getColumnVisibility($columnName);
@@ -603,6 +607,15 @@ implements
     protected function getServiceTypeVolumeHoraire()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
+    }
+
+    /**
+     *
+     * @return \Application\Service\EtatVolumeHoraire
+     */
+    protected function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 
     /**

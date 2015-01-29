@@ -123,9 +123,13 @@ function ServiceListe( id ){
     }
 
     this.onAfterDelete = function( serviceId ){
-        $("#"+this.id+" #service-"+serviceId+"-volume-horaire-tr").remove();
-        $("#"+this.id+" #service-"+serviceId+"-ligne" ).remove();
-        this.onAfterChange();
+        if (this.params['in-realise']){ // si on est dans les services réalisés alors les lignes apparaissent toujours, même si les heures réalisées ont été supprimées
+            this.onAfterSaisie( serviceId );
+        }else{
+            $("#"+this.id+" #service-"+serviceId+"-volume-horaire-tr").remove();
+            $("#"+this.id+" #service-"+serviceId+"-ligne" ).remove();
+            this.onAfterChange();
+        }
     }
 
     this.init2 = function(){
@@ -239,6 +243,14 @@ function ServiceForm( id ) {
         });
     }
 
+    this.prevuToRealise = function( periode ){
+        $("form#service div.periode#"+periode+" .form-control").each( function(){
+            var id = $(this).attr('name').replace(periode+'[', 'prev-').replace(']','');
+            var value = $("form#service div.periode#"+periode+" #"+id).data('heures');
+            $(this).val( value );
+        });
+    }
+
 }
 
 ServiceForm.get = function( id ){
@@ -259,6 +271,12 @@ ServiceForm.init = function(){
         var elementId = ui.item.id;
         ServiceForm.get(serviceId).refreshFormVolumesHoraires( elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val(), $("input[name='type-volume-horaire']").val() );
     } );
+
+    $("form#service button.prevu-to-realise").on('click', function(){
+        var serviceId = $('form#service input[name="service\\[id\\]"]').val();
+        var periode = $(this).parents('div.periode').attr('id')
+        ServiceForm.get(serviceId).prevuToRealise( periode );
+    } );
 }
 
 
@@ -266,7 +284,7 @@ ServiceForm.init = function(){
 
 
 ServiceFilter = function(){
-    
+
 }
 
 ServiceFilter.initRecherche = function(){

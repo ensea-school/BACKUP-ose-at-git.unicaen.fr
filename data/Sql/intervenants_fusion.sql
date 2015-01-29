@@ -1,3 +1,4 @@
+-- déplacer les données d'un compte vers un autre en vue d'une fusion
 alter trigger "OSE"."SERVICE_HISTO_CK" disable;
 alter trigger "OSE"."VALIDATION_CK" disable;
 /
@@ -49,5 +50,23 @@ END;
 alter trigger "OSE"."SERVICE_HISTO_CK" enable;
 alter trigger "OSE"."VALIDATION_CK" enable;
 /
+
+
+
+-- intervertir deux source_code harpège
+DECLARE
+  old_source_code VARCHAR2(255) DEFAULT '96074';
+  new_source_code VARCHAR2(255) DEFAULT '55342';
+BEGIN
+  
+  UPDATE intervenant SET source_code = 'old_zzz1' WHERE source_code = old_source_code;
+  UPDATE intervenant SET source_code = 'new_zzz1' WHERE source_code = new_source_code;
+  
+  UPDATE intervenant SET source_code = new_source_code WHERE source_code = 'old_zzz1';
+  UPDATE intervenant SET source_code = old_source_code WHERE source_code = 'new_zzz1';
+  
+END;
+/
+
 
 --select ut.* from user_tab_cols utc JOIN user_tables ut ON ut.table_name = utc.table_name where utc.column_name = 'DOSSIER_ID' order by ut.table_name;

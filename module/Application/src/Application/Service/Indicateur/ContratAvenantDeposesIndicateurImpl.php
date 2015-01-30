@@ -6,14 +6,13 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Common\Constants;
 use DateTime;
 use Doctrine\ORM\QueryBuilder;
-use Traversable;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl implements DateAwareIndicateurImplInterface
+class ContratAvenantDeposesIndicateurImpl extends AbstractIntervenantResultIndicateurImpl implements DateAwareIndicateurImplInterface
 {
     protected $singularTitlePattern = "%s contrat/avenant de vacataire a été déposé";
     protected $pluralTitlePattern   = "%s contrats/avenants de vacataire ont été déposés";
@@ -64,22 +63,6 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl impleme
         }
         
         return $title;
-    }
-
-    /**
-     * 
-     * @return Traversable
-     */
-    public function getResult()
-    {
-        if (null === $this->result) {
-            $qb = $this->getQueryBuilder();
-//            print_r($qb->getQuery()->getSQL());
-
-            $this->result = $qb->getQuery()->getResult();
-        }
-            
-        return $this->result;
     }
     
     /**
@@ -142,9 +125,9 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl impleme
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("i.contrat", "c")
+                ->join("int.contrat", "c")
                 ->join("c.fichier", "f");
      
         /**
@@ -164,7 +147,7 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl impleme
                     ->setParameter('structure', $this->getStructure());
         }
         
-        $qb->orderBy("i.nomUsuel, i.prenom");
+        $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
     }

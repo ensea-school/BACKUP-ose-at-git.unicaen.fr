@@ -4,32 +4,16 @@ namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Doctrine\ORM\QueryBuilder;
-use Traversable;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DonneesPersoDiffImportIndicateurImpl extends AbstractIndicateurImpl
+class DonneesPersoDiffImportIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     protected $singularTitlePattern = "%s vacataire a saisi des données personnelles qui diffèrent de celles importées";
     protected $pluralTitlePattern   = "%s vacataires ont saisi des données personnelles qui diffèrent de celles importées";
-    
-    /**
-     * 
-     * @return Traversable
-     */
-    public function getResult()
-    {
-        if (null === $this->result) {
-            $qb = $this->getQueryBuilder();
-
-            $this->result = $qb->getQuery()->getResult();
-        }
-            
-        return $this->result;
-    }
     
     /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
@@ -46,36 +30,21 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIndicateurImpl
     }
     
     /**
-     * 
-     * @return integer
-     */
-    public function getResultCount()
-    {
-        if (null !== $this->result) {
-            return count($this->result);
-        }
-        
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-        
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-    
-    /**
      * @return QueryBuilder
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("i.statut", "st", \Doctrine\ORM\Query\Expr\Join::WITH, "st.peutSaisirDossier = 1")
-                ->join("i.vIndicDiffDossier", "vidd")
+                ->join("int.statut", "st", \Doctrine\ORM\Query\Expr\Join::WITH, "st.peutSaisirDossier = 1")
+                ->join("int.vIndicDiffDossier", "vidd")
                 ->andWhere(
                         "vidd.adresseDossier IS NOT NULL OR " . 
                         "vidd.ribDossier IS NOT NULL OR " . 
                         "vidd.nomUsuelDossier IS NOT NULL OR " . 
                         "vidd.prenomDossier IS NOT NULL");
         
-        $qb->orderBy("i.nomUsuel, i.prenom");
+        $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
     }

@@ -3,36 +3,20 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\WfEtape;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Traversable;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
+class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     protected $singularTitlePattern = "%s vacataire est en attente de son contrat initial";
     protected $pluralTitlePattern   = "%s vacataires sont en attente de leur contrat initial";
-    
-    /**
-     * 
-     * @return Traversable
-     */
-    public function getResult()
-    {
-        if (null === $this->result) {
-            $qb = $this->getQueryBuilder();
-//            print_r($qb->getQuery()->getSQL());
-
-            $this->result = $qb->getQuery()->getResult();
-        }
-            
-        return $this->result;
-    }
     
     /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
@@ -49,29 +33,14 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
     }
     
     /**
-     * 
-     * @return integer
-     */
-    public function getResultCount()
-    {
-        if (null !== $this->result) {
-            return count($this->result);
-        }
-        
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-        
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-    
-    /**
      * @return QueryBuilder
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("i.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
-                ->join("i.service", "s")
+                ->join("int.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
+                ->join("int.service", "s")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.validation", "v");
         
@@ -79,7 +48,7 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
          * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape Contrat doivent avoir été franchies
          */
         $qb
-                ->join("i.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
+                ->join("int.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
                 ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
                 ->setParameter('codeEtape', WfEtape::CODE_CONTRAT);
         
@@ -89,24 +58,33 @@ class AttenteContratIndicateurImpl extends AbstractIndicateurImpl
         $notExists = 
                 "SELECT c FROM Application\Entity\Db\Contrat c " .
                 "JOIN c.typeContrat tc WITH tc.code = :codeTypeContrat " .
-                "WHERE c.intervenant = i AND c.validation IS NOT NULL ";
+                "WHERE c.intervenant = int AND c.validation IS NOT NULL ";
         $qb
                 ->andWhere("NOT EXISTS ( $notExists )")
-                ->setParameter('codeTypeContrat', \Application\Entity\Db\TypeContrat::CODE_CONTRAT);
+                ->setParameter('codeTypeContrat', TypeContrat::CODE_CONTRAT);
         
-        $qb->orderBy("i.nomUsuel, i.prenom");
+        /**
+         * L'intervenant doit intervenir dans la structure spécifiée.
+         */
+        if ($this->getStructure()) {
+            $qb
+                    ->andWhere("s.structureEns = :structure")
+                    ->setParameter('structure', $this->getStructure());
+        }
+        
+        $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
     }
-    
-    /**
-     * Surcharge pour ne renvoyer aucune structure car la contrat initial peut être
-     * établi par n'importe quelle composante d'enseignement.
-     * 
-     * @return null
-     */
-    public function getStructure()
-    {
-        return null;
-    }
+//    
+//    /**
+//     * Surcharge pour ne renvoyer aucune structure car la contrat initial peut être
+//     * établi par n'importe quelle composante d'enseignement.
+//     * 
+//     * @return null
+//     */
+//    public function getStructure()
+//    {
+//        return null;
+//    }
 }

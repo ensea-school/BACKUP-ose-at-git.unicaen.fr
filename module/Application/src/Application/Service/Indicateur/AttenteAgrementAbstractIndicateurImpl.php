@@ -7,14 +7,13 @@ use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\WfEtape;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Traversable;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurImpl
+abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     protected $singularTitlePattern = "%s vacataire est en attente d'agrément du %s";
     protected $pluralTitlePattern   = "%s vacataires sont en attente d'agrément du %s";
@@ -35,21 +34,6 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurI
     }
     
     /**
-     * 
-     * @return Traversable
-     */
-    public function getResult()
-    {
-        if (null === $this->result) {
-            $qb = $this->getQueryBuilder();
-
-            $this->result = $qb->getQuery()->getResult();
-        }
-            
-        return $this->result;
-    }
-    
-    /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
      * 
      * @param IntervenantEntity $result
@@ -64,37 +48,23 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIndicateurI
     }
     
     /**
-     * 
-     * @return integer
-     */
-    public function getResultCount()
-    {
-        if (null !== $this->result) {
-            return count($this->result);
-        }
-        
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-        
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-    
-    /**
      * @return QueryBuilder
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
+        $qb = parent::getQueryBuilder()
+                ->andWhere("ti.code = :type")->setParameter('type', \Application\Entity\Db\TypeIntervenant::CODE_EXTERIEUR);
         
         /**
          * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape 
          * "Agrément Conseil Restreint" doivent avoir été franchies
          */
         $qb
-                ->join("i.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
+                ->join("int.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
                 ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
                 ->setParameter('codeEtape', $this->codeEtape);
         
-        $qb->orderBy("i.nomUsuel, i.prenom");
+        $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
     }

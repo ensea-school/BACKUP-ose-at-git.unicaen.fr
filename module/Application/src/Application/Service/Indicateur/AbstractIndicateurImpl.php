@@ -2,10 +2,12 @@
 
 namespace Application\Service\Indicateur;
 
-use Zend\Mvc\Controller\Plugin\Url;
+use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Service\AbstractService;
 use Application\Traits\StructureAwareTrait;
-use Application\Entity\Db\Indicateur as IndicateurEntity;
+use Zend\Filter\Callback;
+use Zend\Filter\FilterInterface;
+use Zend\Mvc\Controller\Plugin\Url;
 
 /**
  * Description of SaisieServiceApresContratAvenantIndicateur
@@ -71,6 +73,33 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
         }
         
         return $title;
+    }
+    
+    /**
+     * @var FilterInterface 
+     */
+    protected $resultFormatter;
+    
+    /**
+     * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
+     * 
+     * @return FilterInterface
+     */
+    public function getResultFormatter()
+    {
+        if (null === $this->resultFormatter) {
+            $toString = function($value) { 
+                if (!is_object($value) && settype($value, 'string') !== false 
+                        || is_object($value) && method_exists($value, '__toString')) {
+                    return (string) $value; 
+                }
+                return sprintf("Impossible de formatter l'item de type '%s' en chaîne de caractères.", 
+                        is_object($value) ? get_class($value) : gettype($value));
+            };
+            $this->resultFormatter = new Callback($toString);
+        }
+        
+        return $this->resultFormatter;
     }
     
     /**

@@ -9,7 +9,7 @@ use Application\Entity\Db\StatutIntervenant;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class BiatssAffectMemeIntervAutreIndicateurImpl extends VacatAffectMemeIntervAutreAbstractIndicateurImpl
+class BiatssAffectMemeIntervAutreIndicateurImpl extends IntervAffectMemeIntervAutreAbstractIndicateurImpl
 {
     protected $codeStatutIntervenant = StatutIntervenant::BIATSS;
 }

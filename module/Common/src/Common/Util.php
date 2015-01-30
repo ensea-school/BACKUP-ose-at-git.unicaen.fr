@@ -16,12 +16,10 @@ class Util
     public static function formattedHeures( $heures )
     {
         $heures = round( (float)$heures, 2);
-        $negatif = $heures < 0;
+        $class = $heures < 0 ? 'negatif' : 'positif';
         $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2);
-        $heures = str_replace( ',00', '<span style="opacity:0.3">,00</span>', $heures );
-        if ($negatif){
-            $heures = '<span style="color:red">'.$heures.'</span>';
-        }
+        $heures = str_replace( ',00', '<span class="heures-dec-00">,00</span>', $heures );
+        $heures = '<span class="heures heures-'.$class.'">'.$heures.'</span>';
         return $heures;
     }
 
@@ -32,12 +30,10 @@ class Util
     public static function formattedPourcentage( $heures )
     {
         $heures = round( (float)$heures*100, 2);
-        $negatif = $heures < 0;
+        $class = $heures < 0 ? 'negatif' : 'positif';
         $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2);
-        $heures = str_replace( ',00', '<span style="opacity:0.3">,00</span>', $heures ).'%';
-        if ($negatif){
-            $heures = '<span style="color:red">'.$heures.'</span>';
-        }
+        $heures = str_replace( ',00', '<span class="heures-dec-00">,00</span>', $heures ).'%';
+        $heures = '<span class="heures heures-'.$class.'">'.$heures.'</span>';
         return $heures;
     }
 

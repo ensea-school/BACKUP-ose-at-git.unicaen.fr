@@ -97,7 +97,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $service = $this->getService();
 
         $context = $this->getContextProvider()->getGlobalContext();
-        $vhl     = $this->getService()->getVolumeHoraireListe();
+        $vhl     = $this->getService()->getVolumeHoraireListe()->setTypeVolumeHoraire( $liste->getTypeVolumeHoraire() );
 
         $typesIntervention = $this->getListe()->getTypesIntervention();
 
@@ -258,7 +258,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('service/default', array('action' => 'suppression', 'id' => $this->getService()->getId()));
+        $url = $this->getView()->url('service/default', ['action' => 'suppression', 'id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
         return '<a class="ajax-modal service-delete" data-event="service-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer l\'enseignement"><span class="glyphicon glyphicon-remove"></span></a>';
     }
 

@@ -191,11 +191,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     public function renderHeures(VolumeHoraireListe $volumeHoraireListe)
     {
         $heures = $volumeHoraireListe->getHeures();
-        if (0 !== $heures){
-            $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, -1);
-        }else{
-            $heures = \UnicaenApp\Util::formattedFloat(0, \NumberFormatter::DECIMAL, -1);;
-        }
+        $heures = \Common\Util::formattedHeures($heures);
 
         $query = $volumeHoraireListe->filtersToArray();
         if (false === $volumeHoraireListe->getMotifNonPaiement()){
@@ -235,9 +231,6 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     public function setVolumeHoraireListe(VolumeHoraireListe $volumeHoraireListe)
     {
-        if (! $volumeHoraireListe->getTypeVolumeHoraire() instanceof \Application\Entity\Db\TypeVolumeHoraire){
-            throw new \Common\Exception\LogicException('Le type de volume horaire de la liste n\'a pas été précisé');
-        }
         $this->volumeHoraireListe = $volumeHoraireListe;
         $this->forcedReadOnly = ! $this->getView()->isAllowed($volumeHoraireListe->getService(), 'update');
         $this->typesIntervention = null;

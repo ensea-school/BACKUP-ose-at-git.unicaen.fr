@@ -54,7 +54,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
     <?php endif; ?>
     <th rowspan="4">Composante d'intervention</th>
     <th style="white-space:nowrap" colspan="<?php echo count($data['types-intervention']); ?>">Types d'intervention</th>
-    <th colspan="3">HETD</th>
+    <th colspan="4">HETD</th>
 </tr>
 <tr>
     <th rowspan="3">FI</th>
@@ -64,7 +64,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
     <th><abbr title="<?php echo $ti->getLibelle() ?>"><?php echo $ti->getCode() ?></abbr></th>
     <?php endforeach; ?>
     <th rowspan="3">Dans le service</th>
-    <th colspan="2">Au-delà du service</th>
+    <th colspan="3">Au-delà du service</th>
 </tr>
 <tr>
     <?php foreach( $data['types-intervention'] as $ti ): ?>

@@ -357,7 +357,7 @@ abstract class AbstractEntityService extends AbstractService
      * @param string $alias                   Alias d'entité à utiliser par défaut. Utile en cas de jointure
      * @return QueryBuilder                   Retourne le QueryBuilder, pour chaîner les filtres au besoin
      */
-    public function finderByFilterObject( $object, HydratorInterface $hydrator=null, QueryBuilder $qb=null, $alias=null )
+    public function finderByFilterObject( $object, HydratorInterface $hydrator=null, QueryBuilder $qb=null, $alias=null, $exclude=[] )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         if (null === $object) return $qb;
@@ -367,7 +367,7 @@ abstract class AbstractEntityService extends AbstractService
         if (! $hydrator){
             $hydrator = new ObjectProperty();
         }
-        return $this->finderByFilterArray($hydrator->extract($object), $qb, $alias);
+        return $this->finderByFilterArray($hydrator->extract($object), $qb, $alias, $exclude);
     }
 
     /**
@@ -379,11 +379,11 @@ abstract class AbstractEntityService extends AbstractService
      * @param string $alias         Alias d'entité à utiliser par défaut. Utile en cas de jointure
      * @return QueryBuilder         Retourne le QueryBuilder, pour chaîner les filtres au besoin
      */
-    public function finderByFilterArray( array $properties, QueryBuilder $qb=null, $alias=null )
+    public function finderByFilterArray( array $properties, QueryBuilder $qb=null, $alias=null, $exclude=[] )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         foreach( $properties as $property => $value){
-            if (null != $value){
+            if (null != $value && ! in_array($property, $exclude)){
                 if(method_exists($this,'finderBy'.ucfirst($property))){
                     call_user_func(array($this,'finderBy'.ucfirst($property)), $value, $qb, $alias);
                 }elseif (in_array($property, $this->getProperties())){ // ne traite que les propriétés reconnues, ignore les autres

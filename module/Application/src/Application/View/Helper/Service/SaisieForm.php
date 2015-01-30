@@ -115,6 +115,16 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
 
     public function renderVolumeHoraire($fieldset)
     {
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get( $fieldset->get('type-volume-horaire')->getValue() );
+        $inRealise = \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE === $typeVolumeHoraire->getCode();
+        if ($inRealise){
+            $vhl = $fieldset->getObject()->getService()->getVolumeHoraireListe()->getChild();
+            /* @var $vhl \Application\Entity\VolumeHoraireListe */
+            $vhl->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() );
+            $vhl->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getValide() );
+            $vhl->setPeriode( $this->getServicePeriode()->get( $fieldset->get('periode')->getValue() ));
+        }
+
         $element = $fieldset->getObject()->getService()->getElementPedagogique();
         if ($element){
             $typesIntervention = $element->getTypeIntervention();
@@ -131,10 +141,21 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
             $element = $fieldset->get($typeIntervention->getCode());
             $element->setAttribute('class', 'form-control')
                     ->setLabelAttributes(array('class' => 'control-label'));
-            $res .= '<div style="">';
+            $res .= '<div>';
             $res .= $this->getView()->formLabel( $element );
+            if ($inRealise){
+                $heures = $vhl->setTypeIntervention($typeIntervention)->getHeures();
+                $res .= '<br />Prévues : <span id="prev-'.$typeIntervention->getCode().'" data-heures="'.$heures.'">';
+                $res .= \Common\Util::formattedHeures( $heures );
+                $res .= '</span>';
+            }
             $res .= '<br />';
             $res .= $this->getView()->formNumber( $element);
+            $res .= '</div>';
+        }
+        if ($inRealise){
+            $res .= '<div><label>&nbsp;</label><br /><br /><button type="button" class="btn btn-default prevu-to-realise" title="Initialise le formulaire avec les heures prévues">Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>';
+
             $res .= '</div>';
         }
         $res .= '</div><div class="volume-horaire-saisie-multiple-fin"></div>';
@@ -163,5 +184,21 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
     protected function getServiceTypeIntervention()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
+    }
+
+    /**
+     * @return \Application\Service\TypeVolumeHoraire
+     */
+    protected function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
+    }
+
+    /**
+     * @return \Application\Service\EtatVolumeHoraire
+     */
+    protected function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 }

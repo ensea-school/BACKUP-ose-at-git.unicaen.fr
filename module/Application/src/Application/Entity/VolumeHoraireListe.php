@@ -4,6 +4,7 @@ namespace Application\Entity;
 
 use Application\Entity\Db\VolumeHoraire;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Application\Entity\Db\Service;
 use Application\Entity\Db\Periode;
 use Application\Entity\Db\TypeIntervention;
@@ -29,6 +30,12 @@ class VolumeHoraireListe
      * @var TypeVolumeHoraire|boolean
      */
     protected $typeVolumeHoraire = false;
+
+    /**
+     *
+     * @var EtatVolumeHoraire
+     */
+    protected $etatVolumeHoraire = false;
 
     /**
      * @var Periode|boolean
@@ -108,6 +115,29 @@ class VolumeHoraireListe
             throw new RuntimeException('Valeur non autorisée');
         }
         $this->typeVolumeHoraire = $typeVolumeHoraire;
+        return $this;
+    }
+
+    /**
+     *
+     * @return EtatVolumeHoraire|boolean
+     */
+    public function getEtatVolumeHoraire()
+    {
+        return $this->etatVolumeHoraire;
+    }
+
+    /**
+     *
+     * @param EtatVolumeHoraire|boolean $etatVolumeHoraire
+     * @return self
+     */
+    public function setEtatVolumeHoraire($etatVolumeHoraire)
+    {
+        if (! (is_bool($etatVolumeHoraire) || null === $etatVolumeHoraire || $etatVolumeHoraire instanceof EtatVolumeHoraire) ){
+            throw new RuntimeException('Valeur non autorisée');
+        }
+        $this->etatVolumeHoraire = $etatVolumeHoraire;
         return $this;
     }
 
@@ -260,6 +290,14 @@ class VolumeHoraireListe
                 if ($typeVolumeHoraire !== $this->typeVolumeHoraire) return false;
             }
         }
+        if (false !== $this->etatVolumeHoraire){
+            $etatVolumeHoraire = $volumeHoraire->getEtatVolumeHoraire();
+            if (true === $this->etatVolumeHoraire){
+                if (null === $etatVolumeHoraire) return false;
+            }else{
+                if ($etatVolumeHoraire->getOrdre() < $this->etatVolumeHoraire->getOrdre()) return false;
+            }
+        }
         if (false !== $this->periode){
             $periode = $volumeHoraire->getPeriode();
             if (true === $this->periode){
@@ -410,6 +448,7 @@ class VolumeHoraireListe
     {
         $volumeHoraireListe = new VolumeHoraireListe( $this->getService() );
         $volumeHoraireListe->setTypeVolumeHoraire( $this->typeVolumeHoraire );
+        $volumeHoraireListe->setEtatVolumeHoraire( $this->etatVolumeHoraire );
         $volumeHoraireListe->setPeriode($this->periode);
         $volumeHoraireListe->setTypeIntervention($this->typeIntervention);
         $volumeHoraireListe->setMotifNonPaiement($this->motifNonPaiement);
@@ -549,6 +588,9 @@ class VolumeHoraireListe
         if ($this->getTypeVolumeHoraire() instanceof TypeVolumeHoraire && $volumeHoraire->getTypeVolumeHoraire() !== $this->getTypeVolumeHoraire()){
             throw new LogicException('Le type du volume horaire ne correspond pas à celui de la liste');
         }
+        if ($this->getEtatVolumeHoraire() instanceof EtatVolumeHoraire && $volumeHoraire->getEtatVolumeHoraire()->getOrdre() < $this->getEtatVolumeHoraire()->getOrdre()){
+            throw new LogicException('L\'état du volume horaire ne correspond pas à celui de la liste');
+        }
         if ($this->getPeriode() instanceof Periode && $volumeHoraire->getPeriode() !== $this->getPeriode()){
             throw new LogicException('La période du volume horaire ne correspond pas à celle de la liste');
         }
@@ -575,6 +617,9 @@ class VolumeHoraireListe
         $result = [];
         if ($this->getTypeVolumeHoraire() instanceof TypeVolumeHoraire){
             $result['type-volume-horaire'] = $this->getTypeVolumeHoraire()->getId();
+        }
+        if ($this->getEtatVolumeHoraire() instanceof EtatVolumeHoraire){
+            $result['etat-volume-horaire'] = $this->getEtatVolumeHoraire()->getId();
         }
         if ($this->getPeriode() instanceof Periode){
             $result['periode'] = $this->getPeriode()->getId();

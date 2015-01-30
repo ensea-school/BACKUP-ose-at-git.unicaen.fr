@@ -51,7 +51,6 @@ class ServiceController extends AbstractActionController
 
         $this->initFilters();
         $qb = $service->initQuery()[0];
-
         $service
             ->join(     'applicationIntervenant',       $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
             ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
@@ -68,12 +67,18 @@ class ServiceController extends AbstractActionController
         $volumeHoraireService
             ->leftJoin( 'applicationMotifNonPaiement',  $qb, 'motifNonPaiement',    ['id', 'libelleCourt', 'libelleLong'] );
 
+        $volumeHoraireService->leftJoin( 'applicationEtatVolumeHoraire', $qb, 'etatVolumeHoraire', ['id','code','libelle','ordre'] );
+        $volumeHoraireService->leftJoin( 'ApplicationFormuleVolumeHoraire', $qb, 'formuleVolumeHoraire', ['id'] );
+
         $service->finderByContext($qb);
-        $service->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb);
+        $service->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire','etatVolumeHoraire']);
 
         if ($intervenant){
             $service->finderByIntervenant($intervenant, $qb);
         }
+
+        $qb->addOrderBy( $elementPedagogiqueService->getAlias().'.libelle' );
+
         if (! $intervenant && $role instanceof \Application\Acl\ComposanteRole){
             $service->finderByComposante($role->getStructure(), $qb);
         }
@@ -126,7 +131,6 @@ class ServiceController extends AbstractActionController
         if ('afficher' === $action || $totaux){
             $qb = $this->getFilteredServices($intervenant, $recherche);
             $services = $this->getServiceService()->getList($qb);
-            $this->getServiceService()->setTypeVolumehoraire($services, $recherche->getTypeVolumeHoraire());
 
             // services référentiels : délégation au contrôleur
 //            if (! $totaux){
@@ -143,10 +147,9 @@ class ServiceController extends AbstractActionController
         }else{
             $services = [];
         }
-        $renderReferentiel  = !$intervenant instanceof IntervenantExterieur;
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params = $viewHelperParams;
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'renderReferentiel','canAddService', 'canAddServiceReferentiel', 'params'));
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'canAddService', 'canAddServiceReferentiel', 'params'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
@@ -158,7 +161,7 @@ class ServiceController extends AbstractActionController
     public function exportAction()
     {
         $intervenant        = $this->context()->intervenantFromRoute();
-        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
+        $role               = $this->getContextProvider()->getSelectedIdentityRole();
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
             throw new \BjyAuthorize\Exception\UnAuthorizedException();
@@ -344,11 +347,17 @@ class ServiceController extends AbstractActionController
 
     public function suppressionAction()
     {
+        $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire') );
+        if (empty($typeVolumeHoraire)){
+            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getPrevu();
+        }else{
+            $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get( $typeVolumeHoraire );
+        }
         $id        = (int) $this->params()->fromRoute('id', 0);
-        $service   = $this->getServiceService();
-        $entity    = $service->getRepo()->find($id);
+        $service   = $this->getServiceService()->get($id);
         $title     = "Suppression de service";
         $form      = new \Application\Form\Supprimer('suppr');
+        $form->add(new \Zend\Form\Element\Hidden('type-volume-horaire'));
         $viewModel = new \Zend\View\Model\ViewModel();
 
         $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
@@ -358,11 +367,22 @@ class ServiceController extends AbstractActionController
         }
 
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->get('type-volume-horaire')->setValue( $typeVolumeHoraire->getId() );
 
         if ($this->getRequest()->isPost()) {
             $errors = array();
             try {
-                $service->delete($entity);
+                if ($typeVolumeHoraire->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE){
+                    // destruction des volumes horaires associés
+                    foreach( $service->getVolumeHoraire() as $vh ){
+                        if ($vh->getTypeVolumeHoraire() === $typeVolumeHoraire){
+                            $this->getServiceVolumeHoraire()->delete($vh);
+                        }
+                    }
+                }else{
+                     // destruction du service même
+                    $this->getServiceService()->delete($service);
+                }
             }
             catch(\Exception $e){
                 $e = DbException::translate($e);
@@ -453,6 +473,14 @@ class ServiceController extends AbstractActionController
     protected function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
+    }
+
+    /**
+     * @return \Application\Service\VolumeHoraire
+     */
+    protected function getServiceVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
     }
 
     /**

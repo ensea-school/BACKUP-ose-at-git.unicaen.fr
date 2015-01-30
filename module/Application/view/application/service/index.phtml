@@ -8,7 +8,7 @@ $titles = [
 ];
 
 $title = $titles[$typeVolumeHoraire->getCode()];
-if ($intervenant && $intervenant instanceof Application\Entity\Db\IntervenantPermanent){
+if ( $intervenant && $intervenant->getStatut()->getPeutSaisirReferentiel() ){
     $title .= ' et référentiel';
 }
 if ($intervenant){
@@ -58,7 +58,7 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
 
     <?php echo $serviceListe->render(); ?>
 
-    <?php if ($renderReferentiel): ?>
+    <?php if ($intervenant && $intervenant->getStatut()->getPeutSaisirReferentiel()): ?>
         <h1>Référentiel</h1>
         <?php if ($canAddServiceReferentiel): ?>
             <?php $urlSaisir = $this->url('referentiel/default', array('action' => 'saisir')); ?>

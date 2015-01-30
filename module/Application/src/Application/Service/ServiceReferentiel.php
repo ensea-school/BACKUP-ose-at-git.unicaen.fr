@@ -34,7 +34,8 @@ class ServiceReferentiel extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias(){
+    public function getAlias()
+    {
         return 'seref';
     }
 
@@ -51,9 +52,9 @@ class ServiceReferentiel extends AbstractEntityService
     {
         list($qb, $alias) = parent::initQuery($qb, $alias);
 
-        $this->leftJoin( $this->getServiceStructure()       , $qb, 'structure'      , true, $alias )
-             ->join( $this->getServiceFonctionReferentiel() , $qb, 'fonction'       , true, $alias )
-             ->join( $this->getServiceIntervenant()         , $qb, 'intervenant'    , true, $alias );
+        $this->join( $this->getServiceStructure()          , $qb, 'structure'  , true, $alias )
+             ->join( $this->getServiceFonctionReferentiel(), $qb, 'fonction'   , true, $alias )
+             ->join( $this->getServiceIntervenant()        , $qb, 'intervenant', true, $alias );
 
         return array($qb,$alias);
     }
@@ -150,6 +151,25 @@ class ServiceReferentiel extends AbstractEntityService
     }
 
     /**
+     *
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
+     * @param QueryBuilder $qb
+     * @param string $alias
+     * @return QueryBuilder
+     */
+    public function finderByTypeVolumeHoraire(TypeVolumeHoraireEntity $typeVolumeHoraire, QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        if ($typeVolumeHoraire){
+            $serviceVolumeHoraireReferentiel = $this->getServiceLocator()->get('applicationVolumeHoraireReferentiel'); /* @var $serviceVolumeHoraireReferentiel VolumeHoraireReferentiel */
+
+            $this->join( $serviceVolumeHoraireReferentiel, $qb, 'volumeHoraireReferentiel' );
+            $serviceVolumeHoraireReferentiel->finderByTypeVolumeHoraire( $typeVolumeHoraire, $qb );
+        }
+        return $qb;
+    }
+
+    /**
      * Retourne la liste des intervenants
      *
      * @param QueryBuilder|null $queryBuilder
@@ -159,7 +179,11 @@ class ServiceReferentiel extends AbstractEntityService
     public function getList( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->addOrderBy( $this->getServiceIntervenant()->getAlias().'.nomUsuel, '.$this->getServiceStructure()->getAlias().'.libelleCourt' );
+        $qb
+                ->addOrderBy($this->getServiceIntervenant()->getAlias().'.nomUsuel')
+                ->addOrderBy($this->getServiceStructure()->getAlias().'.libelleCourt')
+                ->addOrderBy($this->getServiceFonctionReferentiel()->getAlias().'.libelleCourt');
+        
         return parent::getList($qb, $alias);
     }
 
@@ -173,6 +197,72 @@ class ServiceReferentiel extends AbstractEntityService
         foreach ( $servicesReferentiels as $serviceReferentiel) {
             $serviceReferentiel->setTypeVolumeHoraire($typeVolumeHoraire);
         }
+    }
+
+    /**
+     * Retourne une nouvelle entité de la classe donnée
+     *
+     * @return ServiceReferentielEntity
+     */
+    public function newEntity()
+    {
+        $entity = parent::newEntity();
+        $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
+        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+            $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+        }
+        return $entity;
+    }
+
+    /**
+     * Sauvegarde une entité
+     *
+     * @param ServiceReferentielEntity $entity
+     * @throws \Common\Exception\RuntimeException
+     */
+    public function save($entity)
+    {
+        $this->getEntityManager()->getConnection()->beginTransaction();
+        try{
+            if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+                $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+            }
+            if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
+                throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
+            }
+
+            $serviceAllreadyExists = null;
+            if (! $entity->getId()){ // uniquement pour les nouveaux services!!
+                $serviceAllreadyExists = $this->getRepo()->findOneBy([
+                    'intervenant' => $entity->getIntervenant(),
+                    'structure'   => $entity->getStructure(),
+                    'fonction'    => $entity->getFonction(),
+                    'annee'       => $entity->getAnnee(),
+                ]);
+            }
+            if ($serviceAllreadyExists){
+                $result = $serviceAllreadyExists;
+            }else{
+                $result = parent::save($entity);
+            }
+
+            /* Sauvegarde automatique des volumes horaires associés */
+            $serviceVolumeHoraire = $this->getServiceLocator()->get('applicationVolumeHoraireReferentiel');
+            /* @var $serviceVolumeHoraire VolumeHoraireReferentiel */
+            foreach( $entity->getVolumeHoraireReferentiel() as $volumeHoraire ){
+                if ($result !== $entity) $volumeHoraire->setServiceReferentiel($result);
+                if ($volumeHoraire->getRemove()){
+                    $serviceVolumeHoraire->delete($volumeHoraire);
+                }else{
+                    $serviceVolumeHoraire->save( $volumeHoraire );
+                }
+            }
+            $this->getEntityManager()->getConnection()->commit();
+        }catch (Exception $e ){
+            $this->getEntityManager()->getConnection()->rollBack();
+            throw $e;
+        }
+        return $result;
     }
     
     /**

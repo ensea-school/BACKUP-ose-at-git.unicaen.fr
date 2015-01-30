@@ -2,44 +2,54 @@
 
 namespace Application\View\Helper\ServiceReferentiel;
 
-use Application\Acl\IntervenantRole;
-use Application\Entity\Db\FonctionReferentiel;
+use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\ServiceReferentiel;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
-use Application\Traits\ReadOnlyAwareTrait;
-use NumberFormatter;
-use UnicaenApp\Util;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\View\Helper\AbstractHelper;
+use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
+use Application\Interfaces\ServiceReferentielAwareInterface;
+use Application\Traits\ServiceReferentielAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Ligne extends AbstractHtmlElement 
+            implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, ServiceReferentielAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
-    use ReadOnlyAwareTrait;
-    
+    use ServiceReferentielAwareTrait;
+
     /**
-     * @var ServiceReferentiel
+     * @var Liste
      */
-    protected $service;
+    protected $liste;
+
+    /**
+     * forcedReadOnly
+     *
+     * @var boolean
+     */
+    protected $forcedReadOnly = false;
+
+
+
+
 
     /**
      * Helper entry point.
      *
-     * @param ServiceReferentiel $service
+     * @param Liste $liste
+     * @param Service $service
      * @return self
      */
-    final public function __invoke(ServiceReferentiel $service)
+    final public function __invoke( Liste $liste, ServiceReferentiel $service )
     {
-        $this->service = $service;
-        
+        $this->setListe($liste);
+        $this->setService( $service );
         return $this;
     }
 
@@ -54,202 +64,176 @@ class Ligne extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
     }
 
     /**
-     * Génère le code HTML.
-     *
      * @return string
      */
-    public function render()
+    public function getRefreshUrl()
     {
-        $parts = array();
-        
-        $parts['intervenant'] = '<td>' . $this->renderIntervenant($this->service->getIntervenant()) . "</td>\n";
-        $parts[]              = '<td>' . $this->renderStructure($this->service->getStructure()) . "</td>\n";
-        $parts['annee']       = '<td>' . $this->renderAnnee($this->service->getAnnee()) . "</td>\n";
-        $parts[]              = '<td>' . $this->renderFonction($this->service->getFonction()) . "</td>\n";
-        $parts[]              = '<td>' . $this->renderCommentaires($this->service->getCommentaires()) . "</td>\n";
-        $parts[]              = '<td style="text-align:right;padding-right:2em">' . $this->renderHeures($this->service->getHeures()) . "</td>\n";
-
-        $parts[] = $this->renderModifier();
-        $parts[] = $this->renderSupprimer();
-        
-        $this->applyGlobalContext($parts);
-        
-        return implode(PHP_EOL, $parts);
+        $url = $this->getView()->url(
+                'referentiel/rafraichir-ligne', 
+                [
+                    'serviceReferentiel' => $this->getService()->getId(), 
+                    'typeVolumeHoraire'  => $this->getListe()->getTypeVolumehoraire()->getId(),
+                ], 
+                [
+                    'query' => ['only-content' => 1, 'read-only' => $this->getListe()->getReadOnly() ? '1' : '0' ]
+                ]
+        );
+        return $url;
     }
 
     /**
-     * 
-     * @param array $parts
-     * @return self
+     * Génère le code HTML.
+     *
+     * @param boolean $details
+     * @return string
      */
-    public function applyGlobalContext(array &$parts)
+    public function render( $details=false )
     {
+        $liste = $this->getListe();
+        $service = $this->getService();
+
         $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
-        
-        if (!$this->getRenderIntervenants()) {
-            unset($parts['intervenant']);
+        $vhl     = $this->getService()->getVolumeHoraireReferentielListe();
+
+        $out = '';
+        if ($liste->getColumnVisibility('intervenant')){
+            $out .= '<td>'.$this->renderIntervenant($this->getService()->getIntervenant()).'</td>';
         }
-        if ($context->getAnnee()) {
-            unset($parts['annee']);
+        if ($liste->getColumnVisibility('structure-aff')){
+            if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
+                $out .= '<td>'.$this->renderStructure( $service->getStructureAff() )."</td>\n";
+            } else {
+                $out .= "<td>&nbsp;</td>\n";
+            }
         }
+        if ($liste->getColumnVisibility('structure')){
+            $out .= '<td>'.$this->renderStructure($service->getStructure())."</td>\n";
+        }
+        if ($liste->getColumnVisibility('fonction')){
+            $out .= '<td>'.$this->renderFonction($this->getService()->getFonction())."</td>\n";
+        }
+        if ($liste->getColumnVisibility('commentaires')){
+            $out .= '<td>'.$this->renderCommentaires($this->getService()->getCommentaires())."</td>\n";
+        }
+        if ($liste->getColumnVisibility('heures')){
+            $out .= '<td>'.$this->renderHeures($this->getService())."</td>\n";
+        }
+        if ($liste->getColumnVisibility('annee')){
+            $out .= '<td>'.$this->renderAnnee( $this->getService()->getAnnee() )."</td>\n";
+        }
+
+        $out .= '<td class="actions">';
+        if (! $liste->getReadOnly()) {
+            $out .= $this->renderModifier();
+            $out .= $this->renderSupprimer();
+        }
+        $out .= '</td>';
         
-        return $this;
+        return $out;
     }
 
     protected function renderIntervenant($intervenant)
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        $out  = '';
-        
-        if (!$role instanceof IntervenantRole) {
-            if ($this->getRenderIntervenants()) {
-                $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'intervenant' => $intervenant->getSourceCode()));
-                $out   = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
-            }
-        }
-        
+        $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'intervenant' => $intervenant->getSourceCode()));
+        $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
         return $out;
     }
 
     protected function renderStructure($structure)
     {
-        if (!$structure) {
-            return 'Établissement';
-        }
+        if (! $structure) return '';
 
-        $url   = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
+        $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
         $pourl = $this->getView()->url('structure/default', array('action' => 'apercevoir', 'id' => $structure->getId()));
-        $out   = '<a data-poload="/ose/test" href="' . $url . '" data-po-href="' . $pourl . '" class="ajax-modal">' . $structure . '</a>';
-
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$structure.'</a>';
         return $out;
     }
 
-    protected function renderFonction(FonctionReferentiel $fonction = null)
+    protected function renderFonction($fonction)
     {
-        if (!$fonction) {
-            return '';
-        }
-        
-        $out = sprintf("<span title=\"%s\">%s</span>", $fonction->getLibelleLong(), $fonction);
-        
-        if ($fonction->getHistoDestruction()) {
-            $out = sprintf("<span class=\"bg-danger\"><abbr title=\"Cette fonction n'existe plus\">%s</abbr></span>", $out);
-        }
-
+        if (! $fonction) return '';
+        $out = $fonction;
         return $out;
     }
 
-    protected function renderCommentaires($commentaires = null)
+    protected function renderCommentaires($commentaires)
     {
-        if (!$commentaires) {
-            return '';
-        }
-        
-        $out = sprintf("<span title=\"%s\">%s</span>", $commentaires, substr($commentaires, 0, 12));
+        if (! $commentaires) return '';
+        $out = $commentaires;
+        return $out;
+    }
 
+    protected function renderHeures(ServiceReferentiel $service)
+    {
+        $vhlView = $this->getView()->volumeHoraireReferentielListe($service->getVolumeHoraireReferentielListe()->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire()))
+                ->setReadOnly($this->getListe()->getReadOnly()); /* @var $vhlView \Application\View\Helper\VolumeHoraireReferentiel\Liste */
+
+        $out = /*'<span class="volume-horaire" id="referentiel-'.$service->getId().'-volume-horaire-td" data-url="'.$vhlView->getRefreshUrl().'">'
+                .*/ $vhlView->render()
+                /*. '</span>'*/;
+        
+//        if (! $heures) return '';
+//        $out = \Common\Util::formattedHeures($heures);
         return $out;
     }
 
     protected function renderAnnee($annee)
     {
-        $out = "" . $annee;
-        
-        return $out;
-    }
-
-    protected function renderHeures($heures)
-    {
-        $out = Util::formattedFloat($heures, NumberFormatter::DECIMAL, -1);
-        
+        $out = $annee->getLibelle();
         return $out;
     }
 
     protected function renderModifier()
     {
-        if ($this->getReadOnly()) {
-            $td = null;
-        }
-        elseif ($this->getView()->isAllowed($this->service, 'update')) {
-            $query = array('sourceCode' => $this->service->getIntervenant()->getSourceCode());
-            $url = $this->getView()->url('service-ref/default', array('action' => 'saisir'), array('query' => $query));
-            $td = sprintf('<a class="ajax-modal" data-event="service-ref-modify-message" href="%s" '
-                           . 'title="Modifier le référentiel de %s"><span class="glyphicon glyphicon-edit"></span></a>',
-                    $url,
-                    $this->service->getIntervenant());
-        }
-        else {
-            $td = null;
-        }
-        
-        return sprintf('<td>%s</td>', $td);
+        $url = $this->getView()->url('referentiel/saisie', ['id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
+        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="'.$url.'" title="Modifier cette ligne de référentiel"><span class="glyphicon glyphicon-edit"></span></a>';
     }
 
     protected function renderSupprimer()
     {
-        if ($this->getReadOnly()) {
-            $td = null;
-        }
-        elseif ($this->getView()->isAllowed($this->service, 'delete')) {
-            $url = $this->getView()->url('service-ref/default', array('action' => 'supprimer', 'id' => $this->service->getId()));
-            $td = sprintf('<a class="ajax-modal" data-event="service-ref-delete-message" data-id="%s" href="%s" '
-                           . 'title="Supprimer ce référentiel"><span class="glyphicon glyphicon-remove"></span></a>',
-                    $this->service->getId(),
-                    $url);
-        }
-        else {
-            $td = null;
-        }
-        
-        return sprintf('<td>%s</td>', $td);
+        $url = $this->getView()->url('referentiel/default', array('action' => 'suppression', 'id' => $this->getService()->getId()));
+        return '<a class="ajax-modal referentiel-delete" data-event="service-referentiel-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer cette ligne de référentiel"><span class="glyphicon glyphicon-remove"></span></a>';
     }
 
-    /**
-     * Retourne le service référentiel source.
-     *
-     * @return ServiceReferentiel
-     */
-    public function getService()
+    protected function toQuery($param)
     {
-        return $this->service;
+        if (null === $param) return null;
+        elseif (false === $param) return 'false';
+        elseif( true === $param) return 'true';
+        elseif(method_exists($param, 'getId')) return $param->getId();
+        else throw new \Common\Exception\LogicException('Le paramètre n\'est pas du bon type');
     }
 
     /**
-     * Spécifie le service référentiel source.
+     *
+     * @return Liste
+     */
+    function getListe()
+    {
+        return $this->liste;
+    }
+
+    /**
+     *
+     * @param Liste $liste
+     * @return self
+     */
+    function setListe(Liste $liste)
+    {
+        $this->liste = $liste;
+        return $this;
+    }
+
+    /**
      *
      * @param ServiceReferentiel $service
      * @return self
      */
-    public function setService(ServiceReferentiel $service)
+    public function setService(ServiceReferentiel $service = null)
     {
+        $this->forcedReadOnly = ! $this->getView()->isAllowed($service, 'update');
         $this->service = $service;
         return $this;
     }
-    
-    /**
-     * @var boolean
-     */
-    protected $renderIntervenants = true;
 
-    /**
-     * Indique si la colonne intervenant doit être générée ou non.
-     * 
-     * @return boolean
-     */
-    public function getRenderIntervenants()
-    {
-        return $this->renderIntervenants;
-    }
-
-    /**
-     * Spécifie si la colonne intervenant doit être générée ou non.
-     * 
-     * @param boolean $renderIntervenants
-     * @return self
-     */
-    public function setRenderIntervenants($renderIntervenants = true)
-    {
-        $this->renderIntervenants = $renderIntervenants;
-        return $this;
-    }
 }

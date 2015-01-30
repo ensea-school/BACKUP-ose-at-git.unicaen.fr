@@ -61,7 +61,7 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
     <?php if ($renderReferentiel): ?>
         <h1>Référentiel</h1>
         <?php if ($canAddServiceReferentiel): ?>
-            <?php $urlSaisir = $this->url('service-ref/default', array('action' => 'saisir')); ?>
+            <?php $urlSaisir = $this->url('referentiel/default', array('action' => 'saisir')); ?>
             <a class="ajax-modal services-ref btn btn-primary" data-event="service-ref-add-message" href="<?php echo $urlSaisir ?>"
                accesskey=""title="Modifier le référentiel"><span class="glyphicon glyphicon-plus"></span> Je saisis</a>
         <?php endif; ?>

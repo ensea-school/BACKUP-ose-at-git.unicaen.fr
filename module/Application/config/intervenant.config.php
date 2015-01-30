@@ -292,6 +292,17 @@ return array(
                                 'resource' => 'controller/Application\Controller\Service:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
+                            'referentiel' => array(
+                                'label'  => "Référentiel",
+                                'title'  => "Référentiel de l'intervenant",
+                                'route'  => 'intervenant/referentiel',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\ServiceReferentiel:index',
+//                                'visible' => 'IntervenantNavigationPageVisibility',
+                            ),
                             'pieces-jointes-saisie' => array(
                                 // coquille vide qui réserve l'emplacement du menu
                             ),

@@ -1295,39 +1295,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
-     * Add serviceDu
-     *
-     * @param \Application\Entity\Db\ServiceDuIntervenant $serviceDu
-     * @return Intervenant
-     */
-    public function addServiceDu(\Application\Entity\Db\ServiceDuIntervenant $serviceDu)
-    {
-        $this->serviceDu[] = $serviceDu;
-
-        return $this;
-    }
-
-    /**
-     * Remove serviceDu
-     *
-     * @param \Application\Entity\Db\ServiceDuIntervenant $serviceDu
-     */
-    public function removeServiceDu(\Application\Entity\Db\ServiceDuIntervenant $serviceDu)
-    {
-        $this->serviceDu->removeElement($serviceDu);
-    }
-
-    /**
-     * Get serviceDu
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getServiceDu()
-    {
-        return $this->serviceDu;
-    }
-
-    /**
      * Add agrement
      *
      * @param \Application\Entity\Db\Agrement $agrement

@@ -171,7 +171,9 @@ class FormuleIntervenant
      */
     public function getUniqueFormuleServiceModifie( Annee $annee )
     {
-        return $this->getFormuleServiceModifie($annee)->first();
+        $result = $this->getFormuleServiceModifie($annee)->first();
+        if (false === $result) $result = new FormuleServiceModifie;
+        return $result;
     }
 
     /**

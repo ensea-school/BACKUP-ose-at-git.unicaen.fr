@@ -16,21 +16,29 @@ class Util
     public static function formattedHeures( $heures )
     {
         $heures = round( (float)$heures, 2);
+        $negatif = $heures < 0;
         $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2);
-        $heures = str_replace( ',00', '<span style="color:gray">,00</span>', $heures );
+        $heures = str_replace( ',00', '<span style="opacity:0.3">,00</span>', $heures );
+        if ($negatif){
+            $heures = '<span style="color:red">'.$heures.'</span>';
+        }
         return $heures;
     }
 
     /**
      *
-     * @param float $value
+     * @param float $heures
      */
-    public static function formattedPourcentage( $value )
+    public static function formattedPourcentage( $heures )
     {
-        $value = round( (float)$value*100, 2);
-        $value = \UnicaenApp\Util::formattedFloat($value, \NumberFormatter::DECIMAL, 2);
-        $value = str_replace( ',00', '<span style="color:gray">,00</span>', $value );
-        return $value.'%';
+        $heures = round( (float)$heures*100, 2);
+        $negatif = $heures < 0;
+        $heures = \UnicaenApp\Util::formattedFloat($heures, \NumberFormatter::DECIMAL, 2);
+        $heures = str_replace( ',00', '<span style="opacity:0.3">,00</span>', $heures ).'%';
+        if ($negatif){
+            $heures = '<span style="color:red">'.$heures.'</span>';
+        }
+        return $heures;
     }
 
 }

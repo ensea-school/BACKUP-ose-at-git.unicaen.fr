@@ -109,7 +109,14 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     public function getTotalRefreshUrl()
     {
-        return $this->getView()->url('intervenant/referentiel', [],['query' => ['totaux' => 1]], true);
+        if (($intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant())) {
+            return $this->getView()->url('intervenant/referentiel', 
+                    ['intervenant' => $intervenant->getId()],
+                    ['query' => ['totaux' => 1]], 
+                    true);
+        }
+        
+        return null;
     }
 
     public function getAddUrl()

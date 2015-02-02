@@ -9,7 +9,8 @@ use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
-
+use Application\Entity\Service\Recherche;
+use Zend\Session\Container as SessionContainer;
 
 /**
  * Description of ServiceReferentiel
@@ -18,6 +19,18 @@ use Application\Entity\Db\Validation as ValidationEntity;
  */
 class ServiceReferentiel extends AbstractEntityService
 {
+    /**
+     *
+     * @var SessionContainer
+     */
+    private $rechercheSessionContainer;
+
+    /**
+     *
+     * @var Recherche
+     */
+    private $recherche;
+
     /**
      * Retourne la classe des entités
      *
@@ -212,6 +225,85 @@ class ServiceReferentiel extends AbstractEntityService
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }
         return $entity;
+    }
+
+    /**
+     *
+     * @return SessionContainer
+     */
+    protected function getRechercheSessionContainer()
+    {
+        if (null === $this->rechercheSessionContainer) {
+            $this->rechercheSessionContainer = new SessionContainer(get_class($this).'_Recherche');
+        }
+        return $this->rechercheSessionContainer;
+    }
+
+    /**
+     * 
+     * @return RechercheHydrator
+     */
+    protected function getRechercheHydrator()
+    {
+        return $this->getServiceLocator()->get('ServiceRechercheHydrator');
+    }
+
+    /**
+     * Les paramètres de recherche sont également remplis à l'aide du contexte local
+     *
+     * @return Recherche
+     */
+    public function loadRecherche()
+    {
+        if (null === $this->recherche){
+            $this->recherche = new Recherche;
+            $session = $this->getRechercheSessionContainer();
+            if ($session->offsetExists('data')){
+                $this->getRechercheHydrator()->hydrate($session->data, $this->recherche);
+            }
+        }
+
+        if (! $this->recherche->getTypeVolumeHoraire()){
+            $serviceTypeVolumehoraire = $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
+            /* @var $serviceTypeVolumehoraire TypeVolumeHoraire */
+            $this->recherche->setTypeVolumeHoraire( $serviceTypeVolumehoraire->getPrevu() );
+        }
+
+        if (! $this->recherche->getEtatVolumeHoraire()){
+            $serviceEtatVolumehoraire = $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
+            /* @var $serviceEtatVolumehoraire EtatVolumeHoraire */
+            $this->recherche->setEtatVolumeHoraire( $serviceEtatVolumehoraire->getSaisi() );
+        }
+
+        $this->recherche->setIntervenant        ( $this->getContextProvider ()->getLocalContext ()->getIntervenant()        );
+        $this->recherche->setStructureEns       ( $this->getContextProvider ()->getLocalContext ()->getStructure()          );
+        $this->recherche->setNiveauEtape        ( $this->getContextProvider ()->getLocalContext ()->getNiveau()             );
+        $this->recherche->setEtape              ( $this->getContextProvider ()->getLocalContext ()->getEtape()              );
+        $this->recherche->setElementPedagogique ( $this->getContextProvider ()->getLocalContext ()->getElementPedagogique() );
+        return $this->recherche;
+    }
+
+    /**
+     * Les paramètres de recherche sont également sauvegardés dans le contexte local
+     *
+     * @param Recherche $recherche
+     * @return self
+     */
+    public function saveRecherche( Recherche $recherche )
+    {
+        if ($recherche !== $this->recherche){
+            $this->recherche = $recherche;
+        }
+        $data = $this->getRechercheHydrator()->extract($recherche);
+        $session = $this->getRechercheSessionContainer();
+        $session->data = $data;
+
+        $this->getContextProvider ()->getLocalContext ()->setIntervenant(       $recherche->getIntervenant()        );
+        $this->getContextProvider ()->getLocalContext ()->setStructure(         $recherche->getStructureEns()       );
+        $this->getContextProvider ()->getLocalContext ()->setNiveau(            $recherche->getNiveauEtape()        );
+        $this->getContextProvider ()->getLocalContext ()->setEtape(             $recherche->getEtape()              );
+        $this->getContextProvider ()->getLocalContext ()->setElementPedagogique($recherche->getElementPedagogique() );
+        return $this;
     }
 
     /**

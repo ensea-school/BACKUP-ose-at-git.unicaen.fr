@@ -86,14 +86,14 @@ class ServiceReferentielController extends AbstractActionController implements C
         }
 
         if (!$intervenant) {
-//            $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
-//            $params = $this->getEvent()->getRouteMatch()->getParams();
-//            $params['action'] = 'recherche';
-//            $rechercheViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
-//            $viewModel->addChild($rechercheViewModel, 'recherche');
-//            
-//            $recherche = $this->getServiceServiceReferentiel()->loadRecherche();
-            throw new LogicException("Pas implémenté!");
+            $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
+            $params = $this->getEvent()->getRouteMatch()->getParams();
+            $params['action'] = 'recherche';
+            $rechercheViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
+            $viewModel->addChild($rechercheViewModel, 'recherche');
+            
+            $recherche = $this->getServiceServiceReferentiel()->loadRecherche();
+//            throw new LogicException("Pas encore implémenté!");
         }
         else {
             $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie

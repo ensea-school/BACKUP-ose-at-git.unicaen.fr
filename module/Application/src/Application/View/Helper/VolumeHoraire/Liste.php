@@ -169,7 +169,12 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
                 foreach( $this->typesIntervention as $typeIntervention ){
                     $vhl->setMotifNonPaiement($motifNonPaiement)
                         ->setTypeIntervention($typeIntervention);
-                    $out .= '<td style="text-align:right">'.$this->renderHeures( $vhl ).'</td>';
+                    if ($vhl->getHeures() == 0){
+                        $class="heures-empty";
+                    }else{
+                        $class="heures-not-empty";
+                    }
+                    $out .= '<td style="text-align:right" class="'.$class.'">'.$this->renderHeures( $vhl ).'</td>';
                 }
                 if ($hasMotifNonPaiement){
                     $out .= "<td>".$this->renderMotifNonPaiement($motifNonPaiement)."</td>\n";

@@ -23,7 +23,7 @@ else {
 $serviceReferentielListe = $this->serviceReferentielListe( $services );
 $serviceReferentielListe
         ->setTypeVolumeHoraire($typeVolumeHoraire)
-        ->setAddButtonVisibility($canAddService);
+        ->setAddButtonVisibility($canAddServiceReferentiel);
 ?>
 
 <h1 class="page-header"><?php echo $title; ?></h1>
@@ -45,10 +45,6 @@ $serviceReferentielListe
         <?php echo $this->messenger()->setMessages(array('warning' => "Est visible ici le référentiel prévisionnel des intervenants affectés "
                 . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures.")); ?>
     <?php endif; ?>
-
-    <div id="filtres">
-        <?php echo $this->recherche; ?>
-    </div>
 <?php endif; ?>
 
 <?php if ('afficher' === $action ): ?>

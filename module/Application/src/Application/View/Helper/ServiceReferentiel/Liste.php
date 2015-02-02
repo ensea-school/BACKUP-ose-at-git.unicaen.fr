@@ -49,10 +49,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             'visibility' => false,
             'head-text'  => "<th>Intervenant</th>",
         ],
-        'structure-aff' => [
-            'visibility' => false,
-            'head-text'  => "<th title=\"Structure d'appartenance de l'intervenant\">Structure d'affectation</th>",
-        ],
         'structure'     => [
             'visibility' => true,
             'head-text'  => "<th title=\"Structure\">Structure</th>",
@@ -111,7 +107,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     {
         if (($intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant())) {
             return $this->getView()->url('intervenant/referentiel', 
-                    ['intervenant' => $intervenant->getId()],
+                    ['intervenant' => $intervenant->getSourceCode()],
                     ['query' => ['totaux' => 1]], 
                     true);
         }
@@ -208,7 +204,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     {
         $colspan = 0;
         if ($this->getColumnVisibility('intervenant'  ))  $colspan ++;
-        if ($this->getColumnVisibility('structure-aff'))  $colspan ++;
         if ($this->getColumnVisibility('structure'    ))  $colspan ++;
         if ($this->getColumnVisibility('fonction'     ))  $colspan ++;
         if ($this->getColumnVisibility('commentaires' ))  $colspan ++;
@@ -325,7 +320,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         }
         $this->setColumnVisibility( 'annee',         $multiAnnees        );
         $this->setColumnVisibility( 'intervenant',   $multiIntervenants  );
-        $this->setColumnVisibility( 'structure-aff', $multiIntervenants  );
 
         return $this;
     }

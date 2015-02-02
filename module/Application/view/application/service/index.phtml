@@ -58,7 +58,7 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
 
     <?php echo $serviceListe->render(); ?>
 
-    <?php if ($intervenant && $intervenant->getStatut()->getPeutSaisirReferentiel()): ?>
+    <?php if ($intervenant === null || $intervenant->getStatut()->getPeutSaisirReferentiel()): ?>
         <?php echo $this->servicesRefListe; ?>
     <?php endif; ?>
     <?php echo $this->formuleTotauxHetd; ?>

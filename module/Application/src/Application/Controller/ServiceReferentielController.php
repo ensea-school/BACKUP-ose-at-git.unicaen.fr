@@ -42,7 +42,7 @@ class ServiceReferentielController extends AbstractActionController implements C
      */
     private function getFilteredServices($intervenant, $recherche)
     {
-                //\Test\Util::sqlLog($this->getServiceService()->getEntityManager());
+  //              \Test\Util::sqlLog($this->getServiceService()->getEntityManager());
         $role = $this->getContextProvider()->getSelectedIdentityRole();
 
         $serviceReferentiel              = $this->getServiceServiceReferentiel();
@@ -64,7 +64,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         if (! $intervenant && $role instanceof \Application\Acl\ComposanteRole){
             $serviceReferentiel->finderByStructure($role->getStructure(), $qb);
         }
-        
+
         return $qb;
     }
 
@@ -77,13 +77,12 @@ class ServiceReferentielController extends AbstractActionController implements C
         $intervenant              = $this->context()->intervenantFromRoute();
         $annee                    = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel                = new \Zend\View\Model\ViewModel();
-        $canAddService            = $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
         $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
                 $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
 
-        if (!$this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'read')) {
-            throw new \BjyAuthorize\Exception\UnAuthorizedException();
-        }
+//        if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur || !$this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'read')) {
+//            throw new \BjyAuthorize\Exception\UnAuthorizedException();
+//        }
 
         if (!$intervenant) {
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
@@ -92,7 +91,7 @@ class ServiceReferentielController extends AbstractActionController implements C
             $rechercheViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
             $viewModel->addChild($rechercheViewModel, 'recherche');
             
-            $recherche = $this->getServiceServiceReferentiel()->loadRecherche();
+            $recherche = $this->getServiceService()->loadRecherche();
 //            throw new LogicException("Pas encore implémenté!");
         }
         else {
@@ -124,7 +123,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
         
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'canAddService', 'canAddServiceReferentiel', 'params'));
+        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'canAddServiceReferentiel', 'params'));
         
         if ($totaux) {
             $viewModel->setTemplate('application/service-referentiel/rafraichir-totaux');
@@ -245,6 +244,15 @@ class ServiceReferentielController extends AbstractActionController implements C
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('ServiceReferentielSaisie');
     }
+
+    /**
+     * @return \Application\Service\Service
+     */
+    private function getServiceService()
+    {
+        return $this->getServiceLocator()->get('ApplicationService');
+    }
+
 
     /**
      * @return \Application\Service\ServiceReferentiel

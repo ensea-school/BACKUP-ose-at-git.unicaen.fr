@@ -99,13 +99,6 @@ class Ligne extends AbstractHtmlElement
         if ($liste->getColumnVisibility('intervenant')){
             $out .= '<td>'.$this->renderIntervenant($this->getService()->getIntervenant()).'</td>';
         }
-        if ($liste->getColumnVisibility('structure-aff')){
-            if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
-                $out .= '<td>'.$this->renderStructure( $service->getStructureAff() )."</td>\n";
-            } else {
-                $out .= "<td>&nbsp;</td>\n";
-            }
-        }
         if ($liste->getColumnVisibility('structure')){
             $out .= '<td>'.$this->renderStructure($service->getStructure())."</td>\n";
         }

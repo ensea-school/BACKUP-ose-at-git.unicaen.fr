@@ -13,14 +13,11 @@ function ServiceReferentielListe(id)
         $("#" + this.id + " tfoot").refresh({params: this.params}); // rafraichissement des totaux
 
 //        // autres modifications...
-//        $("#formule-totaux-hetd").refresh( {}, function () {
-//            that.showHideTypesIntervention();
-//        });
-//
-//        if ($("#service-resume").length > 0) { // Si on est dans le résumé (si nécessaire)
-//            $("#service-resume").refresh();
-//        }
-//        $("#wf-nav-next").refresh(); // mise à jour de la navigation du Workflow
+        $("#formule-totaux-hetd").refresh( {} );
+        if ($("#service-resume").length > 0) { // Si on est dans le résumé (si nécessaire)
+            $("#service-resume").refresh();
+        }
+        $("#wf-nav-next").refresh(); // mise à jour de la navigation du Workflow
     }
 
     this.onAfterSaisie = function (serviceId) {

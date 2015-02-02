@@ -8,7 +8,6 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Entity\Db\TypeIntervention;
 use Application\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Traits\TypeVolumeHoraireAwareTrait;
 
@@ -110,7 +109,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     public function getTotalRefreshUrl()
     {
-        return $this->getView()->url(null, [],['query' => ['totaux' => 1]], true);
+        return $this->getView()->url('intervenant/referentiel', [],['query' => ['totaux' => 1]], true);
     }
 
     public function getAddUrl()
@@ -141,7 +140,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $out .= $this->renderAddButton();
         }
 
-        $out .= '<table class="table table-bordered service">';
+        $out .= '<table class="table table-bordered table-extra-condensed service-referentiel">';
         $out .= '<tr>';
 
         foreach( $this->getColumnsList() as $columnName ){
@@ -184,9 +183,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     public function renderLigne(ServiceReferentiel $service, $details=false, $show=true )
     {
         $ligneView = $this->getView()->serviceReferentielLigne( $this, $service );
-        $vhlView   = $this->getView()->volumeHoraireReferentielListe($service->getVolumeHoraireReferentielListe()->setTypeVolumeHoraire($this->getTypeVolumeHoraire()))
-                ->setReadOnly($this->getReadOnly()); /* @var $vhlView \Application\Entity\VolumeHoraireReferentielListe */
-
         $attribs = [
             'id'        => 'referentiel-'.$service->getId().'-ligne',
             'data-id'   => $service->getId(),
@@ -215,24 +211,22 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $data = $this->getTotaux();
 
         $typesInterventionDisplayed = 0;
-//        foreach( $typesIntervention as $ti ){
-//            if ($this->getTypeInterventionVisibility($ti)){
-//                $display = '';
-//                $typesInterventionDisplayed++;
-//            }else{
-//                $display = ';display:none';
-//            }
-//            $out .= "<td id=\"".$ti->getCode()."\" class=\"type-intervention ".$ti->getCode()."\" style=\"text-align:right$display\">".\Common\Util::formattedHeures($data[$ti->getCode()])."</td>\n";
-//        }
-//        $out .= "<td>&nbsp;</td>\n";
-//        $out .= "</tr>\n";
         $out = '';
         $out .= '<tr>';
         $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de référentiel :</th>\n";
-        $out .= "<td id=\"total-general\" style=\"text-align:right\" colspan=\"".$typesInterventionDisplayed."\">".\Common\Util::formattedHeures($data['total_general'])."</td>\n";
+        $out .= "<td id=\"total-referentiel\" style=\"text-align:right\" colspan=\"".$typesInterventionDisplayed."\">".\Common\Util::formattedHeures($data['total_general'])."</td>\n";
         $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";
         return $out;
+    }
+
+    public function renderShowHide()
+    {
+        return
+            '<div class="service-show-hide-buttons">'
+            .'<button type="button" class="btn btn-default btn-xs service-show-all-details"><span class="glyphicon glyphicon-chevron-down"></span> Tout déplier</button> '
+            .'<button type="button" class="btn btn-default btn-xs service-hide-all-details"><span class="glyphicon glyphicon-chevron-up"></span> Tout replier</button>'
+           .'</div>';
     }
 
     /**
@@ -310,7 +304,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     public function calcDefaultColumnsVisibility()
     {
         $services = $this->getServices();
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
 
         // si plusieurs années différentes sont détectées alors on prévoit d'afficher la colonne année par défaut
         // si plusieurs intervenants différents alors on prévoit d'afficher la colonne intervenant par défaut
@@ -326,11 +319,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $this->setColumnVisibility( 'annee',         $multiAnnees        );
         $this->setColumnVisibility( 'intervenant',   $multiIntervenants  );
         $this->setColumnVisibility( 'structure-aff', $multiIntervenants  );
-
-//        // si c'est une composante alors on affiche le détail pour l'enseignement
-//        $detailsEns = ! $role instanceof \Application\Acl\IntervenantRole; /** @todo associer ça à un paramètre... */
-//        $this->setColumnVisibility( 'foad',                 $detailsEns         );
-//        $this->setColumnVisibility( 'regimes-inscription',  $detailsEns         );
 
         return $this;
     }

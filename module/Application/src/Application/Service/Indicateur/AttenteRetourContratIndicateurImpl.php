@@ -6,32 +6,16 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeContrat;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Traversable;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteRetourContratIndicateurImpl extends AbstractIndicateurImpl
+class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     protected $singularTitlePattern = "%s contrat de vacataires est en attente de retour";
     protected $pluralTitlePattern   = "%s contrats de vacataires sont en attente de retour";
-
-    /**
-     * 
-     * @return Traversable
-     */
-    public function getResult()
-    {
-        if (null === $this->result) {
-            $qb = $this->getQueryBuilder();
-
-            $this->result = $qb->getQuery()->getResult();
-        }
-            
-        return $this->result;
-    }
     
     /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
@@ -77,12 +61,12 @@ class AttenteRetourContratIndicateurImpl extends AbstractIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i");
-        $qb->join("i.contrat", "c");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
+        $qb->join("int.contrat", "c");
         
         $this->initQueryBuilder($qb);
         
-        $qb->orderBy("i.nomUsuel, i.prenom");
+        $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
     }

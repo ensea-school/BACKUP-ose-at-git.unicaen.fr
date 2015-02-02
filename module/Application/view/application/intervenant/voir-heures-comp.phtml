@@ -110,7 +110,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
     </tr>
 <?php endforeach; ?>
 </table>
-
+<?php if (! empty($data['referentiel'])): ?>
 <h2>Heures de référentiel</h2>
 <table class="table table-bordered table-condensed table-extra-condensed" style="width:auto">
     <tr>
@@ -128,6 +128,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
     </tr>
     <?php endforeach; ?>
 </table>
+<?php endif; ?>
 
 <h2>Totaux HETD</h2>
 <div class="row">

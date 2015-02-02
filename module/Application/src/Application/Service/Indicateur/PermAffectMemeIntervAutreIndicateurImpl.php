@@ -4,14 +4,13 @@ namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Doctrine\ORM\QueryBuilder;
-use Traversable;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PermAffectMemeIntervAutreIndicateurImpl extends AbstractIndicateurImpl
+class PermAffectMemeIntervAutreIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     protected $singularTitlePattern = "%s permanent affecté dans ma structure (%s) intervient dans une autre structure";
     protected $pluralTitlePattern   = "%s permanents affectés dans ma structure (%s) interviennent dans une autre structure";
@@ -30,22 +29,6 @@ class PermAffectMemeIntervAutreIndicateurImpl extends AbstractIndicateurImpl
     }
     
     /**
-     * 
-     * @return Traversable
-     */
-    public function getResult()
-    {
-        if (null === $this->result) {
-            $qb = $this->getQueryBuilder();
-            $qb->addOrderBy("i.nomUsuel, i.prenom");
-            
-            $this->result = $qb->getQuery()->getResult();
-        }
-            
-        return $this->result;
-    }
-    
-    /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
      * 
      * @param IntervenantEntity $result
@@ -60,32 +43,21 @@ class PermAffectMemeIntervAutreIndicateurImpl extends AbstractIndicateurImpl
     }
     
     /**
-     * 
-     * @return integer
-     */
-    public function getResultCount()
-    {
-        if (null !== $this->result) {
-            return count($this->result);
-        }
-        
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-        
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-    
-    /**
      * @return QueryBuilder
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i");
-        $qb
-                ->join("i.service", "s")
+        $qb = parent::getQueryBuilder()
+                ->join("int.service", "s")
                 ->join("s.structureAff", "sa")
                 ->join("s.structureEns", "se") // on ne s'intéresse pas aux enseignements fait dans un autre établissement
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.validation", "v"); // les volumes horaires doivent être validés.
+        
+        /**
+         * Les permanents.
+         */
+        $qb->andWhere("ti.code = :type")->setParameter('type', \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT);
         
         /**
          * Intervenants affectés à la structure spécifiée.
@@ -99,7 +71,7 @@ class PermAffectMemeIntervAutreIndicateurImpl extends AbstractIndicateurImpl
          */
         $qb->andWhere("s.structureEns <> :structure");
         
-        $qb->orderBy("i.nomUsuel, i.prenom");
+        $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
     }

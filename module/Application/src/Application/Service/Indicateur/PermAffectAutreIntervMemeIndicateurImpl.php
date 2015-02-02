@@ -4,33 +4,16 @@ namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Doctrine\ORM\QueryBuilder;
-use Traversable;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PermAffectAutreIntervMemeIndicateurImpl extends AbstractIndicateurImpl
+class PermAffectAutreIntervMemeIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     protected $singularTitlePattern = "%s permanent affecté dans une autre structure intervient dans ma structure";
     protected $pluralTitlePattern   = "%s permanents affectés dans une autre structure interviennent dans ma structure";
-    
-    /**
-     * 
-     * @return Traversable
-     */
-    public function getResult()
-    {
-        if (null === $this->result) {
-            $qb = $this->getQueryBuilder();
-            $qb->addOrderBy("i.nomUsuel, i.prenom");
-            
-            $this->result = $qb->getQuery()->getResult();
-        }
-            
-        return $this->result;
-    }
     
     /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
@@ -47,30 +30,19 @@ class PermAffectAutreIntervMemeIndicateurImpl extends AbstractIndicateurImpl
     }
     
     /**
-     * 
-     * @return integer
-     */
-    public function getResultCount()
-    {
-        if (null !== $this->result) {
-            return count($this->result);
-        }
-        
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT i)");
-        
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-    
-    /**
      * @return QueryBuilder
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i");
-        $qb
-                ->join("i.service", "s")
+        $qb = parent::getQueryBuilder()
+                ->join("int.service", "s")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.validation", "v"); // les volumes horaires doivent être validés.
+        
+        /**
+         * Les permanents.
+         */
+        $qb->andWhere("ti.code = :type")->setParameter('type', \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT);
         
         /**
          * Intervenants affectés à une autre structure que celle spécifiée.
@@ -84,7 +56,7 @@ class PermAffectAutreIntervMemeIndicateurImpl extends AbstractIndicateurImpl
                 ->andWhere("s.structureEns = :structure")
                 ->setParameter('structure', $this->getStructure());
         
-        $qb->orderBy("i.nomUsuel, i.prenom");
+        $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
     }

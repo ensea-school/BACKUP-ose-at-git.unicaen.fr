@@ -149,6 +149,7 @@ implements
      */
     public function render( $details = false )
     {
+        $this->totaux = [];
         $typesIntervention = $this->getTypesIntervention();
         $colspan = 2;
 
@@ -163,7 +164,7 @@ implements
             return $out.'<div class="alert alert-danger" role="alert">Le nombre de services à afficher est trop important. Merci d\'affiner vos critères de recherche.</div></div>';
         }
         if ($this->getAddButtonVisibility() && ! $this->getReadOnly()){
-            $out .= $this->renderAddButton();
+            $out .= $this->renderActionButtons();
         }
         $out .= $this->renderShowHide();
 
@@ -187,7 +188,9 @@ implements
         foreach( $this->services as $service ){
             $out .= $this->renderLigne($service, $details);
         }
-        $out .= '<tfoot data-url="'.$this->getTotalRefreshUrl().'">'."\n";
+
+        $style =  $this->getTotaux()['total_general'] == 0 ? ' style="display:none"' : '';
+        $out .= '<tfoot data-url="'.$this->getTotalRefreshUrl().'"'.$style.'>'."\n";
         $out .= $this->renderTotaux();
         $out .= '</tfoot>'."\n";
         $out .= '</table>'."\n";
@@ -199,7 +202,7 @@ implements
         return $out;
     }
 
-    public function renderAddButton()
+    public function renderActionButtons()
     {
         $attribs = [
             'class'         => 'ajax-modal services btn btn-primary',
@@ -208,6 +211,37 @@ implements
             'title'         => 'Ajouter un nouvel enseignement',
         ];
         $out = '<a '.$this->htmlAttribs($attribs).'><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
+
+        if ($this->isInRealise()){
+            $attribs = [
+                'class'         => 'btn btn-warning prevu-to-realise-show',
+                'data-toggle'   => 'modal',
+                'data-target'   => '#prevu-to-realise-modal',
+                //'data-event'    => 'service-constatation',
+                //'href'          => $this->getAddUrl(),
+                'title'         => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
+                                  .". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
+            ];
+            $out .= '&nbsp;<button type="button" '.$this->htmlAttribs($attribs).'>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>';
+            $out .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+            $out .= '<div class="modal-dialog modal-sm">';
+            $out .= '<div class="modal-content">';
+            $out .= '<div class="modal-header">';
+            $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+            $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
+            $out .= '</div>';
+            $out .= '<div class="modal-body">';
+            $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
+            $out .= '<p>Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</p>';
+            $out .= '</div>';
+            $out .= '<div class="modal-footer">';
+            $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+            $out .= '<button type="button" class="btn btn-primary prevu-to-realise">OK</button>';
+            $out .= '</div>';
+            $out .= '</div>';
+            $out .= '</div>';
+            $out .= '</div>';
+        }
         return $out;
     }
 
@@ -229,7 +263,7 @@ implements
         $out .= $ligneView->render($details);
         $out .= '</tr>';
         $out .= '<tr class="volume-horaire" id="service-'.$service->getId().'-volume-horaire-tr"'.($details ? '' : ' style="display:none"').'>';
-        if ( $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE ){
+        if ( $this->isInRealise() ){
             $out .= '<td class="volume-horaire" style="padding-left:5em" id="service-'.$service->getId().'-volume-horaire-td" colspan="999">';
 
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() );
@@ -237,7 +271,7 @@ implements
             $volumeHoraireListe->setReadOnly(true);
             $out .= '<div style="float:left;width:15%"><h5>Prévisionnel :</h5></div>';
             $out .= '<div id="vhl-prev" style="width:85%" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
-            
+
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getTypeVolumeHoraire() );
             $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
             $volumeHoraireListe->setReadOnly( $this->getReadOnly() );
@@ -303,6 +337,16 @@ implements
            .'</div>';
     }
 
+    /**
+     * Détermine si nous sommes en service réalisé ou non
+     *
+     * @return boolean
+     */
+    public function isInRealise()
+    {
+        return $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
+    }
+
 
     /**
      * @return string
@@ -351,7 +395,7 @@ implements
             'type-volume-horaire'           => $this->getTypeVolumeHoraire()->getId(),
             'columns-visibility'            => [],
             'types-intervention-visibility' => [],
-            'in-realise'                    => $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE,
+            'in-realise'                    => $this->isInRealise(),
         ];
         foreach( $this->getColumnsList() as $columnName ){
             $params['columns-visibility'][$columnName] = $this->getColumnVisibility($columnName);

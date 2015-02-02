@@ -344,6 +344,18 @@ class ServiceController extends AbstractActionController
         return compact('form');
     }
 
+    public function constatationAction()
+    {
+        $services = $this->params()->fromQuery('services');
+        if ($services){
+            $services = explode( ',', $services );
+            foreach( $services as $sid ){
+                $service = $this->getServiceService()->get( $sid );
+                $this->getServiceService()->setRealisesFromPrevus( $service );
+            }
+        }
+    }
+
     public function suppressionAction()
     {
         $typeVolumeHoraire = $this->params()->fromQuery('type-volume-horaire', $this->params()->fromPost('type-volume-horaire') );

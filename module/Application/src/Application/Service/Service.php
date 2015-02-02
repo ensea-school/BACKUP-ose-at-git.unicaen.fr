@@ -546,6 +546,36 @@ class Service extends AbstractEntityService
         return $qb;
     }
 
+    public function setRealisesFromPrevus( ServiceEntity $service )
+    {
+        $prevus = $service
+                    ->getVolumeHoraireListe()->getChild()
+                    ->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() )
+                    ->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getValide() );
+
+        $realises = $service
+                    ->getVolumeHoraireListe()->getChild()
+                    ->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getRealise() )
+                    ->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
+
+        foreach( $realises->get() as $vh ){
+            /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            $vh->setRemove(true);
+        }
+
+        foreach( $prevus->get() as $vh ){
+            $nvh = new \Application\Entity\Db\VolumeHoraire;
+            $nvh->setTypeVolumeHoraire  ( $this->getServiceTypeVolumeHoraire()->getRealise() );
+            $nvh->setService            ( $service                   );
+            $nvh->setPeriode            ( $vh->getPeriode()          );
+            $nvh->setTypeIntervention   ( $vh->getTypeIntervention() );
+            $nvh->setHeures             ( $vh->getHeures()           );
+            $nvh->setMotifNonPaiement   ( $vh->getMotifNonPaiement() );
+            $service->addVolumeHoraire($nvh);
+        }
+        $this->save($service);
+    }
+
     /**
      * Retourne les données du TBL des services en fonction des critères de recherche transmis
      *
@@ -923,6 +953,22 @@ class Service extends AbstractEntityService
         foreach( $services as $service ){
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
         }
+    }
+
+    /**
+     * @return TypeVolumeHoraire
+     */
+    protected function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
+    }
+
+    /**
+     * @return EtatVolumeHoraire
+     */
+    protected function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 
     /**

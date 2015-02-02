@@ -28,8 +28,8 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.source_code = '1058'
-  --AND s.id = 464
+  --AND i.source_code = '91521'
+  AND s.id = 3208
   AND vh.histo_destruction IS NULL
   --AND ti.code = 'TP'
   --AND validation_id is not null

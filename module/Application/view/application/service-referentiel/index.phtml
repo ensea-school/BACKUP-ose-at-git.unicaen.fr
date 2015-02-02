@@ -1,6 +1,5 @@
 <?php
 
-use Application\Acl\IntervenantRole;
 use Application\Entity\Db\TypeVolumeHoraire;
 use UnicaenApp\View\Helper\Messenger;
 
@@ -12,13 +11,13 @@ $titles = [
 ];
 
 $title = $titles[$typeVolumeHoraire->getCode()];
-if ($intervenant){
-    $title .= ' <small>'.$intervenant.'</small>';
-    $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");
-}
-else {  
-    $this->headTitle()->append("Référentiel");
-}
+//if ($intervenant){
+//    $title .= ' <small>'.$intervenant.'</small>';
+//    $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");
+//}
+//else {  
+//    $this->headTitle()->append("Référentiel");
+//}
 
 $serviceReferentielListe = $this->serviceReferentielListe( $services );
 $serviceReferentielListe
@@ -28,11 +27,11 @@ $serviceReferentielListe
 
 <h1 class="page-header"><?php echo $title; ?></h1>
 
-<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
+<?php //echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <style>
     .modal-dialog { 
-        width: 70%;
+        width: 60%;
     }
     div.row {
         padding:1px;

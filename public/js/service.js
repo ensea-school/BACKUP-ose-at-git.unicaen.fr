@@ -97,7 +97,9 @@ function ServiceListe( id ){
         var that = this;
 
         this.init2();
-        $("#"+this.id+" tfoot").refresh( { params  : this.params } ); // rafraichissement des totaux
+        $("#"+this.id+" tfoot").refresh( { params  : this.params }, function(){
+            that.showHideTypesIntervention();
+        } ); // rafraichissement des totaux
 
         // autres modifications...
         $("#formule-totaux-hetd").refresh( {}, function(){

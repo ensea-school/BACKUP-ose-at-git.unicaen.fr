@@ -759,4 +759,12 @@ class ContratController extends AbstractActionController implements ContextProvi
     {
         return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
     }
+    
+    /**
+     * @return \Application\Service\EtatVolumeHoraire
+     */
+    private function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationEtatVolumeHoraire');
+    }
 }

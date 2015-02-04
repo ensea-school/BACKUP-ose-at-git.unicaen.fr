@@ -7,13 +7,6 @@ namespace Application\Entity\Db;
  */
 class Indicateur
 {
-    const SAISIE_SERVICE_APRES_CONTRAT_AVENANT = 'SAISIE_SERVICE_APRES_CONTRAT_AVENANT';
-    const ATTENTE_CONTRAT                      = 'ATTENTE_CONTRAT';
-    const ATTENTE_AVENANT                      = 'ATTENTE_AVENANT';
-    
-    const TYPE_ALERTE = 'Alerte';
-    const TYPE_INFO   = 'Info';
-
     /**
      * @var integer
      */
@@ -33,21 +26,11 @@ class Indicateur
      * @var string
      */
     private $type;
-
-    /**
-     * @var string
-     */
-    private $libelle;
     
     /**
      * @var integer
      */
     private $ordre;
-
-    /**
-     * @var boolean
-     */
-    private $structureDependant;
     
     /**
      * 
@@ -55,7 +38,7 @@ class Indicateur
      */
     public function __toString()
     {
-        return $this->getLibelle();
+        return $this->getCode();
     }
             
     /**
@@ -135,29 +118,6 @@ class Indicateur
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return Indicateur
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string 
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
     }
 
     /**

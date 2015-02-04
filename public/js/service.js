@@ -36,7 +36,7 @@ function ServiceListe( id ){
              }
          } );
 
-         // on met à jour aussi les entêtes
+         // on met à jour aussi les entêtes et les totaux
          var count = 0;
          for( var i in this.params["types-intervention-visibility"] ){
              if (this.params["types-intervention-visibility"][i]){
@@ -49,6 +49,11 @@ function ServiceListe( id ){
              }
          }
          $("#"+this.id+" table.service #total-general").attr('colspan', count);
+         if (count == 0){
+             $("#"+this.id+" table.service tfoot").hide();
+         }else{
+             $("#"+this.id+" table.service tfoot").show();
+         }
     }
 
     this.showHideDetails = function( serviceId, action ){
@@ -73,14 +78,18 @@ function ServiceListe( id ){
     this.showAllDetails = function(){
         var thatId = this.id;
         $("#"+thatId+" .service-ligne").each( function(){
-            ServiceListe.get( thatId ).showHideDetails( $(this).data('id'), 'show' );
+            if ($(this).is(':visible')){
+               ServiceListe.get( thatId ).showHideDetails( $(this).data('id'), 'show' );
+            }
         } );
     }
 
     this.hideAllDetails = function(){
         var thatId = this.id;
         $("#"+thatId+" .service-ligne").each( function(){
-            ServiceListe.get( thatId ).showHideDetails( $(this).data('id'), 'hide' );
+            if ($(this).is(':visible')){
+               ServiceListe.get( thatId ).showHideDetails( $(this).data('id'), 'hide' );
+            }
         } );
     }
 
@@ -94,7 +103,7 @@ function ServiceListe( id ){
         $("#formule-totaux-hetd").refresh( {}, function(){
             that.showHideTypesIntervention();
         } );
-        
+
         if ($( "#service-resume" ).length > 0){ // Si on est dans le résumé (si nécessaire)
             $( "#service-resume" ).refresh(); 
         }
@@ -132,18 +141,42 @@ function ServiceListe( id ){
         }
     }
 
+    this.setRealisesFromPrevus = function(){
+        var services = '';
+        $("#"+this.id+" table.service tr.service-ligne").each( function(){
+             if (services != '') services += ',';
+             services += $(this).data('id');
+        } );
+        $.get(
+            Url("service/constatation"),
+            {services: services},
+            function(){ window.location.reload(); }
+        );
+    }
+
     this.init2 = function(){
         var thatId = this.id;
         $("#"+this.id+" .service-details-button").off();
         $("#"+this.id+" .service-details-button").on('click', function(){
             ServiceListe.get(thatId).showHideDetails( $(this).parents('.service-ligne').data('id') );
         });
+
+        $("#"+this.id+" table.service tr.service-ligne").each( function(){
+             var id = $(this).data('id');
+             if ( $("#"+thatId+" table.service tr#service-"+id+"-volume-horaire-tr td.heures-not-empty").length ? false : true){
+                 $(this).hide();
+                 $("#"+thatId+" table.service tr#service-"+id+"-volume-horaire-tr").hide();
+             }else{
+                 $(this).show();
+             }
+        } );
     }
 
     this.init = function(){
         var thatId = this.id;
         $("#"+this.id+" .service-show-all-details").on('click', function(){ ServiceListe.get(thatId).showAllDetails(); });
         $("#"+this.id+" .service-hide-all-details").on('click', function(){ ServiceListe.get(thatId).hideAllDetails(); });
+        $("#"+this.id+" .prevu-to-realise").on('click', function(){ ServiceListe.get(thatId).setRealisesFromPrevus(); });
         this.init2();
 
         $("body").on("service-modify-message", function(event, data) {

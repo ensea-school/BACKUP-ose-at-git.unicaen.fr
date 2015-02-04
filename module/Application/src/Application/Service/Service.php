@@ -553,6 +553,36 @@ class Service extends AbstractEntityService
         return $qb;
     }
 
+    public function setRealisesFromPrevus( ServiceEntity $service )
+    {
+        $prevus = $service
+                    ->getVolumeHoraireListe()->getChild()
+                    ->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() )
+                    ->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getValide() );
+
+        $realises = $service
+                    ->getVolumeHoraireListe()->getChild()
+                    ->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getRealise() )
+                    ->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
+
+        foreach( $realises->get() as $vh ){
+            /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            $vh->setRemove(true);
+        }
+
+        foreach( $prevus->get() as $vh ){
+            $nvh = new \Application\Entity\Db\VolumeHoraire;
+            $nvh->setTypeVolumeHoraire  ( $this->getServiceTypeVolumeHoraire()->getRealise() );
+            $nvh->setService            ( $service                   );
+            $nvh->setPeriode            ( $vh->getPeriode()          );
+            $nvh->setTypeIntervention   ( $vh->getTypeIntervention() );
+            $nvh->setHeures             ( $vh->getHeures()           );
+            $nvh->setMotifNonPaiement   ( $vh->getMotifNonPaiement() );
+            $service->addVolumeHoraire($nvh);
+        }
+        $this->save($service);
+    }
+
     /**
      * Retourne les données du TBL des services en fonction des critères de recherche transmis
      *
@@ -665,7 +695,7 @@ class Service extends AbstractEntityService
                 'etape-code'                    =>          $d['ETAPE_CODE'],
                 'etape-etablissement-libelle'   =>          $d['ETAPE_LIBELLE'] ? $d['ETAPE_LIBELLE'] : $d['ETABLISSEMENT_LIBELLE'],
                 'element-code'                  =>          $d['ELEMENT_CODE'],
-                'element-libelle'               =>          $d['ELEMENT_LIBELLE'],
+                'element-fonction-libelle'      =>          $d['ELEMENT_LIBELLE'] ? $d['ELEMENT_LIBELLE'] : $d['FONCTION_REFERENTIEL_LIBELLE'],
                 'element-taux-fi'               => (float)  $d['ELEMENT_TAUX_FI'],
                 'element-taux-fc'               => (float)  $d['ELEMENT_TAUX_FC'],
                 'element-taux-fa'               => (float)  $d['ELEMENT_TAUX_FA'],
@@ -745,7 +775,7 @@ class Service extends AbstractEntityService
             'etape-code'                    => 'Code formation',
             'etape-etablissement-libelle'   => 'Formation ou établissement',
             'element-code'                  => 'Code enseignement',
-            'element-libelle'               => 'Enseignement',
+            'element-fonction-libelle'      => 'Enseignement ou fonction référentielle',
             'element-taux-fi'               => 'Taux FI',
             'element-taux-fc'               => 'Taux FC',
             'element-taux-fa'               => 'Taux FA',
@@ -930,6 +960,22 @@ class Service extends AbstractEntityService
         foreach( $services as $service ){
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
         }
+    }
+
+    /**
+     * @return TypeVolumeHoraire
+     */
+    protected function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
+    }
+
+    /**
+     * @return EtatVolumeHoraire
+     */
+    protected function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 
     /**

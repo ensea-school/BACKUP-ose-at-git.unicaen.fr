@@ -112,6 +112,15 @@ return [
                             ],
                         ],
                     ],
+                    'constatation' => [
+                        'type'  => 'Segment',
+                        'options' => [
+                            'route'    => '/constatation',
+                            'defaults' => [
+                                'action' => 'constatation',
+                            ],
+                        ],
+                    ],
                     'default' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -205,7 +214,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh'],
+                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh','constatation'],
                     'roles' => [R_ROLE],
                 ], [
                     'controller' => 'Application\Controller\Service',

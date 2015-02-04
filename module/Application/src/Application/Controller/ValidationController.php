@@ -7,12 +7,12 @@ use Common\Exception\RuntimeException;
 use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Structure;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\ServiceValidation;
 use Application\Form\Intervenant\ReferentielValidation;
-use Common\Exception\MessageException;
 
 /**
  * Description of ValidationController
@@ -313,10 +313,10 @@ class ValidationController extends AbstractActionController implements ContextPr
         $serviceStructure  = $this->getServiceStructure();
         $serviceService    = $this->getServiceService();
         $role              = $this->getContextProvider()->getSelectedIdentityRole();
+        $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU));
         $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $this->formValider = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
-        $this->title       = "Validation des enseignements <small>$this->intervenant</small>";
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $this->title       = "Validation des enseignements de type '$typeVolumeHoraire' <small>$this->intervenant</small>";
         $typeValidation    = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_SERVICES_PAR_COMP)->getQuery()->getOneOrNullResult();
         $messages          = [];
         
@@ -352,7 +352,7 @@ class ValidationController extends AbstractActionController implements ContextPr
             $data[$structure->getId()]['validations'] = [];
             $data[$structure->getId()]['services']    = [];
             
-            $this->collectValidationsServices($typeValidation, $structure);
+            $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structure);
             foreach ($this->validations as $validation) {
                 $data[$structure->getId()]['validations'][] = $validation;
                 $data[$structure->getId()]['services']      = $this->services;
@@ -395,16 +395,16 @@ class ValidationController extends AbstractActionController implements ContextPr
         $serviceService      = $this->getServiceService();
         $serviceValidation   = $this->getServiceValidation();
         $role                = $this->getContextProvider()->getSelectedIdentityRole();
+        $typeVolumeHoraire   = $this->getServiceTypeVolumehoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU));
         $this->intervenant   = $this->context()->mandatory()->intervenantFromRoute();
         $this->formValider   = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
-        $this->title         = "Validation des enseignements <small>$this->intervenant</small>";
+        $this->title         = "Validation des enseignements de type '$typeVolumeHoraire' <small>$this->intervenant</small>";
         $structureAffect     = $this->intervenant->getStructure()->getParenteNiv2();
-        $typeVolumeHoraire   = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $typeValidation      = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_SERVICES_PAR_COMP)->getQuery()->getOneOrNullResult();
         $structureValidation = $role->getStructure();
         $servicesNonValides  = [];
         $messages            = [];
-
+        
         $this->em()->getFilters()->enable('historique');
         
         $serviceValidation->canAdd($this->intervenant, $typeValidation, true);
@@ -417,23 +417,23 @@ class ValidationController extends AbstractActionController implements ContextPr
             if ($role->getStructure() !== $structureAffect) {
                 $this->readonly = true;
                 $structureValidation = $structureAffect;
-                $messages['warning'] = "Les enseignements de cet intervenant permanent ne peuvent être "
+                $messages['warning'] = "Les enseignements de type '$typeVolumeHoraire' de cet intervenant permanent ne peuvent être "
                         . "validés que par la structure &laquo; $structureValidation &raquo;.";
             }
         }
         
-        $this->collectValidationsServices($typeValidation, $structureEns, $structureValidation);
+        $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structureEns, $structureValidation);
         
         $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes sur Service !
         
         // recherche des enseignements de l'intervenant non encore validés
-        $qb = $serviceService->finderServicesNonValides($this->intervenant, $structureEns);
+        $qb = $serviceService->finderServicesNonValides($typeVolumeHoraire, $this->intervenant, $structureEns);
         $servicesNonValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
         $serviceService->setTypeVolumehoraire($servicesNonValides, $typeVolumeHoraire);
 
         if (!count($servicesNonValides)) {
             $this->validation = current($this->validations);
-            $message = sprintf("Aucun enseignement à valider%s n'a été trouvé.", 
+            $message = sprintf("Aucun enseignement de type '$typeVolumeHoraire' à valider%s n'a été trouvé.", 
                     $structureEns ? " concernant la composante d'intervention &laquo; $structureEns &raquo;" : null);
             $messages[] = $message;
         }
@@ -448,7 +448,7 @@ class ValidationController extends AbstractActionController implements ContextPr
             
             $this->formValider->bind($this->validation);
             
-            $messages[] = "Des enseignements à valider ont été trouvés...";
+            $messages[] = "Des enseignements de type '$typeVolumeHoraire' à valider ont été trouvés...";
         }
 
         $this->view = new \Zend\View\Model\ViewModel(array(
@@ -482,31 +482,41 @@ class ValidationController extends AbstractActionController implements ContextPr
     /**
      * 
      * @param TypeValidation $typeValidation
+     * @param TypeVolumeHoraire $typeVolumeHoraire
      * @param Structure $structureEns
      * @param Structure $structureValidation
      * @return \Application\Controller\ValidationController
      */
     public function collectValidationsServices(
-            TypeValidation $typeValidation, 
+            TypeValidation $typeValidation,
+            TypeVolumeHoraire $typeVolumeHoraire, 
             Structure $structureEns = null, 
             Structure $structureValidation = null)
     {
         $serviceService = $this->getServiceService();
         $serviceValidation = $this->getServiceValidation();
-        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         
         $this->services = [];
         $this->validations = [];
         
         // recherche des enseignements de l'intervenant déjà validés par la composante d'affectation
-        // mais n'ayant pas fait l'objet d'un contrat/avenant
-        $qb = $serviceValidation->finderValidationsServices($typeValidation, $this->intervenant, $structureEns, $structureValidation);
+        $qb = $serviceValidation->finderValidationsServices(
+                $typeVolumeHoraire, 
+                $typeValidation,
+                $this->intervenant, 
+                $structureEns, 
+                $structureValidation);
         $validationsServices = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
         foreach ($validationsServices as $validation) { /* @var $validation \Application\Entity\Db\Validation */
             
             $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes concernant les services !
             
-            $qb = $serviceService->finderServicesValides($validation, $this->intervenant, $structureEns, $structureValidation);
+            $qb = $serviceService->finderServicesValides(
+                    $typeVolumeHoraire, 
+                    $validation, 
+                    $this->intervenant, 
+                    $structureEns, 
+                    $structureValidation);
             $servicesValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
             $serviceService->setTypeVolumeHoraire($servicesValides, $typeVolumeHoraire);
             

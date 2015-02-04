@@ -8,10 +8,12 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Exception\DbException;
 use Application\Rule\Validation\PeutSupprimerValidationRule;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 use Exception;
 
 /**
@@ -243,6 +245,7 @@ class Validation extends AbstractEntityService
     
     /**
      * 
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param TypeValidationEntity $typeValidation
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureEns
@@ -250,8 +253,9 @@ class Validation extends AbstractEntityService
      * @return QueryBuilder
      */
     public function finderValidationsServices(
+            TypeVolumeHoraireEntity $typeVolumeHoraire,  
             TypeValidationEntity $typeValidation = null, 
-            IntervenantEntity $intervenant = null, 
+            IntervenantEntity $intervenant = null,
             StructureEntity $structureEns = null, 
             StructureEntity $structureValidation = null)
     {
@@ -262,6 +266,7 @@ class Validation extends AbstractEntityService
                 ->join("v.structure", 'str') // auteur de la validation
                 ->join("v.intervenant", "i")
                 ->join("v.volumeHoraire", 'vh')
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("vh.service", 's')
                 ->join("s.structureEns", 'strens')
                 ->join("strens.structureNiv2", 'strens2')

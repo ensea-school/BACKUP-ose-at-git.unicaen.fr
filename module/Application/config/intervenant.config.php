@@ -164,26 +164,28 @@ return array(
                     'validation-service' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:intervenant/validation/service',
+                            'route' => '/:intervenant/validation/service[/:type-volume-horaire-code]',
                             'constraints' => array(
                                 'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Validation',
                                 'action' => 'service',
+                                'type-volume-horaire-code' => 'PREVU',
                             ),
                         ),
                     ),
                     'validation-referentiel' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:intervenant/validation/referentiel',
+                            'route' => '/:intervenant/validation/referentiel[/:type-volume-horaire-code]',
                             'constraints' => array(
                                 'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Validation',
                                 'action' => 'referentiel',
+                                'type-volume-horaire-code' => 'PREVU',
                             ),
                         ),
                     ),

@@ -5,7 +5,7 @@
 <?php echo $this->messenger()->addMessagesFromFlashMessenger()->addMessages($messages) ?>
 
 <?php if ($action && count($servicesDispos)): ?>
-    <?php echo $this->serviceListe($servicesDispos)->setIntervenant(false)->render(); ?>
+    <?php echo $this->serviceListe($servicesDispos)->render(); ?>
     <form method="POST">
         <input class="btn btn-primary" type="submit" name="submit" value="<?php echo $action ?>" />
     </form>

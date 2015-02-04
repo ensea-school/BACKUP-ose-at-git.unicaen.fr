@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\Dotation" table="DOTATION">
+  <entity name="Application\Entity\Db\TypeRessource" table="TYPE_RESSOURCE">
     <indexes>
-      <index name="IDX_559B3C11AA401F5C" columns="ANNEE_ID"/>
-      <index name="IDX_559B3C1159860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_559B3C117E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_559B3C1163F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_559B3C11884B0F7B" columns="STRUCTURE_ID"/>
-      <index name="IDX_559B3C11C2443469" columns="TYPE_ID"/>
+      <index name="IDX_832C7DB959860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_832C7DB97E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_832C7DB963F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="dateEffet" type="datetime" column="DATE_EFFET" nullable="false"/>
-    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
+    <field name="code" type="string" column="CODE" length="50" nullable="false"/>
+    <field name="fa" type="boolean" column="FA" nullable="false"/>
+    <field name="fc" type="boolean" column="FC" nullable="false"/>
+    <field name="fi" type="boolean" column="FI" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="type" target-entity="Application\Entity\Db\TypeDotation">
-      <join-columns>
-        <join-column name="TYPE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
+    <field name="libelle" type="string" column="LIBELLE" length="200" nullable="false"/>
+    <field name="referentiel" type="boolean" column="REFERENTIEL" nullable="false"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
@@ -40,11 +31,6 @@
     <many-to-one field="histoCreateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
-      <join-columns>
-        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

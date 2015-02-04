@@ -279,5 +279,6 @@ return array_merge_recursive(
     include 'formule.config.php',
     include 'workflow.config.php',
     include 'indicateur.config.php',
-    include 'notification.config.php'
+    include 'notification.config.php',
+    include 'paiement.config.php'
 );

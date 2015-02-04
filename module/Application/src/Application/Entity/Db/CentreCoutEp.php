@@ -5,9 +5,9 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CentreCout
+ * CentreCoutEp
  */
-class CentreCout
+class CentreCoutEp
 {
     /**
      * @var \DateTime
@@ -27,16 +27,6 @@ class CentreCout
     /**
      * @var string
      */
-    private $libelle;
-
-    /**
-     * @var integer
-     */
-    private $parentId;
-
-    /**
-     * @var string
-     */
     private $sourceCode;
 
     /**
@@ -45,19 +35,9 @@ class CentreCout
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var \Application\Entity\Db\Utilisateur
      */
-    private $structure;
-
-    /**
-     * @var \Application\Entity\Db\TypeRessource
-     */
-    private $typeRessource;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    private $source;
+    private $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -70,21 +50,26 @@ class CentreCout
     private $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var \Application\Entity\Db\Source
      */
-    private $histoDestructeur;
+    private $source;
 
     /**
-     * @var \Application\Entity\Db\CcActivite
+     * @var \Application\Entity\Db\ElementPedagogique
      */
-    private $activite;
+    private $elementPedagogique;
+
+    /**
+     * @var \Application\Entity\Db\CentreCout
+     */
+    private $centreCout;
 
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return CentreCout
+     * @return CentreCoutEp
      */
     public function setHistoCreation($histoCreation)
     {
@@ -107,7 +92,7 @@ class CentreCout
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return CentreCout
+     * @return CentreCoutEp
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -130,7 +115,7 @@ class CentreCout
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return CentreCout
+     * @return CentreCoutEp
      */
     public function setHistoModification($histoModification)
     {
@@ -150,56 +135,10 @@ class CentreCout
     }
 
     /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return CentreCout
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string 
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-    /**
-     * Set parentId
-     *
-     * @param integer $parentId
-     * @return CentreCout
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId
-     *
-     * @return integer 
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return CentreCout
+     * @return CentreCoutEp
      */
     public function setSourceCode($sourceCode)
     {
@@ -229,79 +168,33 @@ class CentreCout
     }
 
     /**
-     * Set structure
+     * Set histoDestructeur
      *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return CentreCout
+     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @return CentreCoutEp
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
-        $this->structure = $structure;
+        $this->histoDestructeur = $histoDestructeur;
 
         return $this;
     }
 
     /**
-     * Get structure
+     * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Utilisateur 
      */
-    public function getStructure()
+    public function getHistoDestructeur()
     {
-        return $this->structure;
-    }
-
-    /**
-     * Set typeRessource
-     *
-     * @param \Application\Entity\Db\TypeRessource $typeRessource
-     * @return CentreCout
-     */
-    public function setTypeRessource(\Application\Entity\Db\TypeRessource $typeRessource = null)
-    {
-        $this->typeRessource = $typeRessource;
-
-        return $this;
-    }
-
-    /**
-     * Get typeRessource
-     *
-     * @return \Application\Entity\Db\TypeRessource 
-     */
-    public function getTypeRessource()
-    {
-        return $this->typeRessource;
-    }
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     * @return CentreCout
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
+        return $this->histoDestructeur;
     }
 
     /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return CentreCout
+     * @return CentreCoutEp
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -324,7 +217,7 @@ class CentreCout
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return CentreCout
+     * @return CentreCoutEp
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -344,48 +237,71 @@ class CentreCout
     }
 
     /**
-     * Set histoDestructeur
+     * Set source
      *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return CentreCout
+     * @param \Application\Entity\Db\Source $source
+     * @return CentreCoutEp
      */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    public function setSource(\Application\Entity\Db\Source $source = null)
     {
-        $this->histoDestructeur = $histoDestructeur;
+        $this->source = $source;
 
         return $this;
     }
 
     /**
-     * Get histoDestructeur
+     * Get source
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Source 
      */
-    public function getHistoDestructeur()
+    public function getSource()
     {
-        return $this->histoDestructeur;
+        return $this->source;
     }
 
     /**
-     * Set activite
+     * Set elementPedagogique
      *
-     * @param \Application\Entity\Db\CcActivite $activite
-     * @return CentreCout
+     * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     * @return CentreCoutEp
      */
-    public function setActivite(\Application\Entity\Db\CcActivite $activite = null)
+    public function setElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique = null)
     {
-        $this->activite = $activite;
+        $this->elementPedagogique = $elementPedagogique;
 
         return $this;
     }
 
     /**
-     * Get activite
+     * Get elementPedagogique
      *
-     * @return \Application\Entity\Db\CcActivite 
+     * @return \Application\Entity\Db\ElementPedagogique 
      */
-    public function getActivite()
+    public function getElementPedagogique()
     {
-        return $this->activite;
+        return $this->elementPedagogique;
+    }
+
+    /**
+     * Set centreCout
+     *
+     * @param \Application\Entity\Db\CentreCout $centreCout
+     * @return CentreCoutEp
+     */
+    public function setCentreCout(\Application\Entity\Db\CentreCout $centreCout = null)
+    {
+        $this->centreCout = $centreCout;
+
+        return $this;
+    }
+
+    /**
+     * Get centreCout
+     *
+     * @return \Application\Entity\Db\CentreCout 
+     */
+    public function getCentreCout()
+    {
+        return $this->centreCout;
     }
 }

@@ -5,19 +5,29 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Dotation
+ * TypeRessource
  */
-class Dotation
+class TypeRessource
 {
     /**
-     * @var \DateTime
+     * @var string
      */
-    private $dateEffet;
+    private $code;
 
     /**
-     * @var float
+     * @var boolean
      */
-    private $heures;
+    private $fa;
+
+    /**
+     * @var boolean
+     */
+    private $fc;
+
+    /**
+     * @var boolean
+     */
+    private $fi;
 
     /**
      * @var \DateTime
@@ -35,19 +45,19 @@ class Dotation
     private $histoModification;
 
     /**
+     * @var string
+     */
+    private $libelle;
+
+    /**
+     * @var boolean
+     */
+    private $referentiel;
+
+    /**
      * @var integer
      */
     private $id;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
-
-    /**
-     * @var \Application\Entity\Db\TypeDotation
-     */
-    private $type;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -64,63 +74,104 @@ class Dotation
      */
     private $histoCreateur;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
-
 
     /**
-     * Set dateEffet
+     * Set code
      *
-     * @param \DateTime $dateEffet
-     * @return Dotation
+     * @param string $code
+     * @return TypeRessource
      */
-    public function setDateEffet($dateEffet)
+    public function setCode($code)
     {
-        $this->dateEffet = $dateEffet;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get dateEffet
+     * Get code
      *
-     * @return \DateTime 
+     * @return string 
      */
-    public function getDateEffet()
+    public function getCode()
     {
-        return $this->dateEffet;
+        return $this->code;
     }
 
     /**
-     * Set heures
+     * Set fa
      *
-     * @param float $heures
-     * @return Dotation
+     * @param boolean $fa
+     * @return TypeRessource
      */
-    public function setHeures($heures)
+    public function setFa($fa)
     {
-        $this->heures = $heures;
+        $this->fa = $fa;
 
         return $this;
     }
 
     /**
-     * Get heures
+     * Get fa
      *
-     * @return float 
+     * @return boolean 
      */
-    public function getHeures()
+    public function getFa()
     {
-        return $this->heures;
+        return $this->fa;
+    }
+
+    /**
+     * Set fc
+     *
+     * @param boolean $fc
+     * @return TypeRessource
+     */
+    public function setFc($fc)
+    {
+        $this->fc = $fc;
+
+        return $this;
+    }
+
+    /**
+     * Get fc
+     *
+     * @return boolean 
+     */
+    public function getFc()
+    {
+        return $this->fc;
+    }
+
+    /**
+     * Set fi
+     *
+     * @param boolean $fi
+     * @return TypeRessource
+     */
+    public function setFi($fi)
+    {
+        $this->fi = $fi;
+
+        return $this;
+    }
+
+    /**
+     * Get fi
+     *
+     * @return boolean 
+     */
+    public function getFi()
+    {
+        return $this->fi;
     }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return Dotation
+     * @return TypeRessource
      */
     public function setHistoCreation($histoCreation)
     {
@@ -143,7 +194,7 @@ class Dotation
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return Dotation
+     * @return TypeRessource
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -166,7 +217,7 @@ class Dotation
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return Dotation
+     * @return TypeRessource
      */
     public function setHistoModification($histoModification)
     {
@@ -186,6 +237,52 @@ class Dotation
     }
 
     /**
+     * Set libelle
+     *
+     * @param string $libelle
+     * @return TypeRessource
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string 
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+    /**
+     * Set referentiel
+     *
+     * @param boolean $referentiel
+     * @return TypeRessource
+     */
+    public function setReferentiel($referentiel)
+    {
+        $this->referentiel = $referentiel;
+
+        return $this;
+    }
+
+    /**
+     * Get referentiel
+     *
+     * @return boolean 
+     */
+    public function getReferentiel()
+    {
+        return $this->referentiel;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -196,56 +293,10 @@ class Dotation
     }
 
     /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Dotation
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-    /**
-     * Set type
-     *
-     * @param \Application\Entity\Db\TypeDotation $type
-     * @return Dotation
-     */
-    public function setType(\Application\Entity\Db\TypeDotation $type = null)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return \Application\Entity\Db\TypeDotation 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Dotation
+     * @return TypeRessource
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -268,7 +319,7 @@ class Dotation
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Dotation
+     * @return TypeRessource
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -291,7 +342,7 @@ class Dotation
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Dotation
+     * @return TypeRessource
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -308,28 +359,5 @@ class Dotation
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return Dotation
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 }

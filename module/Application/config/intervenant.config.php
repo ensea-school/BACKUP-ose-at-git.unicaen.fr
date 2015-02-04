@@ -148,6 +148,19 @@ return array(
                             ),
                         ),
                     ),
+                    'mise-en-paiement' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:intervenant/mise-en-paiement',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\Paiement',
+                                'action' => 'MiseEnPaiement',
+                            ),
+                        ),
+                    ),
                     'validation-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -340,6 +353,16 @@ return array(
                                 ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Service:index',
+                                'visible' => 'IntervenantNavigationPageVisibility',
+                            ),
+                            'mise-en-paiement' => array(
+                                'label'  => "Mise en paiement",
+                                'title'  => "Mise en paiement",
+                                'route'  => 'intervenant/mise-en-paiement',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
+                                'withtarget' => true,
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                         ),

@@ -2,8 +2,8 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\MiseEnPaiement" table="MISE_EN_PAIEMENT">
     <indexes>
-      <index name="IDX_5A6BAF45798EB38A" columns="FORMULE_REFERENTIEL_ID"/>
-      <index name="IDX_5A6BAF45CB3F4F12" columns="FORMULE_SERVICE_ID"/>
+      <index name="IDX_5A6BAF452AB2EAAC" columns="FORMULE_RES_SERVICE_REF_ID"/>
+      <index name="IDX_5A6BAF456D5170" columns="FORMULE_RES_SERVICE_ID"/>
       <index name="IDX_5A6BAF4559860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_5A6BAF457E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_5A6BAF4563F06898" columns="HISTO_MODIFICATEUR_ID"/>
@@ -38,7 +38,7 @@
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService">
+    <many-to-one field="formuleResService" target-entity="Application\Entity\Db\FormuleResultatService">
       <join-columns>
         <join-column name="FORMULE_RES_SERVICE_ID" referenced-column-name="ID"/>
       </join-columns>
@@ -48,7 +48,7 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="formuleResultatServiceReferentiel" target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel">
+    <many-to-one field="formuleResServiceRef" target-entity="Application\Entity\Db\FormuleResultatServiceRef">
       <join-columns>
         <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
       </join-columns>

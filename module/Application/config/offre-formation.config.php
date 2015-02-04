@@ -387,6 +387,7 @@ return array(
             'EtapeModulateursSaisieForm'       => 'Application\View\Helper\OffreFormation\EtapeModulateursSaisieForm',
             'ElementModulateursSaisieFieldset' => 'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset',
             'ElementPedagogique'               => 'Application\View\Helper\OffreFormation\ElementPedagogique',
+            'Etape'                            => 'Application\View\Helper\OffreFormation\EtapeViewHelper',
         ),
     ),
 

@@ -62,7 +62,7 @@ class MiseEnPaiement
     /**
      * @var \Application\Entity\Db\FormuleResultatService
      */
-    private $formuleResService;
+    private $formuleResultatService;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -70,9 +70,9 @@ class MiseEnPaiement
     private $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\FormuleResultatServiceRef
+     * @var \Application\Entity\Db\FormuleResultatServiceReferentiel
      */
-    private $formuleResServiceRef;
+    private $formuleResultatServiceReferentiel;
 
 
     /**
@@ -293,26 +293,26 @@ class MiseEnPaiement
     }
 
     /**
-     * Set formuleResService
+     * Set formuleResultatService
      *
-     * @param \Application\Entity\Db\FormuleResultatService $formuleResService
+     * @param \Application\Entity\Db\FormuleResultatService $formuleResultatService
      * @return MiseEnPaiement
      */
-    public function setFormuleResService(\Application\Entity\Db\FormuleResultatService $formuleResService = null)
+    public function setFormuleResultatService(\Application\Entity\Db\FormuleResultatService $formuleResultatService = null)
     {
-        $this->formuleResService = $formuleResService;
+        $this->formuleResultatService = $formuleResultatService;
 
         return $this;
     }
 
     /**
-     * Get formuleResService
+     * Get formuleResultatService
      *
      * @return \Application\Entity\Db\FormuleResultatService 
      */
-    public function getFormuleResService()
+    public function getFormuleResultatService()
     {
-        return $this->formuleResService;
+        return $this->formuleResultatService;
     }
 
     /**
@@ -339,25 +339,25 @@ class MiseEnPaiement
     }
 
     /**
-     * Set formuleResServiceRef
+     * Set formuleResultatServiceReferentiel
      *
-     * @param \Application\Entity\Db\FormuleResultatServiceRef $formuleResServiceRef
+     * @param \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel
      * @return MiseEnPaiement
      */
-    public function setFormuleResServiceRef(\Application\Entity\Db\FormuleResultatServiceRef $formuleResServiceRef = null)
+    public function setFormuleResultatServiceReferentielerentiel(\Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null)
     {
-        $this->formuleResServiceRef = $formuleResServiceRef;
+        $this->formuleResultatServiceReferentiel = $formuleResultatServiceReferentiel;
 
         return $this;
     }
 
     /**
-     * Get formuleResServiceRef
+     * Get formuleResultatServiceReferentiel
      *
-     * @return \Application\Entity\Db\FormuleResultatServiceRef 
+     * @return \Application\Entity\Db\FormuleResultatServiceReferentiel
      */
-    public function getFormuleResServiceRef()
+    public function getFormuleResultatServiceReferentiel()
     {
-        return $this->formuleResServiceRef;
+        return $this->formuleResultatServiceReferentiel;
     }
 }

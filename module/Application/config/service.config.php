@@ -310,6 +310,7 @@ return [
             'serviceReferentielDl'    => 'Application\View\Helper\ServiceReferentiel\Dl',
             'serviceSaisieForm'       => 'Application\View\Helper\Service\SaisieForm',
             'serviceResume'           => 'Application\View\Helper\Service\Resume',
+            'FonctionReferentiel'     => 'Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper',
         ],
         'factories' => [
             'serviceListe'            => 'Application\View\Helper\Service\ListeFactory',

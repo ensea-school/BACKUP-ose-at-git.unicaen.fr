@@ -16,6 +16,8 @@
         <join-column name="SERVICE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="miseEnPaiement" target-entity="Application\Entity\Db\MiseEnPaiement" mapped-by="formuleResultatService" />
+
     <field name="serviceAssure" type="float" column="SERVICE_ASSURE" precision="126" scale="0" nullable="false"/>
     <field name="heuresService" type="float" column="HEURES_SERVICE" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>

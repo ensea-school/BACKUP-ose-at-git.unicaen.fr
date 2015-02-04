@@ -33,22 +33,13 @@ return [
     'service_manager' => [
         'invokables' => [
         ],
-        'factories' => [
-        ],
-        'abstract_factories' => [
-        ],
-        'initializers' => [
-        ],
     ],
     'view_helpers' => [
         'invokables' => [
-        ],
-        'initializers' => [
+            'paiementLigne' => 'Application\View\Helper\Paiement\LigneViewHelper',
         ],
     ],
     'form_elements' => [
-        'initializers' => [
-        ],
     ],
     'controllers' => [
         'invokables' => [

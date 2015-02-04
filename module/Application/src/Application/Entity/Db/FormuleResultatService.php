@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FormuleResultatService
  */
-class FormuleResultatService
+class FormuleResultatService implements ServiceAPayerInterface
 {
     /**
      * @var float
@@ -45,6 +43,11 @@ class FormuleResultatService
     private $id;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $miseEnPaiement;
+
+    /**
      * @var \Application\Entity\Db\FormuleResultat
      */
     private $formuleResultat;
@@ -54,6 +57,14 @@ class FormuleResultatService
      */
     private $service;
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->miseEnPaiement = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set serviceAssure
@@ -194,6 +205,16 @@ class FormuleResultatService
     }
 
     /**
+     * Get heuresComplReferentiel
+     *
+     * @return float
+     */
+    public function getHeuresComplReferentiel()
+    {
+        return 0.0;
+    }
+
+    /**
      * Set id
      *
      * @param integer $id
@@ -214,6 +235,39 @@ class FormuleResultatService
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add miseEnPaiement
+     *
+     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
+     * @return FormuleResultatService
+     */
+    public function addMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement)
+    {
+        $this->miseEnPaiement[] = $miseEnPaiement;
+
+        return $this;
+    }
+
+    /**
+     * Remove miseEnPaiement
+     *
+     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
+     */
+    public function removeMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement)
+    {
+        $this->miseEnPaiement->removeElement($miseEnPaiement);
+    }
+
+    /**
+     * Get miseEnPaiement
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiement()
+    {
+        return $this->miseEnPaiement;
     }
 
     /**

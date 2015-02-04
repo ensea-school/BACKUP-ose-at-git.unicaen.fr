@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FormuleResultatServiceReferentiel
  */
-class FormuleResultatServiceReferentiel
+class FormuleResultatServiceReferentiel implements ServiceAPayerInterface
 {
     /**
      * @var float
@@ -30,6 +28,11 @@ class FormuleResultatServiceReferentiel
     private $id;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $miseEnPaiement;
+
+    /**
      * @var \Application\Entity\Db\FormuleResultat
      */
     private $formuleResultat;
@@ -39,6 +42,14 @@ class FormuleResultatServiceReferentiel
      */
     private $serviceReferentiel;
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->miseEnPaiement = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set serviceAssure
@@ -87,6 +98,46 @@ class FormuleResultatServiceReferentiel
     }
 
     /**
+     * Get heuresComplFi
+     *
+     * @return float
+     */
+    public function getHeuresComplFi()
+    {
+        return 0.0;
+    }
+
+    /**
+     * Get heuresComplFa
+     *
+     * @return float
+     */
+    public function getHeuresComplFa()
+    {
+        return 0.0;
+    }
+
+    /**
+     * Get heuresComplFc
+     *
+     * @return float
+     */
+    public function getHeuresComplFc()
+    {
+        return 0.0;
+    }
+
+    /**
+     * Get heuresComplFcMajorees
+     *
+     * @return float
+     */
+    public function getHeuresComplFcMajorees()
+    {
+        return 0.0;
+    }
+
+    /**
      * Set heuresComplReferentiel
      *
      * @param float $heuresComplReferentiel
@@ -130,6 +181,39 @@ class FormuleResultatServiceReferentiel
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add miseEnPaiement
+     *
+     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
+     * @return FormuleResultatServiceReferentiel
+     */
+    public function addMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement)
+    {
+        $this->miseEnPaiement[] = $miseEnPaiement;
+
+        return $this;
+    }
+
+    /**
+     * Remove miseEnPaiement
+     *
+     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
+     */
+    public function removeMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement)
+    {
+        $this->miseEnPaiement->removeElement($miseEnPaiement);
+    }
+
+    /**
+     * Get miseEnPaiement
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiement()
+    {
+        return $this->miseEnPaiement;
     }
 
     /**

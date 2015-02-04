@@ -76,24 +76,31 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
             'type-intervention' => [],
             'heures-ref'        => 0,
         );
+
+        $hasTi = 0 < count($typesIntervention);
+
         $urlTriIntervenant = $this->getView()->url( 'service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'intervenant']]);
         //$urlTriReferentiel = $this->getView()->url( 'service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'referentiel']]);
         $urlTriHetd = $this->getView()->url( 'service/resume', [], ['query' => ['action' => 'trier', 'tri' => 'hetd']]);
         $res  = '<table class="table table-hover table-bordered">'."\n";
         $res .= '<thead>'."\n";
         $res .= '<tr>'."\n";
-        $res .= '    <th style="width:40%" rowspan="2"><a href="'.$urlTriIntervenant.'">Intervenant</a></th>'."\n";
-        $res .= '    <th style="width:40%" colspan="'.count($typesIntervention).'">Enseignements</th>'."\n";
-        $res .= '    <th style="width:10%" rowspan="2">Référentiel</th>'."\n";
-        $res .= '    <th style="width:10%" rowspan="2">Service dû</th>'."\n";
-        $res .= '    <th style="width:10%" rowspan="2"><a href="'.$urlTriHetd.'">Solde HETD</a></th>'."\n";
-        $res .= '</tr>'."\n";
-        $res .= '<tr>'."\n";
-        foreach( $typesIntervention as $ti ){
-            $totaux['type-intervention-'.$ti->getCode()] = 0;
-            $res .= '        <th><abbr title="'.$ti->getLibelle().'">'.$ti.'</abbr></th>'."\n";
+        $res .= '    <th style="width:40%" rowspan="'.($hasTi ? '2' : '1').'"><a href="'.$urlTriIntervenant.'">Intervenant</a></th>'."\n";
+        if ($hasTi){
+            $res .= '    <th style="width:40%" colspan="'.count($typesIntervention).'">Enseignements</th>'."\n";
         }
+        $res .= '    <th style="width:10%" rowspan="'.($hasTi ? '2' : '1').'">Référentiel</th>'."\n";
+        $res .= '    <th style="width:10%" rowspan="'.($hasTi ? '2' : '1').'">Service dû</th>'."\n";
+        $res .= '    <th style="width:10%" rowspan="'.($hasTi ? '2' : '1').'"><a href="'.$urlTriHetd.'">Solde HETD</a></th>'."\n";
         $res .= '</tr>'."\n";
+        if ($hasTi){
+            $res .= '<tr>'."\n";
+            foreach( $typesIntervention as $ti ){
+                $totaux['type-intervention-'.$ti->getCode()] = 0;
+                $res .= '        <th><abbr title="'.$ti->getLibelle().'">'.$ti.'</abbr></th>'."\n";
+            }
+            $res .= '</tr>'."\n";
+        }
         $res .= '</thead>'."\n";
         $res .= '<tbody>'."\n";
         foreach( $this->resumeServices['data'] as $line ) {
@@ -111,10 +118,12 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
 
             $res .= '<td><a href="'.$url.'">'.strtoupper($line['intervenant-nom']).'</a></td>'."\n";
             $totaux['intervenant']++;
-            foreach( $typesIntervention as $ti ){
-                $totaux['type-intervention-'.$ti->getCode()] += $line['type-intervention-'.$ti->getCode()];
-                $totaux['heures'] += $line['type-intervention-'.$ti->getCode()];
-                $res .= '<td style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($line['type-intervention-'.$ti->getCode()]).'</td>'."\n";
+            if ($hasTi){
+                foreach( $typesIntervention as $ti ){
+                    $totaux['type-intervention-'.$ti->getCode()] += $line['type-intervention-'.$ti->getCode()];
+                    $totaux['heures'] += $line['type-intervention-'.$ti->getCode()];
+                    $res .= '<td style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($line['type-intervention-'.$ti->getCode()]).'</td>'."\n";
+                }
             }
             $totaux['heures-ref'] += $line['heures-ref'];
             $totaux['hetd'] += $line['hetd'];
@@ -126,16 +135,20 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $res .= '</tbody>'."\n";
         $res .= '<tfoot>'."\n";
         $res .= '<tr>'."\n";
-        $res .= '<th rowspan="2" style="text-align:right">'.$totaux['intervenant'].' intervenants</th>'."\n";
-        foreach( $typesIntervention as $ti ){
-            $res .= '        <th style="text-align:right;white-space:nowrap"><abbr title="'.$ti->getLibelle().'">'.\Common\Util::formattedHeures($totaux['type-intervention-'.$ti->getCode()]).'</abbr></th>'."\n";
+        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'" style="text-align:right">'.$totaux['intervenant'].' intervenants</th>'."\n";
+        if ($hasTi){
+            foreach( $typesIntervention as $ti ){
+                $res .= '        <th style="text-align:right;white-space:nowrap"><abbr title="'.$ti->getLibelle().'">'.\Common\Util::formattedHeures($totaux['type-intervention-'.$ti->getCode()]).'</abbr></th>'."\n";
+            }
         }
-        $res .= '<th rowspan="2" style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-ref']).'</th>'."\n";
-        $res .= '<th rowspan="2">&nbsp;</th>'."\n";
-        $res .= '<th rowspan="2"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\Common\Util::formattedHeures($totaux['hetd']).'</span></th>'."\n";
+        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'" style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-ref']).'</th>'."\n";
+        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'">&nbsp;</th>'."\n";
+        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\Common\Util::formattedHeures($totaux['hetd']).'</span></th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
-        $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right;white-space:nowrap">Total des heures de service : '.\Common\Util::formattedHeures($totaux['heures']).'</th>'."\n";
+        if ($hasTi){
+            $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right;white-space:nowrap">Total des heures de service : '.\Common\Util::formattedHeures($totaux['heures']).'</th>'."\n";
+        }
         $res .= '</tr>'."\n";
         $res .= '</tfoot>'."\n";
         $res .= '</table>'."\n";

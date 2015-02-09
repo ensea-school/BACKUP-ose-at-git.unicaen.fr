@@ -59,6 +59,7 @@ class IntervenantController extends AbstractActionController implements ContextP
         $view = $this->choisirAction();
         
         if ($this->intervenant) {
+            $this->addIntervenantChoisiRecent($this->intervenant);
             return $this->redirect()->toRoute('intervenant/fiche', array('intervenant' => $this->intervenant->getSourceCode()));
         }
         
@@ -99,7 +100,6 @@ class IntervenantController extends AbstractActionController implements ContextP
                 $sourceCode = $form->get('interv')->getValueId();
                 $this->getRequest()->getQuery()->set('sourceCode', $sourceCode);
                 $this->intervenant = $this->importerAction()->getVariable('intervenant');
-                $this->addIntervenantChoisiRecent($this->intervenant);
                 if (($redirect = $this->params()->fromQuery('redirect'))) {
                     $redirect = str_replace('__sourceCode__', $sourceCode, $redirect);
                     return $this->redirect()->toUrl($redirect);
@@ -402,7 +402,7 @@ class IntervenantController extends AbstractActionController implements ContextP
     {
         if (null === $this->intervenantsChoisisRecentsSessionContainer) {
             $container = new \Zend\Session\Container(get_class() . '_IntervenantsChoisisRecents');
-            $container->setExpirationSeconds(2*60*60); // 1 heure
+            $container->setExpirationSeconds(3*60*60); // 3 heures
             $this->intervenantsChoisisRecentsSessionContainer = $container;
         }
         return $this->intervenantsChoisisRecentsSessionContainer;

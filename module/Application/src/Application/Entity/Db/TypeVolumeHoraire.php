@@ -11,6 +11,12 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
     const CODE_REALISE  = 'REALISE';
     const CODE_PAYE     = 'PAYE';
     
+    static public $codes = [
+        self::CODE_PREVU,
+        self::CODE_REALISE,
+        self::CODE_PAYE,
+    ];
+    
     /**
      * @var string
      */

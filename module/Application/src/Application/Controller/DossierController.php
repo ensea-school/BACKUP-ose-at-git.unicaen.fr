@@ -143,7 +143,7 @@ class DossierController extends AbstractActionController implements ContextProvi
      */
     private function getTypeValidationDossier() 
     {
-        $qb = $this->getTypeValidationService()->finderByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        $qb = $this->getTypeValidationService()->finderByCode(TypeValidation::CODE_DONNEES_PERSO);
         
         return $qb->getQuery()->getOneOrNullResult();
     }

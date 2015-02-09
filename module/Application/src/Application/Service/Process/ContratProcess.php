@@ -143,7 +143,7 @@ class ContratProcess extends AbstractService
             $serviceContrat = $this->getServiceContrat();
             $qb = $serviceContrat->finderByType($this->getTypeContrat());
             $qb = $serviceContrat->finderByIntervenant($this->getIntervenant(), $qb);
-            $qb = $serviceContrat->finderByTypeValidation(TypeValidation::CODE_CONTRAT_PAR_COMP, $qb);
+            $qb = $serviceContrat->finderByTypeValidation(TypeValidation::CODE_CONTRAT, $qb);
             // NB: pas de filtre sur la structure
 
             $this->contratValide = $qb->getQuery()->getOneOrNullResult();

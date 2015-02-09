@@ -2,13 +2,7 @@
 
 namespace Application\Assertion;
 
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\DrhRole;
-use Application\Acl\EtablissementRole;
-use Application\Acl\IntervenantRole;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
-use Application\Entity\Db\Validation as ValidationEntity;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -46,6 +40,8 @@ class ValidationAssertionProxy extends AbstractAssertion
     protected function getDelegate()
     {
         switch ($this->resource->getTypeValidation()->getCode()) {
+            case TypeValidationEntity::CODE_ENSEIGNEMENT:
+                return $this->getServiceLocator()->get('ValidationServiceAssertion');
             case TypeValidationEntity::CODE_REFERENTIEL:
                 return $this->getServiceLocator()->get('ValidationReferentielAssertion');
             default:

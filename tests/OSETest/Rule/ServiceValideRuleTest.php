@@ -50,7 +50,7 @@ class ServiceValideRuleTest extends BaseRuleTest
     {
         parent::setUp();
         
-        $this->typeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_SERVICES_PAR_COMP);
+        $this->typeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_ENSEIGNEMENT);
         $this->rule->setTypeValidation($this->typeValidation);
         
         /**
@@ -136,7 +136,7 @@ class ServiceValideRuleTest extends BaseRuleTest
         /**
          * validation incorrecte d'1 VH sur 2
          */
-        $autreTypeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        $autreTypeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_DONNEES_PERSO);
         $autreValidation = $this->getEntityProvider()->getValidation($autreTypeValidation, $this->ie);
         $vh1 = $service->getVolumeHoraire()->first();
         $vh1->addValidation($autreValidation); 

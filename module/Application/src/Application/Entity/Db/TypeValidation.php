@@ -7,12 +7,12 @@ namespace Application\Entity\Db;
  */
 class TypeValidation implements HistoriqueAwareInterface
 {
-    const CODE_DONNEES_PERSO_PAR_COMP = 'DONNEES_PERSO_PAR_COMP';
-    const CODE_SERVICES_PAR_COMP      = 'SERVICES_PAR_COMP';
-    const CODE_REFERENTIEL            = 'REFERENTIEL';
-    const CODE_CONTRAT_PAR_COMP       = 'CONTRAT_PAR_COMP';
-    const CODE_FICHIER                = 'FICHIER';
-    const CODE_PIECE_JOINTE           = 'PIECE_JOINTE';
+    const CODE_DONNEES_PERSO = 'DONNEES_PERSO_PAR_COMP';
+    const CODE_ENSEIGNEMENT  = 'SERVICES_PAR_COMP';
+    const CODE_REFERENTIEL   = 'REFERENTIEL';
+    const CODE_CONTRAT       = 'CONTRAT_PAR_COMP';
+    const CODE_FICHIER       = 'FICHIER';
+    const CODE_PIECE_JOINTE  = 'PIECE_JOINTE';
 
     /**
      * @var string

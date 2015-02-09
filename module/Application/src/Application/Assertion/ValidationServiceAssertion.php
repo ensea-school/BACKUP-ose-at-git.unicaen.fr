@@ -2,14 +2,14 @@
 
 namespace Application\Assertion;
 
-use Application\Rule\Validation\ValidationReferentielRule;
+use Application\Rule\Validation\ValidationEnseignementRule;
 
 /**
- * Assertions concernant la validation de référentiel.
+ * Assertions concernant la validation d'enseignements.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ValidationReferentielAssertion extends ValidationEnsRefAbstractAssertion
+class ValidationServiceAssertion extends ValidationEnsRefAbstractAssertion
 {
     /**
      * @return boolean
@@ -23,7 +23,11 @@ class ValidationReferentielAssertion extends ValidationEnsRefAbstractAssertion
 //            return true;
 //        }
 //
-//        $structureIntervenant = $this->resource->getIntervenant()->getStructure();
+//        $intervenant          = $this->resource->getIntervenant();
+//        $structureValidation  = $this->resource->getStructure();
+//        $structureIntervenant = $intervenant->getStructure();
+//        $structureRole        = $this->role->getStructure();
+//        $typeVolumeHoraire    = $this->getTypeVolumeHoraire();
 //
 //        /*********************************************************
 //         *                      Rôle Composante
@@ -32,11 +36,22 @@ class ValidationReferentielAssertion extends ValidationEnsRefAbstractAssertion
 //            if ('read' === $this->privilege) {
 //                return true; // les composantes voient tout
 //            }
-//            
-//            $structureRole = $this->role->getStructure();
-//            
-//            if ($structureRole === $structureIntervenant) {
-//                return true;
+//
+//            switch ($typeVolumeHoraire->getCode()) {
+//                // Enseignements PRÉVUS :
+//                // - intervenant permanent : validation par la composante d'affectation de l'intervenant ;
+//                // - intervenant vacataire : validation par chaque composante d'intervention des enseignements la concernant.
+//                case TypeVolumeHoraire::CODE_PREVU:
+//                    if ( $intervenant->estPermanent() && $structureRole === $structureIntervenant || 
+//                        !$intervenant->estPermanent() && $structureRole === $structureValidation) {
+//                        return true;
+//                    }
+//                    break;
+//                // Enseignements REALISES :
+//                case TypeVolumeHoraire::CODE_REALISE:
+//                    break;
+//                default:
+//                    throw new LogicException("Type de volume horaire inattendu.");
 //            }
 //        }
 //
@@ -81,7 +96,7 @@ class ValidationReferentielAssertion extends ValidationEnsRefAbstractAssertion
 //    }
     protected function assertEntity()
     {
-        $rule = $this->getServiceLocator()->get('ValidationReferentielRule')
+        $rule = $this->getServiceLocator()->get('ValidationEnseignementRule')
                 ->setIntervenant($this->resource->getIntervenant())
                 ->setTypeVolumeHoraire($this->getTypeVolumeHoraire())
                 ->setRole($this->role)
@@ -96,11 +111,11 @@ class ValidationReferentielAssertion extends ValidationEnsRefAbstractAssertion
      */
     protected function getTypeVolumeHoraire()
     {
-        if (!count($this->resource->getVolumeHoraireReferentiel())) {
+        if (!count($this->resource->getVolumeHoraire())) {
             throw new LogicException(
                     "Impossible de déterminer le type de volume horaire car la validation ne possède aucun volume horaire.");
         }
         
-        return $this->resource->getVolumeHoraireReferentiel()[0]->getTypeVolumeHoraire();
+        return $this->resource->getVolumeHoraire()[0]->getTypeVolumeHoraire();
     }
 }

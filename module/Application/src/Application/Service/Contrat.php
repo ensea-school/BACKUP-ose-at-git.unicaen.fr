@@ -97,7 +97,7 @@ class Contrat extends AbstractEntityService
     {
         $serviceValidation     = $this->getServiceLocator()->get('ApplicationValidation');
         $serviceTypeValidation = $this->getServiceLocator()->get('ApplicationTypeValidation');
-        $typeValidation        = $serviceTypeValidation->finderByCode(TypeValidationEntity::CODE_CONTRAT_PAR_COMP)->getQuery()->getSingleResult();
+        $typeValidation        = $serviceTypeValidation->finderByCode(TypeValidationEntity::CODE_CONTRAT)->getQuery()->getSingleResult();
         
         $validation = $serviceValidation->newEntity($typeValidation)
                 ->setIntervenant($contrat->getIntervenant())

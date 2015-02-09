@@ -3,7 +3,7 @@ $validation        = $this->validation; /* @var $validation \Application\Entity\
 $services          = $this->referentiels;
 $typeVolumeHoraire = $this->typeVolumeHoraire;
 $display           = $validation->getId() ? 'display: none' : '';
-$intituleConcernes = $validation->getId() ? "Référentiel concerné par la validation :" : "Référentiel à valider :";
+$intituleConcernes = "Référentiel de type '$typeVolumeHoraire'" . ($validation->getId() ? " concerné par la validation :" : " à valider :");
 ?>
 <p>
     <strong><?php echo $intituleConcernes ?></strong><br />

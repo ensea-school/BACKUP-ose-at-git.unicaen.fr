@@ -3,7 +3,7 @@ $validation        = $this->validation; /* @var $validation \Application\Entity\
 $services          = $this->services;
 $typeVolumeHoraire = $this->typeVolumeHoraire;
 $display           = $validation->getId() ? 'display: none' : '';
-$intituleConcernes = $validation->getId() ? "Enseignements concernés par la validation :" : "Enseignements à valider :";
+$intituleConcernes = "Enseignements de type '$typeVolumeHoraire'" . ($validation->getId() ? " concernés par la validation :" : " à valider :");
 ?>
 <p>
     <strong><?php echo $intituleConcernes ?></strong><br />

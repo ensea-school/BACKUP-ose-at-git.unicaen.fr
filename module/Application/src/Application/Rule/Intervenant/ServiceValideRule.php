@@ -258,7 +258,7 @@ class ServiceValideRule extends AbstractIntervenantRule
      */
     private function getTypeValidationService()
     {
-        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_SERVICES_PAR_COMP);
+        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_ENSEIGNEMENT);
         $typeValidation = $qb->getQuery()->getOneOrNullResult();
         
         return $typeValidation;

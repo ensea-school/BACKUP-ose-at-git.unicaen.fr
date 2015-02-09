@@ -65,14 +65,14 @@ class Validation extends AbstractEntityService
      * @param ValidationEntity $validation
      * @return void
      */
-    public function enregistrerValidationServices(ValidationEntity $validation, $services)
+    public function enregistrerValidationServices(ValidationEntity $validation/*, $services*/)
     {
-        // peuplement de la nouvelle validation avec les volumes horaires non validés
-        foreach ($services as $s) { /* @var $s \Application\Entity\Db\Service */
-            foreach ($s->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
-                $validation->addVolumeHoraire($vh);
-            }
-        }
+//        // peuplement de la nouvelle validation avec les volumes horaires non validés
+//        foreach ($services as $s) { /* @var $s \Application\Entity\Db\Service */
+//            foreach ($s->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
+//                $validation->addVolumeHoraire($vh);
+//            }
+//        }
         $this->save($validation);
     }
     
@@ -90,12 +90,12 @@ class Validation extends AbstractEntityService
 //        // NB: une validation de contrat doit être supprimée! Il existe une relation ManyToOne de Contrat vers Validation
 //        // et si la validation est seulement historisée, Doctrine ne trouve plus la Validation référencée dans Contrat 
 //        // (EntityNotFoundException) si le filtre 'historique' est actif.
-//        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_CONTRAT_PAR_COMP) {
+//        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_CONTRAT) {
 //            $softDelete = false;
 //        }
 
         // Validation de services : il faut supprimer les liens Validation --> VolumeHoraire
-        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_SERVICES_PAR_COMP) {
+        if ($validation->getTypeValidation()->getCode() === TypeValidationEntity::CODE_ENSEIGNEMENT) {
             foreach ($validation->getVolumeHoraire() as $vh) {
                 $validation->removeVolumeHoraire($vh);
             }
@@ -293,6 +293,7 @@ class Validation extends AbstractEntityService
     
     /**
      * 
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param TypeValidationEntity $typeValidation
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureRef
@@ -300,6 +301,7 @@ class Validation extends AbstractEntityService
      * @return QueryBuilder
      */
     public function finderValidationsReferentiels(
+            TypeVolumeHoraireEntity $typeVolumeHoraire,  
             TypeValidationEntity $typeValidation = null, 
             IntervenantEntity $intervenant = null, 
             StructureEntity $structureRef = null, 
@@ -313,6 +315,7 @@ class Validation extends AbstractEntityService
                 ->join("v.intervenant", "i")
                 ->join("v.volumeHoraireReferentiel", 'vh')
                 ->join("vh.serviceReferentiel", 's')
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("s.structure", 'strref')
                 ->orderBy("v.histoModification", 'desc')
                 ->addOrderBy("strref.libelleCourt", 'asc');

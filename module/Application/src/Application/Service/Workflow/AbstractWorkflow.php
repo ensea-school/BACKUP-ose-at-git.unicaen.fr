@@ -282,12 +282,13 @@ abstract class AbstractWorkflow extends AbstractService
                 $step = $this->getStep($step);
             }
             catch (RuntimeException $exc) {
+                // étape introuvable
                 return false;
             }
         }
-        
+
         foreach ($this->getSteps() as $s) { /* @var $s Step */
-            if ($s === $step) {
+            if ($s->getKey() === $step->getKey()) {
                 return true;
             }
             if (!$s->getDone()) {
@@ -315,6 +316,8 @@ abstract class AbstractWorkflow extends AbstractService
                 return false;
             }
         }
+        
+        // une étape peut être marquée d'office comme "franchissable"
         if (is_bool($step->getCrossable())) {
             return $step->getCrossable();
         }

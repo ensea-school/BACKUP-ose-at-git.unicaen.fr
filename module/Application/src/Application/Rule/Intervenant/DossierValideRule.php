@@ -92,7 +92,7 @@ class DossierValideRule extends AbstractIntervenantRule
      */
     private function getTypeValidationDossier()
     {
-        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        $qb = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_DONNEES_PERSO);
         $typeValidation = $qb->getQuery()->getOneOrNullResult();
         
         return $typeValidation;

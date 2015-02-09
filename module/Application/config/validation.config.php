@@ -172,7 +172,10 @@ return array(
         'invokables' => array(
             'ApplicationTypeValidation'        => 'Application\\Service\\TypeValidation',
             'ApplicationValidation'            => 'Application\\Service\\Validation',
+            'ValidationEnseignementRule'       => 'Application\\Rule\\Validation\\ValidationEnseignementRule',
+            'ValidationReferentielRule'        => 'Application\\Rule\\Validation\\ValidationReferentielRule',
             'ValidationAssertion'              => 'Application\\Assertion\\ValidationAssertionProxy',
+            'ValidationServiceAssertion'       => 'Application\\Assertion\\ValidationServiceAssertion',
             'ValidationReferentielAssertion'   => 'Application\\Assertion\\ValidationReferentielAssertion',
         ),
         'initializers' => array(

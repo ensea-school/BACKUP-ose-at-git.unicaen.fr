@@ -24,7 +24,7 @@ class PeutValiderServiceRule extends AbstractRule
     public function execute()
     {
         switch ($this->typeValidation->getCode()) {
-            case TypeValidation::CODE_DONNEES_PERSO_PAR_COMP:
+            case TypeValidation::CODE_DONNEES_PERSO:
 //                $peutSaisirDossier = new PeutSaisirDossierRule($this->getIntervenant());
                 $peutSaisirDossier = $this->getServiceLocator()->get('PeutSaisirDossierRule')->setIntervenant($this->getIntervenant());
                 if (!$peutSaisirDossier->execute()) {
@@ -32,7 +32,7 @@ class PeutValiderServiceRule extends AbstractRule
                     return false;
                 }
                 break;
-            case TypeValidation::CODE_SERVICES_PAR_COMP:
+            case TypeValidation::CODE_ENSEIGNEMENT:
 //                $permetSaisieService = new PeutSaisirServiceRule($this->getIntervenant());
                 $permetSaisieService = $this->getServiceLocator()->get('PeutSaisirServiceRule')->setIntervenant($this->getIntervenant());
                 if (!$permetSaisieService->execute()) {

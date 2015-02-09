@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\ServiceReferentiel as ServiceReferentielEntity;
 use Application\Entity\Db\Structure as StructureEntity;
@@ -177,11 +178,13 @@ class ServiceReferentiel extends AbstractEntityService
     
     /**
      * 
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureRef
      * @return QueryBuilder
      */
     public function finderReferentielsNonValides(
+            TypeVolumeHoraireEntity $typeVolumeHoraire,
             IntervenantEntity $intervenant = null,
             StructureEntity $structureRef = null)
     {
@@ -196,6 +199,7 @@ EOS;
                 ->from("Application\Entity\Db\ServiceReferentiel", 's2')
                 ->join("s2.intervenant", "i")
                 ->join("s2.volumeHoraireReferentiel", 'vh')
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("s2.structure", 'strref')
                 ->join("s2.fonction", 'f')
                 ->andWhere("NOT EXISTS ($dqlNotExists)")
@@ -216,6 +220,7 @@ EOS;
     
     /**
      * 
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param TypeValidationEntity $validation
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureRef
@@ -223,6 +228,7 @@ EOS;
      * @return QueryBuilder
      */
     public function finderReferentielsValides(
+            TypeVolumeHoraireEntity $typeVolumeHoraire, 
             ValidationEntity $validation = null, 
             IntervenantEntity $intervenant = null, 
             StructureEntity $structureRef = null)
@@ -235,6 +241,7 @@ EOS;
                 ->join("s.structure", 'strref')
                 ->join("s.fonction", 'f')
                 ->join("vh.validation", "v")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str') // validés par la structure spécifiée
                 ->orderBy("v.histoModification", 'desc')

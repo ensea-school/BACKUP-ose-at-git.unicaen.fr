@@ -64,10 +64,10 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'serviceReferentiel', 'validation', 'agrement', 'utilisateur');
+            return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'adressePrinc', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'serviceReferentiel', 'validation', 'agrement', 'utilisateur', 'premierRecrutement', 'wfIntervenantEtape');
         }
 
-        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'serviceReferentiel', 'validation', 'agrement', 'utilisateur');
+        return array('__isInitialized__', 'validiteDebut', 'validiteFin', 'modificationServiceDu', 'corps', 'dateNaissance', 'depNaissanceCodeInsee', 'depNaissanceLibelle', 'email', 'histoCreation', 'histoDestruction', 'histoModification', 'nomPatronymique', 'nomUsuel', 'numeroInsee', 'numeroInseeCle', 'numeroInseeProvisoire', 'paysNaissanceCodeInsee', 'paysNaissanceLibelle', 'paysNationaliteCodeInsee', 'paysNationaliteLibelle', 'prenom', 'sourceCode', 'telMobile', 'telPro', 'villeNaissanceCodeInsee', 'villeNaissanceLibelle', 'id', 'affectation', 'adresse', 'adressePrinc', 'source', 'statut', 'structure', 'discipline', 'civilite', 'BIC', 'IBAN', 'histoDestructeur', 'histoModificateur', 'histoCreateur', 'type', 'service', 'serviceReferentiel', 'validation', 'agrement', 'utilisateur', 'premierRecrutement', 'wfIntervenantEtape');
     }
 
     /**
@@ -862,6 +862,17 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     /**
      * {@inheritDoc}
      */
+    public function getAdressePrinc()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAdressePrinc', array());
+
+        return parent::getAdressePrinc();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setSource(\Application\Entity\Db\Source $source = NULL)
     {
 
@@ -1357,6 +1368,83 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
     /**
      * {@inheritDoc}
      */
+    public function setPremierRecrutement($premierRecrutement)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPremierRecrutement', array($premierRecrutement));
+
+        return parent::setPremierRecrutement($premierRecrutement);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPremierRecrutement()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPremierRecrutement', array());
+
+        return parent::getPremierRecrutement();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addWfIntervenantEtape', array($wfIntervenantEtape));
+
+        return parent::addWfIntervenantEtape($wfIntervenantEtape);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeWfIntervenantEtape', array($wfIntervenantEtape));
+
+        return parent::removeWfIntervenantEtape($wfIntervenantEtape);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getWfIntervenantEtape()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getWfIntervenantEtape', array());
+
+        return parent::getWfIntervenantEtape();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVIndicDiffDossier()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVIndicDiffDossier', array());
+
+        return parent::getVIndicDiffDossier();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormuleReferentiel(\Application\Entity\Db\Annee $annee, \Application\Entity\Db\Structure $structure = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleReferentiel', array($annee, $structure));
+
+        return parent::getFormuleReferentiel($annee, $structure);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getFormuleResultat(\Application\Entity\Db\Annee $annee, \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = NULL, \Application\Entity\Db\EtatVolumeHoraire $etatVolumehoraire = NULL)
     {
 
@@ -1385,28 +1473,6 @@ class IntervenantPermanent extends \Application\Entity\Db\IntervenantPermanent i
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormuleIntervenant', array());
 
         return parent::getFormuleIntervenant();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPremierRecrutement()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPremierRecrutement', array());
-
-        return parent::getPremierRecrutement();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setPremierRecrutement($premierRecrutement)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPremierRecrutement', array($premierRecrutement));
-
-        return parent::setPremierRecrutement($premierRecrutement);
     }
 
     /**

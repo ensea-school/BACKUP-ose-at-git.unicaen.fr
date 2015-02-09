@@ -82,11 +82,11 @@ table.table-extra-condensed tr th {
     padding:2px;
 }
 
-table.service {
+table.service, table.service-referentiel {
     margin-bottom: 0px;
 }
 
-table.service table.volume-horaire {
+table.service table.volume-horaire, table.service-referentiel table.volume-horaire {
     margin-bottom: 0px;
 }
 
@@ -99,7 +99,7 @@ table.service div#vhl-prev table {
     background-color: #EDEAD2;
 }
 
-table.service td.actions {
+table.service td.actions, table.service-referentiel td.actions {
     white-space: nowrap;
     text-align:center;
 }
@@ -108,7 +108,7 @@ table.service tfoot td.type-intervention{
     white-space: nowrap;
 }
 
-table.service td.actions a {
+table.service td.actions a, table.service-referentiel td.actions a {
     margin-left: 0.2em;
     margin-right:0.2em;
 }

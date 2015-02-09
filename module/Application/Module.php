@@ -52,7 +52,8 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         if ( substr($basePath, -1) !== '/' ) $basePath .= '/';
         $jsFiles = [
             'js/elementPedagogiqueRecherche.js',
-            'js/service.js'
+            'js/service.js',
+            'js/service-referentiel.js'
         ];
 
         foreach( $jsFiles as $jsFile ){

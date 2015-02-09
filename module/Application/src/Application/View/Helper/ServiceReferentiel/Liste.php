@@ -2,43 +2,94 @@
 
 namespace Application\View\Helper\ServiceReferentiel;
 
-use Zend\View\Helper\AbstractHelper;
+use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\ServiceReferentiel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
-use Application\Interfaces\IntervenantAwareInterface;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\ReadOnlyAwareTrait;
-use NumberFormatter;
-use UnicaenApp\Util;
+use Application\Interfaces\TypeVolumeHoraireAwareInterface;
+use Application\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
- * Aide de vue permettant d'afficher une liste de services referentiels
+ * Aide de vue permettant d'afficher une liste de services
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, IntervenantAwareInterface
+class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, TypeVolumeHoraireAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
-    use IntervenantAwareTrait;
-    use ReadOnlyAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
 
-    protected $services;
+    /**
+     *
+     * @var string
+     */
+    private $id;
+
+    /**
+     *
+     * @var array
+     */
+    private $totaux;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $addButtonVisibility;
+
+    /**
+     *
+     * @var array
+     */
+    private $columns = [
+        'intervenant'   => [
+            'visibility' => false,
+            'head-text'  => "<th>Intervenant</th>",
+        ],
+        'structure'     => [
+            'visibility' => true,
+            'head-text'  => "<th title=\"Structure\">Structure</th>",
+        ],
+        'fonction'      => [
+            'visibility' => true,
+            'head-text'  => "<th title=\"Fonction référentiel\">Fonction</th>",
+        ],
+        'commentaires'  => [
+            'visibility' => true,
+            'head-text'  => "<th title=\">Commentaires éventuels\">Commentaires</th>",
+        ],
+        'heures'        => [
+            'visibility' => true,
+            'head-text'  => "<th title=\"Nombre d'heures\">Heures</th>",
+        ],
+        'annee'         => [
+            'visibility' => false,
+            'head-text'  => "<th>Année univ.</th>",
+        ],
+    ];
+
+    /**
+     * Lecture seule ou non
+     *
+     * @var boolean
+     */
+    private $readOnly = false;
+
+
 
     /**
      * Helper entry point.
      *
      * @param ServiceReferentiel[] $services
-     * @param array $context
      * @return self
      */
-    final public function __invoke(array $services)
+    final public function __invoke($services)
     {
-        $this->services = $services;
-        
+        $this->setServices($services);
+        $this->calcDefaultColumnsVisibility();
         return $this;
     }
 
@@ -52,102 +103,304 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         return $this->render();
     }
 
+    public function getTotalRefreshUrl()
+    {
+        if (($intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant())) {
+            return $this->getView()->url('intervenant/referentiel', 
+                    ['intervenant' => $intervenant->getSourceCode()],
+                    ['query' => ['totaux' => 1]], 
+                    true);
+        }
+        
+        return null;
+    }
+
+    public function getAddUrl()
+    {
+        return $this->getView()->url('referentiel/saisie', [], ['query' => ['type-volume-horaire' => $this->getTypeVolumeHoraire()->getId()]]);
+    }
+
     /**
      * Génère le code HTML.
      *
      * @return string
      */
-    public function render()
+    public function render( $details = false )
     {
-        $params = [];
-        if ($this->getIntervenant()){
-            $params['query'] = ['intervenant-filter' => $this->getIntervenant()->getSourceCode()];
+        $colspan = 2;
+
+        $attribs = [
+            'id'            => $this->getId(true),
+            'class'         => 'referentiel-liste',
+            'data-params'   => json_encode( $this->exportParams() ),
+        ];
+
+        $out = '<div '.$this->htmlAttribs($attribs).'>';
+        if ( count($this->getServices()) > 150 ){
+            return $out.'<div class="alert alert-danger" role="alert">Le nombre de lignes à afficher est trop important. Merci d\'affiner vos critères de recherche.</div></div>';
+        }
+        if ($this->getAddButtonVisibility() && ! $this->getReadOnly()) {
+            $out .= $this->renderAddButton();
         }
 
-        $urlVoirListe = $this->getView()->url('service-ref/default', ['action' => 'voirListe'], $params);
-        $parts        = array();
+        $out .= '<table class="table table-bordered table-extra-condensed service-referentiel">';
+        $out .= '<tr>';
 
-        $parts[]              = '<table id="services-ref" class="table service-ref">';
-        $parts[]              = '<tr>';
-        $parts['intervenant'] = "<th>Intervenant</th>";
-        $parts[]              = "<th>Structure</th>";
-        $parts[]              = "<th>Fonction</th>";
-        $parts[]              = "<th>Commentaires</th>";
-        $parts['annee']       = "<th>Année univ.</th>";
-        $parts[]              = "<th>Heures</th>";
-        $parts[]              = "<th class=\"action\" colspan=\"2\">&nbsp;</th>";
-        $parts[]              = "</tr>";
-
-        $total = 0;
-
-        foreach ($this->services as $service) {
-            $parts[] = '<tr id="service-ref-' . $service->getId() . '-ligne">';
-            $parts[] = $this->renderLigne($service);
-            $total += $service->getHeures();
-            $parts[] = '</tr>';
+        foreach( $this->getColumnsList() as $columnName ){
+            if ($this->getColumnVisibility($columnName)) {
+                $out .= $this->getColumnHeadText($columnName)."\n";
+                $colspan ++;
+            }
         }
-        $parts[] = '<tfoot>';
-        $parts[] = '<th style="text-align:right" colspan="'.($this->getColumnsCount()-3).'">Total :</th>';
-        $parts[] = '<td style="text-align:right;padding-right:2em">'.Util::formattedFloat($total, NumberFormatter::DECIMAL, -1).'</td>';
-        $parts[] = "<td class=\"action\" colspan=\"2\">&nbsp;</td>";
-        $parts[] = '</tfoot>';
-        $parts[] = '</table>';
+
+        $out .= "<th>&nbsp;</th>\n";
+        $out .= "</tr>\n";
+
+        foreach( $this->services as $service ){
+            $out .= $this->renderLigne($service, $details);
+        }
+        $out .= '<tfoot data-url="'.$this->getTotalRefreshUrl().'">'."\n";
+        $out .= $this->renderTotaux();
+        $out .= '</tfoot>'."\n";
+        $out .= '</table>'."\n";
+        $out .= '</div>'."\n";
+        $out .= '<script type="text/javascript">';
+        $out .= '$(function() { ServiceReferentielListe.get("'.$this->getId().'").init(); });';
+        $out .= '</script>';
         
-        $parts[] = '<script type="text/javascript">';
-        $parts[] = '$(function() { ServiceReferentiel.init("' . $urlVoirListe . '"); });';
-        $parts[] = '</script>';
-        
-        $this->applyGlobalContext($parts);
-        
-        return implode(PHP_EOL, $parts);
+        return $out;
     }
-    
-    protected function renderLigne($service)
+
+    public function renderAddButton()
     {
-        $helper = $this->getView()->serviceReferentielLigne($service); /* @var $helper Ligne */
-        $helper
-                ->setReadOnly($this->getReadOnly())
-                ->setRenderIntervenants($this->getRenderIntervenants());
+        $attribs = [
+            'class'         => 'ajax-modal services btn btn-primary',
+            'data-event'    => 'service-referentiel-add-message',
+            'href'          => $this->getAddUrl(),
+            'title'         => 'Ajouter une nouvelle fonction',
+        ];
+        $out = '<a '.$this->htmlAttribs($attribs).'><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
+        return $out;
+    }
+
+    public function renderLigne(ServiceReferentiel $service, $details=false, $show=true )
+    {
+        $ligneView = $this->getView()->serviceReferentielLigne( $this, $service );
+        $attribs = [
+            'id'        => 'referentiel-'.$service->getId().'-ligne',
+            'data-id'   => $service->getId(),
+            'class'     => 'referentiel-ligne',
+            'data-url'  => $ligneView->getRefreshUrl(),
+        ];
+        if (! $show) $attribs['style'] = 'display:none';
+        $out  = '<tr '.$this->htmlAttribs($attribs).'>';
+        $out .= $ligneView->render($details);
+        $out .= '</tr>';
         
-        return $helper->render();
+        return $out;
+    }
+
+    public function renderTotaux()
+    {
+        $colspan = 0;
+        if ($this->getColumnVisibility('intervenant'  ))  $colspan ++;
+        if ($this->getColumnVisibility('structure'    ))  $colspan ++;
+        if ($this->getColumnVisibility('fonction'     ))  $colspan ++;
+        if ($this->getColumnVisibility('commentaires' ))  $colspan ++;
+//        if ($this->getColumnVisibility('heures'       ))  $colspan ++;
+        if ($this->getColumnVisibility('annee'        ))  $colspan ++;
+
+        $data = $this->getTotaux();
+
+        $typesInterventionDisplayed = 0;
+        $out = '';
+        $out .= '<tr>';
+        $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de référentiel :</th>\n";
+        $out .= "<td id=\"total-referentiel\" style=\"text-align:right\" colspan=\"".$typesInterventionDisplayed."\">".\Common\Util::formattedHeures($data['total_general'])."</td>\n";
+        $out .= "<td>&nbsp;</td>\n";
+        $out .= "</tr>\n";
+        return $out;
+    }
+
+    public function renderShowHide()
+    {
+        return
+            '<div class="service-show-hide-buttons">'
+            .'<button type="button" class="btn btn-default btn-xs service-show-all-details"><span class="glyphicon glyphicon-chevron-down"></span> Tout déplier</button> '
+            .'<button type="button" class="btn btn-default btn-xs service-hide-all-details"><span class="glyphicon glyphicon-chevron-up"></span> Tout replier</button>'
+           .'</div>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getId( $reNew=false )
+    {
+        if (null === $this->id || $reNew){
+            $this->id = uniqid('referentiel-liste-');
+        }
+        return $this->id;
+    }
+
+    protected function getTotaux()
+    {
+        if (! $this->totaux){
+            $data = [
+                        'total_general' => 0,
+                    ];
+            foreach( $this->getServices() as $service ){
+                $data['total_general'] += $service->getVolumeHoraireReferentielListe()/*->setTypeIntervention(false)*/->getHeures();
+            }
+            $this->totaux = $data;
+        }
+        return $this->totaux;
+    }
+
+    /**
+     * Retourne les paramètres de configuration du View Helper sous forme de tableau transformable en JSON
+     *
+     * @return array
+     */
+    public function exportParams()
+    {
+        $params = [
+            'read-only'                     => $this->getReadOnly(),
+            'type-volume-horaire'           => $this->getTypeVolumeHoraire()->getId(),
+            'columns-visibility'            => [],
+        ];
+        foreach( $this->getColumnsList() as $columnName ){
+            $params['columns-visibility'][$columnName] = $this->getColumnVisibility($columnName);
+        }
+
+        return $params;
+    }
+
+    /**
+     * Copnfigure le View Helper selon les paramètres transmis
+     *
+     * @param array $params
+     * @return self
+     */
+    public function applyParams( array $params )
+    {
+        if (isset($params['read-only'])){
+            $this->setReadOnly( filter_var( $params['read-only'], FILTER_VALIDATE_BOOLEAN) );
+        }
+        if (isset($params['type-volume-horaire'])){
+            $this->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->get( (int)$params['type-volume-horaire'] ) );
+        }
+        if (isset($params['columns-visibility']) && is_array($params['columns-visibility'])){
+            foreach( $params['columns-visibility'] as $columnName => $visibility ){
+                $this->setColumnVisibility( $columnName, filter_var( $visibility, FILTER_VALIDATE_BOOLEAN) );
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Calcule la visibilité par défaut des colonnes en fonction des données transmises!!
+     * 
+     * @return \Application\View\Helper\Service\Liste
+     */
+    public function calcDefaultColumnsVisibility()
+    {
+        $services = $this->getServices();
+
+        // si plusieurs années différentes sont détectées alors on prévoit d'afficher la colonne année par défaut
+        // si plusieurs intervenants différents alors on prévoit d'afficher la colonne intervenant par défaut
+        $annee       = null;    $multiAnnees        = false;
+        $intervenant = null;    $multiIntervenants  = false;
+        foreach( $services as $service ){
+            if (empty($annee)) $annee = $service->getAnnee();
+            elseif( $annee !== $service->getAnnee() ){ $multiAnnees = true; break;}
+
+            if (empty($intervenant)) $intervenant = $service->getIntervenant();
+            elseif( $intervenant !== $service->getIntervenant() ){ $multiIntervenants = true; break;}
+        }
+        $this->setColumnVisibility( 'annee',         $multiAnnees        );
+        $this->setColumnVisibility( 'intervenant',   $multiIntervenants  );
+
+        return $this;
+    }
+
+    /**
+     * @return @string[]
+     */
+    public function getColumnsList()
+    {
+        return array_keys( $this->columns );
     }
 
     /**
      *
-     * @return integer
+     * @param string $columnName
+     * @param boolean $visibility
+     * @return self
      */
-    private function getColumnsCount()
+    public function setColumnVisibility( $columnName, $visibility )
     {
-        $count = 8;
-        $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
-
-        if (!$this->getRenderIntervenants()) {
-            $count--;
-        }
-        if ($context->getAnnee()) {
-            $count--;
-        }
-
-        return $count;
+        $this->columns[$columnName]['visibility'] = (boolean)$visibility;
+        return $this;
     }
 
     /**
-     * 
-     * @param array $parts
+     *
+     * @param string $columnName
+     * @return boolean
+     */
+    public function getColumnVisibility( $columnName )
+    {
+        if (! array_key_exists($columnName, $this->columns)){
+            throw new \Common\Exception\LogicException('La colonne "'.$columnName.'" n\'existe pas.');
+        }
+        return $this->columns[$columnName]['visibility'];
+    }
+
+    /**
+     *
+     * @param string $columnName
+     * @return string
+     * @throws \Common\Exception\LogicException
+     */
+    public function getColumnHeadText( $columnName )
+    {
+        if (! array_key_exists($columnName, $this->columns)){
+            throw new \Common\Exception\LogicException('La colonne "'.$columnName.'" n\'existe pas.');
+        }
+        return $this->columns[$columnName]['head-text'];
+    }
+
+    /**
+     * Retourne le type de volume horaire concerné.
+     *
+     * @return TypeVolumeHoraire
+     */
+    public function getTypeVolumeHoraire()
+    {
+        if (empty($this->typeVolumeHoraire)){
+            $this->typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        }
+        return $this->typeVolumeHoraire;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getReadOnly()
+    {
+        return $this->readOnly;
+    }
+
+    /**
+     *
+     * @param boolean $readOnly
      * @return self
      */
-    public function applyGlobalContext(array &$parts)
+    public function setReadOnly($readOnly)
     {
-        $context = $this->getContextProvider()->getGlobalContext();
-        
-        if (!$this->getRenderIntervenants()) {
-            unset($parts['intervenant']);
-        }
-        if ($context->getAnnee()) {
-            unset($parts['annee']);
-        }
-        
+        $this->readOnly = $readOnly;
         return $this;
     }
 
@@ -162,7 +415,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     /**
      *
-     * @param ServiceReferentiel[] $services
+     * @param Service[] $services
      * @return self
      */
     public function setServices(array $services)
@@ -170,31 +423,41 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $this->services = $services;
         return $this;
     }
-    
-    /**
-     * @var boolean
-     */
-    protected $renderIntervenants = true;
 
     /**
-     * Indique si la colonne intervenant doit être générée ou non.
      * 
      * @return boolean
      */
-    public function getRenderIntervenants()
+    function getAddButtonVisibility()
     {
-        return $this->renderIntervenants;
+        return $this->addButtonVisibility;
     }
 
     /**
-     * Spécifie si la colonne intervenant doit être générée ou non.
-     * 
-     * @param boolean $renderIntervenants
+     *
+     * @param boolean $addButtonVisibility
      * @return self
      */
-    public function setRenderIntervenants($renderIntervenants = true)
+    function setAddButtonVisibility($addButtonVisibility)
     {
-        $this->renderIntervenants = $renderIntervenants;
+        $this->addButtonVisibility = $addButtonVisibility;
         return $this;
+    }
+
+    /**
+     * @return \Application\Service\Service
+     */
+    protected function getServiceService()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
+    }
+
+    /**
+     *
+     * @return \Application\Service\TypeVolumeHoraire
+     */
+    protected function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
     }
 }

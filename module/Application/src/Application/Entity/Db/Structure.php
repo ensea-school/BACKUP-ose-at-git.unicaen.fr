@@ -113,6 +113,24 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
     protected $service;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $centreCout;
+
+
+
+
+
+    function __construct()
+    {
+        $this->structureNiv2        = new \Doctrine\Common\Collections\Collection;
+        $this->elementPedagogique   = new \Doctrine\Common\Collections\Collection;
+        $this->service              = new \Doctrine\Common\Collections\Collection;
+        $this->centreCout           = new \Doctrine\Common\Collections\Collection;
+    }
+
+
+    /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
@@ -602,6 +620,38 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
         return $this->service;
     }
 
+    /**
+     * Add centreCout
+     *
+     * @param \Application\Entity\Db\CentreCout $centreCout
+     * @return Intervenant
+     */
+    public function addCentreCout(\Application\Entity\Db\CentreCout $centreCout)
+    {
+        $this->centreCout[] = $centreCout;
+
+        return $this;
+    }
+
+    /**
+     * Remove centreCout
+     *
+     * @param \Application\Entity\Db\CentreCout $centreCout
+     */
+    public function removeCentreCout(\Application\Entity\Db\CentreCout $centreCout)
+    {
+        $this->service->removeElement($centreCout);
+    }
+
+    /**
+     * Get centreCout
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentreCout()
+    {
+        return $this->centreCout;
+    }
 
     /**************************************************************************************************
      *                                      Début ajout

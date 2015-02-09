@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\MiseEnPaiementListe;
+
 /**
  * FormuleResultatServiceReferentiel
  */
@@ -161,6 +163,41 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface
     }
 
     /**
+     *
+     * @param TypeHeures $typeHeures
+     * @return float
+     * @throws \Common\Exception\RuntimeException
+     */
+    public function getHeures( TypeHeures $typeHeures )
+    {
+        switch( $typeHeures->getCode() ){
+            case TypeHeures::FI: return $this->getHeuresComplFi();
+            case TypeHeures::FA: return $this->getHeuresComplFa();
+            case TypeHeures::FC: return $this->getHeuresComplFc();
+            case TypeHeures::REFERENTIEL: return $this->getHeuresComplReferentiel();
+        }
+        throw new \Common\Exception\RuntimeException('Type d\'heures inconnu');
+    }
+
+    /**
+     *
+     * @param TypeHeures $typeHeures
+     * @param float $heures
+     * @return self
+     * @throws \Common\Exception\RuntimeException
+     */
+    public function setHeures( TypeHeures $typeHeures, $heures )
+    {
+        switch( $typeHeures->getCode() ){
+            case TypeHeures::FI: return $this->setHeuresComplFi( $heures );
+            case TypeHeures::FA: return $this->setHeuresComplFa( $heures );
+            case TypeHeures::FC: return $this->setHeuresComplFc( $heures );
+            case TypeHeures::REFERENTIEL: return $this->setHeuresComplReferentiel( $heures );
+        }
+        throw new \Common\Exception\RuntimeException('Type d\'heures inconnu');
+    }
+
+    /**
      * Set id
      *
      * @param integer $id
@@ -214,6 +251,17 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface
     public function getMiseEnPaiement()
     {
         return $this->miseEnPaiement;
+    }
+
+    /**
+     * @return MiseEnPaiementListe
+     */
+    public function getMiseEnPaiementListe( \DateTime $dateMiseEnPaiement=null, Periode $periodePaiement=null )
+    {
+        $liste = new MiseEnPaiementListe( $this );
+        if ($dateMiseEnPaiement) $liste->setDateMiseEnPaiement( $dateMiseEnPaiement );
+        if ($periodePaiement)    $liste->setPeriodePaiement( $periodePaiement );
+        return $liste;
     }
 
     /**

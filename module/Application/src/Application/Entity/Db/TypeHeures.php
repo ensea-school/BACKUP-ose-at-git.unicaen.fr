@@ -2,32 +2,20 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * HeuresMisesEnPaiement
+ * TypeHeures
  */
-class HeuresMisesEnPaiement
+class TypeHeures
 {
-    /**
-     * @var float
-     */
-    private $heuresFa;
+    const FI          = 'fi';
+    const FA          = 'fa';
+    const FC          = 'fc';
+    const REFERENTIEL = 'referentiel';
 
     /**
-     * @var float
+     * @var string
      */
-    private $heuresFc;
-
-    /**
-     * @var float
-     */
-    private $heuresFi;
-
-    /**
-     * @var float
-     */
-    private $heuresReferentiel;
+    private $code;
 
     /**
      * @var \DateTime
@@ -45,19 +33,24 @@ class HeuresMisesEnPaiement
     private $histoModification;
 
     /**
+     * @var string
+     */
+    private $libelleCourt;
+
+    /**
+     * @var string
+     */
+    private $libelleLong;
+
+    /**
+     * @var integer
+     */
+    private $ordre;
+
+    /**
      * @var integer
      */
     private $id;
-
-    /**
-     * @var \Application\Entity\Db\MiseEnPaiement
-     */
-    private $miseEnPaiement;
-
-    /**
-     * @var \Application\Entity\Db\CentreCout
-     */
-    private $centreCout;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -76,102 +69,33 @@ class HeuresMisesEnPaiement
 
 
     /**
-     * Set heuresFa
+     * Set code
      *
-     * @param float $heuresFa
-     * @return HeuresMisesEnPaiement
+     * @param string $code
+     * @return TypeHeures
      */
-    public function setHeuresFa($heuresFa)
+    public function setCode($code)
     {
-        $this->heuresFa = $heuresFa;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get heuresFa
+     * Get code
      *
-     * @return float 
+     * @return string 
      */
-    public function getHeuresFa()
+    public function getCode()
     {
-        return $this->heuresFa;
-    }
-
-    /**
-     * Set heuresFc
-     *
-     * @param float $heuresFc
-     * @return HeuresMisesEnPaiement
-     */
-    public function setHeuresFc($heuresFc)
-    {
-        $this->heuresFc = $heuresFc;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresFc
-     *
-     * @return float 
-     */
-    public function getHeuresFc()
-    {
-        return $this->heuresFc;
-    }
-
-    /**
-     * Set heuresFi
-     *
-     * @param float $heuresFi
-     * @return HeuresMisesEnPaiement
-     */
-    public function setHeuresFi($heuresFi)
-    {
-        $this->heuresFi = $heuresFi;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresFi
-     *
-     * @return float 
-     */
-    public function getHeuresFi()
-    {
-        return $this->heuresFi;
-    }
-
-    /**
-     * Set heuresReferentiel
-     *
-     * @param float $heuresReferentiel
-     * @return HeuresMisesEnPaiement
-     */
-    public function setHeuresReferentiel($heuresReferentiel)
-    {
-        $this->heuresReferentiel = $heuresReferentiel;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresReferentiel
-     *
-     * @return float 
-     */
-    public function getHeuresReferentiel()
-    {
-        return $this->heuresReferentiel;
+        return $this->code;
     }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return HeuresMisesEnPaiement
+     * @return TypeHeures
      */
     public function setHistoCreation($histoCreation)
     {
@@ -194,7 +118,7 @@ class HeuresMisesEnPaiement
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return HeuresMisesEnPaiement
+     * @return TypeHeures
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -217,7 +141,7 @@ class HeuresMisesEnPaiement
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return HeuresMisesEnPaiement
+     * @return TypeHeures
      */
     public function setHistoModification($histoModification)
     {
@@ -237,6 +161,75 @@ class HeuresMisesEnPaiement
     }
 
     /**
+     * Set libelleCourt
+     *
+     * @param string $libelleCourt
+     * @return TypeHeures
+     */
+    public function setLibelleCourt($libelleCourt)
+    {
+        $this->libelleCourt = $libelleCourt;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleCourt
+     *
+     * @return string 
+     */
+    public function getLibelleCourt()
+    {
+        return $this->libelleCourt;
+    }
+
+    /**
+     * Set libelleLong
+     *
+     * @param string $libelleLong
+     * @return TypeHeures
+     */
+    public function setLibelleLong($libelleLong)
+    {
+        $this->libelleLong = $libelleLong;
+
+        return $this;
+    }
+
+    /**
+     * Get libelleLong
+     *
+     * @return string 
+     */
+    public function getLibelleLong()
+    {
+        return $this->libelleLong;
+    }
+
+    /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return TypeHeures
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer 
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -247,56 +240,10 @@ class HeuresMisesEnPaiement
     }
 
     /**
-     * Set miseEnPaiement
-     *
-     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
-     * @return HeuresMisesEnPaiement
-     */
-    public function setMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement = null)
-    {
-        $this->miseEnPaiement = $miseEnPaiement;
-
-        return $this;
-    }
-
-    /**
-     * Get miseEnPaiement
-     *
-     * @return \Application\Entity\Db\MiseEnPaiement 
-     */
-    public function getMiseEnPaiement()
-    {
-        return $this->miseEnPaiement;
-    }
-
-    /**
-     * Set centreCout
-     *
-     * @param \Application\Entity\Db\CentreCout $centreCout
-     * @return HeuresMisesEnPaiement
-     */
-    public function setCentreCout(\Application\Entity\Db\CentreCout $centreCout = null)
-    {
-        $this->centreCout = $centreCout;
-
-        return $this;
-    }
-
-    /**
-     * Get centreCout
-     *
-     * @return \Application\Entity\Db\CentreCout 
-     */
-    public function getCentreCout()
-    {
-        return $this->centreCout;
-    }
-
-    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return HeuresMisesEnPaiement
+     * @return TypeHeures
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -319,7 +266,7 @@ class HeuresMisesEnPaiement
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return HeuresMisesEnPaiement
+     * @return TypeHeures
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -342,7 +289,7 @@ class HeuresMisesEnPaiement
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return HeuresMisesEnPaiement
+     * @return TypeHeures
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -359,5 +306,23 @@ class HeuresMisesEnPaiement
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelleCourt();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function toHtml()
+    {
+        return '<abbr title="'.$this->getLibelleLong().'">'.$this->getLibelleCourt().'</abbr>';
     }
 }

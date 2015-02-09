@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * MiseEnPaiement
  */
@@ -43,6 +41,21 @@ class MiseEnPaiement
      * @var \Application\Entity\Db\Periode
      */
     private $periodePaiement;
+
+    /**
+     * @var float
+     */
+    private $heures;
+
+    /**
+     * @var TypeHeures
+     */
+    private $typeHeures;
+
+    /**
+     * @var \Application\Entity\Db\CentreCout
+     */
+    private $centreCout;
 
     /**
      * @var \Application\Entity\Db\Validation
@@ -224,6 +237,75 @@ class MiseEnPaiement
     }
 
     /**
+     * Set heures
+     *
+     * @param float $heures
+     * @return MiseEnPaiement
+     */
+    public function setHeures($heures)
+    {
+        $this->heures = $heures;
+
+        return $this;
+    }
+
+    /**
+     * Get heures
+     *
+     * @return float
+     */
+    public function getHeures()
+    {
+        return $this->heures;
+    }
+
+    /**
+     * Set typeHeures
+     *
+     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @return self
+     */
+    public function setTypeHeures(\Application\Entity\Db\TypeHeures $typeHeures = null)
+    {
+        $this->typeHeures = $typeHeures;
+
+        return $this;
+    }
+
+    /**
+     * Get typeHeures
+     *
+     * @return \Application\Entity\Db\TypeHeures
+     */
+    public function getTypeHeures()
+    {
+        return $this->typeHeures;
+    }
+
+    /**
+     * Set centreCout
+     *
+     * @param \Application\Entity\Db\CentreCout $centreCout
+     * @return MiseEnPaiement
+     */
+    public function setCentreCout(\Application\Entity\Db\CentreCout $centreCout = null)
+    {
+        $this->centreCout = $centreCout;
+
+        return $this;
+    }
+
+    /**
+     * Get centreCout
+     *
+     * @return \Application\Entity\Db\CentreCout
+     */
+    public function getCentreCout()
+    {
+        return $this->centreCout;
+    }
+
+    /**
      * Set validation
      *
      * @param \Application\Entity\Db\Validation $validation
@@ -313,6 +395,37 @@ class MiseEnPaiement
     public function getFormuleResultatService()
     {
         return $this->formuleResultatService;
+    }
+
+    /**
+     *
+     * @return ServiceAPayerInterface
+     */
+    public function getServiceAPayer()
+    {
+        if ($this->formuleResultatService           ) return $this->formuleResultatService;
+        if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;
+        return null;
+    }
+
+    /**
+     *
+     * @param ServiceAPayerInterface $serviceAPayer
+     * @return self
+     */
+    public function setServiceAPayer(ServiceAPayerInterface $serviceAPayer = null )
+    {
+        if ($serviceAPayer instanceof FormuleResultatService           ){
+            $this->setFormuleResultatService( $serviceAPayer );
+            $this->setFormuleResultatServiceReferentielerentiel();
+        }elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel){
+            $this->setFormuleResultatService();
+            $this->setFormuleResultatServiceReferentiel( $serviceAPayer );
+        }else{
+            $this->setFormuleResultatService();
+            $this->setFormuleResultatServiceReferentielerentiel();
+        }
+        return $this;
     }
 
     /**

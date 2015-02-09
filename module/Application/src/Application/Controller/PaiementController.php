@@ -57,8 +57,8 @@ class PaiementController extends AbstractActionController implements ContextProv
         });
 
         return [
-            'service' => $frsList,
-            'referentiel' => $frsrList,
+            'service'       => $frsList,
+            'referentiel'   => $frsrList,
         ];
     }
 
@@ -84,6 +84,39 @@ class PaiementController extends AbstractActionController implements ContextProv
         $referentiels = $hap['referentiel'];
 
         return compact('intervenant', 'services', 'referentiels');
+    }
+
+    public function miseEnPaiementSaisieAction()
+    {
+        $form = $this->getMiseEnPaiementSaisieForm();
+        $errors = [];
+        
+
+        $terminal = $this->getRequest()->isXmlHttpRequest();
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel
+                ->setTemplate('application/paiement/mise-en-paiement-saisie')
+                ->setVariables(compact('form', 'errors'));
+        if ($terminal) {
+            return $this->popoverInnerViewModel($viewModel, "Mise en paiement", false);
+        }
+        return $viewModel;
+
+    }
+
+    public function centreCoutRechercheAction()
+    {
+        var_dump('coucou');
+    }
+
+    /**
+     * Retourne le formulaire de modif de Volume Horaire.
+     *
+     * @return \Application\Form\Paiement\MiseEnPaiementSaisieForm
+     */
+    protected function getMiseEnPaiementSaisieForm()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('MiseEnPaiementSaisie');
     }
 
     /**

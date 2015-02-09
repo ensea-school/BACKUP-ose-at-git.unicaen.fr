@@ -64,10 +64,10 @@ class Structure extends \Application\Entity\Db\Structure implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique', 'service');
+            return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique', 'service', 'centreCout');
         }
 
-        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique', 'service');
+        return array('__isInitialized__', 'histoCreation', 'histoDestruction', 'histoModification', 'libelleCourt', 'libelleLong', 'niveau', 'sourceCode', 'contactPj', 'validiteDebut', 'validiteFin', 'id', 'source', 'type', 'histoModificateur', 'histoDestructeur', 'etablissement', 'histoCreateur', 'parente', 'structureNiv2', 'elementPedagogique', 'service', 'centreCout');
     }
 
     /**
@@ -648,6 +648,39 @@ class Structure extends \Application\Entity\Db\Structure implements \Doctrine\OR
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getService', array());
 
         return parent::getService();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addCentreCout(\Application\Entity\Db\CentreCout $centreCout)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addCentreCout', array($centreCout));
+
+        return parent::addCentreCout($centreCout);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeCentreCout(\Application\Entity\Db\CentreCout $centreCout)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeCentreCout', array($centreCout));
+
+        return parent::removeCentreCout($centreCout);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCentreCout()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCentreCout', array());
+
+        return parent::getCentreCout();
     }
 
     /**

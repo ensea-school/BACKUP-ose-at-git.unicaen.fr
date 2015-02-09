@@ -388,4 +388,13 @@ class CentreCout
     {
         return $this->activite;
     }
+
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getSourceCode().' - '.$this->getLibelle();
+    }
 }

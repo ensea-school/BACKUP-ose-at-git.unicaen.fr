@@ -15,6 +15,76 @@ BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END;
 
 drop view "OSE"."V_FORMULE_REFERENTIEL";
 
+
+INSERT INTO TYPE_HEURES(
+    ID,
+    CODE,
+    LIBELLE_COURT,
+    LIBELLE_LONG,
+    ORDRE,
+    HISTO_CREATION,HISTO_CREATEUR_ID,
+    HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID
+)VALUES(
+    type_heures_id_seq.nextval,
+    'fi',
+    'Fi',
+    'Formation initiale',
+    1,
+    sysdate,ose_parametre.get_ose_user,sysdate,ose_parametre.get_ose_user
+);
+
+INSERT INTO TYPE_HEURES(
+    ID,
+    CODE,
+    LIBELLE_COURT,
+    LIBELLE_LONG,
+    ORDRE,
+    HISTO_CREATION,HISTO_CREATEUR_ID,
+    HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID
+)VALUES(
+    type_heures_id_seq.nextval,
+    'fa',
+    'Fa',
+    'Formation en apprentissage',
+    2,
+    sysdate,ose_parametre.get_ose_user,sysdate,ose_parametre.get_ose_user
+);
+
+INSERT INTO TYPE_HEURES(
+    ID,
+    CODE,
+    LIBELLE_COURT,
+    LIBELLE_LONG,
+    ORDRE,
+    HISTO_CREATION,HISTO_CREATEUR_ID,
+    HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID
+)VALUES(
+    type_heures_id_seq.nextval,
+    'fc',
+    'Fc',
+    'Formation continue',
+    3,
+    sysdate,ose_parametre.get_ose_user,sysdate,ose_parametre.get_ose_user
+);
+
+INSERT INTO TYPE_HEURES(
+    ID,
+    CODE,
+    LIBELLE_COURT,
+    LIBELLE_LONG,
+    ORDRE,
+    HISTO_CREATION,HISTO_CREATEUR_ID,
+    HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID
+)VALUES(
+    type_heures_id_seq.nextval,
+    'referentiel',
+    'Référentiel',
+    'Référentiel',
+    4,
+    sysdate,ose_parametre.get_ose_user,sysdate,ose_parametre.get_ose_user
+);
+
+
 INSERT INTO VOLUME_HORAIRE_REF (
     ID,
     TYPE_VOLUME_HORAIRE_ID,

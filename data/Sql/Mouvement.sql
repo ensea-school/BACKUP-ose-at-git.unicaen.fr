@@ -1,114 +1,40 @@
--- domaines fonctionnels
 SELECT
-  A.fkber "Domaine Fonctionnel",
-  B.fkbtx "Libellé",
-  A.datab "Date début de validité", -- la plus petite des deux
-  A.datbis "Date de fin de validité",
-  A.date_exp "Date d'expiration"
+  frs.id formule_resultat_servcie_id, cc.id centre_cout_id
 FROM
-  sapsr3.tfkb@sifacp A,
-  sapsr3.tfkbt@sifacp B
+  formule_resultat_service   frs
+  JOIN service                 s ON s.id = frs.service_id AND s.element_pedagogique_id IS NOT NULL
+  JOIN centre_cout_ep       ccep ON ccep.element_pedagogique_id = s.element_pedagogique_id
+  JOIN centre_cout            cc ON cc.id = ccep.centre_cout_id AND cc.structure_id = s.structure_ens_id AND 1 = ose_divers.comprise_entre( cc.histo_creation, cc.histo_destruction )
+  JOIN cc_activite             a ON a.id = cc.activite_id AND 1 = ose_divers.comprise_entre( a.histo_creation, a.histo_destruction )
+  JOIN type_ressource         tr ON tr.id = cc.type_ressource_id AND 1 = ose_divers.comprise_entre( tr.histo_creation, tr.histo_destruction )
 WHERE
-    A.mandt=B.mandt
-and A.fkber=B.fkber
-and B.SPRAS='F'
-and A.mandt='500';
+  (
+    (frs.heures_compl_fi > 0 AND tr.fi = 1 AND a.fi = 1 )
+    OR (frs.heures_compl_fa > 0 AND tr.fa = 1 AND a.fa = 1 )
+    OR (frs.heures_compl_fc + frs.heures_compl_fc_majorees > 0 AND tr.fc = 1 AND a.fc = 1 )
+  )
 
--- centres de cout
-SELECT
-  A.kostl CC,
-  A.kokrs "Périm Analytique",
-  A.datab "date début validite",
-  A.datbi "date fin de validité",
-  B.ktext "Libellé",
-  A.verak "Centre Financier",
-  A.bukrs "Société",
-  A.func_area "Domaine Fonctionnel",
-  A.PRCTR "Centre de Profit",
-  A.gsber "Domaine d'activité",
-  A.bkzkp "Blocage couts primaires"
-FROM
-  sapsr3.csks@sifacp A,
-  sapsr3.cskt@sifacp B
-WHERE
-    A.kostl=B.kostl(+)
-and A.kokrs=B.kokrs(+)
-and B.mandt(+)='500'
-and B.spras(+)='F'
-and A.kokrs='UCBN'
-and A.bkzkp !='X'
-order by 1;
-
-------------EOTP-------------------
+UNION
 
 SELECT
-  A.posid "Code Eotp",
-  A.post1 "Désignation",
-  A.pkokr "Périm Analytique",
-  A.pbukr "Société",
-  A.fkstl "CC associé",
-  A.prctr "CP associé",
-  A.func_area "Dom Fonctionnel",
-  B.pstrt "Date début",
-  B.pende "Date fin"
+  frs.id formule_resultat_servcie_id, cc.id
 FROM
-  sapsr3.prps@sifacp A,
-  sapsr3.prte@sifacp B
+  formule_resultat_service   frs
+  JOIN service                 s ON s.id = frs.service_id AND s.element_pedagogique_id IS NOT NULL
+  JOIN centre_cout            cc ON cc.structure_id = s.structure_ens_id AND 1 = ose_divers.comprise_entre( cc.histo_creation, cc.histo_destruction )
+  JOIN cc_activite             a ON a.id = cc.activite_id AND 1 = ose_divers.comprise_entre( a.histo_creation, a.histo_destruction )
+  JOIN type_ressource         tr ON tr.id = cc.type_ressource_id AND 1 = ose_divers.comprise_entre( tr.histo_creation, tr.histo_destruction )
+  LEFT JOIN centre_cout_ep  ccep ON ccep.element_pedagogique_id = s.element_pedagogique_id
 WHERE
-  A.pspnr=B.posnr(+)
-and A.pkokr='UCBN'
-and B.mandt(+)='500'
-and A.fkstl like 'P%B';
-
-
---------dates EOtp ds PRTE---------------------
-
-SELECT
-  *
-FROM
-  sapsr3.prte@sifacp
-WHERE
-  mandt='500';
-  and posnr='00000567';
-  
+  (
+    (frs.heures_compl_fi > 0 AND tr.fi = 1 AND a.fi = 1 )
+    OR (frs.heures_compl_fa > 0 AND tr.fa = 1 AND a.fa = 1 )
+    OR (frs.heures_compl_fc + frs.heures_compl_fc_majorees > 0 AND tr.fc = 1 AND a.fc = 1 )
+  )
+  AND ccep.id IS NULL
+;
 
 
 
--- CENTRES DE COUT --
-SELECT DISTINCT
-  B.ktext libelle,
-  CASE
-    WHEN a.kostl like '%B' THEN 'enseignement'
-    WHEN a.kostl like '%M' THEN 'pilotage'
-  END z_activite_id,
-  CASE
-    WHEN LENGTH(a.kostl) = 5 THEN 'paye-etat'
-    WHEN LENGTH(a.kostl) > 5 THEN 'ressources-propres'
-  END z_type_ressource_id,
-  
-  NULL z_parent_id,
-  STR.CODE_HARPEGE z_structure_id,
 
-  
-  
-  
-  
-  
-  A.kostl code
-  
-FROM
-  sapsr3.csks@sifacp A,
-  sapsr3.cskt@sifacp B,
-  unicaen_corresp_structure_cc str 
-WHERE
-    A.kostl=B.kostl(+)
-    and A.kokrs=B.kokrs(+)
-    and substr( a.kostl, 2, 3 ) = str.code_sifac(+)
-    and B.mandt(+)='500'
-    and B.spras(+)='F'
-    and A.kokrs='UCBN'
-    and A.bkzkp !='X'
-    and a.kostl LIKE 'P%' AND (a.kostl like '%B' OR a.kostl like '%M')
-    AND SYSDATE BETWEEN to_date( A.datab, 'YYYYMMDD') AND to_date( A.datbi, 'YYYYMMDD')
-    AND STR.CODE_HARPEGE IS NOT NULL -- à désactiver pour trouver les structures non référencées dans la table de correspondance
-  
+

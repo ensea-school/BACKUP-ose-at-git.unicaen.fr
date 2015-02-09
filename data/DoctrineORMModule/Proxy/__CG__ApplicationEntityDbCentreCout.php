@@ -64,10 +64,10 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'fa', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'fc', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'fi', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'paieEtat', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'parentId', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'referentiel', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'sourceCode', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'source', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoCreateur');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'parentId', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'sourceCode', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'typeRessource', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'source', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'activite');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'fa', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'fc', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'fi', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'paieEtat', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'parentId', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'referentiel', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'sourceCode', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'validiteDebut', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'validiteFin', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'source', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoCreateur');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'parentId', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'sourceCode', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'structure', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'typeRessource', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'source', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\CentreCout' . "\0" . 'activite');
     }
 
     /**
@@ -176,72 +176,6 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
     /**
      * {@inheritDoc}
      */
-    public function setFa($fa)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFa', array($fa));
-
-        return parent::setFa($fa);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFa()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFa', array());
-
-        return parent::getFa();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setFc($fc)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFc', array($fc));
-
-        return parent::setFc($fc);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFc()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFc', array());
-
-        return parent::getFc();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setFi($fi)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFi', array($fi));
-
-        return parent::setFi($fi);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFi()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFi', array());
-
-        return parent::getFi();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setHistoCreation($histoCreation)
     {
 
@@ -330,28 +264,6 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
     /**
      * {@inheritDoc}
      */
-    public function setPaieEtat($paieEtat)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPaieEtat', array($paieEtat));
-
-        return parent::setPaieEtat($paieEtat);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPaieEtat()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPaieEtat', array());
-
-        return parent::getPaieEtat();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setParentId($parentId)
     {
 
@@ -374,28 +286,6 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
     /**
      * {@inheritDoc}
      */
-    public function setReferentiel($referentiel)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setReferentiel', array($referentiel));
-
-        return parent::setReferentiel($referentiel);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getReferentiel()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getReferentiel', array());
-
-        return parent::getReferentiel();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setSourceCode($sourceCode)
     {
 
@@ -413,50 +303,6 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSourceCode', array());
 
         return parent::getSourceCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValiditeDebut', array($validiteDebut));
-
-        return parent::setValiditeDebut($validiteDebut);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getValiditeDebut()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValiditeDebut', array());
-
-        return parent::getValiditeDebut();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setValiditeFin($validiteFin)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValiditeFin', array($validiteFin));
-
-        return parent::setValiditeFin($validiteFin);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getValiditeFin()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValiditeFin', array());
-
-        return parent::getValiditeFin();
     }
 
     /**
@@ -499,23 +345,23 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
     /**
      * {@inheritDoc}
      */
-    public function setType(\Application\Entity\Db\TypeCentreCout $type = NULL)
+    public function setTypeRessource(\Application\Entity\Db\TypeRessource $typeRessource = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setType', array($type));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTypeRessource', array($typeRessource));
 
-        return parent::setType($type);
+        return parent::setTypeRessource($typeRessource);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getType()
+    public function getTypeRessource()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getType', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTypeRessource', array());
 
-        return parent::getType();
+        return parent::getTypeRessource();
     }
 
     /**
@@ -565,6 +411,28 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
     /**
      * {@inheritDoc}
      */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHistoCreateur', array($histoCreateur));
+
+        return parent::setHistoCreateur($histoCreateur);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHistoCreateur()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
+
+        return parent::getHistoCreateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = NULL)
     {
 
@@ -587,23 +455,34 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
     /**
      * {@inheritDoc}
      */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = NULL)
+    public function setActivite(\Application\Entity\Db\CcActivite $activite = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHistoCreateur', array($histoCreateur));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setActivite', array($activite));
 
-        return parent::setHistoCreateur($histoCreateur);
+        return parent::setActivite($activite);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getHistoCreateur()
+    public function getActivite()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActivite', array());
 
-        return parent::getHistoCreateur();
+        return parent::getActivite();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', array());
+
+        return parent::__toString();
     }
 
 }

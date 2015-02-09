@@ -52,6 +52,23 @@ interface ServiceAPayerInterface
     public function getHeuresComplReferentiel();
 
     /**
+     *
+     * @param TypeHeures $typeHeures
+     * @return float
+     * @throws \Common\Exception\RuntimeException
+     */
+    public function getHeures( TypeHeures $typeHeures );
+
+    /**
+     *
+     * @param TypeHeures $typeHeures
+     * @param float $heures
+     * @return self
+     * @throws \Common\Exception\RuntimeException
+     */
+    public function setHeures( TypeHeures $typeHeures, $heures );
+
+    /**
      * Add miseEnPaiement
      *
      * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
@@ -72,4 +89,9 @@ interface ServiceAPayerInterface
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getMiseEnPaiement();
+
+    /**
+     * @return MiseEnPaiementListe
+     */
+    public function getMiseEnPaiementListe( \DateTime $dateMiseEnPaiement=null, Periode $periodePaiement=null );
 }

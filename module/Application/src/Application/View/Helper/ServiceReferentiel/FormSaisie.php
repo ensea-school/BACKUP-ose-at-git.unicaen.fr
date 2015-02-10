@@ -2,17 +2,25 @@
 
 namespace Application\View\Helper\ServiceReferentiel;
 
-use Application\Form\ServiceReferentiel\Saisie;
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Acl\IntervenantRole;
+use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Entity\VolumeHoraireReferentielListe;
+use Application\Form\ServiceReferentiel\SaisieFieldset;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
+use Application\Service\EtatVolumeHoraire;
+use Application\Service\Service;
+use Application\Service\TypeVolumeHoraire as TypeVolumeHoraireService;
+use Common\Util;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\View\Helper\AbstractHelper;
+use Application\Form\ServiceReferentiel\Saisie as SaisieForm;
 
 /**
  * Description of SaisieForm
  *
- * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class FormSaisie extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
 {
@@ -20,19 +28,19 @@ class FormSaisie extends AbstractHelper implements ServiceLocatorAwareInterface,
     use ContextProviderAwareTrait;
 
     /**
-     * @var Saisie
+     * @var SaisieForm
      */
     protected $form;
 
     /**
      *
-     * @param Saisie $form
-     * @return SaisieForm|string
+     * @param SaisieForm $form
+     * @return self
      */
-    public function __invoke(Saisie $form = null)
+    public function __invoke(SaisieForm $form = null)
     {
         $this->form = $form;
-        $this->form->setAttribute('id', uniqid("form-saisie-"));
+        $this->form->setAttribute('id', 'referentiel');
         $this->form->prepare();
         return $this;
     }
@@ -61,11 +69,11 @@ class FormSaisie extends AbstractHelper implements ServiceLocatorAwareInterface,
      */
     public function render()
     {
-        $fservice = $this->form->get('service'); /* @var $fservice \Application\Form\ServiceReferentiel\SaisieFieldset */
+        $fservice = $this->form->get('service'); /* @var $fservice SaisieFieldset */
 
         $part = $this->getView()->form()->openTag($this->form);
         
-        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole) {
+        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof IntervenantRole) {
             $template = <<<EOS
 <div>
     %s
@@ -76,18 +84,61 @@ EOS;
                     $this->getView()->formControlGroup($fservice->get('intervenant')));
         }
         
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->get($this->form->get('type-volume-horaire')->getValue());
+        $inRealise         = TypeVolumeHoraire::CODE_REALISE === $typeVolumeHoraire->getCode();
+        $rappelPrevu       = null;
+        $buttonMarkup      = null;
+        
+        if ($inRealise) {
+            /**
+             * Rappel du nombre d'heures prévues
+             */
+            $vhl = $this->form->get('service')->getObject()->getVolumeHoraireReferentielListe()->getChild();
+            /* @var $vhl VolumeHoraireReferentielListe */
+            $vhl->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() );
+            $vhl->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getValide() );
+            $heures = $vhl->getHeures();
+            
+            $template = <<<EOS
+<div class="pull-right" style="opacity: 0.5">
+    <strong>Prévu :</strong> <span id="rappel-heures-prevu" data-heures="%s">%s</span>
+</div>
+EOS;
+            $rappelPrevu = sprintf($template,
+                    $heures,
+                    Util::formattedHeures($vhl->getHeures()));
+            
+            /**
+             * Bouton Prévu->Réalisé
+             */
+            $button = new \Zend\Form\Element\Button('referentiel-prevu-to-realise');
+            $button
+                    ->setAttributes([
+                        'class' => 'btn btn-default referentiel-prevu-to-realise',
+                        'title' => "Initialise le formulaire avec les heures prévues",
+                    ])
+                    ->setLabel('Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé')
+                    ->setLabelOption('disable_html_escape', true);
+            $buttonMarkup = $this->getView()->formControlGroup($button);
+        }
+        
         $template = <<<EOS
 <div class="row">
-    <div class="col-md-4">
-        %s
-    </div>
     <div class="col-md-5">
         %s
     </div>
-    <div class="col-md-3">
-        <div id="volumes-horaires" data-url="%s">
-            %s
-        </div>
+    <div class="col-md-7">
+        %s
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4" id="volumes-horaires" data-url="%s">
+        $rappelPrevu
+        %s
+    </div>
+    <div class="col-md-4">
+        <br />
+        $buttonMarkup
     </div>
 </div>
 EOS;
@@ -115,7 +166,7 @@ EOS;
         $part .= $this->getView()->form()->closeTag().'<br />';
         
         $part .= '<script type="text/javascript">';
-        $part .= '//$(function() { ServiceReferentielForm.init(); });';
+        $part .= '  $(function() { ServiceReferentielForm.init(); });';
         $part .= '</script>';
         
         $this->includeJavascript($part);
@@ -123,46 +174,6 @@ EOS;
         return $part;
     }
 
-    public function renderVolumesHoraires()
-    {
-        $res = '';
-        foreach( $this->getPeriodes() as $periode ){
-            $res .= '<div class="periode" id="'.$periode->getCode().'">';
-            $res .= '<h3>'.$periode.'</h3>';
-            $res .= $this->renderVolumeHoraire( $this->form->get($periode->getCode()) );
-            $res .= '</div>';
-        }
-        return $res;
-    }
-
-    public function renderVolumeHoraire($fieldset)
-    {
-        $element = $fieldset->getObject()->getService()->getElementPedagogique();
-        if ($element){
-            $typesIntervention = $element->getTypeIntervention();
-        }else{
-            $typesIntervention = $this->getServiceTypeIntervention()->getTypesIntervention();
-        }
-
-        $res  = $this->getView()->formHidden($fieldset->get('service'));
-        $res .= $this->getView()->formHidden($fieldset->get('periode'));
-        $res .= $this->getView()->formHidden($fieldset->get('type-volume-horaire'));
-
-        $res .= '<div class="volume-horaire-saisie-multiple">';
-        foreach( $typesIntervention as $typeIntervention ){
-            $element = $fieldset->get($typeIntervention->getCode());
-            $element->setAttribute('class', 'form-control')
-                    ->setLabelAttributes(array('class' => 'control-label'));
-            $res .= '<div style="">';
-            $res .= $this->getView()->formLabel( $element );
-            $res .= '<br />';
-            $res .= $this->getView()->formNumber( $element);
-            $res .= '</div>';
-        }
-        $res .= '</div><div class="volume-horaire-saisie-multiple-fin"></div>';
-        return $res;
-    }
-    
     /**
      * @var bool
      */
@@ -171,7 +182,7 @@ EOS;
     /**
      * 
      * @param string $html
-     * @return \UnicaenApp\View\Helper\ToggleDetails
+     * @return self
      */
     protected function includeJavascript(&$html)
     {
@@ -194,6 +205,10 @@ EOS;
         return $this;
     }
     
+    /**
+     * 
+     * @return string
+     */
     protected function getJavascript()
     {
         $formId = $this->form->getAttribute('id');
@@ -233,7 +248,7 @@ function applyStructureFonction()
     var structureSelect = $(structureSelectSel, form);
 
     $('option', structureSelect).attr('disabled', false);
-//console.log(structuresFonction[fonctionVal]);
+                
     // si une structure est associée à la fonction sélectionnée
     if (structuresFonction[fonctionVal]) {
         structureSelect.val(structuresFonction[fonctionVal]);
@@ -245,7 +260,7 @@ EOS;
     }
 
     /**
-     * @return \Application\Service\Service
+     * @return Service
      */
     protected function getServiceService()
     {
@@ -253,18 +268,18 @@ EOS;
     }
 
     /**
-     * @return \Application\Service\Periode
+     * @return TypeVolumeHoraireService
      */
-    protected function getServicePeriode()
+    protected function getServiceTypeVolumeHoraire()
     {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
     }
 
     /**
-     * @return \Application\Service\TypeIntervention
+     * @return EtatVolumeHoraire
      */
-    protected function getServiceTypeIntervention()
+    protected function getServiceEtatVolumeHoraire()
     {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 }

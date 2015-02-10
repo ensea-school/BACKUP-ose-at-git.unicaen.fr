@@ -47,8 +47,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             'type' => 'Hidden',
         ));
 
-        $identityRole       = $this->getContextProvider()->getSelectedIdentityRole();
-        $contextIntervenant = $this->getContextProvider()->getGlobalContext()->getIntervenant();
+        $identityRole = $this->getContextProvider()->getSelectedIdentityRole();
 
         if (!$identityRole instanceof IntervenantRole) {
             $intervenant = new SearchAndSelect('intervenant');
@@ -89,7 +88,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $this->add(array(
             'name'       => 'heures',
             'options'    => array(
-                'label' => "Nb d'heures :",
+                'label' => "Heures :",
             ),
             'attributes' => array(
                 'value' => "0",

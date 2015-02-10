@@ -10,6 +10,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Application\View\Helper\ServiceReferentiel\Ligne;
 
 /**
  * Aide de vue permettant d'afficher une liste de services
@@ -106,9 +107,20 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     public function getTotalRefreshUrl()
     {
         if (($intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant())) {
-            return $this->getView()->url('intervenant/referentiel', 
-                    ['intervenant' => $intervenant->getSourceCode()],
-                    ['query' => ['totaux' => 1]], 
+            if ($this->isInRealise()) {
+                $route = 'intervenant/referentiel-realise';
+            }
+            else {
+                $route = 'intervenant/referentiel';
+            }
+            
+            return $this->getView()->url($route, 
+                    [
+                        'intervenant' => $intervenant->getSourceCode(),
+                    ],
+                    [
+                        'query' => ['totaux' => 1],
+                    ], 
                     true);
         }
         
@@ -180,12 +192,44 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             'title'         => 'Ajouter une nouvelle fonction',
         ];
         $out = '<a '.$this->htmlAttribs($attribs).'><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
+
+        if ($this->isInRealise()){
+            $attribs = [
+                'class'         => 'btn btn-warning referentiel-prevu-to-realise-show',
+                'data-toggle'   => 'modal',
+                'data-target'   => '#referentiel-prevu-to-realise-modal',
+                //'data-event'    => 'service-constatation',
+                //'href'          => $this->getAddUrl(),
+                'title'         => "Saisir comme réalisées l'ensemble des heures prévisionnelles de référentiel"
+                                  .". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
+            ];
+            $out .= '&nbsp;<button type="button" '.$this->htmlAttribs($attribs).'>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>';
+            $out .= '<div class="modal fade" id="referentiel-prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
+            $out .= '<div class="modal-dialog modal-sm">';
+            $out .= '<div class="modal-content">';
+            $out .= '<div class="modal-header">';
+            $out .= '<button type="button" class="close" data-dismiss="modal" aria-label="Annuler"><span aria-hidden="true">&times;</span></button>';
+            $out .= '<h4 class="modal-title">Saisir comme réalisées l\'ensemble des heures prévisionnelles</h4>';
+            $out .= '</div>';
+            $out .= '<div class="modal-body">';
+            $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
+            $out .= '<p>Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</p>';
+            $out .= '</div>';
+            $out .= '<div class="modal-footer">';
+            $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
+            $out .= '<button type="button" class="btn btn-primary referentiel-prevu-to-realise">OK</button>';
+            $out .= '</div>';
+            $out .= '</div>';
+            $out .= '</div>';
+            $out .= '</div>';
+        }
+        
         return $out;
     }
 
     public function renderLigne(ServiceReferentiel $service, $details=false, $show=true )
     {
-        $ligneView = $this->getView()->serviceReferentielLigne( $this, $service );
+        $ligneView = $this->getView()->serviceReferentielLigne( $this, $service ); /* @var $ligneView Ligne */
         $attribs = [
             'id'        => 'referentiel-'.$service->getId().'-ligne',
             'data-id'   => $service->getId(),
@@ -196,7 +240,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $out  = '<tr '.$this->htmlAttribs($attribs).'>';
         $out .= $ligneView->render($details);
         $out .= '</tr>';
-        
+
         return $out;
     }
 
@@ -232,6 +276,16 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     }
 
     /**
+     * Détermine si nous sommes en service réalisé ou non
+     *
+     * @return boolean
+     */
+    public function isInRealise()
+    {
+        return $this->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
+    }
+
+    /**
      * @return string
      */
     public function getId( $reNew=false )
@@ -249,7 +303,8 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                         'total_general' => 0,
                     ];
             foreach( $this->getServices() as $service ){
-                $data['total_general'] += $service->getVolumeHoraireReferentielListe()/*->setTypeIntervention(false)*/->getHeures();
+                $h = $service->getVolumeHoraireReferentielListe()->setTypeVolumeHoraire($this->getTypeVolumehoraire())->getHeures();
+                $data['total_general'] += $h;
             }
             $this->totaux = $data;
         }
@@ -267,6 +322,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             'read-only'                     => $this->getReadOnly(),
             'type-volume-horaire'           => $this->getTypeVolumeHoraire()->getId(),
             'columns-visibility'            => [],
+            'in-realise'                    => $this->isInRealise(),
         ];
         foreach( $this->getColumnsList() as $columnName ){
             $params['columns-visibility'][$columnName] = $this->getColumnVisibility($columnName);

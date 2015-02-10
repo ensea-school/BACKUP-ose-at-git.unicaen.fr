@@ -10,6 +10,7 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Interfaces\ServiceReferentielAwareInterface;
 use Application\Traits\ServiceReferentielAwareTrait;
+use Application\View\Helper\VolumeHoraireReferentiel\Liste as ListeHelper;
 
 /**
  * Aide de vue permettant d'afficher une ligne de service
@@ -34,10 +35,6 @@ class Ligne extends AbstractHtmlElement
      * @var boolean
      */
     protected $forcedReadOnly = false;
-
-
-
-
 
     /**
      * Helper entry point.
@@ -72,10 +69,11 @@ class Ligne extends AbstractHtmlElement
                 'referentiel/rafraichir-ligne', 
                 [
                     'serviceReferentiel' => $this->getService()->getId(), 
-                    'typeVolumeHoraire'  => $this->getListe()->getTypeVolumehoraire()->getId(),
                 ], 
                 [
-                    'query' => ['only-content' => 1, 'read-only' => $this->getListe()->getReadOnly() ? '1' : '0' ]
+                    'query' => [
+                        'only-content' => 1, 
+                        'read-only'    => $this->getListe()->getReadOnly() ? '1' : '0' ]
                 ]
         );
         return $url;
@@ -91,9 +89,6 @@ class Ligne extends AbstractHtmlElement
     {
         $liste = $this->getListe();
         $service = $this->getService();
-
-        $context = $this->getContextProvider()->getGlobalContext();
-        $vhl     = $this->getService()->getVolumeHoraireReferentielListe();
 
         $out = '';
         if ($liste->getColumnVisibility('intervenant')){
@@ -158,15 +153,46 @@ class Ligne extends AbstractHtmlElement
 
     protected function renderHeures(ServiceReferentiel $service)
     {
-        $vhlView = $this->getView()->volumeHoraireReferentielListe($service->getVolumeHoraireReferentielListe()->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire()))
-                ->setReadOnly($this->getListe()->getReadOnly()); /* @var $vhlView \Application\View\Helper\VolumeHoraireReferentiel\Liste */
-
-        $out = /*'<span class="volume-horaire" id="referentiel-'.$service->getId().'-volume-horaire-td" data-url="'.$vhlView->getRefreshUrl().'">'
-                .*/ $vhlView->render()
-                /*. '</span>'*/;
+        $out = '';
         
-//        if (! $heures) return '';
-//        $out = \Common\Util::formattedHeures($heures);
+        $vhlListe = $service->getVolumeHoraireReferentielListe();
+        $vhlView  = $this->getView()->volumeHoraireReferentielListe($vhlListe);  /* @var $vhlView ListeHelper */
+        
+//        var_dump(array_map(function(\Application\Entity\Db\VolumeHoraireReferentiel $v) {                    
+//            var_dump($v->getTypeVolumeHoraire()." ".$v->getHeures());
+//        }, $service->getVolumeHoraireReferentiel()->toArray()));
+        
+        if ($this->isInRealise()) {
+            $out .= '<table style="width: 100%">';
+            
+            /**
+             * PREVU, lecture seule
+             */
+            $vhlListe
+                    ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
+                    ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
+            $vhlView->setReadOnly(true);
+            $out .= '<tr><td><strong>Prévisionnel :</strong></td><td class="heures">' . $vhlView->render() . '</td></tr>';
+            
+            /**
+             * REALISE
+             */
+            $vhlListe
+                    ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
+                    ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+            $vhlView->setReadOnly($this->getListe()->getReadOnly());
+            $out .= '<tr><td><strong>Réalisé :</strong></td><td class="heures">' . $vhlView->render() . '</td></tr>';
+            
+            $out .= '</table>';
+        }
+        else {
+            $vhlListe
+                    ->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire())
+                    ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getSaisi());
+            $vhlView->setReadOnly($this->getListe()->getReadOnly());
+            $out .= $vhlView->render();
+        }
+        
         return $out;
     }
 
@@ -184,7 +210,7 @@ class Ligne extends AbstractHtmlElement
 
     protected function renderSupprimer()
     {
-        $url = $this->getView()->url('referentiel/default', array('action' => 'suppression', 'id' => $this->getService()->getId()));
+        $url = $this->getView()->url('referentiel/default', array('action' => 'suppression', 'id' => $this->getService()->getId()), ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
         return '<a class="ajax-modal referentiel-delete" data-event="service-referentiel-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer cette ligne de référentiel"><span class="glyphicon glyphicon-remove"></span></a>';
     }
 
@@ -195,6 +221,16 @@ class Ligne extends AbstractHtmlElement
         elseif( true === $param) return 'true';
         elseif(method_exists($param, 'getId')) return $param->getId();
         else throw new \Common\Exception\LogicException('Le paramètre n\'est pas du bon type');
+    }
+
+    /**
+     * Détermine si nous sommes en service réalisé ou non
+     *
+     * @return boolean
+     */
+    public function isInRealise()
+    {
+        return $this->getListe()->getTypeVolumeHoraire()->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE;
     }
 
     /**
@@ -229,4 +265,21 @@ class Ligne extends AbstractHtmlElement
         return $this;
     }
 
+    /**
+     *
+     * @return \Application\Service\TypeVolumeHoraire
+     */
+    protected function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
+    }
+
+    /**
+     *
+     * @return \Application\Service\EtatVolumeHoraire
+     */
+    protected function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
+    }
 }

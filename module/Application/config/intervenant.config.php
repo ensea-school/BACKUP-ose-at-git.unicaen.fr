@@ -130,7 +130,7 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
                                 'action' => 'index',
-                                'type-volume-horaire-code' => 'PREVU',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
                             ),
                         ),
                     ),
@@ -144,7 +144,7 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Application\Controller\ServiceReferentiel',
                                 'action' => 'index',
-                                'type-volume-horaire-code' => 'PREVU',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
                             ),
                         ),
                     ),
@@ -158,7 +158,21 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
                                 'action' => 'index',
-                                'type-volume-horaire-code' => 'REALISE',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
+                            ),
+                        ),
+                    ),
+                    'referentiel-realise' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:intervenant/referentiel',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\ServiceReferentiel',
+                                'action' => 'index',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
                             ),
                         ),
                     ),

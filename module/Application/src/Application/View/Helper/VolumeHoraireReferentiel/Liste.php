@@ -100,47 +100,6 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
      */
     public function render()
     {
-//        $this->hasForbiddenPeriodes = false;
-//
-//        $out = '<table class="table table-condensed table-bordered volume-horaire">';
-//        $out .= '<tr>';
-//        $out .= "<th style=\"width:10%\">Période</th>\n";
-//        $out .= "</tr>\n";
-//        $periodes = $this->getPeriodes();
-//        foreach( $periodes as $periode ){
-//            $vhl = $this->getVolumeHoraireReferentielListe()->setPeriode($periode)->setTypeIntervention(false);
-//            $motifsNonPaiement = [];
-//            if(empty($motifsNonPaiement)){
-//                $motifsNonPaiement = [0 => false];
-//            }
-//            foreach( $motifsNonPaiement as $motifNonPaiement ){
-//                $forbiddenPeriode = false;
-//                if (
-//                       $this->getVolumeHoraireReferentielListe()->getService()
-//                    && $this->getVolumeHoraireReferentielListe()->getService()->getElementPedagogique()
-//                    && $this->getVolumeHoraireReferentielListe()->getService()->getElementPedagogique()->getPeriode()
-//                    && $this->getVolumeHoraireReferentielListe()->getService()->getElementPedagogique()->getPeriode() !== $periode
-//                ){
-//                    $forbiddenPeriode = true;
-//                    $this->hasForbiddenPeriodes = true;
-//                }
-//                if ($forbiddenPeriode){
-//                    $out .= '<tr class="bg-danger">';
-//                    $out .= "<td><abbr title=\"La période n'est pas conforme à l'enseignement\">".$this->renderPeriode($periode)."</abbr></td>\n";
-//                }else{
-//                    $out .= '<tr>';
-//                    $out .= "<td>".$this->renderPeriode($periode)."</td>\n";
-//                }
-//                
-//                foreach( $this->typesIntervention as $typeIntervention ){
-//                    $vhl->setMotifNonPaiement($motifNonPaiement)
-//                        ->setTypeIntervention($typeIntervention);
-//                    $out .= '<td style="text-align:right">'.$this->renderHeures( $vhl ).'</td>';
-//                }
-//                $out .= "</tr>\n";
-//            }
-//        }
-//        $out .= '</table>' . "\n";
         $out = $this->renderHeures($this->getVolumeHoraireReferentielListe());
         
         return $out;
@@ -151,18 +110,24 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
         $heures = \Common\Util::formattedHeures($volumeHoraireListe->getHeures());
 
         $query = $volumeHoraireListe->filtersToArray();
-//        if (false === $volumeHoraireListe->getMotifNonPaiement()) {
-//            $query['tous-motifs-non-paiement'] = '1';
-//        }
+        
         if ($this->getReadOnly()) {
             return $heures;
         }
         else {
             $url = $this->getView()->url(
-                    'volume-horaire-referentiel/saisie', ['serviceReferentiel' => $volumeHoraireListe->getService()->getId()], ['query' => $query]
+                    'volume-horaire-referentiel/saisie', 
+                    [
+                        'serviceReferentiel' => $volumeHoraireListe->getService()->getId(),
+                    ], 
+                    [
+                        'query' => $query,
+                    ]
             );
 
-            return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire-referentiel\" data-placement=\"bottom\" data-service=\"" . $volumeHoraireListe->getService()->getId() . "\" href=\"" . $url . "\" >$heures</a>";
+            return "<a class=\"ajax-popover volume-horaire\" data-event=\"save-volume-horaire-referentiel\" "
+                    . "data-placement=\"bottom\" data-service=\"" . $volumeHoraireListe->getService()->getId() . "\" "
+                    . "href=\"" . $url . "\" >$heures</a>";
         }
     }
 
@@ -177,9 +142,6 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, Cont
 
     public function setVolumeHoraireReferentielListe(VolumeHoraireReferentielListe $volumeHoraireListe)
     {
-        if (!$volumeHoraireListe->getTypeVolumeHoraire() instanceof \Application\Entity\Db\TypeVolumeHoraire) {
-            throw new \Common\Exception\LogicException('Le type de volume horaire de la liste n\'a pas été précisé');
-        }
         $this->volumeHoraireListe = $volumeHoraireListe;
         $this->forcedReadOnly     = !$this->getView()->isAllowed($volumeHoraireListe->getService(), 'update');
         return $this;

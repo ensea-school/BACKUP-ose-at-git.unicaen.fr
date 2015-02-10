@@ -6,6 +6,7 @@ use Application\Entity\Db\VolumeHoraireReferentiel;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\Validation;
+use Application\Entity\Db\EtatVolumeHoraire;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 
@@ -25,6 +26,12 @@ class VolumeHoraireReferentielListe
      * @var TypeVolumeHoraire|boolean
      */
     protected $typeVolumeHoraire = false;
+    
+    /**
+     *
+     * @var EtatVolumeHoraire
+     */
+    protected $etatVolumeHoraire = false;
 
     /**
      * @var Validation|boolean
@@ -85,6 +92,29 @@ class VolumeHoraireReferentielListe
 
     /**
      *
+     * @return EtatVolumeHoraire|boolean
+     */
+    public function getEtatVolumeHoraire()
+    {
+        return $this->etatVolumeHoraire;
+    }
+
+    /**
+     *
+     * @param EtatVolumeHoraire|boolean $etatVolumeHoraire
+     * @return self
+     */
+    public function setEtatVolumeHoraire($etatVolumeHoraire)
+    {
+        if (! (is_bool($etatVolumeHoraire) || null === $etatVolumeHoraire || $etatVolumeHoraire instanceof EtatVolumeHoraire) ){
+            throw new RuntimeException('Valeur non autorisée');
+        }
+        $this->etatVolumeHoraire = $etatVolumeHoraire;
+        return $this;
+    }
+
+    /**
+     *
      * @return Validation|boolean
      */
     public function getValidation()
@@ -125,6 +155,14 @@ class VolumeHoraireReferentielListe
             }else {
                 if ($typeVolumeHoraire !== $this->typeVolumeHoraire)
                     return false;
+            }
+        }
+        if (false !== $this->etatVolumeHoraire){
+            $etatVolumeHoraire = $volumeHoraire->getEtatVolumeHoraireReferentiel();
+            if (true === $this->etatVolumeHoraire){
+                if (null === $etatVolumeHoraire) return false;
+            }else{
+                if ($etatVolumeHoraire->getOrdre() < $this->etatVolumeHoraire->getOrdre()) return false;
             }
         }
         if (false !== $this->validation) {
@@ -188,6 +226,7 @@ class VolumeHoraireReferentielListe
     {
         $volumeHoraireListe = new VolumeHoraireReferentielListe($this->getService());
         $volumeHoraireListe->setTypeVolumeHoraire($this->typeVolumeHoraire);
+        $volumeHoraireListe->setEtatVolumeHoraire( $this->etatVolumeHoraire );
         $volumeHoraireListe->setValidation($this->validation);
         return $volumeHoraireListe;
     }
@@ -228,19 +267,6 @@ class VolumeHoraireReferentielListe
             throw new LogicException('Le type de volume horaire n\'est pas défini');
         }
 
-//        /* transfert d'heures d'un motif vers un autre */
-//        if (false !== $ancienMotifNonPaiement && $ancienMotifNonPaiement !== $motifNonPaiement){ // On retranche les anciennes heures si besoin...
-//            $vhl->setMotifNonPaiement($motifNonPaiement);
-//            $vhl->setHeures($vhl->getHeures() + $heures, $motifNonPaiement);
-//
-//            $vhl->setMotifNonPaiement($ancienMotifNonPaiement);
-//            $newHeures = $vhl->getHeures() - $heures;
-//            if ($newHeures < 0) $newHeures = 0;
-//            $vhl->setHeures($newHeures, $ancienMotifNonPaiement);
-//            return $this;
-//        }
-//
-//        $vhl->setMotifNonPaiement($motifNonPaiement); // avec le motif de non paiement transmis
         $lastHeures = $vhl->getHeures();
         $newHeures  = $heures - $lastHeures;
         $vhl->setValidation(null); // On travaille sur les non validés
@@ -264,30 +290,15 @@ class VolumeHoraireReferentielListe
                 elseif (0 < $saisieHeures) {
                     $volumeHoraire->setHeures($saisieHeures); // On ajoute les heures au premier item trouvé
                     $soldeHeures = 0; // Fin de la modif
-                }/* else{ // sinon on retire des heures sur tous les motifs jusqu'à ce que le compte soit bon
-                  $motifVhl = $vhl->getChild()->setValidation(false)->setMotifNonPaiement($volumeHoraire->getMotifNonPaiement());
-                  $motifHeures = $motifVhl->getHeures(); // on récupère le nbr d'heures du motif de non paiement
-                  if ($motifHeures + $soldeHeures <= 0){
-                  $soldeHeures += $volumeHoraire->getHeures();
-                  $volumeHoraire->setRemove(true); // on l'enlève
-                  }else{
-                  $volumeHoraire->setHeures($saisieHeures);
-                  $soldeHeures = 0;
-                  }
-                  } */
+                }
                 if (0 == $soldeHeures)
                     break; // Fin de boucle si fin de modif
             }
             if ($soldeHeures !== 0) {
-                $vhl->getChild()/* ->setMotifNonPaiement(null) */->setHeures($lastHeures + $newHeures);
+                $vhl->getChild()->setHeures($lastHeures + $newHeures);
             }
         }
-//        if (false !== $ancienMotifNonPaiement && $ancienMotifNonPaiement !== $motifNonPaiement){ // On retranche les anciennes heures si besoin...
-//            $vhl->setMotifNonPaiement($ancienMotifNonPaiement); // avec le motif de non paiement transmis
-//            $oldSaisieHeures = $vhl->getHeures() - $newHeures;
-//            if ($oldSaisieHeures < 0) $oldSaisieHeures = 0;
-//            $this->setHeures($oldSaisieHeures, $ancienMotifNonPaiement);
-//        }
+        
         return $this;
     }
 

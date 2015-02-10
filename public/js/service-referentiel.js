@@ -44,19 +44,37 @@ function ServiceReferentielListe(id)
     }
 
     this.onAfterDelete = function (serviceId) {
-        $("#" + this.id + " #referentiel-" + serviceId + "-volume-horaire-tr").remove();
-        $("#" + this.id + " #referentiel-" + serviceId + "-ligne").remove();
-        this.onAfterChange();
+        if (this.params['in-realise']){ // si on est dans le réalisé alors les lignes apparaissent toujours, même si les heures réalisées ont été supprimées
+            this.onAfterSaisie( serviceId );
+        }else{
+            $("#" + this.id + " #referentiel-" + serviceId + "-volume-horaire-tr").remove();
+            $("#" + this.id + " #referentiel-" + serviceId + "-ligne").remove();
+            this.onAfterChange();
+        }
+    }
+
+    this.setRealisesFromPrevus = function(){
+        var services = '';
+        $("#"+this.id+" table.service-referentiel tr.referentiel-ligne").each( function(){
+             if (services != '') services += ',';
+             services += $(this).data('id');
+        } );
+        $.get(
+            Url("referentiel/constatation"),
+            {services: services},
+            function(){ window.location.reload(); }
+        );
     }
 
     this.init = function () {
         var thatId = this.id;
 
+        $("#"+this.id+" .referentiel-prevu-to-realise").on('click', function(){ ServiceReferentielListe.get(thatId).setRealisesFromPrevus(); });
+        
         $("body").on("service-referentiel-modify-message", function (event, data) {
             var serviceId = null;
             if ($("div .messenger, div .alert", event.div).length ? false : true) {
                 event.div.modal('hide'); // ferme la fenêtre modale
-                console.log(event, data);
                 for (i in data) {
                     if (data[i].name == 'service[id]') {
                         serviceId = data[i].value;
@@ -152,6 +170,11 @@ function ServiceReferentielForm(id) {
         });
     }
 
+    this.prevuToRealise = function() {
+        var form = $("form#referentiel");
+        $("input.fonction-referentiel-heures", form).val($("#rappel-heures-prevu", form).data('heures'));
+    }
+
 }
 
 ServiceReferentielForm.get = function (id) {
@@ -163,17 +186,11 @@ ServiceReferentielForm.get = function (id) {
 }
 
 ServiceReferentielForm.init = function () {
-    /* Détection de changement d'état du radio interne-externe */
-    $("body").on('change', 'form#service input[name="service\\[interne-externe\\]"]', function () {
-        ServiceReferentielForm.get(this.value).showInterneExterne($(this).val());
-    });
-
-    /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
-    $("body").on("autocompleteselect", 'form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[label\\]"]', function (event, ui) {
-        var serviceId = $('form#service input[name="service\\[id\\]"]').val();
-        var elementId = ui.item.id;
-        ServiceReferentielForm.get(serviceId).refreshFormVolumesHoraires(elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val(), $("input[name='type-volume-horaire']").val());
-    });
+    var form = $("form#referentiel");
+    $("button.referentiel-prevu-to-realise", form).on('click', function(){
+        var serviceId = $('input[name="service\\[id\\]"]', form).val();
+        ServiceReferentielForm.get(serviceId).prevuToRealise();
+    } );
 }
 
 

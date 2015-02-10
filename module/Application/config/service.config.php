@@ -171,6 +171,15 @@ return [
                             ],
                         ],
                     ],
+                    'constatation' => [
+                        'type'  => 'Segment',
+                        'options' => [
+                            'route'    => '/constatation',
+                            'defaults' => [
+                                'action' => 'constatation',
+                            ],
+                        ],
+                    ],
                     'default' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -225,7 +234,7 @@ return [
                     'roles' => [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD]
                 ], [
                     'controller' => 'Application\Controller\ServiceReferentiel',
-                    'action' => ['index', 'saisie', 'suppression', 'rafraichir-ligne', /*'intervenant', 'supprimer', 'voir', 'voirLigne', 'voirListe'*/],
+                    'action' => ['index', 'saisie', 'suppression', 'rafraichir-ligne', 'constatation'],
                     'roles' => [R_ROLE],
                 ],
             ],

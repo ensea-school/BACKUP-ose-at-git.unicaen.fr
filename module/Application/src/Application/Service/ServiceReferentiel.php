@@ -11,7 +11,6 @@ use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
 use Application\Entity\Service\Recherche;
-use Zend\Session\Container as SessionContainer;
 
 /**
  * Description of ServiceReferentiel
@@ -20,18 +19,6 @@ use Zend\Session\Container as SessionContainer;
  */
 class ServiceReferentiel extends AbstractEntityService
 {
-    /**
-     *
-     * @var SessionContainer
-     */
-    private $rechercheSessionContainer;
-
-    /**
-     *
-     * @var Recherche
-     */
-    private $recherche;
-
     /**
      * Retourne la classe des entités
      *
@@ -362,6 +349,33 @@ EOS;
         return $qb;
     }
 
+    public function setRealisesFromPrevus( ServiceReferentielEntity $service )
+    {
+        $prevus = $service
+                    ->getVolumeHoraireReferentielListe()->getChild()
+                    ->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() )
+                    ->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getValide() );
+
+        $realises = $service
+                    ->getVolumeHoraireReferentielListe()->getChild()
+                    ->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getRealise() )
+                    ->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
+
+        foreach( $realises->get() as $vh ){
+            /* @var $vh \Application\Entity\Db\VolumeHoraire */
+            $vh->setRemove(true);
+        }
+
+        foreach( $prevus->get() as $vh ){
+            $nvh = new \Application\Entity\Db\VolumeHoraireReferentiel;
+            $nvh->setTypeVolumeHoraire  ( $this->getServiceTypeVolumeHoraire()->getRealise() );
+            $nvh->setServiceReferentiel ( $service                   );
+            $nvh->setHeures             ( $vh->getHeures()           );
+            $service->addVolumeHoraireReferentiel($nvh);
+        }
+        $this->save($service);
+    }
+
     /**
      * @return Intervenant
      */
@@ -384,5 +398,21 @@ EOS;
     protected function getServiceFonctionReferentiel()
     {
         return $this->getServiceLocator()->get('applicationFonctionReferentiel');
+    }
+
+    /**
+     * @return TypeVolumeHoraire
+     */
+    protected function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
+    }
+
+    /**
+     * @return EtatVolumeHoraire
+     */
+    protected function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 }

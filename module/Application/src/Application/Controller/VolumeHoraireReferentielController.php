@@ -42,12 +42,9 @@ class VolumeHoraireReferentielController extends AbstractActionController
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
-
-        if ($typeVolumeHoraire) $service->setTypeVolumehoraire( $typeVolumeHoraire );
-
         $readOnly           = 1 == (int)$this->params()->fromQuery('read-only', 0);
 
-        $volumeHoraireListe = $service->getVolumeHoraireReferentielListe();
+        $volumeHoraireListe = $service->getVolumeHoraireReferentielListe()->setTypeVolumeHoraire( $typeVolumeHoraire );
         return compact('volumeHoraireListe', 'readOnly');
     }
 
@@ -63,6 +60,7 @@ class VolumeHoraireReferentielController extends AbstractActionController
 
         $form = $this->getForm();
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->get('type-volume-horaire')->setValue($typeVolumehoraire->getId());
 
         $request = $this->getRequest();
         if ($request->isPost()){

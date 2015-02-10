@@ -365,7 +365,7 @@ class VolumeHoraireReferentiel implements HistoriqueAwareInterface
      */
     public function getEtatVolumeHoraireReferentiel()
     {
-        return $this->etatVolumeHoraireReferentiel;
+        return $this->etatVolumeHoraireReferentiel->first();
     }
 
     /**

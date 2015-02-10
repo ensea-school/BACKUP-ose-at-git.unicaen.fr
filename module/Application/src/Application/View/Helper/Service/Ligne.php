@@ -76,7 +76,6 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                 'service/rafraichir-ligne',
                 [
                     'service' => $this->getService()->getId(),
-                    'typeVolumeHoraire' => $this->getListe()->getTypeVolumehoraire()->getId()
                 ],
                 ['query' => [
                     'only-content'          => 1,

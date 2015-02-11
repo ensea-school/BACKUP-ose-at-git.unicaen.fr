@@ -26,6 +26,7 @@ class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface, W
     private $role;
 
     /**
+     * Point d'entrée.
      * 
      * @param Intervenant $intervenant
      * @param RoleInterface $role
@@ -40,7 +41,9 @@ class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface, W
     }
 
     /**
+     * Retourne le code HTML d'un lien pointant vers l'étape courante.
      * 
+     * @param string $prependText Eventuel texte à ajouter à la fin du libellé du lien
      * @return string
      */
     public function navCurrent($prependText = null)
@@ -63,24 +66,32 @@ class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface, W
     }
 
     /**
+     * Retourne le code HTML d'un lien pointant vers l'étape suivante.
      * 
+     * @param string $prependText Eventuel texte à ajouter à la fin du libellé du lien
+     * @param bool $returnNothingIfNextStepIsDone Si ce paramètre vaut true et que 
+     * l'étape suivante est franchie, rien n'est retourné
      * @return string
      */
-    public function navNext($prependText = null)
+    public function navNext($prependText = null, $returnNothingIfNextStepIsDone = true)
     {
         $wf = $this->getWorkflow(); /* @var $wf AbstractWorkflow */
         $wf->getCurrentStep();
 
-        $step = ($route = $this->getCurrentRoute()) ? $wf->getStepForRoute($route) : $wf->getStepForCurrentRoute();
-        if (!$step || !$step->getDone()) {
+        $currentStep = ($route = $this->getCurrentRoute()) ? $wf->getStepForRoute($route) : $wf->getStepForCurrentRoute();
+        if (!$currentStep || !$currentStep->getDone()) {
             return '';
         }
 
-        $nextStep = $wf->getNextStep($step);
+        $nextStep = $wf->getNextStep($currentStep);
         if (!$nextStep) {
             return '';
         }
 
+        if ($returnNothingIfNextStepIsDone && $nextStep->getDone()) {
+            return '';
+        }
+        
         $url   = $wf->getStepUrl($nextStep);
         $label = $this->getView()->translate($nextStep->getLabel($this->role)) . '...';
 
@@ -108,6 +119,7 @@ class Workflow extends AbstractHelper implements ServiceLocatorAwareInterface, W
     }
 
     /**
+     * Retourne l'objet Workflow utilisé par cette aide de vue.
      * 
      * @return AbstractWorkflow
      */

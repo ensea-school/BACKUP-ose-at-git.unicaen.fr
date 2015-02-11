@@ -17,7 +17,7 @@ class SaisieServiceStep extends Step
     {
         $labels = array(
             IntervenantPermanentRole::ROLE_ID => "Je saisis mes enseignements prévisionnels",
-            IntervenantExterieurRole::ROLE_ID => "Je saisis mes enseignements",
+            IntervenantExterieurRole::ROLE_ID => "Je saisis mes enseignements prévisionnels",
             ComposanteRole::ROLE_ID           => "J'accède aux enseignements prévisionnels de l'intervenant",
             'default'                         => "Enseignements prévisionnels",
         );

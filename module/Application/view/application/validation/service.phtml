@@ -63,6 +63,13 @@
 </table>
 <?php endif; ?>
 
+
+<?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <hr />
+    <?php echo $this->workflow($role->getIntervenant(), $role)->navNext() ?>
+<?php endif; ?>
+
+
 <script>
 $(function() {
     $("body").on("validation-delete-event", function(event, data) {

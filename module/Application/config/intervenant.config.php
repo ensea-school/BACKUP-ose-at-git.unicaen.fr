@@ -373,7 +373,7 @@ return array(
                                 ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:referentiel',
-//                                'visible' => 'IntervenantNavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'agrement' => array(
                                 // coquille vide qui réserve l'emplacement du menu "Agréments"
@@ -409,7 +409,7 @@ return array(
                                 ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:service',
-//                                'visible' => 'IntervenantNavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'validation-referentiel-realise' => array(
                                 'label'  => "Validation du référentiel réalisé",
@@ -420,7 +420,7 @@ return array(
                                 ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:referentiel',
-//                                'visible' => 'IntervenantNavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                         ),
                     ),

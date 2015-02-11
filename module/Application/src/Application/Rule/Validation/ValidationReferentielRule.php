@@ -39,7 +39,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
              * Intervenant vacataire : impossible.
              */
             else {
-                throw new LogicException("Cas inattendu : référentiel pour un vacataire!");
+                throw new LogicException("Les vacataires ne peuvent pas avoir de référentiel.");
             }
         }
         /**

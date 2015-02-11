@@ -4,6 +4,8 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
+use Common\Exception\LogicException;
+use Common\Exception\MessageException;
 use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Structure;
@@ -468,8 +470,14 @@ class ValidationController extends AbstractActionController implements ContextPr
         $rule = $this->getServiceLocator()->get('ValidationReferentielRule') /* @var $rule ValidationReferentielRule */
                 ->setIntervenant($this->intervenant)
                 ->setTypeVolumeHoraire($typeVolumeHoraire)
-                ->setRole($role)
-                ->execute();
+                ->setRole($role);
+        try {
+            $rule->execute();
+        }
+        catch (LogicException $le) {
+            throw new MessageException("Validation du référentiel impossible.", null, $le);
+        }
+
         $structureRef        = $rule->getStructureIntervention();
         $structureValidation = $rule->getStructureValidation();
         

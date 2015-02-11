@@ -2,22 +2,15 @@
 
 namespace Application\Controller;
 
-use Application\Service\Agrement as AgrementService;
+use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
 use Application\Form\Agrement\Saisie;
-use Application\Rule\Intervenant\NecessiteAgrementRule;
 use Application\Rule\Intervenant\AgrementFourniRule;
+use Application\Rule\Intervenant\NecessiteAgrementRule;
 use Application\Service\ContextProviderAwareInterface;
-use BjyAuthorize\Exception\UnAuthorizedException;
-use Common\Exception\LogicException;
-use Common\Exception\MessageException;
-use Common\Exception\RuntimeException;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Permissions\Acl\Role\RoleInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Initializer\AgrementServiceAwareInterface;
 use Application\Service\Initializer\AgrementServiceAwareTrait;
@@ -27,12 +20,21 @@ use Application\Service\Initializer\ServiceServiceAwareInterface;
 use Application\Service\Initializer\ServiceServiceAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
+use Common\Exception\LogicException;
+use Common\Exception\MessageException;
+use Common\Exception\RuntimeException;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Permissions\Acl\Role\RoleInterface;
+use Zend\View\Model\ViewModel;
 
 /**
  * Opérations sur les agréments.
  *
- * @method \Doctrine\ORM\EntityManager em()
- * @method Plugin\Context              context()
+ * @method EntityManager em()
+ * @method Context              context()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -114,27 +116,19 @@ implements ContextProviderAwareInterface,
         $agrementFourniRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $agrementFourniRule AgrementFourniRule */
         $agrementFourniRule
                 ->setIntervenant($this->intervenant)
-                ->setTypeAgrement($this->typeAgrement)/*
-                ->execute()*/;
+                ->setTypeAgrement($this->typeAgrement);
         
         /**
          * Il y a un Conseil Restreint par structure d'enseignement
          */
         if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
             $structures = $agrementFourniRule->getStructuresEnseignement();
-//            $messages[] = sprintf("Sont attendus autant d'agréments &laquo; %s &raquo; qu'il y a de composantes d'enseignement.", 
-//                    $this->typeAgrement);
         }
         /**
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
          */
         elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-//            $structureEns = $this->intervenant->getStructure()->getParenteNiv2();
-//            $structures = [ $structureEns->getId() => $structureEns];
-//            $messages[] = sprintf("Est attendu un seul agrément &laquo; %s &raquo; par la composante d'enseignement &laquo; %s &raquo;.", 
-//                    $this->typeAgrement, $structureEns);
             $structures = [ null ];
-//            $messages[] = sprintf("Est attendu un seul agrément &laquo; %s &raquo;.", $this->typeAgrement);
         }
         else {
             throw new LogicException("Type d'agrément inattendu!");
@@ -278,26 +272,6 @@ implements ContextProviderAwareInterface,
 
         $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
         
-//        /**
-//         * Il y a un Conseil Restreint par structure d'enseignement
-//         */
-//        if ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
-//            $structureEns = $this->role->getStructure();
-//        }
-//        /**
-//         * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
-//         */
-//        elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-//            $structureEns = $this->intervenant->getStructure()->getParenteNiv2();
-//        }
-//        else {
-//            throw new LogicException("Type d'agrément inattendu!");
-//        }
-//
-//        if ($this->agrement->getStructure() !== $structureEns) {
-//            throw new UnAuthorizedException("Les structures ne correspondent pas!");
-//        }
-
         $this->updateCommon();
 
         return $this->view;
@@ -331,7 +305,10 @@ implements ContextProviderAwareInterface,
     }
     
     /**
+     * Saisie d'un nouvel agrément pour plusieurs intervenants à la fois.
      * 
+     * @return ViewModel
+     * @throws LogicException
      */
     public function ajouterLotAction()
     {
@@ -348,8 +325,6 @@ implements ContextProviderAwareInterface,
          * Il y a un seul Conseil Academique pour toutes les structures d'enseignement
          */
         elseif ($this->typeAgrement->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-//            $structureEns = $this->intervenant->getStructure()->getParenteNiv2();
-//            $structureEns = $this->role->getStructure();
             $structure = null;
         }
         else {
@@ -359,45 +334,21 @@ implements ContextProviderAwareInterface,
         $this->title = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $structure);
         
         /**
-         * Recherche des intervenants candidats :
-         * - ayant des services sur la structure adéquate éventuelle
-         * - et nécessitant le type d'agrément spécifié dans la requête
-         * @todo exploiter WfIntervenantEtape
+         * Recherche des intervenants concernés : 
+         * ce sont ceux qui sont à l'étape adéquate dans le WF.
          */
         $serviceIntervenant = $this->getIntervenantService();
-        $serviceService = $this->getServiceService();
-        $qb = $serviceIntervenant->initQuery()[0]; /* @var $qb \Doctrine\ORM\QueryBuilder */
+        $qb = $serviceIntervenant->initQuery()[0]; /* @var $qb QueryBuilder */
         $qb
-                ->leftJoin("int.agrement", "ag")
-                ->join("int.statut", "sta")
-                ->join("sta.typeAgrementStatut", "tas")
-                ->join("tas.type", 'ta')
-                ->andWhere("ta = :type")->setParameter('type', $this->typeAgrement);
+                ->join("int.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
+                ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
+                ->setParameter('codeEtape', $this->typeAgrement->getCode());
         if ($structure) {
-            $serviceService->finderByStructureEns($structure, $qb);
+            $qb
+                    ->andWhere("p.structure = :structure")
+                    ->setParameter('structure', $structure);
         }
-        $serviceService->finderByAnnee($this->getContextProvider()->getGlobalContext()->getAnnee(), $qb);
-        $serviceIntervenant->join($serviceService, $qb, "service"); //print_r($qb->getQuery()->getDQL());
-        $intervenantsCandidats = $serviceIntervenant->getList($qb);
-
-        /**
-         * Parcours des intervenants candidats pour ne retenir que ceux qui sont à l'étape agrément
-         * dans leur workflow 
-         * @todo exploiter WfIntervenantEtape
-         */
-        $intervenants = [];
-        foreach ($intervenantsCandidats as $i) {
-            $wf = $this->getWorkflowIntervenant();
-            $wf
-                    ->setIntervenant($i)
-                    ->setRole($this->role);
-            
-            $step = $wf->getCurrentStep();
-            if ($step instanceof \Application\Service\Workflow\Step\AgrementStep && $step->getTypeAgrement() === $this->typeAgrement) {
-                $intervenants[$i->getId()] = $i;
-            }
-            $wf->recreateSteps();
-        }
+        $intervenants = $serviceIntervenant->getList($qb);
 
         if ($intervenants) {
             $this->agrement   = $this->getNewEntity()->setStructure($structure);

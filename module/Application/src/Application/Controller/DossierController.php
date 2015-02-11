@@ -91,17 +91,7 @@ class DossierController extends AbstractActionController implements ContextProvi
             }
         }
         
-        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
-        $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
-        $url   = $step ? $wf->getStepUrl($step) : $this->url('home');
-        if ($role instanceof IntervenantRole) {
-            $role->getIntervenant();
-            $label = $step ? ' et ' . lcfirst($step->getLabel($role)) . '...' : null;
-            $this->form->get('submit')->setAttribute('value', "J'enregistre" . $label);
-        }
-        else {
-            $url = $this->url()->fromRoute(null, array(), array(), true);
-        }
+        $this->form->get('submit')->setAttribute('value', $this->getSubmitButtonLabel());
         
         $service->canAdd($this->intervenant, true);
         
@@ -119,12 +109,8 @@ class DossierController extends AbstractActionController implements ContextProvi
                 $this->getDossierService()->enregistrerDossier($dossier, $this->intervenant);
 //                $notified = $this->notify($this->intervenant);
                 $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
-//                if ($notified) {
-//                    $this->flashMessenger()->addInfoMessage(
-//                            "Un mail doit être envoyé pour informer la composante de la modification des données personnelles...");
-//                }
                 
-                return $this->redirect()->toUrl($url);
+                return $this->redirect()->toUrl($this->getModifierRedirectionUrl());
             }
         }
         
@@ -136,6 +122,39 @@ class DossierController extends AbstractActionController implements ContextProvi
         ));
         
         return $view;
+    }
+    
+    /**
+     * @return string
+     */
+    private function getSubmitButtonLabel()
+    {
+        $label = null;
+        $role  = $this->getContextProvider()->getSelectedIdentityRole();
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
+        $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
+       
+        if ($role instanceof IntervenantRole) {
+            $role->getIntervenant();
+            $label = $step ? ' et ' . lcfirst($step->getLabel($role)) . '...' : null;
+        }
+        
+        $label = "J'enregistre" . $label;
+        
+        return $label;
+    }
+    
+    /**
+     * @return string
+     */
+    private function getModifierRedirectionUrl()
+    {
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
+        $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
+             
+        $url   = $step ? $wf->getStepUrl($step) : $this->url()->fromRoute(null, array(), array(), true);
+        
+        return $url;
     }
     
     /**

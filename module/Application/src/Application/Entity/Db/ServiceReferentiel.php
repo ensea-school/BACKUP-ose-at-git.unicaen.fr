@@ -3,17 +3,13 @@
 namespace Application\Entity\Db;
 
 use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Application\Entity\VolumeHoraireReferentielListe;
 
 /**
  * ServiceReferentiel
  */
 class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 {
-    /**
-     * @var float
-     */
-    protected $heures;
-
     /**
      * @var \DateTime
      */
@@ -114,36 +110,11 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 
     /**
      *
-     * @param \Application\Entity\Db\Annee $annee
      */
-    public function __construct(Annee $annee = null)
+    public function __construct()
     {
-        $this->setAnnee($annee);
-        $this->volumeHoraireReferentiel             = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultatServiceReferentiel    = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set heures
-     *
-     * @param int $heures 
-     * @return self 
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = $heures;
-        
-        return $this;
-    }
-
-    /**
-     * Get heures
-     *
-     * @return float 
-     */
-    public function getHeures()
-    {
-        return $this->heures;
+        $this->volumeHoraireReferentiel          = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultatServiceReferentiel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -450,6 +421,41 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     public function getFormuleServiceReferentiel()
     {
         return $this->formuleServiceReferentiel;
+    }
+
+    /**
+     *
+     * @return TypeVolumeHoraire
+     */
+    public function getTypeVolumeHoraire()
+    {
+        return $this->typeVolumeHoraire;
+    }
+
+    /**
+     *
+     * @param TypeVolumeHoraire $typeVolumeHoraire
+     * @return self
+     */
+    public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire)
+    {
+        $this->typeVolumeHoraire = $typeVolumeHoraire;
+        return $this;
+    }
+
+    /**
+     *
+     * @return VolumeHoraireReferentielListe
+     */
+    public function getVolumeHoraireReferentielListe()
+    {
+        $volumeHoraireListe = new VolumeHoraireReferentielListe($this);
+        
+        if ($this->getTypeVolumeHoraire()) {
+            $volumeHoraireListe->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
+        }
+
+        return $volumeHoraireListe;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 use Application\Entity\Db\Etape as EtapeEntity;
 use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
@@ -477,21 +478,23 @@ class Service extends AbstractEntityService
     
     /**
      * 
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureEns
      * @return QueryBuilder
      */
     public function finderServicesNonValides(
+            TypeVolumeHoraireEntity $typeVolumeHoraire,
             IntervenantEntity $intervenant = null,
             StructureEntity $structureEns = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("s2, i, vh, strens, strens2")
+                ->select("s2, i, vh, strens")
                 ->from("Application\Entity\Db\Service", 's2')
                 ->join("s2.intervenant", "i")
                 ->join("s2.volumeHoraire", 'vh')
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("s2.structureEns", 'strens')
-                ->join("strens.structureNiv2", 'strens2')
                 ->andWhere('NOT EXISTS (SELECT sv FROM Application\Entity\Db\VServiceValide sv WHERE sv.volumeHoraire = vh)')
                 ->addOrderBy("strens.libelleCourt", 'asc')
                 ->addOrderBy("s2.histoModification", 'asc');
@@ -500,7 +503,7 @@ class Service extends AbstractEntityService
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
         }
         if ($structureEns) {
-            $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
+            $qb->andWhere("strens = :structureEns")->setParameter('structureEns', $structureEns);
         }
         
 //        var_dump($qb->getQuery()->getSQL());
@@ -510,6 +513,7 @@ class Service extends AbstractEntityService
     
     /**
      * 
+     * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param TypeValidationEntity $validation
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureEns
@@ -517,18 +521,19 @@ class Service extends AbstractEntityService
      * @return QueryBuilder
      */
     public function finderServicesValides(
+            TypeVolumeHoraireEntity $typeVolumeHoraire, 
             ValidationEntity $validation = null, 
             IntervenantEntity $intervenant = null, 
             StructureEntity $structureEns = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("s, i, vh, strens, strens2")
+                ->select("s, i, vh, strens")
                 ->from("Application\Entity\Db\Service", 's')
                 ->join("s.intervenant", "i")
                 ->join("s.volumeHoraire", 'vh')
                 ->join("s.structureEns", 'strens')
-                ->join("strens.structureNiv2", 'strens2')
                 ->join("vh.validation", "v")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str') // validés par la structure spécifiée
                 ->orderBy("v.histoModification", 'desc')
@@ -541,7 +546,7 @@ class Service extends AbstractEntityService
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
         }
         if ($structureEns) {
-            $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
+            $qb->andWhere("strens = :structureEns")->setParameter('structureEns', $structureEns);
         }
         return $qb;
     }

@@ -38,6 +38,16 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
+                            // une route 'validation' dédiée à l'étape du WF est indispensable 
+                            'validation' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/validation',
+                                ),
+                                'defaults' => array(
+                                    'action' => 'index',
+                                ),
+                            ),
                             'voir' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -173,7 +183,7 @@ return array(
                             'pieces-jointes-validation' => array(
                                 'label'  => "Validation des pièces justificatives",
                                 'title'  => "Validation des pièces justificatives du dossier de l'intervenant",
-                                'route'  => 'piece-jointe/intervenant',
+                                'route'  => 'piece-jointe/intervenant/validation',
                                 'paramsInject' => array(
                                     'intervenant',
                                 ),

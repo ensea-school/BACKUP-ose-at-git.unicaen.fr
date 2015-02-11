@@ -55,7 +55,7 @@ class DossierValideRuleTest extends BaseRuleTest
     {
         parent::setUp();
         
-        $this->typeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_DONNEES_PERSO_PAR_COMP);
+        $this->typeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_DONNEES_PERSO);
         $this->rule->setTypeValidation($this->typeValidation);
         
         /**
@@ -116,7 +116,7 @@ class DossierValideRuleTest extends BaseRuleTest
         /**
          * mauvais type de validation des données perso de l'IE 
          */
-        $autreTypeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_SERVICES_PAR_COMP);
+        $autreTypeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_ENSEIGNEMENT);
         $validation = $this->getEntityProvider()->getValidation($autreTypeValidation, $this->ie);
         $this->getEntityManager()->flush($validation);
         

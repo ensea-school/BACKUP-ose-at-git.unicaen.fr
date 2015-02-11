@@ -116,10 +116,30 @@ class Intervenant extends AbstractEntityService
     }
     
     /**
+     * Finder par étape franchie dans le workflow de l'intervenant.
+     * 
+     * @param string $codeEtape Ex: WfEtape::CODE_PJ_SAISIE
+     * @param QueryBuilder $qb
+     * @return QueryBuilder
+     * @see \Application\Entity\Db\WfEtape
+     */
+    public function finderByWfEtapeFranchie($codeEtape, QueryBuilder $qb = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb);
+        $qb
+                ->join("$alias.wfIntervenantEtape", "p", \Doctrine\ORM\Query\Expr\Join::WITH, "p.franchie = 1")
+                ->join("p.etape", "e", \Doctrine\ORM\Query\Expr\Join::WITH, "e.code = :codeEtape")
+                ->setParameter('codeEtape', $codeEtape);
+
+        return $qb;
+    }
+    
+    /**
      * Finder par étape courante dans le workflow de l'intervenant.
      * 
      * @param string $codeEtape Ex: \Application\Entity\Db\WfEtape::CODE_PIECES_JOINTES
      * @param QueryBuilder $qb
+     * @return QueryBuilder
      */
     public function finderByWfEtapeCourante($codeEtape, QueryBuilder $qb = null)
     {
@@ -129,6 +149,25 @@ class Intervenant extends AbstractEntityService
                 ->join("p.etape", "e", \Doctrine\ORM\Query\Expr\Join::WITH, "e.code = :codeEtape")
                 ->setParameter('codeEtape', $codeEtape);
 
+        return $qb;
+    }
+    
+    /**
+     * Ajoutant les critères permettant de ne retenir que les intervenants ayant fourni
+     * une pièce justificative qui n'a pas encore été validée.
+     * 
+     * @param QueryBuilder $qb
+     * @return QueryBuilder
+     */
+    public function finderByPieceJointeFournieNonValidee(QueryBuilder $qb = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb);
+        $qb
+                ->join("$alias.dossier", "d")
+                ->join("d.pieceJointe", "pj")
+                ->leftJoin("pj.validation", "vpj")
+                ->andWhere("vpj IS NULL");
+        
         return $qb;
     }
     

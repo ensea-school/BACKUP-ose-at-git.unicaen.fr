@@ -149,7 +149,7 @@ class PossedeContratRuleTest extends BaseRuleTest
     {
         $typeContrat    = $this->getEntityProvider()->getTypeContrat(false);
         $structure      = $this->getEntityProvider()->getStructure();
-        $typeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_CONTRAT_PAR_COMP);
+        $typeValidation = $this->getEntityProvider()->getTypeValidationByCode(TypeValidation::CODE_CONTRAT);
 
         $this->rule->setTypeContrat($typeContrat);
         $this->rule->setStructure(null);

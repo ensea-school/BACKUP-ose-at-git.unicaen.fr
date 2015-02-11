@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * VolumeHoraireReferentiel
  */
-class VolumeHoraireReferentiel
+class VolumeHoraireReferentiel implements HistoriqueAwareInterface
 {
     /**
      * @var float
@@ -63,6 +63,13 @@ class VolumeHoraireReferentiel
     private $validation;
 
     /**
+     * remove
+     *
+     * @var boolean
+     */
+    protected $remove=false;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $etatVolumeHoraireReferentiel;
@@ -85,6 +92,20 @@ class VolumeHoraireReferentiel
         $this->validation                               = new \Doctrine\Common\Collections\ArrayCollection();
         $this->etatVolumeHoraireReferentiel             = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleResultatVolumeHoraireReferentiel  = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Détermine si le volume horaire a vocation à être supprimé ou non
+     */
+    public function setRemove($remove)
+    {
+        $this->remove = (boolean)$remove;
+        return $this;
+    }
+
+    public function getRemove()
+    {
+        return $this->remove;
     }
 
     /**
@@ -344,7 +365,7 @@ class VolumeHoraireReferentiel
      */
     public function getEtatVolumeHoraireReferentiel()
     {
-        return $this->etatVolumeHoraireReferentiel;
+        return $this->etatVolumeHoraireReferentiel->first();
     }
 
     /**

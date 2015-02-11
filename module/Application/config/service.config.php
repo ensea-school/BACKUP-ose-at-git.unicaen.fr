@@ -136,10 +136,10 @@ return [
                     ],
                 ],
             ],
-            'service-ref' => [
+            'referentiel' => [
                 'type' => 'Literal',
                 'options' => [
-                    'route' => '/service-referentiel',
+                    'route' => '/referentiel',
                     'defaults' => [
                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'   => 'ServiceReferentiel',
@@ -147,24 +147,36 @@ return [
                 ],
                 'may_terminate' => FALSE,
                 'child_routes' => [
-                    'modifier' => [
+                    'saisie' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/modifier/:id',
+                            'route'    => '/saisie[/:id]',
                             'constraints' => [
                                 'id' => '[0-9]*',
                             ],
                             'defaults' => [
-                                'action' => 'modifier',
+                                'action' => 'saisie',
                             ],
                         ],
                     ],
-                    'recherche' => [
+                    'rafraichir-ligne' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/recherche[/:term]',
+                            'route'    => '/rafraichir-ligne/:serviceReferentiel',
+                            'constraints' => [
+                                'serviceReferentiel'=> '[0-9]*',
+                            ],
                             'defaults' => [
-                                'action' => 'recherche',
+                                'action' => 'rafraichir-ligne',
+                            ],
+                        ],
+                    ],
+                    'constatation' => [
+                        'type'  => 'Segment',
+                        'options' => [
+                            'route'    => '/constatation',
+                            'defaults' => [
+                                'action' => 'constatation',
                             ],
                         ],
                     ],
@@ -222,7 +234,7 @@ return [
                     'roles' => [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD]
                 ], [
                     'controller' => 'Application\Controller\ServiceReferentiel',
-                    'action' => ['index', 'intervenant', 'saisir', 'supprimer', 'voir', 'voirLigne', 'voirListe'],
+                    'action' => ['index', 'saisie', 'suppression', 'rafraichir-ligne', 'constatation'],
                     'roles' => [R_ROLE],
                 ],
             ],
@@ -277,19 +289,21 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationService'                => 'Application\\Service\\Service',
-            'ApplicationServiceReferentiel'     => 'Application\\Service\\ServiceReferentiel',
-            'ApplicationFonctionReferentiel'     => 'Application\\Service\\FonctionReferentiel',
-            'ApplicationServiceValidation'      => 'Application\\Service\\ServiceValidation',
-            'ApplicationPeriode'                => 'Application\\Service\\Periode',
-            'ApplicationMotifNonPaiement'       => 'Application\\Service\\MotifNonPaiement',
-            'ApplicationModificationServiceDu'  => 'Application\\Service\\ModificationServiceDu',
-            'ServiceRechercheHydrator'          => 'Application\Entity\Service\RechercheHydrator',
-            'ServiceRechercheFormHydrator'      => 'Application\Form\Service\RechercheFormHydrator',
-            'FormServiceSaisieFieldsetHydrator' => 'Application\Form\Service\SaisieFieldsetHydrator',
-            'FormServiceSaisieHydrator'         => 'Application\Form\Service\SaisieHydrator',
-            'ServiceAssertion'                  => 'Application\\Assertion\\ServiceAssertion',
-            'ServiceReferentielAssertion'       => 'Application\\Assertion\\ServiceReferentielAssertion',
+            'ApplicationService'                           => 'Application\\Service\\Service',
+            'ApplicationServiceReferentiel'                => 'Application\\Service\\ServiceReferentiel',
+            'ApplicationFonctionReferentiel'               => 'Application\\Service\\FonctionReferentiel',
+            'ApplicationServiceValidation'                 => 'Application\\Service\\ServiceValidation',
+            'ApplicationPeriode'                           => 'Application\\Service\\Periode',
+            'ApplicationMotifNonPaiement'                  => 'Application\\Service\\MotifNonPaiement',
+            'ApplicationModificationServiceDu'             => 'Application\\Service\\ModificationServiceDu',
+            'ServiceRechercheHydrator'                     => 'Application\Entity\Service\RechercheHydrator',
+            'ServiceRechercheFormHydrator'                 => 'Application\Form\Service\RechercheFormHydrator',
+            'FormServiceSaisieFieldsetHydrator'            => 'Application\Form\Service\SaisieFieldsetHydrator',
+            'FormServiceSaisieHydrator'                    => 'Application\Form\Service\SaisieHydrator',
+            'FormServiceReferentielSaisieFieldsetHydrator' => 'Application\Form\ServiceReferentiel\SaisieFieldsetHydrator',
+            'FormServiceReferentielSaisieHydrator'         => 'Application\Form\ServiceReferentiel\SaisieHydrator',
+            'ServiceAssertion'                             => 'Application\\Assertion\\ServiceAssertion',
+            'ServiceReferentielAssertion'                  => 'Application\\Assertion\\ServiceReferentielAssertion',
         ],
         'factories' => [
         ],
@@ -299,17 +313,20 @@ return [
     ],
     'form_elements' => [
         'invokables' => [
-            'ServiceSaisie'         => 'Application\\Form\\Service\\Saisie',
-            'ServiceSaisieFieldset' => 'Application\\Form\\Service\\SaisieFieldset',
-            'ServiceRechercheForm'  => 'Application\\Form\\Service\\RechercheForm',
+            'ServiceSaisie'                    => 'Application\\Form\\Service\\Saisie',
+            'ServiceSaisieFieldset'            => 'Application\\Form\\Service\\SaisieFieldset',
+            'ServiceReferentielSaisie'         => 'Application\\Form\\ServiceReferentiel\\Saisie',
+            'ServiceReferentielSaisieFieldset' => 'Application\\Form\\ServiceReferentiel\\SaisieFieldset',
+            'ServiceRechercheForm'             => 'Application\\Form\\Service\\RechercheForm',
         ],
     ],
     'view_helpers' => [
         'invokables' => [
-            'serviceDl'               => 'Application\View\Helper\Service\Dl',
-            'serviceReferentielDl'    => 'Application\View\Helper\ServiceReferentiel\Dl',
-            'serviceSaisieForm'       => 'Application\View\Helper\Service\SaisieForm',
-            'serviceResume'           => 'Application\View\Helper\Service\Resume',
+            'serviceDl'                    => 'Application\View\Helper\Service\Dl',
+            'serviceReferentielDl'         => 'Application\View\Helper\ServiceReferentiel\Dl',
+            'serviceSaisieForm'            => 'Application\View\Helper\Service\SaisieForm',
+            'formServiceReferentielSaisie' => 'Application\View\Helper\ServiceReferentiel\FormSaisie',
+            'serviceResume'                => 'Application\View\Helper\Service\Resume',
             'FonctionReferentiel'     => 'Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper',
         ],
         'factories' => [

@@ -130,7 +130,21 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
                                 'action' => 'index',
-                                'type-volume-horaire-code' => 'PREVU',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
+                            ),
+                        ),
+                    ),
+                    'referentiel' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:intervenant/referentiel',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\ServiceReferentiel',
+                                'action' => 'index',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
                             ),
                         ),
                     ),
@@ -144,7 +158,21 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Service',
                                 'action' => 'index',
-                                'type-volume-horaire-code' => 'REALISE',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
+                            ),
+                        ),
+                    ),
+                    'referentiel-realise' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:intervenant/referentiel',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\ServiceReferentiel',
+                                'action' => 'index',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
                             ),
                         ),
                     ),
@@ -177,13 +205,28 @@ return array(
                     'validation-service' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:intervenant/validation/service',
+                            'route' => '/:intervenant/validation/service-prevu',
                             'constraints' => array(
                                 'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Validation',
                                 'action' => 'service',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
+                            ),
+                        ),
+                    ),
+                    'validation-service-realise' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:intervenant/validation/service-realise',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Validation',
+                                'action' => 'service',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
                             ),
                         ),
                     ),
@@ -197,6 +240,21 @@ return array(
                             'defaults' => array(
                                 'controller' => 'Validation',
                                 'action' => 'referentiel',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_PREVU,
+                            ),
+                        ),
+                    ),
+                    'validation-referentiel-realise' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/:intervenant/validation/referentiel-realise',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Validation',
+                                'action' => 'referentiel',
+                                'type-volume-horaire-code' => Entity\Db\TypeVolumeHoraire::CODE_REALISE,
                             ),
                         ),
                     ),
@@ -281,8 +339,8 @@ return array(
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'service' => array(
-                                'label'  => "Enseignements",
-                                'title'  => "Enseignements de l'intervenant",
+                                'label'  => "Enseignements prévisionnels",
+                                'title'  => "Enseignements  prévisionnelsde l'intervenant",
                                 'route'  => 'intervenant/services',
                                 'paramsInject' => array(
                                     'intervenant',
@@ -308,9 +366,9 @@ return array(
                                 'resource' => 'controller/Application\Controller\Validation:dossier',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
-                            'validation-service' => array(
-                                'label'  => "Validation des enseignements",
-                                'title'  => "Validation des enseignements de l'intervenant",
+                            'validation-service-prevu' => array(
+                                'label'  => "Validation des enseignements prévisionnels",
+                                'title'  => "Validation des enseignements prévisionnels de l'intervenant",
                                 'route'  => 'intervenant/validation-service',
                                 'paramsInject' => array(
                                     'intervenant',
@@ -319,16 +377,16 @@ return array(
                                 'resource' => 'controller/Application\Controller\Validation:service',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
-                            'validation-referentiel' => array(
-                                'label'  => "Validation du référentiel",
-                                'title'  => "Validation du référentiel de l'intervenant",
+                            'validation-referentiel-prevu' => array(
+                                'label'  => "Validation du référentiel prévisionnel",
+                                'title'  => "Validation du référentiel prévisionnel de l'intervenant",
                                 'route'  => 'intervenant/validation-referentiel',
                                 'paramsInject' => array(
                                     'intervenant',
                                 ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:referentiel',
-//                                'visible' => 'IntervenantNavigationPageVisibility',
+                                'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'agrement' => array(
                                 // coquille vide qui réserve l'emplacement du menu "Agréments"
@@ -353,6 +411,28 @@ return array(
                                 ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Service:index',
+                                'visible' => 'IntervenantNavigationPageVisibility',
+                            ),
+                            'validation-service-realise' => array(
+                                'label'  => "Validation des enseignements réalisés",
+                                'title'  => "Validation des enseignements réalisés de l'intervenant",
+                                'route'  => 'intervenant/validation-service-realise',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Validation:service',
+                                'visible' => 'IntervenantNavigationPageVisibility',
+                            ),
+                            'validation-referentiel-realise' => array(
+                                'label'  => "Validation du référentiel réalisé",
+                                'title'  => "Validation du référentiel réalisé de l'intervenant",
+                                'route'  => 'intervenant/validation-referentiel-realise',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
+                                'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\Validation:referentiel',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                             'demande-mise-en-paiement' => array(

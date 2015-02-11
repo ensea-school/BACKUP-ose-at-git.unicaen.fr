@@ -32,16 +32,25 @@ class Workflow extends AbstractWorkflow
     use StructureAwareTrait;
     use RoleAwareTrait;
     
-    const DONNEES_PERSO_SAISIE     = 'DONNEES_PERSO_SAISIE';
-    const DONNEES_PERSO_VALIDATION = 'DONNEES_PERSO_VALIDATION';
-    const SERVICE_SAISIE           = 'SERVICE_SAISIE';
-    const SERVICE_VALIDATION       = 'SERVICE_VALIDATION';
-    const REFERENTIEL_SAISIE       = 'REFERENTIEL_SAISIE';
-    const REFERENTIEL_VALIDATION   = 'REFERENTIEL_VALIDATION';
-    const PIECES_JOINTES           = 'PIECES_JOINTES';
-    const CONSEIL_RESTREINT        = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
-    const CONSEIL_ACADEMIQUE       = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
-    const CONTRAT                  = 'CONTRAT';
+    const DONNEES_PERSO_SAISIE           = 'DONNEES_PERSO_SAISIE';
+    const DONNEES_PERSO_VALIDATION       = 'DONNEES_PERSO_VALIDATION';
+    
+    const SERVICE_SAISIE                 = 'SERVICE_SAISIE';
+    const SERVICE_SAISIE_REALISE         = 'SERVICE_SAISIE_REALISE';
+    const SERVICE_VALIDATION             = 'SERVICE_VALIDATION';
+    const SERVICE_VALIDATION_REALISE     = 'SERVICE_VALIDATION_REALISE';
+    
+    const REFERENTIEL_SAISIE             = 'REFERENTIEL_SAISIE';
+    const REFERENTIEL_SAISIE_REALISE     = 'REFERENTIEL_SAISIE_REALISE';
+    const REFERENTIEL_VALIDATION         = 'REFERENTIEL_VALIDATION';
+    const REFERENTIEL_VALIDATION_REALISE = 'REFERENTIEL_VALIDATION_REALISE';
+    
+    const PIECES_JOINTES                 = 'PIECES_JOINTES';
+    
+    const CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
+    const CONSEIL_ACADEMIQUE             = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
+    
+    const CONTRAT                        = 'CONTRAT';
 
     /**
      * Spécifie l'intervenant concerné.
@@ -177,6 +186,7 @@ class Workflow extends AbstractWorkflow
 
         return $this;
     }
+    
     /**
      * Parcourt les étapes pour déterminer l'étape courante (i.e. 1ere étape non franchissable trouvée).
      * 
@@ -266,31 +276,11 @@ class Workflow extends AbstractWorkflow
     }
     
     /**
-     * Instanciation d'une étape de WF spécifiée par le nom de sa classe.
+     * Instanciation de l'étape de WF spécifiée.
      * 
-     * @param string $stepClass Classe à instancier
-     * @param string $key Clé de l'étape.
-     * @param boolean $visible Témoin de visibilité de l'étape
+     * @param WfEtape $wfEtape étape
      * @return Step
      */
-//    protected function createStep($stepClass, $key, $visible = true)
-//    {
-//        if (!$stepClass) {
-//            $stepClass = 'Application\Service\Workflow\Step\GenericStep';
-//        }
-//        
-//        $step = new $stepClass();
-//        $step
-//                ->setKey($key)
-//                ->setVisible($visible);
-//        
-//        if ($step instanceof TypeAgrementAwareInterface) {
-//            $typeAgrement = $this->getServiceTypeAgrement()->getRepo()->findOneByCode($key);
-//            $step->setTypeAgrement($typeAgrement);
-//        }
-//        
-//        return $step;
-//    }
     protected function createStep(WfEtape $wfEtape)
     {
         $stepClass = $wfEtape->getStepClass() ? : 'Application\Service\Workflow\Step\GenericStep';

@@ -64,10 +64,10 @@ class Indicateur extends \Application\Entity\Db\Indicateur implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'enabled', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'ordre', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'structureDependant');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'enabled', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'ordre');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'enabled', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'ordre', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'structureDependant');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'enabled', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Db\\Indicateur' . "\0" . 'ordre');
     }
 
     /**
@@ -263,28 +263,6 @@ class Indicateur extends \Application\Entity\Db\Indicateur implements \Doctrine\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getType', array());
 
         return parent::getType();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setLibelle($libelle)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLibelle', array($libelle));
-
-        return parent::setLibelle($libelle);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getLibelle()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLibelle', array());
-
-        return parent::getLibelle();
     }
 
     /**

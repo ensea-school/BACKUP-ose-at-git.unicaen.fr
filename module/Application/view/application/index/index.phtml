@@ -64,5 +64,5 @@
 <!----------------------------- Feuille de route --------------------------->
 <?php if (isset($wf)): ?>
 <h2>Feuille de route</h2>
-<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', array('wf' => $wf, 'role' => $role)); ?>
+<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', ['intervenant' => $intervenant, 'role' => $role]); ?>
 <?php endif; ?>

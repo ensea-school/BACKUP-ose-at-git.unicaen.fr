@@ -72,8 +72,8 @@ class Etape extends AbstractEntityService
 
         $qb
                 ->join("$alias.source", "src")
-                ->andWhere("SIZE ($alias.elementPedagogique) = 0")
-                ->andWhere("SIZE ($alias.cheminPedagogique) = 0")
+                ->andWhere("NOT EXISTS (SELECT eptmp FROM Application\Entity\Db\ElementPedagogique eptmp WHERE eptmp.etape = $alias)")
+                ->andWhere("NOT EXISTS (SELECT cptmp FROM Application\Entity\Db\CheminPedagogique  cptmp WHERE cptmp.etape = $alias)")
                 ->andWhere("$alias.specifiqueEchanges = 0 OR src.code = :sourceOse")
                 ->setParameter('sourceOse', \Application\Entity\Db\Source::CODE_SOURCE_OSE);
 

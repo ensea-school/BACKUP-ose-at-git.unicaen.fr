@@ -53,6 +53,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $jsFiles = [
             'js/elementPedagogiqueRecherche.js',
             'js/service.js',
+            'js/service-referentiel.js',
             'js/paiement.js'
         ];
 

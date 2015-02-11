@@ -31,6 +31,6 @@ class ValidationPiecesJointesStep extends Step
                 
                 ->setLabels($labels)
                 ->setDescriptions($descriptions)
-                ->setRoute('piece-jointe/intervenant');
+                ->setRoute('piece-jointe/intervenant/validation');
     }
 }

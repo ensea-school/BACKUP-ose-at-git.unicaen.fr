@@ -71,17 +71,17 @@ interface ServiceAPayerInterface
     /**
      * Add miseEnPaiement
      *
-     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
+     * @param MiseEnPaiement $miseEnPaiement
      * @return FormuleResultatService
      */
-    public function addMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement);
+    public function addMiseEnPaiement(MiseEnPaiement $miseEnPaiement);
 
     /**
      * Remove miseEnPaiement
      *
-     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
+     * @param MiseEnPaiement $miseEnPaiement
      */
-    public function removeMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement);
+    public function removeMiseEnPaiement(MiseEnPaiement $miseEnPaiement);
 
     /**
      * Get miseEnPaiement
@@ -94,4 +94,12 @@ interface ServiceAPayerInterface
      * @return MiseEnPaiementListe
      */
     public function getMiseEnPaiementListe( \DateTime $dateMiseEnPaiement=null, Periode $periodePaiement=null );
+
+    /**
+     * Get centreCout
+     *
+     * @param TypeHeures $typeHeures
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentreCout( TypeHeures $typeHeures=null );
 }

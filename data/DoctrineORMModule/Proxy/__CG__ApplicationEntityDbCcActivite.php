@@ -64,10 +64,10 @@ class CcActivite extends \Application\Entity\Db\CcActivite implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fa', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fc', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fi', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'referentiel', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoCreateur');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fa', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fc', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fcMajorees', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fi', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'referentiel', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoCreateur');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fa', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fc', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fi', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'referentiel', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoCreateur');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fa', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fc', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fcMajorees', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'fi', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'libelle', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'referentiel', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\CcActivite' . "\0" . 'histoCreateur');
     }
 
     /**
@@ -237,6 +237,28 @@ class CcActivite extends \Application\Entity\Db\CcActivite implements \Doctrine\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFc', array());
 
         return parent::getFc();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFcMajorees($fcMajorees)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFcMajorees', array($fcMajorees));
+
+        return parent::setFcMajorees($fcMajorees);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFcMajorees()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFcMajorees', array());
+
+        return parent::getFcMajorees();
     }
 
     /**
@@ -450,6 +472,17 @@ class CcActivite extends \Application\Entity\Db\CcActivite implements \Doctrine\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHistoCreateur', array());
 
         return parent::getHistoCreateur();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function typeHeuresMatches(\Application\Entity\Db\TypeHeures $typeHeures)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'typeHeuresMatches', array($typeHeures));
+
+        return parent::typeHeuresMatches($typeHeures);
     }
 
 }

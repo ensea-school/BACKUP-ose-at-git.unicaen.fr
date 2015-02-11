@@ -27,6 +27,11 @@ class CcActivite
     /**
      * @var boolean
      */
+    private $fcMajorees;
+
+    /**
+     * @var boolean
+     */
     private $fi;
 
     /**
@@ -142,6 +147,29 @@ class CcActivite
     public function getFc()
     {
         return $this->fc;
+    }
+
+    /**
+     * Set fcMajorees
+     *
+     * @param boolean $fcMajorees
+     * @return CcActivite
+     */
+    public function setFcMajorees($fcMajorees)
+    {
+        $this->fcMajorees = $fcMajorees;
+
+        return $this;
+    }
+
+    /**
+     * Get fcMajorees
+     *
+     * @return boolean
+     */
+    public function getFcMajorees()
+    {
+        return $this->fcMajorees;
     }
 
     /**
@@ -359,5 +387,24 @@ class CcActivite
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * détermine si un type d'heures peut être appliqué à ce type d'activité de centre de coût ou non
+     *
+     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @return boolean
+     */
+    public function typeHeuresMatches( TypeHeures $typeHeures )
+    {
+        $code = $typeHeures->getCode();
+        switch( $code ){
+            case TypeHeures::FI         : return $this->getFi();
+            case TypeHeures::FA         : return $this->getFa();
+            case TypeHeures::FC         : return $this->getFc();
+            case TypeHeures::FC_MAJOREES: return $this->getFcMajorees();
+            case TypeHeures::REFERENTIEL: return $this->getReferentiel();
+        }
+        return false;
     }
 }

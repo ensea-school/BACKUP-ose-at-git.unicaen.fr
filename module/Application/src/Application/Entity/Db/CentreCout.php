@@ -397,4 +397,15 @@ class CentreCout
     {
         return $this->getSourceCode().' - '.$this->getLibelle();
     }
+
+    /**
+     * détermine si un type d'heures peut être appliqué à ce type de ressource ou non
+     *
+     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @return boolean
+     */
+    public function typeHeuresMatches( TypeHeures $typeHeures )
+    {
+        return $this->getActivite()->typeHeuresMatches($typeHeures) && $this->getTypeRessource()->typeHeuresMatches($typeHeures);
+    }
 }

@@ -16,7 +16,7 @@ return [
                         'action' => 'index',
                     ],
                 ],
-                'child_routes' => [
+               /*'child_routes' => [
                     'saisie' => [
                         'type'    => 'Literal',
                         'may_terminate' => false,
@@ -27,26 +27,7 @@ return [
                             ],
                         ],
                     ],
-                    'centre-de-cout' => [
-                        'type'    => 'Literal',
-                        'may_terminate' => false,
-                        'options' => [
-                            'route'    => '/centre-de-cout',
-                        ],
-                        'child_routes' => [
-                            'recherche' => [
-                                'type'    => 'Literal',
-                                'may_terminate' => true,
-                                'options' => [
-                                    'route'    => '/recherche',
-                                    'defaults' => [
-                                        'action' => 'centreCoutRecherche',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
+                ],*/
             ],
         ],
     ],
@@ -55,7 +36,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['index','miseEnPaiement','miseEnPaiementSaisie','centreCoutRecherche'],
+                    'action'     => ['index','demandeMiseEnPaiement'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
                 ],
             ],
@@ -63,15 +44,14 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
+            'ApplicationServiceAPayer'         => 'Application\Service\ServiceAPayer',
             'ApplicationTypeHeures'            => 'Application\Service\TypeHeures',
             'ApplicationCentreCout'            => 'Application\Service\CentreCout',
-            'FormMiseEnPaiementSaisieHydrator' => 'Application\Form\Paiement\MiseEnPaiementSaisieHydrator',
         ],
     ],
     'view_helpers' => [
         'invokables' => [
-            'PaiementLigne'             => 'Application\View\Helper\Paiement\LigneViewHelper',
-            'MiseEnPaiementSaisieForm'  => 'Application\View\Helper\Paiement\MiseEnPaiementSaisieFormViewHelper'
+            'DemandeMiseEnPaiement'            => 'Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper',
         ],
     ],
     'form_elements' => [

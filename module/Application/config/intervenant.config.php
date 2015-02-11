@@ -148,16 +148,16 @@ return array(
                             ),
                         ),
                     ),
-                    'mise-en-paiement' => array(
+                    'demande-mise-en-paiement' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/:intervenant/mise-en-paiement',
+                            'route'    => '/:intervenant/demande-mise-en-paiement',
                             'constraints' => array(
                                 'intervenant' => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Paiement',
-                                'action' => 'MiseEnPaiement',
+                                'action' => 'demandeMiseEnPaiement',
                             ),
                         ),
                     ),
@@ -355,10 +355,10 @@ return array(
                                 'resource' => 'controller/Application\Controller\Service:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
-                            'mise-en-paiement' => array(
-                                'label'  => "Mise en paiement",
-                                'title'  => "Mise en paiement",
-                                'route'  => 'intervenant/mise-en-paiement',
+                            'demande-mise-en-paiement' => array(
+                                'label'  => "Demande de mise en paiement",
+                                'title'  => "Demande de mise en paiement",
+                                'route'  => 'intervenant/demande-mise-en-paiement',
                                 'paramsInject' => array(
                                     'intervenant',
                                 ),

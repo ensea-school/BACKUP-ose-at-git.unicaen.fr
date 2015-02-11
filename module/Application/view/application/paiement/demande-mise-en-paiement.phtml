@@ -1,0 +1,19 @@
+<?php
+
+/* @var $intervenant Application\Entity\Db\Intervenant */
+/* @var $serviceaAPayer Application\Entity\Db\ServiceAPayerInterface[] */
+
+$title = 'Demande de mise en paiement';
+if ($intervenant){
+    $title .= ' <small>'.$intervenant.'</small>';
+    $this->headTitle()->append($intervenant->getNomUsuel())->append($title);
+}else{
+    $this->headTitle()->append($title);
+}
+
+$this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
+
+<h1 class="page-header"><?php echo $title; ?></h1>
+
+<?php
+echo $this->demandeMiseEnPaiement( $servicesAPayer );

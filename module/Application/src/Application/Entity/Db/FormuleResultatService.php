@@ -50,6 +50,11 @@ class FormuleResultatService implements ServiceAPayerInterface
     private $miseEnPaiement;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $centreCout;
+
+    /**
      * @var \Application\Entity\Db\FormuleResultat
      */
     private $formuleResultat;
@@ -66,6 +71,7 @@ class FormuleResultatService implements ServiceAPayerInterface
     public function __construct()
     {
         $this->miseEnPaiement = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->centreCout = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -228,6 +234,7 @@ class FormuleResultatService implements ServiceAPayerInterface
             case TypeHeures::FI: return $this->getHeuresComplFi();
             case TypeHeures::FA: return $this->getHeuresComplFa();
             case TypeHeures::FC: return $this->getHeuresComplFc();
+            case TypeHeures::FC_MAJOREES: return $this->getHeuresComplFcMajorees();
             case TypeHeures::REFERENTIEL: return $this->getHeuresComplReferentiel();
         }
         throw new \Common\Exception\RuntimeException('Type d\'heures inconnu');
@@ -246,9 +253,9 @@ class FormuleResultatService implements ServiceAPayerInterface
             case TypeHeures::FI: return $this->setHeuresComplFi( $heures );
             case TypeHeures::FA: return $this->setHeuresComplFa( $heures );
             case TypeHeures::FC: return $this->setHeuresComplFc( $heures );
-            case TypeHeures::REFERENTIEL: return $this->setHeuresComplReferentiel( $heures );
+            case TypeHeures::FC_MAJOREES: return $this->setHeuresComplFcMajorees( $heures );
         }
-        throw new \Common\Exception\RuntimeException('Type d\'heures inconnu');        
+        throw new \Common\Exception\RuntimeException('Type d\'heures inconnu ou incorrect');
     }
 
     /**
@@ -305,6 +312,24 @@ class FormuleResultatService implements ServiceAPayerInterface
     public function getMiseEnPaiement()
     {
         return $this->miseEnPaiement;
+    }
+
+    /**
+     * Get centreCout
+     *
+     * @param TypeHeures $typeHeures
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentreCout( TypeHeures $typeHeures=null )
+    {
+        $filter = function( CentreCout $centreCout ) use ($typeHeures) {
+            if ($typeHeures){
+                return $centreCout->typeHeuresMatches( $typeHeures );
+            }else{
+                return true;
+            }
+        };
+        return $this->centreCout->filter($filter);
     }
 
     /**

@@ -43,6 +43,41 @@ Url.getBase = function(){
     }
 }
 
+Util = {
+    formattedHeures: function( heures )
+    {
+        heures = parseFloat( heures );
+        var hclass = (heures < 0) ? 'negatif' : 'positif';
+
+        heures = Math.round( heures * 100 ) / 100;
+        var parts = heures.toString().split(".");
+        if (undefined === parts[1]){ parts[1] = '<span class="heures-dec-00">,00</span>'; }else{ parts[1] = ',' + parts[1]; }
+        return '<span class="heures heures-'+hclass+'">'+parts[0]+parts[1]+'</span>';
+    },
+
+    json: {
+
+        count: function( tab )
+        {
+            var key, result = 0;
+            for(key in tab) {
+              if(tab.hasOwnProperty(key)) {
+                result++;
+              }
+            }
+            return result;
+        },
+
+        first: function( tab )
+        {
+            for( var key in tab ){
+                return tab[key];
+            }
+        }
+        
+    }
+};
+
 
 /*************** Propre à l'affichage des services référentiels ***************/
 

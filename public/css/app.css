@@ -60,6 +60,10 @@ table {
 
 /* Divers : affichage des heures */
 
+input[type=number] {
+    padding-right:1px;
+}
+
 span.heures-negatif {
     color: red;
 }

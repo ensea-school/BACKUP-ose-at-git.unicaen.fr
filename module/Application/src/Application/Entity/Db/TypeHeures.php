@@ -10,6 +10,7 @@ class TypeHeures
     const FI          = 'fi';
     const FA          = 'fa';
     const FC          = 'fc';
+    const FC_MAJOREES = 'fc_majorees';
     const REFERENTIEL = 'referentiel';
 
     /**

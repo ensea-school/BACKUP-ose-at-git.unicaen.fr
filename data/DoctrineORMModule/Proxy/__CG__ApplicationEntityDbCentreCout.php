@@ -485,4 +485,15 @@ class CentreCout extends \Application\Entity\Db\CentreCout implements \Doctrine\
         return parent::__toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function typeHeuresMatches(\Application\Entity\Db\TypeHeures $typeHeures)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'typeHeuresMatches', array($typeHeures));
+
+        return parent::typeHeuresMatches($typeHeures);
+    }
+
 }

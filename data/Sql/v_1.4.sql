@@ -77,13 +77,29 @@ INSERT INTO TYPE_HEURES(
     HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID
 )VALUES(
     type_heures_id_seq.nextval,
-    'referentiel',
-    'Référentiel',
-    'Référentiel',
+    'fc_majorees',
+    'Fc. Maj.',
+    'Formation continue majorée',
     4,
     sysdate,ose_parametre.get_ose_user,sysdate,ose_parametre.get_ose_user
 );
 
+INSERT INTO TYPE_HEURES(
+    ID,
+    CODE,
+    LIBELLE_COURT,
+    LIBELLE_LONG,
+    ORDRE,
+    HISTO_CREATION,HISTO_CREATEUR_ID,
+    HISTO_MODIFICATION,HISTO_MODIFICATEUR_ID
+)VALUES(
+    type_heures_id_seq.nextval,
+    'referentiel',
+    'Référentiel',
+    'Référentiel',
+    5,
+    sysdate,ose_parametre.get_ose_user,sysdate,ose_parametre.get_ose_user
+);
 
 INSERT INTO VOLUME_HORAIRE_REF (
     ID,

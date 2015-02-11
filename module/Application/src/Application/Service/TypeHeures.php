@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\ServiceAPayerInterface;
+use Application\Entity\Db\TypeHeures as TypeHeuresEntity;
 
 /**
  * Description of TypeHeures
@@ -53,19 +54,23 @@ class TypeHeures extends AbstractEntityService
     {
         $list = [];
         if ($serviceAPayer->getHeuresComplFi() != 0){
-            $th = $this->getByCode('fi');
+            $th = $this->getByCode(TypeHeuresEntity::FI);
             $list[$th->getId()] = $th;
         }
         if ($serviceAPayer->getHeuresComplFa() != 0){
-            $th = $this->getByCode('fa');
+            $th = $this->getByCode(TypeHeuresEntity::FA);
             $list[$th->getId()] = $th;
         }
         if ($serviceAPayer->getHeuresComplFc() != 0){
-            $th = $this->getByCode('fc');
+            $th = $this->getByCode(TypeHeuresEntity::FC);
+            $list[$th->getId()] = $th;
+        }
+        if ($serviceAPayer->getHeuresComplFcMajorees() != 0){
+            $th = $this->getByCode(TypeHeuresEntity::FC_MAJOREES);
             $list[$th->getId()] = $th;
         }
         if ($serviceAPayer->getHeuresComplReferentiel() != 0){
-            $th = $this->getByCode('referentiel');
+            $th = $this->getByCode(TypeHeuresEntity::REFERENTIEL);
             $list[$th->getId()] = $th;
         }
         return $list;

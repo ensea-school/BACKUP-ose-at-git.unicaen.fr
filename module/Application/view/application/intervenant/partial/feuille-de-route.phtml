@@ -1,11 +1,13 @@
+<?php 
+$wf = $this->workflow($this->intervenant, $this->role)->getWorkflow(); 
+/* @var $wf \Application\Service\Workflow\AbstractWorkflow */
+?>
+
 <style>
     .step.no     { width: 50px; }
     .step.status { width: 50px; }
     td.step.status { text-align: center; }
 </style>
-
-<?php $wf = $this->wf; /* @var $wf \Application\Service\Workflow\AbstractWorkflow */ ?>
-
 
 <div class="row">
     <div class="col-md-9">
@@ -17,11 +19,11 @@
                         <?php 
                         $etape  = sprintf('<span class="label label-primary">%s</span> ', $step->getIndex());
                         $etape .= (!$step->getRoute() || $wf->isStepAfterCurrentStep($step) && !$step->getDone()) ?
-                            $step->getLabel($role) : 
+                            $step->getLabel($this->role) : 
                             sprintf('<a title="%s" href="%s">%s</a>', 
                                 "Cliquez sur ce lien pour accéder à la page correspondant à cette étape", 
                                 $wf->getStepUrl($step),
-                                $step->getLabel($role));
+                                $step->getLabel($this->role));
                         echo $etape;
                         ?>
                         <?php
@@ -40,49 +42,6 @@
         </ul> 
     </div>
 </div>  
-        
-<!--<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th class="step status"></th>
-            <th>Formation</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($this->wf->getSteps() as $step): /* @var $step \Application\Service\Workflow\Step */ ?>
-        <tr>
-            <td class="step status">
-                <?php
-                if ($step->getDone()) {
-                    echo '<span title="Fait" class="glyphicon glyphicon-ok text-success"></span>';
-                }
-                else {
-                    echo '<span title="À faire" class="glyphicon glyphicon-remove text-danger"></span>';
-                }
-                ?>
-            </td>
-            <td>
-                <a class="details pull-right" href="#" title="Cliquez pour afficher plus d'informations"><small>En savoir plus...</small></a>
-                <p>
-                    <?php 
-                    $etape  = sprintf('<span class="label label-primary">%s</span> ', $step->getIndex());
-                    $etape .= !$step->getRoute() || $wf->isStepAfterCurrentStep($step) ?
-                        $step->getLabel($role) : 
-                        sprintf('<a title="%s" href="%s">%s</a>', 
-                            "Cliquez sur ce lien pour accéder à la page correspondant à cette étape", 
-                            $wf->getStepUrl($step),
-                            $step->getLabel($role));
-                    echo $etape;
-                    ?>
-                </p> 
-                <div class="details" style="display: none;">
-                    <small><?php echo $step->getDescription($this->role) ?></small>
-                </div>
-            </td>
-        </tr>
-    <?php endforeach ?>
-    </tbody>
-</table>-->
 
 <script>
 $(function() {

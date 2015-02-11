@@ -158,10 +158,6 @@ class Ligne extends AbstractHtmlElement
         $vhlListe = $service->getVolumeHoraireReferentielListe();
         $vhlView  = $this->getView()->volumeHoraireReferentielListe($vhlListe);  /* @var $vhlView ListeHelper */
         
-//        var_dump(array_map(function(\Application\Entity\Db\VolumeHoraireReferentiel $v) {                    
-//            var_dump($v->getTypeVolumeHoraire()." ".$v->getHeures());
-//        }, $service->getVolumeHoraireReferentiel()->toArray()));
-        
         if ($this->isInRealise()) {
             $out .= '<table style="width: 100%">';
             
@@ -172,7 +168,7 @@ class Ligne extends AbstractHtmlElement
                     ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
                     ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
             $vhlView->setReadOnly(true);
-            $out .= '<tr><td><strong>Prévisionnel :</strong></td><td class="heures">' . $vhlView->render() . '</td></tr>';
+            $out .= '<tr style="opacity: 0.5"><td><strong>Prévisionnel :</strong></td><td class="heures">' . $vhlView->render() . '</td></tr>';
             
             /**
              * REALISE

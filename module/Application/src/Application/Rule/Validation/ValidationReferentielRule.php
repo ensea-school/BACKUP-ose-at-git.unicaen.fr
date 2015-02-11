@@ -49,7 +49,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
             /**
              * Validation par chaque structure du référentiel.
              */
-            $this->structureValidation = $this->structureRole;
+            $this->structureIntervention = $this->structureRole;
         }
 
         if ($this->structureIntervention) {

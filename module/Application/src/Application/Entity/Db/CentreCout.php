@@ -30,9 +30,9 @@ class CentreCout
     private $libelle;
 
     /**
-     * @var integer
+     * @var CentreCout
      */
-    private $parentId;
+    private $parent;
 
     /**
      * @var string
@@ -173,26 +173,26 @@ class CentreCout
     }
 
     /**
-     * Set parentId
+     * Set parent
      *
-     * @param integer $parentId
+     * @param CentreCout $parent
      * @return CentreCout
      */
-    public function setParentId($parentId)
+    public function setParent( CentreCout $parent = null )
     {
-        $this->parentId = $parentId;
+        $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * Get parentId
+     * Get parent
      *
-     * @return integer 
+     * @return CentreCout
      */
-    public function getParentId()
+    public function getParent()
     {
-        return $this->parentId;
+        return $this->parent;
     }
 
     /**

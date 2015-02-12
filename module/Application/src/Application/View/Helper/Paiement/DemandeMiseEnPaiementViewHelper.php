@@ -70,7 +70,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     public function renderServiceAPayer( ServiceAPayerInterface $serviceAPayer )
     {
         $out  = '<div class="service-a-payer" id="'.$this->getServiceAPayerId($serviceAPayer).'">';
-        $out .= '<div class="head">'.$this->renderHead( $serviceAPayer ).'</div>';
+        $out .= '<ul class="breadcrumb"><li>'.$this->renderHead( $serviceAPayer ).'</li></ul>';
         $typesHeures = $this->getServiceTypeHeures()->getListFromServiceAPayer($serviceAPayer);
         $colSpan = 12 / count($typesHeures);
         if ($colSpan > 6) $colSpan = 6;
@@ -80,7 +80,6 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         }
         $out .= '</div>';
         $out .= '</div>';
-        $out .= '<hr />';
         return $out;
     }
 
@@ -111,20 +110,15 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         ];
         $out  = '<div '.$this->htmlAttribs($attrs).'>';
         
-        $out .= '<h4>'.$typeHeures->toHtml().'</h4>';
-        
-        
-
         $attrs = [
             'class'         => ['table', 'table-condensed', 'table-extra-condensed', 'table-bordered', 'mise-en-paiement-liste'],
             'id'            => self::$miseEnPaiementListeIdSequence++,
-            'style'         => ['margin:auto;width:90%'],
             'data-params'   => json_encode($params),
         ];
         $out .= '<table '.$this->htmlAttribs($attrs).'>';
-        $out .= '<thead><tr>';
+        $out .= '<thead><tr><th colspan="3">'.$typeHeures->getLibelleLong().'</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
-        $out .= '<th style="width:50%">Centre de coût</th>';
+        $out .= '<th>Centre de coût</th>';
         $out .= '<th>&nbsp;</th>';
         $out .= '</tr></thead>';
 

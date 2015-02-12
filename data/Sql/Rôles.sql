@@ -21,9 +21,9 @@ ORDER BY
 
 -- pour créer un nouveau rôle
 
-select nom_usuel, prenom, source_code from personnel where nom_usuel like '%Frebourg%';
+select nom_usuel, prenom, source_code from personnel where nom_patronymique like '%Fafin%';
 
-select libelle_court, libelle_long, source_code from structure where libelle_court like '%Uni%' AND niveau = 2;
+select libelle_court, libelle_long, source_code from structure where libelle_court like '%Méde%' AND niveau = 2;
 
 select * from type_role where histo_destruction is null;
 
@@ -34,10 +34,10 @@ INSERT INTO ROLE (
     SOURCE_CODE,
     ID, SOURCE_ID, HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
 )VALUES(
-    (SELECT ID FROM structure WHERE source_code = 'UNICAEN'),
-    (SELECT ID FROM personnel WHERE source_code ='5838'),
+    (SELECT ID FROM structure WHERE source_code = 'M17'),
+    (SELECT ID FROM personnel WHERE source_code ='19542'),
     (SELECT ID FROM TYPE_ROLE WHERE code = 'gestionnaire-composante'),
-    'gest-5838',
+    'gest-19542',
     ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 4, 4 -- laurent
 );
 

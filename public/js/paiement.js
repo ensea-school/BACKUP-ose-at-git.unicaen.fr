@@ -115,14 +115,14 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
         }else{
             out += '<div class="alert alert-danger" role="alert">Aucun centre de coût ne correspond. Saisie impossible.</div>';
         }
-        out += '</td><td style="vertical-align:middle">&nbsp;<a role="button" class="btn btn-xs btn-default action-delete"><span class="glyphicon glyphicon-remove"></span> Supprimer</a></td></tr>';
+        out += '</td><td style="vertical-align:middle">&nbsp;<a role="button" class="action-delete" title="Supprimer la ligne"><span class="glyphicon glyphicon-remove"></span></a></td></tr>';
         this.element.append(out);
 
         var heuresElement = this.element.find(".mise-en-paiement#"+id+" input[name='heures']");
         heuresElement.on('change', function(){
             that.onHeuresChange( $(this) );
         } );
-        this.element.find('.action-delete').on('click', function(){
+        this.element.find(".mise-en-paiement#"+id+" .action-delete").on('click', function(){
             that.removeMiseEnPaiement( id );
         } );
 
@@ -173,8 +173,10 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
 
         if (0 == this.params['heures-non-dmep']){
             this.element.find('.heures-non-dmep').parents('tr').hide();
+            this.element.addClass('bg-success');
         }else{
             this.element.find('.heures-non-dmep').parents('tr').show();
+            this.element.removeClass('bg-success');
         }
     }
 

@@ -17,6 +17,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Zend\Console\Request as ConsoleRequest;
 
 class Module implements ControllerPluginProviderInterface, ViewHelperProviderInterface, ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
@@ -25,7 +26,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $sm = $e->getApplication()->getServiceManager();
         $sm->get('translator');
 
-        $this->injectPublicFiles($sm);
+        if (!$e->getRequest() instanceof ConsoleRequest) {
+            $this->injectPublicFiles($sm);
+        }
 
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();

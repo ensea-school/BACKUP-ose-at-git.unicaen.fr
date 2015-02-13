@@ -86,8 +86,9 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
         $res .= '<tr>';
         foreach ($typesHeures as $th) {
             $thElement = new Select($th->getCode());
-            $thElement->setValueOptions(['' => '(Aucun)'] + \UnicaenApp\Util::collectionAsOptions($form->getCentresCouts($th)));
-            $thElement->setAttribute('class', 'form-control type-heures');
+            $thElement
+                    ->setValueOptions(['' => '(Aucun)'] + $form->getCentresCoutsToArray($th))
+                    ->setAttribute('class', 'form-control type-heures');
             
             $res .= '<th>';
             $res .= $this->getView()->formSelect($thElement);

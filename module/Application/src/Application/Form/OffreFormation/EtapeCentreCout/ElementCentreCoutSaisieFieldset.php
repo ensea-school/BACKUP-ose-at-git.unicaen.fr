@@ -8,7 +8,6 @@ use Application\Entity\Db\TypeHeures;
 use Application\Entity\Db\CentreCout;
 use Application\Entity\Db\Structure;
 use Common\Exception\RuntimeException;
-use UnicaenApp\Util;
 use Zend\Form\Element\Select;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -50,19 +49,6 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
     }
 
     /**
-     * Retourne les centres de coûts possibles pour le type d'heure spécifié.
-     *
-     * @return CentreCout[]
-     */
-    public function getCentresCouts(TypeHeures $th)
-    {
-        $structure = $this->getStructure();
-        $f         = function(CentreCout $cc) use ($structure) { return $cc->getStructure() === $structure; };
-        
-        return $th->getCentreCout()->filter($f);
-    }
-
-    /**
      * 
      */
     public function build()
@@ -83,7 +69,7 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
         $element = new Select($th->getCode());
         $element
                 ->setLabel($th->getLibelleCourt())
-                ->setValueOptions(['' => '(Aucun)'] + Util::collectionAsOptions($this->getCentresCouts($th)))
+                ->setValueOptions(['' => '(Aucun)'] + $this->getForm()->getCentresCoutsToArray($th))
                 ->setAttribute('class', 'type-heures');
             
         return $element;
@@ -121,6 +107,22 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
         }
         
         return $filters;
+    }
+    
+    /**
+     * @var EtapeCentreCoutSaisieForm
+     */
+    protected $form;
+    
+    public function setForm(EtapeCentreCoutSaisieForm $form)
+    {
+        $this->form = $form;
+        return $this;
+    }
+    
+    protected function getForm()
+    {
+        return $this->form;
     }
     
     /**

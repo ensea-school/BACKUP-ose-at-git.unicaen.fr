@@ -2,17 +2,19 @@
 
 namespace Application\Form\OffreFormation\EtapeCentreCout;
 
+use Application\Entity\Db\CentreCout;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\TypeHeures;
-use Application\Entity\Db\CentreCout;
+use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset;
+use Application\Service\CentreCout as CentreCoutService;
 use Common\Exception\RuntimeException;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\CentreCout as CentreCoutService;
-use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset;
 
 /**
  * Formulaire de saisie, pour chacun des éléments d'une étape, des centres de coûts
@@ -71,8 +73,8 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
         $f = $this->getServiceLocator()->get('ElementCentreCoutSaisieFieldset'); /* @var $f ElementCentreCoutSaisieFieldset */
         $f->setName('EL' . $element->getId());
         
-        // fournit au fieldset la structure à utiliser pour filtrer les centres de coûts
-        $f->setStructure($this->getEtape()->getStructure());
+        // fournit au fieldset un moyen de se procurer les centres de coûts sans surcoût(!)
+        $f->setForm($this);
         
         return $f;
     }
@@ -161,16 +163,41 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
      *
      * @return CentreCout[]
      */
-    public function getCentresCouts(TypeHeures $th)
+    protected function getCentresCouts(TypeHeures $th)
     {
         if (!array_key_exists($th->getCode(), $this->centresCouts)) {
-            $serviceCentreCout = $this->getServiceLocator()->getServiceLocator()->get('applicationCentreCout'); /* @var $serviceCentreCout CentreCoutService */
-            $qb = $serviceCentreCout->finderByStructure($this->getEtape()->getStructure());
-            $qb->join("cc.typeHeures", "th", \Doctrine\ORM\Query\Expr\Join::WITH, "th = :th")->setParameter('th', $th);
+            $serviceCentreCout = $this->getServiceCentreCout();
+            $qb = $serviceCentreCout->finderByStructure($this->getEtape()->getStructure())
+                    ->join("cc.typeHeures", "th", Join::WITH, "th = :th")->setParameter('th', $th)
+                    ->leftJoin("cc.parent", "ccp")
+                    ->addSelect("ccp")
+                    ->addOrderBy("ccp.sourceCode", "ASC") // ne pas changer le tri
+                    ->addOrderBy("cc.sourceCode", "ASC");
             $this->centresCouts[$th->getCode()] = $serviceCentreCout->getList($qb);
         }
         
         return $this->centresCouts[$th->getCode()];
+    }
+
+    /**
+     * Centres de couts pour chaque (code de) type d'heures.
+     *
+     * @var array
+     */
+    protected $centresCoutsToArray = [];
+    
+    /**
+     * Retourne les centres de coûts possibles pour le type d'heure spécifié.
+     *
+     * @return array
+     */
+    public function getCentresCoutsToArray(TypeHeures $th)
+    {
+        if (!array_key_exists($th->getCode(), $this->centresCoutsToArray)) {
+            $this->centresCoutsToArray[$th->getCode()] = $this->getServiceCentreCout()->formatCentresCouts($this->getCentresCouts($th));
+        }
+        
+        return $this->centresCoutsToArray[$th->getCode()];
     }
     
     /**
@@ -188,4 +215,12 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
         $this->etape = $etape;
         return $this;
     }   
+    
+    /**
+     * @return CentreCoutService
+     */
+    private function getServiceCentreCout()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationCentreCout');
+    }
 }

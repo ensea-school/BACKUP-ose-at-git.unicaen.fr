@@ -84,8 +84,8 @@ function DemandeMiseEnPaiement( id )
             alert('Enregistrement impossible');
             return false;
         }
-        
-        //alert(JSON.stringify( this.changes ));
+
+        alert(JSON.stringify( this.changes ));
         return true;
     }
 
@@ -302,7 +302,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
             }
         }else if( ccCount > 1 ){
             outC = '<select name="centre-cout" class="selectpicker" data-width="100%" data-live-search="true">';
-            if (undefined === data['centre-cout-id']){
+            if (undefined == data['centre-cout-id']){
                 outC += '<option value="" selected="selected">&Agrave; préciser ...</option>';
             }
             for ( var ccId in this.params['centres-cout']){
@@ -337,7 +337,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
 
         if (data['read-only']){
             if (data['validation'] != undefined){
-                outA = '<span class="glyphicon glyphicon-flag" title="Validé par '+data['validation']['utilisateur'] + ' le ' + data['validation']['date']+'">';
+                outA = '<span class="glyphicon glyphicon-ok-circle" title="Validé par '+data['validation']['utilisateur'] + ' le ' + data['validation']['date']+'">';
             }else{
                 outA = '';
             }
@@ -410,7 +410,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
         if (this.params['heures-non-dmep'] < 0){
             alert('Il est impossible d\'ajouter des HETD négatifs.');
         }else{
-            this.addMiseEnPaiement( undefined, this.params['heures-non-dmep'], undefined, true );
+            this.addMiseEnPaiement( undefined, this.params['heures-non-dmep'], this.params['default-centre-cout'], true );
         }
     }
 

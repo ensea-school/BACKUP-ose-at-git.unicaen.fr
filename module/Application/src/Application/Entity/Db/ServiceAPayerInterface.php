@@ -102,4 +102,11 @@ interface ServiceAPayerInterface
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getCentreCout( TypeHeures $typeHeures=null );
+
+    /**
+     *
+     * @param TypeHeures $typeHeures
+     * @return CentreCout|null
+     */
+    public function getDefaultCentreCout( TypeHeures $typeHeures );
 }

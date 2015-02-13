@@ -243,3 +243,13 @@ form#modulateurs-saisie th select{
     display: inline;
     width:auto;
 }
+
+
+
+.bootstrap-select .dropdown-menu li.divider{
+    display: none;
+}
+
+.bootstrap-select .dropdown-menu li a.opt{
+    margin-left: 2em;
+}

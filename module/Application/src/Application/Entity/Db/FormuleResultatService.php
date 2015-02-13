@@ -333,6 +333,20 @@ class FormuleResultatService implements ServiceAPayerInterface
     }
 
     /**
+     * 
+     * @param TypeHeures $typeHeures
+     * @return CentreCout|null
+     */
+    public function getDefaultCentreCout( TypeHeures $typeHeures )
+    {
+        $element = $this->getService()->getElementPedagogique();
+        if (! $element) return null;
+        $result = $element->getCentreCoutEp($typeHeures->getTypeHeuresElement());
+        if (false == $result) return null;
+        return $result->first();
+    }
+
+    /**
      * @return MiseEnPaiementListe
      */
     public function getMiseEnPaiementListe( \DateTime $dateMiseEnPaiement=null, Periode $periodePaiement=null )

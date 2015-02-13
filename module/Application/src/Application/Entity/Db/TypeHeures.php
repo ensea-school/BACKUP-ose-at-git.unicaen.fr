@@ -83,6 +83,12 @@ class TypeHeures
      */
     private $elementPedagogique;
 
+    /**
+     *
+     * @var TypeHeures
+     */
+    private $typeHeuresElement;
+
 
     /**
      * Set code
@@ -365,6 +371,26 @@ class TypeHeures
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
+    }
+
+    /**
+     *
+     * @return type
+     */
+    function getTypeHeuresElement()
+    {
+        return $this->typeHeuresElement;
+    }
+
+    /**
+     *
+     * @param \Application\Entity\Db\TypeHeures $typeHeuresElement
+     * @return \Application\Entity\Db\TypeHeures
+     */
+    function setTypeHeuresElement(TypeHeures $typeHeuresElement)
+    {
+        $this->typeHeuresElement = $typeHeuresElement;
+        return $this;
     }
 
     /**

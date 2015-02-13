@@ -276,6 +276,16 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface
     }
 
     /**
+     *
+     * @param TypeHeures $typeHeures
+     * @return CentreCout|null
+     */
+    public function getDefaultCentreCout( TypeHeures $typeHeures )
+    {
+        return null; // pas encore de centre de cout par défaut
+    }
+
+    /**
      * @return MiseEnPaiementListe
      */
     public function getMiseEnPaiementListe( \DateTime $dateMiseEnPaiement=null, Periode $periodePaiement=null )

@@ -14,6 +14,8 @@ function DemandeMiseEnPaiement( id )
     this.misesEnPaiementListes = {};
     this.miseEnPaiementSequence = 1;
     this.changes = {};
+    this.validation = true;
+    this.validationMessage = undefined;
 
 
 
@@ -24,8 +26,9 @@ function DemandeMiseEnPaiement( id )
      */
     this.demanderToutesHeuresEnPaiement = function()
     {
-        this.element.find(".heures-non-dmep").click();
+        this.element.find(".heures-non-dmep:visible").click();
     }
+
 
 
     this.changeUpdate = function( miseEnPaiementId, propertyName, newValue )
@@ -36,10 +39,14 @@ function DemandeMiseEnPaiement( id )
         this.changes[miseEnPaiementId][propertyName] = newValue;
     }
 
+
+
     this.changeInsert = function( miseEnPaiementId, properties )
     {
         this.changes[miseEnPaiementId] = properties;
     }
+
+
 
     this.changeDelete = function( miseEnPaiementId )
     {
@@ -50,13 +57,36 @@ function DemandeMiseEnPaiement( id )
         }
     }
 
+
+
     /**
      *
-     * @returns {undefined}
+     * @returns {Boolean}
+     */
+    this.valider = function()
+    {
+        var result = true;
+        for( var id in this.misesEnPaiementListes ){
+            if (! this.misesEnPaiementListes[id].valider()) result = false;
+        }
+        return result;
+    }
+
+
+
+    /**
+     *
+     * @returns {boolean}
      */
     this.sauvegarder = function()
     {
-        alert(JSON.stringify( this.changes ));
+        if (! this.valider()){
+            alert('Enregistrement impossible');
+            return false;
+        }
+        
+        //alert(JSON.stringify( this.changes ));
+        return true;
     }
 
 
@@ -71,6 +101,8 @@ function DemandeMiseEnPaiement( id )
         var that = this;
 
         this.element.find(".mise-en-paiement-liste").each( function(){
+            var id = $(this).attr('id');
+
             that.misesEnPaiementListes[id] = new MiseEnPaiementListe( that, $(this) );
             that.misesEnPaiementListes[id].init();
         } );
@@ -116,6 +148,41 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
     this.id      = element.attr('id');
     this.element = element;
     this.params  = element.data('params');
+    this.validation = true;
+
+
+
+    this.valider = function()
+    {
+        var that = this;
+
+        this.validation = true;
+
+        if (this.params['heures-non-dmep'] < 0){
+            this.showError( 'Trop d\'heures de paiement ont été demandées.' );
+        }
+
+        this.element.find("select[name='centre-cout']").each( function(){
+            if ($(this).val() == ''){
+                that.showError('Centre de coût à définir.');
+            }
+        } );
+
+        return this.validation;
+    }
+
+
+
+    this.showError = function( errorStr )
+    {
+        var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
+                + '<span class="glyphicon glyphicon-exclamation-sign"></span> '
+                + errorStr
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
+                + '</div>';
+        this.element.parents('.type-heures').prepend( out );
+        this.validation = false;
+    }
 
 
 
@@ -152,52 +219,18 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
             id = 'new-'+this.demandeMiseEnPaiement.miseEnPaiementSequence++;
             this.params['demandes-mep'][id] = {
                 heures          : heures,
-                'centre-cout-id': centreCoutId
+                'centre-cout-id': centreCoutId,
+                'read-only'     : false,
+                'validation'    : null
             };
-            this.demandeMiseEnPaiement.changeInsert( id, this.params['demandes-mep'][id] );
-        }else{
-            heures       = this.params['demandes-mep'][id]['heures'];
-            centreCoutId = this.params['demandes-mep'][id]['centre-cout-id'];
+            this.demandeMiseEnPaiement.changeInsert( id, {
+                heures          : this.params['demandes-mep'][id]['heures'],
+                'centre-cout-id': this.params['demandes-mep'][id]['centre-cout-id']
+            } );
         }
 
-        var max = this.params['heures-total'] - this.params['heures-mep'];
-
-        var out = '<tr class="mise-en-paiement" id="'+id+'"><td class="nombre" style="vertical-align:middle">';
-        out += '<input name="heures" class="form-control input-sm" step="any" min="0" max="'+max+'" value="'+heures+'" type="number" />';
-        out += '</td><td style="vertical-align:middle">';
-
-        ccCount = Util.json.count(this.params['centres-cout']);
-        if( ccCount > 1 ){
-            out += '<select name="centre-cout" class="selectpicker" data-width="100%" data-live-search="true">';
-            if (undefined === centreCoutId){
-                out += '<option value="" selected="selected">&Agrave; préciser ...</option>';
-            }
-            for ( var ccId in this.params['centres-cout']){
-                var children = this.centreCoutGetChildren( ccId );
-                if (Util.json.count(children) > 0){
-                    out += '<optgroup label="'+this.params['centres-cout'][ccId]['libelle']+'">';
-                    for ( var cccId in children){
-                        var selected = cccId == centreCoutId ? ' selected="selected"' : '';
-                        out += '<option value="'+cccId+'"'+selected+'>'+this.params['centres-cout'][cccId]['libelle']+'</option>';
-                    }
-                    var selected = ccId == centreCoutId ? ' selected="selected"' : '';
-                    out += '<option value="'+ccId+'"'+selected+'>'+this.params['centres-cout'][ccId]['libelle']+'</option>';
-                    out += '</optgroup>';
-                }else if(this.params['centres-cout'][ccId]['parent'] == null){
-                    var selected = ccId == centreCoutId ? ' selected="selected"' : '';
-                    out += '<option value="'+ccId+'"'+selected+'>'+this.params['centres-cout'][ccId]['libelle']+'</option>';
-                }
-            }
-            out += '</select>';
-        }else if( ccCount == 1 ){
-            out += '&nbsp;'+Util.json.first( this.params['centres-cout'] )['libelle'];
-        }else{
-            out += '<div class="alert alert-danger" role="alert">Aucun centre de coût ne correspond. Saisie impossible.</div>';
-        }
-        out += '</td><td style="vertical-align:middle">&nbsp;<a role="button" class="action-delete" title="Supprimer la ligne"><span class="glyphicon glyphicon-remove"></span></a></td></tr>';
-        this.element.append(out);
-        $('select').selectpicker();
-
+        this.element.append( this.renderMiseEnPaiement( id ) );
+        $('.selectpicker').selectpicker();
 
         /* Connexion des événements */
         var heuresElement = this.element.find(".mise-en-paiement#"+id+" input[name='heures']");
@@ -217,6 +250,102 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
         if (focus) heuresElement.focus();
         this.updateHeuresRestantes();
         return this;
+    }
+
+
+
+    this.renderMiseEnPaiement = function( id )
+    {
+        var data = this.params['demandes-mep'][id];
+
+        var out = '<tr class="mise-en-paiement" id="'+id+'"><td class="nombre" style="vertical-align:middle">';
+        out += this.renderHeures( data );
+        out += '</td><td style="vertical-align:middle">';
+        out += this.renderCentreCout( data );
+        out += '</td><td style="vertical-align:middle;text-align:center">';
+        out += this.renderActions( data );
+        out += '</td></tr>';
+
+        return out;
+    }
+
+
+
+    this.renderHeures = function( data )
+    {
+        var out;
+        var max = this.params['heures-total'] - this.params['heures-mep'];
+
+        if (data['read-only']){
+            out = Util.formattedHeures( data['heures'] );
+        }else{
+            out = '<input name="heures" class="form-control input-sm" step="any" min="0" max="'+max+'" value="'+data['heures']+'" type="number" />';
+        }
+
+        return out;
+    }
+
+
+
+    this.renderCentreCout = function( data )
+    {
+        var outC = '';
+        
+        ccCount = Util.json.count(this.params['centres-cout']);
+        if( ccCount == 1 || data['read-only'] ){
+            if (data['validation'] != undefined){
+                outC += '<abbr title="Validé par '+data['validation']['utilisateur'] + ' le ' + data['validation']['date']+'">';
+            }
+            outC += '&nbsp;'+Util.json.first( this.params['centres-cout'] )['libelle'];
+            if (data['validation'] != undefined){
+                outC += ' </span></abbr>';
+            }
+        }else if( ccCount > 1 ){
+            outC = '<select name="centre-cout" class="selectpicker" data-width="100%" data-live-search="true">';
+            if (undefined === data['centre-cout-id']){
+                outC += '<option value="" selected="selected">&Agrave; préciser ...</option>';
+            }
+            for ( var ccId in this.params['centres-cout']){
+                var children = this.centreCoutGetChildren( ccId );
+                if (Util.json.count(children) > 0){
+                    outC += '<optgroup label="'+this.params['centres-cout'][ccId]['libelle']+'">';
+                    for ( var cccId in children){
+                        var selected = cccId == data['centre-cout-id'] ? ' selected="selected"' : '';
+                        outC += '<option value="'+cccId+'"'+selected+'>'+this.params['centres-cout'][cccId]['libelle']+'</option>';
+                    }
+                    var selected = ccId == data['centre-cout-id'] ? ' selected="selected"' : '';
+                    outC += '<option value="'+ccId+'"'+selected+'>'+this.params['centres-cout'][ccId]['libelle']+'</option>';
+                    outC += '</optgroup>';
+                }else if(this.params['centres-cout'][ccId]['parent'] == null){
+                    var selected = ccId == data['centre-cout-id'] ? ' selected="selected"' : '';
+                    outC += '<option value="'+ccId+'"'+selected+'>'+this.params['centres-cout'][ccId]['libelle']+'</option>';
+                }
+            }
+            outC += '</select>';
+        }else{
+            outC = '<div class="alert alert-danger" role="alert">Aucun centre de coût ne correspond. Saisie impossible.</div>';
+        }
+
+        return outC;
+    }
+
+
+
+    this.renderActions = function( data )
+    {
+        var outA;
+
+        if (data['read-only']){
+            if (data['validation'] != undefined){
+                outA = '<span class="glyphicon glyphicon-flag" title="Validé par '+data['validation']['utilisateur'] + ' le ' + data['validation']['date']+'">';
+            }else{
+                outA = '';
+            }
+        }else{
+           outA = '<a role="button" class="action-delete" title="Supprimer la ligne"><span class="glyphicon glyphicon-remove"></span></a>';
+        }
+
+        return outA;
     }
 
 

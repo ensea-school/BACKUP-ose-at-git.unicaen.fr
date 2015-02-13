@@ -207,7 +207,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
                 if ($validation = $miseEnPaiement->getValidation()){
                     $dmepParams['read-only'] = true;
                     $dmepParams['validation'] = [
-                        'date'          => $miseEnPaiement->getDateValidation(),
+                        'date'          => $miseEnPaiement->getDateValidation()->format('d/m/Y'),
                         'utilisateur'   => (string)$validation->getHistoCreateur()
                     ];
                 }else{

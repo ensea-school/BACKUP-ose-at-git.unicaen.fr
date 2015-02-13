@@ -120,16 +120,19 @@ function AjaxModalListener(dialogDivId)
     this.anchorClickListener = function(e) 
     {
         var anchor      = $(e.currentTarget);
+        var url         = anchor.attr('href');
         var modalDialog = this.getModalDialog();
         
-        // transmet à la DIV le lien cliqué (car fournit l'événement à déclencher à la soumission du formulaire)
-        modalDialog.data('a', anchor);
-        
-        // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
-        $.get(anchor.attr('href'), { modal: 1 }, $.proxy(function(data) {
-            // remplacement du contenu de la fenêtre modale
-            $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
-        }, this));
+        if (url && url !== "#") {
+            // transmet à la DIV le lien cliqué (car fournit l'événement à déclencher à la soumission du formulaire)
+            modalDialog.data('a', anchor);
+
+            // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
+            $.get(url, { modal: 1 }, $.proxy(function(data) {
+                // remplacement du contenu de la fenêtre modale
+                $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
+            }, this));
+        }
         
         e.preventDefault();
     };
@@ -140,16 +143,18 @@ function AjaxModalListener(dialogDivId)
     this.innerAnchorClickListener = function(e)
     {
         var anchor      = $(e.currentTarget);
+        var url         = anchor.attr('href');
         var modalDialog = this.getModalDialog();
-
-        // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
-        $.get(anchor.attr('href'), { modal: 1 }, $.proxy(function(data) {
-            // remplacement du contenu de la fenêtre modale
-            $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
-        }, this));
-
+        
+        if (url && url !== "#") {
+            // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
+            $.get(url, { modal: 1 }, $.proxy(function(data) {
+                // remplacement du contenu de la fenêtre modale
+                $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
+            }, this));
+        }
+        
         e.preventDefault();
-        //e.stopPopagation();
     };
 
     this.btnPrimaryClickListener = function(e) 

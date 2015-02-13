@@ -50,27 +50,29 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     public function render()
     {
         $servicesAPayer = $this->getServicesAPayer();
-
         $attrs = [
             'id'            => $this->getId(),
             'class'         => 'demande-mise-en-paiement',
             'data-params'   => json_encode($this->getParams())
         ];
         $out = '<div '.$this->htmlAttribs($attrs).'>';
+        $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander toutes les HETD en paiement</button></div>';
         foreach( $servicesAPayer as $serviceAPayer ){
             $out .= $this->renderServiceAPayer($serviceAPayer);
         }
+        $out .= '<div><button type="button" class="btn btn-primary sauvegarde">Effectuer la demande de paiement</button></div>';
         $out .= '</div>';
         $out .= '<script type="text/javascript">';
         $out .= '$(function() { DemandeMiseEnPaiement.get("'.$this->getId().'").init(); });';
         $out .= '</script>';
+        
         return $out;
     }
 
     public function renderServiceAPayer( ServiceAPayerInterface $serviceAPayer )
     {
         $out  = '<div class="service-a-payer" id="'.$this->getServiceAPayerId($serviceAPayer).'">';
-        $out .= '<div class="head">'.$this->renderHead( $serviceAPayer ).'</div>';
+        $out .= '<ul class="breadcrumb"><li>'.$this->renderHead( $serviceAPayer ).'</li></ul>';
         $typesHeures = $this->getServiceTypeHeures()->getListFromServiceAPayer($serviceAPayer);
         $colSpan = 12 / count($typesHeures);
         if ($colSpan > 6) $colSpan = 6;
@@ -80,7 +82,6 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         }
         $out .= '</div>';
         $out .= '</div>';
-        $out .= '<hr />';
         return $out;
     }
 
@@ -103,7 +104,6 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     public function renderMiseEnPaiementListe( ServiceAPayerInterface $serviceAPayer, TypeHeures $typeHeures, $colSpan=12 )
     {
         $params = $this->getServiceAPayerParams($serviceAPayer, $typeHeures);
-
         $attrs = [
             'class'         => ['type-heures', 'col-md-'.$colSpan],
             'id'            => $typeHeures->getId(),
@@ -111,20 +111,15 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         ];
         $out  = '<div '.$this->htmlAttribs($attrs).'>';
         
-        $out .= '<h4>'.$typeHeures->toHtml().'</h4>';
-        
-        
-
         $attrs = [
             'class'         => ['table', 'table-condensed', 'table-extra-condensed', 'table-bordered', 'mise-en-paiement-liste'],
             'id'            => self::$miseEnPaiementListeIdSequence++,
-            'style'         => ['margin:auto;width:90%'],
             'data-params'   => json_encode($params),
         ];
         $out .= '<table '.$this->htmlAttribs($attrs).'>';
-        $out .= '<thead><tr>';
+        $out .= '<thead><tr><th colspan="3">'.$typeHeures->getLibelleLong().'</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
-        $out .= '<th style="width:50%">Centre de coût</th>';
+        $out .= '<th>Centre de coût</th>';
         $out .= '<th>&nbsp;</th>';
         $out .= '</tr></thead>';
 
@@ -182,7 +177,10 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
 
         foreach( $serviceAPayer->getCentreCout() as $centreCout ){
             if ($centreCout->typeHeuresMatches( $typeHeures )){
-                $params['centres-cout'][$centreCout->getId()] = (string)$centreCout;
+                $params['centres-cout'][$centreCout->getId()] = [
+                    'libelle' => (string)$centreCout,
+                    'parent'  => $centreCout->getParent() ? $centreCout->getParent()->getId() : null
+                ];
             }
         }
 
@@ -201,10 +199,21 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
                 $mepBuffer[$pp->getId()]['heures'] += $miseEnPaiement->getHeures(); // mise en buffer pour tri...
                 $params['heures-mep'] += $miseEnPaiement->getHeures();
             }else{
-                $params['demandes-mep'][$miseEnPaiement->getId()] = [
-                    'centre-cout-id' => $miseEnPaiement->getCentreCout()->getId(),
-                    'heures' => $miseEnPaiement->getHeures(),
+                $dmepParams = [
+                    'centre-cout-id'    => $miseEnPaiement->getCentreCout()->getId(),
+                    'heures'            => $miseEnPaiement->getHeures(),
+                    'read-only'         => $miseEnPaiement->getValidation() ? true : false,
                 ];
+                if ($validation = $miseEnPaiement->getValidation()){
+                    $dmepParams['read-only'] = true;
+                    $dmepParams['validation'] = [
+                        'date'          => $miseEnPaiement->getDateValidation(),
+                        'utilisateur'   => (string)$validation->getHistoCreateur()
+                    ];
+                }else{
+                    $dmepParams['read-only'] = false;
+                }
+                $params['demandes-mep'][$miseEnPaiement->getId()] = $dmepParams;
                 $params['heures-dmep'] += $miseEnPaiement->getHeures();
             }
         }

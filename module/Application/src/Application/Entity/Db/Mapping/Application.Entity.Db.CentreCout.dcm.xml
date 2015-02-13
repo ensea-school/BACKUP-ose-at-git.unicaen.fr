@@ -17,8 +17,12 @@
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="200" nullable="false"/>
-    <field name="parentId" type="integer" column="PARENT_ID" nullable="true"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
+    <many-to-one field="parent" target-entity="Application\Entity\Db\CentreCout">
+      <join-columns>
+        <join-column name="PARENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
       <join-columns>
         <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>

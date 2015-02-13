@@ -64,10 +64,10 @@ class VolumeHoraireReferentiel extends \Application\Entity\Db\VolumeHoraireRefer
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'heures', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'serviceReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'etatVolumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'formuleVolumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'formuleResultatVolumeHoraireReferentiel');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'heures', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'serviceReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'validation', 'remove', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'etatVolumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'formuleVolumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'formuleResultatVolumeHoraireReferentiel');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'heures', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'serviceReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'validation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'etatVolumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'formuleVolumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'formuleResultatVolumeHoraireReferentiel');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'heures', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoCreation', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoDestruction', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoModification', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'typeVolumeHoraire', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoDestructeur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoModificateur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'histoCreateur', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'serviceReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'validation', 'remove', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'etatVolumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'formuleVolumeHoraireReferentiel', '' . "\0" . 'Application\\Entity\\Db\\VolumeHoraireReferentiel' . "\0" . 'formuleResultatVolumeHoraireReferentiel');
     }
 
     /**
@@ -173,6 +173,28 @@ class VolumeHoraireReferentiel extends \Application\Entity\Db\VolumeHoraireRefer
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function setRemove($remove)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRemove', array($remove));
+
+        return parent::setRemove($remove);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRemove()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRemove', array());
+
+        return parent::getRemove();
+    }
+
     /**
      * {@inheritDoc}
      */

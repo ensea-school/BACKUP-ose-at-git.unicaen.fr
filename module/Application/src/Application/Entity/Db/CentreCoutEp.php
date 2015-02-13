@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * CentreCoutEp
  */
-class CentreCoutEp
+class CentreCoutEp implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime
@@ -58,6 +56,11 @@ class CentreCoutEp
      * @var \Application\Entity\Db\ElementPedagogique
      */
     private $elementPedagogique;
+
+    /**
+     * @var \Application\Entity\Db\TypeHeures
+     */
+    private $typeHeures;
 
     /**
      * @var \Application\Entity\Db\CentreCout
@@ -280,6 +283,29 @@ class CentreCoutEp
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
+    }
+
+    /**
+     * Set typeHeures
+     *
+     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @return TypeHeuresEp
+     */
+    public function setTypeHeures(\Application\Entity\Db\TypeHeures $typeHeures = null)
+    {
+        $this->typeHeures = $typeHeures;
+
+        return $this;
+    }
+
+    /**
+     * Get typeHeures
+     *
+     * @return \Application\Entity\Db\TypeHeures 
+     */
+    public function getTypeHeures()
+    {
+        return $this->typeHeures;
     }
 
     /**

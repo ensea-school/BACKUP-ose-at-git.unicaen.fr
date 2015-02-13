@@ -189,8 +189,15 @@ $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $par
                 <?php foreach ($etapesOptions as $code => $lib): ?>
                 <!--------------- Boutons de modif d'étape --------------->
                 <?php $actions = null; ?>
+                <?php if ($serviceEtape->canEditCentresCouts($code)): ?>
+                <?php $actions .= (string) $mc
+                        ->withTarget($code)
+                        ->addParam('structure', $structure ? $structure->getId() : null)
+                        ->withProp('category', 'centres-couts')
+                        ->addProp('class', 'iconify ajax-modal btn btn-default btn-xs'); ?>
+                <?php endif; ?>
                 <?php if ($serviceEtape->canEditModulateurs($code)): ?>
-                <?php $actions = (string) $mc
+                <?php $actions .= (string) $mc
                         ->withTarget($code)
                         ->addParam('structure', $structure ? $structure->getId() : null)
                         ->withProp('category', 'modulateur')

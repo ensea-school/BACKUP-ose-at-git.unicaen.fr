@@ -191,6 +191,32 @@ class Etape extends AbstractEntityService
         return true;
     }
 
+    public function canEditCentresCouts($etape, $runEx=false)
+    {
+        if (!$etape instanceof EtapeEntity) {
+            $etape = $this->get($etape);
+        }
+
+        $ir = $this->getContextProvider()->getSelectedIdentityRole();
+        if ($ir instanceof \Application\Acl\ComposanteRole){
+            if ($etape->getStructure() != $ir->getStructure()){
+                return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour paramétrer les centres de coûts de cette structure', $runEx);
+            }
+        }elseif($ir->getRoleId() == \Application\Acl\Role::ROLE_ID || $ir->getRoleId() == 'user'){
+            return $this->cannotDoThat('Vous n\'êtes pas autorisé à paramétrer les centres de coûts', $runEx);
+        }elseif($ir instanceof \Application\Acl\IntervenantRole){
+            return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité de paramétrer les centres de coûts', $runEx);
+        }
+
+//        $stm = $this->getServiceLocator()->get('applicationTypeModulateur');
+//        /* @var $stm \Application\Service\TypeModulateur */
+//        if (0 === $stm->count( $stm->finderByEtape($etape) ) ){
+//            return $this->cannotDoThat('Aucun modulateur ne peut être saisi sur cette étape', $runEx);
+//        }
+
+        return true;
+    }
+
     /**
      * Retourne la liste des étapes
      *

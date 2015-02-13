@@ -198,6 +198,19 @@ return array(
                                     ),
                                 ),
                             ),
+                            'centres-couts' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/centres-couts/:id',
+                                    'constraints' => array(
+                                        'etape' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'controller'    => 'EtapeCentreCout',
+                                        'action'        => 'saisir'
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                 ),
@@ -282,6 +295,16 @@ return array(
                                 'withtarget' => true,
                                 'category' => 'modulateur',
                             ),
+                            'etape-centres-couts' => array(
+                                'label'    => "Paramétrer les centres de coûts",
+                                'title'    => "Paramétrer les centres de coûts liés à cette formation",
+                                'route'    => 'of/etape/centres-couts',
+                                'resource' => 'controller/Application\Controller\OffreFormation\EtapeCentreCout:saisir',
+                                'visible'  => false,
+                                'icon'     => 'glyphicon glyphicon-euro',
+                                'withtarget' => true,
+                                'category' => 'centres-couts',
+                            ),
                         ),
                     ),
                 ),
@@ -338,6 +361,14 @@ return array(
                     'action'     => array('saisir'),
                     'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
+                /**
+                 * Centre de Cout des Etapes
+                 */
+                array(
+                    'controller' => 'Application\Controller\OffreFormation\EtapeCentreCout',
+                    'action'     => array('saisir'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                ),
             ),
         ),
     ),
@@ -347,6 +378,7 @@ return array(
             'Application\Controller\OffreFormation\Etape'              => 'Application\Controller\OffreFormation\EtapeController',
             'Application\Controller\OffreFormation\Modulateur'         => 'Application\Controller\OffreFormation\ModulateurController',
             'Application\Controller\OffreFormation\ElementPedagogique' => 'Application\Controller\OffreFormation\ElementPedagogiqueController',
+            'Application\Controller\OffreFormation\EtapeCentreCout'    => 'Application\Controller\OffreFormation\EtapeCentreCoutController',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',
@@ -364,19 +396,24 @@ return array(
             'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
             'ApplicationElementModulateur'            => 'Application\\Service\\ElementModulateur',
             'ApplicationTypeModulateur'               => 'Application\\Service\\TypeModulateur',
+            'ApplicationDomaineFonctionnel'           => 'Application\\Service\\DomaineFonctionnel',
             'FormElementPedagogiqueRechercheHydrator' => 'Application\\Form\\OffreFormation\\ElementPedagogiqueRechercheHydrator',
             'ElementModulateursFormHydrator'          => 'Application\\Form\\OffreFormation\\ElementModulateursHydrator',
             'EtapeModulateursFormHydrator'            => 'Application\\Form\\OffreFormation\\EtapeModulateursHydrator',
             'OffreFormationAssertion'                 => 'Application\\Service\\OffreFormationAssertion',
+            'EtapeCentreCoutFormHydrator'             => 'Application\\Form\\OffreFormation\\EtapeCentreCout\\EtapeCentreCoutFormHydrator',
+            'ElementCentreCoutFieldsetHydrator'       => 'Application\\Form\\OffreFormation\\EtapeCentreCout\\ElementCentreCoutFieldsetHydrator',
         ),
     ),
     'form_elements' => array(
         'invokables' => array(
             'FormElementPedagogiqueRechercheFieldset' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset',
-            'EtapeSaisie'                   => 'Application\Form\OffreFormation\EtapeSaisie',
-            'ElementPedagogiqueSaisie'      => 'Application\Form\OffreFormation\ElementPedagogiqueSaisie',
-            'EtapeModulateursSaisie'        => 'Application\Form\OffreFormation\EtapeModulateursSaisie',
-            'ElementModulateursFieldset'    => 'Application\Form\OffreFormation\ElementModulateursFieldset',
+            'EtapeSaisie'                             => 'Application\Form\OffreFormation\EtapeSaisie',
+            'ElementPedagogiqueSaisie'                => 'Application\Form\OffreFormation\ElementPedagogiqueSaisie',
+            'EtapeModulateursSaisie'                  => 'Application\Form\OffreFormation\EtapeModulateursSaisie',
+            'ElementModulateursFieldset'              => 'Application\Form\OffreFormation\ElementModulateursFieldset',
+            'EtapeCentreCoutSaisieForm'               => 'Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutSaisieForm',
+            'ElementCentreCoutSaisieFieldset'         => 'Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset',
         ),
         'initializers' => array(
             'Application\Service\ContextProviderAwareInitializer',
@@ -388,6 +425,8 @@ return array(
             'ElementModulateursSaisieFieldset' => 'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset',
             'ElementPedagogique'               => 'Application\View\Helper\OffreFormation\ElementPedagogique',
             'Etape'                            => 'Application\View\Helper\OffreFormation\EtapeViewHelper',
+            'FormEtapeCentreCoutSaisie'        => 'Application\View\Helper\OffreFormation\FormEtapeCentreCoutSaisieHelper',
+            'FieldsetElementCentreCoutSaisie'  => 'Application\View\Helper\OffreFormation\FieldsetElementCentreCoutSaisieHelper',
         ),
     ),
 

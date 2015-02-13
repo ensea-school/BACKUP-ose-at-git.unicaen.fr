@@ -295,3 +295,44 @@ Modulateur.setFormValues = function( typeModulateurCode, value )
 
     $('form#modulateurs-saisie select[name$="\\['+typeModulateurCode+'\\]"]').val(value);
 }
+
+
+
+
+
+
+
+function EtapeCentreCout(id) 
+{
+    this.id = id;
+}
+
+//EtapeCentreCout.get = function (id)
+//{
+//    if (null == EtapeCentreCout.modulateurs)
+//        EtapeCentreCout.modulateurs = new Array();
+//    
+//    if (null == EtapeCentreCout.modulateurs[id])
+//        EtapeCentreCout.modulateurs[id] = new Etape(id);
+//    
+//    return EtapeCentreCout.modulateurs[id];
+//}
+
+EtapeCentreCout.init = function ()
+{
+    $("body").on("event-of-etape-centres-couts", function (event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+    });
+
+    $("body").on("click", "form#etape-centre-cout a.form-set-value", function (e) {
+        var typeHeuresCode = $(this).data('code');
+        var value = $('form#etape-centre-cout select[name="' + typeHeuresCode + '"]').val();
+        EtapeCentreCout.setFormValues(typeHeuresCode, value);
+        e.stopPopagation();
+    });
+}
+
+EtapeCentreCout.setFormValues = function (typeHeuresCode, value)
+{
+    $('form#etape-centre-cout select[name$="\\[' + typeHeuresCode + '\\]"]').val(value);
+}

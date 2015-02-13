@@ -1,0 +1,11 @@
+<?php
+
+$this->headTitle($title);
+echo '<h1 class="page-header">' . $title . '</h1>';
+
+echo $this->formEtapeCentreCoutSaisie($form);
+
+echo $this->formErrors($form);
+if ($errors) {
+    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));
+}

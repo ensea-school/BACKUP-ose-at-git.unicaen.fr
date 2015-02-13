@@ -49,6 +49,11 @@ class TypeHeures
     private $ordre;
 
     /**
+     * @var boolean
+     */
+    private $eligibleCentreCoutEp;
+
+    /**
      * @var integer
      */
     private $id;
@@ -67,6 +72,16 @@ class TypeHeures
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoCreateur;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $centreCout;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $elementPedagogique;
 
 
     /**
@@ -231,6 +246,29 @@ class TypeHeures
     }
 
     /**
+     * Set eligibleCentreCoutEp
+     *
+     * @param boolean $eligibleCentreCoutEp
+     * @return TypeHeures
+     */
+    public function setEligibleCentreCoutEp($eligibleCentreCoutEp)
+    {
+        $this->eligibleCentreCoutEp = $eligibleCentreCoutEp;
+
+        return $this;
+    }
+
+    /**
+     * Get eligibleCentreCoutEp
+     *
+     * @return boolean 
+     */
+    public function getEligibleCentreCoutEp()
+    {
+        return $this->eligibleCentreCoutEp;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -307,6 +345,26 @@ class TypeHeures
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Get centreCout
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCentreCout()
+    {
+        return $this->centreCout;
+    }
+
+    /**
+     * Get elementPedagogique
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElementPedagogique()
+    {
+        return $this->elementPedagogique;
     }
 
     /**

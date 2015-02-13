@@ -54,7 +54,8 @@ class ModulateurController extends AbstractActionController implements ContextPr
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
-        $title = 'Saisie des modulateurs';
+        $title = "Saisie des modulateurs <br /><small>$etape</small>";
+        
         return compact('title', 'form', 'errors');
     }
 

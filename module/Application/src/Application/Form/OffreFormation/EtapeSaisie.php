@@ -82,6 +82,14 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
         ) );
 
         $this->add( array(
+            'name' => 'domaine-fonctionnel',
+            'options' => array(
+                'label' => 'Domaine fonctionnel',
+            ),
+            'type' => 'Select',
+        ) );
+
+        $this->add( array(
             'name' => 'id',
             'type' => 'Hidden'
         ) );
@@ -118,6 +126,12 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
                 ->setEmptyOption(count($valueOptions) > 1 ? "(Sélectionnez un type...)" : null)
                 ->setValueOptions($valueOptions);
         
+        // peuplement liste des domaines fonctionnels
+        $serviceDomaineFonctionnel = $this->getServiceLocator()->getServiceLocator()->get('ApplicationDomaineFonctionnel');
+        $this->get('domaine-fonctionnel')
+                ->setEmptyOption("(Aucun)")
+                ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceDomaineFonctionnel->getList()));
+
         // init niveau
         if ($localContext->getNiveau()) {
             // si un filtre niveau est positionné dans le contexte local, on l'utilise
@@ -200,6 +214,9 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
                 ),
             ),
             'structure' => array(
+                'required' => false,
+            ),
+            'domaine-fonctionnel' => array(
                 'required' => false,
             ),
         );

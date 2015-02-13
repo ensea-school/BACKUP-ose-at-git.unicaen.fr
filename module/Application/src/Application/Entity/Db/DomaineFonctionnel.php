@@ -58,6 +58,16 @@ class DomaineFonctionnel
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoCreateur;
+    
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->sourceCode . " - " . $this->libelle;
+    }
 
 
     /**

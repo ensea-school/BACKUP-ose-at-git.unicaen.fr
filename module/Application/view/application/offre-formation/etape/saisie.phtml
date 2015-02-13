@@ -42,6 +42,13 @@ if ($errors) {
         ?>
     </div>
 </div>
+<div class="row">
+    <div class="col-sm-7">
+        <?php
+        echo $this->formControlGroup($form->get('domaine-fonctionnel'));
+        ?>
+    </div>
+</div>
 
 <?php 
 echo $this->formRow($form->get('submit'));

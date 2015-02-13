@@ -79,6 +79,11 @@ class CentreCout
      */
     private $activite;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typeHeures;
+
 
     /**
      * Set histoCreation
@@ -387,6 +392,16 @@ class CentreCout
     public function getActivite()
     {
         return $this->activite;
+    }
+
+    /**
+     * Get typeHeures
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypeHeures()
+    {
+        return $this->typeHeures;
     }
 
     /**

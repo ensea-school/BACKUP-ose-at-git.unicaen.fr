@@ -190,6 +190,16 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
      */
     private $typeModulateur;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $typeHeures;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $centreCoutEp;
+
     
 
 
@@ -825,5 +835,63 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     public function getTypeModulateur()
     {
         return $this->typeModulateur;
+    }
+
+    /**
+     * Get typeHeures
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypeHeures()
+    {
+        return $this->typeHeures;
+    }
+
+    /**
+     * Add centreCoutEp
+     *
+     * @param \Application\Entity\Db\CentreCoutEp $centreCoutEp
+     * @return CentreCoutEp
+     */
+    public function addCentreCoutEp(\Application\Entity\Db\CentreCoutEp $centreCoutEp)
+    {
+        $this->centreCoutEp[] = $centreCoutEp;
+
+        return $this;
+    }
+
+    /**
+     * Remove centreCoutEp
+     *
+     * @param \Application\Entity\Db\CentreCoutEp $centreCoutEp
+     */
+    public function removeCentreCoutEp(\Application\Entity\Db\CentreCoutEp $centreCoutEp)
+    {
+        $this->centreCoutEp->removeElement($centreCoutEp);
+    }
+
+    /**
+     * Get centreCoutEp
+     *
+     * @param \Application\Entity\Db\TypeHeures $th Eventuel seul type d'heures à prendre en compte
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCentreCoutEp(TypeHeures $th = null)
+    {
+        if (!$th) {
+            return $this->centreCoutEp;
+        }
+        
+        $f     = function(CentreCoutEp $ccEp) use ($th) { return $ccEp->getTypeHeures() === $th; };
+        $slice = $this->centreCoutEp->filter($f);
+        
+        if (count($slice) > 1) {
+            throw new \Common\Exception\LogicException(sprintf(
+                    "Anomalie dans la base de données : plus d'un centre de coût trouvé pour l'élément pédagogique %s et le type d'heures %s.",
+                    $this,
+                    $th));
+        }
+        
+        return $slice;
     }
 }

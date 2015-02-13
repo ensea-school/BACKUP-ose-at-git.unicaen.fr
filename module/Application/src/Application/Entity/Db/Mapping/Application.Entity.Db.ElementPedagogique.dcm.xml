@@ -96,5 +96,16 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
+    <many-to-many field="typeHeures" target-entity="Application\Entity\Db\TypeHeures">
+        <join-table name="V_ELEMENT_TYPE_HEURES">
+            <join-columns>
+                <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID" on-delete="NO ACTION"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="TYPE_HEURES_ID" referenced-column-name="ID" on-delete="NO ACTION"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
+    <one-to-many field="centreCoutEp" target-entity="Application\Entity\Db\CentreCoutEp" mapped-by="elementPedagogique" />
   </entity>
 </doctrine-mapping>

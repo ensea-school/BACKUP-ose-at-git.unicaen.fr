@@ -41,6 +41,11 @@
         <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-one field="typeHeures" target-entity="Application\Entity\Db\TypeHeures">
+      <join-columns>
+        <join-column name="TYPE_HEURES_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="centreCout" target-entity="Application\Entity\Db\CentreCout">
       <join-columns>
         <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>

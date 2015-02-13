@@ -263,10 +263,13 @@ ElementPedagogique.init = function( voirLigneUrl )
 
 
 
-function Modulateur( id ) {
 
+
+
+
+function Modulateur( id ) 
+{
     this.id = id;
-
 }
 
 Modulateur.get = function( id )
@@ -282,9 +285,9 @@ Modulateur.init = function()
         event.div.modal('hide'); // ferme la fenêtre modale
     });
 
-    $("body").on("click", "form#modulateurs-saisie a.form-set-value", function(e){
-        typeModulateurCode = $(this).data('code');
-        value = $('form#modulateurs-saisie select[name="'+typeModulateurCode+'"]').val();
+    $("body").on("click", "form#modulateurs-saisie button.form-set-value", function(e){
+        var typeModulateurCode = $(this).data('code');
+        var value = $('form#modulateurs-saisie select[name="'+typeModulateurCode+'"]').val();
         Modulateur.setFormValues(typeModulateurCode, value);
         e.stopPopagation();
     });
@@ -292,7 +295,6 @@ Modulateur.init = function()
 
 Modulateur.setFormValues = function( typeModulateurCode, value )
 {
-
     $('form#modulateurs-saisie select[name$="\\['+typeModulateurCode+'\\]"]').val(value);
 }
 
@@ -307,24 +309,13 @@ function EtapeCentreCout(id)
     this.id = id;
 }
 
-//EtapeCentreCout.get = function (id)
-//{
-//    if (null == EtapeCentreCout.modulateurs)
-//        EtapeCentreCout.modulateurs = new Array();
-//    
-//    if (null == EtapeCentreCout.modulateurs[id])
-//        EtapeCentreCout.modulateurs[id] = new Etape(id);
-//    
-//    return EtapeCentreCout.modulateurs[id];
-//}
-
 EtapeCentreCout.init = function ()
 {
     $("body").on("event-of-etape-centres-couts", function (event, data) {
         event.div.modal('hide'); // ferme la fenêtre modale
     });
 
-    $("body").on("click", "form#etape-centre-cout a.form-set-value", function (e) {
+    $("body").on("click", "form#etape-centre-cout button.form-set-value", function (e) {
         var typeHeuresCode = $(this).data('code');
         var value = $('form#etape-centre-cout select[name="' + typeHeuresCode + '"]').val();
         EtapeCentreCout.setFormValues(typeHeuresCode, value);

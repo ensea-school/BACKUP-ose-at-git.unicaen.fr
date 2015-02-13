@@ -101,7 +101,7 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
             $res .= '<th>';
             $res .= $this->getView()->formSelect( $typeModulateurElement );
 //href="javascript:return false;" onclick="Modulateur.setFormValues($(this).data(\'code\'), $($(this).data(\'code\')).val())
-            $res .= ' <a class="btn btn-default btn-sm form-set-value" data-code="'.$typeModulateur->getCode().'" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span><a>';
+            $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value" data-code="'.$typeModulateur->getCode().'" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span></button>';
             $res .= '</th>';
         }
         $res .= '</tr>';

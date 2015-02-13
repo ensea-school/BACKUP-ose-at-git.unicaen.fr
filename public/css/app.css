@@ -159,6 +159,12 @@ h1.page-header {
     margin-top: 10px;
 }
 
+
+.modal-header h1,
+.modal-header h2 { 
+    line-height: 90%; 
+}
+
 .modal-body h1 {
     margin-top: 0;
 }

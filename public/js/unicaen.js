@@ -85,16 +85,33 @@ function AjaxModalListener(dialogDivId)
         // suppression de l'éventuel titre identique présent dans le body
         if (title = $(".modal-title", newModalContent).html()) {
             $(":header", newModalContent.filter(".modal-body")).filter(function() { return $(this).html() === title; }).remove();
-        }
+        }        
         return newModalContent;
     }
     this.getDialogBody = function() 
     { 
         return $("div.modal-body", this.getModalDialog()); 
     };
+    this.getDialogFooter = function() 
+    { 
+        return $("div.modal-footer", this.getModalDialog()); 
+    };
     this.getForm = function() 
     { 
         return $("form", this.getDialogBody()); 
+    };
+    this.getSubmitButton = function() 
+    { 
+        return $("#" + this.modalContainerId + " .btn-primary"); 
+    };
+
+    /**
+     * Fonction lancée à l'ouverture de la fenêtre modale
+     */
+    this.modalShownListener = function(e) 
+    {
+        // déplacement du bouton submit dans le footer
+        this.getSubmitButton().prependTo(this.getDialogFooter());
     };
     
     /**
@@ -216,7 +233,7 @@ AjaxModalListener.prototype.start = function()
     this.eventListener.on("click", "#" + this.modalContainerId + " a", $.proxy(this.innerAnchorClickListener, this));
 
     // le formulaire éventuel est soumis lorsque le bouton principal de la fenêtre modale est cliqué
-    this.eventListener.on("click", "#" + this.modalContainerId + " .btn-primary", $.proxy(this.btnPrimaryClickListener, this));
+    this.eventListener.on("click", this.getSubmitButton().selector, $.proxy(this.btnPrimaryClickListener, this));
 
     // interception la soumission classique du formulaire pour le faire à la sauce AJAX
     this.eventListener.on("submit", "#" + this.modalContainerId + " form", $.proxy(this.formSubmitListener, this));
@@ -225,6 +242,8 @@ AjaxModalListener.prototype.start = function()
     this.eventListener.on('hidden.bs.modal', "#" + this.modalContainerId, function(e) {
         $(e.target).removeData('bs.modal');
     });
+
+    this.eventListener.on('shown.bs.modal', "#" + this.modalContainerId, $.proxy(this.modalShownListener, this));
     
     return this;
 };
@@ -235,7 +254,7 @@ AjaxModalListener.prototype.stop = function()
 {
     this.eventListener
             .off("click", "a.ajax-modal", $.proxy(this.anchorClickListener, this))
-            .off("click", "#" + this.modalContainerId + " .btn-primary", $.proxy(this.btnPrimaryClickListener, this))
+            .off("click", this.getSubmitButton().selector, $.proxy(this.btnPrimaryClickListener, this))
             .off("submit", "#" + this.modalContainerId + " form", $.proxy(this.formSubmitListener, this))
             .off('hidden.bs.modal', "#" + this.modalContainerId);
     

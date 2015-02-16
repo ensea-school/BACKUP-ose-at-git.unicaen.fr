@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeRessource
  */
-class TypeRessource
+class TypeRessource implements HistoriqueAwareInterface
 {
     /**
      * @var string

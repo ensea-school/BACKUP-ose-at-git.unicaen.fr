@@ -9,7 +9,6 @@ use Application\Entity\Db\Etablissement;
 use Application\Entity\Db\SectionCnu;
 use Application\Entity\Db\Corps;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\PeriodeEnseignement;
 use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\Etape;

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * TypeHeures
  */
-class TypeHeures
+class TypeHeures implements HistoriqueAwareInterface
 {
     const FI          = 'fi';
     const FA          = 'fa';

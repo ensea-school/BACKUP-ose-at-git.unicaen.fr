@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * DomaineFonctionnel
  */
-class DomaineFonctionnel
+class DomaineFonctionnel implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime

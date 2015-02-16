@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CentreCout
  */
-class CentreCout
+class CentreCout implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime

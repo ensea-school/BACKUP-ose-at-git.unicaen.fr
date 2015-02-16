@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Dotation
  */
-class Dotation
+class Dotation implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime

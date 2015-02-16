@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * MiseEnPaiement
  */
-class MiseEnPaiement
+class MiseEnPaiement implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime

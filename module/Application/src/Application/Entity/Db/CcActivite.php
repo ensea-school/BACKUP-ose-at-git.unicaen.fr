@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CcActivite
  */
-class CcActivite
+class CcActivite implements HistoriqueAwareInterface
 {
     /**
      * @var string

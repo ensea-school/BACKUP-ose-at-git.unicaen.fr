@@ -16,4 +16,4 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
 <h1 class="page-header"><?php echo $title; ?></h1>
 
 <?php
-echo $this->demandeMiseEnPaiement( $servicesAPayer );
+echo $this->demandeMiseEnPaiement( $servicesAPayer )->render();

@@ -22,6 +22,12 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
 
     private $servicesAPayer = [];
 
+    /**
+     *
+     * @var \Zend\Form\Form
+     */
+    private $form;
+
     private static $miseEnPaiementListeIdSequence = 1;
 
 
@@ -47,6 +53,33 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         return $this->render();
     }
 
+
+
+    /**
+     *
+     * @return \Zend\Form\Form
+     */
+    public function getForm()
+    {
+        if (null === $this->form){
+            $this->form = new \Zend\Form\Form;
+            $this->form->add( new \Zend\Form\Element\Hidden('changements') );
+            $this->form->add(array(
+                'name' => 'submit',
+                'type'  => 'Submit',
+                'attributes' => array(
+                    'value' => 'Effectuer la demande de paiement',
+                    'class' => 'btn btn-primary sauvegarde',
+                ),
+            ));
+
+            $this->form->setAttribute('action', $this->getView()->url(null, [], [], true));
+        }
+        return $this->form;
+    }
+
+
+
     public function render()
     {
         $servicesAPayer = $this->getServicesAPayer();
@@ -60,12 +93,19 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         foreach( $servicesAPayer as $serviceAPayer ){
             $out .= $this->renderServiceAPayer($serviceAPayer);
         }
-        $out .= '<div><button type="button" class="btn btn-primary sauvegarde">Effectuer la demande de paiement</button></div>';
+        $out .= '<div>';
+
+        $out .= $this->getView()->form()->openTag($this->getForm());
+        $out .= $this->getView()->formHidden($this->getForm()->get('changements'));
+        $out .= $this->getView()->formRow($this->getForm()->get('submit'));
+        $out .= $this->getView()->form()->closeTag();
+
+        $out .= '</div>';
         $out .= '</div>';
         $out .= '<script type="text/javascript">';
         $out .= '$(function() { DemandeMiseEnPaiement.get("'.$this->getId().'").init(); });';
         $out .= '</script>';
-        
+
         return $out;
     }
 
@@ -175,16 +215,28 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             'heures-mep'            => 0.0,
             'heures-dmep'           => 0.0,
             'heures-non-dmep'       => 0.0,
+            'mep-defaults'          => [
+                'formule-resultat-service-id'             => $serviceAPayer instanceof FormuleResultatService            ? $serviceAPayer->getId() : null,
+                'formule-resultat-service-referentiel-id' => $serviceAPayer instanceof FormuleResultatServiceReferentiel ? $serviceAPayer->getId() : null,
+                'type-heures-id'                          => $typeHeures->getId(),
+            ],
         ];
         $mepBuffer = [];
 
+        $ccCount = 0;
+        $ccLast = null;
         foreach( $serviceAPayer->getCentreCout() as $centreCout ){
             if ($centreCout->typeHeuresMatches( $typeHeures )){
-                $params['centres-cout'][$centreCout->getId()] = [
+                $ccCount ++;
+                $ccLast = $centreCout->getId();
+                $params['centres-cout'][$ccLast] = [
                     'libelle' => (string)$centreCout,
                     'parent'  => $centreCout->getParent() ? $centreCout->getParent()->getId() : null
                 ];
             }
+        }
+        if ($ccCount == 1){ // un seul choix possible, donc sél. par défaut!
+            $params['default-centre-cout'] = $ccLast;
         }
 
         $misesEnPaiement = $serviceAPayer->getMiseEnPaiement()->filter( function( MiseEnPaiement $miseEnPaiement ) use ($typeHeures) {
@@ -266,6 +318,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         $this->servicesAPayer = $servicesAPayer;
         return $this;
     }
+
 
     /**
      * @return \Application\Service\TypeHeures

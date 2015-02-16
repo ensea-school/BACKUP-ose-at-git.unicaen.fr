@@ -5,6 +5,7 @@ namespace Application\Controller;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Json\Json;
 
 /**
  * @method \Application\Controller\Plugin\Context     context()
@@ -38,8 +39,22 @@ class PaiementController extends AbstractActionController implements ContextProv
         $this->initFilters();
         $intervenant        = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant \Application\Entity\Db\Intervenant */
         $annee              = $this->context()->getGlobalContext()->getAnnee();
+        if ($this->getRequest()->isPost()) {
+            $changements = $this->params()->fromPost('changements', '{}');
+            $changements = Json::decode($changements, Json::TYPE_ARRAY);
+            //var_dump($changements);
+            $this->getServiceMiseEnPaiement()->saveChangements($changements);
+        }
         $servicesAPayer     = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant, $annee);
         return compact('intervenant', 'servicesAPayer');
+    }
+
+    /**
+     * @return \Application\Service\MiseEnPaiement
+     */
+    protected function getServiceMiseEnPaiement()
+    {
+        return $this->getServiceLocator()->get('applicationMiseEnPaiement');
     }
 
     /**

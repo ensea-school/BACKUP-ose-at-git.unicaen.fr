@@ -84,8 +84,7 @@ function DemandeMiseEnPaiement( id )
             alert('Enregistrement impossible');
             return false;
         }
-
-        alert(JSON.stringify( this.changes ));
+        this.element.find("form input[name='changements']").val( JSON.stringify( this.changes ) );
         return true;
     }
 
@@ -111,8 +110,8 @@ function DemandeMiseEnPaiement( id )
             that.demanderToutesHeuresEnPaiement();
         });
 
-        this.element.find(".sauvegarde").on("click", function(){
-            that.sauvegarder();
+        this.element.find("form").on("submit", function(){
+            return that.sauvegarder();
         });
     }
 }
@@ -223,10 +222,11 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
                 'read-only'     : false,
                 'validation'    : null
             };
-            this.demandeMiseEnPaiement.changeInsert( id, {
-                heures          : this.params['demandes-mep'][id]['heures'],
-                'centre-cout-id': this.params['demandes-mep'][id]['centre-cout-id']
-            } );
+
+            var mepParams               = this.params['mep-defaults'];
+            mepParams['heures']         = this.params['demandes-mep'][id]['heures'];
+            mepParams['centre-cout-id'] = this.params['demandes-mep'][id]['centre-cout-id'];
+            this.demandeMiseEnPaiement.changeInsert( id, mepParams );
         }
 
         this.element.append( this.renderMiseEnPaiement( id ) );

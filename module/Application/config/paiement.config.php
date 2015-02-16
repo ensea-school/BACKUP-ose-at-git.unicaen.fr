@@ -45,6 +45,7 @@ return [
     'service_manager' => [
         'invokables' => [
             'ApplicationServiceAPayer'         => 'Application\Service\ServiceAPayer',
+            'ApplicationMiseEnPaiement'        => 'Application\Service\MiseEnPaiement',
             'ApplicationTypeHeures'            => 'Application\Service\TypeHeures',
             'ApplicationCentreCout'            => 'Application\Service\CentreCout',
         ],

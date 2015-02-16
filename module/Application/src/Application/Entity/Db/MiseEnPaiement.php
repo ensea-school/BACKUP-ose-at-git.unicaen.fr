@@ -457,7 +457,7 @@ class MiseEnPaiement implements HistoriqueAwareInterface
      * @param \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel
      * @return MiseEnPaiement
      */
-    public function setFormuleResultatServiceReferentielerentiel(\Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null)
+    public function setFormuleResultatServiceReferentiel(\Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null)
     {
         $this->formuleResultatServiceReferentiel = $formuleResultatServiceReferentiel;
 

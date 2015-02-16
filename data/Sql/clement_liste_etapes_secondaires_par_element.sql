@@ -1,4 +1,4 @@
-select code_enseignement, libelle_enseignement, code_formation, libelle_formation from (
+select code_enseignement, libelle_enseignement, code_formation, libelle_formation, statut from (
 select
   ep.source_code code_enseignement,
   ep.libelle libelle_enseignement,
@@ -12,6 +12,10 @@ from
   join etape ech on 1 = ose_divers.comprise_entre(ech.histo_creation,ech.histo_destruction) and ech.id = ch.etape_id
 where
   1 = ose_divers.comprise_entre(ep.histo_creation,ep.histo_destruction)
+  AND ech.source_code not like '%_400'
+  AND ech.source_code not like '%_500'
+  AND ech.source_code not like '%_501'
+  AND ech.source_code not like '%_504'
 ) t1 where cc > 1
 ORDER BY
   code_enseignement, code_formation

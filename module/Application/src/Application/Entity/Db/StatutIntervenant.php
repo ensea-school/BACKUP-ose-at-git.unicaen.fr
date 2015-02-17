@@ -2,6 +2,8 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * StatutIntervenant
  */
@@ -221,6 +223,11 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
      * @var \Doctrine\Common\Collections\Collection
      */
     private $typePieceJointeStatut;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $privilege;
 
     /**
      *
@@ -813,5 +820,83 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
     public function getTypePieceJointeStatut()
     {
         return $this->typePieceJointeStatut;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->typeAgrementStatut = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->typePieceJointeStatut = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->privilege = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Add privilege
+     *
+     * @param \Application\Entity\Db\Privilege $privilege
+     * @return StatutIntervenant
+     */
+    public function addPrivilege(\Application\Entity\Db\Privilege $privilege)
+    {
+        $this->privilege[] = $privilege;
+
+        return $this;
+    }
+
+    /**
+     * Remove privilege
+     *
+     * @param \Application\Entity\Db\Privilege $privilege
+     */
+    public function removePrivilege(\Application\Entity\Db\Privilege $privilege)
+    {
+        $this->privilege->removeElement($privilege);
+    }
+
+    /**
+     * Get privilege
+     *
+     * @param ResourceInterface|string|null $resource
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPrivilege( $resource=null )
+    {
+        return $this->privilege->filter( function(Privilege $privilege) use ($resource){
+            if (empty($resource)){
+                return true; // pas de filtre
+            }
+            if ($resource instanceof ResourceInterface){
+                $resource = $resource->getResourceId();
+            }
+            return $privilege->getRessource()->getCode() === $resource;
+        });
+    }
+
+    /**
+     * Détermine si le type de rôle possède un provilège ou non.
+     * Si le privilège transmis est un objet de classe Privilege, alors il est inutile de fournir la ressource, sinon il est obligatoire de la préciser
+     *
+     * @param Privilege|string $privilege
+     * @param ResourceInterface|string|null $resource
+     * @return boolean
+     * @throws \Common\Exception\LogicException
+     */
+    public function hasPrivilege( $privilege, $resource=null )
+    {
+        if ($privilege instanceof Privilege){
+            $resource  = $privilege->getRessource();
+            $privilege = $privilege->getCode();
+        }
+        if (empty($resource)){
+            throw new \Common\Exception\LogicException('La ressource du privilège n\'est pas précisée');
+        }
+        $privileges = $this->getPrivilege($resource);
+        foreach( $privileges as $priv ){
+            if ($priv->getCode() === $privilege) return true;
+        }
+        return false;
     }
 }

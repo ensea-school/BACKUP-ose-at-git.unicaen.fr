@@ -60,5 +60,6 @@
     </many-to-one>
     <one-to-many field="typeAgrementStatut" target-entity="Application\Entity\Db\TypeAgrementStatut" mapped-by="statut" />
     <one-to-many field="typePieceJointeStatut" target-entity="Application\Entity\Db\TypePieceJointeStatut" mapped-by="statut" />
+    <many-to-many field="privilege" target-entity="Application\Entity\Db\Privilege" mapped-by="statut"/>
   </entity>
 </doctrine-mapping>

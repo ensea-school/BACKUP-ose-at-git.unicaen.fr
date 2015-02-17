@@ -13,6 +13,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Acl\Role;
 
 /**
  * Description of AbstractAssertion
@@ -33,22 +34,36 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
      * @var Acl
      */
     protected $acl;
-    
+
+    /**
+     * copntrôle par les privileges activés ou non
+     *
+     * @var boolean
+     */
+    protected $assertPrivilegesEnabled = false;
+
+    /**
+     * contrôle par les ressources activés ou non
+     *
+     * @var boolean
+     */
+    protected $assertResourcesEnabled = true;
+
     /**
      * @var string
      */
     protected $privilege;
-    
+
     /**
      * @var ResourceInterface|string
      */
     protected $resource;
-    
+
     /**
      * @var RoleInterface
      */
     protected $role;
-    
+
     /**
      * !!!! Pour éviter l'erreur "Serialization of 'Closure' is not allowed"... !!!!
      * 
@@ -58,7 +73,7 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
     {
         return [];
     }
-    
+
     /**
      * Returns true if and only if the assertion conditions are met
      *
@@ -78,10 +93,34 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
         $this->resource  = $resource;
         $this->privilege = $privilege;
         $this->role      = $this->getSelectedIdentityRole();
-        
+
+        if (! $this->assertPrivilege()                              ) return false;
+        if (! $this->assertResource()                               ) return false;
         return true;
     }
-    
+
+    private function assertPrivilege()
+    {
+        if (! $this->assertPrivilegesEnabled) return true; // si pas activé alors on sort
+        if ($this->role instanceof Role && ! empty($this->resource) && ! empty($this->privilege)){
+            return $this->role->hasPrivilege($this->privilege, $this->resource);
+        }
+        return true;
+    }
+
+    private function assertResource()
+    {
+        if (! $this->assertResourcesEnabled) return true; // si pas activé alors on sort
+        if (! $this->resource instanceof ResourceInterface) return true; // pas assez de précisions
+        $resourceId = $this->resource->getResourceId();
+
+        if (method_exists( $this, 'assertResource'.$resourceId)){
+            return $this->{'assertResource'.$resourceId}( $this->resource );
+        }
+
+        return true;
+    }
+
     /**
      * 
      * @return MvcEvent
@@ -90,7 +129,6 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
     {
         return $this->getServiceLocator()->get('Application')->getMvcEvent();
     }
-
 
     /**
      * @return boolean
@@ -210,5 +248,12 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
         $dateFin->setTime(0, 0, 0);
 
         return $now > $dateFin;
+    }
+
+    public static function getAssertionId()
+    {
+        $getCalledClass = get_called_class();
+        $getCalledClass = substr( $getCalledClass, strrpos( $getCalledClass, '\\')+1 );
+        return $getCalledClass;
     }
 }

@@ -24,6 +24,19 @@ class IntervenantRole extends Role implements StructureAwareInterface, Intervena
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
     }
+
+    /**
+     *
+     * @param Resource|string $resource
+     * @param Privilege|string $privilege
+     */
+    function hasPrivilege( $resource, $privilege )
+    {
+        if ($statut = $this->getIntervenant()->getStatut()){
+            return $statut->hasPrivilege($resource, $privilege);
+        }
+        return false;
+    }
 }
 
 

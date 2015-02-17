@@ -35,5 +35,6 @@
       </join-columns>
     </many-to-one>
     <one-to-many field="role" target-entity="Application\Entity\Db\Role" mapped-by="type" />
+    <many-to-many field="privilege" target-entity="Application\Entity\Db\Privilege" mapped-by="typeRole"/>
   </entity>
 </doctrine-mapping>

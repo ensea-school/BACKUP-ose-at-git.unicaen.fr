@@ -3,11 +3,12 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\MiseEnPaiementListe;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * FormuleResultatService
  */
-class FormuleResultatService implements ServiceAPayerInterface
+class FormuleResultatService implements ServiceAPayerInterface, ResourceInterface
 {
     /**
      * @var float
@@ -401,5 +402,22 @@ class FormuleResultatService implements ServiceAPayerInterface
     public function getService()
     {
         return $this->service;
+    }
+
+    /**
+     * @return Structure
+     */
+    public function getStructure()
+    {
+        $service = $this->getService();
+        if ($service->getStructureEns())
+            return $service->getStructureEns ();
+        else
+            return $service->getStructureAff ();
+    }
+
+    public function getResourceId()
+    {
+        return 'FormuleResultatService';
     }
 }

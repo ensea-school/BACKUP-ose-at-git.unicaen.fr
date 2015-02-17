@@ -23,8 +23,8 @@ class ServiceAPayer extends AbstractService
      */
     public function getListByIntervenant( IntervenantEntity $intervenant, AnneeEntity $annee )
     {
-        $typeVolumeHoraire  = $this->getServiceTypeVolumeHoraire()->getPrevu();
-        $etatVolumeHoraire  = $this->getServiceEtatVolumeHoraire()->getSaisi();
+        $typeVolumeHoraire  = $this->getServiceTypeVolumeHoraire()->getRealise();
+        $etatVolumeHoraire  = $this->getServiceEtatVolumeHoraire()->getValide();
 
         $frsList = $intervenant
                         ->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire)

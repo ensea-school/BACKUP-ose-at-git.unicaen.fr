@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * MiseEnPaiement
  */
-class MiseEnPaiement implements HistoriqueAwareInterface
+class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * @var \DateTime
@@ -417,13 +419,13 @@ class MiseEnPaiement implements HistoriqueAwareInterface
     {
         if ($serviceAPayer instanceof FormuleResultatService           ){
             $this->setFormuleResultatService( $serviceAPayer );
-            $this->setFormuleResultatServiceReferentielerentiel();
+            $this->setFormuleResultatServiceReferentiel();
         }elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel){
             $this->setFormuleResultatService();
             $this->setFormuleResultatServiceReferentiel( $serviceAPayer );
         }else{
             $this->setFormuleResultatService();
-            $this->setFormuleResultatServiceReferentielerentiel();
+            $this->setFormuleResultatServiceReferentiel();
         }
         return $this;
     }
@@ -472,5 +474,16 @@ class MiseEnPaiement implements HistoriqueAwareInterface
     public function getFormuleResultatServiceReferentiel()
     {
         return $this->formuleResultatServiceReferentiel;
+    }
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'MiseEnPaiement';
     }
 }

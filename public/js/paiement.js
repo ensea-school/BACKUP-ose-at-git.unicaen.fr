@@ -151,11 +151,24 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
 
 
 
+    /**
+     * Détermine si la liste est en lecture seule ou non
+     *
+     * @returns {boolean}
+     */
+    this.isReadOnly = function()
+    {
+        return this.element.hasClass('read-only');
+    }
+
+
     this.valider = function()
     {
         var that = this;
 
         this.validation = true;
+
+        if (this.isReadOnly()) return true; // pas de validation puisque c'est en lecture seule!!
 
         if (this.params['heures-non-dmep'] < 0){
             this.showError( 'Trop d\'heures de paiement ont été demandées.' );

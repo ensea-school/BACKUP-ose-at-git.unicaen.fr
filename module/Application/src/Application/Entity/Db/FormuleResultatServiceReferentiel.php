@@ -3,11 +3,12 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\MiseEnPaiementListe;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * FormuleResultatServiceReferentiel
  */
-class FormuleResultatServiceReferentiel implements ServiceAPayerInterface
+class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, ResourceInterface
 {
     /**
      * @var float
@@ -340,5 +341,18 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface
     public function getServiceReferentiel()
     {
         return $this->serviceReferentiel;
+    }
+
+    /**
+     * @return Structure
+     */
+    public function getStructure()
+    {
+        return $this->getServiceReferentiel()->getStructure();
+    }
+
+    public function getResourceId()
+    {
+        return 'FormuleResultatServiceReferentiel';
     }
 }

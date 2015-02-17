@@ -41,6 +41,28 @@ return [
                 ],
             ],
         ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'MiseEnPaiement' => [],
+            ],
+        ],
+        'rule_providers' => [
+            'BjyAuthorize\Provider\Rule\Config' => [
+                'allow' => [
+                    [
+                        [R_ROLE],
+                        'MiseEnPaiement',
+                        [
+                            Assertion\MiseEnPaiementAssertion::PRIVILEGE_VISUALISATION,
+                            Assertion\MiseEnPaiementAssertion::PRIVILEGE_DEMANDE,
+                            Assertion\MiseEnPaiementAssertion::PRIVILEGE_VALIDATION,
+                            Assertion\MiseEnPaiementAssertion::PRIVILEGE_MISE_EN_PAIEMENT,
+                        ],
+                        Assertion\MiseEnPaiementAssertion::getAssertionId(),
+                    ],
+                ],
+            ],
+        ],
     ],
     'service_manager' => [
         'invokables' => [
@@ -48,6 +70,7 @@ return [
             'ApplicationMiseEnPaiement'        => 'Application\Service\MiseEnPaiement',
             'ApplicationTypeHeures'            => 'Application\Service\TypeHeures',
             'ApplicationCentreCout'            => 'Application\Service\CentreCout',
+            'MiseEnPaiementAssertion'          => 'Application\\Assertion\\MiseEnPaiementAssertion',
         ],
     ],
     'view_helpers' => [

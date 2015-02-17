@@ -109,4 +109,9 @@ interface ServiceAPayerInterface
      * @return CentreCout|null
      */
     public function getDefaultCentreCout( TypeHeures $typeHeures );
+
+    /**
+     * @return Structure
+     */
+    public function getStructure();
 }

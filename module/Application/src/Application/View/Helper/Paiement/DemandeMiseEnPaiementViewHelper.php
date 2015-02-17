@@ -30,6 +30,13 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
 
     private static $miseEnPaiementListeIdSequence = 1;
 
+    /**
+     * Mose lecture seule
+     *
+     * @var boolean
+     */
+    private $readOnly = false;
+
 
     /**
      * Helper entry point.
@@ -89,18 +96,20 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             'data-params'   => json_encode($this->getParams())
         ];
         $out = '<div '.$this->htmlAttribs($attrs).'>';
-        $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander toutes les HETD en paiement</button></div>';
+        if ( (!$this->getReadOnly()) && $this->getView()->isAllowed(new MiseEnPaiement, 'demande') ){
+            $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander toutes les HETD en paiement</button></div>';
+        }
         foreach( $servicesAPayer as $serviceAPayer ){
             $out .= $this->renderServiceAPayer($serviceAPayer);
         }
-        $out .= '<div>';
-
-        $out .= $this->getView()->form()->openTag($this->getForm());
-        $out .= $this->getView()->formHidden($this->getForm()->get('changements'));
-        $out .= $this->getView()->formRow($this->getForm()->get('submit'));
-        $out .= $this->getView()->form()->closeTag();
-
-        $out .= '</div>';
+        if (! $this->getReadOnly() && $this->getView()->isAllowed(new MiseEnPaiement, 'demande')){
+            $out .= '<div>';
+            $out .= $this->getView()->form()->openTag($this->getForm());
+            $out .= $this->getView()->formHidden($this->getForm()->get('changements'));
+            $out .= $this->getView()->formRow($this->getForm()->get('submit'));
+            $out .= $this->getView()->form()->closeTag();
+            $out .= '</div>';
+        }
         $out .= '</div>';
         $out .= '<script type="text/javascript">';
         $out .= '$(function() { DemandeMiseEnPaiement.get("'.$this->getId().'").init(); });';
@@ -144,18 +153,24 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     public function renderMiseEnPaiementListe( ServiceAPayerInterface $serviceAPayer, TypeHeures $typeHeures, $colSpan=12 )
     {
         $params = $this->getServiceAPayerParams($serviceAPayer, $typeHeures);
+
+        $miseEnPaiement = new MiseEnPaiement;
+        $miseEnPaiement->setServiceAPayer($serviceAPayer);
+        $readOnly = $this->getReadOnly() || ! $this->getView()->isAllowed($miseEnPaiement, 'demande');
+
         $attrs = [
             'class'         => ['type-heures', 'col-md-'.$colSpan],
             'id'            => $typeHeures->getId(),
             'style'         => ['margin-bottom:.5em'],
         ];
         $out  = '<div '.$this->htmlAttribs($attrs).'>';
-        
+
         $attrs = [
             'class'         => ['table', 'table-condensed', 'table-extra-condensed', 'table-bordered', 'mise-en-paiement-liste'],
             'id'            => self::$miseEnPaiementListeIdSequence++,
             'data-params'   => json_encode($params),
         ];
+        if ($readOnly) $attrs['class'][] = 'read-only';
         $out .= '<table '.$this->htmlAttribs($attrs).'>';
         $out .= '<thead><tr><th colspan="3">'.$typeHeures->getLibelleLong().'</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
@@ -172,7 +187,11 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             $out .= '<tr><td class="nombre"><abbr title="'.$title.'">'.\Common\Util::formattedHeures($params['heures-mep']).'</td><td>HETD déjà mises en paiement</td></tr>';
         }
         $out .= '<tfoot><tr>';
-        $out .= '<td class="nombre"><button class="btn btn-default heures-non-dmep" type="button" title="Demander ces heures en paiement">'.\Common\Util::formattedHeures($params['heures-non-dmep']).'</button></td>';
+        $out .= '<td class="nombre">';
+        if (! $readOnly) $out .= '<button class="btn btn-default heures-non-dmep" type="button" title="Demander ces heures en paiement">';
+        $out .= \Common\Util::formattedHeures($params['heures-non-dmep']);
+        if (! $readOnly) $out .= '</button>';
+        $out .= '</td>';
         $out .= '<th>HETD restantes</th>';
         $out .= '<td>&nbsp;</td>';
         $out .= '</tr>';
@@ -257,16 +276,13 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
                 $dmepParams = [
                     'centre-cout-id'    => $miseEnPaiement->getCentreCout()->getId(),
                     'heures'            => $miseEnPaiement->getHeures(),
-                    'read-only'         => $miseEnPaiement->getValidation() ? true : false,
+                    'read-only'         => $this->getReadOnly() || ! $this->getView()->isAllowed($miseEnPaiement, 'demande'),
                 ];
                 if ($validation = $miseEnPaiement->getValidation()){
-                    $dmepParams['read-only'] = true;
                     $dmepParams['validation'] = [
                         'date'          => $miseEnPaiement->getDateValidation()->format('d/m/Y'),
                         'utilisateur'   => (string)$validation->getHistoCreateur()
                     ];
-                }else{
-                    $dmepParams['read-only'] = false;
                 }
                 $params['demandes-mep'][$miseEnPaiement->getId()] = $dmepParams;
                 $params['heures-dmep'] += $miseEnPaiement->getHeures();
@@ -297,6 +313,17 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel) $id .= 'referentiel';
         $id .= '-'.$serviceAPayer->getId();
         return $id;
+    }
+
+    function getReadOnly()
+    {
+        return $this->readOnly;
+    }
+
+    function setReadOnly($readOnly)
+    {
+        $this->readOnly = $readOnly;
+        return $this;
     }
 
     /**

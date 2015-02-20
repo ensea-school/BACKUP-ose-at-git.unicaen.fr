@@ -45,6 +45,19 @@ class Periode extends AbstractEntityService
     }
 
     /**
+     *
+     * @param \DateTime $date
+     * @return PeriodeEntity
+     */
+    public function getDatePeriodePaiement( \DateTime $date=null )
+    {
+        if (empty($date)) $date = new \DateTime;
+        $mois = (int)$date->format('m');
+        if (0 == $mois) return null;
+        return $this->getRepo()->findOneBy(['moisOriginePaiement' => $mois]);
+    }
+
+    /**
      * Retourne la liste des périodes d'enseignement
      *
      * @param QueryBuilder|null $queryBuilder

@@ -1,59 +1,16 @@
 <?php
 
-use Application\Entity\Db\MiseEnPaiement;
+/* @var $form Application\Form\Paiement\MiseEnPaiementForm */
+/* @var $errors string[] */
 
-/* @var $rechercheForm \Application\Form\Paiement\MiseEnPaiementRechercheForm */
-/* @var $etatPaiement array */
-/* @var $etat string */
-$title = 'Paiement';
-switch( $etat ){
-    case MiseEnPaiement::A_VALIDER:
-        $title = 'Demandes de mise en paiement à valider';
-    break;
-    case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
-        $title = 'Mise en paiement';
-    break;
-    case MiseEnPaiement::MIS_EN_PAIEMENT:
-        $title = 'État de paiement';
-    break;
-}
+echo $this->form()->openTag($form->prepare());
 
-?>
-<h1><?php echo $title ?></h1>
-<div class="panel panel-default filter" data-etat="<?php echo $etat ?>">
+echo $this->formControlGroup($form->get('periode'));
+echo $this->formControlGroup($form->get('date-mise-en-paiement'));
 
-    <div class="panel-heading">Filtres</div>
-    <div class="panel-body">
-        <?php echo $this->form()->openTag($rechercheForm->prepare()); ?>
-        <?php
+echo $this->formRow($form->get('submit'));
 
-        echo $this->formControlGroup($rechercheForm->get('structure'));
+echo $this->form()->closeTag();
+echo $this->formErrors( $form );
 
-        if ($rechercheForm->get('structure')->getValue()){
-            if (MiseEnPaiement::MIS_EN_PAIEMENT === $etat){
-                echo $this->formControlGroup($rechercheForm->get('periode'));
-                if ($rechercheForm->get('periode')->getValue()){
-                    echo $this->formControlGroup($rechercheForm->get('intervenants'));
-                }
-            }else{
-                echo $this->formControlGroup($rechercheForm->get('intervenants'));
-            }
-            
-        }
-        echo $this->formRow($rechercheForm->get('submit'));
-        
-        echo $this->form()->closeTag();
-        echo $this->formErrors( $rechercheForm );
-        ?>
-    </div>
-    <script type="text/javascript">
-        $(function() {
-            PaiementMiseEnPaiementRechercheForm.get("<?php echo $rechercheForm->getId(); ?>").init();
-        });
-    </script>
-</div>
-
-<?php
-
-if (! empty($etatPaiement)) 
-    echo $this->partial('application/paiement/etat-paiement-html', compact('etatPaiement'));
+if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));

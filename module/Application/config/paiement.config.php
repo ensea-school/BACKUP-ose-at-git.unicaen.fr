@@ -17,24 +17,37 @@ return [
                     ],
                 ],
                'child_routes' => [
-                    'mise-en-paiement' => [
+                    'etat-demande-paiement' => [
                         'type'    => 'Literal',
-                        'may_terminate' => false,
+                        'may_terminate' => true,
                         'options' => [
-                            'route'    => '/mise-en-paiement',
+                            'route'    => '/etat-demande-paiement',
                             'defaults' => [
-                                'action' => 'miseEnPaiement',
+                                'action' => 'etatPaiement',
                                 'etat'   => Entity\Db\MiseEnPaiement::A_METTRE_EN_PAIEMENT,
+                            ],
+                        ],
+                    ],
+                    'mise-en-paiement' => [
+                        'type'    => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/mise-en-paiement/:structure/:intervenants',
+                            'constraints' => [
+                                'structure' => '[0-9]*'
+                            ],
+                            'defaults' => [
+                                'action' => 'MiseEnPaiement',
                             ],
                         ],
                     ],
                     'etat-paiement' => [
                         'type'    => 'Literal',
-                        'may_terminate' => false,
+                        'may_terminate' => true,
                         'options' => [
                             'route'    => '/etat-paiement',
                             'defaults' => [
-                                'action' => 'miseEnPaiement',
+                                'action' => 'etatPaiement',
                                 'etat'   => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
                             ],
                         ],
@@ -49,10 +62,10 @@ return [
                 'pages' => array(
                     'gestion' => array(
                         'pages' => array(
-                            'mise-en-paiement' => array(
+                            'etat-demande-paiement' => array(
                                 'label'    => "Mise en paiement",
                                 'title'    => "Mise en paiement",
-                                'route'    => 'paiement/mise-en-paiement',
+                                'route'    => 'paiement/etat-demande-paiement',
                             ),
                             'etat-paiement' => array(
                                 'label'    => "État de paiement",
@@ -70,8 +83,13 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['index','demandeMiseEnPaiement','miseEnPaiement'],
+                    'action'     => ['index','demandeMiseEnPaiement','etatPaiement'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR, R_DRH],
+                ],
+                [
+                    'controller' => 'Application\Controller\Paiement',
+                    'action'     => ['miseEnPaiement'],
+                    'roles'      => [R_ADMINISTRATEUR, R_DRH],
                 ],
             ],
         ],
@@ -110,17 +128,18 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-            'DemandeMiseEnPaiement'            => 'Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper',
+            'DemandeMiseEnPaiement'                 => 'Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper',
         ],
     ],
     'form_elements' => [
         'invokables' => [
-            'PaiementMiseEnPaiementRechercheForm'             => 'Application\Form\Paiement\MiseEnPaiementRechercheForm',
+            'PaiementMiseEnPaiementForm'            => 'Application\Form\Paiement\MiseEnPaiementForm',
+            'PaiementMiseEnPaiementRechercheForm'   => 'Application\Form\Paiement\MiseEnPaiementRechercheForm',
         ],
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Paiement' => 'Application\Controller\PaiementController',
+            'Application\Controller\Paiement'       => 'Application\Controller\PaiementController',
         ],
     ],
 ];

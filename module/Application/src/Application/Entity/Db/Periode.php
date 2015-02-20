@@ -88,6 +88,14 @@ class Periode
     protected $paiement;
 
     /**
+     * moisOriginePaiement
+     *
+     * @var integer
+     */
+    protected $moisOriginePaiement;
+
+
+        /**
      * miseEnPaiementIntervenantStructure
      *
      * @var MiseEnPaiementIntervenantStructure
@@ -368,6 +376,29 @@ class Periode
     public function getPaiement()
     {
         return $this->paiement;
+    }
+
+    /**
+     * Set moisOriginePaiement
+     *
+     * @param boolean $moisOriginePaiement
+     * @return Periode
+     */
+    public function setMoisOriginePaiement($moisOriginePaiement)
+    {
+        $this->moisOriginePaiement = $moisOriginePaiement;
+
+        return $this;
+    }
+
+    /**
+     * Get moisOriginePaiement
+     *
+     * @return boolean
+     */
+    public function getMoisOriginePaiement()
+    {
+        return $this->moisOriginePaiement;
     }
 
     /**

@@ -49,7 +49,7 @@ class PaiementController extends AbstractActionController implements ContextProv
         return compact('intervenant', 'servicesAPayer');
     }
 
-    public function miseEnPaiementAction()
+    public function etatPaiementAction()
     {
         $this->initFilters();
 
@@ -102,6 +102,44 @@ class PaiementController extends AbstractActionController implements ContextProv
             $etatPaiement = $this->getServiceMiseEnPaiement()->getEtatPaiement( $recherche );
         }
         return compact( 'rechercheForm', 'etatPaiement', 'etat' );
+    }
+
+    public function miseEnPaiementAction()
+    {
+        $title = 'Mise en paiement';
+        $structure    = $this->context()->mandatory()->structureFromRoute();
+        $intervenants = $this->params('intervenants');
+
+        $form = $this->getFormMiseEnPaiement();
+        $errors = [];
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            $form->isValid();
+
+            $dateMiseEnPaiement = $form->get('date-mise-en-paiement')->getValue();
+            $periode            = $form->get('periode')->getValue();
+
+            $dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiement);
+            $periode = $this->getServicePeriode()->get($periode);
+
+            $intervenants = $this->getServiceIntervenant()->get( explode(',',$intervenants) );
+            try{
+                $this->getServiceMiseEnPaiement()->mettreEnPaiement($structure, $intervenants, $periode, $dateMiseEnPaiement);
+            }catch(\Exception $e){
+                $errors[] = $e->getMessage();
+            }
+        }
+
+        return compact('form','title', 'errors');
+    }
+
+    /**
+     * @return \Application\Form\Paiement\MiseEnPaiementForm
+     */
+    protected function getFormMiseEnPaiement()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('PaiementMiseEnPaiementForm');
     }
 
     /**

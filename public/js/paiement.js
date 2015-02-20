@@ -531,7 +531,7 @@ function PaiementMiseEnPaiementRechercheForm( id )
                 submitElement.show();
             }
         }else{
-            submitElement.attr( 'value', 'Sélectionner ou rechercher les intervenants correspondants');
+            submitElement.attr( 'value', 'Suite...');
             submitElement.show();
         }
     }
@@ -562,6 +562,13 @@ function PaiementMiseEnPaiementRechercheForm( id )
         );
         iediv.find(".select-all").click( function(){ that.intervenantsSelectAll() } );
         iediv.find(".select-none").click( function(){ that.intervenantsSelectNone() } );
+
+        $("body").on("mise-en-paiement-form-submit", function(event, data) {
+            if ($("div .messenger, div .alert", event.div).length ? false : true){
+                document.location.href = event.a.data('url-redirect');
+            }
+        });
+
         this.onIntervenantsChange();
     }
 

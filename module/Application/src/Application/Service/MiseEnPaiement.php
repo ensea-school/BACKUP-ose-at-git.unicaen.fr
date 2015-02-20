@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Periode as PeriodeEntity;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -243,6 +244,28 @@ class MiseEnPaiement extends AbstractEntityService
                     $this->save($miseEnPaiement);
                 }
             }
+        }
+    }
+
+    /**
+     *
+     * @param StructureEntity $structure
+     * @param \Application\Entity\Db\Intervenant[] $intervenants
+     * @param PeriodeEntity $periodePaiement
+     * @param \DateTime $dateMiseEnPaiement
+     */
+    public function mettreEnPaiement( StructureEntity $structure, $intervenants, PeriodeEntity $periodePaiement, \DateTime $dateMiseEnPaiement )
+    {
+        list($qb,$alias) = $this->initQuery();
+        $this->finderByEtat( MiseEnPaiementEntity::A_METTRE_EN_PAIEMENT, $qb );
+        $this->finderByStructure($structure, $qb);
+        $this->finderByIntervenants($intervenants, $qb);
+        $mepList = $this->getList( $qb );
+        foreach( $mepList as $mep ){
+            /* @var $mep MiseEnPaiementEntity */
+            $mep->setPeriodePaiement( $periodePaiement );
+            $mep->setDateMiseEnPaiement($dateMiseEnPaiement);
+            $this->save( $mep );
         }
     }
 

@@ -87,6 +87,14 @@ class Periode
      */
     protected $paiement;
 
+    /**
+     * miseEnPaiementIntervenantStructure
+     *
+     * @var MiseEnPaiementIntervenantStructure
+     */
+    protected $miseEnPaiementIntervenantStructure;
+
+
 
     /**
      * Set histoCreation
@@ -362,9 +370,15 @@ class Periode
         return $this->paiement;
     }
 
-    /*******************************************************************************************************
-     *                                        Début ajout
-     *******************************************************************************************************/
+    /**
+     * Get miseEnPaiementIntervenantStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiementIntervenantStructure()
+    {
+        return $this->miseEnPaiementIntervenantStructure;
+    }
 
     /**
      *

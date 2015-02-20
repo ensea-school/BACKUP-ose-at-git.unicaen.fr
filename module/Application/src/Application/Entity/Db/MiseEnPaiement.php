@@ -9,6 +9,10 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 {
+    const A_VALIDER             = 'a-valider';
+    const A_METTRE_EN_PAIEMENT  = 'a-mettre-en-paiement';
+    const MIS_EN_PAIEMENT       = 'mis-en-paiement';
+
     /**
      * @var \DateTime
      */
@@ -89,6 +93,18 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
      */
     private $formuleResultatServiceReferentiel;
 
+    /**
+     * miseEnPaiementIntervenantStructure
+     *
+     * @var MiseEnPaiementIntervenantStructure
+     */
+    protected $miseEnPaiementIntervenantStructure;
+
+
+    public function __construct()
+    {
+        $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set dateMiseEnPaiement
@@ -474,6 +490,27 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     public function getFormuleResultatServiceReferentiel()
     {
         return $this->formuleResultatServiceReferentiel;
+    }
+
+    /**
+     * Get miseEnPaiementIntervenantStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiementIntervenantStructure()
+    {
+        return $this->miseEnPaiementIntervenantStructure;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getEtat()
+    {
+        if (! $this->getValidation()) return self::A_VALIDER;
+        if (! $this->getDateMiseEnPaiement()) return self::A_METTRE_EN_PAIEMENT;
+        return self::MIS_EN_PAIEMENT;
     }
 
     /**

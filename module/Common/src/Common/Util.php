@@ -27,6 +27,15 @@ class Util
      *
      * @param float $heures
      */
+    public static function formattedEuros( $montant )
+    {
+        return self::formattedHeures($montant).' &euro;';
+    }
+
+    /**
+     *
+     * @param float $heures
+     */
     public static function formattedPourcentage( $heures )
     {
         $heures = round( (float)$heures*100, 2);

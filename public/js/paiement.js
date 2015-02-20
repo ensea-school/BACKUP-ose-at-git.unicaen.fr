@@ -484,3 +484,109 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
         this.populate();
     }
 }
+
+
+
+
+
+function PaiementMiseEnPaiementRechercheForm( id )
+{
+    this.id = id;
+    this.element = $(".paiement-mise-en-paiement-recherche-form#"+this.id);
+
+    this.onStructureChange = function()
+    {
+        var intervenantElement = this.getIntervenantsElement();
+        this.intervenantsSelectNone();
+        intervenantElement.parents('.form-group').hide();
+        $('.etat-paiement').hide();
+        this.submitUpdate();
+        this.element.submit();
+    }
+
+    this.onIntervenantsChange = function()
+    {
+        this.submitUpdate();
+    }
+
+    this.submitUpdate = function()
+    {
+        var submitElement = this.getSubmitElement();
+
+        if ( this.getIntervenantsElement().is(':visible') ){
+            switch( this.getEtat()){
+                case 'a-valider':               submitElement.attr( 'value', 'Afficher l\'état des demandes de paiement en paiement à valider'); break;
+                case 'a-mettre-en-paiement':    submitElement.attr( 'value', 'Afficher les demandes à mettre en paiement'); break;
+                case 'mis-en-paiement':         submitElement.attr( 'value', 'Afficher l\'état de paiement'); break;
+            }
+            if (this.getIntervenantsElement().val() == null){
+                submitElement.hide();
+            }else{
+                submitElement.show();
+            }
+        }else{
+            submitElement.attr( 'value', 'Sélectionner ou rechercher les intervenants correspondants');
+            submitElement.show();
+        }
+    }
+
+    this.intervenantsSelectAll = function()
+    {
+        this.getIntervenantsElement().find("option").prop("selected", "selected");
+        this.onIntervenantsChange();
+    }
+
+    this.intervenantsSelectNone = function()
+    {
+        this.getIntervenantsElement().val([]);
+        this.onIntervenantsChange();
+    }
+
+    this.init = function()
+    {
+        var that = this;
+        this.getStructureElement().change(function(){ that.onStructureChange() });
+        this.getIntervenantsElement().change(function(){ that.onIntervenantsChange() });
+
+        var iediv = this.getIntervenantsElement().parent();
+        iediv.append(
+            '<a class="btn btn-default btn-xs select-all" role="button"><span class="glyphicon glyphicon-ok-circle"></span> Tout sélectionner</a>'
+           +'<a class="btn btn-default btn-xs select-none" role="button"><span class="glyphicon glyphicon-remove-circle"></span> Ne rien sélectionner</a>'
+        );
+        iediv.find(".select-all").click( function(){ that.intervenantsSelectAll() } );
+        iediv.find(".select-none").click( function(){ that.intervenantsSelectNone() } );
+        this.onIntervenantsChange();
+    }
+
+    this.getStructureElement = function()
+    {
+        return this.element.find('[name="structure"]');
+    }
+
+    this.getIntervenantsElement = function()
+    {
+        return this.element.find('[name="intervenants[]"]');
+    }
+
+    this.getSubmitElement = function()
+    {
+        return this.element.find('[name="submit"]');
+    }
+
+    this.getEtat = function()
+    {
+        return this.element.parents('.filter').data('etat');
+    }
+}
+
+/**
+ *
+ * @param {string} id
+ * @returns {PaiementMiseEnPaiementRechercheForm}
+ */
+PaiementMiseEnPaiementRechercheForm.get = function( id )
+{
+    if (null == PaiementMiseEnPaiementRechercheForm.instances) PaiementMiseEnPaiementRechercheForm.instances = new Array();
+    if (null == PaiementMiseEnPaiementRechercheForm.instances[id]) PaiementMiseEnPaiementRechercheForm.instances[id] = new PaiementMiseEnPaiementRechercheForm(id);
+    return PaiementMiseEnPaiementRechercheForm.instances[id];
+}

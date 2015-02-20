@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Structure as StructureEntity;
+
 use Doctrine\ORM\QueryBuilder;
 
 
@@ -52,6 +54,29 @@ class Periode extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->andWhere("$alias.enseignement = 1");
+        return $qb;
+    }
+
+    public function finderByMiseEnPaiement(StructureEntity $structure=null, QueryBuilder $qb=null, $alias=null)
+    {
+        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
+        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
+
+        $serviceMiseEnPaiement = $this->getServiceLocator()->get('applicationMiseEnPaiement');
+        /* @var $serviceMiseEnPaiement MiseEnPaiement */
+
+        $serviceStructure = $this->getServiceLocator()->get('applicationStructure');
+        /* @var $serviceStructure Structure */
+
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $this               ->join( $serviceMIS             , $qb, 'miseEnPaiementIntervenantStructure', false, $alias );
+        $serviceMIS         ->join( $serviceMiseEnPaiement  , $qb, 'miseEnPaiement'                                    );
+
+        if ($structure){
+            $serviceMIS->finderByStructure( $structure, $qb );
+        }
+
         return $qb;
     }
 

@@ -68,5 +68,6 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
+    <one-to-many field="miseEnPaiement" target-entity="Application\Entity\Db\MiseEnPaiement" mapped-by="centreCout" />
   </entity>
 </doctrine-mapping>

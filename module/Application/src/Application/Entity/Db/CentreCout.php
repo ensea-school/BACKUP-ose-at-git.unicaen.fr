@@ -84,6 +84,18 @@ class CentreCout implements HistoriqueAwareInterface
      */
     private $typeHeures;
 
+    /**
+     *
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $miseEnPaiement;
+
+
+    public function __construct()
+    {
+        $this->typeHeures       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->miseEnPaiement   = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set histoCreation
@@ -422,5 +434,38 @@ class CentreCout implements HistoriqueAwareInterface
     public function typeHeuresMatches( TypeHeures $typeHeures )
     {
         return $this->getActivite()->typeHeuresMatches($typeHeures) && $this->getTypeRessource()->typeHeuresMatches($typeHeures);
+    }
+
+    /**
+     * Add miseEnPaiement
+     *
+     * @param MiseEnPaiement $miseEnPaiement
+     * @return self
+     */
+    public function addMiseEnPaiement(MiseEnPaiement $miseEnPaiement)
+    {
+        $this->miseEnPaiement[] = $miseEnPaiement;
+
+        return $this;
+    }
+
+    /**
+     * Remove miseEnPaiement
+     *
+     * @param MiseEnPaiement $miseEnPaiement
+     */
+    public function removeMiseEnPaiement(MiseEnPaiement $miseEnPaiement)
+    {
+        $this->miseEnPaiement->removeElement($miseEnPaiement);
+    }
+
+    /**
+     * Get miseEnPaiement
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiement()
+    {
+        return $this->miseEnPaiement;
     }
 }

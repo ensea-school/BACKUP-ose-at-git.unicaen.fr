@@ -49,6 +49,93 @@ class PaiementController extends AbstractActionController implements ContextProv
         return compact('intervenant', 'servicesAPayer');
     }
 
+    public function miseEnPaiementAction()
+    {
+        $this->initFilters();
+
+        $etat = $this->params()->fromRoute('etat');
+
+        $rechercheForm = $this->getFormMiseEnPaiementRecherche();
+        $recherche = new \Application\Entity\Paiement\MiseEnPaiementRecherche;
+        $recherche->setEtat( $etat ); // données à mettre en paiement uniquement
+        $rechercheForm->bind($recherche);
+
+        $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
+        $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
+        $structures = $this->getServiceStructure()->getList($qb);
+        $rechercheForm->populateStructures( $structures );
+
+        if (count($structures) == 1){
+            $structure = current($structures);
+            $rechercheForm->get('structure')->setValue( $structure->getId() );
+        }else{
+            $structure = $this->context()->structureFromPost(); /* @var $structure \Application\Entity\Db\Structure */
+        }
+
+        $periode = null;
+        if ($structure){
+            $qb = $this->getServicePeriode()->finderByMiseEnPaiement($structure);
+            $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
+            $periodes = $this->getServicePeriode()->getList($qb);
+            $rechercheForm->populatePeriodes( $periodes );
+
+            if (count($periodes) == 1){
+                $periode = current($periodes);
+                $rechercheForm->get('periode')->setValue( $periode->getId() );
+            }else{
+                $periode = $this->context()->periodeFromPost(); /* @var $periode \Application\Entity\Db\Periode */
+            }
+
+            $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement( $structure );
+            $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
+            $rechercheForm->populateIntervenants( $this->getServiceIntervenant()->getList($qb) );
+        }
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $rechercheForm->setData($request->getPost());
+            $rechercheForm->isValid();
+        }
+
+        $etatPaiement = null;
+        if ( $recherche->getIntervenants()->count() > 0 ){
+            $etatPaiement = $this->getServiceMiseEnPaiement()->getEtatPaiement( $recherche );
+        }
+        return compact( 'rechercheForm', 'etatPaiement', 'etat' );
+    }
+
+    /**
+     * @return \Application\Form\Paiement\MiseEnPaiementRechercheForm
+     */
+    protected function getFormMiseEnPaiementRecherche()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('PaiementMiseEnPaiementRechercheForm');
+    }
+
+    /**
+     * @return \Application\Service\Intervenant
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->get('applicationIntervenant');
+    }
+
+    /**
+     * @return \Application\Service\Periode
+     */
+    protected function getServicePeriode()
+    {
+        return $this->getServiceLocator()->get('applicationPeriode');
+    }
+
+    /**
+     * @return \Application\Service\Structure
+     */
+    protected function getServiceStructure()
+    {
+        return $this->getServiceLocator()->get('applicationStructure');
+    }
+
     /**
      * @return \Application\Service\MiseEnPaiement
      */

@@ -207,6 +207,22 @@ class Structure extends AbstractEntityService
         return $qb;
     }
 
+    public function finderByMiseEnPaiement(QueryBuilder $qb=null, $alias=null)
+    {
+        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
+        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
+
+        $serviceMiseEnPaiement = $this->getServiceLocator()->get('applicationMiseEnPaiement');
+        /* @var $serviceMiseEnPaiement MiseEnPaiement */
+
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $this               ->join( $serviceMIS             , $qb, 'miseEnPaiementIntervenantStructure', false, $alias );
+        $serviceMIS         ->join( $serviceMiseEnPaiement  , $qb, 'miseEnPaiement'                         );
+
+        return $qb;
+    }
+
     /**
      * Fetch des structures d'enseignement distinctes d'un intervenant.
      * 

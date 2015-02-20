@@ -16,28 +16,62 @@ return [
                         'action' => 'index',
                     ],
                 ],
-               /*'child_routes' => [
-                    'saisie' => [
+               'child_routes' => [
+                    'mise-en-paiement' => [
                         'type'    => 'Literal',
                         'may_terminate' => false,
                         'options' => [
-                            'route'    => '/saisie',
+                            'route'    => '/mise-en-paiement',
                             'defaults' => [
-                                'action' => 'miseEnPaiementSaisie',
+                                'action' => 'miseEnPaiement',
+                                'etat'   => Entity\Db\MiseEnPaiement::A_METTRE_EN_PAIEMENT,
                             ],
                         ],
                     ],
-                ],*/
+                    'etat-paiement' => [
+                        'type'    => 'Literal',
+                        'may_terminate' => false,
+                        'options' => [
+                            'route'    => '/etat-paiement',
+                            'defaults' => [
+                                'action' => 'miseEnPaiement',
+                                'etat'   => Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT,
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
+    'navigation' => array(
+        'default' => array(
+            'home' => array(
+                'pages' => array(
+                    'gestion' => array(
+                        'pages' => array(
+                            'mise-en-paiement' => array(
+                                'label'    => "Mise en paiement",
+                                'title'    => "Mise en paiement",
+                                'route'    => 'paiement/mise-en-paiement',
+                            ),
+                            'etat-paiement' => array(
+                                'label'    => "État de paiement",
+                                'title'    => "État de paiement",
+                                'route'    => 'paiement/etat-paiement',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
     'bjyauthorize' => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['index','demandeMiseEnPaiement'],
-                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
+                    'action'     => ['index','demandeMiseEnPaiement','miseEnPaiement'],
+                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR, R_DRH],
                 ],
             ],
         ],
@@ -66,11 +100,12 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationServiceAPayer'         => 'Application\Service\ServiceAPayer',
-            'ApplicationMiseEnPaiement'        => 'Application\Service\MiseEnPaiement',
-            'ApplicationTypeHeures'            => 'Application\Service\TypeHeures',
-            'ApplicationCentreCout'            => 'Application\Service\CentreCout',
-            'MiseEnPaiementAssertion'          => 'Application\\Assertion\\MiseEnPaiementAssertion',
+            'ApplicationServiceAPayer'                      => 'Application\Service\ServiceAPayer',
+            'ApplicationMiseEnPaiement'                     => 'Application\Service\MiseEnPaiement',
+            'ApplicationMiseEnPaiementIntervenantStructure' => 'Application\Service\MiseEnPaiementIntervenantStructure',
+            'ApplicationTypeHeures'                         => 'Application\Service\TypeHeures',
+            'ApplicationCentreCout'                         => 'Application\Service\CentreCout',
+            'MiseEnPaiementAssertion'                       => 'Application\Assertion\MiseEnPaiementAssertion',
         ],
     ],
     'view_helpers' => [
@@ -80,7 +115,7 @@ return [
     ],
     'form_elements' => [
         'invokables' => [
-            'MiseEnPaiementSaisie' => 'Application\Form\Paiement\MiseEnPaiementSaisieForm',
+            'PaiementMiseEnPaiementRechercheForm'             => 'Application\Form\Paiement\MiseEnPaiementRechercheForm',
         ],
     ],
     'controllers' => [

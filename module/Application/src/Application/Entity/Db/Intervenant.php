@@ -288,20 +288,28 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @var \Application\Entity\Db\VIndicDiffDossier
      */
     private $vIndicDiffDossier;
+
+    /**
+     * miseEnPaiementIntervenantStructure
+     *
+     * @var MiseEnPaiementIntervenantStructure
+     */
+    protected $miseEnPaiementIntervenantStructure;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->affectation                      = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->adresse                          = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->validation                       = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->agrement                         = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->service                          = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->serviceReferentiel               = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultat                  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleIntervenant               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->affectation                          = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->adresse                              = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation                           = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->agrement                             = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->service                              = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviceReferentiel                   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultat                      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleIntervenant                   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1611,6 +1619,17 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getFormuleIntervenant()
     {
         return $this->formuleIntervenant;
+    }
+
+
+    /**
+     * Get miseEnPaiementIntervenantStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiementIntervenantStructure()
+    {
+        return $this->miseEnPaiementIntervenantStructure;
     }
 
 

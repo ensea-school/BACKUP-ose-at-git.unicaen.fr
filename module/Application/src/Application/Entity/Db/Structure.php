@@ -117,16 +117,25 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
      */
     protected $centreCout;
 
+    /**
+     * miseEnPaiementIntervenantStructure
+     *
+     * @var MiseEnPaiementIntervenantStructure
+     */
+    protected $miseEnPaiementIntervenantStructure;
+
+
 
 
 
 
     function __construct()
     {
-        $this->structureNiv2        = new \Doctrine\Common\Collections\Collection;
-        $this->elementPedagogique   = new \Doctrine\Common\Collections\Collection;
-        $this->service              = new \Doctrine\Common\Collections\Collection;
-        $this->centreCout           = new \Doctrine\Common\Collections\Collection;
+        $this->structureNiv2                        = new \Doctrine\Common\Collections\Collection;
+        $this->elementPedagogique                   = new \Doctrine\Common\Collections\Collection;
+        $this->service                              = new \Doctrine\Common\Collections\Collection;
+        $this->centreCout                           = new \Doctrine\Common\Collections\Collection;
+        $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\Collection;
     }
 
 
@@ -653,9 +662,15 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
         return $this->centreCout;
     }
 
-    /**************************************************************************************************
-     *                                      Début ajout
-     **************************************************************************************************/
+    /**
+     * Get miseEnPaiementIntervenantStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiementIntervenantStructure()
+    {
+        return $this->miseEnPaiementIntervenantStructure;
+    }
 
     /**
      * Retourne la représentation littérale de cet objet.

@@ -501,38 +501,30 @@ function PaiementMiseEnPaiementRechercheForm( id )
         if (periodeElement){
             periodeElement.val('');
         }
-        this.getSubmitElement().click();
+        this.getSuiteElement().click();
     }
 
     this.onPeriodeChange = function()
     {
         this.intervenantsSelectNone();
-        this.getSubmitElement().click();
+        this.getSuiteElement().click();
     }
 
     this.onIntervenantsChange = function()
     {
-        this.submitUpdate();
-    }
-
-    this.submitUpdate = function()
-    {
-        var submitElement = this.getSubmitElement();
-
         if ( this.getIntervenantsElement().is(':visible') ){
-            switch( this.getEtat()){
-                case 'a-valider':               submitElement.attr( 'value', 'Afficher l\'état des demandes de paiement en paiement à valider'); break;
-                case 'a-mettre-en-paiement':    submitElement.attr( 'value', 'Afficher les demandes à mettre en paiement'); break;
-                case 'mis-en-paiement':         submitElement.attr( 'value', 'Afficher l\'état de paiement'); break;
-            }
+            this.getSuiteElement().hide();
             if (this.getIntervenantsElement().val() == null){
-                submitElement.hide();
+                this.getAfficherElement().hide();
+                this.getExporterElement().hide();
             }else{
-                submitElement.show();
+                this.getAfficherElement().show();
+                this.getExporterElement().show();
             }
         }else{
-            submitElement.attr( 'value', 'Suite...');
-            submitElement.show();
+            this.getSuiteElement().show();
+            this.getAfficherElement().hide();
+            this.getExporterElement().hide();
         }
     }
 
@@ -587,9 +579,19 @@ function PaiementMiseEnPaiementRechercheForm( id )
         return this.element.find('[name="intervenants[]"]');
     }
 
-    this.getSubmitElement = function()
+    this.getSuiteElement = function()
     {
-        return this.element.find('[name="submit"]');
+        return this.element.find('[name="suite"]');
+    }
+
+    this.getAfficherElement = function()
+    {
+        return this.element.find('[name="afficher"]');
+    }
+
+    this.getExporterElement = function()
+    {
+        return this.element.find('[name="exporter"]');
     }
 
     this.getEtat = function()

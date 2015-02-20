@@ -1,6 +1,7 @@
 <?php
 
 /* @var $etatPaiement array */
+/* @var $hasFoot boolean */
 
 ?>
 <table class="table table-condensed table-bordered etat-paiement">
@@ -54,6 +55,7 @@
     <?php endforeach; ?>
     <?php endif; ?>
 </tbody>
+<?php if ($hasFoot): ?>
 <tfoot class="bg-info">
     <tr>
         <td colspan="4"><?php echo (count($etatPaiement)-1) ?> intervenant(s)</td>
@@ -65,4 +67,5 @@
         <td class="nombre"><?php echo \Common\Util::formattedEuros($etatPaiement['total']['exercice-ac-montant']) ?></td>
     </tr>
 </tfoot>
+<?php endif; ?>
 </table>

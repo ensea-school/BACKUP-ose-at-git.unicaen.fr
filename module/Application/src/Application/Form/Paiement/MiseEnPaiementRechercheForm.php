@@ -81,14 +81,29 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
         ]);
 
         $this->add(array(
-            'name' => 'submit',
+            'name' => 'suite',
             'type'  => 'Submit',
             'attributes' => array(
-                'value' => 'Rechercher les mises en paiement',
+                'value' => 'Suite...',
                 'class' => 'btn btn-primary',
             ),
         ));
 
+        $this->add(array(
+            'name' => 'afficher',
+            'type'  => 'Submit',
+            'attributes' => array(
+                'class' => 'btn btn-primary',
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'exporter',
+            'type'  => 'Submit',
+            'attributes' => array(
+                'class' => 'btn btn-default',
+            ),
+        ));
     }
 
     /**

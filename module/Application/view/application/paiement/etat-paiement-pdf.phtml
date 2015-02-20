@@ -1,0 +1,31 @@
+<?php
+
+/* @var $etatPaiement array */
+/* @var $title string */
+/* @var $structure Application\Entity\Db\Structure */
+/* @var $periode Application\Entity\Db\Periode */
+/* @var $drh \Application\Entity\Db\Personnel */
+
+?>
+<style>
+    body { font-family: ubuntu,arial,sans-serif; }
+    h1{ text-align: center;}
+    table.etat-paiement { border-collapse: true; border-style: solid; border-width: 1px; width: 100%; }
+    table.etat-paiement th, table.etat-paiement td { border-style: solid; border-width: 1px; }
+    .nombre { text-align:right; white-space: nowrap; }
+    .signature{ margin-left: 60%; text-align:center; }
+</style>
+<h1><?php echo $title ?></h1>
+<table style="width:100%"><tr>
+        <td><?php echo ucfirst($structure->getLibelleLong()) ?></td>
+    <?php if ($periode): ?><td style="text-align:right">Paye du mois de <?php echo lcfirst($periode->getLibelleLong()) ?></td><?php endif; ?>
+</tr></table>
+
+<?php echo $this->partial('application/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => false]); ?>
+<div class="signature">
+<p style="margin: none;margin-top:1em">Pour le président et par délégation</p>
+<p style="margin: none">Le Directeur des ressources humaines</p>
+<?php if ($drh): ?>
+<p style="margin-top:4em"><?php echo $drh->getPrenom().' '.$drh->getNomUsuel() ?></p>
+<?php endif; ?>
+</div>

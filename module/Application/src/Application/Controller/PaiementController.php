@@ -6,6 +6,8 @@ use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Json\Json;
+use UnicaenApp\Exporter\Pdf;
+use Application\Entity\Db\MiseEnPaiement;
 
 /**
  * @method \Application\Controller\Plugin\Context     context()
@@ -101,7 +103,48 @@ class PaiementController extends AbstractActionController implements ContextProv
         if ( $recherche->getIntervenants()->count() > 0 ){
             $etatPaiement = $this->getServiceMiseEnPaiement()->getEtatPaiement( $recherche );
         }
-        return compact( 'rechercheForm', 'etatPaiement', 'etat' );
+
+        if ( $this->params()->fromPost('exporter') !== null ){
+            $this->etatPaiementPdf( $etat, $structure, $periode, $etatPaiement );
+        }else{
+            return compact( 'rechercheForm', 'etatPaiement', 'etat' );
+        }
+    }
+
+    protected function etatPaiementPdf( $etat, $structure, $periode, $etatPaiement )
+    {
+        $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
+
+        switch( $etat  ){
+            case MiseEnPaiement::A_VALIDER              : 
+                $fileName = 'mise_en_paiement_a_valider';
+                $title = 'Mise en paiement à valider';
+                 //$exp->setWatermark("A valider");
+            break;
+            case MiseEnPaiement::A_METTRE_EN_PAIEMENT   : 
+                $fileName = 'demande_mise_en_paiement';
+                $title = 'Demande de mise en paiement';
+                //$exp->setWatermark("Demandes");
+            break;
+            default                                     :
+                $fileName = 'etat_paiement';
+                $title = 'État de paiement';
+        }
+
+        if ($structure) $fileName .= '_'.strtolower( $structure->getSourceCode() );
+        if ($periode)   $fileName .= '_'.strtolower( $periode->getLibelleCourt() );
+        $fileName .= '_'.date('Y-m-d');
+        $exp->setOrientationPaysage();
+        // Création du pdf, complétion et envoi au navigateur
+        $exp    ->setHeaderSubtitle('Année universitaire '.$this->getContextProvider()->getGlobalContext()->getAnnee())
+                ->setMarginBottom(25)
+                ->setMarginTop(25);
+
+        $drh = $this->getServicePersonnel()->getDrh();
+
+        $variables = compact( 'structure', 'periode', 'title', 'etatPaiement', 'drh' );
+        $exp->addBodyScript('application/paiement/etat-paiement-pdf.phtml', true, $variables, 1);
+        $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }
 
     public function miseEnPaiementAction()
@@ -156,6 +199,14 @@ class PaiementController extends AbstractActionController implements ContextProv
     protected function getServiceIntervenant()
     {
         return $this->getServiceLocator()->get('applicationIntervenant');
+    }
+
+    /**
+     * @return \Application\Service\Personnel
+     */
+    protected function getServicePersonnel()
+    {
+        return $this->getServiceLocator()->get('applicationPersonnel');
     }
 
     /**

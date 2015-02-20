@@ -86,7 +86,7 @@ class PaiementController extends AbstractActionController implements ContextProv
                 $periode = $this->context()->periodeFromPost(); /* @var $periode \Application\Entity\Db\Periode */
             }
 
-            $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement( $structure );
+            $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement( $structure, $periode );
             $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
             $rechercheForm->populateIntervenants( $this->getServiceIntervenant()->getList($qb) );
         }

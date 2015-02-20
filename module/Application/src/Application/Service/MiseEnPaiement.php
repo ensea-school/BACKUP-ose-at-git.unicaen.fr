@@ -144,7 +144,7 @@ class MiseEnPaiement extends AbstractEntityService
 
         $sql = 'SELECT * FROM V_ETAT_PAIEMENT WHERE '.implode( ' AND ', $conditions );
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-        \Test\Util::dumpSql($sql);
+        
         // récupération des données
         while( $d = $stmt->fetch()){
             $ds = [

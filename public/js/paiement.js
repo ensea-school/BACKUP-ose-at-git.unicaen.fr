@@ -496,12 +496,18 @@ function PaiementMiseEnPaiementRechercheForm( id )
 
     this.onStructureChange = function()
     {
-        var intervenantElement = this.getIntervenantsElement();
         this.intervenantsSelectNone();
-        intervenantElement.parents('.form-group').hide();
-        $('.etat-paiement').hide();
-        this.submitUpdate();
-        this.element.submit();
+        var periodeElement = this.getPeriodeElement()
+        if (periodeElement){
+            periodeElement.val('');
+        }
+        this.getSubmitElement().click();
+    }
+
+    this.onPeriodeChange = function()
+    {
+        this.intervenantsSelectNone();
+        this.getSubmitElement().click();
     }
 
     this.onIntervenantsChange = function()
@@ -546,6 +552,7 @@ function PaiementMiseEnPaiementRechercheForm( id )
     {
         var that = this;
         this.getStructureElement().change(function(){ that.onStructureChange() });
+        this.getPeriodeElement().change(function(){ that.onPeriodeChange() });
         this.getIntervenantsElement().change(function(){ that.onIntervenantsChange() });
 
         var iediv = this.getIntervenantsElement().parent();
@@ -561,6 +568,11 @@ function PaiementMiseEnPaiementRechercheForm( id )
     this.getStructureElement = function()
     {
         return this.element.find('[name="structure"]');
+    }
+
+    this.getPeriodeElement = function()
+    {
+        return this.element.find('[name="periode"]');
     }
 
     this.getIntervenantsElement = function()

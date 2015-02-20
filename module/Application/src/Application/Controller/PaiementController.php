@@ -70,7 +70,12 @@ class PaiementController extends AbstractActionController implements ContextProv
         if (count($structures) == 1){
             $structure = current($structures);
             $rechercheForm->get('structure')->setValue( $structure->getId() );
+            $noData = false;
+        }elseif(count($structures) == 0){
+            $noData = true;
+            $structure = $this->context()->structureFromPost(); /* @var $structure \Application\Entity\Db\Structure */
         }else{
+            $noData = false;
             $structure = $this->context()->structureFromPost(); /* @var $structure \Application\Entity\Db\Structure */
         }
 
@@ -107,7 +112,7 @@ class PaiementController extends AbstractActionController implements ContextProv
         if ( $this->params()->fromPost('exporter') !== null ){
             $this->etatPaiementPdf( $etat, $structure, $periode, $etatPaiement );
         }else{
-            return compact( 'rechercheForm', 'etatPaiement', 'etat' );
+            return compact( 'rechercheForm', 'etatPaiement', 'etat', 'noData' );
         }
     }
 

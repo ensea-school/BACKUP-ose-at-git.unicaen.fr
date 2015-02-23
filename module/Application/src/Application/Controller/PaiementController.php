@@ -147,7 +147,7 @@ class PaiementController extends AbstractActionController implements ContextProv
 
         $drh = $this->getServicePersonnel()->getDrh();
 
-        $variables = compact( 'structure', 'periode', 'title', 'etatPaiement', 'drh' );
+        $variables = compact( 'structure', 'periode', 'title', 'etatPaiement', 'drh', 'etat' );
         $exp->addBodyScript('application/paiement/etat-paiement-pdf.phtml', true, $variables, 1);
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }

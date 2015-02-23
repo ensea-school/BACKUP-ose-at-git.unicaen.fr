@@ -5,6 +5,7 @@
 /* @var $structure Application\Entity\Db\Structure */
 /* @var $periode Application\Entity\Db\Periode */
 /* @var $drh \Application\Entity\Db\Personnel */
+/* @var $etat string */
 
 ?>
 <style>
@@ -22,6 +23,8 @@
 </tr></table>
 
 <?php echo $this->partial('application/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => false]); ?>
+
+<?php if (Application\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT == $etat): ?>
 <div class="signature">
 <p style="margin: none;margin-top:1em">Pour le président et par délégation</p>
 <p style="margin: none">Le Directeur des ressources humaines</p>
@@ -29,3 +32,4 @@
 <p style="margin-top:4em"><?php echo $drh->getPrenom().' '.$drh->getNomUsuel() ?></p>
 <?php endif; ?>
 </div>
+<?php endif; ?>

@@ -79,6 +79,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 }else{
                     $this->roles[$roleId] = new $classname($roleId);
                 }
+                $this->roles[$roleId]->setTypeRole( $role->getType() );
             }
         }
         return $this->roles;

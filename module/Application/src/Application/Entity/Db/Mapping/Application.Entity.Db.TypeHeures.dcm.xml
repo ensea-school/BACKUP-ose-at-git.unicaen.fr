@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Application\Entity\Db\HeuresMisesEnPaiement" table="HEURES_MISES_EN_PAIEMENT">
+  <entity name="Application\Entity\Db\TypeHeures" table="TYPE_HEURES">
     <indexes>
-      <index name="IDX_BFDDB51D59860CDC" columns="HISTO_CREATEUR_ID"/>
-      <index name="IDX_BFDDB51D7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
-      <index name="IDX_BFDDB51D63F06898" columns="HISTO_MODIFICATEUR_ID"/>
-      <index name="IDX_BFDDB51DF08DA511" columns="CENTRE_COUT_ID"/>
-      <index name="IDX_BFDDB51D4D0596DD" columns="MISE_EN_PAIEMENT_ID"/>
+      <index name="IDX_BFCC471159860CDC" columns="HISTO_CREATEUR_ID"/>
+      <index name="IDX_BFCC47117E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
+      <index name="IDX_BFCC471163F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
+    <unique-constraints>
+      <unique-constraint name="type_heures_un" columns="CODE"/>
+    </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
     </id>
-    <field name="heuresFa" type="float" column="HEURES_FA" precision="126" scale="0" nullable="false"/>
-    <field name="heuresFc" type="float" column="HEURES_FC" precision="126" scale="0" nullable="false"/>
-    <field name="heuresFi" type="float" column="HEURES_FI" precision="126" scale="0" nullable="false"/>
-    <field name="heuresReferentiel" type="float" column="HEURES_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+    <field name="code" type="string" column="CODE" length="20" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
-    <many-to-one field="miseEnPaiement" target-entity="Application\Entity\Db\MiseEnPaiement">
+    <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="15" nullable="false"/>
+    <field name="libelleLong" type="string" column="LIBELLE_LONG" length="100" nullable="false"/>
+    <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
+    <field name="eligibleCentreCoutEp" type="boolean" column="ELIGIBLE_CENTRE_COUT_EP" nullable="false"/>
+    <many-to-one field="typeHeuresElement" target-entity="Application\Entity\Db\TypeHeures">
       <join-columns>
-        <join-column name="MISE_EN_PAIEMENT_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="centreCout" target-entity="Application\Entity\Db\CentreCout">
-      <join-columns>
-        <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
+        <join-column name="TYPE_HEURES_ELEMENT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
@@ -43,5 +40,7 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout" mapped-by="typeHeures" />
+    <many-to-many field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique" mapped-by="typeHeures" />
   </entity>
 </doctrine-mapping>

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeDotation
  */
-class TypeDotation
+class TypeDotation implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime
@@ -30,24 +30,9 @@ class TypeDotation
     private $libelle;
 
     /**
-     * @var boolean
-     */
-    private $paieEtat;
-
-    /**
      * @var string
      */
     private $sourceCode;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
 
     /**
      * @var integer
@@ -73,6 +58,11 @@ class TypeDotation
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoCreateur;
+
+    /**
+     * @var \Application\Entity\Db\TypeRessource
+     */
+    private $typeRessource;
 
 
     /**
@@ -168,29 +158,6 @@ class TypeDotation
     }
 
     /**
-     * Set paieEtat
-     *
-     * @param boolean $paieEtat
-     * @return TypeDotation
-     */
-    public function setPaieEtat($paieEtat)
-    {
-        $this->paieEtat = $paieEtat;
-
-        return $this;
-    }
-
-    /**
-     * Get paieEtat
-     *
-     * @return boolean 
-     */
-    public function getPaieEtat()
-    {
-        return $this->paieEtat;
-    }
-
-    /**
      * Set sourceCode
      *
      * @param string $sourceCode
@@ -211,52 +178,6 @@ class TypeDotation
     public function getSourceCode()
     {
         return $this->sourceCode;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return TypeDotation
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return TypeDotation
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**
@@ -359,5 +280,28 @@ class TypeDotation
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * Set typeRessource
+     *
+     * @param \Application\Entity\Db\TypeRessource $typeRessource
+     * @return TypeDotation
+     */
+    public function setTypeRessource(\Application\Entity\Db\TypeRessource $typeRessource = null)
+    {
+        $this->typeRessource = $typeRessource;
+
+        return $this;
+    }
+
+    /**
+     * Get typeRessource
+     *
+     * @return \Application\Entity\Db\TypeRessource 
+     */
+    public function getTypeRessource()
+    {
+        return $this->typeRessource;
     }
 }

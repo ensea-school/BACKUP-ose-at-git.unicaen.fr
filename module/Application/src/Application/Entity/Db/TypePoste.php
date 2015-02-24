@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypePoste
  */
-class TypePoste
+class TypePoste implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime

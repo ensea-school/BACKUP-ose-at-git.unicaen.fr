@@ -2,13 +2,16 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * MiseEnPaiement
  */
-class MiseEnPaiement
+class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 {
+    const A_METTRE_EN_PAIEMENT  = 'a-mettre-en-paiement';
+    const MIS_EN_PAIEMENT       = 'mis-en-paiement';
+
     /**
      * @var \DateTime
      */
@@ -45,6 +48,21 @@ class MiseEnPaiement
     private $periodePaiement;
 
     /**
+     * @var float
+     */
+    private $heures;
+
+    /**
+     * @var TypeHeures
+     */
+    private $typeHeures;
+
+    /**
+     * @var \Application\Entity\Db\CentreCout
+     */
+    private $centreCout;
+
+    /**
      * @var \Application\Entity\Db\Validation
      */
     private $validation;
@@ -74,6 +92,18 @@ class MiseEnPaiement
      */
     private $formuleResultatServiceReferentiel;
 
+    /**
+     * miseEnPaiementIntervenantStructure
+     *
+     * @var MiseEnPaiementIntervenantStructure
+     */
+    protected $miseEnPaiementIntervenantStructure;
+
+
+    public function __construct()
+    {
+        $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set dateMiseEnPaiement
@@ -224,6 +254,75 @@ class MiseEnPaiement
     }
 
     /**
+     * Set heures
+     *
+     * @param float $heures
+     * @return MiseEnPaiement
+     */
+    public function setHeures($heures)
+    {
+        $this->heures = $heures;
+
+        return $this;
+    }
+
+    /**
+     * Get heures
+     *
+     * @return float
+     */
+    public function getHeures()
+    {
+        return $this->heures;
+    }
+
+    /**
+     * Set typeHeures
+     *
+     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @return self
+     */
+    public function setTypeHeures(\Application\Entity\Db\TypeHeures $typeHeures = null)
+    {
+        $this->typeHeures = $typeHeures;
+
+        return $this;
+    }
+
+    /**
+     * Get typeHeures
+     *
+     * @return \Application\Entity\Db\TypeHeures
+     */
+    public function getTypeHeures()
+    {
+        return $this->typeHeures;
+    }
+
+    /**
+     * Set centreCout
+     *
+     * @param \Application\Entity\Db\CentreCout $centreCout
+     * @return MiseEnPaiement
+     */
+    public function setCentreCout(\Application\Entity\Db\CentreCout $centreCout = null)
+    {
+        $this->centreCout = $centreCout;
+
+        return $this;
+    }
+
+    /**
+     * Get centreCout
+     *
+     * @return \Application\Entity\Db\CentreCout
+     */
+    public function getCentreCout()
+    {
+        return $this->centreCout;
+    }
+
+    /**
      * Set validation
      *
      * @param \Application\Entity\Db\Validation $validation
@@ -316,6 +415,37 @@ class MiseEnPaiement
     }
 
     /**
+     *
+     * @return ServiceAPayerInterface
+     */
+    public function getServiceAPayer()
+    {
+        if ($this->formuleResultatService           ) return $this->formuleResultatService;
+        if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;
+        return null;
+    }
+
+    /**
+     *
+     * @param ServiceAPayerInterface $serviceAPayer
+     * @return self
+     */
+    public function setServiceAPayer(ServiceAPayerInterface $serviceAPayer = null )
+    {
+        if ($serviceAPayer instanceof FormuleResultatService           ){
+            $this->setFormuleResultatService( $serviceAPayer );
+            $this->setFormuleResultatServiceReferentiel();
+        }elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel){
+            $this->setFormuleResultatService();
+            $this->setFormuleResultatServiceReferentiel( $serviceAPayer );
+        }else{
+            $this->setFormuleResultatService();
+            $this->setFormuleResultatServiceReferentiel();
+        }
+        return $this;
+    }
+
+    /**
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
@@ -354,10 +484,41 @@ class MiseEnPaiement
     /**
      * Get formuleResultatServiceReferentiel
      *
-     * @return \Application\Entity\Db\FormuleResultatServiceReferentiel 
+     * @return \Application\Entity\Db\FormuleResultatServiceReferentiel
      */
     public function getFormuleResultatServiceReferentiel()
     {
         return $this->formuleResultatServiceReferentiel;
+    }
+
+    /**
+     * Get miseEnPaiementIntervenantStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiementIntervenantStructure()
+    {
+        return $this->miseEnPaiementIntervenantStructure;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getEtat()
+    {
+        if (! $this->getDateMiseEnPaiement()) return self::A_METTRE_EN_PAIEMENT;
+        return self::MIS_EN_PAIEMENT;
+    }
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     * @see ResourceInterface
+     */
+    public function getResourceId()
+    {
+        return 'MiseEnPaiement';
     }
 }

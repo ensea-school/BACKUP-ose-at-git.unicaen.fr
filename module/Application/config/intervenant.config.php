@@ -176,6 +176,19 @@ return array(
                             ),
                         ),
                     ),
+                    'demande-mise-en-paiement' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/:intervenant/demande-mise-en-paiement',
+                            'constraints' => array(
+                                'intervenant' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Application\Controller\Paiement',
+                                'action' => 'demandeMiseEnPaiement',
+                            ),
+                        ),
+                    ),
                     'validation-dossier' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -420,6 +433,16 @@ return array(
                                 ),
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:referentiel',
+                                'visible' => 'IntervenantNavigationPageVisibility',
+                            ),
+                            'demande-mise-en-paiement' => array(
+                                'label'  => "Demande de mise en paiement",
+                                'title'  => "Demande de mise en paiement",
+                                'route'  => 'intervenant/demande-mise-en-paiement',
+                                'paramsInject' => array(
+                                    'intervenant',
+                                ),
+                                'withtarget' => true,
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ),
                         ),

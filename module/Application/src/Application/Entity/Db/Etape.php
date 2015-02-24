@@ -110,6 +110,11 @@ class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
     protected $source;
 
     /**
+     * @var \Application\Entity\Db\DomaineFonctionnel
+     */
+    private $domaineFonctionnel;
+
+    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoModificateur;
@@ -464,6 +469,29 @@ class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getTypeFormation()
     {
         return $this->typeFormation;
+    }
+
+    /**
+     * Set domaineFonctionnel
+     *
+     * @param \Application\Entity\Db\DomaineFonctionnel $domaineFonctionnel
+     * @return Etape
+     */
+    public function setDomaineFonctionnel(\Application\Entity\Db\DomaineFonctionnel $domaineFonctionnel = null)
+    {
+        $this->domaineFonctionnel = $domaineFonctionnel;
+
+        return $this;
+    }
+
+    /**
+     * Get domaineFonctionnel
+     *
+     * @return \Application\Entity\Db\DomaineFonctionnel
+     */
+    public function getDomaineFonctionnel()
+    {
+        return $this->domaineFonctionnel;
     }
 
     /**

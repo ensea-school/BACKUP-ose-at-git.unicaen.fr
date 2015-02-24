@@ -327,6 +327,7 @@ return [
             'serviceSaisieForm'            => 'Application\View\Helper\Service\SaisieForm',
             'formServiceReferentielSaisie' => 'Application\View\Helper\ServiceReferentiel\FormSaisie',
             'serviceResume'                => 'Application\View\Helper\Service\Resume',
+            'FonctionReferentiel'     => 'Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper',
         ],
         'factories' => [
             'serviceListe'            => 'Application\View\Helper\Service\ListeFactory',

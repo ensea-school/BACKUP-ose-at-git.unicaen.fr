@@ -87,6 +87,30 @@ class Periode
      */
     protected $paiement;
 
+    /**
+     * moisOriginePaiement
+     *
+     * @var integer
+     */
+    protected $moisOriginePaiement;
+
+    /**
+     * numeroMoisPaiement
+     *
+     * @var integer
+     */
+    protected $numeroMoisPaiement;
+
+
+
+        /**
+     * miseEnPaiementIntervenantStructure
+     *
+     * @var MiseEnPaiementIntervenantStructure
+     */
+    protected $miseEnPaiementIntervenantStructure;
+
+
 
     /**
      * Set histoCreation
@@ -362,9 +386,79 @@ class Periode
         return $this->paiement;
     }
 
-    /*******************************************************************************************************
-     *                                        Début ajout
-     *******************************************************************************************************/
+    /**
+     * Set moisOriginePaiement
+     *
+     * @param boolean $moisOriginePaiement
+     * @return Periode
+     */
+    public function setMoisOriginePaiement($moisOriginePaiement)
+    {
+        $this->moisOriginePaiement = $moisOriginePaiement;
+
+        return $this;
+    }
+
+    /**
+     * Get moisOriginePaiement
+     *
+     * @return boolean
+     */
+    public function getMoisOriginePaiement()
+    {
+        return $this->moisOriginePaiement;
+    }
+
+    /**
+     * Set numeroMoisPaiement
+     *
+     * @param boolean $numeroMoisPaiement
+     * @return Periode
+     */
+    public function setNumeroMoisPaiement($numeroMoisPaiement)
+    {
+        $this->numeroMoisPaiement = $numeroMoisPaiement;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroMoisPaiement
+     *
+     * @return boolean
+     */
+    public function getNumeroMoisPaiement()
+    {
+        return $this->numeroMoisPaiement;
+    }
+
+    /**
+     * Retourne la date de paiement de la période
+     *
+     * @param Annee $annee
+     * @return \DateTime
+     */
+    public function getDatePaiement( Annee $annee )
+    {
+        if (null == $this->getNumeroMoisPaiement()) return null;
+        $year = $annee->getId();
+        $month = $this->getNumeroMoisPaiement();
+        $day = 1;
+        if ($month < 9) $year++;
+        $a_date = date("Y-m-t", mktime(0, 0, 0, $month, $day, $year));
+        $date = \DateTime::createFromFormat('Y-m-d', $a_date);
+        return $date;
+    }
+
+    /**
+     * Get miseEnPaiementIntervenantStructure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiementIntervenantStructure()
+    {
+        return $this->miseEnPaiementIntervenantStructure;
+    }
 
     /**
      *

@@ -174,20 +174,12 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderEtape($etape)
     {
-        if (! $etape) return '';
-        $url = $this->getView()->url('of/etape/apercevoir', array('id' => $etape->getId()));
-        $pourl = $this->getView()->url('of/etape/apercevoir', array('id' => $etape->getId()));
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etape.'</a>';
-        return $out;
+        return $this->getView()->etape( $etape )->renderLink();
     }
 
     protected function renderElementPedagogique($element)
     {
-        if (! $element) return '';
-        $url = $this->getView()->url('of/element/voir', array('id' => $element->getId()));
-        $pourl = $this->getView()->url('of/element/apercevoir', array('id' => $element->getId()));
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$element.'</a>';
-        return $out;
+        return $this->getView()->elementPedagogique( $element )->renderLink();
     }
 
     protected function renderFOAD($element)
@@ -211,10 +203,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderEtablissement($etablissement)
     {
-        $url = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
-        $pourl = $this->getView()->url('etablissement/default', array('action' => 'apercevoir', 'id' => $etablissement->getId()));
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etablissement.'</a>';
-        return $out;
+        return $this->getView()->etablissement( $etablissement )->renderLink();
     }
 
     protected function renderTypeIntervention( \Application\Entity\VolumeHoraireListe $liste )

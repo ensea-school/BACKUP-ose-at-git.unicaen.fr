@@ -69,6 +69,11 @@ class EtapeDl extends AbstractDl
             $this->entity->getSpecifiqueEchanges() ? 'Oui' : 'Non'
         );
         
+        $details[] = sprintf($tplDtdd,
+            "Domaine fonctionnel :", 
+            $this->entity->getDomaineFonctionnel() ?: "Aucun"
+        );
+        
         $html .= sprintf($this->getTemplateDl('etape etape-details'), implode(PHP_EOL, $details)) . PHP_EOL;
         
         /**

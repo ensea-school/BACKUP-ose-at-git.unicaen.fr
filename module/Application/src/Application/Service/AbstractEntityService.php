@@ -405,7 +405,19 @@ abstract class AbstractEntityService extends AbstractService
     public function finderByProperty( $property, $value, QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
-        $qb->andWhere("$alias.$property = :$property")->setParameter($property, $value);
+        if (is_array($value) or $value instanceof \Doctrine\Common\Collections\Collection){
+            if ($value instanceof \Doctrine\Common\Collections\Collection){
+                $value = $value->toArray();
+            }
+            foreach( $value as $key => $val ){
+                if (is_object($val) && method_exists($val,'getId')){
+                    $value[$key] = $val->getId();
+                }
+            }
+            $qb->andWhere($qb->expr()->in("$alias.$property", $value));
+        }else{
+            $qb->andWhere("$alias.$property = :$property")->setParameter($property, $value);
+        }
         return $qb;
     }
 

@@ -2,8 +2,8 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\MiseEnPaiement" table="MISE_EN_PAIEMENT">
     <indexes>
-      <index name="IDX_5A6BAF45798EB38A" columns="FORMULE_REFERENTIEL_ID"/>
-      <index name="IDX_5A6BAF45CB3F4F12" columns="FORMULE_SERVICE_ID"/>
+      <index name="IDX_5A6BAF452AB2EAAC" columns="FORMULE_RES_SERVICE_REF_ID"/>
+      <index name="IDX_5A6BAF456D5170" columns="FORMULE_RES_SERVICE_ID"/>
       <index name="IDX_5A6BAF4559860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_5A6BAF457E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_5A6BAF4563F06898" columns="HISTO_MODIFICATEUR_ID"/>
@@ -15,12 +15,23 @@
     </id>
     <field name="dateMiseEnPaiement" type="datetime" column="DATE_MISE_EN_PAIEMENT" nullable="true"/>
     <field name="dateValidation" type="datetime" column="DATE_VALIDATION" nullable="true"/>
+    <field name="heures" type="float" column="HEURES" precision="126" scale="0" nullable="false"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
+    <many-to-one field="typeHeures" target-entity="Application\Entity\Db\TypeHeures">
+      <join-columns>
+        <join-column name="TYPE_HEURES_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="periodePaiement" target-entity="Application\Entity\Db\Periode">
       <join-columns>
         <join-column name="PERIODE_PAIEMENT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="centreCout" target-entity="Application\Entity\Db\CentreCout">
+      <join-columns>
+        <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="validation" target-entity="Application\Entity\Db\Validation">
@@ -53,5 +64,6 @@
         <join-column name="FORMULE_RES_SERVICE_REF_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="miseEnPaiement" />
   </entity>
 </doctrine-mapping>

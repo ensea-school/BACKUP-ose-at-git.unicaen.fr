@@ -7,23 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CentreCout
  */
-class CentreCout
+class CentreCout implements HistoriqueAwareInterface
 {
-    /**
-     * @var boolean
-     */
-    private $fa;
-
-    /**
-     * @var boolean
-     */
-    private $fc;
-
-    /**
-     * @var boolean
-     */
-    private $fi;
-
     /**
      * @var \DateTime
      */
@@ -45,34 +30,14 @@ class CentreCout
     private $libelle;
 
     /**
-     * @var boolean
+     * @var CentreCout
      */
-    private $paieEtat;
-
-    /**
-     * @var integer
-     */
-    private $parentId;
-
-    /**
-     * @var boolean
-     */
-    private $referentiel;
+    private $parent;
 
     /**
      * @var string
      */
     private $sourceCode;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
 
     /**
      * @var integer
@@ -85,9 +50,9 @@ class CentreCout
     private $structure;
 
     /**
-     * @var \Application\Entity\Db\TypeCentreCout
+     * @var \Application\Entity\Db\TypeRessource
      */
-    private $type;
+    private $typeRessource;
 
     /**
      * @var \Application\Entity\Db\Source
@@ -102,81 +67,34 @@ class CentreCout
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoDestructeur;
+    private $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    private $histoCreateur;
-
-
-    /**
-     * Set fa
-     *
-     * @param boolean $fa
-     * @return CentreCout
-     */
-    public function setFa($fa)
-    {
-        $this->fa = $fa;
-
-        return $this;
-    }
+    private $histoDestructeur;
 
     /**
-     * Get fa
-     *
-     * @return boolean 
+     * @var \Application\Entity\Db\CcActivite
      */
-    public function getFa()
-    {
-        return $this->fa;
-    }
+    private $activite;
 
     /**
-     * Set fc
-     *
-     * @param boolean $fc
-     * @return CentreCout
+     * @var \Doctrine\Common\Collections\Collection
      */
-    public function setFc($fc)
-    {
-        $this->fc = $fc;
-
-        return $this;
-    }
+    private $typeHeures;
 
     /**
-     * Get fc
      *
-     * @return boolean 
+     * @var \Doctrine\Common\Collections\Collection
      */
-    public function getFc()
-    {
-        return $this->fc;
-    }
+    private $miseEnPaiement;
 
-    /**
-     * Set fi
-     *
-     * @param boolean $fi
-     * @return CentreCout
-     */
-    public function setFi($fi)
-    {
-        $this->fi = $fi;
 
-        return $this;
-    }
-
-    /**
-     * Get fi
-     *
-     * @return boolean 
-     */
-    public function getFi()
+    public function __construct()
     {
-        return $this->fi;
+        $this->typeHeures       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->miseEnPaiement   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -272,72 +190,26 @@ class CentreCout
     }
 
     /**
-     * Set paieEtat
+     * Set parent
      *
-     * @param boolean $paieEtat
+     * @param CentreCout $parent
      * @return CentreCout
      */
-    public function setPaieEtat($paieEtat)
+    public function setParent( CentreCout $parent = null )
     {
-        $this->paieEtat = $paieEtat;
+        $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * Get paieEtat
+     * Get parent
      *
-     * @return boolean 
-     */
-    public function getPaieEtat()
-    {
-        return $this->paieEtat;
-    }
-
-    /**
-     * Set parentId
-     *
-     * @param integer $parentId
      * @return CentreCout
      */
-    public function setParentId($parentId)
+    public function getParent()
     {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId
-     *
-     * @return integer 
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
-    /**
-     * Set referentiel
-     *
-     * @param boolean $referentiel
-     * @return CentreCout
-     */
-    public function setReferentiel($referentiel)
-    {
-        $this->referentiel = $referentiel;
-
-        return $this;
-    }
-
-    /**
-     * Get referentiel
-     *
-     * @return boolean 
-     */
-    public function getReferentiel()
-    {
-        return $this->referentiel;
+        return $this->parent;
     }
 
     /**
@@ -361,52 +233,6 @@ class CentreCout
     public function getSourceCode()
     {
         return $this->sourceCode;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return CentreCout
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return CentreCout
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**
@@ -443,26 +269,26 @@ class CentreCout
     }
 
     /**
-     * Set type
+     * Set typeRessource
      *
-     * @param \Application\Entity\Db\TypeCentreCout $type
+     * @param \Application\Entity\Db\TypeRessource $typeRessource
      * @return CentreCout
      */
-    public function setType(\Application\Entity\Db\TypeCentreCout $type = null)
+    public function setTypeRessource(\Application\Entity\Db\TypeRessource $typeRessource = null)
     {
-        $this->type = $type;
+        $this->typeRessource = $typeRessource;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get typeRessource
      *
-     * @return \Application\Entity\Db\TypeCentreCout 
+     * @return \Application\Entity\Db\TypeRessource 
      */
-    public function getType()
+    public function getTypeRessource()
     {
-        return $this->type;
+        return $this->typeRessource;
     }
 
     /**
@@ -512,6 +338,29 @@ class CentreCout
     }
 
     /**
+     * Set histoCreateur
+     *
+     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @return CentreCout
+     */
+    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    {
+        $this->histoCreateur = $histoCreateur;
+
+        return $this;
+    }
+
+    /**
+     * Get histoCreateur
+     *
+     * @return \Application\Entity\Db\Utilisateur 
+     */
+    public function getHistoCreateur()
+    {
+        return $this->histoCreateur;
+    }
+
+    /**
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
@@ -535,25 +384,88 @@ class CentreCout
     }
 
     /**
-     * Set histoCreateur
+     * Set activite
      *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @param \Application\Entity\Db\CcActivite $activite
      * @return CentreCout
      */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    public function setActivite(\Application\Entity\Db\CcActivite $activite = null)
     {
-        $this->histoCreateur = $histoCreateur;
+        $this->activite = $activite;
 
         return $this;
     }
 
     /**
-     * Get histoCreateur
+     * Get activite
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\CcActivite 
      */
-    public function getHistoCreateur()
+    public function getActivite()
     {
-        return $this->histoCreateur;
+        return $this->activite;
+    }
+
+    /**
+     * Get typeHeures
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypeHeures()
+    {
+        return $this->typeHeures;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getSourceCode().' - '.$this->getLibelle();
+    }
+
+    /**
+     * détermine si un type d'heures peut être appliqué à ce type de ressource ou non
+     *
+     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @return boolean
+     */
+    public function typeHeuresMatches( TypeHeures $typeHeures )
+    {
+        return $this->getActivite()->typeHeuresMatches($typeHeures) && $this->getTypeRessource()->typeHeuresMatches($typeHeures);
+    }
+
+    /**
+     * Add miseEnPaiement
+     *
+     * @param MiseEnPaiement $miseEnPaiement
+     * @return self
+     */
+    public function addMiseEnPaiement(MiseEnPaiement $miseEnPaiement)
+    {
+        $this->miseEnPaiement[] = $miseEnPaiement;
+
+        return $this;
+    }
+
+    /**
+     * Remove miseEnPaiement
+     *
+     * @param MiseEnPaiement $miseEnPaiement
+     */
+    public function removeMiseEnPaiement(MiseEnPaiement $miseEnPaiement)
+    {
+        $this->miseEnPaiement->removeElement($miseEnPaiement);
+    }
+
+    /**
+     * Get miseEnPaiement
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMiseEnPaiement()
+    {
+        return $this->miseEnPaiement;
     }
 }

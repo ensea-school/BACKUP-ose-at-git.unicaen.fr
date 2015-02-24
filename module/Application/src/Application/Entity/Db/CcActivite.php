@@ -5,29 +5,34 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * HeuresMisesEnPaiement
+ * CcActivite
  */
-class HeuresMisesEnPaiement
+class CcActivite implements HistoriqueAwareInterface
 {
     /**
-     * @var float
+     * @var string
      */
-    private $heuresFa;
+    private $code;
 
     /**
-     * @var float
+     * @var boolean
      */
-    private $heuresFc;
+    private $fa;
 
     /**
-     * @var float
+     * @var boolean
      */
-    private $heuresFi;
+    private $fc;
 
     /**
-     * @var float
+     * @var boolean
      */
-    private $heuresReferentiel;
+    private $fcMajorees;
+
+    /**
+     * @var boolean
+     */
+    private $fi;
 
     /**
      * @var \DateTime
@@ -45,19 +50,19 @@ class HeuresMisesEnPaiement
     private $histoModification;
 
     /**
+     * @var string
+     */
+    private $libelle;
+
+    /**
+     * @var boolean
+     */
+    private $referentiel;
+
+    /**
      * @var integer
      */
     private $id;
-
-    /**
-     * @var \Application\Entity\Db\MiseEnPaiement
-     */
-    private $miseEnPaiement;
-
-    /**
-     * @var \Application\Entity\Db\CentreCout
-     */
-    private $centreCout;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
@@ -76,102 +81,125 @@ class HeuresMisesEnPaiement
 
 
     /**
-     * Set heuresFa
+     * Set code
      *
-     * @param float $heuresFa
-     * @return HeuresMisesEnPaiement
+     * @param string $code
+     * @return CcActivite
      */
-    public function setHeuresFa($heuresFa)
+    public function setCode($code)
     {
-        $this->heuresFa = $heuresFa;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get heuresFa
+     * Get code
      *
-     * @return float 
+     * @return string 
      */
-    public function getHeuresFa()
+    public function getCode()
     {
-        return $this->heuresFa;
+        return $this->code;
     }
 
     /**
-     * Set heuresFc
+     * Set fa
      *
-     * @param float $heuresFc
-     * @return HeuresMisesEnPaiement
+     * @param boolean $fa
+     * @return CcActivite
      */
-    public function setHeuresFc($heuresFc)
+    public function setFa($fa)
     {
-        $this->heuresFc = $heuresFc;
+        $this->fa = $fa;
 
         return $this;
     }
 
     /**
-     * Get heuresFc
+     * Get fa
      *
-     * @return float 
+     * @return boolean 
      */
-    public function getHeuresFc()
+    public function getFa()
     {
-        return $this->heuresFc;
+        return $this->fa;
     }
 
     /**
-     * Set heuresFi
+     * Set fc
      *
-     * @param float $heuresFi
-     * @return HeuresMisesEnPaiement
+     * @param boolean $fc
+     * @return CcActivite
      */
-    public function setHeuresFi($heuresFi)
+    public function setFc($fc)
     {
-        $this->heuresFi = $heuresFi;
+        $this->fc = $fc;
 
         return $this;
     }
 
     /**
-     * Get heuresFi
+     * Get fc
      *
-     * @return float 
+     * @return boolean 
      */
-    public function getHeuresFi()
+    public function getFc()
     {
-        return $this->heuresFi;
+        return $this->fc;
     }
 
     /**
-     * Set heuresReferentiel
+     * Set fcMajorees
      *
-     * @param float $heuresReferentiel
-     * @return HeuresMisesEnPaiement
+     * @param boolean $fcMajorees
+     * @return CcActivite
      */
-    public function setHeuresReferentiel($heuresReferentiel)
+    public function setFcMajorees($fcMajorees)
     {
-        $this->heuresReferentiel = $heuresReferentiel;
+        $this->fcMajorees = $fcMajorees;
 
         return $this;
     }
 
     /**
-     * Get heuresReferentiel
+     * Get fcMajorees
      *
-     * @return float 
+     * @return boolean
      */
-    public function getHeuresReferentiel()
+    public function getFcMajorees()
     {
-        return $this->heuresReferentiel;
+        return $this->fcMajorees;
+    }
+
+    /**
+     * Set fi
+     *
+     * @param boolean $fi
+     * @return CcActivite
+     */
+    public function setFi($fi)
+    {
+        $this->fi = $fi;
+
+        return $this;
+    }
+
+    /**
+     * Get fi
+     *
+     * @return boolean 
+     */
+    public function getFi()
+    {
+        return $this->fi;
     }
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return HeuresMisesEnPaiement
+     * @return CcActivite
      */
     public function setHistoCreation($histoCreation)
     {
@@ -194,7 +222,7 @@ class HeuresMisesEnPaiement
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return HeuresMisesEnPaiement
+     * @return CcActivite
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -217,7 +245,7 @@ class HeuresMisesEnPaiement
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return HeuresMisesEnPaiement
+     * @return CcActivite
      */
     public function setHistoModification($histoModification)
     {
@@ -237,6 +265,52 @@ class HeuresMisesEnPaiement
     }
 
     /**
+     * Set libelle
+     *
+     * @param string $libelle
+     * @return CcActivite
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string 
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+    /**
+     * Set referentiel
+     *
+     * @param boolean $referentiel
+     * @return CcActivite
+     */
+    public function setReferentiel($referentiel)
+    {
+        $this->referentiel = $referentiel;
+
+        return $this;
+    }
+
+    /**
+     * Get referentiel
+     *
+     * @return boolean 
+     */
+    public function getReferentiel()
+    {
+        return $this->referentiel;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -247,56 +321,10 @@ class HeuresMisesEnPaiement
     }
 
     /**
-     * Set miseEnPaiement
-     *
-     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
-     * @return HeuresMisesEnPaiement
-     */
-    public function setMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement = null)
-    {
-        $this->miseEnPaiement = $miseEnPaiement;
-
-        return $this;
-    }
-
-    /**
-     * Get miseEnPaiement
-     *
-     * @return \Application\Entity\Db\MiseEnPaiement 
-     */
-    public function getMiseEnPaiement()
-    {
-        return $this->miseEnPaiement;
-    }
-
-    /**
-     * Set centreCout
-     *
-     * @param \Application\Entity\Db\CentreCout $centreCout
-     * @return HeuresMisesEnPaiement
-     */
-    public function setCentreCout(\Application\Entity\Db\CentreCout $centreCout = null)
-    {
-        $this->centreCout = $centreCout;
-
-        return $this;
-    }
-
-    /**
-     * Get centreCout
-     *
-     * @return \Application\Entity\Db\CentreCout 
-     */
-    public function getCentreCout()
-    {
-        return $this->centreCout;
-    }
-
-    /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return HeuresMisesEnPaiement
+     * @return CcActivite
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -319,7 +347,7 @@ class HeuresMisesEnPaiement
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return HeuresMisesEnPaiement
+     * @return CcActivite
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -342,7 +370,7 @@ class HeuresMisesEnPaiement
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return HeuresMisesEnPaiement
+     * @return CcActivite
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {
@@ -359,5 +387,24 @@ class HeuresMisesEnPaiement
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+    /**
+     * détermine si un type d'heures peut être appliqué à ce type d'activité de centre de coût ou non
+     *
+     * @param \Application\Entity\Db\TypeHeures $typeHeures
+     * @return boolean
+     */
+    public function typeHeuresMatches( TypeHeures $typeHeures )
+    {
+        $code = $typeHeures->getCode();
+        switch( $code ){
+            case TypeHeures::FI         : return $this->getFi();
+            case TypeHeures::FA         : return $this->getFa();
+            case TypeHeures::FC         : return $this->getFc();
+            case TypeHeures::FC_MAJOREES: return $this->getFcMajorees();
+            case TypeHeures::REFERENTIEL: return $this->getReferentiel();
+        }
+        return false;
     }
 }

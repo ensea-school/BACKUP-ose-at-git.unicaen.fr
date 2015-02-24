@@ -19,6 +19,8 @@
     <field name="libelleLong" type="string" column="LIBELLE_LONG" length="40" nullable="false"/>
     <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
     <field name="paiement" type="boolean" column="PAIEMENT" nullable="true"/>
+    <field name="moisOriginePaiement" type="integer" column="MOIS_ORIGINE_PAIEMENT" nullable="true"/>
+    <field name="numeroMoisPaiement" type="integer" column="NUMERO_MOIS_PAIEMENT" nullable="true"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
@@ -34,5 +36,6 @@
         <join-column name="HISTO_CREATEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="periode" />
   </entity>
 </doctrine-mapping>

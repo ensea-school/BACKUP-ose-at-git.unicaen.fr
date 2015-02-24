@@ -7,8 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Dotation
  */
-class Dotation
+class Dotation implements HistoriqueAwareInterface
 {
+    /**
+     * @var \DateTime
+     */
+    private $dateEffet;
+
     /**
      * @var float
      */
@@ -64,6 +69,29 @@ class Dotation
      */
     private $annee;
 
+
+    /**
+     * Set dateEffet
+     *
+     * @param \DateTime $dateEffet
+     * @return Dotation
+     */
+    public function setDateEffet($dateEffet)
+    {
+        $this->dateEffet = $dateEffet;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEffet
+     *
+     * @return \DateTime 
+     */
+    public function getDateEffet()
+    {
+        return $this->dateEffet;
+    }
 
     /**
      * Set heures

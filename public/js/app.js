@@ -43,6 +43,41 @@ Url.getBase = function(){
     }
 }
 
+Util = {
+    formattedHeures: function( heures )
+    {
+        heures = parseFloat( heures );
+        var hclass = (heures < 0) ? 'negatif' : 'positif';
+
+        heures = Math.round( heures * 100 ) / 100;
+        var parts = heures.toString().split(".");
+        if (undefined === parts[1]){ parts[1] = '<span class="heures-dec-00">,00</span>'; }else{ parts[1] = ',' + parts[1]; }
+        return '<span class="heures heures-'+hclass+'">'+parts[0]+parts[1]+'</span>';
+    },
+
+    json: {
+
+        count: function( tab )
+        {
+            var key, result = 0;
+            for(key in tab) {
+              if(tab.hasOwnProperty(key)) {
+                result++;
+              }
+            }
+            return result;
+        },
+
+        first: function( tab )
+        {
+            for( var key in tab ){
+                return tab[key];
+            }
+        }
+
+    }
+};
+
 
 /*************** Propre à l'affichage des services référentiels ***************/
 
@@ -228,10 +263,13 @@ ElementPedagogique.init = function( voirLigneUrl )
 
 
 
-function Modulateur( id ) {
 
+
+
+
+function Modulateur( id ) 
+{
     this.id = id;
-
 }
 
 Modulateur.get = function( id )
@@ -247,9 +285,9 @@ Modulateur.init = function()
         event.div.modal('hide'); // ferme la fenêtre modale
     });
 
-    $("body").on("click", "form#modulateurs-saisie a.form-set-value", function(e){
-        typeModulateurCode = $(this).data('code');
-        value = $('form#modulateurs-saisie select[name="'+typeModulateurCode+'"]').val();
+    $("body").on("click", "form#modulateurs-saisie button.form-set-value", function(e){
+        var typeModulateurCode = $(this).data('code');
+        var value = $('form#modulateurs-saisie select[name="'+typeModulateurCode+'"]').val();
         Modulateur.setFormValues(typeModulateurCode, value);
         e.stopPopagation();
     });
@@ -257,6 +295,35 @@ Modulateur.init = function()
 
 Modulateur.setFormValues = function( typeModulateurCode, value )
 {
-
     $('form#modulateurs-saisie select[name$="\\['+typeModulateurCode+'\\]"]').val(value);
+}
+
+
+
+
+
+
+
+function EtapeCentreCout(id) 
+{
+    this.id = id;
+}
+
+EtapeCentreCout.init = function ()
+{
+    $("body").on("event-of-etape-centres-couts", function (event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+    });
+
+    $("body").on("click", "form#etape-centre-cout button.form-set-value", function (e) {
+        var typeHeuresCode = $(this).data('code');
+        var value = $('form#etape-centre-cout select[name="' + typeHeuresCode + '"]').val();
+        EtapeCentreCout.setFormValues(typeHeuresCode, value);
+        e.stopPopagation();
+    });
+}
+
+EtapeCentreCout.setFormValues = function (typeHeuresCode, value)
+{
+    $('form#etape-centre-cout select[name$="\\[' + typeHeuresCode + '\\]"]').val(value);
 }

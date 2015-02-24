@@ -60,6 +60,10 @@ table {
 
 /* Divers : affichage des heures */
 
+input[type=number] {
+    padding-right:1px;
+}
+
 span.heures-negatif {
     color: red;
 }
@@ -155,6 +159,12 @@ h1.page-header {
     margin-top: 10px;
 }
 
+
+.modal-header h1,
+.modal-header h2 { 
+    line-height: 90%; 
+}
+
 .modal-body h1 {
     margin-top: 0;
 }
@@ -232,4 +242,18 @@ td .form-group{
 form#modulateurs-saisie th select{
     display: inline;
     width:auto;
+}
+
+
+
+.bootstrap-select .dropdown-menu li.divider{
+    display: none;
+}
+
+.bootstrap-select .dropdown-menu li a.opt{
+    margin-left: 2em;
+}
+
+.demande-mise-en-paiement .type-heures.not-allowed {
+    opacity: 0.5;
 }

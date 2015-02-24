@@ -5,91 +5,76 @@ namespace Application\Entity\Db;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PeriodeEnseignement
+ * DomaineFonctionnel
  */
-class PeriodeEnseignement
+class DomaineFonctionnel implements HistoriqueAwareInterface
 {
     /**
-     * Retourne la représentation littérale de cet objet.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getLibelle();
-    }
-    
-    /**
      * @var \DateTime
      */
-    protected $histoCreation;
+    private $histoCreation;
 
     /**
      * @var \DateTime
      */
-    protected $histoDestruction;
+    private $histoDestruction;
 
     /**
      * @var \DateTime
      */
-    protected $histoModification;
+    private $histoModification;
 
     /**
      * @var string
      */
-    protected $libelle;
-
-    /**
-     * @var integer
-     */
-    protected $ordre;
+    private $libelle;
 
     /**
      * @var string
      */
-    protected $sourceCode;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
+    private $sourceCode;
 
     /**
      * @var integer
      */
-    protected $id;
+    private $id;
 
     /**
      * @var \Application\Entity\Db\Source
      */
-    protected $source;
+    private $source;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    protected $histoModificateur;
+    private $histoModificateur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    protected $histoDestructeur;
+    private $histoDestructeur;
 
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
-    protected $histoCreateur;
+    private $histoCreateur;
+    
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->sourceCode . " - " . $this->libelle;
+    }
 
 
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setHistoCreation($histoCreation)
     {
@@ -112,7 +97,7 @@ class PeriodeEnseignement
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -135,7 +120,7 @@ class PeriodeEnseignement
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setHistoModification($histoModification)
     {
@@ -158,7 +143,7 @@ class PeriodeEnseignement
      * Set libelle
      *
      * @param string $libelle
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setLibelle($libelle)
     {
@@ -178,33 +163,10 @@ class PeriodeEnseignement
     }
 
     /**
-     * Set ordre
-     *
-     * @param integer $ordre
-     * @return PeriodeEnseignement
-     */
-    public function setOrdre($ordre)
-    {
-        $this->ordre = $ordre;
-
-        return $this;
-    }
-
-    /**
-     * Get ordre
-     *
-     * @return integer 
-     */
-    public function getOrdre()
-    {
-        return $this->ordre;
-    }
-
-    /**
      * Set sourceCode
      *
      * @param string $sourceCode
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setSourceCode($sourceCode)
     {
@@ -224,52 +186,6 @@ class PeriodeEnseignement
     }
 
     /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return PeriodeEnseignement
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return PeriodeEnseignement
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -283,7 +199,7 @@ class PeriodeEnseignement
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
     {
@@ -306,7 +222,7 @@ class PeriodeEnseignement
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -329,7 +245,7 @@ class PeriodeEnseignement
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -352,7 +268,7 @@ class PeriodeEnseignement
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return PeriodeEnseignement
+     * @return DomaineFonctionnel
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {

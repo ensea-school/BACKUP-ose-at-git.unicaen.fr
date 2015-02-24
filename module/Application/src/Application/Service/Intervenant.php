@@ -6,6 +6,8 @@ use Application\Entity\Db\Finder\FinderIntervenantPermanentWithServiceReferentie
 use Application\Entity\Db\Finder\FinderIntervenantPermanentWithModificationServiceDu;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
+use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Periode as PeriodeEntity;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Import\Processus\Import;
@@ -170,7 +172,33 @@ class Intervenant extends AbstractEntityService
         
         return $qb;
     }
-    
+
+    public function finderByMiseEnPaiement(StructureEntity $structure=null, PeriodeEntity $periode=null, QueryBuilder $qb=null, $alias=null)
+    {
+        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
+        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
+
+        $serviceMiseEnPaiement = $this->getServiceLocator()->get('applicationMiseEnPaiement');
+        /* @var $serviceMiseEnPaiement MiseEnPaiement */
+
+        $serviceStructure = $this->getServiceLocator()->get('applicationStructure');
+        /* @var $serviceStructure Structure */
+
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $this               ->join( $serviceMIS             , $qb, 'miseEnPaiementIntervenantStructure', false, $alias );
+        $serviceMIS         ->join( $serviceMiseEnPaiement  , $qb, 'miseEnPaiement'                                    );
+
+        if ($structure){
+            $serviceMIS->finderByStructure( $structure, $qb );
+        }
+        if ($periode){
+            $serviceMIS->finderByPeriode( $periode, $qb );
+        }
+
+        return $qb;
+    }
+
     /**
      * Importe un intervenant si besoin.
      * 
@@ -181,7 +209,7 @@ class Intervenant extends AbstractEntityService
     public function importer($sourceCode)
     {
         $repo = $this->getEntityManager()->getRepository($this->getEntityClass());
-        
+
         if (($intervenant = $repo->findOneBySourceCode($sourceCode))) {
             return $intervenant;
         }

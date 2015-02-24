@@ -124,6 +124,7 @@ return array(
     ),
     'service_manager' => array(
         'invokables' => array(
+            'ApplicationPersonnel'       => 'Application\\Service\\Personnel',
             'ApplicationStructure'       => 'Application\\Service\\Structure',
             'ApplicationTypeStructure'   => 'Application\\Service\\TypeStructure',
         )

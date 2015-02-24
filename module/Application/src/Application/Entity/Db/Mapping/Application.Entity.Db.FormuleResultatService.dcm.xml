@@ -16,11 +16,24 @@
         <join-column name="SERVICE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="miseEnPaiement" target-entity="Application\Entity\Db\MiseEnPaiement" mapped-by="formuleResultatService" />
+
     <field name="serviceAssure" type="float" column="SERVICE_ASSURE" precision="126" scale="0" nullable="false"/>
     <field name="heuresService" type="float" column="HEURES_SERVICE" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
+
+    <many-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout">
+        <join-table name="V_FR_SERVICE_CENTRE_COUT">
+            <join-columns>
+                <join-column name="FORMULE_RESULTAT_SERVICE_ID" referenced-column-name="ID" unique="true"/>
+            </join-columns>
+            <inverse-join-columns>
+                <join-column name="CENTRE_COUT_ID" referenced-column-name="ID"/>
+            </inverse-join-columns>
+        </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

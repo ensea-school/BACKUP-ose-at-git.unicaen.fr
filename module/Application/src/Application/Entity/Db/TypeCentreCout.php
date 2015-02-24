@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TypeCentreCout
  */
-class TypeCentreCout
+class TypeCentreCout implements HistoriqueAwareInterface
 {
     /**
      * @var string

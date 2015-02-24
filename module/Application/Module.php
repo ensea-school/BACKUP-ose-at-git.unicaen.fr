@@ -17,6 +17,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Zend\Console\Request as ConsoleRequest;
 
 class Module implements ControllerPluginProviderInterface, ViewHelperProviderInterface, ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
@@ -25,7 +26,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $sm = $e->getApplication()->getServiceManager();
         $sm->get('translator');
 
-        $this->injectJsFiles($sm);
+        if (!$e->getRequest() instanceof ConsoleRequest) {
+            $this->injectPublicFiles($sm);
+        }
 
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
@@ -45,19 +48,25 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'injectRouteEntitiesInEvent'), -90);
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkRouteParams'), -100);
     }
-    
-    public function injectJsFiles(ServiceLocatorInterface $serviceLocator)
-    {
-        $basePath = dirname($_SERVER['PHP_SELF']);
-        if ( substr($basePath, -1) !== '/' ) $basePath .= '/';
-        $jsFiles = [
-            'js/elementPedagogiqueRecherche.js',
-            'js/service.js',
-            'js/service-referentiel.js'
-        ];
 
+    public function injectPublicFiles(ServiceLocatorInterface $serviceLocator)
+    {
+        $config = $this->getPublicFilesConfig();
+        $jsFiles  = []; if (isset($config['js' ])) $jsFiles  = $config['js'];
+        $cssFiles = []; if (isset($config['css'])) $cssFiles = $config['css'];
+
+        $basePath = $serviceLocator->get('viewhelpermanager')->get('basePath')->__invoke();
+        
+        $offset = 10;
         foreach( $jsFiles as $jsFile ){
-            $serviceLocator->get('viewhelpermanager')->get('HeadScript')->appendFile($basePath.$jsFile);
+            $offset++;
+            $serviceLocator->get('viewhelpermanager')->get('HeadScript')->offsetSetFile($offset, $basePath.$jsFile, 'text/javascript');
+        }
+
+        $offset = 10;
+        foreach( $cssFiles as $cssFile ){
+            $offset++;
+            $serviceLocator->get('viewhelpermanager')->get('HeadLink')->offsetSetStylesheet($offset, $basePath.$cssFile);
         }
     }
 
@@ -120,6 +129,27 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                 ),
             ),
         );
+    }
+
+    /**
+     * Retourne les fichiers javascript et CSS à ajouter au HEAD
+     * 
+     * @return array
+     */
+    public function getPublicFilesConfig()
+    {
+        return [
+            'js' => [
+                '/js/elementPedagogiqueRecherche.js',
+                '/js/service.js',
+                '/js/service-referentiel.js',
+                '/js/paiement.js',
+                '/bootstrap-select/js/bootstrap-select.min.js',
+            ],
+            'css' => [
+                '/bootstrap-select/css/bootstrap-select.min.css',
+            ]
+        ];
     }
 
     /**

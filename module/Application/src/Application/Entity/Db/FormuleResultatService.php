@@ -344,7 +344,7 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
         if (! $element) return null;
         $result = $element->getCentreCoutEp($typeHeures->getTypeHeuresElement());
         if (false == $result) return null;
-        return $result->first();
+        return $result->first()->getCentreCout();
     }
 
     /**

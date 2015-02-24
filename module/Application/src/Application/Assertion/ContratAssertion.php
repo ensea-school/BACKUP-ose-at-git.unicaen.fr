@@ -129,11 +129,11 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
                 return false;
             }
             
-            // l'étape suivante du workflow ne doit pas avoir été franchie
-            $nextStep = $this->getWorkflow()->getNextStep($contratStepKey);
-            if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
-                return false;
-            }
+//            // l'étape suivante du workflow ne doit pas avoir été franchie
+//            $nextStep = $this->getWorkflow()->getNextStep($contratStepKey);
+//            if ($nextStep && $this->getWorkflow()->isStepCrossable($nextStep)) {
+//                return false;
+//            }
         }
         
         return true;

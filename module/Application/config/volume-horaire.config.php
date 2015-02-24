@@ -150,13 +150,6 @@ return array(
                     'roles' => array(R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR)
                 ),
             ),
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
-                    'controller' => 'Application\Controller\VolumeHoraireReferentiel',
-                    'action' => array('voir', 'liste', 'saisie'),
-                    'roles' => array(R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR)
-                ),
-            ),
         ),
     ),
     'controllers' => array(

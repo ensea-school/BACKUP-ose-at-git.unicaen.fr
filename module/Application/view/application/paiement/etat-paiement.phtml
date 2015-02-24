@@ -9,11 +9,6 @@ use Application\Entity\Db\MiseEnPaiement;
 
 $title = 'Paiement';
 switch( $etat ){
-    case MiseEnPaiement::A_VALIDER:
-        $title = 'Demandes de mise en paiement à valider';
-        $rechercheForm->get('afficher')->setValue('Afficher l\'état des demandes de paiement en paiement à valider');
-        $rechercheForm->get('exporter')->setValue('Télécharger l\'état des demandes de paiement à valider au format PDF');
-    break;
     case MiseEnPaiement::A_METTRE_EN_PAIEMENT:
         $title = 'Mise en paiement';
         $rechercheForm->get('afficher')->setValue('Afficher les demandes à mettre en paiement');
@@ -55,7 +50,9 @@ $this->headTitle()->append($title);
         }
         echo $this->formRow($rechercheForm->get('suite')).' ';
         echo $this->formRow($rechercheForm->get('afficher')).' ';
-        echo $this->formRow($rechercheForm->get('exporter'));
+        if (MiseEnPaiement::MIS_EN_PAIEMENT == $etat){
+            echo $this->formRow($rechercheForm->get('exporter'));
+        }
 
         echo $this->form()->closeTag();
         echo $this->formErrors( $rechercheForm );

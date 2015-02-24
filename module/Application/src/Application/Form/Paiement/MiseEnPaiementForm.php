@@ -42,12 +42,25 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
     {
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
         /* @var $url Zend\View\Helper\Url */
-        
-        $this   ->setAttribute('method', 'post')
-                ->setAttribute('class', 'paiement-mise-en-paiement-form')
-                ->setAttribute('id', $this->getId());
+
+        $contextProvider = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider');
+        /* @var $contextProvider \Application\Service\ContextProvider */
+
+        $annee = $contextProvider->getGlobalContext()->getAnnee();
 
         $periodes = $this->getServicePeriode()->getList( $this->getServicePeriode()->finderByPaiement(true) );
+        $datesMiseEnPaiement = [];
+        foreach( $periodes as $periode ){
+            $datesMiseEnPaiement[$periode->getId()] = $periode->getDatePaiement( $annee )->format('d/m/Y');
+        }
+
+
+        $this   ->setAttribute('method', 'post')
+                ->setAttribute('class', 'paiement-mise-en-paiement-form')
+                ->setAttribute('id', $this->getId())
+                ->setAttribute('data-dates-mise-en-paiement', json_encode($datesMiseEnPaiement));
+
+        
         $defaultPeriode = $this->getServicePeriode()->getDatePeriodePaiement();
         $this->add([
             'type' => 'Select',
@@ -61,7 +74,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
             ],
         ]);
 
-        $defaultDateMiseEnPaiement = new \DateTime;
+        $defaultDateMiseEnPaiement = $defaultPeriode->getDatePaiement( $annee );
         $this->add([
             'type' => 'UnicaenApp\Form\Element\Date',
             'name' => 'date-mise-en-paiement',
@@ -71,6 +84,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
             ],
             'attributes' => [
                 'step'  => '1',
+                'disabled' => 'true',
                 'value' =>  $defaultDateMiseEnPaiement->format('d/m/Y')
             ]
         ]);
@@ -100,7 +114,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
                 'required'  => true
             ],
             'date-mise-en-paiement' => [
-                'required'  => true
+                'required'  => false
             ],
         ];
     }

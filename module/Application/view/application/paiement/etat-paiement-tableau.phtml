@@ -43,7 +43,7 @@
     <?php endforeach; ?>
     <?php if (count($lep) > 1 ): ?>
     <tr>
-        <th colspan="4" style="text-align: right">Sous-total <?php echo $hetdRem == 'hetd' ? 'HC' : 'rém. DC D714.60' ?></th>
+        <th colspan="4" style="text-align: right">Sous-total <?php echo $hetdRem == 'hetd' ? 'HC' : 'rém. FC D714.60' ?></th>
         <th class="nombre"><?php echo $hetdRem == 'hetd' ? \Common\Util::formattedHeures($lep['total']['hetd']) : '' ?></th>
         <th class="nombre"><?php echo $hetdRem == 'hetd' ? \Common\Util::formattedPourcentage($lep['total']['hetd-pourc']) : '' ?></th>
         <th class="nombre"><?php echo $hetdRem == 'hetd' ? \Common\Util::formattedEuros($lep['total']['hetd-montant']) : '' ?></th>

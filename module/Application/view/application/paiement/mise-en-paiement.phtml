@@ -13,4 +13,10 @@ echo $this->formRow($form->get('submit'));
 echo $this->form()->closeTag();
 echo $this->formErrors( $form );
 
+?><script type="text/javascript">
+    $(function() {
+        PaiementMiseEnPaiementForm.get("<?php echo $form->getId(); ?>").init();
+    });
+</script><?php
+
 if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));

@@ -47,15 +47,10 @@ class MiseEnPaiement extends AbstractEntityService
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
         switch( $etat ){
-            case MiseEnPaiementEntity::A_VALIDER:
-                $qb->andWhere("$alias.validation IS NULL");
-            break;
             case MiseEnPaiementEntity::A_METTRE_EN_PAIEMENT:
-                $qb->andWhere("$alias.validation IS NOT NULL");
                 $qb->andWhere("$alias.dateMiseEnPaiement IS NULL");
             break;
             case MiseEnPaiementEntity::MIS_EN_PAIEMENT:
-                $qb->andWhere("$alias.validation IS NOT NULL");
                 $qb->andWhere("$alias.dateMiseEnPaiement IS NOT NULL");
             break;
         }

@@ -156,13 +156,16 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
 
         $miseEnPaiement = new MiseEnPaiement;
         $miseEnPaiement->setServiceAPayer($serviceAPayer);
-        $readOnly = $this->getReadOnly() || ! $this->getView()->isAllowed($miseEnPaiement, 'demande');
+        $notAllowed = ! $this->getView()->isAllowed($miseEnPaiement, 'demande');
+        $readOnly = $this->getReadOnly() || $notAllowed;
+        $saisieTerminee = ($params['heures-dmep'] + $params['heures-non-dmep']) == 0; // s'il reste des heures à positionner ou déjà positionnées
 
         $attrs = [
             'class'         => ['type-heures', 'col-md-'.$colSpan],
             'id'            => $typeHeures->getId(),
             'style'         => ['margin-bottom:.5em'],
         ];
+        if ($notAllowed) $attrs['class'][] = 'not-allowed';
         $out  = '<div '.$this->htmlAttribs($attrs).'>';
 
         $attrs = [
@@ -170,7 +173,9 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             'id'            => self::$miseEnPaiementListeIdSequence++,
             'data-params'   => json_encode($params),
         ];
+        if ($notAllowed && ! $saisieTerminee) $attrs['class'][] = 'bg-warning';
         if ($readOnly) $attrs['class'][] = 'read-only';
+        if ($saisieTerminee) $attrs['class'][] = 'bg-success';
         $out .= '<table '.$this->htmlAttribs($attrs).'>';
         $out .= '<thead><tr><th colspan="3">'.$typeHeures->getLibelleLong().'</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
@@ -186,15 +191,19 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             $title = implode( '&#13;', $title );
             $out .= '<tr><td class="nombre"><abbr title="'.$title.'">'.\Common\Util::formattedHeures($params['heures-mep']).'</td><td>HETD déjà mises en paiement</td></tr>';
         }
-        $out .= '<tfoot><tr>';
-        $out .= '<td class="nombre">';
-        if (! $readOnly) $out .= '<button class="btn btn-default heures-non-dmep" type="button" title="Demander ces heures en paiement">';
-        $out .= \Common\Util::formattedHeures($params['heures-non-dmep']);
-        if (! $readOnly) $out .= '</button>';
-        $out .= '</td>';
-        $out .= '<th>HETD restantes</th>';
-        $out .= '<td>&nbsp;</td>';
-        $out .= '</tr>';
+        $out .= '<tfoot>';
+
+        if (! $saisieTerminee){
+            $out .= '<tr>';
+            $out .= '<td class="nombre">';
+            if (! $readOnly) $out .= '<button class="btn btn-default heures-non-dmep" type="button" title="Demander ces heures en paiement">';
+            $out .= \Common\Util::formattedHeures($params['heures-non-dmep']);
+            if (! $readOnly) $out .= '</button>';
+            $out .= '</td>';
+            $out .= '<th>HETD restantes</th>';
+            $out .= '<td>&nbsp;</td>';
+            $out .= '</tr>';
+        }
         $out .= '<tr class="active">';
         $out .= '<td class="nombre heures-total">'.\Common\Util::formattedHeures($params['heures-total']).'</td>';
         $out .= '<th>HETD au total</th>';

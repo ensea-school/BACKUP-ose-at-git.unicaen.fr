@@ -557,6 +557,7 @@ function PaiementMiseEnPaiementRechercheForm( id )
 
         $("body").on("mise-en-paiement-form-submit", function(event, data) {
             if ($("div .messenger, div .alert", event.div).length ? false : true){
+                
                 document.location.href = event.a.data('url-redirect');
             }
         });
@@ -610,4 +611,50 @@ PaiementMiseEnPaiementRechercheForm.get = function( id )
     if (null == PaiementMiseEnPaiementRechercheForm.instances) PaiementMiseEnPaiementRechercheForm.instances = new Array();
     if (null == PaiementMiseEnPaiementRechercheForm.instances[id]) PaiementMiseEnPaiementRechercheForm.instances[id] = new PaiementMiseEnPaiementRechercheForm(id);
     return PaiementMiseEnPaiementRechercheForm.instances[id];
+}
+
+
+
+
+
+function PaiementMiseEnPaiementForm( id )
+{
+    this.id = id;
+    this.element = $(".paiement-mise-en-paiement-form#"+this.id);
+
+    this.onPeriodeChange = function()
+    {
+        var periodeId = this.getPeriodeElement().val();
+        var dates = this.element.data('dates-mise-en-paiement');
+
+        this.getDateMiseEnPaiementElement().val( dates[periodeId] );
+    }
+
+    this.init = function()
+    {
+        var that = this;
+        this.getPeriodeElement().change(function(){ that.onPeriodeChange() });
+    }
+
+    this.getPeriodeElement = function()
+    {
+        return this.element.find('[name="periode"]');
+    }
+
+    this.getDateMiseEnPaiementElement = function()
+    {
+        return this.element.find('[name="date-mise-en-paiement"]');
+    }
+}
+
+/**
+ *
+ * @param {string} id
+ * @returns {PaiementMiseEnPaiementForm}
+ */
+PaiementMiseEnPaiementForm.get = function( id )
+{
+    if (null == PaiementMiseEnPaiementForm.instances) PaiementMiseEnPaiementForm.instances = new Array();
+    if (null == PaiementMiseEnPaiementForm.instances[id]) PaiementMiseEnPaiementForm.instances[id] = new PaiementMiseEnPaiementForm(id);
+    return PaiementMiseEnPaiementForm.instances[id];
 }

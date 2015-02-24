@@ -26,9 +26,9 @@ class MiseEnPaiementAssertion extends AbstractAssertion
         if ($miseEnPaiement->getValidation() && $this->privilege == self::PRIVILEGE_DEMANDE){
             return false; // pas de nouvelle demande si la mise en paiement est déjà validée
         }
-        if ($miseEnPaiement->getValidation() === null && $this->privilege == self::PRIVILEGE_MISE_EN_PAIEMENT){
-            return false; // impossible de mettre en paiement une demande non validée
-        }
+//        if ($miseEnPaiement->getValidation() === null && $this->privilege == self::PRIVILEGE_MISE_EN_PAIEMENT){
+//            return false; // impossible de mettre en paiement une demande non validée
+//        }
 
         if ($serviceAPayer = $miseEnPaiement->getServiceAPayer()){
             return $this->assertResourceServiceAPayer($serviceAPayer);

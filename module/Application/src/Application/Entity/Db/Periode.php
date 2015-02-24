@@ -94,6 +94,14 @@ class Periode
      */
     protected $moisOriginePaiement;
 
+    /**
+     * numeroMoisPaiement
+     *
+     * @var integer
+     */
+    protected $numeroMoisPaiement;
+
+
 
         /**
      * miseEnPaiementIntervenantStructure
@@ -399,6 +407,47 @@ class Periode
     public function getMoisOriginePaiement()
     {
         return $this->moisOriginePaiement;
+    }
+
+    /**
+     * Set numeroMoisPaiement
+     *
+     * @param boolean $numeroMoisPaiement
+     * @return Periode
+     */
+    public function setNumeroMoisPaiement($numeroMoisPaiement)
+    {
+        $this->numeroMoisPaiement = $numeroMoisPaiement;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroMoisPaiement
+     *
+     * @return boolean
+     */
+    public function getNumeroMoisPaiement()
+    {
+        return $this->numeroMoisPaiement;
+    }
+
+    /**
+     * Retourne la date de paiement de la période
+     *
+     * @param Annee $annee
+     * @return \DateTime
+     */
+    public function getDatePaiement( Annee $annee )
+    {
+        if (null == $this->getNumeroMoisPaiement()) return null;
+        $year = $annee->getId();
+        $month = $this->getNumeroMoisPaiement();
+        $day = 1;
+        if ($month < 9) $year++;
+        $a_date = date("Y-m-t", mktime(0, 0, 0, $month, $day, $year));
+        $date = \DateTime::createFromFormat('Y-m-d', $a_date);
+        return $date;
     }
 
     /**

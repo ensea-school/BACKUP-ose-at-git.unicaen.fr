@@ -121,11 +121,6 @@ class PaiementController extends AbstractActionController implements ContextProv
         $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
 
         switch( $etat  ){
-            case MiseEnPaiement::A_VALIDER              : 
-                $fileName = 'mise_en_paiement_a_valider';
-                $title = 'Mise en paiement à valider';
-                 //$exp->setWatermark("A valider");
-            break;
             case MiseEnPaiement::A_METTRE_EN_PAIEMENT   : 
                 $fileName = 'demande_mise_en_paiement';
                 $title = 'Demande de mise en paiement';
@@ -165,11 +160,12 @@ class PaiementController extends AbstractActionController implements ContextProv
             $form->setData($request->getPost());
             $form->isValid();
 
-            $dateMiseEnPaiement = $form->get('date-mise-en-paiement')->getValue();
             $periode            = $form->get('periode')->getValue();
+            //$dateMiseEnPaiement = $form->get('date-mise-en-paiement')->getValue();
 
-            $dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiement);
-            $periode = $this->getServicePeriode()->get($periode);
+            $periode = $this->getServicePeriode()->get($periode); /* @var $periode \Application\Entity\Db\Periode */
+            $dateMiseEnPaiement = $periode->getDatePaiement($this->context()->getGlobalContext()->getAnnee()); // date forcée car plus de saisie possible!
+            //$dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiement);
 
             $intervenants = $this->getServiceIntervenant()->get( explode(',',$intervenants) );
             try{

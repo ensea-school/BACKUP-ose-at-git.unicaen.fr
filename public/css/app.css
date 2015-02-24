@@ -253,3 +253,7 @@ form#modulateurs-saisie th select{
 .bootstrap-select .dropdown-menu li a.opt{
     margin-left: 2em;
 }
+
+.demande-mise-en-paiement .type-heures.not-allowed {
+    opacity: 0.5;
+}

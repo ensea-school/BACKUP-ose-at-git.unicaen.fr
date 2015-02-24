@@ -9,7 +9,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 {
-    const A_VALIDER             = 'a-valider';
     const A_METTRE_EN_PAIEMENT  = 'a-mettre-en-paiement';
     const MIS_EN_PAIEMENT       = 'mis-en-paiement';
 
@@ -508,7 +507,6 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getEtat()
     {
-        if (! $this->getValidation()) return self::A_VALIDER;
         if (! $this->getDateMiseEnPaiement()) return self::A_METTRE_EN_PAIEMENT;
         return self::MIS_EN_PAIEMENT;
     }

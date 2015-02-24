@@ -16,4 +16,13 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
 <h1 class="page-header"><?php echo $title; ?></h1>
 
 <?php
-echo $this->demandeMiseEnPaiement( $servicesAPayer )->render();
+
+if ($intervenant->estPermanent()){
+?>
+<div class="alert alert-danger" role="alert">
+  Les demandes de mise en paiement ne sont pour le moment pas ouvertes aux intervenants permanents.
+</div>
+<?php
+}else{
+    echo $this->demandeMiseEnPaiement( $servicesAPayer )->render();
+}

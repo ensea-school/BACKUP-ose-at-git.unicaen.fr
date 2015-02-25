@@ -563,20 +563,18 @@ class Service extends AbstractEntityService
                     ->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getRealise() )
                     ->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
 
-        foreach( $realises->get() as $vh ){
-            /* @var $vh \Application\Entity\Db\VolumeHoraire */
-            $vh->setRemove(true);
-        }
+        $typesIntervention = $prevus->getTypesIntervention() + $realises->getTypesIntervention();
+        $periodes = $prevus->getPeriodes() + $realises->getPeriodes();
 
-        foreach( $prevus->get() as $vh ){
-            $nvh = new \Application\Entity\Db\VolumeHoraire;
-            $nvh->setTypeVolumeHoraire  ( $this->getServiceTypeVolumeHoraire()->getRealise() );
-            $nvh->setService            ( $service                   );
-            $nvh->setPeriode            ( $vh->getPeriode()          );
-            $nvh->setTypeIntervention   ( $vh->getTypeIntervention() );
-            $nvh->setHeures             ( $vh->getHeures()           );
-            $nvh->setMotifNonPaiement   ( $vh->getMotifNonPaiement() );
-            $service->addVolumeHoraire($nvh);
+        foreach( $periodes as $periode ){
+            $prevus->setPeriode($periode);
+            $realises->setPeriode($periode);
+            foreach( $typesIntervention as $typeIntervention ){
+                $prevus->setTypeIntervention($typeIntervention);
+                $realises->setTypeIntervention($typeIntervention);
+
+                $realises->setHeures( $prevus->getHeures() );
+            }
         }
         $this->save($service);
     }

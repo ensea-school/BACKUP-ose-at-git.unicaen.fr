@@ -145,6 +145,7 @@ function ServiceListe( id ){
 
     this.setRealisesFromPrevus = function(){
         var services = '';
+        var that = this;
         $("#"+this.id+" table.service tr.service-ligne").each( function(){
              if (services != '') services += ',';
              services += $(this).data('id');
@@ -152,7 +153,14 @@ function ServiceListe( id ){
         $.get(
             Url("service/constatation"),
             {services: services},
-            function(){ window.location.reload(); }
+            function( data ){
+                if (data != 'OK'){
+                    $("#"+that.id+" #prevu-to-realise-modal").modal('hide');
+                    $("#"+that.id+" #prevu-to-realise-modal").after( '<div style="margin-top:.5em">' + data + '</div>' );
+                }else{
+                    window.location.reload();
+                }
+            }
         );
     }
 

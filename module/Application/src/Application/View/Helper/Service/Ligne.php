@@ -79,7 +79,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                 ],
                 ['query' => [
                     'only-content'          => 1,
-                    'read-only'             => $this->getListe()->getReadOnly() ? '1' : '0',
+                    'read-only'             => $this->getReadOnly() ? '1' : '0',
                 ]]);
         return $url;
     }
@@ -146,7 +146,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         }
 
         $out .= '<td class="actions">';
-        if (! $liste->getReadOnly()){
+        if (! $this->getReadOnly()){
             $out .= $this->renderModifier();
             $out .= $this->renderSupprimer();
         }
@@ -286,6 +286,11 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     {
         $this->liste = $liste;
         return $this;
+    }
+
+    public function getReadOnly()
+    {
+        return $this->getListe()->getReadOnly() || $this->forcedReadOnly;
     }
 
     /**

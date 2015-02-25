@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * VolumeHoraire
  */
-class VolumeHoraire implements HistoriqueAwareInterface
+class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 {
     /**
      * @var float
@@ -549,4 +551,8 @@ class VolumeHoraire implements HistoriqueAwareInterface
         return $this->getFormuleResultatVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
 
+    public function getResourceId()
+    {
+        return 'VolumeHoraire';
+    }
 }

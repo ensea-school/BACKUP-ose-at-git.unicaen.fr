@@ -345,14 +345,23 @@ class ServiceController extends AbstractActionController
 
     public function constatationAction()
     {
+        $errors = [];
+        $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getRealise();
         $services = $this->params()->fromQuery('services');
         if ($services){
             $services = explode( ',', $services );
             foreach( $services as $sid ){
                 $service = $this->getServiceService()->get( $sid );
-                $this->getServiceService()->setRealisesFromPrevus( $service );
+                if ($this->isAllowed($service, 'update')){
+                    try{
+                        $this->getServiceService()->setRealisesFromPrevus( $service );
+                    }catch(\Exception $e){
+                        $errors[] = $e->getMessage();
+                    }
+                }
             }
         }
+        return compact('errors');
     }
 
     public function suppressionAction()

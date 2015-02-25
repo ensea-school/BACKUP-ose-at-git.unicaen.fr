@@ -240,6 +240,13 @@ class IntervenantDl extends AbstractDl
         
         if (!$this->short) {
             $divers[] = sprintf($tplDtdd,
+                "Id :", 
+                $this->entity->getId()
+            );
+        }
+        
+        if (!$this->short) {
+            $divers[] = sprintf($tplDtdd,
                 "Id de connexion :", 
                 ($u = $this->entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)"
             );

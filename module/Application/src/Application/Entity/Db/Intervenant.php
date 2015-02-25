@@ -295,6 +295,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @var MiseEnPaiementIntervenantStructure
      */
     protected $miseEnPaiementIntervenantStructure;
+
+    /**
+     * @var \Application\Entity\Db\VIndicAttenteDemandeMep
+     */
+    private $vIndicAttenteDemandeMep;
+
+    /**
+     * @var \Application\Entity\Db\VIndicAttenteMep
+     */
+    private $vIndicAttenteMep;
     
     /**
      * Constructor
@@ -1542,6 +1552,26 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getVIndicDiffDossier()
     {
         return $this->vIndicDiffDossier;
+    }
+
+    /**
+     * Get vIndicAttenteDemandeMep
+     *
+     * @return \Application\Entity\Db\VIndicAttenteDemandeMep
+     */
+    public function getVIndicAttenteDemandeMep()
+    {
+        return $this->vIndicAttenteDemandeMep;
+    }
+
+    /**
+     * Get vIndicAttenteMep
+     *
+     * @return \Application\Entity\Db\VIndicAttenteMep
+     */
+    public function getVIndicAttenteMep()
+    {
+        return $this->vIndicAttenteMep;
     }
 
     /**

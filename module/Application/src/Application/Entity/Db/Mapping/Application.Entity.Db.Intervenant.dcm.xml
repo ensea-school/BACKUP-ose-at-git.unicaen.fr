@@ -111,5 +111,7 @@
     <one-to-many field="wfIntervenantEtape" target-entity="Application\Entity\Db\WfIntervenantEtape" mapped-by="intervenant" />
     <one-to-one field="vIndicDiffDossier" target-entity="Application\Entity\Db\VIndicDiffDossier" mapped-by="intervenant" />
     <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant" />
+    <one-to-one field="vIndicAttenteDemandeMep" target-entity="Application\Entity\Db\VIndicAttenteDemandeMep"   mapped-by="intervenant" />
+    <one-to-one field="vIndicAttenteMep"        target-entity="Application\Entity\Db\VIndicAttenteMep"          mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

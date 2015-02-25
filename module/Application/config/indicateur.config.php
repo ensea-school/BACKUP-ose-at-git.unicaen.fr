@@ -160,6 +160,8 @@ return array(
             'PermAffectAutreIntervMeme'        => 'Application\\Service\\Indicateur\\PermAffectAutreIntervMemeIndicateurImpl',
             'PermAffectMemeIntervAutre'        => 'Application\\Service\\Indicateur\\PermAffectMemeIntervAutreIndicateurImpl',
             'BiatssAffectMemeIntervAutre'      => 'Application\\Service\\Indicateur\\BiatssAffectMemeIntervAutreIndicateurImpl',
+            'AttenteDemandeMep'                => 'Application\\Service\\Indicateur\\AttenteDemandeMepIndicateurImpl',
+            'AttenteMep'                       => 'Application\\Service\\Indicateur\\AttenteMepIndicateurImpl',
         ),
         'factories' => array(
         ),

@@ -2,6 +2,7 @@
 
 namespace Application\Service\Indicateur;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Doctrine\ORM\QueryBuilder;
 use Traversable;
@@ -53,20 +54,6 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
     }
     
     /**
-     * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
-     * 
-     * @param IntervenantEntity $result
-     * @return string
-     */
-    public function getResultUrl($result)
-    {
-        return $this->getHelperUrl()->fromRoute(
-                'intervenant/contrat', 
-                ['intervenant' => $result->getSourceCode()], 
-                ['force_canonical' => true]);
-    }
-    
-    /**
      * 
      * @return integer
      */
@@ -96,5 +83,14 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * 
+     * @return Annee
+     */
+    protected function getAnnee()
+    {
+        return $this->getContextProvider()->getGlobalContext()->getAnnee();
     }
 }

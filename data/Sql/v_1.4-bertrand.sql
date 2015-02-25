@@ -70,19 +70,21 @@ INSERT INTO TYPE_VALIDATION (
 -- Indicateurs
 ---------------------------------------------------------------------------------
 
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationDonneesPerso',      'Données personnelles','AttenteValidationDonneesPerso','100','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'DonneesPersoDiffImport',             'Données personnelles','DonneesPersoDiffImport','1000','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttentePieceJustif',                 'Pièces justificatives','AttentePieceJustif','200','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationPieceJustif',       'Pièces justificatives','AttenteValidationPieceJustif','210','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationEns',               'Enseignements','AttenteValidationEnsIndicateurImpl','300','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAgrementCR',                  'Agrément','AttenteAgrementCR','400','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAgrementCA',                  'Agrément','AttenteAgrementCA','500','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteContrat',                     'Contrat / avenant','Attente Contrat','600','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAvenant',                     'Contrat / avenant','Attente Avenant','700','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'SaisieServiceApresContratAvenant',   'Contrat / avenant','Saisie Service Apres Contrat Avenant','800','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AgrementCAMaisPasContrat',           'Contrat / avenant','AgrementCAMaisPasContrat','50','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'ContratAvenantDeposes',              'Contrat / avenant','Contrat Avenant Déposés','900','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteRetourContrat',               'Contrat / avenant','AttenteRetourContrat','950','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'PermAffectAutreIntervMeme',          'Affectation','PermAffectAutreIntervMeme','975','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'PermAffectMemeIntervAutre',          'Affectation','PermAffectMemeIntervAutre','976','1');
-Insert into INDICATEUR (ID,CODE,TYPE,LIBELLE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'BiatssAffectMemeIntervAutre',        'Affectation','BiatssAffectMemeIntervAutre','977','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationDonneesPerso',      'Données personnelles','100','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'DonneesPersoDiffImport',             'Données personnelles','1000','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttentePieceJustif',                 'Pièces justificatives','200','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationPieceJustif',       'Pièces justificatives','210','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationEns',               'Enseignements','300','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAgrementCR',                  'Agrément','400','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAgrementCA',                  'Agrément','500','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteContrat',                     'Contrat / avenant','600','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAvenant',                     'Contrat / avenant','700','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'SaisieServiceApresContratAvenant',   'Contrat / avenant','800','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AgrementCAMaisPasContrat',           'Contrat / avenant','50','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'ContratAvenantDeposes',              'Contrat / avenant','900','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteRetourContrat',               'Contrat / avenant','950','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'PermAffectAutreIntervMeme',          'Affectation','975','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'PermAffectMemeIntervAutre',          'Affectation','976','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'BiatssAffectMemeIntervAutre',        'Affectation','977','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteDemandeMep',                  'Mise en paiement','1100','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteMep',                         'Mise en paiement','1200','1');

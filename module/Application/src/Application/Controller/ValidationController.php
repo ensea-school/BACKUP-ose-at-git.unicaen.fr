@@ -373,9 +373,15 @@ class ValidationController extends AbstractActionController implements ContextPr
             $data = $this->getRequest()->getPost();
             $this->formValider->setData($data);
             if ($this->formValider->isValid()) {
-                $serviceValidation->enregistrerValidationServices($this->validation/*, $servicesNonValides*/);
-                
-                $this->flashMessenger()->addSuccessMessage("Validation enregistrée avec succès.");
+                try {
+                    $serviceValidation->enregistrerValidationServices($this->validation/*, $servicesNonValides*/);
+
+                    $this->flashMessenger()->addSuccessMessage("Validation enregistrée avec succès.");
+                }
+                catch (\Exception $e) {
+                    $e        = \Application\Exception\DbException::translate($e);
+                    $this->flashMessenger()->addErrorMessage($e->getMessage());
+                }
                 
                 return $this->redirect()->toRoute(null, array(), array(), true);
             }

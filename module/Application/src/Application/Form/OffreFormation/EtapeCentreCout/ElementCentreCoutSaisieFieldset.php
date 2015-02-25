@@ -70,7 +70,7 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
         $element
                 ->setLabel($th->getLibelleCourt())
                 ->setValueOptions(['' => '(Aucun)'] + $this->getForm()->getCentresCoutsToArray($th))
-                ->setAttribute('class', 'type-heures');
+                ->setAttribute('class', 'type-heures selectpicker');
             
         return $element;
     }

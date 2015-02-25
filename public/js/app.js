@@ -319,7 +319,7 @@ EtapeCentreCout.init = function ()
         var typeHeuresCode = $(this).data('code');
         var value = $('form#etape-centre-cout select[name="' + typeHeuresCode + '"]').val();
         EtapeCentreCout.setFormValues(typeHeuresCode, value);
-        e.stopPopagation();
+        e.stopPropagation();
     });
 }
 

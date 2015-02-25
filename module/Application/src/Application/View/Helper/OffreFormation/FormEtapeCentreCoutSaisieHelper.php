@@ -88,7 +88,7 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
             $thElement = new Select($th->getCode());
             $thElement
                     ->setValueOptions(['' => '(Aucun)'] + $form->getCentresCoutsToArray($th))
-                    ->setAttribute('class', 'form-control type-heures');
+                    ->setAttribute('class', 'form-control type-heures selectpicker');
             
             $res .= '<th>';
             $res .= $this->getView()->formSelect($thElement);

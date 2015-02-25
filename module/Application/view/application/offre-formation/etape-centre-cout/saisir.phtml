@@ -9,3 +9,22 @@ echo $this->formErrors($form);
 if ($errors) {
     echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));
 }
+?>
+
+<script>
+    /**
+     * Installation d'un "bootstrap-select" sur les select.
+     */
+    $(function() {
+        $('select.selectpicker').attr('data-live-search', 'true').selectpicker();
+    });
+
+    /**
+     * Redéfinition de la fonction définie dans "app.js" pour que cela fonctionne avec le "bootstrap-select" installé
+     * sur les select.
+     */
+    EtapeCentreCout.setFormValues = function (typeHeuresCode, value)
+    {
+        $('form#etape-centre-cout select[name$="\\[' + typeHeuresCode + '\\]"]').selectpicker('val', value);
+    }
+</script>

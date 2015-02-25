@@ -46,19 +46,24 @@ class CentreCout extends AbstractEntityService
         $result = [];
 
         foreach ($centresCouts as $cc) {
-            $id         = $cc->getId();
-            $code       = $cc->getSourceCode();
-            
-            $ccp        = $cc->getParent() ? : null;
-            $codeParent = $ccp ? $ccp->getSourceCode() : null;
+            $id       = $cc->getId();
+            $ccp      = $cc->getParent() ? : null;
+            $idParent = $ccp ? $ccp->getId() : null;
 
-            if ($codeParent) {
-                $result[$codeParent]['label']        = (string) $ccp;
-                $result[$codeParent]['options'][$id] = (string) $cc;
+            if ($idParent) {
+                $result[$idParent]['label']        = (string) $ccp;
+                $result[$idParent]['options'][$id] = (string) $cc;
             }
             else {
-                $result[$code]['label']        = (string) $cc;
-                $result[$code]['options'][$id] = (string) $cc;
+                $result[$id]['label']        = (string) $cc;
+                $result[$id]['options'][$id] = (string) $cc;
+            }
+        }
+        
+        // parcours pour supprimer le niveau 2 lorsque le centre de coût n'a pas d'EOTP fils
+        foreach ($result as $id => $data) {
+            if (isset($data['options']) && count($data['options']) === 1) {
+                $result[$id] = $data['label'];
             }
         }
         

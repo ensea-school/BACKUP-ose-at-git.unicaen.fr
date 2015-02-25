@@ -74,7 +74,7 @@ Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.ne
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'DonneesPersoDiffImport',             'Données personnelles','1000','1');
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttentePieceJustif',                 'Pièces justificatives','200','1');
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationPieceJustif',       'Pièces justificatives','210','1');
-Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationEns',               'Enseignements','300','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteValidationEns',               'Enseignements et référentiel','300','1');
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAgrementCR',                  'Agrément','400','1');
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteAgrementCA',                  'Agrément','500','1');
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteContrat',                     'Contrat / avenant','600','1');
@@ -88,3 +88,7 @@ Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.ne
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'BiatssAffectMemeIntervAutre',        'Affectation','977','1');
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteDemandeMep',                  'Mise en paiement','1100','1');
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'AttenteMep',                         'Mise en paiement','1200','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'PlafondHetdPrevuDepasse',            'Enseignements et référentiel','1300','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'PlafondHetdRealiseDepasse',          'Enseignements et référentiel','1400','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'PlafondRefPrevuDepasse',             'Enseignements et référentiel','1500','1');
+Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (indicateur_id_seq.nextval,'PlafondRefRealiseDepasse',           'Enseignements et référentiel','1600','1');

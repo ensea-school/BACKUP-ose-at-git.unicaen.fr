@@ -162,6 +162,10 @@ return array(
             'BiatssAffectMemeIntervAutre'      => 'Application\\Service\\Indicateur\\BiatssAffectMemeIntervAutreIndicateurImpl',
             'AttenteDemandeMep'                => 'Application\\Service\\Indicateur\\AttenteDemandeMepIndicateurImpl',
             'AttenteMep'                       => 'Application\\Service\\Indicateur\\AttenteMepIndicateurImpl',
+            'PlafondHetdPrevuDepasse'          => 'Application\\Service\\Indicateur\\PlafondHetdPrevuDepasseIndicateurImpl',
+            'PlafondHetdRealiseDepasse'        => 'Application\\Service\\Indicateur\\PlafondHetdRealiseDepasseIndicateurImpl',
+            'PlafondRefPrevuDepasse'           => 'Application\\Service\\Indicateur\\PlafondRefPrevuDepasseIndicateurImpl',
+            'PlafondRefRealiseDepasse'         => 'Application\\Service\\Indicateur\\PlafondRefRealiseDepasseIndicateurImpl',
         ),
         'factories' => array(
         ),

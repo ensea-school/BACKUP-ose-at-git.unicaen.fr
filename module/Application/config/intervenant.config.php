@@ -297,7 +297,7 @@ return array(
                                 'resource' => 'controller/Application\Controller\Intervenant:rechercher',
                             ),
                             'fiche' => array(
-                                'label'  => "Fiche",
+                                'label'  => "Fiche individuelle",
                                 'title'  => "Consultation de la fiche de l'intervenant {id}",
                                 'route'  => 'intervenant/fiche',
                                 'paramsInject' => array(
@@ -307,8 +307,8 @@ return array(
                                 'resource' => 'controller/Application\Controller\Intervenant:voir',
                             ),
                             'voir-heures-comp' => array(
-                                'label'  => "Heures complémentaires",
-                                'title'  => "Calcul des heures complémentaires {id}",
+                                'label'  => "Calcul HETD",
+                                'title'  => "Calcul des heures équivalent TD {id}",
                                 'route'  => 'intervenant/voir-heures-comp',
                                 'paramsInject' => array(
                                     'intervenant',

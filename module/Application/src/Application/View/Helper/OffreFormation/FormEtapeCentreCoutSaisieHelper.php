@@ -66,7 +66,8 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
         $res = $this->getView()->form()->openTag($form);
         $res .= '<style>';
         $res .= '.modal-dialog { width: 60%; }';
-        $res .= 'select.type-heures { display: inline; width: 75%; }';
+        $res .= '/*select.type-heures { display: inline; width: 75%; }*/';
+        $res .= 'th.element-pedagogique, td.element-pedagogique { width: 50%; }';
         $res .= '</style>';
         $res .= '<script type="text/javascript">';
         $res .= ' $(function() { EtapeCentreCout.init(); });';
@@ -75,7 +76,7 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
         $res .= '<table class="table table-bordered table-extra-condensed">';
         
         $res .= '<tr>';
-        $res .= '<th rowspan="2">Elément</th>';
+        $res .= '<th rowspan="2" class="element-pedagogique">Elément</th>';
         foreach ($typesHeures as $th) {
             $res .= '<th>';
             $res .= $th->getLibelleCourt();
@@ -88,18 +89,18 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
             $thElement = new Select($th->getCode());
             $thElement
                     ->setValueOptions(['' => '(Aucun)'] + $form->getCentresCoutsToArray($th))
-                    ->setAttribute('class', 'form-control type-heures selectpicker');
+                    ->setAttribute('class', 'form-control type-heures header-select selectpicker');
             
             $res .= '<th>';
             $res .= $this->getView()->formSelect($thElement);
-            $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value" data-code="' . $th->getCode() . '" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span></button>';
+            $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value pull-right" data-code="' . $th->getCode() . '" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span></button>';
             $res .= '</th>';
         }
         $res .= '</tr>';
         
         foreach ($elements as $element) {
             $res .= '<tr>';
-            $res .= '<th>' . $element . '</th>';
+            $res .= '<th class="element-pedagogique">' . $element . '</th>';
             $formElement = $form->get('EL' . $element->getId());
             $res .= $this->getView()->fieldsetElementCentreCoutSaisie()->render($formElement, $typesHeures, true);
             $res .= '</tr>';

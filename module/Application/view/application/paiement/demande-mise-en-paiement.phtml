@@ -2,6 +2,7 @@
 
 /* @var $intervenant Application\Entity\Db\Intervenant */
 /* @var $serviceaAPayer Application\Entity\Db\ServiceAPayerInterface[] */
+/* @var $saved boolean */
 
 $title = 'Demande de mise en paiement';
 if ($intervenant){
@@ -25,4 +26,13 @@ if ($intervenant->estPermanent()){
 <?php
 }else{
     echo $this->demandeMiseEnPaiement( $servicesAPayer )->render();
+}
+if ($saved){
+?>
+<script type="text/javascript">
+    $(function() {
+        alertFlash('La demande de paiement a bien été prise en compte.', 'success', 2000);
+    });
+</script>
+<?php
 }

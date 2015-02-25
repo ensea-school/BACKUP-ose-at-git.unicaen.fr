@@ -7379,5 +7379,11 @@ UPDATE periode SET mois_origine_paiement=12, numero_mois_paiement=1 WHERE code =
 /
 BEGIN DBMS_SCHEDULER.enable(name=>'"OSE"."OSE_SRC_SYNC"'); END;
 /
+
+begin
+  ose_formule.calculer_tout;
+end;
+
+/
 BEGIN OSE_FORMULE.CALCULER_TOUT; END;
 /

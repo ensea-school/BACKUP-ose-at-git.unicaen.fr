@@ -5,6 +5,7 @@ namespace Application\Service\Indicateur;
 use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Service\AbstractService;
 use Application\Traits\StructureAwareTrait;
+use Traversable;
 use Zend\Filter\Callback;
 use Zend\Filter\FilterInterface;
 use Zend\Mvc\Controller\Plugin\Url;
@@ -55,8 +56,16 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
     {
         return $this->entity;
     }
-    
+
+    /**
+     * @var Traversable
+     */
     protected $result;
+    
+    /**
+     * @var int
+     */
+    protected $resultCount;
 
     /**
      * 

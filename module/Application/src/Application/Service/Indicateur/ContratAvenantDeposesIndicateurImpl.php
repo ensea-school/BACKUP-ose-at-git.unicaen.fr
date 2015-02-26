@@ -12,7 +12,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratAvenantDeposesIndicateurImpl extends AbstractIntervenantResultIndicateurImpl implements DateAwareIndicateurImplInterface
+class ContratAvenantDeposesIndicateurImpl extends AbstractIndicateurImpl implements DateAwareIndicateurImplInterface
 {
     protected $singularTitlePattern = "%s contrat/avenant de vacataire a été déposé";
     protected $pluralTitlePattern   = "%s contrats/avenants de vacataire ont été déposés";
@@ -39,6 +39,22 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIntervenantResultIndic
     public function getDate()
     {
         return $this->dateDepuis;
+    }
+    
+    /**
+     * Retourne la liste de résultats renvoyée par l'indicateur.
+     * 
+     * @return Traversable
+     */
+    public function getResult()
+    {
+        if (null === $this->result) {
+            $qb = $this->getQueryBuilder();
+            
+            $this->result = $qb->getQuery()->getResult();
+        }
+            
+        return $this->result;
     }
     
     /**

@@ -135,8 +135,9 @@ class Structure extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        if (! $role instanceof \Application\Acl\Role) return $qb;
-        $this->finderByStructure( $role->getStructure(), $qb, $alias );
+        if ($role instanceof \Application\Interfaces\StructureAwareInterface){
+            $this->finderByStructure( $role->getStructure(), $qb, $alias );
+        }
         
         return $qb;
     }

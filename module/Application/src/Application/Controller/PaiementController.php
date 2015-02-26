@@ -65,6 +65,7 @@ class PaiementController extends AbstractActionController implements ContextProv
         $rechercheForm->bind($recherche);
 
         $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
+        $this->getServiceStructure()->finderByRole( $this->getContextProvider()->getSelectedIdentityRole(), $qb );
         $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
         $structures = $this->getServiceStructure()->getList($qb);
         $rechercheForm->populateStructures( $structures );

@@ -5,12 +5,31 @@
 BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END; 
 /
 
-
+---------------------------
+--Nouveau SEQUENCE
+--VOLUME_HORAIRE_REF_ID_SEQ
+---------------------------
+ CREATE SEQUENCE "OSE"."VOLUME_HORAIRE_REF_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 396 NOCACHE NOORDER NOCYCLE;
+---------------------------
+--Nouveau SEQUENCE
+--VALIDATION_VOL_HORAIRE__ID_SEQ
+---------------------------
+ CREATE SEQUENCE "OSE"."VALIDATION_VOL_HORAIRE__ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE NOORDER NOCYCLE;
+---------------------------
+--Nouveau SEQUENCE
+--UNICAEN_EFFECTIFS_POUR__ID_SEQ
+---------------------------
+ CREATE SEQUENCE "OSE"."UNICAEN_EFFECTIFS_POUR__ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 8613 NOCACHE NOORDER NOCYCLE;
 ---------------------------
 --Nouveau SEQUENCE
 --UNICAEN_CORRESP_STRUCTU_ID_SEQ
 ---------------------------
  CREATE SEQUENCE "OSE"."UNICAEN_CORRESP_STRUCTU_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE NOORDER NOCYCLE;
+---------------------------
+--Nouveau SEQUENCE
+--TYPE_ROLE_PRIVILEGE_ID_SEQ
+---------------------------
+ CREATE SEQUENCE "OSE"."TYPE_ROLE_PRIVILEGE_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE NOORDER NOCYCLE;
 ---------------------------
 --Nouveau SEQUENCE
 --TYPE_RESSOURCE_ID_SEQ
@@ -21,6 +40,21 @@ BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END;
 --TYPE_HEURES_ID_SEQ
 ---------------------------
  CREATE SEQUENCE "OSE"."TYPE_HEURES_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 6 NOCACHE NOORDER NOCYCLE;
+---------------------------
+--Nouveau SEQUENCE
+--STATUT_PRIVILEGE_ID_SEQ
+---------------------------
+ CREATE SEQUENCE "OSE"."STATUT_PRIVILEGE_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE NOORDER NOCYCLE;
+---------------------------
+--Nouveau SEQUENCE
+--RESSOURCE_ID_SEQ
+---------------------------
+ CREATE SEQUENCE "OSE"."RESSOURCE_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE NOORDER NOCYCLE;
+---------------------------
+--Nouveau SEQUENCE
+--PRIVILEGE_ID_SEQ
+---------------------------
+ CREATE SEQUENCE "OSE"."PRIVILEGE_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE NOORDER NOCYCLE;
 ---------------------------
 --Nouveau SEQUENCE
 --FORMULE_RESULTAT_VH_REF_ID_SEQ
@@ -35,7 +69,7 @@ BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END;
 --Nouveau SEQUENCE
 --CENTRE_COUT_EP_ID_SEQ
 ---------------------------
- CREATE SEQUENCE "OSE"."CENTRE_COUT_EP_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 312 NOCACHE NOORDER NOCYCLE;
+ CREATE SEQUENCE "OSE"."CENTRE_COUT_EP_ID_SEQ" MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 351 NOCACHE NOORDER NOCYCLE;
 ---------------------------
 --Nouveau SEQUENCE
 --CC_ACTIVITE_ID_SEQ
@@ -48,6 +82,40 @@ BEGIN DBMS_SCHEDULER.disable(name=>'"OSE"."OSE_SRC_SYNC"', force => TRUE); END;
 ALTER TABLE "OSE"."WF_ETAPE" ADD ("ORDRE" NUMBER(*,0) DEFAULT 1 NOT NULL ENABLE);
 ALTER TABLE "OSE"."WF_ETAPE" ADD ("STRUCTURES_IDS_FUNC" VARCHAR2(256 CHAR) DEFAULT null);
 
+---------------------------
+--Nouveau TABLE
+--VOLUME_HORAIRE_REF
+---------------------------
+  CREATE TABLE "OSE"."VOLUME_HORAIRE_REF" 
+   (	"ID" NUMBER(*,0) NOT NULL ENABLE,
+	"TYPE_VOLUME_HORAIRE_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"SERVICE_REFERENTIEL_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"HEURES" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
+	"HISTO_CREATION" DATE DEFAULT SYSDATE NOT NULL ENABLE,
+	"HISTO_CREATEUR_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"HISTO_MODIFICATION" DATE DEFAULT SYSDATE NOT NULL ENABLE,
+	"HISTO_MODIFICATEUR_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"HISTO_DESTRUCTION" DATE,
+	"HISTO_DESTRUCTEUR_ID" NUMBER(*,0),
+	CONSTRAINT "VOLUME_HORAIRE_REF_PK" PRIMARY KEY ("ID") ENABLE,
+	CONSTRAINT "VHR_SERVICE_REFERENTIEL_FK" FOREIGN KEY ("SERVICE_REFERENTIEL_ID")
+	 REFERENCES "OSE"."SERVICE_REFERENTIEL" ("ID") ON DELETE CASCADE ENABLE,
+	CONSTRAINT "VHR_TYPE_VOLUME_HORAIRE_FK" FOREIGN KEY ("TYPE_VOLUME_HORAIRE_ID")
+	 REFERENCES "OSE"."TYPE_VOLUME_HORAIRE" ("ID") ENABLE
+   );
+---------------------------
+--Nouveau TABLE
+--VALIDATION_VOL_HORAIRE_REF
+---------------------------
+  CREATE TABLE "OSE"."VALIDATION_VOL_HORAIRE_REF" 
+   (	"VALIDATION_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"VOLUME_HORAIRE_REF_ID" NUMBER(*,0) NOT NULL ENABLE,
+	CONSTRAINT "VALIDATION_VOL_HORAIRE_REF_PK" PRIMARY KEY ("VALIDATION_ID","VOLUME_HORAIRE_REF_ID") ENABLE,
+	CONSTRAINT "VVHR_VALIDATION_FK" FOREIGN KEY ("VALIDATION_ID")
+	 REFERENCES "OSE"."VALIDATION" ("ID") ON DELETE CASCADE ENABLE,
+	CONSTRAINT "VVHR_VOLUME_HORAIRE_REF_FK" FOREIGN KEY ("VOLUME_HORAIRE_REF_ID")
+	 REFERENCES "OSE"."VOLUME_HORAIRE_REF" ("ID") ON DELETE CASCADE ENABLE
+   );
 ---------------------------
 --Nouveau TABLE
 --UNICAEN_CORRESP_STRUCTURE_CC
@@ -198,16 +266,51 @@ ALTER TABLE "OSE"."PERIODE" ADD ("NUMERO_MOIS_PAIEMENT" NUMBER);
 ALTER TABLE "OSE"."PERIODE" ADD CONSTRAINT "PERIODE__UNV1" UNIQUE ("MOIS_ORIGINE_PAIEMENT") ENABLE;
 
 ---------------------------
+--Nouveau TABLE
+--MV_ANTHONY2
+---------------------------
+  CREATE TABLE "OSE"."MV_ANTHONY2" 
+   (	"NOM_USUEL" VARCHAR2(120),
+	"PRENOM" VARCHAR2(60),
+	"NOM_PATRONYMIQUE" VARCHAR2(120),
+	"DATE_NAISSANCE" DATE,
+	"PAYS_NAISSANCE_CODE_INSEE" VARCHAR2(9),
+	"PAYS_NAISSANCE_LIBELLE" VARCHAR2(120),
+	"DEP_NAISSANCE_CODE_INSEE" VARCHAR2(9),
+	"DEP_NAISSANCE_LIBELLE" VARCHAR2(120),
+	"VILLE_NAISSANCE_CODE_INSEE" VARCHAR2(15),
+	"VILLE_NAISSANCE_LIBELLE" VARCHAR2(78),
+	"PAYS_NATIONALITE_CODE_INSEE" VARCHAR2(9),
+	"PAYS_NATIONALITE_LIBELLE" VARCHAR2(120),
+	"TEL_PRO" VARCHAR2(33),
+	"TEL_MOBILE" VARCHAR2(60),
+	"Z_TYPE_ID" VARCHAR2(1 CHAR) NOT NULL ENABLE,
+	"Z_STATUT_ID" VARCHAR2(100 CHAR),
+	"SOURCE_CODE" VARCHAR2(9) NOT NULL ENABLE,
+	"NUMERO_INSEE" VARCHAR2(39),
+	"NUMERO_INSEE_CLE" VARCHAR2(40),
+	"NUMERO_INSEE_PROVISOIRE" NUMBER,
+	"IBAN" VARCHAR2(108),
+	"BIC" VARCHAR2(36),
+	CONSTRAINT "MV_ANTHONY2_PK" PRIMARY KEY ("SOURCE_CODE") ENABLE
+   );
+---------------------------
 --Modifié TABLE
 --MISE_EN_PAIEMENT
 ---------------------------
 ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD ("CENTRE_COUT_ID" NUMBER(*,0) NOT NULL ENABLE);
+ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD ("FORMULE_RES_SERVICE_ID" NUMBER(*,0));
+ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD ("FORMULE_RES_SERVICE_REF_ID" NUMBER(*,0));
 ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD ("HEURES" FLOAT(126) DEFAULT 0 NOT NULL ENABLE);
 ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD ("TYPE_HEURES_ID" NUMBER(*,0) NOT NULL ENABLE);
-ALTER TABLE "OSE"."MISE_EN_PAIEMENT" MODIFY ("FORMULE_RES_SERVICE_ID" NULL);
-ALTER TABLE "OSE"."MISE_EN_PAIEMENT" MODIFY ("FORMULE_RES_SERVICE_REF_ID" NULL);
+ALTER TABLE "OSE"."MISE_EN_PAIEMENT" DROP ("FORMULE_REFERENTIEL_ID");
+ALTER TABLE "OSE"."MISE_EN_PAIEMENT" DROP ("FORMULE_SERVICE_ID");
+ALTER TABLE "OSE"."MISE_EN_PAIEMENT" DROP CONSTRAINT "MEP_FORMULE_REFERENTIEL_FK";
+ALTER TABLE "OSE"."MISE_EN_PAIEMENT" DROP CONSTRAINT "MEP_FORMULE_SERVICE_FK";
 ALTER TABLE "OSE"."MISE_EN_PAIEMENT" DROP CONSTRAINT "MISE_EN_PAIEMENT_VALIDATION_FK";
 ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD CONSTRAINT "MEP_CENTRE_COUT_FK" FOREIGN KEY ("CENTRE_COUT_ID") REFERENCES "OSE"."CENTRE_COUT"("ID") ON DELETE CASCADE ENABLE;
+ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD CONSTRAINT "MEP_FR_SERVICE_FK" FOREIGN KEY ("FORMULE_RES_SERVICE_ID") REFERENCES "OSE"."FORMULE_RESULTAT_SERVICE"("ID") ENABLE;
+ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD CONSTRAINT "MEP_FR_SERVICE_REF_FK" FOREIGN KEY ("FORMULE_RES_SERVICE_REF_ID") REFERENCES "OSE"."FORMULE_RESULTAT_SERVICE_REF"("ID") ENABLE;
 ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD CONSTRAINT "MEP_TYPE_HEURES_FK" FOREIGN KEY ("TYPE_HEURES_ID") REFERENCES "OSE"."TYPE_HEURES"("ID") ON DELETE CASCADE ENABLE;
 ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD CONSTRAINT "MISE_EN_PAIEMENT_VALIDATION_FK" FOREIGN KEY ("VALIDATION_ID") REFERENCES "OSE"."VALIDATION"("ID") ON DELETE CASCADE ENABLE;
 
@@ -218,10 +321,77 @@ ALTER TABLE "OSE"."MISE_EN_PAIEMENT" ADD CONSTRAINT "MISE_EN_PAIEMENT_VALIDATION
 ALTER TABLE "OSE"."INDICATEUR" DROP ("LIBELLE");
 
 ---------------------------
+--Nouveau TABLE
+--FORMULE_RESULTAT_VH_REF
+---------------------------
+  CREATE TABLE "OSE"."FORMULE_RESULTAT_VH_REF" 
+   (	"ID" NUMBER(*,0) NOT NULL ENABLE,
+	"FORMULE_RESULTAT_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"VOLUME_HORAIRE_REF_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"SERVICE_ASSURE" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
+	"HEURES_SERVICE" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
+	"HEURES_COMPL_REFERENTIEL" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
+	"TO_DELETE" NUMBER(1,0) DEFAULT 0 NOT NULL ENABLE,
+	CONSTRAINT "FORMULE_RESULTAT_VH_REF_PK" PRIMARY KEY ("ID") ENABLE,
+	CONSTRAINT "FRVHR_FORMULE_RESULTAT_FK" FOREIGN KEY ("FORMULE_RESULTAT_ID")
+	 REFERENCES "OSE"."FORMULE_RESULTAT" ("ID") ON DELETE CASCADE ENABLE,
+	CONSTRAINT "FRVHR_VOLUME_HORAIRE_REF_FK" FOREIGN KEY ("VOLUME_HORAIRE_REF_ID")
+	 REFERENCES "OSE"."VOLUME_HORAIRE_REF" ("ID") ON DELETE CASCADE ENABLE
+   );
+---------------------------
+--Modifié TABLE
+--FORMULE_RESULTAT_VH
+---------------------------
+ALTER TABLE "OSE"."FORMULE_RESULTAT_VH" ADD ("HEURES_COMPL_FC_MAJOREES" FLOAT(126) DEFAULT 0 NOT NULL ENABLE);
+ALTER TABLE "OSE"."FORMULE_RESULTAT_VH" ADD CONSTRAINT "FORMULE_RESULTAT_VH_PK" PRIMARY KEY ("ID") ENABLE;
+
+---------------------------
+--Nouveau TABLE
+--FORMULE_RESULTAT_SERVICE_REF
+---------------------------
+  CREATE TABLE "OSE"."FORMULE_RESULTAT_SERVICE_REF" 
+   (	"ID" NUMBER(*,0) NOT NULL ENABLE,
+	"FORMULE_RESULTAT_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"SERVICE_REFERENTIEL_ID" NUMBER(*,0) NOT NULL ENABLE,
+	"SERVICE_ASSURE" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
+	"HEURES_SERVICE" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
+	"HEURES_COMPL_REFERENTIEL" FLOAT(126) DEFAULT 0 NOT NULL ENABLE,
+	"TO_DELETE" NUMBER(1,0) DEFAULT 0 NOT NULL ENABLE,
+	CONSTRAINT "FRSR_PK" PRIMARY KEY ("ID") ENABLE,
+	CONSTRAINT "FRR_FORMULE_RESULTAT_FK" FOREIGN KEY ("FORMULE_RESULTAT_ID")
+	 REFERENCES "OSE"."FORMULE_RESULTAT" ("ID") ON DELETE CASCADE ENABLE,
+	CONSTRAINT "FRSR_SERVICE_REFERENTIEL_FK" FOREIGN KEY ("SERVICE_REFERENTIEL_ID")
+	 REFERENCES "OSE"."SERVICE_REFERENTIEL" ("ID") ON DELETE CASCADE ENABLE
+   );
+---------------------------
+--Modifié TABLE
+--FORMULE_RESULTAT_SERVICE
+---------------------------
+ALTER TABLE "OSE"."FORMULE_RESULTAT_SERVICE" ADD ("HEURES_COMPL_FC_MAJOREES" FLOAT(126) DEFAULT 0 NOT NULL ENABLE);
+
+---------------------------
+--Modifié TABLE
+--FORMULE_RESULTAT_MAJ
+---------------------------
+ALTER TABLE "OSE"."FORMULE_RESULTAT_MAJ" DROP ("ETAT_VOLUME_HORAIRE_ID");
+ALTER TABLE "OSE"."FORMULE_RESULTAT_MAJ" DROP ("TYPE_VOLUME_HORAIRE_ID");
+ALTER TABLE "OSE"."FORMULE_RESULTAT_MAJ" DROP CONSTRAINT "FRM_ETAT_VOLUME_HORAIRE_FK";
+ALTER TABLE "OSE"."FORMULE_RESULTAT_MAJ" DROP CONSTRAINT "FRM_INTERVENANT_FK";
+ALTER TABLE "OSE"."FORMULE_RESULTAT_MAJ" DROP CONSTRAINT "FRM_TYPE_VOLUME_HORAIRE_FK";
+ALTER TABLE "OSE"."FORMULE_RESULTAT_MAJ" DROP CONSTRAINT "FORMULE_RESULTAT_MAJ__UN";
+ALTER TABLE "OSE"."FORMULE_RESULTAT_MAJ" ADD CONSTRAINT "FORMULE_RESULTAT_MAJ__UN" UNIQUE ("INTERVENANT_ID","ANNEE_ID") ENABLE;
+
+---------------------------
+--Modifié TABLE
+--FORMULE_RESULTAT
+---------------------------
+ALTER TABLE "OSE"."FORMULE_RESULTAT" ADD ("HEURES_COMPL_FC_MAJOREES" FLOAT(126) DEFAULT 0 NOT NULL ENABLE);
+
+---------------------------
 --Modifié TABLE
 --ETAPE
 ---------------------------
-ALTER TABLE "OSE"."ETAPE" ADD ("DOMAINE_FONCTIONNEL_ID" NUMBER(*,0));
+ALTER TABLE "OSE"."ETAPE" ADD ("DOMAINE_FONCTIONNEL_ID" NUMBER(*,0) NOT NULL ENABLE);
 ALTER TABLE "OSE"."ETAPE" DROP CONSTRAINT "ETAPE_CODE__UN";
 ALTER TABLE "OSE"."ETAPE" ADD CONSTRAINT "ETAPE_DOMAINE_FONCTIONNEL_FK" FOREIGN KEY ("DOMAINE_FONCTIONNEL_ID") REFERENCES "OSE"."DOMAINE_FONCTIONNEL"("ID") ENABLE;
 
@@ -263,6 +433,13 @@ ALTER TABLE "OSE"."DOTATION" ADD ("DATE_EFFET" DATE NOT NULL ENABLE);
 	CONSTRAINT "DOMAINE_FONCTIONNEL_SOURCE_FK" FOREIGN KEY ("SOURCE_ID")
 	 REFERENCES "OSE"."SOURCE" ("ID") ON DELETE CASCADE ENABLE
    );
+---------------------------
+--Modifié TABLE
+--CONTRAT
+---------------------------
+ALTER TABLE "OSE"."CONTRAT" DROP CONSTRAINT "CONTRAT_VALIDATION_FK";
+ALTER TABLE "OSE"."CONTRAT" ADD CONSTRAINT "CONTRAT_VALIDATION_FK" FOREIGN KEY ("VALIDATION_ID") REFERENCES "OSE"."VALIDATION"("ID") ON DELETE SET NULL ENABLE;
+
 ---------------------------
 --Nouveau TABLE
 --CENTRE_COUT_EP
@@ -343,6 +520,64 @@ ALTER TABLE "OSE"."CENTRE_COUT" ADD CONSTRAINT "CENTRE_COUT_TYPE_RESSOURCE_FK" F
 	CONSTRAINT "CC_ACTIVITE_HMFK" FOREIGN KEY ("HISTO_MODIFICATEUR_ID")
 	 REFERENCES "OSE"."UTILISATEUR" ("ID") ENABLE
    );
+---------------------------
+--Nouveau VIEW
+--V_VOLUME_HORAIRE_REF_ETAT
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_VOLUME_HORAIRE_REF_ETAT" 
+ ( "VOLUME_HORAIRE_REF_ID", "ETAT_VOLUME_HORAIRE_ID"
+  )  AS 
+  SELECT 
+  vhr.id volume_horaire_ref_id,
+  evh.id etat_volume_horaire_id
+FROM
+  volume_horaire_ref vhr
+  JOIN etat_volume_horaire evh ON evh.code = CASE
+    WHEN EXISTS(
+      SELECT * FROM validation v JOIN validation_vol_horaire_ref vvhr ON vvhr.validation_id = v.id
+      WHERE vvhr.volume_horaire_ref_id = vhr.id AND 1 = ose_divers.comprise_entre( v.histo_creation, v.histo_destruction )
+    ) THEN 'valide'
+    ELSE 'saisi'
+  END;
+---------------------------
+--Modifié VIEW
+--V_TMP_WF
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_TMP_WF" 
+ ( "ID", "SOURCE_CODE", "NB_COMP", "NB_AGREM"
+  )  AS 
+  WITH 
+  composantes_enseign AS (
+      -- composantes d'enseignement par intervenant
+      SELECT DISTINCT i.ID, i.source_code, s.structure_ens_id
+      FROM service s
+      INNER JOIN intervenant i ON i.ID = s.intervenant_id AND (i.histo_destructeur_id IS NULL)
+      INNER JOIN STRUCTURE comp ON comp.ID = s.structure_ens_id AND (comp.histo_destructeur_id IS NULL)
+      WHERE s.histo_destructeur_id IS NULL
+  ),
+  agrements_oblig_exist AS (
+      -- agréments obligatoires obtenus par intervenant et structure
+      SELECT i.ID, i.source_code, A.type_agrement_id, A.ID agrement_id, A.structure_id
+      FROM agrement A
+      INNER JOIN type_agrement ta ON A.type_agrement_id = ta.ID AND (ta.histo_destructeur_id IS NULL)
+      INNER JOIN intervenant i ON A.intervenant_id = i.ID AND (i.histo_destructeur_id IS NULL)
+      INNER JOIN type_agrement_statut tas ON i.statut_id = tas.statut_intervenant_id AND ta.ID = tas.type_agrement_id 
+          AND i.premier_recrutement = tas.premier_recrutement AND tas.obligatoire = 1 AND (tas.histo_destructeur_id IS NULL) 
+      WHERE A.histo_destructeur_id IS NULL
+      AND ta.code = 'CONSEIL_RESTREINT'
+  ), 
+  v_agrement AS (
+    -- nombres de composantes d'enseignement et d'agrément obligatoires fournis par intervenant
+    SELECT DISTINCT i.ID, i.source_code, 
+      ( select count(*) from COMPOSANTES_ENSEIGN ce where ce.id = i.id ) nb_comp, 
+      ( select count(*) from AGREMENTS_OBLIG_EXIST ao where ao.id = i.id ) nb_agrem
+    FROM intervenant i 
+    WHERE i.histo_destructeur_id IS NULL
+  )
+  SELECT "ID","SOURCE_CODE","NB_COMP","NB_AGREM"
+  FROM v_agrement v
+  WHERE v.nb_comp <= nb_agrem
+  --AND v.id = p_intervenant_id;
 ---------------------------
 --Modifié VIEW
 --V_TBL_SERVICE
@@ -617,6 +852,133 @@ FROM
 ) t1;
 ---------------------------
 --Nouveau VIEW
+--V_INDIC_ATTENTE_MEP
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_INDIC_ATTENTE_MEP" 
+ ( "ID", "ANNEE_ID", "STRUCTURE_ID", "TOTAL_HEURES_MEP"
+  )  AS 
+  with 
+  -- total des heures comp ayant fait l'objet d'une *demande* de mise en paiement
+  mep as (
+    select annee_id, intervenant_id, structure_id, sum(nvl(mep_heures, 0)) total_heures_mep
+    from (
+      -- enseignements
+      select 
+        fr.annee_id,
+        fr.intervenant_id, 
+        nvl(s.structure_ens_id, s.structure_aff_id) structure_id,
+        nvl(mep.heures, 0) mep_heures
+      from mise_en_paiement mep
+      join formule_resultat_service frs on mep.formule_res_service_id = frs.id
+      join formule_resultat fr on frs.formule_resultat_id = fr.id
+      join intervenant i on fr.intervenant_id = i.id
+      join type_volume_horaire tvh on fr.type_volume_horaire_id = tvh.id and tvh.code = 'REALISE'
+      join etat_volume_horaire evh on fr.etat_volume_horaire_id = evh.id and evh.code = 'valide'
+      join service s on frs.service_id = s.id
+      where mep.histo_destructeur_id is null and mep.date_mise_en_paiement is null -- si date_mise_en_paiement = null, c'est une demande
+      union all
+      -- referentiel
+      select 
+        fr.annee_id,
+        fr.intervenant_id, 
+        s.structure_id,
+        nvl(mep.heures, 0) mep_heures
+      from mise_en_paiement mep
+      join formule_resultat_service_ref frs on mep.formule_res_service_ref_id = frs.id
+      join formule_resultat fr on frs.formule_resultat_id = fr.id
+      join intervenant i on fr.intervenant_id = i.id
+      join type_volume_horaire tvh on fr.type_volume_horaire_id = tvh.id and tvh.code = 'REALISE'
+      join etat_volume_horaire evh on fr.etat_volume_horaire_id = evh.id and evh.code = 'valide'
+      join service_referentiel s on frs.service_referentiel_id = s.id
+      where mep.histo_destructeur_id is null and mep.date_mise_en_paiement is null -- si date_mise_en_paiement = null, c'est une demande
+    )
+    group by annee_id, intervenant_id, structure_id
+  )
+select intervenant_id id, annee_id, structure_id, total_heures_mep from mep;
+---------------------------
+--Nouveau VIEW
+--V_INDIC_ATTENTE_DEMANDE_MEP
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_INDIC_ATTENTE_DEMANDE_MEP" 
+ ( "ID", "ANNEE_ID", "STRUCTURE_ID", "TOTAL_HEURES_COMPL", "TOTAL_HEURES_MEP"
+  )  AS 
+  with 
+  -- total des heures comp ayant fait l'objet d'une (demande de) mise en paiement
+  mep as (
+    select annee_id, intervenant_id, structure_id, sum(nvl(mep_heures, 0)) total_heures_mep
+    from (
+      -- enseignements
+      select 
+        fr.annee_id,
+        fr.intervenant_id, 
+        nvl(s.structure_ens_id, s.structure_aff_id) structure_id,
+        nvl(mep.heures, 0) mep_heures
+      from mise_en_paiement mep
+      join formule_resultat_service frs on mep.formule_res_service_id = frs.id --and mep.date_mise_en_paiement is null -- date_mise_en_paiement is null <=> demande
+      join formule_resultat fr on frs.formule_resultat_id = fr.id
+      join intervenant i on fr.intervenant_id = i.id
+      join type_volume_horaire tvh on fr.type_volume_horaire_id = tvh.id and tvh.code = 'REALISE'
+      join etat_volume_horaire evh on fr.etat_volume_horaire_id = evh.id and evh.code = 'valide'
+      join service s on frs.service_id = s.id
+      where mep.histo_destructeur_id is null
+      union all
+      -- referentiel
+      select 
+        fr.annee_id,
+        fr.intervenant_id, 
+        s.structure_id,
+        nvl(mep.heures, 0) mep_heures
+      from mise_en_paiement mep
+      join formule_resultat_service_ref frs on mep.formule_res_service_ref_id = frs.id --and mep.date_mise_en_paiement is null -- date_mise_en_paiement is null <=> demande
+      join formule_resultat fr on frs.formule_resultat_id = fr.id
+      join intervenant i on fr.intervenant_id = i.id
+      join type_volume_horaire tvh on fr.type_volume_horaire_id = tvh.id and tvh.code = 'REALISE'
+      join etat_volume_horaire evh on fr.etat_volume_horaire_id = evh.id and evh.code = 'valide'
+      join service_referentiel s on frs.service_referentiel_id = s.id
+      where mep.histo_destructeur_id is null
+    )
+    group by annee_id, intervenant_id, structure_id
+  ),
+  -- total des heures comp
+  hc as (
+    select annee_id, intervenant_id, structure_id, sum(nvl(total_heures_compl, 0)) total_heures_compl
+    from (
+      -- enseignements
+      select 
+        fr.annee_id, 
+        fr.intervenant_id, 
+        nvl(s.structure_ens_id, s.structure_aff_id) structure_id,
+        nvl(frs.heures_compl_fi, 0) + nvl(frs.heures_compl_fa, 0) + nvl(frs.heures_compl_fc, 0) + nvl(frs.heures_compl_fc_majorees, 0) total_heures_compl
+      from formule_resultat_service frs
+      join formule_resultat fr on frs.formule_resultat_id = fr.id
+      join intervenant i on fr.intervenant_id = i.id
+      join type_volume_horaire tvh on fr.type_volume_horaire_id = tvh.id and tvh.code = 'REALISE'
+      join etat_volume_horaire evh on fr.etat_volume_horaire_id = evh.id and evh.code = 'valide'
+      join service s on frs.service_id = s.id
+      union all
+      -- referentiel
+      select 
+        fr.annee_id, 
+        fr.intervenant_id, 
+        s.structure_id,
+        nvl(frs.heures_compl_referentiel, 0) total_heures_compl
+      from formule_resultat_service_ref frs
+      join formule_resultat fr on frs.formule_resultat_id = fr.id
+      join intervenant i on fr.intervenant_id = i.id
+      join type_volume_horaire tvh on fr.type_volume_horaire_id = tvh.id and tvh.code = 'REALISE'
+      join etat_volume_horaire evh on fr.etat_volume_horaire_id = evh.id and evh.code = 'valide'
+      join service_referentiel s on frs.service_referentiel_id = s.id
+    )
+    group by annee_id, intervenant_id, structure_id
+  )
+select id, hc.annee_id, hc.structure_id, hc.total_heures_compl, nvl(mep.total_heures_mep, 0) total_heures_mep
+from intervenant i
+join hc on hc.intervenant_id = i.id
+left join mep on mep.intervenant_id = i.id and hc.annee_id = mep.annee_id and hc.structure_id = mep.structure_id
+where nvl(mep.total_heures_mep, 0) < hc.total_heures_compl
+order by id, hc.structure_id;
+---------------------------
+--Nouveau VIEW
 --V_FR_SERVICE_REF_CENTRE_COUT
 ---------------------------
 CREATE OR REPLACE FORCE VIEW "OSE"."V_FR_SERVICE_REF_CENTRE_COUT" 
@@ -672,6 +1034,48 @@ WHERE
     OR (frs.heures_compl_fc > 0 AND tr.fc = 1 AND a.fc = 1 )
     OR (frs.heures_compl_fc_majorees > 0 AND tr.fc_majorees = 1 AND a.fc_majorees = 1 )
   );
+---------------------------
+--Nouveau VIEW
+--V_FORMULE_VOLUME_HORAIRE_REF
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_FORMULE_VOLUME_HORAIRE_REF" 
+ ( "ID", "SERVICE_REFERENTIEL_ID", "INTERVENANT_ID", "ANNEE_ID", "TYPE_VOLUME_HORAIRE_ID", "ETAT_VOLUME_HORAIRE_ID", "ETAT_VOLUME_HORAIRE_ORDRE", "HEURES"
+  )  AS 
+  SELECT
+  vhr.id                      id,
+  sr.id                       service_referentiel_id,
+  sr.intervenant_id           intervenant_id,
+  sr.annee_id                 annee_id,
+  vhr.type_volume_horaire_id  type_volume_horaire_id,
+  evh.id                      etat_volume_horaire_id,
+  evh.ordre                   etat_volume_horaire_ordre,
+  vhr.heures                  heures
+FROM
+  volume_horaire_ref               vhr
+  JOIN service_referentiel          sr ON sr.id     = vhr.service_referentiel_id
+  JOIN v_volume_horaire_ref_etat  vher ON vher.volume_horaire_ref_id = vhr.id
+  JOIN etat_volume_horaire         evh ON evh.id = vher.etat_volume_horaire_id
+WHERE
+  1 = ose_divers.comprise_entre( vhr.histo_creation, vhr.histo_destruction, ose_formule.get_date_obs )
+  AND 1 = ose_divers.comprise_entre( sr.histo_creation,   sr.histo_destruction,   ose_formule.get_date_obs )
+  AND vhr.heures <> 0;
+---------------------------
+--Nouveau VIEW
+--V_FORMULE_SERVICE_REF
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."V_FORMULE_SERVICE_REF" 
+ ( "ID", "INTERVENANT_ID", "ANNEE_ID", "STRUCTURE_ID"
+  )  AS 
+  SELECT
+  sr.id             id,
+  sr.intervenant_id intervenant_id,
+  sr.annee_id       annee_id,
+  sr.structure_id   structure_id
+FROM
+  service_referentiel sr
+  JOIN intervenant i ON i.id = sr.intervenant_id
+WHERE
+  1 = ose_divers.comprise_entre( sr.histo_creation, sr.histo_destruction, ose_formule.get_date_obs );
 ---------------------------
 --Nouveau VIEW
 --V_ETAT_PAIEMENT
@@ -957,6 +1361,32 @@ FROM
   LEFT JOIN STRUCTURE s ON s.source_code = E.Z_STRUCTURE_ID
   LEFT JOIN domaine_fonctionnel df ON df.source_code = e.z_domaine_fonctionnel_id;
 ---------------------------
+--Modifié VIEW
+--SRC_ELEMENT_TAUX_REGIMES
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."SRC_ELEMENT_TAUX_REGIMES" 
+ ( "ID", "ELEMENT_PEDAGOGIQUE_ID", "ANNEE_ID", "TAUX_FI", "TAUX_FC", "TAUX_FA", "SOURCE_ID", "SOURCE_CODE"
+  )  AS 
+  SELECT
+  null ID,
+  ep.id element_pedagogique_id,
+  etr.annee_id,
+  OSE_DIVERS.CALCUL_TAUX_FI( etr.eff_taux_fi, etr.eff_taux_fc, etr.eff_taux_fa, ep.fi, ep.fc, ep.fa ) taux_fi,
+  OSE_DIVERS.CALCUL_TAUX_FC( etr.eff_taux_fi, etr.eff_taux_fc, etr.eff_taux_fa, ep.fi, ep.fc, ep.fa ) taux_fc,
+  OSE_DIVERS.CALCUL_TAUX_FA( etr.eff_taux_fi, etr.eff_taux_fc, etr.eff_taux_fa, ep.fi, ep.fc, ep.fa ) taux_fa,
+  etr.source_id,
+  etr.source_code
+FROM
+  MV_ELEMENT_TAUX_REGIMES_X etr
+  JOIN ELEMENT_PEDAGOGIQUE ep ON ep.source_code = etr.z_element_pedagogique_id
+WHERE
+  NOT EXISTS(
+    SELECT * FROM element_taux_regimes etr_tbl WHERE
+      etr_tbl.element_pedagogique_id = ep.id
+      AND etr_tbl.annee_id = etr.annee_id
+      AND etr_tbl.source_id <> etr.source_id
+  );
+---------------------------
 --Nouveau VIEW
 --SRC_DOMAINE_FONCTIONNEL
 ---------------------------
@@ -993,6 +1423,156 @@ FROM
   LEFT JOIN centre_cout       cc ON cc.source_code = mvcc.z_parent_id
   LEFT JOIN structure          s ON s.source_code  = mvcc.z_structure_id;
 ---------------------------
+--Nouveau VIEW
+--ANTHONY_V_INTERVENANT
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."ANTHONY_V_INTERVENANT" 
+ ( "CIVILITE_ID", "NOM_USUEL", "PRENOM", "NOM_PATRONYMIQUE", "DATE_NAISSANCE", "PAYS_NAISSANCE_CODE_INSEE", "PAYS_NAISSANCE_LIBELLE", "DEP_NAISSANCE_CODE_INSEE", "DEP_NAISSANCE_LIBELLE", "VILLE_NAISSANCE_CODE_INSEE", "VILLE_NAISSANCE_LIBELLE", "PAYS_NATIONALITE_CODE_INSEE", "PAYS_NATIONALITE_LIBELLE", "TEL_PRO", "TEL_MOBILE", "EMAIL", "Z_TYPE_ID", "Z_STATUT_ID", "Z_STRUCTURE_ID", "SOURCE_ID", "SOURCE_CODE", "NUMERO_INSEE", "NUMERO_INSEE_CLE", "NUMERO_INSEE_PROVISOIRE", "IBAN", "BIC"
+  )  AS 
+  SELECT
+  ose_import.get_civilite_id(
+    CASE mvh.c_civilite
+    WHEN 'M.' THEN 'M.'
+    ELSE 'Mme'
+    END)                      "CIVILITE_ID"
+  ,initcap(mvh.nom_usuel)        "NOM_USUEL"
+  ,initcap(mvh.prenom)           "PRENOM"
+  ,initcap(mvh.nom_patronymique) "NOM_PATRONYMIQUE"
+  ,mvh.d_naissance            "DATE_NAISSANCE"
+  ,mvh.c_pays_naissance       "PAYS_NAISSANCE_CODE_INSEE"
+  ,mvh.ll_pays_naissance      "PAYS_NAISSANCE_LIBELLE"
+  ,mvh.c_departement          "DEP_NAISSANCE_CODE_INSEE"
+  ,mvh.ll_departement         "DEP_NAISSANCE_LIBELLE"
+  ,mvh.c_commune_naissance    "VILLE_NAISSANCE_CODE_INSEE"
+  ,mvh.ville_de_naissance     "VILLE_NAISSANCE_LIBELLE"
+  ,mvh.c_pays_nationalite     "PAYS_NATIONALITE_CODE_INSEE"
+  ,mvh.ll_pays_nationalite    "PAYS_NATIONALITE_LIBELLE"
+  ,mvh.no_telephone           "TEL_PRO"
+  ,mvh.no_tel_portable        "TEL_MOBILE"
+  ,NVL(mvh.NO_E_MAIL, UCBN_LDAP.hid2mail(mvh.no_individu)) "EMAIL"
+  ,his.type_intervenant       "Z_TYPE_ID"
+  ,his.statut                 "Z_STATUT_ID"
+  ,NVL(istr.c_structure, 'UNIV')                "Z_STRUCTURE_ID"
+  ,ose_import.get_source_id('Harpege')          "SOURCE_ID"
+  ,ltrim(TO_CHAR(mvh.no_individu,'99999999'))   "SOURCE_CODE"
+--  ,null                                       "PRIME_EXCELLENCE_SCIENTIFIQUE"
+  ,mvh.no_insee               "NUMERO_INSEE"
+  ,mvh.cle_insee              "NUMERO_INSEE_CLE"
+  ,CASE
+    WHEN mvh.no_insee IS NULL THEN NULL
+    ELSE 0
+    END                       "NUMERO_INSEE_PROVISOIRE"
+  ,ib.iban                    "IBAN"
+  ,ib.bic                     "BIC"
+FROM
+  ( select distinct c_civilite,nom_usuel,prenom,nom_patronymique,d_naissance,c_pays_naissance,ll_pays_naissance
+                    ,c_departement,ll_departement,c_commune_naissance,ville_de_naissance,c_pays_nationalite,ll_pays_nationalite
+                    ,no_telephone,no_tel_portable ,NO_E_MAIL,no_individu,no_insee ,cle_insee
+    from anthony_mv_harpege
+  ) mvh
+  LEFT JOIN ANTHONY_V_HARP_INDIVIDU_BANQUE ib ON (mvh.no_individu=ib.no_individu)
+  JOIN ANTHONY_V_HARP_IND_DER_STRUCT istr ON (mvh.no_individu = istr.no_individu)
+  JOIN ANTHONY_V_HARP_INDIVIDU_STATUT his ON (mvh.no_individu = his.no_individu)
+;
+---------------------------
+--Nouveau VIEW
+--ANTHONY_V_HARP_INDIVIDU_STATUT
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."ANTHONY_V_HARP_INDIVIDU_STATUT" 
+ ( "NO_INDIVIDU", "STATUT", "TYPE_INTERVENANT"
+  )  AS 
+  SELECT
+  no_individu,
+  statut,
+  ti.code type_intervenant
+FROM
+(
+SELECT
+  no_individu,
+  CASE
+    WHEN NVL(c.ordre,99999) > NVL(tp.ordre,99999) THEN COALESCE(tp.statut, c.statut, 'AUTRES')
+    WHEN NVL(c.ordre,99999) <= NVL(tp.ordre,99999) THEN COALESCE(c.statut, tp.statut, 'AUTRES')
+  END statut
+FROM
+  (SELECT DISTINCT no_individu FROM ANTHONY_MV_HARPEGE) mvh LEFT JOIN
+  (SELECT DISTINCT
+      i.no_individu no_dossier_pers,
+      si.source_code statut,
+      si.ordre,
+      min(si.ordre) over(partition BY i.no_individu) AS min_ordre
+    FROM
+      ANTHONY_MV_HARPEGE i
+      JOIN statut_intervenant si ON si.source_code = CASE
+        WHEN i.c_type_contrat_trav IN ('MC','MA')                THEN 'ASS_MI_TPS'
+        WHEN i.c_type_contrat_trav IN ('AT')                     THEN 'ATER'
+        WHEN i.c_type_contrat_trav IN ('AX')                     THEN 'ATER_MI_TPS'
+        WHEN i.c_type_contrat_trav IN ('DO')                     THEN 'DOCTOR'
+        WHEN i.c_type_contrat_trav IN ('GI','PN')                THEN 'ENS_CONTRACT'
+        WHEN i.c_type_contrat_trav IN ('LT','LB')                THEN 'LECTEUR'
+        WHEN i.c_type_contrat_trav IN ('MB')                     THEN 'MAITRE_LANG'
+        WHEN i.c_type_contrat_trav IN ('C3','CA','CB','CD','HA','HS','S3','SX','SW','SY','CS','SZ','VA') THEN 'BIATSS'
+        WHEN i.c_type_contrat_trav IN ('CU','AH','CG','MM','PM','IN','DN','ET','NF') THEN 'NON_AUTORISE'
+                                                                  ELSE 'AUTRES'
+      END
+    WHERE
+      SYSDATE BETWEEN i.cav_d_deb_contrat_trav AND NVL(i.cav_d_fin_contrat_trav,SYSDATE)
+  ) c ON c.no_dossier_pers = mvh.no_individu AND c.ordre = c.min_ordre
+  LEFT JOIN (SELECT DISTINCT
+      i.no_individu no_dossier_pers,
+      si.source_code statut,
+      si.ordre,
+      min(si.ordre) over(partition BY i.no_individu) AS min_ordre
+    FROM
+      ANTHONY_MV_HARPEGE i
+      JOIN statut_intervenant si ON si.source_code = CASE
+        WHEN i.c_type_population IN ('DA','DC','OA')                THEN 'ENS_2ND_DEG'
+        WHEN i.c_type_population IN ('SA')                          THEN 'ENS_CH'
+        WHEN i.c_type_population IN ('AA','AC','BA','IA','MA')      THEN 'BIATSS'
+        WHEN i.c_type_population IN ('MG','SB')                     THEN 'NON_AUTORISE'
+                                                                    ELSE 'AUTRES'
+      END
+    WHERE
+      (SYSDATE BETWEEN i.aa_d_deb_affectation AND COALESCE(i.aa_d_fin_affectation,SYSDATE))
+  ) tp ON tp.no_dossier_pers = mvh.no_individu AND tp.ordre = tp.min_ordre
+) tmp
+JOIN statut_intervenant si ON si.source_code = tmp.statut
+JOIN type_intervenant ti ON ti.id = si.type_intervenant_id;
+---------------------------
+--Nouveau VIEW
+--ANTHONY_V_HARP_INDIVIDU_BANQUE
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."ANTHONY_V_HARP_INDIVIDU_BANQUE" 
+ ( "NO_INDIVIDU", "IBAN", "BIC"
+  )  AS 
+  SELECT DISTINCT
+  no_individu
+  ,CASE WHEN id_ind_banque IS NOT NULL THEN
+  trim( NVL(c_pays_iso || cle_controle,'FR00') || ' ' ||
+    substr(c_banque,0,4) || ' ' ||
+    substr(c_banque,5,1) || substr(c_guichet,0,3) || ' ' ||
+    substr(c_guichet,4,2) || substr(no_compte,0,2) || ' ' ||
+    substr(no_compte,3,4) || ' ' ||
+    substr(no_compte,7,4) || ' ' ||
+    substr(no_compte,11) || cle_rib) ELSE NULL END IBAN
+  ,CASE WHEN id_ind_banque IS NOT NULL THEN
+  c_banque_bic || ' ' || c_pays_bic || ' ' || c_emplacement || ' ' || c_branche ELSE NULL END BIC
+FROM
+  ANTHONY_MV_HARPEGE ;
+---------------------------
+--Nouveau VIEW
+--ANTHONY_V_HARP_IND_DER_STRUCT
+---------------------------
+CREATE OR REPLACE FORCE VIEW "OSE"."ANTHONY_V_HARP_IND_DER_STRUCT" 
+ ( "NO_INDIVIDU", "DATE_DEPART", "C_STRUCTURE"
+  )  AS 
+  SELECT DISTINCT
+  no_individu
+  ,date_depart
+  ,c_structure_depart c_structure
+FROM
+  ANTHONY_MV_HARPEGE
+;
+---------------------------
 --Modifié MATERIALIZED VIEW
 --MV_ETAPE
 ---------------------------
@@ -1015,6 +1595,56 @@ CREATE MATERIALIZED VIEW "OSE"."MV_ETAPE" ("LIBELLE","Z_TYPE_FORMATION_ID","NIVE
   validite_fin
 FROM
   ucbn_ose_etape@apoprod
+---------------------------
+--Nouveau MATERIALIZED VIEW
+--MV_ELEMENT_TAUX_REGIMES_X
+---------------------------
+CREATE MATERIALIZED VIEW "OSE"."MV_ELEMENT_TAUX_REGIMES_X" ("Z_ELEMENT_PEDAGOGIQUE_ID","ANNEE_ID","EFF_TAUX_FI","EFF_TAUX_FC","EFF_TAUX_FA","SOURCE_ID","SOURCE_CODE") 
+  BUILD IMMEDIATE
+  USING INDEX REFRESH FORCE ON DEMAND
+  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
+  DISABLE QUERY REWRITE AS 
+  SELECT
+  e.source_code z_element_pedagogique_id,
+  to_number(e.annee_id) + 1 annee_id,
+  effectif_fi eff_taux_fi,
+  effectif_fc eff_taux_fc,
+  effectif_fa eff_taux_fa,
+  ose_import.get_source_id('Apogee') source_id,
+  e.annee_id || '-' || e.source_code source_code
+FROM
+  ucbn_ose_element_effectifs@apoprod e
+  JOIN element_pedagogique ep ON ep.source_code = e.source_code
+WHERE
+  (effectif_fi + effectif_fc + effectif_fa) > 0
+  AND NOT EXISTS(
+    SELECT * FROM element_taux_regimes etr JOIN element_pedagogique ep2 ON ep2.id = etr.element_pedagogique_id WHERE
+      ep2.source_code = e.source_code
+      AND etr.annee_id = to_number(e.annee_id) + 1
+      AND etr.source_id <> ose_import.get_source_id('Apogee')
+  )
+---------------------------
+--Modifié MATERIALIZED VIEW
+--MV_ELEMENT_PEDAGOGIQUE
+---------------------------
+DROP MATERIALIZED VIEW "OSE"."MV_ELEMENT_PEDAGOGIQUE";
+CREATE MATERIALIZED VIEW "OSE"."MV_ELEMENT_PEDAGOGIQUE" ("LIBELLE","Z_ETAPE_ID","Z_STRUCTURE_ID","Z_PERIODE_ID","FI","FC","FA","TAUX_FOAD","SOURCE_ID","SOURCE_CODE") 
+  BUILD IMMEDIATE
+  USING INDEX REFRESH COMPLETE ON DEMAND
+  USING DEFAULT LOCAL ROLLBACK SEGMENT  USING ENFORCED CONSTRAINTS
+  DISABLE QUERY REWRITE AS 
+  SELECT
+  libelle,
+  z_etape_id,
+  z_structure_id,
+  z_periode_id,
+  CASE WHEN fi+fa+fc=0 THEN 1 ELSE fi END fi,
+  fc,fa,
+  taux_foad,
+  ose_import.get_source_id('Apogee') source_id,
+  source_code
+FROM
+  ucbn_ose_element_pedagogique@apoprod
 ---------------------------
 --Modifié MATERIALIZED VIEW
 --MV_EFFECTIFS
@@ -1145,6 +1775,12 @@ WHERE
 ---------------------------
   CREATE INDEX "OSE"."CC_ACTIVITE_FC" ON "OSE"."CC_ACTIVITE" ("FC");
 ---------------------------
+--Modifié INDEX
+--MV_ELEMENT_TAUX_REGIMES_PK
+---------------------------
+DROP INDEX "OSE"."MV_ELEMENT_TAUX_REGIMES_PK";
+  CREATE UNIQUE INDEX "OSE"."MV_ELEMENT_TAUX_REGIMES_PK" ON "OSE"."MV_ELEMENT_TAUX_REGIMES_X" ("SOURCE_CODE");
+---------------------------
 --Nouveau INDEX
 --CC_ACTIVITE_PK
 ---------------------------
@@ -1161,14 +1797,20 @@ WHERE
   CREATE UNIQUE INDEX "OSE"."PRIVILEGE__UN" ON "OSE"."PRIVILEGE" ("RESSOURCE_ID","CODE");
 ---------------------------
 --Nouveau INDEX
+--VALIDATION_VOL_HORAIRE_REF_PK
+---------------------------
+  CREATE UNIQUE INDEX "OSE"."VALIDATION_VOL_HORAIRE_REF_PK" ON "OSE"."VALIDATION_VOL_HORAIRE_REF" ("VALIDATION_ID","VOLUME_HORAIRE_REF_ID");
+---------------------------
+--Nouveau INDEX
 --STATUT_PRIVILEGE_PK
 ---------------------------
   CREATE UNIQUE INDEX "OSE"."STATUT_PRIVILEGE_PK" ON "OSE"."STATUT_PRIVILEGE" ("STATUT_ID","PRIVILEGE_ID");
 ---------------------------
---Nouveau INDEX
---MV_PERSONNEL_PK
+--Modifié INDEX
+--FORMULE_RESULTAT_MAJ__UN
 ---------------------------
-  CREATE UNIQUE INDEX "OSE"."MV_PERSONNEL_PK" ON "OSE"."MV_PERSONNEL" ("SOURCE_CODE");
+DROP INDEX "OSE"."FORMULE_RESULTAT_MAJ__UN";
+  CREATE UNIQUE INDEX "OSE"."FORMULE_RESULTAT_MAJ__UN" ON "OSE"."FORMULE_RESULTAT_MAJ" ("INTERVENANT_ID","ANNEE_ID");
 ---------------------------
 --Nouveau INDEX
 --DOMAINE_FONCTIONNEL_PK
@@ -1191,6 +1833,11 @@ WHERE
   CREATE UNIQUE INDEX "OSE"."TYPE_HEURES_UN" ON "OSE"."TYPE_HEURES" ("CODE");
 ---------------------------
 --Nouveau INDEX
+--VOLUME_HORAIRE_REF_PK
+---------------------------
+  CREATE UNIQUE INDEX "OSE"."VOLUME_HORAIRE_REF_PK" ON "OSE"."VOLUME_HORAIRE_REF" ("ID");
+---------------------------
+--Nouveau INDEX
 --CC_ACTIVITE_REF
 ---------------------------
   CREATE INDEX "OSE"."CC_ACTIVITE_REF" ON "OSE"."CC_ACTIVITE" ("REFERENTIEL");
@@ -1209,6 +1856,16 @@ WHERE
 --CENTRE_COUT_EP__UN
 ---------------------------
   CREATE UNIQUE INDEX "OSE"."CENTRE_COUT_EP__UN" ON "OSE"."CENTRE_COUT_EP" ("CENTRE_COUT_ID","ELEMENT_PEDAGOGIQUE_ID","TYPE_HEURES_ID","HISTO_DESTRUCTION");
+---------------------------
+--Nouveau INDEX
+--FORMULE_RESULTAT_VH_REF_PK
+---------------------------
+  CREATE UNIQUE INDEX "OSE"."FORMULE_RESULTAT_VH_REF_PK" ON "OSE"."FORMULE_RESULTAT_VH_REF" ("ID");
+---------------------------
+--Nouveau INDEX
+--FRSR_PK
+---------------------------
+  CREATE UNIQUE INDEX "OSE"."FRSR_PK" ON "OSE"."FORMULE_RESULTAT_SERVICE_REF" ("ID");
 ---------------------------
 --Nouveau INDEX
 --PRIVILEGE_PK
@@ -1236,6 +1893,11 @@ WHERE
   CREATE UNIQUE INDEX "OSE"."RESSOURCE__UN" ON "OSE"."RESSOURCE" ("CODE");
 ---------------------------
 --Nouveau INDEX
+--FORMULE_RESULTAT_VH_PK
+---------------------------
+  CREATE UNIQUE INDEX "OSE"."FORMULE_RESULTAT_VH_PK" ON "OSE"."FORMULE_RESULTAT_VH" ("ID");
+---------------------------
+--Nouveau INDEX
 --MV_CENTRE_COUT_PK
 ---------------------------
   CREATE UNIQUE INDEX "OSE"."MV_CENTRE_COUT_PK" ON "OSE"."MV_CENTRE_COUT" ("SOURCE_CODE");
@@ -1254,6 +1916,11 @@ WHERE
 --RESSOURCE_PK
 ---------------------------
   CREATE UNIQUE INDEX "OSE"."RESSOURCE_PK" ON "OSE"."RESSOURCE" ("ID");
+---------------------------
+--Nouveau INDEX
+--MV_ANTHONY2_PK
+---------------------------
+  CREATE UNIQUE INDEX "OSE"."MV_ANTHONY2_PK" ON "OSE"."MV_ANTHONY2" ("SOURCE_CODE");
 ---------------------------
 --Nouveau INDEX
 --TYPE_RESSOURCE_FI
@@ -1287,6 +1954,56 @@ END;
 /
 ---------------------------
 --Modifié TRIGGER
+--WF_TRG_VH_VALIDATION_S
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_VH_VALIDATION_S" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_VH_VALIDATION
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_VH_VALIDATION" ENABLE;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_VH_REF_VALIDATION_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_VH_REF_VALIDATION_S"
+  AFTER INSERT OR DELETE ON "OSE"."VALIDATION_VOL_HORAIRE_REF"
+  BEGIN
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_VH_REF_VALIDATION
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_VH_REF_VALIDATION"
+  AFTER INSERT OR DELETE ON "OSE"."VALIDATION_VOL_HORAIRE_REF"
+  REFERENCING FOR EACH ROW
+  DECLARE
+  intervenant_id NUMERIC;
+  validation_id NUMERIC;
+BEGIN
+  validation_id := CASE WHEN deleting THEN :OLD.validation_id ELSE :NEW.validation_id END;
+  SELECT V.INTERVENANT_ID INTO intervenant_id FROM validation v WHERE id = validation_id;
+  ose_workflow.add_intervenant_to_update (intervenant_id); 
+END;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_SERVICE_VALIDATION_S
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_SERVICE_VALIDATION_S" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_SERVICE_VALIDATION
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_SERVICE_VALIDATION" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
 --WF_TRG_SERVICE_S
 ---------------------------
   CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_SERVICE_S"
@@ -1308,6 +2025,75 @@ END;
 /
 ---------------------------
 --Modifié TRIGGER
+--WF_TRG_PJ_VALIDATION_S
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_PJ_VALIDATION_S" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_PJ_VALIDATION
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_PJ_VALIDATION" ENABLE;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_PJ_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_PJ_S"
+  AFTER INSERT OR DELETE ON "OSE"."PIECE_JOINTE_FICHIER"
+  BEGIN
+  --DBMS_OUTPUT.put_line ('WF_TRG_PJ_FICHIER_S ');
+  ose_workflow.update_intervenants_etapes();
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--WF_TRG_PJ
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_PJ"
+  AFTER INSERT OR DELETE OR UPDATE OF HISTO_DESTRUCTEUR_ID ON "OSE"."PIECE_JOINTE"
+  REFERENCING FOR EACH ROW
+  DECLARE
+  intervenant_id NUMERIC;
+  dossierId NUMERIC;
+BEGIN
+  dossierId := CASE WHEN deleting THEN :OLD.dossier_id ELSE :NEW.dossier_id END;
+  SELECT ie.ID INTO intervenant_id FROM intervenant_exterieur ie WHERE ie.dossier_id = dossierId;
+  ose_workflow.add_intervenant_to_update (intervenant_id); 
+END;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_INTERV_DOSSIER_S
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_INTERV_DOSSIER_S" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_INTERV_DOSSIER
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_INTERV_DOSSIER" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_DOSSIER_VALIDATION_S
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_DOSSIER_VALIDATION_S" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_DOSSIER_VALIDATION
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_DOSSIER_VALIDATION" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_DOSSIER_S
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_DOSSIER_S" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
 --WF_TRG_DOSSIER
 ---------------------------
   CREATE OR REPLACE TRIGGER "OSE"."WF_TRG_DOSSIER"
@@ -1325,6 +2111,123 @@ BEGIN
   
   SELECT ID INTO intervenant_id FROM intervenant_exterieur WHERE dossier_id = :OLD.ID;
   ose_workflow.add_intervenant_to_update (intervenant_id); 
+END;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_CONTRAT_S
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_CONTRAT_S" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_CONTRAT
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_CONTRAT" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_AGREMENT_S
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_AGREMENT_S" ENABLE;
+/
+---------------------------
+--Modifié TRIGGER
+--WF_TRG_AGREMENT
+---------------------------
+ALTER TRIGGER "OSE"."WF_TRG_AGREMENT" ENABLE;
+/
+---------------------------
+--Nouveau TRIGGER
+--VOLUME_HORAIRE_REF_DEL_CK
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."VOLUME_HORAIRE_REF_DEL_CK"
+  BEFORE DELETE ON "OSE"."VOLUME_HORAIRE_REF"
+  REFERENCING FOR EACH ROW
+  DECLARE has_validation INTEGER;
+  pragma autonomous_transaction;
+  BEGIN
+    SELECT COUNT(*)
+    INTO has_validation
+    FROM VALIDATION_VOL_HORAIRE_REF vvh
+    JOIN validation v
+    ON v.id                    = VVH.VALIDATION_ID
+    WHERE V.HISTO_DESTRUCTION IS NULL
+    AND vvh.VOLUME_HORAIRE_REF_ID  = :OLD.ID;
+    IF 0                      <> has_validation THEN
+      raise_application_error(-20101, 'Il est impossible de supprimer des heures référentiel déjà validées.');
+    END IF;
+  END;
+/
+---------------------------
+--Nouveau TRIGGER
+--VOLUME_HORAIRE_REF_CK
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."VOLUME_HORAIRE_REF_CK"
+  BEFORE UPDATE ON "OSE"."VOLUME_HORAIRE_REF"
+  REFERENCING FOR EACH ROW
+  DECLARE
+    has_validation NUMERIC;
+  BEGIN  
+    
+  SELECT 
+    COUNT(*)
+  INTO
+    has_validation
+  FROM
+    VALIDATION_VOL_HORAIRE_REF vvh
+    JOIN validation v ON v.id = VVH.VALIDATION_ID
+  WHERE
+    V.HISTO_DESTRUCTION IS NULL
+    AND vvh.VOLUME_HORAIRE_REF_ID  = :NEW.ID;
+    
+  IF 0 <> has_validation THEN
+    raise_application_error(-20101, 'Il est impossible de modifier des heures référentiel déjà validées.');
+  END IF;
+END;
+/
+---------------------------
+--Modifié TRIGGER
+--VALIDATION_VOL_HORAIRE_CK
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."VALIDATION_VOL_HORAIRE_CK"
+  BEFORE INSERT OR DELETE OR UPDATE ON "OSE"."VALIDATION_VOL_HORAIRE"
+  REFERENCING FOR EACH ROW
+  DECLARE 
+  contrat_blinde NUMERIC; 
+  donnee_historisee NUMERIC;  
+  pragma autonomous_transaction;
+BEGIN
+
+  if updating or deleting then  
+  
+    SELECT count(*) INTO contrat_blinde 
+    FROM volume_horaire vh
+    JOIN contrat c ON c.id = vh.contrat_id AND 1 = ose_divers.comprise_entre( c.histo_creation, c.histo_destruction )
+    WHERE vh.id = :OLD.volume_horaire_id;
+      
+    -- Si des volumes horaires ont déjà fait l'objet de contrats alors pas de dévalidation possible des heures
+    IF contrat_blinde = 1 THEN
+      raise_application_error(-20101, 'La dévalidation est impossible car un contrat a déjà été édité sur la base de ces heures.');
+    END IF;
+    
+  else
+  
+    -- si on en trouve un service, EP, étape ou VH historisé, problème
+    select count(*) into donnee_historisee
+    from service s
+    join element_pedagogique ep on s.element_pedagogique_id = ep.id
+    join etape e on ep.etape_id = e.id
+    join volume_horaire vh on vh.service_id = s.id
+    where vh.id = :NEW.volume_horaire_id 
+    and (s.histo_destructeur_id is not null or ep.histo_destructeur_id is not null or e.histo_destructeur_id is not null or vh.histo_destructeur_id is not null);
+    
+    IF donnee_historisee > 0 THEN
+      raise_application_error(-20101, 'La validation est impossible car elle porte sur des données historisées (supprimées).');
+    END IF;
+    
+  end if;
+  
 END;
 /
 ---------------------------
@@ -1461,6 +2364,43 @@ END;
 /
 ---------------------------
 --Nouveau TRIGGER
+--F_VALIDATION_VOL_HORAIRE_REF_S
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_REF_S"
+  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."VALIDATION_VOL_HORAIRE_REF"
+  BEGIN
+  OSE_FORMULE.CALCULER_SUR_DEMANDE;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
+--F_VALIDATION_VOL_HORAIRE_REF
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."F_VALIDATION_VOL_HORAIRE_REF"
+  AFTER INSERT OR DELETE OR UPDATE ON "OSE"."VALIDATION_VOL_HORAIRE_REF"
+  REFERENCING FOR EACH ROW
+  BEGIN
+  FOR p IN (
+  
+    SELECT DISTINCT
+      s.intervenant_id,
+      s.annee_id
+    FROM
+      volume_horaire_ref vh
+      JOIN service_referentiel s ON s.id = vh.service_referentiel_id AND 1 = ose_divers.comprise_entre(s.histo_creation, s.histo_destruction)
+    WHERE
+      1 = ose_divers.comprise_entre( vh.histo_creation, vh.histo_destruction )
+      AND (vh.id = :NEW.volume_horaire_ref_id OR vh.id = :OLD.volume_horaire_ref_id)
+  
+  ) LOOP
+  
+    OSE_FORMULE.DEMANDE_CALCUL( p.intervenant_id, p.annee_id );
+  
+  END LOOP;
+END;
+/
+---------------------------
+--Nouveau TRIGGER
 --F_RESULTAT_VH_REF_R
 ---------------------------
   CREATE OR REPLACE TRIGGER "OSE"."F_RESULTAT_VH_REF_R"
@@ -1541,6 +2481,51 @@ END;
   :NEW.SOUS_SERVICE              := ROUND( :NEW.SOUS_SERVICE            , 2 );
   :NEW.A_PAYER                   := ROUND( :NEW.A_PAYER                 , 2 );
   
+END;
+/
+---------------------------
+--Modifié TRIGGER
+--ELEMENT_PEDAGOGIQUE_CK
+---------------------------
+  CREATE OR REPLACE TRIGGER "OSE"."ELEMENT_PEDAGOGIQUE_CK"
+  BEFORE INSERT OR UPDATE ON "OSE"."ELEMENT_PEDAGOGIQUE"
+  REFERENCING FOR EACH ROW
+  DECLARE
+  enseignement INTEGER;
+BEGIN
+
+  IF :NEW.source_id <> OSE_IMPORT.GET_SOURCE_ID('OSE') THEN RETURN; END IF; -- impossible de checker car l'UPD par import se fait champ par champ...
+  
+  IF :NEW.fi = 0 AND :NEW.fc = 0 AND :NEW.fa = 0 THEN
+    raise_application_error(-20101, 'Un enseignement doit obligatoirement être au moins en FI, FC ou FA');
+  END IF;
+
+  IF 1 <> ROUND(:NEW.taux_fi + :NEW.taux_fc + :NEW.taux_fa, 2) THEN
+    raise_application_error( -20101, 'Le total des taux FI, FC et FA n''est pas égal à 1');
+  END IF;
+
+  IF :NEW.fi = 0 AND :NEW.taux_fi > 0 THEN
+    raise_application_error( -20101, 'Le taux FI doit être à 0 puisque la formation n''est pas dispensée en FI');
+  END IF;
+
+  IF :NEW.fa = 0 AND :NEW.taux_fa > 0 THEN
+    raise_application_error( -20101, 'Le taux FA doit être à 0 puisque la formation n''est pas dispensée en FA');
+  END IF;
+  
+  IF :NEW.fc = 0 AND :NEW.taux_fc > 0 THEN
+    raise_application_error( -20101, 'Le taux FC doit être à 0 puisque la formation n''est pas dispensée en FC');
+  END IF;  
+
+  IF :NEW.periode_id IS NOT NULL THEN
+    SELECT p.enseignement
+    INTO enseignement
+    FROM periode p
+    WHERE p.id	     = :NEW.periode_id;
+    IF enseignement <> 1 THEN
+      raise_application_error(-20101, 'Cette période n''est pas appliquable à cet élément pédagogique.');
+    END IF;
+  END IF;
+
 END;
 /
 ---------------------------
@@ -3348,16 +4333,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           GROUP BY I.ID, I.SOURCE_CODE
       )
       SELECT 
-          AO.INTERVENANT_ID  ID, 
-          AO.SOURCE_CODE     SOURCE_CODE, 
-          AO.TOTAL_HEURES    TOTAL_HEURES, 
+          I.ID, 
+          I.source_code,
+          coalesce(AO.TOTAL_HEURES, 0) TOTAL_HEURES, 
           COALESCE(AO.NB, 0) NB_PJ_OBLIG_ATTENDU, 
           COALESCE(FO.NB, 0) NB_PJ_OBLIG_FOURNI
-      FROM ATTENDU_OBLIGATOIRE AO
-      LEFT JOIN FOURNI_OBLIGATOIRE  FO ON FO.INTERVENANT_ID = AO.INTERVENANT_ID
-      WHERE AO.INTERVENANT_ID = p_intervenant_id
+      FROM intervenant i
+      left join ATTENDU_OBLIGATOIRE AO on ao.intervenant_id = i.id
+      LEFT JOIN FOURNI_OBLIGATOIRE  FO ON FO.INTERVENANT_ID = i.id
+      WHERE i.ID = p_intervenant_id
     )
-    WHERE NB_PJ_OBLIG_ATTENDU <= NB_PJ_OBLIG_FOURNI;
+    WHERE NB_PJ_OBLIG_ATTENDU = 0 OR NB_PJ_OBLIG_ATTENDU <= NB_PJ_OBLIG_FOURNI;
     
     RETURN res;
   END;
@@ -3404,16 +4390,17 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
           GROUP BY I.ID, I.SOURCE_CODE
       )
       SELECT 
-          AO.INTERVENANT_ID  ID, 
-          AO.SOURCE_CODE     SOURCE_CODE, 
-          AO.TOTAL_HEURES    TOTAL_HEURES, 
-          AO.NB              NB_PJ_OBLIG_ATTENDU, 
+          I.ID, 
+          I.source_code,
+          coalesce(AO.TOTAL_HEURES, 0) TOTAL_HEURES, 
+          COALESCE(AO.NB, 0) NB_PJ_OBLIG_ATTENDU, 
           COALESCE(FO.NB, 0) NB_PJ_OBLIG_FOURNI
-      FROM      ATTENDU_OBLIGATOIRE AO
-      LEFT JOIN FOURNI_OBLIGATOIRE  FO ON FO.INTERVENANT_ID = AO.INTERVENANT_ID
-      WHERE AO.INTERVENANT_ID = p_intervenant_id
+      FROM intervenant i
+      left join ATTENDU_OBLIGATOIRE AO on ao.intervenant_id = i.id
+      LEFT JOIN FOURNI_OBLIGATOIRE  FO ON FO.INTERVENANT_ID = i.id
+      WHERE i.ID = p_intervenant_id
     )
-    WHERE NB_PJ_OBLIG_ATTENDU <= NB_PJ_OBLIG_FOURNI;
+    WHERE NB_PJ_OBLIG_ATTENDU = 0 OR NB_PJ_OBLIG_ATTENDU <= NB_PJ_OBLIG_FOURNI;
     
     RETURN res;
   END;
@@ -3524,1185 +4511,6 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_WORKFLOW" AS
   END;
 
 END OSE_WORKFLOW;
-/
----------------------------
---Modifié PACKAGE BODY
---OSE_TEST
----------------------------
-CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_TEST" AS
-  TYPE OUT_LIST IS TABLE OF CLOB;
-
-  SUCCES_SHOWN BOOLEAN DEFAULT TRUE;
-  T_SUCCES_COUNT NUMERIC DEFAULT 0;
-  T_ECHECS_COUNT NUMERIC DEFAULT 0;
-  A_SUCCES_COUNT NUMERIC DEFAULT 0;
-  A_ECHECS_COUNT NUMERIC DEFAULT 0;
-  CURRENT_TEST CLOB;
-  CURRENT_TEST_OUTPUT_BUFFER OUT_LIST := OUT_LIST();
-  CURRENT_TEST_OUTPUT_BUFFER_ERR BOOLEAN;
-  
-  PROCEDURE SHOW_SUCCES IS
-  BEGIN
-    SUCCES_SHOWN := true;
-  END SHOW_SUCCES;
-
-  PROCEDURE HIDE_SUCCES IS
-  BEGIN
-    SUCCES_SHOWN := false;
-  END HIDE_SUCCES;
-
-  PROCEDURE DEBUT( TEST_NAME CLOB ) IS
-  BEGIN
-    CURRENT_TEST := TEST_NAME;
-    CURRENT_TEST_OUTPUT_BUFFER_ERR := FALSE;
-    echo (' '); echo('TEST ' || TEST_NAME || ' >>>>>>>>>>' );
-  END;
-
-  PROCEDURE FIN IS
-    TEST_NAME CLOB;
-  BEGIN
-    IF CURRENT_TEST_OUTPUT_BUFFER_ERR THEN
-      T_ECHECS_COUNT := T_ECHECS_COUNT + 1;
-      echo('>>>>>>>>>> FIN DU TEST ' || CURRENT_TEST ); echo (' ');
-      CURRENT_TEST := NULL;
-
-      FOR i IN 1 .. CURRENT_TEST_OUTPUT_BUFFER.COUNT LOOP
-        echo( CURRENT_TEST_OUTPUT_BUFFER(i) );
-      END LOOP;
-    ELSE
-      T_SUCCES_COUNT := T_SUCCES_COUNT + 1;
-      TEST_NAME := CURRENT_TEST;
-      CURRENT_TEST := NULL;
-      echo('SUCCÈS DU TEST : ' || TEST_NAME );
-    END IF;
-    CURRENT_TEST_OUTPUT_BUFFER.DELETE; -- clear buffer
-  END;
-
-  PROCEDURE ECHO( MSG CLOB ) IS
-  BEGIN
-    IF CURRENT_TEST IS NULL THEN
-      dbms_output.put_line(MSG);
-    ELSE
-      CURRENT_TEST_OUTPUT_BUFFER.EXTEND;
-      CURRENT_TEST_OUTPUT_BUFFER (CURRENT_TEST_OUTPUT_BUFFER.LAST) := MSG;
-    END IF;
-  END;
-
-  PROCEDURE INIT IS
-  BEGIN
-    T_SUCCES_COUNT  := 0;
-    T_ECHECS_COUNT  := 0;
-    A_SUCCES_COUNT  := 0;
-    A_ECHECS_COUNT  := 0;
-    CURRENT_TEST    := NULL;
-  END INIT;
-
-  PROCEDURE SHOW_STATS IS
-  BEGIN
-    echo ( ' ' );
-    echo ( '********************************* STATISTIQUES *********************************' );
-    echo ( ' ' );
-    echo ( '   - nombre de tests passés avec succès :       ' || T_SUCCES_COUNT );
-    echo ( '   - nombre de tests ayant échoué :             ' || T_ECHECS_COUNT );
-    echo ( ' ' );
-    echo ( '   - nombre d''assertions passés avec succès :   ' || A_SUCCES_COUNT );
-    echo ( '   - nombre d''assertions ayant échoué :         ' || A_ECHECS_COUNT );
-    echo ( ' ' );
-    echo ( '********************************************************************************' );
-    echo ( ' ' );
-  END;
-
-  PROCEDURE ASSERT( condition BOOLEAN, MSG CLOB ) IS
-  BEGIN
-    IF condition THEN
-      A_SUCCES_COUNT := A_SUCCES_COUNT + 1;
-      IF SUCCES_SHOWN THEN
-        ECHO('        SUCCÈS : ' || MSG );
-      END IF;
-    ELSE
-      A_ECHECS_COUNT := A_ECHECS_COUNT + 1;
-      CURRENT_TEST_OUTPUT_BUFFER_ERR := TRUE;
-      ECHO('        ** ECHEC ** : ' || MSG );
-    END IF;
-  END;
-  
-  PROCEDURE ADD_BUFFER( table_name VARCHAR2, id NUMERIC ) IS
-  BEGIN
-    INSERT INTO TEST_BUFFER( ID, TABLE_NAME, DATA_ID ) 
-                    VALUES ( TEST_BUFFER_ID_SEQ.NEXTVAL, table_name, id );
-  END;
-  
-  PROCEDURE DELETE_TEST_DATA IS
-  BEGIN
-    FOR tb IN (SELECT * FROM TEST_BUFFER)
-    LOOP
-      EXECUTE IMMEDIATE 'DELETE FROM ' || tb.table_name || ' WHERE ID = ' || tb.data_id;
-    END LOOP;
-    DELETE FROM TEST_BUFFER;
-  END;
-  
-  FUNCTION GET_USER RETURN NUMERIC IS
-  BEGIN
-    RETURN 1; -- utilisateur réservé aux tests... (à revoir!!)
-  END;
- 
-  FUNCTION GET_SOURCE RETURN NUMERIC IS
-    res_id Numeric;
-  BEGIN
-    SELECT s.id INTO res_id FROM ose.source s WHERE s.code = 'TEST';
-    RETURN res_id;
-  END;
-  
-  
-  FUNCTION GET_CIVILITE( libelle_court VARCHAR2 DEFAULT NULL ) RETURN civilite%rowtype IS
-    res civilite%rowtype;
-  BEGIN
-    SELECT * INTO res FROM civilite WHERE
-      (OSE_DIVERS.LIKED( libelle_court, GET_CIVILITE.libelle_court ) = 1 OR GET_CIVILITE.libelle_court IS NULL) AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_TYPE_INTERVENANT( code VARCHAR2 DEFAULT NULL ) RETURN type_intervenant%rowtype IS
-    res type_intervenant%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_intervenant WHERE
-      (OSE_DIVERS.LIKED( code, GET_TYPE_INTERVENANT.code ) = 1 OR GET_TYPE_INTERVENANT.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_TYPE_INTERVENANT_BY_ID( id NUMERIC ) RETURN type_intervenant%rowtype IS
-    res type_intervenant%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_intervenant WHERE
-      id = GET_TYPE_INTERVENANT_BY_ID.id;
-    RETURN res;
-  END;
-
-  FUNCTION GET_STATUT_INTERVENANT( source_code VARCHAR2 DEFAULT NULL ) RETURN statut_intervenant%rowtype IS
-    res statut_intervenant%rowtype;
-  BEGIN
-    SELECT * INTO res FROM statut_intervenant WHERE
-      (OSE_DIVERS.LIKED( source_code, GET_STATUT_INTERVENANT.source_code ) = 1 OR GET_STATUT_INTERVENANT.source_code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_STATUT_INTERVENANT_BY_ID( id NUMERIC ) RETURN statut_intervenant%rowtype IS
-    res statut_intervenant%rowtype;
-  BEGIN
-    SELECT * INTO res FROM statut_intervenant WHERE id = GET_STATUT_INTERVENANT_BY_ID.id;
-    RETURN res;
-  END;
-  
-  FUNCTION GET_TYPE_STRUCTURE( code VARCHAR2 DEFAULT NULL ) RETURN type_structure%rowtype IS
-    res type_structure%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_structure WHERE
-      (OSE_DIVERS.LIKED( code, GET_TYPE_STRUCTURE.code ) = 1 OR GET_TYPE_STRUCTURE.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_STRUCTURE( source_code VARCHAR2 DEFAULT NULL ) RETURN structure%rowtype IS
-    res structure%rowtype;
-  BEGIN
-    SELECT * INTO res FROM structure WHERE
-      (OSE_DIVERS.LIKED( source_code, GET_STRUCTURE.source_code ) = 1 OR GET_STRUCTURE.source_code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION GET_STRUCTURE_BY_ID( id NUMERIC ) RETURN structure%rowtype IS
-    res structure%rowtype;
-  BEGIN
-    SELECT * INTO res FROM structure WHERE id = GET_STRUCTURE_BY_ID.id;
-    RETURN res;
-  END;
-  
-  FUNCTION GET_STRUCTURE_ENS_BY_NIVEAU( niveau NUMERIC ) RETURN structure%rowtype IS
-    res structure%rowtype;
-  BEGIN
-    SELECT * INTO res FROM structure WHERE
-      niveau = GET_STRUCTURE_ENS_BY_NIVEAU.niveau AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_STRUCTURE_UNIV RETURN "STRUCTURE"%rowtype IS
-    res "STRUCTURE"%rowtype;
-  BEGIN
-    SELECT * INTO res FROM "STRUCTURE" WHERE source_code = 'UNIV' AND histo_destruction IS NULL ;
-    RETURN res;  
-  END;
-
-  FUNCTION ADD_STRUCTURE(
-    libelle_long  VARCHAR2,
-    libelle_court VARCHAR2,
-    parente_id    NUMERIC,
-    type_id       NUMERIC,
-    source_code   VARCHAR2
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-    parente  structure%rowtype;
-    niv2_id  NUMERIC;
-  BEGIN
-    entity_id := STRUCTURE_ID_SEQ.NEXTVAL;
-    IF parente_id IS NOT NULL THEN
-      parente := GET_STRUCTURE_BY_ID( parente_id );
-      niv2_id := CASE
-        WHEN parente.niveau = 1 THEN entity_id
-        WHEN parente.niveau = 2 THEN parente_id
-        WHEN parente.niveau = 3 THEN parente.parente_id
-        WHEN parente.niveau = 4 THEN GET_STRUCTURE_BY_ID( parente.parente_id ).parente_id
-        WHEN parente.niveau = 5 THEN GET_STRUCTURE_BY_ID( GET_STRUCTURE_BY_ID( parente.parente_id ).parente_id ).parente_id
-        WHEN parente.niveau = 6 THEN GET_STRUCTURE_BY_ID( GET_STRUCTURE_BY_ID( GET_STRUCTURE_BY_ID( parente.parente_id ).parente_id ).parente_id ).parente_id
-      END;
-    END IF;
-    INSERT INTO STRUCTURE (
-      ID,
-      LIBELLE_LONG,
-      LIBELLE_COURT,
-      PARENTE_ID,
-      STRUCTURE_NIV2_ID,
-      TYPE_ID,
-      ETABLISSEMENT_ID,
-      NIVEAU,
-      SOURCE_ID,
-      SOURCE_CODE,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      libelle_long,
-      libelle_court,
-      parente_id,
-      niv2_id,
-      type_id,
-      OSE_PARAMETRE.GET_ETABLISSEMENT,
-      NVL( parente.niveau, 1),
-      GET_SOURCE,
-      source_code,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'structure', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_INTERVENANT( source_code VARCHAR2 DEFAULT NULL ) RETURN intervenant%rowtype IS
-    res intervenant%rowtype;
-  BEGIN
-    SELECT * INTO res FROM intervenant WHERE
-      (OSE_DIVERS.LIKED( source_code, GET_INTERVENANT.source_code ) = 1 OR GET_INTERVENANT.source_code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_INTERVENANT_BY_ID( id NUMERIC DEFAULT NULL ) RETURN intervenant%rowtype IS
-    res intervenant%rowtype;
-  BEGIN
-    SELECT * INTO res FROM intervenant WHERE id = GET_INTERVENANT_BY_ID.id;
-    RETURN res;
-  END;
-
-  FUNCTION GET_INTERVENANT_BY_STATUT( statut_id NUMERIC ) RETURN intervenant%rowtype IS
-    res intervenant%rowtype;
-  BEGIN
-    SELECT * INTO res FROM intervenant WHERE
-      statut_id = GET_INTERVENANT_BY_STATUT.statut_id AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_INTERVENANT_BY_TYPE( type_id NUMERIC ) RETURN intervenant%rowtype IS
-    res intervenant%rowtype;
-  BEGIN
-    SELECT * INTO res FROM intervenant WHERE
-      type_id = GET_INTERVENANT_BY_TYPE.type_id AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;  
-  END;
-
-  FUNCTION ADD_INTERVENANT(
-    civilite_id     NUMERIC,
-    nom_usuel       VARCHAR2,
-    prenom          VARCHAR2,
-    date_naissance  DATE,
-    email           VARCHAR2,
-    statut_id       NUMERIC,
-    structure_id    NUMERIC,
-    source_code     VARCHAR2
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-    statut statut_intervenant%rowtype;
-    type_interv type_intervenant%rowtype;
-  BEGIN
-    entity_id := INTERVENANT_ID_SEQ.NEXTVAL;
-    statut := GET_STATUT_INTERVENANT_BY_ID( statut_id );
-    type_interv := GET_TYPE_INTERVENANT_BY_ID( statut.type_intervenant_id );
-    INSERT INTO INTERVENANT (
-      ID,
-      CIVILITE_ID,
-      NOM_USUEL,
-      PRENOM,
-      NOM_PATRONYMIQUE,
-      DATE_NAISSANCE,
-      PAYS_NAISSANCE_CODE_INSEE,
-      PAYS_NAISSANCE_LIBELLE,
-      EMAIL,
-      TYPE_ID,
-      STATUT_ID,
-      STRUCTURE_ID,
-      SOURCE_ID,
-      SOURCE_CODE,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      civilite_id,
-      nom_usuel,
-      prenom,
-      nom_usuel,
-      date_naissance,
-      100,
-      'FRANCE',
-      email,
-      type_interv.id,
-      statut_id,
-      structure_id,
-      GET_SOURCE,
-      source_code,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'intervenant', entity_id);
-    IF type_interv.code = 'P' THEN
-      INSERT INTO INTERVENANT_PERMANENT(
-        ID,
-        SOURCE_ID,
-        SOURCE_CODE,
-        HISTO_CREATEUR_ID,
-        HISTO_MODIFICATEUR_ID
-      )VALUES(
-        entity_id,
-        GET_SOURCE,
-        source_code,
-        GET_USER,
-        GET_USER
-      );
-      INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'intervenant_permanent', entity_id);
-    END IF;
-    IF type_interv.code = 'E' THEN
-      INSERT INTO INTERVENANT_EXTERIEUR(
-        ID,
-        SOURCE_ID,
-        SOURCE_CODE,
-        HISTO_CREATEUR_ID,
-        HISTO_MODIFICATEUR_ID
-      )VALUES(
-        entity_id,
-        GET_SOURCE,
-        source_code,
-        GET_USER,
-        GET_USER
-      );
-      INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'intervenant_exterieur', entity_id);
-    END IF;
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_GROUPE_TYPE_FORMATION( source_code VARCHAR2 DEFAULT NULL ) RETURN groupe_type_formation%rowtype IS
-    res groupe_type_formation%rowtype;
-  BEGIN
-    SELECT * INTO res FROM groupe_type_formation WHERE
-      (OSE_DIVERS.LIKED( source_code, GET_GROUPE_TYPE_FORMATION.source_code ) = 1 OR GET_GROUPE_TYPE_FORMATION.source_code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION ADD_GROUPE_TYPE_FORMATION(
-    libelle_long  VARCHAR2,
-    libelle_court VARCHAR2,
-    source_code   VARCHAR2
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := GROUPE_TYPE_FORMATION_ID_SEQ.NEXTVAL;
-    INSERT INTO GROUPE_TYPE_FORMATION (
-      ID,
-      LIBELLE_COURT,
-      LIBELLE_LONG,
-      ORDRE,
-      PERTINENCE_NIVEAU,
-      SOURCE_ID,
-      SOURCE_CODE,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    ) VALUES (
-      entity_id,
-      libelle_court,
-      libelle_long,
-      999,
-      0,
-      GET_SOURCE,
-      source_code,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'groupe_type_formation', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_TYPE_FORMATION( source_code VARCHAR2 ) RETURN type_formation%rowtype IS
-    res type_formation%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_formation WHERE
-      (OSE_DIVERS.LIKED( source_code, GET_TYPE_FORMATION.source_code ) = 1 OR GET_TYPE_FORMATION.source_code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION ADD_TYPE_FORMATION(
-    libelle_long  VARCHAR2,
-    libelle_court VARCHAR2,
-    groupe_id     NUMERIC,
-    source_code   VARCHAR2
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := TYPE_FORMATION_ID_SEQ.NEXTVAL;
-    INSERT INTO TYPE_FORMATION(
-      ID,
-      LIBELLE_LONG,
-      LIBELLE_COURT,
-      GROUPE_ID,
-      SOURCE_ID,
-      SOURCE_CODE,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    ) VALUES (
-      entity_id,
-      libelle_long,
-      libelle_court,
-      groupe_id,
-      GET_SOURCE,
-      source_code,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'type_formation', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_ETAPE( source_code VARCHAR2 DEFAULT NULL ) RETURN etape%rowtype IS
-    res etape%rowtype;
-  BEGIN
-    SELECT * INTO res FROM etape WHERE
-      (OSE_DIVERS.LIKED( source_code, GET_ETAPE.source_code ) = 1 OR GET_ETAPE.source_code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION ADD_ETAPE(
-    libelle           VARCHAR2,
-    type_formation_id NUMERIC,
-    niveau            NUMERIC,
-    structure_id      NUMERIC,
-    source_code       VARCHAR2
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := ETAPE_ID_SEQ.NEXTVAL;
-    INSERT INTO ETAPE (
-      ID,
-      LIBELLE,
-      TYPE_FORMATION_ID,
-      NIVEAU,
-      SPECIFIQUE_ECHANGES,
-      STRUCTURE_ID,
-      SOURCE_ID,
-      SOURCE_CODE,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      libelle,
-      type_formation_id,
-      niveau,
-      0,
-      structure_id,
-      GET_SOURCE,
-      source_code,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'etape', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_PERIODE( code VARCHAR2 DEFAULT NULL ) RETURN periode%rowtype IS
-    res periode%rowtype;
-  BEGIN
-    SELECT * INTO res FROM periode WHERE
-      (OSE_DIVERS.LIKED( code, GET_PERIODE.code ) = 1 OR GET_PERIODE.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_ELEMENT_PEDAGOGIQUE( source_code VARCHAR2 DEFAULT NULL ) RETURN element_pedagogique%rowtype IS
-    res element_pedagogique%rowtype;
-  BEGIN
-    SELECT * INTO res FROM element_pedagogique WHERE
-      (OSE_DIVERS.LIKED( source_code, GET_ELEMENT_PEDAGOGIQUE.source_code ) = 1 OR GET_ELEMENT_PEDAGOGIQUE.source_code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION GET_ELEMENT_PEDAGOGIQUE_BY_ID( ID NUMERIC ) RETURN element_pedagogique%rowtype IS
-    res element_pedagogique%rowtype;
-  BEGIN
-    SELECT * INTO res FROM element_pedagogique WHERE id = GET_ELEMENT_PEDAGOGIQUE_BY_ID.id;
-    RETURN res;
-  END;
-  
-  FUNCTION ADD_ELEMENT_PEDAGOGIQUE(
-    libelle       VARCHAR2,
-    etape_id      NUMERIC,
-    structure_id  NUMERIC,
-    periode_id    NUMERIC,
-    taux_foad     FLOAT,
-    taux_fi       FLOAT,
-    taux_fc       FLOAT,
-    taux_fa       FLOAT,
-    source_code   VARCHAR2
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-    ch_id NUMERIC;
-  BEGIN
-    entity_id := ELEMENT_PEDAGOGIQUE_ID_SEQ.NEXTVAL;
-    INSERT INTO ELEMENT_PEDAGOGIQUE (
-      ID,
-      LIBELLE,
-      ETAPE_ID,
-      STRUCTURE_ID,
-      PERIODE_ID,
-      TAUX_FOAD,
-      TAUX_FI,
-      TAUX_FC,
-      TAUX_FA,
-      SOURCE_ID,
-      SOURCE_CODE,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      libelle,
-      etape_id,
-      structure_id,
-      periode_id,
-      taux_foad,
-      taux_fi,
-      taux_fc,
-      taux_fa,
-      GET_SOURCE,
-      source_code,
-      GET_USER,
-      GET_USER
-    );
-    ch_id := CHEMIN_PEDAGOGIQUE_ID_SEQ.NEXTVAL;
-    INSERT INTO CHEMIN_PEDAGOGIQUE (
-      ID,
-      ELEMENT_PEDAGOGIQUE_ID,
-      ETAPE_ID,
-      ORDRE,
-      SOURCE_ID,
-      SOURCE_CODE,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      ch_id,
-      entity_id,
-      etape_id,
-      9999999,
-      GET_SOURCE,
-      source_code,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'element_pedagogique', entity_id);
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'chemin_pedagogique', ch_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_TYPE_MODULATEUR( code VARCHAR2 DEFAULT NULL ) RETURN type_modulateur%rowtype IS
-    res type_modulateur%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_modulateur WHERE
-      (OSE_DIVERS.LIKED( code, GET_TYPE_MODULATEUR.code ) = 1 OR GET_TYPE_MODULATEUR.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION ADD_TYPE_MODULATEUR(
-    code        VARCHAR2,
-    libelle     VARCHAR2,
-    publique    NUMERIC,
-    obligatoire NUMERIC
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-    tms_id    NUMERIC;
-    structure_id NUMERIC;
-  BEGIN
-    entity_id := TYPE_MODULATEUR_ID_SEQ.NEXTVAL;
-    INSERT INTO TYPE_MODULATEUR (
-      ID,
-      CODE,
-      LIBELLE,
-      PUBLIQUE,
-      OBLIGATOIRE,
-      SAISIE_PAR_ENSEIGNANT,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      code,
-      libelle,
-      publique,
-      obligatoire,
-      0,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'type_modulateur', entity_id);
-    structure_id := ose_test.get_structure_univ().id;
-    tms_id := TYPE_MODULATEUR_STRUCTU_ID_SEQ.NEXTVAL;
-    INSERT INTO TYPE_MODULATEUR_STRUCTURE(
-      ID,
-      TYPE_MODULATEUR_ID,
-      STRUCTURE_ID,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      tms_id,
-      entity_id,
-      structure_id,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'type_modulateur_structure', tms_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_MODULATEUR( code VARCHAR2 DEFAULT NULL ) RETURN modulateur%rowtype IS
-    res modulateur%rowtype;
-  BEGIN
-    SELECT * INTO res FROM modulateur WHERE
-      (OSE_DIVERS.LIKED( code, GET_MODULATEUR.code ) = 1 OR GET_MODULATEUR.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION ADD_MODULATEUR(
-    code                      VARCHAR2,
-    libelle                   VARCHAR2,
-    type_modulateur_id        NUMERIC,
-    ponderation_service_du    FLOAT,
-    ponderation_service_compl FLOAT
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := MODULATEUR_ID_SEQ.NEXTVAL;
-    INSERT INTO MODULATEUR (
-      ID,
-      CODE,
-      LIBELLE,
-      TYPE_MODULATEUR_ID,
-      PONDERATION_SERVICE_DU,
-      PONDERATION_SERVICE_COMPL,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      code,
-      libelle,
-      type_modulateur_id,
-      ponderation_service_du,
-      ponderation_service_compl,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'modulateur', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION ADD_ELEMENT_MODULATEUR(
-    element_id    NUMERIC,
-    modulateur_id NUMERIC,
-    annee_id      NUMERIC
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := ELEMENT_MODULATEUR_ID_SEQ.NEXTVAL;
-    INSERT INTO ELEMENT_MODULATEUR (
-      ID,
-      ELEMENT_ID,
-      MODULATEUR_ID,
-      ANNEE_ID,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      element_id,
-      modulateur_id,
-      annee_id,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'element_modulateur', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_FONCTION_REFERENTIEL( code VARCHAR2 DEFAULT NULL ) RETURN fonction_referentiel%rowtype IS
-    res fonction_referentiel%rowtype;
-  BEGIN
-    SELECT * INTO res FROM fonction_referentiel WHERE
-      (OSE_DIVERS.LIKED( code, GET_FONCTION_REFERENTIEL.code ) = 1 OR GET_FONCTION_REFERENTIEL.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION ADD_FONCTION_REFERENTIEL(
-    code          VARCHAR2,
-    libelle_long  VARCHAR2,
-    libelle_court VARCHAR2,
-    plafond       FLOAT
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := FONCTION_REFERENTIEL_ID_SEQ.NEXTVAL;
-    INSERT INTO FONCTION_REFERENTIEL (
-      ID,
-      CODE,
-      LIBELLE_LONG,
-      LIBELLE_COURT,
-      PLAFOND,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      code,
-      libelle_long,
-      libelle_court,
-      plafond,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'fonction_referentiel', entity_id);
-    RETURN entity_id;
-  END;
-  
-  FUNCTION ADD_SERVICE_REFERENTIEL(
-    fonction_id     NUMERIC,
-    intervenant_id  NUMERIC,
-    structure_id    NUMERIC,
-    annee_id        NUMERIC,
-    heures          FLOAT
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := SERVICE_REFERENTIEL_ID_SEQ.NEXTVAL;
-    INSERT INTO SERVICE_REFERENTIEL (
-      ID,
-      FONCTION_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      ANNEE_ID,
-      HEURES,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      fonction_id,
-      intervenant_id,
-      structure_id,
-      annee_id,
-      heures,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'service_referentiel', entity_id);
-    RETURN entity_id;
-  END;
-  
-  FUNCTION ADD_MODIFICATION_SERVICE_DU(
-    intervenant_id  NUMERIC,
-    annee_id        NUMERIC,
-    heures          FLOAT,
-    motif_id        NUMERIC,
-    commentaires    CLOB DEFAULT NULL
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := MODIFICATION_SERVICE_DU_ID_SEQ.NEXTVAL;
-    INSERT INTO MODIFICATION_SERVICE_DU (
-      ID,
-      INTERVENANT_ID,
-      ANNEE_ID,
-      HEURES,
-      MOTIF_ID,
-      COMMENTAIRES,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      intervenant_id,
-      annee_id,
-      heures,
-      motif_id,
-      commentaires,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'modification_service_du', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_MOTIF_MODIFICATION_SERVICE( code VARCHAR2 DEFAULT NULL, multiplicateur FLOAT DEFAULT NULL ) RETURN motif_modification_service%rowtype IS
-    res motif_modification_service%rowtype;
-  BEGIN
-    SELECT * INTO res FROM motif_modification_service WHERE
-      (OSE_DIVERS.LIKED( code, GET_MOTIF_MODIFICATION_SERVICE.code ) = 1 OR GET_MOTIF_MODIFICATION_SERVICE.code IS NULL)
-      AND (multiplicateur = GET_MOTIF_MODIFICATION_SERVICE.multiplicateur OR GET_MOTIF_MODIFICATION_SERVICE.multiplicateur IS NULL)
-      AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_ETABLISSEMENT( source_code VARCHAR2 DEFAULT NULL ) RETURN etablissement%rowtype IS
-    res etablissement%rowtype;
-  BEGIN
-    SELECT * INTO res FROM etablissement WHERE
-      (OSE_DIVERS.LIKED( source_code, GET_ETABLISSEMENT.source_code ) = 1 OR (GET_ETABLISSEMENT.source_code IS NULL AND id <> OSE_PARAMETRE.GET_ETABLISSEMENT))
-      AND histo_destruction IS NULL
-      AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_SERVICE_BY_ID( id NUMERIC ) RETURN service%rowtype IS
-    res service%rowtype;
-  BEGIN
-    SELECT * INTO res FROM service WHERE id = GET_SERVICE_BY_ID.id;
-    RETURN res;
-  END;
-
-  FUNCTION ADD_SERVICE(
-    intervenant_id          NUMERIC,
-    annee_id                NUMERIC,
-    element_pedagogique_id  NUMERIC,
-    etablissement_id        NUMERIC DEFAULT NULL
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-    ep element_pedagogique%rowtype;
-    interv intervenant%rowtype;
-  BEGIN
-    entity_id := SERVICE_ID_SEQ.NEXTVAL;
-    IF element_pedagogique_id IS NOT NULL THEN
-      ep := GET_ELEMENT_PEDAGOGIQUE_BY_ID( element_pedagogique_id );
-    END IF;
-    interv := GET_INTERVENANT_BY_ID( intervenant_id );
-    INSERT INTO SERVICE (
-      ID,
-      INTERVENANT_ID,
-      STRUCTURE_AFF_ID,
-      STRUCTURE_ENS_ID,
-      ELEMENT_PEDAGOGIQUE_ID,
-      ANNEE_ID,
-      ETABLISSEMENT_ID,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      intervenant_id,
-      interv.structure_id,
-      ep.structure_id,
-      element_pedagogique_id,
-      annee_id,
-      COALESCE( ADD_SERVICE.etablissement_id, OSE_PARAMETRE.GET_ETABLISSEMENT),
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'service', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION GET_ETAT_VOLUME_HORAIRE( code VARCHAR2 DEFAULT NULL ) RETURN etat_volume_horaire%rowtype IS
-    res etat_volume_horaire%rowtype;
-  BEGIN
-    SELECT * INTO res FROM etat_volume_horaire WHERE
-      (OSE_DIVERS.LIKED( code, GET_ETAT_VOLUME_HORAIRE.code ) = 1 OR GET_ETAT_VOLUME_HORAIRE.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION GET_TYPE_VOLUME_HORAIRE( code VARCHAR2 DEFAULT NULL ) RETURN type_volume_horaire%rowtype IS
-    res type_volume_horaire%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_volume_horaire WHERE
-      (OSE_DIVERS.LIKED( code, GET_TYPE_VOLUME_HORAIRE.code ) = 1 OR GET_TYPE_VOLUME_HORAIRE.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-  FUNCTION GET_TYPE_INTERVENTION( code VARCHAR2 DEFAULT NULL ) RETURN type_intervention%rowtype IS
-    res type_intervention%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_intervention WHERE
-      (OSE_DIVERS.LIKED( code, GET_TYPE_INTERVENTION.code ) = 1 OR GET_TYPE_INTERVENTION.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_TYPE_INTERVENTION_BY_ID( id NUMERIC ) RETURN type_intervention%rowtype IS
-    res type_intervention%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_intervention WHERE id = GET_TYPE_INTERVENTION_BY_ID.id;
-    RETURN res;
-  END;
-
-  FUNCTION GET_TYPE_INTERVENTION_BY_ELEMT( ELEMENT_ID NUMERIC ) RETURN type_intervention%rowtype IS
-    res type_intervention%rowtype;
-  BEGIN
-    SELECT
-      ti.*
-    INTO
-      res
-    FROM
-      type_intervention ti
-      JOIN v_element_type_intervention eti ON eti.type_intervention_id = ti.id AND eti.element_pedagogique_id = ELEMENT_ID
-    WHERE
-      ti.histo_destruction IS NULL
-      AND rownum = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_MOTIF_NON_PAIEMENT( code VARCHAR2 DEFAULT NULL ) RETURN motif_non_paiement%rowtype IS
-    res motif_non_paiement%rowtype;
-  BEGIN
-    SELECT * INTO res FROM motif_non_paiement WHERE
-      (OSE_DIVERS.LIKED( code, GET_MOTIF_NON_PAIEMENT.code ) = 1 OR GET_MOTIF_NON_PAIEMENT.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-
-  FUNCTION GET_VOLUME_HORAIRE( id NUMERIC DEFAULT NULL ) RETURN volume_horaire%rowtype IS
-    res volume_horaire%rowtype;
-  BEGIN
-    SELECT * INTO res FROM volume_horaire WHERE
-      id = GET_VOLUME_HORAIRE.id OR (GET_VOLUME_HORAIRE.id IS NULL AND histo_destruction IS NULL AND ROWNUM = 1);
-    RETURN res;    
-  END;
-
-  FUNCTION ADD_VOLUME_HORAIRE(
-    type_volume_horaire_id  NUMERIC,
-    service_id              NUMERIC,
-    periode_id              NUMERIC,
-    type_intervention_id    NUMERIC,
-    heures                  FLOAT,
-    motif_non_paiement_id   NUMERIC DEFAULT NULL
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := VOLUME_HORAIRE_ID_SEQ.NEXTVAL;
-    INSERT INTO VOLUME_HORAIRE (
-      ID,
-      TYPE_VOLUME_HORAIRE_ID,
-      SERVICE_ID,
-      PERIODE_ID,
-      TYPE_INTERVENTION_ID,
-      HEURES,
-      MOTIF_NON_PAIEMENT_ID,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      type_volume_horaire_id,
-      service_id,
-      periode_id,
-      type_intervention_id,
-      heures,
-      motif_non_paiement_id,
-      GET_USER,
-      GET_USER
-    );
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'volume_horaire', entity_id);
-    RETURN entity_id;
-  END;
-
-  FUNCTION ADD_VALIDATION_VOLUME_HORAIRE(
-    structure_id      NUMERIC,
-    intervenant_id    NUMERIC,
-    volume_horaire_id NUMERIC DEFAULT NULL,
-    service_id        NUMERIC DEFAULT NULL
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := VALIDATION_ID_SEQ.NEXTVAL;
-    INSERT INTO VALIDATION (
-      ID,
-      TYPE_VALIDATION_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      (SELECT id FROM type_validation WHERE code = 'SERVICES_PAR_COMP'),
-      intervenant_id,
-      structure_id,
-      GET_USER,
-      GET_USER
-    );
-    FOR vh IN (
-      SELECT vh.id FROM volume_horaire vh JOIN service s ON s.id = vh.service_id
-      WHERE
-        vh.histo_destruction IS NULL AND
-        s.histo_destruction IS NULL
-        AND (s.structure_ens_id = ADD_VALIDATION_VOLUME_HORAIRE.structure_id OR s.structure_aff_id = ADD_VALIDATION_VOLUME_HORAIRE.structure_id)
-        AND (s.intervenant_id = ADD_VALIDATION_VOLUME_HORAIRE.intervenant_id)
-        AND (vh.id = ADD_VALIDATION_VOLUME_HORAIRE.volume_horaire_id OR ADD_VALIDATION_VOLUME_HORAIRE.volume_horaire_id IS NULL)
-        AND (s.id = ADD_VALIDATION_VOLUME_HORAIRE.service_id OR ADD_VALIDATION_VOLUME_HORAIRE.service_id IS NULL)
-    ) LOOP
-      INSERT INTO VALIDATION_VOL_HORAIRE(
-        VALIDATION_ID,
-        VOLUME_HORAIRE_ID
-      )VALUES(
-        entity_id,
-        vh.id
-      );
-    END LOOP;
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'validation', entity_id);
-    RETURN entity_id;
-  END;
-
-  PROCEDURE DEL_VALIDATION_VOLUME_HORAIRE(
-    structure_id      NUMERIC,
-    intervenant_id    NUMERIC,
-    volume_horaire_id NUMERIC DEFAULT NULL,
-    service_id        NUMERIC DEFAULT NULL,
-    validation_id     NUMERIC DEFAULT NULL
-  ) IS
-    vvh_count NUMERIC;
-  BEGIN
-    FOR vh IN (
-      SELECT vh.id FROM volume_horaire vh JOIN service s ON s.id = vh.service_id
-      WHERE
-        vh.histo_destruction IS NULL AND
-        s.histo_destruction IS NULL
-        AND (s.structure_ens_id = DEL_VALIDATION_VOLUME_HORAIRE.structure_id OR s.structure_aff_id = DEL_VALIDATION_VOLUME_HORAIRE.structure_id)
-        AND (s.intervenant_id = DEL_VALIDATION_VOLUME_HORAIRE.intervenant_id)
-        AND (vh.id = DEL_VALIDATION_VOLUME_HORAIRE.volume_horaire_id OR DEL_VALIDATION_VOLUME_HORAIRE.volume_horaire_id IS NULL)
-        AND (s.id = DEL_VALIDATION_VOLUME_HORAIRE.service_id OR DEL_VALIDATION_VOLUME_HORAIRE.service_id IS NULL)
-    ) LOOP
-      DELETE FROM VALIDATION_VOL_HORAIRE WHERE 
-        VOLUME_HORAIRE_ID = vh.id 
-        AND (VALIDATION_ID = DEL_VALIDATION_VOLUME_HORAIRE.validation_id OR DEL_VALIDATION_VOLUME_HORAIRE.validation_id IS NULL);
-    END LOOP;
-    IF VALIDATION_ID IS NOT NULL THEN
-      SELECT count(*) INTO vvh_count FROM VALIDATION_VOL_HORAIRE WHERE VALIDATION_ID = DEL_VALIDATION_VOLUME_HORAIRE.validation_id;
-      IF 0 = vvh_count THEN
-        DELETE FROM validation WHERE id = VALIDATION_ID;
-      END IF;
-    END IF;
-  END;
-
-  FUNCTION GET_CONTRAT_BY_ID( ID NUMERIC ) RETURN contrat%rowtype IS
-    res contrat%rowtype;
-  BEGIN
-    SELECT * INTO res FROM contrat WHERE id = GET_CONTRAT_BY_ID.id;
-    RETURN res;
-  END;
-
-  FUNCTION ADD_CONTRAT(
-    structure_id      NUMERIC DEFAULT NULL,
-    intervenant_id    NUMERIC DEFAULT NULL,
-    volume_horaire_id NUMERIC DEFAULT NULL,
-    service_id        NUMERIC DEFAULT NULL    
-  ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-  BEGIN
-    entity_id := CONTRAT_ID_SEQ.NEXTVAL;
-    INSERT INTO CONTRAT (
-      ID,
-      TYPE_CONTRAT_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      NUMERO_AVENANT,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      (SELECT id FROM type_contrat WHERE code = 'CONTRAT'),
-      intervenant_id,
-      structure_id,
-      (SELECT MAX(numero_avenant) FROM contrat) + 1,
-      GET_USER,
-      GET_USER
-    );
-    FOR vh IN (
-      SELECT vh.id FROM volume_horaire vh JOIN service s ON s.id = vh.service_id
-      WHERE
-        vh.histo_destruction IS NULL
-        AND s.histo_destruction IS NULL
-        AND (s.intervenant_id = ADD_CONTRAT.intervenant_id OR ADD_CONTRAT.intervenant_id IS NULL)
-        AND (vh.id = ADD_CONTRAT.volume_horaire_id OR ADD_CONTRAT.volume_horaire_id IS NULL)
-        AND (s.id = ADD_CONTRAT.service_id OR ADD_CONTRAT.service_id IS NULL)
-        AND vh.contrat_id IS NULL
-    ) LOOP
-      UPDATE volume_horaire SET contrat_id = entity_id WHERE volume_horaire.id = vh.id;
-    END LOOP;
-
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'contrat', entity_id);
-    RETURN entity_id;
-  END;
-  
-  FUNCTION SIGNATURE_CONTRAT(
-    contrat_id        NUMERIC
-  ) RETURN NUMERIC IS
-  BEGIN
-    UPDATE contrat SET date_retour_signe = SYSDATE WHERE id = SIGNATURE_CONTRAT.contrat_id;
-    RETURN contrat_id;
-  END;
-  
-  FUNCTION ADD_CONTRAT_VALIDATION( contrat_id NUMERIC ) RETURN NUMERIC IS
-    entity_id NUMERIC;
-    ctr contrat%rowtype;
-  BEGIN
-    ctr := GET_CONTRAT_BY_ID( contrat_id );
-
-    IF ctr.validation_id IS NOT NULL THEN RETURN NULL; END IF;
-
-    entity_id := VALIDATION_ID_SEQ.NEXTVAL;
-    INSERT INTO VALIDATION (
-      ID,
-      TYPE_VALIDATION_ID,
-      INTERVENANT_ID,
-      STRUCTURE_ID,
-      HISTO_CREATEUR_ID,
-      HISTO_MODIFICATEUR_ID
-    )VALUES(
-      entity_id,
-      (SELECT id FROM type_validation WHERE code = 'CONTRAT_PAR_COMP'),
-      ctr.intervenant_id,
-      ctr.structure_id,
-      GET_USER,
-      GET_USER
-    );
-    UPDATE contrat SET validation_id = entity_id WHERE id = ADD_CONTRAT_VALIDATION.contrat_id;
-    INSERT INTO TEST_BUFFER(ID, TABLE_NAME, DATA_ID) VALUES(TEST_BUFFER_ID_SEQ.NEXTVAL, 'validation', entity_id);
-    RETURN entity_id;
-  END;  
-  
-  FUNCTION DEL_CONTRAT_VALIDATION( contrat_id NUMERIC ) RETURN NUMERIC IS
-    ctr contrat%rowtype;
-  BEGIN
-    ctr := GET_CONTRAT_BY_ID( contrat_id );
-    
-    IF ctr.validation_id IS NOT NULL THEN
-      UPDATE contrat SET validation_id = NULL WHERE contrat_id = DEL_CONTRAT_VALIDATION.contrat_id;
-      DELETE FROM validation WHERE id = ctr.validation_id;
-    END IF;
-    RETURN contrat_id;
-  END;
-  
-  FUNCTION GET_TYPE_VALIDATION( code VARCHAR2 DEFAULT NULL ) RETURN type_validation%rowtype IS
-    res type_validation%rowtype;
-  BEGIN
-    SELECT * INTO res FROM type_validation WHERE
-      (OSE_DIVERS.LIKED( code, GET_TYPE_VALIDATION.code ) = 1 OR GET_TYPE_VALIDATION.code IS NULL) AND histo_destruction IS NULL AND ROWNUM = 1;
-    RETURN res;
-  END;
-  
-END OSE_TEST;
 /
 ---------------------------
 --Modifié PACKAGE BODY
@@ -5127,7 +4935,7 @@ CREATE OR REPLACE PACKAGE BODY "OSE"."OSE_IMPORT" IS
     SYNC_ETAPE;
     SYNC_ELEMENT_PEDAGOGIQUE;
     SYNC_EFFECTIFS;
-    --SYNC_ELEMENT_TAUX_REGIMES; -- Synchronisation manuelle ! ! !
+    SYNC_ELEMENT_TAUX_REGIMES;
     SYNC_CHEMIN_PEDAGOGIQUE;
     SYNC_DISCIPLINE;
     SYNC_ELEMENT_DISCIPLINE;

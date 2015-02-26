@@ -21,7 +21,13 @@ ORDER BY
 
 -- pour créer un nouveau rôle
 
-select nom_usuel, prenom, source_code from personnel where nom_patronymique like '%Ren%';
+select nom_usuel, prenom, source_code from personnel where 1 = ose_divers.str_find(nom_patronymique || ' ' || nom_usuel,'OZENNE' );
+/*
+- Chantal DENOYES
+- Nathalie OZENNE
+- Eric VIEVILLE
+- Sandra MAHIEU
+ */
 
 select libelle_court, libelle_long, source_code from structure where libelle_court like '%Histoire%' AND niveau = 2;
 
@@ -35,10 +41,10 @@ INSERT INTO ROLE (
     ID, SOURCE_ID, 
     HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
 )VALUES(
-    (SELECT ID FROM structure WHERE source_code = 'U08'),
-    (SELECT ID FROM personnel WHERE source_code ='93932'),
-    (SELECT ID FROM TYPE_ROLE WHERE code = 'gestionnaire-composante'),
-    'gest-93932',
+    null,--(SELECT ID FROM structure WHERE source_code = 'U08'),
+    (SELECT ID FROM personnel WHERE source_code ='528'),
+    (SELECT ID FROM TYPE_ROLE WHERE code = 'administrateur'),
+    'admin-drh-528',
     ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 
     (select id from utilisateur where username='lecluse'), (select id from utilisateur where username='lecluse') -- laurent
 );
@@ -95,4 +101,4 @@ select * from structure@harpprod where lc_structure like 'UFR%Scien%';
 select * from individu_fonct_struct@harpprod ifs where no_dossier_pers = 16956;
 
 
-
+select * from individu@harpprod where nom_usuel = 'DENOYES';

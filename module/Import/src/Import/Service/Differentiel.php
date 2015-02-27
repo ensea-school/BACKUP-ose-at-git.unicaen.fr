@@ -41,7 +41,11 @@ class Differentiel extends Service
      */
     public function make( Query $query )
     {
+        $sqg = $this->getServiceManager()->get('importServiceQueryGenerator');
+        /* @var $sqg QueryGenerator */
+
         $this->tableName = $query->getTableName();
+        $query->addDefaultSqlCriterion( $sqg );
         $this->stmt = $this->getEntityManager()->getConnection()->executeQuery( $query->toSql(), array() );
         return $this;
     }

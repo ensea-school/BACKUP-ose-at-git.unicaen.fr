@@ -12,10 +12,12 @@
 <?php endif; ?>
 
 <div>
+<?php if (in_array($table, $mviews)): ?>
     <a class="import-update-mv" href="javascript:void(0)" data-table="<?php echo $table ?>">
         <span class="glyphicon glyphicon-refresh"></span>
         Mettre à jour la vue matérialisée
     </a>
+<?php endif; ?>
 <?php if (count($lignes) > 0) : ?>
     &nbsp;&nbsp;<a class="import-update" href="javascript:void(0)" data-table="<?php echo $table ?>">
         <span class="glyphicon glyphicon-refresh"></span>

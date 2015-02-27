@@ -5,6 +5,7 @@ namespace Import\Entity\Differentiel;
 use Application\Entity\Db\Source;
 use Import\Exception\Exception;
 use Import\Service\Service;
+use Import\Service\QueryGenerator;
 
 /**
  * Classe permettant de créer une requête de récupération de différentiel
@@ -96,6 +97,13 @@ class Query
      */
     protected $ignoreFields;
 
+    /**
+     * defaultSqlCriterion
+     *
+     * @var string
+     */
+    protected $defaultSqlCriterion;
+
 
 
 
@@ -108,6 +116,19 @@ class Query
     function __construct( $tableName )
     {
         $this->setTableName($tableName);
+    }
+
+    /**
+     * 
+     * @param QueryGenerator $queryGenerator
+     * @return self
+     */
+    public function addDefaultSqlCriterion( QueryGenerator $queryGenerator )
+    {
+        if ($this->getTableName()){
+            $this->defaultSqlCriterion = $queryGenerator->getSqlCriterion($this->getTableName());
+        }
+        return $this;
     }
 
     /**
@@ -454,11 +475,6 @@ class Query
     {
         $viewName = Service::escapeKW('V_DIFF_'.$this->tableName);
 
-        if ($full){
-            $sql = 'SELECT * FROM '.$viewName.' ';
-        }else{
-            $sql = '';
-        }
         $where = array();
         if (! empty($this->id)){
             $where[] = $viewName.'.ID'.Service::equals($this->id);
@@ -511,8 +527,22 @@ class Query
             $where[] = 'ROWNUM <= '.$this->limit;
         }
 
+
+        if ($full){
+            $sql = 'SELECT * FROM '.$viewName.' ';
+        }else{
+            $sql = '';
+        }
         if (! empty($where)){
-            $sql .= 'WHERE '.implode( ' AND ', $where );
+            if (! empty($this->defaultSqlCriterion)){
+                $sql .= $this->defaultSqlCriterion.' AND '.implode( ' AND ', $where );
+            }else{
+                $sql .= 'WHERE '.implode( ' AND ', $where );
+            }
+        }else{
+            if (! empty($this->defaultSqlCriterion)){
+                $sql .= $this->defaultSqlCriterion;
+            }
         }
 
         return $sql;

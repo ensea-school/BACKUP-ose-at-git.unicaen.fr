@@ -3,7 +3,6 @@ namespace Import\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Import\Entity\Differentiel\Query;
-use Common\Exception\LogicException;
 
 /**
  *
@@ -12,71 +11,6 @@ use Common\Exception\LogicException;
  */
 class ImportController extends AbstractActionController
 {
-    protected function makeQueries( $tableName=null, $import=false )
-    {
-        /* Liste des tables pour lesquelles les insertions ne doivent pas être scrutées */
-        $noInsertTables = array(
-            'INTERVENANT_PERMANENT',
-            'INTERVENANT_EXTERIEUR',
-            'INTERVENANT',
-        //    'AFFECTATION_RECHERCHE',
-        //    'ADRESSE_INTERVENANT',
-        );
-        /* Liste des tables pour lesquelles les insertions doivent tout de même être scrutées si un intervenant existe déjà dans OSE */
-        $inTable = array(
-            'INTERVENANT_PERMANENT',
-            'INTERVENANT_EXTERIEUR',
-        );
-
-        $sc = $this->getServiceLocator()->get('ImportServiceSchema');
-        /* @var $sc \Import\Service\Schema */
-
-        $tables = $sc->getImportTables();
-        sort($tables);
-
-        if (! empty($tableName)){
-            $tableName = str_replace( ' ', '_', strtoupper($tableName) );
-            if (! in_array($tableName, $tables)){
-                throw new LogicException('La table "'.$tableName.'" n\'est pas correste ou n\'est pas importable.');
-            }
-            // Réduction à la seule table voulue
-            $tables = array( $tableName );
-        }
-
-        $queries = array();
-        foreach( $tables as $table ){
-            $q = new Query($table);
-            if (in_array($table,$noInsertTables)){
-                $q->setAction(array(Query::ACTION_DELETE, Query::ACTION_UPDATE, Query::ACTION_UNDELETE));
-                if (in_array($table, $inTable)){
-                    $q->setInTable('INTERVENANT');
-                }
-            }else{
-                $q->setAction(null);
-            }
-
-            $queries[$table] = $q;
-        }
-
-        if (isset($queries['ADRESSE_INTERVENANT'])){
-            $queries['ADRESSE_INTERVENANT']->addNotNull('INTERVENANT_ID');
-        }
-        if (isset($queries['AFFECTATION_RECHERCHE'])){
-            $queries['AFFECTATION_RECHERCHE']->addNotNull('INTERVENANT_ID');
-        }
-
-        if ($import){
-            if (isset($queries['ELEMENT_PEDAGOGIQUE'])){
-                $queries['ELEMENT_PEDAGOGIQUE']->addNotNull('ETAPE_ID');
-            }
-            if (isset($queries['CHEMIN_PEDAGOGIQUE'])){
-                $queries['CHEMIN_PEDAGOGIQUE']->addNotNull('ELEMENT_PEDAGOGIQUE_ID');
-            }
-        }
-
-        return $queries;
-    }
-
     public function indexAction()
     {
     }
@@ -109,62 +43,59 @@ class ImportController extends AbstractActionController
     {
         $tableName = $this->params()->fromRoute('table');
 
-        $queries = $this->makeQueries($tableName);
-
         $sd = $this->getServiceLocator()->get('ImportServiceDifferentiel');
         /* @var $sd \Import\Service\Differentiel */
 
+        $sc = $this->getServiceLocator()->get('ImportServiceSchema');
+        /* @var $sc \Import\Service\Schema */
+
+        $mviews = $sc->getImportMviews();
+
+        if ($tableName){
+            $tables = [$tableName];
+        }else{
+            $tables = $sc->getImportTables();
+            sort($tables);
+        }
+
         $data = array();
-        foreach( $queries as $table => $query ){
+        foreach( $tables as $table ){
+            $query = new Query($table);
             $query->setLimit(101);
             $data[$table] = $sd->make($query)->fetchAll();
         }
 
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables(compact('data'));
-        if ($this->getRequest()->isXmlHttpRequest()){
-            $viewModel->setTemplate('import/import/show-diff-ajax');
-        }else{
-            $viewModel->setTemplate('import/import/show-diff');
-        }
-        return $viewModel;
+        return compact('data', 'mviews');
     }
 
     public function updateAction()
     {
         $errors = array();
-        $lignes = array();
         $tableName = $this->params()->fromRoute('table');
         $typeMaj = $this->params()->fromPost('type-maj');
 
-        $query = $this->makeQueries($tableName, true);
+        $query = new Query( $tableName );
 
-        if (! isset($query[$tableName])){
-            $errors[] = 'La table "'.$tableName.'" n\'est pas correste ou n\'est pas importable.';
-        }else{
-            $query = $query[$tableName];
+        $sd = $this->getServiceLocator()->get('ImportServiceDifferentiel');
+        /* @var $sd \Import\Service\Differentiel */
 
-            $sd = $this->getServiceLocator()->get('ImportServiceDifferentiel');
-            /* @var $sd \Import\Service\Differentiel */
+        $sq = $this->getServiceLocator()->get('ImportServiceQueryGenerator');
+        /* @var $sq \Import\Service\QueryGenerator */
 
-            $sq = $this->getServiceLocator()->get('ImportServiceQueryGenerator');
-            /* @var $sq \Import\Service\QueryGenerator */
-
-            /* Mise à jour des données et récupération des éventuelles erreurs */
-            try{
-                if ('vue-materialisee' == $typeMaj){
-                    $sq->execMajVM($tableName);
-                }else{
-                    $errors = $errors + $sq->syncTable($tableName);
-                    //$sq->execMaj($query);
-                }
-            }catch(\Exception $e){
-                $errors = array($e->getMessage());
+        /* Mise à jour des données et récupération des éventuelles erreurs */
+        try{
+            if ('vue-materialisee' == $typeMaj){
+                $sq->execMajVM($tableName);
+            }else{
+                $errors = $errors + $sq->syncTable($tableName);
+                //$sq->execMaj($query);
             }
-            $query->setNotNull(array()); // Aucune colonne ne doit être non nulle !!
-            $query->setLimit(101);
-            $lignes = $sd->make($query)->fetchAll();
+        }catch(\Exception $e){
+            $errors = array($e->getMessage());
         }
+        $query->setNotNull(array()); // Aucune colonne ne doit être non nulle !!
+        $query->setLimit(101);
+        $lignes = $sd->make($query)->fetchAll();
 
         return array(
             'lignes' => $lignes,
@@ -175,16 +106,20 @@ class ImportController extends AbstractActionController
 
     public function updateTablesAction()
     {
-        $queries = $this->makeQueries();
+        $sc = $this->getServiceLocator()->get('ImportServiceSchema');
+        /* @var $sc \Import\Service\Schema */
 
         $sq = $this->getServiceLocator()->get('ImportServiceQueryGenerator');
         /* @var $sq \Import\Service\QueryGenerator */
 
+        $tables = $sc->getImportTables();
+        sort($tables);
+
         $message = '';
         try{
-            foreach( $queries as $table => $query ){
+            foreach( $tables as $table ){
                 $message .= '<div>Table "'.$table.'" Mise à jour.</div>';
-                $sq->execMaj($query);
+                $sq->execMaj( new Query($table) );
             }
             $message .= 'Mise à jour des données OSE terminée';
         }catch(\Exception $e){

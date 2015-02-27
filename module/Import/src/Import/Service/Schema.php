@@ -78,7 +78,22 @@ class Schema extends Service
         return $this->query( $sql, array(), 'TABLE_NAME');
     }
 
-
+    /**
+     * Retourne la liste des tables ayant des vues matérialisées
+     *
+     * @return string[]
+     */
+    public function getImportMviews()
+    {
+        $sql = "SELECT mview_name FROM USER_MVIEWS WHERE mview_name LIKE 'MV_%'";
+        $stmt = $this->getEntityManager()->getConnection()->query($sql);
+        $mviews = [];
+        while ($d = $stmt->fetch()){
+            $mvn = substr( $d['MVIEW_NAME'], 3 );
+            $mviews[] = $mvn;
+        }
+        return $mviews;
+    }
 
     /**
      * Retourne les colonnes concernées par l'import pour une table donnée

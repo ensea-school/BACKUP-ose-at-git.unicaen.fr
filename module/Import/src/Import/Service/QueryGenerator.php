@@ -128,7 +128,7 @@ class QueryGenerator extends Service
 
         $errors = [];
         $lastLogId = $this->getLastLogId();
-        $sql = "BEGIN OSE_IMPORT.SET_CURRENT_USER($userId);OSE_IMPORT.".$this->escapeKW('SYNC_'.$tableName)."; END;";
+        $sql = "BEGIN OSE_IMPORT.SET_CURRENT_USER($userId);OSE_IMPORT.".$this->escapeKW('MAJ_'.$tableName)."; END;";
         try{
             $this->getEntityManager()->getConnection()->exec($sql);
         }catch(\Doctrine\DBAL\DBALException $e){
@@ -169,6 +169,23 @@ class QueryGenerator extends Service
             $messages[] = $r['MESSAGE'];
         }
         return $messages;
+    }
+
+    /**
+     * 
+     * @param string $tableName
+     * @return null|string
+     */
+    public function getSqlCriterion( $tableName )
+    {
+        $sql = 'SELECT OSE_IMPORT.GET_SQL_CRITERION('.$this->escape($tableName).',\'\') res FROM DUAL';
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery( $sql );
+
+        if($r = $stmt->fetch()){
+            $res = $r['RES'];
+            if ($res) return $res; else return null;
+        }
+        return null;
     }
 
     /**
@@ -422,39 +439,42 @@ WHERE
     diff_cur r_cursor;
     diff_row V_DIFF_$tableName%ROWTYPE;
   BEGIN
-    sql_query := 'SELECT V_DIFF_$tableName.* FROM V_DIFF_$tableName ' || SQL_CRITERION;
+    sql_query := 'SELECT V_DIFF_$tableName.* FROM V_DIFF_$tableName ' || get_sql_criterion('$tableName',SQL_CRITERION);
     OPEN diff_cur FOR sql_query;
     LOOP
-      FETCH diff_cur INTO diff_row;
-      EXIT WHEN diff_cur%NOTFOUND;
+      FETCH diff_cur INTO diff_row; EXIT WHEN diff_cur%NOTFOUND;
+      BEGIN
 
-      CASE diff_row.import_action
-        WHEN 'insert' THEN
-          INSERT INTO OSE.$tableName
-            ( id, ".$this->formatColQuery($cols).", source_id, source_code, histo_createur_id, histo_modificateur_id )
-          VALUES
-            ( COALESCE(diff_row.id,$tableName"."_ID_SEQ.NEXTVAL), ".$this->formatColQuery($cols,'diff_row.:column').", diff_row.source_id, diff_row.source_code, v_current_user, v_current_user );
+        CASE diff_row.import_action
+          WHEN 'insert' THEN
+            INSERT INTO OSE.$tableName
+              ( id, ".$this->formatColQuery($cols).", source_id, source_code, histo_createur_id, histo_modificateur_id )
+            VALUES
+              ( COALESCE(diff_row.id,$tableName"."_ID_SEQ.NEXTVAL), ".$this->formatColQuery($cols,'diff_row.:column').", diff_row.source_id, diff_row.source_code, v_current_user, v_current_user );
 
-        WHEN 'update' THEN
-          ".$this->formatColQuery(
-                    $cols,
-                    "IF (diff_row.u_:column = 1 AND IN_COLUMN_LIST(':column',IGNORE_UPD_COLS) = 0) THEN UPDATE OSE.$tableName SET :column = diff_row.:column WHERE ID = diff_row.id; END IF;"
-                    ,"\n          "
-            )."
+          WHEN 'update' THEN
+            ".$this->formatColQuery(
+                      $cols,
+                      "IF (diff_row.u_:column = 1 AND IN_COLUMN_LIST(':column',IGNORE_UPD_COLS) = 0) THEN UPDATE OSE.$tableName SET :column = diff_row.:column WHERE ID = diff_row.id; END IF;"
+                      ,"\n          "
+              )."
 
-        WHEN 'delete' THEN
-          UPDATE OSE.$tableName SET histo_destruction = SYSDATE, histo_destructeur_id = v_current_user WHERE ID = diff_row.id;
+          WHEN 'delete' THEN
+            UPDATE OSE.$tableName SET histo_destruction = SYSDATE, histo_destructeur_id = v_current_user WHERE ID = diff_row.id;
 
-        WHEN 'undelete' THEN
-          ".$this->formatColQuery(
-                    $cols,
-                    "IF (diff_row.u_:column = 1 AND IN_COLUMN_LIST(':column',IGNORE_UPD_COLS) = 0) THEN UPDATE OSE.$tableName SET :column = diff_row.:column WHERE ID = diff_row.id; END IF;"
-                    ,"\n          "
-            )."
-          UPDATE OSE.$tableName SET histo_destruction = NULL, histo_destructeur_id = NULL WHERE ID = diff_row.id;
+          WHEN 'undelete' THEN
+            ".$this->formatColQuery(
+                      $cols,
+                      "IF (diff_row.u_:column = 1 AND IN_COLUMN_LIST(':column',IGNORE_UPD_COLS) = 0) THEN UPDATE OSE.$tableName SET :column = diff_row.:column WHERE ID = diff_row.id; END IF;"
+                      ,"\n          "
+              )."
+            UPDATE OSE.$tableName SET histo_destruction = NULL, histo_destructeur_id = NULL WHERE ID = diff_row.id;
 
-      END CASE;
+        END CASE;
 
+      EXCEPTION WHEN OTHERS THEN
+        OSE_IMPORT.SYNC_LOG( SQLERRM, '$tableName', diff_row.source_code );
+      END;
     END LOOP;
     CLOSE diff_cur;
 

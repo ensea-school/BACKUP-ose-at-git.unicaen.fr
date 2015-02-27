@@ -150,6 +150,30 @@ class PaiementController extends AbstractActionController implements ContextProv
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }
 
+    protected function etatPaiementCsv()
+    {
+        /*$csvModel = new \UnicaenApp\View\Model\CsvModel();
+        $csvModel->setHeader([
+            'Intervenant',
+            'N° intervenant'
+        ]);
+        foreach( $entities as $entity ){ /* @var $entity \Application\Entity\Db\ElementPedagogique *
+            $etape = $entity->getEtape();
+            $csvModel->addLine([
+                $etape->getSourceCode(),
+                $etape->getLibelle(),
+                $etape->getNiveauToString(),
+                $entity->getSourceCode(),
+                $entity->getLibelle(),
+                $entity->getPeriode(),
+                $entity->getTauxFoad(),
+                $entity->getRegimesInscription()
+            ]);
+        }
+        $csvModel->setFilename('offre-de-formation.csv');
+        return $csvModel;*/
+    }
+
     public function miseEnPaiementAction()
     {
         $title = 'Mise en paiement';

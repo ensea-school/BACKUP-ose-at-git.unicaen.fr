@@ -194,26 +194,6 @@ class MiseEnPaiement extends AbstractEntityService
                 }
             }
         }
-
-        // entêtes
-        $head = [
-            'annee-libelle'                 => 'Année universitaire',
-
-            'intervenant-code'              => 'Code intervenant',
-            'intervenant-nom'               => 'Identité',
-            'intervenant-numero-insee'      => 'N° INSEE',
-            
-            'centre-cout-code'              => 'Centre de coût / EOTP',
-            'domaine-fonctionnel-libelle'   => 'Domaine fonctionnel',
-
-            'hetd'                          => 'HETD',
-            'hetd-pourc'                    => 'HETD (%)',
-            'hetd-montant'                  => 'Montant',
-            'rem-fc-d714'                   => 'Rém. FC D714.60',
-            'exercice-aa'                   => 'Exercice AA',
-            'exercice-ac'                   => 'Exercice AC',
-        ];
-
         return $data;
     }
 

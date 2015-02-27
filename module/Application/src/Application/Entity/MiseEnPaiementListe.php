@@ -33,7 +33,7 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
     protected $validation = false;
 
     /**
-     * Centre de coût
+     * Centre de coûts
      *
      * @var Db\CentreCout
      */
@@ -384,7 +384,7 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
             throw new LogicException('La validation de la mise en paiement ne correspond pas à celle de la liste');
         }
         if ($this->getCentreCout() instanceof Db\CentreCout && $miseEnPaiement->getCentreCout() !== $this->getCentreCout()){
-            throw new LogicException('Le centre de coût de la mise en paiement ne correspond pas à celui de la liste');
+            throw new LogicException('Le centre de coûts de la mise en paiement ne correspond pas à celui de la liste');
         }
         if ($this->getTypeHeures() instanceof Db\TypeHeures && $miseEnPaiement->getTypeHeures() !== $this->getTypeHeures()){
             throw new LogicException('Le type d\'heures de la mise en paiement ne correspond pas à celui de la liste');

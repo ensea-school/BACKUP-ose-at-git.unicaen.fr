@@ -14,7 +14,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
- * Fieldset de saisie d'un centre de coût pour chacun des types d'heures éligibles
+ * Fieldset de saisie d'un centre de coûts pour chacun des types d'heures éligibles
  * d'un élément pédagogique.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>

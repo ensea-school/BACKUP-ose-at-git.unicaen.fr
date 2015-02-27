@@ -390,7 +390,7 @@ class CcActivite implements HistoriqueAwareInterface
     }
 
     /**
-     * détermine si un type d'heures peut être appliqué à ce type d'activité de centre de coût ou non
+     * détermine si un type d'heures peut être appliqué à ce type d'activité de centre de coûts ou non
      *
      * @param \Application\Entity\Db\TypeHeures $typeHeures
      * @return boolean

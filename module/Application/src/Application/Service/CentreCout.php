@@ -60,7 +60,7 @@ class CentreCout extends AbstractEntityService
             }
         }
         
-        // parcours pour supprimer le niveau 2 lorsque le centre de coût n'a pas d'EOTP fils
+        // parcours pour supprimer le niveau 2 lorsque le centre de coûts n'a pas d'EOTP fils
         foreach ($result as $id => $data) {
             if (isset($data['options']) && count($data['options']) === 1) {
                 $result[$id] = $data['label'];

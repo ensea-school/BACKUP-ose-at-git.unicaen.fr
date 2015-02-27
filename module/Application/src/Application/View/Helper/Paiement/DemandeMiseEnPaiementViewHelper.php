@@ -179,7 +179,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         $out .= '<table '.$this->htmlAttribs($attrs).'>';
         $out .= '<thead><tr><th colspan="3">'.$typeHeures->getLibelleLong().'</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
-        $out .= '<th>Centre de coût</th>';
+        $out .= '<th>Centre de coûts</th>';
         $out .= '<th>&nbsp;</th>';
         $out .= '</tr></thead>';
 

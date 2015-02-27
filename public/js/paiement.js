@@ -176,7 +176,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
 
         this.element.find("select[name='centre-cout']").each( function(){
             if ($(this).val() == ''){
-                that.showError('Centre de coût à définir.');
+                that.showError('Centre de coûts à définir.');
             }
         } );
 
@@ -336,7 +336,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
             }
             outC += '</select>';
         }else{
-            outC = '<div class="alert alert-danger" role="alert">Aucun centre de coût ne correspond. Saisie impossible.</div>';
+            outC = '<div class="alert alert-danger" role="alert">Aucun centre de coûts ne correspond. Saisie impossible.</div>';
         }
 
         return outC;

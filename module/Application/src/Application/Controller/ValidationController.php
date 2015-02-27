@@ -309,9 +309,9 @@ class ValidationController extends AbstractActionController implements ContextPr
                 ->execute();
         $structureEns        = $rule->getStructureIntervention();
         $structureValidation = $rule->getStructureValidation();
-        if (!$rule->isAllowed('read')) {
-            return $this->redirect()->toRoute('home');
-        }
+//        if (!$rule->isAllowed('read')) {
+//            return $this->redirect()->toRoute('home');
+//        }
 
         $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structureEns, $structureValidation);
         

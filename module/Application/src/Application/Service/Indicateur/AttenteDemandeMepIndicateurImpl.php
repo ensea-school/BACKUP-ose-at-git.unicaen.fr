@@ -3,8 +3,10 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Doctrine\ORM\Query\Expr\Join;
+use Application\Entity\Db\VIndicAttenteDemandeMep as VIndicAttenteDemandeMepEntity;
 use Doctrine\ORM\QueryBuilder;
+use Zend\Filter\Callback;
+use Zend\Filter\FilterInterface;
 
 /**
  * 
@@ -26,7 +28,7 @@ class AttenteDemandeMepIndicateurImpl extends AbstractIntervenantResultIndicateu
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/demande-mise-en-paiement', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getIntervenant()->getSourceCode()], 
                 ['force_canonical' => true]);
     }
     
@@ -36,17 +38,19 @@ class AttenteDemandeMepIndicateurImpl extends AbstractIntervenantResultIndicateu
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("int");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicAttenteDemandeMep')->createQueryBuilder("v");
         $qb
+                ->join("v.intervenant", "int")
                 ->join("int.structure", "aff")
-                ->join("int.statut", "si");
-     
+                ->join("int.statut", "si")
+                ->andWhere("v.annee = :annee")
+                ->setParameter("annee", $this->getContextProvider()->getGlobalContext()->getAnnee());
         /**
          * L'intervenant doit posséder des heures complémentaire pouvant faire l'objet d'une (demande de) mise en paiement.
          */
         $qb
-                ->join("int.vIndicAttenteDemandeMep", "v", Join::WITH, "v.annee = :annee")
-                ->setParameter("annee", $this->getContextProvider()->getGlobalContext()->getAnnee());
+                ->addSelect("int, aff, si, str")
+                ->join("v.structure", "str");
         
         if ($this->getStructure()) {
             $qb
@@ -54,8 +58,29 @@ class AttenteDemandeMepIndicateurImpl extends AbstractIntervenantResultIndicateu
                     ->setParameter('structure', $this->getStructure());
         }
         
-        $qb->orderBy("int.nomUsuel, int.prenom");
+        $qb->orderBy("str.libelleCourt, int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
+     * 
+     * @return FilterInterface
+     */
+    public function getResultFormatter()
+    {
+        if (null === $this->resultFormatter) {
+            $this->resultFormatter = new Callback(function(VIndicAttenteDemandeMepEntity $resultItem) { 
+                $out = sprintf("<strong>%s</strong> : %s <small>(n°%s%s)</small>", 
+                        $resultItem->getStructure(), 
+                        $i = $resultItem->getIntervenant(), 
+                        $i->getSourceCode(),
+                        $i->getStatut()->estPermanent() ? ", Affectation: " . $i->getStructure() : null);
+                return $out;
+            });
+        }
+        
+        return $this->resultFormatter;
     }
 }

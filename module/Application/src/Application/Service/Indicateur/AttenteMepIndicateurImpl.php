@@ -3,8 +3,10 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Doctrine\ORM\Query\Expr\Join;
+use Application\Entity\Db\VIndicAttenteMep as VIndicAttenteMepEntity;
 use Doctrine\ORM\QueryBuilder;
+use Zend\Filter\Callback;
+use Zend\Filter\FilterInterface;
 
 /**
  * 
@@ -35,17 +37,19 @@ class AttenteMepIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
      */
     protected function getQueryBuilder()
     {
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("int");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicAttenteMep')->createQueryBuilder("v");
         $qb
+                ->join("v.intervenant", "int")
                 ->join("int.structure", "aff")
-                ->join("int.statut", "si");
-     
+                ->join("int.statut", "si")
+                ->andWhere("v.annee = :annee")
+                ->setParameter("annee", $this->getContextProvider()->getGlobalContext()->getAnnee());
         /**
-         * L'intervenant doit posséder des heures complémentaire ayant fait l'objet d'une *demande* de mise en paiement.
+         * L'intervenant doit posséder des heures complémentaire pouvant faire l'objet d'une (demande de) mise en paiement.
          */
         $qb
-                ->join("int.vIndicAttenteMep", "v", Join::WITH, "v.annee = :annee")
-                ->setParameter("annee", $this->getContextProvider()->getGlobalContext()->getAnnee());
+                ->addSelect("int, aff, si, str")
+                ->join("v.structure", "str");
         
         if ($this->getStructure()) {
             $qb
@@ -53,8 +57,29 @@ class AttenteMepIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
                     ->setParameter('structure', $this->getStructure());
         }
         
-        $qb->orderBy("int.nomUsuel, int.prenom");
+        $qb->orderBy("str.libelleCourt, int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
+     * 
+     * @return FilterInterface
+     */
+    public function getResultFormatter()
+    {
+        if (null === $this->resultFormatter) {
+            $this->resultFormatter = new Callback(function(VIndicAttenteMepEntity $resultItem) { 
+                $out = sprintf("<strong>%s</strong> : %s <small>(n°%s%s)</small>", 
+                        $resultItem->getStructure(), 
+                        $i = $resultItem->getIntervenant(), 
+                        $i->getSourceCode(),
+                        $i->getStatut()->estPermanent() ? ", Affectation: " . $i->getStructure() : null);
+                return $out;
+            });
+        }
+        
+        return $this->resultFormatter;
     }
 }

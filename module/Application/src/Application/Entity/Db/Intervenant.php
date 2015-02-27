@@ -297,12 +297,12 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $miseEnPaiementIntervenantStructure;
 
     /**
-     * @var \Application\Entity\Db\VIndicAttenteDemandeMep
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $vIndicAttenteDemandeMep;
 
     /**
-     * @var \Application\Entity\Db\VIndicAttenteMep
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $vIndicAttenteMep;
     
@@ -320,6 +320,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $this->formuleResultat                      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleIntervenant                   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vIndicAttenteDemandeMep              = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vIndicAttenteMep                     = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1557,7 +1559,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Get vIndicAttenteDemandeMep
      *
-     * @return \Application\Entity\Db\VIndicAttenteDemandeMep
+     * @return VIndicAttenteDemandeMep[]
      */
     public function getVIndicAttenteDemandeMep()
     {
@@ -1567,7 +1569,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Get vIndicAttenteMep
      *
-     * @return \Application\Entity\Db\VIndicAttenteMep
+     * @return VIndicAttenteMep[]
      */
     public function getVIndicAttenteMep()
     {

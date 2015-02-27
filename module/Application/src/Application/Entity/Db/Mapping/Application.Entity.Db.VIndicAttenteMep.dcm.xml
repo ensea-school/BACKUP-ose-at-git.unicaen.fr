@@ -5,7 +5,7 @@
     <field name="totalHeuresMep" type="float" column="TOTAL_HEURES_MEP" nullable="false"/>
     <one-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="vIndicAttenteMep">
       <join-columns>
-        <join-column name="ID" referenced-column-name="ID"/>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
     </one-to-one>
     <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">

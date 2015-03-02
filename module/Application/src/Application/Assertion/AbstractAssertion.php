@@ -235,13 +235,21 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
             // il existe une date de fin de saisie (i.e. ajout, modif, suppression) de service par les intervenants permanents eux-mêmes
             if (in_array($this->privilege, [self::PRIVILEGE_CREATE, self::PRIVILEGE_UPDATE, self::PRIVILEGE_DELETE])) {
                 $dateFin = $context->getDateFinSaisiePermanents();
+                
+                /**
+                 * Vilaine verrue pour prolonger la période de saisie des permanents de l'ESPE
+                 * @todo Virer cette verrue après le 27/03/2015 !!
+                 */
+                if ($this->role->getIntervenant()->getStructure()->getSourceCode() === 'E01') {
+                    $dateFin = new \DateTime('2015-03-27');
+                }
             }
         }
 
         if (null === $dateFin) {
             return false;
         }
-
+                
         $now = new DateTime();
 
         $now->setTime(0, 0, 0);

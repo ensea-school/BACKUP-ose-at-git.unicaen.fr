@@ -109,7 +109,7 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplFcMajorees() > 0): ?>
-                <tr><th style="padding-left:5em">Dont <abbr title="Formation continue">FC Majorées</abbr></th>
+                <tr><th style="padding-left:5em">Dont <abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">rémunération FC D714-60</abbr></th>
                     <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplFcMajorees()) ?></td></tr>
                 <?php endif; ?>
 

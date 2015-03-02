@@ -146,9 +146,9 @@ class ContratController extends AbstractActionController implements ContextProvi
             $query = $qb->getQuery();
             foreach ($query->execute() as $service) { /* @var $service \Application\Entity\Db\Service */
                 $this->em()->detach($service); // INDISPENSABLE si on requête N fois la même entité avec des critères différents
-                if (0 == $service->getVolumeHoraireListe()->getHeures()) {
-                    continue;
-                }
+//                if (0 == $service->getVolumeHoraireListe()->getHeures()) {
+//                    continue;
+//                }
                 $services[$contrat->getId()][$service->getId()] = $service;
                 $service->setTypeVolumehoraire($typeVolumeHoraire); // pour aide de vue! :-(
             }

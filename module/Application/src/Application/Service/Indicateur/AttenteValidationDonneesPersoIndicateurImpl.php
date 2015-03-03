@@ -53,4 +53,14 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIntervenantRes
          
         return $qb;
     }
+    
+    /**
+     * Cet indicateur n'exploite pas la structure.
+     * 
+     * @return null
+     */
+    public function getStructure()
+    {
+        return null;
+    }
 }

@@ -9,7 +9,8 @@ use Common\Constants;
 <ul>
 <?php foreach ($indicateurImpl->getResult() as $r): ?>
     <li><a href="<?php echo $indicateurImpl->getResultUrl($r) ?>"
-           title="Cliquez pour vous rendre à la page concernée"><?php echo $r ?></a></li>
+           title="Cliquez pour vous rendre à la page concernée"
+           ><?php echo $indicateurImpl->getResultFormatter()->filter($r) ?></a></li>
 <?php endforeach; ?>
 </ul>
 

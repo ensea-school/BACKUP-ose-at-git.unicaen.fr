@@ -14,4 +14,15 @@ class AttenteAgrementCRIndicateurImpl extends AttenteAgrementAbstractIndicateurI
 {
     protected $codeTypeAgrement = TypeAgrement::CODE_CONSEIL_RESTREINT;
     protected $codeEtape        = WfEtape::CODE_CONSEIL_RESTREINT;
+    
+    protected function getQueryBuilder()
+    {
+        $qb = parent::getQueryBuilder();
+        
+        $qb
+                ->andWhere("p.structure = :structure")
+                ->setParameter('structure', $this->getStructure());
+        
+        return $qb;
+    }
 }

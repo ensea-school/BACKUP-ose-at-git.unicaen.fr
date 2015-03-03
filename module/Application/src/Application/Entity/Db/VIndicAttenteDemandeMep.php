@@ -37,6 +37,14 @@ class VIndicAttenteDemandeMep
      */
     protected $totalHeuresMep;
 
+    /**
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getIntervenant();
+    }
     
     /**
      * 

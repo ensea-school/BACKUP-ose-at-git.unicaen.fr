@@ -17,8 +17,8 @@ abstract class PlafondHetdDepasseAbstractIndicateurImpl extends AbstractInterven
 {
     use TypeVolumeHoraireAwareTrait;
     
-    protected $singularTitlePattern = "%s intervenant a    un total HETD <em>%s validé</em> qui dépasse le plafond correspondant à son statut";
-    protected $pluralTitlePattern   = "%s intervenants ont un total HETD <em>%s validé</em> qui dépasse le plafond correspondant à leur statut";
+    protected $singularTitlePattern = "%s intervenant a    un total HETD <em>%s saisi</em> qui dépasse le plafond correspondant à son statut";
+    protected $pluralTitlePattern   = "%s intervenants ont un total HETD <em>%s saisi</em> qui dépasse le plafond correspondant à leur statut";
 
     /**
      * 
@@ -58,7 +58,7 @@ abstract class PlafondHetdDepasseAbstractIndicateurImpl extends AbstractInterven
                 ->join("fr.etatVolumeHoraire", "evh", Join::WITH, "evh.code = :codeEvh")
                 ->setParameter("annee", $annee)
                 ->setParameter('codeTvh', $this->getTypeVolumeHoraire()->getCode())
-                ->setParameter("codeEvh", EtatVolumeHoraire::CODE_VALIDE)
+                ->setParameter("codeEvh", EtatVolumeHoraire::CODE_SAISI)
                 ->andWhere("fr.enseignements > si.maximumHETD");
         
         if ($this->getStructure()) {

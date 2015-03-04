@@ -40,7 +40,9 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIntervenant
         $qb
                 ->join("int.contrat", "c")
                 ->join("int.service", "s")
-                ->join("s.volumeHoraire", "vh", Join::WITH, "vh.contrat IS NULL");
+                ->join("s.volumeHoraire", "vh", Join::WITH, "vh.contrat IS NULL")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :codeTvh")
+                ->setParameter('codeTvh', \Application\Entity\Db\TypeVolumeHoraire::CODE_PREVU);
      
         /**
          * NB: pas besoin de consulter la progression dans le workflow car si l'intervenant a déjà un contrat/avenant,

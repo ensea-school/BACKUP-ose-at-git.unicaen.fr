@@ -305,6 +305,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @var \Doctrine\Common\Collections\Collection
      */
     private $vIndicAttenteMep;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $vIndicDepassHcHorsRemuFc;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $vIndicDepassRef;
     
     /**
      * Constructor
@@ -1574,6 +1584,26 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getVIndicAttenteMep()
     {
         return $this->vIndicAttenteMep;
+    }
+
+    /**
+     * Get vIndicDepassHcHorsRemuFc
+     *
+     * @return VIndicDepassHcHorsRemuFc[]
+     */
+    public function getVIndicDepassHcHorsRemuFc()
+    {
+        return $this->vIndicDepassHcHorsRemuFc;
+    }
+
+    /**
+     * Get vIndicDepassRef
+     *
+     * @return VIndicDepassRef[]
+     */
+    public function getVIndicDepassRef()
+    {
+        return $this->vIndicDepassRef;
     }
 
     /**

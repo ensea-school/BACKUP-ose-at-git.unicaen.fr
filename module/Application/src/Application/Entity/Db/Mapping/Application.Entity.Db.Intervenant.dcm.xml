@@ -113,5 +113,7 @@
     <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant" />
     <one-to-many field="vIndicAttenteDemandeMep" target-entity="Application\Entity\Db\VIndicAttenteDemandeMep"   mapped-by="intervenant" />
     <one-to-many field="vIndicAttenteMep"        target-entity="Application\Entity\Db\VIndicAttenteMep"          mapped-by="intervenant" />
+    <one-to-many field="vIndicDepassHcHorsRemuFc" target-entity="Application\Entity\Db\VIndicDepassHcHorsRemuFc" mapped-by="intervenant" />
+    <one-to-many field="vIndicDepassRef"          target-entity="Application\Entity\Db\VIndicDepassRef"          mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

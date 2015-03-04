@@ -2,25 +2,25 @@
 
 namespace Application\Service\Indicateur;
 
-use Application\Entity\Db\VIndicDepassRef;
+use Application\Entity\Db\VIndicDepassHcHorsRemuFc;
 use Application\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Traits\TypeVolumeHoraireAwareTrait;
+use Assetic\Filter\FilterInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Filter\Callback;
-use Zend\Filter\FilterInterface;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl implements TypeVolumeHoraireAwareInterface
+abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl implements TypeVolumeHoraireAwareInterface
 {
     use TypeVolumeHoraireAwareTrait;
     
-    protected $singularTitlePattern = "%s intervenant a    un total Référentiel <em>%s</em> qui dépasse le plafond correspondant à son statut";
-    protected $pluralTitlePattern   = "%s intervenants ont un total Référentiel <em>%s</em> qui dépasse le plafond correspondant à leur statut";
+    protected $singularTitlePattern = "%s intervenant a    un total HC hors rémunération FC D713-60 <em>%s Saisi</em> qui dépasse le plafond correspondant à son statut";
+    protected $pluralTitlePattern   = "%s intervenants ont un total HC hors rémunération FC D713-60 <em>%s Saisi</em> qui dépasse le plafond correspondant à leur statut";
 
     /**
      * 
@@ -43,8 +43,8 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
     public function getResultFormatter()
     {
         if (null === $this->resultFormatter) {
-            $this->resultFormatter = new Callback(function(VIndicDepassRef $resultItem) { 
-                $out = sprintf("<strong>%s</strong> : %s <small>(n°%s, %s%s)</small>, total Référentiel = %s (plafond = %s)", 
+            $this->resultFormatter = new Callback(function(VIndicDepassHcHorsRemuFc $resultItem) { 
+                $out = sprintf("<strong>%s</strong> : %s <small>(n°%s, %s%s)</small>, total HC = %s (plafond = %s)", 
                         $resultItem->getStructure(), 
                         $i = $resultItem->getIntervenant(), 
                         $i->getSourceCode(),
@@ -67,7 +67,7 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
     {
         $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
         
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicDepassRef')->createQueryBuilder("v");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicDepassHcHorsRemuFc')->createQueryBuilder("v");
         $qb
                 ->addSelect("int, aff, si, str")
                 ->join("v.structure", "str")

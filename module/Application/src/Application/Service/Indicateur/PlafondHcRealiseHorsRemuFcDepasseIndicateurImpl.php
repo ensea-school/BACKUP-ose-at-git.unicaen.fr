@@ -7,7 +7,7 @@ namespace Application\Service\Indicateur;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PlafondHetdRealiseDepasseIndicateurImpl extends PlafondHetdDepasseAbstractIndicateurImpl
+class PlafondHcRealiseHorsRemuFcDepasseIndicateurImpl extends PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl
 {
     public function getTypeVolumeHoraire()
     {
@@ -28,7 +28,7 @@ class PlafondHetdRealiseDepasseIndicateurImpl extends PlafondHetdDepasseAbstract
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/services-realises', 
-                ['intervenant' => $result->getSourceCode()], 
+                ['intervenant' => $result->getIntervenant()->getSourceCode()], 
                 ['force_canonical' => true]);
     }
 }

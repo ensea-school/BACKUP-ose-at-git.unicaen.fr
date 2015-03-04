@@ -111,7 +111,7 @@ function AjaxModalListener(dialogDivId)
     this.modalShownListener = function(e) 
     {
         // déplacement du bouton submit dans le footer
-        this.getSubmitButton().prependTo(this.getDialogFooter());
+//        this.getSubmitButton().prependTo(this.getDialogFooter());
     };
     
     /**

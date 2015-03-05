@@ -11,5 +11,25 @@ use Application\Entity\Db\StatutIntervenant;
  */
 class BiatssAffectMemeIntervAutreIndicateurImpl extends IntervAffectMemeIntervAutreAbstractIndicateurImpl
 {
-    protected $codeStatutIntervenant = StatutIntervenant::BIATSS;
+    public function getTypeVolumeHoraire()
+    {
+        if (null === $this->typeVolumeHoraire) {
+            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
+        }
+        
+        return $this->typeVolumeHoraire;
+    }
+    
+    /**
+     * @return StatutIntervenantEntity
+     */
+    protected function getStatutIntervenant()
+    {
+        if (null === $this->statutIntervenant) {
+            $qb = $this->getServiceStatutIntervenant()->finderBySourceCode(StatutIntervenant::BIATSS);
+            $this->statutIntervenant = $qb->getQuery()->getOneOrNullResult();
+        }
+        
+        return $this->statutIntervenant;
+    }
 }

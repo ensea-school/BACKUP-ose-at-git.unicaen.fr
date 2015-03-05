@@ -12,12 +12,12 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class IntervAffectMemeIntervAutreAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
+abstract class IntervAffectAutreIntervMemeAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     use \Application\Traits\TypeVolumeHoraireAwareTrait;
     
-    protected $singularTitlePattern = "%s intervenant  '%s' affecté  dans ma structure (%s) a   des enseignements <em>%ss Validés</em> dans une autre structure";
-    protected $pluralTitlePattern   = "%s intervenants '%s' affectés dans ma structure (%s) ont des enseignements <em>%ss Validés</em> dans une autre structure";
+    protected $singularTitlePattern = "%s intervenant  '%s' affecté  dans une autre structure a   des enseignements <em>%ss Validés</em> dans ma structure (%s)";
+    protected $pluralTitlePattern   = "%s intervenants '%s' affectés dans une autre structure ont des enseignements <em>%ss Validés</em> dans ma structure (%s)";
     protected $statutIntervenant;
     
     /**
@@ -32,8 +32,8 @@ abstract class IntervAffectMemeIntervAutreAbstractIndicateurImpl extends Abstrac
      */
     public function getTitle($appendStructure = true)
     {
-        $this->singularTitlePattern = sprintf($this->singularTitlePattern, '%s', $this->getStatutIntervenant(), $this->getStructure(), $this->getTypeVolumeHoraire());
-        $this->pluralTitlePattern   = sprintf($this->pluralTitlePattern,   '%s', $this->getStatutIntervenant(), $this->getStructure(), $this->getTypeVolumeHoraire());
+        $this->singularTitlePattern = sprintf($this->singularTitlePattern, '%s', $this->getStatutIntervenant(), $this->getTypeVolumeHoraire(), $this->getStructure());
+        $this->pluralTitlePattern   = sprintf($this->pluralTitlePattern,   '%s', $this->getStatutIntervenant(), $this->getTypeVolumeHoraire(), $this->getStructure());
         
         return parent::getTitle(false);
     }
@@ -64,7 +64,7 @@ abstract class IntervAffectMemeIntervAutreAbstractIndicateurImpl extends Abstrac
                 . "JOIN vh.typeVolumeHoraire tvh WITH tvh = :tvh "
                 . "JOIN vh.validation v " // les volumes horaires doivent être validés
                 . "WHERE s.intervenant = int "
-                . "AND s.structureEns <> :structure";  // intervention dans une autre structure que celle spécifiée.
+                . "AND s.structureEns = :structure";  // intervention dans la structure spécifiée.
         
         $qb = parent::getQueryBuilder()
                 ->andWhere("EXISTS ($exists)")
@@ -77,10 +77,10 @@ abstract class IntervAffectMemeIntervAutreAbstractIndicateurImpl extends Abstrac
         }
         
         /**
-         * Intervenants affectés à la structure spécifiée.
+         * Intervenants affectés dans une autre structure que celle spécifiée.
          */
         $qb
-                ->andWhere("int.structure = :structure")
+                ->andWhere("int.structure <> :structure")
                 ->setParameter('structure', $this->getStructure());
         
         $qb->orderBy("int.nomUsuel, int.prenom");

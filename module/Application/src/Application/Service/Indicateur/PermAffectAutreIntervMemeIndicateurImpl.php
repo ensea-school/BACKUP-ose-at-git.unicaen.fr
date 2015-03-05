@@ -2,7 +2,8 @@
 
 namespace Application\Service\Indicateur;
 
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\TypeIntervenant;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -10,23 +11,42 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PermAffectAutreIntervMemeIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
+class PermAffectAutreIntervMemeIndicateurImpl extends IntervAffectAutreIntervMemeAbstractIndicateurImpl
 {
-    protected $singularTitlePattern = "%s permanent affecté dans une autre structure intervient dans ma structure";
-    protected $pluralTitlePattern   = "%s permanents affectés dans une autre structure interviennent dans ma structure";
+    protected $singularTitlePattern = "%s permanent  affecté  dans une autre structure a   des enseignements <em>%ss Validés</em> dans ma structure (%s)";
+    protected $pluralTitlePattern   = "%s permanents affectés dans une autre structure ont des enseignements <em>%ss Validés</em> dans ma structure (%s)";
     
     /**
-     * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
+     * @return TypeVolumeHoraire
+     */
+    public function getTypeVolumeHoraire()
+    {
+        if (null === $this->typeVolumeHoraire) {
+            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
+        }
+        
+        return $this->typeVolumeHoraire;
+    }
+    
+    /**
+     * @return StatutIntervenantEntity
+     */
+    protected function getStatutIntervenant()
+    {
+        return null;
+    }
+    
+    /**
      * 
-     * @param IntervenantEntity $result
+     * @param bool $appendStructure
      * @return string
      */
-    public function getResultUrl($result)
+    public function getTitle($appendStructure = true)
     {
-        return $this->getHelperUrl()->fromRoute(
-                'intervenant/services', 
-                ['intervenant' => $result->getSourceCode()], 
-                ['force_canonical' => true]);
+        $this->singularTitlePattern = sprintf($this->singularTitlePattern, '%s', $this->getTypeVolumeHoraire(), $this->getStructure());
+        $this->pluralTitlePattern   = sprintf($this->pluralTitlePattern,   '%s', $this->getTypeVolumeHoraire(), $this->getStructure());
+        
+        return AbstractIntervenantResultIndicateurImpl::getTitle(false);
     }
     
     /**
@@ -35,28 +55,8 @@ class PermAffectAutreIntervMemeIndicateurImpl extends AbstractIntervenantResultI
     protected function getQueryBuilder()
     {
         $qb = parent::getQueryBuilder()
-                ->join("int.service", "s")
-                ->join("s.volumeHoraire", "vh")
-                ->join("vh.validation", "v"); // les volumes horaires doivent être validés.
-        
-        /**
-         * Les permanents.
-         */
-        $qb->andWhere("ti.code = :type")->setParameter('type', \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT);
-        
-        /**
-         * Intervenants affectés à une autre structure que celle spécifiée.
-         */
-        $qb->andWhere("s.structureAff <> :structure");
-        
-        /**
-         * Intervenant dans la structure spécifiée.
-         */
-        $qb
-                ->andWhere("s.structureEns = :structure")
-                ->setParameter('structure', $this->getStructure());
-        
-        $qb->orderBy("int.nomUsuel, int.prenom");
+                ->andWhere("ti.code = :type")
+                ->setParameter('type', TypeIntervenant::CODE_PERMANENT);
          
         return $qb;
     }

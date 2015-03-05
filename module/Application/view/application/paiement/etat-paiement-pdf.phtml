@@ -15,6 +15,7 @@
     table.etat-paiement th, table.etat-paiement td { border-style: solid; border-width: 1px; }
     .nombre { text-align:right; white-space: nowrap; }
     .signature{ margin-left: 60%; text-align:center; }
+    .tfoot td { font-weight: bold; font-size: 120%; }
 </style>
 <h1><?php echo $title ?></h1>
 <table style="width:100%"><tr>
@@ -22,7 +23,7 @@
     <?php if ($periode): ?><td style="text-align:right">Paye du mois de <?php echo lcfirst($periode->getLibelleLong()) ?></td><?php endif; ?>
 </tr></table>
 
-<?php echo $this->partial('application/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => false]); ?>
+<?php echo $this->partial('application/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => true]); ?>
 
 <?php if (Application\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT == $etat): ?>
 <div class="signature">

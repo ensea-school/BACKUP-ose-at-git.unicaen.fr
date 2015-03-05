@@ -17,19 +17,20 @@ if ($errors) {
 ?>
 
 <script>
-    /**
-     * Installation d'un "bootstrap-select" sur les select.
-     */
     $(function() {
+        /**
+         * Redéfinition de la fonction définie dans "app.js" pour que cela fonctionne avec le "bootstrap-select" installé
+         * sur les select.
+         */
+        EtapeCentreCout.setFormValues = function (typeHeuresCode, value)
+        {
+            $('form#etape-centre-cout select[name$="\\[' + typeHeuresCode + '\\]"]').selectpicker('val', value);
+        }
+        
+        /**
+         * Installation d'un "bootstrap-select" sur les select.
+         */
         $('select.selectpicker').attr('data-live-search', 'true').selectpicker();
     });
 
-    /**
-     * Redéfinition de la fonction définie dans "app.js" pour que cela fonctionne avec le "bootstrap-select" installé
-     * sur les select.
-     */
-    EtapeCentreCout.setFormValues = function (typeHeuresCode, value)
-    {
-        $('form#etape-centre-cout select[name$="\\[' + typeHeuresCode + '\\]"]').selectpicker('val', value);
-    }
 </script>

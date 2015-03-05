@@ -7,19 +7,21 @@ namespace Application\Entity\Db;
  */
 class WfEtape
 {
-    const CODE_DEBUT                    = 'DEBUT';
-    const CODE_DONNEES_PERSO_SAISIE     = 'DONNEES_PERSO_SAISIE';
-    const CODE_DONNEES_PERSO_VALIDATION = 'DONNEES_PERSO_VALIDATION';
-    const CODE_SERVICE_SAISIE           = 'SERVICE_SAISIE';
-    const CODE_SERVICE_VALIDATION       = 'SERVICE_VALIDATION';
-    const CODE_REFERENTIEL_SAISIE       = 'REFERENTIEL_SAISIE';
-    const CODE_REFERENTIEL_VALIDATION   = 'REFERENTIEL_VALIDATION';
-    const CODE_PJ_SAISIE                = 'PJ_SAISIE';
-    const CODE_PJ_VALIDATION            = 'PJ_VALIDATION';
-    const CODE_CONSEIL_RESTREINT        = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
-    const CODE_CONSEIL_ACADEMIQUE       = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
-    const CODE_CONTRAT                  = 'CONTRAT';
-    const CODE_FIN                      = 'FIN';
+    const CODE_DEBUT                          = 'DEBUT';
+    const CODE_DONNEES_PERSO_SAISIE           = 'DONNEES_PERSO_SAISIE';
+    const CODE_SERVICE_SAISIE                 = 'SERVICE_SAISIE';
+    const CODE_PJ_SAISIE                      = 'PJ_SAISIE';
+    const CODE_PJ_VALIDATION                  = 'PJ_VALIDATION';
+    const CODE_DONNEES_PERSO_VALIDATION       = 'DONNEES_PERSO_VALIDATION';
+    const CODE_SERVICE_VALIDATION             = 'SERVICE_VALIDATION';
+    const CODE_REFERENTIEL_VALIDATION         = 'REFERENTIEL_VALIDATION';
+    const CODE_CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément
+    const CODE_CONSEIL_ACADEMIQUE             = TypeAgrement::CODE_CONSEIL_ACADEMIQUE; // NB: c'est texto le code du type d'agrément
+    const CODE_CONTRAT                        = 'CONTRAT';
+    const CODE_SERVICE_SAISIE_REALISE         = 'SERVICE_SAISIE_REALISE';
+    const CODE_SERVICE_VALIDATION_REALISE     = 'SERVICE_VALIDATION_REALISE';
+    const CODE_REFERENTIEL_VALIDATION_REALISE = 'REFERENTIEL_VALIDATION_REALISE';
+    const CODE_FIN                            = 'FIN';
 
     /**
      * @var string

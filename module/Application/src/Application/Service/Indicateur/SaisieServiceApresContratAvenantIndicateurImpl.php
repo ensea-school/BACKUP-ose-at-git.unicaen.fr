@@ -13,8 +13,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    protected $singularTitlePattern = "%s vacataire a saisi des heures d'enseignement supplémentaires depuis l'édition de son contrat ou avenant";
-    protected $pluralTitlePattern   = "%s vacataires ont saisi des heures d'enseignement supplémentaires depuis l'édition de leur contrat ou avenant";
+    protected $singularTitlePattern = "%s vacataire a saisi des heures d'enseignement <em>Prévisionnel</em> supplémentaires depuis l'édition de son contrat ou avenant";
+    protected $pluralTitlePattern   = "%s vacataires ont saisi des heures d'enseignement <em>Prévisionnel</em> supplémentaires depuis l'édition de leur contrat ou avenant";
     
     /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.

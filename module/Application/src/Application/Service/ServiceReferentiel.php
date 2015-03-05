@@ -235,10 +235,11 @@ class ServiceReferentiel extends AbstractEntityService
             $serviceAllreadyExists = null;
             if (! $entity->getId()){ // uniquement pour les nouveaux services!!
                 $serviceAllreadyExists = $this->getRepo()->findOneBy([
-                    'intervenant' => $entity->getIntervenant(),
-                    'structure'   => $entity->getStructure(),
-                    'fonction'    => $entity->getFonction(),
-                    'annee'       => $entity->getAnnee(),
+                    'intervenant'  => $entity->getIntervenant(),
+                    'structure'    => $entity->getStructure(),
+                    'fonction'     => $entity->getFonction(),
+                    'commentaires' => $entity->getCommentaires(),
+                    'annee'        => $entity->getAnnee(),
                 ]);
             }
             if ($serviceAllreadyExists){

@@ -166,6 +166,7 @@ return array(
             'PlafondHcRealiseHorsRemuFcDepasse' => 'Application\\Service\\Indicateur\\PlafondHcRealiseHorsRemuFcDepasseIndicateurImpl',
             'PlafondRefPrevuDepasse'            => 'Application\\Service\\Indicateur\\PlafondRefPrevuDepasseIndicateurImpl',
             'PlafondRefRealiseDepasse'          => 'Application\\Service\\Indicateur\\PlafondRefRealiseDepasseIndicateurImpl',
+            'EnsHisto'                          => 'Application\\Service\\Indicateur\\EnsHistoIndicateurImpl',
         ),
         'factories'    => array(
         ),

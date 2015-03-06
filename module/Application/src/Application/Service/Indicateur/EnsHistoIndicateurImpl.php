@@ -1,0 +1,132 @@
+<?php
+
+namespace Application\Service\Indicateur;
+
+use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\TypeIntervenant;
+use Doctrine\ORM\QueryBuilder;
+use Zend\Filter\Callback;
+use Zend\Filter\FilterInterface;
+
+/**
+ * 
+ *
+ * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ */
+class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
+{
+    use \Application\Traits\TypeVolumeHoraireAwareTrait;
+    
+    protected $singularTitlePattern = "%s intervenant  a   saisi des enseignements dont l'étape ou l'élément pédagogique a disparu";
+    protected $pluralTitlePattern   = "%s intervenants ont saisi des enseignements dont l'étape ou l'élément pédagogique a disparu";
+    
+    public function getTypeVolumeHoraire()
+    {
+        if (null === $this->typeVolumeHoraire) {
+            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
+        }
+        
+        return $this->typeVolumeHoraire;
+    }
+    
+    /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')
+                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
+                ->disableForEntity('Application\Entity\Db\Etape')
+                /*->disableForEntity('Application\Entity\Db\Etablissement')*/;
+    }
+    
+    /**
+     * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
+     * 
+     * @param IntervenantEntity $result
+     * @return string
+     */
+    public function getResultUrl($result)
+    {
+        return $this->getHelperUrl()->fromRoute(
+                'intervenant/services', 
+                ['intervenant' => $result->getSourceCode()], 
+                ['force_canonical' => true]);
+    }
+    
+    /**
+     * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
+     * 
+     * @return FilterInterface
+     */
+    public function getResultFormatter()
+    {
+        if (null === $this->resultFormatter) {
+            $this->resultFormatter = new Callback(function(IntervenantEntity $resultItem) { 
+                $details = [];
+                foreach ($resultItem->getService() as $service) { /* @var $service \Application\Entity\Db\Service */
+                    $ep    = $service->getElementPedagogique();
+                    $etape = $ep->getEtape();
+                    
+                    $details[] = implode(' + ', array_filter([
+                        $etape->getHistoDestruction() ? "Étape &laquo; $etape &raquo;" : null,
+                        $ep->getHistoDestruction()    ? "Élément &laquo; $ep &raquo;"  : null,
+                    ]));
+                }
+                $out = sprintf("%s <small>(n°%s, %s%s)</small> %s", 
+                        $i = $resultItem, 
+                        $i->getSourceCode(),
+                        $i->getStatut(),
+                        $i->getStatut()->estPermanent() ? ", " . $i->getStructure() : null,
+                        "<ul><li>" . implode("</li><li>", $details) . "</li></ul>");
+                return $out;
+            });
+        }
+        
+        return $this->resultFormatter;
+    }
+    
+    /**
+     * @return QueryBuilder
+     */
+    protected function getQueryBuilder()
+    {
+        $this->initFilters();
+        
+        $whereHistos = 
+                "(e.histoDestructeur  IS NOT NULL OR e.histoDestruction  IS NOT NULL) "
+           . "OR (ep.histoDestructeur IS NOT NULL OR ep.histoDestruction IS NOT NULL) ";
+        
+        $qb = parent::getQueryBuilder()
+                ->addSelect("s, se, e, ep")
+                ->join("int.service", "s", \Doctrine\ORM\Query\Expr\Join::WITH, "s.annee = :annee")
+                ->join("s.structureEns", "se")
+                ->join("s.elementPedagogique", "ep")
+                ->join("ep.etape", "e")
+                ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
+                ->andWhere($whereHistos)
+                ->setParameter('tvh', $this->getTypeVolumeHoraire())
+                ->setParameter('annee', $this->getAnnee());
+        
+        if ($this->getStructure()) {
+            /**
+             * Permanents : ceux intervenant ou affectés dans la structure spécifiée.
+             * Vacataires : ceux intervenant dans la structure spécifiée.
+             */
+            $where = "  ti.code = :codeTiPerm AND (se = :structure OR str = :structure) OR "
+                    . " ti.code = :codeTiVac  AND  se = :structure";
+            $qb
+                    ->andWhere($where)
+                    ->setParameter('codeTiPerm', TypeIntervenant::CODE_PERMANENT)
+                    ->setParameter('codeTiVac',  TypeIntervenant::CODE_EXTERIEUR)
+                    ->setParameter('structure', $this->getStructure());
+        }
+        
+        $qb->orderBy("int.nomUsuel, int.prenom");
+        
+        return $qb;
+    }
+}

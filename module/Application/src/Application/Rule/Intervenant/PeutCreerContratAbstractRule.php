@@ -2,8 +2,8 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\VolumeHoraire;
+use Application\Service\TypeVolumeHoraire as TypeVolumeHoraireService;
 use Application\Rule\AbstractRule;
 use Application\Traits\IntervenantAwareTrait;
 use Application\Traits\StructureAwareTrait;
@@ -47,9 +47,20 @@ abstract class PeutCreerContratAbstractRule extends AbstractRule
         }
         $this->serviceValideRule
                 ->setMemePartiellement() // une validation partielle des services suffit
+                ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
                 ->setIntervenant($this->getIntervenant())
                 ->setStructure($this->getStructure());
         
         return $this->serviceValideRule;
+    }
+    
+    /**
+     * Retourne le service TypeVolumeHoraire.
+     *
+     * @return TypeVolumeHoraireService
+     */
+    public function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
     }
 }

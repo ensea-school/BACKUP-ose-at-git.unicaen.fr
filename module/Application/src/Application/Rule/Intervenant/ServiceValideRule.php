@@ -7,12 +7,13 @@ use Application\Entity\Db\TypeValidation;
 use Application\Service\TypeValidation as TypeValidationService;
 use Application\Service\VolumeHoraire as VolumeHoraireService;
 use Application\Traits\StructureAwareTrait;
-use Common\Exception\LogicException;
+use Application\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * Recherche si les enseignements d'un intervenant au sein d'une structure ont été validés.
+ * Recherche si les enseignements d'un intervenant (d'un type d'heures à spécifier) 
+ * au sein d'une structure ont été validés.
  * 
  * Cette règle renvoit :
  * - <code>true</code> si tous les volumes horaires ont été validés ;
@@ -29,6 +30,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ServiceValideRule extends AbstractIntervenantRule
 {
+    use TypeVolumeHoraireAwareTrait;
     use StructureAwareTrait;
         
     const MESSAGE_AUCUNE     = 'messageAucune';
@@ -83,10 +85,13 @@ class ServiceValideRule extends AbstractIntervenantRule
     
     protected function executeForIntervenant()
     {
-        $qb = $this->getServiceVolumeHoraire()->finderByIntervenant($this->getIntervenant());
+        $vhService = $this->getServiceVolumeHoraire();
+        
+        $qb = $vhService->finderByIntervenant($this->getIntervenant());
+        $qb = $vhService->finderByTypeVolumeHoraire($this->getTypeVolumeHoraire(), $qb);
         // NB: pas de filtre sur le type de validation ici, car on veut collecter les VH validés et non validés plus bas...
         if ($this->getStructure()) {
-            $this->getServiceVolumeHoraire()->finderByStructureIntervention($this->getStructure(), $qb);
+            $vhService->finderByStructureIntervention($this->getStructure(), $qb);
         }
         
         $volumesHoraires = $qb->getQuery()->getResult();
@@ -149,8 +154,10 @@ class ServiceValideRule extends AbstractIntervenantRule
                 ->join("i.service", 's')
                 ->join("s.structureEns", "strEns")
                 ->join("s.volumeHoraire", 'vh')
+                ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
                 ->join("vh.validation", "v", Join::WITH, "v.typeValidation = " . $this->getTypeValidationService()->getId())
-                ->join("v.typeValidation", "tv");
+                ->join("v.typeValidation", "tv")
+                ->setParameter('tvh', $this->getTypeVolumeHoraire());
         
         if ($this->getIntervenant()) {
             $qb->andWhere("i = " . $this->getIntervenant()->getId());

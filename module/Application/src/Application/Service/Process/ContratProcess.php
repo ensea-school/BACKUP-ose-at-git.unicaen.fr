@@ -237,9 +237,11 @@ class ContratProcess extends AbstractService
         $qb
                 ->select("s, vh, str, i")
                 ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
                 ->join("s.structureEns", "str")
                 ->join("s.intervenant", "i")
-                ->andWhere($qb->expr()->in("vh", $vhIds));
+                ->andWhere($qb->expr()->in("vh", $vhIds))
+                ->setParameter('tvh', $this->getServiceTypeVolumeHoraire()->getPrevu());
         $servicesDisposPourContrat = $qb->getQuery()->getResult();
         
         return $servicesDisposPourContrat;
@@ -270,9 +272,11 @@ class ContratProcess extends AbstractService
         $qb
                 ->select("s, vh, str, i")
                 ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
                 ->join("s.structureEns", "str")
                 ->join("s.intervenant", "i")
-                ->andWhere($qb->expr()->in("vh", $vhIds));
+                ->andWhere($qb->expr()->in("vh", $vhIds))
+                ->setParameter('tvh', $this->getServiceTypeVolumeHoraire()->getPrevu());
         $servicesDisposPourAvenant = $qb->getQuery()->getResult();
         
         return $servicesDisposPourAvenant;
@@ -340,5 +344,13 @@ class ContratProcess extends AbstractService
     private function getServiceService()
     {
         return $this->getServiceLocator()->get('ApplicationService');
+    }
+    
+    /**
+     * @return \Application\Service\TypeVolumeHoraire
+     */
+    private function getServiceTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
     }
 }

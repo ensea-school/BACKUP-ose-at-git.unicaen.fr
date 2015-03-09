@@ -14,6 +14,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AttenteAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
+    use \Application\Traits\TypeVolumeHoraireAwareTrait;
+    
     protected $singularTitlePattern = "%s vacataire est en attente de son avenant";
     protected $pluralTitlePattern   = "%s vacataires sont en attente de leur avenant";
     
@@ -41,6 +43,7 @@ class AttenteAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurIm
                 ->join("int.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
                 ->join("int.service", "s")
                 ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")->setParameter('tvh', $this->getTypeVolumeHoraire())
                 ->join("vh.validation", "v");
         
         if ($this->getStructure()) {
@@ -73,5 +76,10 @@ class AttenteAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurIm
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    public function getTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
     }
 }

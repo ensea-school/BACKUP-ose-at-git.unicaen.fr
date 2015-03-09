@@ -15,6 +15,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
+    use \Application\Traits\TypeVolumeHoraireAwareTrait;
+    
     protected $singularTitlePattern = "%s vacataire est en attente de son contrat initial";
     protected $pluralTitlePattern   = "%s vacataires sont en attente de leur contrat initial";
     
@@ -42,6 +44,7 @@ class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurIm
                 ->join("int.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
                 ->join("int.service", "s")
                 ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")->setParameter('tvh', $this->getTypeVolumeHoraire())
                 ->join("vh.validation", "v");
         
         /**
@@ -76,15 +79,9 @@ class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurIm
          
         return $qb;
     }
-//    
-//    /**
-//     * Surcharge pour ne renvoyer aucune structure car la contrat initial peut être
-//     * établi par n'importe quelle composante d'enseignement.
-//     * 
-//     * @return null
-//     */
-//    public function getStructure()
-//    {
-//        return null;
-//    }
+    
+    public function getTypeVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
+    }
 }

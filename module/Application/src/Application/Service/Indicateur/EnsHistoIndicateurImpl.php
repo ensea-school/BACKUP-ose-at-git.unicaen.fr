@@ -17,8 +17,8 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     use \Application\Traits\TypeVolumeHoraireAwareTrait;
     
-    protected $singularTitlePattern = "%s intervenant  a   saisi des enseignements dont l'étape ou l'élément pédagogique a disparu";
-    protected $pluralTitlePattern   = "%s intervenants ont saisi des enseignements dont l'étape ou l'élément pédagogique a disparu";
+    protected $singularTitlePattern = "%s intervenant  a   saisi des enseignements dont l'étape, l'élément pédagogique ou la période a disparu";
+    protected $pluralTitlePattern   = "%s intervenants ont saisi des enseignements dont l'étape, l'élément pédagogique ou la période a disparu";
     
     public function getTypeVolumeHoraire()
     {
@@ -39,6 +39,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
         $this->getEntityManager()->getFilters()->enable('historique')
                 ->disableForEntity('Application\Entity\Db\ElementPedagogique')
                 ->disableForEntity('Application\Entity\Db\Etape')
+                ->disableForEntity('Application\Entity\Db\Periode')
                 /*->disableForEntity('Application\Entity\Db\Etablissement')*/;
     }
     
@@ -67,12 +68,14 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
             $this->resultFormatter = new Callback(function(IntervenantEntity $resultItem) { 
                 $details = [];
                 foreach ($resultItem->getService() as $service) { /* @var $service \Application\Entity\Db\Service */
-                    $ep    = $service->getElementPedagogique();
-                    $etape = $ep->getEtape();
+                    $ep      = $service->getElementPedagogique();
+                    $etape   = $ep->getEtape();
+                    $periode = $ep->getPeriode();
                     
                     $details[] = implode(' + ', array_filter([
-                        $etape->getHistoDestruction() ? "Étape &laquo; $etape &raquo;" : null,
-                        $ep->getHistoDestruction()    ? "Élément &laquo; $ep &raquo;"  : null,
+                        $etape->getHistoDestruction()               ? "Étape &laquo; $etape &raquo;" : null,
+                        $ep->getHistoDestruction()                  ? "Élément &laquo; $ep &raquo;"  : null,
+                        $periode && $periode->getHistoDestruction() ? "Période &laquo; $periode &raquo;"  : null,
                     ]));
                 }
                 $out = sprintf("%s <small>(n°%s, %s%s)</small> %s", 
@@ -97,7 +100,8 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
         
         $whereHistos = 
                 "(e.histoDestructeur  IS NOT NULL OR e.histoDestruction  IS NOT NULL) "
-           . "OR (ep.histoDestructeur IS NOT NULL OR ep.histoDestruction IS NOT NULL) ";
+           . "OR (ep.histoDestructeur IS NOT NULL OR ep.histoDestruction IS NOT NULL) "
+           . "OR (p.id IS NOT NULL AND (p.histoDestructeur  IS NOT NULL OR p.histoDestruction  IS NOT NULL)) ";
         
         $qb = parent::getQueryBuilder()
                 ->addSelect("s, se, e, ep")
@@ -105,6 +109,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
                 ->join("s.structureEns", "se")
                 ->join("s.elementPedagogique", "ep")
                 ->join("ep.etape", "e")
+                ->leftJoin("ep.periode", "p")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
                 ->andWhere($whereHistos)
@@ -126,6 +131,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
         }
         
         $qb->orderBy("int.nomUsuel, int.prenom");
+//        print_r($qb->getQuery()->getSQL());
         
         return $qb;
     }

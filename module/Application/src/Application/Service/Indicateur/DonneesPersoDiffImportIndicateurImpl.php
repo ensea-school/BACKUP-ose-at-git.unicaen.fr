@@ -44,19 +44,17 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIntervenantResultIndi
                         "vidd.nomUsuelDossier IS NOT NULL OR " . 
                         "vidd.prenomDossier IS NOT NULL");
         
+        /**
+         * L'intervenant doit intervenir dans la structure spécifiée éventuelle.
+         */
+        if ($this->getStructure()) {
+            $qb
+                    ->join("int.service", "s", \Doctrine\ORM\Query\Expr\Join::WITH, "s.structureEns = :structure")
+                    ->setParameter('structure', $this->getStructure());
+        }
+        
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Surcharge pour ne renvoyer aucune structure car la contrat initial peut être
-     * établi par n'importe quelle composante d'enseignement.
-     * 
-     * @return null
-     */
-    public function getStructure()
-    {
-        return null;
     }
 }

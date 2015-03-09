@@ -14,15 +14,4 @@ class AttenteAgrementCAIndicateurImpl extends AttenteAgrementAbstractIndicateurI
 {
     protected $codeTypeAgrement = TypeAgrement::CODE_CONSEIL_ACADEMIQUE;
     protected $codeEtape        = WfEtape::CODE_CONSEIL_ACADEMIQUE;
-    
-    /**
-     * Surcharge pour ne renvoyer aucune structure car l'agrément CA
-     * n'est pas donné par une composante d'enseignement en particulier.
-     * 
-     * @return null
-     */
-    public function getStructure()
-    {
-        return null;
-    }
 }

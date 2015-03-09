@@ -19,10 +19,14 @@ class AttenteAgrementCRIndicateurImpl extends AttenteAgrementAbstractIndicateurI
     {
         $qb = parent::getQueryBuilder();
         
-        $qb
-                ->andWhere("p.structure = :structure")
-                ->setParameter('structure', $this->getStructure());
-        
+        /**
+         * L'étape "Agrément du CR" du WF est déclinée par structure d'intervention dans la progression.
+         */
+        if ($this->getStructure()) {
+            $qb
+                    ->andWhere("p.structure = :structure")
+                    ->setParameter('structure', $this->getStructure());
+        }
         return $qb;
     }
 }

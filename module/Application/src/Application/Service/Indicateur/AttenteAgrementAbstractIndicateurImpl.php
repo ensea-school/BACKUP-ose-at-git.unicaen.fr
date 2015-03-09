@@ -64,6 +64,18 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIntervenant
                 ->join("p.etape", "e", Join::WITH, "e.code = :codeEtape")
                 ->setParameter('codeEtape', $this->codeEtape);
         
+        /**
+         * L'intervenant doit intervenir dans la structure spécifiée éventuelle.
+         */
+        if ($this->getStructure()) {
+            $qb
+                    ->join("int.service", "s", Join::WITH, "s.structureEns = :structure")
+                    ->join("s.volumeHoraire", "vh")
+                    ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                    ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
+                    ->setParameter('structure', $this->getStructure());
+        }
+        
         $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;

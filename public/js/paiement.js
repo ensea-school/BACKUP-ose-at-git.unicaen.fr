@@ -236,7 +236,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
                 'validation'    : null
             };
 
-            var mepParams               = this.params['mep-defaults'];
+            var mepParams               = jQuery.extend({}, this.params['mep-defaults']);
             mepParams['heures']         = this.params['demandes-mep'][id]['heures'];
             mepParams['centre-cout-id'] = this.params['demandes-mep'][id]['centre-cout-id'];
             this.demandeMiseEnPaiement.changeInsert( id, mepParams );

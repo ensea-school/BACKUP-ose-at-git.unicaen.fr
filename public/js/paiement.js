@@ -387,7 +387,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
     this.onHeuresChange = function( element )
     {
         var miseEnPaiementId = element.parents('.mise-en-paiement').attr('id');
-        var heures           = parseFloat( element.val() == '' ? 0 : element.val() );
+        var heures           = parseFloat( element.val() == '' ? 0 : element.val().replace(",", ".") );
 
         this.demandeMiseEnPaiement.changeUpdate( miseEnPaiementId, 'heures', heures );
         if (heures > 0){

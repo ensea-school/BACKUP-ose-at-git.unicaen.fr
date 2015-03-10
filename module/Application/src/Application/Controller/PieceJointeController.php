@@ -107,8 +107,12 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $messages = [];
         
         // recherche si toutes les PJ obligatoires ont été fournies
-        $rule = $this->getRulePiecesJointesFournies();
-        $complet = $rule->execute();
+//        $rule = $this->getRulePiecesJointesFournies();
+        $rule = clone $this->getServiceLocator()->get('DbFunctionRule');
+        $rule
+                ->setFunction("ose_workflow.pj_oblig_fournies")
+                ->setIntervenant($this->getIntervenant());
+        $complet = (int) $rule->execute();
         if ($complet) {
             $messages['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
         }
@@ -117,19 +121,30 @@ class PieceJointeController extends AbstractActionController implements ContextP
         }
         
         // recherche si des PJ restent à valider
-        $validations = [];
-        $typesPieceJointeAttendus = $this->getPieceJointeProcess()->getTypesPieceJointeAttendus();
-        $piecesJointesFournies    = $this->getPieceJointeProcess()->getPiecesJointesFournies();
-        foreach ($piecesJointesFournies as $pj) { /* @var $pj PieceJointe */
-            if ($pj->getValidation()) {
-                $validations[] = $pj->getValidation();
-            }
-        }
-        if (count($validations) < count($piecesJointesFournies)) {
-            $messages['danger'][] = "Elles doivent encore être validées par votre composante.";
-        }
-        elseif (count($typesPieceJointeAttendus) === count($validations)) {
+//        $validations = [];
+//        $typesPieceJointeAttendus = $this->getPieceJointeProcess()->getTypesPieceJointeAttendus();
+//        $piecesJointesFournies    = $this->getPieceJointeProcess()->getPiecesJointesFournies();
+//        foreach ($piecesJointesFournies as $pj) { /* @var $pj PieceJointe */
+//            if ($pj->getValidation()) {
+//                $validations[] = $pj->getValidation();
+//            }
+//        }
+//        if (count($validations) < count($piecesJointesFournies)) {
+//            $messages['danger'][] = "Elles doivent encore être validées par votre composante.";
+//        }
+//        elseif (count($typesPieceJointeAttendus) === count($validations)) {
+//            $messages['success'][] = "Toutes les pièces justificatives fournies ont été validées par votre composante.";
+//        }
+        $rule = clone $this->getServiceLocator()->get('DbFunctionRule');
+        $rule
+                ->setFunction("ose_workflow.pj_oblig_validees")
+                ->setIntervenant($this->getIntervenant());
+        $complet = (int) $rule->execute();
+        if ($complet) {
             $messages['success'][] = "Toutes les pièces justificatives fournies ont été validées par votre composante.";
+        }
+        else {
+            $messages['danger'][] = "Elles doivent encore être validées par votre composante.";
         }
         
         $this->view->setVariables(array(

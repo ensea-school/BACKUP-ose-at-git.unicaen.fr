@@ -31,10 +31,14 @@ class RoleProviderFactory implements FactoryInterface
         }
 
         $providerConfig = $config['role_providers']['ApplicationRoleProvider'];
+        $contextProvider    = $serviceLocator->get('ApplicationContextProvider');
 
         $roleProvider = new RoleProvider( $providerConfig );
-        $roleProvider->setEntityManager($em);
-        $roleProvider->init();
+        $roleProvider
+                ->setEntityManager($em)
+                ->setStructureSelectionnee($contextProvider->getGlobalContext()->getStructure())
+                ->init();
+        
         return $roleProvider;
     }
 }

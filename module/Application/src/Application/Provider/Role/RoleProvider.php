@@ -2,10 +2,16 @@
 
 namespace Application\Provider\Role;
 
+use Application\Acl\AdministrateurRole;
+use Application\Entity\Db\Role;
+use Application\Entity\Db\Structure as StructureEntity;
+use Application\Interfaces\StructureAwareInterface;
 use BjyAuthorize\Provider\Role\ProviderInterface;
+use Exception;
+use UnicaenApp\Exception\LogicException;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Application\Interfaces\StructureAwareInterface;
+use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
  * Fournisseur des rôles utilisateurs de l'application :
@@ -42,7 +48,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     }
 
     /**
-     * @return \Zend\Permissions\Acl\Role\RoleInterface[]
+     * @return RoleInterface[]
      */
     public function getRoles()
     {
@@ -52,10 +58,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             // Chargement des rôles de base
             foreach( $this->config as $classname ){
                 if (class_exists( $classname )){
-                    $role = new $classname; /* @var $role \Zend\Permissions\Acl\Role\RoleInterface */
+                    $role = new $classname; /* @var $role RoleInterface */
                     $this->roles[$role->getRoleId()] = $role;
                 }else{
-                    throw new \UnicaenApp\Exception\LogicException('La classe "'.$classname.'" déclarée dans la configuration du fournisseur de rôles n\'a pas été trouvée.');
+                    throw new LogicException('La classe "'.$classname.'" déclarée dans la configuration du fournisseur de rôles n\'a pas été trouvée.');
                 }
             }
 
@@ -66,10 +72,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 ->distinct()
                 ->join("r.type", "tr")
                 ->leftJoin("r.structure", "s");
-            foreach ($qb->getQuery()->getResult() as $role) { /* @var $role \Application\Entity\Db\Role */
+            foreach ($qb->getQuery()->getResult() as $role) { /* @var $role Role */
                 $roleId = $role->getType()->getCode();
                 if (! isset($this->roles[$roleId])){
-                    throw new \Exception('Le rôle "'.$roleId.'" est inconnu.');
+                    throw new Exception('Le rôle "'.$roleId.'" est inconnu.');
                 }
                 $classname = get_class($this->roles[$roleId]);
                 if ($this->roles[$roleId] instanceof StructureAwareInterface && $role->getStructure()){
@@ -80,8 +86,40 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     $this->roles[$roleId] = new $classname($roleId);
                 }
                 $this->roles[$roleId]->setTypeRole( $role->getType() );
+                
+                $this->injectSelectedStructureInRole($this->roles[$roleId]);
             }
         }
+        
         return $this->roles;
+    }
+
+    /**
+     * Inject la structure sélectionnée en session dans le rôle Administrateur.
+     * 
+     * @param Role $role
+     * @return self
+     */
+    public function injectSelectedStructureInRole($role)
+    {
+        if (! $role instanceof AdministrateurRole) {
+            return $this;
+        }
+            
+        $role->setStructure($this->structureSelectionnee);
+        
+        return $this;
+    }
+
+    /**
+     * @var StructureEntity
+     */
+    protected $structureSelectionnee;
+    
+    public function setStructureSelectionnee(StructureEntity $structureSelectionnee = null)
+    {
+        $this->structureSelectionnee = $structureSelectionnee;
+        
+        return $this;
     }
 }

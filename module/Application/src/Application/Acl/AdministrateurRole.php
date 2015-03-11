@@ -2,7 +2,8 @@
 
 namespace Application\Acl;
 
-use UnicaenAuth\Acl\NamedRole;
+use Application\Interfaces\StructureAwareInterface;
+use Application\Traits\StructureAwareTrait;
 use Application\Interfaces\PersonnelAwareInterface;
 use Application\Traits\PersonnelAwareTrait;
 
@@ -11,8 +12,9 @@ use Application\Traits\PersonnelAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class AdministrateurRole extends Role implements PersonnelAwareInterface
+class AdministrateurRole extends Role implements /*StructureAwareInterface,*/ PersonnelAwareInterface
 {
+    use StructureAwareTrait;
     use PersonnelAwareTrait;
 
     const ROLE_ID = 'administrateur';
@@ -20,5 +22,15 @@ class AdministrateurRole extends Role implements PersonnelAwareInterface
     public function __construct($id = self::ROLE_ID, $parent = Role::ROLE_ID, $name = 'Administrateur', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
+    }
+
+    /**
+     * Retourne la représentation littérale de cet objet.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getRoleName() . (($s = $this->getStructure()) ? " ($s)" : null);
     }
 }

@@ -127,15 +127,19 @@ class Structure extends AbstractEntityService
     }
 
     /**
-     * Retourne la liste des structures pour lesquelles le rôle est autorisé à officier
+     * Si un rôle est spécifié, retourne la liste des structures pour lesquelles ce rôle est autorisé à officier.
+     * Si <code>true</code> est spécifié, retourne la liste des structures associées à des rôles.
      *
-     * @param \Application\Acl\Role $role
+     * @param \Application\Acl\Role|true $role
      */
     public function finderByRole( $role, QueryBuilder $qb=null, $alias=null)
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        if ($role instanceof \Application\Interfaces\StructureAwareInterface){
+        if (true === $role) {
+            $qb->andWhere("EXISTS ( SELECT r from Application\Entity\Db\Role r WHERE r.structure = $alias)");
+        }
+        elseif ($role instanceof \Application\Interfaces\StructureAwareInterface) {
             $this->finderByStructure( $role->getStructure(), $qb, $alias );
         }
         

@@ -222,6 +222,9 @@ $main =  array(
         ),
     ),
     'view_helpers' => array(
+        'factories' => array(
+            'userProfileSelectRadioItem' => 'Application\View\Helper\UserProfileSelectRadioItemFactory',
+        ),
         'invokables' => array(
             'historiqueDl' => 'Application\View\Helper\HistoriqueDl',
             'validationDl' => 'Application\View\Helper\ValidationDl',
@@ -249,6 +252,7 @@ $main =  array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index'   => 'Application\Controller\IndexController',
+            'UnicaenAuth\Controller\Utilisateur' => 'Application\Controller\UtilisateurController',
         ),
     ),
     'view_manager' => array(

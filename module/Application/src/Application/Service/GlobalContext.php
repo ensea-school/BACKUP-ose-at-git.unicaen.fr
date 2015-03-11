@@ -2,11 +2,16 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Annee;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
 use Application\Entity\Db\Personnel as PersonnelEntity;
+use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Utilisateur as UtilisateurEntity;
+use DateTime;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Session\Container;
 
 /**
  * Classe regroupant les données globales de fonctionnement de l'application.
@@ -15,6 +20,10 @@ use Application\Entity\Db\Utilisateur as UtilisateurEntity;
  */
 class GlobalContext
 {
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $sl;
     
     /**
      * @var UtilisateurEntity
@@ -48,9 +57,19 @@ class GlobalContext
     
     /**
      *
-     * @var \DateTime
+     * @var DateTime
      */
     protected $dateFinSaisiePermanents;
+    
+    /**
+     * Constructeur.
+     * 
+     * @param ServiceLocatorInterface $sl
+     */
+    public function __construct(ServiceLocatorInterface $sl)
+    {
+        $this->sl = $sl;
+    }
     
     /**
      * @var EntityEtablissement
@@ -148,10 +167,59 @@ class GlobalContext
         return $this;
     }
 
-    function setDateFinSaisiePermanents(\DateTime $dateFinSaisiePermanents)
+    function setDateFinSaisiePermanents(DateTime $dateFinSaisiePermanents)
     {
         $this->dateFinSaisiePermanents = $dateFinSaisiePermanents;
         return $this;
     }
+    
+    /**
+     * Retourne l'éventuelle structure sélectionnée mémorisée en session.
+     * 
+     * @return StructureEntity|null
+     */
+    function getStructure()
+    {
+        $structure = $this->getSessionContainer()->structure;
+        
+        if ($structure instanceof StructureEntity) {
+            return $structure;
+        }
+        if ($structure) {
+            $structure = $this->sl->get('ApplicationStructure')->get($structure);
+        }
+        
+        return $structure;
+    }
 
+    /**
+     * Spécifie l'éventuelle structure sélectionnée à mémoriser en session.
+     * 
+     * @param StructureEntity|int|null $structure
+     */
+    function setStructure($structure)
+    {
+        if ($structure instanceof StructureEntity) {
+            $structure = $structure->getId();
+        }
+        
+        $this->getSessionContainer()->structure = $structure;
+    }
+    
+    /**
+     * @var Container
+     */
+    protected $sessionContainer;
+    
+    /**
+     * @return Container
+     */
+    function getSessionContainer()
+    {
+        if (null === $this->sessionContainer) {
+            $this->sessionContainer = new Container(__CLASS__);
+        }
+        
+        return $this->sessionContainer;
+    }
 }

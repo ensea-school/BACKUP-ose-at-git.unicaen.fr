@@ -71,8 +71,10 @@ class ContextProvider extends AbstractService
                 }
             }
 
-            
-            $this->globalContext = new GlobalContext();
+            /**
+             * @todo Faire du GlobalContext un service !
+             */
+            $this->globalContext = new GlobalContext($this->getServiceLocator());
             $this->globalContext
                     ->setUtilisateur($utilisateur)
                     ->setIntervenant($intervenant)

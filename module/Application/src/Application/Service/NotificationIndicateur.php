@@ -118,9 +118,10 @@ class NotificationIndicateur extends AbstractEntityService
         $now->setTime($now->format('H'), 0, 0); // raz minutes et secondes
             
         $qb = $this->getRepo()->createQueryBuilder("ni")
-                ->select("ni, p, i")
+                ->select("ni, p, i, s")
                 ->join("ni.personnel", "p")
-                ->join("ni.indicateur", "i")
+                ->join("ni.indicateur", "i", \Doctrine\ORM\Query\Expr\Join::WITH, "i.enabled = 1")
+                ->leftJoin("ni.structure", "s")
                 ->orderBy("i.ordre");
         
         if (!$force) {

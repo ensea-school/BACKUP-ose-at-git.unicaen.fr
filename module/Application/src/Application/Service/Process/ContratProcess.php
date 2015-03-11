@@ -321,7 +321,7 @@ class ContratProcess extends AbstractService
     {
         if (null === $this->structure) {
             $role = $this->getContextProvider()->getSelectedIdentityRole();
-            if (!$role instanceof ComposanteRole) {
+            if (!$role instanceof \Application\Interfaces\StructureAwareInterface) {
                 throw new LogicException("Rôle courant inattendu.");
             }
             $this->structure = $role->getStructure();

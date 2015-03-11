@@ -84,70 +84,70 @@ class ValidationController extends AbstractActionController implements ContextPr
                 ->disableForEntity('Application\Entity\Db\Etape')
                 ->disableForEntity('Application\Entity\Db\ElementPedagogique');
     }
-    
-    /**
-     * 
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function voirAction()
-    {
-        $role                 = $this->getContextProvider()->getSelectedIdentityRole();
-        $this->validation     = $this->context()->mandatory()->validationFromRoute(); /* @var $validation \Application\Entity\Db\Validation */
-        $this->intervenant    = $this->validation->getIntervenant();
-        $this->title          = "Détails d'une validation";
-        
-        // enseignements concernés
-        $service = $this->getServiceService();
-        $qb = $service->finderByIntervenant($this->intervenant);
-        $qb = $service->finderByValidation($this->validation, $qb);
-        $services = $service->getList($qb);
-        
-        $this->view = new \Zend\View\Model\ViewModel(array(
-            'validation' => $this->validation,
-            'services'   => $services,
-            'role'       => $role,
-            'title'      => $this->title,
-        ));
-        $this->view->setTemplate('application/validation/voir');
-        
-        return $this->view;
-    }
-    
-    /**
-     * 
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function listeAction()
-    {
-        $role                 = $this->getContextProvider()->getSelectedIdentityRole();
-        $typeValidation       = $this->context()->mandatory()->typeValidationFromRoute();
-        $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute();
-        $this->title          = (string) $typeValidation;
-        
-        $qb = $this->getServiceValidation()->finderByType($typeValidation);
-        $qb = $this->getServiceValidation()->finderByIntervenant($this->intervenant, $qb);
-        $qb = $this->getServiceValidation()->finderByStructureIntervention($role->getStructure(), $qb);
-        $this->validation = $qb->getQuery()->getResult();
-        
-        // enseignements concernés par chaque validation
-        $services = [];
-        foreach ($this->validation as $validation) { /* @var $validation \Application\Entity\Db\Validation */
-            $qb = $this->getServiceService()->finderByIntervenant($this->intervenant);
-            $qb = $this->getServiceService()->finderByValidation($validation, $qb);
-            $services[$validation->getId()] = $this->getServiceService()->getList($qb);
-        }
-        
-        $this->view = new \Zend\View\Model\ViewModel(array(
-            'intervenant' => $this->intervenant,
-            'validations' => $this->validation,
-            'services'    => $services,
-            'role'        => $role,
-            'title'       => $this->title,
-        ));
-        $this->view->setTemplate('application/validation/liste');
-        
-        return $this->view;
-    }
+//    
+//    /**
+//     * 
+//     * @return \Zend\View\Model\ViewModel
+//     */
+//    public function voirAction()
+//    {
+//        $role                 = $this->getContextProvider()->getSelectedIdentityRole();
+//        $this->validation     = $this->context()->mandatory()->validationFromRoute(); /* @var $validation \Application\Entity\Db\Validation */
+//        $this->intervenant    = $this->validation->getIntervenant();
+//        $this->title          = "Détails d'une validation";
+//        
+//        // enseignements concernés
+//        $service = $this->getServiceService();
+//        $qb = $service->finderByIntervenant($this->intervenant);
+//        $qb = $service->finderByValidation($this->validation, $qb);
+//        $services = $service->getList($qb);
+//        
+//        $this->view = new \Zend\View\Model\ViewModel(array(
+//            'validation' => $this->validation,
+//            'services'   => $services,
+//            'role'       => $role,
+//            'title'      => $this->title,
+//        ));
+//        $this->view->setTemplate('application/validation/voir');
+//        
+//        return $this->view;
+//    }
+//    
+//    /**
+//     * 
+//     * @return \Zend\View\Model\ViewModel
+//     */
+//    public function listeAction()
+//    {
+//        $role                 = $this->getContextProvider()->getSelectedIdentityRole();
+//        $typeValidation       = $this->context()->mandatory()->typeValidationFromRoute();
+//        $this->intervenant    = $this->context()->mandatory()->intervenantFromRoute();
+//        $this->title          = (string) $typeValidation;
+//        
+//        $qb = $this->getServiceValidation()->finderByType($typeValidation);
+//        $qb = $this->getServiceValidation()->finderByIntervenant($this->intervenant, $qb);
+//        $qb = $this->getServiceValidation()->finderByStructureIntervention($role->getStructure(), $qb);
+//        $this->validation = $qb->getQuery()->getResult();
+//        
+//        // enseignements concernés par chaque validation
+//        $services = [];
+//        foreach ($this->validation as $validation) { /* @var $validation \Application\Entity\Db\Validation */
+//            $qb = $this->getServiceService()->finderByIntervenant($this->intervenant);
+//            $qb = $this->getServiceService()->finderByValidation($validation, $qb);
+//            $services[$validation->getId()] = $this->getServiceService()->getList($qb);
+//        }
+//        
+//        $this->view = new \Zend\View\Model\ViewModel(array(
+//            'intervenant' => $this->intervenant,
+//            'validations' => $this->validation,
+//            'services'    => $services,
+//            'role'        => $role,
+//            'title'       => $this->title,
+//        ));
+//        $this->view->setTemplate('application/validation/liste');
+//        
+//        return $this->view;
+//    }
     
     /**
      * 
@@ -236,7 +236,7 @@ class ValidationController extends AbstractActionController implements ContextPr
         if (!$this->validation) {
             $this->validation = $serviceValidation->newEntity($typeValidation);
             $this->validation->setIntervenant($this->intervenant);
-            if ($role instanceof ComposanteRole) {
+            if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
                 $this->validation->setStructure($role->getStructure());
             }
         }

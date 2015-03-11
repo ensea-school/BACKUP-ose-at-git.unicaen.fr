@@ -3,6 +3,7 @@
 namespace Application\Rule\Validation;
 
 use Application\Acl\ComposanteRole;
+use Application\Acl\AdministrateurRole;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Workflow\Workflow;
 
@@ -20,7 +21,7 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
      * Détermine la composante d'intervention (éventuelle) à prendre en compte
      * dans la recherche des enseignements à valider ou déjà validés.
      * 
-     * @return ValidationReferentielRule
+     * @return self
      */
     protected function determineStructureIntervention()
     {
@@ -29,13 +30,13 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
          */
         if (TypeVolumeHoraire::CODE_PREVU === $this->typeVolumeHoraire->getCode()) {
             /**
-             * Intervenant permanent : peu importe la structure sur laquelle est effectué le référentiel.
+             * Intervenant permanent : peu importe la structure d'intervention.
              */
             if ($this->intervenant->estPermanent()) {
                 $this->structureIntervention = null;
             }
             /**
-             * Intervenant vacataire : la structure sur laquelle est effectué le référentiel doit correspondre à la 
+             * Intervenant vacataire : la structure d'intervention doit correspondre à la 
              * structure du rôle (i.e. structure de responsabilité).
              */
             else {
@@ -47,7 +48,7 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
          */
         elseif (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
             /**
-             * La structure sur laquelle est effectué le référentiel doit correspondre à la 
+             * La structure d'intervention doit correspondre à la 
              * structure du rôle (i.e. structure de responsabilité).
              */
             $this->structureIntervention = $this->structureRole;
@@ -65,7 +66,7 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
     /**
      * Détermine la structure auteure de la validation à créer ou des validations recherchées.
      * 
-     * @return ValidationReferentielRule
+     * @return self
      */
     protected function determineStructureValidation()
     {
@@ -127,7 +128,10 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->role instanceof ComposanteRole) {
+        if (
+                $this->role instanceof ComposanteRole 
+                || $this->role instanceof AdministrateurRole && $this->structureRole
+        ) {
             if ('read' === $privilege) {
                 return true; // les composantes voient tout
             }
@@ -156,7 +160,7 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
         }
 
         /*********************************************************
-         *                      Autres rôles
+         *                      Autres cas
          *********************************************************/
         if ('read' === $privilege) {
             return true;

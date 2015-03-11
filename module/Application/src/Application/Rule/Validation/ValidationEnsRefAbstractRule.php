@@ -127,14 +127,11 @@ abstract class ValidationEnsRefAbstractRule implements WorkflowIntervenantAwareI
      */
     protected function determineStructureRole()
     {
-        if ($this->role instanceof ComposanteRole) {
+        if ($this->role instanceof \Application\Interfaces\StructureAwareInterface) {
             $this->structureRole = $this->role->getStructure();
         }
-        elseif ($this->role instanceof IntervenantRole) {
-            $this->structureRole = null;
-        }
         else {
-            throw new LogicException("Cas inattendu.");
+            $this->structureRole = null;
         }
         
         return $this;

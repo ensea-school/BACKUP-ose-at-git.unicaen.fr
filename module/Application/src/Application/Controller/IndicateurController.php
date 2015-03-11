@@ -40,6 +40,9 @@ class IndicateurController extends AbstractActionController implements ContextPr
         $personnel       = $this->getContextProvider()->getGlobalContext()->getPersonnel();
         
         $qb = $serviceNotif->finderByPersonnel($personnel);
+        if ($this->getStructure()) {
+            $qb = $serviceNotif->finderByStructure($this->getStructure(), $qb);
+        }
         $abonnements = $abonnementsInfos = [];
         foreach ($qb->getQuery()->getResult() as $notificationIndicateur) {
             $indicateur = $notificationIndicateur->getIndicateur();
@@ -171,7 +174,7 @@ class IndicateurController extends AbstractActionController implements ContextPr
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
-        if ($role instanceof ComposanteRole) {
+        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
             return $role->getStructure();
         }
         

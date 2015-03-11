@@ -115,7 +115,10 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        elseif ($this->role instanceof ComposanteRole) {
+        elseif (
+                $this->role instanceof ComposanteRole
+                || $this->role instanceof AdministrateurRole && $this->role->getStructure()
+        ) {
             
             // structure de responsabilité de l'utilisateur et structure du contrat doivent correspondre
             if ($this->role->getStructure() !== $this->resource->getStructure()) {

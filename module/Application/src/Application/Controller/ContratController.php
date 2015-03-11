@@ -69,7 +69,7 @@ class ContratController extends AbstractActionController implements ContextProvi
             throw new \Common\Exception\MessageException("Les intervenants permanents n'ont pas de contrat.");
         }
         
-        if ($role instanceof ComposanteRole) {
+        if ($role instanceof ComposanteRole || $role instanceof \Application\Acl\AdministrateurRole) {
             return $this->creerAction();
         }
         else {
@@ -727,7 +727,7 @@ class ContratController extends AbstractActionController implements ContextProvi
     {
         if (null === $this->structure) {
             $role = $this->getContextProvider()->getSelectedIdentityRole();
-            if (!$role instanceof ComposanteRole) {
+            if (!$role instanceof \Application\Interfaces\StructureAwareInterface) {
                 throw new LogicException("Rôle courant inattendu.");
             }
             $this->structure = $role->getStructure();

@@ -24,33 +24,33 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
     {
         $html = parent::render();
              
-//        if ($this->role instanceof \Application\Acl\AdministrateurRole) {
-//            $selectClass = 'user-profile-select-input-structure';
-//
-//            $select = new \Zend\Form\Element\Select('structure');
-//            $select
-//                    ->setEmptyOption("(Aucune)")
-//                    ->setValueOptions(array_map(function($v) { return (string) $v; }, $this->getStructures()))
-//                    ->setValue($this->structureSelectionnee ? $this->structureSelectionnee->getId() : null)
-//                    ->setAttribute('class', $selectClass)
-//                    ->setAttribute('title', "Cliquez pour sélectionner la structure associée au profil $this->role");
-//
-//            $html .= ' ' . $this->getView()->formSelect($select);
-//
-//            $html .= <<<EOS
-//<script>
-//    $(function() {
-//        $("select.$selectClass").tooltip({ delay: 500, placement: 'right' }).change(function() {
-//            var roleSelect = $("input.user-profile-select-input");
-//            if (! roleSelect.attr("checked")) {
-//                roleSelect.attr("checked", true);
-//            }
-//            submitProfile(); 
-//        });
-//    });  
-//</script>
-//EOS;
-//        }
+        if ($this->role instanceof \Application\Acl\AdministrateurRole) {
+            $selectClass = 'user-profile-select-input-structure';
+
+            $select = new \Zend\Form\Element\Select('structure');
+            $select
+                    ->setEmptyOption("(Aucune)")
+                    ->setValueOptions(array_map(function($v) { return (string) $v; }, $this->getStructures()))
+                    ->setValue($this->structureSelectionnee ? $this->structureSelectionnee->getId() : null)
+                    ->setAttribute('class', $selectClass)
+                    ->setAttribute('title', "Cliquez pour sélectionner la structure associée au profil $this->role");
+
+            $html .= ' ' . $this->getView()->formSelect($select);
+
+            $html .= <<<EOS
+<script>
+    $(function() {
+        $("select.$selectClass").tooltip({ delay: 500, placement: 'right' }).change(function() {
+            var roleSelect = $("input.user-profile-select-input");
+            if (! roleSelect.attr("checked")) {
+                roleSelect.attr("checked", true);
+            }
+            submitProfile(); 
+        });
+    });  
+</script>
+EOS;
+        }
         
         return $html;
     }

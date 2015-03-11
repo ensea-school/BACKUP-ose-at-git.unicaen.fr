@@ -12,7 +12,7 @@ use Application\Traits\PersonnelAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class AdministrateurRole extends Role implements /*StructureAwareInterface,*/ PersonnelAwareInterface
+class AdministrateurRole extends Role implements StructureAwareInterface, PersonnelAwareInterface
 {
     use StructureAwareTrait;
     use PersonnelAwareTrait;

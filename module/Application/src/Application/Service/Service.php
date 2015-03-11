@@ -603,30 +603,34 @@ class Service extends AbstractEntityService
         $typesIntervention = [];
         $invertTi = [];
         $numericColunms = [
-            'heures-service-statutaire',
-            'heures-service-du-modifie',
+            'service-statutaire',
+            'service-du-modifie',
             'heures-non-payees',
             'heures-ref',
-            'hetd-service',
-            'hetd-compl-fi',
-            'hetd-compl-fa',
-            'hetd-compl-fc',
-            'hetd-compl-fc-majorees',
-            'hetd-compl-referentiel',
-            'hetd',
-            'hetd-solde',
+            'service-fi',
+            'service-fa',
+            'service-fc',
+            'heures-compl-fi',
+            'heures-compl-fa',
+            'heures-compl-fc',
+            'heures-compl-fc-d714-60',
+            'heures-compl-referentiel',
+            'total',
+            'solde',
         ];
         $addableColumns = [
             '__total__',
             'heures-non-payees',
             'heures-ref',
-            'hetd-service',
-            'hetd-compl-fi',
-            'hetd-compl-fa',
-            'hetd-compl-fc',
-            'hetd-compl-fc-majorees',
-            'hetd-compl-referentiel',
-            'hetd',
+            'service-fi',
+            'service-fa',
+            'service-fc',
+            'heures-compl-fi',
+            'heures-compl-fa',
+            'heures-compl-fc',
+            'heures-compl-fc-d714-60',
+            'heures-compl-referentiel',
+            'total',
         ];
 
         // requêtage
@@ -672,7 +676,7 @@ class Service extends AbstractEntityService
                 $sid = $d['SERVICE_ID'] ? $d['SERVICE_ID'].'_'.$d['PERIODE_ID'] : $d['ID'];
             }
             $ds = [
-                '__total__'                     => (float)$d['HEURES_NON_PAYEES'] + (float)$d['HETD'] + (float)$d['HEURES_REF'] + (float) $d['HEURES'],
+                '__total__'                     => (float) $d['HEURES'] + (float)$d['HEURES_NON_PAYEES'] + (float)$d['HEURES_REF'] + (float)$d['TOTAL'],
                 'annee-libelle'                 =>          (string)$annee,
 
                 'intervenant-code'              =>          $d['INTERVENANT_CODE'],
@@ -680,8 +684,8 @@ class Service extends AbstractEntityService
                 'intervenant-statut-libelle'    =>          $d['INTERVENANT_STATUT_LIBELLE'],
                 'intervenant-type-code'         =>          $d['INTERVENANT_TYPE_CODE'],
                 'intervenant-type-libelle'      =>          $d['INTERVENANT_TYPE_LIBELLE'],
-                'heures-service-statutaire'     => (float)  $d['HEURES_SERVICE_STATUTAIRE'],
-                'heures-service-du-modifie'     => (float)  $d['HEURES_SERVICE_DU_MODIFIE'],
+                'heures-service-statutaire'     => (float)  $d['SERVICE_STATUTAIRE'],
+                'heures-service-du-modifie'     => (float)  $d['SERVICE_DU_MODIFIE'],
                 'service-structure-aff-libelle' =>          $d['SERVICE_STRUCTURE_AFF_LIBELLE'],
 
                 'service-structure-ens-libelle' =>          $d['SERVICE_STRUCTURE_ENS_LIBELLE'],
@@ -703,14 +707,17 @@ class Service extends AbstractEntityService
                 'heures-non-payees'             => (float)  $d['HEURES_NON_PAYEES'],
                 // types d'intervention traités en aval
                 'heures-ref'                    => (float)  $d['HEURES_REF'],
-                'hetd-service'                  => (float)  $d['HETD_SERVICE'],
-                'hetd-compl-fi'                 => (float)  $d['HETD_COMPL_FI'],
-                'hetd-compl-fa'                 => (float)  $d['HETD_COMPL_FA'],
-                'hetd-compl-fc'                 => (float)  $d['HETD_COMPL_FC'],
-                'hetd-compl-fc-majorees'        => (float)  $d['HETD_COMPL_FC_MAJOREES'],
-                'hetd-compl-referentiel'        => (float)  $d['HETD_COMPL_REFERENTIEL'],
-                'hetd'                          => (float)  $d['HETD'],
-                'hetd-solde'                    => (float)  $d['HETD_SOLDE'],
+                'service-fi'                    => (float)  $d['SERVICE_FI'],
+                'service-fa'                    => (float)  $d['SERVICE_FA'],
+                'service-fc'                    => (float)  $d['SERVICE_FC'],
+                'service-referentiel'           => (float)  $d['SERVICE_REFERENTIEL'],
+                'heures-compl-fi'               => (float)  $d['HEURES_COMPL_FI'],
+                'heures-compl-fa'               => (float)  $d['HEURES_COMPL_FA'],
+                'heures-compl-fc'               => (float)  $d['HEURES_COMPL_FC'],
+                'heures-compl-fc-d714-60'       => (float)  $d['HEURES_COMPL_FC_D714_60'],
+                'heures-compl-referentiel'      => (float)  $d['HEURES_COMPL_REFERENTIEL'],
+                'total'                         => (float)  $d['TOTAL'],
+                'solde'                         => (float)  $d['SOLDE'],
             ];
 
             if ($d['TYPE_INTERVENTION_ID'] != null){
@@ -788,15 +795,18 @@ class Service extends AbstractEntityService
             /* @var $typeIntervention \Application\Entity\Db\TypeIntervention */
             $head['type-intervention-'.$typeIntervention->getCode()] = $typeIntervention->getCode();
         }
-        $head['heures-ref']             = 'Référentiel';
-        $head['hetd-service']           = 'HETD Service';
-        $head['hetd-compl-fi']          = 'HETD Compl. FI';
-        $head['hetd-compl-fa']          = 'HETD Compl. FA';
-        $head['hetd-compl-fc']          = 'HETD Compl. FC';
-        $head['hetd-compl-fc-majorees'] = 'HETD Compl. FC majorées';
-        $head['hetd-compl-referentiel'] = 'HETD Compl. référentiel';
-        $head['hetd']                   = 'Total HETD';
-        $head['hetd-solde']             = 'Solde HETD';
+        $head['heures-ref']                 = 'Référentiel';
+        $head['service-fi']                 = 'HETD Service FI';
+        $head['service-fa']                 = 'HETD Service FA';
+        $head['service-fc']                 = 'HETD Service FC';
+        $head['service-referentiel']        = 'HETD Service Référentiel';
+        $head['heures-compl-fi']            = 'HETD Compl. FI';
+        $head['heures-compl-fa']            = 'HETD Compl. FA';
+        $head['heures-compl-fc']            = 'HETD Compl. FC';
+        $head['heures-compl-fc-d714-60']    = 'HETD Compl. FC D714-60';
+        $head['heures-compl-referentiel']   = 'HETD Compl. référentiel';
+        $head['total']                      = 'Total HETD';
+        $head['solde']                      = 'Solde HETD';
 
         // suppression des informations superflues
         foreach( $shown as $column => $visibility ){

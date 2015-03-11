@@ -36,6 +36,9 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIntervenant
      */
     protected function getQueryBuilder()
     {
+        // INDISPENSABLE si plusieurs requêtes successives sur IntervenantExterieur !
+        $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
+        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
                 ->join("int.contrat", "c")

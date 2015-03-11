@@ -38,6 +38,9 @@ class AttenteDemandeMepIndicateurImpl extends AbstractIntervenantResultIndicateu
      */
     protected function getQueryBuilder()
     {
+        // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
+        $this->getEntityManager()->clear('Application\Entity\Db\VIndicAttenteDemandeMep');
+        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicAttenteDemandeMep')->createQueryBuilder("v");
         $qb
                 ->addSelect("int, aff, si, str")

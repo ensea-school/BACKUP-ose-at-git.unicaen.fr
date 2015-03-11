@@ -36,6 +36,9 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
      */
     protected function getQueryBuilder()
     {
+        // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
+        $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
+        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
                 ->join("int.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")

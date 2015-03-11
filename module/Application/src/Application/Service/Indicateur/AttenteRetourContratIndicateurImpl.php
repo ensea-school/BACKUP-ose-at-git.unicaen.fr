@@ -48,6 +48,9 @@ class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndica
      */
     protected function getTitleQueryBuilder()
     {
+        // INDISPENSABLE si plusieurs requêtes successives sur Contrat !
+        $this->getEntityManager()->clear('Application\Entity\Db\Contrat');
+        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Contrat')->createQueryBuilder("c");
         
         $this->initQueryBuilder($qb);
@@ -73,6 +76,9 @@ class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndica
     
     protected function initQueryBuilder(QueryBuilder $qb)
     {
+        // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
+        $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
+        
         $qb
                 ->join("c.typeContrat", "tc", Join::WITH, "tc.code = :codeTypeContrat")
                 ->setParameter('codeTypeContrat', TypeContrat::CODE_CONTRAT)

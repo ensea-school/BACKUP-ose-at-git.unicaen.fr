@@ -37,6 +37,9 @@ class AttentePieceJustifIndicateurImpl extends AbstractIntervenantResultIndicate
      */
     protected function getQueryBuilder()
     {
+        // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
+        $this->getEntityManager()->clear('Application\Entity\Db\Intervenant');
+        
         $service = $this->getServiceLocator()->get('ApplicationIntervenant'); /* @var $service Intervenant */
         
         /**

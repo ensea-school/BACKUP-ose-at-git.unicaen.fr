@@ -67,6 +67,9 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
     {
         $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
         
+        // INDISPENSABLE si plusieurs requêtes successives sur VIndicDepassHcHorsRemuFc !
+        $this->getEntityManager()->clear('Application\Entity\Db\VIndicDepassHcHorsRemuFc');
+        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicDepassHcHorsRemuFc')->createQueryBuilder("v");
         $qb
                 ->addSelect("int, aff, si, str")

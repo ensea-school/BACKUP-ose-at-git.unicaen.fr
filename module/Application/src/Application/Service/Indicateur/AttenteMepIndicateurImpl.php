@@ -37,6 +37,9 @@ class AttenteMepIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
      */
     protected function getQueryBuilder()
     {
+        // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
+        $this->getEntityManager()->clear('Application\Entity\Db\VIndicAttenteMep');
+        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicAttenteMep')->createQueryBuilder("v");
         $qb
                 ->join("v.intervenant", "int")

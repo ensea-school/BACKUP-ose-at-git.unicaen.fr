@@ -80,6 +80,9 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
      */
     protected function getQueryBuilder()
     {
+        // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
+        $this->getEntityManager()->clear('Application\Entity\Db\Intervenant');
+        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("int");
         $qb
                 ->select("int, si, ti, str")

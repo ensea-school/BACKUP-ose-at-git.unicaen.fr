@@ -2,7 +2,8 @@
 
 namespace Application\Service\Indicateur;
 
-use Application\Entity\Db\TypeIntervenant;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -13,8 +14,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    use \Application\Traits\TypeVolumeHoraireAwareTrait;
-    
     protected $singularTitlePattern = "%s vacataire est en attente de validation de ses enseignements <em>%s</em>";
     protected $pluralTitlePattern   = "%s vacataires sont en attente de validation de leurs enseignements <em>%s</em>";
     
@@ -51,7 +50,7 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
         /**
          * Les vacataires.
          */
-        $qb->andWhere("ti.code = :type")->setParameter('type', TypeIntervenant::CODE_EXTERIEUR);
+        $qb->andWhere("ti.code = :type")->setParameter('type', TypeIntervenantEntity::CODE_EXTERIEUR);
         
         if ($this->getStructure()) {
             $qb
@@ -68,6 +67,13 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
         
         return $qb;
     }
+    
+    /**
+     * Retourne le type de volume horaire utile à cet indicateur.
+     * 
+     * @return TypeVolumeHoraireEntity
+     */
+    abstract protected function getTypeVolumeHoraire();
     
     /**
      * Retourne la clé de l'étape utile à cet indicateur.

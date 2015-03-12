@@ -3,6 +3,7 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\WfEtape;
 
 /**
@@ -12,6 +13,11 @@ use Application\Entity\Db\WfEtape;
  */
 class AttenteValidationEnsRealiseIndicateurImpl extends AttenteValidationEnsAbstractIndicateurImpl
 {
+    /**
+     * Retourne le type de volume horaire utile à cet indicateur.
+     * 
+     * @return TypeVolumeHoraireEntity
+     */
     public function getTypeVolumeHoraire()
     {
         if (null === $this->typeVolumeHoraire) {

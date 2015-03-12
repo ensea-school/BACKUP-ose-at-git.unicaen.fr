@@ -66,7 +66,7 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
      * @var int
      */
     protected $resultCount;
-
+        
     /**
      * 
      * @param bool $appendStructure
@@ -119,5 +119,45 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
     protected function getHelperUrl()
     {
         return $this->getServiceLocator()->get('ControllerPluginManager')->get('Url');
+    }
+
+    /**
+     * @var bool
+     */
+    protected $dirtyResult = true;
+
+    /**
+     * @var bool
+     */
+    protected $dirtyResultCount = true;
+    
+    /**
+     * Met cet objet à l'état "dirty" 
+     * (i.e. recalcul nécessaire du résultat et de la taille du résultat).
+     * 
+     * @return self
+     */
+    protected function setDirty()
+    {
+        $this->dirtyResult      = true;
+        $this->dirtyResultCount = true;
+        
+        return $this;
+    }
+    
+    /**
+     * Surcharge pour mettre l'indicateur à l'état "dirty" lorsque la structure change.
+     * 
+     * @param \Application\Entity\Db\Structure $structure
+     */
+    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    {
+        if ($structure !== $this->getStructure()) {
+            $this->setDirty();
+        }
+        
+        $this->structure = $structure;
+        
+        return $this;
     }
 }

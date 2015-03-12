@@ -15,8 +15,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    use \Application\Traits\TypeVolumeHoraireAwareTrait;
-    
     protected $singularTitlePattern = "%s vacataire est en attente de son contrat initial";
     protected $pluralTitlePattern   = "%s vacataires sont en attente de leur contrat initial";
     

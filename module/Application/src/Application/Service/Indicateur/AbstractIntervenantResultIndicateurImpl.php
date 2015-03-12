@@ -23,11 +23,10 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
      */
     public function getResult()
     {
-        if (null === $this->result) {
-            $qb = $this->getQueryBuilder();
-//            print_r($qb->getQuery()->getSQL());
-            
-            $this->result = $qb->getQuery()->getResult();
+        if (null === $this->result || $this->dirtyResult) {
+            $qb                = $this->getQueryBuilder();
+            $this->result      = $qb->getQuery()->getResult();
+            $this->dirtyResult = false;
         }
             
         return $this->result;
@@ -59,18 +58,19 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
      */
     public function getResultCount()
     {
-        if (null !== $this->resultCount) {
+        if (null !== $this->resultCount && !$this->dirtyResultCount) {
             return $this->resultCount;
         }
         
-        if (null !== $this->result) {
+        if (null !== $this->result && !$this->dirtyResult) {
             $this->resultCount = count($this->result);
-            return $this->resultCount;
         }
-            
-        $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT int)");
+        else {
+            $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT int)");
+            $this->resultCount = (int) $qb->getQuery()->getSingleScalarResult();
+        }
         
-        $this->resultCount = (int) $qb->getQuery()->getSingleScalarResult();
+        $this->dirtyResultCount = false;
         
         return $this->resultCount;
     }

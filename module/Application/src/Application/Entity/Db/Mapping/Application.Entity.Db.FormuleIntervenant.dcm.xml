@@ -13,6 +13,7 @@
         <join-column name="ID" referenced-column-name="ID"/>
       </join-columns>
     </one-to-one>
+    <field name="depassementServiceDuSansHC" type="boolean" column="DEPASSEMENT_SERVICE_DU_SANS_HC" nullable="false" />
     <one-to-many field="formuleServiceModifie" target-entity="Application\Entity\Db\FormuleServiceModifie" mapped-by="formuleIntervenant" />
     <one-to-many field="formuleService" target-entity="Application\Entity\Db\FormuleService" mapped-by="intervenant" />
     <one-to-many field="formuleServiceReferentiel" target-entity="Application\Entity\Db\FormuleServiceReferentiel" mapped-by="formuleIntervenant" />

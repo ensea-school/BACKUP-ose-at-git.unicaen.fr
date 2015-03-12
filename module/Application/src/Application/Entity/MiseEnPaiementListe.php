@@ -356,7 +356,7 @@ class MiseEnPaiementListe implements ServiceAPayerAwareInterface
                 if (0 == $soldeHeures) break; // Fin de boucle si fin de modif
             }
             if ($soldeHeures !== 0){
-                $Mpl->getChild()->setHeures($lastHeures + $newHeures);
+                $mpl->getChild()->setHeures($lastHeures + $newHeures);
             }
         }
         return $this;

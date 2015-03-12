@@ -66,11 +66,6 @@ class Dl extends AbstractDl
             $this->entity->getAnnee()
         );
 
-        $identite[] = sprintf($tplDtdd,
-            "Nombre d'heures :",
-            \UnicaenApp\Util::formattedFloat($this->entity->getHeures(), \NumberFormatter::DECIMAL, -1)
-        );
-
         $html .= sprintf($this->getTemplateDl('service-referentiel service-referentiel-identite'), implode(PHP_EOL, $identite)) . PHP_EOL;
 
         /**

@@ -30,10 +30,10 @@ class ServiceAPayer extends AbstractService
                         ->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire)
                         ->getFormuleResultatService()->filter(
         function( \Application\Entity\Db\FormuleResultatService $formuleResultatService ){
-            $totalHC = $formuleResultatService->getHeuresComplFa()
+            $totalHC = $formuleResultatService->getHeuresComplFi()
+                     + $formuleResultatService->getHeuresComplFa()
                      + $formuleResultatService->getHeuresComplFc()
-                     + $formuleResultatService->getHeuresComplFcMajorees()
-                     + $formuleResultatService->getHeuresComplFi();
+                     + $formuleResultatService->getHeuresComplFcMajorees();
             return $totalHC > 0;
         });
 

@@ -30,6 +30,13 @@ class FormuleIntervenant
     private $formuleServiceModifie;
 
     /**
+     *
+     * @var boolean
+     */
+    protected $depassementServiceDuSansHC;
+
+
+        /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $formuleService;
@@ -55,19 +62,6 @@ class FormuleIntervenant
     }
 
     /**
-     * Set heuresServiceStatutaire
-     *
-     * @param float $heuresServiceStatutaire
-     * @return FormuleIntervenant
-     */
-    public function setHeuresServiceStatutaire($heuresServiceStatutaire)
-    {
-        $this->heuresServiceStatutaire = $heuresServiceStatutaire;
-
-        return $this;
-    }
-
-    /**
      * Get heuresServiceStatutaire
      *
      * @return float 
@@ -75,19 +69,6 @@ class FormuleIntervenant
     public function getHeuresServiceStatutaire()
     {
         return $this->heuresServiceStatutaire;
-    }
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return FormuleIntervenant
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -101,19 +82,6 @@ class FormuleIntervenant
     }
 
     /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return FormuleIntervenant
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-    /**
      * Get intervenant
      *
      * @return \Application\Entity\Db\Intervenant 
@@ -121,29 +89,6 @@ class FormuleIntervenant
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-    /**
-     * Add formuleServiceModifie
-     *
-     * @param \Application\Entity\Db\FormuleServiceModifie $formuleServiceModifie
-     * @return FormuleIntervenant
-     */
-    public function addFormuleServiceModifie(\Application\Entity\Db\FormuleServiceModifie $formuleServiceModifie)
-    {
-        $this->formuleServiceModifie[] = $formuleServiceModifie;
-
-        return $this;
-    }
-
-    /**
-     * Remove formuleServiceModifie
-     *
-     * @param \Application\Entity\Db\FormuleServiceModifie $formuleServiceModifie
-     */
-    public function removeFormuleServiceModifie(\Application\Entity\Db\FormuleServiceModifie $formuleServiceModifie)
-    {
-        $this->formuleServiceModifie->removeElement($formuleServiceModifie);
     }
 
     /**
@@ -177,26 +122,23 @@ class FormuleIntervenant
     }
 
     /**
-     * Add formuleService
-     *
-     * @param \Application\Entity\Db\FormuleService $formuleService
-     * @return FormuleIntervenant
+     * 
+     * @return boolean
      */
-    public function addFormuleService(\Application\Entity\Db\FormuleService $formuleService)
+    function getDepassementServiceDuSansHC()
     {
-        $this->formuleService[] = $formuleService;
-
-        return $this;
+        return $this->depassementServiceDuSansHC;
     }
 
     /**
-     * Remove formuleService
      *
-     * @param \Application\Entity\Db\FormuleService $formuleService
+     * @param boolean $depassementServiceDuSansHC
+     * @return self
      */
-    public function removeFormuleService(\Application\Entity\Db\FormuleService $formuleService)
+    function setDepassementServiceDuSansHC($depassementServiceDuSansHC)
     {
-        $this->formuleService->removeElement($formuleService);
+        $this->depassementServiceDuSansHC = $depassementServiceDuSansHC;
+        return $this;
     }
 
     /**
@@ -210,29 +152,6 @@ class FormuleIntervenant
     }
 
     /**
-     * Add formuleServiceReferentiel
-     *
-     * @param \Application\Entity\Db\FormuleServiceReferentiel $formuleServiceReferentiel
-     * @return FormuleIntervenant
-     */
-    public function addFormuleServiceReferentiel(\Application\Entity\Db\FormuleServiceReferentiel $formuleServiceReferentiel)
-    {
-        $this->formuleServiceReferentiel[] = $formuleServiceReferentiel;
-
-        return $this;
-    }
-
-    /**
-     * Remove formuleServiceReferentiel
-     *
-     * @param \Application\Entity\Db\FormuleServiceReferentiel $formuleServiceReferentiel
-     */
-    public function removeFormuleServiceReferentiel(\Application\Entity\Db\FormuleServiceReferentiel $formuleServiceReferentiel)
-    {
-        $this->formuleServiceReferentiel->removeElement($formuleServiceReferentiel);
-    }
-
-    /**
      * Get formuleServiceReferentiel
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -240,19 +159,6 @@ class FormuleIntervenant
     public function getFormuleServiceReferentiel()
     {
         return $this->formuleServiceReferentiel;
-    }
-
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return FormuleIntervenant
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
     }
 
     /**

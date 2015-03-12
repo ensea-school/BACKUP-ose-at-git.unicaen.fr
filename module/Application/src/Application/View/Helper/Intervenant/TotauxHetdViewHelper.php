@@ -70,27 +70,27 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
             <?php endif; ?>
 
             <tr><th>Service assuré</th>
-                <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getServiceAssure()) ?></td></tr>
+                <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getTotal()) ?></td></tr>
 
             <?php if ($fr->getIntervenant()->estPermanent()): ?>
 
-                <?php if ($fr->getEnseignements() > 0): ?>
+                <?php if ($fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceFi() > 0): ?>
                 <tr><th style="padding-left:5em">Dont enseignements</th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getEnseignements()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceFi()) ?></td></tr>
                 <?php endif; ?>
 
-                <?php if ($fr->getReferentiel() > 0): ?>
+                <?php if ($fr->getHeuresServiceReferentiel() > 0): ?>
                 <tr><th style="padding-left:5em">Dont référentiel</th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getReferentiel()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresServiceReferentiel()) ?></td></tr>
                 <?php endif; ?>
 
             <?php endif; ?>
 
-            <?php if ($fr->getHeuresComplTotal() > 0) : ?>
+            <?php if ($fr->getHeuresCompl() > 0) : ?>
 
                 <?php if ($fr->getIntervenant()->estPermanent()): ?>
                 <tr><th>Heures complémentaires</th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplTotal()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresCompl()) ?></td></tr>
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplFi() > 0): ?>

@@ -10,35 +10,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class FormuleResultatService implements ServiceAPayerInterface, ResourceInterface
 {
-    /**
-     * @var float
-     */
-    private $serviceAssure;
-
-    /**
-     * @var float
-     */
-    private $heuresService;
-
-    /**
-     * @var float
-     */
-    private $heuresComplFi;
-
-    /**
-     * @var float
-     */
-    private $heuresComplFa;
-
-    /**
-     * @var float
-     */
-    private $heuresComplFc;
-
-    /**
-     * @var float
-     */
-    private $heuresComplFcMajorees;
+    use FormuleResultatTypesHeuresTrait;
 
     /**
      * @var integer
@@ -65,7 +37,6 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
      */
     private $service;
 
-
     /**
      * Constructor
      */
@@ -76,206 +47,9 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     }
 
     /**
-     * Set serviceAssure
-     *
-     * @param float $serviceAssure
-     * @return FormuleResultatService
-     */
-    public function setServiceAssure($serviceAssure)
-    {
-        $this->serviceAssure = $serviceAssure;
-
-        return $this;
-    }
-
-    /**
-     * Get serviceAssure
-     *
-     * @return float 
-     */
-    public function getServiceAssure()
-    {
-        return $this->serviceAssure;
-    }
-
-    /**
-     * Set heuresService
-     *
-     * @param float $heuresService
-     * @return FormuleResultatService
-     */
-    public function setHeuresService($heuresService)
-    {
-        $this->heuresService = $heuresService;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresService
-     *
-     * @return float 
-     */
-    public function getHeuresService()
-    {
-        return $this->heuresService;
-    }
-
-    /**
-     * Set heuresComplFi
-     *
-     * @param float $heuresComplFi
-     * @return FormuleResultatService
-     */
-    public function setHeuresComplFi($heuresComplFi)
-    {
-        $this->heuresComplFi = $heuresComplFi;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresComplFi
-     *
-     * @return float 
-     */
-    public function getHeuresComplFi()
-    {
-        return $this->heuresComplFi;
-    }
-
-    /**
-     * Set heuresComplFa
-     *
-     * @param float $heuresComplFa
-     * @return FormuleResultatService
-     */
-    public function setHeuresComplFa($heuresComplFa)
-    {
-        $this->heuresComplFa = $heuresComplFa;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresComplFa
-     *
-     * @return float 
-     */
-    public function getHeuresComplFa()
-    {
-        return $this->heuresComplFa;
-    }
-
-    /**
-     * Set heuresComplFc
-     *
-     * @param float $heuresComplFc
-     * @return FormuleResultatService
-     */
-    public function setHeuresComplFc($heuresComplFc)
-    {
-        $this->heuresComplFc = $heuresComplFc;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresComplFc
-     *
-     * @return float 
-     */
-    public function getHeuresComplFc()
-    {
-        return $this->heuresComplFc;
-    }
-
-    /**
-     * Set heuresComplFcMajorees
-     *
-     * @param float $heuresComplFcMajorees
-     * @return FormuleResultatService
-     */
-    public function setHeuresComplFcMajorees($heuresComplFcMajorees)
-    {
-        $this->heuresComplFcMajorees = $heuresComplFcMajorees;
-
-        return $this;
-    }
-
-    /**
-     * Get heuresComplFcMajorees
-     *
-     * @return float 
-     */
-    public function getHeuresComplFcMajorees()
-    {
-        return $this->heuresComplFcMajorees;
-    }
-
-    /**
-     * Get heuresComplReferentiel
-     *
-     * @return float
-     */
-    public function getHeuresComplReferentiel()
-    {
-        return 0.0;
-    }
-
-    /**
-     *
-     * @param TypeHeures $typeHeures
-     * @return float
-     * @throws \Common\Exception\RuntimeException
-     */
-    public function getHeures( TypeHeures $typeHeures )
-    {
-        switch( $typeHeures->getCode() ){
-            case TypeHeures::FI: return $this->getHeuresComplFi();
-            case TypeHeures::FA: return $this->getHeuresComplFa();
-            case TypeHeures::FC: return $this->getHeuresComplFc();
-            case TypeHeures::FC_MAJOREES: return $this->getHeuresComplFcMajorees();
-            case TypeHeures::REFERENTIEL: return $this->getHeuresComplReferentiel();
-        }
-        throw new \Common\Exception\RuntimeException('Type d\'heures inconnu');
-    }
-
-    /**
-     *
-     * @param TypeHeures $typeHeures
-     * @param float $heures
-     * @return self
-     * @throws \Common\Exception\RuntimeException
-     */
-    public function setHeures( TypeHeures $typeHeures, $heures )
-    {
-        switch( $typeHeures->getCode() ){
-            case TypeHeures::FI: return $this->setHeuresComplFi( $heures );
-            case TypeHeures::FA: return $this->setHeuresComplFa( $heures );
-            case TypeHeures::FC: return $this->setHeuresComplFc( $heures );
-            case TypeHeures::FC_MAJOREES: return $this->setHeuresComplFcMajorees( $heures );
-        }
-        throw new \Common\Exception\RuntimeException('Type d\'heures inconnu ou incorrect');
-    }
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return FormuleResultatService
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -364,19 +138,6 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     }
 
     /**
-     * Set formuleResultat
-     *
-     * @param \Application\Entity\Db\FormuleResultat $formuleResultat
-     * @return FormuleResultatService
-     */
-    public function setFormuleResultat(\Application\Entity\Db\FormuleResultat $formuleResultat = null)
-    {
-        $this->formuleResultat = $formuleResultat;
-
-        return $this;
-    }
-
-    /**
      * Get formuleResultat
      *
      * @return \Application\Entity\Db\FormuleResultat 
@@ -384,19 +145,6 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     public function getFormuleResultat()
     {
         return $this->formuleResultat;
-    }
-
-    /**
-     * Set Service
-     *
-     * @param \Application\Entity\Db\Service $service
-     * @return FormuleResultatService
-     */
-    public function setService(\Application\Entity\Db\Service $service = null)
-    {
-        $this->service = $service;
-
-        return $this;
     }
 
     /**

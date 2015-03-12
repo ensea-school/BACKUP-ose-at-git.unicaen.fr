@@ -12,8 +12,8 @@
         <join-column name="VOLUME_HORAIRE_REF_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <field name="serviceAssure" type="float" column="SERVICE_ASSURE" precision="126" scale="0" nullable="false"/>
-    <field name="heuresService" type="float" column="HEURES_SERVICE" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceReferentiel" type="float" column="SERVICE_REFERENTIEL" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+    <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
   </entity>
 </doctrine-mapping>

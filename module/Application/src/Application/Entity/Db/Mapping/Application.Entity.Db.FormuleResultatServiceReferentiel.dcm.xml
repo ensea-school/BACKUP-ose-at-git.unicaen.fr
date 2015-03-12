@@ -17,10 +17,6 @@
       </join-columns>
     </many-to-one>
     <one-to-many field="miseEnPaiement" target-entity="Application\Entity\Db\MiseEnPaiement" mapped-by="formuleResultatServiceReferentiel" />
-    <field name="serviceAssure" type="float" column="SERVICE_ASSURE" precision="126" scale="0" nullable="false"/>
-    <field name="heuresService" type="float" column="HEURES_SERVICE" precision="126" scale="0" nullable="false"/>
-    <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
-
     <many-to-many field="centreCout" target-entity="Application\Entity\Db\CentreCout">
         <join-table name="V_FR_SERVICE_REF_CENTRE_COUT">
             <join-columns>
@@ -31,6 +27,8 @@
             </inverse-join-columns>
         </join-table>
     </many-to-many>
-
+    <field name="heuresServiceReferentiel" type="float" column="SERVICE_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+    <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
+    <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
   </entity>
 </doctrine-mapping>

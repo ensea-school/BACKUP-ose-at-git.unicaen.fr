@@ -57,16 +57,7 @@ interface ServiceAPayerInterface
      * @return float
      * @throws \Common\Exception\RuntimeException
      */
-    public function getHeures( TypeHeures $typeHeures );
-
-    /**
-     *
-     * @param TypeHeures $typeHeures
-     * @param float $heures
-     * @return self
-     * @throws \Common\Exception\RuntimeException
-     */
-    public function setHeures( TypeHeures $typeHeures, $heures );
+    public function getHeuresCompl( TypeHeures $typeHeures );
 
     /**
      * Add miseEnPaiement

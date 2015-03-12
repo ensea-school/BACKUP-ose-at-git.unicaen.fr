@@ -73,19 +73,6 @@ class FormuleService
     }
 
     /**
-     * Set tauxFa
-     *
-     * @param float $tauxFa
-     * @return FormuleService
-     */
-    public function setTauxFa($tauxFa)
-    {
-        $this->tauxFa = $tauxFa;
-
-        return $this;
-    }
-
-    /**
      * Get tauxFa
      *
      * @return float 
@@ -93,19 +80,6 @@ class FormuleService
     public function getTauxFa()
     {
         return $this->tauxFa;
-    }
-
-    /**
-     * Set tauxFc
-     *
-     * @param float $tauxFc
-     * @return FormuleService
-     */
-    public function setTauxFc($tauxFc)
-    {
-        $this->tauxFc = $tauxFc;
-
-        return $this;
     }
 
     /**
@@ -119,19 +93,6 @@ class FormuleService
     }
 
     /**
-     * Set tauxFi
-     *
-     * @param float $tauxFi
-     * @return FormuleService
-     */
-    public function setTauxFi($tauxFi)
-    {
-        $this->tauxFi = $tauxFi;
-
-        return $this;
-    }
-
-    /**
      * Get tauxFi
      *
      * @return float 
@@ -142,16 +103,19 @@ class FormuleService
     }
 
     /**
-     * Set ponderationServiceDu
      *
-     * @param float $ponderationServiceDu
-     * @return FormuleService
+     * @param TypeHeures $typeHeures
+     * @return float
+     * @throws \Common\Exception\LogicException
      */
-    public function setPonderationServiceDu($ponderationServiceDu)
+    public function getTaux(TypeHeures $typeHeures)
     {
-        $this->ponderationServiceDu = $ponderationServiceDu;
-
-        return $this;
+        switch($typeHeures->getCode()){
+            case TypeHeures::FI: return $this->getTauxFi();
+            case TypeHeures::FA: return $this->getTauxFa();
+            case TypeHeures::FC: return $this->getTauxFc();
+        }
+        throw new \Common\Exception\LogicException('Le type d\'heures transmis n\'est pas correct');
     }
 
     /**
@@ -165,19 +129,6 @@ class FormuleService
     }
 
     /**
-     * Set ponderationServiceCompl
-     *
-     * @param float $ponderationServiceCompl
-     * @return FormuleService
-     */
-    public function setPonderationServiceCompl($ponderationServiceCompl)
-    {
-        $this->ponderationServiceCompl = $ponderationServiceCompl;
-
-        return $this;
-    }
-
-    /**
      * Get ponderationServiceCompl
      *
      * @return float 
@@ -185,19 +136,6 @@ class FormuleService
     public function getPonderationServiceCompl()
     {
         return $this->ponderationServiceCompl;
-    }
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return FormuleService
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -211,19 +149,6 @@ class FormuleService
     }
 
     /**
-     * Set service
-     *
-     * @param \Application\Entity\Db\Service $service
-     * @return FormuleService
-     */
-    public function setService(\Application\Entity\Db\Service $service = null)
-    {
-        $this->service = $service;
-
-        return $this;
-    }
-
-    /**
      * Get service
      *
      * @return \Application\Entity\Db\Service 
@@ -231,29 +156,6 @@ class FormuleService
     public function getService()
     {
         return $this->service;
-    }
-
-    /**
-     * Add formuleVolumeHoraire
-     *
-     * @param \Application\Entity\Db\FormuleVolumeHoraire $formuleVolumeHoraire
-     * @return FormuleService
-     */
-    public function addFormuleVolumeHoraire(\Application\Entity\Db\FormuleVolumeHoraire $formuleVolumeHoraire)
-    {
-        $this->formuleVolumeHoraire[] = $formuleVolumeHoraire;
-
-        return $this;
-    }
-
-    /**
-     * Remove formuleVolumeHoraire
-     *
-     * @param \Application\Entity\Db\FormuleVolumeHoraire $formuleVolumeHoraire
-     */
-    public function removeFormuleVolumeHoraire(\Application\Entity\Db\FormuleVolumeHoraire $formuleVolumeHoraire)
-    {
-        $this->formuleVolumeHoraire->removeElement($formuleVolumeHoraire);
     }
 
     /**
@@ -294,19 +196,6 @@ class FormuleService
     }
 
     /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return FormuleService
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-    /**
      * Get intervenant
      *
      * @return \Application\Entity\Db\Intervenant 
@@ -317,19 +206,6 @@ class FormuleService
     }
 
     /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return FormuleService
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
      * Get annee
      *
      * @return \Application\Entity\Db\Annee 
@@ -337,19 +213,6 @@ class FormuleService
     public function getAnnee()
     {
         return $this->annee;
-    }
-
-    /**
-     * Set formuleIntervenant
-     *
-     * @param \Application\Entity\Db\FormuleIntervenant $formuleIntervenant
-     * @return FormuleService
-     */
-    public function setFormuleIntervenant(\Application\Entity\Db\FormuleIntervenant $formuleIntervenant = null)
-    {
-        $this->formuleIntervenant = $formuleIntervenant;
-
-        return $this;
     }
 
     /**

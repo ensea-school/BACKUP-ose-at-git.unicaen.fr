@@ -613,7 +613,7 @@ class Service extends AbstractEntityService
             'heures-compl-fi',
             'heures-compl-fa',
             'heures-compl-fc',
-            'heures-compl-fc-d714-60',
+            'heures-compl-fc-majorees',
             'heures-compl-referentiel',
             'total',
             'solde',
@@ -628,7 +628,7 @@ class Service extends AbstractEntityService
             'heures-compl-fi',
             'heures-compl-fa',
             'heures-compl-fc',
-            'heures-compl-fc-d714-60',
+            'heures-compl-fc-majorees',
             'heures-compl-referentiel',
             'total',
         ];
@@ -714,7 +714,7 @@ class Service extends AbstractEntityService
                 'heures-compl-fi'               => (float)  $d['HEURES_COMPL_FI'],
                 'heures-compl-fa'               => (float)  $d['HEURES_COMPL_FA'],
                 'heures-compl-fc'               => (float)  $d['HEURES_COMPL_FC'],
-                'heures-compl-fc-d714-60'       => (float)  $d['HEURES_COMPL_FC_D714_60'],
+                'heures-compl-fc-majorees'      => (float)  $d['HEURES_COMPL_FC_MAJOREES'],
                 'heures-compl-referentiel'      => (float)  $d['HEURES_COMPL_REFERENTIEL'],
                 'total'                         => (float)  $d['TOTAL'],
                 'solde'                         => (float)  $d['SOLDE'],
@@ -803,7 +803,7 @@ class Service extends AbstractEntityService
         $head['heures-compl-fi']            = 'HETD Compl. FI';
         $head['heures-compl-fa']            = 'HETD Compl. FA';
         $head['heures-compl-fc']            = 'HETD Compl. FC';
-        $head['heures-compl-fc-d714-60']    = 'HETD Compl. FC D714-60';
+        $head['heures-compl-fc-majorees']   = 'HETD Compl. FC D714-60';
         $head['heures-compl-referentiel']   = 'HETD Compl. référentiel';
         $head['total']                      = 'Total HETD';
         $head['solde']                      = 'Solde HETD';

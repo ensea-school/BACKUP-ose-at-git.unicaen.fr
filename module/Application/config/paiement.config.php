@@ -129,6 +129,7 @@ return [
     'view_helpers' => [
         'invokables' => [
             'DemandeMiseEnPaiement'                 => 'Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper',
+            'TypeHeures'                            => 'Application\View\Helper\Paiement\TypeHeuresViewHelper',
         ],
     ],
     'form_elements' => [

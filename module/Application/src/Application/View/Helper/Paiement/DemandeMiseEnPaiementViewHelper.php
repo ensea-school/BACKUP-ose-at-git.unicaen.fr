@@ -239,7 +239,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             'default-centre-cout'   => $defaultCentreCout ? $defaultCentreCout->getId() : null,
             'mises-en-paiement'     => [],
             'demandes-mep'          => [],
-            'heures-total'          => $serviceAPayer->getHeures($typeHeures),
+            'heures-total'          => $serviceAPayer->getHeuresCompl($typeHeures),
             'heures-mep'            => 0.0,
             'heures-dmep'           => 0.0,
             'heures-non-dmep'       => 0.0,

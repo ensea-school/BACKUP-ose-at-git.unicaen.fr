@@ -26,7 +26,7 @@ class IntervenantController extends AbstractActionController implements ContextP
 {
     use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
-    
+
     /**
      * @var Intervenant
      */
@@ -106,7 +106,7 @@ class IntervenantController extends AbstractActionController implements ContextP
                 }
             }
         }
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/intervenant/choisir')
@@ -117,7 +117,7 @@ class IntervenantController extends AbstractActionController implements ContextP
         
         return $viewModel;
     }
-    
+
     public function importerAction()
     {
         if (!($sourceCode = $this->params()->fromQuery('sourceCode', $this->params()->fromPost('sourceCode')))) {
@@ -223,6 +223,8 @@ class IntervenantController extends AbstractActionController implements ContextP
             throw new LogicException('Etat de volume horaire erroné');
         }
 
+        $typesHeures = $this->getServiceTypeHeures()->getList();
+
         $form->setData([
             'type-volume-horaire' => $typeVolumeHoraire->getId(),
             'etat-volume-horaire' => $etatVolumeHoraire->getId(),
@@ -236,6 +238,9 @@ class IntervenantController extends AbstractActionController implements ContextP
             'referentiel'                   => [],
             'types-intervention'            => [],
             'has-ponderation-service-compl' => false,
+            'th-taux'                       => [],
+            'th-service'                    => [],
+            'th-compl'                      => [],
         ];
 
         $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel($annee);
@@ -252,12 +257,15 @@ class IntervenantController extends AbstractActionController implements ContextP
             }
             $data['referentiel'][$referentiel->getStructure()->getId()]['heures'] += $referentiel->getHeures( $typeVolumeHoraire, $etatVolumeHoraire );
             $frr = $referentiel->getServiceReferentiel()->getUniqueFormuleResultatServiceReferentiel($typeVolumeHoraire, $etatVolumeHoraire);
-            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr ?$frr->getHeuresService() : 0;
+            $data['referentiel'][$referentiel->getStructure()->getId()]['hetd'] += $frr ?$frr->getHeuresServiceReferentiel() : 0;
             $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr ? $frr->getHeuresComplReferentiel() : 0;
         }
 
         $services = $intervenant->getFormuleIntervenant()->getFormuleService($annee);
         foreach( $services as $service ){
+            $dsId = $service->getId();
+            $ds = [];
+
             /* @var $service \Application\Entity\Db\FormuleService */
             $typesIntervention = [];
             $totalHeures = 0;
@@ -271,7 +279,7 @@ class IntervenantController extends AbstractActionController implements ContextP
                     'hetd'              => 0,
                 ];
                 $typesIntervention[$fvh->getTypeIntervention()->getId()]['heures'] += $fvh->getHeures();
-                $hetd = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()->first()->getServiceAssure();
+                $hetd = $fvh->getVolumeHoraire()->getFormuleResultatVolumeHoraire()->first()->getTotal();
                 $typesIntervention[$fvh->getTypeIntervention()->getId()]['hetd'] += $hetd;
             }
 
@@ -280,33 +288,63 @@ class IntervenantController extends AbstractActionController implements ContextP
                 if (1.0 !== $service->getPonderationServiceCompl()){
                     $data['has-ponderation-service-compl'] = true;
                 }
-                $data['services'][$service->getId()] = [
-                    'service'                       => $service->getService(),
-                    'taux-fi'                       => $service->getTauxFi(),
-                    'taux-fa'                       => $service->getTauxFa(),
-                    'taux-fc'                       => $service->getTauxFc(),
+                $ds = [
+                    'element-etablissement'         => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique() : $service->getService()->getEtablissement(),
+                    'taux'                          => [],
+                    'structure'                     => $service->getService()->getStructureEns() ? $service->getService()->getStructureEns() : $service->getService()->getStructureAff(),
                     'ponderation-service-compl'     => $service->getPonderationServiceCompl(),
                     'heures'                        => [],
-                    'hetd'                          => [],
-                    'total-hetd'                    => $frs->getHeuresService(),
-                    'total-hetd-compl-fi'           => $frs->getHeuresComplFi(),
-                    'total-hetd-compl-fa'           => $frs->getHeuresComplFa(),
-                    'total-hetd-compl-fc'           => $frs->getHeuresComplFc(),
-                    'total-hetd-compl-fc-majorees'  => $frs->getHeuresComplFcMajorees(),
+                    'hetd'                          => []
                 ];
+
+                foreach( $typesHeures as $typeHeures ){
+                    // taux
+                    try{
+                        $h = $service->getTaux($typeHeures);
+                    } catch (\Exception $ex) {
+                        $h = 0.0;
+                    }
+                    if ($h > 0){
+                        $ds['taux'][$typeHeures->getId()] = $h;
+                        $data['th-taux'][$typeHeures->getId()] = $typeHeures;
+                    }
+
+                    // HETD service
+                    try{
+                        $h = $frs->getHeuresService($typeHeures);
+                    } catch (\Exception $ex) {
+                        $h = 0.0;
+                    }
+                    if ($h > 0){
+                        $ds['hetd']['service'][$typeHeures->getId()] = $h;
+                        $data['th-service'][$typeHeures->getId()] = $typeHeures;
+                    }
+
+                    // HETD compl
+                    try{
+                        $h = $frs->getHeuresCompl($typeHeures);
+                    } catch (\Exception $ex) {
+                        $h = 0.0;
+                    }
+                    if ($h > 0){
+                        $ds['hetd']['compl'][$typeHeures->getId()] = $h;
+                        $data['th-compl'][$typeHeures->getId()] = $typeHeures;
+                    }
+                }
+
                 foreach( $typesIntervention as $ti ){
                     if ( $ti['heures'] > 0 ){
                         $data['types-intervention'][$ti['type-intervention']->getId()] = $ti['type-intervention'];
-                        $data['services'][$service->getId()]['heures'][$ti['type-intervention']->getId()] = $ti['heures'];
-                        $data['services'][$service->getId()]['hetd'][$ti['type-intervention']->getId()] = $ti['hetd'];
+                        $ds['heures'][$ti['type-intervention']->getId()] = $ti['heures'];
+                        $ds['hetd'][$ti['type-intervention']->getId()] = $ti['hetd'];
                     }
                 }
+                $data['services'][$dsId] = $ds;
             }
         }
 
         usort($data['types-intervention'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
-
-        return compact('annee', 'form','intervenant','typeVolumeHoraire','etatVolumeHoraire', 'data');
+        return compact('annee', 'form', 'intervenant', 'typeVolumeHoraire', 'etatVolumeHoraire', 'data');
     }
 
     public function formuleTotauxHetdAction()
@@ -463,5 +501,13 @@ class IntervenantController extends AbstractActionController implements ContextP
     protected function getServiceIntervenant()
     {
         return $this->getServiceLocator()->get('applicationIntervenant');
+    }
+
+    /**
+     * @return \Application\Service\TypeHeures
+     */
+    protected function getServiceTypeHeures()
+    {
+        return $this->getServiceLocator()->get('applicationTypeHeures');
     }
 }

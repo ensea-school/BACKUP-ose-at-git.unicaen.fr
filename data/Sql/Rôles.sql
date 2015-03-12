@@ -15,13 +15,13 @@ from
   LEFT JOIN structure s ON s.id = r.structure_id AND s.histo_destruction IS NULL
 WHERE
   r.histo_destruction IS NULL
-  AND r.source_id = OSE_IMPORT.GET_SOURCE_ID('OSE')
+  --AND r.source_id = OSE_IMPORT.GET_SOURCE_ID('OSE')
 ORDER BY
   structure, nom, source, type_role;
 
 -- pour créer un nouveau rôle
 
-select nom_usuel, prenom, source_code from personnel where 1 = ose_divers.str_find(nom_patronymique || ' ' || nom_usuel,'OZENNE' );
+select nom_usuel, prenom, source_code from personnel where 1 = ose_divers.str_find(nom_patronymique || ' ' || nom_usuel,'Levalois' );
 /*
 - Chantal DENOYES
 - Nathalie OZENNE
@@ -29,7 +29,7 @@ select nom_usuel, prenom, source_code from personnel where 1 = ose_divers.str_fi
 - Sandra MAHIEU
  */
 
-select libelle_court, libelle_long, source_code from structure where libelle_court like '%Histoire%' AND niveau = 2;
+select libelle_court, libelle_long, source_code from structure where libelle_court like '%Droit%' AND niveau = 2;
 
 select * from type_role where histo_destruction is null;
 
@@ -41,15 +41,15 @@ INSERT INTO ROLE (
     ID, SOURCE_ID, 
     HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
 )VALUES(
-    null,--(SELECT ID FROM structure WHERE source_code = 'U08'),
-    (SELECT ID FROM personnel WHERE source_code ='528'),
-    (SELECT ID FROM TYPE_ROLE WHERE code = 'administrateur'),
-    'admin-drh-528',
+    (SELECT ID FROM structure WHERE source_code = 'U01'),
+    (SELECT ID FROM personnel WHERE source_code ='3157'),
+    (SELECT ID FROM TYPE_ROLE WHERE code = 'gestionnaire-composante'),
+    'gestionnaire-composante-3157',
     ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 
     (select id from utilisateur where username='lecluse'), (select id from utilisateur where username='lecluse') -- laurent
 );
 
---delete from role where source_code = 'gest-5064';
+delete from role where source_code = 'gestionnaire-composante-3157';
 
 -- divers
 

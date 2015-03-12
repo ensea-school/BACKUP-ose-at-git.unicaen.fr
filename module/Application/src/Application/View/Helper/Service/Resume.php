@@ -72,7 +72,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         $totaux = array(
             'intervenant'       => 0,
             'heures'            => 0,
-            'hetd'              => 0,
+            'total'             => 0,
             'type-intervention' => [],
             'heures-ref'        => 0,
         );
@@ -126,10 +126,10 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
                 }
             }
             $totaux['heures-ref'] += $line['heures-ref'];
-            $totaux['hetd'] += $line['hetd'];
+            $totaux['total'] += $line['total'];
             $res .= '<td style="text-align:right;white-space:nowrap">'.($intervenantPermanent ? \Common\Util::formattedHeures($line['heures-ref']) : $na).'</td>'."\n";
             $res .= $this->renderServiceDu( $line['heures-service-statutaire'] - $line['heures-service-du-modifie'] );
-            $res .= $this->renderSoldeHetd($line['hetd-solde'], $intervenantPermanent);
+            $res .= $this->renderSoldeHetd($line['solde'], $intervenantPermanent);
             $res .= '</tr>'."\n";
         }
         $res .= '</tbody>'."\n";
@@ -143,7 +143,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         }
         $res .= '<th rowspan="'.($hasTi ? '2' : '1').'" style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-ref']).'</th>'."\n";
         $res .= '<th rowspan="'.($hasTi ? '2' : '1').'">&nbsp;</th>'."\n";
-        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\Common\Util::formattedHeures($totaux['hetd']).'</span></th>'."\n";
+        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\Common\Util::formattedHeures($totaux['total']).'</span></th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
         if ($hasTi){

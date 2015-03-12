@@ -32,18 +32,19 @@
       </join-columns>
     </many-to-one>
     <field name="serviceDu" type="float" column="SERVICE_DU" precision="126" scale="0" nullable="false"/>
-    <field name="enseignements" type="float" column="ENSEIGNEMENTS" precision="126" scale="0" nullable="false"/>
-    <field name="referentiel" type="float" column="REFERENTIEL" precision="126" scale="0" nullable="false"/>
-    <field name="serviceAssure" type="float" column="SERVICE_ASSURE" precision="126" scale="0" nullable="false"/>
-    <field name="service" type="float" column="SERVICE" precision="126" scale="0" nullable="false"/>
-    <field name="heuresSolde" type="float" column="HEURES_SOLDE" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFi" type="float" column="SERVICE_FI" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFa" type="float" column="SERVICE_FA" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceFc" type="float" column="SERVICE_FC" precision="126" scale="0" nullable="false"/>
+    <field name="heuresServiceReferentiel" type="float" column="SERVICE_REFERENTIEL" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFi" type="float" column="HEURES_COMPL_FI" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFa" type="float" column="HEURES_COMPL_FA" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFc" type="float" column="HEURES_COMPL_FC" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplFcMajorees" type="float" column="HEURES_COMPL_FC_MAJOREES" precision="126" scale="0" nullable="false"/>
     <field name="heuresComplReferentiel" type="float" column="HEURES_COMPL_REFERENTIEL" precision="126" scale="0" nullable="false"/>
-    <field name="heuresComplTotal" type="float" column="HEURES_COMPL_TOTAL" precision="126" scale="0" nullable="false"/>
+    <field name="total" type="float" column="TOTAL" precision="126" scale="0" nullable="false"/>
+    <field name="solde" type="float" column="SOLDE" precision="126" scale="0" nullable="false"/>
     <field name="sousService" type="float" column="SOUS_SERVICE" precision="126" scale="0" nullable="false"/>
+    <field name="heuresCompl" type="float" column="HEURES_COMPL" precision="126" scale="0" nullable="false"/>
     <one-to-many field="formuleResultatService" target-entity="Application\Entity\Db\FormuleResultatService" mapped-by="formuleResultat" />
     <one-to-many field="formuleResultatServiceReferentiel" target-entity="Application\Entity\Db\FormuleResultatServiceReferentiel" mapped-by="formuleResultat" />
     <one-to-many field="formuleResultatVolumeHoraire" target-entity="Application\Entity\Db\FormuleResultatVolumeHoraire" mapped-by="formuleResultat" />

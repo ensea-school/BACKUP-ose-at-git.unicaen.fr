@@ -52,6 +52,16 @@ return [
                             ],
                         ],
                     ],
+                    'mises-en-paiement-csv' => [
+                        'type'    => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/mises-en-paiement-csv',
+                            'defaults' => [
+                                'action' => 'misesEnPaiementCsv'
+                            ],
+                        ],
+                    ]
                 ],
             ],
         ],
@@ -72,6 +82,11 @@ return [
                                 'title'    => "État de paiement",
                                 'route'    => 'paiement/etat-paiement',
                             ),
+                            'mises-en-paiement-csv' => array(
+                                'label'    => "Mises en paiement (CSV)",
+                                'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
+                                'route'    => 'paiement/mises-en-paiement-csv',
+                            ),
                         ),
                     ),
                 ),
@@ -83,7 +98,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['index','demandeMiseEnPaiement','etatPaiement'],
+                    'action'     => ['index','demandeMiseEnPaiement','etatPaiement','misesEnPaiementCsv'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR, R_DRH],
                 ],
                 [

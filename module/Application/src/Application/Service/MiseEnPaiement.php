@@ -198,6 +198,82 @@ class MiseEnPaiement extends AbstractEntityService
     }
 
     /**
+     * Retourne les données du TBL des mises en paiement en fonction des critères de recherche transmis
+     *
+     * @param MiseEnPaiementRecherche $recherche
+     * @return array
+     */
+    public function getEtatPaiementCsv( MiseEnPaiementRecherche $recherche, array $options=[] )
+    {
+        // initialisation
+        $defaultOptions = [
+            'composante'        => null,            // Composante qui en fait la demande
+        ];
+        $options = array_merge($defaultOptions, $options );
+        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+
+
+        $data = [];
+
+        // requêtage
+        $conditions = [
+            'annee_id = '.$annee->getId()
+        ];
+
+        if ($e = $recherche->getEtat()){
+            $conditions['etat'] = 'etat = \''.$e.'\'';
+        }
+        if ($p = $recherche->getPeriode()){
+            $conditions['periode_id'] = 'periode_paiement_id = '.$p->getId();
+        }
+        if ($s = $recherche->getStructure()){
+            $conditions['structure_id'] = 'structure_id = '.$s->getId();
+        }
+        if ($recherche->getIntervenants()->count() > 0){
+            $iIdList = [];
+            foreach( $recherche->getIntervenants() as $intervenant ){
+                $iIdList[] = $intervenant->getId();
+            }
+            $conditions['intervenant_id'] = 'intervenant_id IN ('.implode(',',$iIdList).')';
+        }
+
+        if ($options['composante'] instanceof StructureEntity ){
+            $conditions['composante'] = "structure_id = ".(int)$options['composante']->getId();
+        }
+
+        $sql = 'SELECT * FROM V_ETAT_PAIEMENT WHERE '.implode( ' AND ', $conditions );
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        
+        // récupération des données
+        while( $d = $stmt->fetch()){
+            $ds = [
+                'annee-libelle'                 => (string) $annee,
+                'etat'                          =>          $d['ETAT'],
+                'date-mise-en-paiement'         => empty($d['DATE_MISE_EN_PAIEMENT']) ? null : \DateTime::createFromFormat('Y-m-d', substr($d['DATE_MISE_EN_PAIEMENT'],0,10)),
+                'intervenant-code'              =>          $d['INTERVENANT_CODE'],
+                'intervenant-nom'               =>          $d['INTERVENANT_NOM'],
+                'intervenant-numero-insee'      =>          $d['INTERVENANT_NUMERO_INSEE'],
+
+                'centre-cout-code'              =>          $d['CENTRE_COUT_CODE'],
+                'centre-cout-libelle'           =>          $d['CENTRE_COUT_LIBELLE'],
+                'domaine-fonctionnel-code'      =>          $d['DOMAINE_FONCTIONNEL_CODE'],
+                'domaine-fonctionnel-libelle'   =>          $d['DOMAINE_FONCTIONNEL_LIBELLE'],
+
+                'hetd'                          => (float)  $d['HETD'],
+                'hetd-pourc'                    => (float)  $d['HETD_POURC'],
+                'hetd-montant'                  => (float)  $d['HETD_MONTANT'],
+                'rem-fc-d714'                   => (float)  $d['REM_FC_D714'],
+                'exercice-aa'                   => (float)  $d['EXERCICE_AA'],
+                'exercice-aa-montant'           => (float)  $d['EXERCICE_AA_MONTANT'],
+                'exercice-ac'                   => (float)  $d['EXERCICE_AC'],
+                'exercice-ac-montant'           => (float)  $d['EXERCICE_AC_MONTANT'],
+            ];
+            $data[] = $ds;
+        }
+        return $data;
+    }
+
+    /**
      * Retourne les données de l'export Winpaie des mises en paiement en fonction des critères de recherche transmis
      *
      * @param MiseEnPaiementRecherche $recherche

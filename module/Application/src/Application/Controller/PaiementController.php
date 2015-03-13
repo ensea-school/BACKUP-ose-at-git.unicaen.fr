@@ -117,9 +117,23 @@ class PaiementController extends AbstractActionController implements ContextProv
             $this->etatPaiementPdf( $etat, $structure, $periode, $etatPaiement );
         }elseif ( $this->params()->fromPost('exporter-csv-winpaie') !== null ){
             return $this->exportCsvWinpaie( $recherche );
+        }elseif ( $this->params()->fromPost('exporter-csv-etat') !== null ){
+            return $this->etatPaiementCsv( $recherche );
         }else{
             return compact( 'rechercheForm', 'etatPaiement', 'etat', 'noData' );
         }
+    }
+
+    public function misesEnPaiementCsvAction()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+
+        $recherche = new MiseEnPaiementRecherche;
+        $options = [];
+        if ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()){
+            $options['composante'] = $role->getStructure();
+        }
+        return $this->etatPaiementCsv( $recherche, $options );
     }
 
     protected function etatPaiementPdf( $etat, $structure, $periode, $etatPaiement )
@@ -153,28 +167,43 @@ class PaiementController extends AbstractActionController implements ContextProv
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }
 
-    protected function etatPaiementCsv()
+    protected function etatPaiementCsv( MiseEnPaiementRecherche $recherche )
     {
-        /*$csvModel = new \UnicaenApp\View\Model\CsvModel();
-        $csvModel->setHeader([
-            'Intervenant',
-            'N° intervenant'
-        ]);
-        foreach( $entities as $entity ){ /* @var $entity \Application\Entity\Db\ElementPedagogique *
-            $etape = $entity->getEtape();
-            $csvModel->addLine([
-                $etape->getSourceCode(),
-                $etape->getLibelle(),
-                $etape->getNiveauToString(),
-                $entity->getSourceCode(),
-                $entity->getLibelle(),
-                $entity->getPeriode(),
-                $entity->getTauxFoad(),
-                $entity->getRegimesInscription()
-            ]);
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+
+        $options = [];
+        if ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()){
+            $options['composante'] = $role->getStructure();
         }
-        $csvModel->setFilename('offre-de-formation.csv');
-        return $csvModel;*/
+
+        $csvModel = new \UnicaenApp\View\Model\CsvModel();
+        $csvModel->setHeader([
+            'Année',
+            'État',
+            'Date de mise en paiement',
+            'N° intervenant',
+            'Intervenant',
+            'N° INSEE',
+            'Centre de coûts ou EOTP (code)',
+            'Centre de coûts ou EOTP (libellé)',
+            'Domaine fonctionnel (code)',
+            'Domaine fonctionnel (libelle)',
+            'HETD',
+            'HETD (%)',
+            'HETD (€)',
+            'Rém. FC D714.60',
+            'EXERCICE AA',
+            'EXERCICE AA (€)',
+            'EXERCICE AC',
+            'EXERCICE AC (€)',
+        ]);
+
+        $data = $this->getServiceMiseEnPaiement()->getEtatPaiementCsv($recherche, $options);
+        foreach( $data as $d ){
+            $csvModel->addLine($d);
+        }
+        $csvModel->setFilename('etat-paiement.csv');
+        return $csvModel;
     }
 
     protected function exportCsvWinpaie( MiseEnPaiementRecherche $recherche )

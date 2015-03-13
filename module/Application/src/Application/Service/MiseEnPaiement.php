@@ -198,6 +198,88 @@ class MiseEnPaiement extends AbstractEntityService
     }
 
     /**
+     * Retourne les données de l'export Winpaie des mises en paiement en fonction des critères de recherche transmis
+     *
+     * @param MiseEnPaiementRecherche $recherche
+     * @return array
+     */
+    public function getExportWinpaie( MiseEnPaiementRecherche $recherche, array $options=[] )
+    {
+        // initialisation
+        $defaultOptions = [
+            'composante'        => null,            // Composante qui en fait la demande
+        ];
+        $options = array_merge($defaultOptions, $options );
+        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+
+        $data = [];
+
+        // requêtage
+        $conditions = [
+            'annee_id = '.$annee->getId()
+        ];
+
+        if ($p = $recherche->getPeriode()){
+            $conditions['periode_id'] = 'periode_paiement_id = '.$p->getId();
+        }
+        if ($s = $recherche->getStructure()){
+            $conditions['structure_id'] = 'structure_id = '.$s->getId();
+        }
+        if ($recherche->getIntervenants()->count() > 0){
+            $iIdList = [];
+            foreach( $recherche->getIntervenants() as $intervenant ){
+                $iIdList[] = $intervenant->getId();
+            }
+            $conditions['intervenant_id'] = 'intervenant_id IN ('.implode(',',$iIdList).')';
+        }
+
+        if ($options['composante'] instanceof StructureEntity ){
+            $conditions['composante'] = "structure_id = ".(int)$options['composante']->getId();
+        }
+
+        $sql = 'SELECT * FROM V_EXPORT_PAIEMENT_WINPAIE WHERE '.implode( ' AND ', $conditions );
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+
+        // récupération des données
+        while( $d = $stmt->fetch()){
+            $nbu = (float) $d['NBU'];
+            $libelle = $d['LIBELLE'];
+            $nbuLimit = 99;
+            $ds = [
+                'insee'         =>         $d['INSEE'],
+                'nom'           =>         $d['NOM'],
+                'carte'         =>         $d['CARTE'],
+                'code-origine'  =>         $d['CODE_ORIGINE'],
+                'retenue'       =>         $d['RETENUE'],
+                'sens'          =>         $d['SENS'],
+                'mc'            =>         $d['MC'],
+                'nbu'           =>         null,
+                'montant'       => (float) $d['MONTANT'],
+                'libelle'       =>         null,
+            ];
+
+            $occ = floor( $nbu / $nbuLimit );
+            $mod = $nbu % $nbuLimit;
+
+            if ($occ > 0){
+                for( $i=0;$i<$occ;$i++ ){
+                    $ds['nbu'] = 99.0;
+                    $ds['libelle'] = $libelle.' 99 H';
+                    $data[] = $ds;
+                }
+            }
+            if ($mod > 0){
+                $ds['nbu'] = $mod;
+                $ds['libelle'] = $libelle.' '.sprintf( '%02d', floor($mod) ).' H';
+                $av = (round($mod-floor($mod),2))*100;
+                if ($av > 0) $ds['libelle'] .= sprintf( ' %02d', floor($av) );
+                $data[] = $ds;
+            }
+        }
+        return $data;
+    }
+
+    /**
      * Sauvegarde tous les changements intervenus dans un ensemble de mises en paiement
      *
      * @param array $changements

@@ -530,17 +530,30 @@ function PaiementMiseEnPaiementRechercheForm( id )
         if ( this.getIntervenantsElement().is(':visible') ){
             this.getSuiteElement().hide();
             if (this.getIntervenantsElement().val() == null){
-                this.getAfficherElement().hide();
-                this.getExporterElement().hide();
+                this.hideActions();
             }else{
-                this.getAfficherElement().show();
-                this.getExporterElement().show();
+                this.showActions();
             }
         }else{
             this.getSuiteElement().show();
-            this.getAfficherElement().hide();
-            this.getExporterElement().hide();
+            this.hideActions();
         }
+    }
+
+    this.hideActions = function()
+    {
+        this.getAfficherElement().hide();
+        this.getExporterPdfElement().hide();
+        this.getExporterCsvEtat().hide();
+        this.getExporterCsvWinpaie().hide();
+    }
+
+    this.showActions = function()
+    {
+        this.getAfficherElement().show();
+        this.getExporterPdfElement().show();
+        this.getExporterCsvEtat().show();
+        this.getExporterCsvWinpaie().show();
     }
 
     this.intervenantsSelectAll = function()
@@ -605,9 +618,19 @@ function PaiementMiseEnPaiementRechercheForm( id )
         return this.element.find('[name="afficher"]');
     }
 
-    this.getExporterElement = function()
+    this.getExporterPdfElement = function()
     {
-        return this.element.find('[name="exporter"]');
+        return this.element.find('[name="exporter-pdf"]');
+    }
+
+    this.getExporterCsvEtat = function()
+    {
+        return this.element.find('[name="exporter-csv-etat"]');
+    }
+
+    this.getExporterCsvWinpaie = function()
+    {
+        return this.element.find('[name="exporter-csv-winpaie"]');
     }
 
     this.getEtat = function()

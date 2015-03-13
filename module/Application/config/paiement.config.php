@@ -112,6 +112,12 @@ return [
                         ],
                         Assertion\MiseEnPaiementAssertion::getAssertionId(),
                     ],
+                    [
+                        [R_ADMINISTRATEUR, R_DRH],
+                        'MiseEnPaiement',
+                        ['export-csv-winpaie'],
+                        
+                    ],
                 ],
             ],
         ],

@@ -8,6 +8,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
 use Application\Entity\Db\MiseEnPaiement;
+use Application\Entity\Paiement\MiseEnPaiementRecherche;
 
 /**
  * @method \Application\Controller\Plugin\Context     context()
@@ -60,7 +61,7 @@ class PaiementController extends AbstractActionController implements ContextProv
         $etat = $this->params()->fromRoute('etat');
 
         $rechercheForm = $this->getFormMiseEnPaiementRecherche();
-        $recherche = new \Application\Entity\Paiement\MiseEnPaiementRecherche;
+        $recherche = new MiseEnPaiementRecherche;
         $recherche->setEtat( $etat ); // données à mettre en paiement uniquement
         $rechercheForm->bind($recherche);
 
@@ -112,8 +113,10 @@ class PaiementController extends AbstractActionController implements ContextProv
             $etatPaiement = $this->getServiceMiseEnPaiement()->getEtatPaiement( $recherche );
         }
 
-        if ( $this->params()->fromPost('exporter') !== null ){
+        if ( $this->params()->fromPost('exporter-pdf') !== null ){
             $this->etatPaiementPdf( $etat, $structure, $periode, $etatPaiement );
+        }elseif ( $this->params()->fromPost('exporter-csv-winpaie') !== null ){
+            return $this->exportCsvWinpaie( $recherche );
         }else{
             return compact( 'rechercheForm', 'etatPaiement', 'etat', 'noData' );
         }
@@ -172,6 +175,30 @@ class PaiementController extends AbstractActionController implements ContextProv
         }
         $csvModel->setFilename('offre-de-formation.csv');
         return $csvModel;*/
+    }
+
+    protected function exportCsvWinpaie( MiseEnPaiementRecherche $recherche )
+    {
+        $csvModel = new \UnicaenApp\View\Model\CsvModel();
+        $csvModel->setHeader([
+            'Insee',
+            'Nom',
+            'Carte',
+            'Code origine',
+            'Retenue',
+            'Sens',
+            'MC',
+            'NBU',
+            'Montant',
+            'Libellé'
+        ]);
+
+        $data = $this->getServiceMiseEnPaiement()->getExportWinpaie($recherche);
+        foreach( $data as $d ){
+            $csvModel->addLine($d);
+        }
+        $csvModel->setFilename('ose-export-winpaie-'.strtolower($recherche->getPeriode()).'.csv');
+        return $csvModel;
     }
 
     public function miseEnPaiementAction()

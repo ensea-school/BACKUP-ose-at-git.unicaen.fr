@@ -122,7 +122,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     {
         $out  = '<div class="service-a-payer" id="'.$this->getServiceAPayerId($serviceAPayer).'">';
         $out .= '<ul class="breadcrumb"><li>'.$this->renderHead( $serviceAPayer ).'</li></ul>';
-        $typesHeures = $this->getServiceTypeHeures()->getListFromServiceAPayer($serviceAPayer);
+        $typesHeures = $this->getServiceTypeHeures()->getList( $this->getServiceTypeHeures()->finderByServiceaPayer($serviceAPayer));
         $colSpan = 12 / count($typesHeures);
         if ($colSpan > 6) $colSpan = 6;
         $out .= '<div class="row">';

@@ -42,7 +42,7 @@ class EtapeViewHelper extends AbstractHelper
         if (! $etape) return '';
 
         if ($etape->getHistoDestruction()){
-            return '<p class="bg-danger"><abbr title="Cette formation n\'existe plus">'.$etape.'</abbr></p>';
+            return '<span class="bg-danger"><abbr title="Cette formation n\'existe plus">'.$etape.'</abbr></span>';
         }
 
         $url = $this->getView()->url('of/etape/apercevoir', array('id' => $etape->getId()));

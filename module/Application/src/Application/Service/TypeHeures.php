@@ -45,35 +45,27 @@ class TypeHeures extends AbstractEntityService
         return $this->getRepo()->findOneBy(['code' => $code]);
     }
 
-    /**
-     *
-     * @param ServiceAPayerInterface $serviceAPayer
-     * @return \Application\Entity\Db\TypeHeures[]
-     */
-    public function getListFromServiceAPayer( ServiceAPayerInterface $serviceAPayer )
+    public function finderByServiceaPayer( ServiceAPayerInterface $serviceAPayer, QueryBuilder $qb=null, $alias=null )
     {
-        $list = [];
-        if ($serviceAPayer->getHeuresComplFi() != 0){
-            $th = $this->getByCode(TypeHeuresEntity::FI);
-            $list[$th->getId()] = $th;
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $codes = [];
+
+        $misesEnPaiement = $serviceAPayer->getMiseEnPaiement();
+        foreach( $misesEnPaiement as $miseEnPaiement ){
+            /* @var $miseEnPaiement \Application\Entity\Db\MiseEnPaiement */
+            $th = $miseEnPaiement->getTypeHeures();
+            $codes[$th->getCode()] = $th->getCode();
         }
-        if ($serviceAPayer->getHeuresComplFa() != 0){
-            $th = $this->getByCode(TypeHeuresEntity::FA);
-            $list[$th->getId()] = $th;
-        }
-        if ($serviceAPayer->getHeuresComplFc() != 0){
-            $th = $this->getByCode(TypeHeuresEntity::FC);
-            $list[$th->getId()] = $th;
-        }
-        if ($serviceAPayer->getHeuresComplFcMajorees() != 0){
-            $th = $this->getByCode(TypeHeuresEntity::FC_MAJOREES);
-            $list[$th->getId()] = $th;
-        }
-        if ($serviceAPayer->getHeuresComplReferentiel() != 0){
-            $th = $this->getByCode(TypeHeuresEntity::REFERENTIEL);
-            $list[$th->getId()] = $th;
-        }
-        return $list;
+
+        if ($serviceAPayer->getHeuresComplFi()          != 0) $codes[TypeHeuresEntity::FI]          = TypeHeuresEntity::FI;
+        if ($serviceAPayer->getHeuresComplFa()          != 0) $codes[TypeHeuresEntity::FA]          = TypeHeuresEntity::FA;
+        if ($serviceAPayer->getHeuresComplFc()          != 0) $codes[TypeHeuresEntity::FC]          = TypeHeuresEntity::FC;
+        if ($serviceAPayer->getHeuresComplFcMajorees()  != 0) $codes[TypeHeuresEntity::FC_MAJOREES] = TypeHeuresEntity::FC_MAJOREES;
+        if ($serviceAPayer->getHeuresComplReferentiel() != 0) $codes[TypeHeuresEntity::REFERENTIEL] = TypeHeuresEntity::REFERENTIEL;
+        $this->finderByCode( $codes, $qb, $alias );
+
+        return $qb;
     }
 
     /**

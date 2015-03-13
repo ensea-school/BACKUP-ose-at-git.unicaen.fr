@@ -42,7 +42,7 @@ class ElementPedagogique extends AbstractHelper
         if (! $element) return '';
 
         if ($element->getHistoDestruction()){
-            return '<p class="bg-danger"><abbr title="Cet élément pédagogique n\'existe plus">'.$element.'</abbr></p>';
+            return '<span class="bg-danger"><abbr title="Cet élément pédagogique n\'existe plus">'.$element.'</abbr></span>';
         }
 
         $url = $this->getView()->url('of/element/voir', array('id' => $element->getId()));

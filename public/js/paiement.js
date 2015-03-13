@@ -441,16 +441,30 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
                 this.params['heures-dmep'] += this.params['demandes-mep'][miseEnPaiementId]['heures'];
             }
         }
-        this.params['heures-non-dmep'] = Math.round( (this.params['heures-total'] - this.params['heures-mep'] - this.params['heures-dmep'])*100 ) / 100;
+        this.params['heures-non-dmep'] = this.params['heures-total'] - this.params['heures-mep'] - this.params['heures-dmep'];
+        if (this.params['heures-total'] < this.params['heures-mep']){
+            this.params['heures-non-dmep'] += this.params['heures-mep'] - this.params['heures-total'];
+        }
+        this.params['heures-non-dmep'] = Math.round( this.params['heures-non-dmep']*100 ) / 100;
 
         this.element.find('.heures-non-dmep').html( Util.formattedHeures(this.params['heures-non-dmep']) );
 
-        if (0 == this.params['heures-non-dmep']){
-            this.element.find('.heures-non-dmep').parents('tr').hide();
-            this.element.addClass('bg-success');
+        if (this.params['heures-dmep'] + this.params['heures-mep'] > this.params['heures-total']){
+            this.element.addClass('bg-danger');
+            if (0 == this.params['heures-non-dmep']){
+                this.element.find('.heures-non-dmep').parents('tr').hide();
+            }else{
+                this.element.find('.heures-non-dmep').parents('tr').show();
+            }
         }else{
-            this.element.find('.heures-non-dmep').parents('tr').show();
-            this.element.removeClass('bg-success');
+            this.element.removeClass('bg-danger');
+            if (0 == this.params['heures-non-dmep']){
+                this.element.find('.heures-non-dmep').parents('tr').hide();
+                this.element.addClass('bg-success');
+            }else{
+                this.element.find('.heures-non-dmep').parents('tr').show();
+                this.element.removeClass('bg-success');
+            }
         }
     }
 
@@ -466,6 +480,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
         for( var miseEnPaiementId in this.params['demandes-mep']){
             this.addMiseEnPaiement( miseEnPaiementId );
         }
+        this.updateHeuresRestantes();
     }
 
 

@@ -112,7 +112,6 @@ class Validation extends AbstractEntityService
             $this->delete($validation, $softDelete);
         }
         catch (Exception $e) {
-            var_dump($e);
             throw new DbException(DbException::translate($e)->getMessage());
         }
     }

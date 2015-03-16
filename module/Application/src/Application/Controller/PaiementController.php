@@ -155,14 +155,27 @@ class PaiementController extends AbstractActionController implements ContextProv
         if ($periode)   $fileName .= '_'.strtolower( $periode->getLibelleCourt() );
         $fileName .= '_'.date('Y-m-d');
         $exp->setOrientationPaysage();
+
+
+
+
         // Création du pdf, complétion et envoi au navigateur
-        $exp    ->setHeaderSubtitle('Année universitaire '.$this->getContextProvider()->getGlobalContext()->getAnnee())
+
+        $htmlTitle = '<h1>'.$title.'</h1>';
+        $htmlTitle .= ucfirst($structure->getLibelleLong());
+
+        if ($periode){
+            $htmlTitle .= '<br />Paye du mois de '.lcfirst($periode->getLibelleLong());
+        }
+
+        $exp    ->setHeaderTitle($htmlTitle)
+                ->setHeaderSubtitle('Année universitaire '.$this->getContextProvider()->getGlobalContext()->getAnnee())
                 ->setMarginBottom(25)
-                ->setMarginTop(25);
+                ->setMarginTop(25 + ($periode ? 5 : 0));
 
         $drh = $this->getServicePersonnel()->getDrh();
 
-        $variables = compact( 'structure', 'periode', 'title', 'etatPaiement', 'drh', 'etat' );
+        $variables = compact( 'structure', 'periode', 'etatPaiement', 'drh', 'etat' );
         $exp->addBodyScript('application/paiement/etat-paiement-pdf.phtml', true, $variables, 1);
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }

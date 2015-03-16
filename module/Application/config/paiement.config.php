@@ -73,8 +73,8 @@ return [
                     'gestion' => array(
                         'pages' => array(
                             'etat-demande-paiement' => array(
-                                'label'    => "Mise en paiement",
-                                'title'    => "Mise en paiement",
+                                'label'    => "Mises en paiement",
+                                'title'    => "Mises en paiement",
                                 'route'    => 'paiement/etat-demande-paiement',
                             ),
                             'etat-paiement' => array(

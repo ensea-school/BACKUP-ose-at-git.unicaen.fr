@@ -119,30 +119,37 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
             }
         ?></td>
         <?php foreach( $data['th-taux'] as $th ): ?>
-        <?php if (isset($ls['taux'][$th->getId()])): ?>
-        <td class="nombre"><?php echo \Common\Util::formattedPourcentage($ls['taux'][$th->getId()]) ?></td>
-        <?php endif; ?>
+        <td class="nombre">
+            <?php if (isset($ls['taux'][$th->getId()])): ?>
+                <?php echo \Common\Util::formattedPourcentage($ls['taux'][$th->getId()]) ?>
+            <?php endif; ?>
+        </td>
         <?php endforeach; ?>
-        <?php if ($data['has-ponderation-service-compl']): ?>
-        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['ponderation-service-compl'])?></td>
-        <?php endif; ?>
+        
+        <td class="nombre">
+            <?php if ($data['has-ponderation-service-compl']): ?>
+                <?php echo \Common\Util::formattedHeures($ls['ponderation-service-compl'])?>
+            <?php endif; ?>
+        </td>
         <td><?php echo $this->structure( $ls['structure'] )->renderLink() ?></td>
         <?php foreach( $data['types-intervention'] as $ti ): ?>
         <td class="nombre">
-            <abbr title="Equivalence en HETD : <?php echo isset($ls['hetd'][$ti->getId()]) ? strip_tags(\Common\Util::formattedHeures($ls['hetd'][$ti->getId()])) : null ?>">
-                <?php echo isset($ls['heures'][$ti->getId()]) ? \Common\Util::formattedHeures($ls['heures'][$ti->getId()]) : null ?>
-            </abbr>
+            <?php echo isset($ls['heures'][$ti->getId()]) ? \Common\Util::formattedHeures($ls['heures'][$ti->getId()]) : null ?>
         </td>
         <?php endforeach; ?>
         <?php foreach( $data['th-service'] as $th ):?>
-        <?php if (isset($ls['hetd']['service'][$th->getId()])): ?>
-        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['hetd']['service'][$th->getId()])?></td>
-        <?php endif; ?>
+        <td class="nombre">
+            <?php if (isset($ls['hetd']['service'][$th->getId()])): ?>
+                <?php echo \Common\Util::formattedHeures($ls['hetd']['service'][$th->getId()])?>
+            <?php endif; ?>
+        </td>
         <?php endforeach; ?>
         <?php foreach( $data['th-compl'] as $th ):?>
-        <?php if (isset($ls['hetd']['compl'][$th->getId()])): ?>
-        <td class="nombre"><?php echo \Common\Util::formattedHeures($ls['hetd']['compl'][$th->getId()])?></td>
-        <?php endif; ?>
+        <td class="nombre">
+            <?php if (isset($ls['hetd']['compl'][$th->getId()])): ?>
+                <?php echo \Common\Util::formattedHeures($ls['hetd']['compl'][$th->getId()])?>
+            <?php endif; ?>
+        </td>
         <?php endforeach; ?>
     </tr>
 <?php endforeach; ?>

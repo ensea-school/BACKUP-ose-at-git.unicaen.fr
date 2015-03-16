@@ -294,7 +294,9 @@ class IntervenantController extends AbstractActionController implements ContextP
                     'structure'                     => $service->getService()->getStructureEns() ? $service->getService()->getStructureEns() : $service->getService()->getStructureAff(),
                     'ponderation-service-compl'     => $service->getPonderationServiceCompl(),
                     'heures'                        => [],
-                    'hetd'                          => []
+                    'hetd'                          => [
+                        'total' => 0,
+                    ]
                 ];
 
                 foreach( $typesHeures as $typeHeures ){

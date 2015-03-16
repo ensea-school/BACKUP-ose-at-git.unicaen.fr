@@ -53,8 +53,8 @@ $this->headTitle()->append($title);
         echo $this->formRow($rechercheForm->get('suite')).' ';
         echo $this->formRow($rechercheForm->get('afficher')).' ';
         echo $this->formRow($rechercheForm->get('exporter-csv-etat')).' ';
+        echo $this->formRow($rechercheForm->get('exporter-pdf')).' ';
         if (MiseEnPaiement::MIS_EN_PAIEMENT == $etat){
-            echo $this->formRow($rechercheForm->get('exporter-pdf')).' ';
             if ($this->isAllowed('MiseEnPaiement', 'export-csv-winpaie')){
                 echo $this->formRow($rechercheForm->get('exporter-csv-winpaie'));
             }

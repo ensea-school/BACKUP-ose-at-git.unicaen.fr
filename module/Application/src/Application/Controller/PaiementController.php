@@ -143,7 +143,7 @@ class PaiementController extends AbstractActionController implements ContextProv
         switch( $etat  ){
             case MiseEnPaiement::A_METTRE_EN_PAIEMENT   : 
                 $fileName = 'demande_mise_en_paiement';
-                $title = 'Demande de mise en paiement';
+                $title = 'Demandes de mises en paiement';
                 //$exp->setWatermark("Demandes");
             break;
             default                                     :

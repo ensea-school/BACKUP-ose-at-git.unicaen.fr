@@ -13,6 +13,8 @@ use Application\Entity\Db\WfEtape;
  */
 class AttenteValidationEnsRealiseIndicateurImpl extends AttenteValidationEnsAbstractIndicateurImpl
 {
+    use \Application\Traits\TypeVolumeHoraireAwareTrait;
+    
     /**
      * Retourne le type de volume horaire utile à cet indicateur.
      * 

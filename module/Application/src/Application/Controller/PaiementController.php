@@ -180,7 +180,9 @@ class PaiementController extends AbstractActionController implements ContextProv
         $csvModel->setHeader([
             'Année',
             'État',
+            'Composante',
             'Date de mise en paiement',
+            'Période',
             'N° intervenant',
             'Intervenant',
             'N° INSEE',

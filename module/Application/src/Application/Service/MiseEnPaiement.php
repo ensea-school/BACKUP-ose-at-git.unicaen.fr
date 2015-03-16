@@ -249,7 +249,9 @@ class MiseEnPaiement extends AbstractEntityService
             $ds = [
                 'annee-libelle'                 => (string) $annee,
                 'etat'                          =>          $d['ETAT'],
+                'periode-paiement-libelle'      =>          $d['PERIODE_PAIEMENT_LIBELLE'],
                 'date-mise-en-paiement'         => empty($d['DATE_MISE_EN_PAIEMENT']) ? null : \DateTime::createFromFormat('Y-m-d', substr($d['DATE_MISE_EN_PAIEMENT'],0,10)),
+                'structure-libelle'             =>          $d['STRUCTURE_LIBELLE'],
                 'intervenant-code'              =>          $d['INTERVENANT_CODE'],
                 'intervenant-nom'               =>          $d['INTERVENANT_NOM'],
                 'intervenant-numero-insee'      =>          $d['INTERVENANT_NUMERO_INSEE'],

@@ -573,7 +573,7 @@ class ContratController extends AbstractActionController implements ContextProvi
         
         $fr = $this->intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
 
-        return $fr->getServiceAssure();
+        return $fr->getServiceDu() + $fr->getSolde();
     }
     
     /**

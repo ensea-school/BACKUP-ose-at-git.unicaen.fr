@@ -335,12 +335,12 @@ class MiseEnPaiement extends AbstractEntityService
             ];
 
             $occ = floor( $nbu / $nbuLimit );
-            $mod = $nbu % $nbuLimit;
+            $mod = $nbu - $nbuLimit * $occ;
 
             if ($occ > 0){
                 for( $i=0;$i<$occ;$i++ ){
-                    $ds['nbu'] = 99.0;
-                    $ds['libelle'] = $libelle.' 99 H';
+                    $ds['nbu'] = (float)$nbuLimit;
+                    $ds['libelle'] = $libelle.' '.((int)$nbuLimit).' H';
                     $data[] = $ds;
                 }
             }

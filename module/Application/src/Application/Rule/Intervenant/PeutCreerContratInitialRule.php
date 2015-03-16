@@ -49,7 +49,7 @@ class PeutCreerContratInitialRule extends PeutCreerContratAbstractRule
         // on s'intéresse à ceux validés mais n'ayant pas faits l'objet d'un contrat
         $this->volumesHorairesDispos = [];
         foreach ($this->getServiceValideRule()->getVolumesHorairesValides() as $vh) { /* @var $vh VolumeHoraire */
-            if (!count($vh->getContrat())) {
+            if (!$vh->getMotifNonPaiement() && !count($vh->getContrat())) {
                 $this->volumesHorairesDispos[] = $vh;
             }
         }

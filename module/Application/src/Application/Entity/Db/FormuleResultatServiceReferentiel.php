@@ -9,6 +9,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, ResourceInterface
 {
+    use FormuleResultatTypesHeuresTrait;
     use ServiceAPayerTrait;
 
     /**

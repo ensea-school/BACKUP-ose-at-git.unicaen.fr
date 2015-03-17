@@ -4,7 +4,6 @@ namespace Application\Entity\DB;
 
 trait ServiceAPayerTrait
 {
-    use FormuleResultatTypesHeuresTrait;
 
     /**
      * @var integer

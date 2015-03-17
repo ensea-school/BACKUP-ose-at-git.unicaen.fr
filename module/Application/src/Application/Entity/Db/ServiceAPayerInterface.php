@@ -105,4 +105,16 @@ interface ServiceAPayerInterface
      * @return Structure
      */
     public function getStructure();
+
+    /**
+     * Get formuleResultat
+     *
+     * @return \Application\Entity\Db\FormuleResultat
+     */
+    public function getFormuleResultat();
+
+    /**
+     * @return boolean
+     */
+    public function isPayable();
 }

@@ -176,6 +176,9 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         if ($notAllowed && ! $saisieTerminee) $attrs['class'][] = 'bg-warning';
         if ($readOnly) $attrs['class'][] = 'read-only';
         if ($saisieTerminee) $attrs['class'][] = 'bg-success';
+        if (! $serviceAPayer->isPayable()){
+            $out .= '<div class="alert alert-danger" role="alert">Des heures à payer ont été positionnées sur ce service alors que c\'est normalement impossible.</div>';
+        }
         $out .= '<table '.$this->htmlAttribs($attrs).'>';
         $out .= '<thead><tr><th colspan="3">'.$typeHeures->getLibelleLong().'</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
@@ -239,7 +242,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             'default-centre-cout'   => $defaultCentreCout ? $defaultCentreCout->getId() : null,
             'mises-en-paiement'     => [],
             'demandes-mep'          => [],
-            'heures-total'          => $serviceAPayer->getHeuresCompl($typeHeures),
+            'heures-total'          => $serviceAPayer->isPayable() ? $serviceAPayer->getHeuresCompl($typeHeures) : 0,
             'heures-mep'            => 0.0,
             'heures-dmep'           => 0.0,
             'heures-non-dmep'       => 0.0,

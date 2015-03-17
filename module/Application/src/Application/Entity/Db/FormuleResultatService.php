@@ -2,7 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Application\Entity\MiseEnPaiementListe;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
@@ -10,102 +9,12 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class FormuleResultatService implements ServiceAPayerInterface, ResourceInterface
 {
-    use FormuleResultatTypesHeuresTrait;
-
-    /**
-     * @var integer
-     */
-    private $id;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $miseEnPaiement;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $centreCout;
-
-    /**
-     * @var \Application\Entity\Db\FormuleResultat
-     */
-    private $formuleResultat;
+    use ServiceAPayerTrait;
 
     /**
      * @var \Application\Entity\Db\Service
      */
     private $service;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->miseEnPaiement = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->centreCout = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Add miseEnPaiement
-     *
-     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
-     * @return FormuleResultatService
-     */
-    public function addMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement)
-    {
-        $this->miseEnPaiement[] = $miseEnPaiement;
-
-        return $this;
-    }
-
-    /**
-     * Remove miseEnPaiement
-     *
-     * @param \Application\Entity\Db\MiseEnPaiement $miseEnPaiement
-     */
-    public function removeMiseEnPaiement(\Application\Entity\Db\MiseEnPaiement $miseEnPaiement)
-    {
-        $this->miseEnPaiement->removeElement($miseEnPaiement);
-    }
-
-    /**
-     * Get miseEnPaiement
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMiseEnPaiement()
-    {
-        return $this->miseEnPaiement;
-    }
-
-    /**
-     * Get centreCout
-     *
-     * @param TypeHeures $typeHeures
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCentreCout( TypeHeures $typeHeures=null )
-    {
-        $filter = function( CentreCout $centreCout ) use ($typeHeures) {
-            if ($typeHeures){
-                return $centreCout->typeHeuresMatches( $typeHeures );
-            }else{
-                return true;
-            }
-        };
-        return $this->centreCout->filter($filter);
-    }
 
     /**
      * 
@@ -124,27 +33,6 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
         }else{
             return null;
         }
-    }
-
-    /**
-     * @return MiseEnPaiementListe
-     */
-    public function getMiseEnPaiementListe( \DateTime $dateMiseEnPaiement=null, Periode $periodePaiement=null )
-    {
-        $liste = new MiseEnPaiementListe( $this );
-        if ($dateMiseEnPaiement) $liste->setDateMiseEnPaiement( $dateMiseEnPaiement );
-        if ($periodePaiement)    $liste->setPeriodePaiement( $periodePaiement );
-        return $liste;
-    }
-
-    /**
-     * Get formuleResultat
-     *
-     * @return \Application\Entity\Db\FormuleResultat 
-     */
-    public function getFormuleResultat()
-    {
-        return $this->formuleResultat;
     }
 
     /**

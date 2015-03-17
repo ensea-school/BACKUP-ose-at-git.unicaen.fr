@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\ServiceAPayerInterface;
+use Doctrine\ORM\QueryBuilder;
 
 
 /**
@@ -34,7 +35,7 @@ class ServiceAPayer extends AbstractService
                      + $formuleResultatService->getHeuresComplFa()
                      + $formuleResultatService->getHeuresComplFc()
                      + $formuleResultatService->getHeuresComplFcMajorees();
-            return $totalHC > 0;
+            return $totalHC > 0 || $formuleResultatService->getMiseEnPaiement()->count() > 0;
         });
 
         $frsrList = $intervenant
@@ -42,7 +43,7 @@ class ServiceAPayer extends AbstractService
                         ->getFormuleResultatServiceReferentiel()->filter(
         function( \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel ){
             $totalHC = $formuleResultatServiceReferentiel->getHeuresComplReferentiel();
-            return $totalHC > 0;
+            return $totalHC > 0 || $formuleResultatServiceReferentiel->getMiseEnPaiement()->count() > 0;
         });
 
         $result = [];

@@ -12,7 +12,7 @@ $settings = array(
     'app_infos' => array(
         'nom'     => "OSE",
         'desc'    => "Organisation des Services d'Enseignement",
-        'version' => "1.4.3",
+        'version' => "1.4.4",
         'date'    => "17/03/2015",
         'contact' => array('mail' => "Contactez votre composante.", /*'tel' => "01 02 03 04 05"*/),
         'mentionsLegales'        => "http://www.unicaen.fr/outils-portail-institutionnel/mentions-legales/",

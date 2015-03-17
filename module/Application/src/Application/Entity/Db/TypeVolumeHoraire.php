@@ -67,6 +67,35 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
      */
     private $histoCreateur;
 
+    /**
+     * Retourne <code>true</code> si le code de ce type de volume horaire est PREVU.
+     * 
+     * @return boolean 
+     */
+    public function isPrevu()
+    {
+        return self::CODE_PREVU === $this->getCode();
+    }
+
+    /**
+     * Retourne <code>true</code> si le code de ce type de volume horaire est REALISE.
+     * 
+     * @return boolean 
+     */
+    public function isRealise()
+    {
+        return self::CODE_REALISE === $this->getCode();
+    }
+
+    /**
+     * Retourne <code>true</code> si le code de ce type de volume horaire est PAYE.
+     * 
+     * @return boolean 
+     */
+    public function isPaye()
+    {
+        return self::CODE_PAYE === $this->getCode();
+    }
 
     /**
      * Set code

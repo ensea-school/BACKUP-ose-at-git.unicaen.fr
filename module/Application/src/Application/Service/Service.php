@@ -480,13 +480,13 @@ class Service extends AbstractEntityService
      * 
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param IntervenantEntity $intervenant
-     * @param StructureEntity $structureEns
+     * @param StructureEntity[array|null $structureEns
      * @return QueryBuilder
      */
-    public function finderServicesNonValides(
+    public function fetchServicesDisposPourValidation(
             TypeVolumeHoraireEntity $typeVolumeHoraire,
             IntervenantEntity $intervenant = null,
-            StructureEntity $structureEns = null)
+            $structureEns = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                 ->select("s2, i, vh, strens")
@@ -494,7 +494,7 @@ class Service extends AbstractEntityService
                 ->join("s2.intervenant", "i")
                 ->join("s2.volumeHoraire", 'vh')
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
-                ->join("s2.structureEns", 'strens')
+                ->leftJoin("s2.structureEns", 'strens')
                 ->andWhere('NOT EXISTS (SELECT sv FROM Application\Entity\Db\VServiceValide sv WHERE sv.volumeHoraire = vh)')
                 ->addOrderBy("strens.libelleCourt", 'asc')
                 ->addOrderBy("s2.histoModification", 'asc');
@@ -502,13 +502,21 @@ class Service extends AbstractEntityService
         if ($intervenant) {
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
         }
-        if ($structureEns) {
-            $qb->andWhere("strens = :structureEns")->setParameter('structureEns', $structureEns);
+        if (null !== $structureEns) {
+            $structureEns = (array) $structureEns;
+            $whereStr     = in_array(null, $structureEns) ? ["strens IS NULL"] : [];
+            $structureEns = array_filter($structureEns);
+            foreach ($structureEns as $s) {
+                $paramName = uniqid("str");
+                $whereStr[] = "strens = :" . $paramName;
+                $qb->setParameter($paramName, $s);
+            }
+            $qb->andWhere(implode(' OR ', $whereStr));
         }
         
 //        var_dump($qb->getQuery()->getSQL());
         
-        return $qb;
+        return $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
     }
     
     /**
@@ -516,7 +524,7 @@ class Service extends AbstractEntityService
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param TypeValidationEntity $validation
      * @param IntervenantEntity $intervenant
-     * @param StructureEntity $structureEns
+     * @param StructureEntity|array|null $structureEns
      * @param StructureEntity $structureValidation
      * @return QueryBuilder
      */
@@ -524,14 +532,14 @@ class Service extends AbstractEntityService
             TypeVolumeHoraireEntity $typeVolumeHoraire, 
             ValidationEntity $validation = null, 
             IntervenantEntity $intervenant = null, 
-            StructureEntity $structureEns = null)
+            $structureEns = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
                 ->select("s, i, vh, strens")
                 ->from("Application\Entity\Db\Service", 's')
                 ->join("s.intervenant", "i")
                 ->join("s.volumeHoraire", 'vh')
-                ->join("s.structureEns", 'strens')
+                ->leftJoin("s.structureEns", 'strens')
                 ->join("vh.validation", "v")
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("v.typeValidation", 'tv')
@@ -545,9 +553,18 @@ class Service extends AbstractEntityService
         if ($intervenant) {
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
         }
-        if ($structureEns) {
-            $qb->andWhere("strens = :structureEns")->setParameter('structureEns', $structureEns);
+        if (null !== $structureEns) {
+            $structureEns = (array) $structureEns;
+            $whereStr     = in_array(null, $structureEns) ? ["strens IS NULL"] : [];
+            $structureEns = array_filter($structureEns);
+            foreach ($structureEns as $s) {
+                $paramName = uniqid("str");
+                $whereStr[] = "strens = :" . $paramName;
+                $qb->setParameter($paramName, $s);
+            }
+            $qb->andWhere(implode(' OR ', $whereStr));
         }
+        
         return $qb;
     }
 

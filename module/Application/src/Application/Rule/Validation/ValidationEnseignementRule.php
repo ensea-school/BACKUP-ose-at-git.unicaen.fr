@@ -18,45 +18,54 @@ use Application\Service\Workflow\Workflow;
 class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
 {
     /**
-     * Détermine la composante d'intervention (éventuelle) à prendre en compte
-     * dans la recherche des enseignements à valider ou déjà validés.
+     * Détermine selon le contexte la ou les composantes d'intervention (éventuelles) à utiliser comme
+     * critère de recherche des enseignements déjà validés ou à valider.
      * 
      * @return self
      */
-    protected function determineStructureIntervention()
+    protected function determineStructuresIntervention()
     {
-        /**
-         * PRÉVU
-         */
+        /***************************************************************************
+         *                                  PRÉVU
+         ***************************************************************************/
         if (TypeVolumeHoraire::CODE_PREVU === $this->typeVolumeHoraire->getCode()) {
             /**
              * Intervenant permanent : peu importe la structure d'intervention.
              */
             if ($this->intervenant->estPermanent()) {
-                $this->structureIntervention = null;
+                $this->structuresIntervention = null;
             }
             /**
              * Intervenant vacataire : la structure d'intervention doit correspondre à la 
              * structure du rôle (i.e. structure de responsabilité).
              */
             else {
-                $this->structureIntervention = $this->structureRole;
+                $this->structuresIntervention = [ (string) $this->structureRole => $this->structureRole ];
             }
         }
-        /**
-         * RÉALISÉ
-         */
+        /***************************************************************************
+         *                                  RÉALISÉ
+         ***************************************************************************/
         elseif (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
             /**
              * La structure d'intervention doit correspondre à la 
-             * structure du rôle (i.e. structure de responsabilité).
+             * structure du rôle (i.e. structure de responsabilité) ou être null (si enseignement hors UCBN).
              */
-            $this->structureIntervention = $this->structureRole;
+            $this->structuresIntervention = [ (string) $this->structureRole => $this->structureRole ];
+            
+            /**
+             * Le réalisé hors UCBN d'un permanent est validé par sa structure d'affectation
+             * (hors UCBN <=> structure d'intervention = null).
+             */
+            if ($this->intervenant->estPermanent() && $this->structureRole === $this->intervenant->getStructure()) {
+                $this->structuresIntervention["hors UCBN"] = null;
+            }
         }
         
-        if ($this->structureIntervention) {
+        if ($this->structuresIntervention) {
             $this->addMessage(
-                    "Seuls les enseignements dont la composante d'intervention est '{$this->structureIntervention}' peuvent être validés.", 
+                    sprintf("Seuls les enseignements dont la structure d'intervention est %s peuvent être validés.", 
+                            implode(" ou ", array_keys($this->structuresIntervention))),
                     'info');
         }
         
@@ -70,19 +79,20 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
      */
     protected function determineStructureValidation()
     {
-        /**
-         * PRÉVU
-         */
+        /***************************************************************************
+         *                                  PRÉVU
+         ***************************************************************************/
         if (TypeVolumeHoraire::CODE_PREVU === $this->typeVolumeHoraire->getCode()) {
             /**
              * Intervenant permanent : validation par la composante d'affectation de l'intervenant.
              */
             if ($this->intervenant->estPermanent()) {
-                $this->structureValidation = $this->structureRole;
-                
-                if ($this->structureRole !== $this->intervenant->getStructure()) {
-                    $this->structureValidation = $this->intervenant->getStructure();
-                }
+//                $this->structureValidation = $this->structureRole;
+//                
+//                if ($this->structureRole !== $this->intervenant->getStructure()) {
+//                    $this->structureValidation = $this->intervenant->getStructure();
+//                }
+                $this->structureValidation = $this->intervenant->getStructure();
             }
             /**
              * Intervenant vacataire : validation par chaque composante d'intervention des enseignements la concernant.
@@ -91,9 +101,9 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
                 $this->structureValidation = $this->structureRole;
             }
         }
-        /**
-         * RÉALISÉ
-         */
+        /***************************************************************************
+         *                                  RÉALISÉ
+         ***************************************************************************/
         elseif (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
             /**
              * Validation par chaque composante d'intervention des enseignements la concernant.
@@ -136,21 +146,26 @@ class ValidationEnseignementRule extends ValidationEnsRefAbstractRule
                 return true; // les composantes voient tout
             }
             
-            /**
-             * PRÉVU
-             */
+//            var_dump(implode(" ; ", (array)$this->structuresIntervention));
+//            var_dump("".$this->structureRole);
+//            var_dump("".$this->structureValidation);
+            
+            /***************************************************************************
+             *                                  PRÉVU
+             ***************************************************************************/
             if (TypeVolumeHoraire::CODE_PREVU === $this->typeVolumeHoraire->getCode()) {
                 /**
                  * Intervenant permanent : validation par la composante d'affectation de l'intervenant ;
                  * Intervenant vacataire : validation par chaque composante d'intervention des enseignements la concernant.
                  */
-                return
-                         $this->intervenant->estPermanent() && $this->structureRole === $this->intervenant->getStructure() ||
-                        !$this->intervenant->estPermanent() && $this->structureRole === $this->structureValidation;
+//                return
+//                         $this->intervenant->estPermanent() && $this->structureRole === $this->intervenant->getStructure() ||
+//                        !$this->intervenant->estPermanent() && $this->structureRole === $this->structureValidation;
+                return $this->structureRole === $this->structureValidation;
             }
-            /**
-             * REALISE
-             */
+            /***************************************************************************
+             *                                  REALISE
+             ***************************************************************************/
             elseif (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
                 /**
                  * Validation par chaque composante d'intervention des enseignements la concernant.

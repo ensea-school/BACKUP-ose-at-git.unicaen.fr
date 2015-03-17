@@ -113,7 +113,7 @@ abstract class ValidationEnsRefAbstractRule implements WorkflowIntervenantAwareI
         
         $this
                 ->determineStructureRole()
-                ->determineStructureIntervention()
+                ->determineStructuresIntervention()
                 ->determineStructureValidation();
         
         return $this;
@@ -138,12 +138,12 @@ abstract class ValidationEnsRefAbstractRule implements WorkflowIntervenantAwareI
     }
 
     /**
-     * Détermine la structure d'intervention (éventuelle) à prendre en compte
-     * dans la recherche des enseignements ou du référentiel à valider ou déjà validés.
+     * Détermine selon le contexte les composantes d'intervention (éventuelles) à utiliser comme
+     * critère de recherche des enseignements déjà validés ou à valider.
      * 
      * @return self
      */
-    abstract protected function determineStructureIntervention();
+    abstract protected function determineStructuresIntervention();
 
     /**
      * Détermine la structure auteure de la validation à créer ou des validations existantes.
@@ -168,19 +168,24 @@ abstract class ValidationEnsRefAbstractRule implements WorkflowIntervenantAwareI
     }
 
     /**
-     * @var Structure
+     * Composantes d'intervention (éventuelles) à utiliser comme
+     * critère de recherche des enseignements déjà validés ou à valider    
+     * 
+     * @var array Format <code>libellé => Structure</code> 
+     * NB: la valeur <code>null</code> est possible (i.e. enseignement hors UCBN).
      */
-    protected $structureIntervention;
+    protected $structuresIntervention;
 
     /**
-     * Retourne la seule composante d'enseignement (éventuelle) à prendre en compte
-     * dans la recherche des enseignements concernés par la validation.
+     * Retourne les composantes d'intervention (éventuelles) à utiliser comme
+     * critère de recherche des enseignements déjà validés ou à valider    
      * 
-     * @return null|Structure
+     * @return array Format <code>libellé => Structure</code> 
+     * NB: la valeur <code>null</code> est possible (i.e. enseignement hors UCBN).
      */
-    public function getStructureIntervention()
+    public function getStructuresIntervention()
     {
-        return $this->structureIntervention;
+        return $this->structuresIntervention;
     }
 
     /**

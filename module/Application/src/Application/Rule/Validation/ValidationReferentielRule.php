@@ -18,12 +18,12 @@ use Common\Exception\LogicException;
 class ValidationReferentielRule extends ValidationEnsRefAbstractRule
 {
     /**
-     * Détermine la seule structure (éventuelle) à prendre en compte
-     * dans la recherche du référentiel à valider ou déjà validé.
+     * Détermine selon le contexte les composantes d'intervention (éventuelles) à utiliser comme
+     * critère de recherche des enseignements déjà validés ou à valider.
      * 
      * @return ValidationReferentielRule
      */
-    protected function determineStructureIntervention()
+    protected function determineStructuresIntervention()
     {
         /**
          * PRÉVU
@@ -33,7 +33,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
              * Intervenant permanent : validation par la composante d'affectation de l'intervenant.
              */
             if ($this->intervenant->estPermanent()) {
-                $this->structureIntervention = null; // toutes structures
+                $this->structuresIntervention = null; // toutes structures
             }
             /**
              * Intervenant vacataire : impossible.
@@ -49,12 +49,12 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
             /**
              * Validation par chaque structure du référentiel.
              */
-            $this->structureIntervention = $this->structureRole;
+            $this->structuresIntervention = $this->structureRole;
         }
 
-        if ($this->structureIntervention) {
+        if ($this->structuresIntervention) {
             $this->addMessage(
-                    "Seul le référentiel dont la structure est '{$this->structureIntervention}' peuvt être validé.", 
+                    "Seul le référentiel dont la structure est '{$this->structuresIntervention}' peuvt être validé.", 
                     'info');
         }
         

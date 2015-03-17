@@ -307,25 +307,27 @@ class ValidationController extends AbstractActionController implements ContextPr
                 ->setTypeVolumeHoraire($typeVolumeHoraire)
                 ->setRole($role)
                 ->execute();
-        $structureEns        = $rule->getStructureIntervention();
+        $structuresEns       = $rule->getStructuresIntervention();
         $structureValidation = $rule->getStructureValidation();
 //        if (!$rule->isAllowed('read')) {
 //            return $this->redirect()->toRoute('home');
 //        }
 
-        $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structureEns, $structureValidation);
+        $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structuresEns, $structureValidation);
         
         $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes sur Service !
         
         // recherche des enseignements de l'intervenant non encore validés
-        $qb = $serviceService->finderServicesNonValides($typeVolumeHoraire, $this->intervenant, $structureEns);
-        $servicesNonValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
+//        if ($typeVolumeHoraire->isRealise() && $this->intervenant->estPermanent() && in_array(null, $structuresEns)) {
+//            $structuresEns = array_filter($structuresEns);
+//        }
+        $servicesNonValides = $serviceService->fetchServicesDisposPourValidation($typeVolumeHoraire, $this->intervenant, $structuresEns);
         $serviceService->setTypeVolumehoraire($servicesNonValides, $typeVolumeHoraire);
 
         if (!count($servicesNonValides)) {
             $this->validation = current($this->validations);
             $message = sprintf("Aucun enseignement de type '$typeVolumeHoraire' à valider%s n'a été trouvé.", 
-                    $structureEns ? " concernant la composante d'intervention &laquo; $structureEns &raquo;" : null);
+                    $structuresEns ? " concernant la structure d'intervention " . implode(" ou ", array_keys($structuresEns)) : null);
             $messages[] = $message;
         }
         
@@ -394,14 +396,14 @@ class ValidationController extends AbstractActionController implements ContextPr
      * 
      * @param TypeValidation $typeValidation
      * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @param Structure $structureEns
+     * @param Structure|array $structureEns
      * @param Structure $structureValidation
      * @return \Application\Controller\ValidationController
      */
     public function collectValidationsServices(
             TypeValidation $typeValidation,
             TypeVolumeHoraire $typeVolumeHoraire, 
-            Structure $structureEns = null, 
+            $structureEns = null, 
             Structure $structureValidation = null)
     {
         $serviceService = $this->getServiceService();
@@ -484,7 +486,7 @@ class ValidationController extends AbstractActionController implements ContextPr
             throw new MessageException("Validation du référentiel impossible.", null, $le);
         }
 
-        $structureRef        = $rule->getStructureIntervention();
+        $structureRef        = $rule->getStructuresIntervention();
         $structureValidation = $rule->getStructureValidation();
         
         // collecte des validations et des référentiels associés

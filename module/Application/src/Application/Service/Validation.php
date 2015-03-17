@@ -247,7 +247,7 @@ class Validation extends AbstractEntityService
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param TypeValidationEntity $typeValidation
      * @param IntervenantEntity $intervenant
-     * @param StructureEntity $structureEns
+     * @param StructureEntity|array|null $structureEns
      * @param StructureEntity $structureValidation
      * @return QueryBuilder
      */
@@ -255,11 +255,11 @@ class Validation extends AbstractEntityService
             TypeVolumeHoraireEntity $typeVolumeHoraire,  
             TypeValidationEntity $typeValidation = null, 
             IntervenantEntity $intervenant = null,
-            StructureEntity $structureEns = null, 
+            $structureEns = null, 
             StructureEntity $structureValidation = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("v, tv, str, i, vh, s, strens, strens2")
+                ->select("v, tv, str, i, vh, s, strens")
                 ->from('Application\Entity\Db\Validation', 'v')
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str') // auteur de la validation
@@ -267,8 +267,7 @@ class Validation extends AbstractEntityService
                 ->join("v.volumeHoraire", 'vh')
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("vh.service", 's')
-                ->join("s.structureEns", 'strens')
-                ->join("strens.structureNiv2", 'strens2')
+                ->leftJoin("s.structureEns", 'strens')
                 ->orderBy("v.histoModification", 'desc')
                 ->addOrderBy("strens.libelleCourt", 'asc');
         
@@ -278,14 +277,22 @@ class Validation extends AbstractEntityService
         if ($intervenant) {
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
         }
-        if ($structureEns) {
-            $qb->andWhere("strens = :structureEns OR strens2 = :structureEns")->setParameter('structureEns', $structureEns);
+        if (null !== $structureEns) {
+            $structureEns = (array) $structureEns;
+            $whereStr     = in_array(null, $structureEns) ? ["strens IS NULL"] : [];
+            $structureEns = array_filter($structureEns);
+            foreach ($structureEns as $s) {
+                $paramName = uniqid("str");
+                $whereStr[] = "strens = :" . $paramName;
+                $qb->setParameter($paramName, $s);
+            }
+            $qb->andWhere(implode(' OR ', $whereStr));
         }
         if ($structureValidation) {
             $qb->andWhere("str = :structureValidation")->setParameter('structureValidation', $structureValidation);
         }
         
-//        var_dump($qb->getQuery()->getSQL());
+//        print_r($qb->getQuery()->getSQL());
         
         return $qb;
     }

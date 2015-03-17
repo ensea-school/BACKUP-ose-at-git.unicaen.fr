@@ -18,7 +18,6 @@ switch( $etat ){
         $title = 'État de paiement';
         $rechercheForm->get('afficher')->setValue('Afficher l\'état de paiement');
         $rechercheForm->get('exporter-pdf')->setValue('Télécharger au format PDF');
-        $rechercheForm->get('exporter-csv-winpaie')->setValue('Extraction Winpaie');
     break;
 }
 $rechercheForm->get('exporter-csv-etat')->setValue('Extraction pour tableur (CSV)');
@@ -54,12 +53,6 @@ $this->headTitle()->append($title);
         echo $this->formRow($rechercheForm->get('afficher')).' ';
         echo $this->formRow($rechercheForm->get('exporter-csv-etat')).' ';
         echo $this->formRow($rechercheForm->get('exporter-pdf')).' ';
-        if (MiseEnPaiement::MIS_EN_PAIEMENT == $etat){
-            if ($this->isAllowed('MiseEnPaiement', 'export-csv-winpaie')){
-                echo $this->formRow($rechercheForm->get('exporter-csv-winpaie'));
-            }
-        }
-
         echo $this->form()->closeTag();
         echo $this->formErrors( $rechercheForm );
         ?>

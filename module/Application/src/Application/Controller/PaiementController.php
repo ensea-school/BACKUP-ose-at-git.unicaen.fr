@@ -115,8 +115,6 @@ class PaiementController extends AbstractActionController implements ContextProv
 
         if ( $this->params()->fromPost('exporter-pdf') !== null ){
             $this->etatPaiementPdf( $etat, $structure, $periode, $etatPaiement );
-        }elseif ( $this->params()->fromPost('exporter-csv-winpaie') !== null ){
-            return $this->exportCsvWinpaie( $recherche );
         }elseif ( $this->params()->fromPost('exporter-csv-etat') !== null ){
             return $this->etatPaiementCsv( $recherche );
         }else{
@@ -221,28 +219,39 @@ class PaiementController extends AbstractActionController implements ContextProv
         return $csvModel;
     }
 
-    protected function exportCsvWinpaie( MiseEnPaiementRecherche $recherche )
+    public function extractionWinpaieAction()
     {
-        $csvModel = new \UnicaenApp\View\Model\CsvModel();
-        $csvModel->setHeader([
-            'Insee',
-            'Nom',
-            'Carte',
-            'Code origine',
-            'Retenue',
-            'Sens',
-            'MC',
-            'NBU',
-            'Montant',
-            'Libellé'
-        ]);
+        $periode = $this->params()->fromRoute('periode');
+        $periode = $this->getServicePeriode()->getRepo()->findOneBy(['code' => $periode]);
 
-        $data = $this->getServiceMiseEnPaiement()->getExportWinpaie($recherche);
-        foreach( $data as $d ){
-            $csvModel->addLine($d);
+        if (empty($periode)){
+            $qb = $this->getServicePeriode()->finderByMiseEnPaiement();
+            $this->getServiceMiseEnPaiement()->finderByEtat(MiseEnPaiement::MIS_EN_PAIEMENT, $qb);
+            $periodes = $this->getServicePeriode()->getList( $qb );
+            return compact('periodes');
+        }else{
+            $recherche = new MiseEnPaiementRecherche;
+            $recherche->setPeriode($periode);
+            $csvModel = new \UnicaenApp\View\Model\CsvModel();
+            $csvModel->setHeader([
+                'Insee',
+                'Nom',
+                'Carte',
+                'Code origine',
+                'Retenue',
+                'Sens',
+                'MC',
+                'NBU',
+                'Montant',
+                'Libellé'
+            ]);
+            $data = $this->getServiceMiseEnPaiement()->getExportWinpaie($recherche);
+            foreach( $data as $d ){
+                $csvModel->addLine($d);
+            }
+            $csvModel->setFilename('ose-export-winpaie-'.strtolower($recherche->getPeriode()).'.csv');
+            return $csvModel;
         }
-        $csvModel->setFilename('ose-export-winpaie-'.strtolower($recherche->getPeriode()).'.csv');
-        return $csvModel;
     }
 
     public function miseEnPaiementAction()

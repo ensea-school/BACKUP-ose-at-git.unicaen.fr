@@ -61,7 +61,17 @@ return [
                                 'action' => 'misesEnPaiementCsv'
                             ],
                         ],
-                    ]
+                    ],
+                    'extraction-winpaie' => [
+                        'type'    => 'Segment',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/extraction-winpaie[/:periode]',
+                            'defaults' => [
+                                'action' => 'extractionWinpaie'
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -87,6 +97,11 @@ return [
                                 'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
                                 'route'    => 'paiement/mises-en-paiement-csv',
                             ),
+                            'extraction-winpaie' => array(
+                                'label'    => "Extraction Winpaie",
+                                'title'    => "Export des données de paiement au format Winpaie",
+                                'route'    => 'paiement/extraction-winpaie',
+                            ),
                         ),
                     ),
                 ),
@@ -103,7 +118,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['miseEnPaiement'],
+                    'action'     => ['miseEnPaiement','extractionWinpaie'],
                     'roles'      => [R_ADMINISTRATEUR, R_DRH],
                 ],
             ],

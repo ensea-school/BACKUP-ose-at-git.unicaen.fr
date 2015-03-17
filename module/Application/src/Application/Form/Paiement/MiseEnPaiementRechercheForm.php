@@ -112,14 +112,6 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
                 'class' => 'btn btn-default',
             ),
         ));
-
-        $this->add(array(
-            'name' => 'exporter-csv-winpaie',
-            'type'  => 'Submit',
-            'attributes' => array(
-                'class' => 'btn btn-default',
-            ),
-        ));
     }
 
     /**

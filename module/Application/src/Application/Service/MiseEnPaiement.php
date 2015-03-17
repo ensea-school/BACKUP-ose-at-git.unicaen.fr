@@ -138,7 +138,7 @@ class MiseEnPaiement extends AbstractEntityService
             $conditions['composante'] = "structure_id = ".(int)$options['composante']->getId();
         }
 
-        $sql = 'SELECT * FROM V_ETAT_PAIEMENT WHERE '.implode( ' AND ', $conditions );
+        $sql = 'SELECT * FROM V_ETAT_PAIEMENT WHERE '.implode( ' AND ', $conditions ).' ORDER BY INTERVENANT_NOM, CENTRE_COUT_CODE';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         
         // récupération des données
@@ -241,7 +241,7 @@ class MiseEnPaiement extends AbstractEntityService
             $conditions['composante'] = "structure_id = ".(int)$options['composante']->getId();
         }
 
-        $sql = 'SELECT * FROM V_ETAT_PAIEMENT WHERE '.implode( ' AND ', $conditions );
+        $sql = 'SELECT * FROM V_ETAT_PAIEMENT WHERE '.implode( ' AND ', $conditions ).' ORDER BY INTERVENANT_NOM, CENTRE_COUT_CODE';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
         
         // récupération des données
@@ -315,7 +315,35 @@ class MiseEnPaiement extends AbstractEntityService
             $conditions['composante'] = "structure_id = ".(int)$options['composante']->getId();
         }
 
-        $sql = 'SELECT * FROM V_EXPORT_PAIEMENT_WINPAIE WHERE '.implode( ' AND ', $conditions );
+        $sql = '
+        SELECT
+            INSEE,
+            NOM,
+            CARTE,
+            CODE_ORIGINE, 
+            RETENUE, 
+            SENS, 
+            MC, 
+            SUM(NBU) NBU,
+            MONTANT, 
+            LIBELLE
+        FROM
+            V_EXPORT_PAIEMENT_WINPAIE
+        WHERE
+            '.implode( ' AND ', $conditions ).'
+        GROUP BY
+            INSEE,
+            NOM,
+            CARTE,
+            CODE_ORIGINE,
+            RETENUE,
+            SENS,
+            MC,
+            MONTANT,
+            LIBELLE
+        ORDER BY
+            NOM, CODE_ORIGINE
+        ';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
 
         // récupération des données

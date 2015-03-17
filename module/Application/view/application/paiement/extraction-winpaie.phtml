@@ -1,0 +1,13 @@
+<h1>Extraction Winpaie</h1>
+
+<div class="alert alert-info" role="alert">Veuillez cliquer sur la période de paiement désirée.</div>
+
+<ul>
+<?php
+foreach( $periodes as $periode ){
+    $url = $this->url('paiement/extraction-winpaie', ['periode' => $periode->getCode()]);
+    $title = $periode->getLibelleLong();
+    echo '<li><a href="'.$url.'">'.$title.'</a></li>';
+}
+?>
+</ul>

@@ -300,6 +300,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
      */
     public function setService(Service $service = null)
     {
+        $service->setTypeVolumeHoraire($this->getListe()->getTypeVolumeHoraire());
         $this->forcedReadOnly = ! $this->getView()->isAllowed($service, 'update');
         $this->service = $service;
         return $this;

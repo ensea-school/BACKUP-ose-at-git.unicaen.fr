@@ -5,6 +5,7 @@ SELECT
   p.id p_id, p.libelle_court periode_paiement,
   cc.id cc_id, cc.source_code centre_cout,
   th.id th_id, th.libelle_court type_heures,
+  ep.source_code,
   mep.heures
 FROM
   v_mep_intervenant_structure  mis
@@ -14,5 +15,14 @@ FROM
   JOIN type_heures th ON th.id = mep.type_heures_id
   JOIN intervenant i on i.id = mis.intervenant_id
   JOIN structure s on s.id = mis.structure_id
+  LEFT JOIN FORMULE_RESULTAT_SERVICE frs ON frs.id = MEP.FORMULE_RES_SERVICE_ID
+  LEFT JOIN service s ON s.id = frs.service_id
+  LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
 WHERE
   mep.histo_destruction IS NULL
+and i.id = 517;
+
+
+--delete from mise_en_paiement where id in (29,31);
+
+--update mise_en_paiement set histo_destruction = null, histo_destructeur_id = null where id = 44;

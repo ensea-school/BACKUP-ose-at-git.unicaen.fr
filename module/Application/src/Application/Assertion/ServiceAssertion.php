@@ -12,6 +12,7 @@ use Application\Entity\Db\Service;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
+use Application\Entity\Db\TypeVolumeHoraire;
 
 /**
  * Description of Service
@@ -72,6 +73,10 @@ class ServiceAssertion extends AbstractAssertion
         if ($intervenant) {
             $intervenantStructure = $this->resource->getStructureAff() ? : $this->resource->getIntervenant()->getStructure();
         }
+        $typeVolumeHoraire = $this->resource->getTypeVolumeHoraire();
+
+        $inCxtPrevu   = $typeVolumeHoraire && $typeVolumeHoraire->getCode() === TypeVolumeHoraire::CODE_PREVU;
+        $inCxtRealise = $typeVolumeHoraire && $typeVolumeHoraire->getCode() === TypeVolumeHoraire::CODE_REALISE;
 
         /*********************************************************
          *                      Rôle intervenant
@@ -104,20 +109,33 @@ class ServiceAssertion extends AbstractAssertion
             }
             
             if ($intervenant) {
-                if (!$serviceStructure /*&& 'create' == $this->privilege*/) { 
+                if (!$serviceStructure && 'create' == $this->privilege) {
                     // si la composante d'enseignement n'est pas encore connue à ce stade, 
                     // on veut sans doute créer un nouveau service, il faut laisser passer...
                     return true;
                 }
-                if ($intervenant instanceof IntervenantPermanent) {
-                    if ($roleStructure === $intervenantStructure) {
-                        /* la composante d'affectation doit pouvoir saisir et contrôler les heures effectuées par ses permanents dans quelque composante que ce soit. */
+                if ($inCxtPrevu){
+                    if ($intervenant instanceof IntervenantPermanent) {
+                        if ($roleStructure === $intervenantStructure) {
+                            /* la composante d'affectation doit pouvoir saisir et contrôler les heures effectuées par ses permanents dans quelque composante que ce soit. */
+                            return true;
+                        }
+                    }else{
+                        if ($roleStructure === $serviceStructure) {
+                            // un gestionnaire ne peut saisir des enseignements à un vacataire que sur sa propre composante
+                            return true;
+                        }
+                    }
+                }elseif($inCxtRealise){
+                    if ($roleStructure === $serviceStructure) {
+                        // un gestionnaire peut saisir réalisé des enseignements que sur sa propre composante
                         return true;
                     }
-                }
-                else {
-                    if ($roleStructure === $serviceStructure) {
-                        // un gestionnaire ne peut saisir des enseignements à un vacataire que sur sa propre composante
+                    if ($intervenant instanceof IntervenantPermanent
+                        &&  $roleStructure === $intervenantStructure
+                        && $serviceStructure === null
+                    ){
+                        // un gestionnaire doit pouvoir saisir des services réalisés sur d'autres composantes
                         return true;
                     }
                 }

@@ -447,7 +447,7 @@ class ServiceController extends AbstractActionController
         $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
         $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
         $assertionEntity->setTypeVolumeHoraire($typeVolumeHoraire);
-        if (! $this->isAllowed($assertionEntity, 'create') || ! $this->isAllowed($assertionEntity, 'update')) {
+        if (! $this->isAllowed($assertionEntity, 'create') && ! $this->isAllowed($assertionEntity, 'update')) {
             throw new MessageException("Cette opération n'est pas autorisée.");
         }
 

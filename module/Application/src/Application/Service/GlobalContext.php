@@ -60,6 +60,15 @@ class GlobalContext
      * @var DateTime
      */
     protected $dateFinSaisiePermanents;
+
+    /**
+     * Date d'observation des historiques
+     *
+     * @var DateTime
+     */
+    protected $dateObservation;
+
+
     
     /**
      * Constructeur.
@@ -125,6 +134,11 @@ class GlobalContext
         return $this->dateFinSaisiePermanents;
     }
 
+    function getDateObservation()
+    {
+        return $this->dateObservation;
+    }
+
     public function setUtilisateur(UtilisateurEntity $utilisateur = null)
     {
         $this->utilisateur = $utilisateur;
@@ -170,6 +184,12 @@ class GlobalContext
     function setDateFinSaisiePermanents(DateTime $dateFinSaisiePermanents)
     {
         $this->dateFinSaisiePermanents = $dateFinSaisiePermanents;
+        return $this;
+    }
+
+    function setDateObservation(DateTime $dateObservation=null)
+    {
+        $this->dateObservation = $dateObservation;
         return $this;
     }
     

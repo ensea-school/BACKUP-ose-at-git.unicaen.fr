@@ -11,6 +11,7 @@ return array(
                     'CONTAINS' => 'Common\ORM\Query\Functions\Contains',
                     'REPLACE'  => 'Common\ORM\Query\Functions\Replace',
                     'OSE_DIVERS_STRUCTURE_DANS_STRUCTURE' => 'Common\ORM\Query\Functions\OseDivers\StructureDansStructure',
+                    'compriseEntre' => 'Common\ORM\Query\Functions\OseDivers\CompriseEntre',
                 ),
                 'filters' => array(
                     'historique' => 'Common\ORM\Filter\HistoriqueFilter',

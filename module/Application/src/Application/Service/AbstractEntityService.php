@@ -395,6 +395,31 @@ abstract class AbstractEntityService extends AbstractService
     }
 
     /**
+     * Filtre par historique, si l'entité est compatible avec les historiques
+     *
+     * @param QueryBuilder $qb
+     * @param string $alias
+     * @return QueryBuilder
+     */
+    public function finderByHistorique( QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $hasHistorique = is_subclass_of( $this->getEntityClass(), 'Application\Entity\Db\HistoriqueAwareInterface');
+        if ($hasHistorique){
+            $dateObservation = $this->getContextProvider()->getGlobalContext()->getDateObservation();
+            if ($dateObservation){
+                $qb->andWhere('1 = compriseEntre('.$alias.'.histoCreation,'.$alias.'.histoDestruction, :dateObservation)');
+                $qb->setParameter('dateObservation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);
+            }else{
+                $qb->andWhere('1 = compriseEntre('.$alias.'.histoCreation,'.$alias.'.histoDestruction)');
+            }
+        }
+
+        return $qb;
+    }
+
+    /**
      *
      * @param string $property                  Nom de la propriété à filtrer
      * @param mixed $value                      Valeur du filtre

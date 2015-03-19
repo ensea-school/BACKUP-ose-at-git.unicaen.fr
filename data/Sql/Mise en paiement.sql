@@ -20,9 +20,10 @@ FROM
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
 WHERE
   mep.histo_destruction IS NULL
-and i.id = 517;
+  AND i.nom_usuel = 'Chaillot'
+;
 
 
 --delete from mise_en_paiement where id in (29,31);
 
---update mise_en_paiement set histo_destruction = null, histo_destructeur_id = null where id = 44;
+--update mise_en_paiement set heures = 4, histo_modification=sysdate, histo_modificateur_id=4 WHERE id = 1060;

@@ -34,6 +34,57 @@ class NotificationController extends AbstractActionController implements Context
     use ContextProviderAwareTrait;
 
     /**
+     * Visualisation de tous les abonnements aux indicateurs.
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function indicateursAction()
+    {
+        $nis = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs(true);
+        
+        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel
+                ->setVariable('nis', $nis)
+                ->setVariable('serviceIndicateur', $this->getServiceIndicateur());
+        
+        return $viewModel;
+    }
+    
+    /**
+     * Réponse aux requêtes AJAX d'obtention du "title" (intitulé contenant le nombre de résultats trouvés)
+     * d'un indicateur.
+     * 
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function indicateurFetchTitleAction()
+    {
+        $niId = $this->params()->fromQuery('id');
+        if (!$niId) {
+            exit;
+        }
+        
+        $ni             = $this->getServiceNotificationIndicateur()->get($niId);
+        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($ni->getIndicateur(), $ni->getStructure());
+        
+        if ($indicateurImpl->getResultCount()) {
+            $url = $this->url()->fromRoute('indicateur/result', [
+                'indicateur' => $ni->getIndicateur()->getId(),
+                'structure'  => $ni->getStructure() ? $ni->getStructure()->getId() : null,
+            ]);
+            $title = <<<EOS
+<a href="$url" title="Cliquez pour vous rendre à la page concernée">$indicateurImpl</a>
+EOS;
+        } 
+        else {
+            $title = (string) $indicateurImpl;
+        }
+
+        return new \Zend\View\Model\JsonModel([
+            'title' => $title,
+        ]);
+    }
+    
+    /**
      * Notifications par mail des personnes abonnées à des indicateurs.
      * 
      * Accessible en ligne de commande, par exemple (on suppose que l'on est situé dans le répertoire de l'appli) :

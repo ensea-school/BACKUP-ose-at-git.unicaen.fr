@@ -1,0 +1,45 @@
+<?php 
+use Application\Service\Indicateur\AbstractIndicateurImpl;
+/* @var $indicateurImpl AbstractIndicateurImpl */
+?>
+
+<h1 class="page-header">Notification indicateurs</h1>
+
+<table class="table table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>Personne</th>
+            <th>Indicateur</th>
+            <th>Structure concernée</th>
+            <th>Fréquence</th>
+            <th>Date d'abonnement</th>
+            <th>Dernière notif</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->nis as $ni): /* @var $ni \Application\Entity\Db\NotificationIndicateur */?>
+        <?php 
+        $indicateurImpl = $this->serviceIndicateur->getIndicateurImpl($ni->getIndicateur(), $ni->getStructure()); 
+        $url = $this->url("notification/indicateur-fetch-title", [], ['query' => ['id' => $ni->getId()]]);
+        ?>
+        <tr>
+            <td><?php echo $ni->getPersonnel() ?></td>
+            <td><?php echo $ni->getIndicateur() ?> <a href="#" class="fetch-title pull-right" data-url="<?php echo $url ?>">Voir</a></td>
+            <td><?php echo $ni->getStructure() ?: "(Toutes)" ?></td>
+            <td><?php echo $ni->getFrequenceToString() ?></td>
+            <td><?php echo $ni->getDateAbonnementToString() ?></td>
+            <td><?php echo $ni->getDateDernNotifToString() ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<script>
+    $(function() {
+        $("a.fetch-title").click(function() {
+            var that = $(this);
+            $.get(that.addClass("loading").data('url')).done(function(data) { that.parent().html(data.title); });
+            return false;
+        });
+    });
+</script>

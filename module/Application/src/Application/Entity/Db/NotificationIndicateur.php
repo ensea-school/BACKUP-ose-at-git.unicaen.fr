@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Common\Constants;
 use DateTime;
 
 /**
@@ -202,6 +203,16 @@ class NotificationIndicateur
     {
         return $this->dateDernNotif;
     }
+
+    /**
+     * Get dateDernNotif
+     *
+     * @return DateTime 
+     */
+    public function getDateDernNotifToString()
+    {
+        return $this->dateDernNotif ? $this->dateDernNotif->format(Constants::DATETIME_FORMAT) : null;
+    }
     
     /**
      * Set dateAbonnement
@@ -225,6 +236,16 @@ class NotificationIndicateur
     {
         return $this->dateAbonnement;
     }
+
+    /**
+     * Get dateAbonnement
+     *
+     * @return DateTime 
+     */
+    public function getDateAbonnementToString()
+    {
+        return $this->dateAbonnement->format(Constants::DATETIME_FORMAT);
+    }
     
     /**
      * 
@@ -232,12 +253,12 @@ class NotificationIndicateur
      */
     public function getExtraInfos()
     {
-        $infos = "Abonnement : " . $this->getDateAbonnement()->format(\Common\Constants::DATETIME_FORMAT);
+        $infos = "Abonnement : " . $this->getDateAbonnement()->format(Constants::DATETIME_FORMAT);
         
         $infos .= "<br />Structure : " . ($this->getStructure() ?: "aucune");
         
         if (($dernNotif = $this->getDateDernNotif())) {
-            $infos .= "<br />Dernière notification : " . $dernNotif->format(\Common\Constants::DATETIME_FORMAT);
+            $infos .= "<br />Dernière notification : " . $dernNotif->format(Constants::DATETIME_FORMAT);
         }
         
         return $infos;

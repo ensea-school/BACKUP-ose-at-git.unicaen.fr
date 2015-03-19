@@ -39,9 +39,10 @@ return array(
                     'result' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route' => '/:indicateur',
+                            'route' => '/:indicateur[/structure/:structure]',
                             'constraints' => array(
                                 'indicateur' => '[0-9]*',
+                                'structure'  => '[0-9]*',
                             ),
                             'defaults' => array(
                                 'action' => 'result',

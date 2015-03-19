@@ -69,8 +69,15 @@ class IndicateurController extends AbstractActionController implements ContextPr
      */
     public function resultAction()
     {
-        $indicateur     = $this->context()->mandatory()->indicateurFromRoute();
-        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $this->getStructure());
+        $role       = $this->getContextProvider()->getSelectedIdentityRole();
+        $indicateur = $this->context()->mandatory()->indicateurFromRoute();
+        $structure  = $this->context()->structureFromRoute();
+        
+        if (! $role instanceof \Application\Acl\AdministrateurRole) {
+            $structure = null;
+        }
+        
+        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $structure ?: $this->getStructure());
         
         $viewModel = new ViewModel();
         $viewModel->setVariables([

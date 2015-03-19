@@ -35,6 +35,24 @@ return array(
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
+                    'indicateurs' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/indicateurs',
+                            'defaults' => array(
+                                'action' => 'indicateurs',
+                            ),
+                        ),
+                    ),
+                    'indicateur-fetch-title' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/indicateur-fetch-title',
+                            'defaults' => array(
+                                'action' => 'indicateur-fetch-title',
+                            ),
+                        ),
+                    ),
                     'notifier-indicateurs' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -76,6 +94,11 @@ return array(
     'bjyauthorize' => array(
         'guards' => array(
             'BjyAuthorize\Guard\Controller' => array(
+                array(
+                    'controller' => 'Application\Controller\Notification',
+                    'action'     => array('indicateurs', 'indicateur-fetch-title'),
+                    'roles'      => array(AdministrateurRole::ROLE_ID),
+                ),
                 array(
                     'controller' => 'Application\Controller\Notification',
                     'action'     => array('notifier-indicateurs'),

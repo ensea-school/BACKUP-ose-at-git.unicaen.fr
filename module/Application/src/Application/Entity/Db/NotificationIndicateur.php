@@ -213,6 +213,22 @@ class NotificationIndicateur
     {
         return $this->dateDernNotif ? $this->dateDernNotif->format(Constants::DATETIME_FORMAT) : null;
     }
+
+    /**
+     * Get dateDernNotif
+     *
+     * @return DateTime 
+     */
+    public function getDateProchaineNotifToString()
+    {
+        if (!$this->dateDernNotif) {
+            return null;
+        }
+        
+        $next = (new \DateTime())->setTimestamp($this->dateDernNotif->getTimestamp() + $this->getFrequence());
+        
+        return $next->format(Constants::DATETIME_FORMAT);
+    }
     
     /**
      * Set dateAbonnement

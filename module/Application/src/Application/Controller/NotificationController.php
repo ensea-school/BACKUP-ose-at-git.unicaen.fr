@@ -40,7 +40,7 @@ class NotificationController extends AbstractActionController implements Context
      */
     public function indicateursAction()
     {
-        $nis = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs(true);
+        $nis = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs(false);
         
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel

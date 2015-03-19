@@ -140,7 +140,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     {
         return [
             'js' => [
-                '/js/elementPedagogiqueRecherche.js',
+                '/js/elementPedagogiqueRecherche-2.js',
                 '/js/service.js',
                 '/js/service-referentiel.js',
                 '/js/paiement.js',

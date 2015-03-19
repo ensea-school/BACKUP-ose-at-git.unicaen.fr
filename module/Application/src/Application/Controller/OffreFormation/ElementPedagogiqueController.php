@@ -153,14 +153,15 @@ class ElementPedagogiqueController extends AbstractActionController implements C
      */
     public function searchAction()
     {
-        if (!($term = $this->params()->fromQuery('term'))) {
-            exit;
-        }
-        
         $structure = $this->context()->structureFromQuery();
         $niveau    = $this->context()->niveauFromQuery();
         $etape     = $this->context()->etapeFromQuery();
-        
+        $term = $this->params()->fromQuery('term');
+
+        if (! $etape && !$term) {
+            exit;
+        }
+
         // respect des filtres éventuels spécifiés en GET ou sinon en session
         $params = array();
         $params['structure'] = $structure;

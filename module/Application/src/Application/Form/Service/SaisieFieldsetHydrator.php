@@ -32,8 +32,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareI
         $intervenant = isset($data['intervenant']['id']) ? (int)$data['intervenant']['id'] : null;
         $object->setIntervenant( $intervenant ? $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($intervenant) : null );
 
-        $elementPedagogique = isset($data['element-pedagogique']['element']['id']) ? (int)$data['element-pedagogique']['element']['id'] : null;
-        $object->setElementPedagogique( $elementPedagogique ? $em->find('Application\Entity\Db\ElementPedagogique', $elementPedagogique) : null );
+        $object->setElementPedagogique( $data['element-pedagogique'] );
 
         $etablissement = isset($data['etablissement']['id']) ? (int)$data['etablissement']['id'] : null;
         $object->setEtablissement( $etablissement ? $em->find('Application\Entity\Db\Etablissement', $etablissement) : null );
@@ -62,12 +61,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareI
         }
 
         if ($object->getElementPedagogique()){
-            $data['element-pedagogique'] = array(
-                'element' => array(
-                    'id' => $object->getElementPedagogique()->getId(),
-                    'label' => (string)$object->getElementPedagogique(),
-                )
-            );
+            $data['element-pedagogique'] = $object->getElementPedagogique();
         }else{
             $data['element-pedagogique'] = null;
         }

@@ -148,7 +148,7 @@ class ElementPedagogique extends AbstractEntityService
      * 
      * @param array $filters
      * <p>Paramètres possibles :</p>
-     * <i>term</i>         : Texte recherché <b>obligatoire</b><br />
+     * <i>term</i>         : Texte recherché<br />
      * <i>limit</i>        : Nombre de résultats maxi<br />
      * <i>structure</i>    : Structure concernée sous forme d'une entité<br />
      * <i>niveau</i>       : Niveau, i.e. CONCAT(gtf.libelle_court, e.niveau), ex: L1, M2<br />
@@ -157,23 +157,24 @@ class ElementPedagogique extends AbstractEntityService
      */
     public function getSearchResultByTerm(array $filters = array())
     {
-        if (!isset($filters['term'])) {
-            return array();
-        }
         if (!isset($filters["limit"])) {
             $filters["limit"] = 100;
         }
         
-        $term      = preg_replace('#\s{2,}#', ' ', trim($filters['term']));
-        $criterion = explode(' ', $term);
+        if ($filters['term']){
+            $term      = preg_replace('#\s{2,}#', ' ', trim($filters['term']));
+            $criterion = explode(' ', $term);
 
-        $concat = "ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT";
-        $parts  = $params = array();
-        for ($i = 0; $i < count($criterion); $i++) {
-            $parts[] = "(UPPER(CONVERT($concat, 'US7ASCII')) LIKE UPPER(CONVERT(:criterionStr$i, 'US7ASCII'))) ";
-            $params["criterionStr$i"] = '%' . $criterion[$i] . '%';
+            $concat = "ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT";
+            $parts  = $params = array();
+            for ($i = 0; $i < count($criterion); $i++) {
+                $parts[] = "(UPPER(CONVERT($concat, 'US7ASCII')) LIKE UPPER(CONVERT(:criterionStr$i, 'US7ASCII'))) ";
+                $params["criterionStr$i"] = '%' . $criterion[$i] . '%';
+            }
+            $whereTerm = implode(' AND ', $parts);
+        }else{
+            $whereTerm = '1=1';
         }
-        $whereTerm = implode(' AND ', $parts);
         
         $whereContext = array();
         if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {

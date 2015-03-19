@@ -26,9 +26,7 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface, ServiceL
     {
         $id = (int)$data['element']['id'];
         if ($id){
-            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            /* @var $em \Doctrine\ORM\EntityManager */
-            $object = $em->find('Application\Entity\Db\ElementPedagogique', $id);
+            $object = $this->getServiceElementPedagogique()->get($id);
             return $object;
         }
         return null;
@@ -49,7 +47,23 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface, ServiceL
             'label' => $object ? $object->getLibelle() : null,
         );
 
+        $etape = $object ? $object->getEtape() : null;
+        if ($etape){
+            $data['etape'] = $etape->getId();
+        }
+        $structure = $object ? $object->getStructure() : null;
+        if ($structure){
+            $data['structure'] = $structure->getId();
+        }
+
         return $data;
     }
 
+    /**
+     * @return \Application\Service\ElementPedagogique
+     */
+    protected function getServiceElementPedagogique()
+    {
+        return $this->getServiceLocator()->get('applicationElementPedagogique');
+    }
 }

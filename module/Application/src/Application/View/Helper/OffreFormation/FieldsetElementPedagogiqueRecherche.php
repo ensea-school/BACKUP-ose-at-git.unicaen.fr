@@ -3,25 +3,32 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset;
-use Zend\View\Helper\AbstractHelper;
+use Zend\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of FieldsetElementPedagogiqueRecherche
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class FieldsetElementPedagogiqueRecherche extends AbstractHelper
+class FieldsetElementPedagogiqueRecherche extends AbstractHtmlElement
 {
+    /**
+     * ID
+     *
+     * @var string
+     */
+    protected $id;
+
     /**
      * @var ElementPedagogiqueRechercheFieldset 
      */
     protected $fieldset;
-    
+
     protected $structureElement;
     protected $niveauElement;
     protected $etapeElement;
     protected $elementElement;
-    
+
     /**
      * 
      * @param ElementPedagogiqueRechercheFieldset $fieldset
@@ -40,39 +47,30 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
 
     /**
      * 
+     * @return string
+     */
+    public function getId()
+    {
+        if (null === $this->id){
+            $this->id = uniqid();
+        }
+        return $this->id;
+    }
+
+    /**
+     * 
      */
     public function render()
     {
-        $id = uniqid();
-
         $this->fieldset->populateOptions();
         $this->structureElement = $this->fieldset->get('structure');
         $this->niveauElement    = $this->fieldset->get('niveau');
         $this->etapeElement     = $this->fieldset->get('etape');
         $this->elementElement   = $this->fieldset->get('element');
-        
-        
-        $this->structureElement ->setAttribute('id', 'structure-'.$id)
-                                ->setAttribute('data-id', $id)
-                                ->setAttribute('onchange', 'elementPedagogiqueRecherche.updateValues("'.$id.'",this)');
-
-        $this->niveauElement    ->setAttribute('id', 'niveau-'.$id)
-                                ->setAttribute('data-id', $id)
-                                ->setAttribute('onchange', 'elementPedagogiqueRecherche.updateValues("'.$id.'",this)');
-
-        $this->etapeElement     ->setAttribute('id', 'etape-'.$id)
-                                ->setAttribute('data-id', $id)
-                                ->setAttribute('onchange', 'elementPedagogiqueRecherche.updateValues("'.$id.'",this)');
-
-        $this->elementElement   ->setAttribute('id', 'element-'.$id);
-
-        $this->structureElement ->setAttribute('data-relations', json_encode($this->fieldset->getRelations()) );
-        $this->structureElement ->setAttribute('data-default-url', $this->fieldset->get('element')->getautoCompleteSource() );
-        //NB: $this->elementElement possède déjà un id DOM
 
         $helper = $this->getView()->formControlGroup();
 
-        $rowTemplate = $rowArgs = array();
+        $rowTemplate = $rowArgs = [];
         if ($this->fieldset->getStructureEnabled()) {
             $rowTemplate[] = '<div class="col-md-3">%s</div>';
             $rowArgs[]     = $helper($this->structureElement);
@@ -86,19 +84,30 @@ class FieldsetElementPedagogiqueRecherche extends AbstractHelper
             $rowArgs[]     = $helper($this->etapeElement);
         }
 
-        $html = '';
+        $attribs = [
+            'class'             => 'element-pedagogique-recherche',
+            'id'                => $this->getId(),
+            'data-relations'    => json_encode($this->fieldset->getRelations()),
+            'data-default-url'  => $this->fieldset->get('element')->getautoCompleteSource(),
+        ];
+        $html = '<div '.$this->htmlAttribs($attribs).'>';
         if ($rowTemplate) {
             $html .= vsprintf('<div class="row">' . implode(PHP_EOL, $rowTemplate) . '</div>', $rowArgs);
         }
-        
-        $rowTemplate = $rowArgs = array();
-        $rowTemplate[] = '<div class="col-md-12">%s</div>';
-        $rowArgs[]     = $helper($this->elementElement);
-        
-        $html .= vsprintf('<div class="row">' . implode(PHP_EOL, $rowTemplate) . '</div>', $rowArgs);
-        
-        $html .= '<script> elementPedagogiqueRecherche.updateValues("'.$id.'"); </script>';
-        
+
+        $helper = $this->getView()->plugin('formSearchAndSelect')->setAutocompleteMinLength(2);
+        $html .= '<div class="row"><div class="col-md-12">';
+        $html .= '<label class=" control-label" for="structure">'.$this->elementElement->getLabel().'</label>';
+        $html .= '<div id="ep-search">'.$helper($this->elementElement).'</div>';
+        $html .= '<div id="ep-liste">'.$this->getView()->formSelect( $this->fieldset->get('element-liste') ).'</div>';
+        $html .= '<div id="ep-wait" class="loading">&nbsp;</div>';
+        $html .= '</div></div>';
+
+        $html .= '</div>';
+        $html .= '<script type="text/javascript">';
+        $html .= '$(function() { ElementPedagogiqueRecherche.get("'.$this->getId().'").init(); });';
+        $html .= '</script>';
+
         return $html;
     }
 }

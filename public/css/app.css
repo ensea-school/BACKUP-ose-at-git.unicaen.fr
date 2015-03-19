@@ -250,10 +250,23 @@ form#modulateurs-saisie th select{
     display: none;
 }
 
+.bootstrap-select .dropdown-menu{
+    font-size: 10pt;
+}
+
 .bootstrap-select .dropdown-menu li a.opt{
     margin-left: 2em;
 }
 
 .demande-mise-en-paiement .type-heures.not-allowed {
     opacity: 0.5;
+}
+
+.bootstrap-select button.selectpicker {
+    font-size: 10pt;
+    padding-left: 0px;
+}
+
+.bootstrap-select button.selectpicker span.pull-left{
+    padding-left: 10px;
 }

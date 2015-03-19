@@ -38,7 +38,8 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
         /* @var $url Zend\View\Helper\Url */
 
-        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator'));
+        $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator'))
+             ->setAllowedObjectBindingClass('Application\Entity\Db\ElementPedagogique');
 
         $this->add(array(
             'name'       => $this->getStructureName(),
@@ -51,8 +52,11 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 ),
             ),
             'attributes' => array(
+                'id'    => 'structure',
                 'title' => "Structure gestionnaire de l'enseignement",
-                'class' => 'element-pedagogique element-pedagogique-structure input-sm',
+                'class' => 'element-pedagogique element-pedagogique-structure input-sm selectpicker',
+                'data-width' => "100%",
+                'data-live-search' => "true"
             ),
             'type' => 'Select',
         ));
@@ -68,8 +72,11 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 ),
             ),
             'attributes' => array(
+                'id'    => 'niveau',
                 'title' => "Niveau",
-                'class' => 'element-pedagogique element-pedagogique-niveau input-sm',
+                'class' => 'element-pedagogique element-pedagogique-niveau input-sm selectpicker',
+                'data-width' => "100%",
+                'data-live-search' => "true"
             ),
             'type' => 'Select',
         ));
@@ -85,8 +92,30 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 ),
             ),
             'attributes' => array(
+                'id'    => 'formation',
                 'title' => "Formation",
-                'class' => 'element-pedagogique element-pedagogique-etape input-sm',
+                'class' => 'element-pedagogique element-pedagogique-etape input-sm selectpicker',
+                'data-width' => "100%",
+                'data-live-search' => "true"
+            ),
+            'type' => 'Select',
+        ));
+
+        $this->add(array(
+            'name'       => 'element-liste',
+            'options'    => array(
+                'label' => "Enseignement :",
+                'label_attributes' => array(
+                    'title' => "Enseignement",
+                ),
+                'empty_option' => "(Tous)",
+                'disable_inarray_validator' => true,
+            ),
+            'attributes' => array(
+                'id'    => 'element-liste',
+                'class' => 'element-pedagogique element-pedagogique-element selectpicker',
+                'data-width' => "100%",
+                'data-live-search' => "true",
             ),
             'type' => 'Select',
         ));
@@ -100,6 +129,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 ),
             ),
             'attributes' => array(
+                'id'    => 'element',
                 'title' => "Saisissez 2 lettres au moins",
                 'class' => 'element-pedagogique element-pedagogique-element input-sm',
             ),
@@ -240,9 +270,12 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             'etape' => array(
                 'required' => false
             ),
+            'element-liste' => array(
+                'required' => false
+            ),
             'element' => array(
                 'required' => false
-            )
+            ),
         );
     }
 
@@ -252,12 +285,11 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             $this->queryBuilder = $this->getServiceEtape()->initQuery()[0];
 
             $this->getServiceEtape()->join( $this->getServiceStructure(), $this->queryBuilder, 'structure', true );
-
             $this->getServiceEtape()->join( $this->getServiceTypeFormation(), $this->queryBuilder, 'typeFormation', true );
-
             $this->getServiceTypeFormation()->join( $this->getServiceGroupeTypeFormation(), $this->queryBuilder, 'groupe', true );
 
             $this->queryBuilder->andWhere($this->getServiceEtape()->getAlias().'.histoDestruction IS NULL');
+            $this->getServiceEtape()->finderByNonOrphelines($this->queryBuilder);
         }
         return $this->queryBuilder;
     }

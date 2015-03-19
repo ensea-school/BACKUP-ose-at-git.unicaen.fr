@@ -36,20 +36,6 @@ $R_COMMUN = [R_ADMINISTRATEUR, R_DRH, R_ETABLISSEMENT, R_FOAD];
 
 $main =  array(
     'doctrine' => array(
-        'configuration' => array(
-            'orm_default' => array(
-                'string_functions' => array(
-                    'CONVERT'  => 'Common\ORM\Query\Functions\Convert',
-                    'CONTAINS' => 'Common\ORM\Query\Functions\Contains',
-                    'REPLACE'  => 'Common\ORM\Query\Functions\Replace',
-                    'OSE_DIVERS.STRUCTURE_DANS_STRUCTURE' => 'Common\ORM\Query\Functions\OseDivers\StructureDansStructure',
-                ),
-                'filters' => array(
-                    'historique' => 'Common\ORM\Filter\HistoriqueFilter',
-//                    'validite'   => 'Common\ORM\Filter\ValiditeFilter',
-                ),
-            )
-        ),
         'connection' => array(
             'orm_default' => array(
                 'driverClass' => 'Doctrine\DBAL\Driver\OCI8\Driver',

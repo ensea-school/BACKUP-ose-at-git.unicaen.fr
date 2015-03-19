@@ -18,10 +18,14 @@ class StructureDansStructure extends FunctionNode
                 $this->structureCibleId->dispatch($sqlWalker));
     }
     
+    /**
+     * NB: le format DQL attendu est "OSE_DIVERS_STRUCTURE_DANS_STRUCTURE"
+     * (et non pas "OSE_DIVERS.STRUCTURE_DANS_STRUCTURE").
+     * 
+     * @param \Doctrine\ORM\Query\Parser $parser
+     */
     public function parse(\Doctrine\ORM\Query\Parser $parser)
     {
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_DOT);
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
         $this->structuretesteeId = $parser->ArithmeticPrimary();

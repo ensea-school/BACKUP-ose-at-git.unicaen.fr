@@ -126,11 +126,13 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
         </td>
         <?php endforeach; ?>
         
-        <td class="nombre">
-            <?php if ($data['has-ponderation-service-compl']): ?>
+        
+        <?php if ($data['has-ponderation-service-compl']): ?>
+            <td class="nombre">
                 <?php echo \Common\Util::formattedHeures($ls['ponderation-service-compl'])?>
-            <?php endif; ?>
-        </td>
+            </td>
+        <?php endif; ?>
+        
         <td><?php echo $this->structure( $ls['structure'] )->renderLink() ?></td>
         <?php foreach( $data['types-intervention'] as $ti ): ?>
         <td class="nombre">

@@ -27,10 +27,13 @@ class ServiceController extends AbstractActionController
      */
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')
-                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
-                ->disableForEntity('Application\Entity\Db\Etape')
-                ->disableForEntity('Application\Entity\Db\Etablissement');
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\VolumeHoraire'
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
     }
 
     /**
@@ -214,7 +217,6 @@ class ServiceController extends AbstractActionController
             throw new \BjyAuthorize\Exception\UnAuthorizedException();
         }
 
-        $this->initFilters();
         if ($intervenant){
             $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
         }
@@ -256,8 +258,6 @@ class ServiceController extends AbstractActionController
 
     public function resumeRefreshAction()
     {
-        $this->initFilters();
-
         $filter = $this->getFormRecherche()->hydrateFromSession();
 
         return compact('filter');
@@ -345,6 +345,7 @@ class ServiceController extends AbstractActionController
 
     public function constatationAction()
     {
+        $this->initFilters();
         $errors = [];
         $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getRealise();
         $services = $this->params()->fromQuery('services');

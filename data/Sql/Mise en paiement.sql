@@ -19,8 +19,7 @@ FROM
   LEFT JOIN service s ON s.id = frs.service_id
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
 WHERE
-  mep.histo_destruction IS NULL
-  AND i.nom_usuel = 'Chaillot'
+  mep.histo_destruction IS NOT NULL
 ;
 
 

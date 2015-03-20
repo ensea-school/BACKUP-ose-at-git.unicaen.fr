@@ -257,7 +257,6 @@ return array_merge_recursive(
     include 'piece-jointe.config.php',
     include 'structure.config.php',
     include 'etablissement.config.php',
-    include 'demo.config.php',
     include 'recherche.config.php',
     include 'service.config.php',
     include 'volume-horaire.config.php',

@@ -133,6 +133,7 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirAction()
     {
+         //       \Test\Util::sqlLog($this->em());
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         $this->em()->getFilters()->enable('historique');
@@ -143,37 +144,7 @@ class IntervenantController extends AbstractActionController implements ContextP
         else {
             $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
-        
-        // fetch avec jointures
-        $entityClass = $intervenant instanceof IntervenantExterieur ? 
-                'Application\Entity\Db\IntervenantExterieur' : 
-                'Application\Entity\Db\IntervenantPermanent';
-        $qb = $this->em()->getRepository($entityClass)->createQueryBuilder("i")
-                ->addSelect("ti, si, c, src, a, aff, affr, d")
-                ->join("i.type", "ti")
-                ->join("i.statut", "si")
-                ->join("i.civilite", "c")
-                ->join("i.source", "src")
-                ->leftJoin("i.utilisateur", "u")
-                ->leftJoin("i.adresse", "a")
-                ->leftJoin("i.structure", "aff")
-                ->leftJoin("i.affectation", "affr")
-                ->leftJoin("i.discipline", "d")
-                ->where("i = :intervenant")->setParameter('intervenant', $intervenant);
-        if ($intervenant instanceof IntervenantExterieur) {
-            $qb
-                    ->addSelect("sf, rs, tp")
-                    ->leftJoin("i.situationFamiliale", "sf")
-                    ->leftJoin("i.regimeSecu", "rs")
-                    ->leftJoin("i.typePoste", "tp");
-        }
-        else {
-            $qb
-                    ->addSelect("co")
-                    ->leftJoin("i.corps", "co");
-        }
-        $intervenant = $qb->getQuery()->getSingleResult();
-        
+
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->intervenantGetDifferentiel($intervenant);
         $short = $this->params()->fromQuery('short', false);
@@ -202,10 +173,6 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirHeuresCompAction()
     {
-        $this->em()->getFilters()->enable('historique')
-                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
-                ->disableForEntity('Application\Entity\Db\Etablissement');
-
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         $form = $this->getFormHeuresComp();
@@ -363,8 +330,6 @@ class IntervenantController extends AbstractActionController implements ContextP
     {
         $role = $this->getContextProvider()->getSelectedIdentityRole();
 
-        $this->em()->getFilters()->enable('historique');
-
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
         }
@@ -389,40 +354,6 @@ class IntervenantController extends AbstractActionController implements ContextP
         }
         
         return $view;
-    }
-    
-    public function modifierAction()
-    {
-        if (!($id = $this->params()->fromRoute('id'))) {
-            throw new LogicException("Aucun identifiant d'intervenant spécifié.");
-        }
-        if (!($intervenant = $this->intervenant()->getRepo()->find($id))) {
-            throw new RuntimeException("Intervenant '$id' spécifié introuvable.");
-        }
-
-        $form = $this->getFormModifier();
-        $form->bind($intervenant);
-
-        if (($data = $this->params()->fromPost())) {
-            $form->setData($data);
-            if ($form->isValid()) {
-                $em = $this->intervenant()->getEntityManager();
-                $em->flush($form->getObject());
-            }
-        }
-        
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(array('form' => $form, 'intervenant' => $intervenant));
-        return $view;
-    }
-    
-    protected function getFormModifier()
-    {
-        $builder = new AnnotationBuilder();
-        $form    = $builder->createForm('Application\Entity\Db\Intervenant');
-        $form->getHydrator()->setUnderscoreSeparatedKeys(false);
-        
-        return $form;
     }
     
     /**

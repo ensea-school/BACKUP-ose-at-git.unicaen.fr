@@ -5,7 +5,6 @@ namespace Application\Service;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\ServiceAPayerInterface;
-use Doctrine\ORM\QueryBuilder;
 
 
 /**

@@ -62,9 +62,10 @@ class ContextProvider extends AbstractService
             
             if ($authUserContext->getIdentity()) {
                 $utilisateur = $authUserContext->getDbUser();
-                $intervenant = $utilisateur->getIntervenant();
-                $personnel   = $utilisateur->getPersonnel();
-                
+                if ($utilisateur){
+                    $intervenant = $utilisateur->getIntervenant();
+                    $personnel   = $utilisateur->getPersonnel();
+                }
                 if (null === $intervenant) {
                     $ldapUser = $authUserContext->getLdapUser();
                     $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer((int) $ldapUser->getSupannEmpId());

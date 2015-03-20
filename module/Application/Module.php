@@ -162,10 +162,6 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                 'em'      => 'Application\Controller\Plugin\Em',
                 'context' => 'Application\Controller\Plugin\Context',
             ),
-            'factories' => array(
-                'intervenant'        => 'Application\Controller\Plugin\IntervenantFactory',
-                'serviceReferentiel' => 'Application\Controller\Plugin\ServiceReferentielFactory',
-            ),
         );
     }
 

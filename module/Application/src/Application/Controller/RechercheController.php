@@ -37,6 +37,11 @@ class RechercheController extends AbstractActionController
     
     public function intervenantFindAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            'Application\Entity\Db\Intervenant',
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
+
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel(array());
         }

@@ -4,7 +4,7 @@ namespace Application\Controller\Plugin;
 
 use Zend\Mvc\Controller\Plugin\Params;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Session\Container;
 use Application\Service\LocalContext;
 use Application\Service\GlobalContext;
@@ -27,6 +27,8 @@ use Common\Exception\RuntimeException;
  */
 class Context extends Params implements ServiceLocatorAwareInterface
 {
+    use ServiceLocatorAwareTrait;
+
     /**
      * @var ServiceLocatorInterface
      */
@@ -135,13 +137,13 @@ class Context extends Params implements ServiceLocatorAwareInterface
             }
         }
 
-        $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $em = $this->getServiceLocator()->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 
         /* Cas particulier pour les intervenants : import implicite */
         if ('intervenant' === $target && (int)$value){
             $sourceCode = (string)(int)$value;
             if (!($intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode))) {
-                $this->getServiceLocator()->get('importProcessusImport')->intervenant($sourceCode); // Import
+                $this->getServiceLocator()->getServiceLocator()->get('importProcessusImport')->intervenant($sourceCode); // Import
                 if (!($intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode))) {
                     throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
                 }
@@ -258,7 +260,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
     public function getGlobalContext()
     {
         if (null === $this->globalContext) {
-            $this->globalContext = $this->sl->get('ApplicationContextProvider')->getGlobalContext();
+            $this->globalContext = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider')->getGlobalContext();
         }
         return $this->globalContext;
     }
@@ -269,7 +271,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
     public function getLocalContext()
     {
         if (null === $this->localContext) {
-            $this->localContext = $this->sl->get('ApplicationContextProvider')->getLocalContext();
+            $this->localContext = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider')->getLocalContext();
         }
         return $this->localContext;
     }
@@ -283,27 +285,5 @@ class Context extends Params implements ServiceLocatorAwareInterface
             $this->sessionContainer = new Container(get_class($this->getController()));
         }
         return $this->sessionContainer;
-    }
-    
-    /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->sl = $serviceLocator->getServiceLocator();
-        
-        return $this;
-    }
-
-    /**
-     * Get service locator
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->sl;
     }
 }

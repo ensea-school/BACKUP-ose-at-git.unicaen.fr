@@ -25,11 +25,10 @@ class PaiementController extends AbstractActionController implements ContextProv
      */
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')
-                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
-                ->disableForEntity('Application\Entity\Db\Etape')
-                ->disableForEntity('Application\Entity\Db\Etablissement')
-                ->disableForEntity('Application\Entity\Db\FonctionReferentiel');
+        $this->em()->getFilters()->enable('historique')->init(
+            'Application\Entity\Db\MiseEnPaiement',
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
     }
 
     public function indexAction()
@@ -46,7 +45,6 @@ class PaiementController extends AbstractActionController implements ContextProv
         if ($this->getRequest()->isPost()) {
             $changements = $this->params()->fromPost('changements', '{}');
             $changements = Json::decode($changements, Json::TYPE_ARRAY);
-            //var_dump($changements);
             $this->getServiceMiseEnPaiement()->saveChangements($changements);
             $saved = true;
         }
@@ -124,6 +122,7 @@ class PaiementController extends AbstractActionController implements ContextProv
 
     public function misesEnPaiementCsvAction()
     {
+        $this->initFilters();
         $role = $this->getContextProvider()->getSelectedIdentityRole();
 
         $recherche = new MiseEnPaiementRecherche;
@@ -221,6 +220,7 @@ class PaiementController extends AbstractActionController implements ContextProv
 
     public function extractionWinpaieAction()
     {
+        $this->initFilters();
         $periode = $this->params()->fromRoute('periode');
         $periode = $this->getServicePeriode()->getRepo()->findOneBy(['code' => $periode]);
 
@@ -256,6 +256,7 @@ class PaiementController extends AbstractActionController implements ContextProv
 
     public function miseEnPaiementAction()
     {
+        $this->initFilters();
         $title = 'Mise en paiement';
         $structure    = $this->context()->mandatory()->structureFromRoute();
         $intervenants = $this->params('intervenants');

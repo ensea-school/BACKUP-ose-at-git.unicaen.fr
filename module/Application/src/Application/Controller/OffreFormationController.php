@@ -32,7 +32,13 @@ class OffreFormationController extends AbstractActionController implements Conte
      */
     public function indexAction()
     {
-        $this->em()->getFilters()->enable('historique');
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\ElementPedagogique',
+                'Application\Entity\Db\Etape'
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
         
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $serviceEtape = $this->getServiceLocator()->get('applicationEtape'); /* @var $serviceEtape EtapeService */
@@ -131,7 +137,13 @@ class OffreFormationController extends AbstractActionController implements Conte
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $role         = $this->getContextProvider()->getSelectedIdentityRole();
 
-        $em->getFilters()->enable('historique');
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\ElementPedagogique',
+                'Application\Entity\Db\Etape'
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
 
         // extraction des filtres spécifiés dans la requête
         $structure = $this->context()->structureFromQuery();
@@ -188,6 +200,11 @@ class OffreFormationController extends AbstractActionController implements Conte
      */
     public function searchStructuresAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            'Application\Entity\Db\Structure',
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
+
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $result = $serviceStructure->getList( $serviceStructure->finderByEnseignement() );
         
@@ -202,8 +219,16 @@ class OffreFormationController extends AbstractActionController implements Conte
      */
     public function searchNiveauxAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Etape',
+                'Application\Entity\Db\CheminPedagogique',
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
+
         $structure = $this->context()->structureFromQuery();
-        
+
         $params = array();
         $params['structure'] = $structure instanceof \Application\Entity\Db\Structure ? $structure : null;
         

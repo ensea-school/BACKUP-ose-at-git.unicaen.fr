@@ -570,6 +570,13 @@ class Service extends AbstractEntityService
 
     public function setRealisesFromPrevus( ServiceEntity $service )
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\VolumeHoraire'
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
+
         $prevus = $service
                     ->getVolumeHoraireListe()->getChild()
                     ->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() )

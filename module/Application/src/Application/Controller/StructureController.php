@@ -63,8 +63,8 @@ class StructureController extends AbstractActionController
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel(array());
         }
-
-        $entities  = $this->getServiceStructure()->finderByNom($term)->getQuery()->execute();
+        $qb = $this->getServiceStructure()->finderByHistorique();
+        $entities  = $this->getServiceStructure()->finderByNom($term, $qb)->getQuery()->execute();
         $result = array();
 
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Structure */

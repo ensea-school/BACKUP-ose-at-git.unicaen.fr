@@ -38,6 +38,12 @@ class VolumeHoraireReferentielController extends AbstractActionController
 
     public function listeAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\VolumeHoraireReferentiel'
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
         $service = $this->context()->serviceReferentielFromRoute('id');
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
@@ -50,6 +56,12 @@ class VolumeHoraireReferentielController extends AbstractActionController
 
     public function saisieAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\VolumeHoraireReferentiel'
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
         $service           = $this->context()->serviceReferentielFromRoute(); /* @var $service \Application\Entity\Db\ServiceReferentiel */
         $typeVolumehoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
         $errors = array();

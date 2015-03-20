@@ -30,8 +30,13 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')
-                ->disableForEntity('Application\Entity\Db\FonctionReferentiel');
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\ServiceReferentiel',
+                'Application\Entity\Db\VolumeHoraireReferentiel'
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
     }
 
     /**
@@ -206,6 +211,7 @@ class ServiceReferentielController extends AbstractActionController implements C
 
     public function constatationAction()
     {
+        $this->initFilters();
         $services = $this->params()->fromQuery('services');
         if ($services){
             $services = explode( ',', $services );

@@ -22,6 +22,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
 class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait;
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
 
     /**
      * @var array
@@ -32,6 +33,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
      * @var array
      */
     protected $roles;
+
 
     /**
      * Constructeur.
@@ -53,45 +55,68 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     public function getRoles()
     {
         if (null === $this->roles) {
-            $this->roles = array();
+            $this->roles = $this->makeRoles();
+        }
+        return $this->roles;
+    }
 
-            // Chargement des rôles de base
-            foreach( $this->config as $classname ){
-                if (class_exists( $classname )){
-                    $role = new $classname; /* @var $role RoleInterface */
-                    $this->roles[$role->getRoleId()] = $role;
-                }else{
-                    throw new LogicException('La classe "'.$classname.'" déclarée dans la configuration du fournisseur de rôles n\'a pas été trouvée.');
-                }
+    protected function makeRoles()
+    {
+        $roles = [];
+
+        // Chargement des rôles de base
+        foreach( $this->config as $classname ){
+            if (class_exists( $classname )){
+                $role = new $classname; /* @var $role RoleInterface */
+                $roles[$role->getRoleId()] = $role;
+            }else{
+                throw new LogicException('La classe "'.$classname.'" déclarée dans la configuration du fournisseur de rôles n\'a pas été trouvée.');
             }
-
+        }
+        if (($utilisateur = $this->getUtilisateur()) && ($personnel = $utilisateur->getPersonnel())){
             // chargement des rôles métiers
             $qb = $this->getEntityManager()->createQueryBuilder()
                 ->from("Application\Entity\Db\Role", "r")
                 ->select("r, tr, s")
                 ->distinct()
                 ->join("r.type", "tr")
-                ->leftJoin("r.structure", "s");
+                ->leftJoin("r.structure", "s")
+                ->andWhere('1=compriseEntre(r.histoCreation,r.histoDestruction)')
+                ->andWhere('1=compriseEntre(tr.histoCreation,tr.histoDestruction)')
+                ->andWhere("r.personnel = :personnel")->setParameter(':personnel', $personnel);
             foreach ($qb->getQuery()->getResult() as $role) { /* @var $role Role */
                 $roleId = $role->getType()->getCode();
-                if (! isset($this->roles[$roleId])){
+                if (! isset($roles[$roleId])){
                     throw new Exception('Le rôle "'.$roleId.'" est inconnu.');
                 }
-                $classname = get_class($this->roles[$roleId]);
-                if ($this->roles[$roleId] instanceof StructureAwareInterface && $role->getStructure()){
+                $classname = get_class($roles[$roleId]);
+                if ($roles[$roleId] instanceof StructureAwareInterface && $role->getStructure()){
                     $roleId .= '-'.$role->getStructure()->getSourceCode();
-                    $this->roles[$roleId] = new $classname($roleId);
-                    $this->roles[$roleId]->setStructure( $role->getStructure() );
+                    $roles[$roleId] = new $classname($roleId);
+                    $roles[$roleId]->setStructure( $role->getStructure() );
                 }else{
-                    $this->roles[$roleId] = new $classname($roleId);
+                    $roles[$roleId] = new $classname($roleId);
                 }
-                $this->roles[$roleId]->setTypeRole( $role->getType() );
-                
-                $this->injectSelectedStructureInRole($this->roles[$roleId]);
+                $roles[$roleId]->setTypeRole( $role->getType() );
+
+                $this->injectSelectedStructureInRole($roles[$roleId]);
             }
         }
-        
-        return $this->roles;
+        return $roles;
+    }
+
+    /**
+     *
+     * @return \Application\Entity\Db\Utilisateur
+     */
+    public function getUtilisateur()
+    {
+        $identity = $this->getServiceLocator()->get('AuthUserContext')->getIdentity();
+        if (isset($identity['db'])){
+            return $identity['db'];
+        }else{
+            return null;
+        }
     }
 
     /**

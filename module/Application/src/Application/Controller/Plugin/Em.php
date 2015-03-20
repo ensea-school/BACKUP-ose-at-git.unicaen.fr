@@ -4,7 +4,7 @@ namespace Application\Controller\Plugin;
 
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -14,10 +14,7 @@ use Doctrine\ORM\EntityManager;
  */
 class Em extends AbstractPlugin implements ServiceLocatorAwareInterface
 {
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $sl;
+    use ServiceLocatorAwareTrait;
     
     /**
      * @var EntityManager
@@ -34,7 +31,7 @@ class Em extends AbstractPlugin implements ServiceLocatorAwareInterface
     {
         return $this->getEntityManager($name);
     }
-    
+
     /**
      * Retourne le gestionnaire d'entités.
      * 
@@ -44,31 +41,9 @@ class Em extends AbstractPlugin implements ServiceLocatorAwareInterface
     protected function getEntityManager($name)
     {
         if (null === $this->em) {
-            $this->em = $this->sl->get("doctrine.entitymanager.$name");
+            $this->em = $this->getServiceLocator()->getServiceLocator()->get("doctrine.entitymanager.$name");
         }
         
         return $this->em;
-    }
-    
-    /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->sl = $serviceLocator->getServiceLocator();
-        
-        return $this;
-    }
-
-    /**
-     * Get service locator
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->sl;
     }
 }

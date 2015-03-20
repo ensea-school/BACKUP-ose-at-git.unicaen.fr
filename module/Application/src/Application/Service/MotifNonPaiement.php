@@ -62,7 +62,7 @@ class MotifNonPaiement extends AbstractEntityService
     public function getMotifsNonPaiement()
     {
         if (! $this->motifsNonPaiement){
-            $this->motifsNonPaiement = $this->getList();
+            $this->motifsNonPaiement = $this->getList( $this->finderByHistorique() );
         }
         return $this->motifsNonPaiement;
     }

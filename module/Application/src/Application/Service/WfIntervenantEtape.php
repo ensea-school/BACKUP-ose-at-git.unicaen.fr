@@ -115,7 +115,7 @@ class WfIntervenantEtape extends AbstractEntityService
         
         $qb = $this->finderByIntervenant($intervenant); /* @var $qb QueryBuilder */
         if (null === $structure) {
-            $qb->andWhere("ie.structure is null");
+            $qb->andWhere("ie.structure is null"); // i.e. "peu importe la structure"
         }
         else {
             $qb
@@ -126,6 +126,9 @@ class WfIntervenantEtape extends AbstractEntityService
         if ($etape) {
             $this->finderByEtape($etape, $qb);
         }
+        
+        $qb->orderBy("ie.ordre");
+        
         $result = $qb->getQuery()->getResult();
         
         return $result;

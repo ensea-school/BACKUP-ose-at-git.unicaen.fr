@@ -7,7 +7,6 @@ use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\WfEtape as WfEtapeEntity;
 use Application\Entity\Db\WfIntervenantEtape as WfIntervenantEtapeEntity;
 use Application\Service\AbstractEntityService;
-use Application\Service\Workflow\Workflow;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 
@@ -63,93 +62,7 @@ class WfIntervenantEtape extends AbstractEntityService
         
         return $this;
     }
-//    
-//    /**
-//     * Remet à jour complètement la progression dans le worflow d'un intervenant.
-//     * 
-//     * @param Workflow $wf Worflow 
-//     * @param IntervenantEntity $intervenant Intervenant concerné
-//     * @return WfIntervenantEtapeEntity[]
-//     */
-//    public function createIntervenantEtapes(Workflow $wf, IntervenantEntity $intervenant)
-//    {
-//        $ordre = 1;
-//        $ies   = [];
-//        
-//        $wf->setIntervenant($intervenant);
-//        
-//        /**
-//         * NB: la progression stockée en bdd ne prend pas en compte la structure d'enseignement
-//         */
-//        $wf->setStructure(null);
-//
-//        /**
-//         * Calcul de l'état de chaque étape du workflow.
-//         */
-//        $wf->getCurrentStep();
-//        
-//        /**
-//         * RAZ progression !
-//         */
-//        $this->removeAllIntervenantEtapes($intervenant);
-//        
-//        /**
-//         * Début de transaction.
-//         */
-//        $this->getEntityManager()->beginTransaction();
-//        
-//        /**
-//         * Fetch table des étapes.
-//         */
-//        $etapes = $this->getServiceWfEtape()->findAll(); /* @var WfEtape[] $etapes  code => WfEtape */
-//        
-//        /**
-//         * Parcours des étapes du workflow.
-//         * NB: chaque étape présente dans le workflow est forcément pertinente.
-//         */
-//        foreach ($wf->getSteps() as $codeEtape => $step) {
-//            
-//            $etape = $etapes[$codeEtape];
-//            
-//            /**
-//             * Ajout de l'étape dans la progression.
-//             */
-//            $ie = new WfIntervenantEtapeEntity();
-//            $ie
-//                    ->setIntervenant($intervenant)
-//                    ->setEtape($etape);
-//            
-//            /**
-//             * Marquage de l'étape comme "franchie" et/ou "courante".
-//             */
-//            $ie
-//                    ->setFranchie($step->getDone())
-//                    ->setCourante($step->getIsCurrent());
-//            
-//            /**
-//             * Numérotation pour pouvoir trier.
-//             */
-//            $ie->setOrdre($ordre++);
-//            
-//            $ies[$codeEtape] = $ie;
-//            
-//            $this->getEntityManager()->persist($ie);
-//        }
-//        
-//        /**
-//         * Fin de transaction
-//         */
-//        try {
-//            $this->getEntityManager()->flush();
-//            $this->getEntityManager()->commit();
-//        }
-//        catch (\Exception $e) {
-//            $this->getEntityManager()->rollback();
-//            throw $e;
-//        }
-//        
-//        return $ies;
-//    }
+
     /**
      * Remet à jour complètement la progression dans le worflow d'un intervenant.
      * 
@@ -214,15 +127,6 @@ class WfIntervenantEtape extends AbstractEntityService
             $this->finderByEtape($etape, $qb);
         }
         $result = $qb->getQuery()->getResult();
-
-//        if ($etape) {
-//            $nb = count($result);
-//            if ($nb > 1) {
-//                throw new RuntimeException("Anomalie rencontrée: l'étape '$etape' figure $nb fois dans la progression!");
-//            }
-//            
-//            return $nb ? reset($result) : null;
-//        }
         
         return $result;
     }

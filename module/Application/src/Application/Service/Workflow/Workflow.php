@@ -3,16 +3,11 @@
 namespace Application\Service\Workflow;
 
 use Application\Acl\ComposanteRole;
-use Application\Interfaces\IntervenantAwareInterface;
-use Application\Interfaces\StructureAwareInterface;
-use Application\Interfaces\AnneeAwareInterface;
 use Application\Interfaces\TypeAgrementAwareInterface;
 use Application\Entity\Db\WfEtape;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeAgrement;
-use Application\Rule\Intervenant\AbstractIntervenantRule;
-use Application\Service\WfEtape as WfEtapeService;
 use Application\Service\WfIntervenantEtape as WfIntervenantEtapeService;
 use Application\Service\TypeAgrement as TypeAgrementService;
 use Application\Service\Workflow\Step\Step;
@@ -129,7 +124,6 @@ class Workflow extends AbstractWorkflow
         }
         
         $dbFunctionRule = $this->getServiceLocator()->get('DbFunctionRule');
-        $currentFound   = false;
         
         foreach ($ies as $ie) {
             $etape = $ie->getEtape();
@@ -150,32 +144,6 @@ class Workflow extends AbstractWorkflow
             $isCurrent = $ie->getCourante();
             $done      = $ie->getFranchie();
             
-//            /**
-//             * Certaines étapes du workflow peuvent être "déclinées" par structure d'enseignement,
-//             * exemple: l'étape "validation des enseignements".
-//             * 
-//             * La progression de l'intervenant dans le wf stockée en base de données
-//             * ne gère pas cette déclinaison par structure : l'étape "validation des enseignements"
-//             * marquée "franchie" signifie que des enseignements ont bien été validés mais 
-//             * sans considération pour la structure d'enseignement précise.
-//             * 
-//             * Le caractère "franchie" de certaines étapes peut être réévalué pour une structure d'enseignement
-//             * précise. Cela est utile pour le rôle gestionnaire par exemple : ce dernier s'exerçant sur
-//             * une structure de responsabilité précise, on veut savoir si une étape franchie l'est bien
-//             * pour cette structure de responsabilité en particulier.
-//             */
-//            if ($currentFound) {
-//                $isCurrent = false;
-//                $done      = false;
-//            }
-//            if ($done && !$currentFound && $etape->getStructureDependant() && $this->getStructure()) {
-//                if ($crossingRule->isRelevant() && !$crossingRule->execute()) {
-//                    $isCurrent = true;
-//                    $done = false;
-//                    $currentFound = true;
-//                }
-//            }
-            
             $step = $this->createStep($etape);
             $step
                     ->setLabel($etape->getLibelle())
@@ -188,7 +156,7 @@ class Workflow extends AbstractWorkflow
     }
     
     /**
-     * Parcourt les étapes pour déterminer l'étape courante (i.e. 1ere étape non franchissable trouvée).
+     * Parcourt les étapes pour déterminer l'étape courante.
      * 
      * @return self
      */
@@ -219,60 +187,6 @@ class Workflow extends AbstractWorkflow
         $this->setCurrentStep($currentStep);
             
         return $this;
-    }
-    
-    /**
-     * Instanciation d'une règle métier spécifiée par un nom de service ou de classe.
-     * 
-     * NB: les différents paramètres éventuellement spécifiés sont injectés dans la règle
-     * (intervenant, structure, année, etc.)
-     * 
-     * @param string $ruleClassName
-     * @param string $key
-     * @return AbstractIntervenantRule
-     */
-    protected function createRule($ruleClassName, $key)
-    {
-        if (!$ruleClassName) {
-            return null;
-        }
-        
-        $rule = null;
-        
-        // tentative via le gestionnaire de service
-        if (($alias = trim(strrchr($ruleClassName, '\\'), '\\'))) {
-            if ($this->getServiceLocator()->has($alias)) {
-                $rule = clone $this->getServiceLocator()->get($alias);
-            }
-        }
-        // sinon instanciation classique
-        if (null === $rule) {
-            $rule = new $ruleClassName();
-        }
-        
-        // injection de l'intervenant
-        if ($rule instanceof IntervenantAwareInterface) {
-            $rule->setIntervenant($this->getIntervenant());
-        }
-        
-        // injection éventuelle de la structure
-        if ($rule instanceof StructureAwareInterface) {
-            $rule->setStructure($this->getStructure());
-        }
-        
-        // injection éventuelle de l'année
-        if ($rule instanceof AnneeAwareInterface) {
-            $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
-            $rule->setAnnee($annee);
-        }
-        
-        // injection éventuelle du type d'agrément
-        if ($rule instanceof TypeAgrementAwareInterface) {
-            $typeAgrement = $this->getServiceTypeAgrement()->getRepo()->findOneByCode($key);
-            $rule->setTypeAgrement($typeAgrement);
-        }
-        
-        return $rule;
     }
     
     /**
@@ -335,15 +249,6 @@ class Workflow extends AbstractWorkflow
         }
         return $this->getStepUrl($this->getCurrentStep());
     }
-
-    /**
-     * 
-     * @return WfEtapeService
-     */
-    private function getServiceWfEtape()
-    {
-        return $this->getServiceLocator()->get('WfEtapeService');
-    } 
 
     /**
      * 

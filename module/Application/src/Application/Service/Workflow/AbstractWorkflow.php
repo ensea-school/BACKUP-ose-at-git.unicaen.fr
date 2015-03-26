@@ -54,67 +54,6 @@ abstract class AbstractWorkflow extends AbstractService
     }
     
     /**
-     * Parcourt les étapes pour déterminer l'étape courante (i.e. 1ere étape non franchissable trouvée).
-     * Chaque étape est marquée selon qu'elle est "courante" ou non et/ou "franchie" ou non.
-     * 
-     * @return self
-     */
-    protected function processSteps()
-    {
-        if (!$this->steps) {
-            $this->createSteps();
-        }
-        
-        $currentStep = null;
-        
-        foreach ($this->getSteps() as $key => $step) { /* @var $step Step */
-            $rule = $this->getCrossingRule($key);
-
-            /**
-             * Si l'étape n'est pas franchissable, c'est l'étape courante : 
-             * elle sera déclarée "courante" et "non franchie" plus bas.
-             */
-            if ($rule && $rule->isRelevant() && !$rule->execute()) {
-                $currentStep = $step;
-            }
-            /**
-             * Si elle franchissable et située APRÈS l'étape courante, elle est déclarée "non courante" et "non franchie".
-             */
-            elseif ($currentStep) {
-                $step
-                        ->setIsCurrent(false)
-                        ->setDone(false);
-            }
-            /**
-             * Si elle franchissable et située AVANT l'étape courante, elle est déclarée "non courante" et "franchie".
-             */
-            else {
-                $step
-                        ->setIsCurrent(false)
-                        ->setDone(true);
-            }
-        }
-        
-        /**
-         * Si aucune étape courante n'est trouvée, ce sera la dernière étape qui fera office.
-         */
-        if (!$currentStep) {
-            $currentStep = $this->getLastStep();
-        }
-
-        /**
-         * Etape courante.
-         */
-        $currentStep
-                    ->setIsCurrent(true)
-                    ->setDone(false);
-        
-        $this->setCurrentStep($currentStep);
-            
-        return $this;
-    }
-    
-    /**
      * Ajoute de règle : de pertinence et de franchissement.
      * 
      * @param string $key Clé de l'étape
@@ -322,15 +261,6 @@ abstract class AbstractWorkflow extends AbstractService
             return $step->getCrossable();
         }
         
-//        $reachable = $this->isStepReachable($step);
-//        $crossable = false;
-//        
-//        if ($reachable) {
-//            $rule = $this->getCrossingRule($step->getKey());
-//            $crossable =  !$rule || $rule->isRelevant() && $rule->execute();
-//        }
-//        
-//        return $reachable && $crossable;
         return $step->getDone();
     }
     

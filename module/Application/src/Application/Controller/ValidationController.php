@@ -232,7 +232,9 @@ class ValidationController extends AbstractActionController implements ContextPr
         $this->em()->getFilters()->enable('historique');
         
         $qb = $serviceValidation->finderByType($typeValidation);
-        $this->validation = $serviceValidation->finderByIntervenant($this->intervenant, $qb)->getQuery()->getOneOrNullResult();
+        $serviceValidation->finderByIntervenant($this->intervenant, $qb);
+        $serviceValidation->finderByHistorique($qb);
+        $this->validation = $qb->getQuery()->getOneOrNullResult();
         if (!$this->validation) {
             $this->validation = $serviceValidation->newEntity($typeValidation);
             $this->validation->setIntervenant($this->intervenant);

@@ -153,6 +153,7 @@ class ElementPedagogique extends AbstractEntityService
      * <i>structure</i>    : Structure concernée sous forme d'une entité<br />
      * <i>niveau</i>       : Niveau, i.e. CONCAT(gtf.libelle_court, e.niveau), ex: L1, M2<br />
      * <i>etape</i>        : Etape concernée sous forme d'une entité<br />
+     * <i>element</i>      : Élément concerné sous forme d'une entité<br />
      * @return array
      */
     public function getSearchResultByTerm(array $filters = array())
@@ -195,28 +196,43 @@ class ElementPedagogique extends AbstractEntityService
         }
         $whereContext = implode(PHP_EOL . 'AND ', array_filter($whereContext));
         $whereContext = $whereContext ? 'AND ' . $whereContext : null;
-        
-        $sql = <<<EOS
+
+        if (isset($filters['element']) && $filters['element'] instanceof ElementPedagogiqueEntity){
+            $orEp = " OR ep.id = ".((int)$filters['element']->getId());
+            $orCp = " OR cp.element_pedagogique_id = ".((int)$filters['element']->getId());
+        }else{
+            $orEp = '';
+            $orCp = '';
+        }
+
+        $sql = "
 select * from (
   select ep.id,
     rank() over (partition by ep.id order by cp.ordre) rang,
-    count(*) over (partition by ep.id) nb_ch,
-    ep.source_code, ep.libelle, e.libelle libelle_etape, e.niveau, pe.libelle_long libelle_pe, gtf.libelle_court libelle_gtf, tf.libelle_long libelle_tf,
+    count(*) over (partition by ep.id)                 nb_ch,
+    ep.source_code, ep.libelle,
+    e.libelle libelle_etape, e.niveau,
+    pe.libelle_long libelle_pe,
+    gtf.libelle_court libelle_gtf,
+    tf.libelle_long libelle_tf,
     ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
-  from chemin_pedagogique cp
-  JOIN element_pedagogique ep ON cp.element_pedagogique_id = ep.id  and  ep.HISTO_DESTRUCTEUR_ID is null and sysdate between ep.VALIDITE_DEBUT and nvl(ep.VALIDITE_FIN, sysdate)
-  JOIN etape e ON cp.etape_id = e.id                                and   e.HISTO_DESTRUCTEUR_ID is null and sysdate between  e.VALIDITE_DEBUT and nvl( e.VALIDITE_FIN, sysdate)
-  JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID             and  tf.HISTO_DESTRUCTEUR_ID is null and sysdate between tf.VALIDITE_DEBUT and nvl(tf.VALIDITE_FIN, sysdate)
-  JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID           and gtf.HISTO_DESTRUCTEUR_ID is null
-  JOIN structure s ON ep.structure_id = s.id
-  LEFT JOIN periode pe ON ep.periode_id = pe.id
-  where cp.HISTO_DESTRUCTEUR_ID is null and sysdate between cp.VALIDITE_DEBUT and nvl(cp.VALIDITE_FIN, sysdate)
-  and $whereTerm
-  $whereContext
-  order by gtf.ordre, e.niveau, ep.libelle
+  from
+    chemin_pedagogique cp
+    JOIN element_pedagogique ep ON cp.element_pedagogique_id = ep.id  and 1 = ose_divers.comprise_entre( ep.histo_creation, ep.histo_destruction)".$orEp."
+    JOIN etape e ON cp.etape_id = e.id
+    JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID
+    JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID
+    JOIN structure s ON ep.structure_id = s.id
+    LEFT JOIN periode pe ON ep.periode_id = pe.id
+  where
+    (1 = ose_divers.comprise_entre( cp.histo_creation, cp.histo_destruction )$orCp)
+    and $whereTerm
+    $whereContext
+  order by
+    gtf.ordre, e.niveau, ep.libelle
 )
 where rang = 1
-EOS;
+";
         
         $params["limit"] = $filters["limit"];
         

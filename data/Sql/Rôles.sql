@@ -21,7 +21,7 @@ ORDER BY
 
 -- pour créer un nouveau rôle
 
-select nom_usuel, prenom, source_code from personnel where 1 = ose_divers.str_find(nom_patronymique || ' ' || nom_usuel,'Levalois' );
+select nom_usuel, prenom, source_code, histo_destruction from personnel where 1 = ose_divers.str_find(nom_patronymique || ' ' || nom_usuel,'%DOLLEY%' );
 /*
 - Chantal DENOYES
 - Nathalie OZENNE
@@ -29,7 +29,7 @@ select nom_usuel, prenom, source_code from personnel where 1 = ose_divers.str_fi
 - Sandra MAHIEU
  */
 
-select libelle_court, libelle_long, source_code from structure where libelle_court like '%Droit%' AND niveau = 2;
+select libelle_court, libelle_long, source_code from structure where libelle_court like '%DRH%' AND niveau = 2;
 
 select * from type_role where histo_destruction is null;
 
@@ -41,10 +41,10 @@ INSERT INTO ROLE (
     ID, SOURCE_ID, 
     HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
 )VALUES(
-    (SELECT ID FROM structure WHERE source_code = 'U01'),
-    (SELECT ID FROM personnel WHERE source_code ='3157'),
-    (SELECT ID FROM TYPE_ROLE WHERE code = 'gestionnaire-composante'),
-    'gestionnaire-composante-3157',
+    null,--(SELECT ID FROM structure WHERE source_code = 'U01'),
+    (SELECT ID FROM personnel WHERE source_code ='102416'),
+    (SELECT ID FROM TYPE_ROLE WHERE code = 'administrateur'),
+    'administrateur-102416',
     ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 
     (select id from utilisateur where username='lecluse'), (select id from utilisateur where username='lecluse') -- laurent
 );
@@ -102,3 +102,38 @@ select * from individu_fonct_struct@harpprod ifs where no_dossier_pers = 16956;
 
 
 select * from individu@harpprod where nom_usuel = 'DENOYES';
+
+/*
+INSERT
+INTO PERSONNEL
+  (
+    ID,
+    CIVILITE_ID,
+    NOM_USUEL,
+    PRENOM,
+    NOM_PATRONYMIQUE,
+    EMAIL,
+    STRUCTURE_ID,
+    SOURCE_ID,
+    SOURCE_CODE,
+    VALIDITE_DEBUT,
+    HISTO_CREATION,
+    HISTO_CREATEUR_ID,
+    HISTO_MODIFICATION,
+    HISTO_MODIFICATEUR_ID
+  )
+  VALUES
+  (
+    PERSONNEL_id_seq.nextval,
+    (select id from civilite where libelle_court = 'Mme'),
+    'DOLLEY',
+    'Coralie',
+    'DOLLEY',
+    'coralie.dolley@unicaen.fr',
+    (select id from structure where libelle_court like '%DRH%' AND niveau = 2),
+    (select id from source where code = 'Harpege'),
+    '102416',
+    sysdate,
+    sysdate,4,sysdate,4
+  );
+*/

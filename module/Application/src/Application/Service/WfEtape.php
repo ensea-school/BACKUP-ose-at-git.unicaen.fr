@@ -44,38 +44,4 @@ class WfEtape extends AbstractEntityService
     {
         return $this->finderByCode($code)->getQuery()->getOneOrNullResult();
     }
-    
-    /**
-     * Retourne la 1ère étape du workflow
-     *
-     * @return WfEtapeEntity
-     */
-    public function findPremiere()
-    {
-        $qb = $this->getRepo()->createQueryBuilder("e")
-                ->join("e.etapeSuivante", "es")
-                ->where("e.code = :code")->setParameter('code', WfEtapeEntity::CODE_DEBUT);
-                
-        $debut = $qb->getQuery()->getOneOrNullResult();
-        
-        return $debut/*->getEtapeSuivante()->first()*/;
-    }
-
-    /**
-     * Retourne les étapes du workflow
-     *
-     * @return WfEtapeEntity[] Code => WfEtapeEntity
-     */
-    public function findAll()
-    {
-        $etape  = $this->findPremiere();
-        $etapes = [$etape->getCode() => $etape];
-        
-        while (($suivante = $etape->getEtapeSuivante()->first())) {  // NB: il n'y a en fait qu'une seule étape suivante au maximum
-            $etapes[$suivante->getCode()] = $suivante;
-            $etape = $suivante;
-        }
-        
-        return $etapes;
-    }
 }

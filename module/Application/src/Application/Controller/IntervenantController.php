@@ -267,6 +267,7 @@ class IntervenantController extends AbstractActionController implements ContextP
                 ];
 
                 foreach( $typesHeures as $typeHeures ){
+                    /* @var $typeHeures \Application\Entity\Db\TypeHeures */
                     // taux
                     try{
                         $h = $service->getTaux($typeHeures);
@@ -313,6 +314,9 @@ class IntervenantController extends AbstractActionController implements ContextP
         }
 
         usort($data['types-intervention'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
+        usort($data['th-taux'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
+        usort($data['th-service'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
+        usort($data['th-compl'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
         return compact('annee', 'form', 'intervenant', 'typeVolumeHoraire', 'etatVolumeHoraire', 'data');
     }
 

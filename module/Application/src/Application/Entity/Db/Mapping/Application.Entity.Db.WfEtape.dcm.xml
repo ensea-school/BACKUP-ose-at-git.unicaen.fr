@@ -14,6 +14,12 @@
     <field name="structureDependant" type="boolean" column="STRUCTURE_DEPENDANT" nullable="false"/>
     <field name="visible" type="boolean" column="VISIBLE" nullable="false"/>
     
+    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+      <join-columns>
+        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    
     <many-to-many field="etapeSuivante" target-entity="Application\Entity\Db\WfEtape">
         <join-table name="WF_ETAPE_TO_ETAPE">
             <join-columns>

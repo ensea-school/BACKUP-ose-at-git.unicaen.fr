@@ -47,17 +47,6 @@ return array(
                             ),
                         ),
                     ),
-                    'ies' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route' => '/ies',
-                            'constraints' => array(
-                            ),
-                            'defaults' => array(
-                                'action' => 'ies',
-                            ),
-                        ),
-                    ),
                 ),
             ),
         ),
@@ -76,7 +65,7 @@ return array(
             'BjyAuthorize\Guard\Controller' => array(
                 array(
                     'controller' => 'Application\Controller\Workflow',
-                    'action'     => array('nav-next', 'intervenants', 'ies'),
+                    'action'     => array('nav-next'),
                     'roles'      => array('user'),
                 ),
             ),

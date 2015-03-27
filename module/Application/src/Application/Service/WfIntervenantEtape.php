@@ -37,31 +37,6 @@ class WfIntervenantEtape extends AbstractEntityService
     {
         return 'ie';
     }
-    
-    /**
-     * Efface la progression d'un intervenant.
-     * 
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return self
-     */
-    public function removeAllIntervenantEtapes(IntervenantEntity $intervenant)
-    {
-        $this->getEntityManager()->beginTransaction();
-
-        $qb = $this->finderByIntervenant($intervenant); /* @var $qb QueryBuilder */
-        $qb->delete()->getQuery()->execute();
-
-        try {
-            $this->getEntityManager()->flush();
-            $this->getEntityManager()->commit();
-        }
-        catch (\Exception $e) {
-            $this->getEntityManager()->rollback();
-            throw $e;
-        }
-        
-        return $this;
-    }
 
     /**
      * Remet à jour complètement la progression dans le worflow d'un intervenant.
@@ -76,22 +51,6 @@ class WfIntervenantEtape extends AbstractEntityService
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->bindValue('intervenant', $intervenant->getId());
         $stmt->execute();
-        
-        return $this;
-    }
-    
-    public function createIntervenantsEtapes()
-    {   
-        set_time_limit(60);
-        
-        $sql = "BEGIN ose_workflow.update_intervenants_etapes(); END;";
-        
-        \UnicaenApp\Util::topChrono();
-        
-        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
-        $stmt->execute();
-        
-        \UnicaenApp\Util::topChrono();
         
         return $this;
     }
@@ -143,6 +102,6 @@ class WfIntervenantEtape extends AbstractEntityService
      */
     private function getServiceWfEtape()
     {
-        return $this->getServiceLocator()->get('WfEtapeService');;
+        return $this->getServiceLocator()->get('WfEtapeService');
     }
 }

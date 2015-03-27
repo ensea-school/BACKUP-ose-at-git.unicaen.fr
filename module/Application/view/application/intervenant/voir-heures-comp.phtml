@@ -87,7 +87,7 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append("Heures compl.")
     <th><abbr title="<?php echo $ti->getLibelle() ?>"><?php echo $ti->getCode() ?></abbr></th>
     <?php endforeach; ?>
     <?php if (count($data['th-service']) > 0): ?>
-    <th rowspan="<?php echo count($data['th-service']) ?>">Dans le service</th>
+    <th colspan="<?php echo count($data['th-service']) ?>">Dans le service</th>
     <?php endif; ?>
     <?php if (count($data['th-compl']) > 0): ?>
     <th colspan="<?php echo count($data['th-compl']) ?>">Au-delà du service</th>

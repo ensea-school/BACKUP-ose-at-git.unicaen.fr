@@ -119,11 +119,19 @@ class DifferentielLigne extends AbstractHelper
     {
         switch( $column ){
             case 'VALIDITE_DEBUT':
-                $date = new \DateTime($value);
-                return 'valide depuis le '.$date->format('d/m/Y');
+                if ($value){
+                    $date = new \DateTime($value);
+                    return 'valide depuis le '.$date->format('d/m/Y');
+                }else{
+                    return 'valide depuis toujours';
+                }
             case 'VALIDITE_FIN':
-                $date = new \DateTime($value);
-                return 'valide jusqu\'au '.$date->format('d/m/Y');
+                if ($value){
+                    $date = new \DateTime($value);
+                    return 'valide jusqu\'au '.$date->format('d/m/Y');
+                }else{
+                    return 'valide pour toujours';
+                }
             default:
                 $column = str_replace( '_', ' ', strtolower($column));
                 return $column.' devient '.$value;

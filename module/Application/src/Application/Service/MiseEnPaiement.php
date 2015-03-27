@@ -148,7 +148,7 @@ class MiseEnPaiement extends AbstractEntityService
 
                 'intervenant-code'              =>          $d['INTERVENANT_CODE'],
                 'intervenant-nom'               =>          $d['INTERVENANT_NOM'],
-                'intervenant-numero-insee'      =>          $d['INTERVENANT_NUMERO_INSEE'],
+                'intervenant-numero-insee'      => (string) $d['INTERVENANT_NUMERO_INSEE'],
 
                 'centre-cout-code'              =>          $d['CENTRE_COUT_CODE'],
                 'domaine-fonctionnel-libelle'   =>          $d['DOMAINE_FONCTIONNEL_LIBELLE'],

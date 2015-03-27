@@ -11,6 +11,7 @@ function ElementPedagogiqueRecherche( id )
         var structureId = this.getStructureElement().val();
         var niveauId    = this.getNiveauElement().val();
         var etapeId     = this.getFormationElement().val();
+        var elementId   = this.getElementId();
         var lastEtapeId = etapeId;
 
         var niveauxValues = [];
@@ -26,9 +27,10 @@ function ElementPedagogiqueRecherche( id )
         this.filterSelect( this.getFormationElement(), etapesValues );
 
         var query = {
-            structure: structureId,
-            niveau: niveauId,
-            etape: etapeId
+            structure           : structureId,
+            niveau              : niveauId,
+            etape               : etapeId,
+            elementPedagogique  : elementId
         };
         var url = this.element.data('default-url') + '?' + $.param( query );
 
@@ -96,7 +98,7 @@ function ElementPedagogiqueRecherche( id )
     this.populateElements = function( data )
     {
         var select = this.getElementListeElement();
-        var value = this.element.find('input#element').attr('value' );
+        var value = this.getElementId();
 
         select.empty();
         if (Util.json.count(data) > 1){
@@ -113,6 +115,11 @@ function ElementPedagogiqueRecherche( id )
         select.selectpicker('refresh');
         this.setElementState( 'liste' );
         this.updateElementValue();
+    }
+
+    this.getElementId = function()
+    {
+        return this.element.find('input#element').attr('value' );
     }
 
     this.getStructureElement = function()

@@ -19,10 +19,11 @@ FROM
   LEFT JOIN service s ON s.id = frs.service_id
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
 WHERE
-  mep.histo_destruction IS NOT NULL
+  1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
+  AND i.source_code = '21472'
 ;
 
 
 --delete from mise_en_paiement where id in (29,31);
 
---update mise_en_paiement set heures = 4, histo_modification=sysdate, histo_modificateur_id=4 WHERE id = 1060;
+--update mise_en_paiement set heures = 1.38 WHERE id = 446;

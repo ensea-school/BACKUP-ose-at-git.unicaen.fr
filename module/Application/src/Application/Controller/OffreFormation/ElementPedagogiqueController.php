@@ -156,6 +156,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         $structure = $this->context()->structureFromQuery();
         $niveau    = $this->context()->niveauFromQuery();
         $etape     = $this->context()->etapeFromQuery();
+        $element   = $this->context()->elementPedagogiqueFromQuery();
         $term = $this->params()->fromQuery('term');
 
         if (! $etape && !$term) {
@@ -167,12 +168,12 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         $params['structure'] = $structure;
         $params['niveau']    = $niveau;
         $params['etape']     = $etape;
+        $params['element']   = $element;
         $params['term']      = $term;
         $params['limit']     = $limit = 101;
         
         // fetch
-        $serviceEp = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
-        $found     = $serviceEp->getSearchResultByTerm($params);
+        $found     = $this->getServiceElementPedagogique()->getSearchResultByTerm($params);
 
         $result = array();
         foreach ($found as $item) {

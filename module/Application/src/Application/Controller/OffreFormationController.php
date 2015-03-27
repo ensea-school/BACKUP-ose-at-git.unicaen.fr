@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Service\OffreFormation as OffreFormationService;
 use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Service\Etape as EtapeService;
 use Application\Service\ContextProviderAwareInterface;
@@ -236,16 +235,6 @@ class OffreFormationController extends AbstractActionController implements Conte
         $niveaux = \Application\Entity\NiveauEtape::getInstancesFromEtapes($etapes);
                 
         return new \Zend\View\Model\JsonModel(\UnicaenApp\Util::collectionAsOptions($niveaux));
-    }
-
-    /**
-     * Retourne le service OffreFormation.
-     * 
-     * @return OffreFormationService
-     */
-    protected function getServiceOffreFormation()
-    {
-        return $this->getServiceLocator()->get('applicationOffreFormation');
     }
 
     /**

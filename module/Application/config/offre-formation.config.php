@@ -400,7 +400,6 @@ return array(
             'FormElementPedagogiqueRechercheHydrator' => 'Application\\Form\\OffreFormation\\ElementPedagogiqueRechercheHydrator',
             'ElementModulateursFormHydrator'          => 'Application\\Form\\OffreFormation\\ElementModulateursHydrator',
             'EtapeModulateursFormHydrator'            => 'Application\\Form\\OffreFormation\\EtapeModulateursHydrator',
-            'OffreFormationAssertion'                 => 'Application\\Service\\OffreFormationAssertion',
             'EtapeCentreCoutFormHydrator'             => 'Application\\Form\\OffreFormation\\EtapeCentreCout\\EtapeCentreCoutFormHydrator',
             'ElementCentreCoutFieldsetHydrator'       => 'Application\\Form\\OffreFormation\\EtapeCentreCout\\ElementCentreCoutFieldsetHydrator',
         ),

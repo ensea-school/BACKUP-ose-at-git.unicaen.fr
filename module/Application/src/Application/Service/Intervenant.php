@@ -28,33 +28,33 @@ class Intervenant extends AbstractEntityService
      * @param string $term
      * @return QueryBuilder
      */
-    public function finderByNomPrenomId($term)
+    public function finderByNomPrenomId($term, QueryBuilder $qb=null, $alias=null)
     {
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
         $term = str_replace(' ', '', $term);
         
-        $qb = $this->getRepo()->createQueryBuilder($this->getAlias());
-        
         $concatNomUsuelPrenom = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat($this->getAlias().'.nomUsuel', $this->getAlias().'.prenom'),
+                array($qb->expr()->concat($alias.'.nomUsuel', $alias.'.prenom'),
                 '?3'));
         $concatNomPatroPrenom = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat($this->getAlias().'.nomPatronymique', $this->getAlias().'.prenom'),
+                array($qb->expr()->concat($alias.'.nomPatronymique', $alias.'.prenom'),
                 '?3'));
         $concatPrenomNomUsuel = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat($this->getAlias().'.prenom', $this->getAlias().'.nomUsuel'),
+                array($qb->expr()->concat($alias.'.prenom', $alias.'.nomUsuel'),
                 '?3'));
         $concatPrenomNomPatro = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat($this->getAlias().'.prenom', $this->getAlias().'.nomPatronymique'),
+                array($qb->expr()->concat($alias.'.prenom', $alias.'.nomPatronymique'),
                 '?3'));
         
         $qb
 //                ->select('i.')
-                ->where($this->getAlias().'.sourceCode = ?1')
+                ->where($alias.'.sourceCode = ?1')
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatNomUsuelPrenom), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatNomPatroPrenom), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatPrenomNomUsuel), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatPrenomNomPatro), $qb->expr()->upper('CONVERT(?2, ?3)')))
-                ->orderBy($this->getAlias().'.nomUsuel, '.$this->getAlias().'.prenom');
+                ->orderBy($alias.'.nomUsuel, '.$alias.'.prenom');
         
         $qb->setParameters(array(1 => $term, 2 => "%$term%", 3 => 'US7ASCII'));
         
@@ -125,9 +125,9 @@ class Intervenant extends AbstractEntityService
      * @return QueryBuilder
      * @see \Application\Entity\Db\WfEtape
      */
-    public function finderByWfEtapeFranchie($codeEtape, QueryBuilder $qb = null)
+    public function finderByWfEtapeFranchie($codeEtape, QueryBuilder $qb = null, $alias=null)
     {
-        list($qb, $alias) = $this->initQuery($qb);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb
                 ->join("$alias.wfIntervenantEtape", "p", \Doctrine\ORM\Query\Expr\Join::WITH, "p.franchie = 1")
                 ->join("p.etape", "e", \Doctrine\ORM\Query\Expr\Join::WITH, "e.code = :codeEtape")
@@ -143,9 +143,9 @@ class Intervenant extends AbstractEntityService
      * @param QueryBuilder $qb
      * @return QueryBuilder
      */
-    public function finderByWfEtapeCourante($codeEtape, QueryBuilder $qb = null)
+    public function finderByWfEtapeCourante($codeEtape, QueryBuilder $qb = null, $alias=null)
     {
-        list($qb, $alias) = $this->initQuery($qb);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb
                 ->join("$alias.wfIntervenantEtape", "p", \Doctrine\ORM\Query\Expr\Join::WITH, "p.courante = 1")
                 ->join("p.etape", "e", \Doctrine\ORM\Query\Expr\Join::WITH, "e.code = :codeEtape")
@@ -161,9 +161,9 @@ class Intervenant extends AbstractEntityService
      * @param QueryBuilder $qb
      * @return QueryBuilder
      */
-    public function finderByPieceJointeFournieNonValidee(QueryBuilder $qb = null)
+    public function finderByPieceJointeFournieNonValidee(QueryBuilder $qb = null, $alias=null)
     {
-        list($qb, $alias) = $this->initQuery($qb);
+        list($qb, $alias) = $this->initQuery($qb, $alias);
         $qb
                 ->join("$alias.dossier", "d")
                 ->join("d.pieceJointe", "pj")
@@ -222,16 +222,6 @@ class Intervenant extends AbstractEntityService
         }
         
         return $intervenant;
-    }
-
-    public function calculFormule( IntervenantEntity $intervenant, AnneeEntity $annee=null )
-    {
-        if (empty($annee)) $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
-
-        $intervenantId = $intervenant->getId();
-        $anneeId = $annee->getId();
-        $sql = "BEGIN OSE_FORMULE.CALCULER( $intervenantId, $anneeId ); END;";
-        $this->getEntityManager()->getConnection()->executeQuery($sql);
     }
 
     /**

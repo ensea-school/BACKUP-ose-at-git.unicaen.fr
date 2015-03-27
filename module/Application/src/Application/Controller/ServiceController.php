@@ -380,10 +380,8 @@ class ServiceController extends AbstractActionController
         $form->add(new \Zend\Form\Element\Hidden('type-volume-horaire'));
         $viewModel = new \Zend\View\Model\ViewModel();
 
-        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
-        $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
-        $assertionEntity->setTypeVolumeHoraire($typeVolumeHoraire);
-        if (! $this->isAllowed($assertionEntity, 'delete')) {
+        $service->setTypeVolumeHoraire($typeVolumeHoraire);
+        if (! $this->isAllowed($service, 'delete')) {
             throw new MessageException("Cette opération n'est pas autorisée.");
         }
 

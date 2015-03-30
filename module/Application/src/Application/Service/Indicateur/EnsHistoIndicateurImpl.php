@@ -36,11 +36,13 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
      */
     protected function initFilters()
     {
-        $this->getEntityManager()->getFilters()->enable('historique')
-                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
-                ->disableForEntity('Application\Entity\Db\Etape')
-                ->disableForEntity('Application\Entity\Db\Periode')
-                /*->disableForEntity('Application\Entity\Db\Etablissement')*/;
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\VolumeHoraire',
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
     }
     
     /**

@@ -40,13 +40,21 @@ class ContratController extends AbstractActionController implements ContextProvi
     private $contrat;
     
     /**
-     * 
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * (services sur des enseignements fermés, etc.)
      */
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')
-                ->disableForEntity('Application\Entity\Db\ElementPedagogique')
-                ->disableForEntity('Application\Entity\Db\Etape');
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Contrat',
+                'Application\Entity\Db\TypeContrat',
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\VolumeHoraire',
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
     }
     
     /**
@@ -338,7 +346,7 @@ class ContratController extends AbstractActionController implements ContextProvi
             throw new \Common\Exception\MessageException("Impossible de valider $contratToString.", null, new \Exception($rule->getMessage()));
         }
 
-        $this->em()->getFilters()->enable('historique');
+        $this->initFilters();
         
         $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
         
@@ -430,7 +438,6 @@ class ContratController extends AbstractActionController implements ContextProvi
         $form              = $this->getFormRetourContrat()->setContrat($this->contrat)->init();
         $contratToString   = $this->contrat->toString(true, true);
         $title             = "Retour $contratToString signé <small>$this->intervenant</small>";
-        $process           = $this->getProcessContrat();
         $messages          = [];
         
         $rule = new \Application\Rule\Intervenant\PeutSaisirRetourContratRule($this->intervenant, $this->contrat);

@@ -86,6 +86,22 @@ implements ContextProviderAwareInterface,
     private $formSaisie;
 
     /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Agrement',
+                'Application\Entity\Db\TypeAgrement',
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
+    }
+
+    /**
      * Page vide invitant à sélectionner un type d'agrément dans le menu.
      * 
      * @return array
@@ -105,14 +121,14 @@ implements ContextProviderAwareInterface,
      */
     public function listerAction()
     {
+        $this->initFilters();
+        
         $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
         $this->title        = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
         $messages           = [];
 
-        $this->em()->getFilters()->enable('historique');
-        
         $agrementFourniRule = $this->getServiceLocator()->get('AgrementFourniRule'); /* @var $agrementFourniRule AgrementFourniRule */
         $agrementFourniRule
                 ->setIntervenant($this->intervenant)
@@ -222,7 +238,7 @@ implements ContextProviderAwareInterface,
         
         $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
 
-        $this->em()->getFilters()->enable('historique');
+        $this->initFilters();
 
         /**
          * Il y a un Conseil Restreint par structure d'enseignement
@@ -418,6 +434,8 @@ implements ContextProviderAwareInterface,
             throw new LogicException(sprintf("Une structure doit être spécifiée pour le type d'agrément '%s'.", $this->typeAgrement));
         }
         
+        $this->initFilters();
+        
         $service = $this->getAgrementService();
         
         $qb = $service->finderByType($this->typeAgrement);
@@ -425,21 +443,6 @@ implements ContextProviderAwareInterface,
             $service->finderByStructure($structure, $qb);
         }
         $service->finderByIntervenant($this->intervenant, $qb);
-        
-        return $qb->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * Recherche d'un agrément par l'intervenant, le type et la structure.
-     * 
-     * @param Structure $structure
-     * @return Agrement
-     */
-    private function getIntervenantsSansAgrement(Structure $structure)
-    {
-        $qb = $this->getIntervenantService()->getRepo()->createQueryBuilder("i");
-//        $qb->
-        
         
         return $qb->getQuery()->getOneOrNullResult();
     }

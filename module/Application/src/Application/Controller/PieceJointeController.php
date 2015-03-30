@@ -59,12 +59,31 @@ class PieceJointeController extends AbstractActionController implements ContextP
     }
     
     /**
+     * Initialisation des filtres Doctrine pour les historique.
+     * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
+     * (services sur des enseignements fermés, etc.)
+     */
+    protected function initFilters()
+    {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\PieceJointe',
+                'Application\Entity\Db\TypePieceJointe',
+                'Application\Entity\Db\Fichier',
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
+    }
+    
+    /**
      * 
      * @return ViewModel
      * @throws MessageException
      */
     public function indexAction()
     {
+        $this->initFilters();
+        
         $this->title = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
 
@@ -104,10 +123,11 @@ class PieceJointeController extends AbstractActionController implements ContextP
      */
     public function statusAction()
     {
+        $this->initFilters();
+        
         $messages = [];
         
         // recherche si toutes les PJ obligatoires ont été fournies
-//        $rule = $this->getRulePiecesJointesFournies();
         $rule = clone $this->getServiceLocator()->get('DbFunctionRule');
         $rule
                 ->setFunction("ose_workflow.pj_oblig_fournies")
@@ -121,20 +141,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
         }
         
         // recherche si des PJ restent à valider
-//        $validations = [];
-//        $typesPieceJointeAttendus = $this->getPieceJointeProcess()->getTypesPieceJointeAttendus();
-//        $piecesJointesFournies    = $this->getPieceJointeProcess()->getPiecesJointesFournies();
-//        foreach ($piecesJointesFournies as $pj) { /* @var $pj PieceJointe */
-//            if ($pj->getValidation()) {
-//                $validations[] = $pj->getValidation();
-//            }
-//        }
-//        if (count($validations) < count($piecesJointesFournies)) {
-//            $messages['danger'][] = "Elles doivent encore être validées par votre composante.";
-//        }
-//        elseif (count($typesPieceJointeAttendus) === count($validations)) {
-//            $messages['success'][] = "Toutes les pièces justificatives fournies ont été validées par votre composante.";
-//        }
         $rule = clone $this->getServiceLocator()->get('DbFunctionRule');
         $rule
                 ->setFunction("ose_workflow.pj_oblig_validees")
@@ -162,6 +168,8 @@ class PieceJointeController extends AbstractActionController implements ContextP
      */
     public function listerAction()
     {
+        $this->initFilters();
+        
         $pj = $this->getPieceJointeProcess()->getPieceJointeFournie($this->getTypePieceJointe());
                
         return [

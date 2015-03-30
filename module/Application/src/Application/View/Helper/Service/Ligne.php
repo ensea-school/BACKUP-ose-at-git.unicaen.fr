@@ -157,9 +157,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderIntervenant($intervenant)
     {
-        $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'intervenant' => $intervenant->getSourceCode()));
-        $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal services">'.$intervenant.'</a>';
-        return $out;
+        return $this->getView()->intervenant( $intervenant )->renderLink();
     }
 
     protected function renderStructure($structure)

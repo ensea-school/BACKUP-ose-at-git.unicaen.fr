@@ -553,6 +553,7 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'formuleTotauxHetd' => 'Application\View\Helper\Intervenant\TotauxHetdViewHelper',
+            'Intervenant'       => 'Application\View\Helper\Intervenant\IntervenantViewHelper',
         ),
         'initializers' => array(
         ),

@@ -34,7 +34,11 @@ class OffreFormationController extends AbstractActionController implements Conte
         $this->em()->getFilters()->enable('historique')->init(
             [
                 'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\Etape'
+                'Application\Entity\Db\Etape',
+                'Application\Entity\Db\TypeFormation',
+                'Application\Entity\Db\GroupeTypeFormation',
+                'Application\Entity\Db\Structure',
+                'Application\Entity\Db\TypeModulateur',
             ],
             $this->context()->getGlobalContext()->getDateObservation()
         );

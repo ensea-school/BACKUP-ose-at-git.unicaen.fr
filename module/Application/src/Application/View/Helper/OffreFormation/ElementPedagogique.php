@@ -36,7 +36,7 @@ class ElementPedagogique extends AbstractHelper
         
     }
 
-    public function renderLink()
+    public function renderLink( $format='original' )
     {
         $element = $this->getElementPedagogique();
         if (! $element) return '';
@@ -45,9 +45,17 @@ class ElementPedagogique extends AbstractHelper
             return '<span class="bg-danger"><abbr title="Cet élément pédagogique n\'existe plus">'.$element.'</abbr></span>';
         }
 
+        switch( $format ){
+            case 'libelle':
+                $str = $element->getLibelle();
+            break;
+            default:
+                $str = (string)$element;
+        }
+
         $url = $this->getView()->url('of/element/voir', array('id' => $element->getId()));
         $pourl = $this->getView()->url('of/element/apercevoir', array('id' => $element->getId()));
-        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$element.'</a>';
+        $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$str.'</a>';
         return $out;
     }
 }

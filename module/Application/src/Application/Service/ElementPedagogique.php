@@ -54,8 +54,7 @@ class ElementPedagogique extends AbstractEntityService
                 ->innerJoin('e.typeFormation', 'tf')
                 ->innerJoin('tf.groupe', 'gtf')
                 ->innerJoin('ep.structure', 's')
-                ->orderBy('gtf.ordre, e.niveau, e.sourceCode, ep.libelle')
-                ->andWhere( '1 = compriseEntre(ep.histoCreation,ep.histoDestruction)');
+                ->orderBy('gtf.ordre, e.niveau, e.sourceCode, ep.libelle');
         
         if (isset($filters['structure'])) {
             $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
@@ -96,8 +95,7 @@ class ElementPedagogique extends AbstractEntityService
                 ->innerJoin('tf.groupe', 'gtf')
                 ->innerJoin('e.elementPedagogique', 'ep')
 //                ->innerJoin('ep.structure', 's')
-                ->orderBy('gtf.ordre, e.niveau')
-                ->andWhere( '1 = compriseEntre(ep.histoCreation,ep.histoDestruction)');
+                ->orderBy('gtf.ordre, e.niveau');
         
         if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
             $qb
@@ -128,8 +126,7 @@ class ElementPedagogique extends AbstractEntityService
                 ->innerJoin('e.typeFormation', 'tf')
                 ->innerJoin('tf.groupe', 'gtf')
                 ->innerJoin('ep.structure', 's')
-                ->orderBy('gtf.ordre, e.niveau, e.sourceCode')
-                ->andWhere( '1 = compriseEntre(e.histoCreation,e.histoDestruction)');
+                ->orderBy('gtf.ordre, e.niveau, e.sourceCode');
         
 //        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
 //            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $filters['structure']);

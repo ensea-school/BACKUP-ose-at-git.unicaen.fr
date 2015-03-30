@@ -314,20 +314,9 @@ $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $par
                     <?php foreach ($entities as $ep): /* @var $ep \Application\Entity\Db\ElementPedagogique */ ?>
                     <tr id="<?php echo $ep->getId() ?>">
                         <td><?php echo $ep->getEtape()->getNiveauToString() ?></td>
-                        <?php
-                        $etapeEp  = $ep->getEtape();
-                        $urlEtape = $this->url('of/etape/apercevoir', array('id' => $etapeEp->getId()));
-                        $urlElem  = $this->url('of/element/apercevoir', array('id' => $ep->getId()));
-                        ?>
-                        <td class="etape">
-                            <a class="ajax-modal" title="Cliquez pour voir le détail de cette formation" 
-                               href="<?php echo $urlEtape ?>"><?php echo $etapeEp ?></a>
-                        </td>
+                        <td class="etape"><?php echo $this->etape($ep->getEtape())->renderLink() ?></td>
                         <td class="element"><?php echo $ep->getSourceCode() ?></td>
-                        <td class="element">
-                            <a class="ajax-modal" title="Cliquez pour voir le détail de cet enseignement" 
-                               href="<?php echo $urlElem ?>"><?php echo $ep->getLibelle() ?></a>
-                        </td>
+                        <td class="element"><?php echo $this->elementPedagogique($ep)->renderLink('libelle') ?></td>
                         <td class="periode"><?php echo $ep->getPeriode() ?: "" ?></td>
                         <td><?php echo (bool)$ep->getTauxFoad() ? "Oui" : "Non" ?></td>
                         <td><?php echo $ep->getRegimesInscription(true) ?></td>
@@ -338,7 +327,7 @@ $urlExportOf = $this->url('of/default', ['action' => 'export'], ['query' => $par
                             <?php echo $mc
                                     ->withTarget($ep)
                                     ->withProp('category', 'element')
-                                    ->addParam('etape', $etapeEp->getId())
+                                    ->addParam('etape', $ep->getEtape()->getId())
                                     ->addProp('class', 'btn btn-default btn-xs iconify ajax-modal'); ?>
                             <?php endif; ?>
                             <?php endif; ?>

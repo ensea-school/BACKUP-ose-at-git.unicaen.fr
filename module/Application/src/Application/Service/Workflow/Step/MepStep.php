@@ -31,6 +31,6 @@ class MepStep extends Step
                 
                 ->setLabels($labels)
                 ->setDescriptions($descriptions)
-                ->setRoute('intervenant/demande-mise-en-paiement');
+                ->setRoute('paiement/etat-demande-paiement');
     }
 }

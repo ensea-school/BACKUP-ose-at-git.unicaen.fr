@@ -58,7 +58,8 @@ class VolumeHoraireController extends AbstractActionController
     {
         $this->em()->getFilters()->enable('historique')->init(
             [
-                'Application\Entity\Db\VolumeHoraire'
+                'Application\Entity\Db\VolumeHoraire',
+                'Application\Entity\Db\MotifNonPaiement'
             ],
             $this->context()->getGlobalContext()->getDateObservation()
         );

@@ -64,7 +64,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             ));
 
             $motifsNonPaiement = $this->getServiceLocator()->getServiceLocator()->get('ApplicationMotifNonPaiement')
-                    ->getMotifsNonPaiement();
+                    ->getList();
             foreach( $motifsNonPaiement as $id => $motifNonPaiement ){
                 $motifsNonPaiement[$id] = (string)$motifNonPaiement;
             }

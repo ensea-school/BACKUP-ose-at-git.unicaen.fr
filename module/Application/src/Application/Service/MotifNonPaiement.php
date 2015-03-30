@@ -14,14 +14,6 @@ class MotifNonPaiement extends AbstractEntityService
 {
 
     /**
-     * Liste des motifs de non paiement
-     *
-     * @var Entity[]
-     */
-    protected $motifsNonPaiement;
-
-
-    /**
      * retourne la classe des entités correcpondantes
      *
      * @return string
@@ -52,18 +44,5 @@ class MotifNonPaiement extends AbstractEntityService
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelleLong");
         return parent::getList($qb, $alias);
-    }
-
-    /**
-     * Liste des motifs de non paiement
-     *
-     * @return Entity[]
-     */
-    public function getMotifsNonPaiement()
-    {
-        if (! $this->motifsNonPaiement){
-            $this->motifsNonPaiement = $this->getList( $this->finderByHistorique() );
-        }
-        return $this->motifsNonPaiement;
     }
 }

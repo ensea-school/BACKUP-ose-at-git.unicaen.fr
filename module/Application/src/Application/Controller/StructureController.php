@@ -60,11 +60,17 @@ class StructureController extends AbstractActionController
 
     public function rechercheAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Structure'
+            ],
+            $this->context()->getGlobalContext()->getDateObservation()
+        );
+
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel(array());
         }
-        $qb = $this->getServiceStructure()->finderByHistorique();
-        $entities  = $this->getServiceStructure()->finderByNom($term, $qb)->getQuery()->execute();
+        $entities  = $this->getServiceStructure()->finderByNom($term)->getQuery()->execute();
         $result = array();
 
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Structure */

@@ -9,7 +9,6 @@ use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
 use Common\Exception\RuntimeException;
 use Application\Entity\Db\HistoriqueAwareInterface;
-use Application\Entity\Db\ValiditeAwareInterface;
 
 /**
  * Listener Doctrine permettant l'ajout automatique de l'heure de création/modification 

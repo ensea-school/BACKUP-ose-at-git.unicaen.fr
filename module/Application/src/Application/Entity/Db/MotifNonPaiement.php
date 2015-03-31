@@ -40,16 +40,6 @@ class MotifNonPaiement
     protected $libelleLong;
 
     /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
-
-    /**
      * @var integer
      */
     protected $id;
@@ -206,52 +196,6 @@ class MotifNonPaiement
     public function getLibelleLong()
     {
         return $this->libelleLong;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return MotifNonPaiement
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return MotifNonPaiement
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

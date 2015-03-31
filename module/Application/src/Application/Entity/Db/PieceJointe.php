@@ -7,7 +7,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 /**
  * PieceJointe
  */
-class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface, ResourceInterface
+class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
     
@@ -27,16 +27,6 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface, R
      * @var \Application\Entity\Db\Dossier
      */
     private $dossier;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -70,52 +60,6 @@ class PieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface, R
         }
         
         return $string;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return PieceJointe
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return PieceJointe
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

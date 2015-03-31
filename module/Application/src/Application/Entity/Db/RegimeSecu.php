@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * RegimeSecu
  */
-class RegimeSecu implements HistoriqueAwareInterface, ValiditeAwareInterface
+class RegimeSecu implements HistoriqueAwareInterface
 {
     /**
      * @var string
@@ -36,16 +36,6 @@ class RegimeSecu implements HistoriqueAwareInterface, ValiditeAwareInterface
      * @var float
      */
     protected $tauxTaxe;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -204,52 +194,6 @@ class RegimeSecu implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getTauxTaxe()
     {
         return $this->tauxTaxe;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return RegimeSecu
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return RegimeSecu
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

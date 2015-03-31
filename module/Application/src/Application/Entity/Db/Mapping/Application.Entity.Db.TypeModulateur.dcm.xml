@@ -17,8 +17,6 @@
     <field name="obligatoire" type="boolean" column="OBLIGATOIRE" nullable="false"/>
     <field name="publique" type="boolean" column="PUBLIQUE" nullable="false"/>
     <field name="saisieParEnseignant" type="boolean" column="SAISIE_PAR_ENSEIGNANT" nullable="false"/>
-    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
-    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>

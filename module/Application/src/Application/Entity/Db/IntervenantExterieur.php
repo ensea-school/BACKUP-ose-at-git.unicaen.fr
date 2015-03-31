@@ -8,16 +8,6 @@ namespace Application\Entity\Db;
 class IntervenantExterieur extends Intervenant
 {
     /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
-
-    /**
      * @var \Application\Entity\Db\TypePoste
      */
     protected $typePoste;
@@ -65,52 +55,6 @@ class IntervenantExterieur extends Intervenant
         $civilite = $this->getDossier() ? $this->getDossier()->getCivilite() : $this->getCivilite();
         
         return Civilite::SEXE_F === $civilite->getSexe();
-    }
-    
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return IntervenantExterieur
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return IntervenantExterieur
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

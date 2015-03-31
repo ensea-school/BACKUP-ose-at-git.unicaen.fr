@@ -8,16 +8,6 @@ namespace Application\Entity\Db;
 class IntervenantPermanent extends Intervenant
 {
     /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $modificationServiceDu;
@@ -36,53 +26,6 @@ class IntervenantPermanent extends Intervenant
         
         $this->modificationServiceDu = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return IntervenantPermanent
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return IntervenantPermanent
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
 
     /**
      * Add modificationServiceDu

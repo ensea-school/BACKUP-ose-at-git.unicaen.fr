@@ -28,8 +28,6 @@
     <field name="principale" type="boolean" column="PRINCIPALE" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="true"/>
     <field name="telDomicile" type="string" column="TEL_DOMICILE" length="25" nullable="true"/>
-    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
-    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <field name="ville" type="string" column="VILLE" length="60" nullable="true"/>
     <!-- NB inversed-by ajouté à la main -->
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="adresse">

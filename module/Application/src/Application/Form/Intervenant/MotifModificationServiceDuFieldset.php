@@ -109,7 +109,7 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
     {
         if (null === $this->motifsPossibles) {
             $repoMotif = $this->getEntityManager()->getRepository('Application\Entity\Db\MotifModificationServiceDu'); /* @var $repoMotif \Doctrine\ORM\EntityRepository */
-            $this->motifsPossibles = $repoMotif->findBy(array('validiteFin' => null), array('libelle' => 'asc'));
+            $this->motifsPossibles = $repoMotif->findBy(array(), array('libelle' => 'asc'));
             if (!$this->motifsPossibles) {
                 throw new \Common\Exception\RuntimeException("Aucun motif de modification de service dû trouvé dans la base.");
             }

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
+class Structure implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime
@@ -46,16 +46,6 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
      * @var string
      */
     protected $contactPj;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -321,52 +311,6 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getContactPj()
     {
         return $this->contactPj;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return Structure
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return Structure
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

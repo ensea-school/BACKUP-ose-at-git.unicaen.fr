@@ -15,7 +15,6 @@ return array(
                 ),
                 'filters' => array(
                     'historique' => 'Common\ORM\Filter\HistoriqueFilter',
-//                    'validite'   => 'Common\ORM\Filter\ValiditeFilter',
                 ),
             )
         ),

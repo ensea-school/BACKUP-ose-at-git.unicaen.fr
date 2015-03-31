@@ -6,7 +6,8 @@ SELECT
   cc.id cc_id, cc.source_code centre_cout,
   th.id th_id, th.libelle_court type_heures,
   ep.source_code,
-  mep.heures
+  mep.heures,
+  mep.histo_modification
 FROM
   v_mep_intervenant_structure  mis
   JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id
@@ -20,10 +21,23 @@ FROM
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
 WHERE
   1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
-  AND i.source_code = '21472'
+  --AND i.source_code = '21472'
+  AND mep.histo_modificateur_id=2504
+  AND s.id = 372
+  AND to_char(mep.histo_modification,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
 ;
 
 
 --delete from mise_en_paiement where id in (29,31);
 
 --update mise_en_paiement set heures = 1.38 WHERE id = 446;
+
+
+--update mise_en_paiement set periode_paiement_id = 8, date_mise_en_paiement = to_date( '31/05/2015', 'DD/MM/YYYY') WHERE
+--id in (2397,2402,2409,2429,2430)
+--;
+
+
+
+
+

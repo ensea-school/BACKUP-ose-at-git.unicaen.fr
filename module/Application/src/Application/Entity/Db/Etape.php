@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Etape
  */
-class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
+class Etape implements HistoriqueAwareInterface
 {
     /**
      * Retourne la représentation littérale de cet objet.
@@ -68,16 +66,6 @@ class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
      * @var boolean
      */
     protected $specifiqueEchanges;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -301,52 +289,6 @@ class Etape implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getSpecifiqueEchanges()
     {
         return $this->specifiqueEchanges;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return Etape
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return Etape
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

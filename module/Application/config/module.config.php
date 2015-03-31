@@ -60,7 +60,6 @@ $main =  array(
                 'subscribers' => array(
                     'Doctrine\DBAL\Event\Listeners\OracleSessionInit',
                     'Common\ORM\Event\Listeners\HistoriqueListener',
-                    'Common\ORM\Event\Listeners\ValiditeListener',
                 ),
             ),
         ),
@@ -185,7 +184,6 @@ $main =  array(
         'invokables' => array(
             'AuthenticatedUserSavedListener'                 => 'Application\AuthenticatedUserSavedListener',
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
-            'Common\ORM\Event\Listeners\ValiditeListener'    => 'Common\ORM\Event\Listeners\ValiditeListener',
             'ApplicationContextProvider'                     => 'Application\\Service\\ContextProvider',
             'ApplicationlocalContext'                        => 'Application\\Service\\LocalContext',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',

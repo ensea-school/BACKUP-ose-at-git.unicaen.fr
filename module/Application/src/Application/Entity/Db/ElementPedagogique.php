@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInterface
+class ElementPedagogique implements HistoriqueAwareInterface
 {
     public function __toString()
     {
@@ -107,16 +107,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
      * @var boolean
      */
     protected $fa;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -499,52 +489,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
             if ($this->getFa()) $regimes[] = 'FA';
         }
         return implode( ', ', $regimes );
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return ElementPedagogique
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return ElementPedagogique
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

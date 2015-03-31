@@ -7,7 +7,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 /**
  * StatutIntervenant
  */
-class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterface
+class StatutIntervenant implements HistoriqueAwareInterface
 {
     const ENS_2ND_DEG    = 'ENS_2ND_DEG';
     const ENS_CH         = 'ENS_CH';
@@ -143,16 +143,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
      * @var float
      */
     protected $maximumHETD;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -606,52 +596,6 @@ class StatutIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterf
     public function getSourceCode()
     {
         return $this->sourceCode;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return StatutIntervenant
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return StatutIntervenant
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

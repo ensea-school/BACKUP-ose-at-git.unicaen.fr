@@ -144,7 +144,6 @@ class FormuleTest extends BaseTestCase {
           ->setStructure($this->structure)
           ->setDateNaissance($this->dateNaissance)
           ->setEmail($this->email)
-          ->setValiditeDebut(new \DateTime)
         ;
         $result = $this->save($e);
         foreach( $services as $service ){
@@ -182,8 +181,7 @@ class FormuleTest extends BaseTestCase {
             ->setStructureAff( $intervenant->getStructure() )
             ->setElementPedagogique($element)
             ->setAnnee($this->annee)
-            ->setEtablissement($etablissement)
-            ->setValiditeDebut(new \DateTime);
+            ->setEtablissement($etablissement);
         ;
         if (null !== $element){
             $e->setStructureEns( $element->getStructure() );
@@ -214,7 +212,6 @@ class FormuleTest extends BaseTestCase {
             ->setIntervenant($intervenant)
             ->setAnnee($this->annee)
             ->setHeures($heures)
-            ->setValiditeDebut(new \DateTime)
         ;
         return $this->save($e);
     }

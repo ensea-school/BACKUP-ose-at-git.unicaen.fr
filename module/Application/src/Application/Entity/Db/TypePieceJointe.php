@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * TypePieceJointe
  */
-class TypePieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterface
+class TypePieceJointe implements HistoriqueAwareInterface
 {
     const CV               = "CV";
     const RIB              = "RIB";
@@ -51,16 +51,6 @@ class TypePieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterfac
      * @var string
      */
     private $urlModeleDoc;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
 
     /**
      * @var integer
@@ -224,52 +214,6 @@ class TypePieceJointe implements HistoriqueAwareInterface, ValiditeAwareInterfac
     public function getUrlModeleDoc()
     {
         return $this->urlModeleDoc;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return TypePieceJointe
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return TypePieceJointe
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

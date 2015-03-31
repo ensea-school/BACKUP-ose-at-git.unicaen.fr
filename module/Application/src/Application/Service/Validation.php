@@ -182,7 +182,8 @@ class Validation extends AbstractEntityService
         $qb
                 ->join("$alias.volumeHoraire", 'vh')
                 ->join("vh.service", 'vhs')
-                ->andWhere("vhs.structureEns = :structure")
+                ->join("vhs.elementPedagogique", 'ep')
+                ->andWhere("ep.structure = :structure")
                 ->setParameter('structure', $structure);
 
         return $qb;
@@ -267,7 +268,8 @@ class Validation extends AbstractEntityService
                 ->join("v.volumeHoraire", 'vh')
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("vh.service", 's')
-                ->leftJoin("s.structureEns", 'strens')
+                ->leftJoin("s.elementPedagogique", 'ep')
+                ->leftJoin("ep.structure", 'strens')
                 ->orderBy("v.histoModification", 'desc')
                 ->addOrderBy("strens.libelleCourt", 'asc');
         

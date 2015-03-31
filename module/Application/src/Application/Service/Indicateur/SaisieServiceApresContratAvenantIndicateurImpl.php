@@ -43,6 +43,7 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIntervenant
         $qb
                 ->join("int.contrat", "c")
                 ->join("int.service", "s")
+                ->join("s.elementPedagogique", "ep")
                 ->join("s.volumeHoraire", "vh", Join::WITH, "vh.contrat IS NULL")
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :codeTvh")
                 ->setParameter('codeTvh', \Application\Entity\Db\TypeVolumeHoraire::CODE_PREVU);
@@ -54,7 +55,7 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIntervenant
         
         if ($this->getStructure()) {
             $qb
-                    ->andWhere("s.structureEns = :structure")
+                    ->andWhere("ep.structure = :structure")
                     ->andWhere("c.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }

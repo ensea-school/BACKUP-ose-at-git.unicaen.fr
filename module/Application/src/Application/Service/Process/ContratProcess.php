@@ -238,7 +238,8 @@ class ContratProcess extends AbstractService
                 ->select("s, vh, str, i")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
-                ->join("s.structureEns", "str")
+                ->join("s.elementPedagogique", "ep")
+                ->join("ep.structure", "str")
                 ->join("s.intervenant", "i")
                 ->andWhere($qb->expr()->in("vh", $vhIds))
                 ->setParameter('tvh', $this->getServiceTypeVolumeHoraire()->getPrevu());
@@ -273,7 +274,8 @@ class ContratProcess extends AbstractService
                 ->select("s, vh, str, i")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
-                ->join("s.structureEns", "str")
+                ->join("s.elementPedagogique", "ep")
+                ->join("ep.structure", "str")
                 ->join("s.intervenant", "i")
                 ->andWhere($qb->expr()->in("vh", $vhIds))
                 ->setParameter('tvh', $this->getServiceTypeVolumeHoraire()->getPrevu());

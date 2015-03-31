@@ -44,6 +44,7 @@ class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurIm
         $qb
                 ->join("int.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
                 ->join("int.service", "s")
+                ->join("s.elementPedagogique", "ep")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")->setParameter('tvh', $this->getTypeVolumeHoraire())
                 ->join("vh.validation", "v");
@@ -72,7 +73,7 @@ class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurIm
          */
         if ($this->getStructure()) {
             $qb
-                    ->andWhere("s.structureEns = :structure")
+                    ->andWhere("ep.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
         

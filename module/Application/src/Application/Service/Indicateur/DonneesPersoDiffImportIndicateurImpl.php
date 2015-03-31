@@ -3,6 +3,7 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -39,7 +40,7 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIntervenantResultIndi
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("int.statut", "st", \Doctrine\ORM\Query\Expr\Join::WITH, "st.peutSaisirDossier = 1")
+                ->join("int.statut", "st", Join::WITH, "st.peutSaisirDossier = 1")
                 ->join("int.vIndicDiffDossier", "vidd")
                 ->andWhere(
                         "vidd.adresseDossier IS NOT NULL OR " . 
@@ -52,7 +53,8 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIntervenantResultIndi
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s", \Doctrine\ORM\Query\Expr\Join::WITH, "s.structureEns = :structure")
+                    ->join("int.service", "s")
+                    ->join("s.elementPedagogique", "ep", Join::WITH, "ep.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
         

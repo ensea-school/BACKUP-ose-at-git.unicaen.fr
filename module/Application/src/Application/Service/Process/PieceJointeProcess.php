@@ -11,7 +11,6 @@ use Application\Service\PieceJointe as PieceJointeService;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Entity\Db\PieceJointe;
-use Application\Rule\Intervenant\PiecesJointesFourniesRule;
 use Common\Exception\RuntimeException;
 
 /**
@@ -200,9 +199,10 @@ class PieceJointeProcess extends AbstractService
     public function getPiecesJointesFournies()
     {
         if (null === $this->piecesJointesFournies) {
-            $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule') /* @var $rule PiecesJointesFourniesRule */
-                    ->setIntervenant($this->getIntervenant());
-            $piecesJointes = $rule->getPiecesJointesFournies();
+            $qb = $this->getServicePieceJointe()->finderByDossier($this->getIntervenant()->getDossier());
+            $this->getServicePieceJointe()->finderByExistsFichier(true, $qb);
+//            $this->getServicePieceJointe()->finderByExistsValidation(true, $qb);
+            $piecesJointes = $qb->getQuery()->getResult();
             
             $this->piecesJointesFournies = [];
             foreach ($piecesJointes as $pj) { /* @var $pj PieceJointe */

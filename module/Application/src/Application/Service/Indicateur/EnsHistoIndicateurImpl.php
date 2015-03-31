@@ -41,7 +41,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
                 'Application\Entity\Db\Service',
                 'Application\Entity\Db\VolumeHoraire',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getContextProvider()->getGlobalContext()->getDateObservation()
         );
     }
     

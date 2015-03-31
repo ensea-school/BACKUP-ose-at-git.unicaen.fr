@@ -84,13 +84,11 @@ class RechercheFormHydrator implements HydratorInterface, ServiceLocatorAwareInt
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\ElementPedagogique $object
+     * @param  \Application\Entity\Service\Recherche $object
      * @return array
      */
     public function extract($object)
     {
-        /* @var $object \Application\Entity\Service\Recherche */
-
         $data = [
             'type-intervenant'      => $object->getTypeIntervenant()    ? $object->getTypeIntervenant()->getId()    : null,
             'structure-aff'         => $object->getStructureAff()       ? $object->getStructureAff()->getId()       : null,

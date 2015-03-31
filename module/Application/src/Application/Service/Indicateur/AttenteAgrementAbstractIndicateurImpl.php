@@ -69,9 +69,11 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIntervenant
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s", Join::WITH, "s.structureEns = :structure")
+                    ->join("int.service", "s")
+                    ->join("s.elementPedagogique", "ep")
                     ->join("s.volumeHoraire", "vh")
                     ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                    ->andWhere( "ep.structure = :structure")
                     ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
                     ->setParameter('structure', $this->getStructure());
         }

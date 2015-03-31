@@ -122,11 +122,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
      */
     public function __toString()
     {
+        $ep = $this->getService()->getElementPedagogique();
+
         return implode(" - ", array(
                 "Id " . $this->getId(),
-                $this->getService()->getStructureEns(),
+                $ep ? $ep->getStructure() : '',
                 "Service " . $this->getService()->getId(),
-                "EP " . $this->getService()->getElementPedagogique()->getSourceCode() . " ({$this->getService()->getElementPedagogique()->getId()})",
+                "EP " . ($ep ? $ep->getSourceCode() : '') . " (".($ep ? $ep->getId() : '').")",
                 $this->getHeures() . "h",
                 $this->getTypeIntervention(),
                 count($this->getValidation()) . " validations",

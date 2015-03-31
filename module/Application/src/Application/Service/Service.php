@@ -301,15 +301,16 @@ class Service extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $serviceStructure   = $this->getServiceStructure();
-        $serviceIntervenant = $this->getServiceIntervenant();
-        $iAlias             = $serviceIntervenant->getAlias();
+        $serviceStructure           = $this->getServiceStructure();
+        $serviceIntervenant         = $this->getServiceIntervenant();
+        $serviceElementPedagogique  = $this->getServiceElementPedagogique();
+        $iAlias                     = $serviceIntervenant->getAlias();
 
         $this->join( $serviceIntervenant, $qb, 'intervenant' );
-        $this->join( $serviceStructure, $qb, 'structureAff', false, null, 's_aff' );
-        $this->leftJoin( $serviceStructure, $qb, 'structureEns', false, null, 's_ens' );
+        $this->leftJoin( $serviceElementPedagogique, $qb, 'elementPedagogique' );
+        $serviceElementPedagogique->leftJoin( $serviceStructure, $qb, 'structure', false, null, 's_ens' );
 
-        $filter = "(($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND ($iAlias.structure = :composante OR s_aff = :composante)) OR s_ens = :composante)";
+        $filter = "(($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
         $qb->andWhere($filter)->setParameter('composante', $structure);
 
         return $qb;
@@ -325,16 +326,12 @@ class Service extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $serviceStructure   = $this->getServiceStructure();
         $serviceIntervenant = $this->getServiceIntervenant();
         $iAlias             = $serviceIntervenant->getAlias();
 
         $this->join( $serviceIntervenant, $qb, 'intervenant' );
-        $this->join( $serviceStructure, $qb, 'structureAff', false, null, 's_aff' );
-
-        $filter = "($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND s_aff = :structureAff)";
-        $qb->andWhere($filter)->setParameter('structureAff', $structure);
-
+        $serviceIntervenant->finderByStructure( $structure, $qb );
+        $qb->andWhere($iAlias.' INSTANCE OF Application\Entity\Db\IntervenantPermanent');
         return $qb;
     }
 
@@ -1030,5 +1027,13 @@ class Service extends AbstractEntityService
     protected function getServiceIntervenant()
     {
         return $this->getServiceLocator()->get('applicationIntervenant');
+    }
+
+    /**
+     * @return ElementPedagogique
+     */
+    protected function getServiceElementPedagogique()
+    {
+        return $this->getServiceLocator()->get('applicationElementPedagogique');
     }
 }

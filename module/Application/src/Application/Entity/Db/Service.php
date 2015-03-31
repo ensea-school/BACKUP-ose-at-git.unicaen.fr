@@ -44,16 +44,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     protected $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structureAff;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structureEns;
-
-    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoModificateur;
@@ -251,9 +241,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
-        if ($intervenant && ! $this->getStructureAff()){
-            $this->setStructureAff( $intervenant->getStructure() );
-        }
         return $this;
     }
 
@@ -265,52 +252,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-    /**
-     * Set structureAff
-     *
-     * @param \Application\Entity\Db\Structure $structureAff
-     * @return Service
-     */
-    public function setStructureAff(\Application\Entity\Db\Structure $structureAff = null)
-    {
-        $this->structureAff = $structureAff;
-
-        return $this;
-    }
-
-    /**
-     * Get structureAff
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructureAff()
-    {
-        return $this->structureAff;
-    }
-
-    /**
-     * Set structureEns
-     *
-     * @param \Application\Entity\Db\Structure $structureEns
-     * @return Service
-     */
-    public function setStructureEns(\Application\Entity\Db\Structure $structureEns = null)
-    {
-        $this->structureEns = $structureEns;
-
-        return $this;
-    }
-
-    /**
-     * Get structureEns
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructureEns()
-    {
-        return $this->structureEns;
     }
 
     /**
@@ -381,8 +322,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
                     $vh->setRemove(true); // Flag de demande de suppression du volume horaire lors de l'enregistrement de l'entité Service par son service Service
                 }
             }
-
-            if (! $this->getStructureEns()) $this->setStructureEns( $elementPedagogique->getStructure() );
         }
         return $this;
     }

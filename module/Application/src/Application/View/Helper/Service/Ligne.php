@@ -106,14 +106,14 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         }
         if ($liste->getColumnVisibility('structure-aff')){
             if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
-                $out .= '<td>'.$this->renderStructure( $service->getStructureAff() )."</td>\n";
+                $out .= '<td>'.$this->renderStructure( $service->getIntervenant()->getStructure() )."</td>\n";
             } else {
                 $out .= "<td>&nbsp;</td>\n";
             }
         }
         if ($service->getEtablissement() === $context->getEtablissement()) {
             if ($liste->getColumnVisibility('structure-ens')){
-                $out .= '<td>'.$this->renderStructure($service->getStructureEns())."</td>\n";
+                $out .= '<td>'.$this->renderStructure($service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null)."</td>\n";
             }
             if ($liste->getColumnVisibility('formation')){
                 $out .= '<td>'.$this->renderEtape($this->getService()->getElementPedagogique()->getEtape())."</td>\n";

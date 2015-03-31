@@ -29,7 +29,7 @@ $totalHeures = 0.0;
         $totalHeures += $heures;
         ?>
         <tr>
-            <td><?php echo $service->getStructureEns() ?></td>
+            <td><?php echo $service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null ?></td>
             <td><?php echo $service->getElementPedagogique()->getSourceCode() ?></td>
             <td><?php echo $service->getElementPedagogique()->getLibelle() ?></td>
             <td class="heures">

@@ -9,8 +9,6 @@
       <index name="IDX_DED864C87E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_DED864C863F06898" columns="HISTO_MODIFICATEUR_ID"/>
       <index name="IDX_DED864C878FF2BCB" columns="INTERVENANT_ID"/>
-      <index name="IDX_DED864C879CEECC4" columns="STRUCTURE_AFF_ID"/>
-      <index name="IDX_DED864C8B5E842BE" columns="STRUCTURE_ENS_ID"/>
     </indexes>
     <unique-constraints>
       <unique-constraint name="service__un" columns="INTERVENANT_ID,ELEMENT_PEDAGOGIQUE_ID,ANNEE_ID,ETABLISSEMENT_ID,HISTO_DESTRUCTION"/>
@@ -24,16 +22,6 @@
     <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="structureAff" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_AFF_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="structureEns" target-entity="Application\Entity\Db\Structure">
-      <join-columns>
-        <join-column name="STRUCTURE_ENS_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">

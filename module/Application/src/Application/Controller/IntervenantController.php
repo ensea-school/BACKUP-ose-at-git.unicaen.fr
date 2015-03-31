@@ -258,7 +258,7 @@ class IntervenantController extends AbstractActionController implements ContextP
                 $ds = [
                     'element-etablissement'         => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique() : $service->getService()->getEtablissement(),
                     'taux'                          => [],
-                    'structure'                     => $service->getService()->getStructureEns() ? $service->getService()->getStructureEns() : $service->getService()->getStructureAff(),
+                    'structure'                     => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique()->getStructure() : $service->getService()->getIntervenant()->getStructure(),
                     'ponderation-service-compl'     => $service->getPonderationServiceCompl(),
                     'heures'                        => [],
                     'hetd'                          => [

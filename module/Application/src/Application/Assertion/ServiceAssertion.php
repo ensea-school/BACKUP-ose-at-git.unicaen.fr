@@ -66,12 +66,13 @@ class ServiceAssertion extends AbstractAssertion
         }
 
         $intervenant      = $this->resource->getIntervenant();
-        $serviceStructure = $this->resource->getStructureEns();
-        if (!$serviceStructure && $this->resource->getElementPedagogique()) {
+        if ($this->resource->getElementPedagogique()) {
             $serviceStructure = $this->resource->getElementPedagogique()->getStructure();
+        }else{
+            $serviceStructure = null;
         }
         if ($intervenant) {
-            $intervenantStructure = $this->resource->getStructureAff() ? : $this->resource->getIntervenant()->getStructure();
+            $intervenantStructure = $this->resource->getIntervenant()->getStructure();
         }
         $typeVolumeHoraire = $this->resource->getTypeVolumeHoraire();
 

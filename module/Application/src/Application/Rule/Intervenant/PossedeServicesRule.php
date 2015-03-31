@@ -88,7 +88,7 @@ class PossedeServicesRule extends AbstractIntervenantRule implements AnneeAwareI
         
         if ($this->getStructure()) {
             $qb
-                    ->join("s.structureEns", "strEns")
+                    ->join("ep.structure", "strEns")
                     ->andWhere("strEns = " . $this->getStructure()->getId());
         }
         

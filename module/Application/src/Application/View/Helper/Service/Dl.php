@@ -49,17 +49,17 @@ class Dl extends AbstractDl
 
         $identite[] = sprintf($tplDtdd,
             "Structure de l'intervenant :",
-            $this->entity->getStructureAff()->getLibelleCourt()
+            $this->entity->getIntervenant()->getStructure()->getLibelleCourt()
         );
 
         $identite[] = sprintf($tplDtdd,
             "Structure d'enseignement :",
-            $this->entity->getStructureEns()->getLibelleCourt()
+            $this->entity->getElementPedagogique() ? $this->entity->getElementPedagogique()->getStructure()->getLibelleCourt() : ''
         );
 
         $identite[] = sprintf($tplDtdd,
             "Enseignement :",
-            $this->entity->getElementPedagogique()->getLibelle()
+            $this->entity->getElementPedagogique() ? $this->entity->getElementPedagogique()->getLibelle() : ''
         );
 
         $identite[] = sprintf($tplDtdd,

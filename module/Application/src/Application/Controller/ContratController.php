@@ -148,7 +148,8 @@ class ContratController extends AbstractActionController implements ContextProvi
             $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
                     ->select("s, vh, str, i")
                     ->join("s.volumeHoraire", "vh")
-                    ->join("s.structureEns", "str")
+                    ->join("s.elementPedagogique", "ep")
+                    ->join("ep.structure", "str")
                     ->join("s.intervenant", "i")
                     ->andWhere("vh.contrat = :contrat")->setParameter("contrat", $contrat);
             $query = $qb->getQuery();
@@ -181,7 +182,8 @@ class ContratController extends AbstractActionController implements ContextProvi
         $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
                 ->select("s, vh, str, i")
                 ->join("s.volumeHoraire", "vh")
-                ->join("s.structureEns", "str")
+                ->join("s.elementPedagogique", "ep")
+                ->join("ep.structure", "str")
                 ->join("s.intervenant", "i")
                 ->join("vh.contrat", "c")
                 ->andWhere("c.histoCreation <= :date")->setParameter("date", $contrat->getHistoModification())

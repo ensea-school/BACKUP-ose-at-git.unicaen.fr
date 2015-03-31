@@ -85,10 +85,15 @@ class VolumeHoraire extends AbstractEntityService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $qb
-                ->join("$alias.service", 'vhs3')
-                ->andWhere("vhs3.structureEns = :structure")
-                ->setParameter('structure', $structure);
+        $serviceService = $this->getServiceLocator()->get('applicationService');
+        /* @var $serviceService Service */
+
+        $serviceElement = $this->getServiceLocator()->get('applicationElementPedagogique');
+        /* @var $element ElementPedagogique */
+
+        $this->join( $serviceService, $qb, 'service' );
+        $serviceService->leftJoin($serviceElement, $qb, 'elementPedagogique');
+        $serviceElement->finderByStructure( $structure );
 
         return $qb;
     }

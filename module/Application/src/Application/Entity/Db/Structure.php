@@ -98,11 +98,6 @@ class Structure implements HistoriqueAwareInterface
     protected $elementPedagogique;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection 
-     */
-    protected $service;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $centreCout;
@@ -123,7 +118,6 @@ class Structure implements HistoriqueAwareInterface
     {
         $this->structureNiv2                        = new \Doctrine\Common\Collections\Collection;
         $this->elementPedagogique                   = new \Doctrine\Common\Collections\Collection;
-        $this->service                              = new \Doctrine\Common\Collections\Collection;
         $this->centreCout                           = new \Doctrine\Common\Collections\Collection;
         $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\Collection;
     }
@@ -538,39 +532,6 @@ class Structure implements HistoriqueAwareInterface
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
-    }
-
-    /**
-     * Add service
-     *
-     * @param \Application\Entity\Db\Service $service
-     * @return Intervenant
-     */
-    public function addService(\Application\Entity\Db\Service $service)
-    {
-        $this->service[] = $service;
-
-        return $this;
-    }
-
-    /**
-     * Remove service
-     *
-     * @param \Application\Entity\Db\Service $service
-     */
-    public function removeService(\Application\Entity\Db\Service $service)
-    {
-        $this->service->removeElement($service);
-    }
-
-    /**
-     * Get service
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getService()
-    {
-        return $this->service;
     }
 
     /**

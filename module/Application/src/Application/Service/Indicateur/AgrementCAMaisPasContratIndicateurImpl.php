@@ -66,10 +66,12 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s", Join::WITH, "s.structureEns = :structure")
+                    ->join("int.service", "s")
+                    ->join("s.elementPedagogique", "ep")
                     ->setParameter('structure', $this->getStructure())
                     ->join("s.volumeHoraire", "vh")
                     ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                    ->andWhere("ep.structure = :structure")
                     ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu());
         }
         

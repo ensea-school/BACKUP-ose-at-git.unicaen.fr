@@ -178,7 +178,6 @@ class FormuleTest extends BaseTestCase {
         }
         $e = (new \Application\Entity\Db\Service)
             ->setIntervenant($intervenant)
-            ->setStructureAff( $intervenant->getStructure() )
             ->setElementPedagogique($element)
             ->setAnnee($this->annee)
             ->setEtablissement($etablissement);

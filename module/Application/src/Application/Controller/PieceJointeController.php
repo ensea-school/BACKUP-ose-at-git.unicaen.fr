@@ -8,7 +8,6 @@ use Application\Entity\Db\Fichier;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointe;
-use Application\Rule\Intervenant\PiecesJointesFourniesRule;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\PieceJointe as PieceJointeService;
@@ -17,7 +16,6 @@ use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use BjyAuthorize\Exception\UnAuthorizedException;
 use Common\Exception\MessageException;
-use Common\Exception\RuntimeException;
 use Common\Exception\PieceJointe\AucuneAFournirException;
 use Common\Exception\PieceJointe\PieceJointeException;
 use Zend\Http\Response;
@@ -195,66 +193,9 @@ class PieceJointeController extends AbstractActionController implements ContextP
         }
         if (is_array($result)) {
             $this->getServicePieceJointe()->ajouterFichiers($result['files'], $intervenant, $typePieceJointe);
-            $this->notifyPiecesJointesFournies();
         }
         
         return $this->redirect()->toRoute('piece-jointe/intervenant/lister', [], [], true);
-    }
-    
-    private function notifyPiecesJointesFournies()
-    {
-        // notif ssi toutes les PJ obligatoires ont été founies
-        if (!$this->getRulePiecesJointesFournies()->execute()) { 
-           return;
-        }
-        // pas de nottif si c'est un gestionnaire qui dépose des PJ
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\ComposanteRole) {
-            return;
-        }
-                
-        // extraction des messages d'info (ce sont les feuilles du tableau)
-        $messages = \UnicaenApp\Util::extractArrayLeafNodes($this->statusAction()->getVariable('messages'));
-        
-        // corps au format HTML
-        $renderer = $this->getServiceLocator()->get('view_manager')->getRenderer();  /* @var $renderer \Zend\View\Renderer\PhpRenderer */
-        $html = $renderer->render('application/piece-jointe/partial/mail', [
-            'messages'    => $messages,
-            'intervenant' => $this->getIntervenant(),
-            'url'         => $this->url()->fromRoute('piece-jointe/intervenant', [], ['force_canonical' => true], true),
-        ]);
-        $part          = new \Zend\Mime\Part($html);
-        $part->type    = \Zend\Mime\Mime::TYPE_HTML;
-        $part->charset = 'UTF-8';
-        $body          = new \Zend\Mime\Message();
-        $body->addPart($part);
-        
-        // init
-        $message       = new \Zend\Mail\Message();
-        $message->setEncoding('UTF-8')
-                ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
-                ->setSubject(sprintf("[%s] Pièces justificatives déposées par %s", $app, $this->getIntervenant()))
-                ->setBody($body);
-        
-        // destinataires
-        $destinataires = $this->getPieceJointeProcess()->getDestinatairesMail();
-        if (!$destinataires) {
-            throw new RuntimeException(sprintf("Aucun destinataire trouvé concernant %s.", $this->getIntervenant()));
-        }
-        $message->addTo($destinataires);
-        
-        // envoi
-        $this->mail()->send($message);
-    }
-
-    /**
-     * @return PiecesJointesFourniesRule
-     */
-    private function getRulePiecesJointesFournies()
-    {
-        $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule');
-        $rule->setIntervenant($this->getIntervenant());
-        
-        return $rule;
     }
     
     /**

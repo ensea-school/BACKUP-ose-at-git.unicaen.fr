@@ -162,6 +162,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                 'em'      => 'Application\Controller\Plugin\Em',
                 'context' => 'Application\Controller\Plugin\Context',
             ),
+            'factories' => array(
+                'mail'    => 'Application\Controller\Plugin\MailWithLogPluginFactory',
+            ),
         );
     }
 

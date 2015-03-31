@@ -47,6 +47,16 @@ class NotificationController extends AbstractActionController implements Context
                 ->setVariable('nis', $nis)
                 ->setVariable('serviceIndicateur', $this->getServiceIndicateur());
         
+//        // init
+//        $message = new MailMessage();
+//        $message->setEncoding('UTF-8')
+//                ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
+//                ->setSubject(sprintf("[%s Test]", $app))
+//                ->setBody("test")
+//                ->addTo("bertrand.gauthier@unicaen.fr");
+//                  
+//        $this->mail()->send($message);
+        
         return $viewModel;
     }
     

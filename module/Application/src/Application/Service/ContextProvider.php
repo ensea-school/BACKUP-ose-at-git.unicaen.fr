@@ -43,12 +43,19 @@ class ContextProvider extends AbstractService
     public function getGlobalContext()
     {
         if (null === $this->globalContext) {
-            $authUserContext = $this->getServiceLocator()->get('authUserContext'); /* @var $authUserContext \UnicaenAuth\Service\UserContext */
-            
-            $annee       = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee);
-            $anneePrec   = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee - 1);
-            $anneeSuiv   = $this->getEntityManager()->find('Application\Entity\Db\Annee', $this->getParametres()->annee + 1);
-            $etab        = $this->getEntityManager()->find('Application\Entity\Db\Etablissement', $this->getParametres()->etablissement);
+            $authUserContext = $this->getServiceLocator()->get('authUserContext');
+            /* @var $authUserContext \UnicaenAuth\Service\UserContext */
+
+            $sAnnee = $this->getServiceLocator()->get('applicationAnnee');
+            /* @var $sAnnee Annee */
+
+            $sEtablissement = $this->getServiceLocator()->get('applicationEtablissement');
+            /* @var $sEtablissement Etablissement */
+
+            $annee       = $sAnnee->get( $this->getParametres()->annee     );
+            $anneePrec   = $sAnnee->get( $this->getParametres()->annee - 1 );
+            $anneeSuiv   = $sAnnee->get( $this->getParametres()->annee + 1 );
+            $etab        = $sEtablissement->get( $this->getParametres()->etablissement );
             $utilisateur = null;
             $intervenant = null;
             $personnel   = null;
@@ -68,7 +75,11 @@ class ContextProvider extends AbstractService
                 }
                 if (null === $intervenant) {
                     $ldapUser = $authUserContext->getLdapUser();
-                    $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer((int) $ldapUser->getSupannEmpId());
+
+                    $sIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
+                    /* @var $sIntervenant Intervenant */
+
+                    $intervenant = $sIntervenant->importer((int) $ldapUser->getSupannEmpId());
                 }
             }
 
@@ -84,12 +95,13 @@ class ContextProvider extends AbstractService
                     ->setAnneePrecedente($anneePrec)
                     ->setAnneeSuivante($anneeSuiv)
                     ->setEtablissement($etab)
-                    ->setDateFinSaisiePermanents($dateFinSaisiePermanents);
+                    ->setDateFinSaisiePermanents($dateFinSaisiePermanents)
+            ;
         }
-        
+
         return $this->globalContext;
     }
-    
+
     /**
      * Retourne le contexte local (filtres, etc.)
      * 
@@ -101,10 +113,18 @@ class ContextProvider extends AbstractService
             $this->localContext = $this->getServiceLocator()->get('applicationLocalContext');
             /* @var $this->localContext LocalContext */
         }
-        
+
+        if (! $this->localContext->getAnnee()){
+            $sAnnee = $this->getServiceLocator()->get('applicationAnnee');
+            /* @var $sAnnee Annee */
+
+            // peuplement obligatoire de l'année en cours!!
+            $this->localContext->setAnnee( $sAnnee->get( $this->getParametres()->annee ) );
+        }
+
         return $this->localContext;
     }
-    
+
     /**
      * 
      * @return Role|IntervenantRole
@@ -112,8 +132,11 @@ class ContextProvider extends AbstractService
     public function getSelectedIdentityRole()
     {
         if (null === $this->selectedIdentityRole) {
-            $this->selectedIdentityRole = $this->getServiceLocator()->get('AuthUserContext')->getSelectedIdentityRole();
-            
+            $authUserContext = $this->getServiceLocator()->get('authUserContext');
+            /* @var $authUserContext \UnicaenAuth\Service\UserContext */
+
+            $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();
+
             if ($this->selectedIdentityRole instanceof IntervenantAwareInterface) {
                 $this->selectedIdentityRole->setIntervenant($this->getGlobalContext()->getIntervenant());
             }
@@ -121,10 +144,10 @@ class ContextProvider extends AbstractService
                 $this->selectedIdentityRole->setPersonnel($this->getGlobalContext()->getPersonnel());
             }
         }
-        
+
         return $this->selectedIdentityRole;
     }
-    
+
     /**
      * 
      * @return Parametres

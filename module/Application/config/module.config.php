@@ -184,6 +184,7 @@ $main =  [
         'invokables' => [
             'AuthenticatedUserSavedListener'                 => 'Application\AuthenticatedUserSavedListener',
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
+            'ApplicationAnnee'                               => 'Application\\Service\\Annee',
             'ApplicationContextProvider'                     => 'Application\\Service\\ContextProvider',
             'ApplicationlocalContext'                        => 'Application\\Service\\LocalContext',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',

@@ -3,13 +3,11 @@
 namespace Application\Service;
 
 use Zend\Session\Container;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
 use Application\Entity\Db\Structure as EntityStructure;
 use Application\Entity\Db\Etape as EntityEtape;
 use Application\Entity\NiveauEtape as EntityNiveauEtape;
-use Application\Entity\Db\EntityAnnee;
+use Application\Entity\Db\Annee as EntityAnnee;
 use Application\Entity\Db\ElementPedagogique as EntityElementPedagogique;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -20,9 +18,8 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class LocalContext extends AbstractContext implements EntityManagerAwareInterface, ServiceLocatorAwareInterface
+class LocalContext extends AbstractContext implements ServiceLocatorAwareInterface
 {
-    use EntityManagerAwareTrait;
     use ServiceLocatorAwareTrait;
 
     /**
@@ -79,7 +76,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
                 $this->annee = $sAnnee->get( $this->annee );
             }
         }
-        return $this->intervenant;
+        return $this->annee;
     }
 
     /**

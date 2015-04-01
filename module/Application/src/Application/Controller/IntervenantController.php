@@ -2,12 +2,9 @@
 
 namespace Application\Controller;
 
-use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
-use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantExterieur;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -17,7 +14,6 @@ use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
  * Description of IntervenantController
  *
  * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Intervenant intervenant()
  * @method \Application\Controller\Plugin\Context     context()
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>

@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Application\Acl\IntervenantRole;
-use Application\Controller\Plugin\Intervenant;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;

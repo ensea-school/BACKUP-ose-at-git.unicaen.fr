@@ -16,7 +16,7 @@ return [
                         'action' => 'index',
                     ],
                 ],
-               'child_routes' => [
+                'child_routes' => [
                     'etat-demande-paiement' => [
                         'type'    => 'Literal',
                         'may_terminate' => true,

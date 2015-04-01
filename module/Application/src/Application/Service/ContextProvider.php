@@ -86,8 +86,9 @@ class ContextProvider extends AbstractService
             /**
              * @todo Faire du GlobalContext un service !
              */
-            $this->globalContext = new GlobalContext($this->getServiceLocator());
+            $this->globalContext = new GlobalContext;
             $this->globalContext
+                    ->setServiceLocator($this->getServiceLocator())
                     ->setUtilisateur($utilisateur)
                     ->setIntervenant($intervenant)
                     ->setPersonnel($personnel)
@@ -110,8 +111,8 @@ class ContextProvider extends AbstractService
     public function getLocalContext()
     {
         if (null === $this->localContext) {
-            $this->localContext = $this->getServiceLocator()->get('applicationLocalContext');
-            /* @var $this->localContext LocalContext */
+            $this->localContext = new LocalContext;
+            $this->localContext->setServiceLocator($this->getServiceLocator());
         }
 
         if (! $this->localContext->getAnnee()){

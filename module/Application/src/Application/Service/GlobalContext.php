@@ -10,7 +10,8 @@ use Application\Entity\Db\Personnel as PersonnelEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Utilisateur as UtilisateurEntity;
 use DateTime;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Session\Container;
 
 /**
@@ -18,12 +19,9 @@ use Zend\Session\Container;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class GlobalContext
+class GlobalContext implements ServiceLocatorAwareInterface
 {
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $sl;
+    use ServiceLocatorAwareTrait;
     
     /**
      * @var UtilisateurEntity
@@ -69,17 +67,7 @@ class GlobalContext
     protected $dateObservation;
 
 
-    
-    /**
-     * Constructeur.
-     * 
-     * @param ServiceLocatorInterface $sl
-     */
-    public function __construct(ServiceLocatorInterface $sl)
-    {
-        $this->sl = $sl;
-    }
-    
+
     /**
      * @var EntityEtablissement
      */
@@ -206,7 +194,10 @@ class GlobalContext
             return $structure;
         }
         if ($structure) {
-            $structure = $this->sl->get('ApplicationStructure')->get($structure);
+            $sStructure = $this->getServiceLocator()->get('ApplicationStructure');
+            /* @var $sStructure Structure */
+
+            $structure = $sStructure->get($structure);
         }
         
         return $structure;

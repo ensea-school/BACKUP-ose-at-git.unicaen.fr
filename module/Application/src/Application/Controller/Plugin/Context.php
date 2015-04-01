@@ -260,7 +260,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
     public function getGlobalContext()
     {
         if (null === $this->globalContext) {
-            $this->globalContext = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider')->getGlobalContext();
+            $this->globalContext = $this->getServiceContextProvider()->getGlobalContext();
         }
         return $this->globalContext;
     }
@@ -271,7 +271,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
     public function getLocalContext()
     {
         if (null === $this->localContext) {
-            $this->localContext = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider')->getLocalContext();
+            $this->localContext = $this->getServiceContextProvider()->getLocalContext();
         }
         return $this->localContext;
     }
@@ -301,5 +301,13 @@ class Context extends Params implements ServiceLocatorAwareInterface
     protected function getProcessusImport()
     {
         return $this->getServiceLocator()->getServiceLocator()->get('importProcessusImport');
+    }
+
+    /**
+     * @return \Application\Service\ContextProvider
+     */
+    protected function getServiceContextProvider()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider');
     }
 }

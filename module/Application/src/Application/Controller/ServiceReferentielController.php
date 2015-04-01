@@ -82,7 +82,6 @@ class ServiceReferentielController extends AbstractActionController implements C
         $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                     = $this->getContextProvider()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
-        $annee                    = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel                = new \Zend\View\Model\ViewModel();
         $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
                 $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
@@ -129,7 +128,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
 
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'canAddServiceReferentiel', 'params'));
+        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'canAddServiceReferentiel', 'params'));
 
         if ($totaux) {
             $viewModel->setTemplate('application/service-referentiel/rafraichir-totaux');

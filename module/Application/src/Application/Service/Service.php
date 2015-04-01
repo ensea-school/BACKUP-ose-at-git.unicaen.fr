@@ -67,7 +67,6 @@ class Service extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
         if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }
@@ -180,7 +179,6 @@ class Service extends AbstractEntityService
                 $serviceAllreadyExists = $this->getRepo()->findOneBy([
                     'intervenant'           => $entity->getIntervenant(),
                     'elementPedagogique'    => $entity->getElementPedagogique(),
-                    'annee'                 => $entity->getAnnee(),
                     'etablissement'         => $entity->getEtablissement(),
                 ]);
             }
@@ -306,8 +304,8 @@ class Service extends AbstractEntityService
         $serviceElementPedagogique  = $this->getServiceElementPedagogique();
         $iAlias                     = $serviceIntervenant->getAlias();
 
-        $this->join( $serviceIntervenant, $qb, 'intervenant' );
-        $this->leftJoin( $serviceElementPedagogique, $qb, 'elementPedagogique' );
+        $this->join( $serviceIntervenant, $qb, 'intervenant', false, $alias );
+        $this->leftJoin( $serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias );
         $serviceElementPedagogique->leftJoin( $serviceStructure, $qb, 'structure', false, null, 's_ens' );
 
         $filter = "(($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
@@ -329,7 +327,7 @@ class Service extends AbstractEntityService
         $serviceIntervenant = $this->getServiceIntervenant();
         $iAlias             = $serviceIntervenant->getAlias();
 
-        $this->join( $serviceIntervenant, $qb, 'intervenant' );
+        $this->join( $serviceIntervenant, $qb, 'intervenant', false, $alias );
         $serviceIntervenant->finderByStructure( $structure, $qb );
         $qb->andWhere($iAlias.' INSTANCE OF Application\Entity\Db\IntervenantPermanent');
         return $qb;
@@ -349,7 +347,8 @@ class Service extends AbstractEntityService
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+        $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
+        $this->getServiceIntervenant()->finderByAnnee( $context->getAnnee(), $qb );
 
         if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
             $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
@@ -369,7 +368,7 @@ class Service extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         if ($typeIntervenant){
-            $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', $alias );
+            $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
             $this->getServiceIntervenant()->finderByType( $typeIntervenant, $qb );
         }
         return $qb;

@@ -43,20 +43,18 @@ class ElementModulateur extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $this->finderByAnnee( $this->getContextProvider()->getGlobalContext()->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+        $this->join( $this->getServiceElementPedagogique(), $qb, 'elementPedagogique', false, $alias );
+
+        $this->getServiceElementPedagogique()->finderByAnnee( $this->getContextProvider()->getGlobalContext()->getannee(), $qb ); // Filtre d'année obligatoire
 
         return $qb;
     }
 
     /**
-     * Retourne une nouvelle entité, initialisée avec les bons paramètres
-     * @return \Application\Entity\Db\ElementModulateur
+     * @return ElementPedagogique
      */
-    public function newEntity()
+    protected function getServiceElementPedagogique()
     {
-        $entity = parent::newEntity();
-        // Initialisation de l'année en cours
-        $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
-        return $entity;
+        return $this->getServiceLocator()->get('applicationElementPedagogique');
     }
 }

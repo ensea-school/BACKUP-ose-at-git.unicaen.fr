@@ -368,11 +368,11 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $annee       = null;    $multiAnnees        = false;
         $intervenant = null;    $multiIntervenants  = false;
         foreach( $services as $service ){
-            if (empty($annee)) $annee = $service->getAnnee();
-            elseif( $annee !== $service->getAnnee() ){ $multiAnnees = true; break;}
-
             if (empty($intervenant)) $intervenant = $service->getIntervenant();
             elseif( $intervenant !== $service->getIntervenant() ){ $multiIntervenants = true; break;}
+
+            if (empty($annee)) $annee = $service->getIntervenant()->getAnnee();
+            elseif( $annee !== $service->getIntervenant()->getAnnee() ){ $multiAnnees = true; break;}
         }
         $this->setColumnVisibility( 'annee',         $multiAnnees        );
         $this->setColumnVisibility( 'intervenant',   $multiIntervenants  );

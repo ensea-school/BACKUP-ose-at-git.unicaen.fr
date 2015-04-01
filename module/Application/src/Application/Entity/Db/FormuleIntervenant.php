@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FormuleIntervenant
  */
@@ -94,29 +92,20 @@ class FormuleIntervenant
     /**
      * Get formuleServiceModifie
      *
-     * @param Annee $annee
-     *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFormuleServiceModifie( Annee $annee=null )
+    public function getFormuleServiceModifie()
     {
-        $filter = function( FormuleServiceModifie $formuleServiceModifie ) use ($annee) {
-            if ($annee && $annee !== $formuleServiceModifie->getAnnee()) {
-                return false;
-            }
-            return true;
-        };
-        return $this->formuleServiceModifie->filter($filter);
+        return $this->formuleServiceModifie;
     }
 
     /**
      *
-     * @param Annee $annee
      * @return FormuleServiceModifie
      */
-    public function getUniqueFormuleServiceModifie( Annee $annee )
+    public function getUniqueFormuleServiceModifie()
     {
-        $result = $this->getFormuleServiceModifie($annee)->first();
+        $result = $this->getFormuleServiceModifie()->first();
         if (false === $result) $result = new FormuleServiceModifie;
         return $result;
     }

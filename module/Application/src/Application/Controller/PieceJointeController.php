@@ -103,7 +103,6 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $this->view->setVariables([
             'intervenant'            => $this->getIntervenant(),
             'totalHeuresReelles'     => $this->getPieceJointeProcess()->getTotalHeuresReellesIntervenant(),
-            'annee'                  => $this->getContextProvider()->getGlobalContext()->getAnnee(),
             'typesPieceJointeStatut' => $typesPieceJointeStatut,
             'piecesJointesFournies'  => $piecesJointesFournies,
             'dossier'                => $dossier,

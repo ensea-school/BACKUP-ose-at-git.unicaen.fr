@@ -200,23 +200,19 @@ class IntervenantExterieur extends Intervenant
      *
      * @param \Application\Entity\Db\TypeContrat $typeContrat
      * @param \Application\Entity\Db\Structure $structure
-     * @param \Application\Entity\Db\Annee $annee
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getContrat(TypeContrat $typeContrat = null, Structure $structure = null, Annee $annee = null)
+    public function getContrat(TypeContrat $typeContrat = null, Structure $structure = null)
     {
         if (null === $this->contrat) {
             return null;
         }
         
-        $filter   = function(Contrat $contrat) use ($typeContrat, $structure, $annee) {
+        $filter   = function(Contrat $contrat) use ($typeContrat, $structure) {
             if ($typeContrat && $typeContrat !== $contrat->getTypeContrat()) {
                 return false;
             }
             if ($structure && $structure !== $contrat->getStructure()) {
-                return false;
-            }
-            if ($annee && $annee !== $contrat->getAnnee()) {
                 return false;
             }
             return true; 

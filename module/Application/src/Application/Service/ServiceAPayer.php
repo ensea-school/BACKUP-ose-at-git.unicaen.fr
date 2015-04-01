@@ -25,7 +25,7 @@ class ServiceAPayer extends AbstractService
         $etatVolumeHoraire  = $this->getServiceEtatVolumeHoraire()->getValide();
 
         $frsList = $intervenant
-                        ->getUniqueFormuleResultat($intervenant->getAnnee(), $typeVolumeHoraire, $etatVolumeHoraire)
+                        ->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire)
                         ->getFormuleResultatService()->filter(
         function( \Application\Entity\Db\FormuleResultatService $formuleResultatService ){
             $totalHC = $formuleResultatService->getHeuresComplFi()
@@ -36,7 +36,7 @@ class ServiceAPayer extends AbstractService
         });
 
         $frsrList = $intervenant
-                        ->getUniqueFormuleResultat($intervenant->getAnnee(), $typeVolumeHoraire, $etatVolumeHoraire)
+                        ->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire)
                         ->getFormuleResultatServiceReferentiel()->filter(
         function( \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel ){
             $totalHC = $formuleResultatServiceReferentiel->getHeuresComplReferentiel();

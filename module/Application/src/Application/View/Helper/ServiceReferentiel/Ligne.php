@@ -107,7 +107,7 @@ class Ligne extends AbstractHtmlElement
             $out .= '<td style="text-align:right">'.$this->renderHeures($this->getService())."</td>\n";
         }
         if ($liste->getColumnVisibility('annee')){
-            $out .= '<td>'.$this->renderAnnee( $this->getService()->getAnnee() )."</td>\n";
+            $out .= '<td>'.$this->renderAnnee( $this->getService()->getIntervenant()->getAnnee() )."</td>\n";
         }
 
         $out .= '<td class="actions">';

@@ -61,11 +61,6 @@ class Dl extends AbstractDl
             $this->entity->getFonction()
         );
 
-        $identite[] = sprintf($tplDtdd,
-            "Année :",
-            $this->entity->getAnnee()
-        );
-
         $html .= sprintf($this->getTemplateDl('service-referentiel service-referentiel-identite'), implode(PHP_EOL, $identite)) . PHP_EOL;
 
         /**

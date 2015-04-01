@@ -13,7 +13,6 @@ use Application\Acl\ComposanteRole;
  * Description of IntervenantController
  *
  * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Intervenant intervenant()
  * @method \Application\Controller\Plugin\Context     context()
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
@@ -44,18 +43,11 @@ class ModificationServiceDuController extends AbstractActionController implement
             throw new MessageException("La modification de service dû n'est pas possible. ", null, new \Exception($rule->getMessage()));
         }
 
-        // fetch intervenant avec jointure sur les modifs de service dû
-        $qb = $this->getServiceIntervenant()->getFinderIntervenantPermanentWithModificationServiceDu();
-        $qb->setIntervenant($intervenant);
-        $intervenant = $qb->getQuery()->getOneOrNullResult(); /* @var $intervenant IntervenantPermanent */
-
-        $annee = $context->getAnnee();
-
         // NB: patch pour permettre de vider toutes les modifs de service dû
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
             if (empty($data['fs']['modificationServiceDu'])) {
-                foreach ($intervenant->getModificationServiceDu($annee) as $sr) {
+                foreach ($intervenant->getModificationServiceDu() as $sr) {
                     $sr->setHistoDestruction(new \DateTime());
                     $this->em()->persist($sr);
                     $this->em()->flush();
@@ -67,7 +59,6 @@ class ModificationServiceDuController extends AbstractActionController implement
         $form = $this->getServiceLocator()->get('form_element_manager')->get('IntervenantModificationServiceDuForm');
         /* @var $form \Application\Form\Intervenant\ModificationServiceDuForm */
         $form->setAttribute('action', $this->getRequest()->getRequestUri());
-        $form->getBaseFieldset()->getHydrator()->setAnnee($annee);
         $form->bind($intervenant);
 
         $variables = [
@@ -82,7 +73,7 @@ class ModificationServiceDuController extends AbstractActionController implement
             if (empty($data['fs']['modificationServiceDu'])) {
                 $data['fs']['modificationServiceDu'] = [];
             }
-//            var_dump($data);
+
             $form->setData($data);
             if ($form->isValid()) {
                 try {
@@ -96,7 +87,6 @@ class ModificationServiceDuController extends AbstractActionController implement
                 catch (\Doctrine\DBAL\DBALException $exc) {
                     $exception = new RuntimeException("Impossible d'enregistrer les modifications de service dû.", null, $exc->getPrevious());
                     $variables['exception'] = $exception;
-//                    var_dump($exc->getMessage(), $exc->getTraceAsString());
                 }
             }
         }

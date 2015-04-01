@@ -142,7 +142,8 @@ class ServiceReferentiel extends AbstractEntityService
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+        $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
+        $this->getServiceIntervenant()->finderByAnnee( $context->getAnnee(), $qb );
 
         if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
             $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
@@ -208,7 +209,6 @@ class ServiceReferentiel extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
         if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
         }
@@ -239,7 +239,6 @@ class ServiceReferentiel extends AbstractEntityService
                     'structure'    => $entity->getStructure(),
                     'fonction'     => $entity->getFonction(),
                     'commentaires' => $entity->getCommentaires(),
-                    'annee'        => $entity->getAnnee(),
                 ]);
             }
             if ($serviceAllreadyExists){

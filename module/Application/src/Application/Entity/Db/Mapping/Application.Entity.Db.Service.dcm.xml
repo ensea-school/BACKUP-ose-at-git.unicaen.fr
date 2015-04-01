@@ -2,7 +2,6 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\Service" table="SERVICE">
     <indexes>
-      <index name="IDX_DED864C8AA401F5C" columns="ANNEE_ID"/>
       <index name="IDX_DED864C88AB4A516" columns="ELEMENT_PEDAGOGIQUE_ID"/>
       <index name="IDX_DED864C8B3FC6B16" columns="ETABLISSEMENT_ID"/>
       <index name="IDX_DED864C859860CDC" columns="HISTO_CREATEUR_ID"/>
@@ -11,7 +10,7 @@
       <index name="IDX_DED864C878FF2BCB" columns="INTERVENANT_ID"/>
     </indexes>
     <unique-constraints>
-      <unique-constraint name="service__un" columns="INTERVENANT_ID,ELEMENT_PEDAGOGIQUE_ID,ANNEE_ID,ETABLISSEMENT_ID,HISTO_DESTRUCTION"/>
+      <unique-constraint name="service__un" columns="INTERVENANT_ID,ELEMENT_PEDAGOGIQUE_ID,ETABLISSEMENT_ID,HISTO_DESTRUCTION"/>
     </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>

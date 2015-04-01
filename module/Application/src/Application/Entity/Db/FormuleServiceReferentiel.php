@@ -30,11 +30,6 @@ class FormuleServiceReferentiel
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
-
-    /**
      * @var \Application\Entity\Db\Structure
      */
     private $structure;
@@ -53,19 +48,6 @@ class FormuleServiceReferentiel
     }
 
     /**
-     * Set id
-     *
-     * @param integer $id
-     * @return FormuleServiceReferentiel
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -76,19 +58,6 @@ class FormuleServiceReferentiel
     }
 
     /**
-     * Set serviceReferentiel
-     *
-     * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
-     * @return FormuleServiceReferentiel
-     */
-    public function setServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel = null)
-    {
-        $this->serviceReferentiel = $serviceReferentiel;
-
-        return $this;
-    }
-
-    /**
      * Get serviceReferentiel
      *
      * @return \Application\Entity\Db\ServiceReferentiel 
@@ -96,29 +65,6 @@ class FormuleServiceReferentiel
     public function getServiceReferentiel()
     {
         return $this->serviceReferentiel;
-    }
-
-    /**
-     * Add formuleVolumeHoraireReferentiel
-     *
-     * @param \Application\Entity\Db\FormuleVolumeHoraireReferentiel $formuleVolumeHoraireReferentiel
-     * @return FormuleServiceReferentiel
-     */
-    public function addFormuleVolumeHoraireReferentiel(\Application\Entity\Db\FormuleVolumeHoraireReferentiel $formuleVolumeHoraireReferentiel)
-    {
-        $this->formuleVolumeHoraireReferentiel[] = $formuleVolumeHoraireReferentiel;
-
-        return $this;
-    }
-
-    /**
-     * Remove formuleVolumeHoraireReferentiel
-     *
-     * @param \Application\Entity\Db\FormuleVolumeHoraireReferentiel $formuleVolumeHoraireReferentiel
-     */
-    public function removeFormuleVolumeHoraireReferentiel(\Application\Entity\Db\FormuleVolumeHoraireReferentiel $formuleVolumeHoraireReferentiel)
-    {
-        $this->formuleVolumeHoraireReferentiel->removeElement($formuleVolumeHoraireReferentiel);
     }
 
     /**
@@ -146,19 +92,6 @@ class FormuleServiceReferentiel
     }
 
     /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return FormuleServiceReferentiel
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-    /**
      * Get intervenant
      *
      * @return \Application\Entity\Db\Intervenant 
@@ -169,42 +102,6 @@ class FormuleServiceReferentiel
     }
 
     /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return FormuleServiceReferentiel
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
-    }
-
-    /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return FormuleServiceReferentiel
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-    /**
      * Get structure
      *
      * @return \Application\Entity\Db\Structure 
@@ -212,19 +109,6 @@ class FormuleServiceReferentiel
     public function getStructure()
     {
         return $this->structure;
-    }
-
-    /**
-     * Set formuleIntervenant
-     *
-     * @param \Application\Entity\Db\FormuleIntervenant $formuleIntervenant
-     * @return FormuleServiceReferentiel
-     */
-    public function setFormuleIntervenant(\Application\Entity\Db\FormuleIntervenant $formuleIntervenant = null)
-    {
-        $this->formuleIntervenant = $formuleIntervenant;
-
-        return $this;
     }
 
     /**

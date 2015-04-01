@@ -2,10 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Finder\FinderIntervenantPermanentWithServiceReferentiel;
-use Application\Entity\Db\Finder\FinderIntervenantPermanentWithModificationServiceDu;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Periode as PeriodeEntity;
 use Common\Exception\RuntimeException;
@@ -59,28 +56,6 @@ class Intervenant extends AbstractEntityService
         $qb->setParameters([1 => $term, 2 => "%$term%", 3 => 'US7ASCII']);
 
 //        print_r($qb->getQuery()->getSQL()); var_dump($qb->getQuery()->getParameters());die;
-
-        return $qb;
-    }
-
-    /**
-     *
-     * @return FinderIntervenantPermanentWithServiceReferentiel
-     */
-    public function getFinderIntervenantPermanentWithServiceReferentiel()
-    {
-        $qb = new FinderIntervenantPermanentWithServiceReferentiel($this->getEntityManager(), $this->getContextProvider());
-
-        return $qb;
-    }
-
-    /**
-     *
-     * @return FinderIntervenantPermanentWithModificationServiceDu
-     */
-    public function getFinderIntervenantPermanentWithModificationServiceDu()
-    {
-        $qb = new FinderIntervenantPermanentWithModificationServiceDu($this->getEntityManager(), $this->getContextProvider());
 
         return $qb;
     }

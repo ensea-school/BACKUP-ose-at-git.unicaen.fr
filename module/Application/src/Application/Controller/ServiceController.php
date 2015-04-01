@@ -94,7 +94,6 @@ class ServiceController extends AbstractActionController
         $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                     = $this->getContextProvider()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
-        $annee                    = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel                = new \Zend\View\Model\ViewModel();
         $canAddService            = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
         $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
@@ -150,7 +149,7 @@ class ServiceController extends AbstractActionController
         }
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params = $viewHelperParams;
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'canAddService', 'canAddServiceReferentiel', 'params'));
+        $viewModel->setVariables(compact('services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'canAddService', 'canAddServiceReferentiel', 'params'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{

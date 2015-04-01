@@ -1282,7 +1282,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Get serviceReferentielToStrings
      *
-     * @param Annee $annee Seule année à retenir
      * @return string[]
      */
     public function getServiceReferentielToStrings()
@@ -1298,7 +1297,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Remove all serviceReferentiel
      *
-     * @param Annee $annee Seule année à retenir
      * @param bool $softDelete
      * @return self
      */
@@ -1360,20 +1358,17 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAgrement(TypeAgrement $typeAgrement = null, Annee $annee = null)
+    public function getAgrement(TypeAgrement $typeAgrement = null)
     {
         if (null === $this->agrement) {
             return null;
         }
-        if (null === $typeAgrement && null === $annee) {
+        if (null === $typeAgrement) {
             return $this->agrement;
         }
 
-        $filter   = function(Agrement $agrement) use ($typeAgrement, $annee) {
+        $filter   = function(Agrement $agrement) use ($typeAgrement) {
             if ($typeAgrement && $typeAgrement !== $agrement->getType()) {
-                return false;
-            }
-            if ($annee && $annee !== $agrement->getAnnee()) {
                 return false;
             }
             return true;

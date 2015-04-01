@@ -175,7 +175,6 @@ class IntervenantController extends AbstractActionController implements ContextP
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         $form = $this->getFormHeuresComp();
-        $annee = $this->context()->getGlobalContext()->getAnnee();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
         /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
@@ -199,7 +198,7 @@ class IntervenantController extends AbstractActionController implements ContextP
         $data = [
             'structure-affectation'         => $intervenant->getStructure(),
             'heures-service-statutaire'     => $intervenant->getStatut()->getServiceStatutaire(),
-            'heures-modification-service'   => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie($annee)->getHeures(),
+            'heures-modification-service'   => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie()->getHeures(),
             'services'                      => [],
             'referentiel'                   => [],
             'types-intervention'            => [],
@@ -209,7 +208,7 @@ class IntervenantController extends AbstractActionController implements ContextP
             'th-compl'                      => [],
         ];
 
-        $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel($annee);
+        $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel();
         foreach( $referentiels as $referentiel ){
             /* @var $referentiel \Application\Entity\Db\FormuleServiceReferentiel */
 
@@ -227,7 +226,7 @@ class IntervenantController extends AbstractActionController implements ContextP
             $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr ? $frr->getHeuresComplReferentiel() : 0;
         }
 
-        $services = $intervenant->getFormuleIntervenant()->getFormuleService($annee);
+        $services = $intervenant->getFormuleIntervenant()->getFormuleService();
         foreach( $services as $service ){
             $dsId = $service->getId();
             $ds = [];
@@ -316,16 +315,15 @@ class IntervenantController extends AbstractActionController implements ContextP
         usort($data['th-taux'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
         usort($data['th-service'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
         usort($data['th-compl'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
-        return compact('annee', 'form', 'intervenant', 'typeVolumeHoraire', 'etatVolumeHoraire', 'data');
+        return compact('form', 'intervenant', 'typeVolumeHoraire', 'etatVolumeHoraire', 'data');
     }
 
     public function formuleTotauxHetdAction()
     {
         $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant Intervenant */
-        $annee = $this->context()->getGlobalContext()->getAnnee();
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat = $intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
         return compact('formuleResultat');
     }
 

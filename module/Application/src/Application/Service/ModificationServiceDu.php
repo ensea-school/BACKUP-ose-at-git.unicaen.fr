@@ -46,7 +46,9 @@ class ModificationServiceDu extends AbstractEntityService
 
         $globalContext = $this->getContextProvider()->getGlobalContext();
 
-        $this->finderByAnnee( $globalContext->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+        $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
+        $this->getServiceIntervenant()->finderByAnnee( $globalContext->getannee(), $qb );
+        
         if ($globalContext->getIntervenant()){
             $this->finderByIntervenant($globalContext->getIntervenant());
         }
@@ -68,5 +70,13 @@ class ModificationServiceDu extends AbstractEntityService
             $total += $modif->heures;
         }
         return $total;
+    }
+
+    /**
+     * @return Intervenant
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->get('applicationIntervenant');
     }
 }

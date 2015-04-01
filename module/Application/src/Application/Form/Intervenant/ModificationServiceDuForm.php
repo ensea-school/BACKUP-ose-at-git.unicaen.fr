@@ -79,25 +79,6 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
     }
 
     /**
-     * Set options for a fieldset. Accepted options are:
-     * - use_as_base_fieldset: is this fieldset use as the base fieldset?
-     *
-     * @param  array|Traversable $options
-     * @return Element|ElementInterface
-     * @throws Exception\InvalidArgumentException
-     */
-    public function setOptions($options)
-    {
-        parent::setOptions($options);
-
-        if (isset($options['annee'])) {
-            $this->setAnnee($options['annee']);
-        }
-
-        return $this;
-    }
-
-    /**
      * Bind an object to the form
      *
      * Ensures the object is populated with validated values.

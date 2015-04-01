@@ -35,8 +35,6 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
      */
     public function init()
     {
-//        var_dump(get_class($intervenant), "".$annee, count($intervenant->getServiceReferentiel($annee)));
-
         $this->setHydrator(new MotifModificationServiceDuHydrator($this->getMotifs()))
              ->setObject(new ModificationServiceDu());
 

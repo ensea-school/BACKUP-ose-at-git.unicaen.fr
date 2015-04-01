@@ -232,20 +232,14 @@ class Structure extends AbstractEntityService
      * Fetch des structures d'enseignement distinctes d'un intervenant.
      *
      * @param \Application\Service\IntervenantEntity $intervenant
-     * @param \Application\Service\Annee $annee
      */
-    public function getListStructuresEnseignIntervenant(IntervenantEntity $intervenant, Annee $annee = null)
+    public function getListStructuresEnseignIntervenant(IntervenantEntity $intervenant)
     {
-        if (null === $annee) {
-            $this->getContextProvider()->getGlobalContext()->getAnnee();
-        }
-
         $serviceService = $this->getServiceLocator()->get('ApplicationService');
 
         $qb = $this->finderByEnseignement();
         $this->join($serviceService, $qb, 'service');
         $serviceService->finderByIntervenant($intervenant, $qb);
-        $serviceService->finderByAnnee($annee, $qb);
 
         return $this->getList($qb);
     }

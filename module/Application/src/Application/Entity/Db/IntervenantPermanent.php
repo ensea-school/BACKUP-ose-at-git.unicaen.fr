@@ -98,52 +98,38 @@ class IntervenantPermanent extends Intervenant
     /**
      * Get modificationServiceDu
      *
-     * @param Annee $annee Seule année à retenir
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getModificationServiceDu(Annee $annee = null)
+    public function getModificationServiceDu()
     {
-        if (null === $annee) {
-            return $this->modificationServiceDu;
-        }
-
-        $p = function($item) use ($annee) {
-            return $item->getAnnee()->getId() === $annee->getId();
-        };
-        $services = $this->modificationServiceDu->filter($p);
-
-        return $services;
+        return $this->modificationServiceDu;
     }
 
     /**
      * Get modificationServiceDuToStrings
      *
-     * @param Annee $annee Seule année à retenir
      * @return string[]
      */
-    public function getModificationServiceDuToStrings(Annee $annee = null)
+    public function getModificationServiceDuToStrings()
     {
         $services = [];
-        foreach ($this->getModificationServiceDu($annee) as $sr) { /* @var $sr \Application\Entity\Db\ModificationServiceDu */
+        foreach ($this->getModificationServiceDu() as $sr) { /* @var $sr \Application\Entity\Db\ModificationServiceDu */
             $services[] = "" . $sr;
         }
-
         return $services;
     }
 
     /**
      * Remove all modificationServiceDu
      *
-     * @param Annee $annee Seule année à retenir
      * @param bool $softDelete
      * @return self
      */
-    public function removeAllModificationServiceDu(Annee $annee = null, $softDelete = true)
+    public function removeAllModificationServiceDu($softDelete = true)
     {
-        foreach ($this->getModificationServiceDu($annee) as $modificationServiceDu) {
+        foreach ($this->getModificationServiceDu() as $modificationServiceDu) {
             $this->removeModificationServiceDu($modificationServiceDu, $softDelete);
         }
-
         return $this;
     }
 }

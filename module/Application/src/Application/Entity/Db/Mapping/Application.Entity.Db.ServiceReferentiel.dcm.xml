@@ -3,7 +3,6 @@
   <!-- NB: repository-class ajouté manuellement sur <entity> -->
   <entity name="Application\Entity\Db\ServiceReferentiel" table="SERVICE_REFERENTIEL">
     <indexes>
-      <index name="IDX_42741E7DAA401F5C" columns="ANNEE_ID"/>
       <index name="IDX_42741E7D59860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_42741E7D7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_42741E7D63F06898" columns="HISTO_MODIFICATEUR_ID"/>

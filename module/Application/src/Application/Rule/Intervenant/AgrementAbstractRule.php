@@ -85,7 +85,6 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
     {
         $qb = $this->getServiceAgrement()->finderByType($this->getTypeAgrement());
         $qb = $this->getServiceAgrement()->finderByIntervenant($this->getIntervenant(), $qb);
-        $qb = $this->getServiceAgrement()->finderByAnnee($this->getContextProvider()->getGlobalContext()->getAnnee(), $qb);
         $agrementsFournis = $this->getServiceAgrement()->getList($qb);
 
         // filtrage par structure éventuel

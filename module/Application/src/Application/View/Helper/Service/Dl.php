@@ -63,11 +63,6 @@ class Dl extends AbstractDl
         );
 
         $identite[] = sprintf($tplDtdd,
-            "Année :",
-            $this->entity->getAnnee()->getLibelle()
-        );
-
-        $identite[] = sprintf($tplDtdd,
             "&Eacute;tablissement :",
             $this->entity->getEtablissement()->getLibelle()
         );

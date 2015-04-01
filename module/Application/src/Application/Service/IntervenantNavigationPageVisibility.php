@@ -19,13 +19,12 @@ class IntervenantNavigationPageVisibility extends AbstractService implements Wor
     public function __invoke(array &$page)
     {
         $role  = $this->getContextProvider()->getSelectedIdentityRole();
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
             $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
             
-            return $this->isPageVisible($intervenant, $page, $wf, $annee);
+            return $this->isPageVisible($intervenant, $page, $wf, $intervenant->getAnnee());
         }
         
         return true;

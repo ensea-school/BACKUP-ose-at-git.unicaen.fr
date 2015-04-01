@@ -40,7 +40,7 @@ class TypeVolumeHoraire extends AbstractEntityService
      */
     public function getPrevu()
     {
-        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_PREVU));
+        return $this->getRepo()->findOneBy(['code' => TypeVolumeHoraireEntity::CODE_PREVU]);
     }
 
     /**
@@ -50,7 +50,7 @@ class TypeVolumeHoraire extends AbstractEntityService
      */
     public function getRealise()
     {
-        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_REALISE));
+        return $this->getRepo()->findOneBy(['code' => TypeVolumeHoraireEntity::CODE_REALISE]);
     }
 
     /**
@@ -60,7 +60,7 @@ class TypeVolumeHoraire extends AbstractEntityService
      */
     public function getPaye()
     {
-        return $this->getRepo()->findOneBy(array('code' => TypeVolumeHoraireEntity::CODE_PAYE));
+        return $this->getRepo()->findOneBy(['code' => TypeVolumeHoraireEntity::CODE_PAYE]);
     }
 
     /**

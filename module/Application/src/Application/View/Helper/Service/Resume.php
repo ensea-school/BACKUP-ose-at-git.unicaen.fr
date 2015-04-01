@@ -51,7 +51,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
     }
 
     /**
-     * 
+     *
      * @return \Application\Entity\Db\TypeIntervention[]
      */
     public function getTypesIntervention()
@@ -69,13 +69,13 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         if (! $this->resumeServices) return '';
 
         $typesIntervention = $this->resumeServices['types-intervention'];
-        $totaux = array(
+        $totaux = [
             'intervenant'       => 0,
             'heures'            => 0,
             'total'             => 0,
             'type-intervention' => [],
             'heures-ref'        => 0,
-        );
+        ];
 
         $hasTi = 0 < count($typesIntervention);
 

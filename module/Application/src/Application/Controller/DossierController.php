@@ -18,31 +18,31 @@ use Application\Entity\Db\TypeValidation;
  *
  * @method \Doctrine\ORM\EntityManager                em()
  * @method \Application\Controller\Plugin\Context     context()
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class DossierController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
 {
     use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
-    
+
     /**
      * @var \Application\Entity\Db\IntervenantExterieur
      */
     private $intervenant;
-    
+
     /**
      * @var \Zend\Form\Form
      */
     private $form;
-    
+
     /**
      * @var bool
      */
     private $readonly = false;
-    
+
     /**
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      * @throws \Common\Exception\MessageException
      */
@@ -57,15 +57,15 @@ class DossierController extends AbstractActionController implements ContextProvi
         if (!$dossier) {
             throw new \Common\Exception\MessageException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
         }
-        
+
         $view->setVariables(compact('intervenant', 'dossier', 'title', 'short'));
-        
+
         return $view;
     }
-    
+
     /**
      * Modification du dossier d'un intervenant.
-     * 
+     *
      * @return type
      * @throws RuntimeException
      */
@@ -81,7 +81,7 @@ class DossierController extends AbstractActionController implements ContextProvi
         else {
             $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
-     
+
         $validation = null;
         $dossierValide = $this->getServiceLocator()->get('DossierValideRule')->setIntervenant($this->intervenant);
         if ($dossierValide->isRelevant() && $dossierValide->execute()) {
@@ -90,18 +90,18 @@ class DossierController extends AbstractActionController implements ContextProvi
                 $validation = $validations->first();
             }
         }
-        
+
         $this->form->get('submit')->setAttribute('value', $this->getSubmitButtonLabel());
-        
+
         $service->canAdd($this->intervenant, true);
-        
+
         if (!($dossier = $this->intervenant->getDossier())) {
             $dossier = $service->newEntity()->fromIntervenant($this->intervenant);
             $this->intervenant->setDossier($dossier);
         }
-        
+
         $this->form->bind($this->intervenant);
-        
+
         if (!$this->readonly && $this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $this->form->setData($data);
@@ -109,21 +109,21 @@ class DossierController extends AbstractActionController implements ContextProvi
                 $this->getDossierService()->enregistrerDossier($dossier, $this->intervenant);
 //                $notified = $this->notify($this->intervenant);
                 $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
-                
+
                 return $this->redirect()->toUrl($this->getModifierRedirectionUrl());
             }
         }
-        
-        $view = new \Zend\View\Model\ViewModel(array(
+
+        $view = new \Zend\View\Model\ViewModel([
             'intervenant' => $this->intervenant,
             'form'        => $this->form,
             'validation'  => $validation,
             'readonly'    => $this->readonly,
-        ));
-        
+        ]);
+
         return $view;
     }
-    
+
     /**
      * @return string
      */
@@ -133,17 +133,17 @@ class DossierController extends AbstractActionController implements ContextProvi
         $role  = $this->getContextProvider()->getSelectedIdentityRole();
         $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
-       
+
         if ($role instanceof IntervenantRole) {
             $role->getIntervenant();
             $label = $step ? ' et ' . lcfirst($step->getLabel($role)) . '...' : null;
         }
-        
+
         $label = "J'enregistre" . $label;
-        
+
         return $label;
     }
-    
+
     /**
      * @return string
      */
@@ -151,32 +151,32 @@ class DossierController extends AbstractActionController implements ContextProvi
     {
         $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
-             
-        $url   = $step ? $wf->getStepUrl($step) : $this->url()->fromRoute(null, array(), array(), true);
-        
+
+        $url   = $step ? $wf->getStepUrl($step) : $this->url()->fromRoute(null, [], [], true);
+
         return $url;
     }
-    
+
     /**
      * @return TypeValidation
      */
-    private function getTypeValidationDossier() 
+    private function getTypeValidationDossier()
     {
         $qb = $this->getTypeValidationService()->finderByCode(TypeValidation::CODE_DONNEES_PERSO);
-        
+
         return $qb->getQuery()->getOneOrNullResult();
     }
-    
+
     protected function notify(Intervenant $intervenant)
     {
         if (DossierListener::$created || DossierListener::$modified) {
             // envoyer un mail au gestionnaire
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * @return \Application\Form\Intervenant\Dossier
      */
@@ -184,7 +184,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier');
     }
-    
+
     /**
      * @return \Application\Service\TypeValidation
      */
@@ -192,7 +192,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     {
         return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
-    
+
     /**
      * @return \Application\Service\Dossier
      */

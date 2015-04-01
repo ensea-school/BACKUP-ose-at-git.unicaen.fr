@@ -15,14 +15,14 @@ class AdresseDl extends AbstractDl
      * @var AdresseIntervenant
      */
     protected $entity;
-    
+
     /**
      * @var bool
      */
     protected $condensed;
-    
+
     /**
-     * 
+     *
      * @param mixed $entity
      * @param bool $horizontal
      * @param bool $condensed
@@ -31,15 +31,15 @@ class AdresseDl extends AbstractDl
     public function __invoke($entity = null, $horizontal = false, $condensed = false)
     {
         parent::__invoke($entity, $horizontal);
-       
+
         $this->condensed = $condensed;
-        
+
         return $this;
     }
-    
+
     /**
-     * 
-     * 
+     *
+     *
      * @return string Code HTML
      */
     public function render()
@@ -47,77 +47,77 @@ class AdresseDl extends AbstractDl
         if (!$this->entity) {
             return '';
         }
-        
+
         $tplDtdd = $this->getTemplateDtDd();
         $html    = '';
-        $dtdds   = array();
-        
+        $dtdds   = [];
+
         if ($this->condensed) {
-            $complement = implode(', ', array_filter(array($this->entity->getMentionComplementaire(), $this->entity->getBatiment())));
+            $complement = implode(', ', array_filter([$this->entity->getMentionComplementaire(), $this->entity->getBatiment()]));
             $dtdds[] = sprintf($tplDtdd,
-                sprintf("Adresse %s:", $this->entity->getPrincipale() ? "principale" : null), 
+                sprintf("Adresse %s:", $this->entity->getPrincipale() ? "principale" : null),
                 sprintf("%s %s%s", $this->entity->getNoVoie(), $this->entity->getNomVoie(), $complement ? " ($complement)" : null)
             );
         }
         else {
             $dtdds[] = sprintf($tplDtdd,
-                "N° voie :", 
+                "N° voie :",
                 $this->entity->getNoVoie()
             );
 
             $dtdds[] = sprintf($tplDtdd,
-                "Nom voie :", 
+                "Nom voie :",
                 $this->entity->getNomVoie()
             );
-        
+
             $dtdds[] = sprintf($tplDtdd,
-                "Mention complementaire :", 
+                "Mention complementaire :",
                 $this->entity->getMentionComplementaire()
             );
 
             $dtdds[] = sprintf($tplDtdd,
-                "Bâtiment :", 
+                "Bâtiment :",
                 $this->entity->getBatiment()
             );
         }
-        
+
         if ($this->entity->getLocalite()) {
             $dtdds[] = sprintf($tplDtdd,
-                "Localité :", 
+                "Localité :",
                 $this->entity->getLocalite()
             );
         }
-        
+
         if ($this->condensed) {
             $dtdds[] = sprintf($tplDtdd,
-                "Ville :", 
+                "Ville :",
                 sprintf("%s %s (%s)", $this->entity->getCodePostal(), $this->entity->getVille(), $this->entity->getPaysLibelle())
             );
         }
         else {
             $dtdds[] = sprintf($tplDtdd,
-                "Code postal :", 
+                "Code postal :",
                 $this->entity->getCodePostal()
             );
 
             $dtdds[] = sprintf($tplDtdd,
-                "Ville :", 
+                "Ville :",
                 $this->entity->getVille()
             );
 
             $dtdds[] = sprintf($tplDtdd,
-                "Pays :", 
+                "Pays :",
                 sprintf("%s (%s)", $this->entity->getPaysLibelle(), $this->entity->getPaysCodeInsee())
             );
-        
+
             $dtdds[] = sprintf($tplDtdd,
-                "Historique :", 
+                "Historique :",
                 $this->getView()->historiqueDl($this->entity)
             );
         }
-        
+
         $html .= sprintf($this->getTemplateDl('adresse adresse-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
- 
+
         return $html;
     }
 }

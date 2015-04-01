@@ -35,7 +35,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $moduleRouteListener->attach($eventManager);
 
         $eventManager->attach($sm->get('AuthenticatedUserSavedListener'));
-        
+
         /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
         $eventManager->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController','dispatch',
             function( \Zend\Mvc\MvcEvent $e) {
@@ -44,9 +44,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
                 }
             }
         );
-        
-        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'injectRouteEntitiesInEvent'), -90);
-        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkRouteParams'), -100);
+
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'injectRouteEntitiesInEvent'], -90);
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'checkRouteParams'], -100);
     }
 
     public function injectPublicFiles(ServiceLocatorInterface $serviceLocator)
@@ -56,7 +56,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         $cssFiles = []; if (isset($config['css'])) $cssFiles = $config['css'];
 
         $basePath = $serviceLocator->get('viewhelpermanager')->get('basePath')->__invoke();
-        
+
         $offset = 10;
         foreach( $jsFiles as $jsFile ){
             $offset++;
@@ -72,8 +72,8 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
 
     /**
      * Recherche de chaque entité spécifiée par son identifiant dans la requête courante,
-     * et injection de cette entité dans l'événement MVC courant. 
-     * 
+     * et injection de cette entité dans l'événement MVC courant.
+     *
      * @param \Zend\Mvc\MvcEvent $e
      * @see Service\NavigationPagesProvider
      */
@@ -98,9 +98,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     }
 
     /**
-     * Si l'utilisateur connecté a le profil "Intervenant", vérification que l'intervenant spécifié dans 
+     * Si l'utilisateur connecté a le profil "Intervenant", vérification que l'intervenant spécifié dans
      * la requête est bien celui connecté.
-     * 
+     *
      * @param \Zend\Mvc\MvcEvent $e
      */
     public function checkRouteParams(MvcEvent $e)
@@ -122,18 +122,18 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
 
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
      * Retourne les fichiers javascript et CSS à ajouter au HEAD
-     * 
+     *
      * @return array
      */
     public function getPublicFilesConfig()
@@ -157,12 +157,12 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
      */
     public function getControllerPluginConfig()
     {
-        return array(
-            'invokables' => array(
+        return [
+            'invokables' => [
                 'em'      => 'Application\Controller\Plugin\Em',
                 'context' => 'Application\Controller\Plugin\Context',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -174,30 +174,30 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
      */
     public function getViewHelperConfig()
     {
-        return array(
-            'factories'  => array(
-            ),
-            'invokables' => array(
+        return [
+            'factories'  => [
+            ],
+            'invokables' => [
                 'intervenantDl'        => 'Application\View\Helper\IntervenantDl',
                 'adresseDl'            => 'Application\View\Helper\AdresseDl',
                 'elementPedagogiqueDl' => 'Application\View\Helper\OffreFormation\ElementPedagogiqueDl',
                 'etapeDl'              => 'Application\View\Helper\OffreFormation\EtapeDl',
                 'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
-            ),
-        );
+            ],
+        ];
     }
-    
+
     public function getConsoleUsage(ConsoleAdapterInterface $console)
     {
-        return array(
+        return [
             "Notifications",
             'notifier indicateurs [--force] --requestUriHost= [--requestUriScheme=]' => "Notification par mail des personnes abonnées à des indicateurs",
-            array('--force', "Facultatif",  "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."),
-            array('--requestUriHost',   "Obligatoire", "Exemples: \"/ose.unicaen.fr\", \"/test.unicaen.fr/ose\"."),
-            array('--requestUriScheme', "Facultatif",  "Exemples: \"http\" (par défaut), \"https\"."),
-        );
+            ['--force', "Facultatif",  "Envoie les mails sytématiquement, sans tenir compte de la fréquence de notification."],
+            ['--requestUriHost',   "Obligatoire", "Exemples: \"/ose.unicaen.fr\", \"/test.unicaen.fr/ose\"."],
+            ['--requestUriScheme', "Facultatif",  "Exemples: \"http\" (par défaut), \"https\"."],
+        ];
     }
-    
+
     public function getConsoleBanner(ConsoleAdapterInterface $console)
     {
         return "OSE Application Module";
@@ -207,5 +207,5 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
 
 class Listener extends \BjyAuthorize\Guard\Controller
 {
-    
+
 }

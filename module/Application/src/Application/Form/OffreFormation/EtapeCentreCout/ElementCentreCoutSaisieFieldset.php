@@ -24,7 +24,7 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
     use ServiceLocatorAwareTrait;
 
     /**
-     * 
+     *
      */
     public function init()
     {
@@ -32,7 +32,7 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
         $this->setHydrator($hydrator);
         $this->setAllowedObjectBindingClass('Application\Entity\Db\ElementPedagogique');
     }
-    
+
     /**
      * Retourne la liste des types d'heures associés à l'élément pédagogique.
      *
@@ -49,7 +49,7 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
     }
 
     /**
-     * 
+     *
      */
     public function build()
     {
@@ -60,7 +60,7 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
     }
 
     /**
-     * 
+     *
      * @param TypeHeures $th
      * @return Select
      */
@@ -71,10 +71,10 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
                 ->setLabel($th->getLibelleCourt())
                 ->setValueOptions(['' => '(Aucun)'] + $this->getForm()->getCentresCoutsToArray($th))
                 ->setAttribute('class', 'type-heures selectpicker');
-            
+
         return $element;
     }
-    
+
     /**
      *
      * @param ElementPedagogique $object
@@ -86,7 +86,7 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
             $this->setElementPedagogique($object);
             $this->build();
         }
-        
+
         return parent::setObject($object);
     }
 
@@ -99,32 +99,32 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
     public function getInputFilterSpecification()
     {
         $typesHeures = $this->getTypesHeures();
-        $filters     = array();
+        $filters     = [];
         foreach ($typesHeures as $th) {
-            $filters[$th->getCode()] = array(
+            $filters[$th->getCode()] = [
                 'required' => false
-            );
+            ];
         }
-        
+
         return $filters;
     }
-    
+
     /**
      * @var EtapeCentreCoutSaisieForm
      */
     protected $form;
-    
+
     public function setForm(EtapeCentreCoutSaisieForm $form)
     {
         $this->form = $form;
         return $this;
     }
-    
+
     protected function getForm()
     {
         return $this->form;
     }
-    
+
     /**
      * @var ElementPedagogique
      */
@@ -140,7 +140,7 @@ class ElementCentreCoutSaisieFieldset extends Fieldset implements InputFilterPro
         $this->elementPedagogique = $elementPedagogique;
         return $this;
     }
-    
+
     /**
      * @var Structure
      */

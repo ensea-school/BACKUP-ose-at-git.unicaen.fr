@@ -46,8 +46,8 @@ class StructureViewHelper extends AbstractHelper implements StructureAwareInterf
             return '<p class="bg-danger"><abbr title="Cette structure n\'existe plus">'.$structure.'</abbr></p>';
         }
 
-        $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
-        $pourl = $this->getView()->url('structure/default', array('action' => 'apercevoir', 'id' => $structure->getId()));
+        $url = $this->getView()->url('structure/default', ['action' => 'voir', 'id' => $structure->getId()]);
+        $pourl = $this->getView()->url('structure/default', ['action' => 'apercevoir', 'id' => $structure->getId()]);
         $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$structure.'</a>';
         return $out;
     }

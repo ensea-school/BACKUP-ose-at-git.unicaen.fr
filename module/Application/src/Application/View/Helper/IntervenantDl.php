@@ -15,10 +15,10 @@ class IntervenantDl extends AbstractDl
      * @var Intervenant
      */
     protected $entity;
-    
+
     /**
-     * 
-     * 
+     *
+     *
      * @return string Code HTML
      */
     public function render()
@@ -26,142 +26,142 @@ class IntervenantDl extends AbstractDl
         if (!$this->entity) {
             return '';
         }
-        
+
         $tplDtdd  = $this->getTemplateDtDd();
         $html     = '';
-        
+
         /**
          * Identité
          */
-        
-        $identite = array();
-        
+
+        $identite = [];
+
         if ($this->short) {
             $identite[] = sprintf($tplDtdd,
-                "Identité :", 
+                "Identité :",
                 sprintf("%s, %s", $this->entity, $this->entity->getCiviliteToString())
             );
-        } 
+        }
         else {
             $identite[] = sprintf($tplDtdd,
-                "NOM prénom :", 
+                "NOM prénom :",
                 $this->entity
             );
 
             $identite[] = sprintf($tplDtdd,
-                "Civilité :", 
+                "Civilité :",
                 $this->entity->getCiviliteToString()
             );
         }
-        
+
         if ($this->short) {
-            $parts = array(
+            $parts = [
                 $this->entity->getDateNaissanceToString(),
                 $this->entity->getVilleNaissanceLibelle(),
                 $this->entity->getPaysNaissanceLibelle(),
-            );
+            ];
             $identite[] = sprintf($tplDtdd,
-                "Naissance :", 
+                "Naissance :",
                 implode(", ", $parts)
             );
         }
         else {
             $identite[] = sprintf($tplDtdd,
-                "Date de naissance :", 
+                "Date de naissance :",
                 $this->entity->getDateNaissanceToString()
             );
 
             $identite[] = sprintf($tplDtdd,
-                "Ville de naissance :", 
+                "Ville de naissance :",
                 $this->entity->getVilleNaissanceLibelle() ?: "(Inconnue)"
             );
 
             $identite[] = sprintf($tplDtdd,
-                "Pays de naissance :", 
+                "Pays de naissance :",
                 $this->entity->getPaysNaissanceLibelle()
             );
         }
-            
+
         if (!$this->short) {
             $identite[] = sprintf($tplDtdd,
-                "N° INSEE :", 
+                "N° INSEE :",
                 $this->entity->getNumeroInsee()
             );
-        
+
             if ($this->entity instanceof \Application\Entity\Db\IntervenantExterieur) {
                 $identite[] = sprintf($tplDtdd,
-                    "Situation familiale :", 
+                    "Situation familiale :",
                     $this->entity->getSituationFamiliale() ?: "(Inconnue)"
                 );
             }
         }
-        
+
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-identite'), implode(PHP_EOL, $identite)) . PHP_EOL;
-        
+
         /**
-         * Coordonnées 
+         * Coordonnées
          */
-        
-        $coord    = array();
-        
+
+        $coord    = [];
+
         $coord[] = sprintf($tplDtdd,
-            "Email :", 
+            "Email :",
             $this->entity->getEmail() ?: "(Inconnu)"
         );
-        
+
         if (!$this->short) {
             $coord[] = sprintf($tplDtdd,
-                "Téléphone mobile :", 
+                "Téléphone mobile :",
                 $this->entity->getTelMobile() ?: "(Inconnu)"
             );
 
             $coord[] = sprintf($tplDtdd,
-                "Téléphone pro :", 
+                "Téléphone pro :",
                 $this->entity->getTelPro() ?: "(Inconnu)"
             );
         }
-        
+
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-coord'), implode(PHP_EOL, $coord)) . PHP_EOL;
-        
+
         /**
-         * Adresses 
+         * Adresses
          */
-        
+
         foreach ($this->entity->getAdresse() as $adresse) {
             $html .= $this->getView()->adresseDl($adresse, true, true) . PHP_EOL;
         }
-        
+
         /**
          * Métier
          */
-        
-        $metier   = array();
-        
+
+        $metier   = [];
+
         $metier[] = sprintf($tplDtdd,
-            "Type d'intervenant :", 
+            "Type d'intervenant :",
             $this->entity->getType()
         );
-        
+
         if (($statut = $this->entity->getStatut())) {
             $metier[] = sprintf($tplDtdd,
-                "Statut de l'intervenant :", 
+                "Statut de l'intervenant :",
                 $statut
             );
         }
-        
+
         $metier[] = sprintf($tplDtdd,
-            "N° {$this->entity->getSourceToString()} :", 
+            "N° {$this->entity->getSourceToString()} :",
             $this->entity->getSourceCode()
         );
-            
+
         $metier[] = sprintf($tplDtdd,
-            "Affectation principale :", 
+            "Affectation principale :",
             $this->entity->getStructure() ?: "(Inconnue)"
         );
-            
+
         if (!$this->short) {
             $metier[] = sprintf($tplDtdd,
-                "Affectation recherche :", 
+                "Affectation recherche :",
                 count($aff = $this->entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : "(Inconnue)"
             );
 
@@ -172,30 +172,30 @@ class IntervenantDl extends AbstractDl
 
             if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
                 $metier[] = sprintf($tplDtdd,
-                    "Corps :", 
+                    "Corps :",
                     $this->entity->getCorps()
                 );
             }
             elseif ($this->entity instanceof \Application\Entity\Db\IntervenantExterieur) {
                 $metier[] = sprintf($tplDtdd,
-                    "Régime sécu :", 
+                    "Régime sécu :",
                     $this->entity->getRegimeSecu() ?: "(Inconnu)"
                 );
                 $metier[] = sprintf($tplDtdd,
-                    "Type de poste :", 
+                    "Type de poste :",
                     $this->entity->getTypePoste() ?: "(Inconnu)"
                 );
             }
         }
-        
+
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-metier'), implode(PHP_EOL, $metier)) . PHP_EOL;
- 
+
 //        /**
 //         * Référentiel
 //         */
-//        
+//
 //        $fonctions = array();
-//        
+//
 //        if (!$this->short) {
 //            if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
 //                $serviceRef = "Aucun";
@@ -203,20 +203,20 @@ class IntervenantDl extends AbstractDl
 //                    $serviceRef = $this->getView()->htmlList($services);
 //                }
 //                $fonctions[] = sprintf($tplDtdd,
-//                    "Service référentiel :", 
+//                    "Service référentiel :",
 //                    $serviceRef
 //                );
 //            }
 //        }
-//        
+//
 //        $html .= sprintf($this->getTemplateDl('intervenant intervenant-fonction'), implode(PHP_EOL, $fonctions)) . PHP_EOL;
-// 
+//
 //        /**
 //         * Modification de service dû
 //         */
-//        
+//
 //        $modificationsServiceDu = array();
-//        
+//
 //        if (!$this->short) {
 //            if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
 //                $msd = "Aucune";
@@ -224,44 +224,44 @@ class IntervenantDl extends AbstractDl
 //                    $msd = $this->getView()->htmlList($modifs);
 //                }
 //                $modificationsServiceDu[] = sprintf($tplDtdd,
-//                    'Modif. de service dû :', 
+//                    'Modif. de service dû :',
 //                    $msd
 //                );
 //            }
 //        }
-//        
+//
 //        $html .= sprintf($this->getTemplateDl('intervenant intervenant-modif-servie-du'), implode(PHP_EOL, $modificationsServiceDu)) . PHP_EOL;
-        
+
         /**
          * Divers
          */
-        
-        $divers = array();
-        
+
+        $divers = [];
+
         if (!$this->short) {
             $divers[] = sprintf($tplDtdd,
-                "Id :", 
+                "Id :",
                 $this->entity->getId()
             );
         }
-        
+
         if (!$this->short) {
             $divers[] = sprintf($tplDtdd,
-                "Id de connexion :", 
+                "Id de connexion :",
                 ($u = $this->entity->getUtilisateur()) ? $u->getUsername() : "(Aucun)"
             );
         }
-        
+
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-divers'), implode(PHP_EOL, $divers)) . PHP_EOL;
-        
+
         /**
          * Historique
          */
-        
+
         if (!$this->short) {
             $html .= $this->getView()->historiqueDl($this->entity, $this->horizontal);
         }
-        
+
         return $html;
     }
 }

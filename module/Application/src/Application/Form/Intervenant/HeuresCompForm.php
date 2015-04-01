@@ -36,14 +36,14 @@ class HeuresCompForm extends Form implements InputFilterProviderInterface, Servi
         $etatVolumeHoraire->setValue( $this->getServiceEtatVolumeHoraire()->getSaisi()->getId() );
         $this->add($etatVolumeHoraire);
 
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Appliquer',
                 'class' => 'btn btn-primary',
-            ),
-        ));
+            ],
+        ]);
 
     }
 

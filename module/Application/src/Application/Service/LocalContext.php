@@ -23,27 +23,27 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
 {
     use EntityManagerAwareTrait;
     use ServiceLocatorAwareTrait;
-    
+
     /**
      * @var Container
      */
     protected $sessionContainer;
-    
+
     /**
      * @var string
      */
     protected $statutInterv;
-    
+
     /**
      * @var EntityStructure
      */
     protected $structure;
-    
+
     /**
      * @var EntityNiveauEtape
      */
     protected $niveau;
-    
+
     /**
      * @var EntityEtape
      */
@@ -67,7 +67,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         }
         return $this->intervenant;
     }
-    
+
     /**
      * @return string
      */
@@ -78,7 +78,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         }
         return $this->statutInterv;
     }
-    
+
     /**
      * @return EntityStructure
      */
@@ -92,7 +92,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         }
         return $this->structure;
     }
-    
+
     /**
      * @return NiveauEtape
      */
@@ -136,7 +136,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
     }
 
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Intervenant $intervenant
      * @return \Application\Service\LocalContext
      */
@@ -162,7 +162,7 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
     }
 
     public function setNiveau(EntityNiveauEtape $niveau = null)
-    {             
+    {
         $this->niveau = $niveau;
         $this->getSessionContainer()->niveau = $niveau ? $niveau->getId() : null;
         return $this;
@@ -192,14 +192,14 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         }
         return $this->sessionContainer;
     }
-    
-    public function fromArray(array $context = array())
+
+    public function fromArray(array $context = [])
     {
         $this->setStructure(isset($context['structureEns']) ? $context['structureEns'] : null);
 
         return parent::fromArray($context);
     }
-    
+
     public function debug()
     {
         var_dump("statut = " . $this->getStatutInterv());

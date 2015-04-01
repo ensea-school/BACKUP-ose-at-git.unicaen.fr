@@ -18,17 +18,17 @@ class DbFunctionRule extends \Application\Rule\AbstractRule
     const MESSAGE_NO = 'messageNo';
 
     protected $function;
-    
+
     /**
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_NO => "Echec!",
-    );
-    
+    ];
+
     /**
-     * 
+     *
      * @param string $function
      * @return self
      */
@@ -40,20 +40,20 @@ class DbFunctionRule extends \Application\Rule\AbstractRule
 
     /**
      * Exécute la règle métier.
-     * 
+     *
      * @return array [ {id} => [ 'id' => {id} ] ]
      */
     public function execute()
     {
         $this->message(null);
-        
+
         $sql = sprintf("BEGIN :res := %s(:intervenant, :structure); END;", $this->function);
-        
+
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); /* @var $em \Doctrine\ORM\EntityManager */
-        
+
         // prepare statement
         $stmt = $em->getConnection()->prepare($sql);
-        
+
         $stmt->bindParam('res', $res);
         $stmt->bindValue('intervenant', $this->getIntervenant()->getId());
         $stmt->bindValue('structure', $this->getStructure() ? $this->getStructure()->getId() : null);
@@ -61,12 +61,12 @@ class DbFunctionRule extends \Application\Rule\AbstractRule
         // execute prepared statement
         $stmt->execute();
 
-//        var_dump(sprintf("%s(%s, %s) : %s", 
-//                $this->function, 
-//                $this->getIntervenant(), 
-//                $this->getStructure() ?: 'null', 
+//        var_dump(sprintf("%s(%s, %s) : %s",
+//                $this->function,
+//                $this->getIntervenant(),
+//                $this->getStructure() ?: 'null',
 //                $res));
-        
+
         return $res;
     }
 

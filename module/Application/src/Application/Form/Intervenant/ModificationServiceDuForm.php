@@ -24,10 +24,10 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
      * @param  null|int|string  $name    Optional name for the element
      * @param  array            $options Optional options for the element
      */
-    public function __construct($name = null, $options = array())
+    public function __construct($name = null, $options = [])
     {
         parent::__construct($name, $options);
-        
+
         $this   ->setAttribute('method', 'post')
                 ->setAttribute('class', 'modification-service-du')
                 ->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods(false))
@@ -35,7 +35,7 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
 //                ->setPreferFormInputFilter(false)
          ;
     }
-    
+
     /**
      * This function is automatically called when creating element with factory. It
      * allows to perform various operations (add elements...)
@@ -44,38 +44,38 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
     {
         $fs = $this->getServiceLocator()->get("IntervenantModificationServiceDuFieldset"); /* @var $fs ModificationServiceDuFieldset */
         $fs->setUseAsBaseFieldset(true);
-        $this->add($fs, array('name' => 'fs'));
-        
-        $this->add(array(
+        $this->add($fs, ['name' => 'fs']);
+
+        $this->add([
             'type' => 'Button',
             'name' => 'ajouter',
-            'options' => array(
+            'options' => [
                 'label' => '<span class="glyphicon glyphicon-plus"></span> Ajouter',
-                'label_options' => array(
+                'label_options' => [
                     'disable_html_escape' => true,
-                ),
-            ),
-            'attributes' => array(
+                ],
+            ],
+            'attributes' => [
                 'title' => "Ajouter une modification de service dû",
                 'class' => 'modification-service-du modification-service-du-ajouter btn btn-default btn-xs'
-            ),
-        ));
-         
+            ],
+        ]);
+
         /**
          * Csrf
          */
         $this->add(new \Zend\Form\Element\Csrf('security'));
-        
+
         /**
          * Submit
          */
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Enregistrer',
-            ),
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -112,7 +112,7 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
         if (!$object instanceof IntervenantPermanent) {
             throw new LogicException("Intervenant spécifié invalide.");
         }
-        
+
         return parent::bind($object, $flags);
     }
 }

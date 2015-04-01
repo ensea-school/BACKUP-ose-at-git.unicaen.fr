@@ -21,55 +21,55 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'workflow' => array(
+return [
+    'router' => [
+        'routes' => [
+            'workflow' => [
                 'type'    => 'Literal',
-                'options' => array(
+                'options' => [
                     'route'    => '/workflow',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Workflow',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => false,
-                'child_routes' => array(
-                    'nav-next' => array(
+                'child_routes' => [
+                    'nav-next' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:intervenant',
-                            'constraints' => array(
+                            'constraints' => [
                                 'intervenant' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'nav-next',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Workflow',
-                    'action'     => array('nav-next'),
-                    'roles'      => array('user'),
-                ),
-            ),
-        ),
+                    'action'     => ['nav-next'],
+                    'roles'      => ['user'],
+                ],
+            ],
+        ],
 //        'resource_providers' => array(
 //            'BjyAuthorize\Provider\Resource\Config' => array(
 //                'Intervenant' => [],
@@ -87,38 +87,38 @@ return array(
 //                ),
 //            ),
 //        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Workflow' => 'Application\Controller\WorkflowController',
-        ),
-        'initializers' => array(
+        ],
+        'initializers' => [
             'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
             'WfEtapeService'            => 'Application\\Service\\WfEtape',
             'WfIntervenantEtapeService' => 'Application\\Service\\WfIntervenantEtape',
             'WorkflowIntervenant'       => 'Application\\Service\\Workflow\\WorkflowIntervenant',
             'DbFunctionRule'            => 'Application\Rule\Intervenant\DbFunctionRule',
-        ),
-        'factories' => array(
-        ),
-        'initializers' => array(
+        ],
+        'factories' => [
+        ],
+        'initializers' => [
             'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
             'Workflow' => 'Application\View\Helper\Workflow',
-        ),
-        'initializers' => array(
+        ],
+        'initializers' => [
             'Application\Service\Workflow\WorkflowIntervenantAwareInitializer',
-        ),
-    ),
-    'form_elements' => array(
-        'invokables' => array(
-        ),
-    ),
-);
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
+        ],
+    ],
+];

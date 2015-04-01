@@ -5,16 +5,16 @@ namespace Application\Service;
 use Application\Entity\Db\TypeAgrement as TypeAgrementEntity;
 
 /**
- * 
+ *
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class AgrementNavigationPagesProvider extends AbstractService
 {
-    public function __invoke(array &$page, array $params = array())
+    public function __invoke(array &$page, array $params = [])
     {
         $pages = [];
-        
+
         /**
          * Création d'une page par type d'agrément pris en compte
          */
@@ -22,22 +22,22 @@ class AgrementNavigationPagesProvider extends AbstractService
             $child = [
                 'label'  => (string) $typeAgrement,
                 'title'  => "Agrément $typeAgrement",
-                'params' => array(
+                'params' => [
                     // NB: le paramètre 'intervenant' est injecté par la NavigationFactory du module
                     'typeAgrement' => $typeAgrement->getId(),
-                ),
+                ],
                 'visible' => true,
             ];
             $child = array_merge($child, $params);
-            
+
             // le code du type d'agrément est concaténé au privilège existant éventuel
             if (isset($child['privilege'])) {
                 $child['privilege'] .= '/' . $typeAgrement->getCode();
             }
-            
+
             $pages[$typeAgrement->getCode()] = $child;
         }
-        
+
         // s'il n'y aucune page fille (car aucun type d'agrément), on masque la page mère
         if (!count($pages)) {
             $page['visible'] = false;
@@ -50,19 +50,19 @@ class AgrementNavigationPagesProvider extends AbstractService
             $page = array_merge($page, $child);
             $pages = [];
         }
-            
+
         return $pages;
     }
-    
+
     /**
      * Fetch tous les types d'agrément existants.
-     * 
+     *
      * @return array id => TypeAgrement
      */
     public function getTypesAgrements()
     {
         $service = $this->getServiceLocator()->get('ApplicationTypeAgrement'); /* @var $service \Application\Service\TypeAgrement */
-        
+
         return $service->getList();
     }
 }

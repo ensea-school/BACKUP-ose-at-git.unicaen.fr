@@ -24,7 +24,7 @@ class EtablissementController extends AbstractActionController
 
     public function indexAction()
     {
-        $url = $this->url()->fromRoute('etablissement/default', array('action' => 'choisir'));
+        $url = $this->url()->fromRoute('etablissement/default', ['action' => 'choisir']);
         return $this->redirect()->toUrl($url);
     }
 
@@ -41,16 +41,16 @@ class EtablissementController extends AbstractActionController
                 ->setRequired(true)
                 ->setSelectionRequired(true)
                 ->setLabel("Recherchez l'établissement concerné :")
-                ->setAttributes(array('title' => "Saisissez le nom de l'établissement"));
+                ->setAttributes(['title' => "Saisissez le nom de l'établissement"]);
         $form = new \Zend\Form\Form('search');
-        $form->setAttributes(array('class' => 'etablissement-rech'));
+        $form->setAttributes(['class' => 'etablissement-rech']);
         $form->add($etablissement);
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $url = $this->url()->fromRoute('etablissement/default', array('action' => 'voir', 'id' => $form->get('etablissement')->getValueId() ) );
+                $url = $this->url()->fromRoute('etablissement/default', ['action' => 'voir', 'id' => $form->get('etablissement')->getValueId() ] );
                 return $this->redirect()->toUrl($url);
             }
         }
@@ -66,18 +66,18 @@ class EtablissementController extends AbstractActionController
         );
 
         if (!($term = $this->params()->fromQuery('term'))) {
-            return new JsonModel(array());
+            return new JsonModel([]);
         }
 
         $entities  = $this->getServiceEtablissement()->finderByLibelle($term)->getQuery()->execute();
-        $result = array();
-        
+        $result = [];
+
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Etablissement */
-            $result[] = array(
+            $result[] = [
                 'id'    => $item->getId(),  // identifiant unique de l'item
                 'label' => (string)$item,   // libellé de l'item
                 'extra' => $item->getDepartement() ? '( département '.$item->getDepartement().')' : '', // infos complémentaires (facultatives) sur l'item
-            );
+            ];
         };
 
         return new JsonModel($result);
@@ -96,11 +96,11 @@ class EtablissementController extends AbstractActionController
         $changements = $import->etablissementGetDifferentiel($etablissement);
         $title = "Détails de l'établissement";
         $short = $this->params()->fromQuery('short', false);
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/etablissement/voir')
                   ->setVariables(compact('etablissement', 'changements', 'title', 'short'));
-        
+
         return $viewModel;
     }
 
@@ -116,11 +116,11 @@ class EtablissementController extends AbstractActionController
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->etablissementGetDifferentiel($etablissement);
         $short = $this->params()->fromQuery('short', false);
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/etablissement/voir')
                   ->setVariables(compact('etablissement', 'changements', 'short'));
-        
+
         return $viewModel;
     }
 }

@@ -64,7 +64,7 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
             return 'Aucun modulateur ne peut être associé à cette formation car ils ne sont pas activés pour la structure d\'enseignement correspondante.';
         }
 
-        $displayTypesModulateurs = array();
+        $displayTypesModulateurs = [];
         foreach( $typesModulateurs as $typeModulateur ){
             if (0 < $form->countModulateurs($typeModulateur->getCode())){
                 $displayTypesModulateurs[] = $typeModulateur;
@@ -92,7 +92,7 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
         foreach( $displayTypesModulateurs as $typeModulateur ){
             $typeModulateurElement = new Select($typeModulateur->getCode());
             //$typeModulateurElement->setLabel($typeModulateur->getLibelle());
-            $values = array('' => '');
+            $values = ['' => ''];
             foreach( $typeModulateur->getModulateur() as $modulateur ){
                 $values[$modulateur->getId()] = (string)$modulateur;
             }

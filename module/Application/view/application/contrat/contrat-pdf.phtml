@@ -51,7 +51,7 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
         Contrat de travail <?php echo $qualiteIntervenant ?>
     <?php endif ?>
 </h1>
-        
+
 <p>Entre d'une part :</p>
 <p class="partie">
     <span class="etab"><?php echo $etablissement ?></span><?php echo $etablissementRepresente ?>
@@ -77,27 +77,27 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
 <p>Il a été convenu ce qui suit :</p>
 
 <dl class="articles">
-    
-    <?php 
-    $servicesToString = $this->partial('application/service/partial/liste', array('services' => $servicesRecaps))
-            . "Total des heures équivalent TD effectuées par $nomCompletIntervenant à " . lcfirst($etablissement) 
+
+    <?php
+    $servicesToString = $this->partial('application/service/partial/liste', ['services' => $servicesRecaps])
+            . "Total des heures équivalent TD effectuées par $nomCompletIntervenant à " . lcfirst($etablissement)
             . " toutes composantes confondues : $totalHETD.";
     $noArticle = 1;
     ?>
-    
+
     <?php if ($estUnAvenant): ?>
-    
+
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
             <p>Le contrat de travail initial de <?php echo $nomCompletIntervenant ?> est <?php echo $contratIniModif ? "modifié" : "complété" ?> comme suit :</p>
             <div class="services"><?php echo $servicesToString ?></div>
         </dd>
-        
+
     <?php else: ?>
-        
+
         <dt>Article <?php echo $noArticle++ ?> :</dt>
         <dd>
-            <p><?php echo $nomCompletIntervenant ?> est recruté<?php echo $e ?> pour l'année universitaire <?php echo $annee ?> en qualité 
+            <p><?php echo $nomCompletIntervenant ?> est recruté<?php echo $e ?> pour l'année universitaire <?php echo $annee ?> en qualité
             <?php echo $qualiteIntervenant ?>.</p>
         </dd>
 
@@ -107,10 +107,10 @@ $qualiteIntervenant = $estATV ? "d'agent temporaire vacataire" : "de chargé$e d
             <div class="services"><?php echo $servicesToString ?></div>
             <p>L'intéressé<?php echo $e ?> s'engage à assurer, sans rémunération complémentaire, toutes les obligations liées à ses enseignements (suivi pédagogique des étudiants, contrôle des connaissances et examens).</p>
         </dd>
-        
+
     <?php endif ?>
 </dl>
-        
+
 <div style="page-break-inside: avoid;">
     <dl class="articles">
         <dt>Article <?php echo $noArticle++ ?> :</dt>

@@ -2,185 +2,185 @@
 
 namespace Application;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'volume-horaire' => array(
+return [
+    'router' => [
+        'routes' => [
+            'volume-horaire' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/volume-horaire',
-                    'defaults' => array(
+                    'defaults' => [
                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'VolumeHoraire',
                         'action'        => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
+                'child_routes' => [
+                    'default' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/:action[/:id]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                    'saisie' => array(
+                            ],
+                        ],
+                    ],
+                    'saisie' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/saisie/:service',
-                            'constraints' => array(
+                            'constraints' => [
                                 'service' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'saisie',
-                            ),
-                        ),
-                    ),
-                    'modifier' => array(
+                            ],
+                        ],
+                    ],
+                    'modifier' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/modifier/:id',
-                            'constraints' => array(
+                            'constraints' => [
                                 'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'modifier',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'volume-horaire-referentiel' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'volume-horaire-referentiel' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/volume-horaire-referentiel',
-                    'defaults' => array(
+                    'defaults' => [
                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'VolumeHoraireReferentiel',
                         'action'        => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
+                'child_routes' => [
+                    'default' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/:action[/:id]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                    'saisie' => array(
+                            ],
+                        ],
+                    ],
+                    'saisie' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/saisie/:serviceReferentiel',
-                            'constraints' => array(
+                            'constraints' => [
                                 'serviceReferentiel' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'saisie',
-                            ),
-                        ),
-                    ),
-                    'modifier' => array(
+                            ],
+                        ],
+                    ],
+                    'modifier' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/modifier/:id',
-                            'constraints' => array(
+                            'constraints' => [
                                 'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'modifier',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'volume-horaire' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'volume-horaire' => [
                         'label'    => 'Volumes horaires',
                         'title'    => "Gestion des volumes horaires",
                         'visible' => false,
                         'route'    => 'volume-horaire',
-                        'params' => array(
+                        'params' => [
                             'action' => 'index',
-                        ),
-                        'pages' => array(
-                            'consultation' => array(
+                        ],
+                        'pages' => [
+                            'consultation' => [
                                 'label'  => "Consultation",
                                 'title'  => "Consultation des volumes horaires",
                                 'route'  => 'volume-horaire',
                                 'visible' => false,
                                 'withtarget' => true,
-                                'pages' => array(),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                                'pages' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\VolumeHoraire',
-                    'action' => array('voir', 'liste', 'saisie'),
-                    'roles' => array(R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR)
-                ),
-                array(
+                    'action' => ['voir', 'liste', 'saisie'],
+                    'roles' => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR]
+                ],
+                [
                     'controller' => 'Application\Controller\VolumeHoraireReferentiel',
-                    'action' => array('voir', 'liste', 'saisie'),
-                    'roles' => array(R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR)
-                ),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+                    'action' => ['voir', 'liste', 'saisie'],
+                    'roles' => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR]
+                ],
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\VolumeHoraire'            => 'Application\Controller\VolumeHoraireController',
             'Application\Controller\VolumeHoraireReferentiel' => 'Application\Controller\VolumeHoraireReferentielController',
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
             'ApplicationVolumeHoraire'                  => 'Application\\Service\\VolumeHoraire',
             'ApplicationVolumeHoraireReferentiel'       => 'Application\\Service\\VolumeHoraireReferentiel',
             'ApplicationTypeVolumeHoraire'              => 'Application\\Service\\TypeVolumeHoraire',
             'ApplicationEtatVolumeHoraire'              => 'Application\\Service\\EtatVolumeHoraire',
             'FormVolumeHoraireSaisieMultipleHydrator'   => 'Application\Form\VolumeHoraire\SaisieMultipleHydrator',
-        )
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
+        ]
+    ],
+    'view_helpers' => [
+        'invokables' => [
             'volumeHoraireDl'                           => 'Application\View\Helper\VolumeHoraire\Dl',
             'volumeHoraireListe'                        => 'Application\View\Helper\VolumeHoraire\Liste',
             'volumeHoraireReferentielDl'                => 'Application\View\Helper\VolumeHoraireReferentiel\Dl',
             'volumeHoraireReferentielListe'             => 'Application\View\Helper\VolumeHoraireReferentiel\Liste',
-        ),
-    ),
-    'form_elements' => array(
-        'invokables' => array(
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
             'VolumeHoraireSaisie'                            => 'Application\Form\VolumeHoraire\Saisie',
             'VolumeHoraireSaisieMultipleFieldset'            => 'Application\Form\VolumeHoraire\SaisieMultipleFieldset', // Nécessite plusieurs instances
             'VolumeHoraireReferentielSaisie'                 => 'Application\Form\VolumeHoraireReferentiel\Saisie',
             'VolumeHoraireReferentielSaisieMultipleFieldset' => 'Application\Form\VolumeHoraireReferentiel\SaisieMultipleFieldset', // Nécessite plusieurs instances
-        ),
-    ),
-);
+        ],
+    ],
+];

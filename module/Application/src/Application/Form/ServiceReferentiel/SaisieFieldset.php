@@ -29,7 +29,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
 
-    public function __construct($name = null, $options = array())
+    public function __construct($name = null, $options = [])
     {
         parent::__construct('service', $options);
     }
@@ -42,10 +42,10 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceReferentielSaisieFieldsetHydrator'))
                 ->setAllowedObjectBindingClass('Application\Entity\Db\ServiceReferentiel');
 
-        $this->add(array(
+        $this->add([
             'name' => 'id',
             'type' => 'Hidden',
-        ));
+        ]);
 
         $identityRole = $this->getContextProvider()->getSelectedIdentityRole();
 
@@ -54,73 +54,73 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             $intervenant->setRequired(true)
                     ->setSelectionRequired(true)
                     ->setAutocompleteSource(
-                            $url('recherche', array('action' => 'intervenantFind'))
+                            $url('recherche', ['action' => 'intervenantFind'])
                     )
                     ->setLabel("Intervenant :")
-                    ->setAttributes(array('title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"));
+                    ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
             $this->add($intervenant);
         }
 
-        $this->add(array(
+        $this->add([
             'name'       => 'structure',
-            'options'    => array(
+            'options'    => [
                 'label' => "Structure :",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'title' => "Structure concernée",
                 'class' => 'fonction-referentiel fonction-referentiel-structure input-sm',
-            ),
+            ],
             'type'       => 'Select',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'fonction',
-            'options'    => array(
+            'options'    => [
                 'label' => "Fonction :",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'title' => "Fonction référentielle",
                 'class' => 'fonction-referentiel fonction-referentiel-fonction input-sm',
-            ),
+            ],
             'type'       => 'Select',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'heures',
-            'options'    => array(
+            'options'    => [
                 'label' => "Heures :",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'value' => "0",
                 'title' => "Nombre d'heures",
                 'class' => 'fonction-referentiel fonction-referentiel-heures input-sm'
-            ),
+            ],
             'type'       => 'Text',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'commentaires',
-            'options'    => array(
+            'options'    => [
                 'label' => "Commentaires :",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'title' => "Commentaires éventuels",
                 'class' => 'fonction-referentiel fonction-referentiel-commentaires input-sm'
-            ),
+            ],
             'type'       => 'Textarea',
-        ));
+        ]);
 
         // liste déroulante des structures
-        $options = array();
+        $options = [];
         $options[''] = "(Sélectionnez une structure...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
         foreach ($this->getStructures() as $item) {
             $options[$item->getId()] = "" . $item;
         }
         asort($options);
         $this->get('structure')->setValueOptions($options);//->setEmptyOption("(Sélectionnez une structure...)");
-        
+
         // liste déroulante des fonctions
-        $options = array();
+        $options = [];
         $options[''] = "(Sélectionnez une fonction...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
         foreach ($this->getFonctions() as $item) {
             $options[$item->getId()] = "" . $item;
@@ -130,30 +130,30 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     }
 
     protected $structures;
-    
+
     public function getStructures()
     {
         if (null === $this->structures) {
             $qb   = $this->getServiceStructure()->finderByEnseignement();
             $univ = $this->getServiceStructure()->getRacine();
-            
+
             $this->structures = [$univ->getId() => $univ] + $this->getServiceStructure()->getList($qb);
         }
-        
+
         return $this->structures;
     }
 
     protected $fonctions;
-    
+
     public function getFonctions()
     {
         if (null === $this->fonctions) {
             $this->fonctions = $this->getServiceFonctionReferentiel()->getList();
         }
-        
+
         return $this->fonctions;
     }
-    
+
     public function initFromContext()
     {
         /* Peuple le formulaire avec les valeurs par défaut issues du contexte global */
@@ -163,16 +163,16 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $cl = $this->getContextProvider()->getLocalContext();
 
         if ($this->has('intervenant') && $cl->getIntervenant()) {
-            $this->get('intervenant')->setValue(array(
+            $this->get('intervenant')->setValue([
                 'id'    => $cl->getIntervenant()->getSourceCode(),
                 'label' => (string) $cl->getIntervenant()
-            ));
+            ]);
         }
 
         if (!$role instanceof IntervenantRole) {
             if ($cl->getStructure()) {
                 $structure    = $cl->getStructure();
-                $valueOptions = array($structure->getId() => (string) $structure);
+                $valueOptions = [$structure->getId() => (string) $structure];
                 $this->get('structure')->setValue($structure->getId());
             }
         }
@@ -180,7 +180,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         // la structure de responsabilité du gestionnaire écrase celle du contexte local
         if ($role instanceof ComposanteRole) { // Si c'est un membre d'une composante
             $structure    = $role->getStructure();
-            $valueOptions = array($structure->getId() => (string) $structure);
+            $valueOptions = [$structure->getId() => (string) $structure];
             //    $this->getServiceStructure()->finderById($structure->getId(), $fs->getQueryBuilder());
             $this->get('structure')->setValue($structure->getId());
         }
@@ -225,10 +225,10 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         if (!$structureSaisie) {
             return null;
         }
-       
+
         // structure éventuelle associée à la fonction
         $structureFonction = $fonctionSaisie->getStructure();
-               
+
         // si aucune structure n'est associée à la fonction, on vérifie simplement que la structure sélectionnée est de niveau 2
         if (!$structureFonction) {
             $callback = function() use ($structureSaisie) { return $structureSaisie->getNiveau() === 2; };
@@ -239,13 +239,13 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             $callback = function() use ($structureSaisie, $structureFonction) { return $structureSaisie === $structureFonction; };
             $message  = sprintf("Structure obligatoire : '%s'", $structureFonction);
         }
-           
+
         $v = new Callback($callback);
-        $v->setMessages(array(Callback::INVALID_VALUE => $message));
-       
+        $v->setMessages([Callback::INVALID_VALUE => $message]);
+
         return $v;
     }
-   
+
     /**
      *
      * @return LessThan|null
@@ -257,12 +257,12 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $fonctions = $this->getFonctions();
         $id        = $this->get('fonction')->getValue();
         $fonction  = isset($fonctions[$id]) ? $fonctions[$id] : null;
-       
+
         if ($fonction) {
-            $v = new LessThan(array('max' => $max = (float)$fonction->getPlafond(), 'inclusive' => true));
-            $v->setMessages(array(LessThan::NOT_LESS_INCLUSIVE => "Le plafond pour cette fonction est de $max"));
+            $v = new LessThan(['max' => $max = (float)$fonction->getPlafond(), 'inclusive' => true]);
+            $v->setMessages([LessThan::NOT_LESS_INCLUSIVE => "Le plafond pour cette fonction est de $max"]);
         }
-       
+
         return $v;
     }
 
@@ -274,39 +274,39 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
      */
     public function getInputFilterSpecification()
     {
-        $specs = array(
-            'structure' => array(
+        $specs = [
+            'structure' => [
                 'required'   => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name' => 'Zend\Validator\NotEmpty',
-                        'options' => array(
-                            'messages' => array(
+                        'options' => [
+                            'messages' => [
                                 NotEmpty::IS_EMPTY => "La structure est requise",
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'fonction' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'fonction' => [
                 'required'   => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name' => 'Zend\Validator\NotEmpty',
-                        'options' => array(
-                            'messages' => array(
+                        'options' => [
+                            'messages' => [
                                 NotEmpty::IS_EMPTY => "La fonction référentielle est requise",
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'heures'   => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'heures'   => [
                 'required' => true,
-                'filters'    => array(
-                    array('name' => 'Zend\Filter\StringTrim'),
-                    new PregReplace(array('pattern' => '/,/', 'replacement' => '.')),
-                ),
+                'filters'    => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                    new PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                ],
 //                'validators' => array(
 //                    array(
 //                        'name' => 'Zend\Validator\NotEmpty',
@@ -320,23 +320,23 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
 //                        ),
 //                    ),
 //                ),
-            ),
-            'commentaires' => array(
+            ],
+            'commentaires' => [
                 'required' => false,
-                'filters'    => array(
-                    array('name' => 'Zend\Filter\StringTrim'),
-                ),
-            ),
-        );
-       
+                'filters'    => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                ],
+            ],
+        ];
+
         if (($validator = $this->getValidatorStructure())) {
             $specs['structure']['validators'][] = $validator;
         }
-       
+
         if (($validator = $this->getValidatorHeures())) {
             $specs['heures']['validators'][] = $validator;
         }
-       
+
         return $specs;
     }
 

@@ -104,7 +104,7 @@ class DifferentielLigne extends AbstractHelper
      */
     public function getDetails()
     {
-        $details = array();
+        $details = [];
         if ('update' == $this->ligne->getAction()){
             $changes = $this->ligne->getChanges();
             foreach( $changes as $column => $value ){
@@ -158,7 +158,7 @@ class DifferentielLigne extends AbstractHelper
     }
 
     /**
-     * 
+     *
      * @param Ligne $ligne
      * @return DifferentielLigne
      */

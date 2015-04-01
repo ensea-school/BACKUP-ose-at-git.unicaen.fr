@@ -95,14 +95,14 @@ class DifferentielListe extends AbstractHelper
     }
 
     /**
-     * 
+     *
      *
      * @param Ligne[]|Differentiel $lignes
      * @return DifferentielLigne
      */
     public function setLignes($lignes)
     {
-        $this->lignes = array();
+        $this->lignes = [];
         if( $lignes instanceof Differentiel ){
             while( $ligne = $lignes->fetchNext() ){
                 $this->addLigne($ligne);

@@ -2,7 +2,7 @@
 
 <?php
 if ($errors) {
-    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));
+    echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
 }
 ?>
 
@@ -65,7 +65,7 @@ if ($errors) {
     </div>
 </div>
 
-<?php 
+<?php
 echo $this->formRow($form->get('submit'));
 echo $this->formHidden($form->get('id'));
 echo $this->form()->closeTag();

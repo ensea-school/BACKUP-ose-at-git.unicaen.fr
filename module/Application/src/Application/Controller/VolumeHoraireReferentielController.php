@@ -8,7 +8,7 @@ use Common\Exception\LogicException;
 use Application\Exception\DbException;
 
 /**
- * 
+ *
  *
  * @method \Doctrine\ORM\EntityManager em() Description
  * @method \Application\Controller\Plugin\Context context()
@@ -64,14 +64,14 @@ class VolumeHoraireReferentielController extends AbstractActionController
         );
         $service           = $this->context()->serviceReferentielFromRoute(); /* @var $service \Application\Entity\Db\ServiceReferentiel */
         $typeVolumehoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
-        $errors = array();
+        $errors = [];
 
         /* @var $service \Application\Entity\Db\Service */
         $service->setTypeVolumeHoraire( $typeVolumehoraire );
         $volumeHoraireList = $service->getVolumeHoraireReferentielListe();
 
         $form = $this->getForm();
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
         $form->get('type-volume-horaire')->setValue($typeVolumehoraire->getId());
 
         $request = $this->getRequest();
@@ -110,7 +110,7 @@ class VolumeHoraireReferentielController extends AbstractActionController
 
     /**
      * Retourne le formulaire de modif de Volume Horaire.
-     * 
+     *
      * @return \Application\Form\VolumeHoraireReferentiel\Saisie
      */
     protected function getForm()

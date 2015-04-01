@@ -27,36 +27,36 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, ContextProvi
     {
         $serviceStatut = $this->getServiceLocator()->getServiceLocator()->get('applicationStatutIntervenant');
         $defaultStatut = $serviceStatut->getRepo()->findOneBySourceCode(\Application\Entity\Db\StatutIntervenant::CHARG_ENS_1AN);
-        
+
         $this->setHydrator(new DossierHydrator($defaultStatut));
-        
+
         $fs = new DossierFieldset('dossier');
         $fs
                 ->setServiceLocator($this->getServiceLocator())
                 ->setContextProvider($this->getContextProvider())
                 ->init();
-        
+
         $this->add($fs);
-        
+
         /**
          * Csrf
          */
         $this->add(new \Zend\Form\Element\Csrf('security'));
-        
+
         /**
          * Submit
          */
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => "Enregistrer",
-            ),
-        ));
+            ],
+        ]);
     }
-    
+
     /**
-     * 
+     *
      * @param \Application\Entity\Db\IntervenantExterieur $object
      * @param type $flags
      * @return type
@@ -67,7 +67,7 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, ContextProvi
         if (!$object instanceof \Application\Entity\Db\IntervenantExterieur) {
             throw new \Common\Exception\LogicException("Ce formulaire ne peut être bindé qu'à un IntervenantExterieur.");
         }
-        
+
         return parent::bind($object, $flags);
     }
 }

@@ -26,7 +26,7 @@ class QueryGenerator extends Service
      *
      * @var array
      */
-    protected $cols = array();
+    protected $cols = [];
 
 
 
@@ -49,7 +49,7 @@ class QueryGenerator extends Service
 
     /**
      * Retourne la liste des colonnes importables d'une table
-     * 
+     *
      * @param string $tableName
      * @return string[]
      */
@@ -172,7 +172,7 @@ class QueryGenerator extends Service
     }
 
     /**
-     * 
+     *
      * @param string $tableName
      * @return null|string
      */
@@ -202,10 +202,10 @@ class QueryGenerator extends Service
         $sql = 'SELECT ID FROM '.$this->escapeKW($tableName).' WHERE SOURCE_CODE IN (:sourceCode)';
         $stmt = $this->getEntityManager()->getConnection()->executeQuery(
                                                                 $sql,
-                                                                array('sourceCode' => (array)$sourceCode),
-                                                                array('sourceCode' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
+                                                                ['sourceCode' => (array)$sourceCode],
+                                                                ['sourceCode' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
                                                             );
-        $ids = array();
+        $ids = [];
         while($r = $stmt->fetch()){
             $id = (int)$r['ID'];
             if (0 != $id){
@@ -219,7 +219,7 @@ class QueryGenerator extends Service
 
     /**
      * Mettre à jour toutes les infos dans la BDD
-     * 
+     *
      * @return self
      */
     public function updateViewsAndPackages()
@@ -249,7 +249,7 @@ class QueryGenerator extends Service
     protected function getPackageDeclaration()
     {
         $sql = "SELECT TEXT FROM USER_SOURCE WHERE NAME = 'OSE_IMPORT' AND type = 'PACKAGE'";
-        $result = $this->query($sql, array(), 'TEXT');
+        $result = $this->query($sql, [], 'TEXT');
         return implode("", $result);
     }
 
@@ -263,7 +263,7 @@ class QueryGenerator extends Service
     protected function getPackageBody()
     {
         $sql = "SELECT TEXT FROM USER_SOURCE WHERE NAME = 'OSE_IMPORT' AND type = 'PACKAGE BODY'";
-        $result = $this->query($sql, array(), 'TEXT');
+        $result = $this->query($sql, [], 'TEXT');
         return implode("", $result);
     }
 
@@ -277,7 +277,7 @@ class QueryGenerator extends Service
     protected function makeDiffViews()
     {
         $tables = $this->getTables();
-        $result = array();
+        $result = [];
         foreach( $tables as $table ){
             $result[$table] = $this->makeDiffView($table);
         }
@@ -294,7 +294,7 @@ class QueryGenerator extends Service
     protected function makeProcDeclarations()
     {
         $tables = $this->getTables();
-        $result = array();
+        $result = [];
         foreach( $tables as $table ){
             $result[$table] = $this->makeProcDeclaration($table);
         }
@@ -311,7 +311,7 @@ class QueryGenerator extends Service
     protected function makeProcBodies()
     {
         $tables = $this->getTables();
-        $result = array();
+        $result = [];
         foreach( $tables as $table ){
             $result[$table] = $this->makeProcBody($table);
         }
@@ -412,7 +412,7 @@ WHERE
 
     /**
      * Génère une déclaration de procédure pour une table donnée
-     * 
+     *
      * @param string $tableName
      * @return string
      */
@@ -425,7 +425,7 @@ WHERE
 
     /**
      * Génère un corps de procédure pour une table donnée
-     * 
+     *
      * @param string $tableName
      * @return string
      */
@@ -497,7 +497,7 @@ WHERE
      */
     protected function formatColQuery( array $cols, $format=':column', $separator=',' )
     {
-        $res = array();
+        $res = [];
         foreach( $cols as $col ){
             $res[] = str_replace( ':column', $col, $format );
         }

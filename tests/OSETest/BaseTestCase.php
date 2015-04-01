@@ -18,7 +18,7 @@ class BaseTestCase extends PHPUnit_Framework_TestCase
     protected $em;
     protected $eventm;
     protected $user;
-    
+
     /**
      * @var EntityProvider
      */
@@ -40,14 +40,14 @@ class BaseTestCase extends PHPUnit_Framework_TestCase
         foreach ($this->getEventManager()->getListeners() as $event => $listeners) {
             foreach ($listeners as $listener) {
                 if ($listener instanceof \Common\ORM\Event\Listeners\HistoriqueListener) {
-                    $listener->setIdentity(array('db' => $this->user));
+                    $listener->setIdentity(['db' => $this->user]);
                 }
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param string $name
      * @return EntityProvider
      */
@@ -57,7 +57,7 @@ class BaseTestCase extends PHPUnit_Framework_TestCase
             $this->entityProvider = new EntityProvider($this->getEntityManager($name));
             $this->entityProvider->setTestClassName(get_class($this));
         }
-        
+
         return $this->entityProvider;
     }
 

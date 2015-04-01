@@ -19,53 +19,53 @@ class NecessiteAgrementRule extends AgrementAbstractRule implements ServiceLocat
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_AUCUN     => "Le statut de l'intervenant ne nécessite aucun d'agrément particulier.",
         self::MESSAGE_INATTENDU => "Le statut de l'intervenant ne nécessite pas le type d'agrément '%value%'.",
-    );
-    
+    ];
+
     /**
      * Exécute la règle métier.
-     * 
+     *
      * @return array [ {id} => [ 'id' => {id} ] ]
      */
     public function execute()
     {
         $this->message(null);
-        
+
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
 //            $result = $qb->getQuery()->getScalarResult();
-//            
+//
 //            if (!$result) {
 //                $this->message(self::MESSAGE_AUCUN);
 //            }
             $result = $this->executeForIntervenant();
-                
+
             return $this->normalizeResult($result);
         }
-        
+
         /**
          * Recherche des intervenants répondant à la règle
          */
-                
+
         $em  = $this->getServiceIntervenant()->getEntityManager();
         $sql = $this->getQuerySQL();
-        
+
         $stmt = $em->getConnection()->executeQuery($sql);
-        
+
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
+
         return $this->normalizeResult($result);
     }
-    
+
     /**
      * Retourne la requête SQL de cette règle.
-     * 
+     *
      * @return string
-     * @deprecated 
+     * @deprecated
      * @todo Utiliser un query builder puisque la requête a été simplifiée suite à la création de la colonne INTERVENANT.PREMIER_RECRUTEMENT
      */
     public function getQuerySQL()
@@ -85,21 +85,21 @@ INNER JOIN TYPE_AGREMENT ta ON tas.TYPE_AGREMENT_ID = ta.ID AND (ta.HISTO_DESTRU
 WHERE (i.HISTO_DESTRUCTEUR_ID IS NULL)
 $andTypeAgrement
 EOS;
-        
+
         return $sql;
     }
-    
+
     /**
-     * 
+     *
      * @return QueryBuilder
      */
     public function getQueryBuilder()
-    {        
+    {
         throw new LogicException("Cette méthode ne devrait pas être appelée!");
     }
-    
+
     /**
-     * 
+     *
      * @return boolean
      */
     public function executeForIntervenant()
@@ -116,10 +116,10 @@ EOS;
             $this->message(self::MESSAGE_INATTENDU, $this->getTypeAgrement());
             return [];
         }
-        
+
         return [0 => ['id' => $this->getIntervenant()->getId()]];
     }
-    
+
     public function isRelevant()
     {
         return true;

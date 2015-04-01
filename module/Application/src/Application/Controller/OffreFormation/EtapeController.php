@@ -14,7 +14,7 @@ use Application\Service\ContextProviderAwareTrait;
  *
  * @method \Doctrine\ORM\EntityManager            em()
  * @method \Application\Controller\Plugin\Context context()
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class EtapeController extends AbstractActionController implements ContextProviderAwareInterface
@@ -30,7 +30,7 @@ class EtapeController extends AbstractActionController implements ContextProvide
     {
         return $this->saisirAction();
     }
-    
+
     protected function saisirAction()
     {
         $structure = $this->context()->mandatory()->structureFromRoute();
@@ -39,15 +39,15 @@ class EtapeController extends AbstractActionController implements ContextProvide
         $service   = $this->getServiceEtape();
         $title     = $id ? "Modification d'une formation" : "Création d'une nouvelle formation";
         $form      = $this->getFormAjouterModifier();
-        $errors    = array();
+        $errors    = [];
 
         // persiste les filtres dans le contexte local
         $this->getContextProvider()->getLocalContext()
                 ->setStructure($structure)
                 ->setNiveau($niveau ? $this->getServiceNiveauEtape()->get($niveau) : null);
-                
+
         $service->canAdd(true);
-        
+
         if ($id) {
             $entity = $service->get($id);
             $form->bind($entity);
@@ -57,9 +57,9 @@ class EtapeController extends AbstractActionController implements ContextProvide
             $entity->setStructure($structure);
             $form->setObject($entity);
         }
-        
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
-        
+
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -78,7 +78,7 @@ class EtapeController extends AbstractActionController implements ContextProvide
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/offre-formation/etape/saisie')
                 ->setVariables(compact('form', 'title', 'errors'));
-        
+
         return $viewModel;
     }
 
@@ -91,8 +91,8 @@ class EtapeController extends AbstractActionController implements ContextProvide
         $entity    = $service->getRepo()->find($id);
         $title     = "Suppression de formation";
         $form      = new \Application\Form\Supprimer('suppr');
-        $errors = array();
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $errors = [];
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $service->canAdd(true);
 
@@ -119,28 +119,28 @@ class EtapeController extends AbstractActionController implements ContextProvide
     }
 
     /**
-     * Retourne au format JSON les étapes distincts des éléments pédagogiques 
+     * Retourne au format JSON les étapes distincts des éléments pédagogiques
      * pour la structure et le niveau éventuellement spécifiés en GET.
-     * 
+     *
      * @return \Zend\View\Model\JsonModel
      */
     public function searchAction()
     {
         $structure = $this->context()->structureFromQuery();
         $niveau    = $this->context()->niveauFromQuery();
-        
-        $params = array();
+
+        $params = [];
         $params['structure'] = $structure instanceof \Application\Entity\Db\Structure ? $structure : null;
         $params['niveau']    = $niveau;
-        
+
         $result = $this->getServiceElementPedagogique()->finderDistinctEtapes($params)->getQuery()->getResult();
-        
+
         return new \Zend\View\Model\JsonModel(\UnicaenApp\Util::collectionAsOptions($result));
     }
 
     /**
      * Retourne le formulaire d'ajout/modif d'Etape.
-     * 
+     *
      * @return \Application\Form\OffreFormation\EtapeSaisie
      */
     protected function getFormAjouterModifier()
@@ -150,7 +150,7 @@ class EtapeController extends AbstractActionController implements ContextProvide
 
     /**
      * Retourne le service ElementPedagogique.
-     * 
+     *
      * @return ElementPedagogiqueService
      */
     protected function getServiceElementPedagogique()

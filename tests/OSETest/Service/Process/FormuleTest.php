@@ -19,7 +19,7 @@ class FormuleTest extends BaseTestCase {
     protected $etablissement;
     protected $typeVolumeHoraire;
     protected $fonctionReferentiel;
-    protected $entities = array();
+    protected $entities = [];
 
     protected function setUp()
     {
@@ -140,7 +140,7 @@ class FormuleTest extends BaseTestCase {
           ->setPaysNaissanceCodeInsee(100)
           ->setPaysNaissanceLibelle('FRANCE')
           ->setPaysNationaliteCodeInsee(100)
-          ->setPaysNationaliteLibelle('FRANCE')      
+          ->setPaysNationaliteLibelle('FRANCE')
           ->setStructure($this->structure)
           ->setDateNaissance($this->dateNaissance)
           ->setEmail($this->email)
@@ -149,7 +149,7 @@ class FormuleTest extends BaseTestCase {
         foreach( $services as $service ){
             $element       = isset($service['element'])         ? $service['element'] : null;
             $etablissement = isset($service['etablissement'])   ? $service['etablissement'] : null;
-            $heures        = isset($service['heures'])          ? $service['heures'] : array();
+            $heures        = isset($service['heures'])          ? $service['heures'] : [];
             $this->addService( $e, $element, $etablissement, $heures );
         }
         return $result;
@@ -163,7 +163,7 @@ class FormuleTest extends BaseTestCase {
      * @param integer[][] $heures Liste, par Période et par Type d'intervention, des heures de service
      * @return \Application\Entity\Db\Service
      */
-    protected function addService($intervenant, $element=null, $etablissement=null, array $heures=array())
+    protected function addService($intervenant, $element=null, $etablissement=null, array $heures=[])
     {
         if (! $intervenant instanceof \Application\Entity\Db\Intervenant){
             $intervenant = $this->getServiceManager()->get('applicationIntervenant')->getRepo()->findOneBy(['id'=>$intervenant]);
@@ -257,7 +257,7 @@ class FormuleTest extends BaseTestCase {
     public function testFormule()
     {
         $this->markTestSkipped("A revoir...");
-        
+
         //$this->addIntervenant('TEST03', 'TEST03', 'Testeur2', 'ENS_CH');
         $this->addServiceReferentiel(605, 2);
         return null;
@@ -294,14 +294,14 @@ class FormuleTest extends BaseTestCase {
             'SELECT * FROM V_FORMULE_PONDERATION_ELEMENT',
             'SELECT * FROM V_FORMULE_SERVICE WHERE intervenant_id = :intervenant',
             'SELECT * FROM V_FORMULE_VOLUME_HORAIRE WHERE intervenant_id = :intervenant',
-            
+
             'SELECT * FROM V_FORMULE_VENTILATION WHERE intervenant_id = :intervenant',
             'SELECT * FROM V_FORMULE_REEVAL_RESTEAPAYER WHERE intervenant_id = :intervenant',
             'SELECT * FROM V_FORMULE_HEURES_COMP WHERE intervenant_id = :intervenant',
         ];
         foreach( $sqls as $sql){
             var_dump( $sql );
-            $result = $this->getEntityManager()->getConnection()->executeQuery($sql, array('intervenant' => $i->getId()))->fetchAll();
+            $result = $this->getEntityManager()->getConnection()->executeQuery($sql, ['intervenant' => $i->getId()])->fetchAll();
             var_dump($result);
         }
 

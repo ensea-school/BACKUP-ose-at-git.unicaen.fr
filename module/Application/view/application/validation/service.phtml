@@ -20,13 +20,13 @@
     </thead>
     <tbody>
     <?php foreach ($validations as $validation): ?>
-        
-        <?php $servicesValidation = $this->partial('application/validation/partial/services-validation', array(
+
+        <?php $servicesValidation = $this->partial('application/validation/partial/services-validation', [
             'validation' => $validation,
             'services' => $services,
             'typeVolumeHoraire' => $typeVolumeHoraire,
-        )) ?>
-        
+        ]) ?>
+
         <tr>
             <td class="structure">
                 <p><?php echo $validation->getStructure() ?></p>
@@ -36,7 +36,7 @@
                     <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
                     <?php echo $servicesValidation ?>
                     <?php if ($this->isAllowed($validation, 'delete')): ?>
-                        <a href="<?php echo $this->url('validation/supprimer', array('validation' => $validation->getId())) ?>"
+                        <a href="<?php echo $this->url('validation/supprimer', ['validation' => $validation->getId()]) ?>"
                            class="validation-delete ajax-modal btn btn-primary" data-event="validation-delete-event">Supprimer cette validation</a>
                     <?php endif ?>
                 <?php else: ?>
@@ -44,12 +44,12 @@
                     <?php if ($this->isAllowed($validation, 'create')): ?>
                         <div class="row">
                             <div class="col-md-3">
-                                <?php 
+                                <?php
                                 echo $this->form()->openTag($formValider);
                                 echo $this->formControlGroup($formValider->get('valide'));
                                 echo $this->formHidden($formValider->get('security'));
                                 echo $this->formSubmit($formValider->get('submit')->setAttribute('class', 'btn btn-primary'));
-                                echo $this->form()->closeTag(); 
+                                echo $this->form()->closeTag();
                                 ?>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                 <?php endif ?>
             </td>
         </tr>
-        
+
     <?php endforeach; ?>
     </tbody>
 </table>

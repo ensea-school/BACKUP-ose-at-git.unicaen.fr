@@ -26,7 +26,7 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
      */
     protected $etape;
 
-    public function __construct($name = null, $options = array())
+    public function __construct($name = null, $options = [])
     {
         if (! $name) $name = "modulateurs-saisie";
         parent::__construct($name, $options);
@@ -39,7 +39,7 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
 
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
         /* @var $url Zend\View\Helper\Url */
-        $this->setAttribute('action', $url(null, array(), array(), true));
+        $this->setAttribute('action', $url(null, [], [], true));
      }
 
     /**
@@ -99,19 +99,19 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
             $this->add($mf);
         }
 
-        $this->add( array(
+        $this->add( [
             'name' => 'id',
             'type' => 'Hidden'
-        ) );
+        ] );
 
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Enregistrer',
                 'class' => 'btn btn-primary',
-            ),
-        ));
+            ],
+        ]);
     }
 
     /**
@@ -142,11 +142,11 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
         }
 
         $elements = $etape->getElementPedagogique();
-        $filters = array();
+        $filters = [];
         foreach( $elements as $element ){
-            $filters['EL'.$element->getId()] = array(
+            $filters['EL'.$element->getId()] = [
                 'required' => false
-            );
+            ];
         }
         return $filters;
     }

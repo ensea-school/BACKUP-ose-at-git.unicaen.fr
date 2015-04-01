@@ -14,7 +14,7 @@ class PeutDevaliderContratRule extends \Application\Rule\AbstractRule
 {
     use \Application\Service\Initializer\ContratServiceAwareTrait;
     use \Application\Traits\IntervenantAwareTrait;
-    
+
     const MESSAGE_NON_VALIDE     = 'messageNonValide';
     const MESSAGE_CONTRAT_INIIAL = 'messageContratInitial';
 
@@ -22,39 +22,39 @@ class PeutDevaliderContratRule extends \Application\Rule\AbstractRule
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_NON_VALIDE     => "%value% n'est pas encore validé.",
         self::MESSAGE_CONTRAT_INIIAL => "Le contrat initial ne peut pas être dévalidé.",
-    );
-    
+    ];
+
     private $contrat;
-    
+
     public function __construct(Intervenant $intervenant, Contrat $contrat)
     {
         parent::__construct();
         $this->setIntervenant($intervenant);
         $this->contrat = $contrat;
     }
-    
+
     public function execute()
     {
         $contratToString = $this->contrat->toString(true);
-            
+
         if (!($validation = $this->contrat->getValidation())) {
             $this->message(self::MESSAGE_NON_VALIDE, $contratToString);
             return false;
         }
-            
+
         if (!$this->contrat->estUnAvenant()) {
             $this->message(self::MESSAGE_CONTRAT_INIIAL);
             return false;
         }
-        
-//        // Seul le contrat (si aucun avenant validé n'existe) et le dernier avenant validé 
+
+//        // Seul le contrat (si aucun avenant validé n'existe) et le dernier avenant validé
 //        // peuvent être dévalidé.
 //        // Pourquoi ? Parce que sinon :
 //        // - si la dévalidation porte sur un avenant, il faudrait renuméroter les avenants restants
-//        // - si la dévalidation porte sur un contrat, il faudrait requalifier le 1er avenant en contrat 
+//        // - si la dévalidation porte sur un contrat, il faudrait requalifier le 1er avenant en contrat
 //        // et renuméroter les avenants restants
 //        // OR les contrat/avenants ont potentiellement déjà été signés.
 //        $qb = $this->getContratService()->finderByIntervenant($this->contrat->getIntervenant());
@@ -68,10 +68,10 @@ class PeutDevaliderContratRule extends \Application\Rule\AbstractRule
 //            $this->setMessage("Il faudrait d'abord dévalider $contratDevalidableToString.");
 //            return false;
 //        }
-        
+
         return true;
     }
-    
+
     public function isRelevant()
     {
         return true;

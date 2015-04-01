@@ -41,102 +41,102 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator'))
              ->setAllowedObjectBindingClass('Application\Entity\Db\ElementPedagogique');
 
-        $this->add(array(
+        $this->add([
             'name'       => $this->getStructureName(),
-            'options'    => array(
+            'options'    => [
                 'label' => "Composante :",
                 'empty_option' => "(Toutes)",
                 'disable_inarray_validator' => true,
-                'label_attributes' => array(
+                'label_attributes' => [
                     'title' => "Structure gestionnaire de l'enseignement",
-                ),
-            ),
-            'attributes' => array(
+                ],
+            ],
+            'attributes' => [
                 'id'    => 'structure',
                 'title' => "Structure gestionnaire de l'enseignement",
                 'class' => 'element-pedagogique element-pedagogique-structure input-sm selectpicker',
                 'data-width' => "100%",
                 'data-live-search' => "true"
-            ),
+            ],
             'type' => 'Select',
-        ));
-        
-        $this->add(array(
+        ]);
+
+        $this->add([
             'name'       => $this->getNiveauName(),
-            'options'    => array(
+            'options'    => [
                 'label' => "Niveau :",
                 'empty_option' => "(Tous)",
                 'disable_inarray_validator' => true,
-                'label_attributes' => array(
+                'label_attributes' => [
                     'title' => "Niveau",
-                ),
-            ),
-            'attributes' => array(
+                ],
+            ],
+            'attributes' => [
                 'id'    => 'niveau',
                 'title' => "Niveau",
                 'class' => 'element-pedagogique element-pedagogique-niveau input-sm selectpicker',
                 'data-width' => "100%",
                 'data-live-search' => "true"
-            ),
+            ],
             'type' => 'Select',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => $this->getEtapeName(),
-            'options'    => array(
+            'options'    => [
                 'label' => "Formation :",
                 'empty_option' => "(Toutes)",
                 'disable_inarray_validator' => true,
-                'label_attributes' => array(
+                'label_attributes' => [
                     'title' => "Formation",
-                ),
-            ),
-            'attributes' => array(
+                ],
+            ],
+            'attributes' => [
                 'id'    => 'formation',
                 'title' => "Formation",
                 'class' => 'element-pedagogique element-pedagogique-etape input-sm selectpicker',
                 'data-width' => "100%",
                 'data-live-search' => "true"
-            ),
+            ],
             'type' => 'Select',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'element-liste',
-            'options'    => array(
+            'options'    => [
                 'label' => "Enseignement :",
-                'label_attributes' => array(
+                'label_attributes' => [
                     'title' => "Enseignement",
-                ),
+                ],
                 'empty_option' => "(Tous)",
                 'disable_inarray_validator' => true,
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'id'    => 'element-liste',
                 'class' => 'element-pedagogique element-pedagogique-element selectpicker',
                 'data-width' => "100%",
                 'data-live-search' => "true",
-            ),
+            ],
             'type' => 'Select',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'element',
-            'options'    => array(
+            'options'    => [
                 'label' => "Enseignement :",
-                'label_attributes' => array(
+                'label_attributes' => [
                     'title' => "Enseignement",
-                ),
-            ),
-            'attributes' => array(
+                ],
+            ],
+            'attributes' => [
                 'id'    => 'element',
                 'title' => "Saisissez 2 lettres au moins",
                 'class' => 'element-pedagogique element-pedagogique-element input-sm',
-            ),
+            ],
             'type' => 'UnicaenApp\Form\Element\SearchAndSelect',
-        ));
+        ]);
 
-        $this->get('element')->setAutoCompleteSource( $url('of/element/default', array('action' => 'search')) );
+        $this->get('element')->setAutoCompleteSource( $url('of/element/default', ['action' => 'search']) );
     }
 
     public function populateOptions()
@@ -260,23 +260,23 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            'structure' => array(
+        return [
+            'structure' => [
                 'required' => false
-            ),
-            'niveau' => array(
+            ],
+            'niveau' => [
                 'required' => false
-            ),
-            'etape' => array(
+            ],
+            'etape' => [
                 'required' => false
-            ),
-            'element-liste' => array(
+            ],
+            'element-liste' => [
                 'required' => false
-            ),
-            'element' => array(
+            ],
+            'element' => [
                 'required' => false
-            ),
-        );
+            ],
+        ];
     }
 
     public function getQueryBuilder()

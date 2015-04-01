@@ -30,34 +30,34 @@ use Zend\View\Model\JsonModel;
  *
  * @method Doctrine\ORM\EntityManager               em()
  * @method Application\Controller\Plugin\Context    context()
- * @method UnicaenApp\Controller\Plugin\AppInfos    appInfos() 
+ * @method UnicaenApp\Controller\Plugin\AppInfos    appInfos()
  * @method UnicaenApp\Controller\Plugin\Mail        mail()
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class PieceJointeController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
 {
     use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
-    
+
     /**
      * @var string
      */
     private $title;
-    
+
     /**
      * @var ViewModel
      */
     private $view;
-    
+
     /**
-     * 
+     *
      */
     public function __construct()
     {
         $this->view = new ViewModel();
     }
-    
+
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
@@ -74,33 +74,33 @@ class PieceJointeController extends AbstractActionController implements ContextP
             $this->context()->getGlobalContext()->getDateObservation()
         );
     }
-    
+
     /**
-     * 
+     *
      * @return ViewModel
      * @throws MessageException
      */
     public function indexAction()
     {
         $this->initFilters();
-        
+
         $this->title = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
         $role        = $this->getContextProvider()->getSelectedIdentityRole();
 
         if (!$this->getIntervenant() instanceof IntervenantExterieur) {
             throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
         }
-        
+
         $dossier = $this->getIntervenant()->getDossier();
         if (!$dossier) {
             throw new MessageException("L'intervenant {$this->getIntervenant()} n'a aucune donnée personnelle enregistrée.");
         }
-        
+
         $typesPieceJointeStatut = $this->getPieceJointeProcess()->getTypesPieceJointeStatut();
         $piecesJointesFournies  = $this->getPieceJointeProcess()->getPiecesJointesFournies();
         $assertionPj            = (new PieceJointe())->setDossier($dossier); // entité transmise à l'assertion
-        
-        $this->view->setVariables(array(
+
+        $this->view->setVariables([
             'intervenant'            => $this->getIntervenant(),
             'totalHeuresReelles'     => $this->getPieceJointeProcess()->getTotalHeuresReellesIntervenant(),
             'annee'                  => $this->getContextProvider()->getGlobalContext()->getAnnee(),
@@ -110,23 +110,23 @@ class PieceJointeController extends AbstractActionController implements ContextP
             'assertionPj'            => $assertionPj,
             'role'                   => $role,
             'title'                  => $this->title,
-        ));
+        ]);
 
         $this->statusAction();
-        
+
         return $this->view;
     }
-    
+
     /**
-     * 
+     *
      * @return ViewModel
      */
     public function statusAction()
     {
         $this->initFilters();
-        
+
         $messages = [];
-        
+
         // recherche si toutes les PJ obligatoires ont été fournies
         $rule = clone $this->getServiceLocator()->get('DbFunctionRule');
         $rule
@@ -139,7 +139,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
         else {
             $messages['danger'][] = "Il manque des pièces justificatives obligatoires.";
         }
-        
+
         // recherche si des PJ restent à valider
         $rule = clone $this->getServiceLocator()->get('DbFunctionRule');
         $rule
@@ -152,44 +152,44 @@ class PieceJointeController extends AbstractActionController implements ContextP
         else {
             $messages['danger'][] = "Elles doivent encore être validées par votre composante.";
         }
-        
-        $this->view->setVariables(array(
+
+        $this->view->setVariables([
             'urlStatus' => $this->url()->fromRoute('piece-jointe/intervenant/status', [], [], true),
             'messages'  => $messages,
-        ));
+        ]);
 
         return $this->view;
     }
-    
+
     /**
      * Listing des fichiers déposés pour un type de pièce jointe donné.
-     * 
+     *
      * @return type
      */
     public function listerAction()
     {
         $this->initFilters();
-        
+
         $pj = $this->getPieceJointeProcess()->getPieceJointeFournie($this->getTypePieceJointe());
-               
+
         return [
             'typePieceJointe' => $this->getTypePieceJointe(),
             'pj'              => $pj,
         ];
     }
-    
+
     /**
      * Dépôt d'un nouveau fichier pour un type de pièce jointe donné.
-     * 
+     *
      * @return Response
      */
     public function ajouterAction()
     {
         $intervenant     = $this->getIntervenant();
         $typePieceJointe = $this->getTypePieceJointe();
-        
+
         $result  = $this->uploader()->upload();
-        
+
         if ($result instanceof JsonModel) {
             return $result;
         }
@@ -197,24 +197,24 @@ class PieceJointeController extends AbstractActionController implements ContextP
             $this->getServicePieceJointe()->ajouterFichiers($result['files'], $intervenant, $typePieceJointe);
             $this->notifyPiecesJointesFournies();
         }
-        
+
         return $this->redirect()->toRoute('piece-jointe/intervenant/lister', [], [], true);
     }
-    
+
     private function notifyPiecesJointesFournies()
     {
         // notif ssi toutes les PJ obligatoires ont été founies
-        if (!$this->getRulePiecesJointesFournies()->execute()) { 
+        if (!$this->getRulePiecesJointesFournies()->execute()) {
            return;
         }
         // pas de nottif si c'est un gestionnaire qui dépose des PJ
         if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\ComposanteRole) {
             return;
         }
-                
+
         // extraction des messages d'info (ce sont les feuilles du tableau)
         $messages = \UnicaenApp\Util::extractArrayLeafNodes($this->statusAction()->getVariable('messages'));
-        
+
         // corps au format HTML
         $renderer = $this->getServiceLocator()->get('view_manager')->getRenderer();  /* @var $renderer \Zend\View\Renderer\PhpRenderer */
         $html = $renderer->render('application/piece-jointe/partial/mail', [
@@ -227,21 +227,21 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $part->charset = 'UTF-8';
         $body          = new \Zend\Mime\Message();
         $body->addPart($part);
-        
+
         // init
         $message       = new \Zend\Mail\Message();
         $message->setEncoding('UTF-8')
                 ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
                 ->setSubject(sprintf("[%s] Pièces justificatives déposées par %s", $app, $this->getIntervenant()))
                 ->setBody($body);
-        
+
         // destinataires
         $destinataires = $this->getPieceJointeProcess()->getDestinatairesMail();
         if (!$destinataires) {
             throw new RuntimeException(sprintf("Aucun destinataire trouvé concernant %s.", $this->getIntervenant()));
         }
         $message->addTo($destinataires);
-        
+
         // envoi
         $this->mail()->send($message);
     }
@@ -253,32 +253,32 @@ class PieceJointeController extends AbstractActionController implements ContextP
     {
         $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule');
         $rule->setIntervenant($this->getIntervenant());
-        
+
         return $rule;
     }
-    
+
     /**
      * Téléchargement d'un fichier.
-     * 
+     *
      * @throws UnAuthorizedException
      */
     public function telechargerAction()
     {
         $pj      = $this->getPieceJointe();
         $fichier = $this->getFichier();
-        
+
         if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_TELECHARGER)) {
             throw new UnAuthorizedException("Interdit!");
         }
-        
+
         $this->uploader()->download($fichier);
     }
-    
+
     /**
      * Suppression d'un fichier déposé.
-     * 
+     *
      * NB: la pièce jointe est supprimée s'il ne reste plus aucun fichier déposé.
-     * 
+     *
      * @return Response
      * @throws UnAuthorizedException
      */
@@ -287,24 +287,24 @@ class PieceJointeController extends AbstractActionController implements ContextP
         if (!$this->getRequest()->isPost()) {
             return $this->redirect()->toRoute('home');
         }
-        
+
         $pj      = $this->getPieceJointe();
         $tpj     = $pj->getType();
         $fichier = $this->getFichier(false);
-        
+
         if ($fichier) {
             $this->getServicePieceJointe()->supprimerFichier($fichier, $pj, $this->getIntervenant());
         }
-            
+
         return $this->redirect()->toRoute('piece-jointe/intervenant/lister', ['typePieceJointe' => $tpj->getId()], [], true);
     }
-    
+
     public function validerAction()
     {
         $pj      = $this->getPieceJointe();
         $tpj     = $pj->getType();
         $fichier = $this->getFichier(false);
-        
+
         if ($fichier) {
             if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_VALIDER)) {
                 throw new UnAuthorizedException('Validation du fichier suivant interdite : ' . $fichier);
@@ -316,19 +316,19 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 throw new UnAuthorizedException('Validation de la pièce justificative suivante interdite : ' . $pj);
             }
             $this->getServicePieceJointe()->valider($pj, $this->getIntervenant());
-            
+
             return $this->redirect()->toRoute('piece-jointe/intervenant', [], [], true);
         }
-        
+
         return $this->redirect()->toRoute('piece-jointe/intervenant/lister', ['typePieceJointe' => $tpj->getId()], [], true);
     }
-    
+
     public function devaliderAction()
     {
         $pj      = $this->getPieceJointe();
         $tpj     = $pj->getType();
         $fichier = $this->getFichier(false);
-        
+
         if ($fichier) {
             if (!$this->isAllowed($fichier, FichierAssertion::PRIVILEGE_DEVALIDER)) {
                 throw new UnAuthorizedException('Dévalidation du fichier suivant interdite : ' . $fichier);
@@ -340,101 +340,101 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 throw new UnAuthorizedException('Dévalidation de la pièce jointe suivante interdite : ' . $pj);
             }
             $this->getServicePieceJointe()->devalider($pj);
-            
+
             return $this->redirect()->toRoute('piece-jointe/intervenant', [], [], true);
         }
-        
+
         return $this->redirect()->toRoute('piece-jointe/intervenant/lister', ['typePieceJointe' => $tpj->getId()], [], true);
     }
-    
+
     /**
-     * 
+     *
      * @return ViewModel
      */
     public function voirAction()
     {
         $pj  = $this->getPieceJointe();
         $vue = urldecode($this->params()->fromRoute('vue', $defaut= 'voir')); // vue à rendre
-        
+
         if (!in_array($vue, [$defaut, 'partial/validation-bar'])) {
             $vue = $defaut;
         }
-        
+
         $this->view
                 ->setTemplate('application/piece-jointe/' . $vue)
-                ->setVariables(array('pj' => $pj));
+                ->setVariables(['pj' => $pj]);
 
         return $this->view;
     }
-    
+
     /**
-     * 
+     *
      * @return ViewModel
      */
     public function voirTypeAction()
     {
         $pj  = $this->getPieceJointeProcess()->getPieceJointeFournie($this->getTypePieceJointe());
         $vue = urldecode($this->params()->fromRoute('vue', $defaut= 'voir')); // vue à rendre
-        
+
         if (!in_array($vue, [$defaut, 'partial/validation-bar'])) {
             $vue = $defaut;
         }
-        
+
         $this->view
                 ->setTemplate('application/piece-jointe/' . $vue)
-                ->setVariables(array('pj' => $pj));
+                ->setVariables(['pj' => $pj]);
 
         return $this->view;
     }
-    
+
     /**
-     * 
+     *
      * @return ViewModel
      */
     public function validationBarAction()
     {
         $pj = $this->getPieceJointe();
-        
-        $this->view->setVariables(array(
+
+        $this->view->setVariables([
             'pj' => $pj,
-        ));
+        ]);
 
         return $this->view;
     }
-    
+
     /**
      * @var IntervenantExterieur
      */
     private $intervenant;
-    
+
     public function getIntervenant()
     {
         if (null == $this->intervenant) {
             $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
         }
-        
+
         return $this->intervenant;
     }
-    
+
     /**
      * @var TypePieceJointe
      */
     private $typePieceJointe;
-    
+
     public function getTypePieceJointe()
     {
         if (null == $this->typePieceJointe) {
             $this->typePieceJointe = $this->context()->mandatory()->typePieceJointeFromRoute();
         }
-        
+
         return $this->typePieceJointe;
     }
-    
+
     /**
      * @var PieceJointe
      */
     private $pieceJointe;
-    
+
     /**
      * @return PieceJointe
      */
@@ -443,15 +443,15 @@ class PieceJointeController extends AbstractActionController implements ContextP
         if (null == $this->pieceJointe) {
             $this->pieceJointe = $this->context()->mandatory()->pieceJointeFromRoute();
         }
-        
+
         return $this->pieceJointe;
     }
-    
+
     /**
      * @var Fichier
      */
     private $fichier;
-    
+
     /**
      * @return Fichier
      */
@@ -460,15 +460,15 @@ class PieceJointeController extends AbstractActionController implements ContextP
         if (null == $this->fichier) {
             $this->fichier = $this->context()->mandatory($mandatory)->fichierFromRoute();
         }
-        
+
         return $this->fichier;
     }
-    
+
     /**
      * @var PieceJointeProcess
      */
     private $process;
-    
+
     /**
      * @return PieceJointeProcess
      */
@@ -477,7 +477,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
         if (null === $this->process) {
             $this->process = $this->getServiceLocator()->get('ApplicationPieceJointeProcess');
         }
-        
+
         try {
             $this->process->setIntervenant($this->getIntervenant());
         }
@@ -489,10 +489,10 @@ class PieceJointeController extends AbstractActionController implements ContextP
             throw new MessageException(
                     "Gestion des pièces justificatives impossible pour l'intervenant {$this->getIntervenant()}.", null, $exc);
         }
-        
+
         return $this->process;
     }
-    
+
     /**
      * @return PieceJointeService
      */

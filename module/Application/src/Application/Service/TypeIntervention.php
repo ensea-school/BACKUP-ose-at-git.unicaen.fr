@@ -68,7 +68,7 @@ class TypeIntervention extends AbstractEntityService
             $qb->andWhere($alias.'.code IN (:'.$alias.'_code)')->setParameter($alias.'_code', $code);
             return $this->getList( $qb );
         }elseif ($code){
-            return $this->getRepo()->findOneBy(array('code' => $code));
+            return $this->getRepo()->findOneBy(['code' => $code]);
         }else{
             return null;
         }

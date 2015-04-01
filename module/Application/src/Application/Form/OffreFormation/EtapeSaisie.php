@@ -20,7 +20,7 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
     use ContextProviderAwareTrait;
 
     private $typesFormation;
-    
+
     /**
      * This function is automatically called when creating element with factory. It
      * allows to perform various operations (add elements...)
@@ -33,83 +33,83 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
         $this->setHydrator($hydrator);
 
         /* construction du formulaire */
-        $this->add( array(
+        $this->add( [
             'name' => 'source-code',
-            'options' => array(
+            'options' => [
                 'label' => 'Code',
-            ),
+            ],
             'type' => 'Text'
-        ) );
+        ] );
 
-        $this->add( array(
+        $this->add( [
             'name' => 'libelle',
-            'options' => array(
+            'options' => [
                 'label' => 'Libellé',
-            ),
+            ],
             'type' => 'Text'
-        ) );
+        ] );
 
-        $this->add( array(
+        $this->add( [
             'name' => 'type-formation',
-            'options' => array(
+            'options' => [
                 'label' => 'Type de formation',
-            ),
+            ],
             'type' => 'Select',
-        ) );
+        ] );
 
-        $this->add( array(
+        $this->add( [
             'name' => 'niveau',
-            'options' => array(
+            'options' => [
                 'label' => 'Niveau',
-            ),
+            ],
             'type' => 'Text',
-        ) );
+        ] );
 
-        $this->add( array(
+        $this->add( [
             'name' => 'specifique-echanges',
-            'options' => array(
+            'options' => [
                 'label' => 'Spécifique aux échanges',
-            ),
+            ],
             'type' => 'Checkbox',
-        ) );
+        ] );
 
-        $this->add( array(
+        $this->add( [
             'name' => 'structure',
-            'options' => array(
+            'options' => [
                 'label' => 'Structure',
-            ),
+            ],
             'type' => 'Select',
-        ) );
+        ] );
 
-        $this->add( array(
+        $this->add( [
             'name' => 'domaine-fonctionnel',
-            'options' => array(
+            'options' => [
                 'label' => 'Domaine fonctionnel',
-            ),
+            ],
             'type' => 'Select',
-        ) );
+        ] );
 
-        $this->add( array(
+        $this->add( [
             'name' => 'id',
             'type' => 'Hidden'
-        ) );
+        ] );
 
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Enregistrer',
                 'class' => 'btn btn-primary',
-            ),
-        ));
-        
+            ],
+        ]);
+
         $localContext = $this->getContextProvider()->getLocalContext();
-        
+
         // peuplement liste des structures
         if ($localContext->getStructure()) {
             // si un filtre structure est positionné dans le contexte local, on l'utilise
             $this->get('structure')
-                    ->setValueOptions(array($id = $localContext->getStructure()->getId() => (string) $localContext->getStructure()))
+                    ->setValueOptions([$id = $localContext->getStructure()->getId() => (string) $localContext->getStructure()])
                     ->setValue($id)
                     ->setAttribute('disabled', true);
         }
@@ -119,13 +119,13 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
             $this->get('structure')
                     ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
         }
-        
+
         // peuplement liste des types de formation
         $valueOptions = \UnicaenApp\Util::collectionAsOptions($this->getTypesFormation());
         $this->get('type-formation')
                 ->setEmptyOption(count($valueOptions) > 1 ? "(Sélectionnez un type...)" : null)
                 ->setValueOptions($valueOptions);
-        
+
         // peuplement liste des domaines fonctionnels
         $serviceDomaineFonctionnel = $this->getServiceLocator()->getServiceLocator()->get('ApplicationDomaineFonctionnel');
         $this->get('domaine-fonctionnel')
@@ -140,7 +140,7 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
                     ->setAttribute('readonly', true);
         }
     }
-    
+
     /**
      * @return \Application\Entity\Db\TypeFormation[]
      */
@@ -150,34 +150,34 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
             $serviceTypeFormation = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeFormation');
             $localContext         = $this->getContextProvider()->getLocalContext();
             $qb                   = null;
-            
+
             if (($niveau = $localContext->getNiveau())) {
                 $qb = $serviceTypeFormation->finderByNiveau($niveau);
             }
-            
+
             $this->typesFormation = $serviceTypeFormation->getList($qb);
         }
-        
+
         return $this->typesFormation;
     }
-    
+
     /**
      * Retourne pour chaque type de formation le flag indiquant si la saisie d'un niveau est pertienent ou non.
-     * 
+     *
      * @return array id => bool
      */
     public function getPertinencesNiveau()
     {
-        $pertinencesNiveau = array();
+        $pertinencesNiveau = [];
         foreach ($this->getTypesFormation() as $tf) { /* @var $tf \Application\Entity\Db\TypeFormation */
             $pertinencesNiveau[$tf->getId()] = (bool) $tf->getGroupe()->getPertinenceNiveau();
         }
-        
+
         return $pertinencesNiveau;
     }
-    
+
     /**
-     * 
+     *
      * @return bool
      */
     private function getRequiredNiveau()
@@ -185,7 +185,7 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
         $typeFormation     = $this->get('type-formation')->getValue();
         $pertinencesNiveau = $this->getPertinencesNiveau();
         $pertinent         = isset($pertinencesNiveau[$typeFormation]) && (bool) $pertinencesNiveau[$typeFormation];
-        
+
         return $pertinent;
     }
 
@@ -197,28 +197,28 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            'source-code' => array(
+        return [
+            'source-code' => [
                 'required' => true,
-            ),
-            'libelle' => array(
+            ],
+            'libelle' => [
                 'required' => true,
-            ),
-            'type-formation' => array(
+            ],
+            'type-formation' => [
                 'required' => true,
-            ),
-            'niveau' => array(
+            ],
+            'niveau' => [
                 'required' => $this->getRequiredNiveau(),
-                'validators' => array(
-                    array('name' => 'Int'),
-                ),
-            ),
-            'structure' => array(
+                'validators' => [
+                    ['name' => 'Int'],
+                ],
+            ],
+            'structure' => [
                 'required' => false,
-            ),
-            'domaine-fonctionnel' => array(
+            ],
+            'domaine-fonctionnel' => [
                 'required' => false,
-            ),
-        );
+            ],
+        ];
     }
 }

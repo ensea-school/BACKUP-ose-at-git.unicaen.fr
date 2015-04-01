@@ -23,153 +23,153 @@ use Application\Acl\ResponsableFoadRole;
 
 use Application\Assertion\AbstractAssertion;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'validation' => array(
+return [
+    'router' => [
+        'routes' => [
+            'validation' => [
                 'type'    => 'Literal',
-                'options' => array(
+                'options' => [
                     'route'    => '/validation',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Validation',
                         'action'        => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'voir' => array(
+                'child_routes' => [
+                    'voir' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/:validation',
-                            'constraints' => array(
+                            'constraints' => [
                                 'validation' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'voir',
                                 'validation' => 0,
-                            ),
-                        ),
-                    ),
-                    'supprimer' => array(
+                            ],
+                        ],
+                    ],
+                    'supprimer' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/:validation/supprimer',
-                            'constraints' => array(
+                            'constraints' => [
                                 'validation' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'supprimer',
-                            ),
-                        ),
-                    ),
-                    'liste' => array(
+                            ],
+                        ],
+                    ],
+                    'liste' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/:typeValidation/:intervenant/liste',
-                            'constraints' => array(
+                            'constraints' => [
                                 'typeValidation' => '[0-9]*',
                                 'intervenant' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'liste',
                                 'typeValidation' => 0,
                                 'intervenant' => 0,
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'validation' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'validation' => [
                         'label'    => 'Validation',
                         'route'    => 'validation/liste',
                         'visible'  => false,
                         'resource' => 'controller/Application\Controller\Validation:liste',
-                        'pages' => array(
-                            'voir' => array(
+                        'pages' => [
+                            'voir' => [
                                 'label'  => "Détails",
                                 'title'  => "Détails d'une validation",
                                 'route'  => 'validation/voir',
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\Validation:voir',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => array('index', 'liste', 'voir'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
-                array(
+                    'action'     => ['index', 'liste', 'voir'],
+                    'roles'      => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+                [
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => array('dossier'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
-                array(
+                    'action'     => ['dossier'],
+                    'roles'      => [IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+                [
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => array('service', 'referentiel'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
-                array(
+                    'action'     => ['service', 'referentiel'],
+                    'roles'      => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+                [
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => array('referentiel'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
-                array(
+                    'action'     => ['referentiel'],
+                    'roles'      => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+                [
                     'controller' => 'Application\Controller\Validation',
-                    'action'     => array('supprimer'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
-            ),
-        ),
-        'resource_providers' => array(
-            'BjyAuthorize\Provider\Resource\Config' => array(
-                'Validation' => array(),
-            ),
-        ),
-        'rule_providers' => array(
-            'BjyAuthorize\Provider\Rule\Config' => array(
-                'allow' => array(
-                    array(
-                        array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID), 
-                        'Validation', 
-                        array(AbstractAssertion::PRIVILEGE_READ), 
+                    'action'     => ['supprimer'],
+                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+            ],
+        ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'Validation' => [],
+            ],
+        ],
+        'rule_providers' => [
+            'BjyAuthorize\Provider\Rule\Config' => [
+                'allow' => [
+                    [
+                        [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                        'Validation',
+                        [AbstractAssertion::PRIVILEGE_READ],
                         'ValidationAssertion',
-                    ),
-                    array(
-                        array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID), 
-                        'Validation', 
-                        array(
-                            AbstractAssertion::PRIVILEGE_CREATE, 
-                            AbstractAssertion::PRIVILEGE_DELETE, 
-                            AbstractAssertion::PRIVILEGE_UPDATE, 
-                        ), 
+                    ],
+                    [
+                        [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                        'Validation',
+                        [
+                            AbstractAssertion::PRIVILEGE_CREATE,
+                            AbstractAssertion::PRIVILEGE_DELETE,
+                            AbstractAssertion::PRIVILEGE_UPDATE,
+                        ],
                         'ValidationAssertion',
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Validation' => 'Application\Controller\ValidationController',
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
             'ApplicationTypeValidation'        => 'Application\\Service\\TypeValidation',
             'ApplicationValidation'            => 'Application\\Service\\Validation',
             'ValidationEnseignementRule'       => 'Application\\Rule\\Validation\\ValidationEnseignementRule',
@@ -177,16 +177,16 @@ return array(
             'ValidationAssertion'              => 'Application\\Assertion\\ValidationAssertionProxy',
             'ValidationServiceAssertion'       => 'Application\\Assertion\\ValidationServiceAssertion',
             'ValidationReferentielAssertion'   => 'Application\\Assertion\\ValidationReferentielAssertion',
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
-        ),
-    ),
-    'form_elements' => array(
-        'invokables' => array(
-        ),
-    ),
-);
+        ],
+        'initializers' => [
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
+        ],
+    ],
+];

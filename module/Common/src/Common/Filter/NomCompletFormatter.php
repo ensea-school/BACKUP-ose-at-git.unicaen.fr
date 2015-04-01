@@ -19,10 +19,10 @@ class NomCompletFormatter extends AbstractFilter
     protected $avecCivilite   = false;
     protected $avecNomPatro   = false;
     protected $prenomDabord   = false;
-    
+
     /**
      * Constructeur.
-     * 
+     *
      * @param bool $nomEnMajuscule
      * @param bool $avecCivilite
      * @param bool $avecNomPatro
@@ -35,7 +35,7 @@ class NomCompletFormatter extends AbstractFilter
         $this->avecNomPatro   = $avecNomPatro;
         $this->prenomDabord   = $prenomDabord;
     }
-    
+
     /**
      * Returns the result of filtering $value
      *
@@ -75,7 +75,7 @@ class NomCompletFormatter extends AbstractFilter
             $civilite = $value->getCiviliteToString();
         }
         else if ($value instanceof \stdClass) {
-            foreach (array('nomUsuel', 'nomPatronymique', 'prenom', 'civilite') as $prop) {
+            foreach (['nomUsuel', 'nomPatronymique', 'prenom', 'civilite'] as $prop) {
                 if (!isset($value->$prop)) {
                     throw new \Common\Exception\LogicException("L'objet à formatter doit posséder l'attribut public '$prop'.");
                 }
@@ -86,7 +86,7 @@ class NomCompletFormatter extends AbstractFilter
             $civilite = $value->civilite;
         }
         else if (is_array($value)) {
-            foreach (array('NOM_USUEL', 'NOM_PATRONYMIQUE', 'PRENOM', 'CIVILITE') as $prop) {
+            foreach (['NOM_USUEL', 'NOM_PATRONYMIQUE', 'PRENOM', 'CIVILITE'] as $prop) {
                 if (!array_key_exists($prop, $value)) {
                     throw new \Common\Exception\LogicException("Le tableau à formatter doit posséder la clé '$prop'.");
                 }
@@ -99,20 +99,20 @@ class NomCompletFormatter extends AbstractFilter
         else {
             throw new \Common\Exception\LogicException("L'objet à formatter n'est pas d'un type supporté.");
         }
-        
+
         $nomUsuel = ucfirst($this->nomEnMajuscule ? strtoupper($nomUsuel) : $nomUsuel);
         $nomPatro = ucfirst($this->nomEnMajuscule ? strtoupper($nomPatro) : $nomPatro);
         $prenom   = ucfirst($prenom);
         $civilite = $this->avecCivilite ? $civilite : null;
-        
-        $parts = array(
+
+        $parts = [
             $this->prenomDabord ? "$prenom $nomUsuel" : "$nomUsuel $prenom",
             $civilite,
             $this->avecNomPatro && $nomPatro != $nomUsuel ? "née $nomPatro" : null,
-        );
-        
+        ];
+
         $result = implode(', ', array_filter($parts));
-        
+
 	return $result;
     }
 }

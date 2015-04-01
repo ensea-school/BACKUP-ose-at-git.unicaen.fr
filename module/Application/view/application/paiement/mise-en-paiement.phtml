@@ -19,4 +19,4 @@ echo $this->formErrors( $form );
     });
 </script><?php
 
-if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));
+if ($errors) echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);

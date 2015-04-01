@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\View\Helper;
-        
+
 /**
  * Description of StructureDl
  *
@@ -10,8 +10,8 @@ namespace Application\View\Helper;
 class StructureDl extends AbstractDl
 {
     /**
-     * 
-     * 
+     *
+     *
      * @return string Code HTML
      */
     public function render()
@@ -19,49 +19,49 @@ class StructureDl extends AbstractDl
         if (!$this->entity) {
             return '';
         }
-        
+
         $entity = $this->entity; /* @var $entity \Application\Entity\Db\Structure */
         $tplDtdd = $this->getTemplateDtDd();
         $html    = '';
-        $dtdds   = array();
-        
+        $dtdds   = [];
+
         $dtdds[] = sprintf($tplDtdd,
-            "Libellé long :", 
+            "Libellé long :",
             $entity->getLibelleLong()
         );
-        
+
         if (!$this->short) {
             $dtdds[] = sprintf($tplDtdd,
-                "Libellé court :", 
+                "Libellé court :",
                 $entity->getLibelleCourt()
             );
-        
+
             $dtdds[] = sprintf($tplDtdd,
-                "Type de structure :", 
+                "Type de structure :",
                 $entity->getType()->getLibelle()
             );
         }
-        
+
         if (!$this->short) {
             $dtdds[] = sprintf($tplDtdd,
-                "N° {$entity->getSource()->getLibelle()} :", 
+                "N° {$entity->getSource()->getLibelle()} :",
                 $entity->getSourceCode()
             );
         }
 
         if ($entity->getParente()) {
             $dtdds[] = sprintf($tplDtdd,
-                "Structure mère :", 
+                "Structure mère :",
                 $entity->getParente()->getLibelleLong()
             );
         }
-        
+
         $html .= sprintf($this->getTemplateDl('structure structure-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
-        
+
         if (!$this->short) {
             $html .= $this->getView()->historiqueDl($entity, $this->horizontal);
         }
- 
+
         return $html;
     }
 }

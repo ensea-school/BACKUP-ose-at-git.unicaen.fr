@@ -26,15 +26,15 @@ class Module
 
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
-    
+
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
@@ -45,10 +45,10 @@ class Module
      */
     public function getControllerPluginConfig()
     {
-        return array(
-            'factories' => array(
-            ),
-        );
+        return [
+            'factories' => [
+            ],
+        ];
     }
 
     /**
@@ -60,12 +60,12 @@ class Module
      */
     public function getViewHelperConfig()
     {
-        return array(
-            'factories'  => array(
-            ),
-            'invokables' => array(
+        return [
+            'factories'  => [
+            ],
+            'invokables' => [
                 'formButtonGroup'      => 'Common\Form\View\Helper\FormButtonGroup',
-            ),
-        );
+            ],
+        ];
     }
 }

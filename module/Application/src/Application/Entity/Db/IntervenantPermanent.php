@@ -23,7 +23,7 @@ class IntervenantPermanent extends Intervenant
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->modificationServiceDu = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -59,7 +59,7 @@ class IntervenantPermanent extends Intervenant
     /**
      * Get modificationServiceDu
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
 //    public function getModificationServiceDu()
 //    {
@@ -83,7 +83,7 @@ class IntervenantPermanent extends Intervenant
     /**
      * Get corps
      *
-     * @return \Application\Entity\Db\Corps 
+     * @return \Application\Entity\Db\Corps
      */
     public function getCorps()
     {
@@ -99,19 +99,19 @@ class IntervenantPermanent extends Intervenant
      * Get modificationServiceDu
      *
      * @param Annee $annee Seule année à retenir
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getModificationServiceDu(Annee $annee = null)
     {
         if (null === $annee) {
             return $this->modificationServiceDu;
         }
-        
+
         $p = function($item) use ($annee) {
             return $item->getAnnee()->getId() === $annee->getId();
         };
         $services = $this->modificationServiceDu->filter($p);
-        
+
         return $services;
     }
 
@@ -123,11 +123,11 @@ class IntervenantPermanent extends Intervenant
      */
     public function getModificationServiceDuToStrings(Annee $annee = null)
     {
-        $services = array();
+        $services = [];
         foreach ($this->getModificationServiceDu($annee) as $sr) { /* @var $sr \Application\Entity\Db\ModificationServiceDu */
             $services[] = "" . $sr;
         }
-        
+
         return $services;
     }
 
@@ -143,7 +143,7 @@ class IntervenantPermanent extends Intervenant
         foreach ($this->getModificationServiceDu($annee) as $modificationServiceDu) {
             $this->removeModificationServiceDu($modificationServiceDu, $softDelete);
         }
-        
+
         return $this;
     }
 }

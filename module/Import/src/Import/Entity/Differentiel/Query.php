@@ -74,14 +74,14 @@ class Query
      *
      * @var array
      */
-    protected $colValues = array();
+    protected $colValues = [];
 
     /**
      * Liste des colonnes ne devant pas être nulles
      *
      * @var string[]
      */
-    protected $notNull = array();
+    protected $notNull = [];
 
     /**
      * Limite au nombre d'enregistrements retournés
@@ -110,7 +110,7 @@ class Query
 
     /**
      * Constructeur
-     * 
+     *
      * @param string $tableName
      */
     function __construct( $tableName )
@@ -119,7 +119,7 @@ class Query
     }
 
     /**
-     * 
+     *
      * @param QueryGenerator $queryGenerator
      * @return self
      */
@@ -164,7 +164,7 @@ class Query
 
     /**
      * Ajoute un ou plusieurs ID
-     * 
+     *
      * @param integer|integer[]|null $id
      * @return self
      */
@@ -173,7 +173,7 @@ class Query
         if (empty($id)){
             $this->id = null;
         }elseif( is_array($id)){
-            $this->id = array();
+            $this->id = [];
             foreach( $id as $i ) $this->id[] = (int)$i;
         }else{
             $this->id = (int)$id;
@@ -200,7 +200,7 @@ class Query
      */
     public function setAction($action)
     {
-        $goodActions = array(self::ACTION_DELETE,self::ACTION_INSERT,self::ACTION_UNDELETE,self::ACTION_UPDATE);
+        $goodActions = [self::ACTION_DELETE,self::ACTION_INSERT,self::ACTION_UNDELETE,self::ACTION_UPDATE];
 
         if (empty($action)){
             $this->action = null;
@@ -282,7 +282,7 @@ class Query
         if (empty($sourceCode)){
             $this->sourceCode = null;
         }elseif( is_array($sourceCode)){
-            $this->sourceCode = array();
+            $this->sourceCode = [];
             foreach( $sourceCode as $sc ) $this->sourceCode[] = (string)$sc;
         }else{
             $this->sourceCode = (string)$sourceCode;
@@ -292,7 +292,7 @@ class Query
 
     /**
      * Retourne la table pour laquelle l'enregistrement doit ou peut être présent
-     * 
+     *
      * @return string
      */
     public function getInTable()
@@ -334,7 +334,7 @@ class Query
         if (empty($colChanged)){
             $this->colChanged = null;
         }elseif( is_array($colChanged)){
-            $this->colChanged = array();
+            $this->colChanged = [];
             foreach( $colChanged as $c ) $this->colChanged[] = (string)$c;
         }else{
             $this->colChanged = (string)$colChanged;
@@ -344,7 +344,7 @@ class Query
 
     /**
      * Retourne le liste des valeurs à filtrer, colonne par colonne
-     * 
+     *
      * @return array
      */
     public function getColValues()
@@ -354,9 +354,9 @@ class Query
 
     /**
      * Applique une liste de colonnes à scruter en fonction des valeurs transmises
-     * 
+     *
      * format du tableau : {Nom de colonne => Valeur(s) à scruter}
-     * 
+     *
      * @param array $colValues
      * @return self
      */
@@ -410,7 +410,7 @@ class Query
     }
 
     /**
-     * 
+     *
      * @return integer
      */
     public function getLimit()
@@ -459,7 +459,7 @@ class Query
      */
     public function addIgnoreField($ignoreField)
     {
-        if (! is_array($this->ignoreFields)) $this->ignoreFields = array();
+        if (! is_array($this->ignoreFields)) $this->ignoreFields = [];
         if (! in_array($ignoreField, $this->ignoreFields)){
             $this->ignoreFields[] = $ignoreField;
         }
@@ -475,7 +475,7 @@ class Query
     {
         $viewName = Service::escapeKW('V_DIFF_'.$this->tableName);
 
-        $where = array();
+        $where = [];
         if (! empty($this->id)){
             $where[] = $viewName.'.ID'.Service::equals($this->id);
         }
@@ -490,7 +490,7 @@ class Query
 
         if (! empty($this->source)){
             if (is_array($this->source)){
-                $values = array();
+                $values = [];
                 foreach( $this->source as $value ){ $values[] = $value->getId(); }
                 $where[] = $viewName.'.SOURCE_ID'.Service::equals($values);
             }else{
@@ -504,7 +504,7 @@ class Query
 
         if (! empty($this->colChanged)){
             $cols = (array)$this->colChanged;
-            $cond = array();
+            $cond = [];
             foreach( $cols as $column ){
                 $cond[] = $viewName.'.'.Service::escapeKW ('U_'.$column).' = 1';
             }

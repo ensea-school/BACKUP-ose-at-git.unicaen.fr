@@ -15,7 +15,7 @@ class PeutSaisirModificationServiceDuRule extends AbstractRule
 {
     use IntervenantAwareTrait;
     use StructureAwareTrait;
-    
+
     const MESSAGE_STATUT      = 'statut';
     const MESSAGE_AFFECTATION = 'affectation';
 
@@ -23,18 +23,18 @@ class PeutSaisirModificationServiceDuRule extends AbstractRule
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_STATUT      => "L'intervenant %value% n'est pas un intervenant permanent.",
         self::MESSAGE_AFFECTATION => "Le statut de l'intervenant ne nécessite pas le type d'agrément '%value%'.",
-    );
-    
+    ];
+
     public function execute()
     {
         if (!$this->getIntervenant()->estPermanent()) {
             $this->message(self::MESSAGE_STATUT, $this->getIntervenant());
             return false;
         }
-        
+
         if ($this->getStructure()) {
             $estAffecte = $this->getServiceLocator()->get('EstAffecteRule')
                     ->setIntervenant($this->getIntervenant())
@@ -44,10 +44,10 @@ class PeutSaisirModificationServiceDuRule extends AbstractRule
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     public function isRelevant()
     {
         return true;

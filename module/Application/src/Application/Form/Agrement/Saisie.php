@@ -17,40 +17,40 @@ class Saisie extends Form implements InputFilterProviderInterface
 {
     use \Application\Traits\IntervenantAwareTrait;
     use \Application\Traits\TypeAgrementAwareTrait;
-    
+
     public function init()
     {
         $this->setHydrator(new ClassMethods(false));
-        
+
         $this->setAttribute('method', 'POST');
-        
-        $this->add(array(
+
+        $this->add([
             'name' => 'dateDecision',
             'type'  => 'UnicaenApp\Form\Element\Date',
-            'options' => array(
+            'options' => [
                 'label' => "Date de la décision",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'id' => uniqid('dateDecision'),
-            ),
-        ));
+            ],
+        ]);
         $this->getHydrator()->addStrategy('dateDecision', new DateStrategy($this->get('dateDecision')));
-        
+
         $this->add(new Csrf('security'));
-        
-        $this->add(array(
+
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => "Enregistrer",
-            ),
-        ));
+            ],
+        ]);
 
         return $this;
     }
-    
+
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Intervenant[] $intervenants
      * @return self
      */
@@ -60,7 +60,7 @@ class Saisie extends Form implements InputFilterProviderInterface
             $mcb = new \Zend\Form\Element\MultiCheckbox($name);
             $this->add($mcb);
         }
-        
+
         $options = [];
         foreach ($intervenants as $intervenant) {
             $options[$intervenant->getId()] = (string)$intervenant;
@@ -68,10 +68,10 @@ class Saisie extends Form implements InputFilterProviderInterface
         $this->get($name)
                 ->setValueOptions($options)
                 ->setValue(array_keys($options));
-        
+
         return $this;
     }
-    
+
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -80,13 +80,13 @@ class Saisie extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
+        return [
             'dateDecision' => [
                 'required'   => true,
             ],
             'intervenants' => [
                 'required'   => $this->has('intervenants'),
             ],
-        );
+        ];
     }
 }

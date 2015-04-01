@@ -4,7 +4,7 @@
     $tableLabel = ucwords(str_replace( '_', ' ', strtolower($table)));
 ?>
 <h2><?php echo $tableLabel ?></h2>
-<div id="DIV_<?php echo $table ?>" data-url="<?php echo $this->url('import', array('action' => 'update','table' => $table)) ?>">
+<div id="DIV_<?php echo $table ?>" data-url="<?php echo $this->url('import', ['action' => 'update','table' => $table]) ?>">
 <?php echo $this->differentielListe( $lignes ); ?>
 
 <?php if (count($lignes) > 100) : ?>

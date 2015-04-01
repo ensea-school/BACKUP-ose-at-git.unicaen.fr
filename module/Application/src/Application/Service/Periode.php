@@ -126,7 +126,7 @@ class Periode extends AbstractEntityService
      */
     public function getSemestre1()
     {
-        return $this->getRepo()->findOneBy(array('code' => PeriodeEntity::SEMESTRE_1));
+        return $this->getRepo()->findOneBy(['code' => PeriodeEntity::SEMESTRE_1]);
     }
 
     /**
@@ -136,6 +136,6 @@ class Periode extends AbstractEntityService
      */
     public function getSemestre2()
     {
-        return $this->getRepo()->findOneBy(array('code' => PeriodeEntity::SEMESTRE_2));
+        return $this->getRepo()->findOneBy(['code' => PeriodeEntity::SEMESTRE_2]);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\View\Helper;
-        
+
 /**
  * Description of EtablissementDl
  *
@@ -10,8 +10,8 @@ namespace Application\View\Helper;
 class EtablissementDl extends AbstractDl
 {
     /**
-     * 
-     * 
+     *
+     *
      * @return string Code HTML
      */
     public function render()
@@ -19,17 +19,17 @@ class EtablissementDl extends AbstractDl
         if (!$this->entity) {
             return '';
         }
-        
+
         $entity = $this->entity; /* @var $entity \Application\Entity\Db\Etablissement */
         $tplDtdd = $this->getTemplateDtDd();
         $html    = '';
-        $dtdds   = array();
-        
+        $dtdds   = [];
+
         $dtdds[] = sprintf($tplDtdd,
-            "Libellé :", 
+            "Libellé :",
             $entity->getLibelle()
         );
-        
+
         if (!$this->short) {
             $dtdds[] = sprintf($tplDtdd,
                 "Localisation :",
@@ -47,21 +47,21 @@ class EtablissementDl extends AbstractDl
                 $entity->getLocalisation() . " (" . $entity->getDepartement() . ")"
             );
         }
-        
+
         if (!$this->short) {
             $dtdds[] = sprintf($tplDtdd,
-                "N° {$entity->getSource()->getLibelle()} :", 
+                "N° {$entity->getSource()->getLibelle()} :",
                 $entity->getSourceCode()
             );
 
             $dtdds[] = sprintf($tplDtdd,
-                "Historique :", 
+                "Historique :",
                 $this->getView()->historiqueDl($entity)
             );
         }
-        
+
         $html .= sprintf($this->getTemplateDl('etablissement etablissement-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
- 
+
         return $html;
     }
 }

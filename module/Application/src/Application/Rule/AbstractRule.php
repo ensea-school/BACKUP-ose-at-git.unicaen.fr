@@ -16,23 +16,23 @@ abstract class AbstractRule implements RuleInterface, ServiceLocatorAwareInterfa
 {
     use ServiceLocatorAwareTrait;
     use ContextProviderAwareTrait;
-    
+
     /**
      * @var array
      */
 //    protected $messages = [];
-    
-    protected $abstractOptions = array(
-        'messages'             => array(), // Array of validation failure messages
-        'messageTemplates'     => array(), // Array of validation failure message templates
-        'messageVariables'     => array(), // Array of additional variables available for validation failure messages
+
+    protected $abstractOptions = [
+        'messages'             => [], // Array of validation failure messages
+        'messageTemplates'     => [], // Array of validation failure message templates
+        'messageVariables'     => [], // Array of additional variables available for validation failure messages
 //        'translator'           => null,    // Translation object to used -> Translator\TranslatorInterface
 //        'translatorTextDomain' => null,    // Translation text domain
 //        'translatorEnabled'    => true,    // Is translation enabled?
 //        'valueObscured'        => false,   // Flag indicating whether or not value should be obfuscated
                                            // in error messages
-    );
-    
+    ];
+
     /**
      * Constructeur.
      */
@@ -46,10 +46,10 @@ abstract class AbstractRule implements RuleInterface, ServiceLocatorAwareInterfa
             $this->abstractOptions['messageVariables'] = $this->messageVariables;
         }
     }
-    
+
     /**
      * Returns array of messages
-     * 
+     *
      * @return array
      */
     public function getMessages()
@@ -97,9 +97,9 @@ abstract class AbstractRule implements RuleInterface, ServiceLocatorAwareInterfa
         $this->abstractOptions['messageTemplates'][$messageKey] = $messageString;
         return $this;
     }
-    
+
     /**
-     * 
+     *
      * @return string
      */
     public function getMessage($glue = PHP_EOL)
@@ -107,7 +107,7 @@ abstract class AbstractRule implements RuleInterface, ServiceLocatorAwareInterfa
         if (!$this->getMessages()) {
             return null;
         }
-        
+
         return implode($glue, $this->getMessages());
     }
 

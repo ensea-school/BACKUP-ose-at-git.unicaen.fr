@@ -35,7 +35,7 @@ class Dl extends AbstractDl
          * Identité
          */
 
-        $identite = array();
+        $identite = [];
 
         $identite[] = sprintf($tplDtdd,
             "Numéro :",
@@ -79,7 +79,7 @@ class Dl extends AbstractDl
          */
 
         $html .= '<h2>Volumes horaires</h2>';
-        $html .= $this->getView()->volumeHoraireListe( $this->entity->getVolumeHoraire(), array('service' => $this->entity) );
+        $html .= $this->getView()->volumeHoraireListe( $this->entity->getVolumeHoraire(), ['service' => $this->entity] );
 
         /**
          * Historique

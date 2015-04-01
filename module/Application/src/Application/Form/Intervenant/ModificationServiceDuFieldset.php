@@ -14,7 +14,7 @@ use Application\Entity\Db\IntervenantPermanent;
 class ModificationServiceDuFieldset extends Fieldset implements \Zend\ServiceManager\ServiceLocatorAwareInterface
 {
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    
+
     public function init()
     {
         $this
@@ -22,19 +22,19 @@ class ModificationServiceDuFieldset extends Fieldset implements \Zend\ServiceMan
                 ->setObject(new IntervenantPermanent());
 
         $targetElement = $this->getServiceLocator()->get('IntervenantMotifModificationServiceDuFieldset');
-        
-        $this->add(array(
+
+        $this->add([
             'type' => 'Zend\Form\Element\Collection',
             'name' => 'modificationServiceDu',
-            'options' => array(
+            'options' => [
 //                'label' => 'Ajoutez autant de fonctions que nécessaire...',
                 'count' => 0,
                 'should_create_template' => true,
                 'allow_add' => true,
                 'allow_remove' => true,
                 'target_element' => $targetElement,
-            ),
-        ));   
+            ],
+        ]);
     }
 }
 
@@ -44,7 +44,7 @@ class ModificationServiceDuFieldsetHydrator implements \Zend\Stdlib\Hydrator\Hyd
      * @var \Application\Entity\Db\Annee
      */
     protected $annee;
-    
+
     /**
      * Extract values from an object
      *
@@ -56,10 +56,10 @@ class ModificationServiceDuFieldsetHydrator implements \Zend\Stdlib\Hydrator\Hyd
         if (!$this->annee) {
             throw new \Common\Exception\LogicException("Aucune année spécifiée.");
         }
-        
-        return array(
+
+        return [
             'modificationServiceDu' => $intervenant->getModificationServiceDu($this->annee),
-        );
+        ];
     }
 
     /**
@@ -77,14 +77,14 @@ class ModificationServiceDuFieldsetHydrator implements \Zend\Stdlib\Hydrator\Hyd
 
         $newModificationsServiceDu = $data['modificationServiceDu'];
         $curModificationsServiceDu = \Zend\Stdlib\ArrayUtils::iteratorToArray($intervenant->getModificationServiceDu($this->annee));
-        
+
 //        foreach ($newModificationsServiceDu as $modificationServiceDu) { /* @var $modificationServiceDu \Application\Entity\Db\ModificationServiceDu */
 //            var_dump("SR posté : " . $modificationServiceDu . " {$modificationServiceDu->getId()} (Fonction {$modificationServiceDu->getFonction()->getId()})");
 //        }
 //        foreach ($curModificationsServiceDu as $modificationServiceDu) { /* @var $modificationServiceDu \Application\Entity\Db\ModificationServiceDu */
 //            var_dump("SR existant : " . $modificationServiceDu . " {$modificationServiceDu->getId()} (Fonction {$modificationServiceDu->getFonction()->getId()})");
 //        }
-        
+
         // historicisation des enregistrements supprimés
         $toRemove = array_diff($curModificationsServiceDu, $newModificationsServiceDu);
         foreach ($toRemove as $modificationServiceDu) { /* @var $modificationServiceDu \Application\Entity\Db\ModificationServiceDu */
@@ -93,30 +93,30 @@ class ModificationServiceDuFieldsetHydrator implements \Zend\Stdlib\Hydrator\Hyd
 //        foreach ($toRemove as $modificationServiceDu) { /* @var $modificationServiceDu \Application\Entity\Db\ModificationServiceDu */
 //            var_dump("SR a suppr : " . $modificationServiceDu . " {$modificationServiceDu->getId()} (Fonction {$modificationServiceDu->getFonction()->getId()})");
 //        }
-        
+
         // insertion des nouveaux enregistrements
         foreach ($newModificationsServiceDu as $modificationServiceDu) { /* @var $modificationServiceDu \Application\Entity\Db\ModificationServiceDu */
             if (null === $modificationServiceDu->getId()) {
-                $intervenant->addModificationServiceDu($modificationServiceDu); 
+                $intervenant->addModificationServiceDu($modificationServiceDu);
                 $modificationServiceDu
                         ->setIntervenant($intervenant)
                         ->setAnnee($this->annee);
 //                var_dump("SR a ajout : " . $modificationServiceDu . " {$modificationServiceDu->getId()} (Fonction {$modificationServiceDu->getFonction()->getId()})");
             }
         }
-        
+
         return $intervenant;
     }
-    
+
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Annee $annee
      * @return self
      */
     public function setAnnee(\Application\Entity\Db\Annee $annee)
     {
         $this->annee = $annee;
-        
+
         return $this;
     }
 }

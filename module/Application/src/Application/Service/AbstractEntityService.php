@@ -109,12 +109,12 @@ abstract class AbstractEntityService extends AbstractService
             $m = $this->getReflectionClass()->getMethods(\ReflectionMethod::IS_PUBLIC);
             $p = $this->getReflectionClass()->getProperties(\ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED);
 
-            $methods = array();
+            $methods = [];
             foreach( $m as $method ){
                 if (0 === strpos($method->name, 'get')) $methods[] = $method->name;
             }
 
-            $this->properties = array();
+            $this->properties = [];
             foreach( $p as $property ){
                 if (in_array('get'.ucfirst($property->name),$methods)){
                     $this->properties[] = $property->name;
@@ -137,7 +137,7 @@ abstract class AbstractEntityService extends AbstractService
     {
         if (null === $alias) $alias = $this->getAlias();
         if (empty($qb)) $qb = $this->getRepo()->createQueryBuilder($alias);
-        return array($qb,$alias);
+        return [$qb,$alias];
     }
 
     /**
@@ -207,7 +207,7 @@ abstract class AbstractEntityService extends AbstractService
     }
 
     /**
-     * 
+     *
      * @param QueryBuilder $qb
      * @return string[]
      */
@@ -249,7 +249,7 @@ abstract class AbstractEntityService extends AbstractService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $entities = $qb->getQuery()->execute();
-        $result = array();
+        $result = [];
         $entityClass = $this->getEntityClass();
         foreach( $entities as $entity ){
             if ($entity instanceof $entityClass){
@@ -337,7 +337,7 @@ abstract class AbstractEntityService extends AbstractService
 
     /**
      * Retourne une nouvelle entité de la classe donnée
-     * 
+     *
      * @return mixed
      */
     public function newEntity()
@@ -385,7 +385,7 @@ abstract class AbstractEntityService extends AbstractService
         foreach( $properties as $property => $value){
             if (null != $value && ! in_array($property, $exclude)){
                 if(method_exists($this,'finderBy'.ucfirst($property))){
-                    call_user_func(array($this,'finderBy'.ucfirst($property)), $value, $qb, $alias);
+                    call_user_func([$this,'finderBy'.ucfirst($property)], $value, $qb, $alias);
                 }elseif (in_array($property, $this->getProperties())){ // ne traite que les propriétés reconnues, ignore les autres
                     $this->finderByProperty($property, $value, $qb);
                 }
@@ -449,7 +449,7 @@ abstract class AbstractEntityService extends AbstractService
     public function __call($name, $arguments)
     {
         if (method_exists($this,$name)){
-            return call_user_func_array(array($this,$name), $arguments);
+            return call_user_func_array([$this,$name], $arguments);
         }
         if (0 === strpos($name, 'finderBy')){
             $property = lcfirst(substr($name, 8));

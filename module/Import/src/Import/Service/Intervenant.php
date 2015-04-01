@@ -23,10 +23,10 @@ class Intervenant extends Service {
     public function searchIntervenant( $criterion, Structure $structure=null, TypeIntervenant $typeIntervenant=null )
     {
 
-        $params = array(
+        $params = [
             'criterionId' => (integer)$criterion,
             'limit'       => 100
-        );
+        ];
 
         $criterion = explode( ' ', $criterion );
 
@@ -73,7 +73,7 @@ EOS;
 
         $res = $this->query($sql, $params );
 
-        $result = array();
+        $result = [];
         $f = new \Common\Filter\IntervenantTrouveFormatter();
         foreach( $res as $r ){
 //            $dateNaissance = new DateTime( $r['DATE_NAISSANCE'] );

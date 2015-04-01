@@ -31,64 +31,64 @@ class StatutIntervenant implements HistoriqueAwareInterface
     const NON_AUTORISE   = 'NON_AUTORISE';
 
     /**
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         return $this->getLibelle();
     }
-    
+
     /**
      * Indique si ce statut correspond à un intervenant permanent.
-     * 
+     *
      * @return bool
      */
     public function estPermanent()
     {
         return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
     }
-    
+
     /**
      * Indique si ce statut correspond aux vacataires.
-     * 
+     *
      * @return bool
      */
     public function estVacataire()
     {
         return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
     }
-    
+
     /**
      * Indique si ce statut correspond aux vacataires BIATSS.
-     * 
+     *
      * @return bool
      */
     public function estBiatss()
     {
         return self::BIATSS === $this->getSourceCode();
     }
-    
+
     /**
      * Indique si ce statut correspond aux "Autres cas".
-     * 
+     *
      * @return bool
      */
     public function estAutre()
     {
         return self::AUTRES === $this->getSourceCode();
     }
-    
+
     /**
      * Indique si ce statut correspond aux Agents Temporaires Vacataires.
      *
-     * @return bool 
+     * @return bool
      */
     public function estAgentTemporaireVacataire()
     {
-        return in_array($this->getSourceCode(), array(self::ETUD_HORS_UCBN, self::ETUD_UCBN, self::RETR_HORS_UCBN));
+        return in_array($this->getSourceCode(), [self::ETUD_HORS_UCBN, self::ETUD_UCBN, self::RETR_HORS_UCBN]);
     }
-    
+
     /**
      * @var \Application\Entity\Db\Source
      */
@@ -193,17 +193,17 @@ class StatutIntervenant implements HistoriqueAwareInterface
      * @var boolean
      */
     protected $peutChoisirDansDossier;
-    
+
     /**
      * @var boolean
      */
     protected $peutSaisirDossier;
-    
+
     /**
      * @var boolean
      */
     protected $peutAvoirContrat;
-    
+
     /**
      * @var integer
      */
@@ -298,47 +298,47 @@ class StatutIntervenant implements HistoriqueAwareInterface
         $this->peutChoisirDansDossier = $peutChoisirDansDossier;
         return $this;
     }
-    
+
     /**
      * Spécifie si ce statut permet la saisie des données personnelles.
-     * 
+     *
      * @param boolean $peutSaisirDossier
      * @return self
      */
     public function setPeutSaisirDossier($peutSaisirDossier = true)
     {
         $this->peutSaisirDossier = $peutSaisirDossier;
-        
+
         return $this;
     }
-    
+
     /**
      * Indique si ce statut permet la saisie des données personnelles.
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPeutSaisirDossier()
     {
         return $this->peutSaisirDossier;
     }
-    
+
     /**
      * Spécifie si ce statut permet l'établissement d'un contrat/avenant.
-     * 
+     *
      * @param boolean $peutAvoirContrat
      * @return self
      */
     public function setPeutAvoirContrat($peutAvoirContrat = true)
     {
         $this->peutAvoirContrat = $peutAvoirContrat;
-        
+
         return $this;
     }
-    
+
     /**
      * Indique si ce statut permet l'établissement d'un contrat/avenant.
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPeutAvoirContrat()
     {
@@ -361,7 +361,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get depassement
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDepassement()
     {
@@ -384,7 +384,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get fonctionEC
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFonctionEC()
     {
@@ -407,7 +407,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoCreation()
     {
@@ -430,7 +430,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoDestruction
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoDestruction()
     {
@@ -453,7 +453,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoModification
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoModification()
     {
@@ -476,7 +476,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -485,7 +485,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
 
     /**
      * Get ordre
-     * 
+     *
      * @return integer
      */
     public function getOrdre()
@@ -495,14 +495,14 @@ class StatutIntervenant implements HistoriqueAwareInterface
 
     /**
      * Set ordre
-     * 
+     *
      * @param integer $ordre
      * @return self
      */
     public function setOrdre($ordre)
     {
         $this->ordre = $ordre;
-        
+
         return $this;
     }
 
@@ -522,7 +522,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get serviceStatutaire
      *
-     * @return float 
+     * @return float
      */
     public function getServiceStatutaire()
     {
@@ -545,7 +545,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get plafondReferentiel
      *
-     * @return float 
+     * @return float
      */
     public function getPlafondReferentiel()
     {
@@ -568,7 +568,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get maximumHETD
      *
-     * @return float 
+     * @return float
      */
     public function getMaximumHETD()
     {
@@ -591,7 +591,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get sourceCode
      *
-     * @return string 
+     * @return string
      */
     public function getSourceCode()
     {
@@ -601,7 +601,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -624,7 +624,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get typeIntervenant
      *
-     * @return \Application\Entity\Db\TypeIntervenant 
+     * @return \Application\Entity\Db\TypeIntervenant
      */
     public function getTypeIntervenant()
     {
@@ -647,7 +647,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoModificateur()
     {
@@ -670,7 +670,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoDestructeur()
     {
@@ -693,7 +693,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoCreateur()
     {
@@ -716,7 +716,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get source
      *
-     * @return \Application\Entity\Db\Source 
+     * @return \Application\Entity\Db\Source
      */
     public function getSource()
     {
@@ -749,7 +749,7 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get typeAgrementStatut
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTypeAgrementStatut()
     {

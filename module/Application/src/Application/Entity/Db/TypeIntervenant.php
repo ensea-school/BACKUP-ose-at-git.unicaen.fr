@@ -6,12 +6,12 @@ namespace Application\Entity\Db;
  * TypeIntervenant
  */
 class TypeIntervenant implements HistoriqueAwareInterface
-{    
-    public $classToCode = array(
+{
+    public $classToCode = [
         'Application\Entity\Db\IntervenantPermanent' => 'P',
         'Application\Entity\Db\IntervenantExterieur' => 'E',
-    );
-    
+    ];
+
     /**
      * @var string
      */
@@ -74,7 +74,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -97,7 +97,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoCreation()
     {
@@ -120,7 +120,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoDestruction
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoDestruction()
     {
@@ -143,7 +143,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoModification
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoModification()
     {
@@ -166,7 +166,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -176,7 +176,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -199,7 +199,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoModificateur()
     {
@@ -222,7 +222,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoDestructeur()
     {
@@ -245,7 +245,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoCreateur()
     {
@@ -264,7 +264,7 @@ class TypeIntervenant implements HistoriqueAwareInterface
 
     /**
      * Retourne la représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()

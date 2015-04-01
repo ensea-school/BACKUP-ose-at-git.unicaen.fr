@@ -21,118 +21,118 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'structure' => array(
+return [
+    'router' => [
+        'routes' => [
+            'structure' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/structure',
-                    'defaults' => array(
+                    'defaults' => [
                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Structure',
                         'action'        => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'modifier' => array(
+                'child_routes' => [
+                    'modifier' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/modifier/:id',
-                            'constraints' => array(
+                            'constraints' => [
                                 'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'modifier',
-                            ),
-                        ),
-                    ),
-                    'recherche' => array(
+                            ],
+                        ],
+                    ],
+                    'recherche' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/recherche[/:term]',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'recherche',
-                            ),
-                        ),
-                    ),
-                    'default' => array(
+                            ],
+                        ],
+                    ],
+                    'default' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/:action[/:id]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'structure' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'structure' => [
                         'label'    => 'Structures',
                         'title'    => "Gestion des structures",
                         'route'    => 'structure',
                         'visible'  => false,
-                        'params' => array(
+                        'params' => [
                             'action' => 'index',
-                        ),
-                        'pages' => array(
-                            'voir' => array(
+                        ],
+                        'pages' => [
+                            'voir' => [
                                 'label'  => "Voir",
                                 'title'  => "Voir une structure",
                                 'route'  => 'structure',
                                 'visible' => false,
                                 'withtarget' => true,
-                                'pages' => array(),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                                'pages' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Structure',
-                    'action' => array('voir', 'apercevoir'),
-                    'roles' => array(R_ROLE)
-                ),
-                array(
+                    'action' => ['voir', 'apercevoir'],
+                    'roles' => [R_ROLE]
+                ],
+                [
                     'controller' => 'Application\Controller\Structure',
-                    'action' => array('index', 'choisir', 'recherche'),
-                    'roles' => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID)
-                ),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+                    'action' => ['index', 'choisir', 'recherche'],
+                    'roles' => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID]
+                ],
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Structure'   => 'Application\Controller\StructureController',
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
             'ApplicationPersonnel'       => 'Application\\Service\\Personnel',
             'ApplicationStructure'       => 'Application\\Service\\Structure',
             'ApplicationTypeStructure'   => 'Application\\Service\\TypeStructure',
-        )
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
+        ]
+    ],
+    'view_helpers' => [
+        'invokables' => [
             'structureDl'       => 'Application\View\Helper\StructureDl',
             'structure'         => 'Application\View\Helper\StructureViewHelper',
-        ),
-    ),
-);
+        ],
+    ],
+];

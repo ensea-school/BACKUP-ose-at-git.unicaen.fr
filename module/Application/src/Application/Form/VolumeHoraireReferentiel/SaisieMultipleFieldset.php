@@ -40,20 +40,20 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
         ;
 
         foreach( $this->getTypesInterventions() as $typeIntervention ){
-            $this->add(array(
+            $this->add([
                 'name'       => $typeIntervention->getCode(),
-                'options'    => array(
+                'options'    => [
                     'label' => '<abbr title="'.$typeIntervention->getLibelle().'">'.$typeIntervention->getCode().'</abbr> :',
                     'label_options' => ['disable_html_escape' => true]
-                ),
-                'attributes' => array(
+                ],
+                'attributes' => [
                     'title' => $typeIntervention->getLibelle(),
                     'class' => 'volume-horaire volume-horaire-heures input-sm',
                     'step'  => 'any',
                     'min'   => 0,
-                ),
+                ],
                 'type'       => 'Text',
-            ));
+            ]);
 
         }
         $this->add( new Hidden('type-volume-horaire') );
@@ -69,15 +69,15 @@ class SaisieMultipleFieldset extends Fieldset implements InputFilterProviderInte
      */
     public function getInputFilterSpecification()
     {
-        $filters = array();
+        $filters = [];
         foreach( $this->getTypesInterventions() as $typeIntervention ){
-            $filters[$typeIntervention->getCode()] = array(
+            $filters[$typeIntervention->getCode()] = [
                 'required' => false,
-                'filters'    => array(
-                    array('name' => 'Zend\Filter\StringTrim'),
-                    new \Zend\Filter\PregReplace(array('pattern' => '/,/', 'replacement' => '.')),
-                ),
-            );
+                'filters'    => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                ],
+            ];
         }
         return $filters;
     }

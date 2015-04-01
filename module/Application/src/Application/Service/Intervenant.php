@@ -21,10 +21,10 @@ class Intervenant extends AbstractEntityService
 {
     /**
      * Recherche par :
-     * - id source exact (numéro Harpege ou autre), 
-     * - ou nom usuel (et prénom), 
+     * - id source exact (numéro Harpege ou autre),
+     * - ou nom usuel (et prénom),
      * - ou nom patronymique (et prénom).
-     * 
+     *
      * @param string $term
      * @return QueryBuilder
      */
@@ -33,20 +33,20 @@ class Intervenant extends AbstractEntityService
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
         $term = str_replace(' ', '', $term);
-        
-        $concatNomUsuelPrenom = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat($alias.'.nomUsuel', $alias.'.prenom'),
-                '?3'));
-        $concatNomPatroPrenom = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat($alias.'.nomPatronymique', $alias.'.prenom'),
-                '?3'));
-        $concatPrenomNomUsuel = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat($alias.'.prenom', $alias.'.nomUsuel'),
-                '?3'));
-        $concatPrenomNomPatro = new \Doctrine\ORM\Query\Expr\Func('CONVERT', 
-                array($qb->expr()->concat($alias.'.prenom', $alias.'.nomPatronymique'),
-                '?3'));
-        
+
+        $concatNomUsuelPrenom = new \Doctrine\ORM\Query\Expr\Func('CONVERT',
+                [$qb->expr()->concat($alias.'.nomUsuel', $alias.'.prenom'),
+                '?3']);
+        $concatNomPatroPrenom = new \Doctrine\ORM\Query\Expr\Func('CONVERT',
+                [$qb->expr()->concat($alias.'.nomPatronymique', $alias.'.prenom'),
+                '?3']);
+        $concatPrenomNomUsuel = new \Doctrine\ORM\Query\Expr\Func('CONVERT',
+                [$qb->expr()->concat($alias.'.prenom', $alias.'.nomUsuel'),
+                '?3']);
+        $concatPrenomNomPatro = new \Doctrine\ORM\Query\Expr\Func('CONVERT',
+                [$qb->expr()->concat($alias.'.prenom', $alias.'.nomPatronymique'),
+                '?3']);
+
         $qb
 //                ->select('i.')
                 ->where($alias.'.sourceCode = ?1')
@@ -55,16 +55,16 @@ class Intervenant extends AbstractEntityService
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatPrenomNomUsuel), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orWhere($qb->expr()->like($qb->expr()->upper($concatPrenomNomPatro), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orderBy($alias.'.nomUsuel, '.$alias.'.prenom');
-        
-        $qb->setParameters(array(1 => $term, 2 => "%$term%", 3 => 'US7ASCII'));
-        
+
+        $qb->setParameters([1 => $term, 2 => "%$term%", 3 => 'US7ASCII']);
+
 //        print_r($qb->getQuery()->getSQL()); var_dump($qb->getQuery()->getParameters());die;
-        
+
         return $qb;
     }
-    
+
     /**
-     * 
+     *
      * @return FinderIntervenantPermanentWithServiceReferentiel
      */
     public function getFinderIntervenantPermanentWithServiceReferentiel()
@@ -73,9 +73,9 @@ class Intervenant extends AbstractEntityService
 
         return $qb;
     }
-    
+
     /**
-     * 
+     *
      * @return FinderIntervenantPermanentWithModificationServiceDu
      */
     public function getFinderIntervenantPermanentWithModificationServiceDu()
@@ -122,7 +122,7 @@ class Intervenant extends AbstractEntityService
 
     /**
      * Finder par étape franchie dans le workflow de l'intervenant.
-     * 
+     *
      * @param string $codeEtape Ex: WfEtape::CODE_PJ_SAISIE
      * @param QueryBuilder $qb
      * @return QueryBuilder
@@ -138,10 +138,10 @@ class Intervenant extends AbstractEntityService
 
         return $qb;
     }
-    
+
     /**
      * Finder par étape courante dans le workflow de l'intervenant.
-     * 
+     *
      * @param string $codeEtape Ex: \Application\Entity\Db\WfEtape::CODE_PIECES_JOINTES
      * @param QueryBuilder $qb
      * @return QueryBuilder
@@ -156,11 +156,11 @@ class Intervenant extends AbstractEntityService
 
         return $qb;
     }
-    
+
     /**
      * Ajoutant les critères permettant de ne retenir que les intervenants ayant fourni
      * une pièce justificative qui n'a pas encore été validée.
-     * 
+     *
      * @param QueryBuilder $qb
      * @return QueryBuilder
      */
@@ -172,7 +172,7 @@ class Intervenant extends AbstractEntityService
                 ->join("d.pieceJointe", "pj")
                 ->leftJoin("pj.validation", "vpj")
                 ->andWhere("vpj IS NULL");
-        
+
         return $qb;
     }
 
@@ -204,7 +204,7 @@ class Intervenant extends AbstractEntityService
 
     /**
      * Importe un intervenant si besoin.
-     * 
+     *
      * @param string $sourceCode Code source
      * @return IntervenantEntity
      * @throws RuntimeException Intervenant déjà importé ou introuvable après import
@@ -216,14 +216,14 @@ class Intervenant extends AbstractEntityService
         if (($intervenant = $repo->findOneBySourceCode($sourceCode))) {
             return $intervenant;
         }
-        
+
         $import = $this->getServiceLocator()->get('importProcessusImport'); /* @var $import Import */
         $import->intervenant($sourceCode);
 
         if (!($intervenant = $repo->findOneBySourceCode($sourceCode))) {
             throw new RuntimeException("Vous n'êtes pas autorisé à vous connecter à OSE avec ce compte. Vous vous prions de vous rapprocher de votre composante pour en obtenir un valide.");
         }
-        
+
         return $intervenant;
     }
 

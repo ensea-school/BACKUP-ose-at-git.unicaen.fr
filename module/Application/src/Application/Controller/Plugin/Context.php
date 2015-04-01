@@ -21,7 +21,7 @@ use Common\Exception\RuntimeException;
  * @method mixed *FromContext($name = null, $default = null) Description
  * @method mixed *FromSources($name = null, $default = null, array $sources = null) Description
  * @method mixed *FromQueryPost($name = null, $default = null) Description
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see Params
  */
@@ -33,29 +33,29 @@ class Context extends Params implements ServiceLocatorAwareInterface
      * @var ServiceLocatorInterface
      */
     protected $sl;
-    
+
     /**
      * @var bool
      */
     protected $mandatory = false;
-    
+
     /**
      * @var GlobalContext
      */
     protected $globalContext;
-    
+
     /**
      * @var LocalContext
      */
     protected $localContext;
-    
+
     /**
      * @var Container
      */
     protected $sessionContainer;
-    
+
     /**
-     * 
+     *
      * @param bool $mandatory
      * @return Context
      */
@@ -80,7 +80,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
     {
         /* Récupération des paramètres */
         $argName = isset($arguments[0]) ? $arguments[0] : null;
-        $argSubNames = array();
+        $argSubNames = [];
         $argDefault = isset($arguments[1]) ? $arguments[1] : null;
         $argSources = isset($arguments[2]) ? $arguments[2] : null;
 
@@ -101,7 +101,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
                 break;
             case 'FromQueryPost' === substr($name, $length = -13):
                 $method = 'FromSources';
-                $argSources = array('query','post');
+                $argSources = ['query','post'];
                 break;
             default:
                 throw new LogicException("Méthode '$name' inexistante.");
@@ -124,7 +124,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
         if ('FromSources' === $method){
             $value = $this->fromSources($argName, $argDefault, $argSources);
         }else{
-            $value = call_user_func_array(array($this, lcfirst($method)), array($argName,$argDefault));
+            $value = call_user_func_array([$this, lcfirst($method)], [$argName,$argDefault]);
         }
 
         /* Parcours du tableau pour récupérer la valeur attendue */
@@ -179,22 +179,22 @@ class Context extends Params implements ServiceLocatorAwareInterface
     }
 
     /**
-     * 
+     *
      * @param  string $name Parameter name to retrieve.
      * @param  mixed $default Default value to use when the requested parameter is not set.
      * @param array $sources
      * @return mixed
      */
-    public function fromSources($name, $default=null, array $sources=array())
+    public function fromSources($name, $default=null, array $sources=[])
     {
-        $defaultSources = array('context', 'route', 'query', 'post', 'session' );
+        $defaultSources = ['context', 'route', 'query', 'post', 'session' ];
         if (empty($sources)) $sources = $defaultSources;
 
         foreach( $sources as $source ){
             if (! in_array($source, $defaultSources)){
                 throw new LogicException("Source de données introuvable : '$source'.");
             }
-            $result = call_user_func_array(array($this, 'from'.lcfirst($source)), array($name, null));
+            $result = call_user_func_array([$this, 'from'.lcfirst($source)], [$name, null]);
             if ($result !== null) return $result;
         }
         return $default;
@@ -215,7 +215,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
 
         return $this->getSessionContainer()->$name;
     }
-    
+
     /**
      * Return a single local context parameter.
      *
@@ -234,7 +234,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
 
         return $value;
     }
-    
+
     /**
      * Return a single global context parameter.
      *

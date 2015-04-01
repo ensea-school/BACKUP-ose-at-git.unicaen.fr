@@ -30,7 +30,7 @@ class ModulateurController extends AbstractActionController implements ContextPr
         }
 
         $form    = $this->getFormSaisie();
-        $errors  = array();
+        $errors  = [];
 
         $form->bind($etape);
 
@@ -55,7 +55,7 @@ class ModulateurController extends AbstractActionController implements ContextPr
             }
         }
         $title = "Saisie des modulateurs <br /><small>$etape</small>";
-        
+
         return compact('title', 'form', 'errors');
     }
 

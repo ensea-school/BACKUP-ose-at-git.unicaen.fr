@@ -49,7 +49,7 @@ define('CONSTRAINT_UTILISATEUR_USERNAME_UN', 'Utilisateur Username Un');
 define('CONSTRAINT_VHE_SOURCE_UN', 'Vhe Source Un');
 define('CONSTRAINT_VOLUME_HORAIRE_EP__UN', 'Volume Horaire Ep  Un');
 
-return array(
+return [
     'ORA-00001: unique constraint (OSE.ADRESSE_INTERVENANT_SOURCE_UN) violated' => CONSTRAINT_ADRESSE_INTERVENANT_SOURCE_UN,
     'ORA-00001: unique constraint (OSE.ADRESSE_STRUCTURE_SOURCE_UN) violated'   => CONSTRAINT_ADRESSE_STRUCTURE_SOURCE_UN,
     'ORA-00001: unique constraint (OSE.AFFECTATION_IS_UN) violated'             => CONSTRAINT_AFFECTATION_IS_UN,
@@ -88,4 +88,4 @@ return array(
     'ORA-00001: unique constraint (OSE.UTILISATEUR_USERNAME_UN) violated'       => CONSTRAINT_UTILISATEUR_USERNAME_UN,
     'ORA-00001: unique constraint (OSE.VHE_SOURCE_UN) violated'                 => CONSTRAINT_VHE_SOURCE_UN,
     'ORA-00001: unique constraint (OSE.VOLUME_HORAIRE_EP__UN) violated'         => CONSTRAINT_VOLUME_HORAIRE_EP__UN,
-);
+];

@@ -35,11 +35,11 @@ use Zend\View\Model\ViewModel;
  *
  * @method EntityManager em()
  * @method Context              context()
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AgrementController extends AbstractActionController 
-implements ContextProviderAwareInterface, 
+class AgrementController extends AbstractActionController
+implements ContextProviderAwareInterface,
            AgrementServiceAwareInterface, IntervenantServiceAwareInterface, ServiceServiceAwareInterface,
            WorkflowIntervenantAwareInterface
 {
@@ -48,7 +48,7 @@ implements ContextProviderAwareInterface,
     use AgrementServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use ServiceServiceAwareTrait;
-    
+
     const ACTION_VOIR        = "voir";
     const ACTION_VOIR_STR    = "voir-str";
     const ACTION_AJOUTER     = "ajouter";
@@ -59,7 +59,7 @@ implements ContextProviderAwareInterface,
      * @var RoleInterface
      */
     private $role;
-    
+
     /**
      * @var Intervenant
      */
@@ -103,7 +103,7 @@ implements ContextProviderAwareInterface,
 
     /**
      * Page vide invitant à sélectionner un type d'agrément dans le menu.
-     * 
+     *
      * @return array
      */
     public function indexAction()
@@ -116,13 +116,13 @@ implements ContextProviderAwareInterface,
 
     /**
      * Liste des agréments d'un type donné, concernant un intervenant.
-     * 
+     *
      * @return ViewModel
      */
     public function listerAction()
     {
         $this->initFilters();
-        
+
         $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
@@ -133,7 +133,7 @@ implements ContextProviderAwareInterface,
         $agrementFourniRule
                 ->setIntervenant($this->intervenant)
                 ->setTypeAgrement($this->typeAgrement);
-        
+
         /**
          * Il y a un Conseil Restreint par structure d'enseignement
          */
@@ -153,7 +153,7 @@ implements ContextProviderAwareInterface,
         /**
          * Collecte des agréments pour chaque structure
          */
-        $data = array();
+        $data = [];
         foreach ($structures as $s) {
             $agrements = $agrementFourniRule->getAgrementsFournis($s);
             $agrement  = array_shift($agrements);
@@ -168,14 +168,14 @@ implements ContextProviderAwareInterface,
             $messages['danger'] = "Aucun enseignement n'a été trouvé.";
         }
 
-        $this->view = new ViewModel(array(
+        $this->view = new ViewModel([
             'typeAgrement' => $this->typeAgrement,
             'intervenant'  => $this->intervenant,
             'data'         => $data,
             'role'         => $this->role,
             'title'        => $this->title,
             'messages'     => $messages,
-        ));
+        ]);
         $this->view->setTemplate('application/agrement/lister');
 
         return $this->view;
@@ -183,7 +183,7 @@ implements ContextProviderAwareInterface,
 
     /**
      * Détails d'un agrément.
-     * 
+     *
      * @return ViewModel
      */
     public function voirAction()
@@ -191,9 +191,9 @@ implements ContextProviderAwareInterface,
         $this->agrement     = $this->context()->mandatory()->agrementFromRoute();
         $this->typeAgrement = $this->agrement->getType();
 
-        $this->view = new ViewModel(array(
+        $this->view = new ViewModel([
             'agrement'    => $this->agrement,
-        ));
+        ]);
         $this->view->setTemplate('application/agrement/voir');
 
         return $this->view;
@@ -201,7 +201,7 @@ implements ContextProviderAwareInterface,
 
     /**
      * Détails d'un agrément recherché par l'intervenant, le type et la structure.
-     * 
+     *
      * @return ViewModel
      */
     public function voirStrAction()
@@ -210,18 +210,18 @@ implements ContextProviderAwareInterface,
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
         $structure          = $this->context()->structureFromRoute();
         $this->agrement     = $this->getAgrementForStructure($structure);
-        
-        $this->view = new ViewModel(array(
+
+        $this->view = new ViewModel([
             'agrement'    => $this->agrement,
-        ));
+        ]);
         $this->view->setTemplate('application/agrement/voir');
 
         return $this->view;
     }
-    
+
     /**
      * Saisie d'un nouvel agrément.
-     * 
+     *
      * @return ViewModel
      * @throws RuntimeException
      */
@@ -235,8 +235,8 @@ implements ContextProviderAwareInterface,
         if (!$this->isTypeAgrementAttendu()) {
             throw new MessageException(sprintf("Le type d'agrément &laquo; %s &raquo; n'est pas requis.", $this->typeAgrement));
         }
-        
-        $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+
+        $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $this->initFilters();
 
@@ -265,17 +265,17 @@ implements ContextProviderAwareInterface,
         if (count($agrementFourniRule->getAgrementsFournis($structure))) {
             throw new MessageException(sprintf("L'agrément &laquo; %s &raquo; a déjà été ajouté.", $this->typeAgrement));
         }
-        
+
         $this->agrement = $this->getNewEntity()->setStructure($structure);
-        
+
         $this->updateCommon();
 
         return $this->view;
     }
-    
+
     /**
      * Modification d'un agrément existant.
-     * 
+     *
      * @return ViewModel
      * @throws RuntimeException
      */
@@ -286,8 +286,8 @@ implements ContextProviderAwareInterface,
         $this->agrement     = $this->context()->mandatory()->agrementFromRoute();
         $this->typeAgrement = $this->agrement->getType();
 
-        $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
-        
+        $this->getFormSaisie()->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+
         $this->updateCommon();
 
         return $this->view;
@@ -311,18 +311,18 @@ implements ContextProviderAwareInterface,
             }
         }
 
-        $this->view = new ViewModel(array(
+        $this->view = new ViewModel([
             'intervenant' => $this->intervenant,
             'title'       => $this->title,
             'form'        => $this->formSaisie,
             'role'        => $this->role,
-        ));
+        ]);
         $this->view->setTemplate('application/agrement/edit');
     }
-    
+
     /**
      * Saisie d'un nouvel agrément pour plusieurs intervenants à la fois.
-     * 
+     *
      * @return ViewModel
      * @throws LogicException
      */
@@ -330,7 +330,7 @@ implements ContextProviderAwareInterface,
     {
         $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
-        
+
         /**
          * Il y a un Conseil Restreint par structure d'enseignement
          */
@@ -346,11 +346,11 @@ implements ContextProviderAwareInterface,
         else {
             throw new LogicException("Type d'agrément inattendu!");
         }
-        
+
         $this->title = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $structure);
-        
+
         /**
-         * Recherche des intervenants concernés : 
+         * Recherche des intervenants concernés :
          * ce sont ceux qui sont à l'étape adéquate dans le WF.
          */
         $serviceIntervenant = $this->getIntervenantService();
@@ -379,7 +379,7 @@ implements ContextProviderAwareInterface,
                     foreach ($data['intervenants'] as $id) {
                         $agrement = clone $this->agrement;
                         $agrement->setIntervenant($intervenants[$id]);
-                        
+
                         $this->getAgrementService()->save($agrement);
                     }
                     $this->flashMessenger()->addSuccessMessage(count($data['intervenants']) . " agrément(s) enregistré(s) avec succès.");
@@ -393,22 +393,22 @@ implements ContextProviderAwareInterface,
             $this->formSaisie = null;
             $messages['warning'] = sprintf("Aucun intervenant n'est en attente d'agrément par %s.", $this->typeAgrement->toString(true));
         }
-        
-        $this->view = new ViewModel(array(
+
+        $this->view = new ViewModel([
             'intervenants' => $intervenants,
             'typeAgrement' => $this->typeAgrement,
             'title'        => $this->title,
             'form'         => $this->formSaisie,
             'role'         => $this->role,
             'messages'     => $messages,
-        ));
-        
+        ]);
+
         return $this->view;
     }
 
     /**
      * Indique si le type d'agrément courant est requis ou non.
-     * 
+     *
      * @return boolean
      */
     private function isTypeAgrementAttendu()
@@ -418,13 +418,13 @@ implements ContextProviderAwareInterface,
                 ->setIntervenant($this->intervenant)
                 ->setTypeAgrement($this->typeAgrement)
                 ->execute();
-        
+
         return $estAttendu;
     }
 
     /**
      * Recherche d'un agrément par l'intervenant, le type et la structure.
-     * 
+     *
      * @param Structure|null $structure
      * @return Agrement
      */
@@ -433,23 +433,23 @@ implements ContextProviderAwareInterface,
         if (!$structure && !$this->typeAgrement->isConseilAcademique()) {
             throw new LogicException(sprintf("Une structure doit être spécifiée pour le type d'agrément '%s'.", $this->typeAgrement));
         }
-        
+
         $this->initFilters();
-        
+
         $service = $this->getAgrementService();
-        
+
         $qb = $service->finderByType($this->typeAgrement);
         if ($structure) {
             $service->finderByStructure($structure, $qb);
         }
         $service->finderByIntervenant($this->intervenant, $qb);
-        
+
         return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
      * Instanciation d'un nouvel Agrement initialisé.
-     * 
+     *
      * @return Agrement
      */
     private function getNewEntity()
@@ -463,7 +463,7 @@ implements ContextProviderAwareInterface,
 
     /**
      * Retourne le formulaire d'édition d'un agrément.
-     * 
+     *
      * @return Saisie
      */
     private function getFormSaisie()

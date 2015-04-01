@@ -57,7 +57,7 @@ class ServiceReferentiel extends AbstractEntityService
              ->join( $this->getServiceFonctionReferentiel(), $qb, 'fonction'   , true, $alias )
              ->join( $this->getServiceIntervenant()        , $qb, 'intervenant', true, $alias );
 
-        return array($qb,$alias);
+        return [$qb,$alias];
     }
 
     /**
@@ -184,7 +184,7 @@ class ServiceReferentiel extends AbstractEntityService
                 ->addOrderBy($this->getServiceIntervenant()->getAlias().'.nomUsuel')
                 ->addOrderBy($this->getServiceStructure()->getAlias().'.libelleCourt')
                 ->addOrderBy($this->getServiceFonctionReferentiel()->getAlias().'.libelleCourt');
-        
+
         return parent::getList($qb, $alias);
     }
 
@@ -266,9 +266,9 @@ class ServiceReferentiel extends AbstractEntityService
         }
         return $result;
     }
-    
+
     /**
-     * 
+     *
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureRef
@@ -280,11 +280,11 @@ class ServiceReferentiel extends AbstractEntityService
             StructureEntity $structureRef = null)
     {
         $dqlNotExists = <<<EOS
-SELECT vhv FROM Application\Entity\Db\VolumeHoraireReferentiel vhv 
-JOIN vhv.validation v 
+SELECT vhv FROM Application\Entity\Db\VolumeHoraireReferentiel vhv
+JOIN vhv.validation v
 WHERE vhv = vh
 EOS;
-        
+
         $qb = $this->getEntityManager()->createQueryBuilder()
                 ->select("s2, i, vh, f, strref")
                 ->from("Application\Entity\Db\ServiceReferentiel", 's2')
@@ -296,21 +296,21 @@ EOS;
                 ->andWhere("NOT EXISTS ($dqlNotExists)")
                 ->addOrderBy("strref.libelleCourt", 'asc')
                 ->addOrderBy("s2.histoModification", 'asc');
-        
+
         if ($intervenant) {
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
         }
         if ($structureRef) {
             $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
         }
-        
+
 //        print_r($qb->getQuery()->getSQL());
-        
+
         return $qb;
     }
-    
+
     /**
-     * 
+     *
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param TypeValidationEntity $validation
      * @param IntervenantEntity $intervenant
@@ -319,9 +319,9 @@ EOS;
      * @return QueryBuilder
      */
     public function finderReferentielsValides(
-            TypeVolumeHoraireEntity $typeVolumeHoraire, 
-            ValidationEntity $validation = null, 
-            IntervenantEntity $intervenant = null, 
+            TypeVolumeHoraireEntity $typeVolumeHoraire,
+            ValidationEntity $validation = null,
+            IntervenantEntity $intervenant = null,
             StructureEntity $structureRef = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -337,7 +337,7 @@ EOS;
                 ->join("v.structure", 'str') // validés par la structure spécifiée
                 ->orderBy("v.histoModification", 'desc')
                 ->addOrderBy("strref.libelleCourt", 'asc');
-        
+
         if ($validation) {
             $qb->andWhere("v = :validation")->setParameter('validation', $validation);
         }

@@ -2,37 +2,37 @@
 
 namespace Application;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'recherche' => array(
+return [
+    'router' => [
+        'routes' => [
+            'recherche' => [
                 'type'    => 'Segment',
-                'options' => array(
+                'options' => [
                     'route'    => '/recherche/:action',
-                    'constraints' => array(
+                    'constraints' => [
                         'action'            => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'typeIntervenant'   => '[0-9]*',
                         'structure'         => '[0-9]*',
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'controller' => 'Application\Controller\Recherche',
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Recherche',
-                    'roles' => array('user')),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+                    'roles' => ['user']],
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Recherche'   => 'Application\Controller\RechercheController',
-        ),
-    ),
-);
+        ],
+    ],
+];

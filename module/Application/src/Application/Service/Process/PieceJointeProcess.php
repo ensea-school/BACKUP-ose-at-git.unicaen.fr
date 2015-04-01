@@ -22,7 +22,7 @@ use Common\Exception\RuntimeException;
 class PieceJointeProcess extends AbstractService
 {
     /**
-     * 
+     *
      * @param string[] $typesPieceJointeIds Ids des type de pj à instancier.
      * @return \Application\Service\Process\DossierProcess
      */
@@ -30,23 +30,23 @@ class PieceJointeProcess extends AbstractService
     {
         $typesPieceJointeIds = (array) $typesPieceJointeIds;
         $em                  = $this->getEntityManager();
-        
+
         $attendusIds         = array_keys($this->getTypesPieceJointeAttendus());
         $fournisIds          = array_keys($this->getTypesPieceJointeFournis());
         $typesPieceJointeIds = array_intersect($typesPieceJointeIds, $attendusIds); // exclut les ids non attendus
-        
+
         $disparusIds = array_diff($fournisIds, $typesPieceJointeIds);
         $apparusIds  = array_diff($typesPieceJointeIds, $fournisIds);
 
 //        var_dump('$attendusIds', $attendusIds, '$fournisIds', $fournisIds, '$typesPieceJointeIds', $typesPieceJointeIds,
 //                '$disparusIds', $disparusIds, '$apparusIds', $apparusIds);
-        
+
         // suppression des pj disparues
         foreach ($disparusIds as $typeId) {
             $entity = $this->getPieceJointeFournie($typeId);
             $em->remove($entity);
         }
-        
+
         // création des pj apparues
         foreach ($apparusIds as $typeId) {
             $type = $this->getTypesPieceJointeAttendus()[$typeId];
@@ -57,12 +57,12 @@ class PieceJointeProcess extends AbstractService
                     ->setUrl(null);
             $em->persist($pieceJointe);
         }
-        
+
         $em->flush();
-        
+
         return $this;
     }
-    
+
     /**
      * @return \Zend\Form\Form
      */
@@ -70,76 +70,76 @@ class PieceJointeProcess extends AbstractService
     {
         $form           = new \Zend\Form\Form();
         $basePathHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('basePath');
-        
-        $valueOptions = array();
+
+        $valueOptions = [];
         foreach ($this->getTypesPieceJointeStatut() as $tpjs) { /* @var $tpjs TypePieceJointeStatut */
             $totalHETD   = $this->getTotalHeuresReellesIntervenant();
             $obligatoire = $tpjs->getObligatoireToString($totalHETD);
-            
+
             $link = null;
             if (($url = $tpjs->getType()->getUrlModeleDoc())) {
                 $href = $basePathHelper($url);
                 $fileName = ltrim(strrchr($href, '/'), '/');
-                $link = '<br /><a class="modele-doc" title="Cliquez pour télécharger le document à remplir" href="' 
+                $link = '<br /><a class="modele-doc" title="Cliquez pour télécharger le document à remplir" href="'
                         . $href . '"><span class="glyphicon glyphicon-file"></span> ' . $fileName . '</a>';
             }
-    
+
             $type = (string) $tpjs->getType();
             if ($tpjs->getType()->getCode() === TypePieceJointe::CARTE_ETUD) {
                 $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
                 $type .= " $annee";
             }
             $label = sprintf('%s <span class="text-warning">%s</span>%s', $type, $obligatoire, $link);
-            $valueOptions[] = array(
+            $valueOptions[] = [
                 'value' => $tpjs->getType()->getId(),
                 'label' => $label,
                 'selected' => $this->isTypePieceJointeFourni($tpjs->getType()),
-                'attributes' => array(
+                'attributes' => [
                     'class' => 'form-control required',
-                ),
-                'label_attributes' => array(
+                ],
+                'label_attributes' => [
                     'class' => 'required',
-                ),
-            );
+                ],
+            ];
         }
-        
-        $form->add(array(
+
+        $form->add([
             'name' => "pj",
             'type'  => 'MultiCheckbox',
-            'options' => array(
+            'options' => [
                 'label' => "Les pièces justificatives cochées ont été fournies :",
                 'value_options' => $valueOptions,
-            ),
-            'attributes' => array(
-            ),
-        ));
+            ],
+            'attributes' => [
+            ],
+        ]);
         $form->get('pj')->setLabelOption('disable_html_escape', true);
-        
+
         /**
          * Csrf
          */
         $form->add(new \Zend\Form\Element\Csrf('security'));
-        
+
         /**
          * Submit
          */
-        $form->add(array(
+        $form->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => "Enregistrer la checklist",
-            ),
-        ));
-        
+            ],
+        ]);
+
         $form->getInputFilter()->get('pj')->setRequired(false);
-        
+
         return $form;
     }
-    
+
     protected $typesPieceJointeStatut;
-    
+
     /**
-     * 
+     *
      * @return array id => TypePieceJointeStatut
      */
     public function getTypesPieceJointeStatut()
@@ -149,14 +149,14 @@ class PieceJointeProcess extends AbstractService
             $qb = $this->getServiceTypePieceJointeStatut()->finderByPremierRecrutement($this->getDossier()->getPremierRecrutement(), $qb);
             $this->typesPieceJointeStatut = $this->getServiceTypePieceJointeStatut()->getList($qb);
         }
-        
+
         return $this->typesPieceJointeStatut;
     }
-    
+
     protected $typesPieceJointeAttendus;
-    
+
     /**
-     * 
+     *
      * @return array id => TypePieceJointe
      */
     public function getTypesPieceJointeAttendus()
@@ -168,14 +168,14 @@ class PieceJointeProcess extends AbstractService
                 $this->typesPieceJointeAttendus[$type->getId()] = $type;
             }
         }
-        
+
         return $this->typesPieceJointeAttendus;
     }
-    
+
     protected $typesPieceJointeFournis;
-    
+
     /**
-     * 
+     *
      * @return array id => TypePieceJointe
      */
     public function getTypesPieceJointeFournis()
@@ -187,14 +187,14 @@ class PieceJointeProcess extends AbstractService
                 $this->typesPieceJointeFournis[$type->getId()] = $type;
             }
         }
-        
+
         return $this->typesPieceJointeFournis;
     }
-    
+
     protected $piecesJointesFournies;
-    
+
     /**
-     * 
+     *
      * @return array type_id => PieceJointe
      */
     public function getPiecesJointesFournies()
@@ -203,38 +203,38 @@ class PieceJointeProcess extends AbstractService
             $rule = $this->getServiceLocator()->get('PiecesJointesFourniesRule') /* @var $rule PiecesJointesFourniesRule */
                     ->setIntervenant($this->getIntervenant());
             $piecesJointes = $rule->getPiecesJointesFournies();
-            
+
             $this->piecesJointesFournies = [];
             foreach ($piecesJointes as $pj) { /* @var $pj PieceJointe */
                 // NB: il ne peut y avoir qu'une seule pièce par type de pièce jointe
                 $this->piecesJointesFournies[$pj->getType()->getId()] = $pj;
             }
         }
-        
+
         return $this->piecesJointesFournies;
     }
-    
+
     /**
-     * 
+     *
      * @param int|TypePieceJointe $type
      * @return PieceJointe|null
      */
     public function getPieceJointeFournie($type)
     {
         $type = $type instanceof TypePieceJointe ? $type->getId() : $type;
-        
+
         foreach ($this->getPiecesJointesFournies() as $pj) { /* @var $pj PieceJointe */
             if ($type === $pj->getType()->getId()) {
                 return $pj;
             }
         }
-        
+
         return null;
     }
 
     /**
      * Teste si un type de pj est attendu.
-     * 
+     *
      * @param int|TypePieceJointe $type
      * @return bool
      */
@@ -243,12 +243,12 @@ class PieceJointeProcess extends AbstractService
         if ($type instanceof TypePieceJointe) {
             $type = $type->getId();
         }
-        
+
         return in_array($type, array_keys($this->getTypesPieceJointeAttendus()));
     }
-    
+
     /**
-     * 
+     *
      * @param int|TypePieceJointe $type
      * @return PieceJointe|false
      */
@@ -257,16 +257,16 @@ class PieceJointeProcess extends AbstractService
         if (!$type instanceof TypePieceJointe) {
             $type = $this->getServiceTypePieceJointe()->get($type);
         }
-        
+
         // recherche d'une pj du type spécifié et liée au dossier de l'intervenant
         $qb = $this->getServicePieceJointe()->finderByType($type);
         $qb = $this->getServicePieceJointe()->finderByDossier($this->getDossier(), $qb);
-        
+
         return $qb->getQuery()->getResult() ?: false;
     }
-    
+
     /**
-     * 
+     *
      * @param int|TypePieceJointe $type
      * @return bool
      */
@@ -275,12 +275,12 @@ class PieceJointeProcess extends AbstractService
         if ($type instanceof TypePieceJointe) {
             $type = $type->getId();
         }
-        
+
         $typePieceJointeStatut = $this->getTypesPieceJointeStatut()[$type]; /* @var $typePieceJointeStatut TypePieceJointeStatut */
-        
+
         return $typePieceJointeStatut->isObligatoire($this->getTotalHeuresReellesIntervenant());
     }
-    
+
     /**
      * @deprecated Implémenter le vrai calcul d'HETD ?
      */
@@ -288,21 +288,21 @@ class PieceJointeProcess extends AbstractService
     {
         return $this->getServicePieceJointe()->getTotalHeuresReelles($this->getIntervenant());
     }
-    
+
     /**
      * Recherche les destinataires des pièces justificatives : ce sont les responsables admins
      * de la structure d'affectation principale de l'intervenant.
-     * 
+     *
      * NB: on retourne des entités Role et non des entités Personnel : cela permet de disposer
      * ultérieurement du type de rôle.
-     * 
+     *
      * @return \Application\Entity\Db\Role[]
      */
     public function getRolesDestinatairesPiecesJointes()
     {
         $service = $this->getServiceRole();
         $structure = $this->getIntervenant()->getStructure();
-        
+
         do {
             $qb = $service->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_GESTIONNAIRE_COMPOSANTE);
             $service->finderByStructure($structure, $qb);
@@ -310,14 +310,14 @@ class PieceJointeProcess extends AbstractService
             $structure = $structure->getParente();
         }
         while (!count($roles) && $structure);
-        
+
         return $roles;
     }
-    
+
     /**
-     * Recherche les destinataires du mail de notification lorsque toutes les pièces justificatives 
+     * Recherche les destinataires du mail de notification lorsque toutes les pièces justificatives
      * obligaoires ont été fournies.
-     * 
+     *
      * @return string[]
      */
     public function getDestinatairesMail()
@@ -333,18 +333,18 @@ class PieceJointeProcess extends AbstractService
             $structures = [ $this->getIntervenant()->getStructure() ];
         }
         if (!$structures) {
-            throw new RuntimeException(sprintf("Aucune composante d'intervention ni structure d'affectation trouvée pour %s.", 
+            throw new RuntimeException(sprintf("Aucune composante d'intervention ni structure d'affectation trouvée pour %s.",
                     $this->getIntervenant()));
         }
-        
+
         $contacts = [];
         foreach ($structures as $structure) {
             $contacts += $serviceStructure->getMailsContact($structure);
         }
-        
+
         return $contacts;
     }
-    
+
     /**
      * @return StuctureService
      */
@@ -352,7 +352,7 @@ class PieceJointeProcess extends AbstractService
     {
         return $this->getServiceLocator()->get('applicationStructure');
     }
-    
+
     /**
      * @return TypePieceJointeService
      */
@@ -360,7 +360,7 @@ class PieceJointeProcess extends AbstractService
     {
         return $this->getServiceLocator()->get('applicationTypePieceJointe');
     }
-    
+
     /**
      * @return TypePieceJointeStatutService
      */
@@ -368,7 +368,7 @@ class PieceJointeProcess extends AbstractService
     {
         return $this->getServiceLocator()->get('applicationTypePieceJointeStatut');
     }
-    
+
     /**
      * @return PieceJointeService
      */
@@ -376,7 +376,7 @@ class PieceJointeProcess extends AbstractService
     {
         return $this->getServiceLocator()->get('applicationPieceJointe');
     }
-    
+
     /**
      * @return \Application\Service\Service
      */
@@ -384,7 +384,7 @@ class PieceJointeProcess extends AbstractService
     {
         return $this->getServiceLocator()->get('ApplicationService');
     }
-    
+
     /**
      * @return \Application\Service\Role
      */
@@ -392,14 +392,14 @@ class PieceJointeProcess extends AbstractService
     {
         return $this->getServiceLocator()->get('applicationRole');
     }
-    
+
     /**
      * @var IntervenantExterieur
      */
     private $intervenant;
-    
+
     /**
-     * 
+     *
      * @param \Application\Entity\Db\IntervenantExterieur $intervenant
      * @return \Application\Service\DossierProcess
      * @throws \Common\Exception\PieceJointe\AucuneAFournirException
@@ -407,7 +407,7 @@ class PieceJointeProcess extends AbstractService
     public function setIntervenant(IntervenantExterieur $intervenant)
     {
         $this->intervenant = $intervenant;
-        
+
         $this->piecesJointesFournies    = null;
         $this->typesPieceJointeFournis  = null;
         $this->typesPieceJointeAttendus = null;
@@ -418,10 +418,10 @@ class PieceJointeProcess extends AbstractService
                     "Aucun type de pièce justificative à fournir n'a été trouvé pour l'intervenant {$this->getIntervenant()} "
                     . "(dont le statut est '{$this->getStatut()}').");
         }
-        
+
         return $this;
     }
-    
+
     /**
      * @return IntervenantExterieur
      */
@@ -441,7 +441,7 @@ class PieceJointeProcess extends AbstractService
         }
         return $dossier;
     }
-    
+
     /**
      * @return \Application\Entity\Db\StatutIntervenant
      */

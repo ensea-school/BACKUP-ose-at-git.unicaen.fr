@@ -24,7 +24,7 @@ class StructureController extends AbstractActionController
 
     public function indexAction()
     {
-        $url = $this->url()->fromRoute('structure/default', array('action' => 'choisir'));
+        $url = $this->url()->fromRoute('structure/default', ['action' => 'choisir']);
         return $this->redirect()->toUrl($url);
     }
 
@@ -41,16 +41,16 @@ class StructureController extends AbstractActionController
                 ->setRequired(true)
                 ->setSelectionRequired(true)
                 ->setLabel("Recherchez la structure concernée :")
-                ->setAttributes(array('title' => "Saisissez le nom de la structure"));
+                ->setAttributes(['title' => "Saisissez le nom de la structure"]);
         $form = new \Zend\Form\Form('search');
-        $form->setAttributes(array('class' => 'structure-rech'));
+        $form->setAttributes(['class' => 'structure-rech']);
         $form->add($structure);
 
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $url = $this->url()->fromRoute('structure/default', array('action' => 'voir', 'id' => $form->get('structure')->getValueId() ) );
+                $url = $this->url()->fromRoute('structure/default', ['action' => 'voir', 'id' => $form->get('structure')->getValueId() ] );
                 return $this->redirect()->toUrl($url);
             }
         }
@@ -68,17 +68,17 @@ class StructureController extends AbstractActionController
         );
 
         if (!($term = $this->params()->fromQuery('term'))) {
-            return new JsonModel(array());
+            return new JsonModel([]);
         }
         $entities  = $this->getServiceStructure()->finderByNom($term)->getQuery()->execute();
-        $result = array();
+        $result = [];
 
         foreach ($entities as $item) { /* @var $item \Application\Entity\Db\Structure */
-            $result[] = array(
+            $result[] = [
                 'id'    => $item->getId(),          // identifiant unique de l'item
                 'label' => $item->getLibelleLong(), // libellé de l'item
                 'extra' => $item->getLibelleCourt(),     // infos complémentaires (facultatives) sur l'item
-            );
+            ];
         };
 
         return new JsonModel($result);
@@ -101,7 +101,7 @@ class StructureController extends AbstractActionController
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/structure/voir')
                   ->setVariables(compact('structure', 'changements', 'title', 'short'));
-        
+
         return $viewModel;
     }
 
@@ -109,11 +109,11 @@ class StructureController extends AbstractActionController
     {
         $structure = $this->context()->mandatory()->structureFromRoute('id');
         $short     = $this->params()->fromQuery('short', false);
-        
+
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
         $changements = $import->structureGetDifferentiel($structure);
         $title = "Aperçu d'une structure";
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setVariables(compact('structure', 'changements', 'title', 'short'));
         return $viewModel;

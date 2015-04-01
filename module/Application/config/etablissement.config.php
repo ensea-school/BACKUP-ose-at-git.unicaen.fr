@@ -21,83 +21,83 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'etablissement' => array(
+return [
+    'router' => [
+        'routes' => [
+            'etablissement' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/etablissement',
-                    'defaults' => array(
+                    'defaults' => [
                        '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'etablissement',
                         'action'        => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'modifier' => array(
+                'child_routes' => [
+                    'modifier' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/modifier/:id',
-                            'constraints' => array(
+                            'constraints' => [
                                 'id' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'modifier',
-                            ),
-                        ),
-                    ),
-                    'recherche' => array(
+                            ],
+                        ],
+                    ],
+                    'recherche' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/recherche[/:term]',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'recherche',
-                            ),
-                        ),
-                    ),
-                    'default' => array(
+                            ],
+                        ],
+                    ],
+                    'default' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/:action[/:id]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id'     => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Etablissement',
-                    'action' => array('index', 'choisir', 'recherche', 'voir', 'apercevoir'),
-                    'roles' => array('user')),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+                    'action' => ['index', 'choisir', 'recherche', 'voir', 'apercevoir'],
+                    'roles' => ['user']],
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Etablissement'   => 'Application\Controller\EtablissementController',
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
             'ApplicationEtablissement'       => 'Application\\Service\\Etablissement',
-        )
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
+        ]
+    ],
+    'view_helpers' => [
+        'invokables' => [
             'etablissementDl'   => 'Application\View\Helper\EtablissementDl',
             'etablissement'     => 'Application\View\Helper\EtablissementViewHelper',
-        ),
-    ),
-);
+        ],
+    ],
+];

@@ -15,39 +15,39 @@ use Zend\Stdlib\Hydrator\ClassMethods;
 class ContratRetour extends Form implements InputFilterProviderInterface
 {
     use \Application\Traits\ContratAwareTrait;
-    
+
     public function init()
     {
         $this->setHydrator(new ClassMethods(false));
         $this->setAttribute('method', 'POST');
 
         $contratToString = lcfirst($this->getContrat()->toString(true));
-        
-        $this->add(array(
+
+        $this->add([
             'name' => 'dateRetourSigne',
             'type'  => 'UnicaenApp\Form\Element\Date',
-            'options' => array(
+            'options' => [
                 'label' => "Date de retour $contratToString signé",
-            ),
-            'attributes' => array(
-            ),
-        ));
-        
+            ],
+            'attributes' => [
+            ],
+        ]);
+
         $this->add(new Csrf('security'));
-        
-        $this->add(array(
+
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => "Enregistrer",
-            ),
-        ));
+            ],
+        ]);
 
         $this->getHydrator()->addStrategy('dateRetourSigne', new \UnicaenApp\Hydrator\Strategy\DateStrategy($this->get('dateRetourSigne')));
-        
+
         return $this;
     }
-    
+
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -56,10 +56,10 @@ class ContratRetour extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            'valide' => array(
+        return [
+            'valide' => [
                 'required' => false,
-            ),
-        );
+            ],
+        ];
     }
 }

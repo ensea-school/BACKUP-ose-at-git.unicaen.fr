@@ -50,11 +50,11 @@ class Etablissement extends AbstractEntityService
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $concatFields = array(
+        $concatFields = [
             "$alias.libelle",
             "$alias.departement",
             "$alias.localisation",
-        );
+        ];
 
         foreach ($concatFields as $field) {
             if (!isset($searchIn)) {
@@ -68,10 +68,10 @@ class Etablissement extends AbstractEntityService
             );
         }
 
-        $haystack = new Func( 'CONVERT', array( $searchIn, '?1' ) );
-        $parameters = array(
+        $haystack = new Func( 'CONVERT', [ $searchIn, '?1' ] );
+        $parameters = [
             1 => 'US7ASCII'
-        );
+        ];
 
         $index = 2;
         foreach( $terms as $term ){

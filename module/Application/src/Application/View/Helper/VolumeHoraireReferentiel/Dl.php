@@ -35,7 +35,7 @@ class Dl extends AbstractDl
          * Identité
          */
 
-        $identite = array();
+        $identite = [];
 
         $identite[] = sprintf($tplDtdd,
             "Période :",
@@ -58,7 +58,7 @@ class Dl extends AbstractDl
                 $this->entity->getMotifNonPaiement()->getLibelleCourt()
             );
         }
-        
+
         $html .= sprintf($this->getTemplateDl('volume-horaire volume-horaire-identite'), implode(PHP_EOL, $identite)) . PHP_EOL;
 
         /**
@@ -71,7 +71,7 @@ class Dl extends AbstractDl
     }
 
     public function __toString()
-    {        
+    {
         return $this->render();
     }
 }

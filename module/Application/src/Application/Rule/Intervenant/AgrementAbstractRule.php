@@ -22,32 +22,32 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
     use TypeAgrementAwareTrait;
 
     /**
-     * 
+     *
      * @return array id => TypeAgrementStatut
      */
     protected function getTypesAgrementStatut()
     {
         $service = $this->getServiceTypeAgrementStatut();
-                
+
         $qb = $service->finderByStatutIntervenant($this->getIntervenant()->getStatut());
 //        if (null !== $this->getIntervenant()->getPremierRecrutement()) {
             $service->finderByPremierRecrutement($this->getIntervenant()->getPremierRecrutement(), $qb);
 //        }
         $typesAgrementStatut = $service->getList($qb);
-        
+
         return $typesAgrementStatut;
     }
-    
+
     /**
      * Si un intervenant est spécifié, retourne les types d'agrément requis par son statut ;
      * ou sinon tous les types d'agrément existant.
-     * 
+     *
      * @return array id => TypeAgrement
      */
     public function getTypesAgrementAttendus()
     {
         if ($this->getIntervenant()) {
-            $typesAgrementAttendus = array();
+            $typesAgrementAttendus = [];
             foreach ($this->getTypesAgrementStatut() as $tas) { /* @var $tas TypeAgrementStatut */
                 $type = $tas->getType();
                 $typesAgrementAttendus[$type->getId()] = $type;
@@ -56,28 +56,28 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
         else {
             $typesAgrementAttendus = $this->getServiceTypeAgrement()->getList();
         }
-        
+
         return $typesAgrementAttendus;
     }
-    
+
     /**
-     * 
+     *
      * @return array id => TypeAgrement
      */
     public function getTypesAgrementFournis()
     {
-        $typesAgrementFournis = array();
+        $typesAgrementFournis = [];
         foreach ($this->getAgrementsFournis() as $a) { /* @var $a Agrement */
             $type = $a->getType();
             $typesAgrementFournis[$type->getId()] = $type;
         }
-        
+
         return $typesAgrementFournis;
     }
-    
+
     /**
      * Recherche les agréments déjà fournis.
-     * 
+     *
      * @param Structure|null $structure Structure concernée éventuelle
      * @return array id => Agrement
      */
@@ -87,7 +87,7 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
         $qb = $this->getServiceAgrement()->finderByIntervenant($this->getIntervenant(), $qb);
         $qb = $this->getServiceAgrement()->finderByAnnee($this->getContextProvider()->getGlobalContext()->getAnnee(), $qb);
         $agrementsFournis = $this->getServiceAgrement()->getList($qb);
-        
+
         // filtrage par structure éventuel
         if ($structure) {
             $agrements = [];
@@ -98,12 +98,12 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
             }
             return $agrements;
         }
-        
+
         return $agrementsFournis;
     }
-    
+
     /**
-     * 
+     *
      * @return array id => Structure
      */
     public function getStructuresEnseignement()
@@ -115,10 +115,10 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
                 ->where("s.intervenant = :intervenant")
                 ->setParameter('intervenant', $this->getIntervenant());
         $structuresEns = $qb->getQuery()->getResult();
-        
+
         return $structuresEns;
     }
-    
+
     /**
      * @return TypeAgrementService
      */
@@ -126,7 +126,7 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
     {
         return $this->getServiceLocator()->get('applicationTypeAgrement');
     }
-    
+
     /**
      * @return TypeAgrementStatutService
      */
@@ -134,7 +134,7 @@ abstract class AgrementAbstractRule extends AbstractIntervenantRule implements T
     {
         return $this->getServiceLocator()->get('applicationTypeAgrementStatut');
     }
-    
+
     /**
      * @return AgrementService
      */

@@ -39,7 +39,7 @@ class EtapeCentreCoutFormHydrator implements HydratorInterface, ServiceLocatorAw
     {
         $sel = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $sel ElementPedagogiqueService */
 
-        $data = array();
+        $data = [];
 
         $elements = $sel->getList($sel->finderByEtape($object));
         foreach ($elements as $element) {

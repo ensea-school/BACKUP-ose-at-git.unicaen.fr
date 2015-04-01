@@ -21,69 +21,69 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'gestion' => array(
+return [
+    'router' => [
+        'routes' => [
+            'gestion' => [
                 'type'    => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/gestion',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller' => 'Index',
                         'action' => 'gestion',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'gestion' => array(
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'gestion' => [
                         'label'  => "Gestion",
                         'route'  => 'gestion',
                         'resource' => 'controller/Application\Controller\Index:gestion',
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Index',
-                    'action'     => array('gestion'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
-            ),
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
-        ),
-        'factories' => array(
-        ),
-        'abstract_factories' => array(
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'form_elements' => array(
-        'initializers' => array(
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
-        ),
-    ),
-);
+                    'action'     => ['gestion'],
+                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+            ],
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
+        ],
+        'factories' => [
+        ],
+        'abstract_factories' => [
+        ],
+        'initializers' => [
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
+        ],
+        'initializers' => [
+        ],
+    ],
+    'form_elements' => [
+        'initializers' => [
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
+        ],
+    ],
+];

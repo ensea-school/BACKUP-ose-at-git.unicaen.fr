@@ -16,20 +16,20 @@ class PossedeServicesRule extends AbstractIntervenantRule implements AnneeAwareI
 {
     use AnneeAwareTrait;
     use StructureAwareTrait;
-    
+
     const MESSAGE_SERVICE = 'messageService';
 
     /**
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_SERVICE => "Les enseignements de %value% n'ont pas été saisis.",
-    );
-    
+    ];
+
     /**
      * Exécute la règle métier.
-     * 
+     *
      * @return array [ integer => [ 'id' => {id} ] ]
      */
     public function execute()
@@ -37,40 +37,40 @@ class PossedeServicesRule extends AbstractIntervenantRule implements AnneeAwareI
         if (!$this->getAnnee()) {
             throw new LogicException("Une année est requise.");
         }
-        
+
         $this->message(null);
-        
+
         $qb = $this->getQueryBuilder();
-        
+
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
             $result = $qb->getQuery()->getScalarResult();
-            
+
             if (!$result) {
                 $this->message(self::MESSAGE_SERVICE, $this->getIntervenant());
             }
-                
+
             return $this->normalizeResult($result);
         }
-        
+
         /**
          * Recherche des intervenants répondant à la règle
          */
-        
+
         $result = $qb->getQuery()->getScalarResult();
 
         return $this->normalizeResult($result);
     }
-    
+
     public function isRelevant()
     {
         return true;
     }
-    
+
     /**
-     * 
+     *
      * @return QueryBuilder
      */
     public function getQueryBuilder()
@@ -81,17 +81,17 @@ class PossedeServicesRule extends AbstractIntervenantRule implements AnneeAwareI
                 ->join("s.elementPedagogique", "ep") // permet d'écarter les EP historisés
                 ->join("ep.etape", "e")              // permet d'écarter les Etapes historisées
                 ->andWhere("s.annee = " . $this->getAnnee()->getId());
-        
+
         if ($this->getIntervenant()) {
             $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
-        
+
         if ($this->getStructure()) {
             $qb
                     ->join("ep.structure", "strEns")
                     ->andWhere("strEns = " . $this->getStructure()->getId());
         }
-        
+
         return $qb;
     }
 }

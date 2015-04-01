@@ -11,18 +11,18 @@ class ElementPedagogique implements HistoriqueAwareInterface
     {
         return $this->getSourceCode().' - '.$this->getLibelle();
     }
-    
+
     /**
      * Retourne les étapes auxquelles est lié cet élément pédagogique.
-     * 
+     *
      * @param bool $principaleIncluse Faut-il inclure l'étape principale ou non ?
      * @return array
      */
     public function getEtapes($principaleIncluse = true)
     {
         $etapePrincipale = $this->getEtape();
-        $etapes = array();
-        
+        $etapes = [];
+
         if (($chemins = $this->getCheminPedagogique())) {
             foreach ($this->getCheminPedagogique() as $cp) { /* @var $cp \Application\Entity\Db\CheminPedagogique */
                 if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
@@ -32,10 +32,10 @@ class ElementPedagogique implements HistoriqueAwareInterface
             }
             ksort($etapes);
         }
-        
+
         return $etapes;
     }
-        
+
     /**
      * @var \DateTime
      */
@@ -195,7 +195,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
      */
     private $centreCoutEp;
 
-    
+
 
 
     public function getHasChanged()
@@ -233,7 +233,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get histoCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoCreation()
     {
@@ -256,7 +256,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get histoDestruction
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoDestruction()
     {
@@ -279,7 +279,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get histoModification
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoModification()
     {
@@ -302,7 +302,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -325,7 +325,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get sourceCode
      *
-     * @return string 
+     * @return string
      */
     public function getSourceCode()
     {
@@ -522,7 +522,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -545,7 +545,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Structure
      */
     public function getStructure()
     {
@@ -568,7 +568,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get periode
      *
-     * @return \Application\Entity\Db\Periode 
+     * @return \Application\Entity\Db\Periode
      */
     public function getPeriode()
     {
@@ -591,7 +591,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get source
      *
-     * @return \Application\Entity\Db\Source 
+     * @return \Application\Entity\Db\Source
      */
     public function getSource()
     {
@@ -614,7 +614,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoModificateur()
     {
@@ -637,7 +637,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoCreateur()
     {
@@ -660,7 +660,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoDestructeur()
     {
@@ -683,7 +683,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get etape
      *
-     * @return \Application\Entity\Db\Etape 
+     * @return \Application\Entity\Db\Etape
      */
     public function getEtape()
     {
@@ -716,7 +716,7 @@ class ElementPedagogique implements HistoriqueAwareInterface
     /**
      * Get cheminPedagogique
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCheminPedagogique()
     {
@@ -853,17 +853,17 @@ class ElementPedagogique implements HistoriqueAwareInterface
         if (!$th) {
             return $this->centreCoutEp;
         }
-        
+
         $f     = function(CentreCoutEp $ccEp) use ($th) { return $ccEp->getTypeHeures() === $th; };
         $slice = $this->centreCoutEp->filter($f);
-        
+
         if (count($slice) > 1) {
             throw new \Common\Exception\LogicException(sprintf(
                     "Anomalie dans la base de données : plus d'un centre de coûts trouvé pour l'élément pédagogique %s et le type d'heures %s.",
                     $this,
                     $th));
         }
-        
+
         return $slice;
     }
 }

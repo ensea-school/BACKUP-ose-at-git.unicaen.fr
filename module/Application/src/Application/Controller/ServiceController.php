@@ -110,7 +110,7 @@ class ServiceController extends AbstractActionController
             $params['action'] = 'recherche';
             $rechercheViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
             $viewModel->addChild($rechercheViewModel, 'recherche');
-            
+
             $recherche = $this->getServiceService()->loadRecherche();
         }else{
             $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
@@ -200,7 +200,7 @@ class ServiceController extends AbstractActionController
 
     /**
      * Totaux de services et de référentiel par intervenant.
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function resumeAction()
@@ -385,11 +385,11 @@ class ServiceController extends AbstractActionController
             throw new MessageException("Cette opération n'est pas autorisée.");
         }
 
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
         $form->get('type-volume-horaire')->setValue( $typeVolumeHoraire->getId() );
 
         if ($this->getRequest()->isPost()) {
-            $errors = array();
+            $errors = [];
             try {
                 if ($typeVolumeHoraire->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE){
                     // destruction des volumes horaires associés
@@ -428,7 +428,7 @@ class ServiceController extends AbstractActionController
         $service = $this->getServiceService();
         //$role    = $this->getContextProvider()->getSelectedIdentityRole();
         $form    = $this->getFormSaisie();
-        $errors  = array();
+        $errors  = [];
 
         if ($id) {
             $entity = $service->get($id);

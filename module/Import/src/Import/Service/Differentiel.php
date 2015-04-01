@@ -46,7 +46,7 @@ class Differentiel extends Service
 
         $this->tableName = $query->getTableName();
         $query->addDefaultSqlCriterion( $sqg );
-        $this->stmt = $this->getEntityManager()->getConnection()->executeQuery( $query->toSql(), array() );
+        $this->stmt = $this->getEntityManager()->getConnection()->executeQuery( $query->toSql(), [] );
         return $this;
     }
 
@@ -69,7 +69,7 @@ class Differentiel extends Service
      */
     public function fetchAll()
     {
-        $result = array();
+        $result = [];
         while( $data = $this->stmt->fetch() ){
             if ($data) $result[] = new Ligne( $this->getEntityManager(), $this->tableName, $data );
         }

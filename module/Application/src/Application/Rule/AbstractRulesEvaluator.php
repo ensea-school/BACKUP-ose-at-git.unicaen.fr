@@ -9,8 +9,8 @@ namespace Application\Rule;
  */
 abstract class AbstractRulesEvaluator implements RulesEvaluatorInterface
 {
-    protected $rules   = array();
-    protected $messages = array();
+    protected $rules   = [];
+    protected $messages = [];
     public function isRelevant()
     {
         return true;

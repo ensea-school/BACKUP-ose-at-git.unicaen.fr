@@ -16,34 +16,34 @@ use Application\Traits\IntervenantAwareTrait;
 class DossierValidation extends Form implements InputFilterProviderInterface
 {
     use IntervenantAwareTrait;
-    
+
     public function init()
     {
         $this->setHydrator(new ClassMethods(false));
-        
+
         $this->setAttribute('method', 'POST');
-        $this->add(array(
+        $this->add([
             'name' => 'valide',
             'type'  => 'Checkbox',
-            'options' => array(
+            'options' => [
                 'label' => "Cochez pour valider les données personnelles",
-            ),
-            'attributes' => array(
-            ),
-        ));
-        
+            ],
+            'attributes' => [
+            ],
+        ]);
+
         $this->add(new Csrf('security'));
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => "Enregistrer",
-            ),
-        ));
-        
+            ],
+        ]);
+
         return $this;
     }
-    
+
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -52,10 +52,10 @@ class DossierValidation extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            'valide' => array(
+        return [
+            'valide' => [
                 'required' => false,
-            ),
-        );
+            ],
+        ];
     }
 }

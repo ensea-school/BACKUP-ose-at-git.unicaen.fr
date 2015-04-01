@@ -73,7 +73,7 @@ class Ligne
 
 
     /**
-     * 
+     *
      * @param Statement $stmt
      */
     public function __construct(EntityManager $entityManager, $tableName, array $data)
@@ -193,7 +193,7 @@ class Ligne
      */
     public function getChanges()
     {
-        $changes = array();
+        $changes = [];
         foreach( $this->changed as $colName => $changed ){
             if ($changed) $changes[$colName] = $this->values[$colName];
         }

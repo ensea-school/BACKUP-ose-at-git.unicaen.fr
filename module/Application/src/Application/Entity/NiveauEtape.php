@@ -12,34 +12,34 @@ use Application\Entity\Db\Etape;
 class NiveauEtape
 {
     /**
-     * @var Etape 
+     * @var Etape
      */
     protected $etape;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     protected $niv;
-    
+
     /**
-     * @var string 
+     * @var string
      */
     protected $lib;
-    
+
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Etape $etape
      */
     static public function getInstanceFromEtape(Etape $etape)
     {
         $i = new self();
         $i->setEtape($etape);
-        
+
         return $i;
     }
-    
+
     /**
-     * 
+     *
      * @param string $lib
      * @param string $niv
      * @return NiveauEtape
@@ -48,37 +48,37 @@ class NiveauEtape
     {
         $i = new self();
         $i->setLib($lib)->setNiv($niv);
-        
+
         return $i;
     }
-    
+
     /**
-     * 
+     *
      * @param \Traversable $etapes
      * @return NiveauEtape[]
      */
     static public function getInstancesFromEtapes($etapes)
     {
-        $instances = array();
-        
+        $instances = [];
+
         foreach ($etapes as $e) {
             $n = static::getInstanceFromEtape($e);
             $instances[$n->__toString()] = $n;
         }
-        
+
         return $instances;
     }
-    
+
     public function __toString()
     {
         return $this->getLib() . $this->getNiv();
     }
-    
+
     public function getId()
     {
         return sprintf("%s-%s", $this->getLib(), $this->getNiv());
     }
-    
+
     public function getEtape()
     {
         return $this->etape;

@@ -48,14 +48,14 @@ class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareI
      */
     public function extract($object)
     {
-        $data = array();
+        $data = [];
 
         if ($object) $data['id'] = $object->getId();
         if ($object->getIntervenant()){
-            $data['intervenant'] = array(
+            $data['intervenant'] = [
                 'id' => $object->getIntervenant()->getSourceCode(),
                 'label' => (string)$object->getIntervenant()
-            );
+            ];
         }else{
             $data['intervenant'] = null;
         }
@@ -67,10 +67,10 @@ class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareI
         }
 
         if ($object->getEtablissement()){
-            $data['etablissement']         = array(
+            $data['etablissement']         = [
                 'id' => $object->getEtablissement()->getId(),
                 'label' => (string)$object->getEtablissement()
-            );
+            ];
         }else{
             $data['etablissement'] = null;
         }

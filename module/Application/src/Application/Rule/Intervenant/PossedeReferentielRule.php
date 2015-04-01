@@ -17,61 +17,61 @@ use Common\Exception\LogicException;
 class PossedeReferentielRule extends AbstractIntervenantRule implements AnneeAwareInterface
 {
     use AnneeAwareTrait;
-    
+
     const MESSAGE_REFERENTIEL = 'messageReferentiel';
 
     /**
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_REFERENTIEL => "Le référentiel de %value% n'a pas été saisi.",
-    );
-    
+    ];
+
     /**
      * Exécute la règle métier.
-     * 
+     *
      * @return array [ integer => [ 'id' => {id} ] ]
      */
     public function execute()
     {
         $this->message(null);
-        
+
         $qb = $this->getQueryBuilder();
-        
+
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
             $result = $qb->getQuery()->getScalarResult();
-            
+
             if (!$result) {
                 $this->message(self::MESSAGE_REFERENTIEL, $this->getIntervenant());
             }
-                
+
             return $this->normalizeResult($result);
         }
-        
+
         /**
          * Recherche des intervenants répondant à la règle
          */
-        
+
         $result = $qb->getQuery()->getScalarResult();
 
         return $this->normalizeResult($result);
     }
-    
+
     public function isRelevant()
     {
         if ($this->getIntervenant()) {
             return $this->getIntervenant() instanceof IntervenantPermanent;
         }
-        
+
         return true;
     }
-    
+
     /**
-     * 
+     *
      * @return QueryBuilder
      */
     public function getQueryBuilder()
@@ -81,15 +81,15 @@ class PossedeReferentielRule extends AbstractIntervenantRule implements AnneeAwa
                 ->select("i.id")
                 ->join("i.serviceReferentiel", "sr")
                 ->andWhere("sr.annee = " . $this->getAnnee()->getId());
-        
+
         if ($this->getIntervenant()) {
             if (!$this->getIntervenant() instanceof IntervenantPermanent) {
                 throw new LogicException("L'intervenant spécifié doit être un IntervenantPermanent.");
             }
-            
+
             $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
-        
+
         return $qb;
     }
 }

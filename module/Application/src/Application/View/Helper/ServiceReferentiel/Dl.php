@@ -35,7 +35,7 @@ class Dl extends AbstractDl
          * Identité
          */
 
-        $identite = array();
+        $identite = [];
 
         if (!$this->short) {
             $identite[] = sprintf($tplDtdd,
@@ -75,7 +75,7 @@ class Dl extends AbstractDl
         if (!$this->short) {
             $html .= $this->getView()->historiqueDl($this->entity, $this->horizontal);
         }
-        
+
         return $html;
     }
 }

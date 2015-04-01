@@ -21,100 +21,100 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'indicateur' => array(
+return [
+    'router' => [
+        'routes' => [
+            'indicateur' => [
                 'type'    => 'Literal',
-                'options' => array(
+                'options' => [
                     'route'    => '/gestion/indicateur',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Indicateur',
                         'action'        => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'result' => array(
+                'child_routes' => [
+                    'result' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:indicateur[/structure/:structure]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'indicateur' => '[0-9]*',
                                 'structure'  => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'result',
-                            ),
-                        ),
-                    ),
-                    'abonner' => array(
+                            ],
+                        ],
+                    ],
+                    'abonner' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:indicateur/abonner',
-                            'constraints' => array(
+                            'constraints' => [
                                 'indicateur' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'abonner',
-                            ),
-                        ),
-                    ),
-                    'abonnements' => array(
+                            ],
+                        ],
+                    ],
+                    'abonnements' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:personnel/abonnements',
-                            'constraints' => array(
+                            'constraints' => [
                                 'personnel' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'abonnements',
-                            ),
-                        ),
-                    ),
-                    'result-item' => array(
+                            ],
+                        ],
+                    ],
+                    'result-item' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/result-item/:action/:intervenant',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'intervenant' => '[0-9]*',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'gestion' => array(
-                        'pages' => array(
-                            'indicateurs' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'gestion' => [
+                        'pages' => [
+                            'indicateurs' => [
                                 'label'    => "Indicateurs",
                                 'title'    => "Indicateurs",
                                 'route'    => 'indicateur',
                                 'resource' => 'controller/Application\Controller\Indicateur:index',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Indicateur',
-                    'action'     => array('index', 'result', 'abonner', 'abonnements', 'result-item-donnees-perso-diff-import'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
-            ),
-        ),
+                    'action'     => ['index', 'result', 'abonner', 'abonnements', 'result-item-donnees-perso-diff-import'],
+                    'roles'      => [ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+            ],
+        ],
 //        'resource_providers' => array(
 //            'BjyAuthorize\Provider\Resource\Config' => array(
 //                'Intervenant' => [],
@@ -132,16 +132,16 @@ return array(
 //                ),
 //            ),
 //        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Indicateur' => 'Application\Controller\IndicateurController',
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'service_manager' => array(
-        'invokables'   => array(
+        ],
+        'initializers' => [
+        ],
+    ],
+    'service_manager' => [
+        'invokables'   => [
             'IndicateurService'                 => 'Application\\Service\\Indicateur',
             'NotificationIndicateurService'     => 'Application\\Service\\NotificationIndicateur',
             'AttenteValidationDonneesPerso'     => 'Application\\Service\\Indicateur\\AttenteValidationDonneesPersoIndicateurImpl',
@@ -168,20 +168,20 @@ return array(
             'PlafondRefPrevuDepasse'            => 'Application\\Service\\Indicateur\\PlafondRefPrevuDepasseIndicateurImpl',
             'PlafondRefRealiseDepasse'          => 'Application\\Service\\Indicateur\\PlafondRefRealiseDepasseIndicateurImpl',
             'EnsHisto'                          => 'Application\\Service\\Indicateur\\EnsHistoIndicateurImpl',
-        ),
-        'factories'    => array(
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'form_elements' => array(
-        'invokables' => array(
-        ),
-    ),
-);
+        ],
+        'factories'    => [
+        ],
+        'initializers' => [
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
+        ],
+        'initializers' => [
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
+        ],
+    ],
+];

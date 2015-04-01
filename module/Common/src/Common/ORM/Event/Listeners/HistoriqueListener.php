@@ -11,22 +11,22 @@ use Common\Exception\RuntimeException;
 use Application\Entity\Db\HistoriqueAwareInterface;
 
 /**
- * Listener Doctrine permettant l'ajout automatique de l'heure de création/modification 
+ * Listener Doctrine permettant l'ajout automatique de l'heure de création/modification
  * et de l'auteur de création/modification de toute entité avant qu'elle soit persistée.
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    
+
     /**
      * @var mixed
      */
     protected $identity;
-    
+
     /**
-     * 
+     *
      * @param LifecycleEventArgs $args
      * @return type
      * @throws RuntimeException
@@ -36,34 +36,34 @@ class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterfac
         $em     = $args->getEntityManager();
         $entity = $args->getEntity();
         $user   = null;
-        
+
         // l'entité doit implémenter l'interface requise
         if (!$entity instanceof HistoriqueAwareInterface) {
             return;
         }
         /* @var $entity \Application\Entity\Db\HistoriqueAwareInterface */
-        
+
         // l'utilisateur connecté sera l'auteur de la création/modification
         if (($identity = $this->getIdentity())) {
             if (isset($identity['db']) && $identity['db'] instanceof \Application\Entity\Db\Utilisateur) {
                 $user = $identity['db']; /* @var $user \Application\Entity\Db\Utilisateur */
             }
         }
-        
+
         if (null === $user) {
             throw new RuntimeException("Aucun utilisateur connecté disponible pour la gestion de l'historique.");
         }
-        
+
         $now = new \DateTime();
-        
+
         /**
          * Historique
          */
-        
+
         if (null === $entity->getHistoCreation()) {
             $entity->setHistoCreation($now);
         }
-        
+
         if (null === $entity->getHistoCreateur()) {
             $entity->setHistoCreateur($user);
         }
@@ -75,12 +75,12 @@ class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterfac
             $entity->setHistoModification($now)
                     ->setHistoModificateur($user);
         }
-        
+
         if (null !== $entity->getHistoDestruction() && null === $entity->getHistoDestructeur()) {
             $entity->setHistoDestructeur($user);
         }
     }
-    
+
     /**
      * @param LifecycleEventArgs $args
      */
@@ -88,7 +88,7 @@ class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterfac
     {
         $this->updateHistorique($args);
     }
-    
+
     /**
      * @param PreUpdateEventArgs $args
      */
@@ -96,21 +96,21 @@ class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterfac
     {
         $this->updateHistorique($args);
     }
-    
+
     /**
-     * 
+     *
      * @param mixed $identity
      * @return \Common\ORM\Event\Listeners\Histo
      */
     public function setIdentity($identity)
     {
         $this->identity = $identity;
-        
+
         return $this;
     }
-    
+
     /**
-     * 
+     *
      * @return mixed
      */
     public function getIdentity()
@@ -121,15 +121,15 @@ class HistoriqueListener implements EventSubscriber, ServiceLocatorAwareInterfac
                 $this->identity = $authenticationService->getIdentity();
             }
         }
-        
+
         return $this->identity;
-    }    
+    }
 
     /**
      * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {
-        return array(Events::prePersist, Events::preUpdate);
-    }   
+        return [Events::prePersist, Events::preUpdate];
+    }
 }

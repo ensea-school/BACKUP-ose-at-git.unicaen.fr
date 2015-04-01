@@ -164,8 +164,8 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     {
         if (! $structure) return '';
 
-        $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
-        $pourl = $this->getView()->url('structure/default', array('action' => 'apercevoir', 'id' => $structure->getId()));
+        $url = $this->getView()->url('structure/default', ['action' => 'voir', 'id' => $structure->getId()]);
+        $pourl = $this->getView()->url('structure/default', ['action' => 'apercevoir', 'id' => $structure->getId()]);
         $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$structure.'</a>';
         return $out;
     }
@@ -210,11 +210,11 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $heures = $liste->getHeures();
 
         $hasForbiddenPeriodes = $liste->hasForbiddenPeriodes();
-        $hasBadTypeIntervention = 
+        $hasBadTypeIntervention =
                 $heures > 0
                 && $liste->getService()->getElementPedagogique()
                 && ! $liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention());
-        
+
         $display = $this->getListe()->getTypeInterventionVisibility($liste->getTypeIntervention()) ? '' : ';display:none';
 
         $attribs = [
@@ -250,7 +250,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderDetails( $details=false )
     {
-        $out = 
+        $out =
               '<a class="service-details-button" title="Détail des heures">'
                   .'<span class="glyphicon glyphicon-chevron-'.($details ? 'up' : 'down').'"></span>'
               .'</a>';

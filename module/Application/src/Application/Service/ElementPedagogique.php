@@ -28,19 +28,19 @@ class ElementPedagogique extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias() 
+    public function getAlias()
     {
         return 'ep';
     }
-    
+
     /**
      * Retourne le chercheur des structures distinctes.
-     * 
+     *
      * @param array $filters
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finder(array $filters = array(), QueryBuilder $qb=null, $alias=null)
+    public function finder(array $filters = [], QueryBuilder $qb=null, $alias=null)
     {
         if (null === $qb) {
             $qb = $this->getEntityManager()->createQueryBuilder();
@@ -55,36 +55,36 @@ class ElementPedagogique extends AbstractEntityService
                 ->innerJoin('tf.groupe', 'gtf')
                 ->innerJoin('ep.structure', 's')
                 ->orderBy('gtf.ordre, e.niveau, e.sourceCode, ep.libelle');
-        
+
         if (isset($filters['structure'])) {
             $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
         }
-        
+
         if (isset($filters['niveau']) && $filters['niveau']) {
             if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
                 $filters['niveau'] = $filters['niveau']->getId();
             }
             $qb->andWhere('CONCAT(gtf.libelleCourt, CONCAT( \'-\', e.niveau )) = :niveau')->setParameter('niveau', $filters['niveau']);
         }
-        
+
         if (isset($filters['etape'])) {
             if (!$filters['etape'] instanceof \Application\Entity\Db\Etape) {
                 throw new \Common\Exception\LogicException("La formation spécifiée dans le contexte n'est pas du type attendu.");
             }
             $qb->andWhere('ep.etape = :etape')->setParameter('etape', $filters['etape']);
         }
-        
+
         return $qb;
     }
-    
+
     /**
      * Retourne le chercheur des niveaux distincts.
-     * 
+     *
      * @param array $filters
      * @param \Doctrine\ORM\QueryBuilder $qbWithEp
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderDistinctNiveaux(array $filters = array(), QueryBuilder $qb=null, $alias=null)
+    public function finderDistinctNiveaux(array $filters = [], QueryBuilder $qb=null, $alias=null)
     {
         $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
         $qb
@@ -96,25 +96,25 @@ class ElementPedagogique extends AbstractEntityService
                 ->innerJoin('e.elementPedagogique', 'ep')
 //                ->innerJoin('ep.structure', 's')
                 ->orderBy('gtf.ordre, e.niveau');
-        
+
         if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
             $qb
                     ->andWhere('ep.structure = :struct')
                     ->setParameter('struct', $filters['structure']);
         }
-        
+
 //        var_dump($qb->getQuery()->getSQL());
         return $qb;
     }
-    
+
     /**
      * Retourne le chercheur d'étapes distinctes.
-     * 
+     *
      * @param array $filters
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function finderDistinctEtapes(array $filters = array(), QueryBuilder $qb=null, $alias=null)
+    public function finderDistinctEtapes(array $filters = [], QueryBuilder $qb=null, $alias=null)
     {
         $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
         $qb
@@ -127,7 +127,7 @@ class ElementPedagogique extends AbstractEntityService
                 ->innerJoin('tf.groupe', 'gtf')
                 ->innerJoin('ep.structure', 's')
                 ->orderBy('gtf.ordre, e.niveau, e.sourceCode');
-        
+
 //        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
 //            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $filters['structure']);
 //        }
@@ -142,10 +142,10 @@ class ElementPedagogique extends AbstractEntityService
         }
         return $qb;
     }
-    
+
     /**
      * Recherche textuelle d'element pédagogique.
-     * 
+     *
      * @param array $filters
      * <p>Paramètres possibles :</p>
      * <i>term</i>         : Texte recherché<br />
@@ -156,18 +156,18 @@ class ElementPedagogique extends AbstractEntityService
      * <i>element</i>      : Élément concerné sous forme d'une entité<br />
      * @return array
      */
-    public function getSearchResultByTerm(array $filters = array())
+    public function getSearchResultByTerm(array $filters = [])
     {
         if (!isset($filters["limit"])) {
             $filters["limit"] = 100;
         }
-        
+
         if ($filters['term']){
             $term      = preg_replace('#\s{2,}#', ' ', trim($filters['term']));
             $criterion = explode(' ', $term);
 
             $concat = "ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT";
-            $parts  = $params = array();
+            $parts  = $params = [];
             for ($i = 0; $i < count($criterion); $i++) {
                 $parts[] = "(UPPER(CONVERT($concat, 'US7ASCII')) LIKE UPPER(CONVERT(:criterionStr$i, 'US7ASCII'))) ";
                 $params["criterionStr$i"] = '%' . $criterion[$i] . '%';
@@ -176,8 +176,8 @@ class ElementPedagogique extends AbstractEntityService
         }else{
             $whereTerm = '1=1';
         }
-        
-        $whereContext = array();
+
+        $whereContext = [];
         if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
             $whereContext[] = 's.structure_niv2_id = :structure';
             $params['structure'] = $filters['structure']->getId();
@@ -233,9 +233,9 @@ select * from (
 )
 where rang = 1
 ";
-        
+
         $params["limit"] = $filters["limit"];
-        
+
         $result = $this->getEntityManager()->getConnection()->executeQuery($sql, $params);
 //        var_dump($sql, $params);die;
 
@@ -243,7 +243,7 @@ where rang = 1
     }
 
     /**
-     * 
+     *
      * @param array $result
      * @param integer $length
      * @return array
@@ -252,7 +252,7 @@ where rang = 1
     {
         if ($length && ($remain = count($result) - $length) > 0) {
             $result   = array_slice($result, 0, $length);
-            $result[] = array('id'    => null, 'label' => "<em><small>$remain résultats restant, affinez vos critères, svp.</small></em>");
+            $result[] = ['id'    => null, 'label' => "<em><small>$remain résultats restant, affinez vos critères, svp.</small></em>"];
         }
         return $result;
     }
@@ -268,7 +268,7 @@ where rang = 1
         $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
 
         if ($role instanceof \Application\Acl\AdministrateurRole) return true;
-        
+
         if (!$localContext->getStructure()) {
             throw new \Common\Exception\LogicException("Le filtre structure est requis dans la méthode " . __METHOD__);
         }
@@ -276,7 +276,7 @@ where rang = 1
                 || $localContext->getStructure()->estFilleDeLaStructureDeNiv2($role->getStructure())) {
             return true;
         }
-            
+
         $this->cannotDoThat(
                 "Votre structure de responsabilité ('{$role->getStructure()}') ne vous permet pas d'ajouter/modifier un enseignement"
                 . "pour la structure '{$localContext->getStructure()}'", $runEx);
@@ -290,7 +290,7 @@ where rang = 1
 
     /**
      * Détermine si l'élément peut être modifié ou non
-     * 
+     *
      * @param int|\Application\Entity\Db\ElementPedagogique $element
      * @return boolean
      */
@@ -299,7 +299,7 @@ where rang = 1
         if (! $this->canAdd($runEx)) {
             return false;
         }
-        
+
         if (!$element instanceof ElementPedagogiqueEntity) {
             $element = $this->get($element);
         }
@@ -307,7 +307,7 @@ where rang = 1
         if ($element->getSource()->getCode() !== \Application\Entity\Db\Source::CODE_SOURCE_OSE){
             $errStr = 'Cet enseignement n\'est pas modifiable dans OSE car elle provient du logiciel '.$element->getSource();
             $errStr .= '. Si vous souhaitez mettre à jour ces informations, nous vous invitons donc à les modifier directement dans '.$element->getSource().'.';
-            
+
             return $this->cannotDoThat($errStr, $runEx);
         }
 
@@ -342,12 +342,12 @@ where rang = 1
             $cp
                     ->setEtape($entity->getEtape())
                     ->setElementPedagogique($entity);
-            
+
             $entity->addCheminPedagogique($cp);
-            
+
             $this->getEntityManager()->persist($cp);
         }
-        
+
         $result = parent::save($entity);
         /* Sauvegarde automatique des éléments-modulateurs associés */
         $serviceElementModulateur = $this->getServiceLocator()->get('applicationElementModulateur');
@@ -376,7 +376,7 @@ where rang = 1
             $entity->removeCheminPedagogique($cp);
             $this->getServiceCheminPedagogique()->delete($cp);
         }
-        
+
         return parent::delete($entity, $softDelete);
     }
 
@@ -388,7 +388,7 @@ where rang = 1
     }
 
     /**
-     * 
+     *
      * @return CheminPedagogique
      */
     protected function getServiceCheminPedagogique()

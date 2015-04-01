@@ -13,7 +13,7 @@ class Schema extends Service
 {
     /**
      * Schéma
-     * 
+     *
      * @var array
      */
     protected $schema;
@@ -43,9 +43,9 @@ class Schema extends Service
     public function makeSchema()
     {
         $sql = 'SELECT * FROM V_IMPORT_TAB_COLS';
-        $d = $this->query( $sql, array() );
+        $d = $this->query( $sql, [] );
 
-        $sc = array();
+        $sc = [];
         foreach( $d as $col ){
             $column = new Column;
             $column->dataType        = $col['DATA_TYPE'];
@@ -75,7 +75,7 @@ class Schema extends Service
             UNION SELECT TABLE_NAME AS name FROM USER_TABLES
         ) t JOIN user_tables ut ON (ut.table_name = SUBSTR(name,5))
         WHERE name LIKE 'SRC_%'";
-        return $this->query( $sql, array(), 'TABLE_NAME');
+        return $this->query( $sql, [], 'TABLE_NAME');
     }
 
     /**
@@ -114,7 +114,7 @@ class Schema extends Service
         ORDER BY
           utc.COLUMN_NAME";
 
-        return $this->query( $sql, array('tableName' => $tableName), 'COLUMN_NAME');
+        return $this->query( $sql, ['tableName' => $tableName], 'COLUMN_NAME');
     }
 
 }

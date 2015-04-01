@@ -32,7 +32,7 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
     {
         $service = $this->form->get('service')->getObject(); /* @var $service \Application\Entity\Db\Service */
         if ($service->getElementPedagogique() && $service->getElementPedagogique()->getPeriode()){
-            return array( $service->getElementPedagogique()->getPeriode() );
+            return [ $service->getElementPedagogique()->getPeriode() ];
         }
         return $this->getServicePeriode()->getEnseignement();
     }
@@ -140,7 +140,7 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
         foreach( $typesIntervention as $typeIntervention ){
             $element = $fieldset->get($typeIntervention->getCode());
             $element->setAttribute('class', 'form-control')
-                    ->setLabelAttributes(array('class' => 'control-label'));
+                    ->setLabelAttributes(['class' => 'control-label']);
             $res .= '<div>';
             $res .= $this->getView()->formLabel( $element );
             if ($inRealise){

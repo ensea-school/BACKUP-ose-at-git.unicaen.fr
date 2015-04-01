@@ -20,7 +20,7 @@ class Bootstrap
 
     public static function init()
     {
-        $zf2ModulePaths = array(dirname(dirname(__DIR__)));
+        $zf2ModulePaths = [dirname(dirname(__DIR__))];
         if (($path = static::findParentPath('vendor'))) {
             $zf2ModulePaths[] = $path;
         }
@@ -31,14 +31,14 @@ class Bootstrap
         static::initAutoloader();
 
         // use ModuleManager to load this module and it's dependencies
-        $config = array(
-            'module_listener_options' => array(
+        $config = [
+            'module_listener_options' => [
                 'module_paths' => $zf2ModulePaths,
-            ),
-        );
+            ],
+        ];
         $config = \Zend\Stdlib\ArrayUtils::merge($config, require 'config/application.config.php');
-        
-        $smConfig = isset($config['service_manager']) ? $config['service_manager'] : array();
+
+        $smConfig = isset($config['service_manager']) ? $config['service_manager'] : [];
         $serviceManager = new ServiceManager(new ServiceManagerConfig($smConfig));
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
@@ -59,7 +59,7 @@ class Bootstrap
     protected static function initAutoloader()
     {
         $vendorPath = static::findParentPath('vendor');
-        
+
         $zf2Path = getenv('ZF2_PATH');
         if (!$zf2Path) {
             if (defined('ZF2_PATH')) {
@@ -83,14 +83,14 @@ class Bootstrap
         }
 
         include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
-        AutoloaderFactory::factory(array(
-            'Zend\Loader\StandardAutoloader' => array(
+        AutoloaderFactory::factory([
+            'Zend\Loader\StandardAutoloader' => [
                 'autoregister_zf' => true,
-                'namespaces' => array(
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
     }
 
     protected static function findParentPath($path)

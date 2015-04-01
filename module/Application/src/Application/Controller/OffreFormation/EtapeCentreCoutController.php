@@ -11,7 +11,7 @@ use Common\Exception\RuntimeException;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
- * 
+ *
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -20,7 +20,7 @@ class EtapeCentreCoutController extends AbstractActionController implements Cont
     use ContextProviderAwareTrait;
 
     /**
-     * 
+     *
      * @return type
      * @throws RuntimeException
      */
@@ -28,7 +28,7 @@ class EtapeCentreCoutController extends AbstractActionController implements Cont
     {
         $etape  = $this->context()->mandatory()->etapeFromRoute('id'); /* @var $etape Etape */
         $form   = $this->getFormSaisie();
-        $errors = array();
+        $errors = [];
 
         $form
                 ->setAttribute('action', $this->url()->fromRoute(null, [], [], true))

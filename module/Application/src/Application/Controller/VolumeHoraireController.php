@@ -68,7 +68,7 @@ class VolumeHoraireController extends AbstractActionController
         $typeVolumehoraire  = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
         $periode            = $this->context()->periodeFromQueryPost();
         $typeIntervention   = $this->context()->typeInterventionFromQueryPost('type-intervention');
-        $errors = array();
+        $errors = [];
         if ($this->getServiceService()->canHaveMotifNonPaiement($service)){
             $tousMotifsNonPaiement = $this->params()->fromQuery('tous-motifs-non-paiement');
             if ($tousMotifsNonPaiement == '1'){
@@ -90,7 +90,7 @@ class VolumeHoraireController extends AbstractActionController
         $volumeHoraireList->setMotifNonPaiement($motifNonPaiement);
 
         $form = $this->getForm();
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $request = $this->getRequest();
         if ($request->isPost()){
@@ -128,7 +128,7 @@ class VolumeHoraireController extends AbstractActionController
 
     /**
      * Retourne le formulaire de modif de Volume Horaire.
-     * 
+     *
      * @return \Application\Form\VolumeHoraire\Saisie
      */
     protected function getForm()

@@ -17,20 +17,20 @@ abstract class AbstractContext
      * @var UtilisateurEntity
      */
     protected $utilisateur;
-    
+
     /**
      * @var EntityIntervenant
      */
     protected $intervenant;
-    
+
     /**
      * @var Annee
      */
     protected $annee;
-    
+
     /**
      * Retourne la valeur d'un attribut.
-     * 
+     *
      * @param string $name
      * @return null
      */
@@ -39,10 +39,10 @@ abstract class AbstractContext
         if (method_exists($this, $method = 'get' . ucfirst($name))) {
             return $this->$method();
         }
-        
+
         return null;
     }
-    
+
     public function getUtilisateur()
     {
         return $this->utilisateur;
@@ -76,7 +76,7 @@ abstract class AbstractContext
         return $this;
     }
 
-    public function fromArray(array $context = array())
+    public function fromArray(array $context = [])
     {
         $h = new \Zend\Stdlib\Hydrator\ClassMethods(false);
         $h->hydrate($context, $this);

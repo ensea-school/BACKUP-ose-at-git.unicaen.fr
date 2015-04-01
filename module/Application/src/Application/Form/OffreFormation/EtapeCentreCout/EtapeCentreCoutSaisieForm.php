@@ -27,18 +27,18 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
     use ServiceLocatorAwareTrait;
 
     /**
-     * 
+     *
      */
     public function init()
     {
         $this->setName('etape-centre-cout');
-        
+
         $hydrator = $this->getServiceLocator()->getServiceLocator()->get('EtapeCentreCoutFormHydrator');
         $this->setHydrator($hydrator);
     }
-    
+
     /**
-     * 
+     *
      * @throws RuntimeException
      */
     protected function build()
@@ -53,29 +53,29 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
             $this->add($this->createFieldset($element));
         }
 
-        $this->add(array(
+        $this->add([
             'name' => 'id',
             'type' => 'Hidden'
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'submit',
             'type'       => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Enregistrer',
                 'class' => 'btn btn-primary',
-            ),
-        ));
+            ],
+        ]);
     }
-    
+
     private function createFieldset(ElementPedagogique $element)
     {
         $f = $this->getServiceLocator()->get('ElementCentreCoutSaisieFieldset'); /* @var $f ElementCentreCoutSaisieFieldset */
         $f->setName('EL' . $element->getId());
-        
+
         // fournit au fieldset un moyen de se procurer les centres de coûts sans surcoût(!)
         $f->setForm($this);
-        
+
         return $f;
     }
 
@@ -90,7 +90,7 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
             $this->setEtape($object);
             $this->build();
         }
-        
+
         return parent::setObject($object);
     }
 
@@ -108,11 +108,11 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
         }
 
         $elements = $etape->getElementPedagogique();
-        $filters  = array();
+        $filters  = [];
         foreach ($elements as $element) {
-            $filters['EL' . $element->getId()] = array(
+            $filters['EL' . $element->getId()] = [
                 'required' => false
-            );
+            ];
         }
 
         return $filters;
@@ -144,10 +144,10 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
                     ->andWhere("ep.etape = :etape")->setParameter('etape', $this->getEtape())
                     ->andWhere("th.eligibleCentreCoutEp = 1")
                     ->distinct();
-            
+
             $this->typesHeures = $serviceTypeHeures->getList($qb);
         }
-        
+
         return $this->typesHeures;
     }
 
@@ -157,7 +157,7 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
      * @var CentreCout[]
      */
     protected $centresCouts = [];
-    
+
     /**
      * Retourne les centres de coûts possibles pour le type d'heure spécifié.
      *
@@ -175,7 +175,7 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
                     ->addOrderBy("cc.sourceCode", "ASC");
             $this->centresCouts[$th->getCode()] = $serviceCentreCout->getList($qb);
         }
-        
+
         return $this->centresCouts[$th->getCode()];
     }
 
@@ -185,7 +185,7 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
      * @var array
      */
     protected $centresCoutsToArray = [];
-    
+
     /**
      * Retourne les centres de coûts possibles pour le type d'heure spécifié.
      *
@@ -196,10 +196,10 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
         if (!array_key_exists($th->getCode(), $this->centresCoutsToArray)) {
             $this->centresCoutsToArray[$th->getCode()] = $this->getServiceCentreCout()->formatCentresCouts($this->getCentresCouts($th));
         }
-        
+
         return $this->centresCoutsToArray[$th->getCode()];
     }
-    
+
     /**
      * @var Etape
      */
@@ -214,8 +214,8 @@ class EtapeCentreCoutSaisieForm extends Form implements InputFilterProviderInter
     {
         $this->etape = $etape;
         return $this;
-    }   
-    
+    }
+
     /**
      * @return CentreCoutService
      */

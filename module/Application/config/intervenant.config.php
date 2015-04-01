@@ -536,7 +536,6 @@ return [
             'PeutSaisirServiceRule'               => 'Application\Rule\Intervenant\PeutSaisirServiceRule',
             'PeutSaisirReferentielRule'           => 'Application\Rule\Intervenant\PeutSaisirReferentielRule',
             'PossedeDossierRule'                  => 'Application\Rule\Intervenant\PossedeDossierRule',
-            'PossedeServicesRule'                 => 'Application\Rule\Intervenant\PossedeServicesRule',
             'DossierValideRule'                   => 'Application\Rule\Intervenant\DossierValideRule',
             'ServiceValideRule'                   => 'Application\Rule\Intervenant\ServiceValideRule',
             'PeutValiderServiceRule'              => 'Application\Rule\Intervenant\PeutValiderServiceRule',

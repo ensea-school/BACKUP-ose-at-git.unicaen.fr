@@ -307,7 +307,7 @@ implements ContextProviderAwareInterface,
             $data = $this->getRequest()->getPost();
             $this->formSaisie->setData($data);
             if ($this->formSaisie->isValid()) {
-                $this->getAgrementService()->enregistrerAgrement($this->agrement);
+                $this->getAgrementService()->save($this->agrement);
             }
         }
 
@@ -380,7 +380,7 @@ implements ContextProviderAwareInterface,
                         $agrement = clone $this->agrement;
                         $agrement->setIntervenant($intervenants[$id]);
                         
-                        $this->getAgrementService()->enregistrerAgrement($agrement);
+                        $this->getAgrementService()->save($agrement);
                     }
                     $this->flashMessenger()->addSuccessMessage(count($data['intervenants']) . " agrément(s) enregistré(s) avec succès.");
                     $this->redirect()->toRoute(null, [], [], true);
@@ -457,9 +457,7 @@ implements ContextProviderAwareInterface,
         $agrement = $this->getAgrementService()->newEntity(); /* @var $agrement Agrement */
         $agrement
                 ->setType($this->typeAgrement)
-                ->setIntervenant($this->intervenant)
-                ->setAnnee($this->getContextProvider()->getGlobalContext()->getAnnee());
-
+                ->setIntervenant($this->intervenant);
         return $agrement;
     }
 

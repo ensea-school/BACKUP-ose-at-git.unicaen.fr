@@ -505,7 +505,6 @@ class ContratController extends AbstractActionController implements ContextProvi
             throw new UnAuthorizedException("Interdit !");
         }
         
-        $annee           = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $estUnAvenant    = $this->contrat->estUnAvenant();
         $contratToString = (string) $this->contrat;
         $nomIntervenant  = (string) $this->intervenant;
@@ -546,7 +545,7 @@ class ContratController extends AbstractActionController implements ContextProvi
             'numeroINSEE'             => $numeroINSEE,
             'estATV'                  => $estATV,
             'nomCompletIntervenant'   => $nomCompletIntervenant,
-            'annee'                   => $annee,
+            'annee'                   => $this->intervenant->getAnnee(),
             'dateSignature'           => $dateSignature->format(Constants::DATE_FORMAT),
             'lieuSignature'           => "Caen",
             'servicesRecaps'          => $servicesRecaps,
@@ -576,11 +575,10 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function getTotalHetdIntervenant()
     {   
-        $annee             = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
         
-        $fr = $this->intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+        $fr = $this->intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return $fr->getServiceDu() + $fr->getSolde();
     }

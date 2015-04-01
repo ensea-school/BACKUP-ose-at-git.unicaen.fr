@@ -34,6 +34,11 @@
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
+    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+      <join-columns>
+        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <!-- NB: inversed-by ajouté à la main -->
     <many-to-one field="structure" target-entity="Application\Entity\Db\Structure" inversed-by="elementPedagogique">
       <join-columns>

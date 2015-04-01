@@ -54,6 +54,10 @@ body.development div#navbar div.collapse pre {
     display: none;
 }
 
+body.development div#navbar div.collapse table {
+    display: none;
+}
+
 table {
     background-color:white;
 }

@@ -69,11 +69,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     protected $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    protected $annee;
-
-    /**
      * Type de volume horaire
      *
      * @var TypeVolumeHoraire
@@ -380,29 +375,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return Service
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

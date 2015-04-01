@@ -66,11 +66,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     protected $histoDestructeur;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    protected $annee;
-
-    /**
      * Type de volume horaire
      *
      * @var TypeVolumeHoraire
@@ -102,7 +97,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
         $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
 
         return sprintf("%s%s : %s (%sh)",
-                $this->getAnnee(),
                 $this->getStructure() ? " - " . $this->getStructure() : null,
                 $this->getFonction(),
                 $heures);
@@ -355,29 +349,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     public function getHistoDestructeur()
     {
         return $this->histoDestructeur;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return ServiceReferentiel
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

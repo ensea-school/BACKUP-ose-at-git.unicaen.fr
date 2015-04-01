@@ -60,11 +60,6 @@ class FormuleResultat
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
-
-    /**
      * @var \Application\Entity\Db\TypeVolumeHoraire
      */
     private $typeVolumeHoraire;
@@ -85,10 +80,9 @@ class FormuleResultat
         $this->formuleResultatVolumeHoraireReferentiel  = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function init( Intervenant $intervenant, Annee $annee, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
+    public function init( Intervenant $intervenant, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
     {
         $this->intervenant = $intervenant;
-        $this->annee = $annee;
         $this->typeVolumeHoraire = $typeVolumeHoraire;
         $this->etatVolumeHoraire = $etatVolumeHoraire;
     }
@@ -191,16 +185,6 @@ class FormuleResultat
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

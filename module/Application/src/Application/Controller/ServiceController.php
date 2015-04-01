@@ -207,10 +207,10 @@ class ServiceController extends AbstractActionController
     {
         $intervenant        = $this->context()->intervenantFromRoute();
         $canAddService      = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
-        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
-        $action = $this->getRequest()->getQuery('action', null);
-        $tri = null;
+        $annee              = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $role               = $this->getContextProvider()->getSelectedIdentityRole();
+        $action             = $this->getRequest()->getQuery('action', null);
+        $tri                = null;
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){

@@ -3,7 +3,6 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeAgrement as TypeAgrementEntity;
 use Application\Entity\Db\Agrement as AgrementEntity;
 use Application\Rule\Intervenant\NecessiteAgrementRule;
 use Application\Rule\Intervenant\AgrementFourniRule;

@@ -48,11 +48,6 @@
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
-      <join-columns>
-        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <one-to-many field="volumeHoraireReferentiel" target-entity="Application\Entity\Db\VolumeHoraireReferentiel" mapped-by="serviceReferentiel">
         <cascade>
             <cascade-all/>

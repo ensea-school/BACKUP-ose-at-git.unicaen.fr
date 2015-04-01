@@ -75,7 +75,7 @@ class IntervenantController extends AbstractActionController implements ContextP
     public function choisirAction()
     {
         $intervenant = $this->context()->intervenantFromQuery();
-        
+
         $url    = $this->url()->fromRoute('recherche', array('action' => 'intervenantFind'));
         $interv = new \UnicaenApp\Form\Element\SearchAndSelect('interv');
         $interv->setAutocompleteSource($url)
@@ -133,7 +133,6 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirAction()
     {
-         //       \Test\Util::sqlLog($this->em());
         $role = $this->getContextProvider()->getSelectedIdentityRole();
         
         $this->em()->getFilters()->enable('historique');
@@ -358,14 +357,6 @@ class IntervenantController extends AbstractActionController implements ContextP
         }
         
         return $view;
-    }
-    
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getIntervenantService()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
     
     private $intervenantsChoisisRecentsSessionContainer;

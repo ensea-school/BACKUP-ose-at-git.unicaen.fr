@@ -62,6 +62,11 @@ class ElementPedagogique implements HistoriqueAwareInterface
     protected $sourceCode;
 
     /**
+     * @var \Application\Entity\Db\Annee
+     */
+    protected $annee;
+
+    /**
      * @var integer
      */
     protected $tauxFoad;
@@ -325,6 +330,29 @@ class ElementPedagogique implements HistoriqueAwareInterface
     public function getSourceCode()
     {
         return $this->sourceCode;
+    }
+
+    /**
+     * Set annee
+     *
+     * @param \Application\Entity\Db\Annee $annee
+     * @return Service
+     */
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get annee
+     *
+     * @return \Application\Entity\Db\Annee
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
     }
 
     /**

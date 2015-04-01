@@ -40,7 +40,6 @@ class PaiementController extends AbstractActionController implements ContextProv
     {
         $this->initFilters();
         $intervenant        = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant \Application\Entity\Db\Intervenant */
-        $annee              = $this->context()->getGlobalContext()->getAnnee();
         $saved = false;
         if ($this->getRequest()->isPost()) {
             $changements = $this->params()->fromPost('changements', '{}');
@@ -48,7 +47,7 @@ class PaiementController extends AbstractActionController implements ContextProv
             $this->getServiceMiseEnPaiement()->saveChangements($changements);
             $saved = true;
         }
-        $servicesAPayer     = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant, $annee);
+        $servicesAPayer     = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
         return compact('intervenant', 'servicesAPayer', 'saved');
     }
 

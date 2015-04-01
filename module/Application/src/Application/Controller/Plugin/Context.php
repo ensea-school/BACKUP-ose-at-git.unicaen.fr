@@ -142,9 +142,9 @@ class Context extends Params implements ServiceLocatorAwareInterface
         /* Cas particulier pour les intervenants : import implicite */
         if ('intervenant' === $target && (int)$value){
             $sourceCode = (string)(int)$value;
-            if (!($intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode))) {
-                $this->getServiceLocator()->getServiceLocator()->get('importProcessusImport')->intervenant($sourceCode); // Import
-                if (!($intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode))) {
+            if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
+                $this->getProcessusImport()->intervenant($sourceCode); // Import
+                if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
                     throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
                 }
             }
@@ -253,7 +253,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
 
         return $value;
     }
-    
+
     /**
      * @return GlobalContext
      */
@@ -264,7 +264,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
         }
         return $this->globalContext;
     }
-    
+
     /**
      * @return LocalContext
      */
@@ -275,7 +275,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
         }
         return $this->localContext;
     }
-    
+
     /**
      * @return Container
      */
@@ -285,5 +285,21 @@ class Context extends Params implements ServiceLocatorAwareInterface
             $this->sessionContainer = new Container(get_class($this->getController()));
         }
         return $this->sessionContainer;
+    }
+
+    /**
+     * @return \Application\Service\Intervenant
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationIntervenant');
+    }
+
+    /**
+     * @return \Import\Processus\Import
+     */
+    protected function getProcessusImport()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('importProcessusImport');
     }
 }

@@ -1235,19 +1235,9 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getService(Annee $annee = null)
+    public function getService()
     {
-        if (null === $annee) {
-            return $this->service;
-        }
-        if (null === $this->service) {
-            return null;
-        }
-        
-        $filter   = function(Service $service) use ($annee) { return $annee === $service->getAnnee(); };
-        $services = $this->service->filter($filter);
-        
-        return $services;
+        return $this->service;
     }
 
     /**
@@ -1284,19 +1274,9 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getServiceReferentiel(Annee $annee = null)
+    public function getServiceReferentiel()
     {
-        if (null === $annee) {
-            return $this->serviceReferentiel;
-        }
-        if (null === $this->serviceReferentiel) {
-            return null;
-        }
-
-        $filter   = function(ServiceReferentiel $serviceReferentiel) use ($annee) { return $annee === $serviceReferentiel->getAnnee(); };
-        $servicesReferentiels = $this->serviceReferentiel->filter($filter);
-
-        return $servicesReferentiels;
+        return $this->serviceReferentiel;
     }
 
     /**
@@ -1305,10 +1285,10 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @param Annee $annee Seule année à retenir
      * @return string[]
      */
-    public function getServiceReferentielToStrings(Annee $annee = null)
+    public function getServiceReferentielToStrings()
     {
         $services = array();
-        foreach ($this->getServiceReferentiel($annee) as $sr) { /* @var $sr \Application\Entity\Db\ServiceReferentiel */
+        foreach ($this->getServiceReferentiel() as $sr) { /* @var $sr \Application\Entity\Db\ServiceReferentiel */
             $services[] = "" . $sr;
         }
 
@@ -1322,9 +1302,9 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @param bool $softDelete
      * @return self
      */
-    public function removeAllServiceReferentiel(Annee $annee = null, $softDelete = true)
+    public function removeAllServiceReferentiel($softDelete = true)
     {
-        foreach ($this->getServiceReferentiel($annee) as $serviceReferentiel) {
+        foreach ($this->getServiceReferentiel() as $serviceReferentiel) {
             $this->removeServiceReferentiel($serviceReferentiel, $softDelete);
         }
 
@@ -1637,17 +1617,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Get formuleReferentiel
      *
-     * @param Annee $annee
      * @param Structure|null $structure
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormuleReferentiel( Annee $annee, Structure $structure=null )
+    public function getFormuleReferentiel( Structure $structure=null )
     {
-        $filter = function( FormuleReferentiel $formuleReferentiel ) use ($annee, $structure) {
-            if ($annee && $annee !== $formuleReferentiel->getAnnee()) {
-                return false;
-            }
+        $filter = function( FormuleReferentiel $formuleReferentiel ) use ($structure) {
             if ($structure && $structure !== $formuleReferentiel->getStructure()) {
                 return false;
             }
@@ -1659,18 +1635,14 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Get formuleResultat
      *
-     * @param Annee $annee
      * @param TypeVolumeHoraire $typeVolumeHoraire
      * @param EtatVolumeHoraire $etatVolumehoraire
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormuleResultat( Annee $annee, TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumehoraire=null )
+    public function getFormuleResultat( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumehoraire=null )
     {
-        $filter = function( FormuleResultat $formuleResultat ) use ($annee, $typeVolumeHoraire, $etatVolumehoraire) {
-            if ($annee && $annee !== $formuleResultat->getAnnee()) {
-                return false;
-            }
+        $filter = function( FormuleResultat $formuleResultat ) use ($typeVolumeHoraire, $etatVolumehoraire) {
             if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleResultat->getTypeVolumeHoraire()) {
                 return false;
             }
@@ -1685,18 +1657,17 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * Get unique formuleResultat
      *
-     * @param Annee $annee
      * @param TypeVolumeHoraire $typeVolumeHoraire
      * @param EtatVolumeHoraire $etatVolumehoraire
      *
      * @return FormuleResultat
      */
-    public function getUniqueFormuleResultat( Annee $annee, TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire )
+    public function getUniqueFormuleResultat( TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire )
     {
-        $formuleResultat = $this->getFormuleResultat($annee, $typeVolumeHoraire, $etatVolumehoraire)->first();
+        $formuleResultat = $this->getFormuleResultat($typeVolumeHoraire, $etatVolumehoraire)->first();
         if (false === $formuleResultat){
             $formuleResultat = new FormuleResultat;
-            $formuleResultat->init( $this, $annee, $typeVolumeHoraire, $etatVolumehoraire );
+            $formuleResultat->init( $this, $typeVolumeHoraire, $etatVolumehoraire );
         }
         return $formuleResultat;
     }

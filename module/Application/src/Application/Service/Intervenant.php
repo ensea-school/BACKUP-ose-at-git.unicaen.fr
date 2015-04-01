@@ -104,7 +104,10 @@ class Intervenant extends AbstractEntityService
     public function getBySourceCode( $sourceCode )
     {
         if (null == $sourceCode) return null;
-        return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode]);
+
+        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+
+        return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode, 'annee' => $annee->getId()]);
     }
 
     /**
@@ -116,7 +119,7 @@ class Intervenant extends AbstractEntityService
     {
         return 'int';
     }
-    
+
     /**
      * Finder par étape franchie dans le workflow de l'intervenant.
      * 

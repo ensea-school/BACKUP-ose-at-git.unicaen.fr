@@ -47,9 +47,7 @@ class AttenteDemandeMepIndicateurImpl extends AbstractIntervenantResultIndicateu
                 ->join("v.structure", "str")
                 ->join("v.intervenant", "int")
                 ->join("int.structure", "aff")
-                ->join("int.statut", "si")
-                ->andWhere("v.annee = :annee")
-                ->setParameter("annee", $this->getContextProvider()->getGlobalContext()->getAnnee());
+                ->join("int.statut", "si");
         
         if ($this->getStructure()) {
             $qb

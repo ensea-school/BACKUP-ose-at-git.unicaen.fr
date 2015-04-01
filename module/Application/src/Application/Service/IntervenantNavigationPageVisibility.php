@@ -33,7 +33,7 @@ class IntervenantNavigationPageVisibility extends AbstractService implements Wor
     private function isPageVisible($intervenant, $page, $wf, $annee)
     {
         $voitPage = new VoitPageRule($intervenant, $page, $wf);
-        $voitPage->setAnnee($annee);
+//        $voitPage->setAnnee($annee);
 
         if (!$voitPage->execute()) {
             // si une page fille est visible alors la page mère est quand même visible

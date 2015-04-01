@@ -88,7 +88,9 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
                 ->select("int, si, ti, str")
                 ->join("int.statut", "si")
                 ->join("int.type", "ti")
-                ->join("int.structure", "str");
+                ->join("int.structure", "str")
+                ->andWhere("int.annee = :annee")
+                ->setParameter("annee", $this->getContextProvider()->getGlobalContext()->getAnnee());
         
         $qb->orderBy("int.nomUsuel, int.prenom");
         

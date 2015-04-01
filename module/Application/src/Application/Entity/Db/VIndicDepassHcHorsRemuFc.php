@@ -18,11 +18,6 @@ class VIndicDepassHcHorsRemuFc
     protected $intervenant;
     
     /**
-     * @var Annee
-     */
-    protected $annee;
-    
-    /**
      * @var TypeVolumeHoraire
      */
     protected $typeVolumeHoraire;
@@ -86,16 +81,6 @@ class VIndicDepassHcHorsRemuFc
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-    
-    /**
-     * Get annee
-     *
-     * @return Annee 
-     */
-    function getAnnee()
-    {
-        return $this->annee;
     }
     
     /**

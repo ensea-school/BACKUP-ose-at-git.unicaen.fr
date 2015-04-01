@@ -79,7 +79,7 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
                 ->join("int.statut", "si")
                 ->join("si.typeIntervenant", "ti")
                 ->join("v.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :codeTvh")
-                ->andWhere("v.annee = :annee")
+                ->andWhere("int.annee = :annee")
                 ->setParameter("annee", $annee)
                 ->setParameter('codeTvh', $this->getTypeVolumeHoraire()->getCode());
         

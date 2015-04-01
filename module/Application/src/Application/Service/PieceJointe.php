@@ -130,11 +130,11 @@ class PieceJointe extends AbstractEntityService
          */
         $sql = <<<EOS
 select sum(v.total_heures) as TOTAL_HEURES from V_PJ_HEURES v
-where v.INTERVENANT_ID = :intervenant and v.ANNEE_ID = :annee
+where v.INTERVENANT_ID = :intervenant 
 EOS;
         $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql, [
-            'intervenant' => $intervenant->getId(),
-            'annee' => $annee->getId()]);
+            'intervenant' => $intervenant->getId()
+        ]);
         $r = $stmt->fetchAll(\PDO::FETCH_COLUMN);
         $total = isset($r[0]) ? (float)$r[0] : 0.0;
 

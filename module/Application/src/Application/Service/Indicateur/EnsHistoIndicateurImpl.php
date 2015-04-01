@@ -107,7 +107,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
         
         $qb = parent::getQueryBuilder()
                 ->addSelect("s, se, e, ep")
-                ->join("int.service", "s", \Doctrine\ORM\Query\Expr\Join::WITH, "s.annee = :annee")
+                ->join("int.service", "s")
                 ->join("s.elementPedagogique", "ep")
                 ->join("ep.structure", "se")
                 ->join("ep.etape", "e")
@@ -115,8 +115,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
                 ->andWhere($whereHistos)
-                ->setParameter('tvh', $this->getTypeVolumeHoraire())
-                ->setParameter('annee', $this->getAnnee());
+                ->setParameter('tvh', $this->getTypeVolumeHoraire());
         
         if ($this->getStructure()) {
             /**

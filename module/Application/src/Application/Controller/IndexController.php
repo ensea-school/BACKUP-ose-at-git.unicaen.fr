@@ -47,7 +47,6 @@ class IndexController extends AbstractActionController implements ContextProvide
         $role = $this->getContextProvider()->getSelectedIdentityRole();
 
         $view = new ViewModel([
-            'annee' => $this->getContextProvider()->getGlobalContext()->getAnnee(),
             'role'  => $role,
             'title' => "Gestion",
         ]);

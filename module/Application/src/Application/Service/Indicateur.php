@@ -60,7 +60,7 @@ class Indicateur extends AbstractEntityService
      */
     public function getIndicateurImpl(IndicateurEntity $indicateur, StructureEntity $structure = null)
     {
-        $impl = $this->getServiceLocator()->get($indicateur->getCode());
+        $impl = clone $this->getServiceLocator()->get($indicateur->getCode());
         $impl
                 ->setEntity($indicateur)
                 ->setStructure($structure);

@@ -7,10 +7,7 @@ use Application\Entity\Db\Intervenant as EntityIntervenant;
 use Application\Entity\Db\Structure as EntityStructure;
 use Application\Entity\Db\Etape as EntityEtape;
 use Application\Entity\NiveauEtape as EntityNiveauEtape;
-use Application\Entity\Db\Annee as EntityAnnee;
 use Application\Entity\Db\ElementPedagogique as EntityElementPedagogique;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 
 /**
@@ -18,9 +15,15 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class LocalContext extends AbstractContext implements ServiceLocatorAwareInterface
+class LocalContext extends AbstractService
 {
-    use ServiceLocatorAwareTrait;
+
+    /**
+     * Intervenant
+     *
+     * @var EntityIntervenant
+     */
+    protected $intervenant;
 
     /**
      * @var Container
@@ -61,22 +64,6 @@ class LocalContext extends AbstractContext implements ServiceLocatorAwareInterfa
             }
         }
         return $this->intervenant;
-    }
-
-    /**
-     * @return EntityAnnee
-     */
-    public function getAnnee()
-    {
-        if (empty($this->annee)) {
-            $this->annee = $this->getSessionContainer()->annee;
-            if ($this->annee && !$this->annee instanceof EntityAnnee) {
-                $sAnnee = $this->getServiceLocator()->get('applicationAnnee');
-                /* @var $sAnnee Annee */
-                $this->annee = $sAnnee->get( $this->annee );
-            }
-        }
-        return $this->annee;
     }
 
     /**
@@ -150,18 +137,6 @@ class LocalContext extends AbstractContext implements ServiceLocatorAwareInterfa
     {
         $this->intervenant = $intervenant;
         $this->getSessionContainer()->intervenant = $intervenant ? $intervenant->getId() : null;
-        return $this;
-    }
-
-    /**
-     *
-     * @param EntityAnnee $annee
-     * @return self
-     */
-    public function setAnnee(EntityAnnee $annee = null)
-    {
-        $this->annee = $annee;
-        $this->getSessionContainer()->annee = $annee ? $annee->getId() : null;
         return $this;
     }
 

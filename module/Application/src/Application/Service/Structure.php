@@ -2,8 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractService;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Func;
 use Application\Entity\Db\Structure as EntityStructure;
@@ -35,19 +33,6 @@ class Structure extends AbstractEntityService
      */
     public function getAlias(){
         return 'str';
-    }
-
-    /**
-     * Retourne le contexte global des services
-     *
-     * @todo implémenter la notion de structure courante
-     */
-    public function getGlobalContext()
-    {
-//        $currentUser = $this->getServiceLocator()->get('authUserContext')->getDbUser();
-        return [
-//            'structure'     => null,
-        ];
     }
 
     /**

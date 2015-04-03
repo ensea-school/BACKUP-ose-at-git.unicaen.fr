@@ -107,7 +107,8 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $fs = $this->get('element-pedagogique'); /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-        $cl = $this->getContextProvider()->getLocalContext();
+        $cl = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+        /* @var $cl \Application\Service\LocalContext */
 
         if ($this->has('intervenant') && $cl->getIntervenant()){
             $this->get('intervenant')->setValue([
@@ -156,7 +157,8 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $fs = $this->get('element-pedagogique'); /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-        $cl = $this->getContextProvider()->getLocalContext();
+        $cl = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+        /* @var $cl \Application\Service\LocalContext */
 
         if (! $role instanceof IntervenantRole){
             if ( $structureId = $fs->get('structure')->getValue() ){

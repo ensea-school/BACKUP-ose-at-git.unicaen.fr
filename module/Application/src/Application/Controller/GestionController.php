@@ -24,7 +24,7 @@ class GestionController extends AbstractActionController implements ContextProvi
      */
     public function anneeAction()
     {
-        $annee = $this->context()->getLocalContext()->getAnnee();
+        $annee = $this->context()->getGlobalContext()->getAnnee();
 
         return compact('annee');
     }

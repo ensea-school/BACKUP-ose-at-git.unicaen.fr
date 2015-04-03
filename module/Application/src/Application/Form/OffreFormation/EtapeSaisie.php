@@ -103,7 +103,8 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
             ],
         ]);
 
-        $localContext = $this->getContextProvider()->getLocalContext();
+        $localContext = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
 
         // peuplement liste des structures
         if ($localContext->getStructure()) {
@@ -148,7 +149,8 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
     {
         if (null === $this->typesFormation) {
             $serviceTypeFormation = $this->getServiceLocator()->getServiceLocator()->get('ApplicationTypeFormation');
-            $localContext         = $this->getContextProvider()->getLocalContext();
+            $localContext = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
             $qb                   = null;
 
             if (($niveau = $localContext->getNiveau())) {

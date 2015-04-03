@@ -160,7 +160,8 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $role = $this->getContextProvider()->getSelectedIdentityRole();
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-        $cl = $this->getContextProvider()->getLocalContext();
+        $cl = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+        /* @var $cl \Application\Service\LocalContext */
 
         if ($this->has('intervenant') && $cl->getIntervenant()) {
             $this->get('intervenant')->setValue([
@@ -192,7 +193,8 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $role = $this->getContextProvider()->getSelectedIdentityRole();
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-        $cl = $this->getContextProvider()->getLocalContext();
+         $cl = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+        /* @var $cl \Application\Service\LocalContext */
 
         if (!$role instanceof IntervenantRole) {
             if (($structureId = $this->get('structure')->getValue())) {

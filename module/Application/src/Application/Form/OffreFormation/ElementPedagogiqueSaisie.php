@@ -146,7 +146,8 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
             ],
         ]);
 
-        $localContext = $this->getContextProvider()->getLocalContext();
+        $localContext = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
 
         // init étape
         if (($etape = $localContext->getEtape())) {

@@ -46,7 +46,8 @@ class OffreFormationController extends AbstractActionController implements Conte
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $serviceEtape = $this->getServiceLocator()->get('applicationEtape'); /* @var $serviceEtape EtapeService */
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
-        $localContext = $this->getContextProvider()->getLocalContext();
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
         $role         = $this->getContextProvider()->getSelectedIdentityRole();
 
         // extraction des filtres spécifiés dans la requête

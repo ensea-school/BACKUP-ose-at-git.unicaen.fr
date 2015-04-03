@@ -2,7 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Annee;
 use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
@@ -39,17 +38,17 @@ class GlobalContext implements ServiceLocatorAwareInterface
     protected $personnel;
     
     /**
-     * @var Annee
+     * @var AnneeEntity
      */
     protected $annee;
     
     /**
-     * @var Annee
+     * @var AnneeEntity
      */
     protected $anneePrecedente;
     
     /**
-     * @var Annee
+     * @var AnneeEntity
      */
     protected $anneeSuivante;
     
@@ -187,7 +186,7 @@ class GlobalContext implements ServiceLocatorAwareInterface
      * @return StructureEntity|null
      */
     function getStructure()
-    {
+    {return null;
         $structure = $this->getSessionContainer()->structure;
         
         if ($structure instanceof StructureEntity) {
@@ -217,20 +216,5 @@ class GlobalContext implements ServiceLocatorAwareInterface
         $this->getSessionContainer()->structure = $structure;
     }
     
-    /**
-     * @var Container
-     */
-    protected $sessionContainer;
-    
-    /**
-     * @return Container
-     */
-    function getSessionContainer()
-    {
-        if (null === $this->sessionContainer) {
-            $this->sessionContainer = new Container(__CLASS__);
-        }
-        
-        return $this->sessionContainer;
-    }
+
 }

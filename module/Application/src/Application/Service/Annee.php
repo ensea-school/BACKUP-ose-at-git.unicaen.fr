@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use Application\Entity\Db\Annee as AnneeEntity;
 
 /**
  * Description of Annee
@@ -50,6 +51,26 @@ class Annee extends AbstractEntityService
         );
 
         return $qb;
+    }
+
+    /**
+     * 
+     * @param AnneeEntity $annee
+     * @return AnneeEntity
+     */
+    public function getPrecedente(AnneeEntity $annee)
+    {
+        return $this->get( $annee->getId() - 1 );
+    }
+
+    /**
+     *
+     * @param AnneeEntity $annee
+     * @return AnneeEntity
+     */
+    public function getSuivante(AnneeEntity $annee)
+    {
+        return $this->get( $annee->getId() + 1 );
     }
 
     /**

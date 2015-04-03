@@ -122,11 +122,14 @@ class Service extends AbstractEntityService
             $this->recherche->setEtatVolumeHoraire( $serviceEtatVolumehoraire->getSaisi() );
         }
 
-        $this->recherche->setIntervenant        ( $this->getContextProvider ()->getLocalContext ()->getIntervenant()        );
-        $this->recherche->setStructureEns       ( $this->getContextProvider ()->getLocalContext ()->getStructure()          );
-        $this->recherche->setNiveauEtape        ( $this->getContextProvider ()->getLocalContext ()->getNiveau()             );
-        $this->recherche->setEtape              ( $this->getContextProvider ()->getLocalContext ()->getEtape()              );
-        $this->recherche->setElementPedagogique ( $this->getContextProvider ()->getLocalContext ()->getElementPedagogique() );
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+
+        $this->recherche->setIntervenant        ( $localContext->getIntervenant()        );
+        $this->recherche->setStructureEns       ( $localContext->getStructure()          );
+        $this->recherche->setNiveauEtape        ( $localContext->getNiveau()             );
+        $this->recherche->setEtape              ( $localContext->getEtape()              );
+        $this->recherche->setElementPedagogique ( $localContext->getElementPedagogique() );
         return $this->recherche;
     }
 
@@ -145,11 +148,14 @@ class Service extends AbstractEntityService
         $session = $this->getRechercheSessionContainer();
         $session->data = $data;
 
-        $this->getContextProvider ()->getLocalContext ()->setIntervenant(       $recherche->getIntervenant()        );
-        $this->getContextProvider ()->getLocalContext ()->setStructure(         $recherche->getStructureEns()       );
-        $this->getContextProvider ()->getLocalContext ()->setNiveau(            $recherche->getNiveauEtape()        );
-        $this->getContextProvider ()->getLocalContext ()->setEtape(             $recherche->getEtape()              );
-        $this->getContextProvider ()->getLocalContext ()->setElementPedagogique($recherche->getElementPedagogique() );
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+
+        $localContext->setIntervenant(       $recherche->getIntervenant()        );
+        $localContext->setStructure(         $recherche->getStructureEns()       );
+        $localContext->setNiveau(            $recherche->getNiveauEtape()        );
+        $localContext->setEtape(             $recherche->getEtape()              );
+        $localContext->setElementPedagogique($recherche->getElementPedagogique() );
         return $this;
     }
 

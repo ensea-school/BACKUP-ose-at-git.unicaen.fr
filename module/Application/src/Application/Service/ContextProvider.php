@@ -104,29 +104,6 @@ class ContextProvider extends AbstractService
     }
 
     /**
-     * Retourne le contexte local (filtres, etc.)
-     * 
-     * @return LocalContext
-     */
-    public function getLocalContext()
-    {
-        if (null === $this->localContext) {
-            $this->localContext = new LocalContext;
-            $this->localContext->setServiceLocator($this->getServiceLocator());
-        }
-
-        if (! $this->localContext->getAnnee()){
-            $sAnnee = $this->getServiceLocator()->get('applicationAnnee');
-            /* @var $sAnnee Annee */
-
-            // peuplement obligatoire de l'année en cours!!
-            $this->localContext->setAnnee( $sAnnee->get( $this->getParametres()->annee ) );
-        }
-
-        return $this->localContext;
-    }
-
-    /**
      * 
      * @return Role|IntervenantRole
      */

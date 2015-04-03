@@ -42,7 +42,10 @@ class EtapeController extends AbstractActionController implements ContextProvide
         $errors    = [];
 
         // persiste les filtres dans le contexte local
-        $this->getContextProvider()->getLocalContext()
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+
+        $localContext
                 ->setStructure($structure)
                 ->setNiveau($niveau ? $this->getServiceNiveauEtape()->get($niveau) : null);
 

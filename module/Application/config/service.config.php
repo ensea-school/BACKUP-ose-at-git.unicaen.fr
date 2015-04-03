@@ -292,7 +292,6 @@ return [
             'ApplicationService'                           => 'Application\\Service\\Service',
             'ApplicationServiceReferentiel'                => 'Application\\Service\\ServiceReferentiel',
             'ApplicationFonctionReferentiel'               => 'Application\\Service\\FonctionReferentiel',
-            'ApplicationServiceValidation'                 => 'Application\\Service\\ServiceValidation',
             'ApplicationPeriode'                           => 'Application\\Service\\Periode',
             'ApplicationMotifNonPaiement'                  => 'Application\\Service\\MotifNonPaiement',
             'ApplicationModificationServiceDu'             => 'Application\\Service\\ModificationServiceDu',

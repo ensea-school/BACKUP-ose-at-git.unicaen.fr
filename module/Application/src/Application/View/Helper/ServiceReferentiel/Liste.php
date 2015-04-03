@@ -106,7 +106,10 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     public function getTotalRefreshUrl()
     {
-        if (($intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant())) {
+        $localContext = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+
+        if (($intervenant = $localContext->getIntervenant())) {
             if ($this->isInRealise()) {
                 $route = 'intervenant/referentiel-realise';
             }

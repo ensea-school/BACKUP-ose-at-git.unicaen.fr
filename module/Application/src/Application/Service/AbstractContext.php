@@ -28,21 +28,6 @@ abstract class AbstractContext
      */
     protected $annee;
 
-    /**
-     * Retourne la valeur d'un attribut.
-     *
-     * @param string $name
-     * @return null
-     */
-    public function get($name)
-    {
-        if (method_exists($this, $method = 'get' . ucfirst($name))) {
-            return $this->$method();
-        }
-
-        return null;
-    }
-
     public function getUtilisateur()
     {
         return $this->utilisateur;
@@ -76,17 +61,4 @@ abstract class AbstractContext
         return $this;
     }
 
-    public function fromArray(array $context = [])
-    {
-        $h = new \Zend\Stdlib\Hydrator\ClassMethods(false);
-        $h->hydrate($context, $this);
-        return $this;
-    }
-
-    public function __set($name, $value)
-    {
-        if (method_exists($this, $method = 'set' . ucfirst($name))) {
-            return $this->$method($value);
-        }
-    }
 }

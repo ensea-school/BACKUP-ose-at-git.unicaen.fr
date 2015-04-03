@@ -6,8 +6,6 @@ use Zend\Mvc\Controller\Plugin\Params;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Session\Container;
-use Application\Service\LocalContext;
-use Application\Service\GlobalContext;
 use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
 
@@ -18,7 +16,6 @@ use Common\Exception\RuntimeException;
  * @method mixed *FromQuery($name = null, $default = null) Description
  * @method mixed *FromPost($name = null, $default = null) Description
  * @method mixed *FromSession($name = null, $default = null) Description
- * @method mixed *FromContext($name = null, $default = null) Description
  * @method mixed *FromSources($name = null, $default = null, array $sources = null) Description
  * @method mixed *FromQueryPost($name = null, $default = null) Description
  *
@@ -30,24 +27,9 @@ class Context extends Params implements ServiceLocatorAwareInterface
     use ServiceLocatorAwareTrait;
 
     /**
-     * @var ServiceLocatorInterface
-     */
-    protected $sl;
-
-    /**
      * @var bool
      */
     protected $mandatory = false;
-
-    /**
-     * @var GlobalContext
-     */
-    protected $globalContext;
-
-    /**
-     * @var LocalContext
-     */
-    protected $localContext;
 
     /**
      * @var Container
@@ -92,10 +74,6 @@ class Context extends Params implements ServiceLocatorAwareInterface
             case ($method = 'FromPost') === substr($name, $length = -8):
                 break;
             case ($method = 'FromSession') === substr($name, $length = -11):
-                break;
-            case ($method = 'FromGlobalContext') === substr($name, $length = -17):
-                break;
-            case ($method = 'FromLocalContext') === substr($name, $length = -16):
                 break;
             case ($method = 'FromSources') === substr($name, $length = -11):
                 break;
@@ -214,66 +192,6 @@ class Context extends Params implements ServiceLocatorAwareInterface
         }
 
         return $this->getSessionContainer()->$name;
-    }
-
-    /**
-     * Return a single local context parameter.
-     *
-     * @param  string $name Parameter name to retrieve.
-     * @param  mixed $default Default value to use when the requested parameter is not set.
-     * @return mixed
-     */
-    public function fromLocalContext($name, $default = null)
-    {
-        try {
-            $value = $this->getLocalContext()->get($name);
-        }
-        catch (LogicException $exc) {
-            $value = $default;
-        }
-
-        return $value;
-    }
-
-    /**
-     * Return a single global context parameter.
-     *
-     * @param  string $name Parameter name to retrieve.
-     * @param  mixed $default Default value to use when the requested parameter is not set.
-     * @return mixed
-     */
-    public function fromGlobalContext($name, $default = null)
-    {
-        try {
-            $value = $this->getGlobalContext()->get($name);
-        }
-        catch (LogicException $exc) {
-            $value = $default;
-        }
-
-        return $value;
-    }
-
-    /**
-     * @return GlobalContext
-     */
-    public function getGlobalContext()
-    {
-        if (null === $this->globalContext) {
-            $this->globalContext = $this->getServiceContextProvider()->getGlobalContext();
-        }
-        return $this->globalContext;
-    }
-
-    /**
-     * @return LocalContext
-     */
-    public function getLocalContext()
-    {
-        if (null === $this->localContext) {
-            $this->localContext = $this->getServiceContextProvider()->getLocalContext();
-        }
-        return $this->localContext;
     }
 
     /**

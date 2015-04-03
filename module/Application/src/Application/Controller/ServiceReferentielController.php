@@ -100,7 +100,9 @@ class ServiceReferentielController extends AbstractActionController implements C
             $recherche = $this->getServiceService()->loadRecherche();
         }
         else {
-            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
+            $localContext->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action    = 'afficher'; // Affichage par défaut
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode));
@@ -166,7 +168,9 @@ class ServiceReferentielController extends AbstractActionController implements C
             $title   = "Ajout de référentiel";
         }
 
-        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+        $intervenant = $localContext->getIntervenant();
         $assertionEntity = $this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant);
         if (! $this->isAllowed($assertionEntity, 'create') || ! $this->isAllowed($assertionEntity, 'update')) {
             throw new MessageException("Cette opération n'est pas autorisée.");
@@ -236,7 +240,9 @@ class ServiceReferentielController extends AbstractActionController implements C
         $form->add(new \Zend\Form\Element\Hidden('type-volume-horaire'));
         $viewModel = new \Zend\View\Model\ViewModel();
 
-        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+        $intervenant = $localContext->getIntervenant();
         $assertionEntity = $this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant);
         if (! $this->isAllowed($assertionEntity, 'delete')) {
             throw new MessageException("Cette opération n'est pas autorisée.");

@@ -112,7 +112,10 @@ class ServiceController extends AbstractActionController
 
             $recherche = $this->getServiceService()->loadRecherche();
         }else{
-            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
+
+            $localContext->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action = 'afficher'; // Affichage par défaut
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode) );
@@ -169,7 +172,9 @@ class ServiceController extends AbstractActionController
 
         $this->initFilters();
         if ($intervenant){
-            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
+            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
+            $localContext->setIntervenant($intervenant);
         }
 
         if (! $intervenant){
@@ -217,7 +222,9 @@ class ServiceController extends AbstractActionController
         }
 
         if ($intervenant){
-            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
+            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
+            $localContext->setIntervenant($intervenant);
         }
 
         if (! $intervenant){
@@ -442,7 +449,9 @@ class ServiceController extends AbstractActionController
             $title   = "Ajout d'enseignement";
         }
 
-        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+        $intervenant = $localContext->getIntervenant();
         $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
         $assertionEntity->setTypeVolumeHoraire($typeVolumeHoraire);
         if (! $this->isAllowed($assertionEntity, 'create') && ! $this->isAllowed($assertionEntity, 'update')) {

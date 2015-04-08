@@ -71,9 +71,10 @@ class DossierController extends AbstractActionController implements ContextProvi
      */
     public function modifierAction()
     {
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
-        $service = $this->getDossierService();
-        $this->form    = $this->getFormModifier();
+        $role       = $this->getContextProvider()->getSelectedIdentityRole();
+        $service    = $this->getDossierService();
+        $this->form = $this->getFormModifier();
+        $validation = null;
 
         if ($role instanceof IntervenantRole) {
             $this->intervenant = $role->getIntervenant();
@@ -82,13 +83,17 @@ class DossierController extends AbstractActionController implements ContextProvi
             $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
      
-        $validation = null;
-        $dossierValide = $this->getServiceLocator()->get('DossierValideRule')->setIntervenant($this->intervenant);
-        if ($dossierValide->isRelevant() && $dossierValide->execute()) {
+        $serviceValidation = $this->getServiceValidation();
+        $qb = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
+        $serviceValidation->finderByIntervenant($this->intervenant, $qb);
+        $serviceValidation->finderByHistorique($qb);
+        $validations = $serviceValidation->getList($qb);
+        if (count($validations)) {
+            $validation = current($validations);
+        }
+
+        if ($validation) {
             $this->readonly = true;
-            if (count($validations = $this->intervenant->getValidation($this->getTypeValidationDossier()))) {
-                $validation = $validations->first();
-            }
         }
         
         $this->form->get('submit')->setAttribute('value', $this->getSubmitButtonLabel());
@@ -157,16 +162,6 @@ class DossierController extends AbstractActionController implements ContextProvi
         return $url;
     }
     
-    /**
-     * @return TypeValidation
-     */
-    private function getTypeValidationDossier() 
-    {
-        $qb = $this->getTypeValidationService()->finderByCode(TypeValidation::CODE_DONNEES_PERSO);
-        
-        return $qb->getQuery()->getOneOrNullResult();
-    }
-    
     protected function notify(Intervenant $intervenant)
     {
         if (DossierListener::$created || DossierListener::$modified) {
@@ -199,5 +194,13 @@ class DossierController extends AbstractActionController implements ContextProvi
     private function getDossierService()
     {
         return $this->getServiceLocator()->get('ApplicationDossier');
+    }
+    
+    /**
+     * @return \Application\Service\Validation
+     */
+    private function getServiceValidation()
+    {
+        return $this->getServiceLocator()->get('ApplicationValidation');
     }
 }

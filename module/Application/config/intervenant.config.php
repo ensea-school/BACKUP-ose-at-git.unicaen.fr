@@ -538,7 +538,6 @@ return array(
             'PossedeDossierRule'                  => 'Application\Rule\Intervenant\PossedeDossierRule',
             'PossedeServicesRule'                 => 'Application\Rule\Intervenant\PossedeServicesRule',
             'PossedeReferentielRule'              => 'Application\Rule\Intervenant\PossedeReferentielRule',
-            'DossierValideRule'                   => 'Application\Rule\Intervenant\DossierValideRule',
             'ServiceValideRule'                   => 'Application\Rule\Intervenant\ServiceValideRule',
             'PeutValiderServiceRule'              => 'Application\Rule\Intervenant\PeutValiderServiceRule',
             'ReferentielValideRule'               => 'Application\Rule\Intervenant\ReferentielValideRule',

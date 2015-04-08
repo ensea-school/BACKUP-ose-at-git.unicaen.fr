@@ -12,10 +12,8 @@ $modules = [
     'Application'
 ];
 
-if ($env == 'development') {
-    if ( 'dig-40' == getenv('HTTP_HOST')){
-        $modules[] = 'Test';
-    }
+if ( file_exists(dirname(dirname(__FILE__)).'/module/Debug') ) {
+    $modules[] = 'Debug';
 }
 
 return [

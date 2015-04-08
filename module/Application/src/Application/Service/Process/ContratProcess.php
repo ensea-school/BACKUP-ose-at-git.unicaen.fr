@@ -70,7 +70,8 @@ class ContratProcess extends AbstractService
                 ->setIntervenant($this->getIntervenant())
                 ->setStructure($this->getStructure())
                 ->setContrat(null) // le contrat initial, c'est lui!
-                ->setValidation(null);
+                ->setValidation(null)
+                ->setTotalHetd($this->getTotalHetdIntervenant());
         
         foreach ($volumesHoraires as $volumeHoraire) {
             $this->contrat->addVolumeHoraire($volumeHoraire);
@@ -96,7 +97,8 @@ class ContratProcess extends AbstractService
                 ->setStructure($this->getStructure())
                 ->setContrat($this->getContratInitial()) // lien vers le contrat initial
                 ->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($this->getIntervenant(), false))
-                ->setValidation(null);
+                ->setValidation(null)
+                ->setTotalHetd($this->getTotalHetdIntervenant());
         
         foreach ($volumesHoraires as $volumeHoraire) { /* @var $volumeHoraire \Application\Entity\Db\VolumeHoraire */
             $avenant->addVolumeHoraire($volumeHoraire);
@@ -331,6 +333,20 @@ class ContratProcess extends AbstractService
     }
 
     /**
+     * @return float
+     */
+    private function getTotalHetdIntervenant()
+    {   
+        $annee             = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
+        
+        $fr = $this->getIntervenant()->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+
+        return $fr->getServiceDu() + $fr->getSolde();
+    }
+
+    /**
      * @return ContratService
      */
     private function getServiceContrat()
@@ -352,5 +368,13 @@ class ContratProcess extends AbstractService
     private function getServiceTypeVolumeHoraire()
     {
         return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
+    }
+    
+    /**
+     * @return \Application\Service\EtatVolumeHoraire
+     */
+    private function getServiceEtatVolumeHoraire()
+    {
+        return $this->getServiceLocator()->get('ApplicationEtatVolumeHoraire');
     }
 }

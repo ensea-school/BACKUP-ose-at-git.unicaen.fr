@@ -2,22 +2,32 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Common\Exception\RuntimeException;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Listener\DossierListener;
 use Application\Acl\IntervenantRole;
-use Application\Service\ContextProviderAwareTrait;
+use Application\Controller\Plugin\Context;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\Listener\DossierListener;
+use Application\Entity\Db\TypeValidation;
+use Application\Form\Intervenant\Dossier as DossierForm;
 use Application\Service\ContextProviderAwareInterface;
+use Application\Service\ContextProviderAwareTrait;
+use Application\Service\Dossier;
+use Application\Service\Validation;
+use Application\Service\Workflow\Workflow;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-use Application\Entity\Db\TypeValidation;
+use Common\Exception\MessageException;
+use Common\Exception\RuntimeException;
+use Doctrine\ORM\EntityManager;
+use Zend\Form\Form;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
  * Description of DossierController
  *
- * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Context     context()
+ * @method EntityManager em()
+ * @method Context       context()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -27,12 +37,12 @@ class DossierController extends AbstractActionController implements ContextProvi
     use WorkflowIntervenantAwareTrait;
     
     /**
-     * @var \Application\Entity\Db\IntervenantExterieur
+     * @var IntervenantExterieur
      */
     private $intervenant;
     
     /**
-     * @var \Zend\Form\Form
+     * @var Form
      */
     private $form;
     
@@ -43,8 +53,8 @@ class DossierController extends AbstractActionController implements ContextProvi
     
     /**
      * 
-     * @return \Zend\View\Model\ViewModel
-     * @throws \Common\Exception\MessageException
+     * @return ViewModel
+     * @throws MessageException
      */
     public function voirAction()
     {
@@ -52,10 +62,10 @@ class DossierController extends AbstractActionController implements ContextProvi
         $dossier     = $intervenant->getDossier();
         $title       = "Données personnelles <small>$intervenant</small>";
         $short       = $this->params()->fromQuery('short', false);
-        $view        = new \Zend\View\Model\ViewModel();
+        $view        = new ViewModel();
 
         if (!$dossier) {
-            throw new \Common\Exception\MessageException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
+            throw new MessageException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
         }
         
         $view->setVariables(compact('intervenant', 'dossier', 'title', 'short'));
@@ -66,14 +76,13 @@ class DossierController extends AbstractActionController implements ContextProvi
     /**
      * Modification du dossier d'un intervenant.
      * 
-     * @return type
+     * @return ViewModel
      * @throws RuntimeException
      */
     public function modifierAction()
     {
         $role       = $this->getContextProvider()->getSelectedIdentityRole();
         $service    = $this->getDossierService();
-        $this->form = $this->getFormModifier();
         $validation = null;
 
         if ($role instanceof IntervenantRole) {
@@ -83,6 +92,8 @@ class DossierController extends AbstractActionController implements ContextProvi
             $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
      
+        $this->form = $this->getFormModifier();
+        
         $serviceValidation = $this->getServiceValidation();
         $qb = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
         $serviceValidation->finderByIntervenant($this->intervenant, $qb);
@@ -119,7 +130,7 @@ class DossierController extends AbstractActionController implements ContextProvi
             }
         }
         
-        $view = new \Zend\View\Model\ViewModel(array(
+        $view = new ViewModel(array(
             'intervenant' => $this->intervenant,
             'form'        => $this->form,
             'validation'  => $validation,
@@ -136,7 +147,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     {
         $label = null;
         $role  = $this->getContextProvider()->getSelectedIdentityRole();
-        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
        
         if ($role instanceof IntervenantRole) {
@@ -154,7 +165,7 @@ class DossierController extends AbstractActionController implements ContextProvi
      */
     private function getModifierRedirectionUrl()
     {
-        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
              
         $url   = $step ? $wf->getStepUrl($step) : $this->url()->fromRoute(null, array(), array(), true);
@@ -173,23 +184,21 @@ class DossierController extends AbstractActionController implements ContextProvi
     }
     
     /**
-     * @return \Application\Form\Intervenant\Dossier
+     * @return DossierForm
      */
     private function getFormModifier()
     {
-        return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier');
+        $form = $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier'); /* @var $form DossierForm */
+        
+        if ($this->intervenant->getStatut()->estBiatss()) {
+            $form->get('dossier')->remove('emailPerso');
+        }
+        
+        return $form;
     }
     
     /**
-     * @return \Application\Service\TypeValidation
-     */
-    private function getTypeValidationService()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeValidation');
-    }
-    
-    /**
-     * @return \Application\Service\Dossier
+     * @return Dossier
      */
     private function getDossierService()
     {
@@ -197,7 +206,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     }
     
     /**
-     * @return \Application\Service\Validation
+     * @return Validation
      */
     private function getServiceValidation()
     {

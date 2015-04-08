@@ -2,11 +2,8 @@
 
 namespace Application\Controller;
 
-use Application\Acl\ComposanteRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Indicateur as IndicateurService;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
 use Doctrine\ORM\EntityManager;
@@ -23,9 +20,11 @@ use Zend\View\Model\ViewModel;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IndicateurController extends AbstractActionController implements ContextProviderAwareInterface
+class IndicateurController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\IndicateurAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
+
 
     /**
      * Liste des indicateurs.
@@ -37,7 +36,7 @@ class IndicateurController extends AbstractActionController implements ContextPr
         $indicateurs     = $this->getServiceIndicateur()->getList();
         $indicateursImpl = $this->getServiceIndicateur()->getIndicateursImpl($indicateurs, $this->getStructure());
         $serviceNotif    = $this->getServiceNotificationIndicateur();
-        $personnel       = $this->getContextProvider()->getGlobalContext()->getPersonnel();
+        $personnel       = $this->getServiceContext()->getSelectedIdentityRole()->getPersonnel();
         
         $qb = $serviceNotif->finderByPersonnel($personnel);
         if ($this->getStructure()) {
@@ -69,7 +68,7 @@ class IndicateurController extends AbstractActionController implements ContextPr
      */
     public function resultAction()
     {
-        $role       = $this->getContextProvider()->getSelectedIdentityRole();
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $indicateur = $this->context()->mandatory()->indicateurFromRoute();
         $structure  = $this->context()->structureFromRoute();
         
@@ -118,7 +117,7 @@ class IndicateurController extends AbstractActionController implements ContextPr
         
         $indicateur   = $this->context()->mandatory()->indicateurFromRoute();
         $frequence    = $this->params()->fromPost('abonnement');
-        $personnel    = $this->getContextProvider()->getGlobalContext()->getPersonnel();
+        $personnel    = $this->getServiceContext()->getSelectedIdentityRole()->getPersonnel();
         $serviceNotif = $this->getServiceNotificationIndicateur();
         $status       = 'success';
         
@@ -179,21 +178,13 @@ class IndicateurController extends AbstractActionController implements ContextPr
      */
     private function getStructure()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
             return $role->getStructure();
         }
         
         return null;
-    }
-    
-    /**
-     * @return IndicateurService
-     */
-    private function getServiceIndicateur()
-    {
-        return $this->getServiceLocator()->get('IndicateurService');
     }
     
     /**

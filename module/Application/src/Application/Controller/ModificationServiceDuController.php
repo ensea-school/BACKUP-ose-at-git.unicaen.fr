@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Service\ContextProviderAwareInterface;
 use Common\Exception\RuntimeException;
 use Application\Entity\Db\IntervenantPermanent;
 use Common\Exception\MessageException;
@@ -17,9 +16,10 @@ use Application\Acl\ComposanteRole;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ModificationServiceDuController extends AbstractActionController implements ContextProviderAwareInterface
+class ModificationServiceDuController extends AbstractActionController
 {
-    use \Application\Service\ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\IntervenantAwareTrait;
 
     /**
      *
@@ -28,13 +28,13 @@ class ModificationServiceDuController extends AbstractActionController implement
     {
         $this->em()->getFilters()->enable('historique')->init(
             'Application\Entity\Db\ModificationServiceDu',
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
-        $context     = $this->getContextProvider()->getGlobalContext();
+        $context     = $this->getServiceContext();
         $isAjax      = $this->getRequest()->isXmlHttpRequest();
         $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant IntervenantPermanent */
-        $role        = $this->getContextProvider()->getSelectedIdentityRole();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
 
         $rule = $this->getServiceLocator()->get('PeutSaisirModificationServiceDuRule')
                 ->setIntervenant($intervenant)
@@ -100,13 +100,5 @@ class ModificationServiceDuController extends AbstractActionController implement
         $viewModel->setVariables($variables);
 
         return $viewModel;
-    }
-
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    public function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
     }
 }

@@ -3,7 +3,7 @@
 <h1><?php echo $this->translate($title); ?></h1>
 
 <?php
-$role = $this->contextProvider()->getSelectedIdentityRole();
+$role = $this->getServiceContext()->getSelectedIdentityRole();
 ?>
 
 <?php if ($role instanceof \Application\Acl\ComposanteRole): ?>

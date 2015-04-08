@@ -4,8 +4,6 @@ namespace Application\Controller;
 
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Indicateur as IndicateurService;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
@@ -29,9 +27,8 @@ use Zend\View\Renderer\PhpRenderer;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class NotificationController extends AbstractActionController implements ContextProviderAwareInterface
+class NotificationController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
 
     /**
      * Visualisation de tous les abonnements aux indicateurs.

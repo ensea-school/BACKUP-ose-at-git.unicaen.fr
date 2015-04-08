@@ -6,18 +6,17 @@ use Application\Form\OffreFormation\ElementModulateursFieldset;
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of ElementModulateursSaisieFieldset
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ElementModulateursSaisieFieldset extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class ElementModulateursSaisieFieldset extends AbstractHelper implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\TypeModulateurAwareTrait
+        ;
 
     /**
      * @var Saisie
@@ -68,13 +67,5 @@ class ElementModulateursSaisieFieldset extends AbstractHelper implements Service
             }
         }
         return $res;
-    }
-
-    /**
-     * @return \Application\Service\TypeModulateur
-     */
-    protected function getServiceTypeModulateur()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeModulateur');
     }
 }

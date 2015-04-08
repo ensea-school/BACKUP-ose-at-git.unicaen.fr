@@ -65,7 +65,7 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
      */
     protected function getQueryBuilder()
     {
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
         
         // INDISPENSABLE si plusieurs requêtes successives sur VIndicDepassRef !
         $this->getEntityManager()->clear('Application\Entity\Db\VIndicDepassRef');

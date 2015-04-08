@@ -5,8 +5,10 @@ namespace Application\Service;
 use \Application\Acl\Role;
 use Application\Entity\Db\Etablissement as EntityEtablissement;
 use Application\Entity\Db\Annee         as AnneeEntity;
+use Application\Entity\Db\Structure     as StructureEntity;
 use \DateTime;
 use Zend\Session\Container;
+use \Application\Interfaces\StructureAwareInterface;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.
@@ -15,6 +17,13 @@ use Zend\Session\Container;
  */
 class Context extends AbstractService
 {
+    use Traits\EtablissementAwareTrait,
+        Traits\AnneeAwareTrait,
+        Traits\IntervenantAwareTrait,
+        Traits\ParametresAwareTrait,
+        Traits\StructureAwareTrait
+    ;
+
     /**
      * selectedIdentityRole
      *
@@ -43,6 +52,16 @@ class Context extends AbstractService
     protected $anneeSuivante;
 
     /**
+     * @var DateTime
+     */
+    protected $dateObservation;
+
+    /**
+     * @var StructureEntity
+     */
+    protected $structure;
+
+    /**
      * parametres
      *
      * @var Parametres
@@ -68,13 +87,22 @@ class Context extends AbstractService
             $authUserContext = $this->getServiceLocator()->get('authUserContext');
             /* @var $authUserContext \UnicaenAuth\Service\UserContext */
 
-            $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();
-
-            if ($this->selectedIdentityRole instanceof IntervenantAwareInterface) {
-                $this->selectedIdentityRole->setIntervenant($this->getGlobalContext()->getIntervenant());
-            }
-            if ($this->selectedIdentityRole instanceof PersonnelAwareInterface){
-                $this->selectedIdentityRole->setPersonnel($this->getGlobalContext()->getPersonnel());
+            if ($authUserContext->getIdentity()) {
+                $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();
+                $utilisateur = $authUserContext->getDbUser();
+                if ($utilisateur){
+                    if ($this->selectedIdentityRole instanceof IntervenantAwareInterface) {
+                        $intervenant = $utilisateur->getIntervenant();
+                        if (! $intervenant){ // sinon import automatique
+                            $iSourceCode = (int)$authUserContext->getLdapUser()->getSupannEmpId();
+                            $intervenant = $this->getServiceIntervenant()->importer($iSourceCode);
+                        }
+                        $this->selectedIdentityRole->setIntervenant( $intervenant );
+                    }
+                    if ($this->selectedIdentityRole instanceof PersonnelAwareInterface){
+                        $this->selectedIdentityRole->setPersonnel( $utilisateur->getPersonnel() );
+                    }
+                }
             }
         }
 
@@ -90,12 +118,9 @@ class Context extends AbstractService
         if (! $this->etablissement){
             $sc = $this->getSessionContainer();
             if (! $sc->offsetExists('etablissement')){
-                $sc->etablissement = (int)$this->getParametres()->etablissement;
+                $sc->etablissement = (int)$this->getServiceParametres()->etablissement;
             }
-            $sEtablissement = $this->getServiceLocator()->get('applicationEtablissement');
-            /* @var $sEtablissement Etablissement */
-
-            $this->etablissement = $sEtablissement->get( $sc->etablissement);
+            $this->etablissement = $this->getServiceEtablissement()->get( $sc->etablissement);
         }
         return $this->etablissement;
     }
@@ -111,7 +136,7 @@ class Context extends AbstractService
         $this->etablissement = $etablissement;
         $this->getSessionContainer()->etablissement = $etablissement->getId();
         if ($updateParametres){
-            $this->getParametres()->etablissement = (string)$etablissement->getId();
+            $this->getServiceParametres()->etablissement = (string)$etablissement->getId();
         }
         return $this;
     }
@@ -125,12 +150,10 @@ class Context extends AbstractService
         if (! $this->annee){
             $sc = $this->getSessionContainer();
             if (! $sc->offsetExists('annee')){
-                $sc->annee = (int)$this->getParametres()->annee;
+                $sc->annee = (int)$this->getServiceParametres()->annee;
             }
-            $sAnnee = $this->getServiceLocator()->get('applicationAnnee');
-            /* @var $sAnnee Annee */
 
-            $this->annee = $sAnnee->get( $sc->annee);
+            $this->annee = $this->getServiceAnnee()->get( $sc->annee);
         }
         return $this->annee;
     }
@@ -142,10 +165,7 @@ class Context extends AbstractService
     public function getAnneePrecedente()
     {
         if (! $this->anneePrecedente){
-            $sAnnee = $this->getServiceLocator()->get('applicationAnnee');
-            /* @var $sAnnee Annee */
-
-            $this->anneePrecedente = $sAnnee->getPrecedente( $this->getAnnee() );
+            $this->anneePrecedente = $this->getServiceAnnee()->getPrecedente( $this->getAnnee() );
         }
         return $this->anneePrecedente;
     }
@@ -157,10 +177,7 @@ class Context extends AbstractService
     public function getAnneeSuivante()
     {
         if (! $this->anneeSuivante){
-            $sAnnee = $this->getServiceLocator()->get('applicationAnnee');
-            /* @var $sAnnee Annee */
-
-            $this->anneeSuivante = $sAnnee->getSuivante( $this->getAnnee() );
+            $this->anneeSuivante = $this->getServiceAnnee()->getSuivante( $this->getAnnee() );
         }
         return $this->anneeSuivante;
     }
@@ -176,7 +193,7 @@ class Context extends AbstractService
         $this->annee = $annee;
         $this->getSessionContainer()->annee = $annee->getId();
         if ($updateParametres){
-            $this->getParametres()->annee = (string)$annee->getId();
+            $this->getServiceParametres()->annee = (string)$annee->getId();
         }
         /* Rafraîchit les années précédentes et suivantes par la même occasion!! */
         $this->getAnneePrecedente();
@@ -184,7 +201,29 @@ class Context extends AbstractService
         return $this;
     }
 
+    /**
+     *
+     * @return DateTime
+     */
+    function getDateObservation()
+    {
+        $sc = $this->getSessionContainer();
+        if (! $sc->offsetExists('dateObservation')){
+            $sc->dateObservation = null;
+        }
+        return $sc->dateObservation;
+    }
 
+    /**
+     *
+     * @param DateTime $dateObservation
+     * @return self
+     */
+    public function setDateObservation( DateTime $dateObservation )
+    {
+        $sc->dateObservation = $dateObservation;
+        return $this;
+    }
 
     /**
      * 
@@ -196,7 +235,7 @@ class Context extends AbstractService
         if (! $sc->offsetExists('dateFinSaisiePermanents')){
             $sc->dateFinSaisiePermanents = DateTime::createFromFormat(
                                                 'd/m/Y',
-                                                $this->getParametres()->date_fin_saisie_permanents
+                                                $this->getServiceParametres()->date_fin_saisie_permanents
                                            );
         }
         return $sc->dateFinSaisiePermanents;
@@ -211,8 +250,42 @@ class Context extends AbstractService
     {
         $sc->dateFinSaisiePermanents = $dateFinSaisiePermanents;
         if ($updateParametres){
-            $this->getParametres()->date_fin_saisie_permanents = $sc->dateFinSaisiePermanents->format('d/m/Y');
+            $this->getServiceParametres()->date_fin_saisie_permanents = $sc->dateFinSaisiePermanents->format('d/m/Y');
         }
+        return $this;
+    }
+
+    /**
+     *
+     * @return EntityStructure
+     */
+    public function getStructure()
+    {
+        if (! $this->structure){
+            $sc = $this->getSessionContainer();
+            if (! $sc->offsetExists('structure')){
+                $role = $this->getSelectedIdentityRole();
+                if ($role instanceof StructureAwareInterface && $role->getStructure()){
+                    $sc->structure = $role->getStructure()->getId();
+                }else{
+                    $sc->structure = null;
+                }
+            }
+            $this->structure = $this->getServiceStructure()->get( $sc->structure);
+        }
+        return $this->structure;
+    }
+
+    /**
+     *
+     * @param EntityStructure $structure
+     * @param boolean $updateParametres
+     * @return self
+     */
+    public function setStructure( EntityStructure $structure )
+    {
+        $this->structure = $structure;
+        $this->getSessionContainer()->structure = $structure->getId();
         return $this;
     }
 
@@ -227,76 +300,4 @@ class Context extends AbstractService
         return $this->sessionContainer;
     }
 
-    /**
-     *
-     * @return Parametres
-     */
-    protected function getParametres()
-    {
-        if (null === $this->parametres) {
-            $this->parametres = $this->getServiceLocator()->get('ApplicationParametres');
-        }
-        return $this->parametres;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    /**
-     * Retourne le contexte global.
-     *
-     * @return GlobalContext
-     */
-    public function getGlobalContext()
-    {
-        if (null === $this->globalContext) {
-            $authUserContext = $this->getServiceLocator()->get('authUserContext');
-            /* @var $authUserContext \UnicaenAuth\Service\UserContext */
-
-            $utilisateur = null;
-            $intervenant = null;
-            $personnel   = null;
-
-
-
-            if ($authUserContext->getIdentity()) {
-                $utilisateur = $authUserContext->getDbUser();
-                if ($utilisateur){
-                    $intervenant = $utilisateur->getIntervenant();
-                    $personnel   = $utilisateur->getPersonnel();
-                }
-                if (null === $intervenant) {
-                    $ldapUser = $authUserContext->getLdapUser();
-
-                    $sIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
-                    /* @var $sIntervenant Intervenant */
-
-                    $intervenant = $sIntervenant->importer((int) $ldapUser->getSupannEmpId());
-                }
-            }
-
-            /**
-             * @todo Faire du GlobalContext un service !
-             */
-            $this->globalContext = new GlobalContext;
-            $this->globalContext
-                    ->setServiceLocator($this->getServiceLocator())
-                    ->setUtilisateur($utilisateur)
-                    ->setIntervenant($intervenant)
-                    ->setPersonnel($personnel)
-            ;
-        }
-
-        return $this->globalContext;
-    }
 }

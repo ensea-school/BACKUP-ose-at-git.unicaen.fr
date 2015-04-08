@@ -142,6 +142,7 @@ return [
     ],
     'service_manager' => [
         'invokables'   => [
+            'applicationIndicateur'             => 'Application\\Service\\Indicateur',
             'IndicateurService'                 => 'Application\\Service\\Indicateur',
             'NotificationIndicateurService'     => 'Application\\Service\\NotificationIndicateur',
             'AttenteValidationDonneesPerso'     => 'Application\\Service\\Indicateur\\AttenteValidationDonneesPersoIndicateurImpl',

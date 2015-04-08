@@ -14,13 +14,10 @@ use Zend\View\Model\JsonModel;
  */
 class StructureController extends AbstractActionController
 {
-    /**
-     * @return \Application\Service\Structure
-     */
-    public function getServiceStructure()
-    {
-        return $this->getServiceLocator()->get('ApplicationStructure');
-    }
+    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\StructureAwareTrait;
+
+    
 
     public function indexAction()
     {
@@ -64,7 +61,7 @@ class StructureController extends AbstractActionController
             [
                 'Application\Entity\Db\Structure'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         if (!($term = $this->params()->fromQuery('term'))) {

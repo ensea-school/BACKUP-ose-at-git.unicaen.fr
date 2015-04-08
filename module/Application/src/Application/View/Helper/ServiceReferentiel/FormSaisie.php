@@ -6,11 +6,6 @@ use Application\Acl\IntervenantRole;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\VolumeHoraireReferentielListe;
 use Application\Form\ServiceReferentiel\SaisieFieldset;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
-use Application\Service\EtatVolumeHoraire;
-use Application\Service\Service;
-use Application\Service\TypeVolumeHoraire as TypeVolumeHoraireService;
 use Common\Util;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -22,10 +17,14 @@ use Application\Form\ServiceReferentiel\Saisie as SaisieForm;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class FormSaisie extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class FormSaisie extends AbstractHelper implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\ServiceAwareTrait,
+        \Application\Service\Traits\TypeVolumeHoraireAwareTrait,
+        \Application\Service\Traits\EtatVolumeHoraireAwareTrait
+    ;
 
     /**
      * @var SaisieForm
@@ -73,7 +72,7 @@ class FormSaisie extends AbstractHelper implements ServiceLocatorAwareInterface,
 
         $part = $this->getView()->form()->openTag($this->form);
         
-        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof IntervenantRole) {
+        if (! $this->getServiceContext()->getSelectedIdentityRole() instanceof IntervenantRole) {
             $template = <<<EOS
 <div>
     %s
@@ -257,29 +256,5 @@ function applyStructureFonction()
 } 
 EOS;
         return $js;
-    }
-
-    /**
-     * @return Service
-     */
-    protected function getServiceService()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-    }
-
-    /**
-     * @return TypeVolumeHoraireService
-     */
-    protected function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 }

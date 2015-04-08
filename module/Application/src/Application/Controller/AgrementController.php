@@ -10,8 +10,6 @@ use Application\Entity\Db\TypeAgrement;
 use Application\Form\Agrement\Saisie;
 use Application\Rule\Intervenant\AgrementFourniRule;
 use Application\Rule\Intervenant\NecessiteAgrementRule;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Initializer\AgrementServiceAwareInterface;
 use Application\Service\Initializer\AgrementServiceAwareTrait;
 use Application\Service\Initializer\IntervenantServiceAwareInterface;
@@ -39,15 +37,14 @@ use Zend\View\Model\ViewModel;
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class AgrementController extends AbstractActionController
-implements ContextProviderAwareInterface,
-           AgrementServiceAwareInterface, IntervenantServiceAwareInterface, ServiceServiceAwareInterface,
+implements AgrementServiceAwareInterface, IntervenantServiceAwareInterface, ServiceServiceAwareInterface,
            WorkflowIntervenantAwareInterface
 {
-    use ContextProviderAwareTrait;
     use WorkflowIntervenantAwareTrait;
     use AgrementServiceAwareTrait;
     use IntervenantServiceAwareTrait;
     use ServiceServiceAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     const ACTION_VOIR        = "voir";
     const ACTION_VOIR_STR    = "voir-str";
@@ -97,7 +94,7 @@ implements ContextProviderAwareInterface,
                 'Application\Entity\Db\Agrement',
                 'Application\Entity\Db\TypeAgrement',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -123,7 +120,7 @@ implements ContextProviderAwareInterface,
     {
         $this->initFilters();
 
-        $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
+        $this->role         = $this->getServiceContext()->getSelectedIdentityRole();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
         $this->title        = sprintf("Agrément par %s <small>%s</small>", $this->typeAgrement->toString(true), $this->intervenant);
@@ -227,7 +224,7 @@ implements ContextProviderAwareInterface,
      */
     public function ajouterAction()
     {
-        $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
+        $this->role         = $this->getServiceContext()->getSelectedIdentityRole();
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
 
@@ -281,7 +278,7 @@ implements ContextProviderAwareInterface,
      */
     public function modifierAction()
     {
-        $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
+        $this->role         = $this->getServiceContext()->getSelectedIdentityRole();
         $this->intervenant  = $this->context()->mandatory()->intervenantFromRoute();
         $this->agrement     = $this->context()->mandatory()->agrementFromRoute();
         $this->typeAgrement = $this->agrement->getType();
@@ -328,7 +325,7 @@ implements ContextProviderAwareInterface,
      */
     public function ajouterLotAction()
     {
-        $this->role         = $this->getContextProvider()->getSelectedIdentityRole();
+        $this->role         = $this->getServiceContext()->getSelectedIdentityRole();
         $this->typeAgrement = $this->context()->mandatory()->typeAgrementFromRoute();
 
         /**

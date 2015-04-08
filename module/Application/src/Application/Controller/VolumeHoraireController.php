@@ -16,13 +16,10 @@ use Application\Exception\DbException;
  */
 class VolumeHoraireController extends AbstractActionController
 {
-    /**
-     * @return \Application\Service\VolumeHoraire
-     */
-    public function getServiceVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-    }
+    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\VolumeHoraireAwareTrait;
+    use \Application\Service\Traits\ServiceAwareTrait;
+
 
     public function voirAction()
     {
@@ -42,7 +39,7 @@ class VolumeHoraireController extends AbstractActionController
             [
                 'Application\Entity\Db\VolumeHoraire'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
         $service = $this->context()->serviceFromRoute('id');
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
@@ -61,7 +58,7 @@ class VolumeHoraireController extends AbstractActionController
                 'Application\Entity\Db\VolumeHoraire',
                 'Application\Entity\Db\MotifNonPaiement'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         $service            = $this->context()->serviceFromRoute();
@@ -136,11 +133,4 @@ class VolumeHoraireController extends AbstractActionController
         return $this->getServiceLocator()->get('FormElementManager')->get('VolumeHoraireSaisie');
     }
 
-    /**
-     * @return \Application\Service\Service
-     */
-    protected function getServiceService()
-    {
-        return $this->getServiceLocator()->get('applicationService');
-    }
 }

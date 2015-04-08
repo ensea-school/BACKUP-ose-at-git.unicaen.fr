@@ -6,8 +6,6 @@ use Application\Form\OffreFormation\EtapeModulateursSaisie;
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Zend\Form\Element\Select;
 
 /**
@@ -15,10 +13,11 @@ use Zend\Form\Element\Select;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ElementPedagogiqueAwareTrait
+    ;
 
     /**
      * @var Saisie
@@ -48,10 +47,7 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
      */
     public function render(EtapeModulateursSaisie $form)
     {
-        $sel = $this->getServiceLocator()->getServiceLocator()->get('applicationElementPedagogique');
-        /* @var $sel \Application\Service\ElementPedagogique */
-
-        $elements = $sel->getList( $sel->finderByEtape($form->getEtape() ) );
+        $elements = $this->getServiceElementPedagogique()->getList( $this->getServiceElementPedagogique()->finderByEtape($form->getEtape() ) );
         $typesModulateurs = $form->getTypesModulateurs();
 
         if (empty($elements)){

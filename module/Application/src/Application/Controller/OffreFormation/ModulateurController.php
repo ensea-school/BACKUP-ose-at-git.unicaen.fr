@@ -5,8 +5,6 @@ namespace Application\Controller\OffreFormation;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Exception\DbException;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of ModulateurController
@@ -16,9 +14,9 @@ use Application\Service\ContextProviderAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ModulateurController extends AbstractActionController implements ContextProviderAwareInterface
+class ModulateurController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ElementPedagogiqueAwareTrait;
 
     protected function saisirAction()
     {
@@ -57,16 +55,6 @@ class ModulateurController extends AbstractActionController implements ContextPr
         $title = "Saisie des modulateurs <br /><small>$etape</small>";
 
         return compact('title', 'form', 'errors');
-    }
-
-    /**
-     * Retourne le service ElementPedagogique.
-     *
-     * @return ElementPedagogiqueService
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('applicationElementPedagogique');
     }
 
     /**

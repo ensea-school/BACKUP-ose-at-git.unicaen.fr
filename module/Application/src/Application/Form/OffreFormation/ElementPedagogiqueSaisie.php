@@ -6,18 +6,15 @@ use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of ElementPedagogiqueSaisie
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
 
     /**
      * This function is automatically called when creating element with factory. It

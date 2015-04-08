@@ -4,8 +4,6 @@ namespace Application\Form\Intervenant;
 
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Zend\Form\Fieldset;
 use Zend\Validator\LessThan;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -19,10 +17,9 @@ use Application\Entity\Db\MotifModificationService;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class MotifModificationServiceDuFieldset extends Fieldset implements EntityManagerAwareInterface, InputFilterProviderInterface//, ContextProviderAwareInterface
+class MotifModificationServiceDuFieldset extends Fieldset implements EntityManagerAwareInterface, InputFilterProviderInterface
 {
     use EntityManagerAwareTrait;
-//    use ContextProviderAwareTrait;
 
     /**
      * @var Collection

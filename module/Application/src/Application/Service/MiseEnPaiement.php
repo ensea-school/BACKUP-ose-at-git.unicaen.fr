@@ -96,7 +96,7 @@ class MiseEnPaiement extends AbstractEntityService
             'composante'        => null,            // Composante qui en fait la demande
         ];
         $options = array_merge($defaultOptions, $options );
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
         $defaultTotal = [
             'hetd'                => 0,
@@ -210,7 +210,7 @@ class MiseEnPaiement extends AbstractEntityService
             'composante'        => null,            // Composante qui en fait la demande
         ];
         $options = array_merge($defaultOptions, $options );
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
 
         $data = [];
@@ -288,7 +288,7 @@ class MiseEnPaiement extends AbstractEntityService
             'composante'        => null,            // Composante qui en fait la demande
         ];
         $options = array_merge($defaultOptions, $options );
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
         $data = [];
 

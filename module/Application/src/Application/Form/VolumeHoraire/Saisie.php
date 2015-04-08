@@ -7,18 +7,17 @@ use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Form\Element\Hidden;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of Saisie
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
      *
@@ -47,7 +46,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
             'type'       => 'Text',
         ]);
 
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         if ($role instanceof \Application\Acl\Role) {
 
             $this->add([

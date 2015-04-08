@@ -3,7 +3,6 @@ namespace Application\View\Helper;
 
 use UnicaenAuth\View\Helper\UserProfileSelectRadioItem as UnicaenAuthViewHelper;
 use UnicaenAuth\View\Helper\UserProfileSelect;
-use Application\Service\Structure as StructureService;
 use Application\Entity\Db\Structure as StructureEntity;
 
 /**
@@ -15,6 +14,10 @@ use Application\Entity\Db\Structure as StructureEntity;
  */
 class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
 {
+    use \Application\Service\Traits\StructureAwareTrait,
+        \Application\Traits\StructureAwareTrait
+    ;
+
     /**
      * Retourne le code HTML généré par cette aide de vue.
      *
@@ -31,7 +34,7 @@ class UserProfileSelectRadioItem extends UnicaenAuthViewHelper
             $select
                     ->setEmptyOption("(Aucune)")
                     ->setValueOptions(array_map(function($v) { return (string) $v; }, $this->getStructures()))
-                    ->setValue($this->structureSelectionnee ? $this->structureSelectionnee->getId() : null)
+                    ->setValue($this->getStructure() ? $this->getStructure()->getId() : null)
                     ->setAttribute('class', $selectClass)
                     ->setAttribute('title', "Cliquez pour sélectionner la structure associée au profil $this->role");
 
@@ -80,32 +83,7 @@ EOS;
      */
     private function getStructures()
     {
-        $qb = $this->structureService->finderByRole(true);
-
-        return $this->structureService->getList($qb);
-    }
-
-    /**
-     * @var StructureService
-     */
-    protected $structureService;
-
-    function setServiceStructure(StructureService $structureService)
-    {
-        $this->structureService = $structureService;
-
-        return $this;
-    }
-
-    /**
-     * @var StructureEntity
-     */
-    protected $structureSelectionnee;
-
-    public function setStructureSelectionnee(StructureEntity $structureSelectionnee = null)
-    {
-        $this->structureSelectionnee = $structureSelectionnee;
-
-        return $this;
+        $qb = $this->getServiceStructure()->finderByRole(true);
+        return $this->getServiceStructure()->getList($qb);
     }
 }

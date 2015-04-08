@@ -14,6 +14,8 @@ use Application\Service\Intervenant as IntervenantService;
  */
 class RechercheController extends AbstractActionController
 {
+    use \Application\Service\Traits\ContextAwareTrait;
+
     public function intervenantAction()
     {
         if (($data = $this->prg()) instanceof \Zend\Http\Response) {
@@ -39,7 +41,7 @@ class RechercheController extends AbstractActionController
     {
         $this->em()->getFilters()->enable('historique')->init(
             'Application\Entity\Db\Intervenant',
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         if (!($term = $this->params()->fromQuery('term'))) {

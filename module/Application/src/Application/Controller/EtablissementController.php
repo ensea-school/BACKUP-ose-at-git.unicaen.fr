@@ -14,13 +14,9 @@ use Zend\View\Model\JsonModel;
  */
 class EtablissementController extends AbstractActionController
 {
-    /**
-     * @return \Application\Service\Etablissement
-     */
-    public function getServiceEtablissement()
-    {
-        return $this->getServiceLocator()->get('ApplicationEtablissement');
-    }
+    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\EtablissementAwareTrait;
+
 
     public function indexAction()
     {
@@ -62,7 +58,7 @@ class EtablissementController extends AbstractActionController
     {
         $this->em()->getFilters()->enable('historique')->init(
             'Application\Entity\Db\Etablissement',
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         if (!($term = $this->params()->fromQuery('term'))) {

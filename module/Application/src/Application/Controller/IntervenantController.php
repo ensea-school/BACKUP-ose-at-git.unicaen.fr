@@ -5,8 +5,6 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 
@@ -18,10 +16,11 @@ use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
+class IntervenantController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
-    use ContextProviderAwareTrait;
-    use WorkflowIntervenantAwareTrait;
+    use WorkflowIntervenantAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
      * @var Intervenant
@@ -34,7 +33,7 @@ class IntervenantController extends AbstractActionController implements ContextP
      */
     public function indexAction()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($role instanceof \Application\Acl\IntervenantRole) {
             // redirection selon le workflow
@@ -129,7 +128,7 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function voirAction()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $this->em()->getFilters()->enable('historique');
 
@@ -325,7 +324,7 @@ class IntervenantController extends AbstractActionController implements ContextP
 
     public function feuilleDeRouteAction()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();

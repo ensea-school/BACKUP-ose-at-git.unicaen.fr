@@ -10,8 +10,6 @@ use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\ServiceValidation;
 use Application\Form\Intervenant\ReferentielValidation;
@@ -26,9 +24,9 @@ use Application\Rule\Validation\ValidationReferentielRule;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ValidationController extends AbstractActionController implements ContextProviderAwareInterface
+class ValidationController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     /**
      * @var \Application\Entity\Db\Service[]
@@ -91,7 +89,7 @@ class ValidationController extends AbstractActionController implements ContextPr
                 'Application\Entity\Db\ServiceReferentiel',
                 'Application\Entity\Db\VolumeHoraireReferentiel',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -103,7 +101,7 @@ class ValidationController extends AbstractActionController implements ContextPr
     public function dossierAction()
     {
         $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($role instanceof ComposanteRole) {
             return $this->modifierDossierAction();
@@ -167,7 +165,7 @@ class ValidationController extends AbstractActionController implements ContextPr
 
     private function commonDossier()
     {
-        $role              = $this->getContextProvider()->getSelectedIdentityRole();
+        $role              = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceValidation = $this->getServiceValidation();
         $typeValidation    = TypeValidation::CODE_DONNEES_PERSO;
 
@@ -230,7 +228,7 @@ class ValidationController extends AbstractActionController implements ContextPr
 
         $serviceService      = $this->getServiceService();
         $serviceValidation   = $this->getServiceValidation();
-        $role                = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                = $this->getServiceContext()->getSelectedIdentityRole();
         $typeVolumeHoraire   = $this->getServiceTypeVolumehoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU));
         $this->intervenant   = $this->context()->mandatory()->intervenantFromRoute();
         $this->formValider   = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
@@ -393,7 +391,7 @@ class ValidationController extends AbstractActionController implements ContextPr
     {
         $serviceReferentiel     = $this->getServiceReferentiel();
         $serviceValidation      = $this->getServiceValidation();
-        $role                   = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                   = $this->getServiceContext()->getSelectedIdentityRole();
         $typeVolumeHoraire      = $this->getServiceTypeVolumehoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU));
         $this->intervenant      = $this->context()->mandatory()->intervenantFromRoute();
         $this->formValider      = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
@@ -547,7 +545,7 @@ class ValidationController extends AbstractActionController implements ContextPr
      */
     public function supprimerAction()
     {
-        $role       = $this->getContextProvider()->getSelectedIdentityRole();
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $validation = $this->context()->mandatory()->validationFromRoute(); /* @var $validation \Application\Entity\Db\Validation */
 
         if ($role instanceof \Application\Interfaces\StructureAwareInterface) {

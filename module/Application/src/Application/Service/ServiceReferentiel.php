@@ -137,15 +137,14 @@ class ServiceReferentiel extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $role    = $this->getServiceContext()->getSelectedIdentityRole();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
         $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
-        $this->getServiceIntervenant()->finderByAnnee( $context->getAnnee(), $qb );
+        $this->getServiceIntervenant()->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
 
-        if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface && $role->getIntervenant()){ // Si c'est un intervenant
             $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
         }
 
@@ -209,8 +208,9 @@ class ServiceReferentiel extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface){
+            $entity->setIntervenant( $role->getIntervenant() );
         }
         return $entity;
     }
@@ -223,10 +223,11 @@ class ServiceReferentiel extends AbstractEntityService
      */
     public function save($entity)
     {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->getEntityManager()->getConnection()->beginTransaction();
         try{
-            if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-                $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+            if (! $entity->getIntervenant() && $role instanceof \Application\Interfaces\IntervenantAwareInterface && $role->getIntervenant()){
+                $entity->setIntervenant( $role->getIntervenant() );
             }
             if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');

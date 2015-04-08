@@ -86,7 +86,7 @@ class PieceJointeProcess extends AbstractService
 
             $type = (string) $tpjs->getType();
             if ($tpjs->getType()->getCode() === TypePieceJointe::CARTE_ETUD) {
-                $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+                $annee = $this->getServiceContext()->getAnnee();
                 $type .= " $annee";
             }
             $label = sprintf('%s <span class="text-warning">%s</span>%s', $type, $obligatoire, $link);

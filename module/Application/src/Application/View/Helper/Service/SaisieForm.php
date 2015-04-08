@@ -6,18 +6,22 @@ use Application\Form\Service\Saisie;
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of SaisieForm
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\ServiceAwareTrait,
+        \Application\Service\Traits\PeriodeAwareTrait,
+        \Application\Service\Traits\TypeInterventionAwareTrait,
+        \Application\Service\Traits\TypeVolumeHoraireAwareTrait,
+        \Application\Service\Traits\EtatVolumeHoraireAwareTrait
+    ;
 
     /**
      * @var Saisie
@@ -76,7 +80,7 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
         $fservice = $this->form->get('service');
 
         $res = $this->getView()->form()->openTag($this->form);
-        if (! $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+        if (! $this->getServiceContext()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             $res .= $this->getView()->formControlGroup($fservice->get('intervenant'));
         }
         if ($fservice->has('interne-externe')){
@@ -160,45 +164,5 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface,
         }
         $res .= '</div><div class="volume-horaire-saisie-multiple-fin"></div>';
         return $res;
-    }
-
-    /**
-     * @return \Application\Service\Service
-     */
-    protected function getServiceService()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-    }
-
-    /**
-     * @return \Application\Service\Periode
-     */
-    protected function getServicePeriode()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
-    }
-
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
-    }
-
-    /**
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
     }
 }

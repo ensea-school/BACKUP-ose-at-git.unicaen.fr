@@ -380,9 +380,6 @@ return [
             'Application\Controller\OffreFormation\ElementPedagogique' => 'Application\Controller\OffreFormation\ElementPedagogiqueController',
             'Application\Controller\OffreFormation\EtapeCentreCout'    => 'Application\Controller\OffreFormation\EtapeCentreCoutController',
         ],
-        'initializers' => [
-            'Application\Service\ContextProviderAwareInitializer',
-        ],
     ],
     'service_manager' => [
         'invokables' => [
@@ -413,9 +410,6 @@ return [
             'ElementModulateursFieldset'              => 'Application\Form\OffreFormation\ElementModulateursFieldset',
             'EtapeCentreCoutSaisieForm'               => 'Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutSaisieForm',
             'ElementCentreCoutSaisieFieldset'         => 'Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset',
-        ],
-        'initializers' => [
-            'Application\Service\ContextProviderAwareInitializer',
         ],
     ],
     'view_helpers' => [

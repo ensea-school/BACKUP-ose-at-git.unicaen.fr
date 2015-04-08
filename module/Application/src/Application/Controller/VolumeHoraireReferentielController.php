@@ -16,13 +16,10 @@ use Application\Exception\DbException;
  */
 class VolumeHoraireReferentielController extends AbstractActionController
 {
-    /**
-     * @return \Application\Service\VolumeHoraireReferentiel
-     */
-    public function getServiceVolumeHoraireReferentiel()
-    {
-        return $this->getServiceLocator()->get('ApplicationVolumeHoraireReferentiel');
-    }
+    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
+    use \Application\Service\Traits\ServiceReferentielAwareTrait;
+
 
     public function voirAction()
     {
@@ -42,7 +39,7 @@ class VolumeHoraireReferentielController extends AbstractActionController
             [
                 'Application\Entity\Db\VolumeHoraireReferentiel'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
         $service = $this->context()->serviceReferentielFromRoute('id');
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
@@ -60,7 +57,7 @@ class VolumeHoraireReferentielController extends AbstractActionController
             [
                 'Application\Entity\Db\VolumeHoraireReferentiel'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
         $service           = $this->context()->serviceReferentielFromRoute(); /* @var $service \Application\Entity\Db\ServiceReferentiel */
         $typeVolumehoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
@@ -118,11 +115,4 @@ class VolumeHoraireReferentielController extends AbstractActionController
         return $this->getServiceLocator()->get('FormElementManager')->get('VolumeHoraireReferentielSaisie');
     }
 
-    /**
-     * @return \Application\Service\ServiceReferentiel
-     */
-    protected function getServiceServiceReferentiel()
-    {
-        return $this->getServiceLocator()->get('applicationServiceReferentiel');
-    }
 }

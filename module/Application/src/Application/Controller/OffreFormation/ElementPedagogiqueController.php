@@ -3,10 +3,7 @@
 namespace Application\Controller\OffreFormation;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Exception\DbException;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of ElementPedagogiqueController
@@ -16,17 +13,11 @@ use Application\Service\ContextProviderAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ElementPedagogiqueController extends AbstractActionController implements ContextProviderAwareInterface
+class ElementPedagogiqueController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ElementPedagogiqueAwareTrait
+    ;
 
-    /**
-     * @return \Application\Service\ServiceReferentiel
-     */
-    public function getContextProvider()
-    {
-        return $this->getServiceLocator()->get('ApplicationContextProvider');
-    }
 
     public function voirAction()
     {
@@ -224,15 +215,5 @@ class ElementPedagogiqueController extends AbstractActionController implements C
     protected function getFormAjouterModifier()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('ElementPedagogiqueSaisie');
-    }
-
-    /**
-     * Retourne le service ElementPedagogique.
-     *
-     * @return ElementPedagogiqueService
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('applicationElementPedagogique');
     }
 }

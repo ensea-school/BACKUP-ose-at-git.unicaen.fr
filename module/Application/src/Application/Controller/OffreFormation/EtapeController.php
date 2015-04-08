@@ -6,8 +6,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Service\Etape as EtapeService;
 use Application\Exception\DbException;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of EtapeController
@@ -17,9 +15,9 @@ use Application\Service\ContextProviderAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class EtapeController extends AbstractActionController implements ContextProviderAwareInterface
+class EtapeController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\LocalContextAwareTrait;
 
     public function ajouterAction()
     {
@@ -42,8 +40,7 @@ class EtapeController extends AbstractActionController implements ContextProvide
         $errors    = [];
 
         // persiste les filtres dans le contexte local
-        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
+        $localContext = $this->getServiceLocalContext();
 
         $localContext
                 ->setStructure($structure)

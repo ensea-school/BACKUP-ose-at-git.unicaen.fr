@@ -6,18 +6,16 @@ use Zend\Form\Fieldset;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of DossierFieldset
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, InputFilterProviderInterface
+class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, InputFilterProviderInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -25,7 +23,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
      */
     public function init()
     {
-        $anneePrec = $this->getContextProvider()->getGlobalContext()->getAnneePrecedente();
+        $anneePrec = $this->getServiceContext()->getAnneePrecedente();
 
         $this
                 ->setObject(new \Application\Entity\Db\Dossier())

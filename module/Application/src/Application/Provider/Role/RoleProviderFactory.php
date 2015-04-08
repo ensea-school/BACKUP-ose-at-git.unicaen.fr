@@ -13,6 +13,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class RoleProviderFactory implements FactoryInterface
 {
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
+
     /**
      * Create service
      *
@@ -21,8 +25,10 @@ class RoleProviderFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config                 = $serviceLocator->get('BjyAuthorize\Config');
-        $em                     = $serviceLocator->get('doctrine.entitymanager.orm_default'); /* @var $em \Doctrine\ORM\EntityManager */
+        $this->setServiceLocator($serviceLocator);
+
+        $config                 = $this->getServiceLocator()->get('BjyAuthorize\Config');
+        $em                     = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); /* @var $em \Doctrine\ORM\EntityManager */
 
         if (! isset($config['role_providers']['ApplicationRoleProvider'])) {
             throw new InvalidArgumentException(
@@ -31,15 +37,14 @@ class RoleProviderFactory implements FactoryInterface
         }
 
         $providerConfig = $config['role_providers']['ApplicationRoleProvider'];
-        $contextProvider    = $serviceLocator->get('ApplicationContextProvider');
 
         $roleProvider = new RoleProvider( $providerConfig );
         $roleProvider
                 ->setEntityManager($em)
-                ->setServiceLocator($serviceLocator)
-                ->setStructureSelectionnee($contextProvider->getGlobalContext()->getStructure())
+                ->setServiceLocator($this->getServiceLocator())
+                ->setStructureSelectionnee($this->getServiceContext()->getStructure())
                 ->init();
-        
+
         return $roleProvider;
     }
 }

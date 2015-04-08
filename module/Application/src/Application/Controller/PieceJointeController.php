@@ -9,8 +9,6 @@ use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Rule\Intervenant\PiecesJointesFourniesRule;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\PieceJointe as PieceJointeService;
 use Application\Service\Process\PieceJointeProcess;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -35,9 +33,9 @@ use Zend\View\Model\JsonModel;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class PieceJointeController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
+class PieceJointeController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
     use WorkflowIntervenantAwareTrait;
 
     /**
@@ -71,7 +69,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
                 'Application\Entity\Db\TypePieceJointe',
                 'Application\Entity\Db\Fichier',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -85,7 +83,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
         $this->initFilters();
 
         $this->title = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
-        $role        = $this->getContextProvider()->getSelectedIdentityRole();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
 
         if (!$this->getIntervenant() instanceof IntervenantExterieur) {
             throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
@@ -207,7 +205,7 @@ class PieceJointeController extends AbstractActionController implements ContextP
            return;
         }
         // pas de nottif si c'est un gestionnaire qui dépose des PJ
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\ComposanteRole) {
+        if ($this->getServiceContext()->getSelectedIdentityRole() instanceof \Application\Acl\ComposanteRole) {
             return;
         }
 

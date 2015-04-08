@@ -11,6 +11,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ElementModulateur extends AbstractEntityService
 {
+    use Traits\ElementPedagogiqueAwareTrait;
+
     /**
      * retourne la classe des entités
      *
@@ -45,16 +47,8 @@ class ElementModulateur extends AbstractEntityService
 
         $this->join( $this->getServiceElementPedagogique(), $qb, 'elementPedagogique', false, $alias );
 
-        $this->getServiceElementPedagogique()->finderByAnnee( $this->getContextProvider()->getGlobalContext()->getannee(), $qb ); // Filtre d'année obligatoire
+        $this->getServiceElementPedagogique()->finderByAnnee( $this->getServiceContext()->getannee(), $qb ); // Filtre d'année obligatoire
 
         return $qb;
-    }
-
-    /**
-     * @return ElementPedagogique
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('applicationElementPedagogique');
     }
 }

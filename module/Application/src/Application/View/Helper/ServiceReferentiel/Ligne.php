@@ -6,8 +6,6 @@ use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\ServiceReferentiel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Interfaces\ServiceReferentielAwareInterface;
 use Application\Traits\ServiceReferentielAwareTrait;
 use Application\View\Helper\VolumeHoraireReferentiel\Liste as ListeHelper;
@@ -18,10 +16,9 @@ use Application\View\Helper\VolumeHoraireReferentiel\Liste as ListeHelper;
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 class Ligne extends AbstractHtmlElement
-            implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, ServiceReferentielAwareInterface
+            implements ServiceLocatorAwareInterface, ServiceReferentielAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
     use ServiceReferentielAwareTrait;
 
     /**

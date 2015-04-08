@@ -20,6 +20,17 @@ use Application\Entity\Service\Recherche;
  */
 class ServiceController extends AbstractActionController
 {
+    use \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\ServiceAwareTrait,
+        \Application\Service\Traits\VolumeHoraireAwareTrait,
+        \Application\Service\Traits\ElementPedagogiqueAwareTrait,
+        \Application\Service\Traits\TypeVolumeHoraireAwareTrait,
+        \Application\Service\Traits\TypeInterventionAwareTrait,
+        \Application\Service\Traits\IntervenantAwareTrait,
+        \Application\Service\Traits\ServiceReferentielAwareTrait,
+        \Application\Service\Traits\EtatVolumeHoraireAwareTrait
+    ;
+
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
@@ -32,7 +43,7 @@ class ServiceController extends AbstractActionController
                 'Application\Entity\Db\Service',
                 'Application\Entity\Db\VolumeHoraire'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -45,7 +56,7 @@ class ServiceController extends AbstractActionController
     private function getFilteredServices($intervenant, $recherche)
     {
                 //\Test\Util::sqlLog($this->getServiceService()->getEntityManager());
-        $role                      = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                      = $this->getServiceContext()->getSelectedIdentityRole();
 
         $service                   = $this->getServiceService();
         $volumeHoraireService      = $this->getServiceLocator()->get('applicationVolumehoraire');       /* @var $volumeHoraireService \Application\Service\VolumeHoraire */
@@ -92,7 +103,7 @@ class ServiceController extends AbstractActionController
         $typeVolumeHoraireCode    = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU' );
         $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
         $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
         $viewModel                = new \Zend\View\Model\ViewModel();
         $canAddService            = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
@@ -164,7 +175,7 @@ class ServiceController extends AbstractActionController
     public function exportAction()
     {
         $intervenant        = $this->context()->intervenantFromRoute();
-        $role               = $this->getContextProvider()->getSelectedIdentityRole();
+        $role               = $this->getServiceContext()->getSelectedIdentityRole();
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
             throw new \BjyAuthorize\Exception\UnAuthorizedException();
@@ -211,8 +222,8 @@ class ServiceController extends AbstractActionController
     {
         $intervenant        = $this->context()->intervenantFromRoute();
         $canAddService      = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
-        $annee              = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $role               = $this->getContextProvider()->getSelectedIdentityRole();
+        $annee              = $this->getServiceContext()->getAnnee();
+        $role               = $this->getServiceContext()->getSelectedIdentityRole();
         $action             = $this->getRequest()->getQuery('action', null);
         $tri                = null;
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
@@ -432,7 +443,7 @@ class ServiceController extends AbstractActionController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get( $typeVolumeHoraire );
         }
         $service = $this->getServiceService();
-        //$role    = $this->getContextProvider()->getSelectedIdentityRole();
+        //$role    = $this->getServiceContext()->getSelectedIdentityRole();
         $form    = $this->getFormSaisie();
         $errors  = [];
 
@@ -493,78 +504,6 @@ class ServiceController extends AbstractActionController
     protected function getFormRecherche()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('ServiceRechercheForm');
-    }
-
-    /**
-     * @return \Application\Service\Service
-     */
-    protected function getServiceService()
-    {
-        return $this->getServiceLocator()->get('ApplicationService');
-    }
-
-    /**
-     * @return \Application\Service\VolumeHoraire
-     */
-    protected function getServiceVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\ElementPedagogique
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('ApplicationElementPedagogique');
-    }
-
-    /**
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumehoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeIntervention');
-    }
-
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('applicationIntervenant');
-    }
-
-    /**
-     * @return \Application\Service\ServiceReferentiel
-     */
-    protected function getServiceServiceReferentiel()
-    {
-        return $this->getServiceLocator()->get('applicationServiceReferentiel');
-    }
-
-    /**
-     * @return \Application\Service\EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\ContextProvider
-     */
-    public function getContextProvider()
-    {
-        return $this->getServiceLocator()->get('ApplicationContextProvider');
     }
 
     /**

@@ -7,8 +7,6 @@ use Common\Exception\RuntimeException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Listener\DossierListener;
 use Application\Acl\IntervenantRole;
-use Application\Service\ContextProviderAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Application\Entity\Db\TypeValidation;
@@ -21,10 +19,11 @@ use Application\Entity\Db\TypeValidation;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class DossierController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
+class DossierController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
-    use ContextProviderAwareTrait;
-    use WorkflowIntervenantAwareTrait;
+    use WorkflowIntervenantAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
      * @var \Application\Entity\Db\IntervenantExterieur
@@ -71,7 +70,7 @@ class DossierController extends AbstractActionController implements ContextProvi
      */
     public function modifierAction()
     {
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $role    = $this->getServiceContext()->getSelectedIdentityRole();
         $service = $this->getDossierService();
         $this->form    = $this->getFormModifier();
 
@@ -130,7 +129,7 @@ class DossierController extends AbstractActionController implements ContextProvi
     private function getSubmitButtonLabel()
     {
         $label = null;
-        $role  = $this->getContextProvider()->getSelectedIdentityRole();
+        $role  = $this->getServiceContext()->getSelectedIdentityRole();
         $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
 

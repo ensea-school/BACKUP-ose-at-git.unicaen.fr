@@ -9,9 +9,9 @@ use UnicaenAuth\Controller\UtilisateurController as BaseController;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class UtilisateurController extends BaseController implements \Application\Service\ContextProviderAwareInterface
+class UtilisateurController extends BaseController
 {
-    use \Application\Service\ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
     
     /**
      * Traite les requêtes AJAX POST de sélection d'un profil utilisateur.
@@ -29,7 +29,7 @@ class UtilisateurController extends BaseController implements \Application\Servi
             if ($structureId) {
                 $structure = $this->getServiceLocator()->get('ApplicationStructure')->get($structureId);
             }
-            $this->getContextProvider()->getGlobalContext()->setStructure($structure);
+            $this->getServiceContext()->setStructure($structure);
 
             $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>%s.",
                     $role->getRoleName(),

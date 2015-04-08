@@ -65,7 +65,7 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
      */
     protected function getQueryBuilder()
     {
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
         
         // INDISPENSABLE si plusieurs requêtes successives sur VIndicDepassHcHorsRemuFc !
         $this->getEntityManager()->clear('Application\Entity\Db\VIndicDepassHcHorsRemuFc');

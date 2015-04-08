@@ -4,8 +4,6 @@ namespace Application\Assertion;
 
 use DateTime;
 use Application\Acl\IntervenantPermanentRole;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Zend\Mvc\MvcEvent;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Assertion\AssertionInterface;
@@ -20,10 +18,12 @@ use Application\Acl\Role;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
+abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
+
  
     const PRIVILEGE_CREATE = 'create';
     const PRIVILEGE_READ   = 'read';
@@ -191,7 +191,7 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
     
     protected function getSelectedIdentityRole()
     {
-        return $this->getContextProvider()->getSelectedIdentityRole();
+        return $this->getServiceContext()->getSelectedIdentityRole();
     }
     
     /**
@@ -225,7 +225,6 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
      */
     protected function isDateFinPrivilegeDepassee()
     {
-        $context = $this->getContextProvider()->getGlobalContext();
         $dateFin = null;
         
         /**
@@ -234,7 +233,7 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
         if ($this->role instanceof IntervenantPermanentRole) {
             // il existe une date de fin de saisie (i.e. ajout, modif, suppression) de service par les intervenants permanents eux-mêmes
             if (in_array($this->privilege, [self::PRIVILEGE_CREATE, self::PRIVILEGE_UPDATE, self::PRIVILEGE_DELETE])) {
-                $dateFin = $context->getDateFinSaisiePermanents();
+                $dateFin = $this->getServiceContext()->getDateFinSaisiePermanents();
                 
                 /**
                  * Vilaine verrue pour prolonger la période de saisie des permanents de l'ESPE

@@ -15,7 +15,9 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
      *
@@ -43,10 +45,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
         /* @var $url Zend\View\Helper\Url */
 
-        $contextProvider = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider');
-        /* @var $contextProvider \Application\Service\ContextProvider */
-
-        $annee = $contextProvider->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
         $periodes = $this->getServicePeriode()->getList( $this->getServicePeriode()->finderByPaiement(true) );
         $datesMiseEnPaiement = [];

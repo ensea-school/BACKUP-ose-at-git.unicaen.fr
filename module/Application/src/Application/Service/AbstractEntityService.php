@@ -407,7 +407,7 @@ abstract class AbstractEntityService extends AbstractService
 
         $hasHistorique = is_subclass_of( $this->getEntityClass(), 'Application\Entity\Db\HistoriqueAwareInterface');
         if ($hasHistorique){
-            $dateObservation = $this->getContextProvider()->getGlobalContext()->getDateObservation();
+            $dateObservation = $this->getServiceContext()->getDateObservation();
             if ($dateObservation){
                 $qb->andWhere('1 = compriseEntre('.$alias.'.histoCreation,'.$alias.'.histoDestruction, :dateObservation)');
                 $qb->setParameter('dateObservation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);

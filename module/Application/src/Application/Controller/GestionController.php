@@ -2,8 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
@@ -14,9 +12,9 @@ use Zend\Mvc\Controller\AbstractActionController;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class GestionController extends AbstractActionController implements ContextProviderAwareInterface
+class GestionController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     /**
      *
@@ -24,7 +22,7 @@ class GestionController extends AbstractActionController implements ContextProvi
      */
     public function anneeAction()
     {
-        $annee = $this->context()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
         return compact('annee');
     }

@@ -4,8 +4,6 @@ namespace Application\Form\ServiceReferentiel;
 
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\FonctionReferentiel;
 use Application\Service\Structure;
 use UnicaenApp\Form\Element\SearchAndSelect;
@@ -24,10 +22,12 @@ use Zend\View\Helper\Url;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\LocalContextAwareTrait
+    ;
 
     public function __construct($name = null, $options = [])
     {
@@ -47,7 +47,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             'type' => 'Hidden',
         ]);
 
-        $identityRole = $this->getContextProvider()->getSelectedIdentityRole();
+        $identityRole = $this->getServiceContext()->getSelectedIdentityRole();
 
         if (!$identityRole instanceof IntervenantRole) {
             $intervenant = new SearchAndSelect('intervenant');
@@ -157,12 +157,10 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     public function initFromContext()
     {
         /* Peuple le formulaire avec les valeurs par défaut issues du contexte global */
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-        $cl = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
-        /* @var $cl \Application\Service\LocalContext */
-
+        $cl = $this->getServiceLocalContext();
         if ($this->has('intervenant') && $cl->getIntervenant()) {
             $this->get('intervenant')->setValue([
                 'id'    => $cl->getIntervenant()->getSourceCode(),
@@ -190,12 +188,10 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     public function saveToContext()
     {
         /* Met à jour le contexte local en fonction des besoins... */
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-         $cl = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
-        /* @var $cl \Application\Service\LocalContext */
-
+        $cl = $this->getServiceLocalContext();
         if (!$role instanceof IntervenantRole) {
             if (($structureId = $this->get('structure')->getValue())) {
                 $cl->setStructure($this->getServiceStructure()->get($structureId));

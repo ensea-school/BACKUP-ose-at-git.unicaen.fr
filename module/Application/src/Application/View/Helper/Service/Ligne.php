@@ -6,8 +6,6 @@ use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Interfaces\ServiceAwareInterface;
 use Application\Traits\ServiceAwareTrait;
 
@@ -16,11 +14,12 @@ use Application\Traits\ServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, ServiceAwareInterface
+class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface, ServiceAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
-    use ServiceAwareTrait;
+    use ServiceLocatorAwareTrait,
+        ServiceAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
      * @var Liste
@@ -95,7 +94,6 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $liste = $this->getListe();
         $service = $this->getService();
 
-        $context = $this->getContextProvider()->getGlobalContext();
         $vhl     = $this->getService()->getVolumeHoraireListe()->setTypeVolumeHoraire( $liste->getTypeVolumeHoraire() );
 
         $typesIntervention = $this->getListe()->getTypesIntervention();
@@ -111,7 +109,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                 $out .= "<td>&nbsp;</td>\n";
             }
         }
-        if ($service->getEtablissement() === $context->getEtablissement()) {
+        if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) {
             if ($liste->getColumnVisibility('structure-ens')){
                 $out .= '<td>'.$this->renderStructure($service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null)."</td>\n";
             }

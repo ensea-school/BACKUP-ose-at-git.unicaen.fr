@@ -4,8 +4,6 @@ namespace Application\Controller\OffreFormation;
 
 use Application\Entity\Db\Etape;
 use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutSaisieForm;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Common\Exception\RuntimeException;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -15,9 +13,10 @@ use Zend\Mvc\Controller\AbstractActionController;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class EtapeCentreCoutController extends AbstractActionController implements ContextProviderAwareInterface
+class EtapeCentreCoutController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ElementPedagogiqueAwareTrait
+    ;
 
     /**
      *
@@ -47,16 +46,6 @@ class EtapeCentreCoutController extends AbstractActionController implements Cont
         $title = "Paramétrage des centres de coûts <br /><small>$etape</small>";
 
         return compact('etape', 'title', 'form', 'errors');
-    }
-
-    /**
-     * Retourne le service ElementPedagogique.
-     *
-     * @return ElementPedagogiqueService
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('applicationElementPedagogique');
     }
 
     /**

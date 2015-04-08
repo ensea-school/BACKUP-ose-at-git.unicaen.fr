@@ -105,7 +105,7 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
      */
     public function checkRouteParams(MvcEvent $e)
     {
-        $role = $e->getApplication()->getServiceManager()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        $role = $e->getApplication()->getServiceManager()->get('ApplicationContext')->getSelectedIdentityRole();
         $routeMatch = $e->getRouteMatch();
         if ($role instanceof Acl\IntervenantRole) {
             if (($value = $routeMatch->getParam($name = 'intervenant')) && $value != $role->getIntervenant()->getSourceCode()) {

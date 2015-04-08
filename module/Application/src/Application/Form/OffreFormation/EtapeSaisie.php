@@ -6,18 +6,15 @@ use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of EtapeSaisie
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
 
     private $typesFormation;
 

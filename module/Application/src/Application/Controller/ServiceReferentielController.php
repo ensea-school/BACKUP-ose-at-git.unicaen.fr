@@ -3,17 +3,9 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Doctrine\Common\Collections\ArrayCollection;
 use Common\Exception\MessageException;
-use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Exception\DbException;
-use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\IntervenantPermanent;
-use Application\Form\ServiceReferentiel\FonctionServiceReferentielFieldset;
-use Application\Acl\ComposanteRole;
 use Application\Entity\Service\Recherche;
 
 /**
@@ -24,9 +16,9 @@ use Application\Entity\Service\Recherche;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentielController extends AbstractActionController implements ContextProviderAwareInterface
+class ServiceReferentielController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     protected function initFilters()
     {
@@ -35,7 +27,7 @@ class ServiceReferentielController extends AbstractActionController implements C
                 'Application\Entity\Db\ServiceReferentiel',
                 'Application\Entity\Db\VolumeHoraireReferentiel'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -48,7 +40,7 @@ class ServiceReferentielController extends AbstractActionController implements C
     private function getFilteredServices($intervenant, $recherche)
     {
   //              \Test\Util::sqlLog($this->getServiceService()->getEntityManager());
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $serviceReferentiel              = $this->getServiceServiceReferentiel();
         $volumeHoraireReferentielService = $this->getServiceLocator()->get('applicationVolumehoraireReferentiel'); /* @var $volumeHoraireReferentielService \Application\Service\VolumeHoraireReferentiel */
@@ -80,7 +72,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         $typeVolumeHoraireCode    = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
         $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
         $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
         $viewModel                = new \Zend\View\Model\ViewModel();
         $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
@@ -150,7 +142,7 @@ class ServiceReferentielController extends AbstractActionController implements C
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get( $typeVolumeHoraire );
         }
         $service = $this->getServiceServiceReferentiel();
-        //$role    = $this->getContextProvider()->getSelectedIdentityRole();
+        //$role    = $this->getServiceContext()->getSelectedIdentityRole();
         $form    = $this->getFormSaisie();
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
         $errors  = [];

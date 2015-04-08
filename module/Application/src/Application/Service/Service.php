@@ -4,19 +4,19 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
-use Application\Entity\Db\Etape as EtapeEntity;
-use Application\Entity\Db\Service as ServiceEntity;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Etape             as EtapeEntity;
+use Application\Entity\Db\Service           as ServiceEntity;
+use Application\Entity\Db\Intervenant       as IntervenantEntity;
+use Application\Entity\Db\Structure         as StructureEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
-use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
-use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
-use Application\Entity\Db\Validation as ValidationEntity;
-use Application\Entity\Db\TypeValidation as TypeValidationEntity;
-use Application\Entity\NiveauEtape as NiveauEtapeEntity;
+use Application\Entity\Db\TypeIntervenant   as TypeIntervenantEntity;
+use Application\Entity\Db\TypeIntervention  as TypeInterventionEntity;
+use Application\Entity\Db\Validation        as ValidationEntity;
+use Application\Entity\Db\TypeValidation    as TypeValidationEntity;
+use Application\Entity\NiveauEtape          as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
-use Zend\Session\Container as SessionContainer;
+use Zend\Session\Container                  as SessionContainer;
 use Application\Form\Service\RechercheHydrator;
 
 /**
@@ -26,6 +26,14 @@ use Application\Form\Service\RechercheHydrator;
  */
 class Service extends AbstractEntityService
 {
+    use Traits\ElementPedagogiqueAwareTrait,
+        Traits\IntervenantAwareTrait,
+        Traits\StructureAwareTrait,
+        Traits\TypeInterventionAwareTrait,
+        Traits\EtatVolumeHoraireAwareTrait,
+        Traits\TypeVolumeHoraireAwareTrait
+    ;
+
     /**
      *
      * @var SessionContainer
@@ -67,8 +75,10 @@ class Service extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface){
+            $entity->setIntervenant( $role->getIntervenant() );
         }
         return $entity;
     }
@@ -170,11 +180,13 @@ class Service extends AbstractEntityService
     {
         $this->getEntityManager()->getConnection()->beginTransaction();
         try{
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
+
             if (! $entity->getEtablissement()){
-                $entity->setEtablissement( $this->getContextProvider()->getGlobalContext()->getEtablissement() );
+                $entity->setEtablissement( $this->getServiceContext()->getEtablissement() );
             }
-            if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-                $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+            if (! $entity->getIntervenant() && $role instanceof \Application\Interfaces\IntervenantAwareInterface){
+                $entity->setIntervenant( $role->getIntervenant() );
             }
             if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
@@ -348,15 +360,14 @@ class Service extends AbstractEntityService
      */
     public function finderByContext( QueryBuilder $qb=null, $alias=null )
     {
-        $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
         $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
-        $this->getServiceIntervenant()->finderByAnnee( $context->getAnnee(), $qb );
+        $this->getServiceIntervenant()->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
 
-        if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface && $role->getIntervenant()){ // Si c'est un intervenant
             $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
         }
 
@@ -618,7 +629,7 @@ class Service extends AbstractEntityService
             'composante'        => null,            // Composante qui en fait la demande
         ];
         $options = array_merge($defaultOptions, $options );
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
         $data = [];
         $shown = [];
         $typesIntervention = [];
@@ -870,7 +881,7 @@ class Service extends AbstractEntityService
     public function isLocal( ServiceEntity $service )
     {
         if (! $service->getEtablissement()) return true; // par défaut
-        if ($service->getEtablissement() === $this->getContextProvider()->getGlobalContext()->getEtablissement()) return true;
+        if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) return true;
         return false;
     }
 
@@ -934,7 +945,7 @@ class Service extends AbstractEntityService
         if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantExterieur){
             return $this->cannotDoThat("Un intervenant vacataire ne peut pas avoir de motif de non paiement", $runEx);
         }
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+        if ($this->getServiceContext()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             return $this->cannotDoThat("Les intervenants n'ont pas le droit de visualiser ou modifier les motifs de non paiement", $runEx);
         }
         return true;
@@ -949,7 +960,7 @@ class Service extends AbstractEntityService
      */
     public function canAdd($intervenant = null, $runEx = false)
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
@@ -987,53 +998,5 @@ class Service extends AbstractEntityService
         foreach( $services as $service ){
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
         }
-    }
-
-    /**
-     * @return TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
-    }
-
-    /**
-     * @return TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->get('applicationTypeIntervention');
-    }
-
-    /**
-     * @return Structure
-     */
-    protected function getServiceStructure()
-    {
-        return $this->getServiceLocator()->get('applicationStructure');
-    }
-
-    /**
-     * @return Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('applicationIntervenant');
-    }
-
-    /**
-     * @return ElementPedagogique
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('applicationElementPedagogique');
     }
 }

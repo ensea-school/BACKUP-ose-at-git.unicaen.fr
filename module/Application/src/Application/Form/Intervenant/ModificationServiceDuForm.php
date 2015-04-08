@@ -5,8 +5,6 @@ namespace Application\Form\Intervenant;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Entity\Db\IntervenantPermanent;
 
 /**
@@ -14,10 +12,9 @@ use Application\Entity\Db\IntervenantPermanent;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, \UnicaenApp\Service\EntityManagerAwareInterface
+class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInterface, \UnicaenApp\Service\EntityManagerAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
     use \UnicaenApp\Service\EntityManagerAwareTrait;
 
     /**

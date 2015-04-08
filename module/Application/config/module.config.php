@@ -185,7 +185,6 @@ $main =  [
             'AuthenticatedUserSavedListener'                 => 'Application\AuthenticatedUserSavedListener',
             'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'ApplicationAnnee'                               => 'Application\\Service\\Annee',
-            'ApplicationContextProvider'                     => 'Application\\Service\\ContextProvider',
             'ApplicationContext'                             => 'Application\\Service\\Context',
             'ApplicationLocalContext'                        => 'Application\\Service\\LocalContext',
             'ApplicationParametres'                          => 'Application\\Service\\Parametres',
@@ -203,9 +202,6 @@ $main =  [
         ],
         'abstract_factories' => [
         ],
-        'initializers' => [
-            'Application\Service\ContextProviderAwareInitializer',
-        ],
     ],
     'view_helpers' => [
         'factories' => [
@@ -215,15 +211,6 @@ $main =  [
             'historiqueDl' => 'Application\View\Helper\HistoriqueDl',
             'validationDl' => 'Application\View\Helper\ValidationDl',
             'mailto'       => 'Application\View\Helper\Mailto',
-            'contextProvider' => 'Application\View\Helper\ContextProvider',
-        ],
-        'initializers' => [
-            'Application\Service\ContextProviderAwareInitializer',
-        ],
-    ],
-    'form_elements' => [
-        'initializers' => [
-            'Application\Service\ContextProviderAwareInitializer',
         ],
     ],
     'translator' => [

@@ -2,8 +2,6 @@
 namespace Application\Form\Service;
 
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
 
@@ -12,11 +10,12 @@ use UnicaenApp\Service\EntityManagerAwaretrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareInterface, EntityManagerAwareInterface
+class SaisieFieldsetHydrator implements HydratorInterface, EntityManagerAwareInterface
 {
 
-    use ContextProviderAwareTrait;
-    use EntityManagerAwaretrait;
+    use EntityManagerAwaretrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
      * Hydrate $object with the provided $data.
@@ -80,7 +79,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareI
             $data['etablissement'] = null;
         }
 
-        if ($object->getEtablissement() === $this->getContextProvider()->getGlobalContext()->getEtablissement()){
+        if ($object->getEtablissement() === $this->getServiceContext()->getEtablissement()){
             $data['interne-externe'] = 'service-interne';
         }else{
             $data['interne-externe'] = 'service-externe';

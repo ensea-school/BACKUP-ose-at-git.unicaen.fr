@@ -5,9 +5,6 @@ namespace Application\Controller;
 use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeContrat;
-use Application\Entity\Db\TypeValidation;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Common\Constants;
 use Common\Exception\LogicException;
 use UnicaenApp\Exporter\Pdf;
@@ -30,9 +27,9 @@ use BjyAuthorize\Exception\UnAuthorizedException;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ContratController extends AbstractActionController implements ContextProviderAwareInterface
+class ContratController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     /**
      * @var Contrat
@@ -53,7 +50,7 @@ class ContratController extends AbstractActionController implements ContextProvi
                 'Application\Entity\Db\Service',
                 'Application\Entity\Db\VolumeHoraire',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -64,7 +61,7 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function indexAction()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($role instanceof IntervenantRole) {
             $intervenant = $role->getIntervenant();
@@ -91,7 +88,7 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function voirAction()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $this->initFilters();
 
@@ -118,7 +115,7 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     private function getContrats()
     {
-        $role           = $this->getContextProvider()->getSelectedIdentityRole();
+        $role           = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceContrat = $this->getServiceContrat();
         $structure      = $role instanceof ComposanteRole ? $role->getStructure() : null;
 
@@ -221,7 +218,7 @@ class ContratController extends AbstractActionController implements ContextProvi
     {
         $this->voirAction();
 
-        $role             = $this->getContextProvider()->getSelectedIdentityRole();
+        $role             = $this->getServiceContext()->getSelectedIdentityRole();
         $process          = $this->getProcessContrat();
         $peutCreerContrat = $process->getPeutCreerContratInitial();
         $peutCreerAvenant = $process->getPeutCreerAvenant();
@@ -333,7 +330,7 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function validerAction()
     {
-        $role              = $this->getContextProvider()->getSelectedIdentityRole();
+        $role              = $this->getServiceContext()->getSelectedIdentityRole();
         $this->structure   = $role->getStructure();
         $this->contrat     = $this->context()->mandatory()->contratFromRoute();
         $this->intervenant = $this->contrat->getIntervenant();
@@ -434,7 +431,7 @@ class ContratController extends AbstractActionController implements ContextProvi
      */
     public function saisirRetourAction()
     {
-        $role              = $this->getContextProvider()->getSelectedIdentityRole();
+        $role              = $this->getServiceContext()->getSelectedIdentityRole();
         $this->contrat     = $this->context()->mandatory()->contratFromRoute();
         $this->intervenant = $this->contrat->getIntervenant();
         $form              = $this->getFormRetourContrat()->setContrat($this->contrat)->init();
@@ -733,7 +730,7 @@ class ContratController extends AbstractActionController implements ContextProvi
     private function getStructure()
     {
         if (null === $this->structure) {
-            $role = $this->getContextProvider()->getSelectedIdentityRole();
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
             if (!$role instanceof \Application\Interfaces\StructureAwareInterface) {
                 throw new LogicException("Rôle courant inattendu.");
             }

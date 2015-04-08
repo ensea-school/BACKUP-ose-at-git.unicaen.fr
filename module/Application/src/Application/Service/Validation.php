@@ -358,7 +358,7 @@ class Validation extends AbstractEntityService
      */
     public function canAdd($intervenant, $type, $runEx = false)
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         
         $rule = $this->getServiceLocator()->get('PeutValiderServiceRule')->setIntervenant($intervenant);
         $rule->setTypeValidation($this->normalizeTypeValidation($type));

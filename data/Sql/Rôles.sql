@@ -29,7 +29,7 @@ select nom_usuel, prenom, source_code, histo_destruction from personnel where 1 
 - Sandra MAHIEU
  */
 
-select libelle_court, libelle_long, source_code from structure where libelle_court like '%DRH%' AND niveau = 2;
+select id, libelle_court, libelle_long, source_code from structure where libelle_court like '%Psy%' AND niveau = 2;
 
 select * from type_role where histo_destruction is null;
 

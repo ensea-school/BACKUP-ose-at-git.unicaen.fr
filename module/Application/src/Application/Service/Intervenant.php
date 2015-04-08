@@ -80,7 +80,7 @@ class Intervenant extends AbstractEntityService
     {
         if (null == $sourceCode) return null;
 
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
         return $this->getRepo()->findOneBy(['sourceCode' => $sourceCode, 'annee' => $annee->getId()]);
     }

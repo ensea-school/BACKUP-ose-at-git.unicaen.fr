@@ -6,18 +6,16 @@ use Zend\Form\Form;
 use Zend\Form\FormInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Formulaire de modification du dossier d'un intervenant extérieur.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Dossier extends Form implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Dossier extends Form implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\StatutIntervenantAwareTrait;
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -25,15 +23,13 @@ class Dossier extends Form implements ServiceLocatorAwareInterface, ContextProvi
      */
     public function init()
     {
-        $serviceStatut = $this->getServiceLocator()->getServiceLocator()->get('applicationStatutIntervenant');
-        $defaultStatut = $serviceStatut->getRepo()->findOneBySourceCode(\Application\Entity\Db\StatutIntervenant::CHARG_ENS_1AN);
+        $defaultStatut = $this->getServiceStatutIntervenant()->getRepo()->findOneBySourceCode(\Application\Entity\Db\StatutIntervenant::CHARG_ENS_1AN);
 
         $this->setHydrator(new DossierHydrator($defaultStatut));
 
         $fs = new DossierFieldset('dossier');
         $fs
                 ->setServiceLocator($this->getServiceLocator())
-                ->setContextProvider($this->getContextProvider())
                 ->init();
 
         $this->add($fs);

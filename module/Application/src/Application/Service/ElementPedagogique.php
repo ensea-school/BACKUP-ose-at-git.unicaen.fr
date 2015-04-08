@@ -267,7 +267,7 @@ where rang = 1
         $localContext = $this->getServiceLocator()->get('applicationLocalContext');
         /* @var $localContext \Application\Service\LocalContext */
 
-        $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($role instanceof \Application\Acl\AdministrateurRole) return true;
 

@@ -2,8 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -17,10 +15,11 @@ use Zend\View\Model\ViewModel;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class WorkflowController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
+class WorkflowController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
-    use ContextProviderAwareTrait;
-    use WorkflowIntervenantAwareTrait;
+    use WorkflowIntervenantAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
     
     /**
      * Dessine le bouton pointant vers l'étape située après l'étape dont la route est spécifiée.
@@ -33,7 +32,7 @@ class WorkflowController extends AbstractActionController implements ContextProv
             exit;
         }
         
-        $role        = $this->getContextProvider()->getSelectedIdentityRole();
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant = $this->context()->intervenantFromRoute();
         $route       = $this->context()->routeFromQuery();
         $prepend     = $this->context()->prependFromQuery();

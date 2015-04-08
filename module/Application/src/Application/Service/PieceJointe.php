@@ -123,7 +123,7 @@ class PieceJointe extends AbstractEntityService
      */
     public function getTotalHeuresReelles(\Application\Entity\Db\Intervenant $intervenant)
     {
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
 
         /**
          * Service
@@ -214,7 +214,7 @@ EOS;
      */
     public function valider(PieceJointeEntity $pj, IntervenantEntity $intervenant)
     {
-        $role                  = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                  = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceValidation     = $this->getServiceLocator()->get('ApplicationValidation');
         $serviceTypeValidation = $this->getServiceLocator()->get('ApplicationTypeValidation');
 
@@ -287,7 +287,7 @@ EOS;
      */
     public function validerFichier(FichierEntity $fichier, PieceJointeEntity $pj, IntervenantEntity $intervenant)
     {
-        $role                  = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                  = $this->getServiceContext()->getSelectedIdentityRole();
         $serviceValidation     = $this->getServiceLocator()->get('ApplicationValidation');
         $serviceTypeValidation = $this->getServiceLocator()->get('ApplicationTypeValidation');
 
@@ -370,7 +370,7 @@ EOS;
      */
     public function canAdd($intervenant, $runEx = false)
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $rule = $this->getServiceLocator()->get('PeutSaisirPieceJointeRule')->setIntervenant($intervenant);
         if (!$rule->execute()) {

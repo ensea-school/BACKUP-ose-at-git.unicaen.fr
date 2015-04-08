@@ -26,7 +26,7 @@ class AgrementIntervenantNavigationPagesProvider extends AgrementNavigationPages
             return $intervenant;
         }
         
-        return $this->getContextProvider()->getGlobalContext()->getIntervenant();
+        return $this->getServiceContext()->getIntervenant();
     }
     
     /**

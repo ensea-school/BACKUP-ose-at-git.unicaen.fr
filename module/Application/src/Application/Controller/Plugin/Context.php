@@ -220,12 +220,4 @@ class Context extends Params implements ServiceLocatorAwareInterface
     {
         return $this->getServiceLocator()->getServiceLocator()->get('importProcessusImport');
     }
-
-    /**
-     * @return \Application\Service\ContextProvider
-     */
-    protected function getServiceContextProvider()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider');
-    }
 }

@@ -5,18 +5,15 @@ namespace Application\View\Helper\Service;
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher un résumé des services
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
 
     /**
      * Filtre de données

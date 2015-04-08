@@ -6,8 +6,6 @@ use Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieField
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Dessine un fieldset de type ElementCentreCoutSaisieFieldset.
@@ -15,10 +13,9 @@ use Application\Service\ContextProviderAwareTrait;
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see ElementCentreCoutSaisieFieldset
  */
-class FieldsetElementCentreCoutSaisieHelper extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class FieldsetElementCentreCoutSaisieHelper extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
 
     /**
      *

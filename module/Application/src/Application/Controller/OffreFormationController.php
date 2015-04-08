@@ -5,8 +5,6 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Service\Etape as EtapeService;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of OffreFormationController
@@ -16,9 +14,9 @@ use Application\Service\ContextProviderAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class OffreFormationController extends AbstractActionController implements ContextProviderAwareInterface
+class OffreFormationController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     /**
      * @var \Zend\Session\Container
@@ -40,7 +38,7 @@ class OffreFormationController extends AbstractActionController implements Conte
                 'Application\Entity\Db\Structure',
                 'Application\Entity\Db\TypeModulateur',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
@@ -48,7 +46,7 @@ class OffreFormationController extends AbstractActionController implements Conte
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $localContext = $this->getServiceLocator()->get('applicationLocalContext');
         /* @var $localContext \Application\Service\LocalContext */
-        $role         = $this->getContextProvider()->getSelectedIdentityRole();
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
 
         // extraction des filtres spécifiés dans la requête
         $structure = $this->context()->structureFromQuery();
@@ -139,14 +137,14 @@ class OffreFormationController extends AbstractActionController implements Conte
     {
         $em           = $this->em(); /* @var $em \Doctrine\ORM\EntityManager */
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
-        $role         = $this->getContextProvider()->getSelectedIdentityRole();
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
 
         $this->em()->getFilters()->enable('historique')->init(
             [
                 'Application\Entity\Db\ElementPedagogique',
                 'Application\Entity\Db\Etape'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         // extraction des filtres spécifiés dans la requête
@@ -206,7 +204,7 @@ class OffreFormationController extends AbstractActionController implements Conte
     {
         $this->em()->getFilters()->enable('historique')->init(
             'Application\Entity\Db\Structure',
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
@@ -228,7 +226,7 @@ class OffreFormationController extends AbstractActionController implements Conte
                 'Application\Entity\Db\Etape',
                 'Application\Entity\Db\CheminPedagogique',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         $structure = $this->context()->structureFromQuery();

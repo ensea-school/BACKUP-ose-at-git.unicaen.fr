@@ -22,7 +22,11 @@ use Application\Entity\Db\Contrat;
  */
 class ContratProcess extends AbstractService
 {
-    use IntervenantAwareTrait;
+    use IntervenantAwareTrait,
+        \Application\Service\Traits\ContratAwareTrait,
+        \Application\Service\Traits\ServiceAPayerAwareTrait,
+        \Application\Service\Traits\TypeVolumeHoraireAwareTrait
+    ;
 
     /**
      *
@@ -322,7 +326,7 @@ class ContratProcess extends AbstractService
     private function getStructure()
     {
         if (null === $this->structure) {
-            $role = $this->getContextProvider()->getSelectedIdentityRole();
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
             if (!$role instanceof \Application\Interfaces\StructureAwareInterface) {
                 throw new LogicException("Rôle courant inattendu.");
             }
@@ -330,29 +334,5 @@ class ContratProcess extends AbstractService
         }
 
         return $this->structure;
-    }
-
-    /**
-     * @return ContratService
-     */
-    private function getServiceContrat()
-    {
-        return $this->getServiceLocator()->get('ApplicationContrat');
-    }
-
-    /**
-     * @return \Application\Service\Service
-     */
-    private function getServiceService()
-    {
-        return $this->getServiceLocator()->get('ApplicationService');
-    }
-
-    /**
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    private function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
     }
 }

@@ -4,18 +4,15 @@ namespace Application\Rule;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of AbstractRule
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AbstractRule implements RuleInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
+abstract class AbstractRule implements RuleInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
 
     /**
      * @var array

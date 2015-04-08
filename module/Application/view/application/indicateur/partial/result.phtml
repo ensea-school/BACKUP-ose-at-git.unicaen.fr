@@ -1,0 +1,24 @@
+<?php 
+use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
+?>
+
+<ul>
+<?php foreach ($this->indicateurImpl->getResult() as $r): ?>
+    <li>
+        <a href="<?php echo $this->indicateurImpl->getResultUrl($r) ?>"
+           title="Cliquez pour vous rendre à la page concernée"
+           ><?php echo $this->indicateurImpl->getResultFormatter()->filter($r) ?></a>
+    </li>
+<?php endforeach; ?>
+</ul>
+
+<?php 
+$emails = null;
+if ($this->indicateurImpl instanceof AbstractIntervenantResultIndicateurImpl) {
+    $emails  = implode(', ', array_keys($this->indicateurImpl->getResultEmails()));
+    $subject = sprintf("%s : information", $app = $this->appInfos()->nom);
+}
+?>
+<?php if ($emails): ?>
+<a href="mailto:?subject=<?php echo $subject ?>&bcc=<?php echo $emails ?>">Rédiger un mail pour ces intervenants...</a>
+<?php endif;

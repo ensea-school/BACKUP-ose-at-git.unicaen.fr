@@ -203,4 +203,16 @@ class IntervenantPermanent extends Intervenant
         
         return $this;
     }
+    
+    /**
+     * Retourne l'adresse mail personnelle éventuelle.
+     * Si elle est null et que le paramètre le demande, retourne l'adresse par défaut.
+     *
+     * @param bool $fallbackOnDefault
+     * @return string 
+     */
+    public function getEmailPerso($fallbackOnDefault = false)
+    {
+        return $this->getEmail();
+    }
 }

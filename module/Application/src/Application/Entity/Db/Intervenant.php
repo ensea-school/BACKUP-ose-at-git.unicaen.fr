@@ -432,6 +432,15 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
+     * Retourne l'adresse mail personnelle éventuelle.
+     * Si elle est null et que le paramètre le demande, retourne l'adresse par défaut.
+     *
+     * @param bool $fallbackOnDefault
+     * @return string 
+     */
+    abstract public function getEmailPerso($fallbackOnDefault = false);
+
+    /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation

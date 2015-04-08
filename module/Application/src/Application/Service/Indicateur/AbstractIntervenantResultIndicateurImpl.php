@@ -53,6 +53,21 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
     }
     
     /**
+     * Collecte et retourne les adresses mails de tous les intervenants retournés par cet indicateur.
+     * 
+     * @return array
+     */
+    public function getResultEmails()
+    {
+        $resultEmails = [];
+        foreach ($this->getResult() as $r) { /* @var $r IntervenantEntity */
+            $resultEmails[$r->getEmailPerso(true)] = $r->getNomComplet();
+        }
+        
+        return $resultEmails;
+    }
+    
+    /**
      * 
      * @return integer
      */

@@ -1,21 +1,9 @@
 <?php 
-use Application\Service\Indicateur\AbstractIndicateurImpl;
-/* @var $indicateurImpl AbstractIndicateurImpl */
+use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
+/* @var $indicateurImpl AbstractIntervenantResultIndicateurImpl */
 ?>
 
-<?php $this->headTitle()->append($this->indicateur . "")->append($title = "Indicateur") ?>
+<?php $this->headTitle()->append($this->indicateur . "")->append("Indicateur") ?>
+<h1 class="page-header"><?php echo $title = $indicateurImpl->getTitle() ?></h1>
 
-<h1 class="page-header"><?php echo $indicateurImpl->getTitle() ?></h1>
-
-<ul>
-<?php foreach ($indicateurImpl->getResult() as $r): ?>
-    <li>
-        <a href="<?php echo $indicateurImpl->getResultUrl($r) ?>"
-           title="Cliquez pour vous rendre à la page concernée"
-           ><?php echo $indicateurImpl->getResultFormatter()->filter($r) ?></a>
-    </li>
-<?php endforeach; ?>
-</ul>
-
-<?php
-//var_dump(\UnicaenApp\Util::collectionAsOptions($indicateurImpl->getResult()));
+<?php echo $this->partial('application/indicateur/partial/result', ['indicateurImpl' => $indicateurImpl]); ?>

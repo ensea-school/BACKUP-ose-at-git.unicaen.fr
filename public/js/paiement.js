@@ -14,10 +14,16 @@ function DemandeMiseEnPaiement( id )
     this.misesEnPaiementListes = {};
     this.miseEnPaiementSequence = 1;
     this.changes = {};
-    this.validation = true;
-    this.validationMessage = undefined;
 
-
+    this.showError = function( serviceElement, errorStr )
+    {
+        var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
+                + '<span class="glyphicon glyphicon-exclamation-sign"></span> '
+                + errorStr
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
+                + '</div>';
+        serviceElement.find(".breadcrumb").after( out );
+    }
 
     /**
      *
@@ -66,8 +72,30 @@ function DemandeMiseEnPaiement( id )
     this.valider = function()
     {
         var result = true;
+        var services = {};
         for( var id in this.misesEnPaiementListes ){
             if (! this.misesEnPaiementListes[id].valider()) result = false;
+
+            var sapEl = this.misesEnPaiementListes[id].getServiceAPayerElement();
+            if (undefined == services[sapEl.attr("id")]){
+                services[sapEl.attr("id")] = {
+                    total   : 0,
+                    dmep    : 0,
+                    mep     : 0
+                };
+            }
+            services[sapEl.attr("id")].total += this.misesEnPaiementListes[id].getHeuresTotal();
+            services[sapEl.attr("id")].mep   += this.misesEnPaiementListes[id].getHeuresMEP();
+            services[sapEl.attr("id")].dmep  += this.misesEnPaiementListes[id].getHeuresDMEP();
+        }
+        for( var id in services ){
+            if ( services[id].mep + services[id].dmep > services[id].total && services[id].dmep > 0 ){
+                this.showError(
+                    this.element.find('.service-a-payer#'+id),
+                    'Le nombre d\'heures mises en paiement ou demandées dépasse le nombre heures disponibles'
+                );
+                result = false;
+            }
         }
         return result;
     }
@@ -497,6 +525,30 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
             that.onAddHeuresRestantes();
         } );
         this.populate();
+    }
+
+
+    this.getHeuresTotal = function()
+    {
+        return this.params['heures-total'];
+    }
+
+
+    this.getHeuresDMEP = function()
+    {
+        return this.params['heures-dmep'];
+    }
+
+
+    this.getHeuresMEP = function()
+    {
+        return this.params['heures-mep'];
+    }
+
+
+    this.getServiceAPayerElement = function()
+    {
+        return this.element.parents("div.service-a-payer");
     }
 }
 

@@ -14,10 +14,16 @@ function DemandeMiseEnPaiement( id )
     this.misesEnPaiementListes = {};
     this.miseEnPaiementSequence = 1;
     this.changes = {};
-    this.validation = true;
-    this.validationMessage = undefined;
 
-
+    this.showError = function( serviceElement, errorStr )
+    {
+        var out = '<div class="alert alert-danger alert-dismissible" role="alert">'
+                + '<span class="glyphicon glyphicon-exclamation-sign"></span> '
+                + errorStr
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">&times;</button>'
+                + '</div>';
+        serviceElement.find(".breadcrumb").after( out );
+    }
 
     /**
      *
@@ -66,8 +72,30 @@ function DemandeMiseEnPaiement( id )
     this.valider = function()
     {
         var result = true;
+        var services = {};
         for( var id in this.misesEnPaiementListes ){
             if (! this.misesEnPaiementListes[id].valider()) result = false;
+
+            var sapEl = this.misesEnPaiementListes[id].getServiceAPayerElement();
+            if (undefined == services[sapEl.attr("id")]){
+                services[sapEl.attr("id")] = {
+                    total   : 0,
+                    dmep    : 0,
+                    mep     : 0
+                };
+            }
+            services[sapEl.attr("id")].total += this.misesEnPaiementListes[id].getHeuresTotal();
+            services[sapEl.attr("id")].mep   += this.misesEnPaiementListes[id].getHeuresMEP();
+            services[sapEl.attr("id")].dmep  += this.misesEnPaiementListes[id].getHeuresDMEP();
+        }
+        for( var id in services ){
+            if ( Math.round((services[id].mep + services[id].dmep) * 100) > Math.round(services[id].total*100) && services[id].dmep > 0 ){
+                this.showError(
+                    this.element.find('.service-a-payer#'+id),
+                    'Le nombre d\'heures mises en paiement ou demandées dépasse le nombre heures disponibles'
+                );
+                result = false;
+            }
         }
         return result;
     }
@@ -92,7 +120,7 @@ function DemandeMiseEnPaiement( id )
 
     /**
      * Initialisation
-     * 
+     *
      * @returns {undefined}
      */
     this.init = function()
@@ -303,7 +331,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
     this.renderCentreCout = function( data )
     {
         var outC = '';
-        
+
         ccCount = Util.json.count(this.params['centres-cout']);
         if( ccCount == 1 || data['read-only'] ){
             if (data['validation'] != undefined){
@@ -493,10 +521,34 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
     this.init = function()
     {
         var that = this;
-        this.element.find('.heures-non-dmep').on('click', function(){ 
+        this.element.find('.heures-non-dmep').on('click', function(){
             that.onAddHeuresRestantes();
         } );
         this.populate();
+    }
+
+
+    this.getHeuresTotal = function()
+    {
+        return this.params['heures-total'];
+    }
+
+
+    this.getHeuresDMEP = function()
+    {
+        return this.params['heures-dmep'];
+    }
+
+
+    this.getHeuresMEP = function()
+    {
+        return this.params['heures-mep'];
+    }
+
+
+    this.getServiceAPayerElement = function()
+    {
+        return this.element.parents("div.service-a-payer");
     }
 }
 
@@ -585,7 +637,7 @@ function PaiementMiseEnPaiementRechercheForm( id )
 
         $("body").on("mise-en-paiement-form-submit", function(event, data) {
             if ($("div .messenger, div .alert", event.div).length ? false : true){
-                
+
                 document.location.href = event.a.data('url-redirect');
             }
         });

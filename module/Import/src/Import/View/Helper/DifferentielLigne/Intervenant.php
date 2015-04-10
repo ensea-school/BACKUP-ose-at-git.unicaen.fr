@@ -24,8 +24,12 @@ class Intervenant extends DifferentielLigne
     {
         switch( $column ){
             case 'STRUCTURE_ID':
-                $structure = $this->ligne->getEntityManager()->find('Application\Entity\Db\Structure', $value);
-                return 'change de structure pour '.$structure->getLibelleCourt();
+                if (! empty($value)){
+                    $structure = $this->ligne->getEntityManager()->find('Application\Entity\Db\Structure', $value);
+                }else{
+                    $structure = null;
+                }
+                return 'change de structure pour '.($structure ? $structure->getLibelleCourt() : '<i>structure indéfinie</i>');
             case 'NOM_USUEL':
                 return 'change de nom usuel pour '.$value;
             case 'STATUT_ID':

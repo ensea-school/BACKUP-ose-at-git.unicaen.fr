@@ -5,7 +5,7 @@
 ?>
 <h2><?php echo $tableLabel ?></h2>
 <div id="DIV_<?php echo $table ?>" data-url="<?php echo $this->url('import', ['action' => 'update','table' => $table]) ?>">
-<?php echo $this->differentielListe( $lignes ); ?>
+<?php echo $this->differentielListe( $lignes )->render(); ?>
 
 <?php if (count($lignes) > 100) : ?>
 <div>Toutes les lignes n'ont pas été affichées, leur nombre dépassant 100</div>

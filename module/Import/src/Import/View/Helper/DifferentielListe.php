@@ -52,7 +52,7 @@ class DifferentielListe extends AbstractHelper
      *
      * @return string
      */
-    protected function render(){
+    public function render(){
         $aucunEcart = 'Il n\'y a aucun écart entre les sources de données et OSE';
         if (empty($this->lignes)) return $aucunEcart;
         $out = '';

@@ -11,7 +11,9 @@ use Application\Interfaces\PersonnelAwareInterface;
  */
 class IndexController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\AnneeAwareTrait
+    ;
 
     /**
      *
@@ -19,6 +21,13 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
+        /* Prise en compte du changement d'année!! */
+        $annee = $this->params()->fromQuery('annee');
+        if ($annee){
+            $annee = $this->getServiceAnnee()->get($annee);
+            $this->getServiceContext()->setAnnee($annee);
+        }
+
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $view = new ViewModel([

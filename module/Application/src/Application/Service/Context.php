@@ -74,7 +74,7 @@ class Context extends AbstractService
     protected $sessionContainer;
 
 
-
+    
 
 
     /**
@@ -143,7 +143,7 @@ class Context extends AbstractService
 
     /**
      *
-     * @return EntityAnnee
+     * @return AnneeEntity
      */
     public function getAnnee()
     {
@@ -160,7 +160,7 @@ class Context extends AbstractService
 
     /**
      *
-     * @return EntityAnnee
+     * @return AnneeEntity
      */
     public function getAnneePrecedente()
     {
@@ -172,7 +172,7 @@ class Context extends AbstractService
 
     /**
      *
-     * @return EntityAnnee
+     * @return AnneeEntity
      */
     public function getAnneeSuivante()
     {
@@ -184,11 +184,11 @@ class Context extends AbstractService
 
     /**
      *
-     * @param EntityAnnee $annee
+     * @param AnneeEntity $annee
      * @param boolean $updateParametres
      * @return self
      */
-    public function setAnnee( EntityAnnee $annee, $updateParametres=false )
+    public function setAnnee( AnneeEntity $annee, $updateParametres=false )
     {
         $this->annee = $annee;
         $this->getSessionContainer()->annee = $annee->getId();
@@ -257,18 +257,22 @@ class Context extends AbstractService
 
     /**
      *
-     * @return EntityStructure
+     * @return StructureEntity
      */
-    public function getStructure()
+    public function getStructure($initializing=false)
     {
         if (! $this->structure){
             $sc = $this->getSessionContainer();
             if (! $sc->offsetExists('structure')){
-                $role = $this->getSelectedIdentityRole();
-                if ($role instanceof StructureAwareInterface && $role->getStructure()){
-                    $sc->structure = $role->getStructure()->getId();
-                }else{
+                if ($initializing){
                     $sc->structure = null;
+                }else{
+                    $role = $this->getSelectedIdentityRole();
+                    if ($role instanceof StructureAwareInterface && $role->getStructure()){
+                        $sc->structure = $role->getStructure()->getId();
+                    }else{
+                        $sc->structure = null;
+                    }
                 }
             }
             $this->structure = $this->getServiceStructure()->get( $sc->structure);
@@ -278,21 +282,26 @@ class Context extends AbstractService
 
     /**
      *
-     * @param EntityStructure $structure
+     * @param StructureEntity $structure
      * @param boolean $updateParametres
      * @return self
      */
-    public function setStructure( EntityStructure $structure )
+    public function setStructure( $structure )
     {
-        $this->structure = $structure;
-        $this->getSessionContainer()->structure = $structure->getId();
+        if ($structure instanceof StructureEntity){
+            $this->structure = $structure;
+            $this->getSessionContainer()->structure = $structure->getId();
+        }else{
+            $this->structure = null;
+            $this->getSessionContainer()->structure = null;
+        }
         return $this;
     }
 
     /**
      * @return Container
      */
-    function getSessionContainer()
+    protected function getSessionContainer()
     {
         if (null === $this->sessionContainer) {
             $this->sessionContainer = new Container(__CLASS__);

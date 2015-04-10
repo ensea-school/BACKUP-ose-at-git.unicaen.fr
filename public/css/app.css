@@ -51,11 +51,11 @@ body.development div#contenu-principal {
 }
 
 body.development div#navbar div.collapse pre {
-    display: none;
+    position:absolute;
 }
 
 body.development div#navbar div.collapse table {
-    display: none;
+    position:absolute;
 }
 
 table {
@@ -250,6 +250,7 @@ form#modulateurs-saisie th select{
 
 
 
+/* Personnalisation du bootstrap-select */
 .bootstrap-select .dropdown-menu li.divider{
     display: none;
 }
@@ -273,4 +274,27 @@ form#modulateurs-saisie th select{
 
 .bootstrap-select button.selectpicker span.pull-left{
     padding-left: 10px;
+}
+
+
+
+
+/* Possibilité de changer l'année depuis la barre de menu du haut */
+.navbar-brand h1 span {
+    font-size:12pt;
+}
+
+#navbar .container .navbar-header {
+
+    vertical-align: middle;
+}
+
+#navbar .container .navbar-header select {
+    margin-top: 12px;
+    height:26px;
+}
+
+.navbar-nav li a {
+    padding-left: 7px;
+    padding-right: 7px;
 }

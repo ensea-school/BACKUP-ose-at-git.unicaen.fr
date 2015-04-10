@@ -83,7 +83,7 @@ EOS;
      */
     private function getStructures()
     {
-        $qb = $this->getServiceStructure()->finderByRole(true);
+        $qb = $this->getServiceStructure()->finderByEnseignement();
         return $this->getServiceStructure()->getList($qb);
     }
 }

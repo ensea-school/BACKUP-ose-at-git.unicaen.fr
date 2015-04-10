@@ -11,7 +11,9 @@ use UnicaenAuth\Controller\UtilisateurController as BaseController;
  */
 class UtilisateurController extends BaseController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait
+    ;
     
     /**
      * Traite les requêtes AJAX POST de sélection d'un profil utilisateur.
@@ -27,7 +29,7 @@ class UtilisateurController extends BaseController
         if ($role instanceof \Application\Acl\AdministrateurRole) {
             $structure = null;
             if ($structureId) {
-                $structure = $this->getServiceLocator()->get('ApplicationStructure')->get($structureId);
+                $structure = $this->getServiceStructure()->get($structureId);
             }
             $this->getServiceContext()->setStructure($structure);
 

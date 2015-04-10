@@ -19,6 +19,7 @@ class PaiementController extends AbstractActionController
         \Application\Service\Traits\ServiceAwareTrait,
         \Application\Service\Traits\StructureAwareTrait,
         \Application\Service\Traits\PersonnelAwareTrait,
+        \Application\Service\Traits\PeriodeAwareTrait,
         \Application\Service\Traits\MiseEnPaiementAwareTrait,
         \Application\Service\Traits\ServiceAPayerAwareTrait
     ;

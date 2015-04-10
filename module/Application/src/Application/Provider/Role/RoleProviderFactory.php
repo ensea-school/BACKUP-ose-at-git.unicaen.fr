@@ -42,9 +42,8 @@ class RoleProviderFactory implements FactoryInterface
         $roleProvider
                 ->setEntityManager($em)
                 ->setServiceLocator($this->getServiceLocator())
-                ->setStructureSelectionnee($this->getServiceContext()->getStructure())
+                ->setStructureSelectionnee($this->getServiceContext()->getStructure(true))
                 ->init();
-
         return $roleProvider;
     }
 }

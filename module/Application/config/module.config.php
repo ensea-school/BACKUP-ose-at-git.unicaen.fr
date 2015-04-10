@@ -206,6 +206,7 @@ $main =  [
     'view_helpers' => [
         'factories' => [
             'userProfileSelectRadioItem' => 'Application\View\Helper\UserProfileSelectRadioItemFactory',
+            'appLink'                    => 'Application\View\Helper\AppLinkFactory',
         ],
         'invokables' => [
             'historiqueDl' => 'Application\View\Helper\HistoriqueDl',

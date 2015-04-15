@@ -2,23 +2,35 @@
 
 namespace Application\Controller;
 
+use Application\Acl\AdministrateurRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
+use Application\Interfaces\StructureAwareInterface;
 use Application\Service\ContextProviderAwareInterface;
 use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Indicateur as IndicateurService;
+use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
+use Common\Exception\MessageException;
+use Common\Exception\RuntimeException;
+use Common\Exception\LogicException;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Zend\Console\Request as ConsoleRequest;
+use Zend\Form\Element\Text;
+use Zend\Form\Element\Textarea;
+use Zend\Form\Element\Submit;
+use Zend\Form\Form;
 use Zend\Mail\Message as MailMessage;
 use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
 use Zend\Mime\Mime;
+use Zend\Mime\Part as MimePart;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\Router\Http\TreeRouteStack;
 use Zend\Uri\Http as HttpUri;
+use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 use Zend\View\Renderer\PhpRenderer;
 
 /**
@@ -26,6 +38,7 @@ use Zend\View\Renderer\PhpRenderer;
  *
  * @method EntityManager em()
  * @method Context              context()
+ * @method \UnicaenApp\Controller\Plugin\Mail mail()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -36,26 +49,16 @@ class NotificationController extends AbstractActionController implements Context
     /**
      * Visualisation de tous les abonnements aux indicateurs.
      * 
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     public function indicateursAction()
     {
         $nis = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs(false);
         
-        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel = new ViewModel();
         $viewModel
                 ->setVariable('nis', $nis)
                 ->setVariable('serviceIndicateur', $this->getServiceIndicateur());
-        
-//        // init
-//        $message = new MailMessage();
-//        $message->setEncoding('UTF-8')
-//                ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
-//                ->setSubject(sprintf("[%s Test]", $app))
-//                ->setBody("test")
-//                ->addTo("bertrand.gauthier@unicaen.fr");
-//                  
-//        $this->mail()->send($message);
         
         return $viewModel;
     }
@@ -64,7 +67,7 @@ class NotificationController extends AbstractActionController implements Context
      * Réponse aux requêtes AJAX d'obtention du "title" (intitulé contenant le nombre de résultats trouvés)
      * d'un indicateur.
      * 
-     * @return \Zend\View\Model\JsonModel
+     * @return JsonModel
      */
     public function indicateurFetchTitleAction()
     {
@@ -89,7 +92,7 @@ EOS;
             $title = (string) $indicateurImpl;
         }
 
-        return new \Zend\View\Model\JsonModel([
+        return new JsonModel([
             'title' => $title,
         ]);
     }
@@ -182,6 +185,76 @@ EOS;
     }
     
     /**
+     * 
+     * 
+     * @return ViewModel
+     * @throws MessageException
+     */
+    public function indicateurIntervenantsAction()
+    {
+        $role       = $this->getContextProvider()->getSelectedIdentityRole();
+        $indicateur = $this->context()->mandatory()->indicateurFromRoute();
+        $structure  = $this->context()->structureFromRoute();
+        
+        if (! $role instanceof AdministrateurRole) {
+            $structure = null;
+        }
+        
+        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $structure ?: $this->getStructure());
+        if (! $indicateurImpl instanceof AbstractIntervenantResultIndicateurImpl) {
+            throw new RuntimeException("Indicateur non pris en charge.");
+        }
+        
+        $emails = $indicateurImpl->getResultEmails();
+        if (! $emails) {
+            throw new MessageException("Aucun destinataire trouvé.");
+        }
+        
+        $mailer  = new IndicateurIntervenantsMailer($this, $indicateurImpl);
+        $from    = $mailer->getFrom();
+        $subject = $mailer->getDefaultSubject();
+        $body    = $mailer->getDefaultBody();
+
+        $form = new Form();
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form->add((new Text('from'))->setValue($from));
+        $form->add((new Text('subject'))->setValue($subject));
+        $form->add((new Textarea('body'))->setValue($body));
+        $form->add((new Submit('submit')));
+        $form->getInputFilter()->get('subject')->setRequired(true);
+        $form->getInputFilter()->get('body')->setRequired(true);
+        
+        if ($this->getRequest()->isPost()) {
+            $post = $this->getRequest()->getPost();
+            if ($form->setData($post)->isValid()) {
+                $mailer->send($emails, $post);
+            }
+        }
+        
+        return new ViewModel([
+            'title'   => "Envoyer un mail aux intervenants",
+            'count'   => count($emails),
+            'subject' => $subject,
+            'body'    => $body,
+            'form'    => $form,
+        ]);
+    }
+    
+    /**
+     * @return StructureEntity
+     */
+    private function getStructure()
+    {
+        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        
+        if ($role instanceof StructureAwareInterface) {
+            return $role->getStructure();
+        }
+        
+        return null;
+    }
+    
+    /**
      * @return IndicateurService
      */
     private function getServiceIndicateur()
@@ -195,5 +268,87 @@ EOS;
     private function getServiceNotificationIndicateur()
     {
         return $this->getServiceLocator()->get('NotificationIndicateurService');
+    }
+}
+
+
+/**
+ * Classe dédiée à l'envoi des mails aux intervenants retournés par un indicateur.
+ */
+class IndicateurIntervenantsMailer
+{
+    private $controller;
+    private $indicateurImpl;
+    
+    public function __construct(NotificationController $controller, AbstractIntervenantResultIndicateurImpl $indicateurImpl)
+    {
+        $this->controller = $controller;
+        $this->indicateurImpl = $indicateurImpl;
+    }
+    
+    public function send($emails, $data)
+    {
+        $mailPlugin = $this->controller->mail();
+        
+        $transport = $mailPlugin->getTransport();
+        if (! $transport instanceof \Zend\Mail\Transport\Smtp) {
+            throw new LogicException("Seul le mode de transport SMTP est pris en charge.");
+        }
+        // utilisation d'un serveur SMTP adapté à l'envoi de mails en masse
+        $transport->getOptions()->setHost('smtpcc.unicaen.fr');
+
+        foreach ($emails as $email => $name) {
+            $message = $this->createMessage($data);
+            $message->setTo($email, $name);
+            
+            $this->controller->mail()->send($message);
+        }
+    }
+    
+    private function createMessage($data)
+    {
+        // corps au format HTML
+        $html          = $data['body'];
+        $part          = new MimePart($html);
+        $part->type    = Mime::TYPE_HTML;
+        $part->charset = 'UTF-8';
+        $body          = new MimeMessage();
+        $body->addPart($part);
+        
+        return (new MailMessage())
+                ->setEncoding('UTF-8')
+                ->setFrom($this->getFrom(), "Contact Application " . ($app = $this->controller->appInfos()->getNom()))
+                ->setSubject($data['subject'])
+                ->setBody($body);
+    }
+    
+    public function getFrom()
+    {
+        $from = $this->controller->getContextProvider()->getGlobalContext()->getPersonnel()->getEmail();
+        
+        return $from;
+    }
+    
+    public function getDefaultSubject()
+    {
+        $subject = sprintf("%s : %s", $this->controller->appInfos()->getNom(), $this->indicateurImpl->getEntity()->getType());
+        
+        return $subject;
+    }
+    
+    public function getDefaultBody()
+    {
+        $signature = $this->controller->getContextProvider()->getGlobalContext()->getPersonnel();
+        $structure = $this->controller->getContextProvider()->getSelectedIdentityRole()->getStructure();
+        $renderer  = $this->controller->getServiceLocator()->get('view_manager')->getRenderer(); /* @var $renderer PhpRenderer */
+        
+        // corps au format HTML
+        $html = $renderer->render('application/notification/mail/indicateur-intervenants', [
+            'phrase' => $this->indicateurImpl->getIntervenantMessage(),
+            'signature' => $signature,
+            'structure' => $structure,
+        ]);
+        
+        return $html;
     }
 }

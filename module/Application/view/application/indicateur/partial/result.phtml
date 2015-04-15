@@ -1,6 +1,6 @@
-<?php 
-use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
-?>
+<style>
+    div.modal-dialog { width: 50%; }
+</style>
 
 <ul>
 <?php foreach ($this->indicateurImpl->getResult() as $r): ?>
@@ -13,12 +13,9 @@ use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 </ul>
 
 <?php 
-$emails = null;
-if ($this->indicateurImpl instanceof AbstractIntervenantResultIndicateurImpl) {
-    $emails  = implode(', ', array_keys($this->indicateurImpl->getResultEmails()));
-    $subject = sprintf("%s : information", $app = $this->appInfos()->nom);
-}
-?>
-<?php if ($emails): ?>
-<a href="mailto:?subject=<?php echo $subject ?>&bcc=<?php echo $emails ?>">Rédiger un mail pour ces intervenants...</a>
+if ($this->indicateurImpl->getResult()): ?>
+    <?php $url = $this->url('notification/indicateur-intervenants', ['indicateur' => $this->indicateurImpl->getEntity()->getId()]); ?>
+    <a class="ajax-modal" 
+       data-event="event-send-mail"
+       href="<?php echo $url ?>">Rédiger un mail pour tous ces intervenants...</a>
 <?php endif;

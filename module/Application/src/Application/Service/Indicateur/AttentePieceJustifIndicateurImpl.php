@@ -15,6 +15,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AttentePieceJustifIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
+    protected $intervenantMessage   = "Vous n'avez pas fourni toutes les pièces justificatives obligatoires.";
     protected $singularTitlePattern = "%s vacataire n'a pas fourni toutes les pièces justificatives obligatoires";
     protected $pluralTitlePattern   = "%s vacataires n'ont pas fourni toutes les pièces justificatives obligatoires";
     

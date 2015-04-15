@@ -7,3 +7,7 @@ use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 <h1 class="page-header"><?php echo $title = $indicateurImpl->getTitle() ?></h1>
 
 <?php echo $this->partial('application/indicateur/partial/result', ['indicateurImpl' => $indicateurImpl]); ?>
+
+
+<!-- Inclusion du script de l'éditeur WYSIWYG (vers HTML) : http://www.tinymce.com -->
+<script type="text/javascript" src="<?php echo $this->basePath() . '/js/tinymce/tinymce.min.js' ?>"></script>

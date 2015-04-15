@@ -16,6 +16,8 @@ use Zend\Filter\FilterInterface;
  */
 abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateurImpl
 {
+    protected $intervenantMessage;
+    
     /**
      * Retourne la liste de résultats renvoyée par l'indicateur.
      * 
@@ -108,6 +110,16 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Retourne l'éventuel message s'adressant à l'intervenant à propos de cet indicateur.
+     * 
+     * @return string|null
+     */
+    public function getIntervenantMessage()
+    {
+        return $this->intervenantMessage;
     }
     
     /**

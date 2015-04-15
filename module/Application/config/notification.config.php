@@ -53,6 +53,18 @@ return array(
                             ),
                         ),
                     ),
+                    'indicateur-intervenants' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route' => '/indicateur-intervenants/:indicateur',
+                            'constraints' => array(
+                                'indicateur' => '[0-9]*',
+                            ),
+                            'defaults' => array(
+                                'action' => 'indicateur-intervenants',
+                            ),
+                        ),
+                    ),
                     'notifier-indicateurs' => array(
                         'type'    => 'Segment',
                         'options' => array(
@@ -98,6 +110,11 @@ return array(
                     'controller' => 'Application\Controller\Notification',
                     'action'     => array('indicateurs', 'indicateur-fetch-title'),
                     'roles'      => array(AdministrateurRole::ROLE_ID),
+                ),
+                array(
+                    'controller' => 'Application\Controller\Notification',
+                    'action'     => array('indicateur-intervenants'),
+                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
                 ),
                 array(
                     'controller' => 'Application\Controller\Notification',

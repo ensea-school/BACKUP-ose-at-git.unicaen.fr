@@ -288,15 +288,6 @@ class IndicateurIntervenantsMailer
     
     public function send($emails, $data)
     {
-        $mailPlugin = $this->controller->mail();
-        
-        $transport = $mailPlugin->getTransport();
-        if (! $transport instanceof \Zend\Mail\Transport\Smtp) {
-            throw new LogicException("Seul le mode de transport SMTP est pris en charge.");
-        }
-        // utilisation d'un serveur SMTP adapté à l'envoi de mails en masse
-        $transport->getOptions()->setHost('smtpcc.unicaen.fr');
-
         foreach ($emails as $email => $name) {
             $message = $this->createMessage($data);
             $message->setTo($email, $name);

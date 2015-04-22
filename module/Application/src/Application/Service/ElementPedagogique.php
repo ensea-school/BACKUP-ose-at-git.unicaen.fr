@@ -377,6 +377,10 @@ where rang = 1
             $this->getEntityManager()->persist($cp);
         }
 
+        if (! $entity->getAnnee()){
+            $entity->setAnnee( $this->getServiceContext()->getAnnee() );
+        }
+
         $result = parent::save($entity);
         /* Sauvegarde automatique des éléments-modulateurs associés */
         $serviceElementModulateur = $this->getServiceLocator()->get('applicationElementModulateur');

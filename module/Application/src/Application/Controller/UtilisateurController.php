@@ -40,9 +40,9 @@ class UtilisateurController extends BaseController
         else {
             $message = sprintf("Vous endossez à présent le profil utilisateur <strong>%s</strong>.", $role);
         }
-        
+
         $this->flashMessenger()->addSuccessMessage($message);
-        
+
         exit;
     }
 }

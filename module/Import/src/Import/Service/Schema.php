@@ -27,12 +27,18 @@ class Schema extends Service
      *
      * @return array
      */
-    public function getSchema()
+    public function getSchema( $tableName=null )
     {
         if (empty($this->schema)){
             $this->schema = $this->makeSchema();
         }
-        return $this->schema;
+        if (empty($tableName)){
+            return $this->schema;
+        }elseif(array_key_exists($tableName, $this->schema)){
+            return $this->schema[$tableName];
+        }else{
+            return null;
+        }
     }
 
 
@@ -93,6 +99,26 @@ class Schema extends Service
             $mviews[] = $mvn;
         }
         return $mviews;
+    }
+
+    /**
+     * 
+     * @param string $tableName
+     * @param string $columnName
+     */
+    public function hasColumn( $tableName, $columnName )
+    {
+        $sql = "
+        SELECT
+          COUNT(*) result
+        FROM
+          USER_TAB_COLS utc
+        WHERE
+          utc.table_name = :tableName
+          AND utc.column_name = :columnName
+        ";
+        $result = $this->query( $sql, compact('tableName', 'columnName'), 'RESULT');
+        return $result[0] === '1';
     }
 
     /**

@@ -13,6 +13,7 @@ class QueryGenerator extends Service
 {
     const AG_BEGIN = '-- AUTOMATIC GENERATION --';
     const AG_END = '-- END OF AUTOMATIC GENERATION --';
+    const ANNEE_COLUMN_NAME = 'ANNEE_ID';
 
     /**
      * Tables
@@ -40,7 +41,7 @@ class QueryGenerator extends Service
     protected function getTables()
     {
         if (empty($this->tables)){
-            $this->tables = $this->getServiceManager()->get('importServiceSchema')->getImportTables();
+            $this->tables = $this->getServiceSchema()->getImportTables();
         }
         return $this->tables;
     }
@@ -56,7 +57,7 @@ class QueryGenerator extends Service
     protected function getCols( $tableName )
     {
         if (! isset($this->cols[$tableName])){
-            $this->cols[$tableName] = $this->getServiceManager()->get('importServiceSchema')->getImportCols( $tableName );
+            $this->cols[$tableName] = $this->getServiceSchema()->getImportCols( $tableName );
         }
         return $this->cols[$tableName];
     }
@@ -382,8 +383,44 @@ class QueryGenerator extends Service
      */
     protected function makeDiffView( $tableName )
     {
-        $cols = $this->getCols($tableName);
+        // Pour l'annualisation :
+        $schema = $this->getServiceSchema()->getSchema($tableName);
+        $joinCond = '';
+        $delCond = '';
+        $depJoin = '';
+        if (array_key_exists(self::ANNEE_COLUMN_NAME, $schema)){
+            // Si la table courante est annualisée ...
+            if ($this->getServiceSchema()->hasColumn('V_DIFF_'.$tableName, self::ANNEE_COLUMN_NAME)){
+                // ... et que la source est également annualisée alors concordance nécessaire
+                $joinCond = ' AND S.'.self::ANNEE_COLUMN_NAME.' = d.'.self::ANNEE_COLUMN_NAME;
+            }
+            // destruction ssi dans l'année d'import courante
+            $delCond = ' AND d.'.self::ANNEE_COLUMN_NAME.' = ose_import.get_current_annee';
+        }else{
+            // on recherche si la table dépend d'une table qui, elle, serait annualisée
+            foreach($schema as $columnName => $column){
+                /* @var $column \Import\Entity\Schema\Column */
+                if (! empty($column->refTableName)){
+                    $refSchema = $this->getServiceSchema()->getSchema( $column->refTableName );
+                    if (! empty($refSchema) && array_key_exists(self::ANNEE_COLUMN_NAME, $refSchema)){
+                        // Oui, la table dépend d'une table annualisée!!
+                        // Donc, on utilise la table référente
+                        $depJoin = "\n  LEFT JOIN ".$column->refTableName." rt ON rt.".$column->refColumnName." = d.".$columnName;
+                        // destruction ssi dans l'année d'import courante de la table référente
+                        $delCond = ' AND rt.'.self::ANNEE_COLUMN_NAME.' = ose_import.get_current_annee';
 
+                        break;
+                        /* on stoppe à la première table contenant une année.
+                         * S'il en existe une autre tant pis pour elle,
+                         * les années doivent de toute manière être concordantes entres sources!!!
+                         */
+                    }
+                }
+            }
+        }
+
+        // on génère ensuite la bonne requête !!!
+        $cols = $this->getCols($tableName);
         $sql = "CREATE OR REPLACE FORCE VIEW OSE.V_DIFF_$tableName AS
 select diff.* from (SELECT
   COALESCE( D.id, S.id ) id,
@@ -392,13 +429,13 @@ select diff.* from (SELECT
 CASE
     WHEN S.source_code IS NOT NULL AND D.source_code IS NULL THEN 'insert'
     WHEN S.source_code IS NOT NULL AND D.source_code IS NOT NULL AND (D.histo_destruction IS NULL OR D.histo_destruction > SYSDATE) THEN 'update'
-    WHEN S.source_code IS NULL AND D.source_code IS NOT NULL AND (D.histo_destruction IS NULL OR D.histo_destruction > SYSDATE) THEN 'delete'
+    WHEN S.source_code IS NULL AND D.source_code IS NOT NULL AND (D.histo_destruction IS NULL OR D.histo_destruction > SYSDATE)$delCond THEN 'delete'
     WHEN S.source_code IS NOT NULL AND D.source_code IS NOT NULL AND D.histo_destruction IS NOT NULL AND D.histo_destruction <= SYSDATE THEN 'undelete' END import_action,
   ".$this->formatColQuery($cols, '  CASE WHEN S.source_code IS NULL AND D.source_code IS NOT NULL THEN D.:column ELSE S.:column END :column', ",\n  ").",
   ".$this->formatColQuery($cols, '  CASE WHEN D.:column <> S.:column OR (D.:column IS NULL AND S.:column IS NOT NULL) OR (D.:column IS NOT NULL AND S.:column IS NULL) THEN 1 ELSE 0 END U_:column',",\n  " ). "
 FROM
-  $tableName D
-  FULL JOIN SRC_$tableName S ON (S.source_id = D.source_id AND S.source_code = D.source_code)
+  $tableName D$depJoin
+  FULL JOIN SRC_$tableName S ON S.source_id = D.source_id AND S.source_code = D.source_code$joinCond
 WHERE
        (S.source_code IS NOT NULL AND D.source_code IS NOT NULL AND D.histo_destruction IS NOT NULL AND D.histo_destruction <= SYSDATE)
     OR (S.source_code IS NULL AND D.source_code IS NOT NULL AND (D.histo_destruction IS NULL OR D.histo_destruction > SYSDATE))
@@ -450,7 +487,7 @@ WHERE
             INSERT INTO OSE.$tableName
               ( id, ".$this->formatColQuery($cols).", source_id, source_code, histo_createur_id, histo_modificateur_id )
             VALUES
-              ( COALESCE(diff_row.id,$tableName"."_ID_SEQ.NEXTVAL), ".$this->formatColQuery($cols,'diff_row.:column').", diff_row.source_id, diff_row.source_code, v_current_user, v_current_user );
+              ( COALESCE(diff_row.id,$tableName"."_ID_SEQ.NEXTVAL), ".$this->formatColQuery($cols,'diff_row.:column').", diff_row.source_id, diff_row.source_code, get_current_user, get_current_user );
 
           WHEN 'update' THEN
             ".$this->formatColQuery(
@@ -460,7 +497,7 @@ WHERE
               )."
 
           WHEN 'delete' THEN
-            UPDATE OSE.$tableName SET histo_destruction = SYSDATE, histo_destructeur_id = v_current_user WHERE ID = diff_row.id;
+            UPDATE OSE.$tableName SET histo_destruction = SYSDATE, histo_destructeur_id = get_current_user WHERE ID = diff_row.id;
 
           WHEN 'undelete' THEN
             ".$this->formatColQuery(
@@ -504,4 +541,12 @@ WHERE
         return implode( $separator, $res );
     }
 
+
+    /**
+     * @return Schema
+     */
+    protected function getServiceSchema()
+    {
+        return $this->getServiceManager()->get('importServiceSchema');
+    }
 }

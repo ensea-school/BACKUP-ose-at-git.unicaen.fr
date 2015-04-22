@@ -315,6 +315,13 @@ ServiceForm.init = function(){
         ServiceForm.get(serviceId).refreshFormVolumesHoraires( elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val(), $("input[name='type-volume-horaire']").val() );
     } );
 
+    /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
+    $( "body form#service select#element-liste" ).on( "change", function( event, ui ) {
+        var serviceId = $('form#service input[name="service\\[id\\]"]').val();
+        var elementId = $(this).val();
+        ServiceForm.get(serviceId).refreshFormVolumesHoraires( elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val(), $("input[name='type-volume-horaire']").val() );
+    } );
+
     $("form#service button.prevu-to-realise").on('click', function(){
         var serviceId = $('form#service input[name="service\\[id\\]"]').val();
         var periode = $(this).parents('div.periode').attr('id')

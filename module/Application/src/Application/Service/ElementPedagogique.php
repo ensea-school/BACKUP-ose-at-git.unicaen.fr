@@ -158,6 +158,17 @@ class ElementPedagogique extends AbstractEntityService
      */
     public function getSearchResultByTerm(array $filters = [])
     {
+        $filterAnnee = $this->getEntityManager()->getFilters()->getFilter('annee');
+        /* @var $filterAnnee \Common\ORM\Filter\AnneeFilter */
+        $annee = $filterAnnee->getAnnee(); // l'année est fonction du filtre et non du contexte!!
+
+        if ($annee){
+            $af = ' ep.annee_id = '.$annee->getId().' AND';
+        }else{
+            $af = '';
+        }
+
+
         if (!isset($filters["limit"])) {
             $filters["limit"] = 100;
         }
@@ -218,7 +229,7 @@ select * from (
     ep.source_code || ' ' || ep.libelle|| ' ' || e.source_code || ' ' || e.libelle || ' ' || gtf.LIBELLE_COURT || ' ' || e.NIVEAU || ' ' || tf.LIBELLE_COURT etape_info
   from
     chemin_pedagogique cp
-    JOIN element_pedagogique ep ON cp.element_pedagogique_id = ep.id  and 1 = ose_divers.comprise_entre( ep.histo_creation, ep.histo_destruction)".$orEp."
+    JOIN element_pedagogique ep ON$af cp.element_pedagogique_id = ep.id  and 1 = ose_divers.comprise_entre( ep.histo_creation, ep.histo_destruction)$orEp
     JOIN etape e ON cp.etape_id = e.id
     JOIN TYPE_FORMATION tf on e.TYPE_FORMATION_ID = tf.ID
     JOIN GROUPE_TYPE_FORMATION gtf on tf.GROUPE_ID = gtf.ID
@@ -240,6 +251,22 @@ where rang = 1
 //        var_dump($sql, $params);die;
 
         return $result->fetchAll();
+    }
+
+    /**
+     * Filtre la liste des éléments selon le contexte courant
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
+     * @return QueryBuilder
+     */
+    public function finderByContext( QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        $this->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
+
+        return $qb;
     }
 
     /**

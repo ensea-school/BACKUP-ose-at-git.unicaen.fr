@@ -40,6 +40,12 @@ class OffreFormationController extends AbstractActionController
             ],
             $this->getServiceContext()->getDateObservation()
         );
+        $this->em()->getFilters()->enable('annee')->init(
+            [
+                'Application\Entity\Db\ElementPedagogique'
+            ],
+            $this->getServiceContext()->getAnnee()
+        );
 
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $serviceEtape = $this->getServiceLocator()->get('applicationEtape'); /* @var $serviceEtape EtapeService */
@@ -108,6 +114,7 @@ class OffreFormationController extends AbstractActionController
                 'structure' => $structure,
                 'niveau' => $niveau,
                 'etape' => $etape]);
+           // $this->getServiceElementPedagogique()->finderByContext( $qb );
             $entities = $qb->getQuery()->getResult();
         }
 

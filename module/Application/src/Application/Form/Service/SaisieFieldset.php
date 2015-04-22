@@ -57,7 +57,6 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         ]);
 
         $identityRole = $this->getServiceContext()->getSelectedIdentityRole();
-        $contextIntervenant = $this->getServiceContext()->getIntervenant();
 
         if (! $identityRole instanceof IntervenantRole){
             $intervenant = new SearchAndSelect('intervenant');
@@ -71,7 +70,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             $this->add($intervenant);
         }
 
-        if (!($identityRole instanceof IntervenantRole && $contextIntervenant instanceof IntervenantExterieur)){
+        if (!($identityRole instanceof IntervenantRole && $identityRole->getIntervenant() instanceof IntervenantExterieur)){
             $this->add([
                 'type'       => 'Radio',
                 'name'       => 'interne-externe',

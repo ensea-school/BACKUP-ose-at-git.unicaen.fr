@@ -260,7 +260,7 @@ class Validation extends AbstractEntityService
             StructureEntity $structureValidation = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("v, tv, str, i, vh, s, strens")
+                ->select("v, tv, str, i, vh, s, ep, strens")
                 ->from('Application\Entity\Db\Validation', 'v')
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str') // auteur de la validation

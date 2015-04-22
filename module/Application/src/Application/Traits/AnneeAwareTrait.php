@@ -21,7 +21,7 @@ trait AnneeAwareTrait
      * 
      * @param Annee $annee Annee concerné
      */
-    public function setAnnee(Annee $annee)
+    public function setAnnee(Annee $annee = null)
     {
         $this->annee = $annee;
         

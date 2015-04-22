@@ -2,10 +2,12 @@
 
 namespace Application\Entity\Db;
 
+use Application\Interfaces\AnneeAwareInterface;
+
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface
+class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface
 {
     public function __toString()
     {

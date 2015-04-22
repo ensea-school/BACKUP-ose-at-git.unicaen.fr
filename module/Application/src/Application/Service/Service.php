@@ -502,7 +502,7 @@ class Service extends AbstractEntityService
             $structureEns = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("s2, i, vh, strens")
+                ->select("s2, i, vh, ep, strens")
                 ->from("Application\Entity\Db\Service", 's2')
                 ->join("s2.intervenant", "i")
                 ->join("s2.volumeHoraire", 'vh')

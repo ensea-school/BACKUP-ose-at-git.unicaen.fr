@@ -2,19 +2,21 @@
 namespace Application\Form\Service;
 
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwaretrait;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  *
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldsetHydrator implements HydratorInterface, EntityManagerAwareInterface
+class SaisieFieldsetHydrator implements HydratorInterface, ServiceLocatorAwareInterface
 {
 
-    use EntityManagerAwaretrait,
-        \Application\Service\Traits\ContextAwareTrait
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\IntervenantAwareTrait,
+        \Application\Service\Traits\ElementPedagogiqueAwareTrait,
+        \Application\Service\Traits\EtablissementAwareTrait
     ;
 
     /**
@@ -26,20 +28,18 @@ class SaisieFieldsetHydrator implements HydratorInterface, EntityManagerAwareInt
      */
     public function hydrate(array $data, $object)
     {
-        $em = $this->getEntityManager();
-
         $intervenant = isset($data['intervenant']['id']) ? (int)$data['intervenant']['id'] : null;
-        $object->setIntervenant( $intervenant ? $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($intervenant) : null );
+        $object->setIntervenant( $intervenant ? $this->getServiceIntervenant()->getBySourceCode($intervenant) : null );
 
         if (isset($data['element-pedagogique']) && $data['element-pedagogique'] instanceof \Application\Entity\Db\ElementPedagogique){
-            $object->setElementPedagogique( $em->find('Application\Entity\Db\elementPedagogique', $data['element-pedagogique']) );
+            $object->setElementPedagogique( $this->getServiceElementPedagogique()->get($data['element-pedagogique']) );
         }else{
             $elementPedagogique = isset($data['element-pedagogique']['element']['id']) ? $data['element-pedagogique']['element']['id'] : null;
-            $object->setElementPedagogique( $elementPedagogique ? $em->find('Application\Entity\Db\elementPedagogique', $elementPedagogique) : null );
+            $object->setElementPedagogique( $elementPedagogique ? $this->getServiceElementPedagogique()->get($elementPedagogique) : null );
         }
 
         $etablissement = isset($data['etablissement']['id']) ? (int)$data['etablissement']['id'] : null;
-        $object->setEtablissement( $etablissement ? $em->find('Application\Entity\Db\Etablissement', $etablissement) : null );
+        $object->setEtablissement( $etablissement ? $this->getServiceEtablissement()->get($etablissement) : null );
 
         return $object;
     }

@@ -15,7 +15,8 @@ use Application\Exception\DbException;
  */
 class ElementPedagogiqueController extends AbstractActionController
 {
-    use \Application\Service\Traits\ElementPedagogiqueAwareTrait
+    use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
     ;
 
 
@@ -144,6 +145,13 @@ class ElementPedagogiqueController extends AbstractActionController
      */
     public function searchAction()
     {
+        $this->em()->getFilters()->enable('annee')->init(
+            [
+                'Application\Entity\Db\ElementPedagogique'
+            ],
+            $this->getServiceContext()->getAnnee()
+        );
+
         $structure = $this->context()->structureFromQuery();
         $niveau    = $this->context()->niveauFromQuery();
         $etape     = $this->context()->etapeFromQuery();

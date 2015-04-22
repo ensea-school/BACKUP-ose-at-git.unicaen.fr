@@ -15,6 +15,7 @@ return [
                 ],
                 'filters' => [
                     'historique' => 'Common\ORM\Filter\HistoriqueFilter',
+                    'annee'      => 'Common\ORM\Filter\AnneeFilter',
                 ],
             ]
         ],

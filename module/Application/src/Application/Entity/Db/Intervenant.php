@@ -5,6 +5,7 @@ namespace Application\Entity\Db;
 use Zend\Form\Annotation;
 use Common\Constants;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Application\Interfaces\AnneeAwareInterface;
 
 /**
  * Intervenant
@@ -13,7 +14,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  * @Annotation\Type("Application\Form\Intervenant\AjouterModifier")
  * @Annotation\Hydrator("Application\Entity\Db\Hydrator\Intervenant")
  */
-abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface
+abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface
 {
     /**
      * @var \DateTime

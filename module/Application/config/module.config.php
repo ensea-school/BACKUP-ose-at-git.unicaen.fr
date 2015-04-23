@@ -179,6 +179,9 @@ $main =  [
                     'Application\\Acl\\IntervenantPermanentRole',
             ],
         ],
+        'guards' => [
+            'Application\Guard\ControllerGuard' => [],
+        ],
     ],
     'service_manager' => [
         'invokables' => [
@@ -194,6 +197,7 @@ $main =  [
             'ApplicationRole'                                => 'Application\\Service\\Role',
             'ApplicationTypeRole'                            => 'Application\\Service\\TypeRole',
             'IntervenantNavigationPageVisibility'            => 'Application\\Service\\IntervenantNavigationPageVisibility',
+            'ApplicationRuleProvider'                        => 'Application\Provider\Rule\RuleProvider',
         ],
         'factories' => [
             'navigation'                  => 'Application\Service\NavigationFactoryFactory',

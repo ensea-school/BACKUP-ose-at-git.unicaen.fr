@@ -17,13 +17,13 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'annee' => [
+                    'droits' => [
                         'type'    => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/annee',
+                            'route'    => '/droits',
                             'defaults' => [
-                                'action' => 'annee',
+                                'action' => 'droits',
                                 'controller' => 'Gestion',
                             ],
                         ],
@@ -41,10 +41,10 @@ return [
                         'route'  => 'gestion',
                         'resource' => 'controller/Application\Controller\Index:gestion',
                         'pages' => [
-                            'annee' => [
-                                'label'    => "Année universitaire",
-                                'title'    => "Configuration de l'année universitaire courante",
-                                'route'    => 'gestion/annee',
+                            'droits' => [
+                                'label'    => "Droits d'accès",
+                                'title'    => "Gestion des droits d'accès",
+                                'route'    => 'gestion/droits',
                             ],
                         ],
                     ],
@@ -62,7 +62,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Gestion',
-                    'action'     => ['annee'],
+                    'action'     => ['droits'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
                 ],
             ],

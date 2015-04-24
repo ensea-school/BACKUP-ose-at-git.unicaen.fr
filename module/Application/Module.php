@@ -11,15 +11,13 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
-use Zend\ModuleManager\Feature\ControllerPluginProviderInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 use Zend\Console\Request as ConsoleRequest;
 
-class Module implements ControllerPluginProviderInterface, ViewHelperProviderInterface, ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
+class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
     public function onBootstrap(MvcEvent $e)
     {
@@ -134,24 +132,6 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getControllerPluginConfig()
-    {
-        return [
-            'invokables' => [
-                'em'      => 'Application\Controller\Plugin\Em',
-                'context' => 'Application\Controller\Plugin\Context',
-            ],
-        ];
-    }
-
-    public function getViewHelperConfig()
-    {
-        return [];
-    }
-
     public function getConsoleUsage(ConsoleAdapterInterface $console)
     {
         return [
@@ -168,10 +148,3 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         return "OSE Application Module";
     }
 }
-
-/*
-class Listener extends \BjyAuthorize\Guard\Controller
-{
-
-}
-*/

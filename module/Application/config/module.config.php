@@ -236,6 +236,12 @@ $main =  [
             'UnicaenAuth\Controller\Utilisateur' => 'Application\Controller\UtilisateurController',
         ],
     ],
+    'controller_plugins' => [
+        'invokables' => [
+            'em'      => 'Application\Controller\Plugin\Em',
+            'context' => 'Application\Controller\Plugin\Context',
+        ],
+    ],
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',

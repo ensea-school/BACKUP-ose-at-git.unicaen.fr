@@ -179,9 +179,6 @@ $main =  [
                     'Application\\Acl\\IntervenantPermanentRole',
             ],
         ],
-        'guards' => [
-            'Application\Guard\ControllerGuard' => [],
-        ],
     ],
     'service_manager' => [
         'invokables' => [
@@ -194,8 +191,9 @@ $main =  [
             'ApplicationUtilisateur'                         => 'Application\\Service\\Utilisateur',
             'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
             'ApplicationSource'                              => 'Application\\Service\\Source',
+            'ApplicationAffectation'                         => 'Application\\Service\\Affectation',
             'ApplicationRole'                                => 'Application\\Service\\Role',
-            'ApplicationTypeRole'                            => 'Application\\Service\\TypeRole',
+            'ApplicationPrivilege'                           => 'Application\\Service\\Privilege',
             'IntervenantNavigationPageVisibility'            => 'Application\\Service\\IntervenantNavigationPageVisibility',
             'ApplicationRuleProvider'                        => 'Application\Provider\Rule\RuleProvider',
         ],

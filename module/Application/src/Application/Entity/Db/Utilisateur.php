@@ -53,19 +53,6 @@ class Utilisateur implements UserInterface, ProviderInterface
     protected $personnel;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $roleUtilisateur;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->roleUtilisateur = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Set displayName
      *
      * @param string $displayName
@@ -236,39 +223,6 @@ class Utilisateur implements UserInterface, ProviderInterface
         return $this->personnel;
     }
 
-    /**
-     * Add roleUtilisateur
-     *
-     * @param \Application\Entity\Db\RoleUtilisateur $roleUtilisateur
-     * @return Utilisateur
-     */
-    public function addRoleUtilisateur(\Application\Entity\Db\RoleUtilisateur $roleUtilisateur)
-    {
-        $this->roleUtilisateur[] = $roleUtilisateur;
-
-        return $this;
-    }
-
-    /**
-     * Remove roleUtilisateur
-     *
-     * @param \Application\Entity\Db\RoleUtilisateur $roleUtilisateur
-     */
-    public function removeRoleUtilisateur(\Application\Entity\Db\RoleUtilisateur $roleUtilisateur)
-    {
-        $this->roleUtilisateur->removeElement($roleUtilisateur);
-    }
-
-    /**
-     * Get roleUtilisateur
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRoleUtilisateur()
-    {
-        return $this->roleUtilisateur;
-    }
-
 
 	/**************************************************************************************************
 	 * 										Début ajout
@@ -303,6 +257,6 @@ class Utilisateur implements UserInterface, ProviderInterface
      */
     public function getRoles()
     {
-        return $this->getRoleUtilisateur();
+        return [];
     }
 }

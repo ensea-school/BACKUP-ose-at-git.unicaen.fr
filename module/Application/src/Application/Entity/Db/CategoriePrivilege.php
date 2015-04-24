@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Ressource
  */
-class Ressource
+class CategoriePrivilege
 {
     /**
      * @var string
@@ -29,7 +29,7 @@ class Ressource
      * Set code
      *
      * @param string $code
-     * @return Ressource
+     * @return CategoriePrivilege
      */
     public function setCode($code)
     {
@@ -52,7 +52,7 @@ class Ressource
      * Set libelle
      *
      * @param string $libelle
-     * @return Ressource
+     * @return CategoriePrivilege
      */
     public function setLibelle($libelle)
     {

@@ -53,6 +53,6 @@
         <join-column name="CIVILITE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <one-to-many field="role" target-entity="Application\Entity\Db\Role" mapped-by="personnel" />
+    <one-to-many field="affectation" target-entity="Application\Entity\Db\Affectation" mapped-by="personnel" />
   </entity>
 </doctrine-mapping>

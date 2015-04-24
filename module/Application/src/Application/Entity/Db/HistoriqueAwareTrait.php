@@ -43,7 +43,7 @@ trait HistoriqueAwareTrait
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return TypeRole
+     * @return self
      */
     public function setHistoCreation($histoCreation)
     {
@@ -66,7 +66,7 @@ trait HistoriqueAwareTrait
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return TypeRole
+     * @return self
      */
     public function setHistoDestruction($histoDestruction)
     {
@@ -89,7 +89,7 @@ trait HistoriqueAwareTrait
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return TypeRole
+     * @return self
      */
     public function setHistoModification($histoModification)
     {
@@ -112,7 +112,7 @@ trait HistoriqueAwareTrait
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return TypeRole
+     * @return self
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
     {
@@ -135,7 +135,7 @@ trait HistoriqueAwareTrait
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return TypeRole
+     * @return self
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
     {
@@ -158,7 +158,7 @@ trait HistoriqueAwareTrait
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return TypeRole
+     * @return self
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
     {

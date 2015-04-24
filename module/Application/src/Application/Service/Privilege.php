@@ -2,23 +2,23 @@
 
 namespace Application\Service;
 
-use Doctrine\ORM\QueryBuilder;
-
 /**
- * Description of TypeRole
+ * Description of Privilege
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class TypeRole extends AbstractEntityService
+class Privilege extends AbstractEntityService
 {
+
     /**
      * retourne la classe des entités
      *
      * @return string
+     * @throws RuntimeException
      */
     public function getEntityClass()
     {
-        return 'Application\Entity\Db\TypeRole';
+        return 'Application\Entity\Db\Privilege';
     }
 
     /**
@@ -26,8 +26,8 @@ class TypeRole extends AbstractEntityService
      *
      * @return string
      */
-    public function getAlias()
-    {
-        return 'tr';
+    public function getAlias(){
+        return 'priv';
     }
+
 }

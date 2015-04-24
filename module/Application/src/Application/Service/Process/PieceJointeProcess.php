@@ -304,7 +304,7 @@ class PieceJointeProcess extends AbstractService
         $structure = $this->getIntervenant()->getStructure();
 
         do {
-            $qb = $service->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_GESTIONNAIRE_COMPOSANTE);
+            $qb = $service->finderByTypeRole(\Application\Entity\Db\Role::CODE_GESTIONNAIRE_COMPOSANTE);
             $service->finderByStructure($structure, $qb);
             $roles = $service->getList($qb);
             $structure = $structure->getParente();

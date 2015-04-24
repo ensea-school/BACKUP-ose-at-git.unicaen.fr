@@ -3,7 +3,7 @@
 namespace Application\Provider\Role;
 
 use Application\Acl\AdministrateurRole;
-use Application\Entity\Db\Role;
+use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Interfaces\StructureAwareInterface;
 use BjyAuthorize\Provider\Role\ProviderInterface;
@@ -76,28 +76,28 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         if (($utilisateur = $this->getUtilisateur()) && ($personnel = $utilisateur->getPersonnel())){
             // chargement des rôles métiers
             $qb = $this->getEntityManager()->createQueryBuilder()
-                ->from("Application\Entity\Db\Role", "r")
-                ->select("r, tr, s")
+                ->from("Application\Entity\Db\Affectation", "a")
+                ->select("a, r, s")
                 ->distinct()
-                ->join("r.type", "tr")
-                ->leftJoin("r.structure", "s")
+                ->join("a.role", "r")
+                ->leftJoin("a.structure", "s")
+                ->andWhere('1=compriseEntre(a.histoCreation,a.histoDestruction)')
                 ->andWhere('1=compriseEntre(r.histoCreation,r.histoDestruction)')
-                ->andWhere('1=compriseEntre(tr.histoCreation,tr.histoDestruction)')
-                ->andWhere("r.personnel = :personnel")->setParameter(':personnel', $personnel);
-            foreach ($qb->getQuery()->getResult() as $role) { /* @var $role Role */
-                $roleId = $role->getType()->getCode();
+                ->andWhere("a.personnel = :personnel")->setParameter(':personnel', $personnel);
+            foreach ($qb->getQuery()->getResult() as $affectation) { /* @var $affectation Affectation */
+                $roleId = $affectation->getRole()->getCode();
                 if (! isset($roles[$roleId])){
                     throw new Exception('Le rôle "'.$roleId.'" est inconnu.');
                 }
                 $classname = get_class($roles[$roleId]);
-                if ($roles[$roleId] instanceof StructureAwareInterface && $role->getStructure()){
-                    $roleId .= '-'.$role->getStructure()->getSourceCode();
+                if ($roles[$roleId] instanceof StructureAwareInterface && $affectation->getStructure()){
+                    $roleId .= '-'.$affectation->getStructure()->getSourceCode();
                     $roles[$roleId] = new $classname($roleId);
-                    $roles[$roleId]->setStructure( $role->getStructure() );
+                    $roles[$roleId]->setStructure( $affectation->getStructure() );
                 }else{
                     $roles[$roleId] = new $classname($roleId);
                 }
-                $roles[$roleId]->setTypeRole( $role->getType() );
+                $roles[$roleId]->setDbRole( $affectation->getRole() );
 
                 $this->injectSelectedStructureInRole($roles[$roleId]);
             }
@@ -122,7 +122,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     /**
      * Inject la structure sélectionnée en session dans le rôle Administrateur.
      * 
-     * @param Role $role
+     * @param \Application\Acl\Role $role
      * @return self
      */
     public function injectSelectedStructureInRole($role)

@@ -2,37 +2,37 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\TypeRole;
+use Application\Service\Privilege;
 use Common\Exception\RuntimeException;
 
-trait TypeRoleAwareTrait
+trait PrivilegeAwareTrait
 {
     /**
      * description
      *
-     * @var TypeRole
+     * @var Privilege
      */
-    private $serviceTypeRole;
+    private $servicePrivilege;
 
     /**
      *
-     * @param TypeRole $serviceTypeRole
+     * @param Privilege $servicePrivilege
      * @return self
      */
-    public function setServiceTypeRole( TypeRole $serviceTypeRole )
+    public function setServicePrivilege( Privilege $servicePrivilege )
     {
-        $this->serviceTypeRole = $serviceTypeRole;
+        $this->servicePrivilege = $servicePrivilege;
         return $this;
     }
 
     /**
      *
-     * @return TypeRole
+     * @return Privilege
      * @throws \Common\Exception\RuntimeException
      */
-    public function getServiceTypeRole()
+    public function getServicePrivilege()
     {
-        if (empty($this->serviceTypeRole)){
+        if (empty($this->servicePrivilege)){
             if (! method_exists($this, 'getServiceLocator')) {
                 throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
             }
@@ -42,9 +42,9 @@ trait TypeRoleAwareTrait
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
 
-            return $serviceLocator->get('applicationTypeRole');
+            return $serviceLocator->get('applicationPrivilege');
         }else{
-            return $this->serviceTypeRole;
+            return $this->servicePrivilege;
         }
     }
 

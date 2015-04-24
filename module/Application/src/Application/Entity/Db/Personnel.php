@@ -57,14 +57,14 @@ class Personnel implements HistoriqueAwareInterface
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    protected $role;
+    protected $affectation;
 
     /**
      * 
      */
     public function __construct()
     {
-        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -262,36 +262,36 @@ class Personnel implements HistoriqueAwareInterface
     }
 
     /**
-     * Add role
+     * Add affectation
      *
-     * @param \Application\Entity\Db\Role $role
-     * @return TypeRole
+     * @param \Application\Entity\Db\Affectation $affectation
+     * @return Personnel
      */
-    public function addRole(\Application\Entity\Db\Role $role)
+    public function addAffectation(\Application\Entity\Db\Affectation $affectation)
     {
-        $this->role[] = $role;
+        $this->affectation[] = $affectation;
 
         return $this;
     }
 
     /**
-     * Remove role
+     * Remove affectation
      *
-     * @param \Application\Entity\Db\Role $role
+     * @param \Application\Entity\Db\Affectation $affectation
      */
-    public function removeRole(\Application\Entity\Db\Role $role)
+    public function removeAffectation(\Application\Entity\Db\Affectation $affectation)
     {
-        $this->role->removeElement($role);
+        $this->affectation->removeElement($affectation);
     }
 
     /**
-     * Get role
+     * Get affectation
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRole()
+    public function getAffectation()
     {
-        return $this->role;
+        return $this->affectation;
     }
     
     /**

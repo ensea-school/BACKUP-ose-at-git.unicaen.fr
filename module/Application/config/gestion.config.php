@@ -60,11 +60,13 @@ return [
                     'action'     => ['gestion'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
                 ],
+            ],
+            'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Gestion',
                     'action'     => ['droits'],
-                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
+                    'privileges' => ['privilege-visualisation', 'privilege-edition']
+                ]
             ],
         ],
     ],

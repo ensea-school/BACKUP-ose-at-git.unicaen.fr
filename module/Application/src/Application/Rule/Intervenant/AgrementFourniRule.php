@@ -180,58 +180,6 @@ EOS;
         throw new LogicException("Cette méthode ne devrait pas être appelée!");
     }
 
-    /**
-     *
-     * @return array
-     */
-//    private function executeForIntervenant()
-//    {
-//        if (!($role = $this->getRole())) {
-//            throw new LogicException("Un rôle doit être spécifié.");
-//        }
-//
-//        /**
-//         * Conseil Academique (un seul pour toutes les structures d'enseignement)
-//         */
-//        if ($this->getTypeAgrement()->getCode() === TypeAgrement::CODE_CONSEIL_ACADEMIQUE) {
-//            if (!count($this->getTypesAgrementFournis())) {
-//                $this->message(self::MESSAGE_AUCUN, $this->getTypeAgrement());
-//                return [];
-//            }
-//            // aucun critère de structure pour ce type d'agrément
-//            $structures = [ null ];
-//        }
-//        /**
-//         * Conseil Restreint (un par structure d'enseignement)
-//         */
-//        elseif ($this->getTypeAgrement()->getCode() === TypeAgrement::CODE_CONSEIL_RESTREINT) {
-//            // si une structure d'enseignement précise a été fournie, on ne considèrera qu'elle
-//            if ($this->getStructure()) {
-//                $structures = [ $this->getStructure()->getId() => $this->getStructure() ];
-//            }
-//            // sinon, pour certains rôles, peu importe la structure
-//            elseif ($role instanceof IntervenantRole || $role instanceof AdministrateurRole) {
-//                // du point de vue intervenant, aucun critère de structure
-//                $structures = [ null ];
-//            }
-//            else {
-//                $structures = $this->getStructuresEnseignement();
-//            }
-//        }
-//
-//        // teste si un agrément existe pour chaque structure d'enseignement
-//        foreach ($structures as $structure) {
-//            if (!count($this->getAgrementsFournis($structure))) {
-//                $this->message(self::MESSAGE_AUCUN, sprintf("&laquo; %s &raquo;%s",
-//                        $this->getTypeAgrement(),
-//                        $structure ? sprintf(" de la structure &laquo; %s &raquo;", $structure) : null));
-//                return [];
-//            }
-//        }
-//
-//        return [0 => ['id' => $this->getIntervenant()->getId()]];
-//    }
-
     public function isRelevant()
     {
         return true;

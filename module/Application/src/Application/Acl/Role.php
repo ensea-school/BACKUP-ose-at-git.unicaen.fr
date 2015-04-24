@@ -3,7 +3,7 @@
 namespace Application\Acl;
 
 use UnicaenAuth\Acl\NamedRole;
-use Application\Entity\Db\TypeRole;
+use Application\Entity\Db\Role as DbRole;
 use Zend\Permissions\Acl\Resource;
 use Application\Entity\Db\Privilege;
 
@@ -18,11 +18,11 @@ class Role extends NamedRole
     const ROLE_ID = 'role';
 
     /**
-     * Type de rôle
+     * Rôle en BDD
      *
-     * @var TypeRole
+     * @var DbRole
      */
-    protected $typeRole;
+    protected $dbRole;
 
 
 
@@ -33,16 +33,16 @@ class Role extends NamedRole
 
     /**
      *
-     * @return TypeRole
+     * @return RoleEntity
      */
-    function getTypeRole()
+    function getDbRole()
     {
-        return $this->typeRole;
+        return $this->role;
     }
 
-    function setTypeRole(TypeRole $typeRole)
+    function setDbRole(DbRole $dbRole)
     {
-        $this->typeRole = $typeRole;
+        $this->dbRole = $dbRole;
         return $this;
     }
 

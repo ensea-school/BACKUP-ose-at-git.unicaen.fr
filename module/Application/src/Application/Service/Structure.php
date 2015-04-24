@@ -14,6 +14,7 @@ use Application\Entity\Db\Structure as EntityStructure;
  */
 class Structure extends AbstractEntityService
 {
+    use Traits\AffectationAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -62,21 +63,21 @@ class Structure extends AbstractEntityService
             return [ $structure->getContactPj() ];
         }
 
-        $serviceRole = $this->getServiceLocator()->get('applicationRole');
+        $serviceAffectation = $this->getServiceAffectation();
 
         $str   = $structure;
 
         // recherche des rôles dans la structure, en remontant la hiérarchie des structures si besoin et demandé
         do {
             // recherche de "gestionnaires"
-            $qb = $serviceRole->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_GESTIONNAIRE_COMPOSANTE);
-            $serviceRole->finderByStructure($str, $qb);
-            $roles = $serviceRole->getList($qb);
+            $qb = $serviceAffectation->finderByRole(\Application\Entity\Db\Role::CODE_GESTIONNAIRE_COMPOSANTE);
+            $serviceAffectation->finderByStructure($str, $qb);
+            $roles = $serviceAffectation->getList($qb);
 
             // recherche de "responsables"
-            $qb = $serviceRole->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RESPONSABLE_COMPOSANTE);
-            $serviceRole->finderByStructure($str, $qb);
-            $roles += $serviceRole->getList($qb);
+            $qb = $serviceAffectation->finderByRole(\Application\Entity\Db\Role::CODE_RESPONSABLE_COMPOSANTE);
+            $serviceAffectation->finderByStructure($str, $qb);
+            $roles += $serviceAffectation->getList($qb);
 
             // on grimpe la hiérarchie des structures
             $str = $str->getParente();

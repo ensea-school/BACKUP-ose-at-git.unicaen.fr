@@ -4,7 +4,7 @@ namespace Application\Provider\Identity;
 use Application\Acl;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\IntervenantPermanent;
-use Application\Entity\Db\Role;
+use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Utilisateur;
 use Common\Exception\RuntimeException;
 use UnicaenApp\Service\EntityManagerAwareInterface;
@@ -90,12 +90,12 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
         }
 
         /**
-         * Responsabilités métier importées (tables ROLE et TYPE_ROLE)
+         * Responsabilités métier importées (tables affectation et TYPE_ROLE)
          */
         if ($utilisateur->getPersonnel()) {
-            foreach ($utilisateur->getPersonnel()->getRole() as $role) { /* @var $role Role */
-                $roleId = $role->getType()->getCode();
-                if ($structure = $role->getStructure()){
+            foreach ($utilisateur->getPersonnel()->getAffectation() as $affectation) { /* @var $affectation Affectation */
+                $roleId = $affectation->getRole()->getCode();
+                if ($structure = $affectation->getStructure()){
                     $roleId .= '-'.$structure->getSourceCode();
                 }
                 $roles[] = $roleId;

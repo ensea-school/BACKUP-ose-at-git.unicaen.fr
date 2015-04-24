@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * Description of Role
  *
@@ -27,5 +29,19 @@ class Role extends AbstractEntityService
     public function getAlias()
     {
         return 'r';
+    }
+
+    /**
+     * Retourne la liste des rôles
+     *
+     * @param QueryBuilder|null $queryBuilder
+     * @param string|null $alias
+     * @return \Application\Entity\Db\Role[]
+     */
+    public function getList( QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.libelle");
+        return parent::getList($qb, $alias);
     }
 }

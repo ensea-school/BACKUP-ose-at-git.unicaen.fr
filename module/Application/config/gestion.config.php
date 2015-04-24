@@ -18,10 +18,10 @@ return [
                 'may_terminate' => true,
                 'child_routes' => [
                     'droits' => [
-                        'type'    => 'Literal',
+                        'type'    => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/droits',
+                            'route'    => '/droits[/:role]',
                             'defaults' => [
                                 'action' => 'droits',
                                 'controller' => 'Gestion',

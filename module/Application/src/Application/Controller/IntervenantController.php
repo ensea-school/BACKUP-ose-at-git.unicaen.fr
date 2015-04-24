@@ -19,7 +19,9 @@ use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 class IntervenantController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\IntervenantAwareTrait,
+        \Application\Service\Traits\TypeHeuresAwareTrait
     ;
 
     /**
@@ -119,7 +121,7 @@ class IntervenantController extends AbstractActionController implements Workflow
             throw new LogicException("Aucun code source d'intervenant spécifié.");
         }
 
-        $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer($sourceCode);
+        $intervenant = $this->getServiceIntervenant()->importer($sourceCode);
 
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(['intervenant' => $intervenant]);
@@ -414,21 +416,5 @@ class IntervenantController extends AbstractActionController implements Workflow
     protected function getFormHeuresComp()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantHeuresCompForm');
-    }
-
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('applicationIntervenant');
-    }
-
-    /**
-     * @return \Application\Service\TypeHeures
-     */
-    protected function getServiceTypeHeures()
-    {
-        return $this->getServiceLocator()->get('applicationTypeHeures');
     }
 }

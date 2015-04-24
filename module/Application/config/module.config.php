@@ -214,6 +214,11 @@ $main =  [
             'historiqueDl' => 'Application\View\Helper\HistoriqueDl',
             'validationDl' => 'Application\View\Helper\ValidationDl',
             'mailto'       => 'Application\View\Helper\Mailto',
+            'intervenantDl'        => 'Application\View\Helper\IntervenantDl',
+            'adresseDl'            => 'Application\View\Helper\AdresseDl',
+            'elementPedagogiqueDl' => 'Application\View\Helper\OffreFormation\ElementPedagogiqueDl',
+            'etapeDl'              => 'Application\View\Helper\OffreFormation\EtapeDl',
+            'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
         ],
     ],
     'translator' => [
@@ -239,6 +244,18 @@ $main =  [
 //            'ModalStrategy',
         ],
     ],
+    'public_files' => [
+        'js' => [
+            'js/elementPedagogiqueRecherche.js',
+            'js/service.js',
+            'js/service-referentiel.js',
+            'js/paiement.js',
+            'bootstrap-select/js/bootstrap-select.min.js',
+        ],
+        'css' => [
+            'bootstrap-select/css/bootstrap-select.min.css',
+        ]
+    ]
 ];
 
 return array_merge_recursive(

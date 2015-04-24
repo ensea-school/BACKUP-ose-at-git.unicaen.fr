@@ -22,7 +22,7 @@ class GestionController extends AbstractActionController
      */
     public function droitsAction()
     {
-        $annee = $this->getServiceContext()->getAnnee();
+        //$role = $this->
 
         return compact('annee');
     }

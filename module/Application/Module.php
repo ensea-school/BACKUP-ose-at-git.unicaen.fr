@@ -24,7 +24,6 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     public function onBootstrap(MvcEvent $e)
     {
         $sm = $e->getApplication()->getServiceManager();
-        $sm->get('translator');
 
         if (!$e->getRequest() instanceof ConsoleRequest) {
             $this->injectPublicFiles($sm);
@@ -51,22 +50,26 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
 
     public function injectPublicFiles(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $this->getPublicFilesConfig();
-        $jsFiles  = []; if (isset($config['js' ])) $jsFiles  = $config['js'];
-        $cssFiles = []; if (isset($config['css'])) $cssFiles = $config['css'];
+        $config = $serviceLocator->get('config');
 
-        $basePath = $serviceLocator->get('viewhelpermanager')->get('basePath')->__invoke();
+        $version = isset($config['unicaen-app']['app_infos']['version']) ? '?v='.$config['unicaen-app']['app_infos']['version'] : '';
+
+        $publicFiles = isset( $config['public_files'] ) ? $config['public_files'] : [];
+        $jsFiles  = isset($publicFiles['js' ]) ? $publicFiles['js' ] : [];
+        $cssFiles = isset($publicFiles['css']) ? $publicFiles['css'] : [];
+
+        $basePath = $serviceLocator->get('viewhelpermanager')->get('basePath')->__invoke().'/';
 
         $offset = 10;
         foreach( $jsFiles as $jsFile ){
             $offset++;
-            $serviceLocator->get('viewhelpermanager')->get('HeadScript')->offsetSetFile($offset, $basePath.$jsFile, 'text/javascript');
+            $serviceLocator->get('viewhelpermanager')->get('HeadScript')->offsetSetFile($offset, $basePath.$jsFile.$version, 'text/javascript');
         }
 
         $offset = 10;
         foreach( $cssFiles as $cssFile ){
             $offset++;
-            $serviceLocator->get('viewhelpermanager')->get('HeadLink')->offsetSetStylesheet($offset, $basePath.$cssFile);
+            $serviceLocator->get('viewhelpermanager')->get('HeadLink')->offsetSetStylesheet($offset, $basePath.$cssFile.$version);
         }
     }
 
@@ -132,27 +135,6 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     }
 
     /**
-     * Retourne les fichiers javascript et CSS à ajouter au HEAD
-     *
-     * @return array
-     */
-    public function getPublicFilesConfig()
-    {
-        return [
-            'js' => [
-                '/js/elementPedagogiqueRecherche-2.js',
-                '/js/service.js',
-                '/js/service-referentiel.js',
-                '/js/paiement.js',
-                '/bootstrap-select/js/bootstrap-select.min.js',
-            ],
-            'css' => [
-                '/bootstrap-select/css/bootstrap-select.min.css',
-            ]
-        ];
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getControllerPluginConfig()
@@ -165,26 +147,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
         ];
     }
 
-    /**
-     * Expected to return \Zend\ServiceManager\Config object or array to
-     * seed such an object.
-     *
-     * @return array|\Zend\ServiceManager\Config
-     * @see ViewHelperProviderInterface
-     */
     public function getViewHelperConfig()
     {
-        return [
-            'factories'  => [
-            ],
-            'invokables' => [
-                'intervenantDl'        => 'Application\View\Helper\IntervenantDl',
-                'adresseDl'            => 'Application\View\Helper\AdresseDl',
-                'elementPedagogiqueDl' => 'Application\View\Helper\OffreFormation\ElementPedagogiqueDl',
-                'etapeDl'              => 'Application\View\Helper\OffreFormation\EtapeDl',
-                'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
-            ],
-        ];
+        return [];
     }
 
     public function getConsoleUsage(ConsoleAdapterInterface $console)
@@ -204,8 +169,9 @@ class Module implements ControllerPluginProviderInterface, ViewHelperProviderInt
     }
 }
 
-
+/*
 class Listener extends \BjyAuthorize\Guard\Controller
 {
 
 }
+*/

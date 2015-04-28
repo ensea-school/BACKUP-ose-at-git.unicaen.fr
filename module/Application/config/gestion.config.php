@@ -18,13 +18,35 @@ return [
                 'may_terminate' => true,
                 'child_routes' => [
                     'droits' => [
-                        'type'    => 'Segment',
+                        'type'    => 'Literal',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/droits[/:role]',
+                            'route'    => '/droits',
                             'defaults' => [
                                 'action' => 'droits',
                                 'controller' => 'Gestion',
+                            ],
+                        ],
+                        'child_routes' => [
+                            'roles' => [
+                                'type'    => 'Segment',
+                                'may_terminate' => true,
+                                'options' => [
+                                    'route'    => '/roles',
+                                    'defaults' => [
+                                        'action' => 'roles',
+                                    ],
+                                ],
+                            ],
+                            'privileges' => [
+                                'type'    => 'Segment',
+                                'may_terminate' => true,
+                                'options' => [
+                                    'route'    => '/privileges[/:role]',
+                                    'defaults' => [
+                                        'action' => 'privileges',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -45,6 +67,22 @@ return [
                                 'label'    => "Droits d'accès",
                                 'title'    => "Gestion des droits d'accès",
                                 'route'    => 'gestion/droits',
+                                'pages' => [
+                                    'roles' => [
+                                        'label'  => "Rôles",
+                                        'title'  => "Gestion des rôles",
+                                        'route'  => 'gestion/droits/roles',
+                                        'withtarget' => true,
+                                        'resource' => 'controller/Application\Controller\Gestion:roles',
+                                    ],
+                                    'privileges' => [
+                                        'label'  => "Privilèges",
+                                        'title'  => "Privilèges par rôle",
+                                        'route'  => 'gestion/droits/privileges',
+                                        'withtarget' => true,
+                                        'resource' => 'controller/Application\Controller\Gestion:privileges',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -64,7 +102,7 @@ return [
             'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Gestion',
-                    'action'     => ['droits'],
+                    'action'     => ['droits', 'privileges', 'roles'],
                     'privileges' => ['privilege-visualisation', 'privilege-edition']
                 ]
             ],
@@ -72,7 +110,12 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Gestion'   => 'Application\Controller\GestionController',
+            'Application\Controller\Gestion' => 'Application\Controller\GestionController',
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
+            'GestionPrivilegesForm' => 'Application\Form\Gestion\PrivilegesForm',
         ],
     ],
 ];

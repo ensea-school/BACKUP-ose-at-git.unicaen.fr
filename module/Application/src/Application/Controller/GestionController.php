@@ -3,6 +3,9 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Application\Entity\Db\Role;
+use Application\Entity\Db\StatutIntervenant;
+use Application\Entity\Db\Privilege;
 
 /**
  * Description of GestionController
@@ -19,49 +22,112 @@ class GestionController extends AbstractActionController
         \Application\Service\Traits\PrivilegeAwareTrait
     ;
 
+    public function droitsAction()
+    {
+        return [];
+    }
+
+    public function rolesAction()
+    {
+        $roles = $this->getServiceRole()->getList();
+
+        return compact('roles');
+    }
+
     /**
      *
      * @return type
      */
-    public function droitsAction()
+    public function privilegesAction()
     {
-        $form = $this->getFormDroitsSelection();
-
         $roleStatutCode = $this->params()->fromRoute('role');
 
+        $formDroitsSelection = $this->getFormDroitsSelection( $roleStatutCode );
+        $formPrivileges = null;
+
         if (0 === strpos($roleStatutCode, 'r-')){
-            $roleCode = substr($roleStatutCode, 2);
-            $rs = $this->getServiceRole()->getRepo()->findOneBy(['code' => $roleCode]);
-            /* @var $rs \Application\Entity\Db\Role */
+            $rs = $this->getServiceRole()->getRepo()->findOneBy(['code' => substr($roleStatutCode, 2)]);
+            /* @var $rs Role */
         }elseif(0 === strpos($roleStatutCode, 's-')){
-            $roleCode = substr($roleStatutCode, 2);
-            $rs = $this->getServiceStatutIntervenant()->getRepo()->findOneBy(['sourceCode' => $roleCode]);
-            /* @var $rs \Application\Entity\Db\StatutIntervenant */
+            $rs = $this->getServiceStatutIntervenant()->getRepo()->findOneBy(['sourceCode' => substr($roleStatutCode, 2)]);
+            /* @var $rs StatutIntervenant */
         }else{
             $rs = null;
-            $authorized = [];
         }
 
         if ($rs){
-            $form->get('role')->setValue( $roleStatutCode );
-            $formPrivileges = $this->getFormPrivileges();
-        }
+            $ps = $this->getServicePrivilege()->getList();
+            /* @var $ps Privilege[] */
 
-        return compact('privileges', 'rs', 'form');
+            $request = $this->getRequest();
+            if ($request->isPost()) {
+                $post = $request->getPost();
+                foreach( $ps as $privilege ){
+                    if (isset($post[$privilege->getCode()])){
+                        if ('1' === $post[$privilege->getCode()]){ // privilège coché
+                            if (! $rs->getPrivilege()->contains($privilege)){
+                                if ($rs instanceof Role){
+                                    $sql = "INSERT INTO ROLE_PRIVILEGE (role_id, privilege_id) VALUES (".$rs->getId().", ".$privilege->getId().")";
+                                }elseif($rs instanceof StatutIntervenant){
+                                    $sql = "INSERT INTO STATUT_PRIVILEGE (statut_id, privilege_id) VALUES (".$rs->getId().", ".$privilege->getId().")";
+                                }
+                                $this->em()->getConnection()->exec($sql);
+                                $this->em()->refresh($privilege);
+                                $this->em()->refresh($rs);
+                            }
+                        }else{ // privilège décoché
+                            if ($rs->getPrivilege()->contains($privilege)){
+                                if ($rs instanceof Role){
+                                    $sql = "DELETE ROLE_PRIVILEGE WHERE role_id = ".$rs->getId()." AND privilege_id = ".$privilege->getId();
+                                }elseif($rs instanceof StatutIntervenant){
+                                    $sql = "DELETE STATUT_PRIVILEGE WHERE statut_id = ".$rs->getId()." AND privilege_id = ".$privilege->getId();
+                                }
+                                $this->em()->getConnection()->exec($sql);
+                                $this->em()->refresh($privilege);
+                                $this->em()->refresh($rs);
+                            }
+                        }
+                    }
+                }
+            }
+
+            $formPrivileges = $this->getFormPrivileges()
+                                   ->setAttribute('action', $this->url()->fromRoute(null, ['role' => $roleStatutCode]))
+                                   ->addPrivileges( $ps, $rs );
+
+            $privileges = [];
+            foreach( $ps as $privilege ){
+                $categorie = $privilege->getCategorie();
+                if (! isset($privileges[$categorie->getCode()])){
+                    $privileges[$categorie->getCode()] = [
+                        'categorie' => $categorie,
+                        'privileges' => [],
+                    ];
+                }
+                $privileges[$categorie->getCode()]['privileges'][] = $privilege;
+            }
+
+            return compact('formDroitsSelection', 'formPrivileges', 'privileges');
+        }else{
+            return compact('formDroitsSelection', 'formPrivileges');
+        }
     }
 
 
 
     /**
-     *
+     * @param string $roleStatutCode
      * @return \Zend\Form\Form
      */
-    public function getFormDroitsSelection()
+    public function getFormDroitsSelection( $roleStatutCode )
     {
-        $options = [
-            'roles'     => ['label' => 'Rôles (personnel)'     , 'options' => []],
-            'statuts'   => ['label' => 'Statuts (intervenants)', 'options' => []],
-        ];
+        $options = [];
+        if (empty($roleStatutCode)){
+            $options['null']= ['label' => 'Sélection du rôle'     , 'options' => ['' => 'Veuillez sélectionner un rôle...']];
+        }
+
+        $options['roles']   = ['label' => 'Rôles (personnel)'     , 'options' => []];
+        $options['statuts'] = ['label' => 'Statuts (intervenants)', 'options' => []];
 
         $roles = $this->getServiceRole()->getList();
         foreach( $roles as $role ){
@@ -85,12 +151,18 @@ class GestionController extends AbstractActionController
             ],
         ]);
         $form->setAttribute('action', $this->url()->fromRoute(null, []));
+
+        $form->get('role')->setValue( $roleStatutCode ?: '' );
+
         return $form;
     }
 
-
+    /**
+     *
+     * @return \Application\Form\Gestion\PrivilegesForm
+     */
     public function getFormPrivileges()
     {
-
+        return $this->getServiceLocator()->get('FormElementManager')->get('GestionPrivilegesForm');
     }
 }

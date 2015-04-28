@@ -106,11 +106,11 @@ select * from individu@harpprod where nom_usuel = 'DENOYES';
 
 
 select
-r.code ressource,
+r.code categorie,
 p.code privilege,
 p.id   p_id
 from
   privilege p
-  join ressource r on r.id = p.ressource_id
+  join categorie_privilege r on r.id = p.categorie_id
 order by
-  ressource, privilege
+  categorie, privilege

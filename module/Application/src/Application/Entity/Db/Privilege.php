@@ -103,26 +103,26 @@ class Privilege
     }
 
     /**
-     * Set categoriePrivilege
+     * Set categorie
      *
-     * @param \Application\Entity\Db\CategoriePrivilege $categoriePrivilege
+     * @param \Application\Entity\Db\CategoriePrivilege $categorie
      * @return Privilege
      */
-    public function setCategoriePrivilege(\Application\Entity\Db\CategoriePrivilege $categoriePrivilege = null)
+    public function setCategorie(\Application\Entity\Db\CategoriePrivilege $categorie = null)
     {
-        $this->categoriePrivilege = $categoriePrivilege;
+        $this->categorie = $categorie;
 
         return $this;
     }
 
     /**
-     * Get categoriePrivilege
+     * Get categorie
      *
      * @return \Application\Entity\Db\CategoriePrivilege
      */
-    public function getCategoriePrivilege()
+    public function getCategorie()
     {
-        return $this->categoriePrivilege;
+        return $this->categorie;
     }
 
     /**

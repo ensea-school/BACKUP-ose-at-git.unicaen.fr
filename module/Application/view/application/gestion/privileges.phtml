@@ -1,0 +1,33 @@
+<h1>Gestion des droits d'accès</h1>
+<?php
+
+/* @var $formDroitsSelection Zend\Form\Form */
+/* @var $formPrivileges \Application\Form\Gestion\PrivilegesForm */
+/* @var $privileges [] */
+
+echo $this->form()->openTag( $formDroitsSelection->prepare() );
+echo $this->formControlGroup( $formDroitsSelection->get('role') );
+echo $this->form()->closeTag();
+
+if ($formPrivileges){
+    echo $this->form()->openTag( $formPrivileges->prepare() );
+
+    foreach( $privileges as $cat ){
+        $categorie = $cat['categorie'];
+        /* @var $categorie Application\Entity\Db\CategoriePrivilege */
+        echo '<h2>'.$categorie->getLibelle().'</h2>';
+        echo '<ul class="privileges-form">';
+        foreach( $cat['privileges'] as $privilege ){
+            /* @var $privilege Application\Entity\Db\Privilege */
+            echo '<li>';
+            echo $this->formCheckbox( $formPrivileges->get($privilege->getCode()) );
+            echo '<label for="'.$privilege->getId().'">';
+            echo $privilege->getLibelle();
+            echo '</label></li>';
+        }
+        echo '</ul>';
+    }
+
+    echo $this->formSubmit( $formPrivileges->get('submit') );
+    echo $this->form()->closeTag();
+}

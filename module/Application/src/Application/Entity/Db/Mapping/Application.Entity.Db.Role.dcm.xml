@@ -17,6 +17,11 @@
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="50" nullable="false"/>
+    <many-to-one field="perimetre" target-entity="Application\Entity\Db\Perimetre">
+      <join-columns>
+        <join-column name="PERIMETRE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_MODIFICATEUR_ID" referenced-column-name="ID"/>
@@ -33,6 +38,6 @@
       </join-columns>
     </many-to-one>
     <one-to-many field="affectation" target-entity="Application\Entity\Db\Affectation" mapped-by="role" />
-    <many-to-many field="privilege" target-entity="Application\Entity\Db\Privilege" mapped-by="role"/>
+    <many-to-many field="privilege" target-entity="Application\Entity\Db\Privilege" mapped-by="role" />
   </entity>
 </doctrine-mapping>

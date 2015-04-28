@@ -1,11 +1,7 @@
 <h1>Gestion des droits d'accès</h1>
+
 <?php
-
-/* @var $form Zend\Form\Form */
-
-echo $this->form()->openTag($form->prepare());
-
-echo $this->formControlGroup( $form->get('role') );
-
-echo $this->form()->closeTag();
-
+echo '<ul>';
+echo '<li><a href="'.$this->url('gestion/droits/roles').'">Gestion des rôles</a></li>';
+echo '<li><a href="'.$this->url('gestion/droits/privileges').'">Gestion des privilèges par rôle</a></li>';
+echo '</ul>';

@@ -1,0 +1,22 @@
+<h1>Gestion des rôles</h1>
+<?php
+
+/* @var $roles Application\Entity\Db\Role[] */
+
+?>
+<table class="table table-condensed table-bordered">
+    <tr>
+        <th>Code</th>
+        <th>Libellé</th>
+        <th>Périmètre</th>
+        <th>Action</th>
+    </tr>
+<?php foreach( $roles as $role ): ?>
+    <tr>
+        <td><?php echo $role->getCode(); ?></td>
+        <td><?php echo $role->getLibelle(); ?></td>
+        <td><?php echo $role->getPerimetre(); ?></td>
+        <td></td>
+    </tr>
+<?php endforeach; ?>
+</table>

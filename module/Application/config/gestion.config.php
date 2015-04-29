@@ -37,6 +37,34 @@ return [
                                         'action' => 'roles',
                                     ],
                                 ],
+                                'child_routes' => [
+                                    'edition' => [
+                                        'type'    => 'Segment',
+                                        'may_terminate' => true,
+                                        'options' => [
+                                            'route'    => '/edition[/:role]',
+                                            'constraints' => [
+                                                'role' => '[0-9]*',
+                                            ],
+                                            'defaults' => [
+                                                'action' => 'role-edition',
+                                            ],
+                                        ],
+                                    ],
+                                    'suppression' => [
+                                        'type'    => 'Segment',
+                                        'may_terminate' => true,
+                                        'options' => [
+                                            'route'    => '/suppression/:role',
+                                            'constraints' => [
+                                                'role' => '[0-9]*',
+                                            ],
+                                            'defaults' => [
+                                                'action' => 'role-suppression',
+                                            ],
+                                        ],
+                                    ],
+                                ],
                             ],
                             'privileges' => [
                                 'type'    => 'Segment',
@@ -45,6 +73,28 @@ return [
                                     'route'    => '/privileges[/:role]',
                                     'defaults' => [
                                         'action' => 'privileges',
+                                    ],
+                                ],
+                            ],
+                            'tableau-bord' => [
+                                'type'    => 'Literal',
+                                'may_terminate' => true,
+                                'options' => [
+                                    'route'    => '/tableau-bord',
+                                    'defaults' => [
+                                        'action' => 'droits-tableau-bord',
+                                    ],
+                                ],
+                                'child_routes' => [
+                                    'modifier' => [
+                                        'type'    => 'Segment',
+                                        'may_terminate' => true,
+                                        'options' => [
+                                            'route'    => '/modifier',
+                                            'defaults' => [
+                                                'action' => 'droits-tableau-bord-modifier',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],
@@ -82,6 +132,13 @@ return [
                                         'withtarget' => true,
                                         'resource' => 'controller/Application\Controller\Gestion:privileges',
                                     ],
+                                    'tableau-bord' => [
+                                        'label'  => "Tableau de bord",
+                                        'title'  => "Tableau de bord",
+                                        'route'  => 'gestion/droits/tableau-bord',
+                                        'withtarget' => true,
+                                        'resource' => 'controller/Application\Controller\Gestion:droits-tableau-bord',
+                                    ],
                                 ],
                             ],
                         ],
@@ -102,9 +159,14 @@ return [
             'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Gestion',
-                    'action'     => ['droits', 'privileges', 'roles'],
+                    'action'     => ['droits', 'privileges', 'roles', 'droits-tableau-bord'],
                     'privileges' => ['privilege-visualisation', 'privilege-edition']
-                ]
+                ],
+                [
+                    'controller' => 'Application\Controller\Gestion',
+                    'action'     => ['role-edition', 'role-suppression', 'droits-tableau-bord-modifier'],
+                    'privileges' => ['privilege-edition']
+                ],
             ],
         ],
     ],
@@ -113,9 +175,20 @@ return [
             'Application\Controller\Gestion' => 'Application\Controller\GestionController',
         ],
     ],
+    'service_manager' => [
+        'invokables' => [
+            'ApplicationPerimetre' => 'Application\\Service\\Perimetre',
+        ],
+    ],
     'form_elements' => [
         'invokables' => [
+            'GestionRoleForm'       => 'Application\Form\Gestion\RoleForm',
             'GestionPrivilegesForm' => 'Application\Form\Gestion\PrivilegesForm',
         ],
     ],
+    'public_files' => [
+        'js' => [
+            'js/gestion.js',
+        ],
+    ]
 ];

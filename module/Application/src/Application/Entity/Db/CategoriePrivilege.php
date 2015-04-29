@@ -80,4 +80,10 @@ class CategoriePrivilege
     {
         return $this->id;
     }
+
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+
 }

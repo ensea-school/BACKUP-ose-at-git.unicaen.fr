@@ -200,4 +200,9 @@ class Privilege
     {
         return $this->statut;
     }
+
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
 }

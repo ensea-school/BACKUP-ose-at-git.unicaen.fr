@@ -16,7 +16,7 @@ class IdentityProviderFactory implements FactoryInterface
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @return Acteur
+     * @return IdentityProvider
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -24,7 +24,6 @@ class IdentityProviderFactory implements FactoryInterface
         
         $identityProvider = new IdentityProvider;
         $identityProvider->setEntityManager($em);
-        $identityProvider->init();
         return $identityProvider;
     }
 }

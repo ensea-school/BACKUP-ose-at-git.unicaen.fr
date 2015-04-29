@@ -2,11 +2,16 @@
 namespace Application\Provider\Identity;
 
 use Application\Acl;
+use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\Affectation;
+use Application\Entity\Db\Utilisateur;
+use Common\Exception\RuntimeException;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Identity\ChainableProvider;
 use UnicaenAuth\Provider\Identity\ChainEvent;
+use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
@@ -39,20 +44,11 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
     public function getIdentityRoles()
     {
         if (null === $this->roles) {
-            $this->getEntityManager()->getFilters()->enable('historique')->init(
-                [
-                    'Application\Entity\Db\Role',
-                    'Application\Entity\Db\Affectation',
-                ],
-                new \DateTime
-            );
-
             $this->roles = [];
 
             $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
             /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
             $utilisateur = $serviceAuthUserContext->getDbUser();
-            /* @var $utilisateur \Application\Entity\Db\Utilisateur */
 
             if (! $utilisateur) return $this->roles; // pas connecté
 

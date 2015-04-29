@@ -74,7 +74,7 @@ class Context extends AbstractService
     protected $sessionContainer;
 
 
-    
+
 
 
     /**
@@ -89,23 +89,17 @@ class Context extends AbstractService
 
             if ($authUserContext->getIdentity()) {
                 $this->selectedIdentityRole = $authUserContext->getSelectedIdentityRole();
-                $utilisateur = $authUserContext->getDbUser();
-                if ($utilisateur){
-                    if ($this->selectedIdentityRole instanceof IntervenantAwareInterface) {
-                        $intervenant = $utilisateur->getIntervenant();
-                        if (! $intervenant){ // sinon import automatique
-                            $iSourceCode = (int)$authUserContext->getLdapUser()->getSupannEmpId();
-                            $intervenant = $this->getServiceIntervenant()->importer($iSourceCode);
-                        }
-                        $this->selectedIdentityRole->setIntervenant( $intervenant );
-                    }
-                    if ($this->selectedIdentityRole instanceof PersonnelAwareInterface){
-                        $this->selectedIdentityRole->setPersonnel( $utilisateur->getPersonnel() );
-                    }
+                if (
+                    $this->selectedIdentityRole instanceof \Application\Acl\IntervenantRole
+                    && ! $this->selectedIdentityRole->getIntervenant()
+                ){
+                    // import automatique
+                    $iSourceCode = (int)$authUserContext->getLdapUser()->getSupannEmpId();
+                    $intervenant = $this->getServiceIntervenant()->importer($iSourceCode);
+                    $this->selectedIdentityRole->setIntervenant( $intervenant ); // injection à la volée de l'intervenant
                 }
             }
         }
-
         return $this->selectedIdentityRole;
     }
 
@@ -268,7 +262,7 @@ class Context extends AbstractService
                     $sc->structure = null;
                 }else{
                     $role = $this->getSelectedIdentityRole();
-                    if ($role instanceof StructureAwareInterface && $role->getStructure()){
+                    if ($role->getStructure()){
                         $sc->structure = $role->getStructure()->getId();
                     }else{
                         $sc->structure = null;

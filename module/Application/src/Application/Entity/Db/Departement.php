@@ -41,7 +41,7 @@ class Departement implements HistoriqueAwareInterface
      */
     public function __toString()
     {
-        return $this->getCode() . " - " . $this->getLibelleLong();
+        return $this->getSourceCode() . " - " . $this->getLibelleLong();
     }
 
     /**

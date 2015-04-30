@@ -14,6 +14,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
+    protected $intervenantMessage   = "Votre contrat ou l'un de vos avenants est en attente de retour signé.";
     protected $singularTitlePattern = "%s contrat de vacataires est en attente de retour";
     protected $pluralTitlePattern   = "%s contrats de vacataires sont en attente de retour";
     

@@ -511,7 +511,7 @@ class ContratController extends AbstractActionController
         $contratIniModif = $estUnAvenant && $this->contrat->getContrat()->getStructure() === $this->contrat->getStructure() ? true : false;
         $dateSignature   = $estUnProjet ? $this->contrat->getHistoCreation() : $this->contrat->getValidation()->getHistoCreation();
         $servicesRecaps  = $this->getServicesRecapsContrat($this->contrat); // récap de tous les services au sein de la structure d'ens
-        $totalHETD       = $this->getTotalHetdIntervenant();
+        $totalHETD       = $this->contrat->getTotalHetd() ?: $this->getTotalHetdIntervenant();
 
         if ($this->intervenant->getDossier()) {
             $adresseIntervenant    = $this->intervenant->getDossier()->getAdresse();
@@ -570,12 +570,13 @@ class ContratController extends AbstractActionController
     /**
      * @return float
      */
-    public function getTotalHetdIntervenant()
+    private function getTotalHetdIntervenant()
     {
+        $annee = $this->getServiceContext()->getAnnee();
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
-
-        $fr = $this->intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
+        
+        $fr = $this->getIntervenant()->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
 
         return $fr->getServiceDu() + $fr->getSolde();
     }

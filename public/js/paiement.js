@@ -89,7 +89,7 @@ function DemandeMiseEnPaiement( id )
             services[sapEl.attr("id")].dmep  += this.misesEnPaiementListes[id].getHeuresDMEP();
         }
         for( var id in services ){
-            if ( services[id].mep + services[id].dmep > services[id].total && services[id].dmep > 0 ){
+            if ( Math.round((services[id].mep + services[id].dmep) * 100) > Math.round(services[id].total*100) && services[id].dmep > 0 ){
                 this.showError(
                     this.element.find('.service-a-payer#'+id),
                     'Le nombre d\'heures mises en paiement ou demandées dépasse le nombre heures disponibles'
@@ -120,7 +120,7 @@ function DemandeMiseEnPaiement( id )
 
     /**
      * Initialisation
-     * 
+     *
      * @returns {undefined}
      */
     this.init = function()
@@ -331,7 +331,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
     this.renderCentreCout = function( data )
     {
         var outC = '';
-        
+
         ccCount = Util.json.count(this.params['centres-cout']);
         if( ccCount == 1 || data['read-only'] ){
             if (data['validation'] != undefined){
@@ -521,7 +521,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
     this.init = function()
     {
         var that = this;
-        this.element.find('.heures-non-dmep').on('click', function(){ 
+        this.element.find('.heures-non-dmep').on('click', function(){
             that.onAddHeuresRestantes();
         } );
         this.populate();
@@ -637,7 +637,7 @@ function PaiementMiseEnPaiementRechercheForm( id )
 
         $("body").on("mise-en-paiement-form-submit", function(event, data) {
             if ($("div .messenger, div .alert", event.div).length ? false : true){
-                
+
                 document.location.href = event.a.data('url-redirect');
             }
         });

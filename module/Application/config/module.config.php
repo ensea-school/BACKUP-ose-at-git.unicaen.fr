@@ -194,6 +194,8 @@ $main =  [
             'ApplicationAffectation'                         => 'Application\\Service\\Affectation',
             'ApplicationRole'                                => 'Application\\Service\\Role',
             'ApplicationPrivilege'                           => 'Application\\Service\\Privilege',
+            'ApplicationPays'                                => 'Application\\Service\\Pays',
+            'ApplicationDepartement'                         => 'Application\\Service\\Departement',
             'IntervenantNavigationPageVisibility'            => 'Application\\Service\\IntervenantNavigationPageVisibility',
             'ApplicationRuleProvider'                        => 'Application\Provider\Rule\RuleProvider',
         ],
@@ -240,6 +242,9 @@ $main =  [
         'invokables' => [
             'em'      => 'Application\Controller\Plugin\Em',
             'context' => 'Application\Controller\Plugin\Context',
+        ],
+        'factories' => [
+            'mail'    => 'Application\Controller\Plugin\MailWithLogPluginFactory',
         ],
     ],
     'view_manager' => [

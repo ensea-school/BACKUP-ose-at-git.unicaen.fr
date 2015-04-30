@@ -60,6 +60,22 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
     }
     
     /**
+     * Collecte et retourne les adresses mails de tous les intervenants retournés par cet indicateur.
+     * 
+     * @return array
+     */
+    public function getResultEmails()
+    {
+        $resultEmails = [];
+        foreach ($this->getResult() as $r) { /* @var $r VIndicDepassHcHorsRemuFc */
+            $intervenant = $r->getIntervenant();
+            $resultEmails[$intervenant->getEmailPerso(true)] = $intervenant->getNomComplet();
+        }
+        
+        return $resultEmails;
+    }
+    
+    /**
      * 
      * @return QueryBuilder
      */

@@ -108,10 +108,21 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
         $this->add( [
             'name' => 'email',
             'options' => [
-                'label' => 'Adresse mail',
+                'label' => 'Adresse mail établissement',
             ],
             'attributes' => [
                 'readonly' => true
+            ],
+            'type' => 'Text',
+        ] );
+
+        $this->add( [
+            'name' => 'emailPerso',
+            'options' => [
+                'label' => 'Adresse mail personnelle (éventuelle)',
+            ],
+            'attributes' => [
+                'readonly' => false
             ],
             'type' => 'Text',
         ] );
@@ -235,6 +246,15 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
             ],
             'email' => [
                 'required' => true,
+                'filters' => [
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    ['name' => 'EmailAddress']
+                ],
+            ],
+            'emailPerso' => [
+                'required' => false,
                 'filters' => [
                     ['name' => 'StringTrim'],
                 ],

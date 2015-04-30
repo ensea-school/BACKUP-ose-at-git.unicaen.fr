@@ -1,0 +1,125 @@
+<?php
+
+namespace Application\Form\Gestion;
+
+use Zend\Form;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use UnicaenApp\Util;
+use Zend\Stdlib\Hydrator\HydratorInterface;
+
+/**
+ * Description of RoleForm
+ *
+ * @author Laurent LECLUSE <laurent.lecluse at unicaen.fr>
+ */
+class RoleForm extends Form\Form implements ServiceLocatorAwareInterface
+{
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\PerimetreAwareTrait
+    ;
+
+
+    public function init()
+    {
+        $hydrator = new RoleFormHydrator;
+        $hydrator->setServicePerimetre($this->getServicePerimetre());
+        $this->setHydrator($hydrator);
+
+        $this->add( [
+            'type' => 'Text',
+            'name' => 'code',
+            'options' => [
+                'label' => 'Code',
+            ],
+        ] );
+
+        $this->add( [
+            'type' => 'Text',
+            'name' => 'libelle',
+            'options' => [
+                'label' => 'Libellé',
+            ],
+        ] );
+
+        $this->add( [
+            'type' => 'Select',
+            'name' => 'perimetre',
+            'options' => [
+                'label' => 'Périmètre',
+                'value_options' => Util::collectionAsOptions($this->getServicePerimetre()->getList())
+            ],
+
+        ] );
+
+        $this->add( [
+            'name' => 'id',
+            'type' => 'Hidden'
+        ] );
+
+        $this->add([
+            'name'       => 'submit',
+            'type'       => 'Submit',
+            'attributes' => [
+                'value'  => 'Enregistrer',
+                'class'  => 'btn btn-primary',
+            ],
+        ]);
+    }
+
+    /**
+     * Should return an array specification compatible with
+     * {@link Zend\InputFilter\Factory::createInputFilter()}.
+     *
+     * @return array
+     */
+    public function getInputFilterSpecification()
+    {
+        return [
+            'code' => [
+                'required' => true,
+            ],
+            'libelle' => [
+                'required' => true,
+            ],
+            'perimetre' => [
+                'required' => true,
+            ],
+        ];
+    }
+}
+
+
+class RoleFormHydrator implements HydratorInterface
+{
+    use \Application\Service\Traits\PerimetreAwareTrait;
+
+    /**
+     * @param  array $data
+     * @param  \Application\Entity\Db\Role $object
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+        $object->setCode     ( $data['code'] );
+        $object->setLibelle  ( $data['libelle'] );
+        $object->setPerimetre( $this->getServicePerimetre()->get($data['perimetre']) );
+        return $object;
+    }
+
+    /**
+     * @param  \Application\Entity\Db\Role $object
+     * @return array
+     */
+    public function extract($object)
+    {
+        $data = [
+            'id'        => $object->getId(),
+            'code'      => $object->getCode(),
+            'libelle'   => $object->getLibelle(),
+            'perimetre' => $object->getPerimetre() ? $object->getPerimetre()->getId() : null,
+        ];
+
+        return $data;
+    }
+}

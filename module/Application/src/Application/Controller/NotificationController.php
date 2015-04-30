@@ -41,7 +41,8 @@ use Zend\View\Renderer\PhpRenderer;
  */
 class NotificationController extends AbstractActionController
 {
-
+    use \Application\Service\Traits\ContextAwareTrait;
+    
     /**
      * Visualisation de tous les abonnements aux indicateurs.
      * 
@@ -188,7 +189,7 @@ EOS;
      */
     public function indicateurIntervenantsAction()
     {
-        $role       = $this->getContextProvider()->getSelectedIdentityRole();
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $indicateur = $this->context()->mandatory()->indicateurFromRoute();
         $structure  = $this->context()->structureFromRoute();
         
@@ -241,7 +242,7 @@ EOS;
      */
     private function getStructure()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         
         if ($role instanceof StructureAwareInterface) {
             return $role->getStructure();
@@ -311,7 +312,7 @@ class IndicateurIntervenantsMailer
     
     public function getFrom()
     {
-        $from = $this->controller->getContextProvider()->getGlobalContext()->getPersonnel()->getEmail();
+        $from = $this->controller->getServiceContext()->getSelectedIdentityRole()->getPersonnel()->getEmail();
         
         return $from;
     }
@@ -325,15 +326,14 @@ class IndicateurIntervenantsMailer
     
     public function getDefaultBody()
     {
-        $signature = $this->controller->getContextProvider()->getGlobalContext()->getPersonnel();
-        $structure = $this->controller->getContextProvider()->getSelectedIdentityRole()->getStructure();
-        $renderer  = $this->controller->getServiceLocator()->get('view_manager')->getRenderer(); /* @var $renderer PhpRenderer */
+        $role     = $this->controller->getServiceContext()->getSelectedIdentityRole();
+        $renderer = $this->controller->getServiceLocator()->get('view_manager')->getRenderer(); /* @var $renderer PhpRenderer */
         
         // corps au format HTML
         $html = $renderer->render('application/notification/mail/indicateur-intervenants', [
             'phrase' => $this->indicateurImpl->getIntervenantMessage(),
-            'signature' => $signature,
-            'structure' => $structure,
+            'signature' => $role->getPersonnel(),
+            'structure' => $role->getStructure(),
         ]);
         
         return $html;

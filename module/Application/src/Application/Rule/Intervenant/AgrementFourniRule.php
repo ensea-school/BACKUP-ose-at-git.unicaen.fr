@@ -86,7 +86,7 @@ class AgrementFourniRule extends AgrementAbstractRule
 
         if ($this->getStructure()) {
             $andStructureAgrement = "AND a.STRUCTURE_ID = " . $this->getStructure()->getId();
-            $andStructureService  = "AND s.STRUCTURE_ENS_ID = " . $this->getStructure()->getId();
+            $andStructureService  = "AND ep.STRUCTURE_ID = " . $this->getStructure()->getId();
         }
 
         /**
@@ -113,10 +113,11 @@ class AgrementFourniRule extends AgrementAbstractRule
     WITH
     COMPOSANTES_ENSEIGN AS (
         -- nombre de composantes d'enseignement par intervenant
-        SELECT I.ID, I.SOURCE_CODE, COUNT(distinct s.STRUCTURE_ENS_ID) NB_COMP_ENS
+        SELECT I.ID, I.SOURCE_CODE, COUNT(distinct ep.STRUCTURE_ID) NB_COMP_ENS
         FROM SERVICE s
         INNER JOIN INTERVENANT I ON I.ID = s.INTERVENANT_ID AND 1 = ose_divers.comprise_entre(i.HISTO_CREATION, i.HISTO_DESTRUCTION)
-        INNER JOIN STRUCTURE comp ON comp.ID = s.STRUCTURE_ENS_ID AND 1 = ose_divers.comprise_entre(comp.HISTO_CREATION, comp.HISTO_DESTRUCTION)
+        INNER JOIN ELEMENT_PEDAGOGQIUE ep ON ep.ID = s.ELEMENT_PEDAGOGQIUE_ID AND 1 = ose_divers.comprise_entre(ep.HISTO_CREATION, ep.HISTO_DESTRUCTION)
+        INNER JOIN STRUCTURE comp ON comp.ID = ep.STRUCTURE_ID AND 1 = ose_divers.comprise_entre(comp.HISTO_CREATION, comp.HISTO_DESTRUCTION)
         WHERE 1 = ose_divers.comprise_entre(s.HISTO_CREATION, s.HISTO_DESTRUCTION)
         $andStructureService
         GROUP BY I.ID, I.SOURCE_CODE

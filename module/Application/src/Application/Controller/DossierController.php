@@ -80,7 +80,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
      */
     public function modifierAction()
     {
-        $role       = $this->getContextProvider()->getSelectedIdentityRole();
+        $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $service    = $this->getDossierService();
         $validation = null;
 

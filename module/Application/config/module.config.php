@@ -193,6 +193,8 @@ $main =  [
             'ApplicationSource'                              => 'Application\\Service\\Source',
             'ApplicationRole'                                => 'Application\\Service\\Role',
             'ApplicationTypeRole'                            => 'Application\\Service\\TypeRole',
+            'ApplicationPays'                                => 'Application\\Service\\Pays',
+            'ApplicationDepartement'                         => 'Application\\Service\\Departement',
             'IntervenantNavigationPageVisibility'            => 'Application\\Service\\IntervenantNavigationPageVisibility',
         ],
         'factories' => [

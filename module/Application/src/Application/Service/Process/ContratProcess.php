@@ -23,9 +23,12 @@ use Application\Entity\Db\Contrat;
 class ContratProcess extends AbstractService
 {
     use IntervenantAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
         \Application\Service\Traits\ContratAwareTrait,
         \Application\Service\Traits\ServiceAPayerAwareTrait,
-        \Application\Service\Traits\TypeVolumeHoraireAwareTrait
+        \Application\Service\Traits\TypeVolumeHoraireAwareTrait,
+        \Application\Service\Traits\ServiceAwareTrait,
+        \Application\Service\Traits\EtatVolumeHoraireAwareTrait
     ;
 
     /**
@@ -74,7 +77,8 @@ class ContratProcess extends AbstractService
                 ->setIntervenant($this->getIntervenant())
                 ->setStructure($this->getStructure())
                 ->setContrat(null) // le contrat initial, c'est lui!
-                ->setValidation(null);
+                ->setValidation(null)
+                ->setTotalHetd($this->getTotalHetdIntervenant());
 
         foreach ($volumesHoraires as $volumeHoraire) {
             $this->contrat->addVolumeHoraire($volumeHoraire);
@@ -100,7 +104,8 @@ class ContratProcess extends AbstractService
                 ->setStructure($this->getStructure())
                 ->setContrat($this->getContratInitial()) // lien vers le contrat initial
                 ->setNumeroAvenant($this->getServiceContrat()->getNextNumeroAvenant($this->getIntervenant(), false))
-                ->setValidation(null);
+                ->setValidation(null)
+                ->setTotalHetd($this->getTotalHetdIntervenant());
 
         foreach ($volumesHoraires as $volumeHoraire) { /* @var $volumeHoraire \Application\Entity\Db\VolumeHoraire */
             $avenant->addVolumeHoraire($volumeHoraire);
@@ -334,5 +339,19 @@ class ContratProcess extends AbstractService
         }
 
         return $this->structure;
+    }
+
+    /**
+     * @return float
+     */
+    private function getTotalHetdIntervenant()
+    {   
+        $annee             = $this->getServiceContext()->getAnnee();
+        $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
+        $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
+        
+        $fr = $this->getIntervenant()->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+
+        return $fr->getServiceDu() + $fr->getSolde();
     }
 }

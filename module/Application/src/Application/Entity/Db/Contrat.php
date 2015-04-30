@@ -90,6 +90,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $fichier;
 
     /**
+     * @var float
+     */
+    private $totalHetd;
+
+    /**
      * Libellé de cet objet.
      * 
      * @return string
@@ -539,6 +544,35 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     {
         return $this->fichier;
     }
+    
+    /**
+     * Retourne le total Hetd enregistré au moment de la création de ce contrat/avenant.
+     * 
+     * Attention: il est null pour ceux créés avant l'ajout de cette colonne dans la table CONTRAT.
+     * 
+     * @return float|null
+     * @since 1.5
+     */
+    public function getTotalHetd()
+    {
+        return $this->totalHetd;
+    }
+
+    /**
+     * Spécifie le total Hetd à enregistrer au moment de la création de ce contrat/avenant.
+     * 
+     * @param float $totalHetd
+     * @return self
+     * @since 1.5
+     */
+    public function setTotalHetd($totalHetd)
+    {
+        $this->totalHetd = $totalHetd;
+        
+        return $this;
+    }
+
+
     
     /**
      * Returns the string identifier of the Resource

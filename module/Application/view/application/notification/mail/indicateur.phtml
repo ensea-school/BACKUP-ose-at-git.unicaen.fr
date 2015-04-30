@@ -1,18 +1,12 @@
 <?php 
-use Application\Service\Indicateur\AbstractIndicateurImpl;
+use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Common\Constants;
-/* @var $indicateurImpl AbstractIndicateurImpl */
+/* @var $indicateurImpl AbstractIntervenantResultIndicateurImpl */
 ?>
 
 <h1 class="page-header"><?php echo $indicateurImpl->getTitle() ?></h1>
 
-<ul>
-<?php foreach ($indicateurImpl->getResult() as $r): ?>
-    <li><a href="<?php echo $indicateurImpl->getResultUrl($r) ?>"
-           title="Cliquez pour vous rendre à la page concernée"
-           ><?php echo $indicateurImpl->getResultFormatter()->filter($r) ?></a></li>
-<?php endforeach; ?>
-</ul>
+<?php echo $this->partial('application/indicateur/partial/result', ['indicateurImpl' => $indicateurImpl]); ?>
 
 <p>
     Vous vous êtes abonné(e) à cet indicateur le <?php echo $this->ni->getDateAbonnement()->format(Constants::DATETIME_FORMAT) ?>.<br />

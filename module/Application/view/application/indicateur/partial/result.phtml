@@ -1,0 +1,21 @@
+<style>
+    div.modal-dialog { width: 50%; }
+</style>
+
+<ul>
+<?php foreach ($this->indicateurImpl->getResult() as $r): ?>
+    <li>
+        <a href="<?php echo $this->indicateurImpl->getResultUrl($r) ?>"
+           title="Cliquez pour vous rendre à la page concernée"
+           ><?php echo $this->indicateurImpl->getResultFormatter()->filter($r) ?></a>
+    </li>
+<?php endforeach; ?>
+</ul>
+
+<?php 
+if ($this->indicateurImpl->getResult()): ?>
+    <?php $url = $this->url('notification/indicateur-intervenants', ['indicateur' => $this->indicateurImpl->getEntity()->getId()]); ?>
+    <a class="ajax-modal" 
+       data-event="event-send-mail"
+       href="<?php echo $url ?>">Rédiger un mail pour tous ces intervenants...</a>
+<?php endif;

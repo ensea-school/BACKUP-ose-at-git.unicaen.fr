@@ -2,20 +2,30 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Common\Exception\RuntimeException;
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Listener\DossierListener;
 use Application\Acl\IntervenantRole;
+use Application\Controller\Plugin\Context;
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\Listener\DossierListener;
+use Application\Entity\Db\TypeValidation;
+use Application\Form\Intervenant\Dossier as DossierForm;
+use Application\Service\Dossier;
+use Application\Service\Validation;
+use Application\Service\Workflow\Workflow;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-use Application\Entity\Db\TypeValidation;
+use Common\Exception\MessageException;
+use Common\Exception\RuntimeException;
+use Doctrine\ORM\EntityManager;
+use Zend\Form\Form;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
  * Description of DossierController
  *
- * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Context     context()
+ * @method EntityManager em()
+ * @method Context       context()
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -26,12 +36,12 @@ class DossierController extends AbstractActionController implements WorkflowInte
     ;
 
     /**
-     * @var \Application\Entity\Db\IntervenantExterieur
+     * @var IntervenantExterieur
      */
     private $intervenant;
 
     /**
-     * @var \Zend\Form\Form
+     * @var Form
      */
     private $form;
 
@@ -42,8 +52,8 @@ class DossierController extends AbstractActionController implements WorkflowInte
 
     /**
      *
-     * @return \Zend\View\Model\ViewModel
-     * @throws \Common\Exception\MessageException
+     * @return ViewModel
+     * @throws MessageException
      */
     public function voirAction()
     {
@@ -51,10 +61,10 @@ class DossierController extends AbstractActionController implements WorkflowInte
         $dossier     = $intervenant->getDossier();
         $title       = "Données personnelles <small>$intervenant</small>";
         $short       = $this->params()->fromQuery('short', false);
-        $view        = new \Zend\View\Model\ViewModel();
+        $view        = new ViewModel();
 
         if (!$dossier) {
-            throw new \Common\Exception\MessageException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
+            throw new MessageException("L'intervenant $intervenant n'a aucune donnée personnelle enregistrée.");
         }
 
         $view->setVariables(compact('intervenant', 'dossier', 'title', 'short'));
@@ -65,14 +75,14 @@ class DossierController extends AbstractActionController implements WorkflowInte
     /**
      * Modification du dossier d'un intervenant.
      *
-     * @return type
+     * @return ViewModel
      * @throws RuntimeException
      */
     public function modifierAction()
     {
-        $role    = $this->getServiceContext()->getSelectedIdentityRole();
-        $service = $this->getDossierService();
-        $this->form    = $this->getFormModifier();
+        $role       = $this->getContextProvider()->getSelectedIdentityRole();
+        $service    = $this->getDossierService();
+        $validation = null;
 
         if ($role instanceof IntervenantRole) {
             $this->intervenant = $role->getIntervenant();
@@ -81,13 +91,19 @@ class DossierController extends AbstractActionController implements WorkflowInte
             $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
 
-        $validation = null;
-        $dossierValide = $this->getServiceLocator()->get('DossierValideRule')->setIntervenant($this->intervenant);
-        if ($dossierValide->isRelevant() && $dossierValide->execute()) {
+        $this->form = $this->getFormModifier();
+        
+        $serviceValidation = $this->getServiceValidation();
+        $qb = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
+        $serviceValidation->finderByIntervenant($this->intervenant, $qb);
+        $serviceValidation->finderByHistorique($qb);
+        $validations = $serviceValidation->getList($qb);
+        if (count($validations)) {
+            $validation = current($validations);
+        }
+
+        if ($validation) {
             $this->readonly = true;
-            if (count($validations = $this->intervenant->getValidation($this->getTypeValidationDossier()))) {
-                $validation = $validations->first();
-            }
         }
 
         $this->form->get('submit')->setAttribute('value', $this->getSubmitButtonLabel());
@@ -112,8 +128,8 @@ class DossierController extends AbstractActionController implements WorkflowInte
                 return $this->redirect()->toUrl($this->getModifierRedirectionUrl());
             }
         }
-
-        $view = new \Zend\View\Model\ViewModel([
+        
+        $view = new ViewModel([
             'intervenant' => $this->intervenant,
             'form'        => $this->form,
             'validation'  => $validation,
@@ -130,7 +146,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
     {
         $label = null;
         $role  = $this->getServiceContext()->getSelectedIdentityRole();
-        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
 
         if ($role instanceof IntervenantRole) {
@@ -148,22 +164,12 @@ class DossierController extends AbstractActionController implements WorkflowInte
      */
     private function getModifierRedirectionUrl()
     {
-        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf \Application\Service\Workflow\Workflow */
+        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf Workflow */
         $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
 
         $url   = $step ? $wf->getStepUrl($step) : $this->url()->fromRoute(null, [], [], true);
 
         return $url;
-    }
-
-    /**
-     * @return TypeValidation
-     */
-    private function getTypeValidationDossier()
-    {
-        $qb = $this->getTypeValidationService()->finderByCode(TypeValidation::CODE_DONNEES_PERSO);
-
-        return $qb->getQuery()->getOneOrNullResult();
     }
 
     protected function notify(Intervenant $intervenant)
@@ -177,26 +183,32 @@ class DossierController extends AbstractActionController implements WorkflowInte
     }
 
     /**
-     * @return \Application\Form\Intervenant\Dossier
+     * @return DossierForm
      */
     private function getFormModifier()
     {
-        return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier');
+        $form = $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier'); /* @var $form DossierForm */
+        
+        if ($this->intervenant->getStatut()->estBiatss()) {
+            $form->get('dossier')->remove('emailPerso');
+        }
+        
+        return $form;
     }
 
     /**
-     * @return \Application\Service\TypeValidation
-     */
-    private function getTypeValidationService()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeValidation');
-    }
-
-    /**
-     * @return \Application\Service\Dossier
+     * @return Dossier
      */
     private function getDossierService()
     {
         return $this->getServiceLocator()->get('ApplicationDossier');
+    }
+
+    /**
+     * @return Validation
+     */
+    private function getServiceValidation()
+    {
+        return $this->getServiceLocator()->get('ApplicationValidation');
     }
 }

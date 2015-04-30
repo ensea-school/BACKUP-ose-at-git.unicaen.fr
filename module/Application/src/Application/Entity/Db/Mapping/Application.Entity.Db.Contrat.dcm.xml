@@ -12,6 +12,7 @@
     </id>
     <field name="numeroAvenant" type="integer" column="NUMERO_AVENANT" nullable="false"/>
     <field name="dateRetourSigne" type="datetime" column="DATE_RETOUR_SIGNE" nullable="true"/>
+    <field name="totalHetd" type="float" column="TOTAL_HETD" precision="126" scale="0" nullable="true"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>

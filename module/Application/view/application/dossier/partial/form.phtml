@@ -21,6 +21,9 @@ $dossier = $this->form->get('dossier');
     <div class="col-md-4">
         <?php echo $this->formControlGroup($dossier->get('adresse')->setAttribute('disabled', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('email')->setAttribute('disabled', $this->readonly)); ?>
+        <?php if ($dossier->has('emailPerso')) {
+            echo $this->formControlGroup($dossier->get('emailPerso')->setAttribute('disabled', $this->readonly)); 
+        } ?>
         <?php echo $this->formControlGroup($dossier->get('telephone')->setAttribute('disabled', $this->readonly)); ?>
         <fieldset class="rib">
             <legend>RIB</legend>

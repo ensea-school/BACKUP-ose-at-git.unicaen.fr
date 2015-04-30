@@ -25,6 +25,11 @@ class Dossier implements HistoriqueAwareInterface
     /**
      * @var string
      */
+    protected $emailPerso;
+
+    /**
+     * @var string
+     */
     protected $telephone;
 
     /**
@@ -187,6 +192,29 @@ class Dossier implements HistoriqueAwareInterface
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set emailPerso
+     *
+     * @param string $emailPerso
+     * @return Dossier
+     */
+    public function setEmailPerso($emailPerso)
+    {
+        $this->emailPerso = $emailPerso;
+
+        return $this;
+    }
+
+    /**
+     * Get emailPerso
+     *
+     * @return string 
+     */
+    public function getEmailPerso()
+    {
+        return $this->emailPerso;
     }
 
     /**

@@ -1,21 +1,13 @@
 <?php 
-use Application\Service\Indicateur\AbstractIndicateurImpl;
-/* @var $indicateurImpl AbstractIndicateurImpl */
+use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
+/* @var $indicateurImpl AbstractIntervenantResultIndicateurImpl */
 ?>
 
-<?php $this->headTitle()->append($this->indicateur . "")->append($title = "Indicateur") ?>
+<?php $this->headTitle()->append($this->indicateur . "")->append("Indicateur") ?>
+<h1 class="page-header"><?php echo $title = $indicateurImpl->getTitle() ?></h1>
 
-<h1 class="page-header"><?php echo $indicateurImpl->getTitle() ?></h1>
+<?php echo $this->partial('application/indicateur/partial/result', ['indicateurImpl' => $indicateurImpl]); ?>
 
-<ul>
-<?php foreach ($indicateurImpl->getResult() as $r): ?>
-    <li>
-        <a href="<?php echo $indicateurImpl->getResultUrl($r) ?>"
-           title="Cliquez pour vous rendre à la page concernée"
-           ><?php echo $indicateurImpl->getResultFormatter()->filter($r) ?></a>
-    </li>
-<?php endforeach; ?>
-</ul>
 
-<?php
-//var_dump(\UnicaenApp\Util::collectionAsOptions($indicateurImpl->getResult()));
+<!-- Inclusion du script de l'éditeur WYSIWYG (vers HTML) : http://www.tinymce.com -->
+<script type="text/javascript" src="<?php echo $this->basePath() . '/js/tinymce/tinymce.min.js' ?>"></script>

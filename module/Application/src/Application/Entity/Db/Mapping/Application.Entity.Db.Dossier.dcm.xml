@@ -14,6 +14,7 @@
     </id>
     <field name="adresse" type="string" column="ADRESSE" length="1024" nullable="false"/>
     <field name="email" type="string" column="EMAIL" length="128" nullable="false"/>
+    <field name="emailPerso" type="string" column="EMAIL_PERSO" length="128" nullable="true"/>
     <field name="telephone" type="string" column="TELEPHONE" length="20" nullable="true"/>
     <field name="histoCreation" type="datetime" column="HISTO_CREATION" nullable="false"/>
     <field name="histoDestruction" type="datetime" column="HISTO_DESTRUCTION" nullable="true"/>

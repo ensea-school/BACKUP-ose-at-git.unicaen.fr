@@ -206,6 +206,7 @@ function ServiceListe( id ){
 
         $("body").on("service-add-message", function(event, data) {
             var thatId = event.a.parents('div.service-liste').attr('id');
+            var serviceId = null;
             if ($("div .messenger, div .alert", event.div).length ? false : true){ // si aucune erreur n'a été rencontrée
                 event.div.modal('hide'); // ferme la fenêtre modale
                 for( i in data ){

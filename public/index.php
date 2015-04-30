@@ -11,6 +11,8 @@ if (! in_array($_SERVER['REMOTE_ADDR'],[
 }
 /* Fin de fermeture du service*/
 
+define('APPLICATION_PATH', realpath(__DIR__ . "/.."));
+
 define('REQUEST_MICROTIME', microtime(true));
 /**
  * This makes our life easier when dealing with paths. Everything is relative

@@ -1,0 +1,10 @@
+<?php
+
+/* @var $role Application\Entity\Db\Role */
+/* @var $statut Application\Entity\Db\StatutIntervenant */
+/* @var $privilege Application\Entity\Db\Privilege */
+
+echo $this->partial(
+        '/application/gestion/partial/tbl-link',
+        compact('role','statut','privilege')
+     );

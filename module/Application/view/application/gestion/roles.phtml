@@ -1,0 +1,47 @@
+<h1>Gestion des rôles</h1>
+<?php
+
+/* @var $roles Application\Entity\Db\Role[] */
+
+$ajoutUrl = $this->url( 'gestion/droits/roles/edition' );
+
+?>
+<table class="table table-condensed table-bordered">
+    <tr>
+        <th>Code</th>
+        <th>Libellé</th>
+        <th>Périmètre</th>
+        <th>Action</th>
+    </tr>
+<?php foreach( $roles as $role ):
+    $editionUrl     = $this->url( 'gestion/droits/roles/edition',     ['role' => $role->getId()] );
+    $suppressionUrl = $this->url( 'gestion/droits/roles/suppression', ['role' => $role->getId()] );
+?>
+    <tr>
+        <td><?php echo $role->getCode(); ?></td>
+        <td><?php echo $role->getLibelle(); ?></td>
+        <td><?php echo $role->getPerimetre(); ?></td>
+        <td style="width:1%;white-space: nowrap;text-align: center">
+            <?php if (true == true): // droits ?>
+            <a href="<?php echo $editionUrl; ?>" class="ajax-modal" data-event="role-edition"><span class="glyphicon glyphicon-edit"></span></a>
+            <a href="<?php echo $suppressionUrl; ?>" class="ajax-modal" data-event="role-suppression"><span class="glyphicon glyphicon-remove"></span></a>
+            <?php endif; ?>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>
+<?php if (true == true): // droits ?>
+<a href="<?php echo $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="role-edition">Création d'un nouveau rôle</a>
+<?php endif; ?>
+<?php echo $this->modalAjaxDialog('roles-edition-suppression'); ?>
+<script type="text/javascript">
+    $(function() {
+        $("body").on("role-edition", function(event, data) {
+            window.location.reload();
+        });
+
+        $("body").on("role-suppression", function(event, data) {
+            window.location.reload();
+        });
+    });
+</script>

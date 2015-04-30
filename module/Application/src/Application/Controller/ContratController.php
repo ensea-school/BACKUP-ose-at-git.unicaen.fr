@@ -143,7 +143,7 @@ class ContratController extends AbstractActionController
 
         foreach ($contrats as $contrat) { /* @var $contrat \Application\Entity\Db\Contrat */
             $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
-                    ->select("s, vh, str, i")
+                    ->select("s, vh, ep, str, i")
                     ->join("s.volumeHoraire", "vh")
                     ->join("s.elementPedagogique", "ep")
                     ->join("ep.structure", "str")

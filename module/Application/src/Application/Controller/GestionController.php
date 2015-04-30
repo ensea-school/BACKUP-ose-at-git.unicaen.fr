@@ -90,81 +90,7 @@ class GestionController extends AbstractActionController
         return compact('role', 'title', 'form', 'errors');
     }
 
-    /**
-     *
-     * @return type
-     */
     public function privilegesAction()
-    {
-        $roleStatutCode = $this->params()->fromRoute('role');
-
-        $formDroitsSelection = $this->getFormDroitsSelection( $roleStatutCode );
-        $formPrivileges = null;
-
-        if (0 === strpos($roleStatutCode, 'r-')){
-            $rs = $this->getServiceRole()->getRepo()->findOneBy(['code' => substr($roleStatutCode, 2)]);
-            /* @var $rs Role */
-        }elseif(0 === strpos($roleStatutCode, 's-')){
-            $rs = $this->getServiceStatutIntervenant()->getRepo()->findOneBy(['sourceCode' => substr($roleStatutCode, 2)]);
-            /* @var $rs StatutIntervenant */
-        }else{
-            $rs = null;
-        }
-
-        if ($rs){
-            $ps = $this->getServicePrivilege()->getList();
-            /* @var $ps Privilege[] */
-
-            $request = $this->getRequest();
-            if ($request->isPost()) {
-                $post = $request->getPost();
-                foreach( $ps as $privilege ){
-                    if (isset($post[$privilege->getCode()])){
-                        if ('1' === $post[$privilege->getCode()]){ // privilège coché
-                            if (! $rs->getPrivilege()->contains($privilege)){
-                                if ($rs instanceof Role){
-                                    $this->roleAddPrivilege($rs, $privilege);
-                                }elseif($rs instanceof StatutIntervenant){
-                                    $this->statutAddPrivilege($rs, $privilege);
-                                }
-                            }
-                        }else{ // privilège décoché
-                            if ($rs->getPrivilege()->contains($privilege)){
-                                if ($rs instanceof Role){
-                                    $this->roleRemovePrivilege($rs, $privilege);
-                                }elseif($rs instanceof StatutIntervenant){
-                                    $this->statutRemovePrivilege($rs, $privilege);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            $formPrivileges = $this->getFormPrivileges()
-                                   ->setAttribute('action', $this->url()->fromRoute(null, ['role' => $roleStatutCode]))
-                                   ->addPrivileges( $ps, $rs );
-
-            $privileges = [];
-            foreach( $ps as $privilege ){
-                $categorie = $privilege->getCategorie();
-                if (! isset($privileges[$categorie->getCode()])){
-                    $privileges[$categorie->getCode()] = [
-                        'categorie' => $categorie,
-                        'privileges' => [],
-                    ];
-                }
-                $privileges[$categorie->getCode()]['privileges'][] = $privilege;
-            }
-
-            return compact('formDroitsSelection', 'formPrivileges', 'privileges');
-        }else{
-            return compact('formDroitsSelection', 'formPrivileges');
-        }
-    }
-
-
-    public function droitsTableauBordAction()
     {
         $ps = $this->getServicePrivilege()->getList();
         $privileges = [];
@@ -188,7 +114,7 @@ class GestionController extends AbstractActionController
     }
 
 
-    public function droitsTableauBordModifierAction()
+    public function privilegesModifierAction()
     {
         $role      = $this->context()->roleFromPost();
         $statut    = $this->context()->statutIntervenantFromPost('statut');

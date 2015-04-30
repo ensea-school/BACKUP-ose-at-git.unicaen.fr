@@ -1,33 +1,61 @@
-<h1>Gestion des droits d'accès</h1>
 <?php
 
-/* @var $formDroitsSelection Zend\Form\Form */
-/* @var $formPrivileges \Application\Form\Gestion\PrivilegesForm */
-/* @var $privileges [] */
+/* @var $privileges Application\Entity\Db\Privilege[] */
+/* @var $roles Application\Entity\Db\Role[] */
+/* @var $statuts Application\Entity\Db\StatutIntervenant[] */
 
-echo $this->form()->openTag( $formDroitsSelection->prepare() );
-echo $this->formControlGroup( $formDroitsSelection->get('role') );
-echo $this->form()->closeTag();
+$id = uniqid();
 
-if ($formPrivileges){
-    echo $this->form()->openTag( $formPrivileges->prepare() );
+?>
+<h1 class="page-header">Gestion des privilèges</h1>
 
-    foreach( $privileges as $cat ){
-        $categorie = $cat['categorie'];
-        /* @var $categorie Application\Entity\Db\CategoriePrivilege */
-        echo '<h2>'.$categorie->getLibelle().'</h2>';
-        echo '<ul class="privileges-form">';
-        foreach( $cat['privileges'] as $privilege ){
-            /* @var $privilege Application\Entity\Db\Privilege */
-            echo '<li>';
-            echo $this->formCheckbox( $formPrivileges->get($privilege->getCode()) );
-            echo '<label for="'.$privilege->getId().'">';
-            echo $privilege->getLibelle();
-            echo '</label></li>';
-        }
-        echo '</ul>';
-    }
+<table class="droits-tbl table table-hover table-bordered table-condensed table-extra-condensed table-header-rotated" id="<?php echo $id; ?>">
+<thead>
+    <tr>
+        <th class="separator"></th>
+    <?php $first = true; foreach( $roles as $role ):?>
+        <th class="rotate-45" title="<?php echo $role; ?>"><div<?php if ($first) echo ' class="first"'; ?>><span><?php echo $role; ?></span></div></th>
+    <?php $first = false; endforeach; ?>
+    <th class="separator rotate-45">&nbsp;</th>
+    <?php $first = true; foreach( $statuts as $statut ):?>
+        <th class="rotate-45" title="<?php echo $statut; ?>"><div<?php if ($first) echo ' class="first"'; ?>><span><?php echo $statut; ?></span></div></th>
+    <?php $first = false; endforeach; ?>
+    </tr>
+    <tr>
+        <th>Privilèges</th>
+        <th colspan="<?php echo count($roles); ?>">Rôles (personnel)</th>
+        <th style="border:none;">&nbsp;</th>
+        <th colspan="<?php echo count($statuts); ?>">Statuts (intervenants)</th>
+        <th style="border:none;min-width:166px">&nbsp;</th>
+    </tr>
+</thead>
+<tbody>
+<?php foreach( $privileges as $cat ): ?>
+    <tr>
+        <th class="separator">&nbsp;</th>
+        <th class="separator" colspan="<?php echo 1 + count($roles) + count($statuts); ?>"><?php echo $cat['categorie'] ?></th>
+    </tr>
+    <?php foreach( $cat['privileges'] as $privilege ): ?>
+    <tr>
+        <th class="privilege"><?php echo $privilege ?></th>
+        <?php $statut=null; foreach( $roles as $role ): ?>
+            <td class="modifier" data-role="<?php echo $role->getId() ?>" data-privilege="<?php echo $privilege->getId() ?>">
+            <?php echo $this->partial( '/application/gestion/partial/tbl-link', compact('role','statut','privilege')) ?>
+            </td>
+        <?php endforeach; ?>
+        <th class="separator ">&nbsp;</th>
+        <?php $role=null; foreach( $statuts as $statut ): ?>
+            <td class="modifier" data-statut="<?php echo $statut->getId() ?>" data-privilege="<?php echo $privilege->getId() ?>">
+            <?php echo $this->partial( '/application/gestion/partial/tbl-link', compact('role','statut','privilege')) ?>
+            </td>
+        <?php endforeach; ?>
+    </tr>
+    <?php endforeach; ?>
+<?php endforeach; ?>
+</tbody>
+</table>
+<script type="text/javascript">
 
-    echo $this->formSubmit( $formPrivileges->get('submit') );
-    echo $this->form()->closeTag();
-}
+    DroitsTbl.get("<?php echo $id ?>").init();
+
+</script>

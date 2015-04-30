@@ -67,22 +67,12 @@ return [
                                 ],
                             ],
                             'privileges' => [
-                                'type'    => 'Segment',
-                                'may_terminate' => true,
-                                'options' => [
-                                    'route'    => '/privileges[/:role]',
-                                    'defaults' => [
-                                        'action' => 'privileges',
-                                    ],
-                                ],
-                            ],
-                            'tableau-bord' => [
                                 'type'    => 'Literal',
                                 'may_terminate' => true,
                                 'options' => [
-                                    'route'    => '/tableau-bord',
+                                    'route'    => '/privileges',
                                     'defaults' => [
-                                        'action' => 'droits-tableau-bord',
+                                        'action' => 'privileges',
                                     ],
                                 ],
                                 'child_routes' => [
@@ -92,7 +82,7 @@ return [
                                         'options' => [
                                             'route'    => '/modifier',
                                             'defaults' => [
-                                                'action' => 'droits-tableau-bord-modifier',
+                                                'action' => 'privileges-modifier',
                                             ],
                                         ],
                                     ],
@@ -127,17 +117,10 @@ return [
                                     ],
                                     'privileges' => [
                                         'label'  => "Privilèges",
-                                        'title'  => "Privilèges par rôle",
+                                        'title'  => "Gestion des privilèges",
                                         'route'  => 'gestion/droits/privileges',
                                         'withtarget' => true,
                                         'resource' => 'controller/Application\Controller\Gestion:privileges',
-                                    ],
-                                    'tableau-bord' => [
-                                        'label'  => "Tableau de bord",
-                                        'title'  => "Tableau de bord",
-                                        'route'  => 'gestion/droits/tableau-bord',
-                                        'withtarget' => true,
-                                        'resource' => 'controller/Application\Controller\Gestion:droits-tableau-bord',
                                     ],
                                 ],
                             ],
@@ -159,12 +142,12 @@ return [
             'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Gestion',
-                    'action'     => ['droits', 'privileges', 'roles', 'droits-tableau-bord'],
+                    'action'     => ['droits', 'roles', 'privileges'],
                     'privileges' => ['privilege-visualisation', 'privilege-edition']
                 ],
                 [
                     'controller' => 'Application\Controller\Gestion',
-                    'action'     => ['role-edition', 'role-suppression', 'droits-tableau-bord-modifier'],
+                    'action'     => ['role-edition', 'role-suppression', 'privileges-modifier'],
                     'privileges' => ['privilege-edition']
                 ],
             ],

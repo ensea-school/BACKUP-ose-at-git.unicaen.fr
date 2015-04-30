@@ -15,7 +15,7 @@ function DroitsTbl( id )
     {
         var that = this;
         td.html("<div class=\"loading\">&nbsp;</div>");
-        td.load( Url('gestion/droits/tableau-bord/modifier'), {
+        td.load( Url('gestion/droits/privileges/modifier'), {
             role     : td.data("role"     ),
             statut   : td.data("statut"   ),
             privilege: td.data("privilege"),

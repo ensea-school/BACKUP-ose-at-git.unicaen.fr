@@ -13,29 +13,29 @@ use Zend\Form\Form;
  */
 class Supprimer extends Form
 {
-    public function __construct($name = null, $options = array())
+    public function __construct($name = null, $options = [])
     {
         parent::__construct($name, $options);
-        
+
         /**
          * Csrf
          */
         $this->add(new Hidden('id'));
-        
+
         /**
          * Csrf
          */
         $this->add(new Csrf('security'));
-        
+
         /**
          * Submit
          */
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Je confirme la suppression',
-            ),
-        ));
+            ],
+        ]);
     }
 }

@@ -5,13 +5,13 @@ namespace Application\Entity\Db;
 /**
  * TypeIntervenant
  */
-class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterface
-{    
-    public $classToCode = array(
+class TypeIntervenant implements HistoriqueAwareInterface
+{
+    public $classToCode = [
         'Application\Entity\Db\IntervenantPermanent' => 'P',
         'Application\Entity\Db\IntervenantExterieur' => 'E',
-    );
-    
+    ];
+
     /**
      * @var string
      */
@@ -36,16 +36,6 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
      * @var string
      */
     protected $libelle;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -84,7 +74,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -107,7 +97,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     /**
      * Get histoCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoCreation()
     {
@@ -130,7 +120,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     /**
      * Get histoDestruction
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoDestruction()
     {
@@ -153,7 +143,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     /**
      * Get histoModification
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoModification()
     {
@@ -176,7 +166,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -184,55 +174,9 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     }
 
     /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return TypeIntervenant
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return TypeIntervenant
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -255,7 +199,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoModificateur()
     {
@@ -278,7 +222,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoDestructeur()
     {
@@ -301,7 +245,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoCreateur()
     {
@@ -320,7 +264,7 @@ class TypeIntervenant implements HistoriqueAwareInterface, ValiditeAwareInterfac
 
     /**
      * Retourne la représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()

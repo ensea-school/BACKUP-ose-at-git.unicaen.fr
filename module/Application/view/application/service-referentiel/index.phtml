@@ -15,7 +15,7 @@ $title = $titles[$typeVolumeHoraire->getCode()];
 //    $title .= ' <small>'.$intervenant.'</small>';
 //    $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");
 //}
-//else {  
+//else {
 //    $this->headTitle()->append("Référentiel");
 //}
 
@@ -30,7 +30,7 @@ $serviceReferentielListe
 <?php //echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <style>
-    .modal-dialog { 
+    .modal-dialog {
         width: 60%;
     }
     div.row {
@@ -41,8 +41,8 @@ $serviceReferentielListe
 
 <?php if (! $intervenant): ?>
     <?php if ($this->isAllowed('ServiceReferentielListView', 'info-only-structure')): ?>
-        <?php echo $this->messenger()->setMessages(array('warning' => "Est visible ici le référentiel prévisionnel des intervenants affectés "
-                . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures.")); ?>
+        <?php echo $this->messenger()->setMessages(['warning' => "Est visible ici le référentiel prévisionnel des intervenants affectés "
+                . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures."]); ?>
     <?php endif; ?>
 <?php endif; ?>
 

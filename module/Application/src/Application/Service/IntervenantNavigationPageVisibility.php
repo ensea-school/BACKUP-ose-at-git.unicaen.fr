@@ -18,14 +18,13 @@ class IntervenantNavigationPageVisibility extends AbstractService implements Wor
     
     public function __invoke(array &$page)
     {
-        $role  = $this->getContextProvider()->getSelectedIdentityRole();
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $role  = $this->getServiceContext()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
             $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant);
             
-            return $this->isPageVisible($intervenant, $page, $wf, $annee);
+            return $this->isPageVisible($intervenant, $page, $wf, $intervenant->getAnnee());
         }
         
         return true;
@@ -34,7 +33,7 @@ class IntervenantNavigationPageVisibility extends AbstractService implements Wor
     private function isPageVisible($intervenant, $page, $wf, $annee)
     {
         $voitPage = new VoitPageRule($intervenant, $page, $wf);
-        $voitPage->setAnnee($annee);
+//        $voitPage->setAnnee($annee);
 
         if (!$voitPage->execute()) {
             // si une page fille est visible alors la page mère est quand même visible

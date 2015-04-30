@@ -10,292 +10,292 @@ use Application\Acl\ComposanteRole;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\IntervenantExterieurRole;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'piece-jointe' => array(
+return [
+    'router' => [
+        'routes' => [
+            'piece-jointe' => [
                 'type'    => 'Literal',
-                'options' => array(
+                'options' => [
                     'route'    => '/piece-jointe',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'PieceJointe',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'intervenant' => array(
+                'child_routes' => [
+                    'intervenant' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/intervenant/:intervenant',
-                            'constraints' => array(
+                            'constraints' => [
                                 'intervenant' => '[0-9]*',
                                 'type' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes' => array(
-                            // une route 'validation' dédiée à l'étape du WF est indispensable 
-                            'validation' => array(
+                        'child_routes' => [
+                            // une route 'validation' dédiée à l'étape du WF est indispensable
+                            'validation' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/validation',
-                                ),
-                                'defaults' => array(
+                                ],
+                                'defaults' => [
                                     'action' => 'index',
-                                ),
-                            ),
-                            'voir' => array(
+                                ],
+                            ],
+                            'voir' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/voir/:pieceJointe/vue/:vue',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'pieceJointe' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'voir',
-                                    ),
-                                ),
-                            ),
-                            'voir-type' => array(
+                                    ],
+                                ],
+                            ],
+                            'voir-type' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/voir-type/:typePieceJointe/vue/:vue',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'typePieceJointe' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'voir-type',
-                                    ),
-                                ),
-                            ),
-                            'lister' => array(
+                                    ],
+                                ],
+                            ],
+                            'lister' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/lister/:typePieceJointe',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'typePieceJointe' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'lister',
-                                    ),
-                                ),
-                            ),
-                            'status' => array(
+                                    ],
+                                ],
+                            ],
+                            'status' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/status',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'action' => 'status',
-                                    ),
-                                ),
-                            ),
-                            'ajouter' => array(
+                                    ],
+                                ],
+                            ],
+                            'ajouter' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/ajouter/:typePieceJointe',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'typePieceJointe' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'ajouter',
-                                    ),
-                                ),
-                            ),
-                            'supprimer' => array(
+                                    ],
+                                ],
+                            ],
+                            'supprimer' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/supprimer/:pieceJointe[/fichier/:fichier]',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'pieceJointe' => '[0-9]*',
                                         'fichier'     => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'supprimer',
-                                    ),
-                                ),
-                            ),
-                            'telecharger' => array(
+                                    ],
+                                ],
+                            ],
+                            'telecharger' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/telecharger/:pieceJointe[/fichier/:fichier/:nomFichier]',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'pieceJointe' => '[0-9]*',
                                         'fichier'     => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'telecharger',
-                                    ),
-                                ),
-                            ),
-                            'valider' => array(
+                                    ],
+                                ],
+                            ],
+                            'valider' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/valider/:pieceJointe[/fichier/:fichier]',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'pieceJointe' => '[0-9]*',
                                         'fichier'     => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'valider',
-                                    ),
-                                ),
-                            ),
-                            'devalider' => array(
+                                    ],
+                                ],
+                            ],
+                            'devalider' => [
                                 'type' => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/devalider/:pieceJointe[/fichier/:fichier]',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'pieceJointe' => '[0-9]*',
                                         'fichier'     => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'devalider',
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'intervenant' => array(
-                        'pages' => array(
-                            'pieces-jointes-saisie' => array(
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'intervenant' => [
+                        'pages' => [
+                            'pieces-jointes-saisie' => [
                                 'label'  => "Pièces justificatives",
                                 'title'  => "Pièces justificatives du dossier de l'intervenant",
                                 'route'  => 'piece-jointe/intervenant',
-                                'paramsInject' => array(
+                                'paramsInject' => [
                                     'intervenant',
-                                ),
+                                ],
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\PieceJointe:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
-                            ),
-                            'pieces-jointes-validation' => array(
+                            ],
+                            'pieces-jointes-validation' => [
                                 'label'  => "Validation des pièces justificatives",
                                 'title'  => "Validation des pièces justificatives du dossier de l'intervenant",
                                 'route'  => 'piece-jointe/intervenant/validation',
-                                'paramsInject' => array(
+                                'paramsInject' => [
                                     'intervenant',
-                                ),
+                                ],
                                 'withtarget' => true,
                                 'resource' => 'controller/Application\Controller\PieceJointe:index',
                                 'visible' => 'IntervenantNavigationPageVisibility',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => array('index', 'ajouter', 'supprimer', 'voir', 'voir-type', 'lister', 'telecharger', 'status'),
-                    'roles'      => array(IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'action'     => ['index', 'ajouter', 'supprimer', 'voir', 'voir-type', 'lister', 'telecharger', 'status'],
+                    'roles'      => [IntervenantExterieurRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                     'assertion'  => 'PieceJointeAssertion',
-                ),
-                array(
+                ],
+                [
                     'controller' => 'Application\Controller\PieceJointe',
-                    'action'     => array('valider', 'devalider'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'action'     => ['valider', 'devalider'],
+                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                     'assertion'  => 'PieceJointeAssertion',
-                ),
-            ),
-        ),
-        'resource_providers' => array(
-            'BjyAuthorize\Provider\Resource\Config' => array(
-                PieceJointe::RESOURCE_ID => array(),
-                Fichier::RESOURCE_ID => array(),
-            ),
-        ),
-        'rule_providers' => array(
-            'BjyAuthorize\Provider\Rule\Config' => array(
-                'allow' => array(
+                ],
+            ],
+        ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                PieceJointe::RESOURCE_ID => [],
+                Fichier::RESOURCE_ID => [],
+            ],
+        ],
+        'rule_providers' => [
+            'BjyAuthorize\Provider\Rule\Config' => [
+                'allow' => [
                     /**
                      * Pièces jointes
                      */
-                    array(
-                        array(
-                            IntervenantExterieurRole::ROLE_ID, 
-                            ComposanteRole::ROLE_ID, 
+                    [
+                        [
+                            IntervenantExterieurRole::ROLE_ID,
+                            ComposanteRole::ROLE_ID,
                             AdministrateurRole::ROLE_ID,
-                        ), 
-                        PieceJointe::RESOURCE_ID, 
-                        array(
-                            PieceJointeAssertion::PRIVILEGE_CREATE, 
-                            PieceJointeAssertion::PRIVILEGE_READ, 
-                            PieceJointeAssertion::PRIVILEGE_DELETE, 
-                            PieceJointeAssertion::PRIVILEGE_CREATE_FICHIER, 
-                        ), 
+                        ],
+                        PieceJointe::RESOURCE_ID,
+                        [
+                            PieceJointeAssertion::PRIVILEGE_CREATE,
+                            PieceJointeAssertion::PRIVILEGE_READ,
+                            PieceJointeAssertion::PRIVILEGE_DELETE,
+                            PieceJointeAssertion::PRIVILEGE_CREATE_FICHIER,
+                        ],
                         'PieceJointeAssertion',
-                    ),
-                    array(
-                        array(
-                            ComposanteRole::ROLE_ID, 
+                    ],
+                    [
+                        [
+                            ComposanteRole::ROLE_ID,
                             AdministrateurRole::ROLE_ID,
-                        ), 
-                        PieceJointe::RESOURCE_ID, 
-                        array(
-                            PieceJointeAssertion::PRIVILEGE_VALIDER, 
-                            PieceJointeAssertion::PRIVILEGE_DEVALIDER, 
-                        ), 
+                        ],
+                        PieceJointe::RESOURCE_ID,
+                        [
+                            PieceJointeAssertion::PRIVILEGE_VALIDER,
+                            PieceJointeAssertion::PRIVILEGE_DEVALIDER,
+                        ],
                         'PieceJointeAssertion',
-                    ),
+                    ],
                     /**
                      * Fichiers déposés
                      */
-                    array(
-                        array(
-                            IntervenantExterieurRole::ROLE_ID, 
-                            ComposanteRole::ROLE_ID, 
+                    [
+                        [
+                            IntervenantExterieurRole::ROLE_ID,
+                            ComposanteRole::ROLE_ID,
                             AdministrateurRole::ROLE_ID,
-                        ), 
-                        Fichier::RESOURCE_ID, 
-                        array(
-                            FichierAssertion::PRIVILEGE_CREATE, 
-                            FichierAssertion::PRIVILEGE_READ, 
+                        ],
+                        Fichier::RESOURCE_ID,
+                        [
+                            FichierAssertion::PRIVILEGE_CREATE,
+                            FichierAssertion::PRIVILEGE_READ,
                             FichierAssertion::PRIVILEGE_DELETE,
-                            FichierAssertion::PRIVILEGE_TELECHARGER, 
-                        ), 
+                            FichierAssertion::PRIVILEGE_TELECHARGER,
+                        ],
                         'FichierAssertion',
-                    ),
-                    array(
-                        array(
-                            ComposanteRole::ROLE_ID, 
+                    ],
+                    [
+                        [
+                            ComposanteRole::ROLE_ID,
                             AdministrateurRole::ROLE_ID,
-                        ), 
-                        Fichier::RESOURCE_ID, 
-                        array(
-                            FichierAssertion::PRIVILEGE_VALIDER, 
-                            FichierAssertion::PRIVILEGE_DEVALIDER, 
-                        ), 
+                        ],
+                        Fichier::RESOURCE_ID,
+                        [
+                            FichierAssertion::PRIVILEGE_VALIDER,
+                            FichierAssertion::PRIVILEGE_DEVALIDER,
+                        ],
                         'FichierAssertion',
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\PieceJointe' => 'Application\Controller\PieceJointeController',
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
+        ],
+        'initializers' => [
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
             'ApplicationPieceJointe'           => 'Application\\Service\\PieceJointe',
             'ApplicationPieceJointeProcess'    => 'Application\\Service\\Process\PieceJointeProcess',
             'ApplicationTypePieceJointe'       => 'Application\\Service\\TypePieceJointe',
@@ -303,18 +303,18 @@ return array(
             'PeutSaisirPieceJointeRule'        => 'Application\\Rule\\Intervenant\\PeutSaisirPieceJointeRule',
             'PieceJointeAssertion'             => 'Application\\Assertion\\PieceJointeAssertion',
             'FichierAssertion'                 => 'Application\\Assertion\\FichierAssertion',
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'form_elements' => array(
-        'invokables' => array(
-        ),
-    ),
-);
+        ],
+        'initializers' => [
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
+        ],
+        'initializers' => [
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
+        ],
+    ],
+];

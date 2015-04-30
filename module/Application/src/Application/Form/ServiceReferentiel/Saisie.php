@@ -16,7 +16,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
 {
     use ServiceLocatorAwareTrait;
 
-    public function __construct($name = null, $options = array())
+    public function __construct($name = null, $options = [])
     {
         parent::__construct('service', $options);
     }
@@ -52,14 +52,14 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
 
         $this->add(new Hidden('type-volume-horaire'));
 
-        $this->add(array(
+        $this->add([
             'name'       => 'submit',
             'type'       => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Enregistrer',
                 'class' => 'btn btn-primary',
-            ),
-        ));
+            ],
+        ]);
 
         $this->setAttribute('action', $url(null, [], [], true));
     }
@@ -82,6 +82,6 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
      */
     public function getInputFilterSpecification()
     {
-        return array();
+        return [];
     }
 }

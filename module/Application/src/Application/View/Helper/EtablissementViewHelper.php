@@ -46,8 +46,8 @@ class EtablissementViewHelper extends AbstractHelper implements EtablissementAwa
             return '<p class="bg-danger"><abbr title="Cet établissement n\'existe plus">'.$etablissement.'</abbr></p>';
         }
 
-        $url = $this->getView()->url('etablissement/default', array('action' => 'voir', 'id' => $etablissement->getId()));
-        $pourl = $this->getView()->url('etablissement/default', array('action' => 'apercevoir', 'id' => $etablissement->getId()));
+        $url = $this->getView()->url('etablissement/default', ['action' => 'voir', 'id' => $etablissement->getId()]);
+        $pourl = $this->getView()->url('etablissement/default', ['action' => 'apercevoir', 'id' => $etablissement->getId()]);
         $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etablissement.'</a>';
         return $out;
     }

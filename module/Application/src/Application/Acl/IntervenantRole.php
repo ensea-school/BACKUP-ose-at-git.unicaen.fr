@@ -2,40 +2,18 @@
 
 namespace Application\Acl;
 
-use UnicaenAuth\Acl\NamedRole;
-use Application\Interfaces\StructureAwareInterface;
-use Application\Interfaces\IntervenantAwareInterface;
-use Application\Traits\IntervenantAwareTrait;
-use Application\Traits\StructureAwareTrait;
-
 /**
  * Description of IntervenantRole
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class IntervenantRole extends Role implements StructureAwareInterface, IntervenantAwareInterface
+class IntervenantRole extends Role
 {
-    use StructureAwareTrait;
-    use IntervenantAwareTrait;
-
     const ROLE_ID = "intervenant";
 
     public function __construct($id = self::ROLE_ID, $parent = Role::ROLE_ID, $name = 'Intervenant', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
-    }
-
-    /**
-     *
-     * @param Resource|string $resource
-     * @param Privilege|string $privilege
-     */
-    function hasPrivilege( $resource, $privilege )
-    {
-        if ($statut = $this->getIntervenant()->getStatut()){
-            return $statut->hasPrivilege($resource, $privilege);
-        }
-        return false;
     }
 }
 

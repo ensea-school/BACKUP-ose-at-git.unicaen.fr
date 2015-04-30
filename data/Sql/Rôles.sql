@@ -1,6 +1,6 @@
 -- liste des comptes utilisateurs
 select
-  tr.code type_role,
+  tr.code role,
   s.libelle_court structure,
   p.nom_usuel nom,
   p.prenom prenom,
@@ -8,16 +8,16 @@ select
   r.id,
   r.source_code
 from
-  role r
+  affectation r
   JOIN personnel p ON p.id = r.personnel_id AND p.histo_destruction IS NULL
-  JOIN type_role tr ON tr.id = r.type_id AND tr.histo_destruction IS NULL
+  JOIN role tr ON tr.id = r.role_id AND tr.histo_destruction IS NULL
   JOIN source src ON src.id = r.source_id
   LEFT JOIN structure s ON s.id = r.structure_id AND s.histo_destruction IS NULL
 WHERE
   r.histo_destruction IS NULL
   --AND r.source_id = OSE_IMPORT.GET_SOURCE_ID('OSE')
 ORDER BY
-  structure, nom, source, type_role;
+  structure, nom, source, role;
 
 -- pour créer un nouveau rôle
 
@@ -29,11 +29,11 @@ select nom_usuel, prenom, source_code, histo_destruction from personnel where 1 
 - Sandra MAHIEU
  */
 
-select libelle_court, libelle_long, source_code from structure where libelle_court like '%DRH%' AND niveau = 2;
+select id, libelle_court, libelle_long, source_code from structure where libelle_court like '%Psy%' AND niveau = 2;
 
 select * from type_role where histo_destruction is null;
 
-INSERT INTO ROLE (
+INSERT INTO affectation (
     STRUCTURE_ID,
     PERSONNEL_ID,
     TYPE_ID,
@@ -43,9 +43,9 @@ INSERT INTO ROLE (
 )VALUES(
     null,--(SELECT ID FROM structure WHERE source_code = 'U01'),
     (SELECT ID FROM personnel WHERE source_code ='102416'),
-    (SELECT ID FROM TYPE_ROLE WHERE code = 'administrateur'),
+    (SELECT ID FROM ROLE WHERE code = 'administrateur'),
     'administrateur-102416',
-    ROLE_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 
+    affectation_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 
     (select id from utilisateur where username='lecluse'), (select id from utilisateur where username='lecluse') -- laurent
 );
 
@@ -103,37 +103,14 @@ select * from individu_fonct_struct@harpprod ifs where no_dossier_pers = 16956;
 
 select * from individu@harpprod where nom_usuel = 'DENOYES';
 
-/*
-INSERT
-INTO PERSONNEL
-  (
-    ID,
-    CIVILITE_ID,
-    NOM_USUEL,
-    PRENOM,
-    NOM_PATRONYMIQUE,
-    EMAIL,
-    STRUCTURE_ID,
-    SOURCE_ID,
-    SOURCE_CODE,
-    VALIDITE_DEBUT,
-    HISTO_CREATION,
-    HISTO_CREATEUR_ID,
-    HISTO_MODIFICATION,
-    HISTO_MODIFICATEUR_ID
-  )
-  VALUES
-  (
-    PERSONNEL_id_seq.nextval,
-    (select id from civilite where libelle_court = 'Mme'),
-    'DOLLEY',
-    'Coralie',
-    'DOLLEY',
-    'coralie.dolley@unicaen.fr',
-    (select id from structure where libelle_court like '%DRH%' AND niveau = 2),
-    (select id from source where code = 'Harpege'),
-    '102416',
-    sysdate,
-    sysdate,4,sysdate,4
-  );
-*/
+
+
+select
+r.code categorie,
+p.code privilege,
+p.id   p_id
+from
+  privilege p
+  join categorie_privilege r on r.id = p.categorie_id
+order by
+  categorie, privilege

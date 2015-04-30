@@ -49,7 +49,7 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface, ServiceLoca
      */
     public function extract($object)
     {
-        $data = array(
+        $data = [
             'etape'          => ($e = $object->getEtape()) ? $e->getId() : null,
             'source-code'    => $object->getSourceCode(),
             'libelle'        => $object->getLibelle(),
@@ -60,7 +60,7 @@ class ElementPedagogiqueSaisieHydrator implements HydratorInterface, ServiceLoca
             'taux-fc'        => $object->getTauxFc(),
             'taux-fi'        => $object->getTauxFi(),
             'taux-fa'        => $object->getTauxFa(),
-        );
+        ];
         return $data;
     }
 }

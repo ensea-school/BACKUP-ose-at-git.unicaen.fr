@@ -2,80 +2,80 @@
 
 namespace Import;
 
-return array(
-    'controllers' => array(
-        'invokables' => array(
+return [
+    'controllers' => [
+        'invokables' => [
             'Import\Controller\Import'      => 'Import\Controller\ImportController',
-        ),
-    ),
+        ],
+    ],
 
-    'router' => array(
-        'routes' => array(
-            'import' => array(
+    'router' => [
+        'routes' => [
+            'import' => [
                 'type'    => 'Segment',
-                'options' => array(
+                'options' => [
                     'route'    => '/import[/:action][/:table]',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Import\Controller',
                         'controller' => 'Import',
                         'action'     => 'index',
                         'table'      => null
-                    ),
-                ),
-            ),
-        ),
-    ),
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'import' => array(
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'import' => [
                         'label'    => 'Import',
                         'route'    => 'import',
                         'resource' => 'controller/Import\Controller\Import:index',
-                        'pages' => array(
-                            'admin' => array(
+                        'pages' => [
+                            'admin' => [
                                 'label'  => "Tableau de bord principal",
                                 'route'  => 'import',
-                                'params' => array(
+                                'params' => [
                                     'action' => 'showImportTbl',
-                                ),
+                                ],
                                 'visible' => true,
-                                'pages' => array(
+                                'pages' => [
 
-                                ),
-                            ),
-                            'showDiff' => array(
+                                ],
+                            ],
+                            'showDiff' => [
                                 'label'  => "Écarts entre OSE et ses sources",
                                 'route'  => 'import',
-                                'params' => array(
+                                'params' => [
                                     'action' => 'showDiff',
-                                ),
+                                ],
                                 'visible' => true,
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Import\Controller\Import',
-                    'action' => array('index','updateViewsAndPackages','showImportTbl','showDiff','update','updateTables'),
-                    'roles' => array('administrateur'),
-                ),
-            ),
-        ),
-    ),
-    
-    'view_manager' => array(
-        'template_path_stack' => array(
+                    'action' => ['index','updateViewsAndPackages','showImportTbl','showDiff','update','updateTables'],
+                    'roles' => ['administrateur'],
+                ],
+            ],
+        ],
+    ],
+
+    'view_manager' => [
+        'template_path_stack' => [
             'import' => __DIR__ . '/../view',
-        ),
-    ),
-);
+        ],
+    ],
+];

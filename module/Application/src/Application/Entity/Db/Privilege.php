@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Privilege
  */
@@ -25,14 +23,14 @@ class Privilege
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Ressource
+     * @var \Application\Entity\Db\CategoriePrivilege
      */
-    private $ressource;
+    private $categorie;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $typeRole;
+    private $role;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -44,7 +42,7 @@ class Privilege
      */
     public function __construct()
     {
-        $this->typeRole = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
         $this->statut = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -105,59 +103,69 @@ class Privilege
     }
 
     /**
-     * Set ressource
+     * Set categorie
      *
-     * @param \Application\Entity\Db\Ressource $ressource
+     * @param \Application\Entity\Db\CategoriePrivilege $categorie
      * @return Privilege
      */
-    public function setRessource(\Application\Entity\Db\Ressource $ressource = null)
+    public function setCategorie(\Application\Entity\Db\CategoriePrivilege $categorie = null)
     {
-        $this->ressource = $ressource;
+        $this->categorie = $categorie;
 
         return $this;
     }
 
     /**
-     * Get ressource
+     * Get categorie
      *
-     * @return \Application\Entity\Db\Ressource 
+     * @return \Application\Entity\Db\CategoriePrivilege
      */
-    public function getRessource()
+    public function getCategorie()
     {
-        return $this->ressource;
+        return $this->categorie;
     }
 
     /**
-     * Add typeRole
+     * Add role
      *
-     * @param \Application\Entity\Db\TypeRole $typeRole
+     * @param \Application\Entity\Db\Role $role
      * @return Privilege
      */
-    public function addTypeRole(\Application\Entity\Db\TypeRole $typeRole)
+    public function addRole(\Application\Entity\Db\Role $role)
     {
-        $this->typeRole[] = $typeRole;
+        $this->Role[] = $role;
 
         return $this;
     }
 
     /**
-     * Remove typeRole
+     * Remove role
      *
-     * @param \Application\Entity\Db\TypeRole $typeRole
+     * @param \Application\Entity\Db\Role $role
      */
-    public function removeTypeRole(\Application\Entity\Db\TypeRole $typeRole)
+    public function removeRole(\Application\Entity\Db\Role $role)
     {
-        $this->typeRole->removeElement($typeRole);
+        $this->role->removeElement($role);
     }
 
     /**
-     * Get typeRole
+     * Get role
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTypeRole()
+    public function getRole()
     {
-        return $this->typeRole;
+        return $this->role;
+    }
+
+    public function getRoleCodes()
+    {
+        $result = [];
+        foreach( $this->role as $role ){
+            /* @var $role Role */
+            $result[] = $role->getCode();
+        }
+        return $result;
     }
 
     /**
@@ -191,5 +199,10 @@ class Privilege
     public function getStatut()
     {
         return $this->statut;
+    }
+
+    public function __toString()
+    {
+        return $this->getLibelle();
     }
 }

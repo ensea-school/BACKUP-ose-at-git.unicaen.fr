@@ -72,7 +72,7 @@ class Dossier extends AbstractEntityService
      */
     public function canAdd($intervenant = null, $runEx = false)
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();

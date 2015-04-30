@@ -25,11 +25,11 @@ class ElementModulateursHydrator implements HydratorInterface, ServiceLocatorAwa
      */
     public function hydrate(array $data, $object)
     {
-        $old = array();
-        $new = array();
+        $old = [];
+        $new = [];
 
         /* Détection des anciennes valeurs */
-        $oldEm = array();
+        $oldEm = [];
         foreach( $object->getElementModulateur() as $elementModulateur ){
             $modulateur = $elementModulateur->getModulateur();
             $old[] = (int)$modulateur->getId();
@@ -75,13 +75,13 @@ class ElementModulateursHydrator implements HydratorInterface, ServiceLocatorAwa
         $sm   = $this->getServiceLocator()->get('applicationModulateur');
         /* @var $sm \Application\Service\Modulateur */
 
-        $data = array();
+        $data = [];
         $qb = $sm->finderByElementPedagogique($object);
         $modulateurs = $sm->getList($qb);
         foreach( $modulateurs as $modulateur ){
             $data[$modulateur->getTypeModulateur()->getCode()] = $modulateur->getId();
         }
-        
+
         return $data;
     }
 

@@ -58,13 +58,15 @@ abstract class IntervAffectAutreIntervMemeAbstractIndicateurImpl extends Abstrac
     protected function getQueryBuilder()
     {
         $exists = "SELECT s FROM Application\Entity\Db\Service s "
-                . "JOIN s.structureAff sa "
-                . "JOIN s.structureEns se " // NB: on ne s'intéresse pas aux enseignements fait dans un autre établissement (structureAff)
+                . "JOIN s.intervenant i "
+                . "JOIN i.structure sa "
+                . "JOIN s.elementPedagogique ep " // NB: on ne s'intéresse pas aux enseignements fait dans un autre établissement (structureAff)
+                . "JOIN ep.structure se "
                 . "JOIN s.volumeHoraire vh "
                 . "JOIN vh.typeVolumeHoraire tvh WITH tvh = :tvh "
                 . "JOIN vh.validation v " // les volumes horaires doivent être validés
                 . "WHERE s.intervenant = int "
-                . "AND s.structureEns = :structure";  // intervention dans la structure spécifiée.
+                . "AND ep.structure = :structure";  // intervention dans la structure spécifiée.
         
         $qb = parent::getQueryBuilder()
                 ->andWhere("EXISTS ($exists)")

@@ -40,7 +40,7 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getSaisi()
     {
-        return $this->getRepo()->findOneBy(array('code' => EtatVolumeHoraireEntity::CODE_SAISI));
+        return $this->getRepo()->findOneBy(['code' => EtatVolumeHoraireEntity::CODE_SAISI]);
     }
 
     /**
@@ -50,7 +50,7 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getValide()
     {
-        return $this->getRepo()->findOneBy(array('code' => EtatVolumeHoraireEntity::CODE_VALIDE));
+        return $this->getRepo()->findOneBy(['code' => EtatVolumeHoraireEntity::CODE_VALIDE]);
     }
 
     /**
@@ -60,7 +60,7 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getContratEdite()
     {
-        return $this->getRepo()->findOneBy(array('code' => EtatVolumeHoraireEntity::CODE_CONTRAT_EDITE));
+        return $this->getRepo()->findOneBy(['code' => EtatVolumeHoraireEntity::CODE_CONTRAT_EDITE]);
     }
 
     /**
@@ -70,7 +70,7 @@ class EtatVolumeHoraire extends AbstractEntityService
      */
     public function getContratSigne()
     {
-        return $this->getRepo()->findOneBy(array('code' => EtatVolumeHoraireEntity::CODE_CONTRAT_SIGNE));
+        return $this->getRepo()->findOneBy(['code' => EtatVolumeHoraireEntity::CODE_CONTRAT_SIGNE]);
     }
 
     /**

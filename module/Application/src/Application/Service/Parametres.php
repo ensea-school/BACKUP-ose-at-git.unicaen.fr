@@ -58,7 +58,7 @@ class Parametres extends AbstractService {
         $repository = $this->getEntityManager()->getRepository('Application\Entity\Db\Parametre');
         /* @var $repository \Doctrine\ORM\EntityRepository */
 
-        $result = $repository->findBy(array('nom' => $param));
+        $result = $repository->findBy(['nom' => $param]);
         if (empty($result)){
             throw new LogicException('Le paramètre "'.$param.'" est invalide.');
         }
@@ -91,7 +91,7 @@ class Parametres extends AbstractService {
         $repository = $this->getEntityManager()->getRepository('Application\Entity\Db\Parametre');
         /* @var $repository \Doctrine\ORM\EntityRepository */
 
-        $result = $repository->findBy(array('nom' => $param));
+        $result = $repository->findBy(['nom' => $param]);
         if (empty($result)){
             throw new LogicException('Le paramètre "'.$param.'" est invalide.');
         }

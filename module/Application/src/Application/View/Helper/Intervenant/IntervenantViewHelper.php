@@ -50,7 +50,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
             return '<span class="bg-danger"><abbr title="Cet intervenant a été supprimé de OSE">'.$intervenant.'</abbr></span>';
         }
 
-        $pourl = $this->getView()->url('intervenant/default', array('action' => 'apercevoir', 'intervenant' => $intervenant->getSourceCode()));
+        $pourl = $this->getView()->url('intervenant/default', ['action' => 'apercevoir', 'intervenant' => $intervenant->getSourceCode()]);
         $out = '<a href="'.$pourl.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$intervenant.'</a>';
         return $out;
     }

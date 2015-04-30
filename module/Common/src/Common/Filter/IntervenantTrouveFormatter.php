@@ -19,17 +19,17 @@ class IntervenantTrouveFormatter extends AbstractFilter
      * @var NomCompletFormatter
      */
     protected $nomCompletFormatter;
-    
+
     /**
      * Constructeur.
-     * 
+     *
      * @param IntervenantInterface|stdClass|array $intervenant
      */
     public function __construct()
     {
         $this->nomCompletFormatter = new NomCompletFormatter(true, false, true);
     }
-    
+
     /**
      * Returns the result of filtering $value
      *
@@ -49,7 +49,7 @@ class IntervenantTrouveFormatter extends AbstractFilter
             $affectat  = $value->getAffectationsToString();
         }
         else if ($value instanceof \stdClass) {
-            foreach (array('civilite', 'sourceCode', 'dateNaissance', 'estUneFemme', 'affectation') as $prop) {
+            foreach (['civilite', 'sourceCode', 'dateNaissance', 'estUneFemme', 'affectation'] as $prop) {
                 if (!isset($value->$prop)) {
                     throw new \Common\Exception\LogicException("L'objet à formatter doit posséder l'attribut public '$prop'.");
                 }
@@ -62,7 +62,7 @@ class IntervenantTrouveFormatter extends AbstractFilter
             $affectat  = $value->affectation;
         }
         else if (is_array($value)) {
-            foreach (array('CIVILITE', 'SOURCE_CODE', 'DATE_NAISSANCE', 'EST_UNE_FEMME', 'AFFECTATION') as $prop) {
+            foreach (['CIVILITE', 'SOURCE_CODE', 'DATE_NAISSANCE', 'EST_UNE_FEMME', 'AFFECTATION'] as $prop) {
                 if (!array_key_exists($prop, $value)) {
                     throw new \Common\Exception\LogicException("Le tableau à formatter doit posséder la clé '$prop'.");
                 }
@@ -77,24 +77,24 @@ class IntervenantTrouveFormatter extends AbstractFilter
         else {
             throw new \Common\Exception\LogicException("L'objet à formatter n'est pas d'un type supporté.");
         }
-        
+
         if (!$dateNaiss instanceof \DateTime) {
             $dateNaiss = new \DateTime($dateNaiss);
         }
-        
+
         $extra  = sprintf("(%s, né%s le %s, n°%s, %s)",
                 $civilite,
                 (boolean) $feminin ? 'e' : '',
                 $dateNaiss->format(Constants::DATE_FORMAT),
                 $id ?: "Inconnu",
                 $affectat ?: "Affectation inconnue");
-        
-        $result = array(
+
+        $result = [
             'id'    => $id,
             'label' => $label,
             'extra' => $extra,
-        );
-        
+        ];
+
 	return $result;
     }
 }

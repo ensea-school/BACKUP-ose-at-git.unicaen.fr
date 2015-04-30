@@ -67,11 +67,11 @@ class SaisieMultipleHydrator implements HydratorInterface, ServiceLocatorAwareIn
     public function extract($object)
     {
         $vhl = $object->getChild();
-        $data = array(
+        $data = [
             'type-volume-horaire' => $object->getTypeVolumeHoraire() ? $object->getTypeVolumeHoraire()->getId() : null,
             'service' => $object->getService() ? $object->getService()->getId() : null,
             'periode' => $object->getPeriode() ? $object->getPeriode()->getId() : null,
-        );
+        ];
         foreach( $this->getTypesInterventions( $object->getService() ) as $typeIntervention ){
             $vhl->setTypeIntervention($typeIntervention);
             $data[$typeIntervention->getCode()] = $vhl->getHeures();

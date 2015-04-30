@@ -41,34 +41,34 @@ class GroupeMultipleFieldset extends Fieldset implements InputFilterProviderInte
         ;
 
         foreach( $this->getTypesInterventions() as $typeIntervention ){
-            $this->add(array(
+            $this->add([
                 'name'       => $typeIntervention->getCode(),
-                'options'    => array(
+                'options'    => [
                     'label' => '<abbr title="'.$typeIntervention->getLibelle().'">'.$typeIntervention->getCode().'</abbr> :',
                     'label_options' => ['disable_html_escape' => true]
-                ),
-                'attributes' => array(
+                ],
+                'attributes' => [
                     'title' => $typeIntervention->getLibelle(),
                     'class' => 'groupe groupe-nombre input-sm',
                     'step'  => 1,
                     'min'   => 0,
-                ),
+                ],
                 'type'       => 'Text',
-            ));
+            ]);
         }
     }
 
     public function getInputFilterSpecification()
     {
-        $filters = array();
+        $filters = [];
         foreach( $this->getTypesInterventions() as $typeIntervention ){
-            $filters[$typeIntervention->getCode()] = array(
+            $filters[$typeIntervention->getCode()] = [
                 'required' => false,
-                'filters'    => array(
+                'filters'    => [
                     ['name' => 'Zend\Filter\StringTrim'],
                     new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
-                ),
-            );
+                ],
+            ];
         }
         return $filters;
     }
@@ -108,11 +108,11 @@ class GroupeMultipleFieldset extends Fieldset implements InputFilterProviderInte
     public function extract($object)
     {
         //$vhl = $object->getChild();
-        $data = array(
+        $data = [
 /*            'type-volume-horaire' => $object->getTypeVolumeHoraire() ? $object->getTypeVolumeHoraire()->getId() : null,
             'service' => $object->getService() ? $object->getService()->getId() : null,
             'periode' => $object->getPeriode() ? $object->getPeriode()->getId() : null,*/
-        );
+        ];
         /*foreach( $this->getTypesInterventions() as $typeIntervention ){
             $vhl->setTypeIntervention($typeIntervention);
             $data[$typeIntervention->getCode()] = $vhl->getHeures();

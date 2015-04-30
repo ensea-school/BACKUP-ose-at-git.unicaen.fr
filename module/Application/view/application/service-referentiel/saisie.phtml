@@ -4,4 +4,4 @@ echo $this->formServiceReferentielSaisie($form)->render();
 
 echo $this->formErrors($form);
 if ($errors)
-    echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));
+    echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);

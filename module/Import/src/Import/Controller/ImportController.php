@@ -58,7 +58,7 @@ class ImportController extends AbstractActionController
             sort($tables);
         }
 
-        $data = array();
+        $data = [];
         foreach( $tables as $table ){
             $query = new Query($table);
             $query->setLimit(101);
@@ -70,7 +70,7 @@ class ImportController extends AbstractActionController
 
     public function updateAction()
     {
-        $errors = array();
+        $errors = [];
         $tableName = $this->params()->fromRoute('table');
         $typeMaj = $this->params()->fromPost('type-maj');
 
@@ -91,17 +91,17 @@ class ImportController extends AbstractActionController
                 //$sq->execMaj($query);
             }
         }catch(\Exception $e){
-            $errors = array($e->getMessage());
+            $errors = [$e->getMessage()];
         }
-        $query->setNotNull(array()); // Aucune colonne ne doit être non nulle !!
+        $query->setNotNull([]); // Aucune colonne ne doit être non nulle !!
         $query->setLimit(101);
         $lignes = $sd->make($query)->fetchAll();
 
-        return array(
+        return [
             'lignes' => $lignes,
             'table'  => $tableName,
             'errors' => $errors
-        );
+        ];
     }
 
     public function updateTablesAction()

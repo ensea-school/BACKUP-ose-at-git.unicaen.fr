@@ -3,40 +3,32 @@
 namespace Application\Controller\OffreFormation;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Exception\DbException;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of ElementPedagogiqueController
  *
  * @method \Doctrine\ORM\EntityManager            em()
  * @method \Application\Controller\Plugin\Context context()
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ElementPedagogiqueController extends AbstractActionController implements ContextProviderAwareInterface
+class ElementPedagogiqueController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
-    /**
-     * @return \Application\Service\ServiceReferentiel
-     */
-    public function getContextProvider()
-    {
-        return $this->getServiceLocator()->get('ApplicationContextProvider');
-    }
 
     public function voirAction()
     {
         $element = $this->context()->mandatory()->elementPedagogiqueFromRoute('id');
         $title   = "Détails d'un enseignement";
         $short   = $this->params()->fromQuery('short', false);
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setVariables(compact('element', 'title', 'short'));
-        
+
         return $viewModel;
     }
 
@@ -45,7 +37,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         $element = $this->context()->mandatory()->elementPedagogiqueFromRoute('id');
         $title   = "Aperçu d'un enseignement";
         $short   = $this->params()->fromQuery('short', false);
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setVariables(compact('element', 'title', 'short'));
 
@@ -61,7 +53,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
     {
         return $this->saisirAction();
     }
-    
+
     protected function saisirAction()
     {
         $etape   = $this->context()->mandatory()->etapeFromRoute(); /* @var $etape \Application\Entity\Db\Etape */
@@ -69,10 +61,10 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         $service = $this->getServiceElementPedagogique();
         $title   = $id ? "Modification d'un enseignement" : "Création d'un enseignement";
         $form    = $this->getFormAjouterModifier();
-        $errors  = array();
+        $errors  = [];
 
         $service->canAdd(true);
-        
+
         if ($id) {
             $entity = $service->getRepo()->find($id);
             $form->bind($entity);
@@ -83,9 +75,9 @@ class ElementPedagogiqueController extends AbstractActionController implements C
                    ->setStructure($etape->getStructure());
             $form->setObject($entity);
         }
-        
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
-        
+
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -104,7 +96,7 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/offre-formation/element-pedagogique/saisir')
                 ->setVariables(compact('form', 'title', 'errors'));
-        
+
         return $viewModel;
     }
 
@@ -114,16 +106,16 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         if (!($id = $this->params()->fromRoute('id'))){
             throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
-        
+
         $service   = $this->getServiceElementPedagogique();
         $entity    = $service->getRepo()->find($id);
         $title     = "Suppression d'enseignement";
         $form      = new \Application\Form\Supprimer('suppr');
-        $errors = array();
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $errors = [];
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $service->canAdd(true);
-        
+
         if ($this->getRequest()->isPost()) {
             try {
                 $service->delete($entity);
@@ -134,10 +126,10 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         }
         return compact('entity', 'title', 'form', 'errors');
     }
-    
+
     /**
      * Action pour rechercher des éléments pédagogiques.
-     * 
+     *
      * Les filtres pris en compte sont :
      * - structure du contexte local,
      * - niveau du contexte local,
@@ -146,13 +138,20 @@ class ElementPedagogiqueController extends AbstractActionController implements C
      * - paramètre GET 'structure' (id d'une structure),
      * - paramètre GET 'niveau' (ex: 'L-2'),
      * - paramètre GET 'etape' (id d'une étape),
-     * 
+     *
      * NB: Les résultats sont renvoyés au format JSON.
-     * 
+     *
      * @return \Zend\View\Model\JsonModel
      */
     public function searchAction()
     {
+        $this->em()->getFilters()->enable('annee')->init(
+            [
+                'Application\Entity\Db\ElementPedagogique'
+            ],
+            $this->getServiceContext()->getAnnee()
+        );
+
         $structure = $this->context()->structureFromQuery();
         $niveau    = $this->context()->niveauFromQuery();
         $etape     = $this->context()->etapeFromQuery();
@@ -164,18 +163,18 @@ class ElementPedagogiqueController extends AbstractActionController implements C
         }
 
         // respect des filtres éventuels spécifiés en GET ou sinon en session
-        $params = array();
+        $params = [];
         $params['structure'] = $structure;
         $params['niveau']    = $niveau;
         $params['etape']     = $etape;
         $params['element']   = $element;
         $params['term']      = $term;
         $params['limit']     = $limit = 101;
-        
+
         // fetch
         $found     = $this->getServiceElementPedagogique()->getSearchResultByTerm($params);
 
-        $result = array();
+        $result = [];
         foreach ($found as $item) {
             if ($item['NB_CH'] > 1){
                 $item['LIBELLE_ETAPE'] = 'Enseignement commun à plusieurs parcours';
@@ -190,16 +189,16 @@ class ElementPedagogiqueController extends AbstractActionController implements C
             }
             $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
             $template = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Enseignement");
-            $result[$item['ID']] = array(
+            $result[$item['ID']] = [
                 'id'       => $item['ID'],
                 'label'    => $item['SOURCE_CODE'] . ' ' . $item['LIBELLE'],
                 'extra'    => $extra,
                 'template' => $template,
-            );
+            ];
         };
 
         $result = \UnicaenApp\Form\Element\SearchAndSelect::truncatedResult($result, $limit - 1);
-        
+
         return new \Zend\View\Model\JsonModel($result);
     }
 
@@ -212,27 +211,17 @@ class ElementPedagogiqueController extends AbstractActionController implements C
                 $code = $periode->getCode();
             }
         }
-        $result = array('periode' => array( 'code' => $code ) );
+        $result = ['periode' => [ 'code' => $code ] ];
         return new \Zend\View\Model\JsonModel($result);
     }
 
     /**
      * Retourne le formulaire d'ajout/modif d'ElementPedagogique.
-     * 
+     *
      * @return \Application\Form\OffreFormation\ElementPedagogiqueSaisie
      */
     protected function getFormAjouterModifier()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('ElementPedagogiqueSaisie');
-    }
-
-    /**
-     * Retourne le service ElementPedagogique.
-     * 
-     * @return ElementPedagogiqueService
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('applicationElementPedagogique');
     }
 }

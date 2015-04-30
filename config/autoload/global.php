@@ -1,6 +1,6 @@
 <?php
-return array(
-    'translator' => array(
+return [
+    'translator' => [
         'locale' => 'fr_FR',
-    ),
-);
+    ],
+];

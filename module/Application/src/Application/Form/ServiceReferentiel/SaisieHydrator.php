@@ -27,7 +27,7 @@ class SaisieHydrator implements HydratorInterface, EntityManagerAwareInterface, 
     public function hydrate(array $data, $object)
     {
         $object = $data['service'];
-        
+
         return $object;
     }
 
@@ -39,7 +39,7 @@ class SaisieHydrator implements HydratorInterface, EntityManagerAwareInterface, 
      */
     public function extract($object)
     {
-        $data = array();
+        $data = [];
         $data['service'] = $object;
 //        foreach( $this->getPeriodes() as $periode ){
 //            $data[$periode->getCode()] = $object->getVolumeHoraireListe($periode);

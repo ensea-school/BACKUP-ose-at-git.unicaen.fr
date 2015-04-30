@@ -7,21 +7,20 @@ use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Form\Element\Hidden;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of Saisie
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
-     * 
+     *
      */
     public function init()
     {
@@ -32,47 +31,47 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
 //                ->setPreferFormInputFilter(false)
          ;
 
-        $this->add(array(
+        $this->add([
             'name'       => 'heures',
-            'options'    => array(
+            'options'    => [
                 'label' => "Nombre d'heures :",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'value' => "0",
                 'title' => "Nombre d'heures",
                 'class' => 'volume-horaire volume-horaire-heures input-sm',
                 'step'  => 'any',
                 'min'   => 0,
-            ),
+            ],
             'type'       => 'Text',
-        ));
+        ]);
 
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $this->add( new Hidden('service-referentiel') );
         $this->add( new Hidden('type-volume-horaire') );
 
-        $this->add(array(
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Enregistrer',
                 'title' => "Enregistrer",
                 'class' => 'volume-horaire volume-horaire-enregistrer btn btn-primary'
-            ),
-        ));
-        
-        $this->add(array(
+            ],
+        ]);
+
+        $this->add([
             'name' => 'annuler',
             'type' => 'Button',
-            'options' => array(
+            'options' => [
                 'label' => 'Fermer',
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'title' => "Abandonner cette saisie",
                 'class' => 'volume-horaire volume-horaire-annuler btn btn-default fermer'
-            ),
-        ));
+            ],
+        ]);
     }
 
     /* Associe une entity VolumeHoraireList au formulaire */
@@ -96,7 +95,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
      */
     public function getInputFilterSpecification()
     {
-        return array(
+        return [
             'heures' => [
                 'required' => true,
                 'filters'  => [
@@ -104,7 +103,7 @@ class Saisie extends Form implements InputFilterProviderInterface, ServiceLocato
                     new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
                 ],
             ],
-        );
+        ];
     }
 
 }

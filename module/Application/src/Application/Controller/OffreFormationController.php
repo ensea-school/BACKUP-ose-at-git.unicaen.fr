@@ -5,20 +5,18 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Service\Etape as EtapeService;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Description of OffreFormationController
  *
  * @method \Doctrine\ORM\EntityManager            em()
  * @method \Application\Controller\Plugin\Context context()
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class OffreFormationController extends AbstractActionController implements ContextProviderAwareInterface
+class OffreFormationController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     /**
      * @var \Zend\Session\Container
@@ -26,7 +24,7 @@ class OffreFormationController extends AbstractActionController implements Conte
     protected $sessionContainer;
 
     /**
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
@@ -40,14 +38,21 @@ class OffreFormationController extends AbstractActionController implements Conte
                 'Application\Entity\Db\Structure',
                 'Application\Entity\Db\TypeModulateur',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
-        
+        $this->em()->getFilters()->enable('annee')->init(
+            [
+                'Application\Entity\Db\ElementPedagogique'
+            ],
+            $this->getServiceContext()->getAnnee()
+        );
+
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $serviceEtape = $this->getServiceLocator()->get('applicationEtape'); /* @var $serviceEtape EtapeService */
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
-        $localContext = $this->getContextProvider()->getLocalContext();
-        $role         = $this->getContextProvider()->getSelectedIdentityRole();
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
 
         // extraction des filtres spécifiés dans la requête
         $structure = $this->context()->structureFromQuery();
@@ -68,21 +73,21 @@ class OffreFormationController extends AbstractActionController implements Conte
         // liste des structures distinctes
         $structuresDistinctes = $serviceStructure->getList( $serviceStructure->finderByEnseignement() );
         // niveaux distincts pour la structure spécifiée
-        $niveauxDistincts = $structure ? 
-                $serviceEp->finderDistinctNiveaux(array('structure' => $structure))->getQuery()->getResult() :
-                array();
+        $niveauxDistincts = $structure ?
+                $serviceEp->finderDistinctNiveaux(['structure' => $structure])->getQuery()->getResult() :
+                [];
         $niveauxDistincts = \Application\Entity\NiveauEtape::getInstancesFromEtapes($niveauxDistincts);
         // liste des etapes distinctes pour la structure et le niveau spécifiés
-        $etapesDistinctes = $structure ? 
-                $serviceEp->finderDistinctEtapes(array('structure' => $structure, 'niveau' => $niveau))->getQuery()->getResult() :
-                array();
+        $etapesDistinctes = $structure ?
+                $serviceEp->finderDistinctEtapes(['structure' => $structure, 'niveau' => $niveau])->getQuery()->getResult() :
+                [];
         // liste des etapes orphelines (sans ÉP) pour la structure et le niveau spécifiés
         $qb = $serviceEtape->finderByOrphelines();
         if ($niveau) $serviceEtape->finderByNiveau($niveau, $qb );
         if ($structure) $serviceEtape->finderByStructure($structure, $qb);
-        $etapesOrphelines = $structure ? 
+        $etapesOrphelines = $structure ?
                 $serviceEtape->getList( $qb ) :
-                array();
+                [];
 
         $params = [];
         if ($structure) $params['structure'] = $structure->getId();
@@ -90,13 +95,13 @@ class OffreFormationController extends AbstractActionController implements Conte
         if ($etape) $params['etape'] = $etape->getId();
         $ep = new \UnicaenApp\Form\Element\SearchAndSelect('element');
         $ep
-                ->setAutocompleteSource($this->url()->fromRoute('of/element/default', array('action' => 'search'), ['query' => $params]))
+                ->setAutocompleteSource($this->url()->fromRoute('of/element/default', ['action' => 'search'], ['query' => $params]))
                 ->setLabel("Recherche :")
-                ->setAttributes(array('title' => "Saisissez 2 lettres au moins"));
+                ->setAttributes(['title' => "Saisissez 2 lettres au moins"]);
         $form = new \Zend\Form\Form('search');
-        $form->setAttributes(array('class' => 'element-rech'));
+        $form->setAttributes(['class' => 'element-rech']);
         $form->add($ep);
-        
+
         // élément pédagogique sélectionné dans le champ de recherche
         if (($element = $this->params()->fromPost('element')) && isset($element['id'])) {
             $form->get('element')->setValue($element);
@@ -105,15 +110,16 @@ class OffreFormationController extends AbstractActionController implements Conte
         // fetch
         $entities = null;
         if ($structure) {
-            $qb = $serviceEp->finder(array(
-                'structure' => $structure, 
-                'niveau' => $niveau, 
-                'etape' => $etape));
+            $qb = $serviceEp->finder([
+                'structure' => $structure,
+                'niveau' => $niveau,
+                'etape' => $etape]);
+           // $this->getServiceElementPedagogique()->finderByContext( $qb );
             $entities = $qb->getQuery()->getResult();
         }
 
         $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables(array(
+        $viewModel->setVariables([
             'entities'         => $entities,
             'structures'       => $structuresDistinctes,
             'niveaux'          => $niveauxDistincts,
@@ -125,7 +131,7 @@ class OffreFormationController extends AbstractActionController implements Conte
             'form'             => $form,
             'serviceEtape'     => $this->getServiceEtape(), // pour déterminer les droits
             'serviceElement'   => $this->getServiceElementPedagogique(), // pour déterminer les droits
-        ));
+        ]);
 
         return $viewModel;
     }
@@ -138,14 +144,14 @@ class OffreFormationController extends AbstractActionController implements Conte
     {
         $em           = $this->em(); /* @var $em \Doctrine\ORM\EntityManager */
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
-        $role         = $this->getContextProvider()->getSelectedIdentityRole();
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
 
         $this->em()->getFilters()->enable('historique')->init(
             [
                 'Application\Entity\Db\ElementPedagogique',
                 'Application\Entity\Db\Etape'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         // extraction des filtres spécifiés dans la requête
@@ -161,10 +167,10 @@ class OffreFormationController extends AbstractActionController implements Conte
         // fetch
         $entities = null;
         if ($structure) {
-            $qb = $serviceEp->finder(array(
+            $qb = $serviceEp->finder([
                 'structure' => $structure,
                 'niveau' => $niveau,
-                'etape' => $etape));
+                'etape' => $etape]);
             $entities = $qb->getQuery()->getResult();
         }
 
@@ -198,26 +204,26 @@ class OffreFormationController extends AbstractActionController implements Conte
 
     /**
      * Retourne au format JSON les structures distinctes des éléments pédagogiques.
-     * 
+     *
      * @return \Zend\View\Model\JsonModel
      */
     public function searchStructuresAction()
     {
         $this->em()->getFilters()->enable('historique')->init(
             'Application\Entity\Db\Structure',
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         $serviceStructure = $this->getServiceLocator()->get('applicationStructure'); /* @var $serviceStructure \Application\Service\Structure */
         $result = $serviceStructure->getList( $serviceStructure->finderByEnseignement() );
-        
+
         return new \Zend\View\Model\JsonModel(\UnicaenApp\Util::collectionAsOptions($result));
     }
-    
+
     /**
-     * Retourne au format JSON les niveaux distincts des éléments pédagogiques 
+     * Retourne au format JSON les niveaux distincts des éléments pédagogiques
      * pour la structure éventuellement spécifiée en GET.
-     * 
+     *
      * @return \Zend\View\Model\JsonModel
      */
     public function searchNiveauxAction()
@@ -227,23 +233,23 @@ class OffreFormationController extends AbstractActionController implements Conte
                 'Application\Entity\Db\Etape',
                 'Application\Entity\Db\CheminPedagogique',
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         $structure = $this->context()->structureFromQuery();
 
-        $params = array();
+        $params = [];
         $params['structure'] = $structure instanceof \Application\Entity\Db\Structure ? $structure : null;
-        
+
         $etapes  = $this->getServiceElementPedagogique()->finderDistinctNiveaux($params)->getQuery()->getResult();
         $niveaux = \Application\Entity\NiveauEtape::getInstancesFromEtapes($etapes);
-                
+
         return new \Zend\View\Model\JsonModel(\UnicaenApp\Util::collectionAsOptions($niveaux));
     }
 
     /**
      * Retourne le service ElementPedagogique.
-     * 
+     *
      * @return ElementPedagogiqueService
      */
     protected function getServiceElementPedagogique()

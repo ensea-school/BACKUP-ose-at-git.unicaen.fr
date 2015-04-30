@@ -4,19 +4,19 @@ namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
-use Application\Entity\Db\Etape as EtapeEntity;
-use Application\Entity\Db\Service as ServiceEntity;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\Structure as StructureEntity;
+use Application\Entity\Db\Etape             as EtapeEntity;
+use Application\Entity\Db\Service           as ServiceEntity;
+use Application\Entity\Db\Intervenant       as IntervenantEntity;
+use Application\Entity\Db\Structure         as StructureEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\EtatVolumeHoraire as EtatVolumeHoraireEntity;
-use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
-use Application\Entity\Db\TypeIntervention as TypeInterventionEntity;
-use Application\Entity\Db\Validation as ValidationEntity;
-use Application\Entity\Db\TypeValidation as TypeValidationEntity;
-use Application\Entity\NiveauEtape as NiveauEtapeEntity;
+use Application\Entity\Db\TypeIntervenant   as TypeIntervenantEntity;
+use Application\Entity\Db\TypeIntervention  as TypeInterventionEntity;
+use Application\Entity\Db\Validation        as ValidationEntity;
+use Application\Entity\Db\TypeValidation    as TypeValidationEntity;
+use Application\Entity\NiveauEtape          as NiveauEtapeEntity;
 use Application\Entity\Service\Recherche;
-use Zend\Session\Container as SessionContainer;
+use Zend\Session\Container                  as SessionContainer;
 use Application\Form\Service\RechercheHydrator;
 
 /**
@@ -26,6 +26,14 @@ use Application\Form\Service\RechercheHydrator;
  */
 class Service extends AbstractEntityService
 {
+    use Traits\ElementPedagogiqueAwareTrait,
+        Traits\IntervenantAwareTrait,
+        Traits\StructureAwareTrait,
+        Traits\TypeInterventionAwareTrait,
+        Traits\EtatVolumeHoraireAwareTrait,
+        Traits\TypeVolumeHoraireAwareTrait
+    ;
+
     /**
      *
      * @var SessionContainer
@@ -67,9 +75,10 @@ class Service extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface){
+            $entity->setIntervenant( $role->getIntervenant() );
         }
         return $entity;
     }
@@ -123,11 +132,14 @@ class Service extends AbstractEntityService
             $this->recherche->setEtatVolumeHoraire( $serviceEtatVolumehoraire->getSaisi() );
         }
 
-        $this->recherche->setIntervenant        ( $this->getContextProvider ()->getLocalContext ()->getIntervenant()        );
-        $this->recherche->setStructureEns       ( $this->getContextProvider ()->getLocalContext ()->getStructure()          );
-        $this->recherche->setNiveauEtape        ( $this->getContextProvider ()->getLocalContext ()->getNiveau()             );
-        $this->recherche->setEtape              ( $this->getContextProvider ()->getLocalContext ()->getEtape()              );
-        $this->recherche->setElementPedagogique ( $this->getContextProvider ()->getLocalContext ()->getElementPedagogique() );
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+
+        $this->recherche->setIntervenant        ( $localContext->getIntervenant()        );
+        $this->recherche->setStructureEns       ( $localContext->getStructure()          );
+        $this->recherche->setNiveauEtape        ( $localContext->getNiveau()             );
+        $this->recherche->setEtape              ( $localContext->getEtape()              );
+        $this->recherche->setElementPedagogique ( $localContext->getElementPedagogique() );
         return $this->recherche;
     }
 
@@ -146,11 +158,14 @@ class Service extends AbstractEntityService
         $session = $this->getRechercheSessionContainer();
         $session->data = $data;
 
-        $this->getContextProvider ()->getLocalContext ()->setIntervenant(       $recherche->getIntervenant()        );
-        $this->getContextProvider ()->getLocalContext ()->setStructure(         $recherche->getStructureEns()       );
-        $this->getContextProvider ()->getLocalContext ()->setNiveau(            $recherche->getNiveauEtape()        );
-        $this->getContextProvider ()->getLocalContext ()->setEtape(             $recherche->getEtape()              );
-        $this->getContextProvider ()->getLocalContext ()->setElementPedagogique($recherche->getElementPedagogique() );
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+
+        $localContext->setIntervenant(       $recherche->getIntervenant()        );
+        $localContext->setStructure(         $recherche->getStructureEns()       );
+        $localContext->setNiveau(            $recherche->getNiveauEtape()        );
+        $localContext->setEtape(             $recherche->getEtape()              );
+        $localContext->setElementPedagogique($recherche->getElementPedagogique() );
         return $this;
     }
 
@@ -165,11 +180,13 @@ class Service extends AbstractEntityService
     {
         $this->getEntityManager()->getConnection()->beginTransaction();
         try{
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
+
             if (! $entity->getEtablissement()){
-                $entity->setEtablissement( $this->getContextProvider()->getGlobalContext()->getEtablissement() );
+                $entity->setEtablissement( $this->getServiceContext()->getEtablissement() );
             }
-            if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-                $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+            if (! $entity->getIntervenant() && $role instanceof \Application\Interfaces\IntervenantAwareInterface){
+                $entity->setIntervenant( $role->getIntervenant() );
             }
             if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
@@ -180,7 +197,6 @@ class Service extends AbstractEntityService
                 $serviceAllreadyExists = $this->getRepo()->findOneBy([
                     'intervenant'           => $entity->getIntervenant(),
                     'elementPedagogique'    => $entity->getElementPedagogique(),
-                    'annee'                 => $entity->getAnnee(),
                     'etablissement'         => $entity->getEtablissement(),
                 ]);
             }
@@ -301,15 +317,16 @@ class Service extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $serviceStructure   = $this->getServiceStructure();
-        $serviceIntervenant = $this->getServiceIntervenant();
-        $iAlias             = $serviceIntervenant->getAlias();
+        $serviceStructure           = $this->getServiceStructure();
+        $serviceIntervenant         = $this->getServiceIntervenant();
+        $serviceElementPedagogique  = $this->getServiceElementPedagogique();
+        $iAlias                     = $serviceIntervenant->getAlias();
 
-        $this->join( $serviceIntervenant, $qb, 'intervenant' );
-        $this->join( $serviceStructure, $qb, 'structureAff', false, null, 's_aff' );
-        $this->leftJoin( $serviceStructure, $qb, 'structureEns', false, null, 's_ens' );
+        $this->join( $serviceIntervenant, $qb, 'intervenant', false, $alias );
+        $this->leftJoin( $serviceElementPedagogique, $qb, 'elementPedagogique', false, $alias );
+        $serviceElementPedagogique->leftJoin( $serviceStructure, $qb, 'structure', false, null, 's_ens' );
 
-        $filter = "(($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND ($iAlias.structure = :composante OR s_aff = :composante)) OR s_ens = :composante)";
+        $filter = "(($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND $iAlias.structure = :composante) OR s_ens = :composante)";
         $qb->andWhere($filter)->setParameter('composante', $structure);
 
         return $qb;
@@ -325,16 +342,12 @@ class Service extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $serviceStructure   = $this->getServiceStructure();
         $serviceIntervenant = $this->getServiceIntervenant();
         $iAlias             = $serviceIntervenant->getAlias();
 
-        $this->join( $serviceIntervenant, $qb, 'intervenant' );
-        $this->join( $serviceStructure, $qb, 'structureAff', false, null, 's_aff' );
-
-        $filter = "($iAlias INSTANCE OF Application\Entity\Db\IntervenantPermanent AND s_aff = :structureAff)";
-        $qb->andWhere($filter)->setParameter('structureAff', $structure);
-
+        $this->join( $serviceIntervenant, $qb, 'intervenant', false, $alias );
+        $serviceIntervenant->finderByStructure( $structure, $qb );
+        $qb->andWhere($iAlias.' INSTANCE OF Application\Entity\Db\IntervenantPermanent');
         return $qb;
     }
 
@@ -347,14 +360,14 @@ class Service extends AbstractEntityService
      */
     public function finderByContext( QueryBuilder $qb=null, $alias=null )
     {
-        $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+        $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
+        $this->getServiceIntervenant()->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
 
-        if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface && $role->getIntervenant()){ // Si c'est un intervenant
             $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
         }
 
@@ -372,7 +385,7 @@ class Service extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         if ($typeIntervenant){
-            $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', $alias );
+            $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
             $this->getServiceIntervenant()->finderByType( $typeIntervenant, $qb );
         }
         return $qb;
@@ -489,12 +502,13 @@ class Service extends AbstractEntityService
             $structureEns = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("s2, i, vh, strens")
+                ->select("s2, i, vh, ep, strens")
                 ->from("Application\Entity\Db\Service", 's2')
                 ->join("s2.intervenant", "i")
                 ->join("s2.volumeHoraire", 'vh')
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
-                ->leftJoin("s2.structureEns", 'strens')
+                ->leftJoin("s2.elementPedagogique", "ep")
+                ->leftJoin("ep.structure", 'strens')
                 ->andWhere('NOT EXISTS (SELECT sv FROM Application\Entity\Db\VServiceValide sv WHERE sv.volumeHoraire = vh)')
                 ->addOrderBy("strens.libelleCourt", 'asc')
                 ->addOrderBy("s2.histoModification", 'asc');
@@ -539,7 +553,8 @@ class Service extends AbstractEntityService
                 ->from("Application\Entity\Db\Service", 's')
                 ->join("s.intervenant", "i")
                 ->join("s.volumeHoraire", 'vh')
-                ->leftJoin("s.structureEns", 'strens')
+                ->leftJoin("s.elementPedagogique", 'ep')
+                ->leftJoin("ep.structure", 'strens')
                 ->join("vh.validation", "v")
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("v.typeValidation", 'tv')
@@ -614,7 +629,7 @@ class Service extends AbstractEntityService
             'composante'        => null,            // Composante qui en fait la demande
         ];
         $options = array_merge($defaultOptions, $options );
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
         $data = [];
         $shown = [];
         $typesIntervention = [];
@@ -866,7 +881,7 @@ class Service extends AbstractEntityService
     public function isLocal( ServiceEntity $service )
     {
         if (! $service->getEtablissement()) return true; // par défaut
-        if ($service->getEtablissement() === $this->getContextProvider()->getGlobalContext()->getEtablissement()) return true;
+        if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) return true;
         return false;
     }
 
@@ -930,7 +945,7 @@ class Service extends AbstractEntityService
         if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantExterieur){
             return $this->cannotDoThat("Un intervenant vacataire ne peut pas avoir de motif de non paiement", $runEx);
         }
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
+        if ($this->getServiceContext()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
             return $this->cannotDoThat("Les intervenants n'ont pas le droit de visualiser ou modifier les motifs de non paiement", $runEx);
         }
         return true;
@@ -945,7 +960,7 @@ class Service extends AbstractEntityService
      */
     public function canAdd($intervenant = null, $runEx = false)
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
@@ -983,45 +998,5 @@ class Service extends AbstractEntityService
         foreach( $services as $service ){
             $service->setTypeVolumeHoraire($typeVolumeHoraire);
         }
-    }
-
-    /**
-     * @return TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('applicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
-    }
-
-    /**
-     * @return TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->get('applicationTypeIntervention');
-    }
-
-    /**
-     * @return Structure
-     */
-    protected function getServiceStructure()
-    {
-        return $this->getServiceLocator()->get('applicationStructure');
-    }
-
-    /**
-     * @return Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('applicationIntervenant');
     }
 }

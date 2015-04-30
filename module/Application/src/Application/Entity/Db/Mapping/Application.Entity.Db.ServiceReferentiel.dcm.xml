@@ -3,7 +3,6 @@
   <!-- NB: repository-class ajouté manuellement sur <entity> -->
   <entity name="Application\Entity\Db\ServiceReferentiel" table="SERVICE_REFERENTIEL">
     <indexes>
-      <index name="IDX_42741E7DAA401F5C" columns="ANNEE_ID"/>
       <index name="IDX_42741E7D59860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_42741E7D7E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_42741E7D63F06898" columns="HISTO_MODIFICATEUR_ID"/>
@@ -46,11 +45,6 @@
     <many-to-one field="histoDestructeur" target-entity="Application\Entity\Db\Utilisateur">
       <join-columns>
         <join-column name="HISTO_DESTRUCTEUR_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
-      <join-columns>
-        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <one-to-many field="volumeHoraireReferentiel" target-entity="Application\Entity\Db\VolumeHoraireReferentiel" mapped-by="serviceReferentiel">

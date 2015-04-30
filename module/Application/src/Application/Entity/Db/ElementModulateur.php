@@ -28,11 +28,6 @@ class ElementModulateur implements HistoriqueAwareInterface
     protected $id;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    protected $annee;
-
-    /**
      * @var \Application\Entity\Db\Modulateur
      */
     protected $modulateur;
@@ -156,29 +151,6 @@ class ElementModulateur implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return ElementModulateur
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

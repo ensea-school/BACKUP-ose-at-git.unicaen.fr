@@ -182,7 +182,8 @@ class Validation extends AbstractEntityService
         $qb
                 ->join("$alias.volumeHoraire", 'vh')
                 ->join("vh.service", 'vhs')
-                ->andWhere("vhs.structureEns = :structure")
+                ->join("vhs.elementPedagogique", 'ep')
+                ->andWhere("ep.structure = :structure")
                 ->setParameter('structure', $structure);
 
         return $qb;
@@ -259,7 +260,7 @@ class Validation extends AbstractEntityService
             StructureEntity $structureValidation = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("v, tv, str, i, vh, s, strens")
+                ->select("v, tv, str, i, vh, s, ep, strens")
                 ->from('Application\Entity\Db\Validation', 'v')
                 ->join("v.typeValidation", 'tv')
                 ->join("v.structure", 'str') // auteur de la validation
@@ -267,7 +268,8 @@ class Validation extends AbstractEntityService
                 ->join("v.volumeHoraire", 'vh')
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
                 ->join("vh.service", 's')
-                ->leftJoin("s.structureEns", 'strens')
+                ->leftJoin("s.elementPedagogique", 'ep')
+                ->leftJoin("ep.structure", 'strens')
                 ->orderBy("v.histoModification", 'desc')
                 ->addOrderBy("strens.libelleCourt", 'asc');
         
@@ -356,7 +358,7 @@ class Validation extends AbstractEntityService
      */
     public function canAdd($intervenant, $type, $runEx = false)
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         
         $rule = $this->getServiceLocator()->get('PeutValiderServiceRule')->setIntervenant($intervenant);
         $rule->setTypeValidation($this->normalizeTypeValidation($type));

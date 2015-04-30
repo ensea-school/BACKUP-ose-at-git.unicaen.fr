@@ -7,7 +7,7 @@ use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
 /**
  * TypePieceJointeStatut
  */
-class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareInterface
+class TypePieceJointeStatut implements HistoriqueAwareInterface
 {
     use ObligatoireSelonSeuilHeuresAwareTrait;
     
@@ -30,16 +30,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareIn
      * @var boolean
      */
     private $premierRecrutement;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    private $validiteFin;
 
     /**
      * @var integer
@@ -221,52 +211,6 @@ class TypePieceJointeStatut implements HistoriqueAwareInterface, ValiditeAwareIn
         $this->seuilHetd = $seuilHetd;
 
         return $this;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return TypePieceJointeStatut
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return TypePieceJointeStatut
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

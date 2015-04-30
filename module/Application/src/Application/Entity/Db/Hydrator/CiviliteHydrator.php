@@ -10,14 +10,14 @@ namespace Application\Entity\Db\Hydrator;
 class CiviliteHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
 {
     /**
-     * 
+     *
      * @param array $civilites
      */
     public function __construct(array $civilites)
     {
         $this->setCivilites($civilites);
     }
-    
+
     /**
      * Hydrate $object with the provided $data.
      *
@@ -28,10 +28,10 @@ class CiviliteHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
     public function hydrate(array $data, $civilite)
     {
         $civilite = $this->getCivilites()[$data['id']];
-        
+
         return $civilite;
     }
-    
+
     /**
      * Extract values from an object
      *
@@ -40,11 +40,11 @@ class CiviliteHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
      */
     public function extract($civilite)
     {
-        return array('id' => $civilite->getId());
+        return ['id' => $civilite->getId()];
     }
-    
+
     private $civilites;
-    
+
     public function getCivilites()
     {
         return $this->civilites;

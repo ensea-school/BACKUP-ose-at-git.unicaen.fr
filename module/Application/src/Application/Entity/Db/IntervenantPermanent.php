@@ -8,16 +8,6 @@ namespace Application\Entity\Db;
 class IntervenantPermanent extends Intervenant
 {
     /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $modificationServiceDu;
@@ -33,56 +23,9 @@ class IntervenantPermanent extends Intervenant
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->modificationServiceDu = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return IntervenantPermanent
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return IntervenantPermanent
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
 
     /**
      * Add modificationServiceDu
@@ -116,7 +59,7 @@ class IntervenantPermanent extends Intervenant
     /**
      * Get modificationServiceDu
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
 //    public function getModificationServiceDu()
 //    {
@@ -140,7 +83,7 @@ class IntervenantPermanent extends Intervenant
     /**
      * Get corps
      *
-     * @return \Application\Entity\Db\Corps 
+     * @return \Application\Entity\Db\Corps
      */
     public function getCorps()
     {
@@ -155,52 +98,38 @@ class IntervenantPermanent extends Intervenant
     /**
      * Get modificationServiceDu
      *
-     * @param Annee $annee Seule année à retenir
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getModificationServiceDu(Annee $annee = null)
+    public function getModificationServiceDu()
     {
-        if (null === $annee) {
-            return $this->modificationServiceDu;
-        }
-        
-        $p = function($item) use ($annee) {
-            return $item->getAnnee()->getId() === $annee->getId();
-        };
-        $services = $this->modificationServiceDu->filter($p);
-        
-        return $services;
+        return $this->modificationServiceDu;
     }
 
     /**
      * Get modificationServiceDuToStrings
      *
-     * @param Annee $annee Seule année à retenir
      * @return string[]
      */
-    public function getModificationServiceDuToStrings(Annee $annee = null)
+    public function getModificationServiceDuToStrings()
     {
-        $services = array();
-        foreach ($this->getModificationServiceDu($annee) as $sr) { /* @var $sr \Application\Entity\Db\ModificationServiceDu */
+        $services = [];
+        foreach ($this->getModificationServiceDu() as $sr) { /* @var $sr \Application\Entity\Db\ModificationServiceDu */
             $services[] = "" . $sr;
         }
-        
         return $services;
     }
 
     /**
      * Remove all modificationServiceDu
      *
-     * @param Annee $annee Seule année à retenir
      * @param bool $softDelete
      * @return self
      */
-    public function removeAllModificationServiceDu(Annee $annee = null, $softDelete = true)
+    public function removeAllModificationServiceDu($softDelete = true)
     {
-        foreach ($this->getModificationServiceDu($annee) as $modificationServiceDu) {
+        foreach ($this->getModificationServiceDu() as $modificationServiceDu) {
             $this->removeModificationServiceDu($modificationServiceDu, $softDelete);
         }
-        
         return $this;
     }
     

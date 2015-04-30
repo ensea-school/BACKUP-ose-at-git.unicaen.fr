@@ -15,7 +15,6 @@ class Role extends AbstractEntityService
      * retourne la classe des entités
      *
      * @return string
-     * @throws RuntimeException
      */
     public function getEntityClass()
     {
@@ -31,42 +30,18 @@ class Role extends AbstractEntityService
     {
         return 'r';
     }
-    
+
     /**
-     * 
-     * @param \Application\Entity\Db\TypeRole|string $typeRole
-     * @param type $qb
-     * @param type $alias
-     * @return type
+     * Retourne la liste des rôles
+     *
+     * @param QueryBuilder|null $queryBuilder
+     * @param string|null $alias
+     * @return \Application\Entity\Db\Role[]
      */
-    public function finderByTypeRole($typeRole, $qb = null, $alias = null)
+    public function getList( QueryBuilder $qb=null, $alias=null )
     {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        
-        if ($typeRole instanceof \Application\Entity\Db\TypeRole) {
-            $typeRole = $typeRole->getCode();
-        }
-        
-        $qb
-                ->innerJoin('r.type', $alias = uniqid('tr'))
-                ->andWhere("$alias.code = :code")->setParameter('code', $typeRole);
-        
-        return $qb;
-    }
-    
-    /**
-     * 
-     * @param \Application\Entity\Db\Structure $structure
-     * @param type $qb
-     * @param type $alias
-     * @return type
-     */
-    public function finderByStructure(\Application\Entity\Db\Structure $structure, $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        
-        $qb->andWhere("$alias.structure = :structure")->setParameter('structure', $structure);
-        
-        return $qb;
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.libelle");
+        return parent::getList($qb, $alias);
     }
 }

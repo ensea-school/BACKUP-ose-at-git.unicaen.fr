@@ -45,8 +45,8 @@ class EtapeViewHelper extends AbstractHelper
             return '<span class="bg-danger"><abbr title="Cette formation n\'existe plus">'.$etape.'</abbr></span>';
         }
 
-        $url = $this->getView()->url('of/etape/apercevoir', array('id' => $etape->getId()));
-        $pourl = $this->getView()->url('of/etape/apercevoir', array('id' => $etape->getId()));
+        $url = $this->getView()->url('of/etape/apercevoir', ['id' => $etape->getId()]);
+        $pourl = $this->getView()->url('of/etape/apercevoir', ['id' => $etape->getId()]);
         $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$etape.'</a>';
         return $out;
     }

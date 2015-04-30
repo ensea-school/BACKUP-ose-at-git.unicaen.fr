@@ -15,7 +15,9 @@ use Zend\Filter\FilterInterface;
  */
 class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    use \Application\Traits\TypeVolumeHoraireAwareTrait;
+    use \Application\Traits\TypeVolumeHoraireAwareTrait,
+        \Application\Service\Traits\TypeVolumeHoraireAwareTrait
+    ;
     
     protected $singularTitlePattern = "%s intervenant  a   saisi des enseignements dont l'étape, l'élément pédagogique ou la période a disparu";
     protected $pluralTitlePattern   = "%s intervenants ont saisi des enseignements dont l'étape, l'élément pédagogique ou la période a disparu";
@@ -23,7 +25,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
     public function getTypeVolumeHoraire()
     {
         if (null === $this->typeVolumeHoraire) {
-            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
+            $this->typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         }
         
         return $this->typeVolumeHoraire;
@@ -41,7 +43,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
                 'Application\Entity\Db\Service',
                 'Application\Entity\Db\VolumeHoraire',
             ],
-            $this->getContextProvider()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
     
@@ -107,16 +109,15 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
         
         $qb = parent::getQueryBuilder()
                 ->addSelect("s, se, e, ep")
-                ->join("int.service", "s", \Doctrine\ORM\Query\Expr\Join::WITH, "s.annee = :annee")
-                ->join("s.structureEns", "se")
+                ->join("int.service", "s")
                 ->join("s.elementPedagogique", "ep")
+                ->join("ep.structure", "se")
                 ->join("ep.etape", "e")
                 ->leftJoin("ep.periode", "p")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
                 ->andWhere($whereHistos)
-                ->setParameter('tvh', $this->getTypeVolumeHoraire())
-                ->setParameter('annee', $this->getAnnee());
+                ->setParameter('tvh', $this->getTypeVolumeHoraire());
         
         if ($this->getStructure()) {
             /**

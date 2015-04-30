@@ -33,7 +33,7 @@ class ElementPedagogique extends AbstractHelper
      */
     public function render()
     {
-        
+
     }
 
     public function renderLink( $format='original' )
@@ -53,8 +53,8 @@ class ElementPedagogique extends AbstractHelper
                 $str = (string)$element;
         }
 
-        $url = $this->getView()->url('of/element/voir', array('id' => $element->getId()));
-        $pourl = $this->getView()->url('of/element/apercevoir', array('id' => $element->getId()));
+        $url = $this->getView()->url('of/element/voir', ['id' => $element->getId()]);
+        $pourl = $this->getView()->url('of/element/apercevoir', ['id' => $element->getId()]);
         $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$str.'</a>';
         return $out;
     }

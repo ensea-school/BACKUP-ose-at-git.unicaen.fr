@@ -16,11 +16,13 @@ use BjyAuthorize\Exception\UnAuthorizedException;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwareInterface, ContextProviderAwareInterface
+class AbstractService implements ServiceLocatorAwareInterface, EntityManagerAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use EntityManagerAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        EntityManagerAwareTrait,
+        Traits\ContextAwareTrait
+    ;
+
 
     /**
      * Retourne le gestionnaire d'entités Doctrine

@@ -15,8 +15,6 @@
       <unique-constraint name="ie_source_un" columns="SOURCE_CODE"/>
     </unique-constraints>
     <id name="id" association-key="true"/>
-    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
-    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="typePoste" target-entity="Application\Entity\Db\TypePoste">
       <join-columns>
         <join-column name="TYPE_POSTE_ID" referenced-column-name="ID"/>

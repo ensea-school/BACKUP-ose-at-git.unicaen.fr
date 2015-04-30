@@ -2,16 +2,15 @@
 
 namespace Application\Provider\Role;
 
-use Application\Acl\AdministrateurRole;
-use Application\Entity\Db\Role;
+use Application\Entity\Db\Affectation;
 use Application\Entity\Db\Structure as StructureEntity;
-use Application\Interfaces\StructureAwareInterface;
 use BjyAuthorize\Provider\Role\ProviderInterface;
-use Exception;
 use UnicaenApp\Exception\LogicException;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
+use Application\Acl\Role;
+use Application\Acl\IntervenantRole;
 
 /**
  * Fournisseur des rôles utilisateurs de l'application :
@@ -33,6 +32,12 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
      * @var array
      */
     protected $roles;
+
+    /**
+     * @var StructureEntity
+     */
+    protected $structureSelectionnee;
+
 
 
     /**
@@ -64,7 +69,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     {
         $roles = [];
 
-        // Chargement des rôles de base
+        /* deprecated */
         foreach( $this->config as $classname ){
             if (class_exists( $classname )){
                 $role = new $classname; /* @var $role RoleInterface */
@@ -73,73 +78,48 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 throw new LogicException('La classe "'.$classname.'" déclarée dans la configuration du fournisseur de rôles n\'a pas été trouvée.');
             }
         }
-        if (($utilisateur = $this->getUtilisateur()) && ($personnel = $utilisateur->getPersonnel())){
+        /* fin de deprecated */
+        
+        $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
+        /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
+        $utilisateur = $serviceAuthUserContext->getDbUser();
+
+
+        /* Cas spécifique du rôle intervenant */
+        if ($utilisateur && $utilisateur->getIntervenant()){
+            $role = new IntervenantRole;
+            $role->setIntervenant( $utilisateur->getIntervenant() );
+            $roles[$role->getRoleId()] = $role;
+        }
+
+        /* Rôles du personnel */
+        if ($utilisateur && ($personnel = $utilisateur->getPersonnel())){
             // chargement des rôles métiers
             $qb = $this->getEntityManager()->createQueryBuilder()
-                ->from("Application\Entity\Db\Role", "r")
-                ->select("r, tr, s")
+                ->from("Application\Entity\Db\Affectation", "a")
+                ->select("a, r, s")
                 ->distinct()
-                ->join("r.type", "tr")
-                ->leftJoin("r.structure", "s")
+                ->join("a.role", "r")
+                ->leftJoin("a.structure", "s")
+                ->andWhere('1=compriseEntre(a.histoCreation,a.histoDestruction)')
                 ->andWhere('1=compriseEntre(r.histoCreation,r.histoDestruction)')
-                ->andWhere('1=compriseEntre(tr.histoCreation,tr.histoDestruction)')
-                ->andWhere("r.personnel = :personnel")->setParameter(':personnel', $personnel);
-            foreach ($qb->getQuery()->getResult() as $role) { /* @var $role Role */
-                $roleId = $role->getType()->getCode();
-                if (! isset($roles[$roleId])){
-                    throw new Exception('Le rôle "'.$roleId.'" est inconnu.');
-                }
-                $classname = get_class($roles[$roleId]);
-                if ($roles[$roleId] instanceof StructureAwareInterface && $role->getStructure()){
-                    $roleId .= '-'.$role->getStructure()->getSourceCode();
-                    $roles[$roleId] = new $classname($roleId);
-                    $roles[$roleId]->setStructure( $role->getStructure() );
-                }else{
-                    $roles[$roleId] = new $classname($roleId);
-                }
-                $roles[$roleId]->setTypeRole( $role->getType() );
+                ->andWhere("a.personnel = :personnel")->setParameter(':personnel', $personnel);
+            foreach ($qb->getQuery()->getResult() as $affectation) { /* @var $affectation Affectation */
+                $dbRole = $affectation->getRole();
+                $role = new Role( $dbRole->getCode(), 'user', $dbRole->getLibelle());
+                $role->setDbRole( $dbRole );
+                $role->setPersonnel( $personnel );
 
-                $this->injectSelectedStructureInRole($roles[$roleId]);
+                if ($this->structureSelectionnee){
+                    $role->setStructure( $this->structureSelectionnee );
+                }else{
+                    $role->setStructure( $affectation->getStructure() );
+                }
+                $roles[$role->getRoleId()] = $role;
             }
         }
         return $roles;
     }
-
-    /**
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getUtilisateur()
-    {
-        $identity = $this->getServiceLocator()->get('AuthUserContext')->getIdentity();
-        if (isset($identity['db'])){
-            return $identity['db'];
-        }else{
-            return null;
-        }
-    }
-
-    /**
-     * Inject la structure sélectionnée en session dans le rôle Administrateur.
-     * 
-     * @param Role $role
-     * @return self
-     */
-    public function injectSelectedStructureInRole($role)
-    {
-        if (! $role instanceof AdministrateurRole) {
-            return $this;
-        }
-            
-        $role->setStructure($this->structureSelectionnee);
-        
-        return $this;
-    }
-
-    /**
-     * @var StructureEntity
-     */
-    protected $structureSelectionnee;
     
     public function setStructureSelectionnee(StructureEntity $structureSelectionnee = null)
     {

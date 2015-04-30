@@ -12,22 +12,28 @@
     </id>
     <field name="code" type="string" column="CODE" length="150" nullable="false"/>
     <field name="libelle" type="string" column="LIBELLE" length="200" nullable="false"/>
-    <many-to-one field="ressource" target-entity="Application\Entity\Db\Ressource">
+    <many-to-one field="categorie" target-entity="Application\Entity\Db\CategoriePrivilege">
       <join-columns>
-        <join-column name="RESSOURCE_ID" referenced-column-name="ID"/>
+        <join-column name="CATEGORIE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="typeRole" target-entity="Application\Entity\Db\TypeRole" inversed-by="privilege">
-      <join-table name="TYPE_ROLE_PRIVILEGE">
+    <many-to-many field="role" target-entity="Application\Entity\Db\Role">
+      <cascade>
+          <cascade-all/>
+      </cascade>
+      <join-table name="ROLE_PRIVILEGE">
         <join-columns>
           <join-column name="PRIVILEGE_ID" referenced-column-name="ID"/>
         </join-columns>
         <inverse-join-columns>
-          <join-column name="TYPE_ROLE_ID" referenced-column-name="ID"/>
+          <join-column name="ROLE_ID" referenced-column-name="ID"/>
         </inverse-join-columns>
       </join-table>
     </many-to-many>
-    <many-to-many field="statut" target-entity="Application\Entity\Db\StatutIntervenant" inversed-by="privilege">
+    <many-to-many field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
+      <cascade>
+          <cascade-all/>
+      </cascade>
       <join-table name="STATUT_PRIVILEGE">
         <join-columns>
           <join-column name="PRIVILEGE_ID" referenced-column-name="ID"/>

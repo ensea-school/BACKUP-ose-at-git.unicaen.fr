@@ -14,7 +14,7 @@ if ( $intervenant && $intervenant->getStatut()->getPeutSaisirReferentiel() ){
 if ($intervenant){
     $title .= ' <small>'.$intervenant.'</small>';
     $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");
-}else{  
+}else{
     $this->headTitle()->append("Enseignements");
 }
 
@@ -29,7 +29,7 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
 <?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
 
 <style>
-    .modal-dialog { 
+    .modal-dialog {
         width: 70%;
     }
     div.row {
@@ -40,8 +40,8 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
 
 <?php if (! $intervenant): ?>
 <?php if ($this->isAllowed('ServiceListView', 'info-only-structure')): ?>
-<?php echo $this->messenger()->setMessages(array('warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
-        . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures.")); ?>
+<?php echo $this->messenger()->setMessages(['warning' => "Sont visibles ici les référentiels et les enseignements prévisionnels des intervenants affectés "
+        . "ou enseignant dans votre structure de responsabilité ({$role->getStructure()}) ou l'une de ses sous-structures."]); ?>
 <?php endif; ?>
 
 <div id="filtres">
@@ -64,9 +64,9 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
     <?php echo $this->formuleTotauxHetd; ?>
     <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
         <hr />
-        <?php $url = $this->url('workflow/nav-next', 
-                array('intervenant' => $role->getIntervenant()->getSourceCode()),
-                array('query' => array('route' => 'intervenant/services', 'prepend' => $prepend = "J'ai terminé ma saisie, "))) ?>
+        <?php $url = $this->url('workflow/nav-next',
+                ['intervenant' => $role->getIntervenant()->getSourceCode()],
+                ['query' => ['route' => 'intervenant/services', 'prepend' => $prepend = "J'ai terminé ma saisie, "]]) ?>
         <div id="wf-nav-next" data-url="<?php echo $url ?>">
             <?php echo $this->workflow($role->getIntervenant(), $role)->navNext($prepend) ?>
         </div>

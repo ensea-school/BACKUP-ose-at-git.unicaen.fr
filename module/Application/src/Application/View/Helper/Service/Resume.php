@@ -5,18 +5,15 @@ namespace Application\View\Helper\Service;
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher un résumé des services
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
 
     /**
      * Filtre de données
@@ -51,7 +48,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
     }
 
     /**
-     * 
+     *
      * @return \Application\Entity\Db\TypeIntervention[]
      */
     public function getTypesIntervention()
@@ -69,13 +66,13 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface, Con
         if (! $this->resumeServices) return '';
 
         $typesIntervention = $this->resumeServices['types-intervention'];
-        $totaux = array(
+        $totaux = [
             'intervenant'       => 0,
             'heures'            => 0,
             'total'             => 0,
             'type-intervention' => [],
             'heures-ref'        => 0,
-        );
+        ];
 
         $hasTi = 0 < count($typesIntervention);
 

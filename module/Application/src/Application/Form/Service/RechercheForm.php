@@ -71,7 +71,7 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
             'attributes' => $attributes,
         ]);
         $this->actionButtons[$name] = $this->get($name);
-        
+
         return $this;
     }
 
@@ -86,7 +86,7 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
     }
 
     /**
-     * 
+     *
      */
     public function init()
     {
@@ -105,10 +105,10 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
 
         $typeIntervenant = new \Zend\Form\Element\Radio('type-intervenant');
         $typeIntervenant
-                ->setValueOptions(array(
+                ->setValueOptions([
                     '' => "Peu importe",
                     $this->getServiceTypeIntervenant()->getPermanent()->getId() => "Permanent",
-                    $this->getServiceTypeIntervenant()->getExterieur()->getId() => "Vacataire"))
+                    $this->getServiceTypeIntervenant()->getExterieur()->getId() => "Vacataire"])
                 ->setValue('')
                 ->setAttribute('data-intervenant-exterieur-id', $this->getServiceTypeIntervenant()->getExterieur()->getId())
                 ->setLabel("Statut :");
@@ -119,30 +119,30 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
                               $this->getServiceStructure()->finderByNiveau(2)
                           )
                       );
-        $this->add(array(
+        $this->add([
             'name'       => 'structure-aff',
-            'options'    => array(
+            'options'    => [
                 'label' => "Structure d'affectation:",
                 'empty_option' => "(Toutes)",
                 'disable_inarray_validator' => true,
-                'label_attributes' => array(
+                'label_attributes' => [
                     'title' => "Structure gestionnaire de l'enseignement",
-                ),
-            ),
-            'attributes' => array(
+                ],
+            ],
+            'attributes' => [
                 'title' => "Structure gestionnaire de l'enseignement",
                 'class' => 'input-sm',
-            ),
+            ],
             'type' => 'Select',
-        ));
+        ]);
         $this->get('structure-aff')->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $structures ) );
 
         $intervenant = new SearchAndSelect('intervenant');
         $intervenant
                 ->setAutocompleteSource($url(
                     'recherche',
-                    array('action' => 'intervenantFind'),
-                    array('query' => array('having-services' => 1))
+                    ['action' => 'intervenantFind'],
+                    ['query' => ['having-services' => 1]]
                 ) )
                 ->setLabel('Intervenant :');
         $this->add($intervenant);
@@ -188,20 +188,20 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            'type-intervenant' => array(
+        return [
+            'type-intervenant' => [
                 'required' => false
-            ),
-            'structure-aff' => array(
+            ],
+            'structure-aff' => [
                 'required' => false
-            ),
-            'intervenant' => array(
+            ],
+            'intervenant' => [
                 'required' => false
-            ),
-            'element-pedagogique' => array(
+            ],
+            'element-pedagogique' => [
                 'required' => false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**

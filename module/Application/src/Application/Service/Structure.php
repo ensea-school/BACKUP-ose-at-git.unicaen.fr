@@ -2,8 +2,6 @@
 
 namespace Application\Service;
 
-use Application\Service\AbstractService;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Func;
 use Application\Entity\Db\Structure as EntityStructure;
@@ -16,6 +14,7 @@ use Application\Entity\Db\Structure as EntityStructure;
  */
 class Structure extends AbstractEntityService
 {
+    use Traits\AffectationAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -38,19 +37,6 @@ class Structure extends AbstractEntityService
     }
 
     /**
-     * Retourne le contexte global des services
-     *
-     * @todo implémenter la notion de structure courante
-     */
-    public function getGlobalContext()
-    {
-//        $currentUser = $this->getServiceLocator()->get('authUserContext')->getDbUser();
-        return array(
-//            'structure'     => null,
-        );
-    }
-
-    /**
      * Retourne la structure racine (i.e. qui n'a pas de structure parente).
      *
      * @return EntityStructure
@@ -59,14 +45,14 @@ class Structure extends AbstractEntityService
     {
         return $this->getRepo()->findOneBySourceCode('UNIV');
     }
-    
+
     /**
      * Recherche les adresses mails de contact d'une structure.
-     * 
+     *
      * Si une adresse de contact est spécifiée pour cette structure dans la table, on retourne cette adresse.
-     * Sinon, on recherche les personnes ayant un rôle spécifique dans la structure, en remontant la hiérarchie 
+     * Sinon, on recherche les personnes ayant un rôle spécifique dans la structure, en remontant la hiérarchie
      * des structures mères tant que personne n'est trouvé (et si demandé).
-     * 
+     *
      * @param \Application\Entity\Db\Structure $structure Structure concernée
      * @param boolean $remonterStructures Remonter les structures mères tant que personne n'est trouvé ?
      * @return string[] mail => nom
@@ -76,28 +62,28 @@ class Structure extends AbstractEntityService
         if ($structure->getContactPj()) {
             return [ $structure->getContactPj() ];
         }
-        
-        $serviceRole = $this->getServiceLocator()->get('applicationRole');
-        
+
+        $serviceAffectation = $this->getServiceAffectation();
+
         $str   = $structure;
-        
+
         // recherche des rôles dans la structure, en remontant la hiérarchie des structures si besoin et demandé
         do {
             // recherche de "gestionnaires"
-            $qb = $serviceRole->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_GESTIONNAIRE_COMPOSANTE);
-            $serviceRole->finderByStructure($str, $qb);
-            $roles = $serviceRole->getList($qb);
-            
+            $qb = $serviceAffectation->finderByRole(\Application\Entity\Db\Role::CODE_GESTIONNAIRE_COMPOSANTE);
+            $serviceAffectation->finderByStructure($str, $qb);
+            $roles = $serviceAffectation->getList($qb);
+
             // recherche de "responsables"
-            $qb = $serviceRole->finderByTypeRole(\Application\Entity\Db\TypeRole::CODE_RESPONSABLE_COMPOSANTE);
-            $serviceRole->finderByStructure($str, $qb);
-            $roles += $serviceRole->getList($qb);
-            
+            $qb = $serviceAffectation->finderByRole(\Application\Entity\Db\Role::CODE_RESPONSABLE_COMPOSANTE);
+            $serviceAffectation->finderByStructure($str, $qb);
+            $roles += $serviceAffectation->getList($qb);
+
             // on grimpe la hiérarchie des structures
             $str = $str->getParente();
         }
         while ($remonterStructures && !count($roles) && $str);
-        
+
         // mise en forme du résultat
         $contacts = [];
         foreach ($roles as $role) { /* @var $role \Application\Entity\Db\Role */
@@ -105,10 +91,10 @@ class Structure extends AbstractEntityService
             $name = $role->getPersonnel()->getNomUsuel() . ' ' . $role->getPersonnel()->getPrenom();
             $contacts[$mail] = $name;
         }
-        
+
         return $contacts;
     }
-    
+
     /**
      * Retourne la liste des structures selon le contexte donné
      *
@@ -142,7 +128,7 @@ class Structure extends AbstractEntityService
         elseif ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()) {
             $this->finderByStructure( $role->getStructure(), $qb, $alias );
         }
-        
+
         return $qb;
     }
 
@@ -179,8 +165,8 @@ class Structure extends AbstractEntityService
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $libelleLong = new Func('CONVERT', array("$alias.libelleLong", '?3') );
-        $libelleCourt = new Func('CONVERT', array("$alias.libelleCourt", '?3') );
+        $libelleLong = new Func('CONVERT', ["$alias.libelleLong", '?3'] );
+        $libelleCourt = new Func('CONVERT', ["$alias.libelleCourt", '?3'] );
 
         $qb
                 ->where("$alias.sourceCode = ?1")
@@ -188,7 +174,7 @@ class Structure extends AbstractEntityService
                 ->orWhere($qb->expr()->like($qb->expr()->upper($libelleCourt), $qb->expr()->upper('CONVERT(?2, ?3)')))
                 ->orderBy("$alias.libelleCourt");
 
-        $qb->setParameters(array(1 => $term, 2 => "%$term%", 3 => 'US7ASCII'));
+        $qb->setParameters([1 => $term, 2 => "%$term%", 3 => 'US7ASCII']);
 
         //print_r($qb->getQuery()->getSQL()); var_dump($qb->getQuery()->getParameters());die;
 
@@ -230,26 +216,20 @@ class Structure extends AbstractEntityService
 
     /**
      * Fetch des structures d'enseignement distinctes d'un intervenant.
-     * 
+     *
      * @param \Application\Service\IntervenantEntity $intervenant
-     * @param \Application\Service\Annee $annee
      */
-    public function getListStructuresEnseignIntervenant(IntervenantEntity $intervenant, Annee $annee = null)
+    public function getListStructuresEnseignIntervenant(IntervenantEntity $intervenant)
     {
-        if (null === $annee) {
-            $this->getContextProvider()->getGlobalContext()->getAnnee();
-        }
-        
         $serviceService = $this->getServiceLocator()->get('ApplicationService');
 
         $qb = $this->finderByEnseignement();
         $this->join($serviceService, $qb, 'service');
         $serviceService->finderByIntervenant($intervenant, $qb);
-        $serviceService->finderByAnnee($annee, $qb);
-        
+
         return $this->getList($qb);
     }
-    
+
     /**
      * Retourne la liste des structures
      *

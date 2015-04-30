@@ -18,11 +18,6 @@ class VIndicAttenteDemandeMep
     protected $intervenant;
     
     /**
-     * @var Annee
-     */
-    protected $annee;
-    
-    /**
      * @var Structure
      */
     protected $structure;
@@ -81,16 +76,6 @@ class VIndicAttenteDemandeMep
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-    
-    /**
-     * Get annee
-     *
-     * @return Annee 
-     */
-    function getAnnee()
-    {
-        return $this->annee;
     }
     
     /**

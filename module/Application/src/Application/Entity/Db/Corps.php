@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * Corps
  */
-class Corps implements HistoriqueAwareInterface, ValiditeAwareInterface
+class Corps implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime
@@ -36,16 +36,6 @@ class Corps implements HistoriqueAwareInterface, ValiditeAwareInterface
      * @var string
      */
     protected $sourceCode;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -209,52 +199,6 @@ class Corps implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getSourceCode()
     {
         return $this->sourceCode;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return Corps
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return Corps
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**

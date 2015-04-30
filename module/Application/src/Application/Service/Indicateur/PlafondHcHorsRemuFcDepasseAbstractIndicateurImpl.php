@@ -81,7 +81,7 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
      */
     protected function getQueryBuilder()
     {
-        $annee = $this->getContextProvider()->getGlobalContext()->getAnnee();
+        $annee = $this->getServiceContext()->getAnnee();
         
         // INDISPENSABLE si plusieurs requêtes successives sur VIndicDepassHcHorsRemuFc !
         $this->getEntityManager()->clear('Application\Entity\Db\VIndicDepassHcHorsRemuFc');
@@ -95,7 +95,7 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
                 ->join("int.statut", "si")
                 ->join("si.typeIntervenant", "ti")
                 ->join("v.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :codeTvh")
-                ->andWhere("v.annee = :annee")
+                ->andWhere("int.annee = :annee")
                 ->setParameter("annee", $annee)
                 ->setParameter('codeTvh', $this->getTypeVolumeHoraire()->getCode());
         

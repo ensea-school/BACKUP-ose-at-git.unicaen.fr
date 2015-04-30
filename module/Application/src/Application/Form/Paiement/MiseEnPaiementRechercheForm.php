@@ -80,38 +80,38 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
             ],
         ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'suite',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => 'Suite...',
                 'class' => 'btn btn-primary',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'afficher',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'btn btn-primary',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'exporter-pdf',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'btn btn-default',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'exporter-csv-etat',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'class' => 'btn btn-default',
-            ),
-        ));
+            ],
+        ]);
     }
 
     /**

@@ -14,35 +14,35 @@ class Expr extends AbstractRule
 {
     const OPERATOR_AND = 'AND';
     const OPERATOR_OR  = 'OR';
-    
+
     /**
      * @var array
      */
     protected $rules = [];
- 
+
     /**
      * @var string
      */
     protected $operator;
-    
+
     /**
      * Instancie un expression.
-     * 
+     *
      * @param array $rules Règles
      * @param string $operator Opérateur, ex: Expr::OPERATOR_AND
      */
-    public function __construct(array $rules = array(), $operator = self::OPERATOR_AND)
+    public function __construct(array $rules = [], $operator = self::OPERATOR_AND)
     {
         foreach ($rules as $rule) {
             $this->addRule($rule);
         }
-        
+
         $this->operator = $operator;
     }
-    
+
     /**
      * Instancie une expression OR avec les règles spécifiées.
-     * 
+     *
      * @param type $x
      * @return self
      */
@@ -50,10 +50,10 @@ class Expr extends AbstractRule
     {
         return new static(func_get_args(), self::OPERATOR_OR);
     }
-    
+
     /**
      * Instancie une expression AND avec les règles spécifiées.
-     * 
+     *
      * @param type $x
      * @return self
      */
@@ -61,23 +61,23 @@ class Expr extends AbstractRule
     {
         return new static(func_get_args(), self::OPERATOR_AND);
     }
-    
+
     /**
      * Ajoute une règle.
-     * 
+     *
      * @param RuleInterface $rule Règle
      * @return self
      */
     public function addRule(RuleInterface $rule)
     {
         $this->rules[] = $rule;
-        
+
         return $this;
     }
-    
+
     /**
      * Spécifie l'opérateur de cette expression.
-     * 
+     *
      * @param string $operator Ex: Expr::OPERATOR_AND
      * @return self
      * @throws LogicException
@@ -87,15 +87,15 @@ class Expr extends AbstractRule
         if (!in_array($operator, [self::OPERATOR_AND, self::OPERATOR_OR])) {
             throw new LogicException(sprintf("Opérateur invalide : %s.", $operator));
         }
-        
+
         $this->operator = $operator;
-        
+
         return $this;
     }
-    
+
     /**
      * Exécute cette expression.
-     * 
+     *
      * @return boolean|array Résultat de l'exécution
      * @throws LogicException
      * @see RuleInterface
@@ -103,18 +103,18 @@ class Expr extends AbstractRule
     public function execute()
     {
         $this->message(null);
-        
+
         if (!$this->rules) {
             throw new LogicException("Aucune règle spécifiée!");
         }
-        
+
         $result = null;
-        
+
         foreach ($this->rules as $rule) { /* @var $rule RuleInterface */
             if (!$rule->isRelevant()) {
                 continue;
             }
-        
+
             $execute = $rule->execute();
 
             /*if (is_boolean($execute)) {
@@ -128,14 +128,14 @@ class Expr extends AbstractRule
                 throw new LogicException("Résultat d'exécution de règle imprévu!");
             }
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Retourne la pertinence de cette expression.
      * Si au moins une règle est pertinente, l'ensemble l'est.
-     * 
+     *
      * @return boolean
      * @see RuleInterface
      */
@@ -146,12 +146,12 @@ class Expr extends AbstractRule
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
 //    /**
-//     * 
+//     *
 //     * @param boolean $b1
 //     * @param boolean $b2
 //     * @return boolean
@@ -162,7 +162,7 @@ class Expr extends AbstractRule
 //        if (null === $b2) {
 //            return $b1;
 //        }
-//        
+//
 //        switch ($this->operator) {
 //            case self::OPERATOR_AND:
 //                return $b1 && $b2;
@@ -172,9 +172,9 @@ class Expr extends AbstractRule
 //                throw new LogicException("Opérateur imprévu : " . $this->operator);
 //        }
 //    }
-    
+
     /**
-     * 
+     *
      * @param array $a1
      * @param array $a2
      * @return array
@@ -185,7 +185,7 @@ class Expr extends AbstractRule
         if (null === $a2) {
             return $a1;
         }
-                
+
         switch ($this->operator) {
             case self::OPERATOR_AND:
                 return array_uintersect_assoc($a1, $a2, function ($a, $b) { return $a == $b ? 0 : -1; });

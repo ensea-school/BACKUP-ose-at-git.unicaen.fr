@@ -6,8 +6,6 @@ use Zend\Mvc\Controller\Plugin\Params;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Session\Container;
-use Application\Service\LocalContext;
-use Application\Service\GlobalContext;
 use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
 
@@ -18,10 +16,9 @@ use Common\Exception\RuntimeException;
  * @method mixed *FromQuery($name = null, $default = null) Description
  * @method mixed *FromPost($name = null, $default = null) Description
  * @method mixed *FromSession($name = null, $default = null) Description
- * @method mixed *FromContext($name = null, $default = null) Description
  * @method mixed *FromSources($name = null, $default = null, array $sources = null) Description
  * @method mixed *FromQueryPost($name = null, $default = null) Description
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see Params
  */
@@ -30,32 +27,17 @@ class Context extends Params implements ServiceLocatorAwareInterface
     use ServiceLocatorAwareTrait;
 
     /**
-     * @var ServiceLocatorInterface
-     */
-    protected $sl;
-    
-    /**
      * @var bool
      */
     protected $mandatory = false;
-    
-    /**
-     * @var GlobalContext
-     */
-    protected $globalContext;
-    
-    /**
-     * @var LocalContext
-     */
-    protected $localContext;
-    
+
     /**
      * @var Container
      */
     protected $sessionContainer;
-    
+
     /**
-     * 
+     *
      * @param bool $mandatory
      * @return Context
      */
@@ -80,7 +62,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
     {
         /* Récupération des paramètres */
         $argName = isset($arguments[0]) ? $arguments[0] : null;
-        $argSubNames = array();
+        $argSubNames = [];
         $argDefault = isset($arguments[1]) ? $arguments[1] : null;
         $argSources = isset($arguments[2]) ? $arguments[2] : null;
 
@@ -93,15 +75,11 @@ class Context extends Params implements ServiceLocatorAwareInterface
                 break;
             case ($method = 'FromSession') === substr($name, $length = -11):
                 break;
-            case ($method = 'FromGlobalContext') === substr($name, $length = -17):
-                break;
-            case ($method = 'FromLocalContext') === substr($name, $length = -16):
-                break;
             case ($method = 'FromSources') === substr($name, $length = -11):
                 break;
             case 'FromQueryPost' === substr($name, $length = -13):
                 $method = 'FromSources';
-                $argSources = array('query','post');
+                $argSources = ['query','post'];
                 break;
             default:
                 throw new LogicException("Méthode '$name' inexistante.");
@@ -124,7 +102,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
         if ('FromSources' === $method){
             $value = $this->fromSources($argName, $argDefault, $argSources);
         }else{
-            $value = call_user_func_array(array($this, lcfirst($method)), array($argName,$argDefault));
+            $value = call_user_func_array([$this, lcfirst($method)], [$argName,$argDefault]);
         }
 
         /* Parcours du tableau pour récupérer la valeur attendue */
@@ -142,9 +120,9 @@ class Context extends Params implements ServiceLocatorAwareInterface
         /* Cas particulier pour les intervenants : import implicite */
         if ('intervenant' === $target && (int)$value){
             $sourceCode = (string)(int)$value;
-            if (!($intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode))) {
-                $this->getServiceLocator()->getServiceLocator()->get('importProcessusImport')->intervenant($sourceCode); // Import
-                if (!($intervenant = $em->getRepository('Application\Entity\Db\Intervenant')->findOneBySourceCode($sourceCode))) {
+            if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
+                $this->getProcessusImport()->intervenant($sourceCode); // Import
+                if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
                     throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
                 }
             }
@@ -179,22 +157,22 @@ class Context extends Params implements ServiceLocatorAwareInterface
     }
 
     /**
-     * 
+     *
      * @param  string $name Parameter name to retrieve.
      * @param  mixed $default Default value to use when the requested parameter is not set.
      * @param array $sources
      * @return mixed
      */
-    public function fromSources($name, $default=null, array $sources=array())
+    public function fromSources($name, $default=null, array $sources=[])
     {
-        $defaultSources = array('context', 'route', 'query', 'post', 'session' );
+        $defaultSources = ['context', 'route', 'query', 'post', 'session' ];
         if (empty($sources)) $sources = $defaultSources;
 
         foreach( $sources as $source ){
             if (! in_array($source, $defaultSources)){
                 throw new LogicException("Source de données introuvable : '$source'.");
             }
-            $result = call_user_func_array(array($this, 'from'.lcfirst($source)), array($name, null));
+            $result = call_user_func_array([$this, 'from'.lcfirst($source)], [$name, null]);
             if ($result !== null) return $result;
         }
         return $default;
@@ -215,67 +193,7 @@ class Context extends Params implements ServiceLocatorAwareInterface
 
         return $this->getSessionContainer()->$name;
     }
-    
-    /**
-     * Return a single local context parameter.
-     *
-     * @param  string $name Parameter name to retrieve.
-     * @param  mixed $default Default value to use when the requested parameter is not set.
-     * @return mixed
-     */
-    public function fromLocalContext($name, $default = null)
-    {
-        try {
-            $value = $this->getLocalContext()->get($name);
-        }
-        catch (LogicException $exc) {
-            $value = $default;
-        }
 
-        return $value;
-    }
-    
-    /**
-     * Return a single global context parameter.
-     *
-     * @param  string $name Parameter name to retrieve.
-     * @param  mixed $default Default value to use when the requested parameter is not set.
-     * @return mixed
-     */
-    public function fromGlobalContext($name, $default = null)
-    {
-        try {
-            $value = $this->getGlobalContext()->get($name);
-        }
-        catch (LogicException $exc) {
-            $value = $default;
-        }
-
-        return $value;
-    }
-    
-    /**
-     * @return GlobalContext
-     */
-    public function getGlobalContext()
-    {
-        if (null === $this->globalContext) {
-            $this->globalContext = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider')->getGlobalContext();
-        }
-        return $this->globalContext;
-    }
-    
-    /**
-     * @return LocalContext
-     */
-    public function getLocalContext()
-    {
-        if (null === $this->localContext) {
-            $this->localContext = $this->getServiceLocator()->getServiceLocator()->get('ApplicationContextProvider')->getLocalContext();
-        }
-        return $this->localContext;
-    }
-    
     /**
      * @return Container
      */
@@ -285,5 +203,21 @@ class Context extends Params implements ServiceLocatorAwareInterface
             $this->sessionContainer = new Container(get_class($this->getController()));
         }
         return $this->sessionContainer;
+    }
+
+    /**
+     * @return \Application\Service\Intervenant
+     */
+    protected function getServiceIntervenant()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('applicationIntervenant');
+    }
+
+    /**
+     * @return \Import\Processus\Import
+     */
+    protected function getProcessusImport()
+    {
+        return $this->getServiceLocator()->getServiceLocator()->get('importProcessusImport');
     }
 }

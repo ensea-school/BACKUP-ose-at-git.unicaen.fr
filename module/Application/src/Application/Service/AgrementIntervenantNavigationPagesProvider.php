@@ -25,8 +25,13 @@ class AgrementIntervenantNavigationPagesProvider extends AgrementNavigationPages
         if (($intervenant = $e->getParam('intervenant'))) {
             return $intervenant;
         }
-        
-        return $this->getContextProvider()->getGlobalContext()->getIntervenant();
+
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface){
+            return $role->getIntervenant();
+        }
+
+        return null;
     }
     
     /**

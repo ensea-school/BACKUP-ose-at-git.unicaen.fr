@@ -7,16 +7,16 @@ class Module
 
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
+        return [
+            'Zend\Loader\ClassMapAutoloader' => [
                 __DIR__ . '/autoload_classmap.php',
-            ),
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+            ],
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     public function getConfig()
@@ -31,17 +31,17 @@ class Module
      */
     public function getServiceConfig()
     {
-        $services = array(
+        $services = [
             'Schema',
             'QueryGenerator',
             'Intervenant',
             'Differentiel',
-        );
-        $processus = array(
+        ];
+        $processus = [
             'Import',
-        );
-        $factories = array();
-        $invokables = array();
+        ];
+        $factories = [];
+        $invokables = [];
         foreach( $services as $service ){
             $factories['importService'.$service] = function($sm) use ($service){
                 $className = 'Import\\Service\\'.$service;
@@ -52,10 +52,10 @@ class Module
         foreach( $processus as $proc ){
             $invokables['importProcessus'.$proc] = 'Import\\Processus\\'.$proc;
         }
-        return array(
+        return [
             'factories' => $factories,
             'invokables' => $invokables,
-        );
+        ];
     }
 
     /**
@@ -65,11 +65,11 @@ class Module
      */
     public function getViewHelperConfig()
     {
-        return array(
-            'invokables' => array(
+        return [
+            'invokables' => [
                 'differentielListe' => 'Import\View\Helper\DifferentielListe',
                 'differentielLigne' => 'Import\View\Helper\DifferentielLigne\DifferentielLigne',
-            ),
-        );
+            ],
+        ];
     }
 }

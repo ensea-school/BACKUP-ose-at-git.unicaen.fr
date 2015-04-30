@@ -12,8 +12,8 @@
     <hr />
 <?php endif; ?>
 
-<?php echo $this->partial('application/contrat/partial/list', array(
+<?php echo $this->partial('application/contrat/partial/list', [
     'contrats'    => $contrats,
-    'services'    => $services, 
+    'services'    => $services,
     'intervenant' => $intervenant,
-    'role'        => $role));
+    'role'        => $role]);

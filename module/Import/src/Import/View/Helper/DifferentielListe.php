@@ -52,7 +52,7 @@ class DifferentielListe extends AbstractHelper
      *
      * @return string
      */
-    protected function render(){
+    public function render(){
         $aucunEcart = 'Il n\'y a aucun écart entre les sources de données et OSE';
         if (empty($this->lignes)) return $aucunEcart;
         $out = '';
@@ -95,14 +95,14 @@ class DifferentielListe extends AbstractHelper
     }
 
     /**
-     * 
+     *
      *
      * @param Ligne[]|Differentiel $lignes
      * @return DifferentielLigne
      */
     public function setLignes($lignes)
     {
-        $this->lignes = array();
+        $this->lignes = [];
         if( $lignes instanceof Differentiel ){
             while( $ligne = $lignes->fetchNext() ){
                 $this->addLigne($ligne);

@@ -71,14 +71,14 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         if (null === $this->form){
             $this->form = new \Zend\Form\Form;
             $this->form->add( new \Zend\Form\Element\Hidden('changements') );
-            $this->form->add(array(
+            $this->form->add([
                 'name' => 'submit',
                 'type'  => 'Submit',
-                'attributes' => array(
+                'attributes' => [
                     'value' => 'Effectuer la demande de paiement',
                     'class' => 'btn btn-primary sauvegarde',
-                ),
-            ));
+                ],
+            ]);
 
             $this->form->setAttribute('action', $this->getView()->url(null, [], [], true));
         }
@@ -339,7 +339,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     }
 
     /**
-     * 
+     *
      * @return ServiceAPayerInterface[]
      */
     function getServicesAPayer()

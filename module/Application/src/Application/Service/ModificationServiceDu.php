@@ -12,6 +12,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ModificationServiceDu extends AbstractEntityService
 {
+    use Traits\IntervenantAwareTrait;
+
 
     /**
      * retourne la classe des entités
@@ -44,11 +46,12 @@ class ModificationServiceDu extends AbstractEntityService
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $globalContext = $this->getContextProvider()->getGlobalContext();
+        $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
+        $this->getServiceIntervenant()->finderByAnnee( $this->getServiceContext()->getannee(), $qb );
 
-        $this->finderByAnnee( $globalContext->getannee(), $qb, $alias ); // Filtre d'année obligatoire
-        if ($globalContext->getIntervenant()){
-            $this->finderByIntervenant($globalContext->getIntervenant());
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface){
+            $this->finderByIntervenant($role->getIntervenant());
         }
 
         return $qb;

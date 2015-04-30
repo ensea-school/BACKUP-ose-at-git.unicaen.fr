@@ -16,38 +16,38 @@ use Zend\Validator\NotEmpty;
 class ServiceValidation extends Form implements InputFilterProviderInterface
 {
     use \Application\Traits\IntervenantAwareTrait;
-    
+
     public function init()
     {
         $this->setHydrator(new ClassMethods(false));
-        
+
         $this->setAttribute('method', 'POST');
-        $this->add(array(
+        $this->add([
             'name' => 'valide',
             'type'  => 'Checkbox',
-            'options' => array(
+            'options' => [
                 'label' => "Cochez pour valider",
                 'use_hidden_element' => false,
                 'checked_value' => 1,
                 'unchecked_value' => 0
-            ),
-            'attributes' => array(
-            ),
-        ));
-        
+            ],
+            'attributes' => [
+            ],
+        ]);
+
         $this->add(new Csrf('security'));
-        
-        $this->add(array(
+
+        $this->add([
             'name' => 'submit',
             'type'  => 'Submit',
-            'attributes' => array(
+            'attributes' => [
                 'value' => "Enregistrer",
-            ),
-        ));
+            ],
+        ]);
 
         return $this;
     }
-    
+
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -56,20 +56,20 @@ class ServiceValidation extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            'valide' => array(
+        return [
+            'valide' => [
                 'required' => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name' => 'NotEmpty',
-                        'options' => array(
-                            'messages' => array(
+                        'options' => [
+                            'messages' => [
                                 NotEmpty::IS_EMPTY => "Vous devez cocher la case pour valider",
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 }

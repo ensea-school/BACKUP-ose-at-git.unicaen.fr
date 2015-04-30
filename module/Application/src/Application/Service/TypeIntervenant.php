@@ -22,15 +22,15 @@ class TypeIntervenant extends AbstractEntityService
     {
         return 'Application\Entity\Db\TypeIntervenant';
     }
-    
+
     /**
      * Retourne le type d'intervenant Permanent
-     * 
+     *
      * @return TypeIntervenantEntity
      */
     public function getPermanent()
     {
-        return $this->getRepo()->findOneBy(array('code' => TypeIntervenantEntity::CODE_PERMANENT));
+        return $this->getRepo()->findOneBy(['code' => TypeIntervenantEntity::CODE_PERMANENT]);
     }
 
     /**
@@ -40,7 +40,7 @@ class TypeIntervenant extends AbstractEntityService
      */
     public function getExterieur()
     {
-        return $this->getRepo()->findOneBy(array('code' => TypeIntervenantEntity::CODE_EXTERIEUR));
+        return $this->getRepo()->findOneBy(['code' => TypeIntervenantEntity::CODE_EXTERIEUR]);
     }
 
     /**

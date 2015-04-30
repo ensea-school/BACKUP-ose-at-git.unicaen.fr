@@ -35,7 +35,7 @@ class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
     protected $entityManager;
 
 
-    
+
     /**
      * Echappe une chaîne de caractères pour convertir en SQL
      *
@@ -77,7 +77,7 @@ class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
         if     (null === $value)    $eq = ' IS ';
         elseif (is_array($value))   $eq = ' IN ';
         else                        $eq = ' = ';
-        
+
         return $eq.self::escape($value);
     }
 
@@ -93,7 +93,7 @@ class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
     protected function query( $sql, $params=null, $colRes=null )
     {
         $stmt = $this->getEntityManager()->getConnection()->executeQuery( $sql, $params );
-        $result = array();
+        $result = [];
         while($r = $stmt->fetch()){
             if (empty($colRes)) $result[] = $r; else $result[] = $r[$colRes];
         }

@@ -10,14 +10,14 @@ namespace Application\Entity\Db\Hydrator;
 class StatutIntervenantHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
 {
     /**
-     * 
+     *
      * @param array $statuts
      */
     public function __construct(array $statuts)
     {
         $this->setStatuts($statuts);
     }
-    
+
     /**
      * Hydrate $object with the provided $data.
      *
@@ -31,10 +31,10 @@ class StatutIntervenantHydrator implements \Zend\Stdlib\Hydrator\HydratorInterfa
             return null;
         }
         $statut = $this->getStatuts()[$data['id']];
-        
+
         return $statut;
     }
-    
+
     /**
      * Extract values from an object
      *
@@ -43,11 +43,11 @@ class StatutIntervenantHydrator implements \Zend\Stdlib\Hydrator\HydratorInterfa
      */
     public function extract($statut)
     {
-        return array('id' => $statut->getId());
+        return ['id' => $statut->getId()];
     }
-    
+
     private $statuts;
-    
+
     public function getStatuts()
     {
         return $this->statuts;

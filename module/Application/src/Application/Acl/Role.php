@@ -3,9 +3,7 @@
 namespace Application\Acl;
 
 use UnicaenAuth\Acl\NamedRole;
-use Application\Entity\Db\TypeRole;
-use Zend\Permissions\Acl\Resource;
-use Application\Entity\Db\Privilege;
+use Application\Entity\Db\Role as DbRole;
 
 /**
  * Rôle père de tous les rôles "administrateur".
@@ -14,15 +12,18 @@ use Application\Entity\Db\Privilege;
  */
 class Role extends NamedRole
 {
+    use \Application\Traits\StructureAwareTrait,
+        \Application\Traits\PersonnelAwareTrait,
+        \Application\Traits\IntervenantAwareTrait;
 
     const ROLE_ID = 'role';
 
     /**
-     * Type de rôle
+     * Rôle en BDD
      *
-     * @var TypeRole
+     * @var DbRole
      */
-    protected $typeRole;
+    protected $dbRole;
 
 
 
@@ -33,29 +34,16 @@ class Role extends NamedRole
 
     /**
      *
-     * @return TypeRole
+     * @return RoleEntity
      */
-    function getTypeRole()
+    public function getDbRole()
     {
-        return $this->typeRole;
+        return $this->dbRole;
     }
 
-    function setTypeRole(TypeRole $typeRole)
+    public function setDbRole(DbRole $dbRole)
     {
-        $this->typeRole = $typeRole;
+        $this->dbRole = $dbRole;
         return $this;
-    }
-
-    /**
-     *
-     * @param Resource|string $resource
-     * @param Privilege|string $privilege
-     */
-    function hasPrivilege( $resource, $privilege )
-    {
-        if ($typeRole = $this->getTypeRole()){
-            return $typeRole->hasPrivilege($resource, $privilege);
-        }
-        return false;
     }
 }

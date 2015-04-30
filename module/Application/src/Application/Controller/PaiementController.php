@@ -2,8 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
@@ -14,9 +12,17 @@ use Application\Entity\Paiement\MiseEnPaiementRecherche;
  * @method \Application\Controller\Plugin\Context     context()
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class PaiementController extends AbstractActionController implements ContextProviderAwareInterface
+class PaiementController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\IntervenantAwareTrait,
+        \Application\Service\Traits\ServiceAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait,
+        \Application\Service\Traits\PersonnelAwareTrait,
+        \Application\Service\Traits\PeriodeAwareTrait,
+        \Application\Service\Traits\MiseEnPaiementAwareTrait,
+        \Application\Service\Traits\ServiceAPayerAwareTrait
+    ;
 
     /**
      * Initialisation des filtres Doctrine pour les historique.
@@ -27,7 +33,7 @@ class PaiementController extends AbstractActionController implements ContextProv
     {
         $this->em()->getFilters()->enable('historique')->init(
             'Application\Entity\Db\MiseEnPaiement',
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -40,7 +46,6 @@ class PaiementController extends AbstractActionController implements ContextProv
     {
         $this->initFilters();
         $intervenant        = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant \Application\Entity\Db\Intervenant */
-        $annee              = $this->context()->getGlobalContext()->getAnnee();
         $saved = false;
         if ($this->getRequest()->isPost()) {
             $changements = $this->params()->fromPost('changements', '{}');
@@ -48,7 +53,7 @@ class PaiementController extends AbstractActionController implements ContextProv
             $this->getServiceMiseEnPaiement()->saveChangements($changements);
             $saved = true;
         }
-        $servicesAPayer     = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant, $annee);
+        $servicesAPayer     = $this->getServiceServiceAPayer()->getListByIntervenant($intervenant);
         return compact('intervenant', 'servicesAPayer', 'saved');
     }
 
@@ -64,7 +69,7 @@ class PaiementController extends AbstractActionController implements ContextProv
         $rechercheForm->bind($recherche);
 
         $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
-        $this->getServiceStructure()->finderByRole( $this->getContextProvider()->getSelectedIdentityRole(), $qb );
+        $this->getServiceStructure()->finderByRole( $this->getServiceContext()->getSelectedIdentityRole(), $qb );
         $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
         $structures = $this->getServiceStructure()->getList($qb);
         $rechercheForm->populateStructures( $structures );
@@ -123,7 +128,7 @@ class PaiementController extends AbstractActionController implements ContextProv
     public function misesEnPaiementCsvAction()
     {
         $this->initFilters();
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $recherche = new MiseEnPaiementRecherche;
         $options = [];
@@ -166,7 +171,7 @@ class PaiementController extends AbstractActionController implements ContextProv
         }
 
         $exp    ->setHeaderTitle($htmlTitle)
-                ->setHeaderSubtitle('Année universitaire '.$this->getContextProvider()->getGlobalContext()->getAnnee())
+                ->setHeaderSubtitle('Année universitaire '.$this->getServiceContext()->getAnnee())
                 ->setMarginBottom(25)
                 ->setMarginTop(25 + ($periode ? 5 : 0));
 
@@ -179,7 +184,7 @@ class PaiementController extends AbstractActionController implements ContextProv
 
     protected function etatPaiementCsv( MiseEnPaiementRecherche $recherche )
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $options = [];
         if ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()){
@@ -272,7 +277,7 @@ class PaiementController extends AbstractActionController implements ContextProv
             //$dateMiseEnPaiement = $form->get('date-mise-en-paiement')->getValue();
 
             $periode = $this->getServicePeriode()->get($periode); /* @var $periode \Application\Entity\Db\Periode */
-            $dateMiseEnPaiement = $periode->getDatePaiement($this->context()->getGlobalContext()->getAnnee()); // date forcée car plus de saisie possible!
+            $dateMiseEnPaiement = $periode->getDatePaiement($this->getServiceContext()->getAnnee()); // date forcée car plus de saisie possible!
             //$dateMiseEnPaiement = \DateTime::createFromFormat('d/m/Y', $dateMiseEnPaiement);
 
             $intervenants = $this->getServiceIntervenant()->get( explode(',',$intervenants) );
@@ -300,53 +305,5 @@ class PaiementController extends AbstractActionController implements ContextProv
     protected function getFormMiseEnPaiementRecherche()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('PaiementMiseEnPaiementRechercheForm');
-    }
-
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('applicationIntervenant');
-    }
-
-    /**
-     * @return \Application\Service\Personnel
-     */
-    protected function getServicePersonnel()
-    {
-        return $this->getServiceLocator()->get('applicationPersonnel');
-    }
-
-    /**
-     * @return \Application\Service\Periode
-     */
-    protected function getServicePeriode()
-    {
-        return $this->getServiceLocator()->get('applicationPeriode');
-    }
-
-    /**
-     * @return \Application\Service\Structure
-     */
-    protected function getServiceStructure()
-    {
-        return $this->getServiceLocator()->get('applicationStructure');
-    }
-
-    /**
-     * @return \Application\Service\MiseEnPaiement
-     */
-    protected function getServiceMiseEnPaiement()
-    {
-        return $this->getServiceLocator()->get('applicationMiseEnPaiement');
-    }
-
-    /**
-     * @return \Application\Service\ServiceAPayer
-     */
-    protected function getServiceServiceAPayer()
-    {
-        return $this->getServiceLocator()->get('applicationServiceAPayer');
     }
 }

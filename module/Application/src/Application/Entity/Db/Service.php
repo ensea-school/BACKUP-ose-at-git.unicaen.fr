@@ -44,16 +44,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     protected $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structureAff;
-
-    /**
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structureEns;
-
-    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoModificateur;
@@ -77,11 +67,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoCreateur;
-
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    protected $annee;
 
     /**
      * Type de volume horaire
@@ -251,9 +236,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
-        if ($intervenant && ! $this->getStructureAff()){
-            $this->setStructureAff( $intervenant->getStructure() );
-        }
         return $this;
     }
 
@@ -265,52 +247,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-    /**
-     * Set structureAff
-     *
-     * @param \Application\Entity\Db\Structure $structureAff
-     * @return Service
-     */
-    public function setStructureAff(\Application\Entity\Db\Structure $structureAff = null)
-    {
-        $this->structureAff = $structureAff;
-
-        return $this;
-    }
-
-    /**
-     * Get structureAff
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructureAff()
-    {
-        return $this->structureAff;
-    }
-
-    /**
-     * Set structureEns
-     *
-     * @param \Application\Entity\Db\Structure $structureEns
-     * @return Service
-     */
-    public function setStructureEns(\Application\Entity\Db\Structure $structureEns = null)
-    {
-        $this->structureEns = $structureEns;
-
-        return $this;
-    }
-
-    /**
-     * Get structureEns
-     *
-     * @return \Application\Entity\Db\Structure 
-     */
-    public function getStructureEns()
-    {
-        return $this->structureEns;
     }
 
     /**
@@ -381,8 +317,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
                     $vh->setRemove(true); // Flag de demande de suppression du volume horaire lors de l'enregistrement de l'entité Service par son service Service
                 }
             }
-
-            if (! $this->getStructureEns()) $this->setStructureEns( $elementPedagogique->getStructure() );
         }
         return $this;
     }
@@ -441,29 +375,6 @@ class Service implements HistoriqueAwareInterface, ResourceInterface
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return Service
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

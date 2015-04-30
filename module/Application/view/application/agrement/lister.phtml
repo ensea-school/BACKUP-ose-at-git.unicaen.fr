@@ -22,13 +22,13 @@
                 $structure   = $array['structure'];
                 $agrement    = $array['agrement'];
                 $params      = [
-                    'agrement'     => $agrement->getId(), 
-                    'structure'    => $structure ? $structure->getId() : null, 
+                    'agrement'     => $agrement->getId(),
+                    'structure'    => $structure ? $structure->getId() : null,
                     'typeAgrement' => $typeAgrement->getId(),
                 ];
-                $refreshUrl  = $agrement->getId() ? 
-                        $this->url('intervenant/agrement/voir', $params, array(), true) : 
-                        $this->url('intervenant/agrement/voir-str', $params, array(), true);
+                $refreshUrl  = $agrement->getId() ?
+                        $this->url('intervenant/agrement/voir', $params, [], true) :
+                        $this->url('intervenant/agrement/voir-str', $params, [], true);
                 ?>
                 <tr>
                     <td class="structure"><?php echo $structure ?></td>

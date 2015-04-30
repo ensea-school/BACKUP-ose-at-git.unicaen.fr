@@ -37,6 +37,7 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
     {
         $qb = parent::getQueryBuilder()
                 ->join("int.service", "s")
+                ->join("s.elementPedagogique", "ep")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
                 ->setParameter('tvh', $this->getTypeVolumeHoraire());
@@ -54,7 +55,7 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
         
         if ($this->getStructure()) {
             $qb
-                    ->andWhere("s.structureEns = :structure")
+                    ->andWhere("ep.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
         

@@ -8,10 +8,10 @@
 
 <?php else: ?>
 
-<?php echo $this->partial('application/contrat/partial/list', array(
-    'contrats'    => $contrats, 
-    'services'    => $services, 
-    'intervenant' => $intervenant)); ?>
+<?php echo $this->partial('application/contrat/partial/list', [
+    'contrats'    => $contrats,
+    'services'    => $services,
+    'intervenant' => $intervenant]); ?>
 
 <?php endif; ?>
 

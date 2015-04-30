@@ -2,12 +2,12 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
+use Application\Interfaces\AnneeAwareInterface;
 
 /**
  * Dotation
  */
-class Dotation implements HistoriqueAwareInterface
+class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
 {
     /**
      * @var \DateTime

@@ -35,7 +35,7 @@ class Dl extends AbstractDl
          * Identité
          */
 
-        $identite = array();
+        $identite = [];
 
         $identite[] = sprintf($tplDtdd,
             "Numéro :",
@@ -49,22 +49,17 @@ class Dl extends AbstractDl
 
         $identite[] = sprintf($tplDtdd,
             "Structure de l'intervenant :",
-            $this->entity->getStructureAff()->getLibelleCourt()
+            $this->entity->getIntervenant()->getStructure()->getLibelleCourt()
         );
 
         $identite[] = sprintf($tplDtdd,
             "Structure d'enseignement :",
-            $this->entity->getStructureEns()->getLibelleCourt()
+            $this->entity->getElementPedagogique() ? $this->entity->getElementPedagogique()->getStructure()->getLibelleCourt() : ''
         );
 
         $identite[] = sprintf($tplDtdd,
             "Enseignement :",
-            $this->entity->getElementPedagogique()->getLibelle()
-        );
-
-        $identite[] = sprintf($tplDtdd,
-            "Année :",
-            $this->entity->getAnnee()->getLibelle()
+            $this->entity->getElementPedagogique() ? $this->entity->getElementPedagogique()->getLibelle() : ''
         );
 
         $identite[] = sprintf($tplDtdd,
@@ -79,7 +74,7 @@ class Dl extends AbstractDl
          */
 
         $html .= '<h2>Volumes horaires</h2>';
-        $html .= $this->getView()->volumeHoraireListe( $this->entity->getVolumeHoraire(), array('service' => $this->entity) );
+        $html .= $this->getView()->volumeHoraireListe( $this->entity->getVolumeHoraire(), ['service' => $this->entity] );
 
         /**
          * Historique

@@ -12,6 +12,8 @@ use Application\Entity\Db\Etape as EtapeEntity;
  */
 class Etape extends AbstractEntityService
 {
+    use Traits\LocalContextAwareTrait;
+
 
     /**
      * retourne la classe des entités
@@ -123,9 +125,11 @@ class Etape extends AbstractEntityService
      */
     public function canAdd($runEx = false)
     {
-        $localContext = $this->getContextProvider()->getLocalContext();
-        $role         = $this->getServiceLocator()->get('ApplicationContextProvider')->getSelectedIdentityRole();
+        $localContext = $this->getServiceLocalContext();
+        
+        $role         = $this->getServiceContext()->getSelectedIdentityRole();
         /* @var $role \Application\Acl\DbRole */
+        
         if ($role instanceof \Application\Acl\AdministrateurRole) return true;
 
         if (!$localContext->getStructure()) {
@@ -187,7 +191,7 @@ class Etape extends AbstractEntityService
             $etape = $this->get($etape);
         }
 
-        $ir = $this->getContextProvider()->getSelectedIdentityRole();
+        $ir = $this->getServiceContext()->getSelectedIdentityRole();
         if ($ir instanceof \Application\Acl\ComposanteRole){
             if ($etape->getStructure() != $ir->getStructure()){
                 return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour éditer les modulateurs de cette structure', $runEx);
@@ -213,7 +217,7 @@ class Etape extends AbstractEntityService
             $etape = $this->get($etape);
         }
 
-        $ir = $this->getContextProvider()->getSelectedIdentityRole();
+        $ir = $this->getServiceContext()->getSelectedIdentityRole();
         if ($ir instanceof \Application\Acl\ComposanteRole){
             if ($etape->getStructure() != $ir->getStructure()){
                 return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour paramétrer les centres de coûts de cette structure', $runEx);

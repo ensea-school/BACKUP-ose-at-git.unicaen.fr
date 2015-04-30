@@ -17,51 +17,51 @@ class PeutSaisirDossierRule extends AbstractIntervenantRule
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_STATUT => "Le statut &laquo; %value% &raquo; n'autorise pas la saisie de données personnelles.",
-    );
-    
+    ];
+
     /**
      * Exécute la règle métier.
-     * 
+     *
      * @return array [ {id} => [ 'id' => {id} ] ]
      */
     public function execute()
     {
         $this->message(null);
-        
+
         $qb = $this->getQueryBuilder();
-        
+
         /**
          * Application de la règle à un intervenant précis
          */
         if ($this->getIntervenant()) {
             $result = $qb->getQuery()->getScalarResult();
-            
+
             if (!$result) {
                 $statut = $this->getIntervenant()->getStatut();
                 $this->message(self::MESSAGE_STATUT, $statut);
             }
-                
+
             return $this->normalizeResult($result);
         }
-        
+
         /**
          * Recherche des intervenants répondant à la règle
          */
-        
+
         $result = $qb->getQuery()->getScalarResult();
 
         return $this->normalizeResult($result);
     }
-    
+
     public function isRelevant()
     {
         return true;
     }
-    
+
     /**
-     * 
+     *
      * @return QueryBuilder
      */
     public function getQueryBuilder()
@@ -70,11 +70,11 @@ class PeutSaisirDossierRule extends AbstractIntervenantRule
                 ->select("i.id")
                 ->join("i.statut", "s")
                 ->andWhere("s.peutSaisirDossier = 1");
-        
+
         if ($this->getIntervenant()) {
             $qb->andWhere("i = " . $this->getIntervenant()->getId());
         }
-        
+
         return $qb;
     }
 }

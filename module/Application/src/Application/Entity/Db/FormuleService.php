@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FormuleService
  */
@@ -53,11 +51,6 @@ class FormuleService
      * @var \Application\Entity\Db\Intervenant
      */
     private $intervenant;
-
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
 
     /**
      * @var \Application\Entity\Db\FormuleIntervenant
@@ -203,16 +196,6 @@ class FormuleService
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

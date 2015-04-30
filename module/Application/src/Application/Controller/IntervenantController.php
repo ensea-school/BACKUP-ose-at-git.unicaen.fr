@@ -2,14 +2,9 @@
 
 namespace Application\Controller;
 
-use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
-use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantExterieur;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 
@@ -17,15 +12,17 @@ use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
  * Description of IntervenantController
  *
  * @method \Doctrine\ORM\EntityManager                em()
- * @method \Application\Controller\Plugin\Intervenant intervenant()
  * @method \Application\Controller\Plugin\Context     context()
- * 
+ *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IntervenantController extends AbstractActionController implements ContextProviderAwareInterface, WorkflowIntervenantAwareInterface
+class IntervenantController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
-    use ContextProviderAwareTrait;
-    use WorkflowIntervenantAwareTrait;
+    use WorkflowIntervenantAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\IntervenantAwareTrait,
+        \Application\Service\Traits\TypeHeuresAwareTrait
+    ;
 
     /**
      * @var Intervenant
@@ -33,13 +30,13 @@ class IntervenantController extends AbstractActionController implements ContextP
     private $intervenant;
 
     /**
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
         if ($role instanceof \Application\Acl\IntervenantRole) {
             // redirection selon le workflow
             $intervenant = $role->getIntervenant();
@@ -50,49 +47,49 @@ class IntervenantController extends AbstractActionController implements ContextP
             }
             return $this->redirect()->toUrl($url);
         }
-        
+
         return $this->redirect()->toRoute('intervenant/rechercher');
     }
-    
+
     public function rechercherAction()
     {
         $view = $this->choisirAction();
-        
+
         if ($this->intervenant) {
             $this->addIntervenantChoisiRecent($this->intervenant);
-            return $this->redirect()->toRoute('intervenant/fiche', array('intervenant' => $this->intervenant->getSourceCode()));
+            return $this->redirect()->toRoute('intervenant/fiche', ['intervenant' => $this->intervenant->getSourceCode()]);
         }
-        
+
         $view->setTemplate('application/intervenant/choisir');
 
         return $view;
     }
-    
+
     /**
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function choisirAction()
     {
         $intervenant = $this->context()->intervenantFromQuery();
-        
-        $url    = $this->url()->fromRoute('recherche', array('action' => 'intervenantFind'));
+
+        $url    = $this->url()->fromRoute('recherche', ['action' => 'intervenantFind']);
         $interv = new \UnicaenApp\Form\Element\SearchAndSelect('interv');
         $interv->setAutocompleteSource($url)
                 ->setRequired(true)
                 ->setSelectionRequired(true)
                 ->setLabel("Recherchez l'intervenant concerné :")
-                ->setAttributes(array('title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"));
+                ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
         if ($intervenant) {
             $f = new \Common\Filter\IntervenantTrouveFormatter();
             $interv->setValue($f->filter($intervenant));
         }
         $form = new \Zend\Form\Form('search');
-        $form->setAttributes(array(
+        $form->setAttributes([
             'action' => $this->getRequest()->getRequestUri(),
-            'class'  => 'intervenant-rech'));
+            'class'  => 'intervenant-rech']);
         $form->add($interv);
-        
+
         if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
@@ -110,11 +107,11 @@ class IntervenantController extends AbstractActionController implements ContextP
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel
                 ->setTemplate('application/intervenant/choisir')
-                ->setVariables(array(
-                    'form'    => $form, 
+                ->setVariables([
+                    'form'    => $form,
                     'title'   => "Rechercher un intervenant",
-                    'recents' => $this->getIntervenantsChoisisRecents()));
-        
+                    'recents' => $this->getIntervenantsChoisisRecents()]);
+
         return $viewModel;
     }
 
@@ -123,19 +120,18 @@ class IntervenantController extends AbstractActionController implements ContextP
         if (!($sourceCode = $this->params()->fromQuery('sourceCode', $this->params()->fromPost('sourceCode')))) {
             throw new LogicException("Aucun code source d'intervenant spécifié.");
         }
-        
-        $intervenant = $this->getServiceLocator()->get('ApplicationIntervenant')->importer($sourceCode);
-        
+
+        $intervenant = $this->getServiceIntervenant()->importer($sourceCode);
+
         $view = new \Zend\View\Model\ViewModel();
-        $view->setVariables(array('intervenant' => $intervenant));
+        $view->setVariables(['intervenant' => $intervenant]);
         return $view;
     }
 
     public function voirAction()
     {
-         //       \Test\Util::sqlLog($this->em());
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
-        
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
         $this->em()->getFilters()->enable('historique');
 
         if ($role instanceof \Application\Acl\IntervenantRole) {
@@ -151,7 +147,7 @@ class IntervenantController extends AbstractActionController implements ContextP
 
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(compact('intervenant', 'changements', 'short', 'page', 'role'));
-        
+
         return $view;
     }
 
@@ -176,7 +172,6 @@ class IntervenantController extends AbstractActionController implements ContextP
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         $form = $this->getFormHeuresComp();
-        $annee = $this->context()->getGlobalContext()->getAnnee();
 
         $typeVolumeHoraire = $this->context()->typeVolumeHoraireFromQuery('type-volume-horaire', $form->get('type-volume-horaire')->getValue());
         /* @var $typeVolumeHoraire \Application\Entity\Db\TypeVolumeHoraire */
@@ -200,7 +195,7 @@ class IntervenantController extends AbstractActionController implements ContextP
         $data = [
             'structure-affectation'         => $intervenant->getStructure(),
             'heures-service-statutaire'     => $intervenant->getStatut()->getServiceStatutaire(),
-            'heures-modification-service'   => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie($annee)->getHeures(),
+            'heures-modification-service'   => $intervenant->getFormuleIntervenant()->getUniqueFormuleServiceModifie()->getHeures(),
             'services'                      => [],
             'referentiel'                   => [],
             'types-intervention'            => [],
@@ -210,7 +205,7 @@ class IntervenantController extends AbstractActionController implements ContextP
             'th-compl'                      => [],
         ];
 
-        $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel($annee);
+        $referentiels = $intervenant->getFormuleIntervenant()->getFormuleServiceReferentiel();
         foreach( $referentiels as $referentiel ){
             /* @var $referentiel \Application\Entity\Db\FormuleServiceReferentiel */
 
@@ -228,7 +223,7 @@ class IntervenantController extends AbstractActionController implements ContextP
             $data['referentiel'][$referentiel->getStructure()->getId()]['hetd-compl'] += $frr ? $frr->getHeuresComplReferentiel() : 0;
         }
 
-        $services = $intervenant->getFormuleIntervenant()->getFormuleService($annee);
+        $services = $intervenant->getFormuleIntervenant()->getFormuleService();
         foreach( $services as $service ){
             $dsId = $service->getId();
             $ds = [];
@@ -258,7 +253,7 @@ class IntervenantController extends AbstractActionController implements ContextP
                 $ds = [
                     'element-etablissement'         => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique() : $service->getService()->getEtablissement(),
                     'taux'                          => [],
-                    'structure'                     => $service->getService()->getStructureEns() ? $service->getService()->getStructureEns() : $service->getService()->getStructureAff(),
+                    'structure'                     => $service->getService()->getElementPedagogique() ? $service->getService()->getElementPedagogique()->getStructure() : $service->getService()->getIntervenant()->getStructure(),
                     'ponderation-service-compl'     => $service->getPonderationServiceCompl(),
                     'heures'                        => [],
                     'hetd'                          => [
@@ -317,22 +312,21 @@ class IntervenantController extends AbstractActionController implements ContextP
         usort($data['th-taux'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
         usort($data['th-service'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
         usort($data['th-compl'], function($ti1,$ti2){ return $ti1->getOrdre() > $ti2->getOrdre(); });
-        return compact('annee', 'form', 'intervenant', 'typeVolumeHoraire', 'etatVolumeHoraire', 'data');
+        return compact('form', 'intervenant', 'typeVolumeHoraire', 'etatVolumeHoraire', 'data');
     }
 
     public function formuleTotauxHetdAction()
     {
         $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant Intervenant */
-        $annee = $this->context()->getGlobalContext()->getAnnee();
         $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
         $etatVolumeHoraire = $this->getEvent()->getParam('etatVolumeHoraire');
-        $formuleResultat = $intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+        $formuleResultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
         return compact('formuleResultat');
     }
 
     public function feuilleDeRouteAction()
     {
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
@@ -344,32 +338,24 @@ class IntervenantController extends AbstractActionController implements ContextP
         if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
             throw new \Common\Exception\MessageException("Pas encore implémenté pour IntervenantPermanent");
         }
-        
+
         $title = sprintf("Feuille de route <small>%s</small>", $intervenant);
-        
+
         $wf = $this->getWorkflowIntervenant()->setIntervenant($intervenant); /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
         $wf->init();
-        
+
         $view = new \Zend\View\Model\ViewModel();
         $view->setVariables(compact('intervenant', 'title', 'wf', 'role'));
-        
+
         if ($wf->getCurrentStep()) {
 //            var_dump($wf->getStepUrl($wf->getCurrentStep()));
         }
-        
+
         return $view;
     }
-    
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getIntervenantService()
-    {
-        return $this->getServiceLocator()->get('ApplicationIntervenant');
-    }
-    
+
     private $intervenantsChoisisRecentsSessionContainer;
-    
+
     /**
      * @return \Zend\Session\Container
      */
@@ -382,9 +368,9 @@ class IntervenantController extends AbstractActionController implements ContextP
         }
         return $this->intervenantsChoisisRecentsSessionContainer;
     }
-    
+
     /**
-     * 
+     *
      * @param bool $clear
      * @return array
      */
@@ -395,13 +381,13 @@ class IntervenantController extends AbstractActionController implements ContextP
             unset($container->intervenants);
         }
         if (!isset($container->intervenants)) {
-            $container->intervenants = array();
+            $container->intervenants = [];
         }
         return $container->intervenants;
     }
-    
+
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Intervenant $intervenant
      * @return \Application\Controller\IntervenantController
      */
@@ -409,17 +395,17 @@ class IntervenantController extends AbstractActionController implements ContextP
     {
         $container    = $this->getIntervenantsChoisisRecentsSessionContainer();
         $intervenants = (array) $container->intervenants;
-        
+
         if (!array_key_exists($intervenant->getId(), $intervenants)) {
-            $intervenants["" . $intervenant] = array(
+            $intervenants["" . $intervenant] = [
                 'id'         => $intervenant->getId(),
                 'sourceCode' => $intervenant->getSourceCode(),
                 'nom'        => "" . $intervenant,
-            );
+            ];
             ksort($intervenants);
         }
         $container->intervenants = $intervenants;
-        
+
         return $this;
     }
 
@@ -430,21 +416,5 @@ class IntervenantController extends AbstractActionController implements ContextP
     protected function getFormHeuresComp()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('IntervenantHeuresCompForm');
-    }
-
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('applicationIntervenant');
-    }
-
-    /**
-     * @return \Application\Service\TypeHeures
-     */
-    protected function getServiceTypeHeures()
-    {
-        return $this->getServiceLocator()->get('applicationTypeHeures');
     }
 }

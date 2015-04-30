@@ -8,7 +8,7 @@ use Common\Exception\LogicException;
 use Application\Exception\DbException;
 
 /**
- * 
+ *
  *
  * @method \Doctrine\ORM\EntityManager em() Description
  * @method \Application\Controller\Plugin\Context context()
@@ -16,13 +16,10 @@ use Application\Exception\DbException;
  */
 class VolumeHoraireReferentielController extends AbstractActionController
 {
-    /**
-     * @return \Application\Service\VolumeHoraireReferentiel
-     */
-    public function getServiceVolumeHoraireReferentiel()
-    {
-        return $this->getServiceLocator()->get('ApplicationVolumeHoraireReferentiel');
-    }
+    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
+    use \Application\Service\Traits\ServiceReferentielAwareTrait;
+
 
     public function voirAction()
     {
@@ -42,7 +39,7 @@ class VolumeHoraireReferentielController extends AbstractActionController
             [
                 'Application\Entity\Db\VolumeHoraireReferentiel'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
         $service = $this->context()->serviceReferentielFromRoute('id');
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
@@ -60,18 +57,18 @@ class VolumeHoraireReferentielController extends AbstractActionController
             [
                 'Application\Entity\Db\VolumeHoraireReferentiel'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
         $service           = $this->context()->serviceReferentielFromRoute(); /* @var $service \Application\Entity\Db\ServiceReferentiel */
         $typeVolumehoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
-        $errors = array();
+        $errors = [];
 
         /* @var $service \Application\Entity\Db\Service */
         $service->setTypeVolumeHoraire( $typeVolumehoraire );
         $volumeHoraireList = $service->getVolumeHoraireReferentielListe();
 
         $form = $this->getForm();
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
         $form->get('type-volume-horaire')->setValue($typeVolumehoraire->getId());
 
         $request = $this->getRequest();
@@ -110,7 +107,7 @@ class VolumeHoraireReferentielController extends AbstractActionController
 
     /**
      * Retourne le formulaire de modif de Volume Horaire.
-     * 
+     *
      * @return \Application\Form\VolumeHoraireReferentiel\Saisie
      */
     protected function getForm()
@@ -118,11 +115,4 @@ class VolumeHoraireReferentielController extends AbstractActionController
         return $this->getServiceLocator()->get('FormElementManager')->get('VolumeHoraireReferentielSaisie');
     }
 
-    /**
-     * @return \Application\Service\ServiceReferentiel
-     */
-    protected function getServiceServiceReferentiel()
-    {
-        return $this->getServiceLocator()->get('applicationServiceReferentiel');
-    }
 }

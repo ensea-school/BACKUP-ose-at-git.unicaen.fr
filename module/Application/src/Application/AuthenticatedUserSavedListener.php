@@ -17,32 +17,32 @@ use Application\Service\Initializer\IntervenantServiceAwareTrait;
 class AuthenticatedUserSavedListener extends AbstractListener implements IntervenantServiceAwareInterface
 {
     use IntervenantServiceAwareTrait;
-    
+
     /**
      * Renseigne les relations 'intervenant' et 'personnel' avant que l'objet soit persisté.
-     * 
+     *
      * @param UserAuthenticatedEvent $e
      */
     public function onUserAuthenticatedPrePersist(UserAuthenticatedEvent $e)
     {
         $user       = $e->getDbUser();   /* @var $user       \ZfcUser\Entity\UserInterface */
         $ldapPeople = $e->getLdapUser(); /* @var $ldapPeople \UnicaenApp\Entity\Ldap\People */
-        
+
         if ($user instanceof Utilisateur) {
-            
+
             $noIndividu = (integer) $ldapPeople->getSupannEmpId(); // pour virer les 0 de tête
-            
+
             $repo = $this->getEntityManager()->getRepository('Application\Entity\Db\Personnel');
-            $personnel = $repo->findOneBy(array('sourceCode' => $noIndividu));
-            
+            $personnel = $repo->findOneBy(['sourceCode' => $noIndividu]);
+
             $repo = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant');
-            $intervenant = $repo->findOneBy(array('sourceCode' => $noIndividu));
-//            
+            $intervenant = $repo->findOneBy(['sourceCode' => $noIndividu]);
+//
             if (!$intervenant) {
                 // import de l'intervenant
                 $intervenant = $this->getIntervenantService()->importer($noIndividu);
             }
-            
+
             $user
                     ->setPersonnel($personnel)
                     ->setIntervenant($intervenant);

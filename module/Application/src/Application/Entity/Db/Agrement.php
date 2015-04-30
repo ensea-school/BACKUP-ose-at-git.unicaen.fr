@@ -70,11 +70,6 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     private $structure;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    protected $annee;
-
-    /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
@@ -335,29 +330,6 @@ class Agrement implements HistoriqueAwareInterface, ResourceInterface
     public function getStructure()
     {
         return $this->structure;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return Service
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

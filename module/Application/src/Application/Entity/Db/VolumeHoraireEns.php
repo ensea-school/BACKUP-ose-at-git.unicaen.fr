@@ -65,11 +65,6 @@ class VolumeHoraireEns
     protected $typeIntervention;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    protected $annee;
-
-    /**
      * @var \Application\Entity\Db\ElementDiscipline
      */
     protected $elementDiscipline;
@@ -313,29 +308,6 @@ class VolumeHoraireEns
     public function getTypeIntervention()
     {
         return $this->typeIntervention;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return VolumeHoraireEns
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
     /**

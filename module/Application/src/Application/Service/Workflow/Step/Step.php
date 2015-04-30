@@ -15,19 +15,19 @@ abstract class Step
 {
     /**
      * Retourne cette étape dans un format lisible.
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         return $this->getLabel() . "[{$this->getKey()}]";
     }
-    
+
     /**
      * @var integer
      */
     private $index;
-    
+
     /**
      * @return integer
      */
@@ -45,12 +45,12 @@ abstract class Step
         $this->index = $index;
         return $this;
     }
-    
+
     /**
      * @var string
      */
     private $key;
-    
+
     /**
      * @return string
      */
@@ -68,12 +68,12 @@ abstract class Step
         $this->key = $key;
         return $this;
     }
-    
+
     /**
      * @var array
      */
     private $labels;
-    
+
     /**
      * @return array
      */
@@ -81,9 +81,9 @@ abstract class Step
     {
         return $this->labels;
     }
-    
+
     /**
-     * 
+     *
      * @param \Zend\Permissions\Acl\Role\RoleInterface $role
      * @return string
      * @throws LogicException
@@ -91,27 +91,27 @@ abstract class Step
     public function getLabel(RoleInterface $role = null)
     {
         $key = null;
-        
+
         if ($role) {
             $key = $role->getRoleId();
             if ($role instanceof ComposanteRole) {
                 $key = ComposanteRole::ROLE_ID;
             }
         }
-        
+
         if (!$key || !isset($this->labels[$key])) {
             $key = 'default';
         }
-        
+
         if (!isset($this->labels[$key])) {
             throw new LogicException("Aucun label n'a été spécifié pour l'étape '" . get_class() . "' et la clé '$key'.");
         }
-            
+
         return $this->labels[$key];
     }
-    
+
     /**
-     * 
+     *
      * @param string $label
      * @param string $key
      * @return self
@@ -121,9 +121,9 @@ abstract class Step
         if (!$key) {
             $key = 'default';
         }
-            
+
         $this->labels[$key] = $label;
-            
+
         return $this;
     }
 
@@ -136,12 +136,12 @@ abstract class Step
         $this->labels = $labels;
         return $this;
     }
-    
+
     /**
      * @var string[]
      */
     private $descriptions;
-    
+
     public function getDescriptions()
     {
         return <<<EOS
@@ -157,7 +157,7 @@ EOS;
         $this->descriptions = $descriptions;
         return $this;
     }
-    
+
     public function getDescription(RoleInterface $role)
     {
         $roleId = $role->getRoleId();
@@ -170,12 +170,12 @@ EOS;
         }
         return $this->descriptions[$roleId];
     }
-    
+
     /**
      * @var string
      */
     private $route;
-    
+
     public function getRoute()
     {
         return $this->route;
@@ -186,12 +186,12 @@ EOS;
         $this->route = $route;
         return $this;
     }
-    
+
     /**
      * @var array
      */
-    private $routeParams = array();
-    
+    private $routeParams = [];
+
     public function getRouteParams()
     {
         return $this->routeParams;
@@ -202,12 +202,12 @@ EOS;
         $this->routeParams = $routeParams;
         return $this;
     }
-    
+
     /**
      * @var bool
      */
     private $done = false;
-    
+
     public function getDone()
     {
         return $this->done;
@@ -218,12 +218,12 @@ EOS;
         $this->done = $done;
         return $this;
     }
-    
+
     /**
      * @var bool
      */
     private $isCurrent = false;
-    
+
     public function getIsCurrent()
     {
         return $this->isCurrent;
@@ -234,12 +234,12 @@ EOS;
         $this->isCurrent = $isCurrent;
         return $this;
     }
-    
+
     /**
      * @var bool
      */
     private $crossable = null;
-    
+
     public function getCrossable()
     {
         return $this->crossable;
@@ -250,12 +250,12 @@ EOS;
         $this->crossable = $crossable;
         return $this;
     }
-    
+
     /**
      * @var bool
      */
     private $visible = false;
-    
+
     public function getVisible()
     {
         return $this->visible;
@@ -266,12 +266,12 @@ EOS;
         $this->visible = $visible;
         return $this;
     }
-    
+
     /**
      * @var \Application\Entity\Db\WfEtape
      */
     private $wfEtape = false;
-    
+
     public function getWfEtape()
     {
         return $this->wfEtape;

@@ -6,8 +6,6 @@ use Zend\View\Helper\AbstractHelper;
 use Application\Entity\VolumeHoraireListe;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Entity\Db\TypeIntervention;
 
 
@@ -16,10 +14,9 @@ use Application\Entity\Db\TypeIntervention;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
 
     /**
      * @var VolumeHoraireListe

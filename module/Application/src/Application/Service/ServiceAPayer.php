@@ -3,7 +3,6 @@
 namespace Application\Service;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\Annee as AnneeEntity;
 use Application\Entity\Db\ServiceAPayerInterface;
 
 
@@ -18,16 +17,15 @@ class ServiceAPayer extends AbstractService
     /**
      *
      * @param IntervenantEntity $intervenant
-     * @param AnneeEntity $annee
      * @return ServiceAPayerInterface[]
      */
-    public function getListByIntervenant( IntervenantEntity $intervenant, AnneeEntity $annee )
+    public function getListByIntervenant( IntervenantEntity $intervenant )
     {
         $typeVolumeHoraire  = $this->getServiceTypeVolumeHoraire()->getRealise();
         $etatVolumeHoraire  = $this->getServiceEtatVolumeHoraire()->getValide();
 
         $frsList = $intervenant
-                        ->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire)
+                        ->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire)
                         ->getFormuleResultatService()->filter(
         function( \Application\Entity\Db\FormuleResultatService $formuleResultatService ){
             $totalHC = $formuleResultatService->getHeuresComplFi()
@@ -38,7 +36,7 @@ class ServiceAPayer extends AbstractService
         });
 
         $frsrList = $intervenant
-                        ->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire)
+                        ->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire)
                         ->getFormuleResultatServiceReferentiel()->filter(
         function( \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel ){
             $totalHC = $formuleResultatServiceReferentiel->getHeuresComplReferentiel();

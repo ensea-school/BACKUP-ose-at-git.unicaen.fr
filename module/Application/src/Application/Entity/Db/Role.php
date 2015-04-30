@@ -2,40 +2,18 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Role\RoleInterface;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
+
 /**
  * Role
  */
-class Role implements HistoriqueAwareInterface
+class Role implements HistoriqueAwareInterface, RoleInterface
 {
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
-
-    /**
-     * @var string
-     */
-    protected $sourceCode;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
+    use HistoriqueAwareTrait;
+ 
+    const CODE_RESPONSABLE_COMPOSANTE  = 'responsable-composante';
+    const CODE_GESTIONNAIRE_COMPOSANTE = 'gestionnaire-composante';
 
     /**
      * @var integer
@@ -43,177 +21,127 @@ class Role implements HistoriqueAwareInterface
     protected $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
+     * @var string
      */
-    protected $structure;
+    protected $code;
 
     /**
-     * @var \Application\Entity\Db\TypeRole
+     * @var string
      */
-    protected $type;
+    protected $libelle;
 
     /**
-     * @var \Application\Entity\Db\Source
+     * @var Perimetre
      */
-    protected $source;
-
-    /**
-     * @var \Application\Entity\Db\Personnel
-     */
-    protected $personnel;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
+    protected $perimetre;
 
 
     /**
-     * Set histoCreation
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $affectation;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $privilege;
+
+    /**
      *
-     * @param \DateTime $histoCreation
-     * @return Role
      */
-    public function setHistoCreation($histoCreation)
+    public function __construct()
     {
-        $this->histoCreation = $histoCreation;
+        $this->affectation = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->privilege = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Returns the string identifier of the Role
+     *
+     * @return string
+     */
+    public function getRoleId()
+    {
+        return $this->getCode();
+    }
+    
+    /**
+     * Retourne la représentation littérale de cet objet.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return self
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return Role
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Role
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
-
-    /**
-     * Set sourceCode
-     *
-     * @param string $sourceCode
-     * @return Role
-     */
-    public function setSourceCode($sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-
-        return $this;
-    }
-
-    /**
-     * Get sourceCode
+     * Get code
      *
      * @return string 
      */
-    public function getSourceCode()
+    public function getCode()
     {
-        return $this->sourceCode;
+        return $this->code;
     }
 
     /**
-     * Set validiteDebut
+     * Set libelle
      *
-     * @param \DateTime $validiteDebut
-     * @return Role
+     * @param string $libelle
+     * @return self
      */
-    public function setValiditeDebut($validiteDebut)
+    public function setLibelle($libelle)
     {
-        $this->validiteDebut = $validiteDebut;
+        $this->libelle = $libelle;
 
         return $this;
     }
 
     /**
-     * Get validiteDebut
+     * Get libelle
      *
-     * @return \DateTime 
+     * @return string 
      */
-    public function getValiditeDebut()
+    public function getLibelle()
     {
-        return $this->validiteDebut;
+        return $this->libelle;
     }
 
     /**
-     * Set validiteFin
+     * Set perimetre
      *
-     * @param \DateTime $validiteFin
-     * @return Role
+     * @param Perimetre $perimetre
+     * @return self
      */
-    public function setValiditeFin($validiteFin)
+    public function setPerimetre($perimetre)
     {
-        $this->validiteFin = $validiteFin;
+        $this->perimetre = $perimetre;
 
         return $this;
     }
 
     /**
-     * Get validiteFin
+     * Get perimetre
      *
-     * @return \DateTime 
+     * @return Perimetre
      */
-    public function getValiditeFin()
+    public function getPerimetre()
     {
-        return $this->validiteFin;
+        return $this->perimetre;
     }
 
     /**
@@ -227,163 +155,68 @@ class Role implements HistoriqueAwareInterface
     }
 
     /**
-     * Set structure
+     * Add affectation
      *
-     * @param \Application\Entity\Db\Structure $structure
-     * @return Role
+     * @param \Application\Entity\Db\Affectation $affectation
+     * @return self
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function addAffectation(\Application\Entity\Db\Affectation $affectation)
     {
-        $this->structure = $structure;
+        $this->affectation[] = $affectation;
 
         return $this;
     }
 
     /**
-     * Get structure
+     * Remove affectation
      *
-     * @return \Application\Entity\Db\Structure 
+     * @param \Application\Entity\Db\Affectation $affectation
      */
-    public function getStructure()
+    public function removeAffectation(\Application\Entity\Db\Affectation $affectation)
     {
-        return $this->structure;
+        $this->affectation->removeElement($affectation);
     }
 
     /**
-     * Set type
+     * Get affectation
      *
-     * @param \Application\Entity\Db\TypeRole $type
-     * @return Role
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setType(\Application\Entity\Db\TypeRole $type = null)
+    public function getAffectation()
     {
-        $this->type = $type;
+        return $this->affectation;
+    }
+
+    /**
+     * Add privilege
+     *
+     * @param \Application\Entity\Db\Privilege $privilege
+     * @return self
+     */
+    public function addPrivilege(\Application\Entity\Db\Privilege $privilege)
+    {
+        $this->privilege[] = $privilege;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Remove privilege
      *
-     * @return \Application\Entity\Db\TypeRole 
+     * @param \Application\Entity\Db\Privilege $privilege
      */
-    public function getType()
+    public function removePrivilege(\Application\Entity\Db\Privilege $privilege)
     {
-        return $this->type;
+        $this->privilege->removeElement($privilege);
     }
 
     /**
-     * Set source
+     * Get privilege
      *
-     * @param \Application\Entity\Db\Source $source
-     * @return Role
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setSource(\Application\Entity\Db\Source $source = null)
+    public function getPrivilege()
     {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source 
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
-     * Set personnel
-     *
-     * @param \Application\Entity\Db\Personnel $personnel
-     * @return Role
-     */
-    public function setPersonnel(\Application\Entity\Db\Personnel $personnel = null)
-    {
-        $this->personnel = $personnel;
-
-        return $this;
-    }
-
-    /**
-     * Get personnel
-     *
-     * @return \Application\Entity\Db\Personnel 
-     */
-    public function getPersonnel()
-    {
-        return $this->personnel;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Role
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Role
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Role
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
+        return $this->privilege;
     }
 }

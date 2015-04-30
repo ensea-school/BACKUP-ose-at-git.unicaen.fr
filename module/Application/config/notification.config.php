@@ -21,108 +21,108 @@ use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'notification' => array(
+return [
+    'router' => [
+        'routes' => [
+            'notification' => [
                 'type'    => 'Literal',
-                'options' => array(
+                'options' => [
                     'route'    => '/notification',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Notification',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => false,
-                'child_routes' => array(
-                    'indicateurs' => array(
+                'child_routes' => [
+                    'indicateurs' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/indicateurs',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'indicateurs',
-                            ),
-                        ),
-                    ),
-                    'indicateur-fetch-title' => array(
+                            ],
+                        ],
+                    ],
+                    'indicateur-fetch-title' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/indicateur-fetch-title',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'indicateur-fetch-title',
-                            ),
-                        ),
-                    ),
-                    'indicateur-intervenants' => array(
+                            ],
+                        ],
+                    ],
+                    'indicateur-intervenants' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/indicateur-intervenants/:indicateur',
-                            'constraints' => array(
+                            'constraints' => [
                                 'indicateur' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'indicateur-intervenants',
-                            ),
-                        ),
-                    ),
-                    'notifier-indicateurs' => array(
+                            ],
+                        ],
+                    ],
+                    'notifier-indicateurs' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/notifier-indicateurs',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'notifier-indicateurs',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'console' => array(
-        'router' => array(
-            'routes' => array(
-                'notifier-indicateurs' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'console' => [
+        'router' => [
+            'routes' => [
+                'notifier-indicateurs' => [
                     'type'    => 'Simple',
-                    'options' => array(
+                    'options' => [
                         'route'    => 'notifier indicateurs [--force] --requestUriHost= [--requestUriScheme=]',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Notification',
                             'action'     => 'notifier-indicateurs'
-                        )
-                    )
-                )
-            )
-        )
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Notification',
-                    'action'     => array('indicateurs', 'indicateur-fetch-title'),
-                    'roles'      => array(AdministrateurRole::ROLE_ID),
-                ),
-                array(
+                    'action'     => ['indicateurs', 'indicateur-fetch-title'],
+                    'roles'      => [AdministrateurRole::ROLE_ID],
+                ],
+                [
                     'controller' => 'Application\Controller\Notification',
-                    'action'     => array('indicateur-intervenants'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                ),
-                array(
+                    'action'     => ['indicateur-intervenants'],
+                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+                [
                     'controller' => 'Application\Controller\Notification',
-                    'action'     => array('notifier-indicateurs'),
-                    'roles'      => array(),
-                ),
-            ),
-        ),
+                    'action'     => ['notifier-indicateurs'],
+                    'roles'      => [],
+                ],
+            ],
+        ],
 //        'resource_providers' => array(
 //            'BjyAuthorize\Provider\Resource\Config' => array(
 //                'Intervenant' => [],
@@ -140,30 +140,30 @@ return array(
 //                ),
 //            ),
 //        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Notification' => 'Application\Controller\NotificationController',
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
-        ),
-        'factories' => array(
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
-        ),
-        'initializers' => array(
-        ),
-    ),
-    'form_elements' => array(
-        'invokables' => array(
-        ),
-    ),
-);
+        ],
+        'initializers' => [
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
+        ],
+        'factories' => [
+        ],
+        'initializers' => [
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
+        ],
+        'initializers' => [
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
+        ],
+    ],
+];

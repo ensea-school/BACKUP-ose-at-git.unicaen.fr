@@ -29,11 +29,14 @@
     <field name="fi" type="boolean" column="FI" nullable="false"/>
     <field name="fc" type="boolean" column="FC" nullable="false"/>
     <field name="fa" type="boolean" column="FA" nullable="false"/>
-    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
-    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
       <join-columns>
         <join-column name="SOURCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
+      <join-columns>
+        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <!-- NB: inversed-by ajouté à la main -->

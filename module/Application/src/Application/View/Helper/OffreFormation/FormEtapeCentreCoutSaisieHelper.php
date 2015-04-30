@@ -7,8 +7,6 @@ use Application\Entity\Db\ElementPedagogique;
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Zend\Form\Element\Select;
 
 /**
@@ -17,10 +15,11 @@ use Zend\Form\Element\Select;
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see EtapeCentreCoutSaisieForm
  */
-class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ElementPedagogiqueAwareTrait
+    ;
 
     /**
      * @var EtapeCentreCoutSaisieForm
@@ -49,10 +48,7 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
      */
     public function render(EtapeCentreCoutSaisieForm $form)
     {
-        $sel = $this->getServiceLocator()->getServiceLocator()->get('applicationElementPedagogique');
-        /* @var $sel \Application\Service\ElementPedagogique */
-
-        $elements    = $sel->getList($sel->finderByEtape($form->getEtape())); /* @var $elements ElementPedagogique[] */
+        $elements    = $this->getServiceElementPedagogique()->getList($this->getServiceElementPedagogique()->finderByEtape($form->getEtape())); /* @var $elements ElementPedagogique[] */
         $typesHeures = $form->getTypesHeures();
 
         if (empty($elements)) {

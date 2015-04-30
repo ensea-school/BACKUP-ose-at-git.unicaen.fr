@@ -16,7 +16,7 @@ return [
                         'action' => 'index',
                     ],
                 ],
-               'child_routes' => [
+                'child_routes' => [
                     'etat-demande-paiement' => [
                         'type'    => 'Literal',
                         'may_terminate' => true,
@@ -76,38 +76,38 @@ return [
             ],
         ],
     ],
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'gestion' => array(
-                        'pages' => array(
-                            'etat-demande-paiement' => array(
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'gestion' => [
+                        'pages' => [
+                            'etat-demande-paiement' => [
                                 'label'    => "Mises en paiement",
                                 'title'    => "Mises en paiement",
                                 'route'    => 'paiement/etat-demande-paiement',
-                            ),
-                            'etat-paiement' => array(
+                            ],
+                            'etat-paiement' => [
                                 'label'    => "État de paiement",
                                 'title'    => "État de paiement",
                                 'route'    => 'paiement/etat-paiement',
-                            ),
-                            'mises-en-paiement-csv' => array(
+                            ],
+                            'mises-en-paiement-csv' => [
                                 'label'    => "Mises en paiement (CSV)",
                                 'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
                                 'route'    => 'paiement/mises-en-paiement-csv',
-                            ),
-                            'extraction-winpaie' => array(
+                            ],
+                            'extraction-winpaie' => [
                                 'label'    => "Extraction Winpaie",
                                 'title'    => "Export des données de paiement au format Winpaie",
                                 'route'    => 'paiement/extraction-winpaie',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
     'bjyauthorize' => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
@@ -146,7 +146,7 @@ return [
                         [R_ADMINISTRATEUR, R_DRH],
                         'MiseEnPaiement',
                         ['export-csv-winpaie'],
-                        
+
                     ],
                 ],
             ],

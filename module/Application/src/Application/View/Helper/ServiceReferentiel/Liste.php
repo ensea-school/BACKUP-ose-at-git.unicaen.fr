@@ -6,8 +6,6 @@ use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\ServiceReferentiel;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Traits\TypeVolumeHoraireAwareTrait;
 use Application\View\Helper\ServiceReferentiel\Ligne;
@@ -17,10 +15,9 @@ use Application\View\Helper\ServiceReferentiel\Ligne;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, TypeVolumeHoraireAwareInterface
+class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface, TypeVolumeHoraireAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
     use TypeVolumeHoraireAwareTrait;
 
     /**
@@ -106,7 +103,10 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     public function getTotalRefreshUrl()
     {
-        if (($intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant())) {
+        $localContext = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+
+        if (($intervenant = $localContext->getIntervenant())) {
             if ($this->isInRealise()) {
                 $route = 'intervenant/referentiel-realise';
             }
@@ -368,11 +368,11 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $annee       = null;    $multiAnnees        = false;
         $intervenant = null;    $multiIntervenants  = false;
         foreach( $services as $service ){
-            if (empty($annee)) $annee = $service->getAnnee();
-            elseif( $annee !== $service->getAnnee() ){ $multiAnnees = true; break;}
-
             if (empty($intervenant)) $intervenant = $service->getIntervenant();
             elseif( $intervenant !== $service->getIntervenant() ){ $multiIntervenants = true; break;}
+
+            if (empty($annee)) $annee = $service->getIntervenant()->getAnnee();
+            elseif( $annee !== $service->getIntervenant()->getAnnee() ){ $multiAnnees = true; break;}
         }
         $this->setColumnVisibility( 'annee',         $multiAnnees        );
         $this->setColumnVisibility( 'intervenant',   $multiIntervenants  );

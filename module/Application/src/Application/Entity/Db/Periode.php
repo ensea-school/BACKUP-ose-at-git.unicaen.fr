@@ -28,16 +28,6 @@ class Periode
     protected $histoModification;
 
     /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
-
-    /**
      * @var integer
      */
     protected $ordre;

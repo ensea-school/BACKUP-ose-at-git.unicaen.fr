@@ -6,19 +6,16 @@ use Zend\View\Helper\AbstractHelper;
 use Application\Entity\VolumeHoraireReferentielListe;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 
 /**
  * Aide de vue permettant d'afficher une liste de volumes horaires
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Liste extends AbstractHelper implements ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
-
+    
     /**
      * @var VolumeHoraireReferentielListe
      */

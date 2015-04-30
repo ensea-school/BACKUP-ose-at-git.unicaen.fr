@@ -3,8 +3,6 @@
 namespace Application\Form\ServiceReferentiel;
 
 use Zend\Stdlib\Hydrator\HydratorInterface;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwaretrait;
 
@@ -13,9 +11,8 @@ use UnicaenApp\Service\EntityManagerAwaretrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareInterface, EntityManagerAwareInterface
+class SaisieFieldsetHydrator implements HydratorInterface, EntityManagerAwareInterface
 {
-    use ContextProviderAwareTrait;
     use EntityManagerAwaretrait;
 
     /**
@@ -34,16 +31,16 @@ class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareI
 
         $structure = isset($data['structure']) ? (int) $data['structure'] : null;
         $object->setStructure($structure ? $em->find('Application\Entity\Db\Structure', $structure) : null );
-        
+
         $fonction = isset($data['fonction']) ? (int) $data['fonction'] : null;
         $object->setFonction($fonction ? $em->find('Application\Entity\Db\FonctionReferentiel', $fonction) : null );
-        
+
         $heures = isset($data['heures']) ? (float) $data['heures'] : 0;
         $object->getVolumeHoraireReferentielListe()->setHeures($heures);
-        
+
         $commentaires = isset($data['commentaires']) ? $data['commentaires'] : null;
         $object->setCommentaires($commentaires);
-        
+
         return $object;
     }
 
@@ -55,17 +52,17 @@ class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareI
      */
     public function extract($object)
     {
-        $data = array();
+        $data = [];
 
         if ($object) {
             $data['id'] = $object->getId();
         }
-        
+
         if ($object->getIntervenant()) {
-            $data['intervenant'] = array(
+            $data['intervenant'] = [
                 'id'    => $object->getIntervenant()->getSourceCode(),
                 'label' => (string) $object->getIntervenant()
-            );
+            ];
         }
         else {
             $data['intervenant'] = null;
@@ -88,7 +85,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, ContextProviderAwareI
         $data['heures'] = $object->getVolumeHoraireReferentielListe()->getHeures();
 
         $data['commentaires'] = $object->getCommentaires();
-        
+
         return $data;
     }
 }

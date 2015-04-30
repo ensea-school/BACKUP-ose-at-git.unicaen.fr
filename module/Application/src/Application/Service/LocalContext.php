@@ -3,15 +3,11 @@
 namespace Application\Service;
 
 use Zend\Session\Container;
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
 use Application\Entity\Db\Intervenant as EntityIntervenant;
 use Application\Entity\Db\Structure as EntityStructure;
 use Application\Entity\Db\Etape as EntityEtape;
 use Application\Entity\NiveauEtape as EntityNiveauEtape;
 use Application\Entity\Db\ElementPedagogique as EntityElementPedagogique;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 
 /**
@@ -19,31 +15,31 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class LocalContext extends AbstractContext implements EntityManagerAwareInterface, ServiceLocatorAwareInterface
+class LocalContext extends AbstractService
 {
-    use EntityManagerAwareTrait;
-    use ServiceLocatorAwareTrait;
-    
+
+    /**
+     * Intervenant
+     *
+     * @var EntityIntervenant
+     */
+    protected $intervenant;
+
     /**
      * @var Container
      */
     protected $sessionContainer;
-    
-    /**
-     * @var string
-     */
-    protected $statutInterv;
-    
+
     /**
      * @var EntityStructure
      */
     protected $structure;
-    
+
     /**
      * @var EntityNiveauEtape
      */
     protected $niveau;
-    
+
     /**
      * @var EntityEtape
      */
@@ -59,46 +55,39 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
      */
     public function getIntervenant()
     {
-        if (null === $this->intervenant) {
+        if (empty($this->intervenant)) {
             $this->intervenant = $this->getSessionContainer()->intervenant;
             if ($this->intervenant && !$this->intervenant instanceof EntityIntervenant) {
-                $this->intervenant = $this->getEntityManager()->find("Application\Entity\Db\Intervenant", $this->intervenant);
+                $sIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
+                /* @var $sIntervenant Intervenant */
+                $this->intervenant = $sIntervenant->get( $this->intervenant );
             }
         }
         return $this->intervenant;
     }
-    
-    /**
-     * @return string
-     */
-    public function getStatutInterv()
-    {
-        if (null === $this->statutInterv) {
-            $this->statutInterv = $this->getSessionContainer()->statutInterv;
-        }
-        return $this->statutInterv;
-    }
-    
+
     /**
      * @return EntityStructure
      */
     public function getStructure()
     {
-        if (null === $this->structure) {
+        if (empty($this->structure)) {
             $this->structure = $this->getSessionContainer()->structure;
             if ($this->structure && !$this->structure instanceof EntityStructure) {
-                $this->structure = $this->getEntityManager()->find("Application\Entity\Db\Structure", $this->structure);
+                $sStructure = $this->getServiceLocator()->get('applicationStructure');
+                /* @var $sStructure Structure */
+                $this->structure = $sStructure->get( $this->structure );
             }
         }
         return $this->structure;
     }
-    
+
     /**
      * @return NiveauEtape
      */
     public function getNiveau()
     {
-        if (null === $this->niveau) {
+        if (empty($this->niveau)) {
             $this->niveau = $this->getSessionContainer()->niveau;
             if ($this->niveau && !$this->niveau instanceof EntityNiveauEtape){
                 $this->niveau = $this->getServiceNiveauEtape()->get($this->niveau);
@@ -112,10 +101,12 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
      */
     public function getEtape()
     {
-        if (null === $this->etape) {
+        if (empty($this->etape)) {
             $this->etape = $this->getSessionContainer()->etape;
             if ($this->etape && !$this->etape instanceof EntityEtape) {
-                $this->etape = $this->getEntityManager()->find("Application\Entity\Db\Etape", $this->etape);
+                $sEtape = $this->getServiceLocator()->get('applicationEtape');
+                /* @var $sEtape Etape */
+                $this->etape = $sEtape->get( $this->etape );
             }
         }
         return $this->etape;
@@ -126,19 +117,21 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
      */
     public function getElementPedagogique()
     {
-        if (null === $this->elementPedagogique) {
+        if (empty($this->elementPedagogique)) {
             $this->elementPedagogique = $this->getSessionContainer()->elementPedagogique;
             if ($this->elementPedagogique && !$this->elementPedagogique instanceof EntityElementPedagogique) {
-                $this->elementPedagogique = $this->getEntityManager()->find("Application\Entity\Db\ElementPedagogique", $this->elementPedagogique);
+                $sElementPedagogique = $this->getServiceLocator()->get('applicationElementPedagogique');
+                /* @var $sElementPedagogique ElementPedagogique */
+                $this->elementPedagogique = $sElementPedagogique->get( $this->elementPedagogique );
             }
         }
         return $this->elementPedagogique;
     }
 
     /**
-     * 
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return \Application\Service\LocalContext
+     *
+     * @param EntityIntervenant $intervenant
+     * @return self
      */
     public function setIntervenant(EntityIntervenant $intervenant = null)
     {
@@ -147,13 +140,11 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         return $this;
     }
 
-    public function setStatutInterv($statutInterv = null)
-    {
-        $this->statutInterv = $statutInterv;
-        $this->getSessionContainer()->statutInterv = $statutInterv ?: null;
-        return $this;
-    }
-
+    /**
+     *
+     * @param EntityStructure $structure
+     * @return self
+     */
     public function setStructure(EntityStructure $structure = null)
     {
         $this->structure = $structure;
@@ -161,13 +152,23 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         return $this;
     }
 
+    /**
+     *
+     * @param EntityNiveauEtape $niveau
+     * @return self
+     */
     public function setNiveau(EntityNiveauEtape $niveau = null)
-    {             
+    {
         $this->niveau = $niveau;
         $this->getSessionContainer()->niveau = $niveau ? $niveau->getId() : null;
         return $this;
     }
 
+    /**
+     *
+     * @param EntityEtape $etape
+     * @return self
+     */
     public function setEtape(EntityEtape $etape = null)
     {
         $this->etape = $etape;
@@ -175,6 +176,11 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         return $this;
     }
 
+    /**
+     *
+     * @param EntityElementPedagogique $elementPedagogique
+     * @return self
+     */
     public function setElementPedagogique(EntityElementPedagogique $elementPedagogique = null)
     {
         $this->elementPedagogique = $elementPedagogique;
@@ -192,17 +198,16 @@ class LocalContext extends AbstractContext implements EntityManagerAwareInterfac
         }
         return $this->sessionContainer;
     }
-    
+
     public function fromArray(array $context = array())
     {
         $this->setStructure(isset($context['structureEns']) ? $context['structureEns'] : null);
 
         return parent::fromArray($context);
     }
-    
+
     public function debug()
     {
-        var_dump("statut = " . $this->getStatutInterv());
         var_dump("intervenant = " . $this->getIntervenant());
         var_dump("structure = " . $this->getStructure());
         var_dump("niveau = " . $this->getNiveau());

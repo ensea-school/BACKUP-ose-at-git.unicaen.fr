@@ -2,27 +2,29 @@
 
 namespace Application\Entity\Db;
 
+use Application\Interfaces\AnneeAwareInterface;
+
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInterface
+class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface
 {
     public function __toString()
     {
         return $this->getSourceCode().' - '.$this->getLibelle();
     }
-    
+
     /**
      * Retourne les étapes auxquelles est lié cet élément pédagogique.
-     * 
+     *
      * @param bool $principaleIncluse Faut-il inclure l'étape principale ou non ?
      * @return array
      */
     public function getEtapes($principaleIncluse = true)
     {
         $etapePrincipale = $this->getEtape();
-        $etapes = array();
-        
+        $etapes = [];
+
         if (($chemins = $this->getCheminPedagogique())) {
             foreach ($this->getCheminPedagogique() as $cp) { /* @var $cp \Application\Entity\Db\CheminPedagogique */
                 if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
@@ -32,10 +34,10 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
             }
             ksort($etapes);
         }
-        
+
         return $etapes;
     }
-        
+
     /**
      * @var \DateTime
      */
@@ -60,6 +62,11 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
      * @var string
      */
     protected $sourceCode;
+
+    /**
+     * @var \Application\Entity\Db\Annee
+     */
+    protected $annee;
 
     /**
      * @var integer
@@ -107,16 +114,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
      * @var boolean
      */
     protected $fa;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -200,7 +197,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
      */
     private $centreCoutEp;
 
-    
+
 
 
     public function getHasChanged()
@@ -238,7 +235,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get histoCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoCreation()
     {
@@ -261,7 +258,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get histoDestruction
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoDestruction()
     {
@@ -284,7 +281,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get histoModification
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoModification()
     {
@@ -307,7 +304,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -330,11 +327,34 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get sourceCode
      *
-     * @return string 
+     * @return string
      */
     public function getSourceCode()
     {
         return $this->sourceCode;
+    }
+
+    /**
+     * Set annee
+     *
+     * @param \Application\Entity\Db\Annee $annee
+     * @return Service
+     */
+    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get annee
+     *
+     * @return \Application\Entity\Db\Annee
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
     }
 
     /**
@@ -502,55 +522,9 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     }
 
     /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return ElementPedagogique
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return ElementPedagogique
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -573,7 +547,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Structure
      */
     public function getStructure()
     {
@@ -596,7 +570,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get periode
      *
-     * @return \Application\Entity\Db\Periode 
+     * @return \Application\Entity\Db\Periode
      */
     public function getPeriode()
     {
@@ -619,7 +593,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get source
      *
-     * @return \Application\Entity\Db\Source 
+     * @return \Application\Entity\Db\Source
      */
     public function getSource()
     {
@@ -642,7 +616,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoModificateur()
     {
@@ -665,7 +639,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoCreateur()
     {
@@ -688,7 +662,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoDestructeur()
     {
@@ -711,7 +685,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get etape
      *
-     * @return \Application\Entity\Db\Etape 
+     * @return \Application\Entity\Db\Etape
      */
     public function getEtape()
     {
@@ -744,7 +718,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
     /**
      * Get cheminPedagogique
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCheminPedagogique()
     {
@@ -881,17 +855,17 @@ class ElementPedagogique implements HistoriqueAwareInterface, ValiditeAwareInter
         if (!$th) {
             return $this->centreCoutEp;
         }
-        
+
         $f     = function(CentreCoutEp $ccEp) use ($th) { return $ccEp->getTypeHeures() === $th; };
         $slice = $this->centreCoutEp->filter($f);
-        
+
         if (count($slice) > 1) {
             throw new \Common\Exception\LogicException(sprintf(
                     "Anomalie dans la base de données : plus d'un centre de coûts trouvé pour l'élément pédagogique %s et le type d'heures %s.",
                     $this,
                     $th));
         }
-        
+
         return $slice;
     }
 }

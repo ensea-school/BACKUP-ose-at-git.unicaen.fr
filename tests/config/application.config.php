@@ -2,7 +2,7 @@
 
 $env = getenv('APP_ENV') ?: 'production';
 
-$modules = array(
+$modules = [
     'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
     'UnicaenApp', //'AssetManager',
     'UnicaenAuth',
@@ -10,7 +10,7 @@ $modules = array(
     'Common',
     'Import',
     'Application'
-);
+];
 
 if ($env == 'development') {
     if ( 'dig-40' == getenv('HTTP_HOST')){
@@ -18,15 +18,15 @@ if ($env == 'development') {
     }
 }
 
-return array(
+return [
     'modules' => $modules,
-    'module_listener_options' => array(
-        'config_glob_paths'    => array(
+    'module_listener_options' => [
+        'config_glob_paths'    => [
             'config/autoload/{,*.}{global,local}.php',
-        ),
-        'module_paths' => array(
+        ],
+        'module_paths' => [
             './module',
             './vendor',
-        ),
-    ),
-);
+        ],
+    ],
+];

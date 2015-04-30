@@ -12,11 +12,6 @@
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
-      <join-columns>
-        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
     <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
       <join-columns>
         <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>

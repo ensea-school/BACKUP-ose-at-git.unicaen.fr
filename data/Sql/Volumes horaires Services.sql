@@ -28,9 +28,10 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  --AND i.source_code = '91521'
+  AND i.source_code = '91521'
 --  AND s.id = 3208
   AND vh.histo_destruction IS NULL
+  AND i.nom_usuel = 'Paulien'
   --AND ti.code = 'TP'
   --AND validation_id is not null
 order by
@@ -41,7 +42,7 @@ order by
 --DELETE FROM VALIDATION_VOL_HORAIRE WHERE VALIDATION_ID in (158,175) AND VOLUME_HORAIRE_ID in (634);
 
 SELECT COUNT(*) FROM VALIDATION_VOL_HORAIRE WHERE VOLUME_HORAIRE_ID = 187;
-DELETE FROM volume_horaire WHERE id IN (727);
-update volume_horaire set heures = 89 where id=29293;
-update volume_horaire set histo_destruction = null, histo_destructeur_id = null where id = 24883;
+--DELETE FROM volume_horaire WHERE id IN (727);
+--update volume_horaire set heures = 89 where id=29293;
+--update volume_horaire set histo_destruction = null, histo_destructeur_id = null where id = 24883;
 

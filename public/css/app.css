@@ -51,7 +51,11 @@ body.development div#contenu-principal {
 }
 
 body.development div#navbar div.collapse pre {
-    display: none;
+    position:absolute;
+}
+
+body.development div#navbar div.collapse table {
+    position:absolute;
 }
 
 table {
@@ -246,6 +250,7 @@ form#modulateurs-saisie th select{
 
 
 
+/* Personnalisation du bootstrap-select */
 .bootstrap-select .dropdown-menu li.divider{
     display: none;
 }
@@ -269,4 +274,105 @@ form#modulateurs-saisie th select{
 
 .bootstrap-select button.selectpicker span.pull-left{
     padding-left: 10px;
+}
+
+
+
+
+/* Possibilité de changer l'année depuis la barre de menu du haut */
+.navbar-brand h1 span {
+    font-size:12pt;
+}
+
+#navbar .container .navbar-header {
+
+    vertical-align: middle;
+}
+
+#navbar .container .navbar-header select {
+    margin-top: 12px;
+    height:26px;
+}
+
+.navbar-nav li a {
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+
+
+ul.privileges-form {
+    list-style-type: none;   
+}
+
+ul.privileges-form li {
+    margin-top:0.5em;
+    margin-bottom:0.5em;
+}
+
+ul.privileges-form li label {
+    margin-left:0.5em;
+}
+
+
+
+.table-header-rotated th.row-header{
+  width: auto;
+}
+
+.table-header-rotated td{
+  width: 40px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table-header-rotated th.rotate-45{
+  border: none;
+  height: 200px;
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  position: relative;
+  vertical-align: bottom;
+  padding: 0;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.table-header-rotated th.rotate-45 > div{
+  position: relative;
+  top: 0px;
+  left: 83px;
+  height: 100%;
+  transform:skew(-40deg,0deg);
+  overflow: hidden;
+  border-right: 1px solid #ddd;
+}
+
+.table-header-rotated th.rotate-45 > div.first{
+  border-left: 1px solid #ddd;
+}
+
+.table-header-rotated th.rotate-45 span {
+  transform:skew(40deg,0deg) rotate(310deg);
+  position: absolute;
+  bottom: 40px;
+  left: -30px;
+  display: inline-block;
+  width: 100px;
+  text-align: left;
+}
+
+.table-header-rotated .separator {
+    border: none;
+}
+
+.droits-tbl th.privilege {
+    min-width: 200px;
+    max-width: 200px;
+    width:200px;
+}
+
+.droits-tbl td a.refuse {
+    opacity: 0.5;   
 }

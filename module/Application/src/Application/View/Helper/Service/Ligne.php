@@ -6,8 +6,6 @@ use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Interfaces\ServiceAwareInterface;
 use Application\Traits\ServiceAwareTrait;
 
@@ -16,11 +14,12 @@ use Application\Traits\ServiceAwareTrait;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface, ContextProviderAwareInterface, ServiceAwareInterface
+class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface, ServiceAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
-    use ServiceAwareTrait;
+    use ServiceLocatorAwareTrait,
+        ServiceAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
      * @var Liste
@@ -95,7 +94,6 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $liste = $this->getListe();
         $service = $this->getService();
 
-        $context = $this->getContextProvider()->getGlobalContext();
         $vhl     = $this->getService()->getVolumeHoraireListe()->setTypeVolumeHoraire( $liste->getTypeVolumeHoraire() );
 
         $typesIntervention = $this->getListe()->getTypesIntervention();
@@ -106,14 +104,14 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         }
         if ($liste->getColumnVisibility('structure-aff')){
             if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
-                $out .= '<td>'.$this->renderStructure( $service->getStructureAff() )."</td>\n";
+                $out .= '<td>'.$this->renderStructure( $service->getIntervenant()->getStructure() )."</td>\n";
             } else {
                 $out .= "<td>&nbsp;</td>\n";
             }
         }
-        if ($service->getEtablissement() === $context->getEtablissement()) {
+        if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) {
             if ($liste->getColumnVisibility('structure-ens')){
-                $out .= '<td>'.$this->renderStructure($service->getStructureEns())."</td>\n";
+                $out .= '<td>'.$this->renderStructure($service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null)."</td>\n";
             }
             if ($liste->getColumnVisibility('formation')){
                 $out .= '<td>'.$this->renderEtape($this->getService()->getElementPedagogique()->getEtape())."</td>\n";
@@ -164,8 +162,8 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     {
         if (! $structure) return '';
 
-        $url = $this->getView()->url('structure/default', array('action' => 'voir', 'id' => $structure->getId()));
-        $pourl = $this->getView()->url('structure/default', array('action' => 'apercevoir', 'id' => $structure->getId()));
+        $url = $this->getView()->url('structure/default', ['action' => 'voir', 'id' => $structure->getId()]);
+        $pourl = $this->getView()->url('structure/default', ['action' => 'apercevoir', 'id' => $structure->getId()]);
         $out = '<a href="'.$url.'" data-po-href="'.$pourl.'" class="ajax-modal">'.$structure.'</a>';
         return $out;
     }
@@ -210,11 +208,11 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $heures = $liste->getHeures();
 
         $hasForbiddenPeriodes = $liste->hasForbiddenPeriodes();
-        $hasBadTypeIntervention = 
+        $hasBadTypeIntervention =
                 $heures > 0
                 && $liste->getService()->getElementPedagogique()
                 && ! $liste->getService()->getElementPedagogique()->getTypeIntervention()->contains($liste->getTypeIntervention());
-        
+
         $display = $this->getListe()->getTypeInterventionVisibility($liste->getTypeIntervention()) ? '' : ';display:none';
 
         $attribs = [
@@ -250,7 +248,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderDetails( $details=false )
     {
-        $out = 
+        $out =
               '<a class="service-details-button" title="Détail des heures">'
                   .'<span class="glyphicon glyphicon-chevron-'.($details ? 'up' : 'down').'"></span>'
               .'</a>';

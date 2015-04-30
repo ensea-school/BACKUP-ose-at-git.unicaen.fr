@@ -16,10 +16,10 @@ class SaisieServiceRulesEvaluator extends AbstractRulesEvaluator
 {
     public function __construct(Intervenant $intervenant)
     {
-        $this->rules = array(
+        $this->rules = [
             new PossedeDossierRule($intervenant),
             new PeutSaisirServiceRule($intervenant),
-        );
+        ];
     }
     public function execute()
     {

@@ -20,6 +20,17 @@ use Application\Entity\Service\Recherche;
  */
 class ServiceController extends AbstractActionController
 {
+    use \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\ServiceAwareTrait,
+        \Application\Service\Traits\VolumeHoraireAwareTrait,
+        \Application\Service\Traits\ElementPedagogiqueAwareTrait,
+        \Application\Service\Traits\TypeVolumeHoraireAwareTrait,
+        \Application\Service\Traits\TypeInterventionAwareTrait,
+        \Application\Service\Traits\IntervenantAwareTrait,
+        \Application\Service\Traits\ServiceReferentielAwareTrait,
+        \Application\Service\Traits\EtatVolumeHoraireAwareTrait
+    ;
+
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
@@ -32,7 +43,7 @@ class ServiceController extends AbstractActionController
                 'Application\Entity\Db\Service',
                 'Application\Entity\Db\VolumeHoraire'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -45,7 +56,7 @@ class ServiceController extends AbstractActionController
     private function getFilteredServices($intervenant, $recherche)
     {
                 //\Test\Util::sqlLog($this->getServiceService()->getEntityManager());
-        $role                      = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                      = $this->getServiceContext()->getSelectedIdentityRole();
 
         $service                   = $this->getServiceService();
         $volumeHoraireService      = $this->getServiceLocator()->get('applicationVolumehoraire');       /* @var $volumeHoraireService \Application\Service\VolumeHoraire */
@@ -92,9 +103,8 @@ class ServiceController extends AbstractActionController
         $typeVolumeHoraireCode    = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU' );
         $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
         $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
-        $annee                    = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel                = new \Zend\View\Model\ViewModel();
         $canAddService            = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
         $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
@@ -110,10 +120,13 @@ class ServiceController extends AbstractActionController
             $params['action'] = 'recherche';
             $rechercheViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
             $viewModel->addChild($rechercheViewModel, 'recherche');
-            
+
             $recherche = $this->getServiceService()->loadRecherche();
         }else{
-            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
+
+            $localContext->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action = 'afficher'; // Affichage par défaut
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode) );
@@ -150,7 +163,7 @@ class ServiceController extends AbstractActionController
         }
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params = $viewHelperParams;
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'canAddService', 'canAddServiceReferentiel', 'params'));
+        $viewModel->setVariables(compact('services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'canAddService', 'canAddServiceReferentiel', 'params'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
@@ -162,7 +175,7 @@ class ServiceController extends AbstractActionController
     public function exportAction()
     {
         $intervenant        = $this->context()->intervenantFromRoute();
-        $role               = $this->getContextProvider()->getSelectedIdentityRole();
+        $role               = $this->getServiceContext()->getSelectedIdentityRole();
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
             throw new \BjyAuthorize\Exception\UnAuthorizedException();
@@ -170,7 +183,9 @@ class ServiceController extends AbstractActionController
 
         $this->initFilters();
         if ($intervenant){
-            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
+            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
+            $localContext->setIntervenant($intervenant);
         }
 
         if (! $intervenant){
@@ -200,17 +215,17 @@ class ServiceController extends AbstractActionController
 
     /**
      * Totaux de services et de référentiel par intervenant.
-     * 
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function resumeAction()
     {
         $intervenant        = $this->context()->intervenantFromRoute();
         $canAddService      = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
-        $annee   = $this->getContextProvider()->getGlobalContext()->getAnnee();
-        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
-        $action = $this->getRequest()->getQuery('action', null);
-        $tri = null;
+        $annee              = $this->getServiceContext()->getAnnee();
+        $role               = $this->getServiceContext()->getSelectedIdentityRole();
+        $action             = $this->getRequest()->getQuery('action', null);
+        $tri                = null;
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
 
         if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
@@ -218,7 +233,9 @@ class ServiceController extends AbstractActionController
         }
 
         if ($intervenant){
-            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant);
+            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
+            $localContext->setIntervenant($intervenant);
         }
 
         if (! $intervenant){
@@ -385,11 +402,11 @@ class ServiceController extends AbstractActionController
             throw new MessageException("Cette opération n'est pas autorisée.");
         }
 
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
         $form->get('type-volume-horaire')->setValue( $typeVolumeHoraire->getId() );
 
         if ($this->getRequest()->isPost()) {
-            $errors = array();
+            $errors = [];
             try {
                 if ($typeVolumeHoraire->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE){
                     // destruction des volumes horaires associés
@@ -426,9 +443,9 @@ class ServiceController extends AbstractActionController
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get( $typeVolumeHoraire );
         }
         $service = $this->getServiceService();
-        //$role    = $this->getContextProvider()->getSelectedIdentityRole();
+        //$role    = $this->getServiceContext()->getSelectedIdentityRole();
         $form    = $this->getFormSaisie();
-        $errors  = array();
+        $errors  = [];
 
         if ($id) {
             $entity = $service->get($id);
@@ -443,7 +460,9 @@ class ServiceController extends AbstractActionController
             $title   = "Ajout d'enseignement";
         }
 
-        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+        $intervenant = $localContext->getIntervenant();
         $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
         $assertionEntity->setTypeVolumeHoraire($typeVolumeHoraire);
         if (! $this->isAllowed($assertionEntity, 'create') && ! $this->isAllowed($assertionEntity, 'update')) {
@@ -485,78 +504,6 @@ class ServiceController extends AbstractActionController
     protected function getFormRecherche()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('ServiceRechercheForm');
-    }
-
-    /**
-     * @return \Application\Service\Service
-     */
-    protected function getServiceService()
-    {
-        return $this->getServiceLocator()->get('ApplicationService');
-    }
-
-    /**
-     * @return \Application\Service\VolumeHoraire
-     */
-    protected function getServiceVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\ElementPedagogique
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('ApplicationElementPedagogique');
-    }
-
-    /**
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumehoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeIntervention');
-    }
-
-    /**
-     * @return \Application\Service\Intervenant
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('applicationIntervenant');
-    }
-
-    /**
-     * @return \Application\Service\ServiceReferentiel
-     */
-    protected function getServiceServiceReferentiel()
-    {
-        return $this->getServiceLocator()->get('applicationServiceReferentiel');
-    }
-
-    /**
-     * @return \Application\Service\EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('applicationEtatVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\ContextProvider
-     */
-    public function getContextProvider()
-    {
-        return $this->getServiceLocator()->get('ApplicationContextProvider');
     }
 
     /**

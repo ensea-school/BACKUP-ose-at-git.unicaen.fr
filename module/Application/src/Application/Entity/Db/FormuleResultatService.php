@@ -52,10 +52,10 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
     public function getStructure()
     {
         $service = $this->getService();
-        if ($service->getStructureEns())
-            return $service->getStructureEns ();
+        if ($service->getElementPedagogique())
+            return $service->getElementPedagogique()->getStructure();
         else
-            return $service->getStructureAff ();
+            return $service->getIntervenant()->getStructure();
     }
 
     public function getResourceId()

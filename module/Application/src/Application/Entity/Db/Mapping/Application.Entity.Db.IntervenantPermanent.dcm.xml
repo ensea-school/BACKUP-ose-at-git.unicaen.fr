@@ -12,8 +12,6 @@
       <unique-constraint name="ip_source_un" columns="SOURCE_CODE"/>
     </unique-constraints>
     <id name="id" association-key="true"/>
-    <field name="validiteDebut" type="datetime" column="VALIDITE_DEBUT" nullable="false"/>
-    <field name="validiteFin" type="datetime" column="VALIDITE_FIN" nullable="true"/>
     <many-to-one field="corps" target-entity="Application\Entity\Db\Corps">
       <join-columns>
         <join-column name="CORPS_ID" referenced-column-name="ID"/>

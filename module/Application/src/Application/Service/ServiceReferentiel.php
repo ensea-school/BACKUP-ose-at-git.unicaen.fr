@@ -57,7 +57,7 @@ class ServiceReferentiel extends AbstractEntityService
              ->join( $this->getServiceFonctionReferentiel(), $qb, 'fonction'   , true, $alias )
              ->join( $this->getServiceIntervenant()        , $qb, 'intervenant', true, $alias );
 
-        return array($qb,$alias);
+        return [$qb,$alias];
     }
 
     /**
@@ -137,14 +137,14 @@ class ServiceReferentiel extends AbstractEntityService
      */
     public function finderByContext(QueryBuilder $qb = null, $alias = null)
     {
-        $context = $this->getContextProvider()->getGlobalContext();
-        $role    = $this->getContextProvider()->getSelectedIdentityRole();
+        $role    = $this->getServiceContext()->getSelectedIdentityRole();
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
-        $this->finderByAnnee( $context->getannee(), $qb, $alias ); // Filtre d'année obligatoire
+        $this->join( $this->getServiceIntervenant(), $qb, 'intervenant', false, $alias );
+        $this->getServiceIntervenant()->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
 
-        if ($role instanceof \Application\Acl\IntervenantRole){ // Si c'est un intervenant
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface && $role->getIntervenant()){ // Si c'est un intervenant
             $this->finderByIntervenant( $role->getIntervenant(), $qb, $alias );
         }
 
@@ -184,7 +184,7 @@ class ServiceReferentiel extends AbstractEntityService
                 ->addOrderBy($this->getServiceIntervenant()->getAlias().'.nomUsuel')
                 ->addOrderBy($this->getServiceStructure()->getAlias().'.libelleCourt')
                 ->addOrderBy($this->getServiceFonctionReferentiel()->getAlias().'.libelleCourt');
-        
+
         return parent::getList($qb, $alias);
     }
 
@@ -208,9 +208,9 @@ class ServiceReferentiel extends AbstractEntityService
     public function newEntity()
     {
         $entity = parent::newEntity();
-        $entity->setAnnee( $this->getContextProvider()->getGlobalContext()->getAnnee() );
-        if ($this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-            $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+        if ($role instanceof \Application\Interfaces\IntervenantAwareInterface){
+            $entity->setIntervenant( $role->getIntervenant() );
         }
         return $entity;
     }
@@ -223,10 +223,11 @@ class ServiceReferentiel extends AbstractEntityService
      */
     public function save($entity)
     {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $this->getEntityManager()->getConnection()->beginTransaction();
         try{
-            if (! $entity->getIntervenant() && $this->getContextProvider()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole){
-                $entity->setIntervenant( $this->getContextProvider()->getGlobalContext()->getIntervenant() );
+            if (! $entity->getIntervenant() && $role instanceof \Application\Interfaces\IntervenantAwareInterface && $role->getIntervenant()){
+                $entity->setIntervenant( $role->getIntervenant() );
             }
             if (! $this->getAuthorize()->isAllowed($entity, $entity->getId() ? 'update' : 'create')){
                 throw new \BjyAuthorize\Exception\UnAuthorizedException('Saisie interdite');
@@ -239,7 +240,6 @@ class ServiceReferentiel extends AbstractEntityService
                     'structure'    => $entity->getStructure(),
                     'fonction'     => $entity->getFonction(),
                     'commentaires' => $entity->getCommentaires(),
-                    'annee'        => $entity->getAnnee(),
                 ]);
             }
             if ($serviceAllreadyExists){
@@ -266,9 +266,9 @@ class ServiceReferentiel extends AbstractEntityService
         }
         return $result;
     }
-    
+
     /**
-     * 
+     *
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param IntervenantEntity $intervenant
      * @param StructureEntity $structureRef
@@ -280,11 +280,11 @@ class ServiceReferentiel extends AbstractEntityService
             StructureEntity $structureRef = null)
     {
         $dqlNotExists = <<<EOS
-SELECT vhv FROM Application\Entity\Db\VolumeHoraireReferentiel vhv 
-JOIN vhv.validation v 
+SELECT vhv FROM Application\Entity\Db\VolumeHoraireReferentiel vhv
+JOIN vhv.validation v
 WHERE vhv = vh
 EOS;
-        
+
         $qb = $this->getEntityManager()->createQueryBuilder()
                 ->select("s2, i, vh, f, strref")
                 ->from("Application\Entity\Db\ServiceReferentiel", 's2')
@@ -296,21 +296,21 @@ EOS;
                 ->andWhere("NOT EXISTS ($dqlNotExists)")
                 ->addOrderBy("strref.libelleCourt", 'asc')
                 ->addOrderBy("s2.histoModification", 'asc');
-        
+
         if ($intervenant) {
             $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
         }
         if ($structureRef) {
             $qb->andWhere("strref = :structureRef")->setParameter('structureRef', $structureRef);
         }
-        
+
 //        print_r($qb->getQuery()->getSQL());
-        
+
         return $qb;
     }
-    
+
     /**
-     * 
+     *
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param TypeValidationEntity $validation
      * @param IntervenantEntity $intervenant
@@ -319,9 +319,9 @@ EOS;
      * @return QueryBuilder
      */
     public function finderReferentielsValides(
-            TypeVolumeHoraireEntity $typeVolumeHoraire, 
-            ValidationEntity $validation = null, 
-            IntervenantEntity $intervenant = null, 
+            TypeVolumeHoraireEntity $typeVolumeHoraire,
+            ValidationEntity $validation = null,
+            IntervenantEntity $intervenant = null,
             StructureEntity $structureRef = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -337,7 +337,7 @@ EOS;
                 ->join("v.structure", 'str') // validés par la structure spécifiée
                 ->orderBy("v.histoModification", 'desc')
                 ->addOrderBy("strref.libelleCourt", 'asc');
-        
+
         if ($validation) {
             $qb->andWhere("v = :validation")->setParameter('validation', $validation);
         }

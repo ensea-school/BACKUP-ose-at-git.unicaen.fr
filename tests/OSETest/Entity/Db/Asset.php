@@ -224,12 +224,9 @@ class Asset
     {
         $e = new Service();
         $e
-                ->setAnnee($annee)
                 ->setElementPedagogique($elementPedagogique)
                 ->setEtablissement($intervenant->getStructure()->getEtablissement())
                 ->setIntervenant($intervenant)
-                ->setStructureAff($intervenant->getStructure())
-                ->setStructureEns($structureEns)
                 ->setTypeVolumeHoraire($typeVolumeHoraire);
         
         return $e;
@@ -243,7 +240,6 @@ class Asset
     {
         $e = new ServiceReferentiel();
         $e
-                ->setAnnee($annee)
                 ->setFonction($fonction)
                 ->setHeures(rand(1, 50))
                 ->setIntervenant($intervenant)

@@ -2,12 +2,10 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * Ressource
+ * Perimetre
  */
-class Ressource
+class Perimetre
 {
     /**
      * @var string
@@ -29,7 +27,7 @@ class Ressource
      * Set code
      *
      * @param string $code
-     * @return Ressource
+     * @return Perimetre
      */
     public function setCode($code)
     {
@@ -52,7 +50,7 @@ class Ressource
      * Set libelle
      *
      * @param string $libelle
-     * @return Ressource
+     * @return Perimetre
      */
     public function setLibelle($libelle)
     {
@@ -72,6 +70,19 @@ class Ressource
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Perimetre
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -79,5 +90,10 @@ class Ressource
     public function getId()
     {
         return $this->id;
+    }
+
+    public function __toString()
+    {
+        return $this->getLibelle();
     }
 }

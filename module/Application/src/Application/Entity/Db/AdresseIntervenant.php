@@ -78,16 +78,6 @@ class AdresseIntervenant
     protected $telDomicile;
 
     /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
-
-    /**
      * @var string
      */
     protected $ville;
@@ -139,7 +129,7 @@ class AdresseIntervenant
     /**
      * Get batiment
      *
-     * @return string 
+     * @return string
      */
     public function getBatiment()
     {
@@ -162,7 +152,7 @@ class AdresseIntervenant
     /**
      * Get codePostal
      *
-     * @return string 
+     * @return string
      */
     public function getCodePostal()
     {
@@ -185,7 +175,7 @@ class AdresseIntervenant
     /**
      * Get histoCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoCreation()
     {
@@ -208,7 +198,7 @@ class AdresseIntervenant
     /**
      * Get histoDestruction
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoDestruction()
     {
@@ -231,7 +221,7 @@ class AdresseIntervenant
     /**
      * Get histoModification
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoModification()
     {
@@ -254,7 +244,7 @@ class AdresseIntervenant
     /**
      * Get localite
      *
-     * @return string 
+     * @return string
      */
     public function getLocalite()
     {
@@ -277,7 +267,7 @@ class AdresseIntervenant
     /**
      * Get mentionComplementaire
      *
-     * @return string 
+     * @return string
      */
     public function getMentionComplementaire()
     {
@@ -300,7 +290,7 @@ class AdresseIntervenant
     /**
      * Get nomVoie
      *
-     * @return string 
+     * @return string
      */
     public function getNomVoie()
     {
@@ -323,7 +313,7 @@ class AdresseIntervenant
     /**
      * Get noVoie
      *
-     * @return string 
+     * @return string
      */
     public function getNoVoie()
     {
@@ -346,7 +336,7 @@ class AdresseIntervenant
     /**
      * Get paysCodeInsee
      *
-     * @return string 
+     * @return string
      */
     public function getPaysCodeInsee()
     {
@@ -369,7 +359,7 @@ class AdresseIntervenant
     /**
      * Get paysLibelle
      *
-     * @return string 
+     * @return string
      */
     public function getPaysLibelle()
     {
@@ -392,7 +382,7 @@ class AdresseIntervenant
     /**
      * Get principale
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPrincipale()
     {
@@ -415,7 +405,7 @@ class AdresseIntervenant
     /**
      * Get sourceCode
      *
-     * @return string 
+     * @return string
      */
     public function getSourceCode()
     {
@@ -438,57 +428,11 @@ class AdresseIntervenant
     /**
      * Get telDomicile
      *
-     * @return string 
+     * @return string
      */
     public function getTelDomicile()
     {
         return $this->telDomicile;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return AdresseIntervenant
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return AdresseIntervenant
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**
@@ -507,7 +451,7 @@ class AdresseIntervenant
     /**
      * Get ville
      *
-     * @return string 
+     * @return string
      */
     public function getVille()
     {
@@ -517,7 +461,7 @@ class AdresseIntervenant
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -540,7 +484,7 @@ class AdresseIntervenant
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\Intervenant 
+     * @return \Application\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {
@@ -563,7 +507,7 @@ class AdresseIntervenant
     /**
      * Get source
      *
-     * @return \Application\Entity\Db\Source 
+     * @return \Application\Entity\Db\Source
      */
     public function getSource()
     {
@@ -586,7 +530,7 @@ class AdresseIntervenant
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoModificateur()
     {
@@ -609,7 +553,7 @@ class AdresseIntervenant
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoDestructeur()
     {
@@ -632,37 +576,37 @@ class AdresseIntervenant
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
     }
-    
+
     /**
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
-        $part1 = array();
+        $part1 = [];
         $part1[] = $this->getNoVoie();
         $part1[] = $this->getNomVoie();
         $part1[] = $this->getBatiment();
         $part1[] = $this->getMentionComplementaire();
         $part1 = implode(', ', array_filter($part1));
 
-        $part2 = array();
+        $part2 = [];
         $part2[] = $this->getLocalite();
         $part2[] = $this->getCodePostal();
         $part2[] = $this->getVille();
         $part2[] = $this->getPaysLibelle();
         $part2 = implode(', ', array_filter($part2));
-        
-        $parts = array();
+
+        $parts = [];
         $parts[] = $part1;
         $parts[] = $part2;
-        
+
         return implode(PHP_EOL, array_filter($parts));
     }
 }

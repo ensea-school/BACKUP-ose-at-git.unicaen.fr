@@ -22,237 +22,237 @@ use Application\Acl\FoadRole;
 use Application\Acl\ResponsableFoadRole;
 use Application\Controller\AgrementController;
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'intervenant' => array(
-                'child_routes' => array(
-                    'agrement' => array(
+return [
+    'router' => [
+        'routes' => [
+            'intervenant' => [
+                'child_routes' => [
+                    'agrement' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:intervenant/agrement',
-                            'constraints' => array(
+                            'constraints' => [
                                 'intervenant' => '[0-9]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'controller' => 'Agrement',
                                 'action' => 'index',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes' => array(
-                            'liste' => array(
+                        'child_routes' => [
+                            'liste' => [
                                 'type'    => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/:typeAgrement',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'typeAgrement' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => 'lister',
-                                    ),
-                                ),
-                            ),
-                            'ajouter' => array(
+                                    ],
+                                ],
+                            ],
+                            'ajouter' => [
                                 'type'    => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/:typeAgrement/ajouter',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'typeAgrement' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => AgrementController::ACTION_AJOUTER,
-                                    ),
-                                ),
-                            ),
-                            'voir' => array(
+                                    ],
+                                ],
+                            ],
+                            'voir' => [
                                 'type'    => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/voir/:agrement',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'agrement' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => AgrementController::ACTION_VOIR,
-                                    ),
-                                ),
-                            ),
-                            'voir-str' => array(
+                                    ],
+                                ],
+                            ],
+                            'voir-str' => [
                                 'type'    => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/:typeAgrement/voir-str[/:structure]',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'typeAgrement' => '[0-9]*',
                                         'structure' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => AgrementController::ACTION_VOIR_STR,
-                                    ),
-                                ),
-                            ),
-                            'modifier' => array(
+                                    ],
+                                ],
+                            ],
+                            'modifier' => [
                                 'type'    => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/modifier/:agrement',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'agrement' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => AgrementController::ACTION_MODIFIER,
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'gestion' => array(
-                'child_routes' => array(
-                    'agrement' => array(
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'gestion' => [
+                'child_routes' => [
+                    'agrement' => [
                         'type'    => 'Literal',
-                        'options' => array(
+                        'options' => [
                             'route' => '/agrement',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'Agrement',
                                 'action' => 'index'
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes' => array(
-                            'ajouter-lot' => array(
+                        'child_routes' => [
+                            'ajouter-lot' => [
                                 'type'    => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route' => '/:typeAgrement/ajouter-lot',
-                                    'constraints' => array(
+                                    'constraints' => [
                                         'typeAgrement' => '[0-9]*',
-                                    ),
-                                    'defaults' => array(
+                                    ],
+                                    'defaults' => [
                                         'action' => AgrementController::ACTION_AJOUTER_LOT,
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'navigation' => array(
-        'default' => array(
-            'home' => array(
-                'pages' => array(
-                    'intervenant' => array(
-                        'pages' => array(
-                            'agrement' => array(
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'navigation' => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'intervenant' => [
+                        'pages' => [
+                            'agrement' => [
                                 'label'         => "Agrément",
                                 'title'         => "Agrément de l'intervenant",
                                 'route'         => 'intervenant/agrement',
-                                'paramsInject' => array(
+                                'paramsInject' => [
                                     'intervenant',
-                                ),
+                                ],
                                 'withtarget'    => true,
                                 'resource'      => 'controller/Application\Controller\Agrement:index',
                                 'visible'       => 'IntervenantNavigationPageVisibility',
-                                'pagesProvider' => array(
+                                'pagesProvider' => [
                                     'type'       => 'AgrementIntervenantNavigationPagesProvider',
                                     'route'      => 'intervenant/agrement/liste',
-                                    'paramsInject' => array(
+                                    'paramsInject' => [
                                         'intervenant',
-                                    ),
+                                    ],
                                     'withtarget' => true,
                                     'resource'   => 'controller/Application\Controller\Agrement:lister',
                                     'visible'    => 'IntervenantNavigationPageVisibility',
-                                ),
-                            ),
-                        ),
-                    ),
-                    'gestion' => array(
-                        'pages' => array(
-                            'agrement' => array(
+                                ],
+                            ],
+                        ],
+                    ],
+                    'gestion' => [
+                        'pages' => [
+                            'agrement' => [
                                 'label'  => "Agréments par lot",
                                 'title'  => "Gestion des agréments par lot",
                                 'route'  => 'gestion/agrement',
                                 'resource' => 'controller/Application\Controller\Agrement:index',
-                                'pagesProvider' => array(
+                                'pagesProvider' => [
                                     'type'  => 'AgrementNavigationPagesProvider',
                                     'route' => 'gestion/agrement/ajouter-lot',
                                     'withtarget' => true,
                                     'resource'   => 'controller/Application\Controller\Agrement:' . AgrementController::ACTION_AJOUTER_LOT,
                                     'privilege'  => AgrementController::ACTION_AJOUTER_LOT,
                                     // NB: le code du type d'agrément sera concaténé au 'privilege' par le AgrementNavigationPagesProvider
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'bjyauthorize' => array(
-        'guards' => array(
-            'BjyAuthorize\Guard\Controller' => array(
-                array(
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
                     'controller' => 'Application\Controller\Agrement',
-                    'action'     => array('index', 'lister', 'voir'),
-                    'roles'      => array(IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'action'     => ['index', 'lister', 'voir'],
+                    'roles'      => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                     'assertion'  => 'AgrementAssertion',
-                ),
-                array(
+                ],
+                [
                     'controller' => 'Application\Controller\Agrement',
-                    'action'     => array('ajouter', 'ajouter-lot', 'modifier', 'supprimer', 'voir-str'),
-                    'roles'      => array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
+                    'action'     => ['ajouter', 'ajouter-lot', 'modifier', 'supprimer', 'voir-str'],
+                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                     'assertion'  => 'AgrementAssertion',
-                ),
-            ),
-        ),
-        'resource_providers' => array(
-            'BjyAuthorize\Provider\Resource\Config' => array(
-                'Agrement' => array(),
-            ),
-        ),
-        'rule_providers' => array(
-            'BjyAuthorize\Provider\Rule\Config' => array(
-                'allow' => array(
-                    array(
-                        array(ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID),
-                        'Agrement', 
-                        array('create', 'read', 'delete', 'update'), 
+                ],
+            ],
+        ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'Agrement' => [],
+            ],
+        ],
+        'rule_providers' => [
+            'BjyAuthorize\Provider\Rule\Config' => [
+                'allow' => [
+                    [
+                        [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                        'Agrement',
+                        ['create', 'read', 'delete', 'update'],
                         'AgrementAssertion',
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Agrement' => 'Application\Controller\AgrementController',
-        ),
-        'initializers' => array(
+        ],
+        'initializers' => [
             'Application\Service\Initializer\AgrementServiceAwareInitializer',
-        ),
-    ),
-    'service_manager' => array(
-        'invokables' => array(
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
             'ApplicationAgrement'                        => 'Application\\Service\\Agrement',
             'ApplicationTypeAgrement'                    => 'Application\\Service\\TypeAgrement',
             'ApplicationTypeAgrementStatut'              => 'Application\\Service\\TypeAgrementStatut',
             'AgrementNavigationPagesProvider'            => 'Application\\Service\\AgrementNavigationPagesProvider',
             'AgrementIntervenantNavigationPagesProvider' => 'Application\\Service\\AgrementIntervenantNavigationPagesProvider',
             'AgrementAssertion'                          => 'Application\\Assertion\\AgrementAssertion',
-        ),
-        'initializers' => array(
+        ],
+        'initializers' => [
             'Application\Service\Initializer\AgrementServiceAwareInitializer',
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
             'agrementDl'    => 'Application\View\Helper\AgrementDl',
             'isAllowedCRUD' => 'Application\View\Helper\IsAllowedCRUD',
-        ),
-    ),
-    'form_elements' => array(
-        'invokables' => array(
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
             'AgrementSaisieForm' => 'Application\Form\Agrement\Saisie',
-        ),
-    ),
-);
+        ],
+    ],
+];

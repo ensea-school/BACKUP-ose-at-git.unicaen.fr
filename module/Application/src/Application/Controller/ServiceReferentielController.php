@@ -3,17 +3,9 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Doctrine\Common\Collections\ArrayCollection;
 use Common\Exception\MessageException;
-use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Exception\DbException;
-use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\IntervenantPermanent;
-use Application\Form\ServiceReferentiel\FonctionServiceReferentielFieldset;
-use Application\Acl\ComposanteRole;
 use Application\Entity\Service\Recherche;
 
 /**
@@ -24,9 +16,9 @@ use Application\Entity\Service\Recherche;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class ServiceReferentielController extends AbstractActionController implements ContextProviderAwareInterface
+class ServiceReferentielController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait;
 
     protected function initFilters()
     {
@@ -35,7 +27,7 @@ class ServiceReferentielController extends AbstractActionController implements C
                 'Application\Entity\Db\ServiceReferentiel',
                 'Application\Entity\Db\VolumeHoraireReferentiel'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
     }
 
@@ -48,7 +40,7 @@ class ServiceReferentielController extends AbstractActionController implements C
     private function getFilteredServices($intervenant, $recherche)
     {
   //              \Test\Util::sqlLog($this->getServiceService()->getEntityManager());
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $serviceReferentiel              = $this->getServiceServiceReferentiel();
         $volumeHoraireReferentielService = $this->getServiceLocator()->get('applicationVolumehoraireReferentiel'); /* @var $volumeHoraireReferentielService \Application\Service\VolumeHoraireReferentiel */
@@ -59,9 +51,9 @@ class ServiceReferentielController extends AbstractActionController implements C
         $serviceReferentiel
             ->join( 'applicationIntervenant',         $qb, 'intervenant',              ['id', 'nomUsuel', 'prenom','sourceCode'] )
             ->join( $volumeHoraireReferentielService, $qb, 'volumeHoraireReferentiel', ['id', 'heures'] );
-        
+
         $volumeHoraireReferentielService->leftJoin( 'applicationEtatVolumeHoraire', $qb, 'etatVolumeHoraireReferentiel', ['id','code','libelle','ordre'] );
-        
+
         $serviceReferentiel->finderByContext($qb);
         $serviceReferentiel->finderByFilterObject($recherche, new \Zend\Stdlib\Hydrator\ClassMethods(false), $qb, null, ['typeVolumeHoraire','etatVolumeHoraire']);
 
@@ -80,9 +72,8 @@ class ServiceReferentielController extends AbstractActionController implements C
         $typeVolumeHoraireCode    = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
         $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
         $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role                     = $this->getContextProvider()->getSelectedIdentityRole();
+        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
         $intervenant              = $this->context()->intervenantFromRoute();
-        $annee                    = $this->getContextProvider()->getGlobalContext()->getAnnee();
         $viewModel                = new \Zend\View\Model\ViewModel();
         $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
                 $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
@@ -97,11 +88,13 @@ class ServiceReferentielController extends AbstractActionController implements C
             $params['action'] = 'recherche';
             $rechercheViewModel   = $this->forward()->dispatch('Application\Controller\Service', $params);
             $viewModel->addChild($rechercheViewModel, 'recherche');
-            
+
             $recherche = $this->getServiceService()->loadRecherche();
         }
         else {
-            $this->getContextProvider()->getLocalContext()->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
+            $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+            /* @var $localContext \Application\Service\LocalContext */
+            $localContext->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action    = 'afficher'; // Affichage par défaut
             $recherche = new Recherche;
             $recherche->setTypeVolumeHoraire($this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode));
@@ -124,17 +117,17 @@ class ServiceReferentielController extends AbstractActionController implements C
         else {
             $services = [];
         }
-        
+
         $renderReferentiel = !$intervenant instanceof IntervenantExterieur;
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params            = $viewHelperParams;
-        
-        $viewModel->setVariables(compact('annee', 'services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'canAddServiceReferentiel', 'params'));
-        
+
+        $viewModel->setVariables(compact('services', 'typeVolumeHoraire', 'action', 'role', 'intervenant', 'renderReferentiel', 'canAddServiceReferentiel', 'params'));
+
         if ($totaux) {
             $viewModel->setTemplate('application/service-referentiel/rafraichir-totaux');
         }
-        
+
         return $viewModel;
     }
 
@@ -149,10 +142,10 @@ class ServiceReferentielController extends AbstractActionController implements C
             $typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->get( $typeVolumeHoraire );
         }
         $service = $this->getServiceServiceReferentiel();
-        //$role    = $this->getContextProvider()->getSelectedIdentityRole();
+        //$role    = $this->getServiceContext()->getSelectedIdentityRole();
         $form    = $this->getFormSaisie();
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
-        $errors  = array();
+        $errors  = [];
 
         if ($id) {
             $entity = $service->get($id);
@@ -167,7 +160,9 @@ class ServiceReferentielController extends AbstractActionController implements C
             $title   = "Ajout de référentiel";
         }
 
-        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+        $intervenant = $localContext->getIntervenant();
         $assertionEntity = $this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant);
         if (! $this->isAllowed($assertionEntity, 'create') || ! $this->isAllowed($assertionEntity, 'update')) {
             throw new MessageException("Cette opération n'est pas autorisée.");
@@ -190,10 +185,10 @@ class ServiceReferentielController extends AbstractActionController implements C
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
-        
+
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setVariables(compact('form','errors','title'));
-        
+
         return $viewModel;
     }
 
@@ -205,7 +200,7 @@ class ServiceReferentielController extends AbstractActionController implements C
         $details            = 1 == (int)$this->params()->fromQuery('details',               (int)$this->params()->fromPost('details',0));
         $onlyContent        = 1 == (int)$this->params()->fromQuery('only-content',          0);
         $service = $this->context()->serviceReferentielFromRoute('id'); // remplacer id par service au besoin, à cause des routes définies en config.
-        
+
         return compact('service', 'params', 'details', 'onlyContent');
     }
 
@@ -237,17 +232,19 @@ class ServiceReferentielController extends AbstractActionController implements C
         $form->add(new \Zend\Form\Element\Hidden('type-volume-horaire'));
         $viewModel = new \Zend\View\Model\ViewModel();
 
-        $intervenant = $this->getContextProvider()->getLocalContext()->getIntervenant();
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+        $intervenant = $localContext->getIntervenant();
         $assertionEntity = $this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant);
         if (! $this->isAllowed($assertionEntity, 'delete')) {
             throw new MessageException("Cette opération n'est pas autorisée.");
         }
 
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
         $form->get('type-volume-horaire')->setValue( $typeVolumeHoraire->getId() );
 
         if ($this->getRequest()->isPost()) {
-            $errors = array();
+            $errors = [];
             try {
                 if ($typeVolumeHoraire->getCode() === \Application\Entity\Db\TypeVolumeHoraire::CODE_REALISE){
                     // destruction des seuls volumes horaires REALISES associés, pas les PREVUS

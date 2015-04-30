@@ -7,8 +7,6 @@ use UnicaenApp\Form\Element\SearchAndSelect;
 use Application\Entity\Db\Etablissement;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Zend\InputFilter\InputFilterProviderInterface;
@@ -19,10 +17,15 @@ use Application\Entity\Db\IntervenantExterieur;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface, ContextProviderAwareInterface
+class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\LocalContextAwareTrait,
+        \Application\Service\Traits\EtapeAwareTrait,
+        \Application\Service\Traits\NiveauEtapeAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait
+    ;
 
     /**
      * etablissement par défaut
@@ -31,9 +34,9 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
      */
     protected $etablissement;
 
-    
 
-    public function __construct($name = null, $options = array())
+
+    public function __construct($name = null, $options = [])
     {
         parent::__construct('service', $options);
     }
@@ -43,46 +46,45 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
         /* @var $url Zend\View\Helper\Url */
 
-        $this->etablissement = $this->getContextProvider()->getGlobalContext()->getEtablissement();
+        $this->etablissement = $this->getServiceContext()->getEtablissement();
 
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieFieldsetHydrator'))
               ->setAllowedObjectBindingClass('Application\Entity\Db\Service');
 
-        $this->add(array(
+        $this->add([
             'name' => 'id',
             'type' => 'Hidden',
-        ));
+        ]);
 
-        $identityRole = $this->getContextProvider()->getSelectedIdentityRole();
-        $contextIntervenant = $this->getContextProvider()->getGlobalContext()->getIntervenant();
+        $identityRole = $this->getServiceContext()->getSelectedIdentityRole();
 
         if (! $identityRole instanceof IntervenantRole){
             $intervenant = new SearchAndSelect('intervenant');
             $intervenant ->setRequired(true)
                          ->setSelectionRequired(true)
                          ->setAutocompleteSource(
-                            $url('recherche', array('action' => 'intervenantFind'))
+                            $url('recherche', ['action' => 'intervenantFind'])
                          )
                          ->setLabel("Intervenant :")
-                         ->setAttributes(array('title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"));
+                         ->setAttributes(['title' => "Saisissez le nom suivi éventuellement du prénom (2 lettres au moins)"]);
             $this->add($intervenant);
         }
 
-        if (!($identityRole instanceof IntervenantRole && $contextIntervenant instanceof IntervenantExterieur)){
-            $this->add(array(
+        if (!($identityRole instanceof IntervenantRole && $identityRole->getIntervenant() instanceof IntervenantExterieur)){
+            $this->add([
                 'type'       => 'Radio',
                 'name'       => 'interne-externe',
-                'options'    => array(
+                'options'    => [
                     'label'  => "Enseignement effectué :",
-                    'value_options' => array(
+                    'value_options' => [
                         'service-interne' => 'en interne',
                         'service-externe' => 'hors '.$this->etablissement,
-                    ),
-                ),
-                'attributes' => array(
+                    ],
+                ],
+                'attributes' => [
                     'value' => 'service-interne'
-                )
-            ));
+                ]
+            ]);
         }
 
         $fs = $this->getServiceLocator()->get('FormElementPedagogiqueRechercheFieldset');
@@ -96,45 +98,43 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
                            $url('etablissement/recherche')
                        )
                        ->setLabel("Établissement :")
-                       ->setAttributes(array('title' => "Saisissez le libellé (2 lettres au moins)"));
+                       ->setAttributes(['title' => "Saisissez le libellé (2 lettres au moins)"]);
         $this->add($etablissement);
     }
 
     public function initFromContext()
     {
         /* Peuple le formulaire avec les valeurs par défaut issues du contexte global */
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $fs = $this->get('element-pedagogique'); /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-        $cl = $this->getContextProvider()->getLocalContext();
-
-        if ($this->has('intervenant') && $cl->getIntervenant()){
-            $this->get('intervenant')->setValue(array(
-                'id' => $cl->getIntervenant()->getSourceCode(),
-                'label' => (string)$cl->getIntervenant()
-            ));
+        if ($this->has('intervenant') && $this->getServiceLocalContext()->getIntervenant()){
+            $this->get('intervenant')->setValue([
+                'id' => $this->getServiceLocalContext()->getIntervenant()->getSourceCode(),
+                'label' => (string)$this->getServiceLocalContext()->getIntervenant()
+            ]);
         }
 
         if (! $role instanceof IntervenantRole){
-            if ($cl->getStructure()){
-                $structure = $cl->getStructure();
-                $valueOptions = array($structure->getId() => (string) $structure);
+            if ($this->getServiceLocalContext()->getStructure()){
+                $structure = $this->getServiceLocalContext()->getStructure();
+                $valueOptions = [$structure->getId() => (string) $structure];
                 $fs->get('structure')->setValue($structure->getId());
 
             }
-            if ($cl->getNiveau()){
-                $fs->get('niveau')->setValue( $cl->getNiveau()->getId() );
+            if ($this->getServiceLocalContext()->getNiveau()){
+                $fs->get('niveau')->setValue( $this->getServiceLocalContext()->getNiveau()->getId() );
             }
-            if ($cl->getEtape()){
-                $fs->get('etape')->setValue( $cl->getEtape()->getId() );
+            if ($this->getServiceLocalContext()->getEtape()){
+                $fs->get('etape')->setValue( $this->getServiceLocalContext()->getEtape()->getId() );
             }
         }
-        if ($cl->getElementPedagogique()){
-            $fs->get('element')->setValue( array(
-                'id' => $cl->getElementPedagogique()->getId(),
-                'label' => (string)$cl->getElementPedagogique()
-            ));
+        if ($this->getServiceLocalContext()->getElementPedagogique()){
+            $fs->get('element')->setValue( [
+                'id' => $this->getServiceLocalContext()->getElementPedagogique()->getId(),
+                'label' => (string)$this->getServiceLocalContext()->getElementPedagogique()
+            ]);
         }
         if ($this->has('interne-externe')){
             $this->get('interne-externe')->setValue('service-interne');
@@ -143,7 +143,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
         // la structure de responsabilité du gestionnaire écrase celle du contexte local
         if ($role instanceof ComposanteRole) { // Si c'est un membre d'une composante
             $structure = $role->getStructure();
-            $valueOptions = array($structure->getId() => (string) $structure);
+            $valueOptions = [$structure->getId() => (string) $structure];
             //    $this->getServiceStructure()->finderById($structure->getId(), $fs->getQueryBuilder());
             $fs->get('structure')->setValue($structure->getId());
         }
@@ -152,27 +152,26 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     public function saveToContext()
     {
         /* Met à jour le contexte local en fonction des besoins... */
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
         $fs = $this->get('element-pedagogique'); /* @var $fs \Application\Form\OffreFormation\ElementPedagogiqueRechercheFieldset */
 
         /* Peuple le formulaire avec les valeurs issues du contexte local */
-        $cl = $this->getContextProvider()->getLocalContext();
 
         if (! $role instanceof IntervenantRole){
             if ( $structureId = $fs->get('structure')->getValue() ){
-                $cl->setStructure( $this->getServiceStructure()->get( $structureId ) );
+                $this->getServiceLocalContext()->setStructure( $this->getServiceStructure()->get( $structureId ) );
             }else{
-                $cl->setStructure( null );
+                $this->getServiceLocalContext()->setStructure( null );
             }
             if ( $niveauId = $fs->get('niveau')->getValue() ){
-                $cl->setNiveau( $this->getServiceNiveauEtape()->get( $niveauId ) );
+                $this->getServiceLocalContext()->setNiveau( $this->getServiceNiveauEtape()->get( $niveauId ) );
             }else{
-                $cl->setNiveau( null );
+                $this->getServiceLocalContext()->setNiveau( null );
             }
             if ( $etapeId = $fs->get('etape')->getValue() ){
-                $cl->setEtape( $this->getServiceEtape()->get( $etapeId ) );
+                $this->getServiceLocalContext()->setEtape( $this->getServiceEtape()->get( $etapeId ) );
             }else{
-                $cl->setEtape( null );
+                $this->getServiceLocalContext()->setEtape( null );
             }
         }
     }
@@ -184,40 +183,16 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
      * @return array
      */
     public function getInputFilterSpecification(){
-        return array(
-            'interne-externe' => array(
+        return [
+            'interne-externe' => [
                 'required' => false
-            ),
-            'etablissement' => array(
+            ],
+            'etablissement' => [
                 'required' => false
-            ),
-            'element-pedagogique' => array(
+            ],
+            'element-pedagogique' => [
                 'required' => false
-            ),
-        );
-    }
-
-    /**
-     * @return \Application\Service\Structure
-     */
-    protected function getServiceStructure()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationStructure');
-    }
-
-    /**
-     * @return \Application\Service\NiveauEtape
-     */
-    protected function getServiceNiveauEtape()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationNiveauEtape');
-    }
-
-    /**
-     * @return \Application\Service\Etape
-     */
-    protected function getServiceEtape()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtape');
+            ],
+        ];
     }
 }

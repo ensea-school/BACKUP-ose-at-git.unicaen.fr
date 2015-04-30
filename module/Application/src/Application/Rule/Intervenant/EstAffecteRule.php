@@ -15,20 +15,20 @@ class EstAffecteRule extends AbstractRule
 {
     use IntervenantAwareTrait;
     use StructureAwareTrait;
-    
+
     const MESSAGE_AFFECTATION = 'affectation';
 
     /**
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_AFFECTATION => "L'intervenant n'est pas affecté à la structure suivante (ou à l'une de ses sous-structures) : %value%.",
-    );
-    
+    ];
+
     public function execute()
     {
-        if ($this->getIntervenant()->getStructure() !== $this->getStructure() 
+        if ($this->getIntervenant()->getStructure() !== $this->getStructure()
                 && $this->getIntervenant()->getStructure()->getParenteNiv2() !== $this->getStructure()->getParenteNiv2()) {
             $this->message(self::MESSAGE_AFFECTATION, $this->getStructure());
             return false;
@@ -36,7 +36,7 @@ class EstAffecteRule extends AbstractRule
 
         return true;
     }
-    
+
     public function isRelevant()
     {
         return null !== $this->getIntervenant()->getStructure();

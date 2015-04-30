@@ -6,15 +6,12 @@ use Application\Acl\AdministrateurRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
 use Application\Interfaces\StructureAwareInterface;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Service\Indicateur as IndicateurService;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
 use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Zend\Console\Request as ConsoleRequest;
@@ -42,9 +39,8 @@ use Zend\View\Renderer\PhpRenderer;
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class NotificationController extends AbstractActionController implements ContextProviderAwareInterface
+class NotificationController extends AbstractActionController
 {
-    use ContextProviderAwareTrait;
 
     /**
      * Visualisation de tous les abonnements aux indicateurs.

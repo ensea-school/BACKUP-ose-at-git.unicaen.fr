@@ -38,7 +38,7 @@ class EtapeSaisieHydrator implements HydratorInterface, ServiceLocatorAwareInter
         if (array_key_exists('domaine-fonctionnel', $data)) {
             $object->setDomaineFonctionnel($this->getServiceLocator()->get('ApplicationDomaineFonctionnel')->get($data['domaine-fonctionnel']));
         }
-        
+
         return $object;
     }
 
@@ -50,7 +50,7 @@ class EtapeSaisieHydrator implements HydratorInterface, ServiceLocatorAwareInter
      */
     public function extract($object)
     {
-        $data = array(
+        $data = [
             'source-code'         => $object->getSourceCode(),
             'libelle'             => $object->getLibelle(),
             'id'                  => $object->getId(),
@@ -59,8 +59,8 @@ class EtapeSaisieHydrator implements HydratorInterface, ServiceLocatorAwareInter
             'specifique-echanges' => $object->getSpecifiqueEchanges(),
             'structure'           => ($s = $object->getStructure()) ? $s->getId() : null,
             'domaine-fonctionnel' => ($s = $object->getDomaineFonctionnel()) ? $s->getId() : null,
-        );
-        
+        ];
+
         return $data;
     }
 }

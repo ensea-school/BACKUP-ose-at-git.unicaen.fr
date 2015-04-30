@@ -40,12 +40,12 @@ class ElementPedagogiqueRechercheHydrator implements HydratorInterface, ServiceL
      */
     public function extract($object)
     {
-        $data = array();
+        $data = [];
 
-        $data['element'] = array(
+        $data['element'] = [
             'id'    => $object ? $object->getId() : null,
             'label' => $object ? $object->getLibelle() : null,
-        );
+        ];
 
         $etape = $object ? $object->getEtape() : null;
         if ($etape){

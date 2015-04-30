@@ -20,6 +20,10 @@
 <?php echo $this->partial('application/paiement/etat-paiement-tableau', ['etatPaiement' => $etatPaiement, 'hasFoot' => true]); ?>
 
 <?php if (Application\Entity\Db\MiseEnPaiement::MIS_EN_PAIEMENT == $etat): ?>
+<p>La rémunération versée sous forme de forfait au titre d'une opération de formation continue identifiée
+(article D714-60 du code de l’Éducation) est exclusive de la rémunération des heures complémentaires réalisées dans le cadre
+de cette même opération.</p>
+
 <div class="signature">
 <p style="margin: none;margin-top:1em">Pour le président et par délégation</p>
 <p style="margin: none">Le Directeur des ressources humaines</p>

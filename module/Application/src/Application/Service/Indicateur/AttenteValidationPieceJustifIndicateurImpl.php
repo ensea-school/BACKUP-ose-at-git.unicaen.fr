@@ -52,7 +52,8 @@ class AttenteValidationPieceJustifIndicateurImpl extends AbstractIntervenantResu
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s", Join::WITH, "s.structureEns = :structure")
+                    ->join("int.service", "s")
+                    ->join("s.elementPedagogique", "ep", Join::WITH, "ep.structure = :structure")
                     ->join("s.volumeHoraire", "vh")
                     ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
                     ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())

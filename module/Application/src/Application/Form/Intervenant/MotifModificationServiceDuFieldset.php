@@ -4,8 +4,6 @@ namespace Application\Form\Intervenant;
 
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Zend\Form\Fieldset;
 use Zend\Validator\LessThan;
 use Zend\Stdlib\Hydrator\HydratorInterface;
@@ -19,83 +17,80 @@ use Application\Entity\Db\MotifModificationService;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class MotifModificationServiceDuFieldset extends Fieldset implements EntityManagerAwareInterface, InputFilterProviderInterface//, ContextProviderAwareInterface
+class MotifModificationServiceDuFieldset extends Fieldset implements EntityManagerAwareInterface, InputFilterProviderInterface
 {
     use EntityManagerAwareTrait;
-//    use ContextProviderAwareTrait;
-    
+
     /**
      * @var Collection
      */
     protected $motifsPossibles;
-    
+
     /**
      * This function is automatically called when creating element with factory. It
      * allows to perform various operations (add elements...)
      */
     public function init()
     {
-//        var_dump(get_class($intervenant), "".$annee, count($intervenant->getServiceReferentiel($annee)));
-        
         $this->setHydrator(new MotifModificationServiceDuHydrator($this->getMotifs()))
              ->setObject(new ModificationServiceDu());
 
 //        $this->setLabel("Motif");
 
-        $this->add(array(
+        $this->add([
             'name'       => 'motif',
-            'options'    => array(
+            'options'    => [
                 'label' => "Motif",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'title' => "Motif",
                 'class' => 'modification-service-du modification-service-du-motif',
-            ),
+            ],
             'type'       => 'Select',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'heures',
-            'options'    => array(
+            'options'    => [
                 'label' => "Nombre d'heures",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'value' => "0",
                 'title' => "Nombre d'heures",
                 'class' => 'modification-service-du modification-service-du-heures'
-            ),
+            ],
             'type'       => 'Text',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'commentaires',
-            'options'    => array(
+            'options'    => [
                 'label' => "Commentaires",
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'title' => "Commentaires éventuels",
                 'class' => 'modification-service-du modification-service-du-commentaires'
-            ),
+            ],
             'type'       => 'Textarea',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'remove',
-            'options'    => array(
+            'options'    => [
                 'label' => "<span class=\"glyphicon glyphicon-minus\"></span> Supprimer",
-                'label_options' => array(
+                'label_options' => [
                     'disable_html_escape' => true,
-                ),
-            ),
-            'attributes' => array(
+                ],
+            ],
+            'attributes' => [
                 'title' => "Supprimer cette ligne",
                 'class' => 'modification-service-du modification-service-du-supprimer btn btn-default btn-xs'
-            ),
+            ],
             'type'       => 'Button',
-        ));
+        ]);
 
         // liste déroulante des motifs
-        $options = array();
+        $options = [];
         $options[''] = "(Sélectionnez un motif...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
         foreach ($this->getMotifs() as $item) {
             $options[$item->getId()] = "" . $item;
@@ -109,16 +104,16 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
     {
         if (null === $this->motifsPossibles) {
             $repoMotif = $this->getEntityManager()->getRepository('Application\Entity\Db\MotifModificationServiceDu'); /* @var $repoMotif \Doctrine\ORM\EntityRepository */
-            $this->motifsPossibles = $repoMotif->findBy(array('libelle' => 'asc'));
+            $this->motifsPossibles = $repoMotif->findBy([], ['libelle' => 'asc']);
             if (!$this->motifsPossibles) {
                 throw new \Common\Exception\RuntimeException("Aucun motif de modification de service dû trouvé dans la base.");
             }
         }
         return $this->motifsPossibles;
     }
-    
+
     /**
-     * 
+     *
      * @return \Zend\Validator\LessThan|null
      */
     protected function getValidatorHeures()
@@ -131,13 +126,13 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
         };
         $motif = current(array_filter($this->getMotifs(), $p)); /* @var $motif MotifModificationService */
         if ($motif) {
-            $v = new LessThan(array('max' => $max = (float)$motif->getPlafond(), 'inclusive' => true));
-            $v->setMessages(array(LessThan::NOT_LESS_INCLUSIVE => "Le plafond pour ce motif est de $max"));
+            $v = new LessThan(['max' => $max = (float)$motif->getPlafond(), 'inclusive' => true]);
+            $v->setMessages([LessThan::NOT_LESS_INCLUSIVE => "Le plafond pour ce motif est de $max"]);
         }
-        
+
         return $v;
     }
-    
+
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -146,27 +141,27 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
      */
     public function getInputFilterSpecification()
     {
-        $specs = array(
-            'motif' => array(
+        $specs = [
+            'motif' => [
                 'required'   => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name' => 'Zend\Validator\NotEmpty',
-                        'options' => array(
-                            'messages' => array(
+                        'options' => [
+                            'messages' => [
                                 \Zend\Validator\NotEmpty::IS_EMPTY => "Le motif est requis",
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'heures'   => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'heures'   => [
                 'required' => true,
-                'filters'    => array(
-                    array('name' => 'Zend\Filter\StringTrim'),
-                    new \Zend\Filter\PregReplace(array('pattern' => '/,/', 'replacement' => '.')),
-                ),
-                'validators' => array(
+                'filters'    => [
+                    ['name' => 'Zend\Filter\StringTrim'],
+                    new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
+                ],
+                'validators' => [
 //                    array(
 //                        'name' => 'Zend\Validator\NotEmpty',
 //                        'options' => array(
@@ -178,24 +173,24 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
 //                            ),
 //                        ),
 //                    ),
-                    array(
+                    [
                         'name' => 'Zend\Validator\GreaterThan',
-                        'options' => array(
+                        'options' => [
                             'min' => 0,
                             'inclusive' => false,
-                            'messages' => array(
+                            'messages' => [
                                 \Zend\Validator\GreaterThan::NOT_GREATER => "Le nombre d'heures doit être strictement supérieur à 0",
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
-        
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
 //        if (($validator = $this->getValidatorHeures())) {
 //            $specs['heures']['validators'][] = $validator;
 //        }
-        
+
         return $specs;
     }
 }
@@ -206,19 +201,19 @@ class MotifModificationServiceDuHydrator implements HydratorInterface
      * @var MotifModificationService[]
      */
     protected $motifsPossibles;
-    
+
     /**
-     * 
+     *
      * @param MotifModificationService[] $motifsPossibles
      */
     public function __construct($motifsPossibles)
     {
-        $this->motifsPossibles = array();
+        $this->motifsPossibles = [];
         foreach ($motifsPossibles as $v) {
             $this->motifsPossibles[$v->getId()] = $v;
         }
     }
-    
+
     /**
      * Extract values from an object
      *
@@ -227,11 +222,11 @@ class MotifModificationServiceDuHydrator implements HydratorInterface
      */
     public function extract($object)
     {
-        return array(
+        return [
             'motif'        => $object->getMotif()->getId(),
             'heures'       => floatval($object->getHeures()),
             'commentaires' => $object->getCommentaires(),
-        );
+        ];
     }
 
     /**
@@ -247,7 +242,7 @@ class MotifModificationServiceDuHydrator implements HydratorInterface
                 ->setMotif($this->motifsPossibles[intval($data['motif'])])
                 ->setHeures(floatval($data['heures']))
                 ->setCommentaires($data['commentaires'] ?: null);
-        
+
         return $object;
     }
 }

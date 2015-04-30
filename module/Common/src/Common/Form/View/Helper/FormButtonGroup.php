@@ -57,9 +57,9 @@ class FormButtonGroup extends FormRadio
             $inputAttributes['type'] = 'radio';
             $inputAttributes['value'] = $value;
 
-            $labelAttributes = array(
+            $labelAttributes = [
                 'class' => 'btn btn-default'
-            );
+            ];
             if ($selected) $labelAttributes['class'] .= ' active';
 
             if (null !== ($translator = $this->getTranslator())) {

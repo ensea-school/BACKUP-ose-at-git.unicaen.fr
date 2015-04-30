@@ -37,7 +37,7 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
      *
      * @var integer[]
      */
-    protected $countModulateursByType = array();
+    protected $countModulateursByType = [];
 
 
 
@@ -97,7 +97,7 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
         foreach( $typesModulateurs as $typeModulateur ){
             $element = new Select($typeModulateur->getCode());
             $element->setLabel($typeModulateur->getLibelle());
-            $values = array('' => '');
+            $values = ['' => ''];
             foreach( $typeModulateur->getModulateur() as $modulateur ){
                 $values[$modulateur->getId()] = (string)$modulateur;
             }
@@ -135,11 +135,11 @@ class ElementModulateursFieldset extends Fieldset implements InputFilterProvider
     public function getInputFilterSpecification()
     {
         $typesModulateurs = $this->getTypesModulateurs();
-        $filters = array();
+        $filters = [];
         foreach( $typesModulateurs as $typeModulateur ){
-            $filters[$typeModulateur->getCode()] = array(
+            $filters[$typeModulateur->getCode()] = [
                 'required' => false
-            );
+            ];
         }
         return $filters;
     }

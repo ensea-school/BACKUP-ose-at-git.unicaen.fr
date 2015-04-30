@@ -6,8 +6,6 @@ use Zend\View\Helper\AbstractHtmlElement;
 use Application\Entity\Db\Service;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Service\ContextProviderAwareInterface;
-use Application\Service\ContextProviderAwareTrait;
 use Application\Entity\Db\TypeIntervention;
 use Application\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Traits\TypeVolumeHoraireAwareTrait;
@@ -23,12 +21,16 @@ extends
     AbstractHtmlElement
 implements
     ServiceLocatorAwareInterface,
-    ContextProviderAwareInterface,
     TypeVolumeHoraireAwareInterface
 {
-    use ServiceLocatorAwareTrait;
-    use ContextProviderAwareTrait;
-    use TypeVolumeHoraireAwareTrait;
+    use ServiceLocatorAwareTrait,
+        TypeVolumeHoraireAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\ServiceAwareTrait,
+        \Application\Service\Traits\TypeInterventionAwareTrait,
+        \Application\Service\Traits\TypeVolumeHoraireAwareTrait,
+        \Application\Service\Traits\EtatVolumeHoraireAwareTrait
+    ;
 
     /**
      *
@@ -442,15 +444,15 @@ implements
     public function calcDefaultColumnsVisibility()
     {
         $services = $this->getServices();
-        $role = $this->getContextProvider()->getSelectedIdentityRole();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         // si plusieurs années différentes sont détectées alors on prévoit d'afficher la colonne année par défaut
         // si plusieurs intervenants différents alors on prévoit d'afficher la colonne intervenant par défaut
         $annee       = null;    $multiAnnees        = false;
         $intervenant = null;    $multiIntervenants  = false;
         foreach( $services as $service ){
-            if (empty($annee)) $annee = $service->getAnnee();
-            elseif( $annee !== $service->getAnnee() ){ $multiAnnees = true; break;}
+            if (empty($annee)) $annee = $service->getIntervenant()->getAnnee();
+            elseif( $annee !== $service->getIntervenant()->getAnnee() ){ $multiAnnees = true; break;}
 
             if (empty($intervenant)) $intervenant = $service->getIntervenant();
             elseif( $intervenant !== $service->getIntervenant() ){ $multiIntervenants = true; break;}
@@ -634,39 +636,5 @@ implements
     {
         $this->addButtonVisibility = $addButtonVisibility;
         return $this;
-    }
-
-    /**
-     * @return \Application\Service\Service
-     */
-    protected function getServiceService()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationService');
-    }
-
-    /**
-     *
-     * @return \Application\Service\TypeVolumeHoraire
-     */
-    protected function getServiceTypeVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeVolumeHoraire');
-    }
-
-    /**
-     *
-     * @return \Application\Service\EtatVolumeHoraire
-     */
-    protected function getServiceEtatVolumeHoraire()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtatVolumeHoraire');
-    }
-
-    /**
-     * @return \Application\Service\TypeIntervention
-     */
-    protected function getServiceTypeIntervention()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeIntervention');
     }
 }

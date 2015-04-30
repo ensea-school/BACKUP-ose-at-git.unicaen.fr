@@ -1,8 +1,8 @@
 <?php
 
-$settings = array(
-);
+$settings = [
+];
 
-return array(
+return [
    'unicaen-ldap' => $settings
-);
+];

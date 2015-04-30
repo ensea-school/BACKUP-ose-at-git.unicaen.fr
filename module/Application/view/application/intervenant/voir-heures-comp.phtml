@@ -1,13 +1,12 @@
 <?php
 
-/* @var $annee \Application\Entity\Db\Annee */
 /* @var $intervenant \Application\Entity\Db\Intervenant */
 /* @var $form Application\Form\Intervenant\HeuresCompForm */
 /* @var $typeVolumeHoraire Application\Entity\Db\TypeVolumeHoraire */
 /* @var $etatVolumeHoraire Application\Entity\Db\EtatVolumeHoraire */
 /* @var $data array */
 
-$resultat = $intervenant->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+$resultat = $intervenant->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 $totalService =
         $resultat->getHeuresServiceFi()
       + $resultat->getHeuresServiceFa()

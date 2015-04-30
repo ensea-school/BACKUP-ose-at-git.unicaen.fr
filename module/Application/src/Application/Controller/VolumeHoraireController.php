@@ -16,13 +16,10 @@ use Application\Exception\DbException;
  */
 class VolumeHoraireController extends AbstractActionController
 {
-    /**
-     * @return \Application\Service\VolumeHoraire
-     */
-    public function getServiceVolumeHoraire()
-    {
-        return $this->getServiceLocator()->get('ApplicationVolumeHoraire');
-    }
+    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\VolumeHoraireAwareTrait;
+    use \Application\Service\Traits\ServiceAwareTrait;
+
 
     public function voirAction()
     {
@@ -42,7 +39,7 @@ class VolumeHoraireController extends AbstractActionController
             [
                 'Application\Entity\Db\VolumeHoraire'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
         $service = $this->context()->serviceFromRoute('id');
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
@@ -61,14 +58,14 @@ class VolumeHoraireController extends AbstractActionController
                 'Application\Entity\Db\VolumeHoraire',
                 'Application\Entity\Db\MotifNonPaiement'
             ],
-            $this->context()->getGlobalContext()->getDateObservation()
+            $this->getServiceContext()->getDateObservation()
         );
 
         $service            = $this->context()->serviceFromRoute();
         $typeVolumehoraire  = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
         $periode            = $this->context()->periodeFromQueryPost();
         $typeIntervention   = $this->context()->typeInterventionFromQueryPost('type-intervention');
-        $errors = array();
+        $errors = [];
         if ($this->getServiceService()->canHaveMotifNonPaiement($service)){
             $tousMotifsNonPaiement = $this->params()->fromQuery('tous-motifs-non-paiement');
             if ($tousMotifsNonPaiement == '1'){
@@ -90,7 +87,7 @@ class VolumeHoraireController extends AbstractActionController
         $volumeHoraireList->setMotifNonPaiement($motifNonPaiement);
 
         $form = $this->getForm();
-        $form->setAttribute('action', $this->url()->fromRoute(null, array(), array(), true));
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $request = $this->getRequest();
         if ($request->isPost()){
@@ -128,7 +125,7 @@ class VolumeHoraireController extends AbstractActionController
 
     /**
      * Retourne le formulaire de modif de Volume Horaire.
-     * 
+     *
      * @return \Application\Form\VolumeHoraire\Saisie
      */
     protected function getForm()
@@ -136,11 +133,4 @@ class VolumeHoraireController extends AbstractActionController
         return $this->getServiceLocator()->get('FormElementManager')->get('VolumeHoraireSaisie');
     }
 
-    /**
-     * @return \Application\Service\Service
-     */
-    protected function getServiceService()
-    {
-        return $this->getServiceLocator()->get('applicationService');
-    }
 }

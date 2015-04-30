@@ -3,15 +3,15 @@ $params = ['agrement' => $this->agrement->getId()];
 ?>
 
 <p class="pull-right">
-    <?php if ($this->isAllowed($this->agrement, 'create')): ?> 
-        <a href="<?php echo $this->url('intervenant/agrement/ajouter', $params, array(), true) ?>" 
-           class="ajax-modal btn btn-sm btn-primary" 
+    <?php if ($this->isAllowed($this->agrement, 'create')): ?>
+        <a href="<?php echo $this->url('intervenant/agrement/ajouter', $params, [], true) ?>"
+           class="ajax-modal btn btn-sm btn-primary"
            data-event="event-update-agrement"
            data-target="td.agrement">Saisir l'agrément</a>
    <?php endif; ?>
    <?php if ($this->isAllowed($this->agrement, 'update')): ?>
-        <a href="<?php echo $this->url('intervenant/agrement/modifier', $params, array(), true) ?>" 
-           class="ajax-modal btn btn-sm btn-default" 
+        <a href="<?php echo $this->url('intervenant/agrement/modifier', $params, [], true) ?>"
+           class="ajax-modal btn btn-sm btn-default"
            data-event="event-update-agrement"
            data-target="td.agrement">Modifier cet agrément</a>
     <?php endif; ?>

@@ -35,11 +35,6 @@ class FormuleVolumeHoraireReferentiel
     private $intervenant;
 
     /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
-
-    /**
      * @var \Application\Entity\Db\TypeVolumeHoraire
      */
     private $typeVolumeHoraire;
@@ -56,19 +51,6 @@ class FormuleVolumeHoraireReferentiel
 
 
     /**
-     * Set heures
-     *
-     * @param float $heures
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setHeures($heures)
-    {
-        $this->heures = $heures;
-
-        return $this;
-    }
-
-    /**
      * Get heures
      *
      * @return float 
@@ -76,19 +58,6 @@ class FormuleVolumeHoraireReferentiel
     public function getHeures()
     {
         return $this->heures;
-    }
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -102,19 +71,6 @@ class FormuleVolumeHoraireReferentiel
     }
 
     /**
-     * Set volumeHoraireReferentiel
-     *
-     * @param \Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setVolumeHoraireReferentiel(\Application\Entity\Db\VolumeHoraireReferentiel $volumeHoraireReferentiel = null)
-    {
-        $this->volumeHoraireReferentiel = $volumeHoraireReferentiel;
-
-        return $this;
-    }
-
-    /**
      * Get volumeHoraireReferentiel
      *
      * @return \Application\Entity\Db\VolumeHoraireReferentiel 
@@ -122,19 +78,6 @@ class FormuleVolumeHoraireReferentiel
     public function getVolumeHoraireReferentiel()
     {
         return $this->volumeHoraireReferentiel;
-    }
-
-    /**
-     * Set serviceReferentiel
-     *
-     * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel = null)
-    {
-        $this->serviceReferentiel = $serviceReferentiel;
-
-        return $this;
     }
 
     /**
@@ -148,19 +91,6 @@ class FormuleVolumeHoraireReferentiel
     }
 
     /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\Intervenant $intervenant
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-    /**
      * Get intervenant
      *
      * @return \Application\Entity\Db\Intervenant 
@@ -168,42 +98,6 @@ class FormuleVolumeHoraireReferentiel
     public function getIntervenant()
     {
         return $this->intervenant;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
-    }
-
-    /**
-     * Set typeVolumeHoraire
-     *
-     * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-
-        return $this;
     }
 
     /**
@@ -217,19 +111,6 @@ class FormuleVolumeHoraireReferentiel
     }
 
     /**
-     * Set etatVolumeHoraire
-     *
-     * @param \Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setEtatVolumeHoraire(\Application\Entity\Db\EtatVolumeHoraire $etatVolumeHoraire = null)
-    {
-        $this->etatVolumeHoraire = $etatVolumeHoraire;
-
-        return $this;
-    }
-
-    /**
      * Get etatVolumeHoraire
      *
      * @return \Application\Entity\Db\EtatVolumeHoraire 
@@ -237,19 +118,6 @@ class FormuleVolumeHoraireReferentiel
     public function getEtatVolumeHoraire()
     {
         return $this->etatVolumeHoraire;
-    }
-
-    /**
-     * Set formuleServiceReferentiel
-     *
-     * @param \Application\Entity\Db\FormuleServiceReferentiel $formuleServiceReferentiel
-     * @return FormuleVolumeHoraireReferentiel
-     */
-    public function setFormuleServiceReferentiel(\Application\Entity\Db\FormuleServiceReferentiel $formuleServiceReferentiel = null)
-    {
-        $this->formuleServiceReferentiel = $formuleServiceReferentiel;
-
-        return $this;
     }
 
     /**

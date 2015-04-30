@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
+class Structure implements HistoriqueAwareInterface
 {
     /**
      * @var \DateTime
@@ -46,16 +46,6 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
      * @var string
      */
     protected $contactPj;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteDebut;
-
-    /**
-     * @var \DateTime
-     */
-    protected $validiteFin;
 
     /**
      * @var integer
@@ -108,11 +98,6 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
     protected $elementPedagogique;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection 
-     */
-    protected $service;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $centreCout;
@@ -133,7 +118,6 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
     {
         $this->structureNiv2                        = new \Doctrine\Common\Collections\Collection;
         $this->elementPedagogique                   = new \Doctrine\Common\Collections\Collection;
-        $this->service                              = new \Doctrine\Common\Collections\Collection;
         $this->centreCout                           = new \Doctrine\Common\Collections\Collection;
         $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\Collection;
     }
@@ -321,52 +305,6 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getContactPj()
     {
         return $this->contactPj;
-    }
-
-    /**
-     * Set validiteDebut
-     *
-     * @param \DateTime $validiteDebut
-     * @return Structure
-     */
-    public function setValiditeDebut($validiteDebut)
-    {
-        $this->validiteDebut = $validiteDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteDebut
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeDebut()
-    {
-        return $this->validiteDebut;
-    }
-
-    /**
-     * Set validiteFin
-     *
-     * @param \DateTime $validiteFin
-     * @return Structure
-     */
-    public function setValiditeFin($validiteFin)
-    {
-        $this->validiteFin = $validiteFin;
-
-        return $this;
-    }
-
-    /**
-     * Get validiteFin
-     *
-     * @return \DateTime 
-     */
-    public function getValiditeFin()
-    {
-        return $this->validiteFin;
     }
 
     /**
@@ -594,39 +532,6 @@ class Structure implements HistoriqueAwareInterface, ValiditeAwareInterface
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
-    }
-
-    /**
-     * Add service
-     *
-     * @param \Application\Entity\Db\Service $service
-     * @return Intervenant
-     */
-    public function addService(\Application\Entity\Db\Service $service)
-    {
-        $this->service[] = $service;
-
-        return $this;
-    }
-
-    /**
-     * Remove service
-     *
-     * @param \Application\Entity\Db\Service $service
-     */
-    public function removeService(\Application\Entity\Db\Service $service)
-    {
-        $this->service->removeElement($service);
-    }
-
-    /**
-     * Get service
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getService()
-    {
-        return $this->service;
     }
 
     /**

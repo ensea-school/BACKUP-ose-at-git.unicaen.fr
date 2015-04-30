@@ -28,7 +28,7 @@ class TypeModulateur extends AbstractEntityService
      *
      * @var array
      */
-    protected $finderByStructureCache = array();
+    protected $finderByStructureCache = [];
 
 
     /**
@@ -53,7 +53,7 @@ class TypeModulateur extends AbstractEntityService
 
     /**
      * Ne récupère que les types de modulateurs associés à une structure donnée
-     * 
+     *
      * @param StructureEntity $structure
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param type $alias
@@ -83,7 +83,7 @@ class TypeModulateur extends AbstractEntityService
             $qb->andWhere($alias.'.code IN (:'.$alias.'_code)')->setParameter($alias.'_code', $code);
             return $this->getList( $qb );
         }elseif ($code){
-            return $this->getRepo()->findOneBy(array('code' => $code));
+            return $this->getRepo()->findOneBy(['code' => $code]);
         }else{
             return null;
         }
@@ -103,7 +103,7 @@ class TypeModulateur extends AbstractEntityService
 
         $pid = 'ep'.uniqid();
         $qb->andWhere(":$pid MEMBER OF $alias.elementPedagogique")->setParameter($pid, $element);
-        
+
         return $qb;
     }
 

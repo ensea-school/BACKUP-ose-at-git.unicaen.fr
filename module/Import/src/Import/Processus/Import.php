@@ -49,7 +49,7 @@ class Import extends Processus
 
     /**
      * Retourne le service différentiel
-     * 
+     *
      * @return \Import\Service\Differentiel
      */
     protected function getDifferentiel()
@@ -387,10 +387,10 @@ class Import extends Processus
         if (null !== $value) $query->addColValue($name, $value);
         switch( $action ){
             case 'insert':
-                $query->setAction (array(Query::ACTION_INSERT,Query::ACTION_UNDELETE));
+                $query->setAction ([Query::ACTION_INSERT,Query::ACTION_UNDELETE]);
             break;
             case 'update':
-                $query->setAction (array(Query::ACTION_UPDATE,Query::ACTION_DELETE));
+                $query->setAction ([Query::ACTION_UPDATE,Query::ACTION_DELETE]);
             break;
         }
         $this->getQueryGenerator()->execMaj($query);

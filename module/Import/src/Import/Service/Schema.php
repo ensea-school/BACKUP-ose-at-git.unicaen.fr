@@ -13,7 +13,7 @@ class Schema extends Service
 {
     /**
      * Schéma
-     * 
+     *
      * @var array
      */
     protected $schema;
@@ -27,12 +27,18 @@ class Schema extends Service
      *
      * @return array
      */
-    public function getSchema()
+    public function getSchema( $tableName=null )
     {
         if (empty($this->schema)){
             $this->schema = $this->makeSchema();
         }
-        return $this->schema;
+        if (empty($tableName)){
+            return $this->schema;
+        }elseif(array_key_exists($tableName, $this->schema)){
+            return $this->schema[$tableName];
+        }else{
+            return null;
+        }
     }
 
 
@@ -43,9 +49,9 @@ class Schema extends Service
     public function makeSchema()
     {
         $sql = 'SELECT * FROM V_IMPORT_TAB_COLS';
-        $d = $this->query( $sql, array() );
+        $d = $this->query( $sql, [] );
 
-        $sc = array();
+        $sc = [];
         foreach( $d as $col ){
             $column = new Column;
             $column->dataType        = $col['DATA_TYPE'];
@@ -75,7 +81,7 @@ class Schema extends Service
             UNION SELECT TABLE_NAME AS name FROM USER_TABLES
         ) t JOIN user_tables ut ON (ut.table_name = SUBSTR(name,5))
         WHERE name LIKE 'SRC_%'";
-        return $this->query( $sql, array(), 'TABLE_NAME');
+        return $this->query( $sql, [], 'TABLE_NAME');
     }
 
     /**
@@ -93,6 +99,26 @@ class Schema extends Service
             $mviews[] = $mvn;
         }
         return $mviews;
+    }
+
+    /**
+     * 
+     * @param string $tableName
+     * @param string $columnName
+     */
+    public function hasColumn( $tableName, $columnName )
+    {
+        $sql = "
+        SELECT
+          COUNT(*) result
+        FROM
+          USER_TAB_COLS utc
+        WHERE
+          utc.table_name = :tableName
+          AND utc.column_name = :columnName
+        ";
+        $result = $this->query( $sql, compact('tableName', 'columnName'), 'RESULT');
+        return $result[0] === '1';
     }
 
     /**
@@ -114,7 +140,7 @@ class Schema extends Service
         ORDER BY
           utc.COLUMN_NAME";
 
-        return $this->query( $sql, array('tableName' => $tableName), 'COLUMN_NAME');
+        return $this->query( $sql, ['tableName' => $tableName], 'COLUMN_NAME');
     }
 
 }

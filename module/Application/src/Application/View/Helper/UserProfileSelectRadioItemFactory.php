@@ -11,6 +11,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class UserProfileSelectRadioItemFactory extends \UnicaenApp\View\Helper\UserProfileSelectFactory
 {
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait
+    ;
+
     /**
      * Create service
      *
@@ -19,15 +24,13 @@ class UserProfileSelectRadioItemFactory extends \UnicaenApp\View\Helper\UserProf
      */
     public function createService(ServiceLocatorInterface $helperPluginManager)
     {
-        $serviceLocator     = $helperPluginManager->getServiceLocator();
-        $userContextService = $serviceLocator->get('AuthUserContext');
-        $structureService   = $serviceLocator->get('ApplicationStructure');
-        $contextProvider    = $serviceLocator->get('ApplicationContextProvider');
+        $this->setServiceLocator( $helperPluginManager->getServiceLocator() );
+        $userContextService = $this->getServiceLocator()->get('AuthUserContext');
 
         $service = new UserProfileSelectRadioItem($userContextService);
         $service
-                ->setServiceStructure($structureService)
-                ->setStructureSelectionnee($contextProvider->getGlobalContext()->getStructure());
+                ->setServiceStructure($this->getServiceStructure())
+                ->setStructure($this->getServiceContext()->getStructure());
         
         return $service;
     }

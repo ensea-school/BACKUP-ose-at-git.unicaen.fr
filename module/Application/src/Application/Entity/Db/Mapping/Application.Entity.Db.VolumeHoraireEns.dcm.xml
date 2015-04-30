@@ -4,7 +4,6 @@
     <indexes>
       <index name="IDX_8909650482E51E2E" columns="ELEMENT_DISCIPLINE_ID"/>
       <index name="IDX_890965046DA70281" columns="TYPE_INTERVENTION_ID"/>
-      <index name="IDX_89096504AA401F5C" columns="ANNEE_ID"/>
       <index name="IDX_8909650459860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_890965047E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_8909650463F06898" columns="HISTO_MODIFICATEUR_ID"/>
@@ -12,7 +11,7 @@
     </indexes>
     <unique-constraints>
       <unique-constraint name="vhe_source_un" columns="SOURCE_CODE"/>
-      <unique-constraint name="volume_horaire_ens_un" columns="ELEMENT_DISCIPLINE_ID,TYPE_INTERVENTION_ID,ANNEE_ID"/>
+      <unique-constraint name="volume_horaire_ens_un" columns="ELEMENT_DISCIPLINE_ID,TYPE_INTERVENTION_ID"/>
     </unique-constraints>
     <id name="id" type="integer" column="ID">
       <generator strategy="SEQUENCE"/>
@@ -45,11 +44,6 @@
     <many-to-one field="typeIntervention" target-entity="Application\Entity\Db\TypeIntervention">
       <join-columns>
         <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="annee" target-entity="Application\Entity\Db\Annee">
-      <join-columns>
-        <join-column name="ANNEE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="elementDiscipline" target-entity="Application\Entity\Db\ElementDiscipline">

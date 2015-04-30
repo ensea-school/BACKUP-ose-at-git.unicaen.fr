@@ -17,17 +17,17 @@ class PeutSupprimerValidationRule extends \Application\Rule\AbstractRule
      * Message template definitions
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::MESSAGE_VH_AVEC_CONTRAT => "Un volume horaire au moins est rattaché à un contrat/avenant.",
-    );
-    
+    ];
+
     /**
      * @var Validation
      */
     private $validation;
-    
+
     /**
-     * 
+     *
      * @param \Application\Entity\Db\Validation $validation
      */
     public function __construct(Validation $validation)
@@ -35,9 +35,9 @@ class PeutSupprimerValidationRule extends \Application\Rule\AbstractRule
         parent::__construct();
         $this->validation = $validation;
     }
-    
+
     /**
-     * 
+     *
      * @return boolean
      */
     public function execute()
@@ -48,10 +48,10 @@ class PeutSupprimerValidationRule extends \Application\Rule\AbstractRule
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     public function isRelevant()
     {
         return true;

@@ -5,4 +5,4 @@ echo '<h1>'.$title.'</h1>';
 echo $this->etapeModulateursSaisieForm( $form );
 
 echo $this->formErrors( $form );
-if ($errors) echo $this->messenger()->setMessages(array(UnicaenApp\View\Helper\Messenger::ERROR => $errors));
+if ($errors) echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);

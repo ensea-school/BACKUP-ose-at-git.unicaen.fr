@@ -24,6 +24,5 @@
         <join-column name="PERSONNEL_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-many field="roleUtilisateur" target-entity="Application\Entity\Db\RoleUtilisateur" mapped-by="utilisateur"/>
   </entity>
 </doctrine-mapping>

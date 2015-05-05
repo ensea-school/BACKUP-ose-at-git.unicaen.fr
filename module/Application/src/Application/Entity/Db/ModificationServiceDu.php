@@ -16,7 +16,7 @@ class ModificationServiceDu implements HistoriqueAwareInterface
     {
         $heures = \UnicaenApp\Util::formattedFloat($this->getHeures(), \NumberFormatter::DECIMAL, -1);
         
-        return sprintf("%s : %s (%sh)%s", 
+        return sprintf("%s (%sh)%s", 
                 $this->getMotif(), 
                 $heures, 
                 ($com = $this->getCommentaires()) ? " - $com" : null);

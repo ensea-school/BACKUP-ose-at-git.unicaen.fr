@@ -6,9 +6,7 @@ use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use Zend\Form\Fieldset;
 use Zend\Validator\LessThan;
-use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;;
-use Doctrine\Common\Collections\Collection;
 use Application\Entity\Db\ModificationServiceDu;
 use Application\Entity\Db\MotifModificationService;
 
@@ -22,32 +20,27 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
     use EntityManagerAwareTrait;
 
     /**
-     * @var Collection
-     */
-    protected $motifsPossibles;
-
-    /**
      * This function is automatically called when creating element with factory. It
      * allows to perform various operations (add elements...)
      */
     public function init()
     {
-        $this->setHydrator(new MotifModificationServiceDuHydrator($this->getMotifs()))
+        $this->setHydrator(new MotifModificationServiceDuHydrator($this->getEntityManager()))
              ->setObject(new ModificationServiceDu());
 
-//        $this->setLabel("Motif");
-
-        $this->add([
-            'name'       => 'motif',
-            'options'    => [
-                'label' => "Motif",
-            ],
-            'attributes' => [
-                'title' => "Motif",
-                'class' => 'modification-service-du modification-service-du-motif',
-            ],
-            'type'       => 'Select',
+        $motifSelect = new \DoctrineORMModule\Form\Element\EntitySelect('motif', [
+            'label' => 'Motif',
+            'empty_option' => "(Sélectionnez un motif...)"
         ]);
+        $motifSelect->setAttributes([
+            'title' => "Motif",
+            'class' => 'modification-service-du modification-service-du-motif',
+        ]);
+        $motifSelect->getProxy()
+                ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelle' => 'ASC']]])
+                ->setObjectManager($this->getEntityManager())
+                ->setTargetClass('Application\Entity\Db\MotifModificationServiceDu');
+        $this->add($motifSelect);
 
         $this->add([
             'name'       => 'heures',
@@ -89,27 +82,7 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
             'type'       => 'Button',
         ]);
 
-        // liste déroulante des motifs
-        $options = [];
-        $options[''] = "(Sélectionnez un motif...)"; // setEmptyOption() pas utilisé car '' n'est pas compris dans le validateur InArray
-        foreach ($this->getMotifs() as $item) {
-            $options[$item->getId()] = "" . $item;
-        }
-        $this->get('motif')->setValueOptions($options);//->setEmptyOption("(Sélectionnez une motif...)");
-
         return $this;
-    }
-
-    protected function getMotifs()
-    {
-        if (null === $this->motifsPossibles) {
-            $repoMotif = $this->getEntityManager()->getRepository('Application\Entity\Db\MotifModificationServiceDu'); /* @var $repoMotif \Doctrine\ORM\EntityRepository */
-            $this->motifsPossibles = $repoMotif->findBy([], ['libelle' => 'asc']);
-            if (!$this->motifsPossibles) {
-                throw new \Common\Exception\RuntimeException("Aucun motif de modification de service dû trouvé dans la base.");
-            }
-        }
-        return $this->motifsPossibles;
     }
 
     /**
@@ -143,17 +116,7 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
     {
         $specs = [
             'motif' => [
-                'required'   => true,
-                'validators' => [
-                    [
-                        'name' => 'Zend\Validator\NotEmpty',
-                        'options' => [
-                            'messages' => [
-                                \Zend\Validator\NotEmpty::IS_EMPTY => "Le motif est requis",
-                            ],
-                        ],
-                    ],
-                ],
+                'required' => true,
             ],
             'heures'   => [
                 'required' => true,
@@ -195,25 +158,8 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
     }
 }
 
-class MotifModificationServiceDuHydrator implements HydratorInterface
+class MotifModificationServiceDuHydrator extends \DoctrineModule\Stdlib\Hydrator\DoctrineObject
 {
-    /**
-     * @var MotifModificationService[]
-     */
-    protected $motifsPossibles;
-
-    /**
-     *
-     * @param MotifModificationService[] $motifsPossibles
-     */
-    public function __construct($motifsPossibles)
-    {
-        $this->motifsPossibles = [];
-        foreach ($motifsPossibles as $v) {
-            $this->motifsPossibles[$v->getId()] = $v;
-        }
-    }
-
     /**
      * Extract values from an object
      *
@@ -222,11 +168,11 @@ class MotifModificationServiceDuHydrator implements HydratorInterface
      */
     public function extract($object)
     {
-        return [
-            'motif'        => $object->getMotif()->getId(),
-            'heures'       => floatval($object->getHeures()),
-            'commentaires' => $object->getCommentaires(),
-        ];
+        $array = parent::extract($object);
+        
+        $array['heures'] = floatval($object->getHeures());
+        
+        return $array;
     }
 
     /**
@@ -238,10 +184,9 @@ class MotifModificationServiceDuHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        $object
-                ->setMotif($this->motifsPossibles[intval($data['motif'])])
-                ->setHeures(floatval($data['heures']))
-                ->setCommentaires($data['commentaires'] ?: null);
+        parent::hydrate($data, $object);
+        
+        $object->setHeures(floatval($data['heures']));
 
         return $object;
     }

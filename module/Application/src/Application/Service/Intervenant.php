@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Periode as PeriodeEntity;
+use Application\Entity\Db\Annee as AnneeEntity;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Import\Processus\Import;
@@ -216,4 +217,21 @@ class Intervenant extends AbstractEntityService
         return parent::getList($qb, $alias);
     }
 
+    /**
+     * Recherche d'intervenant par le "source code" et l'année.
+     * 
+     * @param string $sourceCode Code de l'intervenant dans la source de données (ex: numéro Harpege)
+     * @param AnneeEntity $annee Année concernée
+     * @return QueryBuilder
+     */
+    public function finderBySourceCodeAndAnnee($sourceCode, AnneeEntity $annee, QueryBuilder $qb = null)
+    {
+        list($qb, $alias) = $this->initQuery($qb);
+        $qb
+                ->andWhere("$alias.sourceCode = :code AND $alias.annee = :annee")
+                ->setParameter('code', $sourceCode)
+                ->setParameter('annee', $annee);
+
+        return $qb;
+    }
 }

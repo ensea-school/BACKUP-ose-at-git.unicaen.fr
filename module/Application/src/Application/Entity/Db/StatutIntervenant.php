@@ -9,26 +9,26 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class StatutIntervenant implements HistoriqueAwareInterface
 {
-    const ENS_2ND_DEG    = 'ENS_2ND_DEG';
-    const ENS_CH         = 'ENS_CH';
-    const ASS_MI_TPS     = 'ASS_MI_TPS';
-    const ATER           = 'ATER';
-    const ATER_MI_TPS    = 'ATER_MI_TPS';
-    const DOCTOR         = 'DOCTOR';
-    const ENS_CONTRACT   = 'ENS_CONTRACT';
-    const LECTEUR        = 'LECTEUR';
-    const MAITRE_LANG    = 'MAITRE_LANG';
-    const BIATSS         = 'BIATSS';
-    const SALAR_PRIVE    = 'SALAR_PRIVE';
-    const SALAR_PUBLIC   = 'SALAR_PUBLIC';
-    const NON_SALAR      = 'NON_SALAR';
-    const RETR_UCBN      = 'RETR_UCBN';
-    const RETR_HORS_UCBN = 'RETR_HORS_UCBN';
-    const ETUD_UCBN      = 'ETUD_UCBN';
-    const ETUD_HORS_UCBN = 'ETUD_HORS_UCBN';
-    const CHARG_ENS_1AN  = 'CHARG_ENS_1AN';
-    const AUTRES         = 'AUTRES';
-    const NON_AUTORISE   = 'NON_AUTORISE';
+    const ENS_2ND_DEG        = 'ENS_2ND_DEG';
+    const ENS_CH             = 'ENS_CH';
+    const ASS_MI_TPS         = 'ASS_MI_TPS';
+    const ATER               = 'ATER';
+    const ATER_MI_TPS        = 'ATER_MI_TPS';
+    const DOCTOR             = 'DOCTOR';
+    const ENS_CONTRACT       = 'ENS_CONTRACT';
+    const LECTEUR            = 'LECTEUR';
+    const MAITRE_LANG        = 'MAITRE_LANG';
+    const BIATSS             = 'BIATSS';
+    const SALAR_PRIVE        = 'SALAR_PRIVE';
+    const SALAR_PUBLIC       = 'SALAR_PUBLIC';
+    const AUTO_LIBER_INDEP          = 'AUTO_LIBER_INDEP';
+    const RETR_UCBN          = 'RETR_UCBN';
+    const RETR_HORS_UCBN     = 'RETR_HORS_UCBN';
+    const ETUD_UCBN          = 'ETUD_UCBN';
+    const ETUD_HORS_UCBN     = 'ETUD_HORS_UCBN';
+    const SS_EMPLOI_NON_ETUD = 'SS_EMPLOI_NON_ETUD';
+    const AUTRES             = 'AUTRES';
+    const NON_AUTORISE       = 'NON_AUTORISE';
 
     /**
      *

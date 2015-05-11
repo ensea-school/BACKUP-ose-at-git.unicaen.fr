@@ -2,6 +2,10 @@
 
 <h1 class="page-header">Données personnelles <small><?php echo $intervenant ?></small></h1>
 
+<?php $this->messenger()->addMessage(
+        "Ces données sont indispensables pour éditer votre contrat et mettre en paiement vos heures complémentaires éventuelles.",
+        'warning'); ?>
+
 <?php
 if ($validation) {
     $this->messenger()->addMessage(

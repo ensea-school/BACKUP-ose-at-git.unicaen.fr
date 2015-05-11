@@ -18,9 +18,6 @@ class DossierFieldsetHydrator extends \Zend\Stdlib\Hydrator\ClassMethods
     {
         $data['rib'] = implode('-', $data['rib']);
 
-        if (!array_key_exists('perteEmploi', $data)) {
-            $data['perteEmploi'] = null;
-        }
         if (!array_key_exists('statut', $data)) {
             $data['statut'] = null;
         }

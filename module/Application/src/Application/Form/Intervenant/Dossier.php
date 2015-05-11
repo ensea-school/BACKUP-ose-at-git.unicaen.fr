@@ -2,6 +2,10 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Entity\Db\IntervenantExterieur;
+use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Common\Exception\LogicException;
+use Zend\Form\Element\Csrf;
 use Zend\Form\Form;
 use Zend\Form\FormInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -15,29 +19,29 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 class Dossier extends Form implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\StatutIntervenantAwareTrait;
+        StatutIntervenantAwareTrait;
 
+    protected $dossierFieldset;
+    
     /**
      * This function is automatically called when creating element with factory. It
      * allows to perform various operations (add elements...)
      */
     public function init()
     {
-        $defaultStatut = $this->getServiceStatutIntervenant()->getRepo()->findOneBySourceCode(\Application\Entity\Db\StatutIntervenant::CHARG_ENS_1AN);
+        $this->setHydrator(new DossierHydrator());
 
-        $this->setHydrator(new DossierHydrator($defaultStatut));
-
-        $fs = new DossierFieldset('dossier');
-        $fs
+        $this->dossierFieldset = new DossierFieldset('dossier');
+        $this->dossierFieldset
                 ->setServiceLocator($this->getServiceLocator())
                 ->init();
 
-        $this->add($fs);
+        $this->add($this->dossierFieldset);
 
         /**
          * Csrf
          */
-        $this->add(new \Zend\Form\Element\Csrf('security'));
+        $this->add(new Csrf('security'));
 
         /**
          * Submit
@@ -52,18 +56,27 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
     }
 
     /**
-     *
-     * @param \Application\Entity\Db\IntervenantExterieur $object
-     * @param type $flags
-     * @return type
-     * @throws \Common\Exception\LogicException
+     * Redéfinition pour tester le type d'objet fourni.
      */
     public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
-        if (!$object instanceof \Application\Entity\Db\IntervenantExterieur) {
-            throw new \Common\Exception\LogicException("Ce formulaire ne peut être bindé qu'à un IntervenantExterieur.");
+        if (!$object instanceof IntervenantExterieur) {
+            throw new LogicException("Ce formulaire ne peut être bindé qu'à un IntervenantExterieur.");
         }
 
         return parent::bind($object, $flags);
+    }
+    
+    /**
+     * Redéfinition pour forcer le témoin "premier recrutement" en cas d'absence 
+     * de l'élément de formulaire.
+     */
+    public function setData($data)
+    {
+        if (! $this->dossierFieldset->has('premierRecrutement')) {
+            $data->dossier['premierRecrutement'] = '0';
+        }
+        
+        return parent::setData($data);
     }
 }

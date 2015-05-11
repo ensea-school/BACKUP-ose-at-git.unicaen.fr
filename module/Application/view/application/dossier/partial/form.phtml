@@ -1,6 +1,6 @@
 <?php 
 $this->form->prepare();
-$dossier = $this->form->get('dossier');
+$dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Intervenant\DossierFieldset */
 ?>
 
 <style>
@@ -14,103 +14,130 @@ $dossier = $this->form->get('dossier');
         <?php echo $this->formControlGroup($dossier->get('nomUsuel')->setAttribute('disabled', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('nomPatronymique')->setAttribute('disabled', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('prenom')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('civilite')->get('id')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('numeroInsee')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('civilite')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('dateNaissance')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('paysNaissance')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('departementNaissance')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('villeNaissance')->setAttribute('disabled', $this->readonly)); ?>
     </div>
     <div class="col-md-4">
+        <?php echo $this->formControlGroup($dossier->get('numeroInsee')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')->setAttribute('disabled', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('adresse')->setAttribute('disabled', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('email')->setAttribute('disabled', $this->readonly)); ?>
         <?php if ($dossier->has('emailPerso')) {
             echo $this->formControlGroup($dossier->get('emailPerso')->setAttribute('disabled', $this->readonly)); 
         } ?>
         <?php echo $this->formControlGroup($dossier->get('telephone')->setAttribute('disabled', $this->readonly)); ?>
+    </div>
+    <div class="col-md-5">
         <fieldset class="rib">
-            <legend>RIB</legend>
+            <legend><?php echo $dossier->get('rib')->getLabel() ?></legend>
             <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('bic')->setAttribute('disabled', $this->readonly)); ?></div>
             <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('iban')->setAttribute('disabled', $this->readonly)); ?></div>
             <?php echo $this->formControlGroup($dossier->get('rib')->get('hidden')); ?>
         </fieldset>
-    </div>
-    <div class="col-md-5">
-        <?php echo $this->formControlGroup($dossier->get('premierRecrutement')->setAttribute('disabled', $this->readonly)); ?>
-        <div class="perteEmploi"><?php echo $this->formControlGroup($dossier->get('perteEmploi')->setAttribute('disabled', $this->readonly)); ?></div>
-        <div class="statut"><?php echo $this->formControlGroup($dossier->get('statut')->get('id')->setAttribute('disabled', $this->readonly)); ?></div>
+        <?php if ($dossier->has('premierRecrutement')) {
+            echo $this->formControlGroup($dossier->get('premierRecrutement')->setAttribute('disabled', $this->readonly)); 
+        } ?>
+        <div class="statut">
+            <?php echo $this->formControlGroup($dossier->get('statut')->setAttribute('disabled', $this->readonly)); ?>
+        </div>
+        
+        <?php echo $this->formHidden($dossier->get('id')); ?>
+
+        <?php echo $this->formHidden($this->form->get('security')); ?>
+        <?php if (!$this->readonly): ?>
+            <hr />
+            <?php echo $this->formSubmit($this->form->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
+        <?php endif ?>
     </div>
 </div>
-<?php echo $this->formHidden($dossier->get('id')); ?>
-
-<?php echo $this->formHidden($this->form->get('security')); ?>
-<?php if (!$this->readonly): ?>
-    <?php echo $this->formSubmit($this->form->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
-<?php endif ?>
 <?php echo $this->form()->closeTag() ?> 
 
-<script>
+
+<script type="text/javascript" src="<?php echo $this->basePath() . '/js/moment-with-locales.min.js' ?>"></script>
+
+<script type="text/javascript">
     $(function() {
         $(":input").tooltip({ placement: 'bottom' });
         
-        var divPerteEmploi    = $("div.perteEmploi");
-        var divStatut         = $("div.statut");
-        var radios1erRecrut   = $("input[name='dossier[premierRecrutement]']"); // NB: 2 radios
-        var radiosPerteEmploi = $("input[name='dossier[perteEmploi]']"); // NB: 2 radios
-        var readonly          = <?php echo $this->readonly ? 'true' : 'false' ?>
+        var readonly = <?php echo $this->readonly ? 'true' : 'false' ?>;
+
+        managePaysNaissance();
+        manageDepartementNaissance();
         
-        if (!readonly) {
-            radios1erRecrut.change(function () {
-                updatePerteEmploi();
+        function managePaysNaissance()
+        {
+            var tfDate     = $("input[name='dossier[dateNaissance]']");
+            var selectPays = $("select[name='dossier[paysNaissance]']");
+            
+            // sélection de la France par défaut
+            if (! selectPays.val()) {
+                $("option.france", selectPays).prop("selected", "selected");
+            }
+        
+            moment.locale('fr');
+            
+            /**
+             * Fonction chargée de ne faire apparaître dans la liste déroulante 
+             * que les pays étant valides à la date d'observation spécifiée.
+             * 
+             * @param {object} dateObservation
+             * @returns {void}
+             */
+            function updateSelectPays(dateObservation)
+            {
+                $("option.pays", selectPays).each(function() {
+                    var option          = $(this);
+                    var dateDebutValid  = moment(option.data("debut"), "D/M/YYYY", true);
+                    var dateFinValid    = option.data("fin") ? moment(option.data("fin"), "D/M/YYYY", true) : moment();
+
+                    if (dateObservation.isBetween(dateDebutValid, dateFinValid)) {
+                        option.show();
+                    }
+                    else {
+                        option.removeProp('selected');
+                        option.hide();
+                    }
+                });
+            }
+            
+            // mise à jour de la liste des pays à chaque modif de la date de naissance
+            tfDate.change(function() {
+                var dateObservation = moment(tfDate.val(), "D/M/YYYY", true);
+                if (! dateObservation.isValid()) {
+                    dateObservation = moment();
+                }
+                updateSelectPays(dateObservation);
             });
-            radiosPerteEmploi.change(function () {
-                updateStatut();
+            
+            // init de la liste : pays valides à la date du jour
+            tfDate.change();
+        }
+        
+        function manageDepartementNaissance()
+        {
+            if (readonly) {
+                return;
+            }
+            
+            var selectPays = $("select[name='dossier[paysNaissance]']");
+            var selectDept = $("select[name='dossier[departementNaissance]']");
+            var emptyDept  = $("option[value='']", selectDept);
+            
+            selectPays.change(function() {
+                if ($("option:selected", selectPays).hasClass("france")) {
+                    selectDept.removeProp('disabled').parent().show();
+                    emptyDept.html("(Sélectionnez un département...)");
+                }
+                else {
+                    selectDept.prop('disabled', 'disabled').parent().hide();
+                    emptyDept.html("(Aucun)").prop('selected', 'selected');
+                }
             });
+            
+            selectPays.change();
         }
-    
-        function getRadioValue(radioInputs)
-        {
-            var checkedRadio = radioInputs.filter(":checked");
-            if (checkedRadio.length === 0) {
-                return null;
-            }
-            return checkedRadio.attr('value');
-        }
-        
-        function updatePerteEmploi()
-        {
-            var valuePremierRecrutement = getRadioValue(radios1erRecrut);
-            if (valuePremierRecrutement === '0') {
-                divPerteEmploi.show();
-                if (!readonly) {
-                    divPerteEmploi.find("input[type=radio]").attr('disabled', false);
-                }
-            }
-            else {
-                divPerteEmploi.hide();
-                if (!readonly) {
-                    divPerteEmploi.find("input[type=radio]").attr('disabled', true);
-                }
-            }
-            updateStatut();
-        }
-        
-        function updateStatut()
-        {
-            var valuePremierRecrutement = getRadioValue(radios1erRecrut);
-            var valuePerteEmploi        = getRadioValue(radiosPerteEmploi);
-            if (valuePremierRecrutement === '1' || valuePerteEmploi === '0') {
-                divStatut.show();
-                if (!readonly) {
-                    divStatut.find("select").attr('disabled', false);
-                }
-            }
-            else {
-                divStatut.hide();
-                if (!readonly) {
-                    divStatut.find("select").attr('disabled', true);
-                }
-            }
-        }
-        
-        updatePerteEmploi();
-        updateStatut();
     });
 </script>

@@ -88,11 +88,6 @@ class Dossier implements HistoriqueAwareInterface
     protected $premierRecrutement;
 
     /**
-     * @var boolean
-     */
-    protected $perteEmploi;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $pieceJointe;
@@ -116,6 +111,26 @@ class Dossier implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\Utilisateur
      */
     protected $histoCreateur;
+
+    /**
+     * @var \DateTime
+     */
+    protected $dateNaissance;
+
+    /**
+     * @var \Application\Entity\Db\Pays
+     */
+    protected $paysNaissance;
+
+    /**
+     * @var \Application\Entity\Db\Departement
+     */
+    protected $departementNaissance;
+
+    /**
+     * @var string
+     */
+    protected $villeNaissance;
 
     /**
      * 
@@ -494,29 +509,6 @@ class Dossier implements HistoriqueAwareInterface
     }
 
     /**
-     * Set perteEmploi
-     *
-     * @param boolean $perteEmploi
-     * @return Dossier
-     */
-    public function setPerteEmploi($perteEmploi)
-    {
-        $this->perteEmploi = $perteEmploi;
-
-        return $this;
-    }
-
-    /**
-     * Get perteEmploi
-     *
-     * @return boolean 
-     */
-    public function getPerteEmploi()
-    {
-        return $this->perteEmploi;
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -626,6 +618,98 @@ class Dossier implements HistoriqueAwareInterface
         
         return $this;
     }
+
+    /**
+     * Set dateNaissance
+     *
+     * @param \DateTime $dateNaissance
+     * @return self
+     */
+    public function setDateNaissance($dateNaissance)
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get dateNaissance
+     *
+     * @return \DateTime 
+     */
+    public function getDateNaissance()
+    {
+        return $this->dateNaissance;
+    }
+
+    /**
+     * Set paysNaissance
+     *
+     * @param Pays $paysNaissance
+     * @return self
+     */
+    public function setPaysNaissance($paysNaissance)
+    {
+        $this->paysNaissance = $paysNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get paysNaissance
+     *
+     * @return Pays 
+     */
+    public function getPaysNaissance()
+    {
+        return $this->paysNaissance;
+    }
+
+    /**
+     * Set departementNaissance
+     *
+     * @param Departement $departementNaissance
+     * @return self
+     */
+    public function setDepartementNaissance($departementNaissance)
+    {
+        $this->departementNaissance = $departementNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get departementNaissance
+     *
+     * @return Departement 
+     */
+    public function getDepartementNaissance()
+    {
+        return $this->departementNaissance;
+    }
+
+    /**
+     * Set villeNaissance
+     *
+     * @param string $villeNaissance
+     * @return self
+     */
+    public function setVilleNaissance($villeNaissance)
+    {
+        $this->villeNaissance = $villeNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get villeNaissance
+     *
+     * @return string 
+     */
+    public function getVilleNaissance()
+    {
+        return $this->villeNaissance;
+    }
         
     /**
      * 
@@ -639,6 +723,10 @@ class Dossier implements HistoriqueAwareInterface
                 ->setNomPatronymique($intervenant->getNomPatronymique())
                 ->setPrenom($intervenant->getPrenom())
                 ->setCivilite($intervenant->getCivilite())
+                ->setDateNaissance($intervenant->getDateNaissance())
+//                ->setPaysNaissance($intervenant->getPaysNaissance())
+//                ->setDepartementNaissance($intervenant->getDepNaissance())
+                ->setVilleNaissance($intervenant->getVilleNaissanceLibelle())
                 ->setNumeroInsee($intervenant->getNumeroInsee() . $intervenant->getNumeroInseeCle())
                 ->setAdresse((string) $intervenant->getAdressePrincipale(true))
                 ->setEmail($intervenant->getEmail())

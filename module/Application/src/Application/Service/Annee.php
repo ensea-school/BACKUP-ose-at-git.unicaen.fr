@@ -54,6 +54,18 @@ class Annee extends AbstractEntityService
     }
 
     /**
+     * Retourne l'année N - x.
+     *
+     * @param AnneeEntity $annee Année de référence
+     * @param int $x Entier supérieur ou égal à zéro
+     * @return AnneeEntity
+     */
+    public function getNmoins(AnneeEntity $annee, $x)
+    {
+        return $this->get( $annee->getId() - (int) $x );
+    }
+
+    /**
      * 
      * @param AnneeEntity $annee
      * @return AnneeEntity

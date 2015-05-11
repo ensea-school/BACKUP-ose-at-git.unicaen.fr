@@ -1,17 +1,22 @@
 <?php
 namespace Application\Form\Intervenant;
 
+use Application\Entity\Db\Dossier;
+use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\StatutIntervenant;
+use Zend\Stdlib\Hydrator\HydratorInterface;
+
 /**
  *
  *
  */
-class DossierHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
+class DossierHydrator implements HydratorInterface
 {
     /**
      *
-     * @param \Application\Entity\Db\StatutIntervenant $defaultStatut
+     * @param StatutIntervenant $defaultStatut
      */
-    public function __construct(\Application\Entity\Db\StatutIntervenant $defaultStatut)
+    public function __construct(StatutIntervenant $defaultStatut = null)
     {
         $this->setDefaultStatut($defaultStatut);
     }
@@ -20,14 +25,14 @@ class DossierHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param  array $data
-     * @param  \Application\Entity\Db\IntervenantExterieur $intervenant
-     * @return \Application\Entity\Db\IntervenantExterieur
+     * @param  IntervenantExterieur $intervenant
+     * @return IntervenantExterieur
      */
     public function hydrate(array $data, $intervenant)
     {
-        $dossier = $data['dossier']; /* @var $dossier \Application\Entity\Db\Dossier */
+        $dossier = $data['dossier']; /* @var $dossier Dossier */
 
-        if (!$dossier->getStatut()) {
+        if (!$dossier->getStatut() && $this->getDefaultStatut()) {
             $dossier->setStatut($this->getDefaultStatut());
         }
 
@@ -42,7 +47,7 @@ class DossierHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  \Application\Entity\Db\IntervenantExterieur $intervenant
+     * @param  IntervenantExterieur $intervenant
      * @return array
      */
     public function extract($intervenant)
@@ -59,7 +64,7 @@ class DossierHydrator implements \Zend\Stdlib\Hydrator\HydratorInterface
         return $this->defaultStatut;
     }
 
-    public function setDefaultStatut($defaultStatut)
+    public function setDefaultStatut($defaultStatut = null)
     {
         $this->defaultStatut = $defaultStatut;
         return $this;

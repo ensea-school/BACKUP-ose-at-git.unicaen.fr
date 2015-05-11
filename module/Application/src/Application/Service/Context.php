@@ -136,6 +136,10 @@ class Context extends AbstractService
     }
 
     /**
+     * Retourne l'année courante. 
+     * C'est à dire :
+     * - celle mémorisée en session (car sélectionnée par l'utilisateur) si elle existe ; 
+     * - ou sinon celle spécifiée dans les paramètres de l'appli.
      *
      * @return AnneeEntity
      */
@@ -150,6 +154,17 @@ class Context extends AbstractService
             $this->annee = $this->getServiceAnnee()->get( $sc->annee);
         }
         return $this->annee;
+    }
+
+    /**
+     * Retourne l'année N - x, N étant l'année courante.
+     *
+     * @param int $x Entier supérieur ou égal à zéro
+     * @return AnneeEntity
+     */
+    public function getAnneeNmoins($x)
+    {
+        return $this->getServiceAnnee()->getNmoins($this->getAnnee(), $x);
     }
 
     /**
@@ -290,6 +305,23 @@ class Context extends AbstractService
             $this->getSessionContainer()->structure = null;
         }
         return $this;
+    }
+    
+    /**
+     * Détermine si l'application était opérationnel l'année spécifiée.
+     * 
+     * On considère que s'il existe des intervenants pour l'année spécifiée, alors
+     * l'application était opérationnelle.
+     * 
+     * @param AnneeEntity $annee
+     * @return boolean
+     */
+    public function applicationExists(AnneeEntity $annee)
+    {
+        $qb    = $this->getServiceIntervenant()->finderByAnnee($annee);
+        $found = (int) $qb->select("COUNT(int)")->getQuery()->getSingleScalarResult();
+        
+        return (bool) $found;
     }
 
     /**

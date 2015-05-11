@@ -2,10 +2,26 @@
 
 namespace Application\Form\Intervenant;
 
+use Application\Entity\Db\Dossier as DossierEntity;
+use Application\Entity\Db\Pays as PaysEntity;
+use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
+use Application\Service\Departement as DepartementService;
+use Application\Service\Pays as PaysService;
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\StatutIntervenantAwareTrait;
+use Application\Validator\DepartementNaissanceValidator;
+use Application\Validator\NumeroINSEEValidator;
+use Application\Validator\PaysNaissanceValidator;
+use Application\Validator\StatutIntervenantValidator;
+use Common\Constants;
+use Common\Exception\LogicException;
+use DoctrineModule\Form\Element\Proxy;
+use DoctrineORMModule\Form\Element\EntitySelect;
 use Zend\Form\Fieldset;
+use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Validator\Date as DateValidator;
 
 /**
  * Description of DossierFieldset
@@ -15,200 +31,297 @@ use Zend\InputFilter\InputFilterProviderInterface;
 class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, InputFilterProviderInterface
 {
     use ServiceLocatorAwareTrait;
-    use \Application\Service\Traits\ContextAwareTrait;
+    use ContextAwareTrait;
+    use StatutIntervenantAwareTrait;
 
+    static private $franceId;
+    
     /**
      * This function is automatically called when creating element with factory. It
      * allows to perform various operations (add elements...)
      */
     public function init()
     {
-        $anneePrec = $this->getServiceContext()->getAnneePrecedente();
-
+        $hydrator = new DossierFieldsetDoctrineHydrator($this->getServiceContext()->getEntityManager());
+        
         $this
-                ->setObject(new \Application\Entity\Db\Dossier())
-                ->setHydrator(new DossierFieldsetHydrator(false));
-
-        $this->add( [
+                ->setObject(new DossierEntity())
+                ->setHydrator($hydrator)
+                ->addElements();
+    }
+    
+    /**
+     * @return self
+     */
+    private function addElements()
+    {
+        /**
+         * Id
+         */
+        $this->add([
             'name' => 'id',
             'type' => 'Hidden'
-        ] );
+        ]);
 
-        $this->add( [
-            'name' => 'nomUsuel',
+        /**
+         * Nom usuel
+         */
+        $this->add([
+            'name'    => 'nomUsuel',
             'options' => [
                 'label' => 'Nom usuel',
             ],
-            'type' => 'Text'
-        ] );
+            'type'    => 'Text'
+        ]);
 
-        $this->add( [
-            'name' => 'nomPatronymique',
+        /**
+         * Nom patro
+         */
+        $this->add([
+            'name'    => 'nomPatronymique',
             'options' => [
                 'label' => 'Nom de naissance',
             ],
-            'type' => 'Text'
-        ] );
+            'type'    => 'Text'
+        ]);
 
-        $this->add( [
-            'name' => 'prenom',
+        /**
+         * Prénom
+         */
+        $this->add([
+            'name'    => 'prenom',
             'options' => [
                 'label' => 'Prénom',
             ],
-            'type' => 'Text'
-        ] );
+            'type'    => 'Text'
+        ]);
 
-        $civilite = new CiviliteFieldset('civilite');
-        $civilite
-                ->setCivilites($this->getCivilites())
-                ->init();
+        /**
+         * Civilité
+         */
+        $civilite = new EntitySelect('civilite', [
+            'label'        => 'Civilité',
+            'empty_option' => "(Sélectionnez une civilité...)",
+        ]);
+        $civilite->getProxy()
+                ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
+                ->setObjectManager($this->getServiceContext()->getEntityManager())
+                ->setTargetClass('Application\Entity\Db\Civilite');
         $this->add($civilite);
 
-        $this->add( [
-            'name' => 'numeroInsee',
-            'options' => [
-                'label' => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> (clé incluse)',
+
+        /**
+         * Date de naissance
+         */
+        $this->add([
+            'name'       => 'dateNaissance',
+            'options'    => array(
+                'label'         => 'Date de naissance',
+                'label_options' => array(
+                    'disable_html_escape' => true
+                ),
+            ),
+            'attributes' => array(
+                'placeholder' => "jj/mm/aaaa",
+            ),
+            'type'       => 'Text'
+        ]);
+
+        /**
+         * Pays de naissance
+         */
+        $paysSelect = new PaysSelect('paysNaissance', [
+            'label'        => 'Pays de naissance',
+            'empty_option' => "(Sélectionnez un pays...)"
+        ]);
+        $paysSelect->getProxy()
+                ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelleLong' => 'ASC']]])
+                ->setObjectManager($this->getServiceContext()->getEntityManager())
+                ->setTargetClass('Application\Entity\Db\Pays');
+        foreach ($paysSelect->getProxy()->getObjects() as $p) {
+            $estFrance = PaysEntity::CODE_FRANCE === $p->getSourceCode();
+            if ($estFrance) {
+                self::$franceId = $p->getId();
+            }
+        }
+        $paysSelect->setValue(self::$franceId);
+        $this->add($paysSelect);
+
+        /**
+         * Département de naissance
+         */
+        $departementSelect = new EntitySelect('departementNaissance', [
+            'label'        => 'Département de naissance',
+            'empty_option' => "(Sélectionnez un département...)"
+        ]);
+        $departementSelect->getProxy()
+                ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['sourceCode' => 'ASC']]])
+                ->setObjectManager($this->getServiceContext()->getEntityManager())
+                ->setTargetClass('Application\Entity\Db\Departement');
+        $this->add($departementSelect);
+
+        /**
+         * Ville de naissance
+         */
+        $this->add(array(
+            'name'    => 'villeNaissance',
+            'options' => array(
+                'label' => 'Ville de naissance',
+            ),
+            'type'    => 'Text'
+        ));
+
+        /**
+         * Numéro INSEE
+         */
+        $this->add([
+            'name'       => 'numeroInsee',
+            'options'    => [
+                'label'              => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> (clé incluse)',
                 'use_hidden_element' => false,
-                'checked_value' => 1,
-                'unchecked_value' => 0,
-                'label_options' => [
+                'checked_value'      => 1,
+                'unchecked_value'    => 0,
+                'label_options'      => [
                     'disable_html_escape' => true
                 ],
             ],
             'attributes' => [
                 'title' => "Numéro INSEE (sécurité sociale) avec la clé de contrôle",
             ],
-            'type' => 'Text',
-        ] );
+            'type'       => 'Text',
+        ]);
 
-        $this->add( [
-            'name' => 'numeroInseeEstProvisoire',
-            'options' => [
-                'label' => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> provisoire',
+        /**
+         * Numéro INSEE provisoire
+         */
+        $this->add([
+            'name'       => 'numeroInseeEstProvisoire',
+            'options'    => [
+                'label'         => 'Numéro <abbr title="Numéro de sécurité sociale">INSEE</abbr> provisoire',
                 'label_options' => [
                     'disable_html_escape' => true
                 ],
             ],
             'attributes' => [
             ],
-            'type' => 'Checkbox',
-        ] );
+            'type'       => 'Checkbox',
+        ]);
 
-        $this->add( [
-            'name' => 'adresse',
-            'options' => [
-                'label' => 'Adresse postale',
+        /**
+         * Adresse postale
+         */
+        $this->add([
+            'name'       => 'adresse',
+            'options'    => [
+                'label'         => 'Adresse postale <em>en France</em>',
+                'label_options' => array(
+                    'disable_html_escape' => true
+                ),
             ],
             'attributes' => [
                 'rows' => 5,
             ],
-            'type' => 'Textarea',
-        ] );
+            'type'       => 'Textarea',
+        ]);
 
-        $this->add( [
-            'name' => 'email',
-            'options' => [
+        /**
+         * Email pro
+         */
+        $this->add([
+            'name'       => 'email',
+            'options'    => [
                 'label' => 'Adresse mail établissement',
             ],
             'attributes' => [
                 'readonly' => true
             ],
-            'type' => 'Text',
-        ] );
+            'type'       => 'Text',
+        ]);
 
-        $this->add( [
-            'name' => 'emailPerso',
-            'options' => [
+        /**
+         * Email perso
+         */
+        $this->add([
+            'name'       => 'emailPerso',
+            'options'    => [
                 'label' => 'Adresse mail personnelle (éventuelle)',
             ],
             'attributes' => [
                 'readonly' => false
             ],
-            'type' => 'Text',
-        ] );
+            'type'       => 'Text',
+        ]);
 
-        $this->add( [
-            'name' => 'telephone',
-            'options' => [
+        /**
+         * Téléphone
+         */
+        $this->add([
+            'name'       => 'telephone',
+            'options'    => [
                 'label' => 'Téléphone',
             ],
             'attributes' => [
                 'size' => 13,
             ],
-            'type' => 'Text',
-        ] );
+            'type'       => 'Text',
+        ]);
 
-        $this->add( [
-            'name' => 'rib',
-            'options' => [
-                'label' => 'RIB',
+        /**
+         * RIB
+         */
+        $this->add([
+            'name'       => 'rib',
+            'options'    => [
+                'label' => 'RIB du <em>compte personnel</em>',
             ],
             'attributes' => [
             ],
-            'type' => 'UnicaenApp\Form\Element\RIBFieldset',
-        ] );
+            'type'       => 'UnicaenApp\Form\Element\RIBFieldset',
+        ]);
 
-        $this->add( [
-            'name' => 'premierRecrutement',
-            'options' => [
-//                'label' => "S'agit-il de votre 1er recrutement en qualité de vacataire à l'Université de Caen ?",
-//                'value_options' => array('0' => "Non", '1' => "Oui"),
-                'value_options' => ['0' => "Oui", '1' => "Non"], // ATTENTION! La logique de la question a changé !
-                'label' => "Avez-vous enseigné en tant que vacataire à l'Université de Caen depuis le 01/09/2012 ?",
+        /**
+         * 1er recrutement
+         */
+        $annee = ((int) $this->getServiceContext()->getAnnee()->getDateDebut()->format('Y')) - 2;
+        $etabl = $this->getServiceContext()->getEtablissement();
+        $this->add([
+            'name'       => 'premierRecrutement',
+            'options'    => [
                 'empty_option'  => "(Sélectionnez...)",
+                'label'         => "Avez-vous exercé une activité rémunérée à l'$etabl depuis le 01/09/$annee ?",
+                'value_options' => [ // ATTENTION! La logique de la question s'est inversée !
+                    '0' => "Oui",    //   "Oui, j'ai déjà enseigné"   <=> premierRecrutement = 0
+                    '1' => "Non",    //   "Non, je n'ai pas enseigné" <=> premierRecrutement = 1
+                 ],
             ],
             'attributes' => [
             ],
-            'type' => 'Radio',
-        ] );
+            'type'       => 'Radio',
+        ]);
 
-        $this->add( [
-            'name' => 'perteEmploi',
-            'options' => [
-                'label' => "Avez-vous perdu votre emploi en $anneePrec ?",
-                'value_options' => ['1' => "Oui", '0' => "Non"],
-                'empty_option'  => "(Sélectionnez...)",
-            ],
-            'attributes' => [
-            ],
-            'type' => 'Radio',
-        ] );
-
-        $statut = new StatutFieldset('statut');
-        $statut
-                ->setStatuts($this->getStatutsIntervenant())
-                ->init();
+        /**
+         * Statut intervenant
+         */
+        $statut = new StatutSelect('statut', [
+            'label'        => "Quel est votre statut ?",
+            'empty_option' => "(Sélectionnez...)",
+            'value'        => '',
+        ]);
+        $statut->getProxy()
+                ->setFindMethod([
+                    'name'   => 'findBy',
+                    'params' => [
+                        'criteria' => ['peutChoisirDansDossier' => true],
+                        'orderBy'  => ['ordre' => 'ASC'],
+                    ],
+                ])
+                ->setObjectManager($this->getServiceContext()->getEntityManager())
+                ->setTargetClass('Application\Entity\Db\StatutIntervenant');
         $this->add($statut);
+
+        return $this;
     }
-
-    /**
-     *
-     * @return \Application\Entity\Db\StatutIntervenant[] id => StatutIntervenant
-     */
-    private function getStatutsIntervenant()
-    {
-        $serviceStatut   = $this->getServiceLocator()->getServiceLocator()->get('applicationStatutIntervenant');
-        /* @var $serviceStatut \Application\Service\StatutIntervenant */
-
-        return $serviceStatut->getList(
-                    $serviceStatut->finderByPeutChoisirDansDossier(true)
-               );
-    }
-
-    /**
-     *
-     * @return \Application\Entity\Db\Civilite[] id => Civilite
-     */
-    private function getCivilites()
-    {
-        $serviceCivilite = $this->getServiceLocator()->getServiceLocator()->get('applicationCivilite');
-        /* @var $serviceCivilite \Application\Service\Civilite */
-
-        $civilites = $serviceCivilite->getList();
-
-        return $civilites;
-    }
-
+    
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -217,13 +330,12 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
      */
     public function getInputFilterSpecification()
     {
+        $paysNaissanceId       = (int) $this->get('paysNaissance')->getValue();
         $numeroInseeProvisoire = (bool) $this->get('numeroInseeEstProvisoire')->getValue();
-        $premierRecrutement    = $this->get('premierRecrutement')->getValue();
-        $perteEmploi           = $this->get('perteEmploi')->getValue();
-
-        // la réponse à la question "perte d'emploi" n'est (visible et donc) obligatoire que
-        // si la réponse à la question "1er recrutement" est NON
-        $perteEmploiRequired = ('0' === $premierRecrutement);
+        $statutSelect          = $this->get('statut'); /* @var $statutSelect StatutSelect */
+        
+        // la sélection du département n'est obligatoire que si le pays sélectionné est la France
+        $departementRequired = (self::$franceId === $paysNaissanceId);
 
         $spec = [
             'nomUsuel' => [
@@ -235,12 +347,40 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
             'prenom' => [
                 'required' => true,
             ],
-            'numeroInsee' => [
+            'civilite' => [
                 'required' => true,
-                'validators' => [
-                    ['name' => 'UnicaenApp\Validator\NumeroINSEE', 'options' => ['provisoire' => $numeroInseeProvisoire]],
-                ],
             ],
+            'dateNaissance' => array(
+                'required' => true,
+                'validators' => array(
+                    new DateValidator(array('format' => Constants::DATE_FORMAT)),
+                ),
+            ),
+            'paysNaissance' => array(
+                'required' => true,
+                'validators' => array(
+                    new PaysNaissanceValidator(['service' => $this->getServicePays()]),
+                ),
+            ),
+            'departementNaissance' => array(
+                'required' => $departementRequired,
+                'validators' => array(
+                    new DepartementNaissanceValidator(['france_id' => self::$franceId]),
+                ),
+            ),
+            'villeNaissance' => array(
+                'required' => true,
+            ),
+            'numeroInsee' => array(
+                'required' => true,
+                'validators' => array(
+                    new NumeroINSEEValidator([
+                        'provisoire' => $numeroInseeProvisoire, 
+                        'france_id'  => self::$franceId,
+                        'service'    => $this->getServiceDepartement(),
+                    ]),
+                ),
+            ),
             'adresse' => [
                 'required' => true,
             ],
@@ -263,125 +403,183 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
                 ],
             ],
             'telephone' => [
-                'required' => false,
+                'required' => true,
                 'filters' => [
                     ['name' => 'StringTrim'],
-                    ['name' => 'StringToUpper'],
                 ],
                 'validators' => [
 //                    new \Zend\I18n\Validator\PhoneNumber(), // les formats de numéros ne tolèrent pas le 0 de tête!!
                 ],
             ],
             'premierRecrutement' => [
-                'required' => true,
+                'required' => $this->has('premierRecrutement'),
             ],
-            'perteEmploi' => [
+            'statut' => [
                 'required' => true,
-                'allow_empty' => true,
+                'validators' =>  [
+                    $statutSelect->getProxy()->getValidator(),
+                ],
             ],
         ];
-
-        $statutNotRequired = !('1' === $premierRecrutement || '0' === $perteEmploi);
-        if ($statutNotRequired) {
-            $spec['statut'] = ['required' => false]; // ainsi l'input filter du fieldset n'est pas pris en compte
-        }
 
         return $spec;
     }
-}
-
-class CiviliteFieldset extends \Zend\Form\Fieldset implements InputFilterProviderInterface
-{
-    public function init()
-    {
-        $this
-                ->setObject(new \Application\Entity\Db\Civilite())
-                ->setHydrator(new \Application\Entity\Db\Hydrator\CiviliteHydrator($this->getCivilites()));
-
-        $this->add([
-            'name' => 'id',
-            'options' => [
-                'label' => 'Civilité',
-                'value_options' => \UnicaenApp\Util::collectionAsOptions($this->getCivilites()),
-                'empty_option' => "(Sélectionnez...)",
-            ],
-            'type' => 'Select',
-        ] );
-    }
-
+    
     /**
-     * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
+     * @return PaysService
      */
-    public function getInputFilterSpecification()
+    private function getServicePays() 
     {
-        return [
-            'id' => [
-                'required' => true,
-            ],
-        ];
+        return $this->getServiceLocator()->getServiceLocator()->get('ApplicationPays');
     }
-
-    private $civilites;
-
-    public function getCivilites()
+    
+    /**
+     * @return DepartementService
+     */
+    private function getServiceDepartement() 
     {
-        return $this->civilites;
-    }
-
-    public function setCivilites($civilites)
-    {
-        $this->civilites = $civilites;
-        return $this;
+        return $this->getServiceLocator()->getServiceLocator()->get('ApplicationDepartement');
     }
 }
 
-class StatutFieldset extends \Zend\Form\Fieldset implements InputFilterProviderInterface
+
+/**
+ * Select d'entités Pays, avec proxy dédié.
+ */
+class PaysSelect extends EntitySelect
 {
-    public function init()
+    public function __construct($name = null, $options = array())
     {
-        $this
-                ->setObject(new \Application\Entity\Db\StatutIntervenant())
-                ->setHydrator(new \Application\Entity\Db\Hydrator\StatutIntervenantHydrator($this->getStatuts()));
-
-        $this->add([
-            'name' => 'id',
-            'options' => [
-                'label' => "Quel est votre statut ?",
-                'value_options' => \UnicaenApp\Util::collectionAsOptions($this->getStatuts()),
-                'empty_option'  => "(Sélectionnez...)",
-            ],
-            'type' => 'Select',
-        ] );
+        parent::__construct($name, $options);
+        
+        $this->proxy = new PaysProxy();
     }
+}
+/**
+ * Proxy pour le select d'entités Pays : customisation des attributs HTML des <option>.
+ */
+class PaysProxy extends Proxy
+{
+    protected function loadValueOptions()
+    {
+        parent::loadValueOptions();
+        
+        foreach ($this->valueOptions as $key => $value) {
+            $id        = $value['value'];
+            $pays      = $this->objects[$id];
+            $estFrance = PaysEntity::CODE_FRANCE === $pays->getSourceCode();
+            
+            $this->valueOptions[$key]['attributes'] = [
+                'class'      => "pays" . ($estFrance ? " france" : null),
+                'data-debut' => $pays->getValiditeDebut()->format('d/m/Y'),
+                'data-fin'   => $pays->getValiditeFin() ? $pays->getValiditeFin()->format('d/m/Y') : null,
+            ];
+        }
+    }
+    
+    protected function loadObjects()
+    {
+        parent::loadObjects();
+        
+        // reformattage du tableau de données : id => Pays
+        $pays = [];
+        foreach ($this->objects as $p) {
+            $pays[$p->getId()] = $p;
+        }
+        
+        $this->objects = $pays;
+    }
+}
 
+/**
+ * Select d'entités StatutIntervenant, avec proxy dédié.
+ * 
+ * @method StatutIntervenantProxy getProxy() Description
+ */
+class StatutSelect extends EntitySelect
+{
+    public function __construct($name = null, $options = array())
+    {
+        parent::__construct($name, $options);
+        
+        $this->proxy = new StatutIntervenantProxy();
+    }
+}
+/**
+ * Proxy pour le select d'entités StatutIntervenant : 
+ * - customisation des attributs HTML des <option> ;
+ * - suppression des statuts à écarter ; 
+ * - fourniture du validateur.
+ */
+class StatutIntervenantProxy extends Proxy
+{
+    protected function loadValueOptions()
+    {
+        parent::loadValueOptions();
+        
+        foreach ($this->valueOptions as $key => $value) {
+            $id     = $value['value'];
+            $statut = $this->objects[$id];
+            
+            $this->valueOptions[$key]['attributes'] = [
+                'class' => $statut->getSourceCode(),
+            ];
+        }
+    }
+    
+    protected function loadObjects()
+    {
+        parent::loadObjects();
+        
+        // reformattage du tableau de données : id => Statut
+        $pays = [];
+        foreach ($this->objects as $o) {
+            // suppression des statuts à écarter
+            if (in_array($o, $this->statutsToRemove)) {
+                continue;
+            }
+            $pays[$o->getId()] = $o;
+        }
+        
+        $this->objects = $pays;
+    }
+    
     /**
-     * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInputFilter()}.
-     *
-     * @return array
+     * @var StatutIntervenantEntity[]
      */
-    public function getInputFilterSpecification()
+    private $statutsToRemove = [];
+    
+    /**
+     * Statuts à écarter.
+     * 
+     * @param StatutIntervenantEntity[] $statuts 
+     * @return self
+     */
+    public function setStatutsToRemove(array $statuts)
     {
-        return [
-            'id' => [
-                'required' => true,
-            ],
-        ];
-    }
-
-    private $statuts;
-
-    public function getStatuts()
-    {
-        return $this->statuts;
-    }
-
-    public function setStatuts($statuts)
-    {
-        $this->statuts = $statuts;
+        $this->statutsToRemove = [];
+        
+        foreach ($statuts as $statut) {
+            if (! $statut instanceof StatutIntervenantEntity) {
+                throw new LogicException("Les statuts à écarter doivent être spécifiés sous forme d'objets.");
+            }
+            $this->statutsToRemove[$statut->getId()] = $statut;
+        }
+        
+        $this->objects = []; // force objects reload
+        
         return $this;
+    }
+    
+    /**
+     * 
+     * @return StatutIntervenantValidator
+     */
+    public function getValidator()
+    {
+        $v = new StatutIntervenantValidator();
+        $v->setStatutsInterdits($this->statutsToRemove);
+        
+        return $v;
     }
 }

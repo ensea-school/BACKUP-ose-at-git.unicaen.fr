@@ -25,8 +25,9 @@
     <field name="numeroInseeEstProvisoire" type="boolean" column="NUMERO_INSEE_EST_PROVISOIRE" nullable="false"/>
     <field name="prenom" type="string" column="PRENOM" length="128" nullable="false"/>
     <field name="rib" type="string" column="RIB" length="50" nullable="false"/>
+    <field name="dateNaissance" type="datetime" column="DATE_NAISSANCE" nullable="true"/>
+    <field name="villeNaissance" type="string" column="VILLE_NAISSANCE" length="128" nullable="true"/>
     <field name="premierRecrutement" type="boolean" column="PREMIER_RECRUTEMENT" nullable="false"/>
-    <field name="perteEmploi" type="boolean" column="PERTE_EMPLOI" nullable="false"/>
     <many-to-one field="civilite" target-entity="Application\Entity\Db\Civilite">
       <join-columns>
         <join-column name="CIVILITE_ID" referenced-column-name="ID"/>
@@ -35,6 +36,16 @@
     <many-to-one field="statut" target-entity="Application\Entity\Db\StatutIntervenant">
       <join-columns>
         <join-column name="STATUT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="paysNaissance" target-entity="Application\Entity\Db\Pays">
+      <join-columns>
+        <join-column name="PAYS_NAISSANCE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="departementNaissance" target-entity="Application\Entity\Db\Departement">
+      <join-columns>
+        <join-column name="DEPT_NAISSANCE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
     <many-to-one field="histoModificateur" target-entity="Application\Entity\Db\Utilisateur">

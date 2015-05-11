@@ -2,6 +2,26 @@
 -- Version 1.5
 --
 
+
+---------------------------------------------------------------------------------
+-- Modif Statuts (Tâche #1728 : Refonte de la page Données personnelles)
+---------------------------------------------------------------------------------
+
+update statut_intervenant set 
+    LIBELLE = 'Sans emploi, non étudiant', 
+    SOURCE_CODE = 'SS_EMPLOI_NON_ETUD', 
+    PEUT_CHOISIR_DANS_DOSSIER = 1,
+    histo_modification = sysdate
+where SOURCE_CODE = 'CHARG_ENS_1AN';
+
+update statut_intervenant set 
+    LIBELLE = 'Auto-entrepreneur, profession libérale ou indépendante', 
+    SOURCE_CODE = 'AUTO_LIBER_INDEP',
+    histo_modification = sysdate
+where SOURCE_CODE = 'NON_SALAR';
+
+
+
 ---------------------------------------------------------------------------------
 -- WF
 ---------------------------------------------------------------------------------

@@ -28,6 +28,34 @@ UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 3', code = 'IAE_FC_3' WHERE code
 UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 2', code = 'IAE_FC_2' WHERE code = 'IAE_FC_NM';
 UPDATE "OSE"."MODULATEUR" SET LIBELLE = 'Niveau 1', code = 'IAE_FC_1' WHERE code = 'IAE_FC_NL';
 
+
+INSERT INTO   TYPE_MODULATEUR  (
+    ID,
+    CODE,
+    LIBELLE,
+    PUBLIQUE,
+    OBLIGATOIRE,
+    SAISIE_PAR_ENSEIGNANT,
+    --VALIDITE_DEBUT,
+    --VALIDITE_FIN,
+    --HISTO_CREATION,
+    HISTO_CREATEUR_ID,
+    --HISTO_MODIFICATION,
+    HISTO_MODIFICATEUR_ID
+    --HISTO_DESTRUCTION,
+    --HISTO_DESTRUCTEUR_ID
+  )
+  VALUES  (
+    TYPE_MODULATEUR_id_seq.nextval,
+    'PSYCHO_FC',
+    'Formation continue',
+    0,
+    1,
+    0,
+    (SELECT id FROM utilisateur WHERE username = 'gauthierb'),
+    (SELECT id FROM utilisateur WHERE username = 'gauthierb')
+  );
+  
 INSERT INTO MODULATEUR
   (
     ID,
@@ -37,21 +65,41 @@ INSERT INTO MODULATEUR
     PONDERATION_SERVICE_DU,
     PONDERATION_SERVICE_COMPL,
     VALIDITE_DEBUT,
-    HISTO_CREATION,
+    --HISTO_CREATION,
     HISTO_CREATEUR_ID,
-    HISTO_MODIFICATION,
+    --HISTO_MODIFICATION,
     HISTO_MODIFICATEUR_ID
   )
   VALUES
   (
     modulateur_id_seq.nextval,
-    'IAE_FC_4',
-    'Niveau 4',
-    (SELECT id FROM type_modulateur WHERE code = 'IAE_FC'),
+    'PSYCHO_FC_1',
+    'Niveau 1',
+    (SELECT id FROM type_modulateur WHERE code = 'PSYCHO_FC'),
     1, 1.92,
     SYSDATE,
-    SYSDATE,
-    (SELECT id FROM utilisateur WHERE username = 'lecluse'),
-    SYSDATE,
-    (SELECT id FROM utilisateur WHERE username = 'lecluse')
+    (SELECT id FROM utilisateur WHERE username = 'gauthierb'),
+    (SELECT id FROM utilisateur WHERE username = 'gauthierb')
+  );
+  
+INSERT INTO   TYPE_MODULATEUR_STRUCTURE  (
+    ID,
+    TYPE_MODULATEUR_ID,
+    STRUCTURE_ID,
+    VALIDITE_DEBUT,
+    --VALIDITE_FIN,
+    --HISTO_CREATION,
+    HISTO_CREATEUR_ID,
+    --HISTO_MODIFICATION,
+    HISTO_MODIFICATEUR_ID
+    --HISTO_DESTRUCTION,
+    --HISTO_DESTRUCTEUR_ID
+  )
+  VALUES  (
+    TYPE_MODULATEUR_STRUCTU_ID_SEQ.nextval,
+    (SELECT id FROM type_modulateur WHERE code = 'PSYCHO_FC'),
+    (SELECT id FROM structure WHERE source_code = 'U24'),
+    sysdate,
+    (SELECT id FROM utilisateur WHERE username = 'gauthierb'),
+    (SELECT id FROM utilisateur WHERE username = 'gauthierb')
   );

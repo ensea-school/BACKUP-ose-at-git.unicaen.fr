@@ -16,10 +16,18 @@ use Application\Exception\DbException;
  */
 class ModulateurController extends AbstractActionController
 {
-    use \Application\Service\Traits\ElementPedagogiqueAwareTrait;
+    use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait;
 
     protected function saisirAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\ElementModulateur'
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
+
         $etape = $this->context()->etapeFromRoute('id');
         /* @var $etape \Application\Entity\Db\Etape */
 

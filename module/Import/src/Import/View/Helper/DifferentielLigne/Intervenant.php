@@ -10,13 +10,25 @@ class Intervenant extends DifferentielLigne
 {
     public function getSujet()
     {
-        $format = '%s %s (numéro %s)';
+        $format = '%s %s (n° %s, %s)';
         if ('insert' == $this->ligne->getAction() || 'undelete' == $this->ligne->getAction()){
-            return sprintf( $format, $this->ligne->get('NOM_USUEL'), $this->ligne->get('PRENOM'), $this->ligne->getSourceCode() );
+            return sprintf( 
+                        $format,
+                        $this->ligne->get('NOM_USUEL'),
+                        $this->ligne->get('PRENOM'),
+                        $this->ligne->getSourceCode(),
+                        $this->ligne->get('ANNEE_ID').'-'.($this->ligne->get('ANNEE_ID')+1)
+                   );
         }else{
             $entity = $this->ligne->getEntity();
             /* @var $entity \Application\Entity\Db\Intervenant */
-            return sprintf( $format, $entity->getNomUsuel(), $entity->getPrenom(), $this->ligne->getSourceCode() );
+            return sprintf( 
+                        $format,
+                        $entity->getNomUsuel(),
+                        $entity->getPrenom(),
+                        $this->ligne->getSourceCode(),
+                        $entity->getAnnee()->getLibelle()
+                   );
         }
     }
 

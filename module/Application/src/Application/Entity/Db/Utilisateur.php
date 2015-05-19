@@ -10,7 +10,7 @@ use ZfcUser\Entity\UserInterface;
  */
 class Utilisateur implements UserInterface, ProviderInterface
 {
-    const OSE_UTILISATEUR_ID = 1;
+    const APP_UTILISATEUR_ID = 1;
     
     /**
      * @var string

@@ -12,6 +12,7 @@ use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\GroupeTypeFormation;
 use Application\Entity\Db\TypeFormation;
 use Application\Entity\Db\Etape;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 
 /**
@@ -19,8 +20,9 @@ use Application\Entity\Db\Etape;
  *
  * @author Laurent Lécluse <laurent.lecluse at unicaen.fr>
  */
-class Import extends Processus
+class Import implements ServiceLocatorAwareInterface
 {
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
 
     /**
      * Mise à jour de l'existant uniquement
@@ -44,7 +46,7 @@ class Import extends Processus
      */
     protected function getQueryGenerator()
     {
-        return $this->getServiceManager()->get('importServiceQueryGenerator');
+        return $this->getServiceLocator()->get('importServiceQueryGenerator');
     }
 
     /**
@@ -54,7 +56,7 @@ class Import extends Processus
      */
     protected function getDifferentiel()
     {
-        return $this->getServiceManager()->get('importServiceDifferentiel');
+        return $this->getServiceLocator()->get('importServiceDifferentiel');
     }
 
     /**

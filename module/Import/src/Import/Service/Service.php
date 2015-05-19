@@ -152,7 +152,7 @@ class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
     public function getDbUser()
     {
         if (null === $this->currentUser) {
-            $this->currentUser = $this->getOSEDbUser();
+            $this->currentUser = $this->getAppDbUser();
         }
         return $this->currentUser;
     }
@@ -171,8 +171,8 @@ class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
      *
      * @return Utilisateur
      */
-    public function getOSEDbUser()
+    public function getAppDbUser()
     {
-        return $this->getEntityManager()->find('Application\Entity\Db\Utilisateur', Utilisateur::OSE_UTILISATEUR_ID);
+        return $this->getEntityManager()->find('Application\Entity\Db\Utilisateur', Utilisateur::APP_UTILISATEUR_ID);
     }
 }

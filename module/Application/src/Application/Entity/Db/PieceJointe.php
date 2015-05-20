@@ -27,6 +27,11 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
      * @var \Application\Entity\Db\Dossier
      */
     private $dossier;
+    
+    /**
+     * @var boolean
+     */
+    private $obligatoire;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -116,6 +121,29 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
     public function getDossier()
     {
         return $this->dossier;
+    }
+
+    /**
+     * Set obligatoire
+     *
+     * @param boolean $obligatoire
+     * @return self
+     */
+    public function setObligatoire($obligatoire)
+    {
+        $this->obligatoire = $obligatoire;
+
+        return $this;
+    }
+    
+    /**
+     * Get obligatoire
+     *
+     * @return boolean 
+     */
+    public function getObligatoire()
+    {
+        return $this->obligatoire;
     }
 
     /**

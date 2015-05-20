@@ -8,6 +8,7 @@ use Application\Entity\Db\Fichier;
 use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointe;
+use Application\Entity\Db\TypePieceJointeStatut;
 use Application\Service\PieceJointe as PieceJointeService;
 use Application\Service\Process\PieceJointeProcess;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
@@ -24,10 +25,10 @@ use Zend\View\Model\JsonModel;
 /**
  * Description of UploadController
  *
- * @method Doctrine\ORM\EntityManager               em()
- * @method Application\Controller\Plugin\Context    context()
- * @method UnicaenApp\Controller\Plugin\AppInfos    appInfos()
- * @method UnicaenApp\Controller\Plugin\Mail        mail()
+ * @method \Doctrine\ORM\EntityManager               em()
+ * @method \Application\Controller\Plugin\Context    context()
+ * @method \UnicaenApp\Controller\Plugin\AppInfos    appInfos()
+ * @method \UnicaenApp\Controller\Plugin\Mail        mail()
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
@@ -77,6 +78,41 @@ class PieceJointeController extends AbstractActionController implements Workflow
      * @throws MessageException
      */
     public function indexAction()
+    {
+        $this->initFilters();
+
+        $this->title = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
+        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+
+        if (!$this->getIntervenant() instanceof IntervenantExterieur) {
+            throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
+        }
+
+        $dossier = $this->getIntervenant()->getDossier();
+        if (!$dossier) {
+            throw new MessageException("L'intervenant {$this->getIntervenant()} n'a aucune donnée personnelle enregistrée.");
+        }
+
+        $typesPieceJointeStatut = $this->getPieceJointeProcess()->getTypesPieceJointeStatut();
+        $piecesJointes          = $this->getPieceJointeProcess()->getPiecesJointes();
+        $assertionPj            = (new PieceJointe())->setDossier($dossier); // entité transmise à l'assertion
+
+        $this->view->setVariables([
+            'intervenant'            => $this->getIntervenant(),
+            'totalHeuresReelles'     => $this->getPieceJointeProcess()->getTotalHeuresReellesIntervenant(),
+            'typesPieceJointeStatut' => $typesPieceJointeStatut,
+            'piecesJointes'          => $piecesJointes,
+            'dossier'                => $dossier,
+            'assertionPj'            => $assertionPj,
+            'role'                   => $role,
+            'title'                  => $this->title,
+        ]);
+
+        $this->statusAction();
+
+        return $this->view;
+    }
+    public function index1Action()
     {
         $this->initFilters();
 
@@ -231,7 +267,7 @@ class PieceJointeController extends AbstractActionController implements Workflow
         $fichier = $this->getFichier(false);
 
         if ($fichier) {
-            $this->getServicePieceJointe()->supprimerFichier($fichier, $pj, $this->getIntervenant());
+            $this->getServicePieceJointe()->supprimerFichier($fichier, $pj);
         }
 
         return $this->redirect()->toRoute('piece-jointe/intervenant/lister', ['typePieceJointe' => $tpj->getId()], [], true);
@@ -338,6 +374,107 @@ class PieceJointeController extends AbstractActionController implements Workflow
         ]);
 
         return $this->view;
+    }
+    
+    public function typePieceJointeStatutAction()
+    {
+        $qb = $this->em()->getRepository('Application\Entity\Db\TypePieceJointe')->createQueryBuilder("tpj")
+                ->select("tpj")
+                ->orderBy("tpj.ordre");
+        $typesPiecesJointes = $qb->getQuery()->getResult();
+        
+        $qb = $this->em()->getRepository('Application\Entity\Db\StatutIntervenant')->createQueryBuilder("si")
+                ->select("si")
+                ->andWhere("si.peutChoisirDansDossier = 1")
+                ->orderBy("si.ordre");
+        $statutsIntervenants = $qb->getQuery()->getResult();
+        
+        $qb = $this->em()->getRepository('Application\Entity\Db\TypePieceJointeStatut')->createQueryBuilder("tpjs")
+                ->select("tpjs, tpj, si")
+                ->join("tpjs.type", "tpj")
+                ->join("tpjs.statut", "si")
+                ->orderBy("si.libelle, tpj.libelle");
+//        $typesPiecesJointesStatuts = $qb->getQuery()->getResult();
+        
+        $typesPiecesJointesStatuts = [];
+        foreach ($qb->getQuery()->getResult() as $tpjs) { /* @var $tpjs TypePieceJointeStatut */
+            $typesPiecesJointesStatuts[$tpjs->getType()->getId()][$tpjs->getPremierRecrutement()][$tpjs->getStatut()->getId()] = $tpjs;
+        }
+        
+        return [
+            'typesPiecesJointes' => $typesPiecesJointes,
+            'statutsIntervenants' => $statutsIntervenants,
+            'typesPiecesJointesStatuts' => $typesPiecesJointesStatuts,
+        ];
+    }
+    
+    public function modifierTypePieceJointeStatutAction()
+    {
+        $type               = $this->context()->mandatory()->typePieceJointeFromRoute();
+        $statut             = $this->context()->mandatory()->statutIntervenantFromRoute();
+        $premierRecrutement = $this->params()->fromRoute("premierRecrutement");
+        
+        if (null === $premierRecrutement) {
+            throw new \Common\Exception\LogicException("Paramètre manquant : premierRecrutement");
+        }
+
+        $qb = $this->em()->getRepository('Application\Entity\Db\TypePieceJointeStatut')->createQueryBuilder("tpjs")
+                ->select("tpjs, tpj, si")
+                ->join("tpjs.type", "tpj", \Doctrine\ORM\Query\Expr\Join::WITH, "tpj = :tpj")
+                ->join("tpjs.statut", "si", \Doctrine\ORM\Query\Expr\Join::WITH, "si = :si")
+                ->andWhere("tpjs.premierRecrutement = :pr")
+                ->orderBy("si.libelle, tpj.libelle")
+                ->setParameter('tpj', $type)
+                ->setParameter('si', $statut)
+                ->setParameter('pr', $premierRecrutement);
+        $tpjs = $qb->getQuery()->getOneOrNullResult();
+        
+        if (! $tpjs) {
+            $tpjs = new TypePieceJointeStatut();
+            $tpjs
+                    ->setType($type)
+                    ->setStatut($statut)
+                    ->setPremierRecrutement((boolean) $premierRecrutement)
+                    ->setObligatoire(true);
+        }
+        
+        $obligatoireValueOptions = [
+            1 => "Obligatoire",
+            0 => "Facultatif",
+            2 => "Non attendu",
+        ];
+        
+        if ($this->getRequest()->isPost()) {
+           
+            $obligatoire = (int) $this->params()->fromPost('obligatoire', 2);
+            $seuilHetd   = (int) $this->params()->fromPost('seuil_heures');
+
+            if (! array_key_exists($obligatoire, $obligatoireValueOptions)) {
+                exit;
+            }
+            
+            // non attendu <=> suppression
+            if (2 === $obligatoire) {
+                $qb = $this->em()->remove($tpjs);
+            }
+            // obligatoire ou facultatif
+            else {
+                $tpjs
+                        ->setObligatoire((boolean) $obligatoire)
+                        ->setSeuilHetd($seuilHetd ?: null);
+
+                $this->em()->persist($tpjs);
+            }
+            
+            $this->em()->flush();
+            
+            exit;
+        }
+        
+        return [
+            'tpjs'                    => $tpjs,
+            'obligatoireValueOptions' => $obligatoireValueOptions,
+        ];
     }
 
     /**

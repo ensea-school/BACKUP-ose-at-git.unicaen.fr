@@ -30,11 +30,12 @@
         <join-column name="SITUATION_FAMILIALE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="dossier" target-entity="Application\Entity\Db\Dossier">
+<!--    <many-to-one field="dossier" target-entity="Application\Entity\Db\Dossier">
       <join-columns>
         <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
       </join-columns>
-    </many-to-one>
+    </many-to-one>-->
+    <one-to-many field="dossier" target-entity="Application\Entity\Db\Dossier" mapped-by="intervenant" />
     <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

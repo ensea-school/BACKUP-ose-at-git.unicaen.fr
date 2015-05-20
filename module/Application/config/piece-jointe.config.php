@@ -159,6 +159,24 @@ return [
                             ],
                         ],
                     ],
+                    'type-piece-jointe-statut' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/type-piece-jointe-statut',
+                            'defaults' => [
+                                'action' => 'type-piece-jointe-statut',
+                            ],
+                        ],
+                    ],
+                    'modifier-type-piece-jointe-statut' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/modifier-type-piece-jointe-statut/:typePieceJointe/:statutIntervenant/:premierRecrutement',
+                            'defaults' => [
+                                'action' => 'modifier-type-piece-jointe-statut',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -211,6 +229,11 @@ return [
                     'action'     => ['valider', 'devalider'],
                     'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                     'assertion'  => 'PieceJointeAssertion',
+                ],
+                [
+                    'controller' => 'Application\Controller\PieceJointe',
+                    'action'     => ['type-piece-jointe-statut', 'modifier-type-piece-jointe-statut'],
+                    'roles'      => [AdministrateurRole::ROLE_ID],
                 ],
             ],
         ],

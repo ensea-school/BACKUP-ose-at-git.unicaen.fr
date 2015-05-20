@@ -77,6 +77,10 @@ class PieceJointeAssertion extends AbstractAssertion implements WorkflowInterven
         if ($this->privilege === self::PRIVILEGE_DEVALIDER && !$this->resource->getValidation()) {
             return false;
         }
+        // Impossible de valider une PJ sans fichier associé
+        if ($this->privilege === self::PRIVILEGE_VALIDER && ! count($this->resource->getFichier())) {
+            return false;
+        }
         
         // Impossible d'ajouter un fichier à une PJ validée
         if ($this->privilege === self::PRIVILEGE_CREATE_FICHIER && $this->resource->getValidation()) {

@@ -1,5 +1,6 @@
 <?php 
 use Application\Assertion\PieceJointeAssertion;
+use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
 ?>
 
@@ -9,11 +10,11 @@ use Application\Entity\Db\TypePieceJointeStatut;
 
 <?php echo $this->partial('application/piece-jointe/status'); ?>
 
-<?php foreach($this->typesPieceJointeStatut as $tpjs): /* @var $tpjs TypePieceJointeStatut */ ?>
+<?php foreach($this->piecesJointes as $pj): /* @var $pj PieceJointe */ ?>
     <?php 
-    $tpj = $tpjs->getType();
-    $pj  = isset($this->piecesJointesFournies[$tpj->getId()]) ? $this->piecesJointesFournies[$tpj->getId()] : null;
-    $pjValidee = $pj && $pj->getValidation();
+    $tpj       = $pj->getType();
+    $tpjs      = $this->typesPieceJointeStatut[$tpj->getId()]; /* @var $tpjs TypePieceJointeStatut */
+    $pjValidee = (boolean) $pj->getValidation();
     
     $validationBar = $this->partial('application/piece-jointe/partial/validation-bar', ['pj' => $pj]);
 

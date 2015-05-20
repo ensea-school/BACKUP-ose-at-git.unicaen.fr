@@ -68,11 +68,14 @@ class DossierController extends AbstractActionController implements WorkflowInte
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
      * (services sur des enseignements fermés, etc.)
+     * @see \Common\ORM\Filter\HistoriqueFilter
      */
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init(
             [
+                'Application\Entity\Db\Intervenant',
+                'Application\Entity\Db\IntervenantExterieur',
                 'Application\Entity\Db\Validation',
                 'Application\Entity\Db\TypeValidation',
                 'Application\Entity\Db\Dossier',
@@ -110,7 +113,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
      * @throws RuntimeException
      */
     public function modifierAction()
-    {
+    {   
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $service    = $this->getServiceDossier();
         $validation = null;
@@ -123,13 +126,21 @@ class DossierController extends AbstractActionController implements WorkflowInte
         else {
             $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
-
+        
+        // refetch intervenant avec jointure sur dossier (et respect de l'historique)
+        $qb = $this->em()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i")
+                ->select("i, d")
+                ->leftJoin("i.dossier", "d")
+                ->andWhere("i = :i")
+                ->setParameter('i', $this->intervenant);
+        $this->intervenant = $qb->getQuery()->getOneOrNullResult();
+        
         $this->form = $this->getFormModifier();
         
         $serviceValidation = $this->getServiceValidation();
         $qb = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
         $serviceValidation->finderByIntervenant($this->intervenant, $qb);
-        $serviceValidation->finderByHistorique($qb);
+//        $serviceValidation->finderByHistorique($qb);
         $validations = $serviceValidation->getList($qb);
         if (count($validations)) {
             $validation = current($validations);
@@ -142,7 +153,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
         $this->form->get('submit')->setAttribute('value', $this->getSubmitButtonLabel());
 
         $service->canAdd($this->intervenant, true);
-
+        
         if (!($dossier = $this->intervenant->getDossier())) {
             $dossier = $service->newEntity()->fromIntervenant($this->intervenant);
             $this->intervenant->setDossier($dossier);
@@ -168,7 +179,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
             'validation'  => $validation,
             'readonly'    => $this->readonly,
         ]);
-
+        
         return $view;
     }
 

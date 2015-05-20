@@ -28,7 +28,7 @@ class IntervenantExterieur extends Intervenant
     protected $situationFamiliale;
 
     /**
-     * @var \Application\Entity\Db\Dossier
+     * @var \Doctrine\Common\Collections\Collection
      */
     protected $dossier;
 
@@ -155,9 +155,16 @@ class IntervenantExterieur extends Intervenant
      * @param \Application\Entity\Db\Dossier $dossier
      * @return IntervenantExterieur
      */
-    public function setDossier(\Application\Entity\Db\Dossier $dossier = null)
+//    public function setDossier(\Application\Entity\Db\Dossier $dossier = null)
+//    {
+//        $this->dossier = $dossier;
+//
+//        return $this;
+//    }
+    public function setDossier(\Application\Entity\Db\Dossier $dossier)
     {
-        $this->dossier = $dossier;
+        $this->dossier->clear();
+        $this->dossier->add($dossier);
 
         return $this;
     }
@@ -167,9 +174,13 @@ class IntervenantExterieur extends Intervenant
      *
      * @return \Application\Entity\Db\Dossier 
      */
+//    public function getDossier()
+//    {
+//        return $this->dossier;
+//    }
     public function getDossier()
     {
-        return $this->dossier;
+        return $this->dossier->first();
     }
 
     /**

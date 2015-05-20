@@ -58,6 +58,11 @@ class TypePieceJointe implements HistoriqueAwareInterface
     private $id;
 
     /**
+     * @var integer
+     */
+    protected $ordre;
+
+    /**
      * @var \Application\Entity\Db\Utilisateur
      */
     private $histoModificateur;
@@ -224,6 +229,29 @@ class TypePieceJointe implements HistoriqueAwareInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get ordre
+     *
+     * @return integer
+     */
+    public function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
+     * Set ordre
+     *
+     * @param integer $ordre
+     * @return self
+     */
+    public function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+
+        return $this;
     }
 
     /**

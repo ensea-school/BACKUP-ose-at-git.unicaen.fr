@@ -337,27 +337,26 @@ EOS;
     }
 
     /**
-     * Suppression d'un fichier déposé lié à une PJ.
+     * Suppression d'un Fichier déposé lié à une PJ.
      *
-     * NB: lorsqu'il n'y a plus aucun fichier, la PJ elle-même est supprimée.
+     * NB: la PieceJointe elle-même n'est PAS supprimée.
      *
      * @param \Application\Entity\Db\Fichier $fichier
      * @param \Application\Entity\Db\PieceJointe $pj
-     * @param \Application\Entity\Db\Intervenant $intervenant
      * @return void
      * @throws UnAuthorizedException
      */
-    public function supprimerFichier(FichierEntity $fichier, PieceJointeEntity $pj, IntervenantEntity $intervenant)
+    public function supprimerFichier(FichierEntity $fichier, PieceJointeEntity $pj)
     {
         $pj->removeFichier($fichier);
         $this->getEntityManager()->remove($fichier);
 
-        if (!count($pj->getFichier())) {
-            if (!$this->getAuthorize()->isAllowed($pj, PieceJointeAssertion::PRIVILEGE_DELETE)) {
-                throw new UnAuthorizedException("Suppression de la pièce jointe interdite!");
-            }
-            $this->getEntityManager()->remove($pj);
-        }
+//        if (!count($pj->getFichier())) {
+//            if (!$this->getAuthorize()->isAllowed($pj, PieceJointeAssertion::PRIVILEGE_DELETE)) {
+//                throw new UnAuthorizedException("Suppression de la pièce jointe interdite!");
+//            }
+//            $this->getEntityManager()->remove($pj);
+//        }
 
         $this->getEntityManager()->flush();
     }

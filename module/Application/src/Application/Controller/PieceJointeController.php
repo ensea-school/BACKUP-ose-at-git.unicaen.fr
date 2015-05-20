@@ -112,41 +112,41 @@ class PieceJointeController extends AbstractActionController implements Workflow
 
         return $this->view;
     }
-    public function index1Action()
-    {
-        $this->initFilters();
-
-        $this->title = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-
-        if (!$this->getIntervenant() instanceof IntervenantExterieur) {
-            throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
-        }
-
-        $dossier = $this->getIntervenant()->getDossier();
-        if (!$dossier) {
-            throw new MessageException("L'intervenant {$this->getIntervenant()} n'a aucune donnée personnelle enregistrée.");
-        }
-
-        $typesPieceJointeStatut = $this->getPieceJointeProcess()->getTypesPieceJointeStatut();
-        $piecesJointesFournies  = $this->getPieceJointeProcess()->getPiecesJointesFournies();
-        $assertionPj            = (new PieceJointe())->setDossier($dossier); // entité transmise à l'assertion
-
-        $this->view->setVariables([
-            'intervenant'            => $this->getIntervenant(),
-            'totalHeuresReelles'     => $this->getPieceJointeProcess()->getTotalHeuresReellesIntervenant(),
-            'typesPieceJointeStatut' => $typesPieceJointeStatut,
-            'piecesJointesFournies'  => $piecesJointesFournies,
-            'dossier'                => $dossier,
-            'assertionPj'            => $assertionPj,
-            'role'                   => $role,
-            'title'                  => $this->title,
-        ]);
-
-        $this->statusAction();
-
-        return $this->view;
-    }
+//    public function index1Action()
+//    {
+//        $this->initFilters();
+//
+//        $this->title = "Pièces justificatives <small>{$this->getIntervenant()}</small>";
+//        $role        = $this->getServiceContext()->getSelectedIdentityRole();
+//
+//        if (!$this->getIntervenant() instanceof IntervenantExterieur) {
+//            throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
+//        }
+//
+//        $dossier = $this->getIntervenant()->getDossier();
+//        if (!$dossier) {
+//            throw new MessageException("L'intervenant {$this->getIntervenant()} n'a aucune donnée personnelle enregistrée.");
+//        }
+//
+//        $typesPieceJointeStatut = $this->getPieceJointeProcess()->getTypesPieceJointeStatut();
+//        $piecesJointesFournies  = $this->getPieceJointeProcess()->getPiecesJointesFournies();
+//        $assertionPj            = (new PieceJointe())->setDossier($dossier); // entité transmise à l'assertion
+//
+//        $this->view->setVariables([
+//            'intervenant'            => $this->getIntervenant(),
+//            'totalHeuresReelles'     => $this->getPieceJointeProcess()->getTotalHeuresReellesIntervenant(),
+//            'typesPieceJointeStatut' => $typesPieceJointeStatut,
+//            'piecesJointesFournies'  => $piecesJointesFournies,
+//            'dossier'                => $dossier,
+//            'assertionPj'            => $assertionPj,
+//            'role'                   => $role,
+//            'title'                  => $this->title,
+//        ]);
+//
+//        $this->statusAction();
+//
+//        return $this->view;
+//    }
 
     /**
      *
@@ -163,27 +163,26 @@ class PieceJointeController extends AbstractActionController implements Workflow
         $rule
                 ->setFunction("ose_workflow.pj_oblig_fournies")
                 ->setIntervenant($this->getIntervenant());
-        $complet = (int) $rule->execute();
-        if ($complet) {
-            $messages['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
-        }
-        else {
-            $messages['danger'][] = "Il manque des pièces justificatives obligatoires.";
-        }
+        $toutesFournies = (int) $rule->execute();
 
         // recherche si des PJ restent à valider
         $rule = clone $this->getServiceLocator()->get('DbFunctionRule');
         $rule
                 ->setFunction("ose_workflow.pj_oblig_validees")
                 ->setIntervenant($this->getIntervenant());
-        $complet = (int) $rule->execute();
-        if ($complet) {
-            $messages['success'][] = "Toutes les pièces justificatives fournies ont été validées par votre composante.";
+        $toutesValidees = (int) $rule->execute();
+        
+        if (!$toutesFournies) {
+            $messages['danger'][]  = "Des pièces justificatives obligatoires n'ont pas été fournies.";
         }
-        else {
-            $messages['danger'][] = "Elles doivent encore être validées par votre composante.";
+        elseif ($toutesFournies && $toutesValidees) {
+            $messages['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies et validées.";
         }
-
+        elseif ($toutesFournies && !$toutesValidees) {
+            $messages['success'][] = "Toutes les pièces justificatives obligatoires ont été fournies.";
+            $messages['danger'][]  = "Mais certaines doivent encore être validées par votre composante.";
+        }
+        
         $this->view->setVariables([
             'urlStatus' => $this->url()->fromRoute('piece-jointe/intervenant/status', [], [], true),
             'messages'  => $messages,

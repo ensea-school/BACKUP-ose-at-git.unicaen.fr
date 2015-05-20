@@ -147,6 +147,20 @@ class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
     }
 
     /**
+     * Get obligatoire
+     *
+     * @return string
+     */
+    public function getObligatoireToString()
+    {
+        if ($this->getObligatoire()) {
+            return "À fournir obligatoirement";
+        }
+        
+        return "Facultatif";
+    }
+
+    /**
      * Add fichier
      *
      * @param \Application\Entity\Db\Fichier $fichier

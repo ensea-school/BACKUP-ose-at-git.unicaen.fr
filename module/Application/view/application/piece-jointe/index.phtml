@@ -13,12 +13,13 @@ use Application\Entity\Db\TypePieceJointeStatut;
 <?php foreach($this->piecesJointes as $pj): /* @var $pj PieceJointe */ ?>
     <?php 
     $tpj       = $pj->getType();
-    $tpjs      = $this->typesPieceJointeStatut[$tpj->getId()]; /* @var $tpjs TypePieceJointeStatut */
+//    $tpjs      = $this->typesPieceJointeStatut[$tpj->getId()]; /* @var $tpjs TypePieceJointeStatut */
     $pjValidee = (boolean) $pj->getValidation();
     
     $validationBar = $this->partial('application/piece-jointe/partial/validation-bar', ['pj' => $pj]);
 
-    $obligatoire = $tpjs->getObligatoireToString($this->totalHeuresReelles);
+//    $obligatoire = $tpjs->getObligatoireToString($this->totalHeuresReelles);
+    $obligatoire = $pj->getObligatoireToString();
     $linksModelesDocs = [];
     if (($url = $tpj->getUrlModeleDoc())) {
         $href = $this->basePath($url);

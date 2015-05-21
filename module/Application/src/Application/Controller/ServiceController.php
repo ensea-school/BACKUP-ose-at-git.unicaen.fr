@@ -3,12 +3,14 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Common\Exception\MessageException;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\IntervenantPermanent;
+use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Service\Recherche;
 
 /**
@@ -28,9 +30,10 @@ class ServiceController extends AbstractActionController
         \Application\Service\Traits\TypeInterventionAwareTrait,
         \Application\Service\Traits\IntervenantAwareTrait,
         \Application\Service\Traits\ServiceReferentielAwareTrait,
-        \Application\Service\Traits\EtatVolumeHoraireAwareTrait
+        \Application\Service\Traits\EtatVolumeHoraireAwareTrait,
+        \Application\Service\Traits\ValidationAwareTrait
     ;
-
+    
     /**
      * Initialisation des filtres Doctrine pour les historique.
      * Objectif : laisser passer les enregistrements passés en historique pour mettre en évidence ensuite les erreurs éventuelles
@@ -100,7 +103,6 @@ class ServiceController extends AbstractActionController
 
     public function indexAction()
     {
-        $typeVolumeHoraireCode    = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU' );
         $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
         $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
         $role                     = $this->getServiceContext()->getSelectedIdentityRole();
@@ -129,7 +131,7 @@ class ServiceController extends AbstractActionController
             $localContext->setIntervenant($intervenant); // passage au contexte pour le présaisir dans le formulaire de saisie
             $action = 'afficher'; // Affichage par défaut
             $recherche = new Recherche;
-            $recherche->setTypeVolumeHoraire( $this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode) );
+            $recherche->setTypeVolumeHoraire( $this->getTypeVolumeHoraire() );
             $recherche->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
 
             $params = [
@@ -169,6 +171,73 @@ class ServiceController extends AbstractActionController
         }else{
             $viewModel->setTemplate('application/service/index');
         }
+        
+        // gestion du bouton permettant de clôturer la saisie du réalisé pour les permanents
+        $this->injectClotureSaisie($viewModel);
+        
+        return $viewModel;
+    }
+    
+    private function injectClotureSaisie(\Zend\View\Model\ModelInterface $viewModel)
+    {
+        $params = $this->getEvent()->getRouteMatch()->getParams();
+        $params['action'] = 'cloturer-saisie';
+        
+        $widget = $this->forward()->dispatch('Application\Controller\Service', $params);
+        
+        if ($widget instanceof \Zend\View\Model\ModelInterface) {
+            $viewModel->addChild($widget, 'clotureSaisie');
+        }
+    }
+    
+    /**
+     * Clôture de la saisie du réalisé des permanents.
+     * 
+     * GET  : affichage du bouton permettant de clôturer la saisie.
+     * POST : création d'une validation pour clôturer la saisie, ou suppression pour déclôturer.
+     * 
+     * @return ViewModel
+     */
+    public function cloturerSaisieAction()
+    {
+        $intervenant = $this->context()->intervenantFromRoute();
+        $structure   = $intervenant->getStructure();
+        $tvh         = $this->getTypeVolumeHoraire();
+        $validation  = $this->getServiceValidation()->findValidationClotureServices($intervenant, $tvh); // clôture existante
+        $viewModel   = new ViewModel();
+        
+        if (! $intervenant->getStatut()->estPermanent()) {
+            return false;
+        }
+        if (TypeVolumeHoraire::CODE_REALISE !== $tvh->getCode()) {
+            return false;
+        }
+        
+        if ($this->getRequest()->isPost()) {
+            $cloturer = $this->params()->fromPost('cloturer');
+            if (null === $cloturer || $validation && 1 === $cloturer || !$validation && 0 === $cloturer) {
+                exit;
+            }
+            if ($cloturer) {
+                $validation = $this->getServiceValidation()->createValidationClotureServices($intervenant, $structure, $tvh);
+                $this->em()->persist($validation);
+            }
+            else {
+                $this->em()->remove($validation);
+            }
+            $this->em()->flush();
+        }
+        
+        if ($validation) {
+            $dateCloture = $validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT);
+            $this->messenger()->addMessage("La saisie des enseignements réalisés a été clôturée le $dateCloture.", 'success');
+        }
+        
+        $viewModel->setVariables([
+            'typeVolumeHoraire' => $tvh,
+            'validation'        => $validation,
+        ]);
+        
         return $viewModel;
     }
 
@@ -487,6 +556,24 @@ class ServiceController extends AbstractActionController
             }
         }
         return compact('form','errors','title');
+    }
+    
+    /**
+     * @var TypeVolumeHoraire
+     */
+    private $typeVolumeHoraire;
+    
+    /**
+     * @return TypeVolumeHoraire
+     */
+    private function getTypeVolumeHoraire()
+    {
+        if (null === $this->typeVolumeHoraire) {
+            $typeVolumeHoraireCode   = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU' );
+            $this->typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode);
+        }
+        
+        return $this->typeVolumeHoraire;
     }
 
     /**

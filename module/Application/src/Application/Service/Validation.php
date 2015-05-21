@@ -23,6 +23,8 @@ use Exception;
  */
 class Validation extends AbstractEntityService
 {
+    use Traits\TypeValidationAwareTrait;
+    
     /**
      * retourne la classe des entités
      *
@@ -74,6 +76,57 @@ class Validation extends AbstractEntityService
 //            }
 //        }
         $this->save($validation);
+    }
+    
+    /**
+     * 
+     * @param IntervenantEntity $intervenant
+     * @param TypeVolumeHoraireEntity $tvh
+     * @return ValidationEntity|null
+     */
+    public function findValidationClotureServices(IntervenantEntity $intervenant, TypeVolumeHoraireEntity $tvh)
+    {
+        $qb = $this->finderByType($this->getTypeValidationClotureFromTypeVolumeHoraire($tvh));
+        $this->finderByIntervenant($intervenant, $qb);
+        $v = $qb->getQuery()->getOneOrNullResult();
+        
+        return $v;
+    }
+    
+    /**
+     * 
+     * @param IntervenantEntity $intervenant
+     * @param StructureEntity $structure
+     * @param TypeVolumeHoraireEntity $tvh
+     * @return ValidationEntity
+     */
+    public function createValidationClotureServices(
+            IntervenantEntity $intervenant, 
+            StructureEntity $structure,
+            TypeVolumeHoraireEntity $tvh)
+    {
+        $v = new ValidationEntity();
+        $v
+                ->setIntervenant($intervenant)
+                ->setStructure($structure)
+                ->setTypeValidation($this->getTypeValidationClotureFromTypeVolumeHoraire($tvh));
+        
+        return $v;
+    }
+    
+    /**
+     * 
+     * @param TypeVolumeHoraireEntity $tvh
+     * @return TypeValidationEntity|null
+     */
+    private function getTypeValidationClotureFromTypeVolumeHoraire(TypeVolumeHoraireEntity $tvh)
+    {
+        switch ($tvh->getCode()) {
+            case TypeVolumeHoraireEntity::CODE_REALISE:
+                return $this->getServiceTypeValidation()->getByCode(TypeValidationEntity::CODE_CLOTURE_REALISE);
+            default:
+                return null;
+        }
     }
     
     /**

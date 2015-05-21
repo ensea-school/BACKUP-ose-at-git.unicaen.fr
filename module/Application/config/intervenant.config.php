@@ -176,6 +176,20 @@ return [
                             ],
                         ],
                     ],
+                    'cloturer-saisie' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/:intervenant/services/:type-volume-horaire-code/cloturer',
+                            'constraints' => [
+                                'id' => '[0-9]*',
+                                'type-volume-horaire-code' => '[a-zA-Z0-9]*',
+                            ],
+                            'defaults' => [
+                                'controller' => 'Application\Controller\Service',
+                                'action' => 'cloturer-saisie',
+                            ],
+                        ],
+                    ],
                     'demande-mise-en-paiement' => [
                         'type'    => 'Segment',
                         'options' => [

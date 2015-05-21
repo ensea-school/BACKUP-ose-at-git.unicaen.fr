@@ -33,6 +33,17 @@ class TypeValidation extends AbstractEntityService
     }
 
     /**
+     *
+     * @param string $code
+     * @return \Application\Entity\Db\TypeValidation
+     */
+    public function getByCode( $code )
+    {
+        if (null == $code) return null;
+        return $this->getRepo()->findOneBy(['code' => $code]);
+    }
+
+    /**
      * Retourne la liste des types de volumes horaires
      *
      * @param QueryBuilder|null $queryBuilder

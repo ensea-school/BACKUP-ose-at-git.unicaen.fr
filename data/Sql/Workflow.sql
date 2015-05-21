@@ -11,6 +11,27 @@ where i.source_code = '1058';
 
 
 /**
+ * Création d'une nouvelle étape.
+ */
+
+Insert into WF_ETAPE (ID, CODE, LIBELLE, ORDRE, STEP_CLASS, PERTIN_FUNC, FRANCH_FUNC, VISIBLE, STRUCTURE_DEPENDANT, STRUCTURES_IDS_FUNC) 
+values (
+    WF_ETAPE_id_seq.nextval, 
+    'CLOTURE_REALISE', 
+    'Clôture de la saisie des enseignements réalisés', 
+    115,
+    'Application\Service\Workflow\Step\ClotureRealiseStep', 
+    'ose_workflow.peut_cloturer_realise', 
+    'ose_workflow.realise_cloture', 
+    '1', 
+    '0', 
+    null--'ose_workflow.fetch_struct_ensref_realis_ids'
+);
+
+
+
+
+/**
  * Regénération de la Feuille de route d'un intervenant.
  */
 

@@ -518,7 +518,7 @@ class Service extends AbstractEntityService
         }
         if (null !== $structureEns) {
             $structureEns = (array) $structureEns;
-            $whereStr     = in_array(null, $structureEns) ? ["strens IS NULL"] : [];
+            $whereStr     = in_array(null, $structureEns) ? ["ep.structure IS NULL"] : [];
             $structureEns = array_filter($structureEns);
             foreach ($structureEns as $s) {
                 $paramName = uniqid("str");
@@ -549,7 +549,7 @@ class Service extends AbstractEntityService
             $structureEns = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("s, i, vh, strens")
+                ->select("s, i, vh, ep, strens")
                 ->from("Application\Entity\Db\Service", 's')
                 ->join("s.intervenant", "i")
                 ->join("s.volumeHoraire", 'vh')

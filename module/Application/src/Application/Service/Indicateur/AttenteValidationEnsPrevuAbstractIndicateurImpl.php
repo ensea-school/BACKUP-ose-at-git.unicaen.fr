@@ -11,16 +11,17 @@ use Application\Entity\Db\WfEtape;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteValidationEnsPrevuIndicateurImpl extends AttenteValidationEnsAbstractIndicateurImpl
+abstract class AttenteValidationEnsPrevuAbstractIndicateurImpl extends AttenteValidationEnsAbstractIndicateurImpl
 {
     use \Application\Traits\TypeVolumeHoraireAwareTrait;
+    use \Application\Traits\TypeIntervenantAwareTrait;
     
     /**
      * Retourne le type de volume horaire utile à cet indicateur.
      * 
      * @return TypeVolumeHoraireEntity
      */
-    protected function getTypeVolumeHoraire()
+    public function getTypeVolumeHoraire()
     {
         if (null === $this->typeVolumeHoraire) {
             $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();

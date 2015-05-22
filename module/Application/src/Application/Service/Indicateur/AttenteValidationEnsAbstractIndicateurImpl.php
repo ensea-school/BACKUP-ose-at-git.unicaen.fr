@@ -14,8 +14,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    protected $singularTitlePattern = "%s vacataire est en attente de validation de ses enseignements <em>%s</em>";
-    protected $pluralTitlePattern   = "%s vacataires sont en attente de validation de leurs enseignements <em>%s</em>";
+    protected $singularTitlePattern = "%s %s est en attente de validation de ses enseignements <em>%s</em>";
+    protected $pluralTitlePattern   = "%s %s sont en attente de validation de leurs enseignements <em>%s</em>";
     
     /**
      * 
@@ -24,8 +24,16 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
      */
     public function getTitle($appendStructure = true)
     {
-        $this->singularTitlePattern = sprintf($this->singularTitlePattern, '%s', $this->getTypeVolumeHoraire());
-        $this->pluralTitlePattern   = sprintf($this->pluralTitlePattern,   '%s', $this->getTypeVolumeHoraire());
+        $this->singularTitlePattern = sprintf(
+                $this->singularTitlePattern, 
+                '%s', 
+                TypeIntervenantEntity::CODE_EXTERIEUR === $this->getTypeIntervenant()->getCode() ? "vacataire" : "permanent", 
+                $this->getTypeVolumeHoraire());
+        $this->pluralTitlePattern   = sprintf(
+                $this->pluralTitlePattern,   
+                '%s', 
+                TypeIntervenantEntity::CODE_EXTERIEUR === $this->getTypeIntervenant()->getCode() ? "vacataires" : "permanents", 
+                $this->getTypeVolumeHoraire());
         
         return parent::getTitle($appendStructure);
     }
@@ -49,9 +57,10 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
         $service->finderByWfEtapeCourante($this->getWorkflowStepKey(), $qb);
         
         /**
-         * Les vacataires.
+         * Type d'intervenant.
          */
-        $qb->andWhere("ti.code = :type")->setParameter('type', TypeIntervenantEntity::CODE_EXTERIEUR);
+//        $qb->andWhere("ti.code = :type")->setParameter('type', TypeIntervenantEntity::CODE_EXTERIEUR);
+        $qb->andWhere("ti = :type")->setParameter('type', $this->getTypeIntervenant());
         
         if ($this->getStructure()) {
             $qb
@@ -68,6 +77,13 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
         
         return $qb;
     }
+    
+    /**
+     * Retourne le type d'intervenant utile à cet indicateur.
+     * 
+     * @return TypeIntervenantEntity
+     */
+    abstract protected function getTypeIntervenant();
     
     /**
      * Retourne le type de volume horaire utile à cet indicateur.

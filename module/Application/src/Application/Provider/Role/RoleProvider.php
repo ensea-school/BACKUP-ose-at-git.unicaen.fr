@@ -137,7 +137,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
                 /* fin de deprecated */
 
-                //$role = new Role( $roleId, $parent, $roleLibelle);
+                //$role = new Role( $roleId, 'user', $roleLibelle);
                 $role->setDbRole( $dbRole );
                 $role->setPersonnel( $personnel );
 
@@ -146,7 +146,6 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 }else{
                     $role->setStructure( $affectation->getStructure() );
                 }
-                
 
                 $roles[$roleId] = $role;
             }

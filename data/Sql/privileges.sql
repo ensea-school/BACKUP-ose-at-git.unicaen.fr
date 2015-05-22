@@ -59,10 +59,13 @@ INSERT INTO PRIVILEGE (
 );
 
 select
-  cp.code categorie,
-  p.code privilege
+  --cp.code categorie,
+  --p.code privilege,
+  '    const '
+    || rpad( upper( replace( cp.code, '-', '_' ) || '_' || replace( p.code, '-', '_' ) ), MAX( length( cp.code ) + length( p.code ) ) OVER (PARTITION BY 1 )+1, ' ' )
+    || ' = ' || '''' || cp.code || '-' || p.code || '''' || ';' php_const
 from
   privilege p
   join categorie_privilege cp on cp.id = p.categorie_id
 order by
-  categorie, privilege
+  cp.code, p.code

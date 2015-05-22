@@ -182,6 +182,9 @@ $main =  [
         'resource_providers' => [
             'ApplicationPrivilege' => [],
         ],
+        'rule_providers' => [
+            'Application\Provider\Rule\RuleProvider' => []
+        ],
     ],
     'service_manager' => [
         'invokables' => [

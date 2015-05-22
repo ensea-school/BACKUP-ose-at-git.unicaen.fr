@@ -88,21 +88,25 @@ return [
                                 'label'    => "Mises en paiement",
                                 'title'    => "Mises en paiement",
                                 'route'    => 'paiement/etat-demande-paiement',
+                                'resource' => 'controller/Application\Controller\MiseEnPaiement:etat-demande-paiement',
                             ],
                             'etat-paiement' => [
                                 'label'    => "État de paiement",
                                 'title'    => "État de paiement",
                                 'route'    => 'paiement/etat-paiement',
+                                'resource' => 'controller/Application\Controller\MiseEnPaiement:etat-paiement',
                             ],
                             'mises-en-paiement-csv' => [
                                 'label'    => "Mises en paiement (CSV)",
                                 'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
                                 'route'    => 'paiement/mises-en-paiement-csv',
+                                'resource' => 'controller/Application\Controller\MiseEnPaiement:mises-en-paiement-csv',
                             ],
                             'extraction-winpaie' => [
                                 'label'    => "Extraction Winpaie",
                                 'title'    => "Export des données de paiement au format Winpaie",
                                 'route'    => 'paiement/extraction-winpaie',
+                                'resource' => 'controller/Application\Controller\MiseEnPaiement:extraction-winpaie',
                             ],
                         ],
                     ],
@@ -119,7 +123,6 @@ return [
                     'privileges' => [
                         Privilege::MISE_EN_PAIEMENT_DEMANDE,
                         Privilege::MISE_EN_PAIEMENT_VISUALISATION,
-                        Privilege::MISE_EN_PAIEMENT_VALIDATION,
                     ],
                     'assertion'  => 'MiseEnPaiementAssertion',
                 ],

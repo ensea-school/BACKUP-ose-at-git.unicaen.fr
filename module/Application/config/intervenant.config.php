@@ -457,6 +457,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget' => true,
+                                'resource' => 'controller/Application\Controller\MiseEnPaiement:demande-mise-en-paiement',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ],
                         ],

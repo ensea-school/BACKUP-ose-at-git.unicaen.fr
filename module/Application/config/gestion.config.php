@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use Application\Entity\Db\Privilege;
+
 return [
     'router' => [
         'routes' => [
@@ -113,14 +115,14 @@ return [
                                         'title'  => "Gestion des rôles",
                                         'route'  => 'gestion/droits/roles',
                                         'withtarget' => true,
-                                        'resource' => 'privilege/privilege-visualisation',
+                                        'resource' => 'privilege/'.Privilege::PRIVILEGE_VISUALISATION,
                                     ],
                                     'privileges' => [
                                         'label'  => "Privilèges",
                                         'title'  => "Gestion des privilèges",
                                         'route'  => 'gestion/droits/privileges',
                                         'withtarget' => true,
-                                        'resource' => 'privilege/privilege-visualisation',
+                                        'resource' => 'privilege/'.Privilege::PRIVILEGE_VISUALISATION,
                                     ],
                                 ],
                             ],

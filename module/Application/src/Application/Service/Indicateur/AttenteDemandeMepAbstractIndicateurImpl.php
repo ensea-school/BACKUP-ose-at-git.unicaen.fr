@@ -3,6 +3,7 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\VIndicAttenteDemandeMep as VIndicAttenteDemandeMepEntity;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Filter\Callback;
@@ -13,10 +14,31 @@ use Zend\Filter\FilterInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteDemandeMepIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
+abstract class AttenteDemandeMepAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    protected $singularTitlePattern = "%s intervenant peut faire l'objet d'une demande de mise en paiement";
-    protected $pluralTitlePattern   = "%s intervenants peuvent faire l'objet d'une demande de mise en paiement";
+    use \Application\Traits\TypeIntervenantAwareTrait;
+    
+    protected $singularTitlePattern = "%s %s peut    faire l'objet d'une demande de mise en paiement";
+    protected $pluralTitlePattern   = "%s %s peuvent faire l'objet d'une demande de mise en paiement";
+    
+    /**
+     * 
+     * @param bool $appendStructure
+     * @return string
+     */
+    public function getTitle($appendStructure = true)
+    {
+        $this->singularTitlePattern = sprintf(
+                $this->singularTitlePattern, 
+                '%s', 
+                TypeIntervenantEntity::CODE_EXTERIEUR === $this->getTypeIntervenant()->getCode() ? "vacataire" : "permanent");
+        $this->pluralTitlePattern   = sprintf(
+                $this->pluralTitlePattern,   
+                '%s', 
+                TypeIntervenantEntity::CODE_EXTERIEUR === $this->getTypeIntervenant()->getCode() ? "vacataires" : "permanents");
+        
+        return parent::getTitle($appendStructure);
+    }
     
     /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
@@ -49,6 +71,16 @@ class AttenteDemandeMepIndicateurImpl extends AbstractIntervenantResultIndicateu
                 ->join("int.structure", "aff")
                 ->join("int.statut", "si");
         
+        /**
+         * Type intervenant.
+         */
+        $qb
+                ->andWhere("si.typeIntervenant = :type")
+                ->setParameter('type', $this->getTypeIntervenant());
+        
+        /**
+         * Composante d'intervention.
+         */
         if ($this->getStructure()) {
             $qb
                     ->andWhere("v.structure = :structure")
@@ -96,4 +128,11 @@ class AttenteDemandeMepIndicateurImpl extends AbstractIntervenantResultIndicateu
         
         return $resultEmails;
     }
+    
+    /**
+     * Retourne le type d'intervenant utile à cet indicateur.
+     * 
+     * @return TypeIntervenantEntity
+     */
+    abstract public function getTypeIntervenant();
 }

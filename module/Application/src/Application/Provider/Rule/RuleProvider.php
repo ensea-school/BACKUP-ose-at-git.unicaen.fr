@@ -2,22 +2,64 @@
 
 namespace Application\Provider\Rule;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use BjyAuthorize\Provider\Rule\ProviderInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 
 /**
- * Description of RuleProvider
+ * Rule provider based on a given array of rules
  *
- * @author Laurent LECLUSE <laurent.lecluse at unicaen.fr>
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RuleProvider implements ProviderInterface, ServiceLocatorAwareInterface
+class RuleProvider implements ProviderInterface
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
+        \Application\Provider\Privilege\PrivilegeProviderAwareTrait
+    ;
 
-    public function getRules()
+    /**
+     * @var array
+     */
+    protected $rules = array();
+
+    /**
+     * @param array $config
+     */
+    public function __construct( array $config, ServiceLocatorInterface $serviceLocator )
     {
-        return [];
+        $this->setServiceLocator($serviceLocator);
+
+        $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
+
+        foreach( $config as $grant => $rules ){
+            foreach( $rules as $index => $rule ){
+                if (is_array($rule)){
+                    $privileges = (array)$rule[0];
+                    $rs = [];
+                    foreach( $pr as $privilege => $roles ){
+                        if (in_array($privilege, $privileges)){
+                            $rs = array_unique( array_merge($rs, $roles) );
+                        }
+                    }
+                    $config[$grant][$index][0] = $rs;
+                }
+            }
+        }
+        $this->rules = $config;
+        if (! isset($this->rules['allow'])) $this->rules['allow'] = [];
+        foreach( $pr as $privilege => $roles ){
+            $this->rules['allow'][] = [
+                $roles,
+                'privilege/'.$privilege
+            ];
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getRules()
+    {
+        return $this->rules;
+    }
 }

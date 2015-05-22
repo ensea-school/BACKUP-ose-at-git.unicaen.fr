@@ -102,15 +102,3 @@ select * from individu_fonct_struct@harpprod ifs where no_dossier_pers = 16956;
 
 
 select * from individu@harpprod where nom_usuel = 'DENOYES';
-
-
-
-select
-r.code categorie,
-p.code privilege,
-p.id   p_id
-from
-  privilege p
-  join categorie_privilege r on r.id = p.categorie_id
-order by
-  categorie, privilege

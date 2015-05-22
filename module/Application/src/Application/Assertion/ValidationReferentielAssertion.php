@@ -79,7 +79,7 @@ class ValidationReferentielAssertion extends ValidationEnsRefAbstractAssertion
 //        
 //        return false;
 //    }
-    protected function assertEntity()
+    protected function assertEntityOld()
     {
         $rule = $this->getServiceLocator()->get('ValidationReferentielRule')
                 ->setIntervenant($this->resource->getIntervenant())

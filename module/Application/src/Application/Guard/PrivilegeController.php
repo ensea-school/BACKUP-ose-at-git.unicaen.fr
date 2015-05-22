@@ -12,7 +12,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class PrivilegeController extends Controller
 {
-    use \Application\Service\Traits\PrivilegeAwareTrait
+    use \Application\Provider\Privilege\PrivilegeProviderAwareTrait
     ;
 
     public function __construct(array $rules, ServiceLocatorInterface $serviceLocator)
@@ -23,7 +23,7 @@ class PrivilegeController extends Controller
 
     protected function privilegesToRoles( array $rules )
     {
-        $pr = $this->getPrivilegesRoles();
+        $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
 
         foreach( $rules as $index => $rule ){
             if (isset($rule['privileges'])){
@@ -39,21 +39,6 @@ class PrivilegeController extends Controller
             }
         }
         return $rules;
-    }
-
-    protected function getPrivilegesRoles()
-    {
-        $privileges = $this->getServicePrivilege()->getList();
-        /* @var $privileges \Application\Entity\Db\Privilege[] */
-
-        $pr = [];
-        foreach( $privileges as $privilege ){
-            $roles = $privilege->getRoleCodes();
-            if (! empty($roles)){
-                $pr[$privilege->getCode()] = $roles;
-            }
-        }
-        return $pr;
     }
 
     /**

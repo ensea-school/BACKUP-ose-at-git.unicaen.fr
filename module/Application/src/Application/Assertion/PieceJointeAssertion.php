@@ -40,7 +40,7 @@ class PieceJointeAssertion extends AbstractAssertion implements WorkflowInterven
          * Cas N°1 : la ressource spécifiée est une entité ; un privilège est spécifié.
          */
         if ($resource instanceof PieceJointe) {
-            return $this->assertEntity($acl, $role, $resource, $privilege);
+            return $this->assertEntityOld($acl, $role, $resource, $privilege);
         }
         
         /**
@@ -57,7 +57,7 @@ class PieceJointeAssertion extends AbstractAssertion implements WorkflowInterven
      * 
      * @return boolean
      */
-    protected function assertEntity()
+    protected function assertEntityOld()
     {
         if (!parent::assertCRUD()) {
             return false;

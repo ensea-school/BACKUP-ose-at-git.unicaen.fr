@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use Application\Entity\Db\Privilege;
+
 return [
     'router' => [
         'routes' => [
@@ -110,47 +112,52 @@ return [
     ],
     'bjyauthorize' => [
         'guards' => [
-            'BjyAuthorize\Guard\Controller' => [
+            'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['index','demandeMiseEnPaiement','etatPaiement','misesEnPaiementCsv'],
-                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR, R_DRH],
+                    'action'     => ['index','etatPaiement','misesEnPaiementCsv'],
+                    'privileges' => [
+                        Privilege::MISE_EN_PAIEMENT_DEMANDE,
+                        Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                        Privilege::MISE_EN_PAIEMENT_VALIDATION,
+                    ],
+                    'assertion'  => 'MiseEnPaiementAssertion',
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['miseEnPaiement','extractionWinpaie'],
-                    'roles'      => [R_ADMINISTRATEUR, R_DRH],
+                    'action'     => ['demandeMiseEnPaiement'],
+                    'privileges' => [Privilege::MISE_EN_PAIEMENT_DEMANDE],
+                    'assertion'  => 'MiseEnPaiementAssertion',
+                ],
+                [
+                    'controller' => 'Application\Controller\Paiement',
+                    'action'     => ['miseEnPaiement'],
+                    'privileges' => [Privilege::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT]
+                ],
+                [
+                    'controller' => 'Application\Controller\Paiement',
+                    'action'     => ['extractionWinpaie'],
+                    'privileges' => [Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE]
                 ],
             ],
         ],
-        'resource_providers' => [
-            'BjyAuthorize\Provider\Resource\Config' => [
-                'MiseEnPaiement' => [],
-            ],
-        ],
-        'rule_providers' => [
-            'BjyAuthorize\Provider\Rule\Config' => [
-                'allow' => [
-                    [
-                        [R_ROLE],
-                        'MiseEnPaiement',
-                        [
-                            Assertion\MiseEnPaiementAssertion::PRIVILEGE_VISUALISATION,
-                            Assertion\MiseEnPaiementAssertion::PRIVILEGE_DEMANDE,
-                            Assertion\MiseEnPaiementAssertion::PRIVILEGE_VALIDATION,
-                            Assertion\MiseEnPaiementAssertion::PRIVILEGE_MISE_EN_PAIEMENT,
-                        ],
-                        Assertion\MiseEnPaiementAssertion::getAssertionId(),
-                    ],
-                    [
-                        [R_ADMINISTRATEUR, R_DRH],
-                        'MiseEnPaiement',
-                        ['export-csv-winpaie'],
-
-                    ],
-                ],
-            ],
-        ],
+//        'rule_providers' => [
+//            'Application\Provider\Rule\RuleProvider' => [
+//                 'allow' => [
+//                    [
+//                        [
+//                            'mise-en-paiement-demande',
+//                            'mise-en-paiement-mise-en-paiement',
+//                            'mise-en-paiement-visualisation',
+//                            'mise-en-paiement-validation'
+//                        ],
+//                        'MiseEnPaiement',
+//                        [],
+//                        'MiseEnPaiementAssertion',
+//                    ]
+//                ],
+//            ],
+//        ],
     ],
     'service_manager' => [
         'invokables' => [

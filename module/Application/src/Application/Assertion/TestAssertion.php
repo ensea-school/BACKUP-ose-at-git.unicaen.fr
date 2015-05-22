@@ -2,23 +2,23 @@
 
 namespace Application\Assertion;
 
-use Application\Entity\Db\Validation as ValidationEntity;
+use Application\Entity\Db\Service;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
- * Assertions concernant la validation d'enseignements ou  de référentiel.
+ * Description of TestAssertion
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-abstract class ValidationEnsRefAbstractAssertion extends AbstractAssertion
+class TestAssertion extends AbstractAssertion
 {
     /**
-     * @var ValidationEntity 
+     * @var Service
      */
     protected $resource;
-    
+
     /**
      * Returns true if and only if the assertion conditions are met
      *
@@ -26,20 +26,21 @@ abstract class ValidationEnsRefAbstractAssertion extends AbstractAssertion
      * $role, $resource, or $privilege parameters are null, it means that the query applies to all Roles, Resources, or
      * privileges, respectively.
      *
-     * @param  Acl                        $acl
-     * @param  RoleInterface         $role
+     * @param  Acl               $acl
+     * @param  RoleInterface     $role
      * @param  ResourceInterface $resource
-     * @param  string                         $privilege
+     * @param  string            $privilege
      * @return bool
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
         parent::assert($acl, $role, $resource, $privilege);
-        
-        if ($resource instanceof ValidationEntity) {
-            return $this->assertEntityOld();
-        }
-        
+var_dump($acl->getRoles());
+//        var_dump($acl);
+//        var_dump($role);
+//        var_dump($resource);
+//        var_dump($privilege);
+
         return true;
     }
 }

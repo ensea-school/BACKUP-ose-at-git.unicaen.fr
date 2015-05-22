@@ -48,7 +48,7 @@ class FichierAssertion extends AbstractAssertion implements /*FichierServiceAwar
          * Cas N°1 : la ressource spécifiée est une entité ; un privilège est spécifié.
          */
         if ($resource instanceof Fichier) {
-            return $this->assertEntity();
+            return $this->assertEntityOld();
         }
         
         /**
@@ -65,7 +65,7 @@ class FichierAssertion extends AbstractAssertion implements /*FichierServiceAwar
      * 
      * @return boolean
      */
-    protected function assertEntity()
+    protected function assertEntityOld()
     {
         if (!parent::assertCRUD()) {
             return false;

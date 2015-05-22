@@ -105,8 +105,39 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 ->andWhere('1=compriseEntre(r.histoCreation,r.histoDestruction)')
                 ->andWhere("a.personnel = :personnel")->setParameter(':personnel', $personnel);
             foreach ($qb->getQuery()->getResult() as $affectation) { /* @var $affectation Affectation */
-                $dbRole = $affectation->getRole();
-                $role = new Role( $dbRole->getCode(), 'user', $dbRole->getLibelle());
+                 $dbRole = $affectation->getRole();
+
+                $roleId = $dbRole->getCode();
+                $roleLibelle = $dbRole->getLibelle();
+                if ($structure = $affectation->getStructure()){
+                    $roleId .= '-'.$structure->getSourceCode();
+                    $roleLibelle .= ' ('.$structure->getLibelleCourt().')';
+                }
+
+                /** @deprecated */
+                $parents = [
+                    'gestionnaire-composante',
+                    'responsable-recherche-labo',
+                    'directeur-composante',
+                    'administrateur',
+                    'responsable-composante',
+                    'superviseur-etablissement',
+                ];
+                if (in_array($dbRole->getCode(), $parents)){
+                    $parent = $dbRole->getCode();
+                }else{
+                    $parent = 'user';
+                }
+
+                if (isset($roles[$roleId])){
+                    $role = $roles[$roleId];
+                }else{
+                    $role = new Role( $roleId, $parent, $roleLibelle);
+                }
+
+                /* fin de deprecated */
+
+                //$role = new Role( $roleId, $parent, $roleLibelle);
                 $role->setDbRole( $dbRole );
                 $role->setPersonnel( $personnel );
 
@@ -115,7 +146,9 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 }else{
                     $role->setStructure( $affectation->getStructure() );
                 }
-                $roles[$role->getRoleId()] = $role;
+                
+
+                $roles[$roleId] = $role;
             }
         }
         return $roles;

@@ -113,14 +113,14 @@ return [
                                         'title'  => "Gestion des rôles",
                                         'route'  => 'gestion/droits/roles',
                                         'withtarget' => true,
-                                        'resource' => 'controller/Application\Controller\Gestion:roles',
+                                        'resource' => 'privilege/privilege-visualisation',
                                     ],
                                     'privileges' => [
                                         'label'  => "Privilèges",
                                         'title'  => "Gestion des privilèges",
                                         'route'  => 'gestion/droits/privileges',
                                         'withtarget' => true,
-                                        'resource' => 'controller/Application\Controller\Gestion:privileges',
+                                        'resource' => 'privilege/privilege-visualisation',
                                     ],
                                 ],
                             ],
@@ -143,7 +143,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Gestion',
                     'action'     => ['droits', 'roles', 'privileges'],
-                    'privileges' => ['privilege-visualisation', 'privilege-edition']
+                    'privileges' => ['privilege-visualisation', 'privilege-edition'],
                 ],
                 [
                     'controller' => 'Application\Controller\Gestion',

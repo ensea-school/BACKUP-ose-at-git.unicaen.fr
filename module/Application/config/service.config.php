@@ -236,7 +236,7 @@ return [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action' => ['index', 'saisie', 'suppression', 'rafraichir-ligne', 'constatation'],
                     'roles' => [R_ROLE],
-                ],
+                ]
             ],
         ],
         'resource_providers' => [
@@ -248,8 +248,16 @@ return [
             ],
         ],
         'rule_providers' => [
-            'BjyAuthorize\Provider\Rule\Config' => [
-                'allow' => [
+            'Application\Provider\Rule\RuleProvider' => [
+                 'allow' => [
+                    [
+                        'mep-visualisation',
+                        'Service',
+                        ['create', 'read', 'delete', 'update'],
+                        'ServiceAssertion',
+                    ]
+                ],
+                /*'allow' => [
                     [
                         [R_ROLE],
                         'Service',
@@ -274,7 +282,7 @@ return [
                         ['create', 'read', 'delete', 'update'],
                         'ServiceReferentielAssertion'
                     ]
-                ],
+                ],*/
             ],
         ],
     ],

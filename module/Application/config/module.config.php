@@ -179,6 +179,9 @@ $main =  [
                     'Application\\Acl\\IntervenantPermanentRole',
             ],
         ],
+        'resource_providers' => [
+            'ApplicationPrivilege' => [],
+        ],
     ],
     'service_manager' => [
         'invokables' => [
@@ -197,12 +200,16 @@ $main =  [
             'ApplicationPays'                                => 'Application\\Service\\Pays',
             'ApplicationDepartement'                         => 'Application\\Service\\Departement',
             'IntervenantNavigationPageVisibility'            => 'Application\\Service\\IntervenantNavigationPageVisibility',
-            'ApplicationRuleProvider'                        => 'Application\Provider\Rule\RuleProvider',
+            'TestAssertion'                                  => 'Application\\Assertion\\TestAssertion',
         ],
+        'aliases' => array(
+            'PrivilegeProvider'                              => 'ApplicationPrivilege'
+        ),
         'factories' => [
             'navigation'                  => 'Application\Service\NavigationFactoryFactory',
             'ApplicationRoleProvider'     => 'Application\Provider\Role\RoleProviderFactory',
             'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
+            'BjyAuthorize\Service\Authorize' => 'Application\Service\AuthorizeFactory', // surcharge!!!
         ],
         'abstract_factories' => [
         ],

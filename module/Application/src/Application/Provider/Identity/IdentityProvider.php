@@ -9,13 +9,14 @@ use UnicaenAuth\Provider\Identity\ChainableProvider;
 use UnicaenAuth\Provider\Identity\ChainEvent;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterface;
 
 /**
  * Classe chargée de fournir les rôles que possède l'identité authentifiée.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvider, EntityManagerAwareInterface
+class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvider, EntityManagerAwareInterface, IdentityProviderInterface
 {
     use ServiceLocatorAwareTrait;
     use EntityManagerAwareTrait;

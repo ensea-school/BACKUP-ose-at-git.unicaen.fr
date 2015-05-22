@@ -94,7 +94,7 @@ class ValidationServiceAssertion extends ValidationEnsRefAbstractAssertion
 //        
 //        return false;
 //    }
-    protected function assertEntity()
+    protected function assertEntityOld()
     {
         $rule = $this->getServiceLocator()->get('ValidationEnseignementRule')
                 ->setIntervenant($this->resource->getIntervenant())

@@ -2,8 +2,6 @@
 
 namespace Application\Assertion;
 
-use DateTime;
-use Application\Acl\IntervenantPermanentRole;
 use Zend\Mvc\MvcEvent;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Assertion\AssertionInterface;
@@ -11,7 +9,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Acl\Role;
 
 /**
  * Description of AbstractAssertion
@@ -20,49 +17,13 @@ use Application\Acl\Role;
  */
 abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
+    use ServiceLocatorAwareTrait;
 
- 
+
     const PRIVILEGE_CREATE = 'create';
     const PRIVILEGE_READ   = 'read';
     const PRIVILEGE_UPDATE = 'update';
     const PRIVILEGE_DELETE = 'delete';
-    
-    /**
-     * @var Acl
-     */
-    protected $acl;
-
-    /**
-     * copntrôle par les privileges activés ou non
-     *
-     * @var boolean
-     */
-    protected $assertPrivilegesEnabled = false;
-
-    /**
-     * contrôle par les ressources activés ou non
-     *
-     * @var boolean
-     */
-    protected $assertResourcesEnabled = true;
-
-    /**
-     * @var string
-     */
-    protected $privilege;
-
-    /**
-     * @var ResourceInterface|string
-     */
-    protected $resource;
-
-    /**
-     * @var RoleInterface
-     */
-    protected $role;
 
     /**
      * !!!! Pour éviter l'erreur "Serialization of 'Closure' is not allowed"... !!!!
@@ -81,56 +42,138 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
      * $role, $this->resource, or $privilege parameters are null, it means that the query applies to all Roles, Resources, or
      * privileges, respectively.
      *
-     * @param  Acl               $acl
-     * @param  RoleInterface     $role
-     * @param  ResourceInterface $resource
-     * @param  string            $privilege
+     * @param  Acl                  $acl
+     * @param  RoleInterface        $role
+     * @param  ResourceInterface    $resource
+     * @param  string               $privilege
      * @return bool
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
+        /** @deprecated */
         $this->acl       = $acl;
         $this->resource  = $resource;
         $this->privilege = $privilege;
-        $this->role      = $this->getSelectedIdentityRole();
+        $this->role      = $role;
+        /* fin de deprecated */
 
-        if (! $this->assertPrivilege()                              ) return false;
-        if (! $this->assertResource()                               ) return false;
-        return true;
-    }
+        // gestion des privilèges
+        if ($this->detectPrivilege($resource)){
+            if (! $this->assertPrivilege ($acl, $role, ltrim( strstr( $resource, '/' ), '/'), $privilege)) return false;
 
-    private function assertPrivilege()
-    {
-        if (! $this->assertPrivilegesEnabled) return true; // si pas activé alors on sort
-        if ($this->role instanceof Role && ! empty($this->resource) && ! empty($this->privilege)){
-            return $this->role->hasPrivilege($this->privilege, $this->resource);
+        // gestion des contrôleurs
+        }else if($this->detectController($resource)){
+            $spos = strpos($resource,'/')+1;
+            $dpos = strrpos($resource, ':')+1;
+            $controller = substr( $resource, $spos, $dpos-$spos-1);
+            $action = substr( $resource, $dpos );
+            if (! $this->assertController ($acl, $role, $controller, $action, $privilege)) return false;
+
+        // gestion des entités
+        }else if($this->detectEntity($resource)){
+            if (! $this->assertEntity ($acl, $role, $resource, $privilege)) return false;
+
+        // gestion de tout le reste
+        }else{
+            if (! $this->assertOther ($acl, $role, $resource, $privilege)) return false;
+
         }
-        return true;
-    }
-
-    private function assertResource()
-    {
-        if (! $this->assertResourcesEnabled) return true; // si pas activé alors on sort
-        if (! $this->resource instanceof ResourceInterface) return true; // pas assez de précisions
-        $resourceId = $this->resource->getResourceId();
-
-        if (method_exists( $this, 'assertResource'.$resourceId)){
-            return $this->{'assertResource'.$resourceId}( $this->resource );
-        }
 
         return true;
     }
+
 
     /**
-     * 
-     * @return MvcEvent
+     *
+     * @param string $resource
+     * @return boolean
      */
-    protected function getMvcEvent()
+    private function detectPrivilege( $resource=null )
     {
-        return $this->getServiceLocator()->get('Application')->getMvcEvent();
+        return is_string($resource) && 0 === strpos($resource, 'privilege/');
     }
 
     /**
+     *
+     * @param Acl $acl
+     * @param RoleInterface $role
+     * @param string $privilege
+     * @param string $subPrivilege
+     * @return boolean
+     */
+    protected function assertPrivilege(Acl $acl, RoleInterface $role=null, $privilege=null, $subPrivilege=null)
+    {
+        return true;
+    }
+
+
+    /**
+     *
+     * @param string $resource
+     * @return boolean
+     */
+    private function detectController( $resource=null )
+    {
+        return is_string($resource) && 0 === strpos($resource, 'controller/');
+    }
+
+    /**
+     *
+     * @param Acl $acl
+     * @param RoleInterface $role
+     * @param string $controller
+     * @param string $action
+     * @param string $privilege
+     * @return boolean
+     */
+    protected function assertController(Acl $acl, RoleInterface $role=null, $controller=null, $action=null, $privilege=null)
+    {
+        return true;
+    }
+
+
+    /**
+     *
+     * @param string $resource
+     * @return boolean
+     */
+    private function detectEntity( $resource=null )
+    {
+        return
+            is_object($resource)
+            && method_exists($resource, 'getId');
+    }
+
+    /**
+     *
+     * @param Acl $acl
+     * @param RoleInterface $role
+     * @param ResourceInterface $entity
+     * @param string $privilege
+     * @return boolean
+     */
+    protected function assertEntity(Acl $acl, RoleInterface $role=null, ResourceInterface $entity=null, $privilege=null)
+    {
+        return true;
+    }
+
+
+    /**
+     *
+     * @param Acl $acl
+     * @param RoleInterface $role
+     * @param ResourceInterface $entity
+     * @param string $privilege
+     * @return boolean
+     */
+    protected function assertOther(Acl $acl, RoleInterface $role=null, ResourceInterface $entity=null, $privilege=null)
+    {
+        return true;
+    }
+
+
+    /**
+     * @deprecated ?
      * @return boolean
      */
     protected function assertCRUD()
@@ -138,69 +181,42 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
         if (!$this->privilege) {
             return true;
         }
-        
+
         switch ($this->privilege) {
             case self::PRIVILEGE_CREATE:
-                return $this->_assertCreate();
+                return ! (is_object($this->resource) && $this->resource->getId());
             case self::PRIVILEGE_READ:
-                return $this->_assertRead();
+                return ! (is_object($this->resource) && !$this->resource->getId());
             case self::PRIVILEGE_UPDATE:
-                return $this->_assertUpdate();
+                return ! (is_object($this->resource) && !$this->resource->getId());
             case self::PRIVILEGE_DELETE:
-                return $this->_assertDelete();
+                return ! (is_object($this->resource) && !$this->resource->getId());
             default:
                 return true;
         }
     }
-    
-    private function _assertCreate()
-    {
-        if (is_object($this->resource) && $this->resource->getId()) {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private function _assertRead()
-    {
-        if (is_object($this->resource) && !$this->resource->getId()) {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private function _assertUpdate()
-    {
-        if (is_object($this->resource) && !$this->resource->getId()) {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private function _assertDelete()
-    {
-        if (is_object($this->resource) && !$this->resource->getId()) {
-            return false;
-        }
-        
-        return true;
-    }
-    
-    protected function getSelectedIdentityRole()
-    {
-        return $this->getServiceContext()->getSelectedIdentityRole();
-    }
-    
+
+
     /**
-     * Retourne un privilège "normalisé" en fonction du type de ressource spécifié.
      * 
+     * @return MvcEvent
+     */
+    protected function getMvcEvent()
+    {
+        $application = $this->getServiceLocator()->get('Application');
+        return $application->getMvcEvent();
+    }
+
+
+    /**
+     * @deprecated
+     *
+     * Retourne un privilège "normalisé" en fonction du type de ressource spécifié.
+     *
      * - Si la ressource est un objet, le privilège est directement utilisable.
      * - Sinon la ressource est sans doute de la forme "controller/Application\Controller\MonController:monAction"
      * (module BjyAuthorize) et le privilège sera le nom de l'action.
-     * 
+     *
      * @param string $privilege
      * @param string|object $resource Ex: "Application\Controller\MonController:monAction"
      * @return string
@@ -210,57 +226,11 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
         if (is_object($resource)) {
             return $privilege;
         }
-        
+
         if (!$privilege) {
             $privilege = ($tmp = strrchr($resource, $c = ':')) ? ltrim($tmp, $c) : null;
         }
-        
+
         return $privilege;
-    }
-
-    /**
-     * Teste si la date de fin de "privilège" du rôle courant est dépassée ou non.
-     * 
-     * @return boolean
-     */
-    protected function isDateFinPrivilegeDepassee()
-    {
-        $dateFin = null;
-        
-        /**
-         * Rôle Intervenant Permanent
-         */
-        if ($this->role instanceof IntervenantPermanentRole) {
-            // il existe une date de fin de saisie (i.e. ajout, modif, suppression) de service par les intervenants permanents eux-mêmes
-            if (in_array($this->privilege, [self::PRIVILEGE_CREATE, self::PRIVILEGE_UPDATE, self::PRIVILEGE_DELETE])) {
-                $dateFin = $this->getServiceContext()->getDateFinSaisiePermanents();
-                
-                /**
-                 * Vilaine verrue pour prolonger la période de saisie des permanents de l'ESPE
-                 * @todo Virer cette verrue après le 27/03/2015 !!
-                 */
-                if ($this->role->getIntervenant()->getStructure()->getSourceCode() === 'E01') {
-                    $dateFin = new \DateTime('2015-03-27');
-                }
-            }
-        }
-
-        if (null === $dateFin) {
-            return false;
-        }
-                
-        $now = new DateTime();
-
-        $now->setTime(0, 0, 0);
-        $dateFin->setTime(0, 0, 0);
-
-        return $now > $dateFin;
-    }
-
-    public static function getAssertionId()
-    {
-        $getCalledClass = get_called_class();
-        $getCalledClass = substr( $getCalledClass, strrpos( $getCalledClass, '\\')+1 );
-        return $getCalledClass;
     }
 }

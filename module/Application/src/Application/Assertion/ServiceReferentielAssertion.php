@@ -13,6 +13,7 @@ use Application\Entity\Db\ServiceReferentiel;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
+use DateTime;
 
 /**
  *
@@ -38,7 +39,7 @@ class ServiceReferentielAssertion extends AbstractAssertion
         parent::assert($acl, $role, $resource, $privilege);
         
         if ($resource instanceof ServiceReferentiel) {
-            return $this->assertEntity();
+            return $this->assertEntityOld();
         }
         
         return true;
@@ -50,7 +51,7 @@ class ServiceReferentielAssertion extends AbstractAssertion
      *
      * @return boolean
      */
-    protected function assertEntity()
+    protected function assertEntityOld()
     {
         $intervenant          = $this->resource->getIntervenant();
         $serviceStructure     = $this->resource->getStructure();
@@ -131,5 +132,36 @@ class ServiceReferentielAssertion extends AbstractAssertion
         }
 
         return true;
+    }
+
+    /**
+     * Teste si la date de fin de "privilège" du rôle courant est dépassée ou non.
+     *
+     * @return boolean
+     */
+    protected function isDateFinPrivilegeDepassee()
+    {
+        $dateFin = null;
+
+        /**
+         * Rôle Intervenant Permanent
+         */
+        if ($this->role instanceof IntervenantPermanentRole) {
+            // il existe une date de fin de saisie (i.e. ajout, modif, suppression) de service par les intervenants permanents eux-mêmes
+            if (in_array($this->privilege, [self::PRIVILEGE_CREATE, self::PRIVILEGE_UPDATE, self::PRIVILEGE_DELETE])) {
+                $dateFin = $this->getServiceContext()->getDateFinSaisiePermanents();
+            }
+        }
+
+        if (null === $dateFin) {
+            return false;
+        }
+
+        $now = new DateTime();
+
+        $now->setTime(0, 0, 0);
+        $dateFin->setTime(0, 0, 0);
+
+        return $now > $dateFin;
     }
 }

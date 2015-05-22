@@ -5,6 +5,7 @@ namespace Application\Assertion;
 use Application\Interfaces\StructureAwareInterface;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\MiseEnPaiement;
+use Zend\Permissions\Acl;
 
 /**
  * Description of MiseEnPaiementAssertion
@@ -18,17 +19,20 @@ class MiseEnPaiementAssertion extends AbstractAssertion
     const PRIVILEGE_VALIDATION         = 'validation';
     const PRIVILEGE_MISE_EN_PAIEMENT   = 'mise-en-paiement';
 
-    protected $assertPrivilegesEnabled = true;
 
+    protected function assertEntity(Acl\Acl $acl, Acl\Role\RoleInterface $role = null, Acl\Resource\ResourceInterface $entity = null, $privilege = null)
+    {
+        if ($entity instanceof MiseEnPaiement)
+            return $this->assertEntityMiseEnPaiement($entity);
 
-    protected function assertResourceMiseEnPaiement( MiseEnPaiement $miseEnPaiement )
+        return true;
+    }
+
+    protected function assertEntityMiseEnPaiement( MiseEnPaiement $miseEnPaiement )
     {
         if ($miseEnPaiement->getValidation() && $this->privilege == self::PRIVILEGE_DEMANDE){
             return false; // pas de nouvelle demande si la mise en paiement est déjà validée
         }
-//        if ($miseEnPaiement->getValidation() === null && $this->privilege == self::PRIVILEGE_MISE_EN_PAIEMENT){
-//            return false; // impossible de mettre en paiement une demande non validée
-//        }
 
         if ($serviceAPayer = $miseEnPaiement->getServiceAPayer()){
             return $this->assertResourceServiceAPayer($serviceAPayer);

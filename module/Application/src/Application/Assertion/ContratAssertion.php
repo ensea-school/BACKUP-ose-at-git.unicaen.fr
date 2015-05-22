@@ -50,7 +50,7 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
         parent::assert($acl, $role, $resource, $privilege);
         
         if ($resource instanceof Contrat) {
-            return $this->assertEntity();
+            return $this->assertEntityOld();
         }
         
         return true;
@@ -60,7 +60,7 @@ class ContratAssertion extends AbstractAssertion implements WorkflowIntervenantA
      * 
      * @return boolean
      */
-    protected function assertEntity()
+    protected function assertEntityOld()
     {
         if (!parent::assertCRUD()) {
             return false;

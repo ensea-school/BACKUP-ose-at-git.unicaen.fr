@@ -88,25 +88,25 @@ return [
                                 'label'    => "Mises en paiement",
                                 'title'    => "Mises en paiement",
                                 'route'    => 'paiement/etat-demande-paiement',
-                                'resource' => 'controller/Application\Controller\MiseEnPaiement:etat-demande-paiement',
+                                'resource' => 'privilege/'.Privilege::MISE_EN_PAIEMENT_VISUALISATION,
                             ],
                             'etat-paiement' => [
                                 'label'    => "État de paiement",
                                 'title'    => "État de paiement",
                                 'route'    => 'paiement/etat-paiement',
-                                'resource' => 'controller/Application\Controller\MiseEnPaiement:etat-paiement',
+                                'resource' => 'privilege/'.Privilege::MISE_EN_PAIEMENT_VISUALISATION,
                             ],
                             'mises-en-paiement-csv' => [
                                 'label'    => "Mises en paiement (CSV)",
                                 'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
                                 'route'    => 'paiement/mises-en-paiement-csv',
-                                'resource' => 'controller/Application\Controller\MiseEnPaiement:mises-en-paiement-csv',
+                                'resource' => 'privilege/'.Privilege::MISE_EN_PAIEMENT_EXPORT_CSV,
                             ],
                             'extraction-winpaie' => [
                                 'label'    => "Extraction Winpaie",
                                 'title'    => "Export des données de paiement au format Winpaie",
                                 'route'    => 'paiement/extraction-winpaie',
-                                'resource' => 'controller/Application\Controller\MiseEnPaiement:extraction-winpaie',
+                                'resource' => 'privilege/'.Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE,
                             ],
                         ],
                     ],
@@ -119,24 +119,32 @@ return [
             'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['index','etatPaiement','misesEnPaiementCsv'],
+                    'action'     => ['demandeMiseEnPaiement'],
                     'privileges' => [
                         Privilege::MISE_EN_PAIEMENT_DEMANDE,
-                        Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                        Privilege::MISE_EN_PAIEMENT_VISUALISATION
                     ],
                     'assertion'  => 'MiseEnPaiementAssertion',
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
-                    'action'     => ['demandeMiseEnPaiement'],
-                    'privileges' => [Privilege::MISE_EN_PAIEMENT_DEMANDE],
-                    'assertion'  => 'MiseEnPaiementAssertion',
+                    'action'     => ['etatPaiement'],
+                    'privileges' => [
+                        Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                    ],
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['miseEnPaiement'],
-                    'privileges' => [Privilege::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT]
+                    'privileges' => [Privilege::MISE_EN_PAIEMENT_VISUALISATION]
                 ],
+                [
+                    'controller' => 'Application\Controller\Paiement',
+                    'action'     => ['misesEnPaiementCsv'],
+                    'privileges' => [
+                        Privilege::MISE_EN_PAIEMENT_EXPORT_CSV,
+                    ]
+                ],                
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['extractionWinpaie'],
@@ -144,23 +152,6 @@ return [
                 ],
             ],
         ],
-//        'rule_providers' => [
-//            'Application\Provider\Rule\RuleProvider' => [
-//                 'allow' => [
-//                    [
-//                        [
-//                            'mise-en-paiement-demande',
-//                            'mise-en-paiement-mise-en-paiement',
-//                            'mise-en-paiement-visualisation',
-//                            'mise-en-paiement-validation'
-//                        ],
-//                        'MiseEnPaiement',
-//                        [],
-//                        'MiseEnPaiementAssertion',
-//                    ]
-//                ],
-//            ],
-//        ],
     ],
     'service_manager' => [
         'invokables' => [

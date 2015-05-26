@@ -43,20 +43,4 @@ class IndexController extends AbstractActionController
 
         return $view;
     }
-
-    /**
-     *
-     * @return type
-     */
-    public function gestionAction()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $view = new ViewModel([
-            'role'  => $role,
-            'title' => "Gestion",
-        ]);
-
-        return $view;
-    }
 }

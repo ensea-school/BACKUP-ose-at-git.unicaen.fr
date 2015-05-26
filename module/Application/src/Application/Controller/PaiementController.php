@@ -7,6 +7,7 @@ use Zend\Json\Json;
 use UnicaenApp\Exporter\Pdf;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
+use Application\Entity\Db\Privilege;
 
 /**
  * @method \Application\Controller\Plugin\Context     context()
@@ -116,26 +117,13 @@ class PaiementController extends AbstractActionController
             $etatPaiement = $this->getServiceMiseEnPaiement()->getEtatPaiement( $recherche );
         }
 
-        if ( $this->params()->fromPost('exporter-pdf') !== null ){
+        if ( $this->params()->fromPost('exporter-pdf') !== null && $this->isAllowed('privilege/'.Privilege::MISE_EN_PAIEMENT_EXPORT_PDF) ){
             $this->etatPaiementPdf( $etat, $structure, $periode, $etatPaiement );
-        }elseif ( $this->params()->fromPost('exporter-csv-etat') !== null ){
+        }elseif ( $this->params()->fromPost('exporter-csv-etat') !== null && $this->isAllowed('privilege/'.Privilege::MISE_EN_PAIEMENT_EXPORT_CSV) ){
             return $this->etatPaiementCsv( $recherche );
         }else{
             return compact( 'rechercheForm', 'etatPaiement', 'etat', 'noData' );
         }
-    }
-
-    public function misesEnPaiementCsvAction()
-    {
-        $this->initFilters();
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $recherche = new MiseEnPaiementRecherche;
-        $options = [];
-        if ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()){
-            $options['composante'] = $role->getStructure();
-        }
-        return $this->etatPaiementCsv( $recherche, $options );
     }
 
     protected function etatPaiementPdf( $etat, $structure, $periode, $etatPaiement )
@@ -223,6 +211,19 @@ class PaiementController extends AbstractActionController
         return $csvModel;
     }
 
+    public function misesEnPaiementCsvAction()
+    {
+        $this->initFilters();
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $recherche = new MiseEnPaiementRecherche;
+        $options = [];
+        if ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()){
+            $options['composante'] = $role->getStructure();
+        }
+        return $this->etatPaiementCsv( $recherche, $options );
+    }
+
     public function extractionWinpaieAction()
     {
         $this->initFilters();
@@ -269,7 +270,7 @@ class PaiementController extends AbstractActionController
         $form = $this->getFormMiseEnPaiement();
         $errors = [];
         $request = $this->getRequest();
-        if ($request->isPost()) {
+        if ($request->isPost() && $this->isAllowed('privilege/'.Privilege::MISE_EN_PAIEMENT_MISE_EN_PAIEMENT)) {
             $form->setData($request->getPost());
             $form->isValid();
 

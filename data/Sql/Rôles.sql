@@ -21,7 +21,7 @@ ORDER BY
 
 -- pour créer un nouveau rôle
 
-select nom_usuel, prenom, source_code, histo_destruction from personnel where 1 = ose_divers.str_find(nom_patronymique || ' ' || nom_usuel,'%DOLLEY%' );
+select nom_usuel, prenom, source_code, histo_destruction from personnel where 1 = ose_divers.str_find(nom_patronymique || ' ' || nom_usuel,'%LECLUSE%' );
 /*
 - Chantal DENOYES
 - Nathalie OZENNE
@@ -36,16 +36,16 @@ select * from type_role where histo_destruction is null;
 INSERT INTO affectation (
     STRUCTURE_ID,
     PERSONNEL_ID,
-    TYPE_ID,
+    ROLE_ID,
     SOURCE_CODE,
     ID, SOURCE_ID, 
     HISTO_CREATEUR_ID, HISTO_MODIFICATEUR_ID
 )VALUES(
     null,--(SELECT ID FROM structure WHERE source_code = 'U01'),
-    (SELECT ID FROM personnel WHERE source_code ='102416'),
-    (SELECT ID FROM ROLE WHERE code = 'administrateur'),
-    'administrateur-102416',
-    affectation_ID_SEQ.NEXTVAL, OSE_IMPORT.GET_SOURCE_ID('OSE'), 
+    (SELECT ID FROM personnel WHERE source_code ='24953'),
+    (SELECT ID FROM ROLE WHERE code = 'test'),
+    'laurent-test',
+    affectation_ID_SEQ.NEXTVAL, (SELECT id FROM source WHERE code='OSE'), 
     (select id from utilisateur where username='lecluse'), (select id from utilisateur where username='lecluse') -- laurent
 );
 

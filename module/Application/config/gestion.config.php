@@ -13,8 +13,8 @@ return [
                     'route' => '/gestion',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller' => 'Index',
-                        'action' => 'gestion',
+                        'controller' => 'Gestion',
+                        'action' => 'index',
                     ],
                 ],
                 'may_terminate' => true,
@@ -26,7 +26,6 @@ return [
                             'route'    => '/droits',
                             'defaults' => [
                                 'action' => 'droits',
-                                'controller' => 'Gestion',
                             ],
                         ],
                         'child_routes' => [
@@ -103,26 +102,25 @@ return [
                     'gestion' => [
                         'label'  => "Gestion",
                         'route'  => 'gestion',
-                        'resource' => 'controller/Application\Controller\Index:gestion',
+                        'resource' => 'controller/Application\Controller\Gestion:index',
                         'pages' => [
                             'droits' => [
                                 'label'    => "Droits d'accès",
                                 'title'    => "Gestion des droits d'accès",
                                 'route'    => 'gestion/droits',
+                                'resource' => 'privilege/'.Privilege::PRIVILEGE_VISUALISATION,
                                 'pages' => [
                                     'roles' => [
                                         'label'  => "Rôles",
                                         'title'  => "Gestion des rôles",
                                         'route'  => 'gestion/droits/roles',
                                         'withtarget' => true,
-                                        'resource' => 'privilege/'.Privilege::PRIVILEGE_VISUALISATION,
                                     ],
                                     'privileges' => [
                                         'label'  => "Privilèges",
                                         'title'  => "Gestion des privilèges",
                                         'route'  => 'gestion/droits/privileges',
                                         'withtarget' => true,
-                                        'resource' => 'privilege/'.Privilege::PRIVILEGE_VISUALISATION,
                                     ],
                                 ],
                             ],
@@ -134,23 +132,22 @@ return [
     ],
     'bjyauthorize' => [
         'guards' => [
-            'BjyAuthorize\Guard\Controller' => [
-                [
-                    'controller' => 'Application\Controller\Index',
-                    'action'     => ['gestion'],
-                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
-            ],
             'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Gestion',
+                    'action'     => ['index'],
+                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
+                    'privileges' => [Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE],
+                ],
+                [
+                    'controller' => 'Application\Controller\Gestion',
                     'action'     => ['droits', 'roles', 'privileges'],
-                    'privileges' => ['privilege-visualisation', 'privilege-edition'],
+                    'privileges' => [Privilege::PRIVILEGE_VISUALISATION, Privilege::PRIVILEGE_EDITION],
                 ],
                 [
                     'controller' => 'Application\Controller\Gestion',
                     'action'     => ['role-edition', 'role-suppression', 'privileges-modifier'],
-                    'privileges' => ['privilege-edition']
+                    'privileges' => [Privilege::PRIVILEGE_EDITION]
                 ],
             ],
         ],

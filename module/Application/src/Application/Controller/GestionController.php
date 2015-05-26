@@ -23,6 +23,15 @@ class GestionController extends AbstractActionController
         \Application\Service\Traits\PrivilegeAwareTrait
     ;
 
+    /**
+     *
+     * @return type
+     */
+    public function indexAction()
+    {
+        return [];
+    }
+
     public function droitsAction()
     {
         return [];

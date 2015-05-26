@@ -19,6 +19,13 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
     protected $pluralTitlePattern   = "%s %s sont en attente de validation de leurs enseignements <em>%s</em>";
     
     /**
+     * Témoin indiquant s'il faut que l'intervenant soit à l'étape concernée dans le WF pour être acceptable.
+     * 
+     * @var boolean
+     */
+    protected $findByWfEtapeCourante = true;
+    
+    /**
      * 
      * @param bool $appendStructure
      * @return string
@@ -54,8 +61,10 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
         /**
          * L'intervenant doit être à l'étape concernée dans le WF.
          */
-        $service = $this->getServiceLocator()->get('ApplicationIntervenant'); /* @var $service Intervenant */
-        $service->finderByWfEtapeCourante($this->getWorkflowStepKey(), $qb);
+        if ($this->findByWfEtapeCourante) {
+            $service = $this->getServiceLocator()->get('ApplicationIntervenant'); /* @var $service Intervenant */
+            $service->finderByWfEtapeCourante($this->getWorkflowStepKey(), $qb);
+        }
         
         /**
          * Type d'intervenant.

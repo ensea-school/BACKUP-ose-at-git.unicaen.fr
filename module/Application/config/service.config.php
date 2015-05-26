@@ -226,7 +226,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh','constatation'],
+                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh','constatation', 'cloturer-saisie'],
                     'roles' => [R_ROLE],
                 ], [
                     'controller' => 'Application\Controller\Service',

@@ -1,20 +1,22 @@
 <hr />
 
+<?php
+$libelle = "J'ai terminé la saisie de la totalité de mon service réalisé";
+?>
+
 <?php if (! $this->validation): ?>
 
-<button type="button" id="btn-cloturer-saisie" class="btn btn-lg btn-info" 
-        data-toggle="tooltip"
-        title="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." 
-        data-placement="right">J'ai fini de saisir mes services réalisés</button>
+<?php echo $this->messenger()->renderMessage($this->avertissement, 'warning') ?>
 
-<?php echo $this->messenger()->renderMessage("<strong>Attention!</strong> Une fois le bouton cliqué il sera impossible de remodifier le service réalisé.", 'warning') ?>
+<button type="button" id="btn-cloturer-saisie" 
+        class="btn btn-lg btn-info"><?php echo $libelle ?></button>
 
 <script>
     var url = '<?php echo $this->url('intervenant/cloturer-saisie', [], [], true) ?>';
     $(function() {
-        $("#btn-cloturer-saisie").tooltip().click(function(e) {
+        $("#btn-cloturer-saisie").click(function(e) {
             e.preventDefault();
-            if (!confirm("Confirmez-vous que vous avez terminé la saisie des enseignements réalisés ?")) {
+            if (!confirm("<?php echo $this->confirm ?>")) {
                 return;
             }
             $.post(url, {cloturer: 1}, function() {
@@ -26,12 +28,8 @@
 
 <?php else: ?>
 
-<span title="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." 
-     data-toggle="tooltip"
-     data-placement="right">
-    <button type="button" id="btn-cloturer-saisie" class="btn btn-lg btn-success" disabled="disabled">J'ai fini de saisir mes services réalisés le 
-            <?php echo $this->validation->getHistoModification()->format(Common\Constants::DATETIME_FORMAT) ?></button>
-</span>
+<button type="button" id="btn-cloturer-saisie" class="btn btn-lg btn-success" disabled="disabled"><?php echo $libelle ?> le 
+        <?php echo $this->validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT) ?></button>
 
 <script>
     $(function() {

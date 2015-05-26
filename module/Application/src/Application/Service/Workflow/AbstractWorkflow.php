@@ -2,7 +2,6 @@
 
 namespace Application\Service\Workflow;
 
-use Application\Rule\RuleInterface;
 use Application\Service\AbstractService;
 use Application\Service\Workflow\Step\Step;
 use Common\Exception\LogicException;
@@ -17,15 +16,6 @@ use Zend\Mvc\Controller\Plugin\Url;
  */
 abstract class AbstractWorkflow extends AbstractService
 {
-    /**
-     * Conditions (règles métier) :
-     * - de pertinence de chaque étape : une étape est pertinente si cette condition est satisfaite.
-     * - de réalisation de chaque étape : une étape est considérée comme réalisée si cette condition est satisfaite.
-     * 
-     * @var array clé => ['relevance' => RuleInterface, 'crossing' => RuleInterface]
-     */
-    protected $rules;
-    
     /**
      * Etapes.
      * 
@@ -50,21 +40,6 @@ abstract class AbstractWorkflow extends AbstractService
         $this->steps = null;
         $this->setCurrentStep(null);
         
-        return $this;
-    }
-    
-    /**
-     * Ajoute de règle : de pertinence et de franchissement.
-     * 
-     * @param string $key Clé de l'étape
-     * @param RuleInterface $relevanceRule Règle de pertinence
-     * @param RuleInterface $crossingRule  Règle de franchissement
-     * @return self
-     */
-    protected function addRule($key, RuleInterface $relevanceRule = null, RuleInterface $crossingRule = null)
-    {   
-        $this->rules[$key] = ['relevance' => $relevanceRule, 'crossing' => $crossingRule];
-
         return $this;
     }
     
@@ -115,54 +90,6 @@ abstract class AbstractWorkflow extends AbstractService
         }
         
         return $this->steps;
-    }
-    
-    /**
-     * Retourne toutes les règles métiers du workflow.
-     * 
-     * @return array clé => ['relevance' => RuleInterface, 'crossing' => RuleInterface] : mêmes clés que les conditions
-     */
-    public function getRules()
-    {
-        if (null === $this->rules) {
-            $this->createSteps();
-        }
-        
-        return $this->rules;
-    }
-    
-    /**
-     * Retourne une règle métier de pertinence précise du workflow.
-     * 
-     * @param string $key Clé de l'étape
-     * @return RuleInterface
-     */
-    protected function getRelevanceRule($key)
-    {
-        $rules = $this->getRules();
-        
-        if (!isset($rules[$key]['relevance'])) {
-            return null;
-        }
-        
-        return $rules[$key]['relevance'];
-    }
-    
-    /**
-     * Retourne une règle métier de franchissement précise du workflow.
-     * 
-     * @param string $key Clé de l'étape
-     * @return RuleInterface
-     */
-    protected function getCrossingRule($key)
-    {
-        $rules = $this->getRules();
-        
-        if (!isset($rules[$key]['crossing'])) {
-            return null;
-        }
-        
-        return $rules[$key]['crossing'];
     }
 
     /**

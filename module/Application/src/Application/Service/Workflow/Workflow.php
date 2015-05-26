@@ -112,36 +112,21 @@ class Workflow extends AbstractWorkflow
         }
 
         $this->steps = [];
-        $this->rules = [];
 
         $service = $this->getServiceWfIntervenantEtape();
 
         // Fetch de la progression de l'intervenant, pour la structure courante éventuelle
-        $ies = $service->findIntervenantEtape($this->getIntervenant(), $this->getStructure());
+        $ies = $service->findIntervenantEtape($this->getIntervenant()/*, $this->getStructure()*/);
         if (!count($ies)) {
             // création de la progression si besoin
             $service->createIntervenantEtapes($this->getIntervenant());
             $ies = $service->findIntervenantEtape($this->getIntervenant());
         }
 
-        $dbFunctionRule = $this->getServiceLocator()->get('DbFunctionRule');
+//        $dbFunctionRule = $this->getServiceLocator()->get('DbFunctionRule');
 
         foreach ($ies as $ie) {
-            $etape = $ie->getEtape();
-            $key   = $etape->getCode();
-
-            $relevanceRule = clone $dbFunctionRule;
-            $relevanceRule
-                    ->setFunction($etape->getPertinFunc())
-                    ->setIntervenant($this->getIntervenant())
-                    ->setStructure($this->getStructure());
-            $crossingRule = clone $dbFunctionRule;
-            $crossingRule
-                    ->setFunction($etape->getFranchFunc())
-                    ->setIntervenant($this->getIntervenant())
-                    ->setStructure($this->getStructure());
-            $this->addRule($key, $relevanceRule, $crossingRule);
-
+            $etape     = $ie->getEtape();
             $isCurrent = $ie->getCourante();
             $done      = $ie->getFranchie();
 
@@ -150,6 +135,7 @@ class Workflow extends AbstractWorkflow
                     ->setLabel($etape->getLibelle())
                     ->setIsCurrent($isCurrent)
                     ->setDone($done);
+            
             $this->addStep($step);
         }
 

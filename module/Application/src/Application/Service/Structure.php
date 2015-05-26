@@ -125,7 +125,7 @@ class Structure extends AbstractEntityService
         if (true === $role) {
             $qb->andWhere("EXISTS ( SELECT r from Application\Entity\Db\Role r WHERE r.structure = $alias)");
         }
-        elseif ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()) {
+        elseif (/*$role instanceof \Application\Interfaces\StructureAwareInterface && */$role->getStructure()) {
             $this->finderByStructure( $role->getStructure(), $qb, $alias );
         }
 

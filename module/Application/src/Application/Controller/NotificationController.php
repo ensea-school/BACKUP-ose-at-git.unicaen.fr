@@ -244,11 +244,12 @@ EOS;
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         
-        if ($role instanceof StructureAwareInterface) {
-            return $role->getStructure();
-        }
-        
-        return null;
+//        if ($role instanceof StructureAwareInterface) {
+//            return $role->getStructure();
+//        }
+//        
+//        return null;
+        return $role->getStructure();
     }
     
     /**

@@ -180,9 +180,9 @@ class ValidationController extends AbstractActionController
         if (!$this->validation) {
             $this->validation = $serviceValidation->newEntity($typeValidation);
             $this->validation->setIntervenant($this->intervenant);
-            if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
+//            if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
                 $this->validation->setStructure($role->getStructure());
-            }
+//            }
         }
         else {
             $this->formValider->get('valide')->setValue(true);
@@ -248,7 +248,7 @@ class ValidationController extends AbstractActionController
 //        if (!$rule->isAllowed('read')) {
 //            return $this->redirect()->toRoute('home');
 //        }
-
+        
         $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structuresEns, $structureValidation);
 
         $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes sur Service !
@@ -548,11 +548,11 @@ class ValidationController extends AbstractActionController
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $validation = $this->context()->mandatory()->validationFromRoute(); /* @var $validation \Application\Entity\Db\Validation */
 
-        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
+//        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
             if ($validation->getStructure() !== $role->getStructure()) {
                 throw new RuntimeException("Suppression de la validation interdite.");
             }
-        }
+//        }
 
         $title     = "Suppression de la validation";
         $form      = new \Application\Form\Supprimer('suppr');

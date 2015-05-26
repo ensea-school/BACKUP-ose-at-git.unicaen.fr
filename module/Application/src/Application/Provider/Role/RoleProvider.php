@@ -68,7 +68,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     protected function makeRoles()
     {
         $roles = [];
-
+$roles['test'] = new Role( 'test', 'user', 'Rôle de test');
         /* deprecated */
         foreach( $this->config as $classname ){
             if (class_exists( $classname )){

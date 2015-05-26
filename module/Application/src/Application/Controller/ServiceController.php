@@ -112,9 +112,9 @@ class ServiceController extends AbstractActionController
         $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
                 $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
 
-        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
-            throw new \BjyAuthorize\Exception\UnAuthorizedException();
-        }
+//        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
+//            throw new \BjyAuthorize\Exception\UnAuthorizedException();
+//        }
 
         if (! $intervenant){
             $action = $this->getRequest()->getQuery('action', null); // ne pas afficher par défaut, sauf si demandé explicitement
@@ -233,9 +233,20 @@ class ServiceController extends AbstractActionController
             $this->messenger()->addMessage("La saisie des enseignements réalisés a été clôturée le $dateCloture.", 'success');
         }
         
+        $avertissement = "<strong>Attention!</strong> <br />"
+                . "Assurez-vous de n'avoir oublié de déclarer la réalisation "
+                . "d'aucun autre enseignement, quelle que soit la composante d'intervention. <br />"
+                . "Cliquer sur le bouton ci-dessous vous empêchera de revenir sur votre saisie.";
+        $confirm = "Attention! "
+                . "Confirmez-vous n'avoir oublié de déclarer la réalisation "
+                . "d'aucun autre enseignement, quelle que soit la composante d'intervention ? "
+                . "Cliquer sur OK vous empêchera de revenir sur votre saisie.";
+                
         $viewModel->setVariables([
             'typeVolumeHoraire' => $tvh,
             'validation'        => $validation,
+            'avertissement'     => $avertissement,
+            'confirm'           => $confirm,
         ]);
         
         return $viewModel;

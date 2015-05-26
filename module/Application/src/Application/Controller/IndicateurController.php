@@ -180,11 +180,12 @@ class IndicateurController extends AbstractActionController
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
         
-        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
-            return $role->getStructure();
-        }
-        
-        return null;
+//        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
+//            return $role->getStructure();
+//        }
+//        
+//        return null;
+        return $role->getStructure();
     }
     
     /**

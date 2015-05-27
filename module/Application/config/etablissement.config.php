@@ -2,25 +2,6 @@
 
 namespace Application;
 
-use Application\Acl\Role;
-use Application\Acl\AdministrateurRole;
-use Application\Acl\ComposanteRole;
-use Application\Acl\DirecteurComposanteRole;
-use Application\Acl\GestionnaireComposanteRole;
-use Application\Acl\ResponsableComposanteRole;
-use Application\Acl\SuperviseurComposanteRole;
-use Application\Acl\ResponsableRechercheLaboRole;
-use Application\Acl\DrhRole;
-use Application\Acl\GestionnaireDrhRole;
-use Application\Acl\ResponsableDrhRole;
-use Application\Acl\EtablissementRole;
-use Application\Acl\SuperviseurEtablissementRole;
-use Application\Acl\IntervenantRole;
-use Application\Acl\IntervenantPermanentRole;
-use Application\Acl\IntervenantExterieurRole;
-use Application\Acl\FoadRole;
-use Application\Acl\ResponsableFoadRole;
-
 return [
     'router' => [
         'routes' => [

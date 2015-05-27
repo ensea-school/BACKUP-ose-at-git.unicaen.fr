@@ -68,22 +68,17 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     protected function makeRoles()
     {
         $roles = [];
-$roles['test'] = new Role( 'test', 'user', 'Rôle de test');
-        /* deprecated */
-        foreach( $this->config as $classname ){
-            if (class_exists( $classname )){
-                $role = new $classname; /* @var $role RoleInterface */
-                $roles[$role->getRoleId()] = $role;
-            }else{
-                throw new LogicException('La classe "'.$classname.'" déclarée dans la configuration du fournisseur de rôles n\'a pas été trouvée.');
-            }
-        }
-        /* fin de deprecated */
+        $r = new Role();                                        $roles[$r->getRoleId()] = $r;
+        $r = new \Application\Acl\ComposanteRole();             $roles[$r->getRoleId()] = $r;
+        $r = new \Application\Acl\DrhRole();                    $roles[$r->getRoleId()] = $r;
+        $r = new \Application\Acl\EtablissementRole();          $roles[$r->getRoleId()] = $r;
+        $r = new \Application\Acl\IntervenantRole();            $roles[$r->getRoleId()] = $r;
+        $r = new \Application\Acl\IntervenantExterieurRole();   $roles[$r->getRoleId()] = $r;
+        $r = new \Application\Acl\IntervenantPermanentRole();   $roles[$r->getRoleId()] = $r;
         
         $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
         /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
         $utilisateur = $serviceAuthUserContext->getDbUser();
-
 
         /* Cas spécifique du rôle intervenant */
         if ($utilisateur && $utilisateur->getIntervenant()){
@@ -93,66 +88,57 @@ $roles['test'] = new Role( 'test', 'user', 'Rôle de test');
         }
 
         /* Rôles du personnel */
-        if ($utilisateur && ($personnel = $utilisateur->getPersonnel())){
-            // chargement des rôles métiers
-            $qb = $this->getEntityManager()->createQueryBuilder()
-                ->from("Application\Entity\Db\Affectation", "a")
-                ->select("a, r, s")
-                ->distinct()
-                ->join("a.role", "r")
-                ->leftJoin("a.structure", "s")
-                ->andWhere('1=compriseEntre(a.histoCreation,a.histoDestruction)')
-                ->andWhere('1=compriseEntre(r.histoCreation,r.histoDestruction)')
-                ->andWhere("a.personnel = :personnel")->setParameter(':personnel', $personnel);
-            foreach ($qb->getQuery()->getResult() as $affectation) { /* @var $affectation Affectation */
-                 $dbRole = $affectation->getRole();
+        $personnel = null;
+        if ($utilisateur) $personnel = $utilisateur->getPersonnel();
 
-                $roleId = $dbRole->getCode();
-                $roleLibelle = $dbRole->getLibelle();
+        // chargement des rôles métiers
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->from("Application\Entity\Db\Role", "r")
+            ->select("r, a, s")
+            ->distinct()
+            ->leftJoin("r.affectation", "a", \Doctrine\ORM\Query\Expr\Join::WITH, '1=compriseEntre(a.histoCreation,a.histoDestruction) AND a.personnel = :personnel')
+            ->leftJoin("a.structure", "s")
+            ->andWhere('1=compriseEntre(r.histoCreation,r.histoDestruction)')
+            ->setParameter(':personnel', $personnel);
+
+        foreach ($qb->getQuery()->getResult() as $dbRole) { /* @var $dbRole \Application\Entity\Db\Role */
+            $roleId = $dbRole->getCode();
+
+            $roleClass = 'Application\Acl\Role';
+            $parent = 'user';
+            /** @deprecated */
+            if ($roleId == 'gestionnaire-composante')   { $roleClass = 'Application\Acl\GestionnaireComposanteRole'; $parent='composante';}
+            if ($roleId == 'directeur-composante')      { $roleClass = 'Application\Acl\DirecteurComposanteRole';    $parent='composante';}
+            if ($roleId == 'administrateur')            { $roleClass = 'Application\Acl\AdministrateurRole';}
+            if ($roleId == 'responsable-composante')    { $roleClass = 'Application\Acl\ResponsableComposanteRole';  $parent='composante';}
+            if ($roleId == 'superviseur-etablissement') { $roleClass = 'Application\Acl\EtablissementRole'; }
+            if ($roleId == 'gestionnaire-drh')          { $roleClass = 'Application\Acl\DrhRole'; }
+            /* FIN de deprecated */
+
+            $role = new $roleClass( $roleId, $parent, $dbRole->getLibelle() );
+            $role->setDbRole($dbRole);
+            $role->setPersonnel($personnel);
+
+            $roles[$roleId] = $role;
+
+            $affectations = $dbRole->getAffectation();
+            foreach( $affectations as $affectation ){ /* @var $affectation Affectation */
                 if ($structure = $affectation->getStructure()){
-                    $roleId .= '-'.$structure->getSourceCode();
-                    $roleLibelle .= ' ('.$structure->getLibelleCourt().')';
+                    $affRoleId = $roleId.'-'.$structure->getSourceCode();
+                    if (! isset($roles[$affRoleId])){
+                        $affRoleLibelle = $dbRole->getLibelle().' ('.$structure->getLibelleCourt().')';
+                        $affRole = new $roleClass( $affRoleId, $roleId, $affRoleLibelle );
+                        $affRole->setDbRole( $dbRole );
+                        $affRole->setPersonnel( $personnel );
+                        $affRole->setStructure( $structure );
+                        $roles[$affRoleId] = $affRole;
+                    }
                 }
-
-                /** @deprecated */
-                $parents = [
-                    'gestionnaire-composante',
-                    'responsable-recherche-labo',
-                    'directeur-composante',
-                    'administrateur',
-                    'responsable-composante',
-                    'superviseur-etablissement',
-                ];
-                if (in_array($dbRole->getCode(), $parents)){
-                    $parent = $dbRole->getCode();
-                }else{
-                    $parent = 'user';
-                }
-
-                if (isset($roles[$roleId])){
-                    $role = $roles[$roleId];
-                }else{
-                    $role = new Role( $roleId, $parent, $roleLibelle);
-                }
-
-                /* fin de deprecated */
-
-                //$role = new Role( $roleId, 'user', $roleLibelle);
-                $role->setDbRole( $dbRole );
-                $role->setPersonnel( $personnel );
-
-                if ($this->structureSelectionnee){
-                    $role->setStructure( $this->structureSelectionnee );
-                }else{
-                    $role->setStructure( $affectation->getStructure() );
-                }
-
-                $roles[$roleId] = $role;
             }
         }
         return $roles;
     }
-    
+
     public function setStructureSelectionnee(StructureEntity $structureSelectionnee = null)
     {
         $this->structureSelectionnee = $structureSelectionnee;

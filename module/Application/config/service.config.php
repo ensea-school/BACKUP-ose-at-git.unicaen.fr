@@ -231,7 +231,7 @@ return [
                 ], [
                     'controller' => 'Application\Controller\Service',
                     'action' => ['resume','resume-refresh','recherche'],
-                    'roles' => [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD]
+                    'roles' => [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT]
                 ], [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action' => ['index', 'saisie', 'suppression', 'rafraichir-ligne', 'constatation'],

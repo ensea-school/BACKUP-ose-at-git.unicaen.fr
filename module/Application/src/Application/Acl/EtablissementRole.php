@@ -23,13 +23,3 @@ class EtablissementRole extends Role implements PersonnelAwareInterface
     }
 
 }
-
-class SuperviseurEtablissementRole extends EtablissementRole
-{
-    const ROLE_ID = 'superviseur-etablissement';
-
-    public function __construct($id = self::ROLE_ID, $parent = EtablissementRole::ROLE_ID, $name = 'Superviseur établissement', $description = null, $selectable = true)
-    {
-        parent::__construct($id, $parent, $name, $description, $selectable);
-    }
-}

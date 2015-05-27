@@ -2,37 +2,19 @@
 
 namespace Application;
 
-const R_USER                        = 'user';
-
 const R_ROLE                        = Acl\Role::ROLE_ID;
-
 const R_ADMINISTRATEUR              = Acl\AdministrateurRole::ROLE_ID;
-
 const R_COMPOSANTE                  = Acl\ComposanteRole::ROLE_ID;
-const R_DIRECTEUR_COMPOSANTE        = Acl\DirecteurComposanteRole::ROLE_ID;
-const R_GESTIONNAIRE_COMPOSANTE     = Acl\GestionnaireComposanteRole::ROLE_ID;
-const R_RESPONSABLE_COMPOSANTE      = Acl\ResponsableComposanteRole::ROLE_ID;
-const R_SUPERVISEUR_COMPOSANTE      = Acl\SuperviseurComposanteRole::ROLE_ID;
-
-const R_RESPONSABLE_RECHERCHE_LABO  = Acl\ResponsableRechercheLaboRole::ROLE_ID;
-
 const R_DRH                         = Acl\DrhRole::ROLE_ID;
-const R_GESTIONNAIRE_DRH            = Acl\GestionnaireDrhRole::ROLE_ID;
-const R_RESPONSABLE_DRH             = Acl\ResponsableDrhRole::ROLE_ID;
-
 const R_ETABLISSEMENT               = Acl\EtablissementRole::ROLE_ID;
-const R_SUPERVISEUR_ETABLISSEMENT   = Acl\SuperviseurEtablissementRole::ROLE_ID;
-
 const R_INTERVENANT                 = Acl\IntervenantRole::ROLE_ID;
 const R_INTERVENANT_PERMANENT       = Acl\IntervenantPermanentRole::ROLE_ID;
 const R_INTERVENANT_EXTERIEUR       = Acl\IntervenantExterieurRole::ROLE_ID;
 
-const R_FOAD                        = Acl\FoadRole::ROLE_ID;
-const R_RESPONSABLE_FOAD            = Acl\ResponsableFoadRole::ROLE_ID;
 
-$R_ALL = [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_INTERVENANT, R_FOAD];
-$R_NOT_INTERVENANT = [R_ADMINISTRATEUR, R_COMPOSANTE, R_RESPONSABLE_RECHERCHE_LABO, R_DRH, R_ETABLISSEMENT, R_FOAD];
-$R_COMMUN = [R_ADMINISTRATEUR, R_DRH, R_ETABLISSEMENT, R_FOAD];
+$R_ALL = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT, R_INTERVENANT];
+$R_NOT_INTERVENANT = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT];
+$R_COMMUN = [R_ADMINISTRATEUR, R_DRH, R_ETABLISSEMENT];
 
 $main =  [
     'doctrine' => [
@@ -158,22 +140,9 @@ $main =  [
                 'Application\\Acl\\AdministrateurRole',
 
                 'Application\\Acl\\ComposanteRole',
-                    'Application\\Acl\\DirecteurComposanteRole',
-                    'Application\\Acl\\GestionnaireComposanteRole',
-                    'Application\\Acl\\ResponsableComposanteRole',
-                    'Application\\Acl\\SuperviseurComposanteRole',
-                    'Application\\Acl\\ResponsableRechercheLaboRole',
 
                 'Application\\Acl\\DrhRole',
-                    'Application\\Acl\\GestionnaireDrhRole',
-                    'Application\\Acl\\ResponsableDrhRole',
-
                 'Application\\Acl\\EtablissementRole',
-                    'Application\\Acl\\SuperviseurEtablissementRole',
-
-                'Application\\Acl\\FoadRole',
-                    'Application\\Acl\\ResponsableFoadRole',
-
                 'Application\\Acl\\IntervenantRole',
                     'Application\\Acl\\IntervenantExterieurRole',
                     'Application\\Acl\\IntervenantPermanentRole',

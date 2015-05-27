@@ -2,7 +2,6 @@
 
 namespace Application\Acl;
 
-use UnicaenAuth\Acl\NamedRole;
 use Application\Interfaces\StructureAwareInterface;
 use Application\Traits\StructureAwareTrait;
 use Application\Interfaces\PersonnelAwareInterface;
@@ -75,26 +74,6 @@ class ResponsableComposanteRole extends ComposanteRole
     const ROLE_ID = 'responsable-composante';
 
     public function __construct($id = self::ROLE_ID, $parent = ComposanteRole::ROLE_ID, $name = 'Responsable de composante', $description = null, $selectable = true)
-    {
-        parent::__construct($id, $parent, $name, $description, $selectable);
-    }
-}
-
-class SuperviseurComposanteRole extends ComposanteRole
-{
-    const ROLE_ID = 'superviseur-composante';
-
-    public function __construct($id = self::ROLE_ID, $parent = ComposanteRole::ROLE_ID, $name = 'Superviseur de composante', $description = null, $selectable = true)
-    {
-        parent::__construct($id, $parent, $name, $description, $selectable);
-    }
-}
-
-class ResponsableRechercheLaboRole extends ComposanteRole
-{
-    const ROLE_ID = 'responsable-recherche-labo';
-
-    public function __construct($id = self::ROLE_ID, $parent = ComposanteRole::ROLE_ID, $name = 'Responsable d\'équipe de recherche', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);
     }

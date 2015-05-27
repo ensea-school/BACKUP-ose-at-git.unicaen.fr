@@ -50,12 +50,10 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
      */
     public function assert(Acl $acl, RoleInterface $role = null, ResourceInterface $resource = null, $privilege = null)
     {
-        /** @deprecated */
         $this->acl       = $acl;
         $this->resource  = $resource;
         $this->privilege = $privilege;
         $this->role      = $role;
-        /* fin de deprecated */
 
         // gestion des privilèges
         if ($this->detectPrivilege($resource)){

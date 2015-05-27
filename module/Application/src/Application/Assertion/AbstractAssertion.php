@@ -171,7 +171,6 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
 
 
     /**
-     * @deprecated ?
      * @return boolean
      */
     protected function assertCRUD()

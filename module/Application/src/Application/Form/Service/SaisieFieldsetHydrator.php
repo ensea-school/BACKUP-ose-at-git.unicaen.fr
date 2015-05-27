@@ -32,7 +32,7 @@ class SaisieFieldsetHydrator implements HydratorInterface, ServiceLocatorAwareIn
         $object->setIntervenant( $intervenant ? $this->getServiceIntervenant()->getBySourceCode($intervenant) : null );
 
         if (isset($data['element-pedagogique']) && $data['element-pedagogique'] instanceof \Application\Entity\Db\ElementPedagogique){
-            $object->setElementPedagogique( $this->getServiceElementPedagogique()->get($data['element-pedagogique']) );
+            $object->setElementPedagogique( $data['element-pedagogique'] );
         }else{
             $elementPedagogique = isset($data['element-pedagogique']['element']['id']) ? $data['element-pedagogique']['element']['id'] : null;
             $object->setElementPedagogique( $elementPedagogique ? $this->getServiceElementPedagogique()->get($elementPedagogique) : null );

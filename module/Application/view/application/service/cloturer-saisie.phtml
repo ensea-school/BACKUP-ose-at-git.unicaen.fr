@@ -4,37 +4,48 @@
 $libelle = "J'ai terminé la saisie de la totalité de mon service réalisé";
 ?>
 
-<?php if (! $this->validation): ?>
+<!----------------------------------------------------------------------------->
+<!--                            Bouton de clôture                            -->
+<!----------------------------------------------------------------------------->
 
-<?php echo $this->messenger()->renderMessage($this->avertissement, 'warning') ?>
+<?php if ($this->isAllowed($this->validation, 'create')): ?>
 
-<button type="button" id="btn-cloturer-saisie" 
-        class="btn btn-lg btn-info"><?php echo $libelle ?></button>
+    <?php echo $this->messenger()->renderMessage($this->avertissement, 'warning') ?>
 
-<script>
-    var url = '<?php echo $this->url('intervenant/cloturer-saisie', [], [], true) ?>';
-    $(function() {
-        $("#btn-cloturer-saisie").click(function(e) {
-            e.preventDefault();
-            if (!confirm("<?php echo $this->confirm ?>")) {
-                return;
-            }
-            $.post(url, {cloturer: 1}, function() {
-                window.location.reload();
+    <button type="button" id="btn-cloturer-saisie" 
+            class="btn btn-lg btn-info"><?php echo $libelle ?></button>
+
+    <script>
+        var url = '<?php echo $this->url('intervenant/cloturer-saisie', [], [], true) ?>';
+        $(function() {
+            $("#btn-cloturer-saisie").click(function(e) {
+                e.preventDefault();
+                if (!confirm("<?php echo $this->confirm ?>")) {
+                    return;
+                }
+                $.post(url, {cloturer: 1}, function() {
+                    window.location.reload();
+                });
             });
         });
-    });
-</script>
+    </script>
 
-<?php else: ?>
+<?php endif; ?>
 
-<button type="button" id="btn-cloturer-saisie" class="btn btn-lg btn-success" disabled="disabled"><?php echo $libelle ?> le 
-        <?php echo $this->validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT) ?></button>
+    
+<!----------------------------------------------------------------------------->
+<!--                       Clôture existante éventuelle                      -->
+<!----------------------------------------------------------------------------->
 
-<script>
-    $(function() {
-        $("#btn-cloturer-saisie").parent().tooltip();
-    });
-</script>
+<?php if ($this->isAllowed($this->validation, 'read')): ?>
+
+    <button type="button" id="btn-cloturer-saisie" class="btn btn-lg btn-success" disabled="disabled"><?php echo $libelle ?> le 
+            <?php echo $this->validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT) ?></button>
+
+    <script>
+        $(function() {
+            $("#btn-cloturer-saisie").parent().tooltip();
+        });
+    </script>
 
 <?php endif;

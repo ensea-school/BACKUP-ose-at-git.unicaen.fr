@@ -66,7 +66,7 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
     <!-- bouton de cloture de la saisie du réalisé des permanents -->
     <?php echo $this->clotureSaisie ?>
 
-    <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>
+    <?php if ($role instanceof \Application\Acl\IntervenantRole && $typeVolumeHoraire->getCode() === 'PREVU'): ?>
         <hr />
         <?php $url = $this->url('workflow/nav-next',
                 ['intervenant' => $role->getIntervenant()->getSourceCode()],

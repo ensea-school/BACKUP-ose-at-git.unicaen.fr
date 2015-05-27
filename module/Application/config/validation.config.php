@@ -137,7 +137,11 @@ return [
                         'ValidationAssertion',
                     ],
                     [
-                        [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                        [
+                            IntervenantRole::ROLE_ID, // Pour la clôture du réalisé
+                            ComposanteRole::ROLE_ID, 
+                            AdministrateurRole::ROLE_ID,
+                        ],
                         'Validation',
                         [
                             AbstractAssertion::PRIVILEGE_CREATE,
@@ -161,9 +165,11 @@ return [
             'ApplicationValidation'            => 'Application\\Service\\Validation',
             'ValidationEnseignementRule'       => 'Application\\Rule\\Validation\\ValidationEnseignementRule',
             'ValidationReferentielRule'        => 'Application\\Rule\\Validation\\ValidationReferentielRule',
+            'ClotureRealiseRule'               => 'Application\\Rule\\Validation\\ClotureRealiseRule',
             'ValidationAssertion'              => 'Application\\Assertion\\ValidationAssertionProxy',
             'ValidationServiceAssertion'       => 'Application\\Assertion\\ValidationServiceAssertion',
             'ValidationReferentielAssertion'   => 'Application\\Assertion\\ValidationReferentielAssertion',
+            'ClotureRealiseAssertion'          => 'Application\\Assertion\\ClotureRealiseAssertion',
         ],
         'initializers' => [
         ],

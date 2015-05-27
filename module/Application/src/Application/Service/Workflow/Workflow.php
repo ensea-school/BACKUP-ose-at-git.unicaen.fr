@@ -40,6 +40,8 @@ class Workflow extends AbstractWorkflow
     const REFERENTIEL_VALIDATION         = 'REFERENTIEL_VALIDATION';
     const REFERENTIEL_VALIDATION_REALISE = 'REFERENTIEL_VALIDATION_REALISE';
 
+    const CLOTURE_REALISE                = 'CLOTURE_REALISE';
+    
     const PIECES_JOINTES                 = 'PIECES_JOINTES';
 
     const CONSEIL_RESTREINT              = TypeAgrement::CODE_CONSEIL_RESTREINT;  // NB: c'est texto le code du type d'agrément

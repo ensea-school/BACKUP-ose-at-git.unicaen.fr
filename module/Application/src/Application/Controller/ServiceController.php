@@ -207,19 +207,22 @@ class ServiceController extends AbstractActionController
         $viewModel   = new ViewModel();
         
         if (! $intervenant->getStatut()->estPermanent()) {
-            return false;
+            return false; // désactive la vue
         }
         if (TypeVolumeHoraire::CODE_REALISE !== $tvh->getCode()) {
-            return false;
+            return false; // désactive la vue
+        }
+        
+        if (! $validation) {
+            $validation = $this->getServiceValidation()->createValidationClotureServices($intervenant, $structure, $tvh);
         }
         
         if ($this->getRequest()->isPost()) {
             $cloturer = $this->params()->fromPost('cloturer');
-            if (null === $cloturer || $validation && 1 === $cloturer || !$validation && 0 === $cloturer) {
+            if (null === $cloturer || $validation->getId() && 1 === $cloturer || !$validation->getId() && 0 === $cloturer) {
                 exit;
             }
             if ($cloturer) {
-                $validation = $this->getServiceValidation()->createValidationClotureServices($intervenant, $structure, $tvh);
                 $this->em()->persist($validation);
             }
             else {
@@ -228,18 +231,18 @@ class ServiceController extends AbstractActionController
             $this->em()->flush();
         }
         
-        if ($validation) {
+        if ($validation->getId()) {
             $dateCloture = $validation->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT);
-            $this->messenger()->addMessage("La saisie des enseignements réalisés a été clôturée le $dateCloture.", 'success');
+            $this->messenger()->addMessage("La saisie du service réalisé a été clôturée le $dateCloture.", 'success');
         }
         
         $avertissement = "<strong>Attention!</strong> <br />"
                 . "Assurez-vous de n'avoir oublié de déclarer la réalisation "
-                . "d'aucun autre enseignement, quelle que soit la composante d'intervention. <br />"
+                . "d'aucun autre enseignement ou référentiel, quelle que soit la composante d'intervention. <br />"
                 . "Cliquer sur le bouton ci-dessous vous empêchera de revenir sur votre saisie.";
         $confirm = "Attention! "
                 . "Confirmez-vous n'avoir oublié de déclarer la réalisation "
-                . "d'aucun autre enseignement, quelle que soit la composante d'intervention ? "
+                . "d'aucun autre enseignement ou référentiel, quelle que soit la composante d'intervention ? "
                 . "Cliquer sur OK vous empêchera de revenir sur votre saisie.";
                 
         $viewModel->setVariables([

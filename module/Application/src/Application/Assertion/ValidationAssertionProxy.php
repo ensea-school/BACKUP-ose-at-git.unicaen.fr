@@ -40,6 +40,8 @@ class ValidationAssertionProxy extends AbstractAssertion
     protected function getDelegate()
     {
         switch ($this->resource->getTypeValidation()->getCode()) {
+            case TypeValidationEntity::CODE_CLOTURE_REALISE:
+                return $this->getServiceLocator()->get('ClotureRealiseAssertion');
             case TypeValidationEntity::CODE_ENSEIGNEMENT:
                 return $this->getServiceLocator()->get('ValidationServiceAssertion');
             case TypeValidationEntity::CODE_REFERENTIEL:

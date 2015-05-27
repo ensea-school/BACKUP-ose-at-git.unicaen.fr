@@ -61,7 +61,7 @@ create global temporary table pj_tmp_intervenant (
 ---------------------------------------------------------------------------------
 
 Insert into WF_ETAPE (ID,CODE,STRUCTURE_DEPENDANT,LIBELLE,PERTIN_FUNC,FRANCH_FUNC,STEP_CLASS,VISIBLE,STRUCTURES_IDS_FUNC,ORDRE) 
-values (WF_ETAPE_id_seq.nextval, 'CLOTURE_REALISE', '0', 'Clôture de la saisie des enseignements réalisés', 'ose_workflow.peut_cloturer_realise', 'ose_workflow.realise_cloture', 'Application\Service\Workflow\Step\ClotureRealiseStep', '1', null, 115);
+values (WF_ETAPE_id_seq.nextval, 'CLOTURE_REALISE', '0', 'Clôture de la saisie du service réalisé', 'ose_workflow.peut_cloturer_realise', 'ose_workflow.realise_cloture', 'Application\Service\Workflow\Step\ClotureRealiseStep', '1', null, 115);
 
 Insert into WF_ETAPE (ID,CODE,STRUCTURE_DEPENDANT,LIBELLE,PERTIN_FUNC,FRANCH_FUNC,STEP_CLASS,VISIBLE,STRUCTURES_IDS_FUNC,ORDRE) 
 values (WF_ETAPE_id_seq.nextval, 'DEMANDE_MEP', '1', 'Demande mise en paiemant', 'ose_workflow.peut_demander_mep', 'ose_workflow.possede_demande_mep', 'Application\Service\Workflow\Step\DemandeMepStep', '1', 'ose_workflow.fetch_struct_ensref_realis_ids', 140);

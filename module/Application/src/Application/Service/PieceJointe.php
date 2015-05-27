@@ -157,6 +157,7 @@ EOS;
 
         // création si besoin d'une PieceJointe
         $qb = $this->finderByType($type);
+        $this->finderByHistorique($qb);
         $this->finderByDossier($intervenant->getDossier(), $qb);
         $pj = $qb->getQuery()->getOneOrNullResult(); /* @var $pj PieceJointeEntity */
         if (!$pj) {

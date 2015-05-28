@@ -10,13 +10,13 @@ class ElementPedagogique extends DifferentielLigne
 {
     public function getSujet()
     {
-        $format = '%s (%s)';
+        $format = '%s (%s, %s)';
         if ('insert' == $this->ligne->getAction() || 'undelete' == $this->ligne->getAction()){
-            return sprintf( $format, $this->ligne->get('LIBELLE'), $this->ligne->getSourceCode() );
+            return sprintf( $format, $this->ligne->get('LIBELLE'), $this->ligne->getSourceCode(), $this->ligne->get('ANNEE_ID').'-'.($this->ligne->get('ANNEE_ID')+1) );
         }else{
             $entity = $this->ligne->getEntity();
             /* @var $entity \Application\Entity\Db\ElementPedagogique */
-            return sprintf( $format, $entity->getLibelle(), $this->ligne->getSourceCode() );
+            return sprintf( $format, $entity->getLibelle(), $this->ligne->getSourceCode(), (string)$entity->getAnnee() );
         }
     }
 

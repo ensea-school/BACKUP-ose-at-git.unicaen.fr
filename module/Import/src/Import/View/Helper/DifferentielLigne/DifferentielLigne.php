@@ -3,15 +3,17 @@ namespace Import\View\Helper\DifferentielLigne;
 
 use Zend\View\Helper\AbstractHelper;
 use Import\Entity\Differentiel\Ligne;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Aide de vue permettant d'afficher une ligne de différentiel d'import
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class DifferentielLigne extends AbstractHelper
+class DifferentielLigne extends AbstractHelper implements ServiceLocatorAwareInterface
 {
-
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    
     /**
      * @var Ligne
      */
@@ -29,6 +31,7 @@ class DifferentielLigne extends AbstractHelper
 
         if (class_exists($helperClass)){
             $helperObject = new $helperClass;
+            $helperObject->setServiceLocator( $this->getServiceLocator() ); // transmission du serviceLocator
             $helperObject->setLigne($ligne);
             $helperObject->setView( $this->getView() );
             return $helperObject;

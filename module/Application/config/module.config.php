@@ -2,7 +2,7 @@
 
 namespace Application;
 
-const R_ROLE                        = Acl\Role::ROLE_ID;
+const R_ROLE                        = 'user';
 const R_ADMINISTRATEUR              = Acl\AdministrateurRole::ROLE_ID;
 const R_COMPOSANTE                  = Acl\ComposanteRole::ROLE_ID;
 const R_DRH                         = Acl\DrhRole::ROLE_ID;

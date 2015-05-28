@@ -311,10 +311,6 @@ class ServiceController extends AbstractActionController
         $tri                = null;
         if ('trier' == $action) $tri = $this->getRequest()->getQuery('tri', null);
 
-        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
-            throw new \BjyAuthorize\Exception\UnAuthorizedException();
-        }
-
         if ($intervenant){
             $localContext = $this->getServiceLocator()->get('applicationLocalContext');
             /* @var $localContext \Application\Service\LocalContext */

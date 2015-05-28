@@ -96,13 +96,13 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             'data-params'   => json_encode($this->getParams())
         ];
         $out = '<div '.$this->htmlAttribs($attrs).'>';
-        if ( (!$this->getReadOnly()) && $this->getView()->isAllowed(new MiseEnPaiement, 'demande') ){
+        if ( (!$this->getReadOnly()) && $this->getView()->isAllowed(new MiseEnPaiement, \Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE) ){
             $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander toutes les HETD en paiement</button></div>';
         }
         foreach( $servicesAPayer as $serviceAPayer ){
             $out .= $this->renderServiceAPayer($serviceAPayer);
         }
-        if (! $this->getReadOnly() && $this->getView()->isAllowed(new MiseEnPaiement, 'demande')){
+        if (! $this->getReadOnly() && $this->getView()->isAllowed(new MiseEnPaiement, \Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE)){
             $out .= '<div>';
             $out .= $this->getView()->form()->openTag($this->getForm());
             $out .= $this->getView()->formHidden($this->getForm()->get('changements'));
@@ -156,7 +156,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
 
         $miseEnPaiement = new MiseEnPaiement;
         $miseEnPaiement->setServiceAPayer($serviceAPayer);
-        $notAllowed = ! $this->getView()->isAllowed($miseEnPaiement, 'demande');
+        $notAllowed = ! $this->getView()->isAllowed($miseEnPaiement, \Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE);
         $readOnly = $this->getReadOnly() || $notAllowed;
         $saisieTerminee = ($params['heures-dmep'] + $params['heures-non-dmep']) == 0; // s'il reste des heures à positionner ou déjà positionnées
 
@@ -288,7 +288,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
                 $dmepParams = [
                     'centre-cout-id'    => $miseEnPaiement->getCentreCout()->getId(),
                     'heures'            => $miseEnPaiement->getHeures(),
-                    'read-only'         => $this->getReadOnly() || ! $this->getView()->isAllowed($miseEnPaiement, 'demande'),
+                    'read-only'         => $this->getReadOnly() || ! $this->getView()->isAllowed($miseEnPaiement, \Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE),
                 ];
                 if ($validation = $miseEnPaiement->getValidation()){
                     $dmepParams['validation'] = [

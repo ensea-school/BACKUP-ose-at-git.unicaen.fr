@@ -318,7 +318,7 @@ return [
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => ['voir', 'apercevoir', 'search'],
-                    'roles'      => [R_ROLE],
+                    'roles'      => ['user'],
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',

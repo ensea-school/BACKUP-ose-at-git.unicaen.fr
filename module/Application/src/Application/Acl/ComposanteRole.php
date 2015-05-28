@@ -45,7 +45,7 @@ class ComposanteRole extends Role implements StructureAwareInterface, PersonnelA
      */
     public function __toString()
     {
-        return sprintf("%s (%s)", $this->getRoleName(), $this->getStructure());
+        return sprintf($this->getRoleName());
     }
 }
 

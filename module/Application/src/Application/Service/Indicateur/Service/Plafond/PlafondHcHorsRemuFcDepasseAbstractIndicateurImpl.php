@@ -83,6 +83,8 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         $annee = $this->getServiceContext()->getAnnee();
         
         // INDISPENSABLE si plusieurs requêtes successives sur VIndicDepassHcHorsRemuFc !
@@ -116,8 +118,21 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
         }
         
         $qb->orderBy("str.libelleCourt, int.nomUsuel, int.prenom");
-//        print_r($qb->getQuery()->getSQL());
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Intervenant',
+                'Application\Entity\Db\Structure',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
 }

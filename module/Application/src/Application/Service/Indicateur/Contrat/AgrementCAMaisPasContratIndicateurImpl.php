@@ -38,6 +38,8 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
@@ -80,5 +82,22 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
         $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Agrement',
+                'Application\Entity\Db\Contrat',
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\VolumeHoraire',
+                'Application\Entity\Db\Validation',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
 }

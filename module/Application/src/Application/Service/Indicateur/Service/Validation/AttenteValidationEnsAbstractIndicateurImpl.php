@@ -51,6 +51,8 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         $qb = parent::getQueryBuilder()
                 ->join("int.service", "s")
                 ->join("s.elementPedagogique", "ep")
@@ -86,6 +88,22 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Validation',
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\ElementPedagogique',
+                'Application\Entity\Db\VolumeHoraire',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
     
     /**

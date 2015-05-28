@@ -38,6 +38,8 @@ class AttenteAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurIm
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
@@ -80,6 +82,22 @@ class AttenteAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurIm
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\VolumeHoraire',
+                'Application\Entity\Db\Validation',
+                'Application\Entity\Db\Contrat',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
     
     public function getTypeVolumeHoraire()

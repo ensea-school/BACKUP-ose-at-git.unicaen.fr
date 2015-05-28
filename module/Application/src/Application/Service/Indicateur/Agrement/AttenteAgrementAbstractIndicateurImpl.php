@@ -54,6 +54,8 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIntervenant
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         $qb = parent::getQueryBuilder()
                 ->andWhere("ti.code = :type")->setParameter('type', TypeIntervenant::CODE_EXTERIEUR);
         
@@ -83,6 +85,20 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIntervenant
         $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\VolumeHoraire',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
     
     protected $typeAgrement;

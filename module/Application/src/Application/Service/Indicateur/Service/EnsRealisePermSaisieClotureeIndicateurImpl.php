@@ -37,6 +37,8 @@ class EnsRealisePermSaisieClotureeIndicateurImpl extends AbstractIntervenantResu
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         /**
          * Une validation de type "clôture du réalisé" doit exister.
          */
@@ -52,8 +54,34 @@ class EnsRealisePermSaisieClotureeIndicateurImpl extends AbstractIntervenantResu
                 ->andWhere("ti.code = :tiCode")
                 ->setParameter('tiCode', TypeIntervenantEntity::CODE_PERMANENT);
         
+        /**
+         * Composante d'intervenation.
+         */
+        if ($this->getStructure()) {
+            $qb
+                    ->join("int.service", "s")
+                    ->join("s.elementPedagogique", "ep")
+                    ->andWhere("ep.structure = :structure")
+                    ->setParameter('structure', $this->getStructure());
+        }
+        
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Validation',
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\ElementPedagogique',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
 }

@@ -37,6 +37,8 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIntervenantRes
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         // INDISPENSABLE si plusieurs requêtes successives sur IntervenantExterieur !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
@@ -69,5 +71,20 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIntervenantRes
         $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\ElementPedagogique',
+                'Application\Entity\Db\VolumeHoraire',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
 }

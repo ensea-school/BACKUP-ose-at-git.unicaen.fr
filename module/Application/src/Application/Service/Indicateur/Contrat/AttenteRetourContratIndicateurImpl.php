@@ -66,6 +66,8 @@ class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndica
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb->join("int.contrat", "c");
         
@@ -97,5 +99,19 @@ class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndica
                     ->andWhere("c.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Contrat',
+                'Application\Entity\Db\Validation',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
 }

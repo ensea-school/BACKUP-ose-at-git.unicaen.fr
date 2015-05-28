@@ -35,6 +35,8 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIntervenantResultIndi
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         // INDISPENSABLE si plusieurs requêtes successives sur IntervenantExterieur !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
@@ -61,5 +63,19 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIntervenantResultIndi
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\ElementPedagogique',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
 }

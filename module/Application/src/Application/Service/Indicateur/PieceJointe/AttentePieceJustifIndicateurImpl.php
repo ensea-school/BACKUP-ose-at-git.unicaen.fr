@@ -39,6 +39,8 @@ class AttentePieceJustifIndicateurImpl extends AbstractIntervenantResultIndicate
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
         $this->getEntityManager()->clear('Application\Entity\Db\Intervenant');
         
@@ -66,5 +68,20 @@ class AttentePieceJustifIndicateurImpl extends AbstractIntervenantResultIndicate
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\VolumeHoraire',
+                'Application\Entity\Db\ElementPedagogique',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
 }

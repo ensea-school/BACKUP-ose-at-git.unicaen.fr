@@ -61,6 +61,8 @@ abstract class AttenteDemandeMepAbstractIndicateurImpl extends AbstractIntervena
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
         $this->getEntityManager()->clear('Application\Entity\Db\VIndicAttenteDemandeMep');
         
@@ -91,6 +93,20 @@ abstract class AttenteDemandeMepAbstractIndicateurImpl extends AbstractIntervena
         $qb->orderBy("str.libelleCourt, int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Structure',
+                'Application\Entity\Db\Intervenant',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
     
     /**

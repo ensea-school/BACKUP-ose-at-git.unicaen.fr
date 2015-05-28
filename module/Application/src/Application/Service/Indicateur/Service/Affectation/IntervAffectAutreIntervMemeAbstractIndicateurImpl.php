@@ -58,6 +58,8 @@ abstract class IntervAffectAutreIntervMemeAbstractIndicateurImpl extends Abstrac
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         $exists = "SELECT s FROM Application\Entity\Db\Service s "
                 . "JOIN s.intervenant i "
                 . "JOIN i.structure sa "
@@ -89,6 +91,22 @@ abstract class IntervAffectAutreIntervMemeAbstractIndicateurImpl extends Abstrac
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Intervenant',
+                'Application\Entity\Db\Validation',
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\ElementPedagogique',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
     
     /**

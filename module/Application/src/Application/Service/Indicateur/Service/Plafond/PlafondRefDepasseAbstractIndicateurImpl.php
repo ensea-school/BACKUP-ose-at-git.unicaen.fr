@@ -83,6 +83,8 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
      */
     protected function getQueryBuilder()
     {
+        $this->initFilters();
+        
         $annee = $this->getServiceContext()->getAnnee();
         
         // INDISPENSABLE si plusieurs requêtes successives sur VIndicDepassRef !
@@ -116,8 +118,23 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
         }
         
         $qb->orderBy("str.libelleCourt, int.nomUsuel, int.prenom");
-//        print_r($qb->getQuery()->getSQL());
         
         return $qb;
+    }
+    
+    /**
+     * Activation du filtrage Doctrine sur l'historique.
+     */
+    protected function initFilters()
+    {
+        $this->getEntityManager()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Intervenant',
+                'Application\Entity\Db\Validation',
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\ElementPedagogique',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
     }
 }

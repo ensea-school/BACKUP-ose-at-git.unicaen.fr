@@ -6,6 +6,7 @@ use Application\Interfaces\StructureAwareInterface;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Db\Privilege;
+use Application\Entity\Db\TypeValidation;
 use Zend\Permissions\Acl\Acl;
 use Application\Acl\Role;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -19,6 +20,8 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class MiseEnPaiementAssertion extends AbstractAssertion
 {
+    use \Application\Service\Traits\TypeValidationAwareTrait;
+    
     const PRIVILEGE_VISUALISATION      = 'visualisation';
     const PRIVILEGE_DEMANDE            = 'demande';
     const PRIVILEGE_VALIDATION         = 'validation';
@@ -45,6 +48,10 @@ class MiseEnPaiementAssertion extends AbstractAssertion
 
     protected function assertMiseEnPaiementDemande( Role $role, MiseEnPaiement $miseEnPaiement )
     {
+        if (! $this->checkClotureRealise($miseEnPaiement)) {
+            return false;
+        }
+        
         if ($miseEnPaiement->getValidation()){
             return false; // pas de nouvelle demande si la mise en paiement est déjà validée
         }
@@ -66,5 +73,28 @@ class MiseEnPaiementAssertion extends AbstractAssertion
         }else{
             return $oriStructure === $destStructure;
         }
+    }
+    
+    /**
+     * Pour les permanents, pas de demande de MEP possible sans clôture du service réalisé.
+     * 
+     * @param MiseEnPaiement $miseEnPaiement
+     * @return boolean
+     */
+    private function checkClotureRealise(MiseEnPaiement $miseEnPaiement)
+    {
+        $intervenant = $miseEnPaiement->getFormuleResultatService()->getFormuleResultat()->getIntervenant();
+        
+        if (! $intervenant->estPermanent()) {
+            return true;
+        }
+        
+        $typeValidationClotureRealise = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_CLOTURE_REALISE);
+
+        if (! count($intervenant->getValidation($typeValidationClotureRealise))) {
+            return false;
+        }
+        
+        return true;
     }
 }

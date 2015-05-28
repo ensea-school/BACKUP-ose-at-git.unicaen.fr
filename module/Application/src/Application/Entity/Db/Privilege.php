@@ -7,6 +7,8 @@ namespace Application\Entity\Db;
  */
 class Privilege
 {
+    const INTERVENANT_FICHE                 = 'intervenant-fiche';
+    const INTERVENANT_RECHERCHE             = 'intervenant-recherche';
     const MISE_EN_PAIEMENT_DEMANDE          = 'mise-en-paiement-demande';
     const MISE_EN_PAIEMENT_EXPORT_CSV       = 'mise-en-paiement-export-csv';
     const MISE_EN_PAIEMENT_EXPORT_PAIE      = 'mise-en-paiement-export-paie';
@@ -18,6 +20,7 @@ class Privilege
     const MODIF_SERVICE_DU_VISUALISATION    = 'modif-service-du-visualisation';
     const PRIVILEGE_EDITION                 = 'privilege-edition';
     const PRIVILEGE_VISUALISATION           = 'privilege-visualisation';
+
 
 
     /**

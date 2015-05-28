@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use Application\Entity\Db\Privilege;
+
 return [
     'router' => [
         'routes' => [
@@ -329,7 +331,7 @@ return [
                                 ],
                                 'action' => 'voir-heures-comp',
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Intervenant:voir-heures-comp',
+                                'resource' => 'controller/Application\Controller\Intervenant:voirheurescomp',
                             ],
                             'modification-service-du' => [
                                 'label'  => "Modification de service dû",
@@ -457,7 +459,7 @@ return [
                                     'intervenant',
                                 ],
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\MiseEnPaiement:demande-mise-en-paiement',
+                                'resource' => 'controller/Application\Controller\Paiement:demandemiseenpaiement',
                                 'visible' => 'IntervenantNavigationPageVisibility',
                             ],
                         ],
@@ -468,6 +470,22 @@ return [
     ],
     'bjyauthorize' => [
         'guards' => [
+            'Application\Guard\PrivilegeController' => [
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['index', 'rechercher'],
+                    'privileges' => [
+                        Privilege::INTERVENANT_RECHERCHE
+                    ]
+                ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['voir'],
+                    'privileges' => [
+                        Privilege::INTERVENANT_FICHE
+                    ]
+                ],
+            ],
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Intervenant',

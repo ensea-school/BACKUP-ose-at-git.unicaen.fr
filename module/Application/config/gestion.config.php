@@ -137,12 +137,15 @@ return [
                     'controller' => 'Application\Controller\Gestion',
                     'action'     => ['index'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
-                    'privileges' => [Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE],
+                    'privileges' => [
+                        Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE,
+                        Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                    ],
                 ],
                 [
                     'controller' => 'Application\Controller\Gestion',
                     'action'     => ['droits', 'roles', 'privileges'],
-                    'privileges' => [Privilege::PRIVILEGE_VISUALISATION, Privilege::PRIVILEGE_EDITION],
+                    'privileges' => [Privilege::PRIVILEGE_VISUALISATION],
                 ],
                 [
                     'controller' => 'Application\Controller\Gestion',

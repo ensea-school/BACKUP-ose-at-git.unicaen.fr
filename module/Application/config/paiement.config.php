@@ -121,8 +121,7 @@ return [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['demandeMiseEnPaiement'],
                     'privileges' => [
-                        Privilege::MISE_EN_PAIEMENT_DEMANDE,
-                        Privilege::MISE_EN_PAIEMENT_VISUALISATION
+                        Privilege::MISE_EN_PAIEMENT_DEMANDE
                     ],
                     'assertion'  => 'MiseEnPaiementAssertion',
                 ],
@@ -149,6 +148,23 @@ return [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['extractionWinpaie'],
                     'privileges' => [Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE]
+                ],
+            ],
+        ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'MiseEnPaiement' => [],
+            ],
+        ],
+        'rule_providers' => [
+            'Application\Provider\Rule\RuleProvider' => [
+                'allow' => [
+                    [
+                        Privilege::MISE_EN_PAIEMENT_DEMANDE,
+                        'MiseEnPaiement',
+                        [Privilege::MISE_EN_PAIEMENT_DEMANDE],
+                        'MiseEnPaiementAssertion',
+                    ],
                 ],
             ],
         ],

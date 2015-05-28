@@ -75,7 +75,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         $r = new \Application\Acl\IntervenantRole();            $roles[$r->getRoleId()] = $r;
         $r = new \Application\Acl\IntervenantExterieurRole();   $roles[$r->getRoleId()] = $r;
         $r = new \Application\Acl\IntervenantPermanentRole();   $roles[$r->getRoleId()] = $r;
-        
+
         $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
         /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
         $utilisateur = $serviceAuthUserContext->getDbUser();

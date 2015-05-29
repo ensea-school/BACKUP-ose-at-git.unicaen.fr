@@ -11,30 +11,30 @@ $dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Inter
 <?php echo $this->form()->openTag($this->form) ?> 
 <div class="row">
     <div class="col-md-3">
-        <?php echo $this->formControlGroup($dossier->get('nomUsuel')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('nomPatronymique')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('prenom')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('nomUsuel')->setAttribute('readonly', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('nomPatronymique')->setAttribute('readonly', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('prenom')->setAttribute('readonly', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('civilite')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('dateNaissance')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('dateNaissance')->setAttribute('readonly', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('paysNaissance')->setAttribute('disabled', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('departementNaissance')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('villeNaissance')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('villeNaissance')->setAttribute('readonly', $this->readonly)); ?>
     </div>
     <div class="col-md-4">
-        <?php echo $this->formControlGroup($dossier->get('numeroInsee')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('numeroInsee')->setAttribute('readonly', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('adresse')->setAttribute('disabled', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('email')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('adresse')->setAttribute('readonly', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('email')->setAttribute('readonly', $this->readonly)); ?>
         <?php if ($dossier->has('emailPerso')) {
-            echo $this->formControlGroup($dossier->get('emailPerso')->setAttribute('disabled', $this->readonly)); 
+            echo $this->formControlGroup($dossier->get('emailPerso')->setAttribute('readonly', $this->readonly)); 
         } ?>
-        <?php echo $this->formControlGroup($dossier->get('telephone')->setAttribute('disabled', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('telephone')->setAttribute('readonly', $this->readonly)); ?>
     </div>
     <div class="col-md-5">
         <fieldset class="rib">
             <legend><?php echo $dossier->get('rib')->getLabel() ?></legend>
-            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('bic')->setAttribute('disabled', $this->readonly)); ?></div>
-            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('iban')->setAttribute('disabled', $this->readonly)); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('bic')->setAttribute('readonly', $this->readonly)); ?></div>
+            <div class="rib-part"><?php echo $this->formControlGroup($dossier->get('rib')->get('iban')->setAttribute('readonly', $this->readonly)); ?></div>
             <?php echo $this->formControlGroup($dossier->get('rib')->get('hidden')); ?>
         </fieldset>
         <?php if ($dossier->has('premierRecrutement')) {

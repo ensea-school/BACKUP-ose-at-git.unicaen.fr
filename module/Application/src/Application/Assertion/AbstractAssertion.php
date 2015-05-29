@@ -19,11 +19,30 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
 {
     use ServiceLocatorAwareTrait;
 
-
     const PRIVILEGE_CREATE = 'create';
     const PRIVILEGE_READ   = 'read';
     const PRIVILEGE_UPDATE = 'update';
     const PRIVILEGE_DELETE = 'delete';
+    
+    /**
+     * @var Acl
+     */
+    protected $acl;
+
+    /**
+     * @var string
+     */
+    protected $privilege;
+
+    /**
+     * @var ResourceInterface|string
+     */
+    protected $resource;
+
+    /**
+     * @var RoleInterface
+     */
+    protected $role;
 
     /**
      * !!!! Pour éviter l'erreur "Serialization of 'Closure' is not allowed"... !!!!

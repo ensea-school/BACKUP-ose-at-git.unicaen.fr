@@ -4,7 +4,9 @@ namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\ORMException;
 use Traversable;
 use Zend\Filter\Callback;
 use Zend\Filter\FilterInterface;
@@ -26,8 +28,16 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
     public function getResult()
     {
         if (null === $this->result || $this->dirtyResult) {
-            $qb                = $this->getQueryBuilder();
-            $this->result      = $qb->getQuery()->getResult();
+            $qb = $this->getQueryBuilder();
+            try {
+                $this->result = $qb->getQuery()->getResult();
+            }
+            catch (ORMException $e) {
+                throw new RuntimeException(
+                        "Erreur rencontrée lors de la requete de l'indicateur {$this->getEntity()->getCode()}.", 
+                        null, 
+                        $e);
+            }
             $this->dirtyResult = false;
         }
             
@@ -84,7 +94,16 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
         }
         else {
             $qb = $this->getQueryBuilder()->select("COUNT(DISTINCT int)");
-            $this->resultCount = (int) $qb->getQuery()->getSingleScalarResult();
+            
+            try {
+                $this->resultCount = (int) $qb->getQuery()->getSingleScalarResult();
+            }
+            catch (ORMException $e) {
+                throw new RuntimeException(
+                        "Erreur rencontrée lors de la requete COUNT de l'indicateur {$this->getEntity()->getCode()}.", 
+                        null, 
+                        $e);
+            }
         }
         
         $this->dirtyResultCount = false;

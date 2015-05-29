@@ -85,7 +85,7 @@ class EnsRealisePermSaisieNonClotureeIndicateurImpl extends AbstractIntervenantR
             $selectRef .= "AND (sr.structure = :structure OR (sr.structure = :etab AND int.structure = :structure)) ";
             $qb
                     ->setParameter('structure', $this->getStructure())
-                    ->setParameter('structure', $this->getStructure());
+                    ->setParameter('etab', $this->getStructureEtablissement());
         }
         
         $qb

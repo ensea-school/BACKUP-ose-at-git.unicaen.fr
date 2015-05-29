@@ -167,7 +167,7 @@ return [
             'AttenteValidationEnsRealisePerm'   => 'Application\\Service\\Indicateur\\Service\\Validation\\AttenteValidationEnsRealisePermIndicateurImpl',
             
             'EnsHisto'                          => 'Application\\Service\\Indicateur\\Service\\EnsHistoIndicateurImpl',
-            'EnsRealisePermSaisieCloturee'      => 'Application\\Service\\Indicateur\\Service\\EnsRealisePermSaisieClotureeIndicateurImpl',
+            'EnsRealisePermSaisieNonCloturee'   => 'Application\\Service\\Indicateur\\Service\\EnsRealisePermSaisieNonClotureeIndicateurImpl',
             
         ],
         'factories'    => [

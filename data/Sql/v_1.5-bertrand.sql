@@ -1,11 +1,3 @@
---
--- Version 1.5
---
-
-
----------------------------------------------------------------------------------
--- Modif Statuts (Tâche #1728 : Refonte de la page Données personnelles)
----------------------------------------------------------------------------------
 
 update statut_intervenant set 
     LIBELLE = 'Sans emploi, non étudiant', 
@@ -44,12 +36,6 @@ alter trigger WF_TRG_PJ enable;
 alter trigger WF_TRG_PJ_VALIDATION enable;
 
 
--- drop table PJ_TMP_INTERVENANT;
-create global temporary table pj_tmp_intervenant (
-  intervenant_id number(*,0) not null , 
-  type_piece_jointe_id number(*,0) not null , 
-  CONSTRAINT "PJ_TMP_INTERVENANT_PK" PRIMARY KEY (INTERVENANT_ID, type_piece_jointe_id) 
-) on commit delete rows ;
 
 
 
@@ -122,7 +108,7 @@ Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (
 
 Insert into INDICATEUR (ID,CODE,TYPE,ORDRE,ENABLED) values (
     indicateur_id_seq.nextval,
-    'EnsRealisePermSaisieCloturee',
+    'EnsRealisePermSaisieNonCloturee',
     'Enseignements et référentiel',
     '335',
     '1'

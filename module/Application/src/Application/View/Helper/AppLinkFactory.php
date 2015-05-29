@@ -34,10 +34,9 @@ class AppLinkFactory implements FactoryInterface
 
         $helper->setRouter($this->getServiceLocator()->get($router));
 
-        $qb = $this->getServiceAnnee()->finderByOffreFormation();
-        $helper->setAnnees( $this->getServiceAnnee()->getList( $qb ) );
+        $helper->setAnnees( $this->getServiceAnnee()->getChoixAnnees() );
         $helper->setAnnee( $this->getServiceContext()->getAnnee() );
-
+        
         if ($match instanceof RouteMatch) {
             $helper->setRouteMatch($match);
         }

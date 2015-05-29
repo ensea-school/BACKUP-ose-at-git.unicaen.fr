@@ -6,8 +6,8 @@ INSERT INTO CATEGORIE_PRIVILEGE (
   LIBELLE
 ) VALUES (
   CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
-  'modification-service-du',
-  'Modification de service dû'
+  'intervenant',
+  'Intervenant'
 );
 
 INSERT INTO PRIVILEGE (
@@ -17,46 +17,11 @@ INSERT INTO PRIVILEGE (
   LIBELLE
 ) VALUES (
   privilege_id_seq.nextval,
-  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = 'modif-service-du' ),
-  'association',
-  'Association'
+  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = 'intervenant' ),
+  'fiche',
+  'Visualisation de la fiche'
 );
 
-INSERT INTO PRIVILEGE (
-  ID,
-  CATEGORIE_ID,
-  CODE,
-  LIBELLE
-) VALUES (
-  privilege_id_seq.nextval,
-  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = 'modif-service-du' ),
-  'visualisation',
-  'Visualisation'
-);
-
-INSERT INTO PRIVILEGE (
-  ID,
-  CATEGORIE_ID,
-  CODE,
-  LIBELLE
-) VALUES (
-  privilege_id_seq.nextval,
-  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = 'modif-service-du' ),
-  'edition',
-  'Édition'
-);
-
-INSERT INTO PRIVILEGE (
-  ID,
-  CATEGORIE_ID,
-  CODE,
-  LIBELLE
-) VALUES (
-  privilege_id_seq.nextval,
-  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = 'mise-en-paiement' ),
-  'export-pdf',
-  'Export PDF'
-);
 
 select
   --p.id, cp.code categorie, p.code privilege,
@@ -70,4 +35,14 @@ order by
   cp.code, p.code;
   
   
-DELETE FROM privilege WHERE id = 3;
+
+
+-- EXPORT
+
+categorie_privilege
+privilege
+
+role
+
+role_privilege
+statut_privilege

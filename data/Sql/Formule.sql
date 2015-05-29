@@ -16,15 +16,14 @@ SELECT * FROM formule_resultat WHERE intervenant_id = (select id from intervenan
 update service set histo_destruction = sysdate, histo_destructeur_id = 1 where id = 16425;
 
 SELECT 
-  fr.annee_id,
+  i.annee_id,
   i.id i_id,
   i.source_code i_code,
   i.nom_usuel || ' ' || i.prenom i_nom,
   fr.type_volume_horaire_id,
   fr.etat_volume_horaire_id,
-  fr.service_assure-fr.referentiel   hetd,
   frs.service_id,
-  frs.service_assure  hetd_service
+  frs.id frs_id
 FROM
   formule_resultat_service frs
   JOIN formule_resultat fr ON fr.id = FRS.FORMULE_RESULTAT_ID

@@ -98,4 +98,28 @@ class Annee extends AbstractEntityService
         return parent::getList($qb, $alias);
     }
 
+    /**
+     * Retourne la liste des ID des années sélectionnables
+     */
+    public function getChoixAnnees()
+    {
+        $sql = 'SELECT DISTINCT 
+            annee_id
+        FROM 
+            ELEMENT_PEDAGOGIQUE ep
+        WHERE 
+            1 = OSE_DIVERS.COMPRISE_ENTRE(ep.HISTO_CREATION, ep.HISTO_DESTRUCTION)
+        ORDER BY 
+            annee_id ASC';
+        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $annees = [];
+        foreach( $result as $annee ){
+            $a = $annee['ANNEE_ID'];
+            $annees[$a] = $a.'-'.($a+1);
+        }
+        return $annees;
+    }
+
 }

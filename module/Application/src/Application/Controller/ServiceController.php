@@ -237,12 +237,12 @@ class ServiceController extends AbstractActionController
         }
         
         $avertissement = "<strong>Attention!</strong> <br />"
-                . "Assurez-vous de n'avoir oublié de déclarer la réalisation "
-                . "d'aucun autre enseignement ou référentiel, quelle que soit la composante d'intervention. <br />"
+                . "Assurez-vous d'avoir saisi la totalité de vos services réalisés (enseignements et référentiel), "
+                . "quelle que soit la composante d'intervention. <br />"
                 . "Cliquer sur le bouton ci-dessous vous empêchera de revenir sur votre saisie.";
         $confirm = "Attention! "
-                . "Confirmez-vous n'avoir oublié de déclarer la réalisation "
-                . "d'aucun autre enseignement ou référentiel, quelle que soit la composante d'intervention ? "
+                . "Confirmez-vous avoir saisi la totalité de vos services réalisés (enseignements et référentiel), "
+                . "quelle que soit la composante d'intervention ? "
                 . "Cliquer sur OK vous empêchera de revenir sur votre saisie.";
                 
         $viewModel->setVariables([

@@ -61,10 +61,11 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
     <?php if ($intervenant === null || $intervenant->getStatut()->getPeutSaisirReferentiel()): ?>
         <?php echo $this->servicesRefListe; ?>
     <?php endif; ?>
-    <?php echo $this->formuleTotauxHetd; ?>
 
     <!-- bouton de cloture de la saisie du réalisé des permanents -->
     <?php echo $this->clotureSaisie ?>
+    
+    <?php echo $this->formuleTotauxHetd; ?>
 
     <?php if ($role instanceof \Application\Acl\IntervenantRole && $typeVolumeHoraire->getCode() === 'PREVU'): ?>
         <hr />

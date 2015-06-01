@@ -9,7 +9,6 @@ use Common\Exception\LogicException;
 use Common\Exception\MessageException;
 use Application\Exception\DbException;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Service\Recherche;
 
@@ -529,6 +528,10 @@ class ServiceController extends AbstractActionController
         $form    = $this->getFormSaisie();
         $errors  = [];
 
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
+        /* @var $localContext \Application\Service\LocalContext */
+        $intervenant = $localContext->getIntervenant();
+        
         if ($id) {
             $entity = $service->get($id);
             $entity->setTypeVolumeHoraire($typeVolumeHoraire);
@@ -542,9 +545,6 @@ class ServiceController extends AbstractActionController
             $title   = "Ajout d'enseignement";
         }
 
-        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
-        $intervenant = $localContext->getIntervenant();
         $assertionEntity = $this->getServiceService()->newEntity()->setIntervenant($intervenant);
         $assertionEntity->setTypeVolumeHoraire($typeVolumeHoraire);
         if (! $this->isAllowed($assertionEntity, 'create') && ! $this->isAllowed($assertionEntity, 'update')) {
@@ -557,7 +557,7 @@ class ServiceController extends AbstractActionController
             $form->saveToContext();
             if ($form->isValid()) {
                 try {
-                    $entity = $service->save($entity);
+                    $entity = $service->save($entity->setIntervenant($intervenant));
                     $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                 }
                 catch (\Exception $e) {

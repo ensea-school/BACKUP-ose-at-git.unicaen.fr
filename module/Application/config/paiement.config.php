@@ -68,7 +68,7 @@ return [
                         'type'    => 'Segment',
                         'may_terminate' => true,
                         'options' => [
-                            'route'    => '/extraction-winpaie[/:periode]',
+                            'route'    => '/extraction-winpaie[/:type][/:periode]',
                             'defaults' => [
                                 'action' => 'extractionWinpaie'
                             ],

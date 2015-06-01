@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Db\MiseEnPaiement as MiseEnPaiementEntity;
+use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Paiement\MiseEnPaiementRecherche;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Periode as PeriodeEntity;
@@ -15,6 +16,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class MiseEnPaiement extends AbstractEntityService
 {
+    use Traits\IntervenantAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -56,6 +58,23 @@ class MiseEnPaiement extends AbstractEntityService
         }
         return $qb;
     }
+
+    public function finderByTypeIntervenant( TypeIntervenantEntity $typeIntervenant=null, QueryBuilder $qb=null, $alias=null )
+    {
+        $serviceMIS = $this->getServiceLocator()->get('applicationMiseEnPaiementIntervenantStructure');
+        /* @var $serviceMIS MiseEnPaiementIntervenantStructure */
+
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+
+        if ($typeIntervenant){
+            $this->join( $serviceMIS, $qb, 'miseEnPaiementIntervenantStructure', false, $alias );
+            $serviceMIS->join( $this->getServiceIntervenant(), $qb, 'intervenant', false );
+            $this->getServiceIntervenant()->finderByType( $typeIntervenant, $qb );
+        }
+
+        return $qb;
+    }
+
 
     public function finderByStructure( StructureEntity $structure, QueryBuilder $qb=null, $alias=null )
     {
@@ -117,6 +136,9 @@ class MiseEnPaiement extends AbstractEntityService
             'annee_id = '.$annee->getId()
         ];
 
+        if ($t = $recherche->getTypeIntervenant()){
+            $conditions['intervenant_type_id'] = 'intervenant_type_id = '.$t->getId();
+        }
         if ($e = $recherche->getEtat()){
             $conditions['etat'] = 'etat = \''.$e.'\'';
         }
@@ -220,6 +242,9 @@ class MiseEnPaiement extends AbstractEntityService
             'annee_id = '.$annee->getId()
         ];
 
+        if ($t = $recherche->getTypeIntervenant()){
+            $conditions['intervenant_type_id'] = 'intervenant_type_id = '.$t->getId();
+        }
         if ($e = $recherche->getEtat()){
             $conditions['etat'] = 'etat = \''.$e.'\'';
         }
@@ -252,6 +277,7 @@ class MiseEnPaiement extends AbstractEntityService
                 'structure-libelle'             =>          $d['STRUCTURE_LIBELLE'],
                 'date-mise-en-paiement'         => empty($d['DATE_MISE_EN_PAIEMENT']) ? null : \DateTime::createFromFormat('Y-m-d', substr($d['DATE_MISE_EN_PAIEMENT'],0,10)),
                 'periode-paiement-libelle'      =>          $d['PERIODE_PAIEMENT_LIBELLE'],
+                'intervenant-type'              =>          $d['INTERVENANT_TYPE'],
                 'intervenant-code'              =>          $d['INTERVENANT_CODE'],
                 'intervenant-nom'               =>          $d['INTERVENANT_NOM'],
                 'intervenant-numero-insee'      =>          $d['INTERVENANT_NUMERO_INSEE'],
@@ -297,6 +323,9 @@ class MiseEnPaiement extends AbstractEntityService
             'annee_id = '.$annee->getId()
         ];
 
+        if ($t = $recherche->getTypeIntervenant()){
+            $conditions['type_intervenant_id'] = 'type_intervenant_id = '.$t->getId();
+        }
         if ($p = $recherche->getPeriode()){
             $conditions['periode_id'] = 'periode_paiement_id = '.$p->getId();
         }

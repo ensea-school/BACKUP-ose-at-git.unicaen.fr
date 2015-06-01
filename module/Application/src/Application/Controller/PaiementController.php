@@ -22,7 +22,8 @@ class PaiementController extends AbstractActionController
         \Application\Service\Traits\PersonnelAwareTrait,
         \Application\Service\Traits\PeriodeAwareTrait,
         \Application\Service\Traits\MiseEnPaiementAwareTrait,
-        \Application\Service\Traits\ServiceAPayerAwareTrait
+        \Application\Service\Traits\ServiceAPayerAwareTrait,
+        \Application\Service\Traits\TypeIntervenantAwareTrait
     ;
 
     /**
@@ -69,12 +70,14 @@ class PaiementController extends AbstractActionController
         $recherche->setEtat( $etat ); // données à mettre en paiement uniquement
         $rechercheForm->bind($recherche);
 
+        $typeIntervenant = $this->context()->typeIntervenantFromPost('type-intervenant');
+
         $qb = $this->getServiceStructure()->finderByMiseEnPaiement();
         $this->getServiceStructure()->finderByRole( $this->getServiceContext()->getSelectedIdentityRole(), $qb );
+        $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($typeIntervenant, $qb);
         $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
         $structures = $this->getServiceStructure()->getList($qb);
         $rechercheForm->populateStructures( $structures );
-
         if (count($structures) == 1){
             $structure = current($structures);
             $rechercheForm->get('structure')->setValue( $structure->getId() );
@@ -90,6 +93,7 @@ class PaiementController extends AbstractActionController
         $periode = null;
         if ($structure){
             $qb = $this->getServicePeriode()->finderByMiseEnPaiement($structure);
+            $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($typeIntervenant, $qb);
             $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
             $periodes = $this->getServicePeriode()->getList($qb);
             $rechercheForm->populatePeriodes( $periodes );
@@ -102,6 +106,7 @@ class PaiementController extends AbstractActionController
             }
 
             $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement( $structure, $periode );
+            $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($typeIntervenant, $qb);
             $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
             $rechercheForm->populateIntervenants( $this->getServiceIntervenant()->getList($qb) );
         }
@@ -118,7 +123,7 @@ class PaiementController extends AbstractActionController
         }
 
         if ( $this->params()->fromPost('exporter-pdf') !== null && $this->isAllowed('privilege/'.Privilege::MISE_EN_PAIEMENT_EXPORT_PDF) ){
-            $this->etatPaiementPdf( $etat, $structure, $periode, $etatPaiement );
+            $this->etatPaiementPdf( $typeIntervenant, $etat, $structure, $periode, $etatPaiement );
         }elseif ( $this->params()->fromPost('exporter-csv-etat') !== null && $this->isAllowed('privilege/'.Privilege::MISE_EN_PAIEMENT_EXPORT_CSV) ){
             return $this->etatPaiementCsv( $recherche );
         }else{
@@ -126,7 +131,7 @@ class PaiementController extends AbstractActionController
         }
     }
 
-    protected function etatPaiementPdf( $etat, $structure, $periode, $etatPaiement )
+    protected function etatPaiementPdf( $typeIntervenant, $etat, $structure, $periode, $etatPaiement )
     {
         $exp = new Pdf($this->getServiceLocator()->get('view_manager')->getRenderer());
 
@@ -165,7 +170,7 @@ class PaiementController extends AbstractActionController
 
         $drh = $this->getServicePersonnel()->getDrh();
 
-        $variables = compact( 'structure', 'periode', 'etatPaiement', 'drh', 'etat' );
+        $variables = compact( 'typeIntervenant', 'structure', 'periode', 'etatPaiement', 'drh', 'etat' );
         $exp->addBodyScript('application/paiement/etat-paiement-pdf.phtml', true, $variables, 1);
         $exp->export($fileName, Pdf::DESTINATION_BROWSER_FORCE_DL);
     }
@@ -186,6 +191,7 @@ class PaiementController extends AbstractActionController
             'Composante',
             'Date de mise en paiement',
             'Période',
+            'Statut',
             'N° intervenant',
             'Intervenant',
             'N° INSEE',
@@ -230,14 +236,21 @@ class PaiementController extends AbstractActionController
         $periode = $this->params()->fromRoute('periode');
         $periode = $this->getServicePeriode()->getRepo()->findOneBy(['code' => $periode]);
 
-        if (empty($periode)){
+        $type = $this->params()->fromRoute('type');
+        $type = $this->getServiceTypeIntervenant()->getRepo()->findOneBy(['code' => $type]);
+
+        if (empty($type)){
+            $types = $this->getServiceTypeIntervenant()->getList();
+            return compact('types');
+        }elseif (empty($periode)){
             $qb = $this->getServicePeriode()->finderByMiseEnPaiement();
             $this->getServiceMiseEnPaiement()->finderByEtat(MiseEnPaiement::MIS_EN_PAIEMENT, $qb);
             $periodes = $this->getServicePeriode()->getList( $qb );
-            return compact('periodes');
+            return compact('type', 'periodes');
         }else{
             $recherche = new MiseEnPaiementRecherche;
             $recherche->setPeriode($periode);
+            $recherche->setTypeIntervenant( $type );
             $csvModel = new \UnicaenApp\View\Model\CsvModel();
             $csvModel->setHeader([
                 'Insee',
@@ -255,7 +268,7 @@ class PaiementController extends AbstractActionController
             foreach( $data as $d ){
                 $csvModel->addLine($d);
             }
-            $csvModel->setFilename('ose-export-winpaie-'.strtolower($recherche->getPeriode()).'.csv');
+            $csvModel->setFilename('ose-export-winpaie-'.strtolower($recherche->getPeriode()).'-'.strtolower($recherche->getTypeIntervenant()->getLibelle()).'.csv');
             return $csvModel;
         }
     }

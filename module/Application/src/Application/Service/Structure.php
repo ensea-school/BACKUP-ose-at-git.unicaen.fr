@@ -123,9 +123,9 @@ class Structure extends AbstractEntityService
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
         if (true === $role) {
-            $qb->andWhere("EXISTS ( SELECT r from Application\Entity\Db\Role r WHERE r.structure = $alias)");
+            $qb->andWhere("EXISTS ( SELECT a from Application\Entity\Db\Affectation a WHERE a.structure = $alias)");
         }
-        elseif (/*$role instanceof \Application\Interfaces\StructureAwareInterface && */$role->getStructure()) {
+        elseif ($role->getStructure()) {
             $this->finderByStructure( $role->getStructure(), $qb, $alias );
         }
 

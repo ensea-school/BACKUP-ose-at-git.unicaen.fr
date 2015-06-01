@@ -2,8 +2,6 @@
 
 namespace Application\Entity\Paiement;
 
-use Application\Interfaces\StructureAwareInterface; use Application\Traits\StructureAwareTrait;
-use Application\Interfaces\PeriodeAwareInterface; use Application\Traits\PeriodeAwareTrait;
 use Common\EntityCollection;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\MiseEnPaiement;
@@ -14,11 +12,12 @@ use Application\Entity\Db\MiseEnPaiement;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class MiseEnPaiementRecherche implements StructureAwareInterface, PeriodeAwareInterface
+class MiseEnPaiementRecherche
 {
 
-    use StructureAwareTrait;
-    use PeriodeAwareTrait;
+    use \Application\Traits\StructureAwareTrait,
+        \Application\Traits\PeriodeAwareTrait,
+        \Application\Traits\TypeIntervenantAwareTrait;
 
     /**
      * etat

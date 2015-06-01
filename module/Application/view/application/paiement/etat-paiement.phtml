@@ -26,9 +26,6 @@ $this->headTitle()->append($title);
 
 ?>
 <h1><?php echo $title ?></h1>
-<?php if ($noData): ?>
-<div class="alert alert-info">Aucune donnée trouvée</div>
-<?php else: ?>
 <div class="panel panel-default filter" data-etat="<?php echo $etat ?>">
 
     <div class="panel-heading">Filtres</div>
@@ -36,27 +33,39 @@ $this->headTitle()->append($title);
         <?php echo $this->form()->openTag($rechercheForm->prepare()); ?>
         <?php
 
-        echo $this->formControlGroup($rechercheForm->get('structure'));
+        echo $this->formControlGroup($rechercheForm->get('type-intervenant'));
 
-        if ($rechercheForm->get('structure')->getValue()){
-            if (MiseEnPaiement::MIS_EN_PAIEMENT === $etat){
-                echo $this->formControlGroup($rechercheForm->get('periode'));
-                if ($rechercheForm->get('periode')->getValue()){
+        if ($noData){ ?>
+            <div class="alert alert-info">Aucune donnée trouvée</div>
+            <input type="hidden" name="structure" />
+            <input type="hidden" name="periode" />
+            <input type="hidden" name="intervenants" />
+        <?php }else{
+
+            echo $this->formControlGroup($rechercheForm->get('structure'));
+
+            if ($rechercheForm->get('structure')->getValue()){
+                if (MiseEnPaiement::MIS_EN_PAIEMENT === $etat){
+                    echo $this->formControlGroup($rechercheForm->get('periode'));
+                    if ($rechercheForm->get('periode')->getValue()){
+                        echo $this->formControlGroup($rechercheForm->get('intervenants'));
+                    }
+                }else{
                     echo $this->formControlGroup($rechercheForm->get('intervenants'));
                 }
-            }else{
-                echo $this->formControlGroup($rechercheForm->get('intervenants'));
             }
-            
         }
+
         echo $this->formRow($rechercheForm->get('suite')).' ';
         echo $this->formRow($rechercheForm->get('afficher')).' ';
         if ($this->isAllowed('privilege/'.Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_EXPORT_CSV))
             echo $this->formRow($rechercheForm->get('exporter-csv-etat')).' ';
-        
+
         if ($this->isAllowed('privilege/'.Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_EXPORT_PDF))
             echo $this->formRow($rechercheForm->get('exporter-pdf')).' ';
-        
+
+
+
         echo $this->form()->closeTag();
         echo $this->formErrors( $rechercheForm );
         ?>
@@ -67,7 +76,6 @@ $this->headTitle()->append($title);
         });
     </script>
 </div>
-<?php endif; ?>
 <?php
 
 if (! empty($etatPaiement)){

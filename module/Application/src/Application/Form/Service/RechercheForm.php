@@ -102,7 +102,6 @@ class RechercheForm extends Form implements InputFilterProviderInterface, Servic
                 ->setAttribute('class', 'service-recherche')
                 ->setAttribute('id', $this->getId());
 
-
         $typeIntervenant = new \Zend\Form\Element\Radio('type-intervenant');
         $typeIntervenant
                 ->setValueOptions([

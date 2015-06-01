@@ -561,14 +561,22 @@ function PaiementMiseEnPaiementRechercheForm( id )
     this.id = id;
     this.element = $(".paiement-mise-en-paiement-recherche-form#"+this.id);
 
+    this.onTypeIntervenantChange = function()
+    {
+        var structureElement = this.getStructureElement()
+        if (structureElement){
+            structureElement.val('');
+        }
+        this.onStructureChange();
+    }
+
     this.onStructureChange = function()
     {
-        this.intervenantsSelectNone();
         var periodeElement = this.getPeriodeElement()
         if (periodeElement){
             periodeElement.val('');
         }
-        this.getSuiteElement().click();
+        this.onPeriodeChange();
     }
 
     this.onPeriodeChange = function()
@@ -623,6 +631,13 @@ function PaiementMiseEnPaiementRechercheForm( id )
     this.init = function()
     {
         var that = this;
+
+        var $radios = this.element.find('input:radio[name=type-intervenant]');
+        if($radios.is(':checked') === false) {
+            $radios.filter('[value=""]').attr('checked', true);
+        }
+
+        this.getTypeIntervenantElement().change(function(){ that.onTypeIntervenantChange() });
         this.getStructureElement().change(function(){ that.onStructureChange() });
         this.getPeriodeElement().change(function(){ that.onPeriodeChange() });
         this.getIntervenantsElement().change(function(){ that.onIntervenantsChange() });
@@ -641,8 +656,12 @@ function PaiementMiseEnPaiementRechercheForm( id )
                 document.location.href = event.a.data('url-redirect');
             }
         });
-
         this.onIntervenantsChange();
+    }
+
+    this.getTypeIntervenantElement = function()
+    {
+        return this.element.find('[name="type-intervenant"]');
     }
 
     this.getStructureElement = function()

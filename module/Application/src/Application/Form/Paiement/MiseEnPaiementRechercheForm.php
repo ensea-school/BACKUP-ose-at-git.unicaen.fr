@@ -15,7 +15,8 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\TypeIntervenantAwareTrait;
 
     /**
      *
@@ -46,9 +47,25 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
         $this->setHydrator( $hydrator )
              ->setAllowedObjectBindingClass('Application\Entity\Paiement\MiseEnPaiementRecherche');
 
-        $this   ->setAttribute('method', 'post')
-                ->setAttribute('class', 'paiement-mise-en-paiement-recherche-form')
-                ->setAttribute('id', $this->getId());
+        $this->setAttribute('method', 'post')
+             ->setAttribute('class', 'paiement-mise-en-paiement-recherche-form')
+             ->setAttribute('id', $this->getId());
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Radio',
+            'name' => 'type-intervenant',
+            'options' => [
+                'label' => 'Statut des intervenants',
+                'value_options' => [
+                    '' => "Peu importe",
+                    $this->getServiceTypeIntervenant()->getPermanent()->getId() => "Permanent",
+                    $this->getServiceTypeIntervenant()->getExterieur()->getId() => "Vacataire"
+                ],
+            ],
+            'attributes' => [
+                'class' => 'input-sm',
+            ],
+        ));
 
         $this->add([
             'name'       => 'structure',
@@ -150,8 +167,11 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
     public function getInputFilterSpecification()
     {
         return [
+            'type-intervenant' => [
+                'required' => false
+            ],
             'structure' => [
-                'required' => true
+                'required' => false
             ],
             'periode' => [
                 'required' => false
@@ -174,7 +194,11 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
  */
 class MiseEnPaiementRechercheFormHydrator implements HydratorInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\IntervenantAwareTrait,
+        \Application\Service\Traits\PeriodeAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait,
+        \Application\Service\Traits\TypeIntervenantAwareTrait;
 
     /**
      * Hydrate $object with the provided $data.
@@ -185,24 +209,18 @@ class MiseEnPaiementRechercheFormHydrator implements HydratorInterface, ServiceL
      */
     public function hydrate(array $data, $object)
     {
-        $sIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
-        /* @var $sIntervenant \Application\Service\Intervenant */
-
-        $sPeriode = $this->getServiceLocator()->get('applicationPeriode');
-        /* @var $sPeriode \Application\Service\Periode */
-
-        $sStructure = $this->getServiceLocator()->get('applicationStructure');
-        /* @var $sStructure \Application\Service\Structure */
+        $id = isset($data['type-intervenant']) ? (int)$data['type-intervenant'] : null;
+        $object->setTypeIntervenant( $this->getServiceTypeIntervenant()->get( $id ) );
 
         $id = isset($data['structure']) ? (int)$data['structure'] : null;
-        $object->setStructure( $sStructure->get( $id ) );
+        $object->setStructure( $this->getServiceStructure()->get( $id ) );
 
         $id = isset($data['periode']) ? (int)$data['periode'] : null;
-        $object->setPeriode( $sPeriode->get( $id ) );
+        $object->setPeriode( $this->getServicePeriode()->get( $id ) );
 
         if (isset($data['intervenants']) && is_array($data['intervenants'])){
             foreach( $data['intervenants'] as $id ){
-                $object->getIntervenants()->add( $sIntervenant->get($id) );
+                $object->getIntervenants()->add( $this->getServiceIntervenant()->get($id) );
             }
         }
         return $object;
@@ -217,9 +235,10 @@ class MiseEnPaiementRechercheFormHydrator implements HydratorInterface, ServiceL
     public function extract($object)
     {
         $data = [
-            'structure'     => $object->getStructure()  ? $object->getStructure()->getId()  : null,
-            'periode'       => $object->getPeriode()    ? $object->getPeriode()->getId()    : null,
-            'intervenants'  => [],
+            'type-intervenant'  => $object->getTypeIntervenant()    ? $object->getTypeIntervenant()->getId() : null,
+            'structure'         => $object->getStructure()          ? $object->getStructure      ()->getId() : null,
+            'periode'           => $object->getPeriode()            ? $object->getPeriode        ()->getId() : null,
+            'intervenants'      => [],
         ];
         foreach( $object->getIntervenants() as $intervenant ){
             $data['intervenants'][] = $intervenant->getId();

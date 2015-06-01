@@ -8,7 +8,7 @@ use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Stdlib\Hydrator\Filter\FilterInterface;
-use Zend\Validator\Callback;
+use Zend\Filter\Callback;
 
 /**
  * 

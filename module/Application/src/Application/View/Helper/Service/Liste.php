@@ -269,9 +269,9 @@ implements
             $out .= '<td class="volume-horaire" style="padding-left:5em" id="service-'.$service->getId().'-volume-horaire-td" colspan="999">';
 
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() );
-            $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getValide() );
+            $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire($etat = $this->getServiceEtatVolumeHoraire()->getValide());
             $volumeHoraireListe->setReadOnly(true);
-            $out .= '<div style="float:left;width:15%"><h5>Prévisionnel :</h5></div>';
+            $out .= sprintf('<div style="float:left;width:15%%"><h5>Prévisionnel<br />%s :</h5></div>', $etat);
             $out .= '<div id="vhl-prev" style="width:85%" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
 
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getTypeVolumeHoraire() );

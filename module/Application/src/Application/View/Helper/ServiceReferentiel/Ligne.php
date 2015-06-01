@@ -163,9 +163,11 @@ class Ligne extends AbstractHtmlElement
              */
             $vhlListe
                     ->setTypeVolumeHoraire($this->getServiceTypeVolumeHoraire()->getPrevu())
-                    ->setEtatVolumeHoraire($this->getServiceEtatVolumeHoraire()->getValide());
+                    ->setEtatVolumeHoraire($etat = $this->getServiceEtatVolumeHoraire()->getValide());
             $vhlView->setReadOnly(true);
-            $out .= '<tr style="opacity: 0.5"><td><strong>Prévisionnel :</strong></td><td class="heures">' . $vhlView->render() . '</td></tr>';
+            $out .= sprintf(
+                    '<tr style="opacity: 0.5"><td><strong>Prévisionnel %s :</strong></td><td class="heures">' . $vhlView->render() . '</td></tr>',
+                    $etat);
 
             /**
              * REALISE

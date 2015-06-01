@@ -39,10 +39,18 @@ order by
 
 -- EXPORT
 
-categorie_privilege
-privilege
-
-role
-
 role_privilege
 statut_privilege
+
+;
+
+SELECT 'INSERT INTO PERIMETRE (
+    ID,
+    CODE,
+    LIBELLE
+  ) VALUES (
+    PERIMETRE_ID_SEQ.NEXTVAL,
+    ''' || code || ''',
+    q''$' || libelle || '$''
+  );'
+FROM perimetre;

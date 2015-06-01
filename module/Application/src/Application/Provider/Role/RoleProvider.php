@@ -81,10 +81,14 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         $utilisateur = $serviceAuthUserContext->getDbUser();
 
         /* Cas spécifique du rôle intervenant */
-        if ($utilisateur && $utilisateur->getIntervenant()){
-            $role = new IntervenantRole;
+        if ($utilisateur && $intervenant = $utilisateur->getIntervenant()){
+            /* @var $intervenant \Application\Entity\Db\Intervenant */
+            if ($intervenant->estPermanent()){
+                $role = $roles[\Application\Acl\IntervenantPermanentRole::ROLE_ID];
+            }else{
+                $role = $roles[\Application\Acl\IntervenantExterieurRole::ROLE_ID];
+            }
             $role->setIntervenant( $utilisateur->getIntervenant() );
-            $roles[$role->getRoleId()] = $role;
         }
 
         /* Rôles du personnel */

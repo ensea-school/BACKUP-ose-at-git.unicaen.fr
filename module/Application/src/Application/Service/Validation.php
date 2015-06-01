@@ -24,6 +24,7 @@ use Exception;
 class Validation extends AbstractEntityService
 {
     use Traits\TypeValidationAwareTrait;
+    use Traits\TypeVolumeHoraireAwareTrait;
     
     /**
      * retourne la classe des entités
@@ -81,11 +82,15 @@ class Validation extends AbstractEntityService
     /**
      * 
      * @param IntervenantEntity $intervenant
-     * @param TypeVolumeHoraireEntity $tvh
+     * @param TypeVolumeHoraireEntity|null $tvh
      * @return ValidationEntity|null
      */
-    public function findValidationClotureServices(IntervenantEntity $intervenant, TypeVolumeHoraireEntity $tvh)
+    public function findValidationClotureServices(IntervenantEntity $intervenant, TypeVolumeHoraireEntity $tvh = null)
     {
+        if (null === $tvh) {
+            $tvh = $this->getServiceTypeVolumeHoraire()->getByCode(TypeVolumeHoraireEntity::CODE_REALISE);
+        }
+        
         $qb = $this->finderByType($this->getTypeValidationClotureFromTypeVolumeHoraire($tvh));
         $this->finderByIntervenant($intervenant, $qb);
         $v = $qb->getQuery()->getOneOrNullResult();

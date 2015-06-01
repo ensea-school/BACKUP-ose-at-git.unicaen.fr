@@ -2,6 +2,7 @@
 
 namespace Application\Assertion;
 
+use Application\Service\Traits\ContextAwareTrait;
 use Zend\Mvc\MvcEvent;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Assertion\AssertionInterface;
@@ -18,6 +19,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use ContextAwareTrait;
 
     const PRIVILEGE_CREATE = 'create';
     const PRIVILEGE_READ   = 'read';

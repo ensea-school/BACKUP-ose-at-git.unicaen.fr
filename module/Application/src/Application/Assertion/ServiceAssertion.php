@@ -8,6 +8,7 @@ use Application\Acl\DrhRole;
 use Application\Acl\EtablissementRole;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\IntervenantPermanent;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -23,10 +24,32 @@ use Application\Acl\IntervenantPermanentRole;
  */
 class ServiceAssertion extends AbstractAssertion
 {
+    use \Application\Service\Traits\ValidationAwareTrait;
+    
     /**
      * @var Service
      */
     protected $resource;
+    
+    /**
+     * @var Intervenant
+     */
+    protected $intervenant;
+    
+    /**
+     * @var TypeVolumeHoraire
+     */
+    protected $typeVolumeHoraire;
+    
+    /**
+     * @var boolean
+     */
+    protected $inCxtPrevu;
+    
+    /**
+     * @var boolean
+     */
+    protected $inCxtRealise;
 
     /**
      * Returns true if and only if the assertion conditions are met
@@ -45,7 +68,12 @@ class ServiceAssertion extends AbstractAssertion
     {
         parent::assert($acl, $role, $resource, $privilege);
 
-        if ($resource instanceof Service) {
+        if ($this->resource instanceof Service) {
+            $this->intervenant       = $this->resource->getIntervenant();
+            $this->typeVolumeHoraire = $this->resource->getTypeVolumeHoraire();
+            $this->inCxtPrevu        = $this->typeVolumeHoraire && $this->typeVolumeHoraire->getCode() === TypeVolumeHoraire::CODE_PREVU;
+            $this->inCxtRealise      = $this->typeVolumeHoraire && $this->typeVolumeHoraire->getCode() === TypeVolumeHoraire::CODE_REALISE;
+        
             return $this->assertEntityOld();
         }
         
@@ -60,6 +88,10 @@ class ServiceAssertion extends AbstractAssertion
      */
     protected function assertEntityOld()
     {
+        if (! $this->assertClotureRealise()) {
+            return false;
+        }
+        
         /*********************************************************
          *                      Rôle administrateur
          *********************************************************/
@@ -67,25 +99,20 @@ class ServiceAssertion extends AbstractAssertion
             return true;
         }
 
-        $intervenant      = $this->resource->getIntervenant();
         if ($this->resource->getElementPedagogique()) {
             $serviceStructure = $this->resource->getElementPedagogique()->getStructure();
         }else{
             $serviceStructure = null;
         }
-        if ($intervenant) {
+        if ($this->intervenant) {
             $intervenantStructure = $this->resource->getIntervenant()->getStructure();
         }
-        $typeVolumeHoraire = $this->resource->getTypeVolumeHoraire();
-
-        $inCxtPrevu   = $typeVolumeHoraire && $typeVolumeHoraire->getCode() === TypeVolumeHoraire::CODE_PREVU;
-        $inCxtRealise = $typeVolumeHoraire && $typeVolumeHoraire->getCode() === TypeVolumeHoraire::CODE_REALISE;
 
         /*********************************************************
          *                      Rôle intervenant
          *********************************************************/
         if ($this->role instanceof IntervenantRole) {
-            if (!$intervenant->getStatut()->getPeutSaisirService()) {
+            if (!$this->intervenant->getStatut()->getPeutSaisirService()) {
                 return false;
             }
 
@@ -93,7 +120,7 @@ class ServiceAssertion extends AbstractAssertion
                 return false;
             }
 
-            if (!$intervenant || $intervenant == $this->role->getIntervenant()) {
+            if (!$this->intervenant || $this->intervenant == $this->role->getIntervenant()) {
                 return true; // Un intervenant ne peut travailler qu'avec ses services ou avec un service non enregistré
             }
         }
@@ -111,14 +138,14 @@ class ServiceAssertion extends AbstractAssertion
                 return true; // chacun peut gérer ses propres services
             }
             
-            if ($intervenant) {
+            if ($this->intervenant) {
                 if (!$serviceStructure && 'create' == $this->privilege) {
                     // si la composante d'enseignement n'est pas encore connue à ce stade, 
                     // on veut sans doute créer un nouveau service, il faut laisser passer...
                     return true;
                 }
-                if ($inCxtPrevu){
-                    if ($intervenant instanceof IntervenantPermanent) {
+                if ($this->inCxtPrevu){
+                    if ($this->intervenant instanceof IntervenantPermanent) {
                         if ($roleStructure === $intervenantStructure) {
                             /* la composante d'affectation doit pouvoir saisir et contrôler les heures effectuées par ses permanents dans quelque composante que ce soit. */
                             return true;
@@ -129,12 +156,12 @@ class ServiceAssertion extends AbstractAssertion
                             return true;
                         }
                     }
-                }elseif($inCxtRealise){
+                }elseif($this->inCxtRealise){
                     if ($roleStructure === $serviceStructure) {
                         // un gestionnaire peut saisir réalisé des enseignements que sur sa propre composante
                         return true;
                     }
-                    if ($intervenant instanceof IntervenantPermanent
+                    if ($this->intervenant instanceof IntervenantPermanent
                         &&  $roleStructure === $intervenantStructure
                         && $serviceStructure === null
                     ){
@@ -167,6 +194,48 @@ class ServiceAssertion extends AbstractAssertion
         }
 
         return false;
+    }
+    
+    /**
+     * Assertions concernant la clôture du service réalisé.
+     * 
+     * @return boolean
+     */
+    private function assertClotureRealise()
+    {
+        // la clôture de la saisie du réalisé n'a pas de sens pour du réalisé!
+        if (! $this->inCxtRealise) {
+            return true;
+        }
+        
+        // la clôture de la saisie du réalisé n'a pas de sens pour un vacataire
+        if (! $this->intervenant->estPermanent()) {
+            return true;
+        }
+        
+        // recherche de la clôture de service réalisé
+        $cloture = $this->getServiceValidation()->findValidationClotureServices($this->intervenant, null);
+        
+        /**
+         * Rôle Intervenant :
+         * - si le réalisé est clôturé, on bloque.
+         */
+        if ($this->role instanceof IntervenantRole) {
+            switch ($this->privilege) {
+                case self::PRIVILEGE_CREATE:
+                case self::PRIVILEGE_UPDATE:
+                case self::PRIVILEGE_DELETE:
+                    // si le réalisé est clôturé, on bloque
+                    if ($cloture) {
+                        return false;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        return true;
     }
 
     /**

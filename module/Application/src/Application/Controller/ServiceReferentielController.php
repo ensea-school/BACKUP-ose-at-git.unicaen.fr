@@ -69,15 +69,19 @@ class ServiceReferentielController extends AbstractActionController
 
     public function indexAction()
     {
-        $typeVolumeHoraireCode    = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
-        $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
-        $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant              = $this->context()->intervenantFromRoute();
-        $viewModel                = new \Zend\View\Model\ViewModel();
-        $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
-                $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
+        $typeVolumeHoraireCode = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU');
+        $totaux                = $this->params()->fromQuery('totaux', 0) == '1';
+        $viewHelperParams      = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
+        $role                  = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant           = $this->context()->intervenantFromRoute();
+        $viewModel             = new \Zend\View\Model\ViewModel();
 
+        $serviceRefProto = $this->getServiceServiceReferentiel()->newEntity()
+                ->setIntervenant($intervenant)
+                ->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
+        
+        $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent && $this->isAllowed($serviceRefProto, 'create');
+        
 //        if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur || !$this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'read')) {
 //            throw new \BjyAuthorize\Exception\UnAuthorizedException();
 //        }
@@ -268,6 +272,24 @@ class ServiceReferentielController extends AbstractActionController
         $viewModel->setVariables(compact('entity', 'context', 'title', 'form'));
 
         return $viewModel;
+    }
+    
+    /**
+     * @var TypeVolumeHoraire
+     */
+    private $typeVolumeHoraire;
+    
+    /**
+     * @return TypeVolumeHoraire
+     */
+    private function getTypeVolumeHoraire()
+    {
+        if (null === $this->typeVolumeHoraire) {
+            $typeVolumeHoraireCode   = $this->params()->fromRoute('type-volume-horaire-code', 'PREVU' );
+            $this->typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getByCode($typeVolumeHoraireCode);
+        }
+        
+        return $this->typeVolumeHoraire;
     }
 
     /**

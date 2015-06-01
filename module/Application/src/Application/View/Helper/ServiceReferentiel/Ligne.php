@@ -108,7 +108,7 @@ class Ligne extends AbstractHtmlElement
         }
 
         $out .= '<td class="actions">';
-        if (! $liste->getReadOnly()) {
+        if (! $this->getReadOnly()) {
             $out .= $this->renderModifier();
             $out .= $this->renderSupprimer();
         }
@@ -244,6 +244,15 @@ class Ligne extends AbstractHtmlElement
     {
         $this->liste = $liste;
         return $this;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function getReadOnly()
+    {
+        return $this->getListe()->getReadOnly() || $this->forcedReadOnly;
     }
 
     /**

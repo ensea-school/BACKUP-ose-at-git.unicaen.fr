@@ -103,14 +103,17 @@ class ServiceController extends AbstractActionController
 
     public function indexAction()
     {
-        $totaux                   = $this->params()->fromQuery('totaux', 0) == '1';
-        $viewHelperParams         = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
-        $role                     = $this->getServiceContext()->getSelectedIdentityRole();
-        $intervenant              = $this->context()->intervenantFromRoute();
-        $viewModel                = new \Zend\View\Model\ViewModel();
-        $canAddService            = $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'create');
-        $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent &&
-                $this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'create');
+        $totaux           = $this->params()->fromQuery('totaux', 0) == '1';
+        $viewHelperParams = $this->params()->fromPost('params', $this->params()->fromQuery('params'));
+        $role             = $this->getServiceContext()->getSelectedIdentityRole();
+        $intervenant      = $this->context()->intervenantFromRoute();
+        $viewModel        = new \Zend\View\Model\ViewModel();
+
+        $serviceProto = $this->getServiceService()->newEntity()
+                ->setIntervenant($intervenant)
+                ->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
+        
+        $canAddService = $this->isAllowed($serviceProto, 'create');
 
 //        if (! $this->isAllowed($this->getServiceService()->newEntity()->setIntervenant($intervenant), 'read')){
 //            throw new \BjyAuthorize\Exception\UnAuthorizedException();
@@ -165,7 +168,7 @@ class ServiceController extends AbstractActionController
         }
         $typeVolumeHoraire = $recherche->getTypeVolumeHoraire();
         $params = $viewHelperParams;
-        $viewModel->setVariables(compact('services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'canAddService', 'canAddServiceReferentiel', 'params'));
+        $viewModel->setVariables(compact('services', 'typeVolumeHoraire','action', 'role', 'intervenant', 'canAddService', 'params'));
         if ($totaux){
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{

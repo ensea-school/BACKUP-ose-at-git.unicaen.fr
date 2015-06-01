@@ -2,7 +2,6 @@
 
 namespace Application\Assertion;
 
-use Application\Interfaces\StructureAwareInterface;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Db\Privilege;
@@ -21,6 +20,7 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class MiseEnPaiementAssertion extends AbstractAssertion
 {
     use \Application\Service\Traits\TypeValidationAwareTrait;
+    use \Application\Service\Traits\ValidationAwareTrait;
     
     const PRIVILEGE_VISUALISATION      = 'visualisation';
     const PRIVILEGE_DEMANDE            = 'demande';
@@ -85,13 +85,17 @@ class MiseEnPaiementAssertion extends AbstractAssertion
     {
         $intervenant = $miseEnPaiement->getFormuleResultatService()->getFormuleResultat()->getIntervenant();
         
+        // la clôture de la saisie du réalisé n'a pas de sens pour un vacataire
         if (! $intervenant->estPermanent()) {
             return true;
         }
         
-        $typeValidationClotureRealise = $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_CLOTURE_REALISE);
-
-        if (! count($intervenant->getValidation($typeValidationClotureRealise))) {
+        $cloture = $this->getServiceValidation()->findValidationClotureServices(
+                $intervenant, 
+                $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_CLOTURE_REALISE));
+        
+        // la clôture de la saisie du réalisé doit être faite
+        if (! $cloture) {
             return false;
         }
         

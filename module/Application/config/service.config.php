@@ -269,7 +269,7 @@ return [
                         'ServiceAssertion',
                     ],
                     [
-                        [R_INTERVENANT_PERMANENT, R_COMPOSANTE, R_ADMINISTRATEUR],
+                        [R_INTERVENANT, /*R_INTERVENANT_PERMANENT,*/ R_COMPOSANTE, R_ADMINISTRATEUR],
                         'ServiceReferentiel',
                         ['create', 'read', 'delete', 'update'],
                         'ServiceReferentielAssertion'

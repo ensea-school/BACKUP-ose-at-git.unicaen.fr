@@ -14,6 +14,9 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class AttenteValidationEnsRealisePermIndicateurImpl extends AttenteValidationEnsRealiseAbstractIndicateurImpl
 {
+    protected $singularTitlePattern = "%s %s a   clôturé la saisie de ses   services réalisés et est  en attente de validation de ses   enseignements <em>%s</em>";
+    protected $pluralTitlePattern   = "%s %s ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leurs enseignements <em>%s</em>";
+    
     /**
      * Témoin indiquant s'il faut que l'intervenant soit à l'étape concernée dans le WF pour être acceptable.
      * 
@@ -26,6 +29,9 @@ class AttenteValidationEnsRealisePermIndicateurImpl extends AttenteValidationEns
      */
     protected function getQueryBuilder()
     {
+        /**
+         * Le réalisé doit être cloturé.
+         */
         $qb = parent::getQueryBuilder()
                 ->join("int.validation", "v")
                 ->join("v.typeValidation", "tv", Join::WITH, "tv.code = :tvCode")

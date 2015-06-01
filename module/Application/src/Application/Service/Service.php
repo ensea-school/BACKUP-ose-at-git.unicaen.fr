@@ -570,7 +570,7 @@ class Service extends AbstractEntityService
         }
         if (null !== $structureEns) {
             $structureEns = (array) $structureEns;
-            $whereStr     = in_array(null, $structureEns) ? ["strens IS NULL"] : [];
+            $whereStr     = in_array(null, $structureEns) ? ["ep.structure IS NULL"] : [];
             $structureEns = array_filter($structureEns);
             foreach ($structureEns as $s) {
                 $paramName = uniqid("str");

@@ -41,7 +41,7 @@ class EtapeViewHelper extends AbstractHelper
         $etape = $this->getEtape();
         if (! $etape) return '';
 
-        if ($etape->getHistoDestruction()){
+        if ($etape->getHistoDestruction() && 0 == $etape->getCheminPedagogique()->count()){
             return '<span class="bg-danger"><abbr title="Cette formation n\'existe plus">'.$etape.'</abbr></span>';
         }
 

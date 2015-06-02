@@ -32,7 +32,6 @@ class OffreFormationController extends AbstractActionController
         $this->em()->getFilters()->enable('historique')->init(
             [
                 'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\Etape',
                 'Application\Entity\Db\TypeFormation',
                 'Application\Entity\Db\GroupeTypeFormation',
                 'Application\Entity\Db\Structure',
@@ -46,6 +45,9 @@ class OffreFormationController extends AbstractActionController
             ],
             $this->getServiceContext()->getAnnee()
         );
+        $this->em()->getFilters()->enable('etape')
+                                 ->setAnnee( $this->getServiceContext()->getAnnee() )
+                                 ->setDateObservation( $this->getServiceContext()->getDateObservation() );
 
         $serviceEp    = $this->getServiceLocator()->get('applicationElementPedagogique'); /* @var $serviceEp ElementPedagogiqueService */
         $serviceEtape = $this->getServiceLocator()->get('applicationEtape'); /* @var $serviceEtape EtapeService */
@@ -148,11 +150,13 @@ class OffreFormationController extends AbstractActionController
 
         $this->em()->getFilters()->enable('historique')->init(
             [
-                'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\Etape'
+                'Application\Entity\Db\ElementPedagogique'
             ],
             $this->getServiceContext()->getDateObservation()
         );
+        $this->em()->getFilters()->enable('etape')
+                                 ->setAnnee( $this->getServiceContext()->getAnnee() )
+                                 ->setDateObservation( $this->getServiceContext()->getDateObservation() );
 
         // extraction des filtres spécifiés dans la requête
         $structure = $this->context()->structureFromQuery();
@@ -230,12 +234,14 @@ class OffreFormationController extends AbstractActionController
     {
         $this->em()->getFilters()->enable('historique')->init(
             [
-                'Application\Entity\Db\Etape',
                 'Application\Entity\Db\CheminPedagogique',
             ],
             $this->getServiceContext()->getDateObservation()
         );
-
+        $this->em()->getFilters()->enable('etape')
+                                 ->setAnnee( $this->getServiceContext()->getAnnee() )
+                                 ->setDateObservation( $this->getServiceContext()->getDateObservation() );
+        
         $structure = $this->context()->structureFromQuery();
 
         $params = [];

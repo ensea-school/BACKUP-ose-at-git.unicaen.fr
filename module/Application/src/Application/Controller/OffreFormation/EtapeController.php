@@ -123,7 +123,7 @@ class EtapeController extends AbstractActionController
      * pour la structure et le niveau éventuellement spécifiés en GET.
      *
      * @return \Zend\View\Model\JsonModel
-     */
+     *
     public function searchAction()
     {
         $structure = $this->context()->structureFromQuery();
@@ -136,7 +136,7 @@ class EtapeController extends AbstractActionController
         $result = $this->getServiceElementPedagogique()->finderDistinctEtapes($params)->getQuery()->getResult();
 
         return new \Zend\View\Model\JsonModel(\UnicaenApp\Util::collectionAsOptions($result));
-    }
+    }*/
 
     /**
      * Retourne le formulaire d'ajout/modif d'Etape.

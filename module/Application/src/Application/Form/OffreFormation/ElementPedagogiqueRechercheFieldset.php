@@ -15,7 +15,12 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\EtapeAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait,
+        \Application\Service\Traits\ElementPedagogiqueAwareTrait,
+        \Application\Service\Traits\TypeFormationAwareTrait,
+        \Application\Service\Traits\GroupeTypeFormationAwareTrait;
 
     protected $structureName = 'structure';
     protected $niveauName    = 'niveau';
@@ -288,49 +293,9 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             $this->getServiceEtape()->join( $this->getServiceTypeFormation(), $this->queryBuilder, 'typeFormation', true );
             $this->getServiceTypeFormation()->join( $this->getServiceGroupeTypeFormation(), $this->queryBuilder, 'groupe', true );
 
-            $this->queryBuilder->andWhere($this->getServiceEtape()->getAlias().'.histoDestruction IS NULL');
+            $this->getServiceEtape()->finderByHistorique($this->queryBuilder);
             $this->getServiceEtape()->finderByNonOrphelines($this->queryBuilder);
         }
         return $this->queryBuilder;
-    }
-
-    /**
-     * @return \Application\Service\Structure
-     */
-    protected function getServiceStructure()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationStructure');
-    }
-
-    /**
-     * @return \Application\Service\Etape
-     */
-    protected function getServiceEtape()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationEtape');
-    }
-
-    /**
-     * @return \Application\Service\ElementPedagogique
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationElementPedagogique');
-    }
-
-    /**
-     * @return \Application\Service\TypeFormation
-     */
-    protected function getServiceTypeFormation()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeFormation');
-    }
-
-    /**
-     * @return \Application\Service\GroupeTypeFormation
-     */
-    protected function getServiceGroupeTypeFormation()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationGroupeTypeFormation');
     }
 }

@@ -177,6 +177,7 @@ return [
             'ApplicationTypeHeures'                         => 'Application\Service\TypeHeures',
             'ApplicationCentreCout'                         => 'Application\Service\CentreCout',
             'MiseEnPaiementAssertion'                       => 'Application\Assertion\MiseEnPaiementAssertion',
+            'MiseEnPaiementExisteRule'                      => 'Application\Rule\Paiement\MiseEnPaiementExisteRule',
         ],
     ],
     'view_helpers' => [

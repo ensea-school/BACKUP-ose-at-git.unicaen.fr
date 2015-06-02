@@ -12,6 +12,7 @@ use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Structure;
+use Application\Rule\Paiement\MiseEnPaiementExisteRule;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -101,6 +102,9 @@ class ServiceReferentielAssertion extends AbstractAssertion
     protected function assertEntityOld()
     {
         if (! $this->assertClotureRealise()) {
+            return false;
+        }
+        if (! $this->assertMiseEnPaiement()) {
             return false;
         }
         
@@ -265,6 +269,45 @@ class ServiceReferentielAssertion extends AbstractAssertion
         
         return true;
     }
+    
+    /**
+     * Assertions concernant les demandes de mise en paiement.
+     * 
+     * @return boolean
+     */
+    private function assertMiseEnPaiement()
+    {
+        // On ne s'intéresse ici qu'au réalisé.
+        if (! $this->inCxtRealise) {
+            return true;
+        }
+        // On ne s'intéresse ici qu'aux permanents.
+        if (! $this->intervenant->estPermanent()) {
+            return true;
+        }
+        
+        // recherche existence d'une demande de mise en paiement
+        $demandeMepExiste = $this->getRuleMiseEnPaiementExiste()->execute();
+//        var_dump($demandeMepExiste);
+        
+        /**
+         * Aucune demande de mise en paiement ne doit exister.
+         */
+        switch ($this->privilege) {
+            case self::PRIVILEGE_CREATE:
+            case self::PRIVILEGE_UPDATE:
+            case self::PRIVILEGE_DELETE:
+                // si le réalisé est clôturé, on bloque
+                if ($demandeMepExiste) {
+                    return false;
+                }
+                break;
+            default:
+                break;
+        }
+        
+        return true;
+    }
 
     /**
      * Teste si la date de fin de "privilège" du rôle courant est dépassée ou non.
@@ -295,5 +338,17 @@ class ServiceReferentielAssertion extends AbstractAssertion
         $dateFin->setTime(0, 0, 0);
 
         return $now > $dateFin;
+    }
+    
+    /**
+     * @return MiseEnPaiementExisteRule
+     */
+    private function getRuleMiseEnPaiementExiste()
+    {
+        $rule = $this->getServiceLocator()->get('MiseEnPaiementExisteRule'); /* @var $rule MiseEnPaiementExisteRule */
+        $rule->setIntervenant($this->intervenant)->setIsDemande();
+        
+        return $rule;
+        
     }
 }

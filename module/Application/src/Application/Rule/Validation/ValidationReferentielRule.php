@@ -28,7 +28,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
         /**
          * PRÉVU
          */
-        if (TypeVolumeHoraire::CODE_PREVU === $this->typeVolumeHoraire->getCode()) {
+        if ($this->isInContextePrevu()) {
             /**
              * Intervenant permanent : validation par la composante d'affectation de l'intervenant.
              */
@@ -45,7 +45,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
         /**
          * RÉALISÉ
          */
-        elseif (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
+        elseif ($this->isInContexteRealise()) {
             /**
              * Validation par chaque structure du référentiel.
              */
@@ -71,7 +71,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
         /**
          * PRÉVU
          */
-        if (TypeVolumeHoraire::CODE_PREVU === $this->typeVolumeHoraire->getCode()) {
+        if ($this->isInContextePrevu()) {
             /**
              * Intervenant permanent : validation par la composante d'affectation de l'intervenant.
              */
@@ -93,7 +93,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
         /**
          * RÉALISÉ
          */
-        elseif (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
+        elseif ($this->isInContexteRealise()) {
             /**
              * Validation par chaque structure du référentiel.
              */
@@ -122,6 +122,10 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
             return false;
         }
         
+        if (!$this->isAllowedMiseEnPaiement($privilege)) {
+            return false;
+        }
+        
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
@@ -133,7 +137,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
             /**
              * PRÉVU
              */
-            if (TypeVolumeHoraire::CODE_PREVU === $this->typeVolumeHoraire->getCode()) {
+            if ($this->isInContextePrevu()) {
                 /**
                  * Intervenant permanent : validation par la composante d'affectation de l'intervenant ;
                  * Intervenant vacataire : validation par chaque structure du référentiel.
@@ -147,7 +151,7 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
             /**
              * REALISE
              */
-            elseif (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
+            elseif ($this->isInContexteRealise()) {
                 /**
                  * Validation par chaque structure du référentiel.
                  */

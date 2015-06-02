@@ -2,6 +2,7 @@
 
 namespace Application\Rule\Validation;
 
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\Role;
@@ -21,8 +22,9 @@ use Common\Exception\LogicException;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class ValidationEnsRefAbstractRule implements WorkflowIntervenantAwareInterface
+abstract class ValidationEnsRefAbstractRule implements ServiceLocatorAwareInterface, WorkflowIntervenantAwareInterface
 {
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
     use \Application\Service\Workflow\WorkflowIntervenantAwareTrait;
     use \UnicaenApp\Traits\MessageAwareTrait;
     
@@ -212,6 +214,54 @@ abstract class ValidationEnsRefAbstractRule implements WorkflowIntervenantAwareI
     abstract public function isAllowed($privilege);
     
     /**
+     * Assertions concernant les demandes de mise en paiement.
+     * 
+     * @return boolean
+     */
+    protected function isAllowedMiseEnPaiement($privilege)
+    {
+        // On ne s'intéresse ici qu'au réalisé.
+        if (! $this->isInContexteRealise()) {
+            return true;
+        }
+        // On ne s'intéresse ici qu'aux permanents.
+        if (! $this->intervenant->estPermanent()) {
+            return true;
+        }
+        
+        // recherche existence d'une demande de mise en paiement
+        $demandeMepExiste = $this->getRuleMiseEnPaiementExiste()->execute();
+//        var_dump($demandeMepExiste);
+        
+        /**
+         * Impossible de dévalider si la moindre demande de mise en paiement existe.
+         */
+        switch ($privilege) {
+            case 'delete':
+                if ($demandeMepExiste) {
+                    return false;
+                }
+                break;
+            default:
+                break;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * @return MiseEnPaiementExisteRule
+     */
+    private function getRuleMiseEnPaiementExiste()
+    {
+        $rule = $this->getServiceLocator()->get('MiseEnPaiementExisteRule'); /* @var $rule MiseEnPaiementExisteRule */
+        $rule->setIntervenant($this->intervenant)->setIsDemande();
+        
+        return $rule;
+        
+    }
+    
+    /**
      * Indique si le privilège spécifié est accordé, en fonction de la progression 
      * de l'intervenant dans le workflow.
      * 
@@ -268,5 +318,25 @@ abstract class ValidationEnsRefAbstractRule implements WorkflowIntervenantAwareI
                 ->setRole($this->role);
         
         return $wf;
+    }
+    
+    /**
+     * Indique si l'on travaille sur le Prévisionnel.
+     * 
+     * @return boolean
+     */
+    protected function isInContextePrevu()
+    {
+        return TypeVolumeHoraire::CODE_PREVU === $this->typeVolumeHoraire->getCode();
+    }
+    
+    /**
+     * Indique si l'on travaille sur le Réalisé.
+     * 
+     * @return boolean
+     */
+    protected function isInContexteRealise()
+    {
+        return TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode();
     }
 }

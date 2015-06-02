@@ -97,13 +97,13 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         ];
 
         $out = '<div '.$this->htmlAttribs($attrs).'>';
-        if ( (!$this->getReadOnly()) && $this->getView()->isAllowed('Privilege/'.\Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE) ){
+        if ( (!$this->getReadOnly()) && $this->getView()->isAllowed('privilege/'.\Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE) ){
             $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander toutes les HETD en paiement</button></div>';
         }
         foreach( $servicesAPayer as $serviceAPayer ){
             $out .= $this->renderServiceAPayer($serviceAPayer);
         }
-        if (! $this->getReadOnly() && $this->getView()->isAllowed('Privilege/'.\Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE)){
+        if (! $this->getReadOnly() && $this->getView()->isAllowed('privilege/'.\Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE)){
             $out .= '<div>';
             $out .= $this->getView()->form()->openTag($this->getForm());
             $out .= $this->getView()->formHidden($this->getForm()->get('changements'));

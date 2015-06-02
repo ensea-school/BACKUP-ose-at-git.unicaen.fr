@@ -545,14 +545,11 @@ class ValidationController extends AbstractActionController
      */
     public function supprimerAction()
     {
-        $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $validation = $this->context()->mandatory()->validationFromRoute(); /* @var $validation \Application\Entity\Db\Validation */
 
-//        if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
-            if ($validation->getStructure() !== $role->getStructure()) {
-                throw new RuntimeException("Suppression de la validation interdite.");
-            }
-//        }
+        if (! $this->isAllowed($validation, 'delete')) {
+            throw new MessageException("Suppression de la validation interdite.");
+        }
 
         $title     = "Suppression de la validation";
         $form      = new \Application\Form\Supprimer('suppr');

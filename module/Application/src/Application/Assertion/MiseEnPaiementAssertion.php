@@ -90,9 +90,7 @@ class MiseEnPaiementAssertion extends AbstractAssertion
             return true;
         }
         
-        $cloture = $this->getServiceValidation()->findValidationClotureServices(
-                $intervenant, 
-                $this->getServiceTypeValidation()->getByCode(TypeValidation::CODE_CLOTURE_REALISE));
+        $cloture = $this->getServiceValidation()->findValidationClotureServices($intervenant, null);
         
         // la clôture de la saisie du réalisé doit être faite
         if (! $cloture) {

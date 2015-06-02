@@ -331,7 +331,7 @@ return [
                                 ],
                                 'action' => 'voir-heures-comp',
                                 'withtarget' => true,
-                                'resource' => 'controller/Application\Controller\Intervenant:voirheurescomp',
+                                'resource' => 'controller/Application\Controller\Intervenant:voir-heures-comp',
                             ],
                             'modification-service-du' => [
                                 'label'  => "Modification de service dû",

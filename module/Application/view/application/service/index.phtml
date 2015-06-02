@@ -8,9 +8,6 @@ $titles = [
 ];
 
 $title = $titles[$typeVolumeHoraire->getCode()];
-if ( $intervenant && $intervenant->getStatut()->getPeutSaisirReferentiel() ){
-    $title .= ' et référentiel';
-}
 if ($intervenant){
     $title .= ' <small>'.$intervenant.'</small>';
     $this->headTitle()->append($intervenant->getNomUsuel())->append("Enseignements");

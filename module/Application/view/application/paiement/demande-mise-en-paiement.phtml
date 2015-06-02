@@ -18,15 +18,8 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
 
 <?php
 
-if ($intervenant->estPermanent()){
-?>
-<div class="alert alert-danger" role="alert">
-  Les demandes de mise en paiement ne sont pour le moment pas ouvertes aux intervenants permanents.
-</div>
-<?php
-}else{
-    echo $this->demandeMiseEnPaiement( $servicesAPayer )->render();
-}
+echo $this->demandeMiseEnPaiement( $servicesAPayer )->render();
+
 if ($saved){
 ?>
 <script type="text/javascript">

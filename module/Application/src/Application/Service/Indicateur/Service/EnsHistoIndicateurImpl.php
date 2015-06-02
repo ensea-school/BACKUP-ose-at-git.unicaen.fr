@@ -4,6 +4,7 @@ namespace Application\Service\Indicateur\Service;
 
 use Application\Entity\Db\Service;
 use Application\Entity\Db\TypeIntervenant;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;

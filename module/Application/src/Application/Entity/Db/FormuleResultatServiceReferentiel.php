@@ -45,6 +45,14 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
         return $this->getServiceReferentiel()->getStructure();
     }
 
+    /**
+     * @return Intervenant
+     */
+    public function getIntervenant()
+    {
+        return $this->getServiceReferentiel()->getIntervenant();
+    }
+
     public function getResourceId()
     {
         return 'FormuleResultatServiceReferentiel';

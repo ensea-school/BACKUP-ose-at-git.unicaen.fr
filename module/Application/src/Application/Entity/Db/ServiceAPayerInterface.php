@@ -107,6 +107,11 @@ interface ServiceAPayerInterface
     public function getStructure();
 
     /**
+     * @return Intervenant
+     */
+    public function getIntervenant();
+
+    /**
      * Get formuleResultat
      *
      * @return \Application\Entity\Db\FormuleResultat

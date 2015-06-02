@@ -58,6 +58,14 @@ class FormuleResultatService implements ServiceAPayerInterface, ResourceInterfac
             return $service->getIntervenant()->getStructure();
     }
 
+    /**
+     * @return Intervenant
+     */
+    public function getIntervenant()
+    {
+        return $this->getService()->getIntervenant();
+    }
+
     public function getResourceId()
     {
         return 'FormuleResultatService';

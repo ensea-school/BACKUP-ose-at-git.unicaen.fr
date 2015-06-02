@@ -83,7 +83,7 @@ class MiseEnPaiementAssertion extends AbstractAssertion
      */
     private function checkClotureRealise(MiseEnPaiement $miseEnPaiement)
     {
-        $intervenant = $miseEnPaiement->getFormuleResultatService()->getFormuleResultat()->getIntervenant();
+        $intervenant = $miseEnPaiement->getServiceAPayer()->getIntervenant();
         
         // la clôture de la saisie du réalisé n'a pas de sens pour un vacataire
         if (! $intervenant->estPermanent()) {

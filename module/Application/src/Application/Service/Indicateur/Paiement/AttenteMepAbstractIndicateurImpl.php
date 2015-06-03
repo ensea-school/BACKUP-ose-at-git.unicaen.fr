@@ -3,6 +3,7 @@
 namespace Application\Service\Indicateur\Paiement;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
+use Application\Entity\Db\VIndicAttenteMep as VIndicAttenteMepEntity;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Stdlib\Hydrator\Filter\FilterInterface;

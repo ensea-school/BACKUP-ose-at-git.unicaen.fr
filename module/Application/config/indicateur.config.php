@@ -166,6 +166,9 @@ return [
             'AttenteValidationEnsRealiseVac'    => 'Application\\Service\\Indicateur\\Service\\Validation\\AttenteValidationEnsRealiseVacIndicateurImpl',
             'AttenteValidationEnsRealisePerm'   => 'Application\\Service\\Indicateur\\Service\\Validation\\AttenteValidationEnsRealisePermIndicateurImpl',
             
+            'AttenteValidationRefPrevuPerm'     => 'Application\\Service\\Indicateur\\Service\\Validation\\AttenteValidationRefPrevuPermIndicateurImpl',
+            'AttenteValidationRefRealisePerm'   => 'Application\\Service\\Indicateur\\Service\\Validation\\AttenteValidationRefRealisePermIndicateurImpl',
+            
             'EnsHisto'                          => 'Application\\Service\\Indicateur\\Service\\EnsHistoIndicateurImpl',
             'EnsRealisePermSaisieNonCloturee'   => 'Application\\Service\\Indicateur\\Service\\EnsRealisePermSaisieNonClotureeIndicateurImpl',
             

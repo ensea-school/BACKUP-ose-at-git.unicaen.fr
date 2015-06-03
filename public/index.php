@@ -1,6 +1,9 @@
 <?php
 
 /* Fermeture du service *
+if (php_sapi_name() === 'cli') {
+    exit(0);
+}
 if (! in_array($_SERVER['REMOTE_ADDR'],[
     '127.0.0.1',
     '10.14.1.39', // Laurent

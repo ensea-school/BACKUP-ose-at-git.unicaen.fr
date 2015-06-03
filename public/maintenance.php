@@ -44,7 +44,7 @@
                     <a class="navbar-brand"><h1 class="title">OSE</h1></a>                </div>
                 <div class="navbar-collapse bs-navbar-collapse collapse">
                     <ul class="nav&#x20;navbar-nav&#x20;menu-principal"></ul>
-                    <p class="navbar-text navbar-right"></p>
+                    <p class="navbar-text navbar-right"><span style="color:#555">IP : <?php echo $_SERVER['REMOTE_ADDR'];?></span></p>
                 </div><!--/.nav-collapse -->
             </div>
         </div>

@@ -6,7 +6,6 @@ if (! in_array($_SERVER['REMOTE_ADDR'],[
     '10.14.1.39', // Laurent
 ])){
     $maintenanceText = 'OSE est en cours de mise à jour. Merci de revenir en fin de matinée.';
-    //echo $_SERVER['REMOTE_ADDR'];
     include 'maintenance.php';
 }
 /* Fin de fermeture du service*/

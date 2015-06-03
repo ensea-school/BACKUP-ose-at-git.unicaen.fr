@@ -1,5 +1,8 @@
 <?php
 
+$remoteAddr= $_SERVER['REMOTE_ADDR'];
+$forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : null;
+
  $root = substr( $_SERVER['SCRIPT_NAME'], 0, -10 );
 
 ?><!DOCTYPE html><html lang="fr">
@@ -44,7 +47,7 @@
                     <a class="navbar-brand"><h1 class="title">OSE</h1></a>                </div>
                 <div class="navbar-collapse bs-navbar-collapse collapse">
                     <ul class="nav&#x20;navbar-nav&#x20;menu-principal"></ul>
-                    <p class="navbar-text navbar-right"><span style="color:#555">IP : <?php echo $_SERVER['REMOTE_ADDR'];?></span></p>
+                    <p class="navbar-text navbar-right"><span style="color:#555">REMOTE_ADDR=<?php echo $remoteAddr;?>, HTTP_X_FORWARDED_FOR=<?php echo $forwarded;?></span></p>
                 </div><!--/.nav-collapse -->
             </div>
         </div>

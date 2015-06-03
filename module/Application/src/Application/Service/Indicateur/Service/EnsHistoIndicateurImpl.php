@@ -105,11 +105,6 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
     {
         $this->initFilters();
         
-        $whereHistos = 
-                "(e.histoDestructeur  IS NOT NULL OR e.histoDestruction  IS NOT NULL) "
-           . "OR (ep.histoDestructeur IS NOT NULL OR ep.histoDestruction IS NOT NULL) "
-           . "OR (p.id IS NOT NULL AND (p.histoDestructeur  IS NOT NULL OR p.histoDestruction  IS NOT NULL)) ";
-        
         $qb = parent::getQueryBuilder()
                 ->addSelect("s, se, e, ep")
                 ->join("int.service", "s")
@@ -119,8 +114,51 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
                 ->leftJoin("ep.periode", "p")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-                ->andWhere($whereHistos)
                 ->setParameter('tvh', $this->getTypeVolumeHoraire());
+        
+        $dateObservation = $this->getServiceContext()->getDateObservation();
+        if ($dateObservation){
+            $dqldobs = ', :fbh_dateObservation';
+            $qb->setParameter('fbh_dateObservation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);
+        }else{
+            $dqldobs = '';
+        }
+        
+        /**
+         * l'étape AINSI QUE tous ces éléments sont historisés
+         * OU
+         * l'élément pédagogique est historisé
+         * OU
+         * la période éventuelle est historisée
+         */
+        $whereHistos = <<<EOS
+(
+    1 <> compriseEntre(e.histoCreation, e.histoDestruction$dqldobs)
+    AND NOT EXISTS(
+      SELECT
+        cp.id
+      FROM
+        Application\Entity\Db\CheminPedagogique cp
+        JOIN Application\Entity\Db\ElementPedagogique ep2 WITH ep2 = cp.elementPedagogique
+      WHERE
+        1 = compriseEntre(cp.histoCreation, cp.histoDestruction$dqldobs)
+        AND 1 = compriseEntre(ep2.histoCreation, ep2.histoDestruction$dqldobs)
+        AND cp.etape = e
+        AND ep2.annee = :fbh_annee
+    )
+)
+OR
+(
+    1 <> compriseEntre(ep.histoCreation, ep.histoDestruction$dqldobs)
+)
+OR 
+(
+    p.id IS NOT NULL AND 1 <> compriseEntre(p.histoCreation, p.histoDestruction$dqldobs)
+) 
+EOS;
+        $qb
+                ->andWhere($whereHistos)
+                ->setParameter('fbh_annee', $this->getServiceContext()->getAnnee());
         
         if ($this->getStructure()) {
             /**

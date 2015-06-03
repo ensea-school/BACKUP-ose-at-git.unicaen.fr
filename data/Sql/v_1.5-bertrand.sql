@@ -1,4 +1,27 @@
 
+
+---------------------------------------------------------------------------------
+-- Dossier
+-- Peuplement suite à inversion des clés étrangères.
+---------------------------------------------------------------------------------
+
+delete from dossier where histo_destructeur_id is not null;
+
+alter trigger WF_TRG_DOSSIER disable;
+update dossier d set d.intervenant_id = ( 
+  select ie.id from intervenant_exterieur ie where ie.dossier_id = d.id and 1 = ose_divers.comprise_entre(ie.histo_creation, ie.histo_destruction)
+);
+alter trigger WF_TRG_DOSSIER enable;
+
+
+
+
+
+
+---------------------------------------------------------------------------------
+-- Statut
+---------------------------------------------------------------------------------
+
 update statut_intervenant set 
     LIBELLE = 'Sans emploi, non étudiant', 
     SOURCE_CODE = 'SS_EMPLOI_NON_ETUD', 

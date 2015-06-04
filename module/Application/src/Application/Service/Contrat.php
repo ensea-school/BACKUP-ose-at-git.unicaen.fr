@@ -313,9 +313,8 @@ class Contrat extends AbstractEntityService
                     ->andWhere("v = :validation")->setParameter('validation', $validation);
         }
         else {
-            $value = $validation ? 'is not null' : 'is null';
-            $qb     ->leftJoin("$alias.validation", 'v')
-                    ->andWhere("v $value");
+            $value = $validation ? 'IS NOT NULL' : 'IS NULL';
+            $qb->andWhere("$alias.validation $value");
         }
         
         return $qb;

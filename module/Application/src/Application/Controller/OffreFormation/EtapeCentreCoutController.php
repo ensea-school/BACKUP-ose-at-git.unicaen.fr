@@ -15,7 +15,8 @@ use Zend\Mvc\Controller\AbstractActionController;
  */
 class EtapeCentreCoutController extends AbstractActionController
 {
-    use \Application\Service\Traits\ElementPedagogiqueAwareTrait
+    use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
     ;
 
     /**
@@ -25,6 +26,13 @@ class EtapeCentreCoutController extends AbstractActionController
      */
     protected function saisirAction()
     {
+        $this->em()->getFilters()->enable('annee')->init(
+            [
+                'Application\Entity\Db\ElementPedagogique'
+            ],
+            $this->getServiceContext()->getAnnee()
+        );
+
         $etape  = $this->context()->mandatory()->etapeFromRoute('id'); /* @var $etape Etape */
         $form   = $this->getFormSaisie();
         $errors = [];

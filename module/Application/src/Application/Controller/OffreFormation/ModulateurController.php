@@ -27,6 +27,12 @@ class ModulateurController extends AbstractActionController
             ],
             $this->getServiceContext()->getDateObservation()
         );
+        $this->em()->getFilters()->enable('annee')->init(
+            [
+                'Application\Entity\Db\ElementPedagogique'
+            ],
+            $this->getServiceContext()->getAnnee()
+        );
 
         $etape = $this->context()->etapeFromRoute('id');
         /* @var $etape \Application\Entity\Db\Etape */

@@ -280,7 +280,7 @@ class ContratProcess extends AbstractService
         $vhIds    = array_map(function($v) { return $v->getId(); }, $vhDispos);
         $qb       = $this->getServiceService()->getRepo()->createQueryBuilder("s");
         $qb
-                ->select("s, vh, str, i")
+                ->select("s, ep, vh, str, i")
                 ->join("s.volumeHoraire", "vh")
                 ->join("vh.typeVolumeHoraire", "tvh", \Doctrine\ORM\Query\Expr\Join::WITH, "tvh = :tvh")
                 ->join("s.elementPedagogique", "ep")

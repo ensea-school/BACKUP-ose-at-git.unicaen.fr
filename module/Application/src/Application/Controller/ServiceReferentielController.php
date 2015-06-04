@@ -76,11 +76,15 @@ class ServiceReferentielController extends AbstractActionController
         $intervenant           = $this->context()->intervenantFromRoute();
         $viewModel             = new \Zend\View\Model\ViewModel();
 
-        $serviceRefProto = $this->getServiceServiceReferentiel()->newEntity()
-                ->setIntervenant($intervenant)
-                ->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
+        if ($intervenant instanceof IntervenantPermanent){
+            $serviceRefProto = $this->getServiceServiceReferentiel()->newEntity()
+                    ->setIntervenant($intervenant)
+                    ->setTypeVolumeHoraire($this->getTypeVolumeHoraire());
         
-        $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent && $this->isAllowed($serviceRefProto, 'create');
+            $canAddServiceReferentiel = $intervenant instanceof IntervenantPermanent && $this->isAllowed($serviceRefProto, 'create');
+        }else{
+            $canAddServiceReferentiel = false;
+        }
         
 //        if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur || !$this->isAllowed($this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant), 'read')) {
 //            throw new \BjyAuthorize\Exception\UnAuthorizedException();

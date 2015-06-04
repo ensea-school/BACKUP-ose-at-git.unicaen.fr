@@ -31,7 +31,13 @@ class ValidationAssertionProxy extends AbstractAssertion
     {
         parent::assert($acl, $role, $resource, $privilege);
         
-        return $this->getDelegate()->assert($acl, $role, $resource, $privilege);
+        $delegate = $this->getDelegate();
+        
+        if (! $delegate) {
+            return true;
+        }
+        
+        return $delegate->assert($acl, $role, $resource, $privilege);
     }
     
     /**

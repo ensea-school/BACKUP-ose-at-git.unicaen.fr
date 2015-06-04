@@ -12,7 +12,8 @@ use Application\Entity\Db\Etape as EtapeEntity;
  */
 class Etape extends AbstractEntityService
 {
-    use Traits\LocalContextAwareTrait;
+    use Traits\LocalContextAwareTrait,
+        Traits\SourceAwareTrait;
 
 
     /**
@@ -290,8 +291,17 @@ class Etape extends AbstractEntityService
         return parent::getList($qb, $alias);
     }
 
+    /**
+     *
+     * @param EtapeEntity $entity
+     * @return EtapeEntity
+     */
     public function save($entity)
     {
+        if (! $entity->getSource()){
+            $entity->setSource( $this->getServiceSource()->getOse() );
+        }
+
         $this->canSave($entity,true);
         return parent::save($entity);
     }

@@ -6,7 +6,6 @@ use Application\Acl\ComposanteRole;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\TypeContrat;
 use Common\Constants;
-use Common\Exception\LogicException;
 use UnicaenApp\Exporter\Pdf;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -143,7 +142,7 @@ class ContratController extends AbstractActionController
 
         foreach ($contrats as $contrat) { /* @var $contrat \Application\Entity\Db\Contrat */
             $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
-                    ->select("s, vh, ep, str, i")
+                    ->select("s, ep, vh, ep, str, i")
                     ->join("s.volumeHoraire", "vh")
                     ->join("s.elementPedagogique", "ep")
                     ->join("ep.structure", "str")
@@ -177,7 +176,7 @@ class ContratController extends AbstractActionController
 
         $this->em()->clear('Application\Entity\Db\Service'); // indispensable si on requête N fois la même entité avec des critères différents
         $qb = $this->getServiceService()->getRepo()->createQueryBuilder("s")
-                ->select("s, vh, str, i")
+                ->select("s, ep, vh, str, i")
                 ->join("s.volumeHoraire", "vh")
                 ->join("s.elementPedagogique", "ep")
                 ->join("ep.structure", "str")

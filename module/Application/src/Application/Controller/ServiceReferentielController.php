@@ -25,6 +25,8 @@ class ServiceReferentielController extends AbstractActionController
         $this->em()->getFilters()->enable('historique')->init(
             [
                 'Application\Entity\Db\ServiceReferentiel',
+                'Application\Entity\Db\FonctionReferentiel',
+                'Application\Entity\Db\Structure',
                 'Application\Entity\Db\VolumeHoraireReferentiel'
             ],
             $this->getServiceContext()->getDateObservation()

@@ -135,6 +135,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     {
         if (null === $this->structures) {
             $qb   = $this->getServiceStructure()->finderByEnseignement();
+            $this->getServiceStructure()->finderByNiveau(2, $qb);
             $univ = $this->getServiceStructure()->getRacine();
 
             $this->structures = [$univ->getId() => $univ] + $this->getServiceStructure()->getList($qb);

@@ -572,11 +572,10 @@ class ContratController extends AbstractActionController
      */
     private function getTotalHetdIntervenant()
     {
-        $annee = $this->getServiceContext()->getAnnee();
         $typeVolumeHoraire = $this->getServiceTypeVolumeHoraire()->getPrevu();
         $etatVolumeHoraire = $this->getServiceEtatVolumeHoraire()->getValide();
         
-        $fr = $this->getIntervenant()->getUniqueFormuleResultat($annee, $typeVolumeHoraire, $etatVolumeHoraire);
+        $fr = $this->getIntervenant()->getUniqueFormuleResultat($typeVolumeHoraire, $etatVolumeHoraire);
 
         return $fr->getServiceDu() + $fr->getSolde();
     }

@@ -155,6 +155,9 @@ class ServiceReferentielController extends AbstractActionController
         $form->get('type-volume-horaire')->setValue($typeVolumeHoraire->getId());
         $errors  = [];
 
+        $localContext = $this->getServiceLocator()->get('applicationLocalContext'); /* @var $localContext \Application\Service\LocalContext */
+        $intervenant  = $localContext->getIntervenant();
+        
         if ($id) {
             $entity = $service->get($id);
             $entity->setTypeVolumeHoraire($typeVolumeHoraire);
@@ -163,15 +166,16 @@ class ServiceReferentielController extends AbstractActionController
         } else {
             $entity = $service->newEntity();
             $entity->setTypeVolumeHoraire($typeVolumeHoraire);
+            $entity->setIntervenant($intervenant);
             $form->bind($entity);
             $form->initFromContext();
             $title   = "Ajout de référentiel";
         }
-
-        $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
-        $intervenant = $localContext->getIntervenant();
-        $assertionEntity = $this->getServiceServiceReferentiel()->newEntity()->setIntervenant($intervenant);
+        
+        $assertionEntity = $this->getServiceServiceReferentiel()->newEntity();
+        $assertionEntity
+                ->setTypeVolumeHoraire($typeVolumeHoraire)
+                ->setIntervenant($intervenant);
         if (! $this->isAllowed($assertionEntity, 'create') || ! $this->isAllowed($assertionEntity, 'update')) {
             throw new MessageException("Cette opération n'est pas autorisée.");
         }
@@ -182,6 +186,7 @@ class ServiceReferentielController extends AbstractActionController
             $form->saveToContext();
             if ($form->isValid()) {
                 try {
+                    $entity->setIntervenant($intervenant); // car après $form->isValid(), $entity->getIntervenant() === null
                     $entity = $service->save($entity);
                     $form->get('service')->get('id')->setValue($entity->getId()); // transmet le nouvel ID
                 }

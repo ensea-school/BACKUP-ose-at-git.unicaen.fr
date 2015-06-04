@@ -2,7 +2,7 @@
  * Consultation de la Feuille de route d'un intervenant.
  */
 
-select i.nom_usuel, e.ordre, e.code, e.libelle, ie.atteignable, ie.franchie, ie.courante, s.libelle_court
+select i.id, i.source_code, i.nom_usuel, e.ordre, e.code, e.libelle, ie.atteignable, ie.franchie, ie.courante, s.libelle_court
 from wf_intervenant_etape ie 
 join intervenant i on i.id = ie.intervenant_id
 join wf_etape e on e.id = ie.etape_id

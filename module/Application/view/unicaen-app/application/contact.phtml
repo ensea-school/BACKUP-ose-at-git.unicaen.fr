@@ -2,11 +2,21 @@
 
 <h1><?php echo $this->translate($title); ?></h1>
 
-<?php
-$role = $this->getServiceContext()->getSelectedIdentityRole();
-?>
+<h3>Intervenants</h3>
+    Contactez votre composante ou bien écrivez à :
+    <?php
+    $contacts = ["ose-assistance@unicaen.fr"];
+    $title = $this->translate("Cliquez pour rédiger un mail à destination de la liste d'échanges dédiée à l'assistance");
+    $v = new \Zend\Validator\EmailAddress();
+    $callback = function($value) use ($v, $title) {
+        return $v->isValid($value) ? sprintf('<a href="mailto:%s" title="%s">%s</a>', $value, $title, $value) : $value;
+    };
+    $contacts = array_map($callback, $contacts);
+    ?>
+    <?php echo $this->htmlList($contacts, false, null, false) ?>
 
-<?php if ($role instanceof \Application\Acl\ComposanteRole): ?>
+
+<h3>Gestionnaires</h3>
     Postez un message sur la liste d'échanges des gestionnaires :
     <?php
     $contacts = ["ose@liste.unicaen.fr"];
@@ -18,6 +28,3 @@ $role = $this->getServiceContext()->getSelectedIdentityRole();
     $contacts = array_map($callback, $contacts);
     ?>
     <?php echo $this->htmlList($contacts, false, null, false) ?>
-<?php else: ?>
-Contactez votre composante.
-<?php endif; ?>

@@ -96,7 +96,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Indicateur',
                     'action'     => ['index', 'result', 'abonner', 'abonnements', 'result-item-donnees-perso-diff-import'],
-                    'roles'      => [ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'roles'      => [R_ROLE, ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                 ],
             ],
         ],

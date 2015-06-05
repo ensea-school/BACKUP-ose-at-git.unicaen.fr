@@ -1,6 +1,9 @@
 <?php 
-$wf = $this->workflow($this->intervenant, $this->role)->getWorkflow(); 
-/* @var $wf \Application\Service\Workflow\AbstractWorkflow */
+$wf = $this->workflow($this->intervenant, $this->role)->getWorkflow(); /* @var $wf \Application\Service\Workflow\AbstractWorkflow */
+
+if (! count($wf->getSteps())) {
+    return;
+}
 ?>
 
 <style>
@@ -8,6 +11,8 @@ $wf = $this->workflow($this->intervenant, $this->role)->getWorkflow();
     .step.status { width: 50px; }
     td.step.status { text-align: center; }
 </style>
+
+<h2>Feuille de route</h2>
 
 <div class="row">
     <div class="col-md-9">

@@ -11,6 +11,8 @@
     
         <?php 
         $message = null;
+        $url   = $this->url('home');
+        $label = $this->translate("Accueil...");
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
             if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
@@ -19,18 +21,16 @@
             elseif ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
                 $message = "L'application sera ouverte du lundi 7 juillet au vendredi 17 octobre 2014.";
             }
-            $wf    = $this->workflow($intervenant, $role)->getWorkflow();
-            $step  = $wf->getCurrentStep() ?: $wf->getLastStep(); /* @var $wf \Application\Service\Workflow\WorkflowIntervenantExterieur */
-            $url   = $wf->getStepUrl($step);
-            $label = $this->translate($step->getLabel($role));
+            $wf = $this->workflow($intervenant, $role)->getWorkflow();
+            if ($wf->getSteps()) {
+                $step  = $wf->getCurrentStep() ?: $wf->getLastStep(); /* @var $wf \Application\Service\Workflow\WorkflowIntervenantExterieur */
+                $url   = $wf->getStepUrl($step);
+                $label = $this->translate($step->getLabel($role));
+            }
         }
         elseif ($role instanceof \Application\Acl\ComposanteRole) {
             $url   = $this->url('service/resume');
             $label = $this->translate("Tableau synthétique des enseignements concernant ma composante...");
-        }
-        else {
-            $url   = $this->url('home');
-            $label = $this->translate("Accueil...");
         }
         ?>
         <?php if ($message): ?>
@@ -62,7 +62,6 @@
 <?php endif ?>
         
 <!----------------------------- Feuille de route --------------------------->
-<?php if (isset($wf)): ?>
-<h2>Feuille de route</h2>
+<?php if (isset($intervenant)): ?>
 <?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', ['intervenant' => $intervenant, 'role' => $role]); ?>
-<?php endif; ?>
+<?php endif;

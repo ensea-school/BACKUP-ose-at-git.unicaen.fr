@@ -133,8 +133,15 @@ class DossierController extends AbstractActionController implements WorkflowInte
                 ->leftJoin("i.dossier", "d")
                 ->andWhere("i = :i")
                 ->setParameter('i', $this->intervenant);
-        $this->intervenant = $qb->getQuery()->getOneOrNullResult();
+        $intervenant = $qb->getQuery()->getOneOrNullResult();
         
+        if (null === $intervenant) {
+            throw new RuntimeException(sprintf(
+                    "L'intervenant portant le code source '%s' est introuvable dans la table des intervenants extérieurs",
+                    $this->intervenant->getSourceCode()));
+        }
+        
+        $this->intervenant = $intervenant;
         $this->form = $this->getFormModifier();
         
         $serviceValidation = $this->getServiceValidation();

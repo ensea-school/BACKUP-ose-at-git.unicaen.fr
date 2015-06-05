@@ -116,7 +116,7 @@ class AgrementFourniRule extends AgrementAbstractRule
         SELECT I.ID, I.SOURCE_CODE, COUNT(distinct ep.STRUCTURE_ID) NB_COMP_ENS
         FROM SERVICE s
         INNER JOIN INTERVENANT I ON I.ID = s.INTERVENANT_ID AND 1 = ose_divers.comprise_entre(i.HISTO_CREATION, i.HISTO_DESTRUCTION)
-        INNER JOIN ELEMENT_PEDAGOGQIUE ep ON ep.ID = s.ELEMENT_PEDAGOGQIUE_ID AND 1 = ose_divers.comprise_entre(ep.HISTO_CREATION, ep.HISTO_DESTRUCTION)
+        INNER JOIN ELEMENT_PEDAGOGIQUE ep ON ep.ID = s.ELEMENT_PEDAGOGIQUE_ID AND 1 = ose_divers.comprise_entre(ep.HISTO_CREATION, ep.HISTO_DESTRUCTION)
         INNER JOIN STRUCTURE comp ON comp.ID = ep.STRUCTURE_ID AND 1 = ose_divers.comprise_entre(comp.HISTO_CREATION, comp.HISTO_DESTRUCTION)
         WHERE 1 = ose_divers.comprise_entre(s.HISTO_CREATION, s.HISTO_DESTRUCTION)
         $andStructureService
@@ -134,18 +134,6 @@ class AgrementFourniRule extends AgrementAbstractRule
         $andStructureAgrement
         GROUP BY I.ID, I.SOURCE_CODE, a.TYPE_AGREMENT_ID
     )
-    -- intervenants concernés de manière FACULTATIVE par le type d'agrément
-    SELECT DISTINCT i.ID --, I.SOURCE_CODE, null NB_AGR_OBL_EXIST, COALESCE(c.NB_COMP_ENS, 0) NB_COMP_ENS
-    FROM INTERVENANT i
-    INNER JOIN TYPE_AGREMENT ta ON tas.TYPE_AGREMENT_ID = ta.ID AND 1 = ose_divers.comprise_entre(ta.HISTO_CREATION, ta.HISTO_DESTRUCTION)
-    --LEFT JOIN COMPOSANTES_ENSEIGN c on c.ID = i.ID
-    WHERE 1 = ose_divers.comprise_entre(i.HISTO_CREATION, i.HISTO_DESTRUCTION)
-    $andIntervenant
-    AND tas.OBLIGATOIRE = 0
-    AND tas.TYPE_AGREMENT_ID = {$this->getTypeAgrement()->getId()}
-
-    UNION
-
     -- intervenants concernés de manière OBLIGATOIRE par le type d'agrément et possédant TOUS les agréments de ce type
     SELECT DISTINCT i.ID --, I.SOURCE_CODE, aoe.NB_AGR_OBL_EXIST, COALESCE(c.NB_COMP_ENS, 0) NB_COMP_ENS
     FROM INTERVENANT i

@@ -164,11 +164,11 @@ class PieceJointeProcess extends AbstractService
         $this->typesPieceJointeAttendus = null;
         $this->typesPieceJointeStatut   = null;
 
-        if (!$this->getTypesPieceJointeStatut()) {
-            throw new AucuneAFournirException(
-                    "Aucun type de pièce justificative à fournir n'a été trouvé pour l'intervenant {$this->getIntervenant()} "
-                    . "(dont le statut est '{$this->getStatut()}').");
-        }
+//        if (!$this->getTypesPieceJointeStatut()) {
+//            throw new AucuneAFournirException(
+//                    "Aucun type de pièce justificative à fournir n'a été trouvé pour l'intervenant {$this->getIntervenant()} "
+//                    . "(dont le statut est '{$this->getStatut()}').");
+//        }
 
         return $this;
     }

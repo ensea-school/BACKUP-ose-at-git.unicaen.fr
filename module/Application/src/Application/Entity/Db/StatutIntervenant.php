@@ -832,14 +832,11 @@ class StatutIntervenant implements HistoriqueAwareInterface
     {
         if ($privilege instanceof Privilege){
             $resource  = $privilege->getRessource();
-            $privilege = $privilege->getCode();
-        }
-        if (empty($resource)){
-            throw new \Common\Exception\LogicException('La ressource du privilège n\'est pas précisée');
+            $privilege = $privilege->getFullCode();
         }
         $privileges = $this->getPrivilege($resource);
         foreach( $privileges as $priv ){
-            if ($priv->getCode() === $privilege) return true;
+            if ($priv->getFullCode() === $privilege) return true;
         }
         return false;
     }

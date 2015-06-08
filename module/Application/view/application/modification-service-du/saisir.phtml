@@ -21,13 +21,40 @@ $modificationServiceDu = $form->get('fs');
 
 <?php 
 echo $this->form()->openTag($form);
-echo $this->formCollection()->setElementHelper($this->formControlGroup())->render($modificationServiceDu->get('modificationServiceDu'));
-?> 
+
+//echo $this->formCollection()->setElementHelper($this->formControlGroup())->render($modificationServiceDu->get('modificationServiceDu'));
+echo '<fieldset>'."\n";
+foreach ($modificationServiceDu->get('modificationServiceDu')->getIterator() as $fieldset) {
+    $motif = $fieldset->getObject()->getMotif();
+    /* @var $object \Application\Entity\Db\ModificationServiceDu */
+
+    $motifElement = $fieldset->get('motif');
+    /* @var $motifElement \Zend\Form\Element\Select */
+
+    echo '<fieldset><div class="form-group">';
+    if ( $motif && $motif->getHistoDestruction() ){
+        $motifElement->setAttribute('class', $motifElement->getAttribute('class'). ' bg-historique');
+        $motifElement->setValueOptions( array_merge( $motifElement->getValueOptions(), [$motif->getId() => $motif->getLibelle().' (MOTIF OBSOLÈTE)']  ) );
+        echo $this->formControlGroup( $motifElement );
+    }else{
+        echo $this->formControlGroup( $motifElement );
+    }
+    
+    echo $this->formControlGroup( $fieldset->get('heures') );
+    echo $this->formControlGroup( $fieldset->get('commentaires') );
+    if ($canEdit) echo $this->formControlGroup( $fieldset->get('remove') );
+    echo '</div></fieldset>';
+}
+
+?>
+</fieldset>
 <div class="text-info" id="modification-service-du-comptage"></div>
 <?php 
-echo $this->formButton($form->get('ajouter'));
-echo $this->formHidden($form->get('security'));
-echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+if ($canEdit){
+    echo $this->formButton($form->get('ajouter'));
+    echo $this->formHidden($form->get('security'));
+    echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+}
 echo $this->form()->closeTag();
 ?>
 
@@ -47,6 +74,12 @@ echo $this->form()->closeTag();
     });
         
     $(function() {
+        <?php if (!$canEdit): ?>
+        form.find('input').attr('readonly', "readonly");
+        form.find('select').attr('disabled', "disabled");
+        form.find('textarea').attr('readonly', "readonly");
+        <?php endif; ?>
+
         updateLigneCounter();
         $(":input").tooltip();
         $('body')

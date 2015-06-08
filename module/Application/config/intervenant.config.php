@@ -485,6 +485,14 @@ return [
                         Privilege::INTERVENANT_FICHE
                     ]
                 ],
+                [
+                    'controller' => 'Application\Controller\ModificationServiceDu',
+                    'action'     => ['saisir'],
+                    'privileges' => [
+                        Privilege::MODIF_SERVICE_DU_VISUALISATION
+                    ],
+                    'assertion'  => 'ModificationServiceDuAssertion',
+                ],
             ],
             'BjyAuthorize\Guard\Controller' => [
                 [
@@ -518,11 +526,6 @@ return [
                     'action'     => ['voir', 'modifier'],
                     'roles'      => [R_INTERVENANT_EXTERIEUR, R_COMPOSANTE, R_ADMINISTRATEUR],
                 ],
-                [
-                    'controller' => 'Application\Controller\ModificationServiceDu',
-                    'action'     => ['saisir'],
-                    'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
             ],
         ],
         'resource_providers' => [
@@ -531,6 +534,16 @@ return [
             ],
         ],
         'rule_providers' => [
+            'Application\Provider\Rule\RuleProvider' => [
+                'allow' => [
+                    [
+                        Privilege::MODIF_SERVICE_DU_EDITION,
+                        'Intervenant',
+                        [Privilege::MODIF_SERVICE_DU_EDITION],
+                        'ModificationServiceDuAssertion',
+                    ],
+                ],
+            ],
             'BjyAuthorize\Provider\Rule\Config' => [
                 'allow' => [
                     [
@@ -539,6 +552,7 @@ return [
                         ['total-heures-comp'],
                         'IntervenantAssertion',
                     ],
+
                 ],
             ],
         ],
@@ -558,23 +572,24 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationIntervenant'              => 'Application\\Service\\Intervenant',
-            'ApplicationCivilite'                 => 'Application\\Service\\Civilite',
-            'ApplicationStatutIntervenant'        => 'Application\\Service\\StatutIntervenant',
-            'ApplicationTypeIntervenant'          => 'Application\\Service\\TypeIntervenant',
-            'ApplicationDossier'                  => 'Application\\Service\\Dossier',
-            'IntervenantAssertion'                => 'Application\\Assertion\\IntervenantAssertion',
-            'PeutSaisirDossierRule'               => 'Application\Rule\Intervenant\PeutSaisirDossierRule',
-            'PeutSaisirModificationServiceDuRule' => 'Application\Rule\Intervenant\PeutSaisirModificationServiceDuRule',
-            'PeutSaisirServiceRule'               => 'Application\Rule\Intervenant\PeutSaisirServiceRule',
-            'PeutSaisirReferentielRule'           => 'Application\Rule\Intervenant\PeutSaisirReferentielRule',
-            'PossedeDossierRule'                  => 'Application\Rule\Intervenant\PossedeDossierRule',
-            'ServiceValideRule'                   => 'Application\Rule\Intervenant\ServiceValideRule',
-            'PeutValiderServiceRule'              => 'Application\Rule\Intervenant\PeutValiderServiceRule',
-            'ReferentielValideRule'               => 'Application\Rule\Intervenant\ReferentielValideRule',
-            'NecessiteAgrementRule'               => 'Application\Rule\Intervenant\NecessiteAgrementRule',
-            'AgrementFourniRule'                  => 'Application\Rule\Intervenant\AgrementFourniRule',
-            'EstAffecteRule'                      => 'Application\Rule\Intervenant\EstAffecteRule',
+            'ApplicationIntervenant'                => 'Application\\Service\\Intervenant',
+            'ApplicationMotifModificationServiceDu' => 'Application\\Service\\MotifModificationServiceDu',
+            'ApplicationCivilite'                   => 'Application\\Service\\Civilite',
+            'ApplicationStatutIntervenant'          => 'Application\\Service\\StatutIntervenant',
+            'ApplicationTypeIntervenant'            => 'Application\\Service\\TypeIntervenant',
+            'ApplicationDossier'                    => 'Application\\Service\\Dossier',
+            'IntervenantAssertion'                  => 'Application\\Assertion\\IntervenantAssertion',
+            'ModificationServiceDuAssertion'        => 'Application\\Assertion\\ModificationServiceDuAssertion',
+            'PeutSaisirDossierRule'                 => 'Application\Rule\Intervenant\PeutSaisirDossierRule',
+            'PeutSaisirServiceRule'                 => 'Application\Rule\Intervenant\PeutSaisirServiceRule',
+            'PeutSaisirReferentielRule'             => 'Application\Rule\Intervenant\PeutSaisirReferentielRule',
+            'PossedeDossierRule'                    => 'Application\Rule\Intervenant\PossedeDossierRule',
+            'ServiceValideRule'                     => 'Application\Rule\Intervenant\ServiceValideRule',
+            'PeutValiderServiceRule'                => 'Application\Rule\Intervenant\PeutValiderServiceRule',
+            'ReferentielValideRule'                 => 'Application\Rule\Intervenant\ReferentielValideRule',
+            'NecessiteAgrementRule'                 => 'Application\Rule\Intervenant\NecessiteAgrementRule',
+            'AgrementFourniRule'                    => 'Application\Rule\Intervenant\AgrementFourniRule',
+            'EstAffecteRule'                        => 'Application\Rule\Intervenant\EstAffecteRule',
         ],
         'initializers' => [
             'Application\Service\Initializer\IntervenantServiceAwareInitializer',

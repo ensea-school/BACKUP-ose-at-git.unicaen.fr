@@ -31,20 +31,11 @@ class ModificationServiceDuController extends AbstractActionController
             $this->getServiceContext()->getDateObservation()
         );
 
-        $context     = $this->getServiceContext();
-        $isAjax      = $this->getRequest()->isXmlHttpRequest();
-        $intervenant = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant IntervenantPermanent */
-        $role        = $this->getServiceContext()->getSelectedIdentityRole();
-
-        $rule = $this->getServiceLocator()->get('PeutSaisirModificationServiceDuRule')
-                ->setIntervenant($intervenant)
-                ->setStructure($role instanceof ComposanteRole ? $role->getStructure() : null);
-        if (!$rule->execute()) {
-            throw new MessageException("La modification de service dû n'est pas possible. ", null, new \Exception($rule->getMessage()));
-        }
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $canEdit     = $this->isAllowed( $intervenant, \Application\Entity\Db\Privilege::MODIF_SERVICE_DU_EDITION );
 
         // NB: patch pour permettre de vider toutes les modifs de service dû
-        if ($this->getRequest()->isPost()) {
+        if ($canEdit && $this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost()->toArray();
             if (empty($data['fs']['modificationServiceDu'])) {
                 foreach ($intervenant->getModificationServiceDu() as $sr) {
@@ -58,6 +49,8 @@ class ModificationServiceDuController extends AbstractActionController
 
         $form = $this->getServiceLocator()->get('form_element_manager')->get('IntervenantModificationServiceDuForm');
         /* @var $form \Application\Form\Intervenant\ModificationServiceDuForm */
+        $fs = $form->getFieldsets()['fs'];
+        $fs->get('modificationServiceDu')->setOption('allow_remove', false);
         $form->setAttribute('action', $this->getRequest()->getRequestUri());
         $form->bind($intervenant);
 
@@ -65,6 +58,7 @@ class ModificationServiceDuController extends AbstractActionController
             'form' => $form,
             'intervenant' => $intervenant,
             'title' => "Modifications de service dû <small>$intervenant</small>",
+            'canEdit' => $canEdit
         ];
 
         $request = $this->getRequest();
@@ -75,12 +69,9 @@ class ModificationServiceDuController extends AbstractActionController
             }
 
             $form->setData($data);
-            if ($form->isValid()) {
+            if ($canEdit && $form->isValid()) {
                 try {
                     $this->em()->flush();
-                    if ($isAjax) {
-                        exit;
-                    }
                     $this->flashMessenger()->addSuccessMessage(sprintf("Modifications de service dû de $intervenant enregistrées avec succès."));
                     $this->redirect()->toRoute(null, [], [], true);
                 }
@@ -90,15 +81,6 @@ class ModificationServiceDuController extends AbstractActionController
                 }
             }
         }
-
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables($variables);
-
-        $variables['context'] = $context;
-
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables($variables);
-
-        return $viewModel;
+        return $variables;
     }
 }

@@ -5,7 +5,7 @@ namespace Application\Entity\Db;
 /**
  * MotifModificationService
  */
-class MotifModificationServiceDu
+class MotifModificationServiceDu implements HistoriqueAwareInterface
 {
     /**
      * Retourne la représentation littérale de cet objet.

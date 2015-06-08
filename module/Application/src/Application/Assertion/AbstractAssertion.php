@@ -82,6 +82,7 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
 
         // gestion des contrôleurs
         }else if($this->detectController($resource)){
+            $resource = (string)$resource;
             $spos = strpos($resource,'/')+1;
             $dpos = strrpos($resource, ':')+1;
             $controller = substr( $resource, $spos, $dpos-$spos-1);
@@ -133,7 +134,7 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
      */
     private function detectController( $resource=null )
     {
-        return is_string($resource) && 0 === strpos($resource, 'controller/');
+        return 0 === strpos($resource, 'controller/');
     }
 
     /**

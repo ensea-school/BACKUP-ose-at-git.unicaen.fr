@@ -377,3 +377,9 @@ ul.privileges-form li label {
 .droits-tbl td a.refuse {
     opacity: 0.5;   
 }
+
+
+.bg-historique {
+    background-color: #d9534f;
+    color:white;
+}

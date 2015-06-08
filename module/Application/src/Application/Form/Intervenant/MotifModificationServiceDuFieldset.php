@@ -2,11 +2,10 @@
 
 namespace Application\Form\Intervenant;
 
-use UnicaenApp\Service\EntityManagerAwareInterface;
-use UnicaenApp\Service\EntityManagerAwareTrait;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\Form\Fieldset;
 use Zend\Validator\LessThan;
-use Zend\InputFilter\InputFilterProviderInterface;;
+use Zend\InputFilter\InputFilterProviderInterface;
 use Application\Entity\Db\ModificationServiceDu;
 use Application\Entity\Db\MotifModificationService;
 
@@ -15,9 +14,10 @@ use Application\Entity\Db\MotifModificationService;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class MotifModificationServiceDuFieldset extends Fieldset implements EntityManagerAwareInterface, InputFilterProviderInterface
+class MotifModificationServiceDuFieldset extends Fieldset implements ServiceLocatorAwareInterface, InputFilterProviderInterface
 {
-    use EntityManagerAwareTrait;
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
+        \Application\Service\Traits\MotifModificationServiceDuAwareTrait;
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -25,61 +25,63 @@ class MotifModificationServiceDuFieldset extends Fieldset implements EntityManag
      */
     public function init()
     {
-        $this->setHydrator(new MotifModificationServiceDuHydrator($this->getEntityManager()))
+        $serviceMMSD = $this->getServiceMotifModificationServiceDu();
+
+        $this->setHydrator(new MotifModificationServiceDuHydrator( $serviceMMSD->getEntityManager()) )
              ->setObject(new ModificationServiceDu());
 
-        $motifSelect = new \DoctrineORMModule\Form\Element\EntitySelect('motif', [
-            'label' => 'Motif',
-            'empty_option' => "(Sélectionnez un motif...)"
-        ]);
-        $motifSelect->setAttributes([
-            'title' => "Motif",
-            'class' => 'modification-service-du modification-service-du-motif',
-        ]);
-        $motifSelect->getProxy()
-                ->setFindMethod(['name' => 'findBy', 'params' => ['criteria' => [], 'orderBy' => ['libelle' => 'ASC']]])
-                ->setObjectManager($this->getEntityManager())
-                ->setTargetClass('Application\Entity\Db\MotifModificationServiceDu');
-        $this->add($motifSelect);
+        $motifs = $serviceMMSD->getList( $serviceMMSD->finderByHistorique() );
 
         $this->add([
-            'name'       => 'heures',
-            'options'    => [
-                'label' => "Nombre d'heures",
+            'type'              => 'Select',
+            'name'              => 'motif',
+            'options' => [
+                'label'         => 'Motif',
+                'value_options' => \UnicaenApp\Util::collectionAsOptions($motifs),
+                'empty_option'  => "(Sélectionnez un motif...)"
             ],
             'attributes' => [
-                'value' => "0",
-                'title' => "Nombre d'heures",
-                'class' => 'modification-service-du modification-service-du-heures'
-            ],
-            'type'       => 'Text',
+                'title'         => "Motif",
+                'class'         => 'modification-service-du modification-service-du-motif',
+            ]
         ]);
 
         $this->add([
-            'name'       => 'commentaires',
+            'type'              => 'Text',
+            'name'              => 'heures',
             'options'    => [
-                'label' => "Commentaires",
+                'label'         => "Nombre d'heures",
             ],
             'attributes' => [
-                'title' => "Commentaires éventuels",
-                'class' => 'modification-service-du modification-service-du-commentaires'
+                'value'         => "0",
+                'title'         => "Nombre d'heures",
+                'class'         => 'modification-service-du modification-service-du-heures'
             ],
-            'type'       => 'Textarea',
         ]);
 
         $this->add([
-            'name'       => 'remove',
-            'options'    => [
-                'label' => "<span class=\"glyphicon glyphicon-minus\"></span> Supprimer",
-                'label_options' => [
-                    'disable_html_escape' => true,
-                ],
+            'type'              => 'Textarea',
+            'name'              => 'commentaires',
+            'options' => [
+                'label'         => "Commentaires",
             ],
             'attributes' => [
-                'title' => "Supprimer cette ligne",
-                'class' => 'modification-service-du modification-service-du-supprimer btn btn-default btn-xs'
+                'title'         => "Commentaires éventuels",
+                'class'         => 'modification-service-du modification-service-du-commentaires'
             ],
-            'type'       => 'Button',
+        ]);
+
+        $this->add([
+            'type'              => 'Button',
+            'name'              => 'remove',
+            'options'    => [
+                'label'         => "<span class=\"glyphicon glyphicon-minus\"></span> Supprimer",
+                'label_options' => ['disable_html_escape' => true],
+            ],
+            'attributes' => [
+                'title'         => "Supprimer cette ligne",
+                'class'         => 'modification-service-du modification-service-du-supprimer btn btn-default btn-xs'
+            ],
         ]);
 
         return $this;

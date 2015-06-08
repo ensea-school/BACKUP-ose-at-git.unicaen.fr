@@ -4,7 +4,7 @@ namespace Application\Service;
 
 use Application\Provider\Privilege\PrivilegeProviderInterface;
 use \BjyAuthorize\Provider\Resource\ProviderInterface as ResourceProviderInterface;
-
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Description of Privilege
@@ -38,6 +38,13 @@ class Privilege extends AbstractEntityService implements PrivilegeProviderInterf
      */
     public function getAlias(){
         return 'priv';
+    }
+
+    public function getList(QueryBuilder $qb=null, $alias=null)
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy($this->getAlias().'.ordre');
+        return parent::getList($qb, $alias);
     }
 
     /**

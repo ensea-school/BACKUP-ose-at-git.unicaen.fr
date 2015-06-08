@@ -34,6 +34,12 @@ class Privilege
     private $libelle;
 
     /**
+     *
+     * @var integer
+     */
+    private $ordre;
+
+    /**
      * @var integer
      */
     private $id;
@@ -112,6 +118,27 @@ class Privilege
     {
         return $this->libelle;
     }
+
+    /**
+     * 
+     * @return integer
+     */
+    function getOrdre()
+    {
+        return $this->ordre;
+    }
+
+    /**
+     *
+     * @param integer $ordre
+     * @return \Application\Entity\Db\Privilege
+     */
+    function setOrdre($ordre)
+    {
+        $this->ordre = $ordre;
+        return $this;
+    }
+
 
     /**
      * Get id

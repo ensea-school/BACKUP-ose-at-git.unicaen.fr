@@ -203,11 +203,15 @@ class ServiceController extends AbstractActionController
     public function cloturerSaisieAction()
     {
         $intervenant = $this->context()->intervenantFromRoute();
-        $structure   = $intervenant->getStructure();
-        $tvh         = $this->getTypeVolumeHoraire();
-        $validation  = $this->getServiceValidation()->findValidationClotureServices($intervenant, $tvh); // clôture existante
-        $viewModel   = new ViewModel();
+        if (! $intervenant) {
+            return false; // désactive la vue
+        }
         
+        $structure  = $intervenant->getStructure();
+        $tvh        = $this->getTypeVolumeHoraire();
+        $validation = $this->getServiceValidation()->findValidationClotureServices($intervenant, $tvh); // clôture existante
+        $viewModel  = new ViewModel();
+
         if (! $intervenant->getStatut()->estPermanent()) {
             return false; // désactive la vue
         }

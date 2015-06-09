@@ -11,7 +11,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class RuleProvider implements ProviderInterface
+class PrivilegeRuleProvider implements ProviderInterface
 {
     use \Zend\ServiceManager\ServiceLocatorAwareTrait,
         \Application\Provider\Privilege\PrivilegeProviderAwareTrait

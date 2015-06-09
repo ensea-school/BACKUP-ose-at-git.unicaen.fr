@@ -152,7 +152,7 @@ $main =  [
             'ApplicationPrivilege' => [],
         ],
         'rule_providers' => [
-            'Application\Provider\Rule\RuleProvider' => []
+            'Application\Provider\Rule\PrivilegeRuleProvider' => []
         ],
     ],
     'service_manager' => [

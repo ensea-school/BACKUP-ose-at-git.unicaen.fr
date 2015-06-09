@@ -534,7 +534,7 @@ return [
             ],
         ],
         'rule_providers' => [
-            'Application\Provider\Rule\RuleProvider' => [
+            'Application\Provider\Rule\PrivilegeRuleProvider' => [
                 'allow' => [
                     [
                         Privilege::MODIF_SERVICE_DU_EDITION,

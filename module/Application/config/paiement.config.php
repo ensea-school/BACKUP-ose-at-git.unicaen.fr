@@ -157,7 +157,7 @@ return [
             ],
         ],
         'rule_providers' => [
-            'Application\Provider\Rule\RuleProvider' => [
+            'Application\Provider\Rule\PrivilegeRuleProvider' => [
                 'allow' => [
                     [
                         Privilege::MISE_EN_PAIEMENT_DEMANDE,

@@ -7,6 +7,10 @@ namespace Application\Entity\Db;
  */
 class Perimetre
 {
+    const COMPOSANTE    = 'composante';
+    const ETABLISSEMENT = 'etablissement';
+    const DIPLOME       = 'diplome';
+
     /**
      * @var string
      */
@@ -95,5 +99,20 @@ class Perimetre
     public function __toString()
     {
         return $this->getLibelle();
+    }
+
+    public function isEtablissement()
+    {
+        return $this->getCode() === self::ETABLISSEMENT;
+    }
+
+    public function isComposante()
+    {
+        return $this->getCode() === self::COMPOSANTE;
+    }
+
+    public function isDiplome()
+    {
+        return $this->getCode() === self::DIPLOME;
     }
 }

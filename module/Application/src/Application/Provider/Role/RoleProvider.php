@@ -123,6 +123,11 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             $role->setDbRole($dbRole);
             $role->setPersonnel($personnel);
 
+            // Si le rôle est de périmètre établissement, alors il se peut que l'on veuille zoomer sur une composante en particulier...
+            if ($this->structureSelectionnee && $dbRole->getPerimetre()->isEtablissement()){
+                $role->setStructure( $this->structureSelectionnee );
+            }
+
             $roles[$roleId] = $role;
 
             $affectations = $dbRole->getAffectation();
@@ -137,6 +142,8 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                         $affRole->setStructure( $structure );
                         $roles[$affRoleId] = $affRole;
                     }
+                }else{
+
                 }
             }
         }

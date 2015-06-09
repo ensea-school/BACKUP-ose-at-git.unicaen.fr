@@ -118,9 +118,9 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
         /**
          * Interrogation du workflow.
          */
-        if (!$this->isAllowedByWorkflow($privilege)) {
-            return false;
-        }
+//        if (!$this->isAllowedByWorkflow($privilege)) {
+//            return false;
+//        }
         
         if (!$this->isAllowedMiseEnPaiement($privilege)) {
             return false;

@@ -518,20 +518,19 @@ class Service extends AbstractEntityService
                 ->leftJoin("ep.structure", 'strens')
                 ->addOrderBy("strens.libelleCourt", 'asc')
                 ->addOrderBy("s2.histoModification", 'asc')
-                ->setParameter('intervenant', $intervenant);
+                ->setParameter('intervenant', $intervenant)
+                ->setParameter('ctvh', $typeVolumeHoraire->getCode());
         
         /**
-         * On écarte bien-sûr les volumes horaires déjà validés.
+         * Il doit exister des volumes horaires du type spécifié ET non validés.
          */
-        $vhRealisesValidesDql = <<<EOS
-SELECT vh_val FROM Application\Entity\Db\VolumeHoraire vh_val
-JOIN vh_val.service s_val WITH s_val.intervenant = :intervenant
-JOIN vh_val.typeVolumeHoraire tvh_val WITH tvh_val.code = :ctvh
-JOIN vh_val.validation val
+        $vhTypeSpecifieDql = <<<EOS
+SELECT vh_ts FROM Application\Entity\Db\VolumeHoraire vh_ts
+JOIN vh_ts.typeVolumeHoraire tvh_ts WITH tvh_ts.code = :ctvh
+LEFT JOIN vh_ts.validation val_ts
+WHERE vh_ts.service = s2 AND val_ts.id IS NULL
 EOS;
-        $qb
-                ->andWhere("vh NOT IN ( $vhRealisesValidesDql )")
-                ->setParameter('ctvh', $typeVolumeHoraire->getCode());
+        $qb->andWhere("EXISTS ( $vhTypeSpecifieDql )");
         
         /**
          * Filtrage éventuel par composante d'intervention.
@@ -548,6 +547,8 @@ EOS;
             $qb->andWhere(implode(' OR ', $whereStr));
         }
         
+//        echo($qb->getQuery()->getSQL());
+//        var_dump($qb->getQuery()->getArrayResult());
         return $qb->getQuery()->getResult();
     }
     

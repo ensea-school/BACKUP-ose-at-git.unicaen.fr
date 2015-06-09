@@ -110,6 +110,7 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
      */
     private function detectPrivilege( $resource=null )
     {
+        if ($resource instanceof ResourceInterface) $resource = $resource->getResourceId ();
         return is_string($resource) && 0 === strpos($resource, 'privilege/');
     }
 
@@ -134,6 +135,7 @@ abstract class AbstractAssertion implements AssertionInterface, ServiceLocatorAw
      */
     private function detectController( $resource=null )
     {
+        if ($resource instanceof ResourceInterface) $resource = $resource->getResourceId ();
         return 0 === strpos($resource, 'controller/');
     }
 

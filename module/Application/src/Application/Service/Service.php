@@ -490,6 +490,7 @@ class Service extends AbstractEntityService
     }
     
     /**
+     * Recherche des services (et volumes horaires) validables.
      * 
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param IntervenantEntity $intervenant
@@ -498,24 +499,43 @@ class Service extends AbstractEntityService
      */
     public function fetchServicesDisposPourValidation(
             TypeVolumeHoraireEntity $typeVolumeHoraire,
-            IntervenantEntity $intervenant = null,
+            IntervenantEntity $intervenant,
             $structureEns = null)
     {
+        /**
+         * On fetche les services qqsoit le type des volumes horaires associés car
+         * dans le contexte de la validation des enseignements réalisés par exemple, 
+         * on a besoin de rappeler (pour info) les volumes horaires prévisionnels validés en face des
+         * volumes horaires réalisés validables.
+         */
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select("s2, i, vh, ep, strens")
+                ->select("s2, i, vh, tvh, ep, strens")
                 ->from("Application\Entity\Db\Service", 's2')
-                ->join("s2.intervenant", "i")
+                ->join("s2.intervenant", "i", Join::WITH, "s2.intervenant = :intervenant")
                 ->join("s2.volumeHoraire", 'vh')
-                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :ctvh")->setParameter('ctvh', $typeVolumeHoraire->getCode())
+                ->join("vh.typeVolumeHoraire", "tvh")
                 ->leftJoin("s2.elementPedagogique", "ep")
                 ->leftJoin("ep.structure", 'strens')
-                ->andWhere('NOT EXISTS (SELECT sv FROM Application\Entity\Db\VServiceValide sv WHERE sv.volumeHoraire = vh)')
                 ->addOrderBy("strens.libelleCourt", 'asc')
-                ->addOrderBy("s2.histoModification", 'asc');
+                ->addOrderBy("s2.histoModification", 'asc')
+                ->setParameter('intervenant', $intervenant);
         
-        if ($intervenant) {
-            $qb->andWhere("i = :intervenant")->setParameter('intervenant', $intervenant);
-        }
+        /**
+         * On écarte bien-sûr les volumes horaires déjà validés.
+         */
+        $vhRealisesValidesDql = <<<EOS
+SELECT vh_val FROM Application\Entity\Db\VolumeHoraire vh_val
+JOIN vh_val.service s_val WITH s_val.intervenant = :intervenant
+JOIN vh_val.typeVolumeHoraire tvh_val WITH tvh_val.code = :ctvh
+JOIN vh_val.validation val
+EOS;
+        $qb
+                ->andWhere("vh NOT IN ( $vhRealisesValidesDql )")
+                ->setParameter('ctvh', $typeVolumeHoraire->getCode());
+        
+        /**
+         * Filtrage éventuel par composante d'intervention.
+         */
         if (null !== $structureEns) {
             $structureEns = (array) $structureEns;
             $whereStr     = in_array(null, $structureEns) ? ["ep.structure IS NULL"] : [];
@@ -528,9 +548,7 @@ class Service extends AbstractEntityService
             $qb->andWhere(implode(' OR ', $whereStr));
         }
         
-//        var_dump($qb->getQuery()->getSQL());
-        
-        return $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
+        return $qb->getQuery()->getResult();
     }
     
     /**

@@ -4,9 +4,6 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
-use Application\Entity\Db\IntervenantPermanent;
-use Common\Exception\MessageException;
-use Application\Acl\ComposanteRole;
 
 /**
  * Description of IntervenantController
@@ -50,7 +47,6 @@ class ModificationServiceDuController extends AbstractActionController
         $form = $this->getServiceLocator()->get('form_element_manager')->get('IntervenantModificationServiceDuForm');
         /* @var $form \Application\Form\Intervenant\ModificationServiceDuForm */
         $fs = $form->getFieldsets()['fs'];
-        $fs->get('modificationServiceDu')->setOption('allow_remove', false);
         $form->setAttribute('action', $this->getRequest()->getRequestUri());
         $form->bind($intervenant);
 

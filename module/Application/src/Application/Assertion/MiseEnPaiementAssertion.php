@@ -5,12 +5,11 @@ namespace Application\Assertion;
 use Application\Entity\Db\ServiceAPayerInterface;
 use Application\Entity\Db\MiseEnPaiement;
 use Application\Entity\Db\Privilege;
-use Application\Entity\Db\TypeValidation;
 use Zend\Permissions\Acl\Acl;
 use Application\Acl\Role;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Description of MiseEnPaiementAssertion
@@ -21,6 +20,9 @@ class MiseEnPaiementAssertion extends AbstractAssertion
 {
     use \Application\Service\Traits\TypeValidationAwareTrait;
     use \Application\Service\Traits\ValidationAwareTrait;
+    use \Application\Service\Traits\ServiceAwareTrait;
+    use \Application\Service\Traits\ServiceReferentielAwareTrait;
+    use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
     
     const PRIVILEGE_VISUALISATION      = 'visualisation';
     const PRIVILEGE_DEMANDE            = 'demande';
@@ -49,6 +51,9 @@ class MiseEnPaiementAssertion extends AbstractAssertion
     protected function assertMiseEnPaiementDemande( Role $role, MiseEnPaiement $miseEnPaiement )
     {
         if (! $this->checkClotureRealise($miseEnPaiement)) {
+            return false;
+        }
+        if (! $this->checkValidationRealise($miseEnPaiement)) {
             return false;
         }
         
@@ -94,6 +99,57 @@ class MiseEnPaiementAssertion extends AbstractAssertion
         
         // la clôture de la saisie du réalisé doit être faite
         if (! $cloture) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Pour les permanents, pas de demande de MEP possible si le moindre
+     * enseignement ou référentiel réalisé n'est pas validé.
+     * 
+     * @param MiseEnPaiement $miseEnPaiement
+     * @return boolean
+     */
+    private function checkValidationRealise(MiseEnPaiement $miseEnPaiement)
+    {
+        $intervenant = $miseEnPaiement->getServiceAPayer()->getIntervenant();
+        
+        // on ne s'intéresse pas aux vacataires
+        if (! $intervenant->estPermanent()) {
+            return true;
+}
+        
+        $tvhRealise = $this->getServiceTypeVolumeHoraire()->getRealise();
+        
+        /**
+         * Recherche d'enseignement non validé.
+         */
+        $alias = $this->getServiceService()->getAlias();
+        $qb = $this->getServiceService()->finderByIntervenant($intervenant);
+        $this->getServiceService()->finderByTypeVolumeHoraire($tvhRealise, $qb);
+        $qb
+                ->select("COUNT($alias)")
+                ->leftJoin("vh.validation", "val", Join::WITH, "1 = compriseEntre(val.histoCreation, val.histoDestruction)")
+                ->andWhere("vh.validation IS EMPTY");
+        $count = (int) $qb->getQuery()->getSingleScalarResult();
+        if ($count) {
+            return false;
+        }
+        
+        /**
+         * Recherche de référentiel non validé.
+         */
+        $alias = $this->getServiceServiceReferentiel()->getAlias();
+        $qb = $this->getServiceServiceReferentiel()->finderByIntervenant($intervenant);
+        $this->getServiceServiceReferentiel()->finderByTypeVolumeHoraire($tvhRealise, $qb);
+        $qb
+                ->select("COUNT($alias)")
+                ->leftJoin("vhr.validation", "val", Join::WITH, "1 = compriseEntre(val.histoCreation, val.histoDestruction)")
+                ->andWhere("vhr.validation IS EMPTY");
+        $count = (int) $qb->getQuery()->getSingleScalarResult();
+        if ($count) {
             return false;
         }
         

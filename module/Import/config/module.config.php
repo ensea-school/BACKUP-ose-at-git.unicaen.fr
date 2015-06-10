@@ -2,6 +2,8 @@
 
 namespace Import;
 
+use Application\Entity\Db\Privilege;
+
 return [
     'controllers' => [
         'invokables' => [
@@ -32,12 +34,14 @@ return [
                 'pages' => [
                     'import' => [
                         'label'    => 'Import',
+                        'order'    => 1,
                         'route'    => 'import',
                         'resource' => 'controller/Import\Controller\Import:index',
                         'pages' => [
                             'admin' => [
                                 'label'  => "Tableau de bord principal",
                                 'route'  => 'import',
+                                'resource' => 'controller/Import\Controller\Import:showimporttbl',
                                 'params' => [
                                     'action' => 'showImportTbl',
                                 ],
@@ -49,6 +53,7 @@ return [
                             'showDiff' => [
                                 'label'  => "Écarts entre OSE et ses sources",
                                 'route'  => 'import',
+                                'resource' => 'controller/Import\Controller\Import:showdiff',
                                 'params' => [
                                     'action' => 'showDiff',
                                 ],
@@ -63,11 +68,31 @@ return [
 
     'bjyauthorize' => [
         'guards' => [
-            'BjyAuthorize\Guard\Controller' => [
+            'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Import\Controller\Import',
-                    'action' => ['index','updateViewsAndPackages','showImportTbl','showDiff','update','updateTables'],
-                    'roles' => ['administrateur'],
+                    'action'     => ['index'],
+                    'privileges' => [Privilege::IMPORT_ECARTS, Privilege::IMPORT_MAJ, Privilege::IMPORT_TBL, Privilege::IMPORT_VUES_PROCEDURES],
+                ],
+                [
+                    'controller' => 'Import\Controller\Import',
+                    'action'     => ['showDiff'],
+                    'privileges' => [Privilege::IMPORT_ECARTS],
+                ],
+                [
+                    'controller' => 'Import\Controller\Import',
+                    'action'     => ['showImportTbl'],
+                    'privileges' => [Privilege::IMPORT_TBL],
+                ],
+                [
+                    'controller' => 'Import\Controller\Import',
+                    'action'     => ['update','updateTables'],
+                    'privileges' => [Privilege::IMPORT_MAJ],
+                ],
+                [
+                    'controller' => 'Import\Controller\Import',
+                    'action'     => ['updateViewsAndPackages'],
+                    'privileges' => [Privilege::IMPORT_VUES_PROCEDURES],
                 ],
             ],
         ],

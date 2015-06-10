@@ -8,8 +8,8 @@ $modules = [
     'UnicaenAuth',
     'UnicaenLdap',
     'Common',
+    'Application',
     'Import',
-    'Application'
 ];
 
 if ( file_exists(dirname(dirname(__FILE__)).'/module/Debug') ) {

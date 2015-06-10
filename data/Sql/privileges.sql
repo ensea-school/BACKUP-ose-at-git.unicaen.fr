@@ -6,20 +6,22 @@ INSERT INTO CATEGORIE_PRIVILEGE (
   LIBELLE
 ) VALUES (
   CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
-  'intervenant',
-  'Intervenant'
+  'import',
+  'Import'
 );
 
 INSERT INTO PRIVILEGE (
   ID,
   CATEGORIE_ID,
   CODE,
-  LIBELLE
+  LIBELLE,
+  ORDRE
 ) VALUES (
   privilege_id_seq.nextval,
-  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = 'intervenant' ),
+  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = 'import' ),
   'fiche',
-  'Visualisation de la fiche'
+  'Visualisation de la fiche',
+  1
 );
 
 

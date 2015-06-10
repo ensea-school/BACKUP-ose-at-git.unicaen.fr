@@ -11,6 +11,7 @@
 <div>Toutes les lignes n'ont pas été affichées, leur nombre dépassant 100</div>
 <?php endif; ?>
 
+<?php if ($this->isAllowed('privilege/'.Application\Entity\Db\Privilege::IMPORT_MAJ)): ?>
 <div>
 <?php if (in_array($table, $mviews)): ?>
     <a class="import-update-mv" href="javascript:void(0)" data-table="<?php echo $table ?>">
@@ -29,6 +30,7 @@
     <img src="<?php echo $this->basePath('loading.gif') ?>" />
     Traitement en cours, merci de patienter. L'opération peut prendre jusqu'à plusieurs minutes.
 </div>
+<?php endif; ?>
 </div>
 <?php endforeach; ?>
 

@@ -111,11 +111,13 @@ class ValidationServiceAssertion extends ValidationEnsRefAbstractAssertion
      */
     protected function getTypeVolumeHoraire()
     {
-        if (!count($this->resource->getVolumeHoraire())) {
+        $tvh = $this->getMvcEvent()->getParam('typeVolumeHoraire');
+        
+        if (! $tvh) {
             throw new LogicException(
-                    "Impossible de déterminer le type de volume horaire car la validation ne possède aucun volume horaire.");
+                    "Aucun type de volume horaire spécifié dans l'événement MVC.");
         }
         
-        return $this->resource->getVolumeHoraire()[0]->getTypeVolumeHoraire();
+        return $tvh;
     }
 }

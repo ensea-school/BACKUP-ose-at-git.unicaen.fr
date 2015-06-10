@@ -237,6 +237,8 @@ class ValidationController extends AbstractActionController
         $servicesNonValides  = [];
         $messages            = [];
 
+        $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
+        
         // interrogation des règles métiers de validation
         $rule = $this->getServiceLocator()->get('ValidationEnseignementRule') /* @var $rule ValidationEnseignementRule */
                 ->setIntervenant($this->intervenant)

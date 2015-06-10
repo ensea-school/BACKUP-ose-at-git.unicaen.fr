@@ -24,33 +24,20 @@ INSERT INTO PRIVILEGE (
 
 
 select
-  --p.id, cp.code categorie, p.code privilege,
-  '    const '
-    || rpad( upper( replace( cp.code, '-', '_' ) || '_' || replace( p.code, '-', '_' ) ), MAX( length( cp.code ) + length( p.code ) ) OVER (PARTITION BY 1 )+1, ' ' )
-    || ' = ' || '''' || cp.code || '-' || p.code || '''' || ';' php_const
+  p.id, cp.code categorie, p.code privilege
+  --'    const '
+  --  || rpad( upper( replace( cp.code, '-', '_' ) || '_' || replace( p.code, '-', '_' ) ), MAX( length( cp.code ) + length( p.code ) ) OVER (PARTITION BY 1 )+1, ' ' )
+  --  || ' = ' || '''' || cp.code || '-' || p.code || '''' || ';' php_const
 from
   privilege p
   join categorie_privilege cp on cp.id = p.categorie_id
 order by
-  cp.code, p.code;
+  cp.code, p.ordre;
   
-  
 
 
--- EXPORT
 
-role_privilege
-statut_privilege
+update privilege set ordre = 1 where id = 6;
+update privilege set ordre = 2 where id = 5;
+update privilege set ordre = 3 where id = 10;
 
-;
-
-SELECT 'INSERT INTO PERIMETRE (
-    ID,
-    CODE,
-    LIBELLE
-  ) VALUES (
-    PERIMETRE_ID_SEQ.NEXTVAL,
-    ''' || code || ''',
-    q''$' || libelle || '$''
-  );'
-FROM perimetre;

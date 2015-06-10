@@ -113,10 +113,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             /** @deprecated */
             if ($roleId == 'gestionnaire-composante')   { $roleClass = 'Application\Acl\GestionnaireComposanteRole'; $parent='composante';}
             if ($roleId == 'directeur-composante')      { $roleClass = 'Application\Acl\DirecteurComposanteRole';    $parent='composante';}
-            if ($roleId == 'administrateur')            { $roleClass = 'Application\Acl\AdministrateurRole';}
+            if ($roleId == 'administrateur')            { $roleClass = 'Application\Acl\AdministrateurRole';                              }
             if ($roleId == 'responsable-composante')    { $roleClass = 'Application\Acl\ResponsableComposanteRole';  $parent='composante';}
-            if ($roleId == 'superviseur-etablissement') { $roleClass = 'Application\Acl\EtablissementRole'; }
-            if ($roleId == 'gestionnaire-drh')          { $roleClass = 'Application\Acl\DrhRole'; }
+            if ($roleId == 'superviseur-etablissement') { $roleClass = 'Application\Acl\EtablissementRole';                               }
+            if ($roleId == 'gestionnaire-drh')          { $roleClass = 'Application\Acl\DrhRole';                                         }
             /* FIN de deprecated */
 
             $role = new $roleClass( $roleId, $parent, $dbRole->getLibelle() );

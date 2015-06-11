@@ -17,8 +17,15 @@ $this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
 <h1 class="page-header"><?php echo $title; ?></h1>
 
 <?php
+$html = $this->demandeMiseEnPaiement( $servicesAPayer )->render();
 
-echo $this->demandeMiseEnPaiement( $servicesAPayer )->render();
+/**
+ * NB: l'appel $this->messageCollector() doit être fait après $this->demandeMiseEnPaiement() car
+ * MiseEnPaiementAssertion transmet des messages au collecteur de messages.
+ */
+echo $this->messageCollector();
+
+echo $html;
 
 if ($saved){
 ?>

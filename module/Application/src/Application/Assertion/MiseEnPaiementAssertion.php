@@ -24,6 +24,8 @@ class MiseEnPaiementAssertion extends AbstractAssertion
     use \Application\Service\Traits\ServiceReferentielAwareTrait;
     use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
     
+    use \UnicaenApp\Service\MessageCollectorAwareTrait;
+    
     const PRIVILEGE_VISUALISATION      = 'visualisation';
     const PRIVILEGE_DEMANDE            = 'demande';
     const PRIVILEGE_VALIDATION         = 'validation';
@@ -99,6 +101,7 @@ class MiseEnPaiementAssertion extends AbstractAssertion
         
         // la clôture de la saisie du réalisé doit être faite
         if (! $cloture) {
+            $this->getServiceMessageCollector()->addMessage("La demande de mise en paiement est impossible tant que la saisie des enseignements et référentiel réalisés n'est pas clôturée.", 'danger');
             return false;
         }
         
@@ -135,6 +138,7 @@ class MiseEnPaiementAssertion extends AbstractAssertion
                 ->andWhere("vh.validation IS EMPTY");
         $count = (int) $qb->getQuery()->getSingleScalarResult();
         if ($count) {
+            $this->getServiceMessageCollector()->addMessage("La demande de mise en paiement est impossible tant qu'il existe des enseignements réalisés non validés.", 'danger');
             return false;
         }
         
@@ -150,6 +154,7 @@ class MiseEnPaiementAssertion extends AbstractAssertion
                 ->andWhere("vhr.validation IS EMPTY");
         $count = (int) $qb->getQuery()->getSingleScalarResult();
         if ($count) {
+            $this->getServiceMessageCollector()->addMessage("La demande de mise en paiement est impossible tant qu'il existe du référentiel réalisé non validé.", 'danger');
             return false;
         }
         

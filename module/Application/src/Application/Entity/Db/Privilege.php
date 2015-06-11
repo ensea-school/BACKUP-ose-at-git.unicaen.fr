@@ -7,20 +7,23 @@ namespace Application\Entity\Db;
  */
 class Privilege
 {
+    const ENSEIGNEMENT_VISUALISATION        = 'enseignement-visualisation';
+    const ENSEIGNEMENT_EXPORT_CSV           = 'enseignement-export-csv';
     const IMPORT_ECARTS                     = 'import-ecarts';
     const IMPORT_MAJ                        = 'import-maj';
     const IMPORT_TBL                        = 'import-tbl';
     const IMPORT_VUES_PROCEDURES            = 'import-vues-procedures';
     const INTERVENANT_RECHERCHE             = 'intervenant-recherche';
     const INTERVENANT_FICHE                 = 'intervenant-fiche';
-    const MISE_EN_PAIEMENT_MISE_EN_PAIEMENT = 'mise-en-paiement-mise-en-paiement';
-    const MISE_EN_PAIEMENT_DEMANDE          = 'mise-en-paiement-demande';
+    const INTERVENANT_CALCUL_HETD           = 'intervenant-calcul-hetd';
     const MISE_EN_PAIEMENT_VISUALISATION    = 'mise-en-paiement-visualisation';
-    const MISE_EN_PAIEMENT_EXPORT_PDF       = 'mise-en-paiement-export-pdf';
+    const MISE_EN_PAIEMENT_DEMANDE          = 'mise-en-paiement-demande';
     const MISE_EN_PAIEMENT_EXPORT_CSV       = 'mise-en-paiement-export-csv';
+    const MISE_EN_PAIEMENT_EXPORT_PDF       = 'mise-en-paiement-export-pdf';
+    const MISE_EN_PAIEMENT_MISE_EN_PAIEMENT = 'mise-en-paiement-mise-en-paiement';
     const MISE_EN_PAIEMENT_EXPORT_PAIE      = 'mise-en-paiement-export-paie';
-    const MODIF_SERVICE_DU_EDITION          = 'modif-service-du-edition';
     const MODIF_SERVICE_DU_VISUALISATION    = 'modif-service-du-visualisation';
+    const MODIF_SERVICE_DU_EDITION          = 'modif-service-du-edition';
     const MODIF_SERVICE_DU_ASSOCIATION      = 'modif-service-du-association';
     const PRIVILEGE_VISUALISATION           = 'privilege-visualisation';
     const PRIVILEGE_EDITION                 = 'privilege-edition';

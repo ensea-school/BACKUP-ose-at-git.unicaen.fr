@@ -493,6 +493,13 @@ return [
                     ],
                     'assertion'  => 'ModificationServiceDuAssertion',
                 ],
+                [
+                    'controller' => 'Application\Controller\Intervenant',
+                    'action'     => ['voir-heures-comp'],
+                    'privileges' => [
+                        Privilege::INTERVENANT_CALCUL_HETD
+                    ],
+                ],
             ],
             'BjyAuthorize\Guard\Controller' => [
                 [
@@ -515,11 +522,6 @@ return [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['choisir', 'rechercher', 'search'],
                     'roles'      => [R_COMPOSANTE, R_ADMINISTRATEUR],
-                ],
-                [
-                    'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['voir-heures-comp'],
-                    'roles'      => [R_DRH, R_ADMINISTRATEUR, R_COMPOSANTE, R_ETABLISSEMENT],
                 ],
                 [
                     'controller' => 'Application\Controller\Dossier',

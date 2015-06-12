@@ -12,6 +12,7 @@ use Application\Entity\Db\Annee as AnneeEntity;
  */
 class Annee extends AbstractEntityService
 {
+    use \Application\Traits\SessionContainerTrait;
 
     /**
      * retourne la classe des entités
@@ -103,23 +104,27 @@ class Annee extends AbstractEntityService
      */
     public function getChoixAnnees()
     {
-        $sql = 'SELECT DISTINCT 
-            annee_id
-        FROM 
-            ELEMENT_PEDAGOGIQUE ep
-        WHERE 
-            1 = OSE_DIVERS.COMPRISE_ENTRE(ep.HISTO_CREATION, ep.HISTO_DESTRUCTION)
-        ORDER BY 
-            annee_id ASC';
-        $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
-        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $session = $this->getSessionContainer();
 
-        $annees = [];
-        foreach( $result as $annee ){
-            $a = $annee['ANNEE_ID'];
-            $annees[$a] = $a.'-'.($a+1);
+        if (! isset($session->choixAnnees)){
+            $sql = 'SELECT DISTINCT
+                annee_id
+            FROM
+                ELEMENT_PEDAGOGIQUE ep
+            WHERE
+                1 = OSE_DIVERS.COMPRISE_ENTRE(ep.HISTO_CREATION, ep.HISTO_DESTRUCTION)
+            ORDER BY
+                annee_id ASC';
+            $stmt = $this->getEntityManager()->getConnection()->executeQuery($sql);
+            $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            $session->choixAnnees = [];
+            foreach( $result as $annee ){
+                $a = $annee['ANNEE_ID'];
+                $session->choixAnnees[$a] = $a.'-'.($a+1);
+            }
         }
-        return $annees;
+        return $session->choixAnnees;
     }
 
 }

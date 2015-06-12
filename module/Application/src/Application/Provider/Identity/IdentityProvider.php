@@ -75,11 +75,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
              * Rôle correspondant au type d'intervenant auquel appartient l'utilisateur
              */
             if ($intervenant = $utilisateur->getIntervenant()){
-                if ($intervenant->estPermanent()){
-                    $this->roles[] = Acl\IntervenantPermanentRole::ROLE_ID;
-                }else{
-                    $this->roles[] = Acl\IntervenantExterieurRole::ROLE_ID;
-                }
+                $this->roles[] = $intervenant->getStatut()->getRoleId();
             }
         }
         return $this->roles;

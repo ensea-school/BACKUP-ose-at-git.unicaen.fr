@@ -20,8 +20,10 @@ use Application\Acl\IntervenantRole;
  */
 class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {
-    use EntityManagerAwareTrait;
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    use EntityManagerAwareTrait,
+        \Zend\ServiceManager\ServiceLocatorAwareTrait,
+        \Application\Service\Traits\StatutIntervenantAwareTrait
+    ;
 
     /**
      * @var array
@@ -80,16 +82,6 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
         $utilisateur = $serviceAuthUserContext->getDbUser();
 
-        /* Cas spécifique du rôle intervenant */
-        if ($utilisateur && $intervenant = $utilisateur->getIntervenant()){
-            /* @var $intervenant \Application\Entity\Db\Intervenant */
-            if ($intervenant->estPermanent()){
-                $role = $roles[\Application\Acl\IntervenantPermanentRole::ROLE_ID];
-            }else{
-                $role = $roles[\Application\Acl\IntervenantExterieurRole::ROLE_ID];
-            }
-            $role->setIntervenant( $utilisateur->getIntervenant() );
-        }
 
         /* Rôles du personnel */
         $personnel = null;
@@ -106,7 +98,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             ->setParameter(':personnel', $personnel);
 
         foreach ($qb->getQuery()->getResult() as $dbRole) { /* @var $dbRole \Application\Entity\Db\Role */
-            $roleId = $dbRole->getCode();
+            $roleId = $dbRole->getRoleId();
 
             $roleClass = 'Application\Acl\Role';
             $parent = 'user';
@@ -147,6 +139,32 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                 }
             }
         }
+
+
+        // Chargement des rôles par statut d'intervenant
+        $statuts = $this->getServiceStatutIntervenant()->getList();
+        foreach( $statuts as $statut ){
+            $roleId = $statut->getRoleId();
+
+            /** @deprecated */
+            if ($statut->getTypeIntervenant()->getCode() === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT){
+                $parent = \Application\Acl\IntervenantPermanentRole::ROLE_ID;
+                $roleClass = 'Application\Acl\IntervenantPermanentRole';
+            }else{
+                $parent = \Application\Acl\IntervenantExterieurRole::ROLE_ID;
+                $roleClass = 'Application\Acl\IntervenantExterieurRole';
+            }
+            /* FIN de deprecated */
+            $role = new $roleClass( $roleId, $parent, $roles[$parent]->getRoleName() );
+
+            if ($utilisateur && $intervenant = $utilisateur->getIntervenant()){
+                if ($intervenant->getStatut() == $statut){
+                    $role->setIntervenant( $intervenant );
+                }
+            }
+            $roles[$roleId] = $role;
+        }
+
         return $roles;
     }
 

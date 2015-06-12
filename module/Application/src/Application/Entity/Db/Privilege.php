@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Privilege
@@ -219,7 +220,11 @@ class Privilege
         $result = [];
         foreach( $this->role as $role ){
             /* @var $role Role */
-            $result[] = $role->getCode();
+            $result[] = $role->getRoleId();
+        }
+        foreach( $this->statut as $statut ){
+            /* @var $statut StatutIntervenant */
+            $result[] = $statut->getRoleId();
         }
         return $result;
     }
@@ -262,11 +267,8 @@ class Privilege
         return $this->getLibelle();
     }
 
-    public static function getResourceId($privilege)
+    public function getResourceId()
     {
-        if ($privilege instanceof Privilege)
-            $privilege = $privilege->getFullCode ();
-
-        return sprintf('privilege/%s', $privilege);
+        return sprintf('privilege/%s', $this->getFullCode());
     }
 }

@@ -3,7 +3,6 @@
 namespace Application\Entity\Db;
 
 use Zend\Permissions\Acl\Role\RoleInterface;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Role

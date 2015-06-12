@@ -2,12 +2,12 @@
 
 namespace Application\Entity\Db;
 
-use Zend\Permissions\Acl\Resource\ResourceInterface;
+use Zend\Permissions\Acl\Role\RoleInterface;
 
 /**
  * StatutIntervenant
  */
-class StatutIntervenant implements HistoriqueAwareInterface
+class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 {
     const ENS_2ND_DEG        = 'ENS_2ND_DEG';
     const ENS_CH             = 'ENS_CH';
@@ -803,20 +803,11 @@ class StatutIntervenant implements HistoriqueAwareInterface
     /**
      * Get privilege
      *
-     * @param ResourceInterface|string|null $resource
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPrivilege( $resource=null )
+    public function getPrivilege()
     {
-        return $this->privilege->filter( function(Privilege $privilege) use ($resource){
-            if (empty($resource)){
-                return true; // pas de filtre
-            }
-            if ($resource instanceof ResourceInterface){
-                $resource = $resource->getResourceId();
-            }
-            return $privilege->getRessource()->getCode() === $resource;
-        });
+        return $this->privilege;
     }
 
     /**
@@ -824,20 +815,23 @@ class StatutIntervenant implements HistoriqueAwareInterface
      * Si le privilège transmis est un objet de classe Privilege, alors il est inutile de fournir la ressource, sinon il est obligatoire de la préciser
      *
      * @param Privilege|string $privilege
-     * @param ResourceInterface|string|null $resource
      * @return boolean
      * @throws \Common\Exception\LogicException
      */
-    public function hasPrivilege( $privilege, $resource=null )
+    public function hasPrivilege( $privilege )
     {
         if ($privilege instanceof Privilege){
-            $resource  = $privilege->getRessource();
             $privilege = $privilege->getFullCode();
         }
-        $privileges = $this->getPrivilege($resource);
+        $privileges = $this->getPrivilege();
         foreach( $privileges as $priv ){
             if ($priv->getFullCode() === $privilege) return true;
         }
         return false;
+    }
+
+    public function getRoleId()
+    {
+        return 'statut/'.$this->getSourceCode();
     }
 }

@@ -515,7 +515,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['voir', 'index', 'feuille-de-route'],
+                    'action'     => ['index', 'feuille-de-route'],
                     'roles'      => [R_INTERVENANT, R_COMPOSANTE,  R_ADMINISTRATEUR],
                 ],
                 [

@@ -35,8 +35,7 @@ class IndexController extends AbstractActionController
             'role'  => $role,
         ]);
 
-        if ($role->getPersonnel()) {
-            $personnel = $role->getPersonnel();
+        if ($role && $personnel = $role->getPersonnel()) {
             // URL de la page affichant les indicateurs auxquels est abonné l'utilisateur
             $view->setVariable('abonnementsUrl', $this->url()->fromRoute('indicateur/abonnements', ['personnel' => $personnel->getId()]));
         }

@@ -15,6 +15,9 @@ $modules = [
 if ( file_exists(dirname(dirname(__FILE__)).'/module/Debug') ) {
     $modules[] = 'Debug';
 }
+if ('development' == getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development' ){
+    $modules[] = 'ZendDeveloperTools';
+}
 
 return [
     'modules' => $modules,

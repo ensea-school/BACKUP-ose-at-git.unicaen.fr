@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "748ee1c993c5f0ae90ee21769545e4da",
+    "hash": "576003317eb851879dd8a9d7b52c5eb0",
     "packages": [
         {
             "name": "bjyoungblood/bjy-authorize",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bjyoungblood/BjyAuthorize.git",
-                "reference": "7553b9ec4f23fb665135d51c520b21289abf1c5e"
+                "reference": "be5a6b7cb8ca578f611a75f129cec1808c39da0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bjyoungblood/BjyAuthorize/zipball/7553b9ec4f23fb665135d51c520b21289abf1c5e",
-                "reference": "7553b9ec4f23fb665135d51c520b21289abf1c5e",
+                "url": "https://api.github.com/repos/bjyoungblood/BjyAuthorize/zipball/be5a6b7cb8ca578f611a75f129cec1808c39da0f",
+                "reference": "be5a6b7cb8ca578f611a75f129cec1808c39da0f",
                 "shasum": ""
             },
             "require": {
@@ -74,7 +74,7 @@
                 "zf2",
                 "zfc-user"
             ],
-            "time": "2014-11-24 16:24:12"
+            "time": "2015-05-27 09:14:26"
         },
         {
             "name": "doctrine/annotations",
@@ -1069,21 +1069,20 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.7",
-            "target-dir": "Symfony/Component/Console",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "ebc5679854aa24ed7d65062e9e3ab0b18a917272"
+                "reference": "564398bc1f33faf92fc2ec86859983d30eb81806"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/ebc5679854aa24ed7d65062e9e3ab0b18a917272",
-                "reference": "ebc5679854aa24ed7d65062e9e3ab0b18a917272",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/564398bc1f33faf92fc2ec86859983d30eb81806",
+                "reference": "564398bc1f33faf92fc2ec86859983d30eb81806",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "psr/log": "~1.0",
@@ -1099,11 +1098,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Console\\": ""
                 }
             },
@@ -1123,25 +1122,24 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-02 15:18:45"
+            "time": "2015-06-10 15:30:22"
         },
         {
             "name": "symfony/process",
-            "version": "v2.6.7",
-            "target-dir": "Symfony/Component/Process",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "9f3c4baaf840ed849e1b1f7bfd5ae246e8509562"
+                "reference": "552d8efdc80980cbcca50b28d626ac8e36e3cdd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/9f3c4baaf840ed849e1b1f7bfd5ae246e8509562",
-                "reference": "9f3c4baaf840ed849e1b1f7bfd5ae246e8509562",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/552d8efdc80980cbcca50b28d626ac8e36e3cdd1",
+                "reference": "552d8efdc80980cbcca50b28d626ac8e36e3cdd1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "symfony/phpunit-bridge": "~2.7"
@@ -1149,11 +1147,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Process\\": ""
                 }
             },
@@ -1173,7 +1171,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-02 15:18:45"
+            "time": "2015-06-08 09:37:21"
         },
         {
             "name": "unicaen/unicaen-app",
@@ -1181,7 +1179,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@592"
+                "reference": "/trunk/@596"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",
@@ -1230,7 +1228,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenAuth",
-                "reference": "/trunk/@237"
+                "reference": "/trunk/@241"
             },
             "require": {
                 "bjyoungblood/bjy-authorize": ">=1.4",
@@ -2625,16 +2623,16 @@
         },
         {
             "name": "zendframework/zend-permissions-acl",
-            "version": "2.4.2",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-permissions-acl.git",
-                "reference": "695abe7902a1668a655569d94b1caf9393918547"
+                "reference": "7f1aac3bf99d0be8f71fe4ae79981338be8a08dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-permissions-acl/zipball/695abe7902a1668a655569d94b1caf9393918547",
-                "reference": "695abe7902a1668a655569d94b1caf9393918547",
+                "url": "https://api.github.com/repos/zendframework/zend-permissions-acl/zipball/7f1aac3bf99d0be8f71fe4ae79981338be8a08dc",
+                "reference": "7f1aac3bf99d0be8f71fe4ae79981338be8a08dc",
                 "shasum": ""
             },
             "require": {
@@ -2643,7 +2641,8 @@
             "require-dev": {
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "dev-master"
+                "zendframework/zend-di": "~2.5",
+                "zendframework/zend-servicemanager": "~2.5"
             },
             "suggest": {
                 "zendframework/zend-servicemanager": "To support Zend\\Permissions\\Acl\\Assertion\\AssertionManager plugin manager usage"
@@ -2651,8 +2650,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4-dev",
-                    "dev-develop": "2.5-dev"
+                    "dev-master": "2.5-dev",
+                    "dev-develop": "2.6-dev"
                 }
             },
             "autoload": {
@@ -2670,7 +2669,7 @@
                 "acl",
                 "zf2"
             ],
-            "time": "2015-05-07 14:55:31"
+            "time": "2015-06-03 15:32:02"
         },
         {
             "name": "zendframework/zend-serializer",
@@ -3698,21 +3697,20 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.6.7",
-            "target-dir": "Symfony/Component/Yaml",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "f157ab074e453ecd4c0fa775f721f6e67a99d9e2"
+                "reference": "9808e75c609a14f6db02f70fccf4ca4aab53c160"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/f157ab074e453ecd4c0fa775f721f6e67a99d9e2",
-                "reference": "f157ab074e453ecd4c0fa775f721f6e67a99d9e2",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/9808e75c609a14f6db02f70fccf4ca4aab53c160",
+                "reference": "9808e75c609a14f6db02f70fccf4ca4aab53c160",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
                 "symfony/phpunit-bridge": "~2.7"
@@ -3720,11 +3718,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Yaml\\": ""
                 }
             },
@@ -3744,7 +3742,124 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-02 15:18:45"
+            "time": "2015-06-10 15:30:22"
+        },
+        {
+            "name": "zendframework/zend-debug",
+            "version": "2.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-debug.git",
+                "reference": "b6f9df59155391ca683c479a0d758f66ef73b3b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-debug/zipball/b6f9df59155391ca683c479a0d758f66ef73b3b3",
+                "reference": "b6f9df59155391ca683c479a0d758f66ef73b3b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.23"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "1.7.*",
+                "phpunit/phpunit": "~4.0",
+                "zendframework/zend-escaper": "2.*"
+            },
+            "suggest": {
+                "ext/xdebug": "XDebug, for better backtrace output",
+                "zendframework/zend-escaper": "To support escaped output"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5-dev",
+                    "dev-develop": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Debug\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "homepage": "https://github.com/zendframework/zend-debug",
+            "keywords": [
+                "debug",
+                "zf2"
+            ],
+            "time": "2015-06-03 14:05:35"
+        },
+        {
+            "name": "zendframework/zend-developer-tools",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/ZendDeveloperTools.git",
+                "reference": "d3432681aa32177a741ad23604a40af9ad454acb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/d3432681aa32177a741ad23604a40af9ad454acb",
+                "reference": "d3432681aa32177a741ad23604a40af9ad454acb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "zendframework/zend-debug": "2.*",
+                "zendframework/zend-eventmanager": "2.*",
+                "zendframework/zend-modulemanager": "2.*",
+                "zendframework/zend-mvc": "2.*",
+                "zendframework/zend-servicemanager": "2.*",
+                "zendframework/zend-stdlib": "2.*",
+                "zendframework/zend-version": "2.*",
+                "zendframework/zend-view": "2.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4"
+            },
+            "suggest": {
+                "aist/aist-git-tools": "Show you informations about current GIT repository",
+                "bjyoungblood/bjy-profiler": "Version: dev-master, allows the usage of the (Zend) Db collector.",
+                "doctrine/doctrine-orm-module": "Profile DoctrineORM queries",
+                "jhuet/zdt-logger-module": "Show you log data from Zend\\Log",
+                "ocramius/ocra-service-manager": "OcraServiceManager can help you track dependencies within your application.",
+                "san/san-session-toolbar": "SanSessionToolbar can help you see current Zend\\Session data you're using within your application.",
+                "snapshotpl/zf-snap-event-debugger": "ZfSnapEventDebugger can help you debug events from Zend\\EventManager"
+            },
+            "type": "zf-module",
+            "autoload": {
+                "psr-0": {
+                    "ZendDeveloperTools": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Evan Coury",
+                    "email": "me@evancoury.com",
+                    "homepage": "http://blog.evan.pro/"
+                },
+                {
+                    "name": "Eric Boh",
+                    "email": "cossish@gmail.com"
+                }
+            ],
+            "description": "Module for developer and debug tools for working with the ZF2 MVC layer.",
+            "homepage": "https://github.com/zendframework/ZendDeveloperTools",
+            "keywords": [
+                "debug",
+                "developer",
+                "module",
+                "zf2"
+            ],
+            "time": "2015-05-06 10:10:04"
         },
         {
             "name": "zendframework/zend-dom",
@@ -3851,7 +3966,8 @@
         "unicaen/unicaen-auth": 20,
         "unicaen/unicaen-ldap": 20,
         "unicaen/unicaen-upload": 20,
-        "bjyoungblood/bjy-authorize": 20
+        "bjyoungblood/bjy-authorize": 20,
+        "zendframework/zend-developer-tools": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

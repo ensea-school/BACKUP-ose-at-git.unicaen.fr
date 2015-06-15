@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use UnicaenApp\Util;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Common\Exception\MessageException;
@@ -54,6 +55,11 @@ class ValidationController extends AbstractActionController
      * @var boolean
      */
     private $readonly = false;
+
+    /**
+     * @var boolean
+     */
+    private $isReferentiel;
 
     /**
      * @var \Application\Entity\Db\IntervenantExterieur
@@ -227,6 +233,7 @@ class ValidationController extends AbstractActionController
     {
         $this->initFilters();
 
+        $this->isReferentiel = false;
         $serviceService      = $this->getServiceService();
         $serviceValidation   = $this->getServiceValidation();
         $role                = $this->getServiceContext()->getSelectedIdentityRole();
@@ -327,55 +334,6 @@ class ValidationController extends AbstractActionController
     }
 
     /**
-     * Recherche les composantes qui n'ont pas encore validé les enseignements réalisé
-     *
-     * @return self
-     */
-    private function injectAttenteValidationMessage()
-    {
-        $this->view->attenteValidationMessage = null;
-        
-        // on ne s'intéresse qu'aux permanents
-        if (! $this->getIntervenant()->getStatut()->estPermanent()) {
-            return $this;
-        }
-        // on ne s'intéresse qu'au Réalisé
-        if ($this->getTypeVolumeHoraire()->getCode() !== TypeVolumeHoraire::CODE_REALISE) {
-            return $this;
-        }
-        
-        $dqlAttenteValidation = $this->em()->createQueryBuilder()
-                ->select("v.id")
-                ->from('Application\Entity\Db\VIndicAttenteValidationService', 'v')
-                ->join("v.intervenant", "i", Join::WITH, "i = :i")
-                ->join("v.structure", "s")
-                ->join("v.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-                ->andWhere("v.structure = str")
-                ->getQuery()
-                ->getDQL();
-        
-        list($qb,) = $this->getServiceStructure()->initQuery();
-        $qb
-                ->select("str.libelleCourt")
-                ->andWhere("EXISTS ( $dqlAttenteValidation )")
-                ->orderBy("str.libelleCourt")
-                ->setParameter('tvh', $this->getTypeVolumeHoraire())
-                ->setParameter('i', $this->getIntervenant());
-        
-        $structures = $qb->getQuery()->getArrayResult();
-        
-        if ($structures) {
-            $this->view->attenteValidationMessage = sprintf(
-                    "Les composantes suivantes n'ont pas encore validé les enseignements de type '%s' : %s",
-                    $this->getTypeVolumeHoraire(),
-                    '<ul><li>' . implode("</li><li>", \UnicaenApp\Util::extractArrayLeafNodes($structures)) . '</li></ul>'
-            );
-        }
-
-        return $this;
-    }
-
-    /**
      *
      * @param TypeValidation $typeValidation
      * @param TypeVolumeHoraire $typeVolumeHoraire
@@ -436,6 +394,7 @@ class ValidationController extends AbstractActionController
      */
     public function referentielAction()
     {
+        $this->isReferentiel    = true;
         $serviceReferentiel     = $this->getServiceReferentiel();
         $serviceValidation      = $this->getServiceValidation();
         $role                   = $this->getServiceContext()->getSelectedIdentityRole();
@@ -533,6 +492,8 @@ class ValidationController extends AbstractActionController
             }
         }
 
+        $this->injectAttenteValidationMessage();
+        
         return $this->view;
     }
 
@@ -580,6 +541,60 @@ class ValidationController extends AbstractActionController
 
             $this->validations[$validation->getId()]  = $validation;
             $this->referentiels[$validation->getId()] = $referentielsValides;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Recherche les composantes qui n'ont pas encore validé les enseignements réalisé
+     *
+     * @return self
+     */
+    private function injectAttenteValidationMessage()
+    {
+        $this->view->attenteValidationMessage = null;
+        
+        // on ne s'intéresse qu'aux permanents
+        if (! $this->getIntervenant()->getStatut()->estPermanent()) {
+            return $this;
+        }
+        // on ne s'intéresse qu'au Réalisé
+        if ($this->getTypeVolumeHoraire()->getCode() !== TypeVolumeHoraire::CODE_REALISE) {
+            return $this;
+        }
+        
+        $entityClass = $this->isReferentiel ? 
+                'Application\Entity\Db\VIndicAttenteValidationServiceRef' :
+                'Application\Entity\Db\VIndicAttenteValidationService';
+        
+        $dqlAttenteValidation = $this->em()->createQueryBuilder()
+                ->select("v.id")
+                ->from($entityClass, 'v')
+                ->join("v.intervenant", "i", Join::WITH, "i = :i")
+                ->join("v.structure", "s")
+                ->join("v.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                ->andWhere("v.structure = str")
+                ->getQuery()
+                ->getDQL();
+        
+        list($qb,) = $this->getServiceStructure()->initQuery();
+        $qb
+                ->select("str.libelleCourt")
+                ->andWhere("EXISTS ( $dqlAttenteValidation )")
+                ->orderBy("str.libelleCourt")
+                ->setParameter('tvh', $this->getTypeVolumeHoraire())
+                ->setParameter('i', $this->getIntervenant());
+        
+        $structures = $qb->getQuery()->getArrayResult();
+        
+        if ($structures) {
+            $this->view->attenteValidationMessage = sprintf(
+                    "Les composantes suivantes n'ont pas encore validé %s de type '%s' : %s",
+                    $this->isReferentiel ? "le référentiel" : "les enseignements",
+                    $this->getTypeVolumeHoraire(),
+                    '<ul><li>' . implode("</li><li>", Util::extractArrayLeafNodes($structures)) . '</li></ul>'
+            );
         }
 
         return $this;

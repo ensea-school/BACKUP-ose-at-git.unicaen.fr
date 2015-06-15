@@ -18,6 +18,7 @@ $libelle = "J'ai terminé la saisie de la totalité de mon service réalisé";
         $(function() {
             $("#btn-cloturer-saisie").click(function(e) {
                 e.preventDefault();
+                e.stopImmediatePropagation(); // nécessaire si cette vue est rendue plus d'une fois.
                 if (!confirm("<?php echo $this->confirm ?>")) {
                     return;
                 }

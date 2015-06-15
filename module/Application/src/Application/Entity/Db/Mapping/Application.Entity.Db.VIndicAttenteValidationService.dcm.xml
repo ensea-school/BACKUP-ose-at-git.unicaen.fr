@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Application\Entity\Db\VIndicAttenteValidationService" table="V_INDIC_ATT_VALID_SERVICE">
+    
+    <id name="id" type="integer" column="ID"/>
+
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant" inversed-by="vIndicAttenteDemandeMep">
+      <join-columns>
+        <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    
+    <many-to-one field="structure" target-entity="Application\Entity\Db\Structure">
+      <join-columns>
+        <join-column name="STRUCTURE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    
+    <many-to-one field="typeVolumeHoraire" target-entity="Application\Entity\Db\TypeVolumeHoraire">
+      <join-columns>
+        <join-column name="TYPE_VOLUME_HORAIRE_ID" referenced-column-name="ID"/>
+      </join-columns>
+    </many-to-one>
+    
+  </entity>
+</doctrine-mapping>

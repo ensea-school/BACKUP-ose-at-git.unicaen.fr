@@ -35,6 +35,17 @@ class Indicateur extends AbstractEntityService
     }
 
     /**
+     *
+     * @param string $code
+     * @return \Application\Entity\Db\Indicateur
+     */
+    public function getByCode( $code )
+    {
+        if (null == $code) return null;
+        return $this->getRepo()->findOneBy(['code' => $code]);
+    }
+
+    /**
      * Retourne la liste des étapes
      *
      * @param QueryBuilder|null $queryBuilder

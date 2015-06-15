@@ -15,6 +15,7 @@ use Application\Form\Intervenant\ServiceValidation;
 use Application\Form\Intervenant\ReferentielValidation;
 use Application\Rule\Validation\ValidationEnseignementRule;
 use Application\Rule\Validation\ValidationReferentielRule;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Description of ValidationController
@@ -26,7 +27,8 @@ use Application\Rule\Validation\ValidationReferentielRule;
  */
 class ValidationController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
+    use \Application\Service\Traits\ContextAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait;
 
     /**
      * @var \Application\Entity\Db\Service[]
@@ -100,7 +102,6 @@ class ValidationController extends AbstractActionController
      */
     public function dossierAction()
     {
-        $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         if ($role instanceof ComposanteRole) {
@@ -138,7 +139,7 @@ class ValidationController extends AbstractActionController
      */
     public function modifierDossierAction()
     {
-        $this->title    = "Validation des données personnelles <small>$this->intervenant</small>";
+        $this->title    = "Validation des données personnelles <small>{$this->getIntervenant()}</small>";
         $this->readonly = false;
 
         $this->commonDossier();
@@ -169,17 +170,17 @@ class ValidationController extends AbstractActionController
         $serviceValidation = $this->getServiceValidation();
         $typeValidation    = TypeValidation::CODE_DONNEES_PERSO;
 
-        $this->formValider = $this->getFormDossier()->setIntervenant($this->intervenant)->init();
+        $this->formValider = $this->getFormDossier()->setIntervenant($this->getIntervenant())->init();
 
         $this->initFilters();
 
         $qb = $serviceValidation->finderByType($typeValidation);
-        $serviceValidation->finderByIntervenant($this->intervenant, $qb);
+        $serviceValidation->finderByIntervenant($this->getIntervenant(), $qb);
         $serviceValidation->finderByHistorique($qb);
         $this->validation = $qb->getQuery()->getOneOrNullResult();
         if (!$this->validation) {
             $this->validation = $serviceValidation->newEntity($typeValidation);
-            $this->validation->setIntervenant($this->intervenant);
+            $this->validation->setIntervenant($this->getIntervenant());
 //            if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
                 $this->validation->setStructure($role->getStructure());
 //            }
@@ -190,7 +191,7 @@ class ValidationController extends AbstractActionController
         $this->formValider->bind($this->validation);
 
         $this->view = new \Zend\View\Model\ViewModel([
-            'intervenant' => $this->intervenant,
+            'intervenant' => $this->getIntervenant(),
             'validation'  => $this->validation,
             'form'        => $this->formValider,
             'role'        => $role,
@@ -229,10 +230,9 @@ class ValidationController extends AbstractActionController
         $serviceService      = $this->getServiceService();
         $serviceValidation   = $this->getServiceValidation();
         $role                = $this->getServiceContext()->getSelectedIdentityRole();
-        $typeVolumeHoraire   = $this->getServiceTypeVolumehoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU));
-        $this->intervenant   = $this->context()->mandatory()->intervenantFromRoute();
-        $this->formValider   = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
-        $this->title         = "Validation des enseignements de type '$typeVolumeHoraire' <small>$this->intervenant</small>";
+        $typeVolumeHoraire   = $this->getTypeVolumeHoraire();
+        $this->formValider   = $this->getFormValidationService()->setIntervenant($this->getIntervenant())->init();
+        $this->title         = "Validation des enseignements de type '$typeVolumeHoraire' <small>{$this->getIntervenant()}</small>";
         $typeValidation      = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_ENSEIGNEMENT)->getQuery()->getOneOrNullResult();
         $servicesNonValides  = [];
         $messages            = [];
@@ -241,25 +241,19 @@ class ValidationController extends AbstractActionController
         
         // interrogation des règles métiers de validation
         $rule = $this->getServiceLocator()->get('ValidationEnseignementRule') /* @var $rule ValidationEnseignementRule */
-                ->setIntervenant($this->intervenant)
+                ->setIntervenant($this->getIntervenant())
                 ->setTypeVolumeHoraire($typeVolumeHoraire)
                 ->setRole($role)
                 ->execute();
         $structuresEns       = $rule->getStructuresIntervention();
         $structureValidation = $rule->getStructureValidation();
-//        if (!$rule->isAllowed('read')) {
-//            return $this->redirect()->toRoute('home');
-//        }
         
         $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structuresEns, $structureValidation);
 
         $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes sur Service !
 
         // recherche des enseignements de l'intervenant non encore validés
-//        if ($typeVolumeHoraire->isRealise() && $this->intervenant->estPermanent() && in_array(null, $structuresEns)) {
-//            $structuresEns = array_filter($structuresEns);
-//        }
-        $servicesNonValides = $serviceService->fetchServicesDisposPourValidation($typeVolumeHoraire, $this->intervenant, $structuresEns);
+        $servicesNonValides = $serviceService->fetchServicesDisposPourValidation($typeVolumeHoraire, $this->getIntervenant(), $structuresEns);
         $serviceService->setTypeVolumehoraire($servicesNonValides, $typeVolumeHoraire);
 
         if (!count($servicesNonValides)) {
@@ -272,7 +266,7 @@ class ValidationController extends AbstractActionController
         if (count($servicesNonValides) && !$this->validation) {
             // instanciation de la nouvelle validation et peuplement avec les volumes horaires non validés
             $this->validation = $serviceValidation->newEntity($typeValidation)
-                    ->setIntervenant($this->intervenant)
+                    ->setIntervenant($this->getIntervenant())
                     ->setStructure($structureValidation);
             foreach ($servicesNonValides as $s) { /* @var $s \Application\Entity\Db\Service */
                 foreach ($s->getVolumeHoraire() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraire */
@@ -293,7 +287,7 @@ class ValidationController extends AbstractActionController
         $this->view = new \Zend\View\Model\ViewModel([
             'role'              => $role,
             'typeVolumeHoraire' => $typeVolumeHoraire,
-            'intervenant'       => $this->intervenant,
+            'intervenant'       => $this->getIntervenant(),
             'validations'       => $this->validations,
             'services'          => $this->services,
             'formValider'       => $this->formValider,
@@ -327,7 +321,58 @@ class ValidationController extends AbstractActionController
             }
         }
 
+        $this->injectAttenteValidationMessage();
+        
         return $this->view;
+    }
+
+    /**
+     * Recherche les composantes qui n'ont pas encore validé les enseignements réalisé
+     *
+     * @return self
+     */
+    private function injectAttenteValidationMessage()
+    {
+        $this->view->attenteValidationMessage = null;
+        
+        // on ne s'intéresse qu'aux permanents
+        if (! $this->getIntervenant()->getStatut()->estPermanent()) {
+            return $this;
+        }
+        // on ne s'intéresse qu'au Réalisé
+        if ($this->getTypeVolumeHoraire()->getCode() !== TypeVolumeHoraire::CODE_REALISE) {
+            return $this;
+        }
+        
+        $dqlAttenteValidation = $this->em()->createQueryBuilder()
+                ->select("v.id")
+                ->from('Application\Entity\Db\VIndicAttenteValidationService', 'v')
+                ->join("v.intervenant", "i", Join::WITH, "i = :i")
+                ->join("v.structure", "s")
+                ->join("v.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                ->andWhere("v.structure = str")
+                ->getQuery()
+                ->getDQL();
+        
+        list($qb,) = $this->getServiceStructure()->initQuery();
+        $qb
+                ->select("str.libelleCourt")
+                ->andWhere("EXISTS ( $dqlAttenteValidation )")
+                ->orderBy("str.libelleCourt")
+                ->setParameter('tvh', $this->getTypeVolumeHoraire())
+                ->setParameter('i', $this->getIntervenant());
+        
+        $structures = $qb->getQuery()->getArrayResult();
+        
+        if ($structures) {
+            $this->view->attenteValidationMessage = sprintf(
+                    "Les composantes suivantes n'ont pas encore validé les enseignements de type '%s' : %s",
+                    $this->getTypeVolumeHoraire(),
+                    '<ul><li>' . implode("</li><li>", \UnicaenApp\Util::extractArrayLeafNodes($structures)) . '</li></ul>'
+            );
+        }
+
+        return $this;
     }
 
     /**
@@ -356,7 +401,7 @@ class ValidationController extends AbstractActionController
         $qb = $serviceValidation->finderValidationsServices(
                 $typeVolumeHoraire,
                 $typeValidation,
-                $this->intervenant,
+                $this->getIntervenant(),
                 $structureEns,
                 $structureValidation);
         $validationsServices = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
@@ -367,7 +412,7 @@ class ValidationController extends AbstractActionController
             $qb = $serviceService->finderServicesValides(
                     $typeVolumeHoraire,
                     $validation,
-                    $this->intervenant,
+                    $this->getIntervenant(),
                     $structureEns,
                     $structureValidation);
             $servicesValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
@@ -395,10 +440,9 @@ class ValidationController extends AbstractActionController
         $serviceValidation      = $this->getServiceValidation();
         $role                   = $this->getServiceContext()->getSelectedIdentityRole();
         $typeVolumeHoraire      = $this->getServiceTypeVolumehoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU));
-        $this->intervenant      = $this->context()->mandatory()->intervenantFromRoute();
-        $this->formValider      = $this->getFormValidationService()->setIntervenant($this->intervenant)->init();
-        $this->title            = "Validation du référentiel de type '$typeVolumeHoraire' <small>$this->intervenant</small>";
-        $structureAffect        = $this->intervenant->getStructure();
+        $this->formValider      = $this->getFormValidationService()->setIntervenant($this->getIntervenant())->init();
+        $this->title            = "Validation du référentiel de type '$typeVolumeHoraire' <small>{$this->getIntervenant()}</small>";
+        $structureAffect        = $this->getIntervenant()->getStructure();
         $typeValidation         = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_REFERENTIEL)->getQuery()->getOneOrNullResult();
         $referentielsNonValides = [];
         $messages               = [];
@@ -407,7 +451,7 @@ class ValidationController extends AbstractActionController
 
         // interrogation des règles métiers de validation
         $rule = $this->getServiceLocator()->get('ValidationReferentielRule') /* @var $rule ValidationReferentielRule */
-                ->setIntervenant($this->intervenant)
+                ->setIntervenant($this->getIntervenant())
                 ->setTypeVolumeHoraire($typeVolumeHoraire)
                 ->setRole($role);
         try {
@@ -426,7 +470,7 @@ class ValidationController extends AbstractActionController
         $this->em()->clear('Application\Entity\Db\ServiceReferentiel'); // INDISPENSABLE entre 2 requêtes sur ServiceReferentiel !
 
         // recherche des référentiels de l'intervenant non encore validés
-        $qb = $serviceReferentiel->finderReferentielsNonValides($typeVolumeHoraire, $this->intervenant, $structureRef);
+        $qb = $serviceReferentiel->finderReferentielsNonValides($typeVolumeHoraire, $this->getIntervenant(), $structureRef);
         $referentielsNonValides = $qb->getQuery()->getResult();
 
         if (!count($referentielsNonValides)) {
@@ -440,7 +484,7 @@ class ValidationController extends AbstractActionController
         if (count($referentielsNonValides) && !$this->validation) {
             // instanciation de la nouvelle validation et peuplement avec les volumes horaires non validés
             $this->validation = $serviceValidation->newEntity($typeValidation)
-                    ->setIntervenant($this->intervenant)
+                    ->setIntervenant($this->getIntervenant())
                     ->setStructure($structureValidation ?: $structureAffect);
             foreach ($referentielsNonValides as $s) { /* @var $s \Application\Entity\Db\ServiceReferentiel */
                 foreach ($s->getVolumeHoraireReferentiel() as $vh) { /* @var $vh \Application\Entity\Db\VolumeHoraireReferentiel */
@@ -461,7 +505,7 @@ class ValidationController extends AbstractActionController
         $this->view = new \Zend\View\Model\ViewModel([
             'role'                 => $role,
             'typeVolumeHoraire'    => $typeVolumeHoraire,
-            'intervenant'          => $this->intervenant,
+            'intervenant'          => $this->getIntervenant(),
             'validations'          => $this->validations,
             'referentiels'         => $this->referentiels,
             'formValider'          => $this->formValider,
@@ -518,7 +562,7 @@ class ValidationController extends AbstractActionController
         $qb = $serviceValidation->finderValidationsReferentiels(
                 $typeVolumeHoraire,
                 $typeValidation,
-                $this->intervenant,
+                $this->getIntervenant(),
                 $structureRef,
                 $structureValidation);
         $validationsReferentiels = $qb->getQuery()->getResult();
@@ -529,7 +573,7 @@ class ValidationController extends AbstractActionController
             $qb = $serviceReferentiel->finderReferentielsValides(
                     $typeVolumeHoraire,
                     $validation,
-                    $this->intervenant,
+                    $this->getIntervenant(),
                     $structureRef,
                     $structureValidation);
             $referentielsValides = $qb->getQuery()/*->setHint(\Doctrine\ORM\Query::HINT_REFRESH, true)*/->getResult();
@@ -632,6 +676,36 @@ class ValidationController extends AbstractActionController
         }
 
         return $this->formValider;
+    }
+
+    /**
+     * @return Intervenant
+     */
+    protected function getIntervenant()
+    {
+        if (null === $this->intervenant) {
+            $this->intervenant = $this->context()->mandatory()->intervenantFromRoute();
+        }
+        
+        return $this->intervenant;
+    }
+
+    /**
+     * @var TypeVolumeHoraire
+     */
+    protected $typeVolumeHoraire;
+    
+    /**
+     * @return TypeVolumeHoraire
+     */
+    protected function getTypeVolumeHoraire()
+    {
+        if (null === $this->typeVolumeHoraire) {
+            $code = $this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU);
+            $this->typeVolumeHoraire = $this->getServiceTypeVolumehoraire()->getByCode($code);
+        }
+        
+        return $this->typeVolumeHoraire;
     }
 
     /**

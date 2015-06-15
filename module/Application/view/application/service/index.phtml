@@ -53,6 +53,10 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
                 "Merci de saisir les heures effectuées <strong>sans majoration</strong>. Exemple: saisissez 1h CM et non 1,5h TD."); ?>
     <?php endif; ?>
 
+    <!-- bouton de cloture de la saisie du réalisé des permanents -->
+    <?php echo $this->clotureSaisie ?>
+    <hr />
+
     <?php echo $serviceListe->render(); ?>
 
     <?php if ($intervenant === null || $intervenant->getStatut()->getPeutSaisirReferentiel()): ?>
@@ -60,7 +64,9 @@ $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
     <?php endif; ?>
 
     <!-- bouton de cloture de la saisie du réalisé des permanents -->
+    <hr />
     <?php echo $this->clotureSaisie ?>
+    <hr />
     
     <?php echo $this->formuleTotauxHetd; ?>
 

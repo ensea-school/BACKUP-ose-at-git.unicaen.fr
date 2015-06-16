@@ -3,6 +3,7 @@
 namespace Application\Rule\Validation;
 
 use Application\Acl\ComposanteRole;
+use Application\Acl\AdministrateurRole;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Workflow\Workflow;
 use Common\Exception\LogicException;
@@ -129,7 +130,10 @@ class ValidationReferentielRule extends ValidationEnsRefAbstractRule
         /*********************************************************
          *                      Rôle Composante
          *********************************************************/
-        if ($this->role instanceof ComposanteRole) {
+        if (
+                $this->role instanceof ComposanteRole ||
+                $this->role instanceof AdministrateurRole
+        ) {
             if ('read' === $privilege) {
                 return true; // les composantes voient tout
             }

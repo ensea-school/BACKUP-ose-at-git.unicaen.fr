@@ -5,7 +5,6 @@ namespace Application\Rule\Validation;
 use Application\Acl\IntervenantRole;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
-use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Service\Workflow\Workflow;
 
 /**
@@ -38,7 +37,7 @@ class ClotureRealiseRule extends ValidationEnsRefAbstractRule
         /***************************************************************************
          *                                  RÉALISÉ
          ***************************************************************************/
-        if (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
+        if ($this->isInContexteRealise()) {
             
             // Validation par la composante d'affectation de l'intervenant.
             $this->structureValidation = $this->intervenant->getStructure();
@@ -59,6 +58,13 @@ class ClotureRealiseRule extends ValidationEnsRefAbstractRule
      */
     public function isAllowed($privilege)
     {
+        /**
+         * On ne peut clôturer que du Réalisé.
+         */
+        if (! $this->isInContexteRealise()) {
+            return false;
+        }
+        
         /**
          * Interrogation du workflow.
          */
@@ -81,15 +87,9 @@ class ClotureRealiseRule extends ValidationEnsRefAbstractRule
                 $this->role instanceof ComposanteRole || 
                 $this->role instanceof AdministrateurRole && $this->structureRole
         ) {
-            /***************************************************************************
-             *                                  REALISE
-             ***************************************************************************/
-            if (TypeVolumeHoraire::CODE_REALISE === $this->typeVolumeHoraire->getCode()) {
-                
                 // Validation par la composante d'affectation de l'intervenant.
                 return $this->structureRole === $this->structureValidation;
             }
-        }
         
         return false;
     }

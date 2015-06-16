@@ -125,7 +125,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
             $totaux['heures-ref'] += $line['heures-ref'];
             $totaux['total'] += $line['total'];
             $res .= '<td style="text-align:right;white-space:nowrap">'.($intervenantPermanent ? \Common\Util::formattedHeures($line['heures-ref']) : $na).'</td>'."\n";
-            $res .= $this->renderServiceDu( $line['heures-service-statutaire'] - $line['heures-service-du-modifie'] );
+            $res .= $this->renderServiceDu( $line['heures-service-statutaire'] + $line['heures-service-du-modifie'] );
             $res .= $this->renderSoldeHetd($line['solde'], $intervenantPermanent);
             $res .= '</tr>'."\n";
         }

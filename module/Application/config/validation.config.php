@@ -41,9 +41,10 @@ return [
                     'supprimer' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/:validation/supprimer',
+                            'route'    => '/:validation/supprimer/:typeVolumeHoraire',
                             'constraints' => [
                                 'validation' => '[0-9]*',
+                                'typeVolumeHoraire' => '[0-9]*',
                             ],
                             'defaults' => [
                                 'action' => 'supprimer',

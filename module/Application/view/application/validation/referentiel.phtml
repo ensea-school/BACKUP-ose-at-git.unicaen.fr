@@ -41,7 +41,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger()->addMessages($messages)
                     <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
                     <?php echo $referentielsValidation ?>
                     <?php if ($this->isAllowed($validation, 'delete')): ?>
-                        <a href="<?php echo $this->url('validation/supprimer', ['validation' => $validation->getId()]) ?>"
+                        <a href="<?php echo $this->url('validation/supprimer', ['validation' => $validation->getId(), 'typeVolumeHoraire' => $typeVolumeHoraire->getId()]) ?>"
                            class="validation-delete ajax-modal btn btn-primary"
                            data-event="validation-delete-event">Supprimer cette validation</a>
                     <?php endif ?>

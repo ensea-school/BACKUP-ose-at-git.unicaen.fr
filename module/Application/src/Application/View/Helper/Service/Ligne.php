@@ -93,14 +93,15 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     {
         $liste = $this->getListe();
         $service = $this->getService();
+        $element = $service->getElementPedagogique();
 
-        $vhl     = $this->getService()->getVolumeHoraireListe()->setTypeVolumeHoraire( $liste->getTypeVolumeHoraire() );
+        $vhl     = $service->getVolumeHoraireListe()->setTypeVolumeHoraire( $liste->getTypeVolumeHoraire() );
 
         $typesIntervention = $this->getListe()->getTypesIntervention();
 
         $out = '';
         if ($liste->getColumnVisibility('intervenant')){
-            $out .= '<td>'.$this->renderIntervenant($this->getService()->getIntervenant()).'</td>';
+            $out .= '<td>'.$this->renderIntervenant($service->getIntervenant()).'</td>';
         }
         if ($liste->getColumnVisibility('structure-aff')){
             if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
@@ -109,21 +110,21 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                 $out .= "<td>&nbsp;</td>\n";
             }
         }
-        if ($service->getEtablissement() === $this->getServiceContext()->getEtablissement()) {
+        if (empty($element)) {
             if ($liste->getColumnVisibility('structure-ens')){
-                $out .= '<td>'.$this->renderStructure($service->getElementPedagogique() ? $service->getElementPedagogique()->getStructure() : null)."</td>\n";
+                $out .= '<td>'.$this->renderStructure($element ? $element->getStructure() : null)."</td>\n";
             }
             if ($liste->getColumnVisibility('formation')){
-                $out .= '<td>'.$this->renderEtape($this->getService()->getElementPedagogique()->getEtape())."</td>\n";
+                $out .= '<td>'.$this->renderEtape($element ? $element->getEtape() : null)."</td>\n";
             }
             if ($liste->getColumnVisibility('enseignement')){
-                $out .= '<td>'.$this->getView()->elementPedagogique($this->getService()->getElementPedagogique())->renderLink()."</td>\n";
+                $out .= '<td>'.$this->getView()->elementPedagogique($element)->renderLink()."</td>\n";
             }
             if ($liste->getColumnVisibility('foad')){
-                $out .= '<td>'.$this->renderFOAD($this->getService()->getElementPedagogique())."</td>\n";
+                $out .= '<td>'.$this->renderFOAD($element)."</td>\n";
             }
             if ($liste->getColumnVisibility('regimes-inscription')){
-                $out .= '<td>'.$this->renderRegimeInscription($this->getService()->getElementPedagogique())."</td>\n";
+                $out .= '<td>'.$this->renderRegimeInscription($element)."</td>\n";
             }
         }else{
             $colspan = 0;
@@ -133,11 +134,11 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             if ($liste->getColumnVisibility('foad'))                $colspan++;
             if ($liste->getColumnVisibility('regimes-inscription')) $colspan++;
             if ($colspan > 0){
-                $out .= '<td colspan="'.$colspan.'">'.$this->renderEtablissement( $this->getService()->getEtablissement() )."</td>\n";
+                $out .= '<td colspan="'.$colspan.'">'.$this->renderEtablissement( $service->getEtablissement() )."</td>\n";
             }
         }
         if ($liste->getColumnVisibility('annee')){
-            $out .= '<td>'.$this->renderAnnee( $this->getService()->getAnnee() )."</td>\n";
+            $out .= '<td>'.$this->renderAnnee( $element ? $element->getAnnee() : null )."</td>\n";
         }
         foreach( $typesIntervention as $ti ){
             $out .= $this->renderTypeIntervention( $vhl->setTypeIntervention($ti) );
@@ -170,12 +171,12 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderEtape($etape)
     {
-        return $this->getView()->etape( $etape )->renderLink();
+        return $this->getView()->etape()->setEtape($etape)->renderLink();
     }
 
     protected function renderElementPedagogique($element)
     {
-        return $this->getView()->elementPedagogique( $element )->renderLink();
+        return $this->getView()->elementPedagogique()->setElementPedagogique($element)->renderLink();
     }
 
     protected function renderFOAD($element)
@@ -199,7 +200,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
 
     protected function renderEtablissement($etablissement)
     {
-        return $this->getView()->etablissement( $etablissement )->renderLink();
+        return $this->getView()->etablissement()->setEtablissement($etablissement)->renderLink();
     }
 
     protected function renderTypeIntervention( \Application\Entity\VolumeHoraireListe $liste )

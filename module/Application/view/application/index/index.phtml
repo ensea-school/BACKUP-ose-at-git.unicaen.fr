@@ -19,7 +19,7 @@
                 $message = null;
             }
             elseif ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
-                $message = "L'application sera ouverte du lundi 7 juillet au vendredi 17 octobre 2014.";
+                $message = null;
             }
             $wf = $this->workflow($intervenant, $role)->getWorkflow();
             if ($wf->getSteps()) {

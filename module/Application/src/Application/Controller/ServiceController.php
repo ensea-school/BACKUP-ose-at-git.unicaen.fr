@@ -30,7 +30,10 @@ class ServiceController extends AbstractActionController
         \Application\Service\Traits\IntervenantAwareTrait,
         \Application\Service\Traits\ServiceReferentielAwareTrait,
         \Application\Service\Traits\EtatVolumeHoraireAwareTrait,
-        \Application\Service\Traits\ValidationAwareTrait
+        \Application\Service\Traits\ValidationAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait,
+        \Application\Service\Traits\EtapeAwareTrait,
+        \Application\Service\Traits\PeriodeAwareTrait
     ;
     
     /**
@@ -61,11 +64,14 @@ class ServiceController extends AbstractActionController
         $role                      = $this->getServiceContext()->getSelectedIdentityRole();
 
         $service                   = $this->getServiceService();
-        $volumeHoraireService      = $this->getServiceLocator()->get('applicationVolumehoraire');       /* @var $volumeHoraireService \Application\Service\VolumeHoraire */
-        $elementPedagogiqueService = $this->getServiceLocator()->get('applicationElementPedagogique');  /* @var $elementPedagogiqueService \Application\Service\ElementPedagogique */
+        $volumeHoraireService      = $this->getServiceVolumeHoraire();
+        $elementPedagogiqueService = $this->getServiceElementPedagogique();
+        $structureService          = $this->getServiceStructure();
+        $etapeService              = $this->getServiceEtape();
+        $periodeService            = $this->getServicePeriode();
 
         $this->initFilters();
-        $qb = $service->initQuery()[0];
+        $qb = $service->initQuery()[0]; /* @var $qb \Doctrine\ORM\QueryBuilder */
         $service
             ->join(     'applicationIntervenant',       $qb, 'intervenant',         ['id', 'nomUsuel', 'prenom','sourceCode'] )
             ->leftJoin( $elementPedagogiqueService,     $qb, 'elementPedagogique',  ['id', 'sourceCode', 'libelle', 'histoDestruction', 'fi', 'fc', 'fa', 'tauxFi', 'tauxFc', 'tauxFa', 'tauxFoad'] )
@@ -75,8 +81,9 @@ class ServiceController extends AbstractActionController
 //            ->leftJoin( 'applicationUtilisateur',       $qb, 'utilisateur',         true );
 
         $elementPedagogiqueService
-            ->leftJoin( 'applicationEtape',             $qb, 'etape',               ['id', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
-            ->leftJoin( 'applicationPeriode',           $qb, 'periode',             ['id', 'code', 'libelleLong', 'libelleCourt', 'ordre'] )
+            ->join(     $structureService,              $qb, 'structure',           ['id', 'libelleCourt'] )
+            ->leftJoin( $etapeService,                  $qb, 'etape',               ['id', 'libelle', 'niveau', 'histoDestruction', 'sourceCode'] )
+            ->leftJoin( $periodeService,                $qb, 'periode',             ['id', 'code', 'libelleLong', 'libelleCourt', 'ordre'] )
             ->leftJoin( 'applicationTypeIntervention',  $qb, 'typeIntervention',    ['id', 'code', 'libelle', 'ordre'] );
 
         $volumeHoraireService
@@ -92,7 +99,10 @@ class ServiceController extends AbstractActionController
             $service->finderByIntervenant($intervenant, $qb);
         }
 
-        $qb->addOrderBy( $elementPedagogiqueService->getAlias().'.libelle' );
+        $qb->addOrderBy( $structureService->getAlias().'.libelleCourt' )
+           ->addOrderBy( $etapeService->getAlias().'.libelle')
+           ->addOrderBy( $periodeService->getAlias().'.libelleCourt')
+           ->addOrderBy( $elementPedagogiqueService->getAlias().'.sourceCode' );
 
         if (! $intervenant && $role instanceof \Application\Acl\ComposanteRole){
             $service->finderByComposante($role->getStructure(), $qb);

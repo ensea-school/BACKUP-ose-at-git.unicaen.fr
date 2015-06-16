@@ -227,7 +227,9 @@ class ServiceReferentielController extends AbstractActionController
             $services = explode( ',', $services );
             foreach( $services as $sid ){
                 $service = $this->getServiceServiceReferentiel()->get( $sid );
-                $this->getServiceServiceReferentiel()->setRealisesFromPrevus( $service );
+                if ($this->isAllowed($service, 'update')) {
+                    $this->getServiceServiceReferentiel()->setRealisesFromPrevus( $service );
+                }
             }
         }
     }

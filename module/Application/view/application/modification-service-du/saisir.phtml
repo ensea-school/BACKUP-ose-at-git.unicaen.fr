@@ -45,6 +45,7 @@ foreach ($modificationServiceDu->get('modificationServiceDu')->getIterator() as 
     if ($canEdit) echo $this->formControlGroup( $fieldset->get('remove') );
     echo '</div></fieldset>';
 }
+echo $this->formCollection()->setElementHelper($this->formControlGroup())->renderTemplate($modificationServiceDu->get('modificationServiceDu'));
 
 ?>
 </fieldset>

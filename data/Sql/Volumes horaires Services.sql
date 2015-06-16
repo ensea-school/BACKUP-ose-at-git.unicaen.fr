@@ -28,12 +28,15 @@ from
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.source_code = '91521'
+  AND i.source_code = '36886'
 --  AND s.id = 3208
   AND vh.histo_destruction IS NULL
-  AND i.nom_usuel = 'Paulien'
+  --AND contrat_id = 341
+  AND tvh.id = 2
+  AND vh.periode_id = 12
+  --AND i.nom_usuel = 'Campart'
   --AND ti.code = 'TP'
-  --AND validation_id is not null
+  AND validation_id is not null
 order by
   s_id, type_volume_horaire, periode, TI.ORDRE;
   
@@ -46,3 +49,34 @@ SELECT COUNT(*) FROM VALIDATION_VOL_HORAIRE WHERE VOLUME_HORAIRE_ID = 187;
 --update volume_horaire set heures = 89 where id=29293;
 --update volume_horaire set histo_destruction = null, histo_destructeur_id = null where id = 24883;
 
+
+
+
+select
+  i.id i_id,
+  i.source_code i_code,
+  s.id s_id,
+  vh.ID vh_id, 
+  TVH.LIBELLE type_volume_horaire,
+  vh.heures,
+  vvh.validation_id,
+  vh.histo_destruction vh_histo,
+  s.histo_destruction s_histo,
+  v.histo_destruction v_histo
+from
+  volume_horaire_ref vh
+  JOIN service_referentiel s ON s.id = vh.SERVICE_REFERENTIEL_ID
+  JOIN intervenant i ON i.id = s.intervenant_id
+  JOIN type_volume_horaire tvh on tvh.id = vh.TYPE_VOLUME_HORAIRE_ID
+  LEFT JOIN VALIDATION_VOL_HORAIRE_ref vvh on VVH.VOLUME_HORAIRE_ref_ID = vh.id
+  LEFT JOIN validation v ON v.id = VVH.VALIDATION_ID
+where
+  1=1
+  AND i.source_code = '61983'
+--  AND s.id = 3208
+  AND vh.histo_destruction IS NULL
+  --AND i.nom_usuel = 'Mancq'
+  --AND ti.code = 'TP'
+  --AND validation_id is not null
+order by
+  s_id, type_volume_horaire;

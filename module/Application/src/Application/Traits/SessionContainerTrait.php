@@ -15,8 +15,11 @@ trait SessionContainerTrait {
      */
     public function getSessionContainer()
     {
-        if (null === $this->sessionContainer) {
-            $this->sessionContainer = new SessionContainer( get_class($this) );
+        $scn = get_class($this);
+        //$scn = str_replace( '\\', '_', $scn );
+
+        if (null === $this->sessionContainer) { 
+            $this->sessionContainer = new SessionContainer( $scn );
         }
         return $this->sessionContainer;
     }

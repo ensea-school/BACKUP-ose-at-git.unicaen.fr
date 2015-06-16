@@ -22,7 +22,8 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 {
     use EntityManagerAwareTrait,
         \Zend\ServiceManager\ServiceLocatorAwareTrait,
-        \Application\Service\Traits\StatutIntervenantAwareTrait
+        \Application\Service\Traits\StatutIntervenantAwareTrait,
+        \Application\Traits\SessionContainerTrait
     ;
 
     /**
@@ -112,7 +113,6 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             /* FIN de deprecated */
 
             $role = new $roleClass( $roleId, $parent, $dbRole->getLibelle() );
-            $role->setDbRole($dbRole);
             $role->setPersonnel($personnel);
 
             // Si le rôle est de périmètre établissement, alors il se peut que l'on veuille zoomer sur une composante en particulier...
@@ -129,43 +129,58 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     if (! isset($roles[$affRoleId])){
                         $affRoleLibelle = $dbRole->getLibelle().' ('.$structure->getLibelleCourt().')';
                         $affRole = new $roleClass( $affRoleId, $roleId, $affRoleLibelle );
-                        $affRole->setDbRole( $dbRole );
                         $affRole->setPersonnel( $personnel );
                         $affRole->setStructure( $structure );
                         $roles[$affRoleId] = $affRole;
                     }
-                }else{
-
                 }
             }
         }
 
 
         // Chargement des rôles par statut d'intervenant
-        $statuts = $this->getServiceStatutIntervenant()->getList();
-        foreach( $statuts as $statut ){
-            $roleId = $statut->getRoleId();
-
-            /** @deprecated */
-            if ($statut->getTypeIntervenant()->getCode() === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT){
-                $parent = \Application\Acl\IntervenantPermanentRole::ROLE_ID;
-                $roleClass = 'Application\Acl\IntervenantPermanentRole';
-            }else{
-                $parent = \Application\Acl\IntervenantExterieurRole::ROLE_ID;
-                $roleClass = 'Application\Acl\IntervenantExterieurRole';
-            }
-            /* FIN de deprecated */
-            $role = new $roleClass( $roleId, $parent, $roles[$parent]->getRoleName() );
+        $si = $this->getStatutsInfo();
+        foreach( $si as $statut ){
+            $roleClass = $statut['role-class'];
+            $role = new $roleClass( $statut['role-id'], $statut['parent'], $roles[$statut['parent']]->getRoleName() );
 
             if ($utilisateur && $intervenant = $utilisateur->getIntervenant()){
-                if ($intervenant->getStatut() == $statut){
+                if ($intervenant->getStatut()->getId() == $statut['statut-id']){
                     $role->setIntervenant( $intervenant );
                 }
             }
-            $roles[$roleId] = $role;
+            $roles[$statut['role-id']] = $role;
         }
 
         return $roles;
+    }
+
+    public function getStatutsInfo()
+    {
+//        $session = $this->getSessionContainer();
+//        if (! isset($session->statutsInfo)){//var_dump('toto');
+            $si = [];
+            $statuts = $this->getServiceStatutIntervenant()->getList();
+            foreach( $statuts as $statut ){
+                /** @deprecated */
+                if ($statut->getTypeIntervenant()->getCode() === \Application\Entity\Db\TypeIntervenant::CODE_PERMANENT){
+                    $parent = \Application\Acl\IntervenantPermanentRole::ROLE_ID;
+                    $roleClass = 'Application\Acl\IntervenantPermanentRole';
+                }else{
+                    $parent = \Application\Acl\IntervenantExterieurRole::ROLE_ID;
+                    $roleClass = 'Application\Acl\IntervenantExterieurRole';
+                }
+                $si[] = [
+                    'statut-id' => $statut->getId(),
+                    'role-id' => $statut->getRoleId(),
+                    'parent' => $parent,
+                    'role-class' => $roleClass,
+                ];
+
+            }return $si;
+//            $session->statutsInfo = $si;
+//        }
+//        return $session->statutsInfo;
     }
 
     public function setStructureSelectionnee(StructureEntity $structureSelectionnee = null)

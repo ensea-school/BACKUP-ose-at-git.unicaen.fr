@@ -6,8 +6,8 @@ INSERT INTO CATEGORIE_PRIVILEGE (
   LIBELLE
 ) VALUES (
   CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
-  'import',
-  'Import'
+  'enseignement',
+  'Enseignement'
 );
 
 INSERT INTO PRIVILEGE (
@@ -16,20 +16,26 @@ INSERT INTO PRIVILEGE (
   CODE,
   LIBELLE,
   ORDRE
-) VALUES (
-  privilege_id_seq.nextval,
-  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = 'import' ),
-  'fiche',
-  'Visualisation de la fiche',
-  1
-);
+)
+SELECT 
+  privilege_id_seq.nextval id,
+  (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c ) CATEGORIE_ID,
+  t1.p CODE,
+  t1.l LIBELLE,
+  (SELECT count(*) FROM PRIVILEGE WHERE categorie_id = (SELECT id FROM CATEGORIE_PRIVILEGE WHERE code = t1.c )) + rownum ORDRE
+FROM (
 
+      SELECT 'intervenant' c, 'calcul-hetd' p, 'Calcul HETD' l FROM dual
+--UNION SELECT 'enseignement' c, 'export-csv'    p, 'Export CSV' l FROM dual
+
+) t1;
 
 select
-  p.id, cp.code categorie, p.code privilege
-  --'    const '
-  --  || rpad( upper( replace( cp.code, '-', '_' ) || '_' || replace( p.code, '-', '_' ) ), MAX( length( cp.code ) + length( p.code ) ) OVER (PARTITION BY 1 )+1, ' ' )
-  --  || ' = ' || '''' || cp.code || '-' || p.code || '''' || ';' php_const
+  /*/
+  p.id, cp.code categorie, p.code, p.ordre privilege /*/
+  '    const '
+    || rpad( upper( replace( cp.code, '-', '_' ) || '_' || replace( p.code, '-', '_' ) ), MAX( length( cp.code ) + length( p.code ) ) OVER (PARTITION BY 1 )+1, ' ' )
+    || ' = ' || '''' || cp.code || '-' || p.code || '''' || ';' php_const /**/
 from
   privilege p
   join categorie_privilege cp on cp.id = p.categorie_id

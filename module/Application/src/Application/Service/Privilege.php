@@ -13,11 +13,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class Privilege extends AbstractEntityService implements PrivilegeProviderInterface, ResourceProviderInterface
 {
-    /**
-     *
-     * @var array
-     */
-    private $privilegesRoles;
+    use \Application\Traits\SessionContainerTrait;
 
 
     /**
@@ -59,19 +55,22 @@ class Privilege extends AbstractEntityService implements PrivilegeProviderInterf
      */
     public function getPrivilegesRoles()
     {
-        if (empty($this->privilegesRoles)){
+//        $session = $this->getSessionContainer();
+
+//        if (! isset($session->privilegesRoles)){
             $privileges = $this->getList();
             /* @var $privileges \Application\Entity\Db\Privilege[] */
 
-            $this->privilegesRoles = [];
+            $pr = [];
             foreach( $privileges as $privilege ){
                 $roles = $privilege->getRoleCodes();
                 if (! empty($roles)){
-                    $this->privilegesRoles[$privilege->getFullCode()] = $roles;
+                    $pr[$privilege->getFullCode()] = $roles;
                 }
-            }
-        }
-        return $this->privilegesRoles;
+            }return $pr;
+//            $session->privilegesRoles = $pr;
+//        }
+//        return $session->privilegesRoles;
     }
 
     public function getResources()

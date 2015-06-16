@@ -7,7 +7,8 @@ SELECT
   th.id th_id, th.libelle_court type_heures,
   ep.source_code,
   mep.heures,
-  mep.histo_modification
+  mep.histo_modification,
+  mep.histo_destructeur_id
 FROM
   v_mep_intervenant_structure  mis
   JOIN mise_en_paiement        mep ON mep.id = mis.mise_en_paiement_id
@@ -20,10 +21,10 @@ FROM
   LEFT JOIN service s ON s.id = frs.service_id
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
 WHERE
-  1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
+  --1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
   --AND i.source_code = '21472'
   --AND mep.histo_modificateur_id=2504
-  AND i.source_code = '21114'
+  i.source_code = '14810'
  -- AND s.id = 372
  -- AND to_char(mep.histo_modification,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
 ;

@@ -12,7 +12,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class PrivilegeController extends Controller
 {
-    use \Application\Provider\Privilege\PrivilegeProviderAwareTrait
+    use \Application\Provider\Privilege\PrivilegeProviderAwareTrait,
+        \Application\Traits\SessionContainerTrait
     ;
 
     public function __construct(array $rules, ServiceLocatorInterface $serviceLocator)
@@ -23,28 +24,33 @@ class PrivilegeController extends Controller
 
     protected function privilegesToRoles( array $rules )
     {
-        $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
+//        $session = $this->getSessionContainer();
+//        if (! isset($session->rules)){
+            
+            $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
 
-        foreach( $rules as $index => $rule ){
-            if (isset($rule['privileges'])){
-                $rolesCount = 0;
-                $privileges = (array)$rule['privileges'];
-                $rule['roles'] = isset($rule['roles']) ? (array)$rule['roles'] : [];
-                foreach( $pr as $privilege => $roles ){
-                    if (in_array($privilege, $privileges)){
-                        $rolesCount += count($roles);
-                        $rule['roles'] = array_unique( array_merge($rule['roles'], $roles) );
+            foreach( $rules as $index => $rule ){
+                if (isset($rule['privileges'])){
+                    $rolesCount = 0;
+                    $privileges = (array)$rule['privileges'];
+                    $rule['roles'] = isset($rule['roles']) ? (array)$rule['roles'] : [];
+                    foreach( $pr as $privilege => $roles ){
+                        if (in_array($privilege, $privileges)){
+                            $rolesCount += count($roles);
+                            $rule['roles'] = array_unique( array_merge($rule['roles'], $roles) );
+                        }
+                    }
+                    unset($rule['privileges']);
+                    if (0 == $rolesCount){
+                        unset($rules[$index]);
+                    }else{
+                        $rules[$index] = $rule;
                     }
                 }
-                unset($rule['privileges']);
-                if (0 == $rolesCount){
-                    unset($rules[$index]);
-                }else{
-                    $rules[$index] = $rule;
-                }
-            }
-        }
-        return $rules;
+            }return $rules;
+//            $session->rules = $rules;
+//        }
+//        return $session->rules;
     }
 
     /**

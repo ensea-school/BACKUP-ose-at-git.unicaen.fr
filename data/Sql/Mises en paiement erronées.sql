@@ -1,9 +1,9 @@
 SELECT 
-  source_code, nom_usuel, prenom
+  id--, source_code, nom_usuel, prenom
 FROM
 (
 select
-  i.source_code, i.nom_usuel, i.prenom, case when v.id is null then 1 else 0 end non_valid, case when mep.id is null then 0 else 1 end nb_mep
+  i.id, i.source_code, i.nom_usuel, i.prenom, case when v.id is null then 1 else 0 end non_valid, case when mep.id is null then 0 else 1 end nb_mep
 from
   intervenant i
   JOIN type_intervenant ti ON ti.id = i.type_id
@@ -22,7 +22,7 @@ WHERE
 UNION
 
 select
-  i.source_code, i.nom_usuel, i.prenom, case when v.id is null then 1 else 0 end non_valid, case when mep.id is null then 0 else 1 end nb_mep
+  i.id, i.source_code, i.nom_usuel, i.prenom, case when v.id is null then 1 else 0 end non_valid, case when mep.id is null then 0 else 1 end nb_mep
 from
   intervenant i
   JOIN type_intervenant ti ON ti.id = i.type_id
@@ -39,7 +39,7 @@ WHERE
   --AND i.source_code = 732
 ) t1
 GROUP BY
-  source_code, nom_usuel, prenom
+  id, source_code, nom_usuel, prenom
 HAVING 
   sum(non_valid) > 0 AND sum(nb_mep) > 0
 order by
@@ -49,12 +49,23 @@ order by
 
 
 
+select
+  'DELETE FROM mise_en_paiement WHERE id = ' || mep.id || ';'
+  --, mep.id, fr.intervenant_id
+FROM
+  mise_en_paiement mep
+  LEFT JOIN formule_resultat_service_ref frsr ON frsr.id = mep.FORMULE_RES_SERVICE_REF_ID
+  LEFT JOIN formule_resultat_service      frs ON  frs.id = mep.FORMULE_RES_SERVICE_ID
+  LEFT JOIN formule_resultat fr ON fr.id = NVL( frs.formule_resultat_id, frsr.formule_resultat_id )
+WHERE
+  fr.intervenant_id IN (
+  2004,1788,308,794,34,2134,2020,1623,1010,27,1328,1620,84,106,702,783,115,1900,309,111,442,1705,4,
+  314,338,600,1348,380,758,24,1041,68 );
 
 
 
 
-
-
+select  *from intervenant where source_code='36886';
 
 
 

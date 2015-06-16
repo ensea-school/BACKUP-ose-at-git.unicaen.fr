@@ -18,13 +18,11 @@ use BjyAuthorize\Provider\Identity\ProviderInterface as IdentityProviderInterfac
  */
 class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvider, EntityManagerAwareInterface, IdentityProviderInterface
 {
-    use ServiceLocatorAwareTrait;
-    use EntityManagerAwareTrait;
+    use ServiceLocatorAwareTrait,
+        EntityManagerAwareTrait,
+        \Application\Traits\SessionContainerTrait
+    ;
 
-    /**
-     * @var array
-     */
-    protected $roles;
 
     /**
      * {@inheritDoc}
@@ -39,7 +37,9 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
      */
     public function getIdentityRoles()
     {
-        if (null === $this->roles) {
+//        $session = $this->getSessionContainer();
+
+//        if (! isset($session->roles)) {
             $this->getEntityManager()->getFilters()->enable('historique')->init(
                 [
                     'Application\Entity\Db\Role',
@@ -48,14 +48,14 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
                 new \DateTime
             );
 
-            $this->roles = [];
+            $roles = [];
 
             $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
             /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
             $utilisateur = $serviceAuthUserContext->getDbUser();
             /* @var $utilisateur \Application\Entity\Db\Utilisateur */
 
-            if (! $utilisateur) return $this->roles; // pas connecté
+            if (! $utilisateur) return []; // pas connecté
 
             /**
              * Rôles que possède l'utilisateur dans la base de données.
@@ -67,7 +67,7 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
                     if ($structure = $affectation->getStructure()){
                         $roleId .= '-'.$structure->getSourceCode();
                     }
-                    $this->roles[] = $roleId;
+                    $roles[] = $roleId;
                 }
             }
 
@@ -75,9 +75,10 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
              * Rôle correspondant au type d'intervenant auquel appartient l'utilisateur
              */
             if ($intervenant = $utilisateur->getIntervenant()){
-                $this->roles[] = $intervenant->getStatut()->getRoleId();
-            }
-        }
-        return $this->roles;
+                $roles[] = $intervenant->getStatut()->getRoleId();
+            }return $roles;
+//            $session->roles = $roles;
+//        }
+//        return $session->roles;
     }
 }

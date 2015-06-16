@@ -14,13 +14,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class PrivilegeRuleProvider implements ProviderInterface
 {
     use \Zend\ServiceManager\ServiceLocatorAwareTrait,
-        \Application\Provider\Privilege\PrivilegeProviderAwareTrait
+        \Application\Provider\Privilege\PrivilegeProviderAwareTrait,
+        \Application\Traits\SessionContainerTrait
     ;
 
-    /**
-     * @var array
-     */
-    protected $rules = array();
 
     /**
      * @param array $config
@@ -29,29 +26,33 @@ class PrivilegeRuleProvider implements ProviderInterface
     {
         $this->setServiceLocator($serviceLocator);
 
-        $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
+        $session = $this->getSessionContainer();
 
-        foreach( $config as $grant => $rules ){
-            foreach( $rules as $index => $rule ){
-                if (is_array($rule)){
-                    $privileges = (array)$rule[0];
-                    $rs = [];
-                    foreach( $pr as $privilege => $roles ){
-                        if (in_array($privilege, $privileges)){
-                            $rs = array_unique( array_merge($rs, $roles) );
+        if (! isset($session->rules)){
+            $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
+
+            foreach( $config as $grant => $rules ){
+                foreach( $rules as $index => $rule ){
+                    if (is_array($rule)){
+                        $privileges = (array)$rule[0];
+                        $rs = [];
+                        foreach( $pr as $privilege => $roles ){
+                            if (in_array($privilege, $privileges)){
+                                $rs = array_unique( array_merge($rs, $roles) );
+                            }
                         }
+                        $config[$grant][$index][0] = $rs;
                     }
-                    $config[$grant][$index][0] = $rs;
                 }
             }
-        }
-        $this->rules = $config;
-        if (! isset($this->rules['allow'])) $this->rules['allow'] = [];
-        foreach( $pr as $privilege => $roles ){
-            $this->rules['allow'][] = [
-                $roles,
-                'privilege/'.$privilege
-            ];
+            $session->rules = $config;
+            if (! isset($session->rules['allow'])) $session->rules['allow'] = [];
+            foreach( $pr as $privilege => $roles ){
+                $session->rules['allow'][] = [
+                    $roles,
+                    'privilege/'.$privilege
+                ];
+            }
         }
     }
 
@@ -60,6 +61,6 @@ class PrivilegeRuleProvider implements ProviderInterface
      */
     public function getRules()
     {
-        return $this->rules;
+        return $this->getSessionContainer()->rules;
     }
 }

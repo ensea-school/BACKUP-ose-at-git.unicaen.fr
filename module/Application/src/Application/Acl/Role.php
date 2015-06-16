@@ -32,18 +32,4 @@ class Role extends NamedRole
         parent::__construct($id, $parent, $name, $description, $selectable);
     }
 
-    /**
-     *
-     * @return RoleEntity
-     */
-    public function getDbRole()
-    {
-        return $this->dbRole;
-    }
-
-    public function setDbRole(DbRole $dbRole)
-    {
-        $this->dbRole = $dbRole;
-        return $this;
-    }
 }

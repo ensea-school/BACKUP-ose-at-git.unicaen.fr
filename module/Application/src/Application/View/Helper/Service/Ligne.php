@@ -110,7 +110,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
                 $out .= "<td>&nbsp;</td>\n";
             }
         }
-        if (empty($element)) {
+        if (! empty($element)) {
             if ($liste->getColumnVisibility('structure-ens')){
                 $out .= '<td>'.$this->renderStructure($element ? $element->getStructure() : null)."</td>\n";
             }

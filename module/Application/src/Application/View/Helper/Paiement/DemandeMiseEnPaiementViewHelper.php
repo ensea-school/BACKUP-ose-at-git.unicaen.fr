@@ -75,7 +75,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
                 'name' => 'submit',
                 'type'  => 'Submit',
                 'attributes' => [
-                    'value' => 'Effectuer la demande de paiement',
+                    'value' => 'Enregistrer les demandes de paiement',
                     'class' => 'btn btn-primary sauvegarde',
                 ],
             ]);
@@ -98,7 +98,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
 
         $out = '<div '.$this->htmlAttribs($attrs).'>';
         if ( (!$this->getReadOnly()) && $this->getView()->isAllowed('privilege/'.\Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE) ){
-            $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander toutes les HETD en paiement</button></div>';
+            $out .= '<div style="padding-bottom:1em"><button type="button" class="btn btn-default toutes-heures-non-dmep">Demander le paiement de toutes les HETD</button></div>';
         }
         foreach( $servicesAPayer as $serviceAPayer ){
             $out .= $this->renderServiceAPayer($serviceAPayer);

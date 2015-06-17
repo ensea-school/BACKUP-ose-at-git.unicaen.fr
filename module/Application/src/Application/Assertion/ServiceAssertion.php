@@ -168,9 +168,8 @@ class ServiceAssertion extends AbstractAssertion
                     }
                     if ($this->intervenant instanceof IntervenantPermanent
                         &&  $roleStructure === $intervenantStructure
-                        && $serviceStructure === null
                     ){
-                        // un gestionnaire doit pouvoir saisir des services réalisés sur d'autres composantes
+                        // un gestionnaire doit pouvoir saisir des services réalisés sur d'autres composantes (et même hors-UCBN)
                         return true;
                     }
                 }

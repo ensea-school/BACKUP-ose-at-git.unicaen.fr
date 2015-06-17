@@ -216,11 +216,17 @@ class ServiceReferentielAssertion extends AbstractAssertion
         }
         /**
          * Référentiel Réalisé :
-         * La composante d'intervention doit correspondre à la structure de responsabilité
-         * du gestionnaire.
          */
         elseif ($this->inCxtRealise) {
             if ($this->serviceStructure === $roleStructure) {
+                // La composante d'intervention correspond à la structure de responsabilité du gestionnaire.
+                return true;
+            }
+            if (
+                    $this->intervenant instanceof IntervenantPermanent &&
+                    $this->intervenantStructure === $roleStructure
+            ) {
+                // Un gestionnaire peut agir sur les permanents de sa composante pour n'importe quelle composante d'intervention
                 return true;
             }
         }

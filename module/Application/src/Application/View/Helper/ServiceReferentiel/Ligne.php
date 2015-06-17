@@ -200,13 +200,13 @@ class Ligne extends AbstractHtmlElement
     protected function renderModifier()
     {
         $url = $this->getView()->url('referentiel/saisie', ['id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
-        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="'.$url.'" title="Modifier cette ligne de référentiel"><span class="glyphicon glyphicon-edit"></span></a>';
+        return '<a class="ajax-modal" data-event="service-referentiel-modify-message" href="'.$url.'" title="Modifier cette ligne de référentiel"><span class="glyphicon glyphicon-pencil"></span></a>';
     }
 
     protected function renderSupprimer()
     {
         $url = $this->getView()->url('referentiel/default', ['action' => 'suppression', 'id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
-        return '<a class="ajax-modal referentiel-delete" data-event="service-referentiel-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer cette ligne de référentiel"><span class="glyphicon glyphicon-remove"></span></a>';
+        return '<a class="ajax-modal referentiel-delete" data-event="service-referentiel-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer cette ligne de référentiel"><span class="glyphicon glyphicon-trash"></span></a>';
     }
 
     protected function toQuery($param)

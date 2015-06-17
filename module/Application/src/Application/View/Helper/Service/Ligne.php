@@ -238,13 +238,13 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     protected function renderModifier()
     {
         $url = $this->getView()->url('service/saisie', ['id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
-        return '<a class="ajax-modal" data-event="service-modify-message" href="'.$url.'" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-edit"></span></a>';
+        return '<a class="ajax-modal" data-event="service-modify-message" href="'.$url.'" title="Modifier l\'enseignement"><span class="glyphicon glyphicon-pencil"></span></a>';
     }
 
     protected function renderSupprimer()
     {
         $url = $this->getView()->url('service/default', ['action' => 'suppression', 'id' => $this->getService()->getId()], ['query' => ['type-volume-horaire' => $this->getListe()->getTypeVolumeHoraire()->getId()]]);
-        return '<a class="ajax-modal service-delete" data-event="service-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer l\'enseignement"><span class="glyphicon glyphicon-remove"></span></a>';
+        return '<a class="ajax-modal service-delete" data-event="service-delete-message" data-id="'.$this->getService()->getId().'" href="'.$url.'" title="Supprimer l\'enseignement"><span class="glyphicon glyphicon-trash"></span></a>';
     }
 
     protected function renderDetails( $details=false )

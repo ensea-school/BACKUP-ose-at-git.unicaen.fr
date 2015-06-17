@@ -77,6 +77,10 @@ implements
             'visibility'    => true,
             'head-text'     => "<th title=\"Formation\">Formation</th>",
         ],
+        'periode'               => [
+            'visibility'    => true,
+            'head-text'     => "<th title=\"Période\">Période</th>",
+        ],
         'enseignement'          => [
             'visibility'    => true,
             'head-text'     => "<th title=\">Enseignement\">Enseignement</th>",
@@ -206,14 +210,7 @@ implements
 
     public function renderActionButtons()
     {
-        $attribs = [
-            'class'         => 'ajax-modal services btn btn-primary',
-            'data-event'    => 'service-add-message',
-            'href'          => $this->getAddUrl(),
-            'title'         => 'Ajouter un nouvel enseignement',
-        ];
-        $out = '<a '.$this->htmlAttribs($attribs).'><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
-
+        $out = '';
         if ($this->isInRealise()){
             $attribs = [
                 'class'         => 'btn btn-warning prevu-to-realise-show',
@@ -224,7 +221,7 @@ implements
                 'title'         => "Saisir comme réalisées l'ensemble des heures prévisionnelles"
                                   .". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
             ];
-            $out .= '&nbsp;<button type="button" '.$this->htmlAttribs($attribs).'>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>';
+            $out .= '<button type="button" '.$this->htmlAttribs($attribs).'>Prévu <span class="glyphicon glyphicon-arrow-right"></span> réalisé</button>&nbsp;';
             $out .= '<div class="modal fade" id="prevu-to-realise-modal" tabindex="-1" role="dialog" aria-hidden="true">';
             $out .= '<div class="modal-dialog modal-sm">';
             $out .= '<div class="modal-content">';
@@ -234,7 +231,7 @@ implements
             $out .= '</div>';
             $out .= '<div class="modal-body">';
             $out .= '<p>Souhaitez-vous réellement saisir comme réalisées l\'ensemble des heures prévisionnelles ?</p>';
-            $out .= '<p>Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</p>';
+            $out .= '<div class="alert alert-warning" role="alert">Attention : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!</div>';
             $out .= '</div>';
             $out .= '<div class="modal-footer">';
             $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';
@@ -244,6 +241,13 @@ implements
             $out .= '</div>';
             $out .= '</div>';
         }
+        $attribs = [
+            'class'         => 'ajax-modal services btn btn-primary',
+            'data-event'    => 'service-add-message',
+            'href'          => $this->getAddUrl(),
+            'title'         => 'Ajouter un nouvel enseignement',
+            ];
+            $out .= '<a '.$this->htmlAttribs($attribs).'><span class="glyphicon glyphicon-plus"></span> Je saisis</a>';
         return $out;
     }
 

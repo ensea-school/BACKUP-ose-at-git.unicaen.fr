@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  *
  */
-class ValidationEnsPrevuRuleFactory implements FactoryInterface
+class ValidationPrevuRuleFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}

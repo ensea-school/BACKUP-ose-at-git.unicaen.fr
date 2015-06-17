@@ -157,8 +157,8 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
     public function getStatutsInfo()
     {
-//        $session = $this->getSessionContainer();
-//        if (! isset($session->statutsInfo)){//var_dump('toto');
+        $session = $this->getSessionContainer();
+        if (! isset($session->statutsInfo)){
             $si = [];
             $statuts = $this->getServiceStatutIntervenant()->getList();
             foreach( $statuts as $statut ){
@@ -177,10 +177,10 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
                     'role-class' => $roleClass,
                 ];
 
-            }return $si;
-//            $session->statutsInfo = $si;
-//        }
-//        return $session->statutsInfo;
+            }
+            $session->statutsInfo = $si;
+        }
+        return $session->statutsInfo;
     }
 
     public function setStructureSelectionnee(StructureEntity $structureSelectionnee = null)

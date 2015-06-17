@@ -40,3 +40,17 @@ WHERE
   AND u.id = vh.histo_createur_id
   --AND ti.code = 'E' -- vacataires
 ;
+
+
+select
+  count( distinct i.id )
+from
+  mise_en_paiement mep
+  JOIN V_MEP_INTERVENANT_STRUCTURE mis ON mis.MISE_EN_PAIEMENT_ID = mep.id
+  --JOIN periode p on p.id = mep.periode_paiement_id
+  JOIn intervenant i ON i.id = mis.intervenant_id
+  JOIN type_intervenant ti ON ti.id = i.type_id
+where
+  1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
+  --AND p.code = 'M07'
+  AND ti.code = 'P'

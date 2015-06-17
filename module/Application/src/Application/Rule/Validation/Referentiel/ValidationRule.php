@@ -45,6 +45,16 @@ class ValidationRule extends ValidationEnsRefAbstractRule
 
         return $this->proxy;
     }
+    
+    /**
+     * Exécute la règle.
+     * 
+     * @return self
+     */
+    public function execute()
+    {
+        return $this->getProxy()->execute();
+    }
 
     /**
      * Détermine selon le contexte la ou les composantes d'intervention (éventuelles) à utiliser comme

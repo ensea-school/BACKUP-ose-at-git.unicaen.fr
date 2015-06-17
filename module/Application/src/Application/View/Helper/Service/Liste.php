@@ -305,6 +305,7 @@ implements
         if ($this->getColumnVisibility('structure-aff'      ))  $colspan ++;
         if ($this->getColumnVisibility('structure-ens'      ))  $colspan ++;
         if ($this->getColumnVisibility('formation'          ))  $colspan ++;
+        if ($this->getColumnVisibility('periode'            ))  $colspan ++;
         if ($this->getColumnVisibility('enseignement'       ))  $colspan ++;
         if ($this->getColumnVisibility('foad'               ))  $colspan ++;
         if ($this->getColumnVisibility('regimes-inscription'))  $colspan ++;

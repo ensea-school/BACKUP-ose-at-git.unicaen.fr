@@ -117,19 +117,23 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             if ($liste->getColumnVisibility('formation')){
                 $out .= '<td>'.$this->renderEtape($element ? $element->getEtape() : null)."</td>\n";
             }
+            if ($liste->getColumnVisibility('periode')){
+                $out .= '<td style="text-align:center">'.$this->renderPeriode($element ? $element->getPeriode() : null)."</td>\n";
+            }
             if ($liste->getColumnVisibility('enseignement')){
                 $out .= '<td>'.$this->getView()->elementPedagogique($element)->renderLink()."</td>\n";
             }
             if ($liste->getColumnVisibility('foad')){
-                $out .= '<td>'.$this->renderFOAD($element)."</td>\n";
+                $out .= '<td style="text-align:center">'.$this->renderFOAD($element)."</td>\n";
             }
             if ($liste->getColumnVisibility('regimes-inscription')){
-                $out .= '<td>'.$this->renderRegimeInscription($element)."</td>\n";
+                $out .= '<td style="text-align:center">'.$this->renderRegimeInscription($element)."</td>\n";
             }
         }else{
             $colspan = 0;
             if ($liste->getColumnVisibility('structure-ens'))       $colspan++;
             if ($liste->getColumnVisibility('formation'))           $colspan++;
+            if ($liste->getColumnVisibility('periode'))             $colspan++;
             if ($liste->getColumnVisibility('enseignement'))        $colspan++;
             if ($liste->getColumnVisibility('foad'))                $colspan++;
             if ($liste->getColumnVisibility('regimes-inscription')) $colspan++;
@@ -172,6 +176,15 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
     protected function renderEtape($etape)
     {
         return $this->getView()->etape()->setEtape($etape)->renderLink();
+    }
+
+    protected function renderPeriode($periode)
+    {
+        if ($periode){
+            return $periode->getLibelleCourt();
+        }else{
+            return '';
+        }
     }
 
     protected function renderElementPedagogique($element)

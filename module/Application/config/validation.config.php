@@ -164,13 +164,19 @@ return [
         'invokables' => [
             'ApplicationTypeValidation'        => 'Application\\Service\\TypeValidation',
             'ApplicationValidation'            => 'Application\\Service\\Validation',
-            'ValidationEnseignementRule'       => 'Application\\Rule\\Validation\\ValidationEnseignementRule',
-            'ValidationReferentielRule'        => 'Application\\Rule\\Validation\\ValidationReferentielRule',
+            'ValidationEnseignementRule'       => 'Application\\Rule\\Validation\\Enseignement\\ValidationRule',
+            'ValidationReferentielRule'        => 'Application\\Rule\\Validation\\Referentiel\\ValidationRule',
             'ClotureRealiseRule'               => 'Application\\Rule\\Validation\\ClotureRealiseRule',
             'ValidationAssertion'              => 'Application\\Assertion\\ValidationAssertionProxy',
             'ValidationServiceAssertion'       => 'Application\\Assertion\\ValidationServiceAssertion',
             'ValidationReferentielAssertion'   => 'Application\\Assertion\\ValidationReferentielAssertion',
             'ClotureRealiseAssertion'          => 'Application\\Assertion\\ClotureRealiseAssertion',
+        ],
+        'factories' => [
+            'ValidationEnseignementPrevuRule'   => 'Application\\Rule\\Validation\\Enseignement\\ValidationPrevuRuleFactory',
+            'ValidationEnseignementRealiseRule' => 'Application\\Rule\\Validation\\Enseignement\\ValidationRealiseRuleFactory',
+            'ValidationReferentielPrevuRule'    => 'Application\\Rule\\Validation\\Referentiel\\ValidationPrevuRuleFactory',
+            'ValidationReferentielRealiseRule'  => 'Application\\Rule\\Validation\\Referentiel\\ValidationRealiseRuleFactory',
         ],
         'initializers' => [
         ],

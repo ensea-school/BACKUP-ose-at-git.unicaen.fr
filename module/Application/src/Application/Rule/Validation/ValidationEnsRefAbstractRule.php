@@ -1,32 +1,30 @@
 <?php
 
-namespace Application\Rule\Validation;
+namespace Application\Rule\Validation;;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\IntervenantRole;
-use Application\Acl\Role;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
+use Application\Rule\AbstractBusinessRule;
+use Application\Rule\Paiement\MiseEnPaiementExisteRule;
 use Application\Service\Workflow\WorkflowIntervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
+use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Common\Exception\LogicException;
 
 /**
- * Tentative de centralisation des "règles métier" concernant la validation des enseignements
- * ou de référentiel.
+ * Tentative de centralisation des "règles métier" concernant la validation des enseignements.
  * 
  * Détermine en fonction du contexte courant les paramètres nécessaires à la validation
- * des enseignements ou de référentiel.
+ * des enseignements.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class ValidationEnsRefAbstractRule implements ServiceLocatorAwareInterface, WorkflowIntervenantAwareInterface
+abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule implements WorkflowIntervenantAwareInterface
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    use \Application\Service\Workflow\WorkflowIntervenantAwareTrait;
-    use \UnicaenApp\Traits\MessageAwareTrait;
+    use WorkflowIntervenantAwareTrait;
     
     /**
      * @var Intervenant
@@ -38,16 +36,6 @@ abstract class ValidationEnsRefAbstractRule implements ServiceLocatorAwareInterf
      */
     protected $typeVolumeHoraire;
 
-    /**
-     * @var Role
-     */
-    protected $role;
-
-    /**
-     * @var string
-     */
-    protected $privilege;
-    
     /**
      * 
      * @param Intervenant $intervenant
@@ -71,50 +59,26 @@ abstract class ValidationEnsRefAbstractRule implements ServiceLocatorAwareInterf
     }
 
     /**
-     * 
-     * @param Role $role
-     * @return self
-     */
-    public function setRole(Role $role)
-    {
-        $this->role = $role;
-        return $this;
-    }
-
-    /**
-     * 
-     * @param string $privilege
-     * @return self
-     */
-    public function setPrivilege($privilege)
-    {
-        $this->privilege = $privilege;
-        return $this;
-    }
-
-    /**
      * Exécute la règle.
      * 
      * @return self
      */
-    final public function execute()
+    public function execute()
     {
-        if (!$this->intervenant) {
+        parent::execute();
+        
+        if (! $this->intervenant) {
             throw new LogicException("Un intervenant doit être spécifié.");
         }
-        if (!$this->typeVolumeHoraire) {
+        if (! $this->typeVolumeHoraire) {
             throw new LogicException("Un type de volume horaire doit être spécifié.");
         }
-        if (!$this->role) {
-            throw new LogicException("Un rôle doit être spécifié.");
-        }
         
-        if (!in_array($this->typeVolumeHoraire->getCode(), TypeVolumeHoraire::$codes)) {
+        if (! in_array($this->typeVolumeHoraire->getCode(), TypeVolumeHoraire::$codes)) {
             throw new LogicException("Type de volume horaire spécifié inattendu.");
         }
         
         $this
-                ->determineStructureRole()
                 ->determineStructuresIntervention()
                 ->determineStructureValidation();
         
@@ -168,21 +132,6 @@ abstract class ValidationEnsRefAbstractRule implements ServiceLocatorAwareInterf
     abstract protected function determineStructureValidation();
 
     /**
-     * @var Structure
-     */
-    protected $structureRole;
-
-    /**
-     * Retourne la structure correspondant au rôle courant.
-     * 
-     * @return null|Structure
-     */
-    protected function getStructureRole()
-    {
-        return $this->structureRole;
-    }
-
-    /**
      * Composantes d'intervention (éventuelles) à utiliser comme
      * critère de recherche des enseignements déjà validés ou à valider    
      * 
@@ -217,14 +166,6 @@ abstract class ValidationEnsRefAbstractRule implements ServiceLocatorAwareInterf
     {
         return $this->structureValidation;
     }
-    
-    /**
-     * Détermine si le rôle courant possède le privilège spécifié.
-     * 
-     * @param string $privilege Ex: 'create', 'read'
-     * @return boolean
-     */
-    abstract public function isAllowed($privilege);
     
     /**
      * Assertions concernant les demandes de mise en paiement.
@@ -318,6 +259,13 @@ abstract class ValidationEnsRefAbstractRule implements ServiceLocatorAwareInterf
         
         return true;
     }
+    
+    /**
+     * Retourne la clé de l'étape dans le workflow.
+     * 
+     * @return string
+     */
+    abstract protected function getWorkflowStepKey();
     
     /**
      * Initialise et retourne le workflow intervenant.

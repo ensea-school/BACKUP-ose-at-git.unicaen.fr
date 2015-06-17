@@ -182,11 +182,11 @@ class ServiceController extends AbstractActionController
             $viewModel->setTemplate('application/service/rafraichir-totaux');
         }else{
             $viewModel->setTemplate('application/service/index');
+
+            // gestion du bouton permettant de clôturer la saisie du réalisé pour les permanents
+            $this->injectClotureSaisie($viewModel);
         }
-        
-        // gestion du bouton permettant de clôturer la saisie du réalisé pour les permanents
-        $this->injectClotureSaisie($viewModel);
-        
+                
         return $viewModel;
     }
     

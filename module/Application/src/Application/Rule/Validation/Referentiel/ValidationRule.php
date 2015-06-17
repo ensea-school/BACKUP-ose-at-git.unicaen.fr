@@ -97,4 +97,26 @@ class ValidationRule extends ValidationEnsRefAbstractRule
     {
         return $this->getProxy()->getWorkflowStepKey();
     }
+    
+    /**
+     * Retourne les composantes d'intervention (éventuelles) à utiliser comme
+     * critère de recherche des enseignements déjà validés ou à valider    
+     * 
+     * @return array Format <code>libellé => Structure</code> 
+     * NB: la valeur <code>null</code> est possible (i.e. enseignement hors UCBN).
+     */
+    public function getStructuresIntervention()
+    {
+        return $this->getProxy()->getStructuresIntervention();
+    }
+
+    /**
+     * Retourne la structure auteure de la validation à créer ou des validations recherchées.
+     * 
+     * @return null|Structure
+     */
+    public function getStructureValidation()
+    {
+        return $this->getProxy()->getStructureValidation();
+    }
 }

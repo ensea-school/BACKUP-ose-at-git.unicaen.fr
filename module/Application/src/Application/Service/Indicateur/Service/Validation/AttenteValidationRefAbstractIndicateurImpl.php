@@ -19,6 +19,13 @@ abstract class AttenteValidationRefAbstractIndicateurImpl extends AbstractInterv
     protected $pluralTitlePattern   = "%s %s sont en attente de validation de leur référentiel <em>%s</em>";
     
     /**
+     * Témoin indiquant s'il faut appliquer le filtre Structure.
+     * 
+     * @var boolean
+     */
+    protected $findByStructure = true;
+    
+    /**
      * Témoin indiquant s'il faut que l'intervenant soit à l'étape concernée dans le WF pour être acceptable.
      * 
      * @var boolean
@@ -73,7 +80,7 @@ abstract class AttenteValidationRefAbstractIndicateurImpl extends AbstractInterv
          */
         $qb->andWhere("ti = :type")->setParameter('type', $this->getTypeIntervenant());
         
-        if ($this->getStructure()) {
+        if ($this->findByStructure && $this->getStructure()) {
             $qb
                     ->andWhere("f.structure = :structure")
                     ->setParameter('structure', $this->getStructure());

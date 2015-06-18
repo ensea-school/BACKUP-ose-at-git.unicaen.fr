@@ -277,7 +277,7 @@ class Context extends AbstractService
                     $sc->structure = null;
                 }else{
                     $role = $this->getSelectedIdentityRole();
-                    if ($role->getStructure()){
+                    if ($role && $role->getStructure()){
                         $sc->structure = $role->getStructure()->getId();
                     }else{
                         $sc->structure = null;

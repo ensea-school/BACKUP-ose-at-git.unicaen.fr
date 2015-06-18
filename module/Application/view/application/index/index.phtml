@@ -15,10 +15,11 @@
         $label = $this->translate("Accueil...");
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
-            if ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
+            if ($intervenant->getStatut()->getNonAutorise()){
+                $message = "<div class='alert alert-danger'> Votre statut ne vous permet pas de vous connecter à OSE.</div>";
+            }elseif ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
                 $message = null;
-            }
-            elseif ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
+            }elseif ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
                 $message = null;
             }
             $wf = $this->workflow($intervenant, $role)->getWorkflow();

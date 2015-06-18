@@ -473,14 +473,14 @@ return [
             'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['index', 'rechercher'],
+                    'action'     => ['rechercher'],
                     'privileges' => [
                         Privilege::INTERVENANT_RECHERCHE
                     ]
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',
-                    'action'     => ['voir'],
+                    'action'     => ['index','voir'],
                     'privileges' => [
                         Privilege::INTERVENANT_FICHE
                     ]

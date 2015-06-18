@@ -22,7 +22,9 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  */
 class Import implements ServiceLocatorAwareInterface
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait,
+        \Application\Service\Traits\ContextAwareTrait
+    ;
 
     /**
      * Mise à jour de l'existant uniquement
@@ -81,10 +83,10 @@ class Import implements ServiceLocatorAwareInterface
     {
         $this->execMaj( 'STRUCTURE', 'SOURCE_CODE', $sourceCode, $action );
 
-        $ids = $this->getQueryGenerator()->getIdFromSourceCode( 'STRUCTURE', $sourceCode );
-        if (! empty($ids)){
-            $this->execMaj( 'ADRESSE_STRUCTURE', 'STRUCTURE_ID', $ids, $action );
-            $this->execMaj( 'ROLE', 'STRUCTURE_ID', $ids, $action );
+        $id = $this->getQueryGenerator()->getIdFromSourceCode( 'STRUCTURE', $sourceCode );
+        if (! empty($id)){
+            $this->execMaj( 'ADRESSE_STRUCTURE', 'STRUCTURE_ID', $id, $action );
+            $this->execMaj( 'ROLE', 'STRUCTURE_ID', $id, $action );
         }
         return $this;
     }
@@ -240,13 +242,12 @@ class Import implements ServiceLocatorAwareInterface
     public function intervenant( $sourceCode=null, $action=null )
     {
         $this->execMaj( 'INTERVENANT', 'SOURCE_CODE', $sourceCode, $action ?: self::A_INSERT );
-        $this->execMaj( 'INTERVENANT_PERMANENT', 'SOURCE_CODE', $sourceCode, $action ?: self::A_ALL );
-        $this->execMaj( 'INTERVENANT_EXTERIEUR', 'SOURCE_CODE', $sourceCode, $action ?: self::A_ALL );
-
-        $ids = $this->getQueryGenerator()->getIdFromSourceCode( 'INTERVENANT', $sourceCode );
-        if (! empty($ids)){
-            $this->execMaj( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $ids, $action ?: self::A_ALL );
-            $this->execMaj( 'AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $ids, $action ?: self::A_ALL );
+        $id = $this->getQueryGenerator()->getIdFromSourceCode( 'INTERVENANT', $sourceCode, $this->getServiceContext()->getAnnee()->getId() );
+        if (! empty($id)){
+            $this->execMaj( 'INTERVENANT_PERMANENT', 'SOURCE_CODE', $id, $action ?: self::A_ALL );
+            $this->execMaj( 'INTERVENANT_EXTERIEUR', 'SOURCE_CODE', $id, $action ?: self::A_ALL );
+            $this->execMaj( 'ADRESSE_INTERVENANT', 'INTERVENANT_ID', $id, $action ?: self::A_ALL );
+            $this->execMaj( 'AFFECTATION_RECHERCHE', 'INTERVENANT_ID', $id, $action ?: self::A_ALL );
         }
         return $this;
     }
@@ -376,7 +377,7 @@ class Import implements ServiceLocatorAwareInterface
      *
      * @param string            $tableName   Nom de la table
      * @param string            $name        Nom du champ à tester
-     * @param string|array|null $value       Valeur de test du champ
+     * @param string|null       $value       Valeur de test du champ
      * @param string            $action      Action
      * @retun self
      */

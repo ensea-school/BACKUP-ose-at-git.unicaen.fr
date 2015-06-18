@@ -194,26 +194,27 @@ class QueryGenerator extends Service
      *
      * @param string                $tableName
      * @param string|string[]|null  $sourceCode
+     * @param integer|null          $anneeId
      * @return integer[]|null
      */
-    public function getIdFromSourceCode( $tableName, $sourceCode )
+    public function getIdFromSourceCode( $tableName, $sourceCode, $anneeId=null )
     {
         if (empty($sourceCode)) return null;
 
         $sql = 'SELECT ID FROM '.$this->escapeKW($tableName).' WHERE SOURCE_CODE IN (:sourceCode)';
+        if ($anneeId){
+            $sql .= ' AND ANNEE_ID = '.(string)(int)$anneeId;
+        }
         $stmt = $this->getEntityManager()->getConnection()->executeQuery(
                                                                 $sql,
                                                                 ['sourceCode' => (array)$sourceCode],
                                                                 ['sourceCode' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
                                                             );
-        $ids = [];
-        while($r = $stmt->fetch()){
-            $id = (int)$r['ID'];
-            if (0 != $id){
-                $ids[] = $id;
-            }
+        if ($r = $stmt->fetch()){;
+            return (int)$r['ID'];
+        }else{
+            return null;
         }
-        return $ids;
     }
 
 

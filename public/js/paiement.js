@@ -208,6 +208,12 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
             }
         } );
 
+        this.element.find("select[name='domaine-fonctionnel']").each( function(){
+            if ($(this).val() == ''){
+                that.showError('Domaine fonctionnel à définir.');
+            }
+        } );
+
         return this.validation;
     }
 
@@ -251,7 +257,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
      * @param {string}  centreCoutId
      * @returns {DemandeMiseEnPaiement}
      */
-    this.addMiseEnPaiement = function( id, heures, centreCoutId, focus )
+    this.addMiseEnPaiement = function( id, heures, centreCoutId, domaineFonctionnelId, focus )
     {
         var that  = this;
 
@@ -260,6 +266,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
             this.params['demandes-mep'][id] = {
                 heures          : heures,
                 'centre-cout-id': centreCoutId,
+                'domaine-fonctionnel-id': domaineFonctionnelId,
                 'read-only'     : false,
                 'validation'    : null
             };
@@ -267,6 +274,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
             var mepParams               = jQuery.extend({}, this.params['mep-defaults']);
             mepParams['heures']         = this.params['demandes-mep'][id]['heures'];
             mepParams['centre-cout-id'] = this.params['demandes-mep'][id]['centre-cout-id'];
+            mepParams['domaine-fonctionnel-id'] = this.params['demandes-mep'][id]['domaine-fonctionnel-id'];
             this.demandeMiseEnPaiement.changeInsert( id, mepParams );
         }
 
@@ -281,6 +289,10 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
 
         this.element.find(".mise-en-paiement#"+id+" select[name='centre-cout']").on('change', function(){
             that.onCentreCoutChange( $(this) );
+        } );
+
+        this.element.find(".mise-en-paiement#"+id+" select[name='domaine-fonctionnel']").on('change', function(){
+            that.onDomaineFonctionnelChange( $(this) );
         } );
 
         this.element.find(".mise-en-paiement#"+id+" .action-delete").on('click', function(){
@@ -303,6 +315,12 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
         out += this.renderHeures( data );
         out += '</td><td style="vertical-align:middle">';
         out += this.renderCentreCout( data );
+
+        if (0 < Util.json.count(this.params['domaines-fonctionnels'])){
+            out += '</td><td style="vertical-align:middle">';
+            out += this.renderDomaineFonctionnel( data );
+        }
+
         out += '</td><td style="vertical-align:middle;text-align:center">';
         out += this.renderActions( data );
         out += '</td></tr>';
@@ -370,6 +388,27 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
         return outC;
     }
 
+    this.renderDomaineFonctionnel = function( data )
+    {
+        var outDF = '';
+
+        ;
+        if (0 == Util.json.count(this.params['domaines-fonctionnels'])){
+            return '';
+        }
+
+        outDF = '<select name="domaine-fonctionnel" class="selectpicker" data-width="100%" data-live-search="true">';
+        if (undefined == data['domaine-fonctionnel-id']){
+            outDF += '<option value="" selected="selected">&Agrave; préciser ...</option>';
+        }
+        for ( var dfId in this.params['domaines-fonctionnels']){
+            var selected = dfId == data['domaine-fonctionnel-id'] ? ' selected="selected"' : '';
+            outDF += '<option value="'+dfId+'"'+selected+'>'+this.params['domaines-fonctionnels'][dfId]+'</option>';
+        }
+        outDF += '</select>';
+
+        return outDF;
+    }
 
 
     this.renderActions = function( data )
@@ -444,6 +483,20 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
 
     /**
      *
+     * @param {Object} element
+     * @returns {undefined}
+     */
+    this.onDomaineFonctionnelChange = function( element )
+    {
+        var miseEnPaiementId = element.parents('.mise-en-paiement').attr('id');
+        var domaineFonctionnelId     = element.val();
+        this.demandeMiseEnPaiement.changeUpdate( miseEnPaiementId, 'domaine-fonctionnel-id', domaineFonctionnelId );
+    }
+
+
+
+    /**
+     *
      * @returns {undefined}
      */
     this.onAddHeuresRestantes = function()
@@ -451,7 +504,7 @@ function MiseEnPaiementListe( demandeMiseEnPaiement, element )
         if (this.params['heures-non-dmep'] < 0){
             alert('Il est impossible d\'ajouter des HETD négatifs.');
         }else{
-            this.addMiseEnPaiement( undefined, this.params['heures-non-dmep'], this.params['default-centre-cout'], true );
+            this.addMiseEnPaiement( undefined, this.params['heures-non-dmep'], this.params['default-centre-cout'], this.params['default-domaine-fonctionnel'], true );
         }
     }
 

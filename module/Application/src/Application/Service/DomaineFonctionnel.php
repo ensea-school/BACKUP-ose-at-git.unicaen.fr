@@ -3,8 +3,7 @@
 namespace Application\Service;
 
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\Dossier as DossierEntity;
-use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\DomaineFonctionnel as DomaineFonctionnelEntity;
 
 /**
  * 
@@ -13,6 +12,7 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
  */
 class DomaineFonctionnel extends AbstractEntityService
 {
+    use Traits\ParametresAwareTrait;
 
     /**
      * retourne la classe des entités
@@ -33,6 +33,17 @@ class DomaineFonctionnel extends AbstractEntityService
     public function getAlias()
     {
         return 'df';
+    }
+
+    /**
+     * Retourne le domaine fonctionnel par défaut pour les services assurés à l'extérieur défini selon les paramètres OSE
+     *
+     * @return DomaineFonctionnelEntity
+     */
+    public function getForServiceExterieur()
+    {
+        $dfId = $this->getServiceParametres()->get('domaine_fonctionnel_ens_ext');
+        return $this->get($dfId);
     }
 
     /**

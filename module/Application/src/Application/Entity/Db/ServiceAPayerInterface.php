@@ -102,6 +102,17 @@ interface ServiceAPayerInterface
     public function getDefaultCentreCout( TypeHeures $typeHeures );
 
     /**
+     *
+     * @return DomaineFonctionnel|null
+     */
+    public function getDefaultDomaineFonctionnel();
+
+    /**
+     * @return boolean
+     */
+    public function isDomaineFonctionnelModifiable();
+
+    /**
      * @return Structure
      */
     public function getStructure();

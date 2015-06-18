@@ -28,6 +28,23 @@ class FormuleResultatServiceReferentiel implements ServiceAPayerInterface, Resou
     }
 
     /**
+     *
+     * @return DomaineFonctionnel|null
+     */
+    public function getDefaultDomaineFonctionnel()
+    {
+        return $this->getServiceReferentiel()->getFonction()->getDomaineFonctionnel();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDomaineFonctionnelModifiable()
+    {
+        return true;
+    }
+
+    /**
      * Get ServiceReferentiel
      *
      * @return \Application\Entity\Db\ServiceReferentiel 

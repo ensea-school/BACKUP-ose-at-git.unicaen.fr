@@ -10,6 +10,7 @@ use Application\Entity\Db\FormuleResultatService;
 use Application\Entity\Db\FormuleResultatServiceReferentiel;
 use Application\Entity\Db\TypeHeures;
 use Application\Entity\Db\MiseEnPaiement;
+use Application\Entity\Db\DomaineFonctionnel;
 
 /**
  * Description of DemandeMiseEnPaiementViewHelper
@@ -18,7 +19,10 @@ use Application\Entity\Db\MiseEnPaiement;
  */
 class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait,
+        \Application\Service\Traits\DomaineFonctionnelAwareTrait,
+        \Application\Service\Traits\TypeHeuresAwareTrait
+    ;
 
     private $servicesAPayer = [];
 
@@ -31,11 +35,19 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     private static $miseEnPaiementListeIdSequence = 1;
 
     /**
-     * Mose lecture seule
+     * Mise lecture seule
      *
      * @var boolean
      */
     private $readOnly = false;
+
+    /**
+     * Liste des domaines fonctionnels
+     *
+     * @var array
+     */
+    protected $domainesFonctionnels;
+
 
 
     /**
@@ -184,6 +196,9 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         $out .= '<thead><tr><th colspan="3">'.$typeHeures->getLibelleLong().'</th></tr><tr>';
         $out .= '<th style="width:8em"><abbr title="Heures équivalent TD">HETD</abbr></th>';
         $out .= '<th>Centre de coûts</th>';
+        if ($serviceAPayer->isDomaineFonctionnelModifiable()){
+            $out .= '<th>Domaine fonctionnel</th>';
+        }
         $out .= '<th>&nbsp;</th>';
         $out .= '</tr></thead>';
 
@@ -205,6 +220,9 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             if (! $readOnly) $out .= '</button>';
             $out .= '</td>';
             $out .= '<th>HETD restantes</th>';
+            if ($serviceAPayer->isDomaineFonctionnelModifiable()){
+                $out .= '<td>&nbsp;</td>';
+            }
             $out .= '<td>&nbsp;</td>';
             $out .= '</tr>';
         }
@@ -212,6 +230,9 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         $out .= '<td class="nombre heures-total">'.\Common\Util::formattedHeures($params['heures-total']).'</td>';
         $out .= '<th>HETD au total</th>';
         $out .= '<td>&nbsp;</td>';
+        if ($serviceAPayer->isDomaineFonctionnelModifiable()){
+                $out .= '<td>&nbsp;</td>';
+            }
         $out .= '</tr></tfoot>';
         $out .= '</table>';
         $out .= '</div>';
@@ -237,10 +258,14 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     protected function getServiceAPayerParams( ServiceAPayerInterface $serviceAPayer, TypeHeures $typeHeures )
     {
         $defaultCentreCout = $serviceAPayer->getDefaultCentreCout($typeHeures);
+        $defaultDomaineFonctionnel = $serviceAPayer->getDefaultDomaineFonctionnel( $this->getServiceDomaineFonctionnel() );
+        
 
         $params = [
             'centres-cout'          => [],
+            'domaines-fonctionnels' => $serviceAPayer->isDomaineFonctionnelModifiable() ? $this->getDomainesFonctionnels() : null,
             'default-centre-cout'   => $defaultCentreCout ? $defaultCentreCout->getId() : null,
+            'default-domaine-fonctionnel' => $defaultDomaineFonctionnel ? $defaultDomaineFonctionnel->getId() : null,
             'mises-en-paiement'     => [],
             'demandes-mep'          => [],
             'heures-total'          => $serviceAPayer->isPayable() ? $serviceAPayer->getHeuresCompl($typeHeures) : 0,
@@ -286,10 +311,13 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
                 $mepBuffer[$pp->getId()]['heures'] += $miseEnPaiement->getHeures(); // mise en buffer pour tri...
                 $params['heures-mep'] += $miseEnPaiement->getHeures();
             }else{
+                $domaineFonctionnel = $miseEnPaiement->getDomaineFonctionnel();
+
                 $dmepParams = [
-                    'centre-cout-id'    => $miseEnPaiement->getCentreCout()->getId(),
-                    'heures'            => $miseEnPaiement->getHeures(),
-                    'read-only'         => $this->getReadOnly() || ! $this->getView()->isAllowed($miseEnPaiement, \Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE),
+                    'centre-cout-id'            => $miseEnPaiement->getCentreCout()->getId(),
+                    'domaine-fonctionnel-id'    => $domaineFonctionnel ? $domaineFonctionnel->getId() : null,
+                    'heures'                    => $miseEnPaiement->getHeures(),
+                    'read-only'                 => $this->getReadOnly() || ! $this->getView()->isAllowed($miseEnPaiement, \Application\Entity\Db\Privilege::MISE_EN_PAIEMENT_DEMANDE),
                 ];
                 if ($validation = $miseEnPaiement->getValidation()){
                     $dmepParams['validation'] = [
@@ -328,12 +356,12 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         return $id;
     }
 
-    function getReadOnly()
+    public function getReadOnly()
     {
         return $this->readOnly;
     }
 
-    function setReadOnly($readOnly)
+    public function setReadOnly($readOnly)
     {
         $this->readOnly = $readOnly;
         return $this;
@@ -343,7 +371,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
      *
      * @return ServiceAPayerInterface[]
      */
-    function getServicesAPayer()
+    public function getServicesAPayer()
     {
         return $this->servicesAPayer;
     }
@@ -353,18 +381,40 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
      * @param ServiceAPayerInterface[] $servicesAPayer
      * @return self
      */
-    function setServicesAPayer( array $servicesAPayer )
+    public function setServicesAPayer( array $servicesAPayer )
     {
         $this->servicesAPayer = $servicesAPayer;
         return $this;
     }
 
+    /**
+     *
+     * @return array
+     */
+    public function getDomainesFonctionnels()
+    {
+        if (empty($this->domainesFonctionnels)){
+            $sdf = $this->getServiceDomaineFonctionnel();
+            $this->setDomainesFonctionnels( $sdf->getList( $sdf->finderByHistorique() ) );
+        }
+        return $this->domainesFonctionnels;
+    }
 
     /**
-     * @return \Application\Service\TypeHeures
+     *
+     * @param array $domainesFonctionnels
+     * @return self
      */
-    protected function getServiceTypeHeures()
+    public function setDomainesFonctionnels( $domainesFonctionnels )
     {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationTypeHeures');
+        $this->domainesFonctionnels = [];
+        foreach( $domainesFonctionnels as $id => $domaineFonctionnel ){
+            if ($domaineFonctionnel instanceof DomaineFonctionnel){
+                $this->domainesFonctionnels[$domaineFonctionnel->getId()] = (string)$domaineFonctionnel;
+            }else{
+                $this->domainesFonctionnels[$id] = (string)$domaineFonctionnel;
+            }
+        }
+        return $this;
     }
 }

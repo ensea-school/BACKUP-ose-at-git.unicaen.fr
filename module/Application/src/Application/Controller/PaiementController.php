@@ -34,7 +34,7 @@ class PaiementController extends AbstractActionController
     protected function initFilters()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\MiseEnPaiement',
+                'Application\Entity\Db\MiseEnPaiement',
                 'Application\Entity\Db\Service',
                 'Application\Entity\Db\VolumeHoraire',
                 'Application\Entity\Db\ServiceReferentiel',
@@ -53,7 +53,7 @@ class PaiementController extends AbstractActionController
     public function demandeMiseEnPaiementAction()
     {
         $this->initFilters();
-        $intervenant        = $this->context()->mandatory()->intervenantFromRoute(); /* @var $intervenant \Application\Entity\Db\Intervenant */
+        $intervenant        = $this->getEvent()->getParam('intervenant'); /* @var $intervenant \Application\Entity\Db\Intervenant */
         $saved = false;
         if ($this->getRequest()->isPost()) {
             $changements = $this->params()->fromPost('changements', '{}');
@@ -230,7 +230,7 @@ class PaiementController extends AbstractActionController
 
         $recherche = new MiseEnPaiementRecherche;
         $options = [];
-        if ($role instanceof \Application\Interfaces\StructureAwareInterface && $role->getStructure()){
+        if ($role->getStructure()){
             $options['composante'] = $role->getStructure();
         }
         return $this->etatPaiementCsv( $recherche, $options );

@@ -70,6 +70,12 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     protected $structure;
 
     /**
+     * @var DomaineFonctionnel
+     */
+    protected $domaineFonctionnel;
+
+
+        /**
      * Set code
      *
      * @param string $code
@@ -330,6 +336,26 @@ class FonctionReferentiel implements HistoriqueAwareInterface
     public function getStructure()
     {
         return $this->structure;
+    }
+
+    /**
+     * 
+     * @return DomaineFonctionnel
+     */
+    function getDomaineFonctionnel()
+    {
+        return $this->domaineFonctionnel;
+    }
+
+    /**
+     *
+     * @param DomaineFonctionnel $domaineFonctionnel
+     * @return self
+     */
+    function setDomaineFonctionnel(DomaineFonctionnel $domaineFonctionnel)
+    {
+        $this->domaineFonctionnel = $domaineFonctionnel;
+        return $this;
     }
 
     /**

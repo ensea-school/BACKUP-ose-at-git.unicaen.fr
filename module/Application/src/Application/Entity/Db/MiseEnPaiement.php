@@ -63,6 +63,11 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     private $centreCout;
 
     /**
+     * @var DomaineFonctionnel
+     */
+    protected $domaineFonctionnel;
+
+    /**
      * @var \Application\Entity\Db\Validation
      */
     private $validation;
@@ -320,6 +325,26 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     public function getCentreCout()
     {
         return $this->centreCout;
+    }
+
+    /**
+     *
+     * @return DomaineFonctionnel
+     */
+    function getDomaineFonctionnel()
+    {
+        return $this->domaineFonctionnel;
+    }
+
+    /**
+     *
+     * @param DomaineFonctionnel $domaineFonctionnel
+     * @return self
+     */
+    function setDomaineFonctionnel(DomaineFonctionnel $domaineFonctionnel)
+    {
+        $this->domaineFonctionnel = $domaineFonctionnel;
+        return $this;
     }
 
     /**

@@ -473,6 +473,12 @@ class MiseEnPaiement extends AbstractEntityService
             $object->setCentreCout( $serviceCentreCout->get( (integer)$data['centre-cout-id'] ) );
         }
 
+        if (isset($data['domaine-fonctionnel-id'])){
+            $serviceDomaineFonctionnel = $this->getServiceLocator()->get('applicationDomaineFonctionnel');
+            /* @var $serviceDomaineFonctionnel DomaineFonctionnel */
+            $object->setDomaineFonctionnel( $serviceDomaineFonctionnel->get( (integer)$data['domaine-fonctionnel-id'] ) );
+        }
+
         if (isset($data['formule-resultat-service-id'])){
             $serviceFormuleResultatService = $this->getServiceLocator()->get('ApplicationFormuleResultatService');
             /* @var $serviceFormuleResultatService FormuleResultatService */

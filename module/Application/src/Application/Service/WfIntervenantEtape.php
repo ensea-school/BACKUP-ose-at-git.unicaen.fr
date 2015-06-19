@@ -9,6 +9,7 @@ use Application\Entity\Db\WfIntervenantEtape as WfIntervenantEtapeEntity;
 use Application\Service\AbstractEntityService;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Service de gestion de la progression d'un intervenant dans le workflow.
@@ -74,7 +75,9 @@ class WfIntervenantEtape extends AbstractEntityService
         
         $qb = $this->finderByIntervenant($intervenant); /* @var $qb QueryBuilder */
         
-        $qb->join("ie.etape", "e", \Doctrine\ORM\Query\Expr\Join::WITH, "e.visible = 1");
+        $qb
+                ->join("ie.etape", "e", Join::WITH, "e.visible = 1 AND e.annee = :annee")
+                ->setParameter('annee', $intervenant->getAnnee());
         
         if (null === $structure) {
             $qb->andWhere("ie.structure is null"); // i.e. "peu importe la structure"

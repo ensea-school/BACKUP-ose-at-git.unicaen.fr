@@ -654,6 +654,8 @@ class Dossier implements HistoriqueAwareInterface
      */
     public function setDateNaissance($dateNaissance)
     {
+        $dateNaissance->setTime(0, 0, 0);
+        
         $this->dateNaissance = $dateNaissance;
 
         return $this;

@@ -108,7 +108,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             if ($roleId == 'directeur-composante')      { $roleClass = 'Application\Acl\DirecteurComposanteRole';    $parent='composante';}
             if ($roleId == 'administrateur')            { $roleClass = 'Application\Acl\AdministrateurRole';                              }
             if ($roleId == 'responsable-composante')    { $roleClass = 'Application\Acl\ResponsableComposanteRole';  $parent='composante';}
-            if ($roleId == 'superviseur-etablissement') { $roleClass = 'Application\Acl\EtablissementRole';                               }
+            if ($roleId == 'superviseur-etablissement') { $roleClass = 'Application\Acl\EtablissementRole';          $parent='etablissement';}
             if ($roleId == 'gestionnaire-drh')          { $roleClass = 'Application\Acl\DrhRole';                                         }
             /* FIN de deprecated */
 

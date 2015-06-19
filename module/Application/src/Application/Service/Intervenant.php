@@ -189,7 +189,7 @@ class Intervenant extends AbstractEntityService
     {
         $repo = $this->getEntityManager()->getRepository($this->getEntityClass());
 
-        if (($intervenant = $repo->findOneBySourceCode($sourceCode))) {
+        if ($intervenant = $this->getBySourceCode($sourceCode)) {
             return $intervenant;
         }
 

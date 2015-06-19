@@ -124,7 +124,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
             'attributes' => array(
                 'placeholder' => "jj/mm/aaaa",
             ),
-            'type'       => 'Text'
+            'type'  => 'UnicaenApp\Form\Element\Date',
         ]);
 
         /**

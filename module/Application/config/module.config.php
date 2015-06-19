@@ -236,6 +236,7 @@ $main =  [
     ],
     'public_files' => [
         'js' => [
+            'js/datepicker-fr.js',
             'js/elementPedagogiqueRecherche.js',
             'js/service.js',
             'js/service-referentiel.js',

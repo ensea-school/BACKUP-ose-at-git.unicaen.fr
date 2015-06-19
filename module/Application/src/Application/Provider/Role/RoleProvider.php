@@ -23,7 +23,8 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
     use EntityManagerAwareTrait,
         \Zend\ServiceManager\ServiceLocatorAwareTrait,
         \Application\Service\Traits\StatutIntervenantAwareTrait,
-        \Application\Traits\SessionContainerTrait
+        \Application\Traits\SessionContainerTrait,
+        \Application\Service\Traits\IntervenantAwareTrait
     ;
 
     /**
@@ -82,6 +83,13 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
         $serviceAuthUserContext = $this->getServiceLocator()->get('AuthUserContext');
         /* @var $serviceAuthUserContext \UnicaenAuth\Service\UserContext */
         $utilisateur = $serviceAuthUserContext->getDbUser();
+
+        if ($ldapUser = $serviceAuthUserContext->getLdapUser()){
+            $intervenantSourceCode = (integer)$ldapUser->getSupannEmpId();
+            $intervenant = $this->getServiceIntervenant()->importer($intervenantSourceCode);
+        }else{
+            $intervenant = null;
+        }
 
 
         /* Rôles du personnel */
@@ -144,7 +152,7 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
             $roleClass = $statut['role-class'];
             $role = new $roleClass( $statut['role-id'], $statut['parent'], $roles[$statut['parent']]->getRoleName() );
 
-            if ($utilisateur && $intervenant = $utilisateur->getIntervenant()){
+            if ($intervenant){
                 if ($intervenant->getStatut()->getId() == $statut['statut-id']){
                     $role->setIntervenant( $intervenant );
                 }

@@ -48,6 +48,7 @@ class ContratController extends AbstractActionController
                 'Application\Entity\Db\TypeContrat',
                 'Application\Entity\Db\Service',
                 'Application\Entity\Db\VolumeHoraire',
+                'Application\Entity\Db\Validation',
             ],
             $this->getServiceContext()->getDateObservation()
         );

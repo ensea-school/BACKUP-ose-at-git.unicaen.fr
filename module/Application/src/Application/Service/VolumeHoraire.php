@@ -93,7 +93,7 @@ class VolumeHoraire extends AbstractEntityService
 
         $this->join( $serviceService, $qb, 'service' );
         $serviceService->leftJoin($serviceElement, $qb, 'elementPedagogique');
-        $serviceElement->finderByStructure( $structure );
+        $serviceElement->finderByStructure( $structure, $qb );
 
         return $qb;
     }

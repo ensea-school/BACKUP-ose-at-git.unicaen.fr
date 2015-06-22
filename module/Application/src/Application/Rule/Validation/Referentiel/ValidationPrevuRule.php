@@ -6,6 +6,7 @@ use Application\Rule\Validation\ValidationEnsRefAbstractRule;
 use Application\Acl\ComposanteRole;
 use Application\Acl\AdministrateurRole;
 use Application\Service\Workflow\Workflow;
+use Common\Exception\LogicException;
 
 /**
  * Tentative de centralisation des "règles métier" concernant la validation des enseignements PREVUS.

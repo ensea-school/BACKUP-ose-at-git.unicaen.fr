@@ -7,7 +7,7 @@ if ($this->dossier->getId()) {
     $this->messenger()->addMessage("Les données personnelles ont été saisies.", 'success');
 }
 else {
-    $this->messenger()->addMessage("Les données personnelles n'ont pas été saisies.", 'warning');
+    $this->messenger()->addMessage("Les données personnelles n'ont pas été saisies.", 'danger');
 }
 if ($this->validation) {
     $this->messenger()->addMessage(

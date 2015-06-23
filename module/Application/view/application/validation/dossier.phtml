@@ -8,10 +8,9 @@ $classValide = $validation->getId() ? "bg-success" : null;
 $this->messenger()->addMessagesFromFlashMessenger();
 
 if (! $this->dossier) {
-    $this->messenger()->addMessage("Les données personnelles n'ont pas été saisies.", 'warning');
+    $this->messenger()->addMessage("Les données personnelles n'ont pas été saisies.", 'danger');
 }
-
-if ($validation->getId()) {
+elseif ($validation->getId()) {
     $this->messenger()->addMessage(sprintf("Les données personnelles sont validées. <br /><br />%s", $this->validationDl($validation)), 'success');
 }
 else {

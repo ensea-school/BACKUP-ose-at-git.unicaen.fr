@@ -7,7 +7,6 @@ use UnicaenApp\Util;
 use Common\Exception\RuntimeException;
 use Common\Exception\LogicException;
 use Common\Exception\MessageException;
-use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeValidation;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
@@ -54,11 +53,6 @@ class ValidationController extends AbstractActionController
     /**
      * @var boolean
      */
-    private $readonly = false;
-
-    /**
-     * @var boolean
-     */
     private $isReferentiel;
 
     /**
@@ -92,6 +86,7 @@ class ValidationController extends AbstractActionController
             [
                 'Application\Entity\Db\Validation',
                 'Application\Entity\Db\TypeValidation',
+                'Application\Entity\Db\Dossier',
                 'Application\Entity\Db\Service',
                 'Application\Entity\Db\VolumeHoraire',
                 'Application\Entity\Db\ServiceReferentiel',
@@ -102,123 +97,87 @@ class ValidationController extends AbstractActionController
     }
 
     /**
-     *
-     * @return \Zend\View\Model\ViewModel
-     * @throws \Common\Exception\MessageException
+     * Validation ou dévalidation des données personnelles.
+
+     * NB : une seule validation pour toutes les composantes.
+     * 
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
      */
     public function dossierAction()
     {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-
-        if ($role instanceof ComposanteRole) {
-            return $this->modifierDossierAction();
+        $prg = $this->prg();
+        
+        if ($prg instanceof \Zend\Http\Response) {
+            return $prg;
         }
-        else {
-            return $this->voirDossierAction();
+        
+        $this->initFilters();
+        
+        $intervenant       = $this->getIntervenant();
+        $dossier           = $intervenant->getDossier();
+        $role              = $this->getServiceContext()->getSelectedIdentityRole();
+        $serviceValidation = $this->getServiceValidation();
+        $typeValidation    = TypeValidation::CODE_DONNEES_PERSO;
+        $this->title       = "Validation des données personnelles <small>$intervenant</small>";
+        
+        // recherche validation existante et instanciation si aucune trouvée
+        $qb = $serviceValidation->finderByType($typeValidation);
+        $serviceValidation->finderByIntervenant($intervenant, $qb);
+        $serviceValidation->finderByHistorique($qb);
+        $this->validation = $qb->getQuery()->getOneOrNullResult();
+        
+        if (! $this->validation) {
+            $this->validation = $serviceValidation->newEntity($typeValidation);
+            $this->validation
+                    ->setIntervenant($intervenant)
+                    ->setStructure($role->getStructure());
         }
-    }
+        
+        $this->formValider = $this->getFormDossier($this->validation);
 
-    /**
-     *
-     * @return \Zend\View\Model\ViewModel
-     * @throws \Common\Exception\MessageException
-     */
-    public function voirDossierAction()
-    {
-        $this->title    = "Validation de vos données personnelles";
-        $this->readonly = true;
-
-        $this->commonDossier();
-
-        $this->formValider->get('valide')->setLabel("Si cette case est cochée, cela indique que vos données personnelles ont été validées...");
-        $this->view->setTemplate('application/validation/voir-dossier');
-
-        return $this->view;
-    }
-
-    /**
-     * (Dé)Validation des données personnelles vacataires.
-     * NB : une seule validation pour toutes les composantes.
-     *
-     * @return \Zend\View\Model\ViewModel
-     * @throws RuntimeException
-     */
-    public function modifierDossierAction()
-    {
-        $this->title    = "Validation des données personnelles <small>{$this->getIntervenant()}</small>";
-        $this->readonly = false;
-
-        $this->commonDossier();
-
-        if ($this->validation->getId()) {
-            $this->formValider->get('valide')->setLabel("Décochez pour dévalider les données personnelles");
-        }
-
-        if (!$this->readonly && $this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
+        $canEdit = $dossier && 
+                ($this->isAllowed($this->validation, 'create') || $this->isAllowed($this->validation, 'delete'));
+        
+        if ($canEdit && is_array($prg)) {
+            $data = $prg;
             $this->formValider->setData($data);
             if ($this->formValider->isValid()) {
                 $complet = (bool) $data['valide'];
                 $this->updateValidation($complet);
 
-                return $this->redirect()->toRoute(null, [], [], true);
+                return $this->redirect()->refresh();
             }
         }
 
-        $this->view->formModifier = $this->getDossierModifierViewModel()->form;
-
-        return $this->view;
-    }
-
-    private function commonDossier()
-    {
-        $role              = $this->getServiceContext()->getSelectedIdentityRole();
-        $serviceValidation = $this->getServiceValidation();
-        $typeValidation    = TypeValidation::CODE_DONNEES_PERSO;
-
-        $this->formValider = $this->getFormDossier()->setIntervenant($this->getIntervenant())->init();
-
-        $this->initFilters();
-
-        $qb = $serviceValidation->finderByType($typeValidation);
-        $serviceValidation->finderByIntervenant($this->getIntervenant(), $qb);
-        $serviceValidation->finderByHistorique($qb);
-        $this->validation = $qb->getQuery()->getOneOrNullResult();
-        if (!$this->validation) {
-            $this->validation = $serviceValidation->newEntity($typeValidation);
-            $this->validation->setIntervenant($this->getIntervenant());
-//            if ($role instanceof \Application\Interfaces\StructureAwareInterface) {
-                $this->validation->setStructure($role->getStructure());
-//            }
-        }
-        else {
-            $this->formValider->get('valide')->setValue(true);
-        }
-        $this->formValider->bind($this->validation);
-
         $this->view = new \Zend\View\Model\ViewModel([
-            'intervenant' => $this->getIntervenant(),
+            'intervenant' => $intervenant,
+            'dossier'     => $dossier,
             'validation'  => $this->validation,
             'form'        => $this->formValider,
             'role'        => $role,
-            'readonly'    => $this->readonly,
+            'canEdit'     => $canEdit,
             'title'       => $this->title,
         ]);
-        $this->view->setTemplate('application/validation/dossier');
+        
+        $this->view->formModifier = $this->getFormDossierModifier();
+        
+        return $this->view;
+        
     }
 
     /**
+     * Interrogation du contrôleur Dossier pour obtenir le formulaire de saisie des données personnelles.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\Form\Form
      */
-    private function getDossierModifierViewModel()
+    private function getFormDossierModifier()
     {
         $controller       = 'Application\Controller\Dossier';
         $params           = $this->getEvent()->getRouteMatch()->getParams();
         $params['action'] = 'modifier';
         $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
 
-        return $viewModel;
+        return $viewModel->form;
     }
 
     /**
@@ -660,12 +619,22 @@ class ValidationController extends AbstractActionController
     /**
      * @return DossierValidation
      */
-    protected function getFormDossier()
+    protected function getFormDossier(\Application\Entity\Db\Validation $validation)
     {
         if (null === $this->formValider) {
             $this->formValider = new DossierValidation();
         }
-
+        
+        $this->formValider->init();
+        
+        if ($validation->getId()) {
+            $this->formValider->get('valide')
+                    ->setValue(true)
+                    ->setLabel("Décochez pour dévalider les données personnelles");
+        }
+        
+        $this->formValider->bind($this->validation);
+        
         return $this->formValider;
     }
 

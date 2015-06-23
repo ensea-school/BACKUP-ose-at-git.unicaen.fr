@@ -2,43 +2,56 @@
 
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<?php
+<?php 
 $classValide = $validation->getId() ? "bg-success" : null;
-?>
 
-<?php echo $this->messenger()->setMessagesFromFlashMessenger() ?>
+$this->messenger()->addMessagesFromFlashMessenger();
 
-<div class="<?php echo $classValide ?>">
-    <?php echo $this->partial('application/dossier/partial/form', [ 
-        'form'     => $formModifier,
-        'readonly' => true,
-    ]) ?>
+if (! $this->dossier) {
+    $this->messenger()->addMessage("Les données personnelles n'ont pas été saisies.", 'warning');
+}
 
-</div>
-
-<?php
 if ($validation->getId()) {
-    echo $this->messenger()->setMessage(
-                sprintf("Les données personnelles sont validées. <br /><br />%s", $this->validationDl($validation)), 
-                'success');
+    $this->messenger()->addMessage(sprintf("Les données personnelles sont validées. <br /><br />%s", $this->validationDl($validation)), 'success');
+}
+else {
+    $this->messenger()->addMessage("Les données personnelles n'ont pas encore été validées", 'warning');
+}
+
+echo $this->messenger();
+
+// si aucune données perso saisies, STOP!
+if (! $this->dossier) {
+    return;
 }
 ?>
 
-<?php $form->prepare(); ?>
-<?php echo $this->form()->openTag($form); ?>
-<div class="row">
-    <div class="col-md-4">
-        <?php 
-        echo $this->formControlGroup($form->get('valide')->setAttribute('disabled', $readonly));
-        echo $this->formHidden($form->get('security'));
-        ?>
-    </div>
+<div class="<?php echo $classValide ?>">
+    <?php echo $this->partial('application/dossier/partial/form', [
+        'form'     => $formModifier,
+        'readonly' => true,
+    ]) ?>
 </div>
 
-<?php if (!$readonly): ?>
+<hr />
+
+<?php if ($this->canEdit): ?>
+
+    <?php $form->prepare(); ?>
+    <?php echo $this->form()->openTag($form); ?>
+    <div class="row">
+        <div class="col-md-4">
+            <?php 
+            echo $this->formControlGroup($form->get('valide')->setAttribute('disabled', ! $this->canEdit));
+            echo $this->formHidden($form->get('security'));
+            ?>
+        </div>
+    </div>
+
     <?php echo $this->formSubmit($form->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
+    <?php echo $this->form()->closeTag(); ?>
+
 <?php endif ?>
-<?php echo $this->form()->closeTag(); ?>
 
 
 <?php if ($role instanceof \Application\Acl\IntervenantRole): ?>

@@ -182,6 +182,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
         
         $view = new ViewModel([
             'intervenant' => $this->intervenant,
+            'dossier'     => $dossier,
             'form'        => $this->form,
             'validation'  => $validation,
             'readonly'    => $this->readonly,

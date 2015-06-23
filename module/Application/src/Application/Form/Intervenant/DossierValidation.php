@@ -6,7 +6,8 @@ use Zend\Form\Element\Csrf;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
-use Application\Traits\IntervenantAwareTrait;
+use Zend\Validator\Identical;
+use Application\Entity\Db\Validation;
 
 /**
  * Formulaire de validation des données personnelles d'un intervenant.
@@ -15,10 +16,9 @@ use Application\Traits\IntervenantAwareTrait;
  */
 class DossierValidation extends Form implements InputFilterProviderInterface
 {
-    use IntervenantAwareTrait;
-
     public function init()
     {
+        $this->setObject(new Validation());
         $this->setHydrator(new ClassMethods(false));
 
         $this->setAttribute('method', 'POST');
@@ -43,7 +43,7 @@ class DossierValidation extends Form implements InputFilterProviderInterface
 
         return $this;
     }
-
+    
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.
@@ -52,9 +52,20 @@ class DossierValidation extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
+        $validationExiste = (bool) $this->getObject()->getId();
+        
+        $validatorsValide   = [];
+        $validatorsValide[] = new Identical([
+            'token' => $validationExiste ? '0' : '1', 
+            'messageTemplates' => [
+                Identical::NOT_SAME => $validationExiste ? "Pour dévalider, vous devez décocher la case" : "Pour valider, vous devez cocher la case",
+            ],
+        ]);
+        
         return [
             'valide' => [
-                'required' => false,
+                'required'   => false,
+                'validators' => $validatorsValide,
             ],
         ];
     }

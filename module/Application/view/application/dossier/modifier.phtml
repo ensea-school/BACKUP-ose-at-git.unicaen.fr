@@ -1,16 +1,21 @@
-<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Données personnelles") ?>
+<?php $this->headTitle()->append($this->intervenant->getNomUsuel())->append("Données personnelles") ?>
 
-<h1 class="page-header">Données personnelles <small><?php echo $intervenant ?></small></h1>
-
-<?php $this->messenger()->addMessage(
-        "Ces données sont indispensables pour éditer votre contrat et mettre en paiement vos heures complémentaires éventuelles.",
-        'warning'); ?>
+<h1 class="page-header">Données personnelles <small><?php echo $this->intervenant ?></small></h1>
 
 <?php
-if ($validation) {
-    $this->messenger()->addMessage(
-            sprintf("Les données personnelles ont été validées. <br /><br />%s", $this->validationDl($validation)), 'success');
+if ($this->dossier->getId()) {
+    $this->messenger()->addMessage("Les données personnelles ont été saisies.", 'success');
 }
+else {
+    $this->messenger()->addMessage("Les données personnelles n'ont pas été saisies.", 'warning');
+}
+if ($this->validation) {
+    $this->messenger()->addMessage(
+            sprintf("Les données personnelles ont été validées. <br /><br />%s", $this->validationDl($this->validation)), 'success');
+}
+$this->messenger()->addMessage(
+        "Ces données sont indispensables pour éditer votre contrat et mettre en paiement vos heures complémentaires éventuelles.",
+        'warning');
 ?>
 
 <?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>

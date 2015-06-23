@@ -9,6 +9,11 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class Validation implements HistoriqueAwareInterface, ResourceInterface
 {
+    const RESOURCE_ID_VALIDATION_DONNEES_PERSO = 'VALIDATION_DOSSIER';
+    const RESOURCE_ID_VALIDATION_ENSEIGNEMENT  = 'VALIDATION_ENSEIGNEMENT';
+    const RESOURCE_ID_VALIDATION_REFERENTIEL   = 'VALIDATION_REFERENTIEL';
+    const RESOURCE_ID_CLOTURE_REALISE          = 'CLOTURE_REALISE';
+    
     /**
      * @var \DateTime
      */
@@ -372,6 +377,23 @@ class Validation implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getResourceId()
     {
+        switch ($this->getTypeValidation()->getCode()) {
+            case TypeValidation::CODE_DONNEES_PERSO:
+                return self::RESOURCE_ID_VALIDATION_DONNEES_PERSO;
+                
+            case TypeValidation::CODE_ENSEIGNEMENT:
+                return self::RESOURCE_ID_VALIDATION_ENSEIGNEMENT;
+                
+            case TypeValidation::CODE_REFERENTIEL:
+                return self::RESOURCE_ID_VALIDATION_REFERENTIEL;
+                
+            case TypeValidation::CODE_CLOTURE_REALISE:
+                return self::RESOURCE_ID_CLOTURE_REALISE;
+                
+            default:
+                break;
+        }
+        
         return 'Validation';
     }
 }

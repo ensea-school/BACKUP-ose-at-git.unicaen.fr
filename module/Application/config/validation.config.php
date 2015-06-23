@@ -7,6 +7,7 @@ use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantExterieurRole;
 
+use Application\Entity\Db\Validation;
 
 use Application\Assertion\AbstractAssertion;
 
@@ -125,29 +126,78 @@ return [
         ],
         'resource_providers' => [
             'BjyAuthorize\Provider\Resource\Config' => [
-                'Validation' => [],
+                Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO => [],
+                Validation::RESOURCE_ID_CLOTURE_REALISE          => [],
+                Validation::RESOURCE_ID_VALIDATION_ENSEIGNEMENT  => [],
+                Validation::RESOURCE_ID_VALIDATION_REFERENTIEL   => [],
             ],
         ],
         'rule_providers' => [
             'BjyAuthorize\Provider\Rule\Config' => [
                 'allow' => [
                     [
-                        [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                        'Validation',
-                        [AbstractAssertion::PRIVILEGE_READ],
-                        'ValidationAssertion',
-                    ],
-                    [
                         [
-                            IntervenantRole::ROLE_ID, // Pour la clôture du réalisé
+                            IntervenantRole::ROLE_ID, 
                             ComposanteRole::ROLE_ID, 
                             AdministrateurRole::ROLE_ID,
                         ],
-                        'Validation',
+                        [
+                            Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO,
+                            Validation::RESOURCE_ID_CLOTURE_REALISE,
+                            Validation::RESOURCE_ID_VALIDATION_ENSEIGNEMENT,
+                            Validation::RESOURCE_ID_VALIDATION_REFERENTIEL,
+                        ],
+                        [
+                            AbstractAssertion::PRIVILEGE_READ,
+                        ],
+                        'ValidationAssertion',
+                    ],
+                    
+                    // ------------- Validation DONNEES PERSO -------------
+                    [
+                        [
+                            ComposanteRole::ROLE_ID, 
+                            AdministrateurRole::ROLE_ID,
+                        ],
+                        [
+                            Validation::RESOURCE_ID_VALIDATION_DONNEES_PERSO,
+                        ],
                         [
                             AbstractAssertion::PRIVILEGE_CREATE,
                             AbstractAssertion::PRIVILEGE_DELETE,
-                            AbstractAssertion::PRIVILEGE_UPDATE,
+                        ],
+                        'ValidationAssertion',
+                    ],
+                    
+                    // ------------- Cloture REALISE -------------
+                    [
+                        [
+                            IntervenantRole::ROLE_ID, // <-- Hey!
+                            ComposanteRole::ROLE_ID, 
+                            AdministrateurRole::ROLE_ID,
+                        ],
+                        [
+                            Validation::RESOURCE_ID_CLOTURE_REALISE,
+                        ],
+                        [
+                            AbstractAssertion::PRIVILEGE_CREATE,
+                        ],
+                        'ValidationAssertion',
+                    ],
+                    
+                    // ------------- Validation ENSEIGNEMENT et REFERENTIEL -------------
+                    [
+                        [
+                            ComposanteRole::ROLE_ID, 
+                            AdministrateurRole::ROLE_ID,
+                        ],
+                        [
+                            Validation::RESOURCE_ID_VALIDATION_ENSEIGNEMENT,
+                            Validation::RESOURCE_ID_VALIDATION_REFERENTIEL,
+                        ],
+                        [
+                            AbstractAssertion::PRIVILEGE_CREATE,
+                            AbstractAssertion::PRIVILEGE_DELETE,
                         ],
                         'ValidationAssertion',
                     ],
@@ -168,6 +218,7 @@ return [
             'ValidationReferentielRule'        => 'Application\\Rule\\Validation\\Referentiel\\ValidationRule',
             'ClotureRealiseRule'               => 'Application\\Rule\\Validation\\ClotureRealiseRule',
             'ValidationAssertion'              => 'Application\\Assertion\\ValidationAssertionProxy',
+            'ValidationDossierAssertion'       => 'Application\\Assertion\\ValidationDossierAssertion',
             'ValidationServiceAssertion'       => 'Application\\Assertion\\ValidationServiceAssertion',
             'ValidationReferentielAssertion'   => 'Application\\Assertion\\ValidationReferentielAssertion',
             'ClotureRealiseAssertion'          => 'Application\\Assertion\\ClotureRealiseAssertion',

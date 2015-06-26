@@ -275,9 +275,11 @@ implements
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getServiceTypeVolumeHoraire()->getPrevu() );
             $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire($etat = $this->getServiceEtatVolumeHoraire()->getValide());
             $volumeHoraireListe->setReadOnly(true);
+            $out .= '<div class="rappel-volume-horaire-prevu">';
             $out .= sprintf('<div style="float:left;width:15%%"><h5>Prévisionnel<br />%s :</h5></div>', $etat);
             $out .= '<div id="vhl-prev" style="width:85%" data-url="'.$volumeHoraireListe->getRefreshUrl().'">'.$volumeHoraireListe->render().'</div>';
-
+            $out .= '</div>';
+            
             $volumeHoraireListe->getVolumeHoraireListe()->setTypeVolumeHoraire( $this->getTypeVolumeHoraire() );
             $volumeHoraireListe->getVolumeHoraireListe()->setEtatVolumeHoraire( $this->getServiceEtatVolumeHoraire()->getSaisi() );
             $volumeHoraireListe->setReadOnly( $this->getReadOnly() );

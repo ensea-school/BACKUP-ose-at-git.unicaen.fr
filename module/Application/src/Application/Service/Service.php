@@ -502,35 +502,25 @@ class Service extends AbstractEntityService
             IntervenantEntity $intervenant,
             $structureEns = null)
     {
-        /**
-         * On fetche les services qqsoit le type des volumes horaires associés car
-         * dans le contexte de la validation des enseignements réalisés par exemple, 
-         * on a besoin de rappeler (pour info) les volumes horaires prévisionnels validés en face des
-         * volumes horaires réalisés validables.
-         */
         $qb = $this->getEntityManager()->createQueryBuilder()
                 ->select("s2, i, vh, tvh, ep, strens")
                 ->from("Application\Entity\Db\Service", 's2')
                 ->join("s2.intervenant", "i", Join::WITH, "s2.intervenant = :intervenant")
                 ->join("s2.volumeHoraire", 'vh')
-                ->join("vh.typeVolumeHoraire", "tvh")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
                 ->leftJoin("s2.elementPedagogique", "ep")
                 ->leftJoin("ep.structure", 'strens')
                 ->addOrderBy("strens.libelleCourt", 'asc')
                 ->addOrderBy("s2.histoModification", 'asc')
                 ->setParameter('intervenant', $intervenant)
-                ->setParameter('ctvh', $typeVolumeHoraire->getCode());
+                ->setParameter('tvh', $typeVolumeHoraire);
         
         /**
-         * Il doit exister des volumes horaires du type spécifié ET non validés.
+         * Les volumes horaires du type spécifié ne doivent pas être validés.
          */
-        $vhTypeSpecifieDql = <<<EOS
-SELECT vh_ts FROM Application\Entity\Db\VolumeHoraire vh_ts
-JOIN vh_ts.typeVolumeHoraire tvh_ts WITH tvh_ts.code = :ctvh
-LEFT JOIN vh_ts.validation val_ts
-WHERE vh_ts.service = s2 AND val_ts.id IS NULL
-EOS;
-        $qb->andWhere("EXISTS ( $vhTypeSpecifieDql )");
+        $qb
+                ->leftJoin("vh.validation", "val")
+                ->andWhere("val.id IS NULL");
         
         /**
          * Filtrage éventuel par composante d'intervention.
@@ -547,8 +537,6 @@ EOS;
             $qb->andWhere(implode(' OR ', $whereStr));
         }
         
-//        echo($qb->getQuery()->getSQL());
-//        var_dump($qb->getQuery()->getArrayResult());
         return $qb->getQuery()->getResult();
     }
     

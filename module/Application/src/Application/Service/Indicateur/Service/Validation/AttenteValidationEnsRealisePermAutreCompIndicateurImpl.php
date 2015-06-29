@@ -4,6 +4,7 @@ namespace Application\Service\Indicateur\Service\Validation;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
+use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\WfEtape;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Traits\IntervenantAwareTrait;
@@ -80,6 +81,14 @@ class AttenteValidationEnsRealisePermAutreCompIndicateurImpl extends AbstractInt
                 ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
                 ->setParameter('tvh', $this->getTypeVolumeHoraire());
         
+        /**
+         * La saisie du réalisé de l'intervenant doit avoir été clôturée.
+         */
+        $qb
+                ->join("int.validation", "clo")
+                ->join("clo.typeValidation", "tvClo", Join::WITH, "tvClo.code = :tvCloCode")
+                ->setParameter('tvCloCode', TypeValidationEntity::CODE_CLOTURE_REALISE);
+                        
         /**
          * L'intervenant doit être à l'étape concernée dans le WF.
          */

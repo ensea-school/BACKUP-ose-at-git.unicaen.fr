@@ -74,11 +74,12 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
      */
     public function getTitle($appendStructure = true)
     {
-        $pattern = $this->getResultCount() === 1 ? $this->singularTitlePattern : $this->pluralTitlePattern;
-        $title   = sprintf($pattern, $this->getResultCount());
+        $resultCount = $this->getResultCount();
+        $pattern     = $resultCount === 1 ? $this->singularTitlePattern : $this->pluralTitlePattern;
+        $title       = sprintf($pattern, $resultCount);
         
-        if ($appendStructure && $this->getStructure()) {
-            $title .= " ({$this->getStructure()})";
+        if ($appendStructure && ($structure = $this->getStructure())) {
+            $title .= " ($structure)";
         }
         
         return $title;

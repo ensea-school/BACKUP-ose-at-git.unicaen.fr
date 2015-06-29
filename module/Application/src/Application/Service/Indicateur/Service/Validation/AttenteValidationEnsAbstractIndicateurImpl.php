@@ -19,13 +19,6 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
     protected $pluralTitlePattern   = "%s %s sont en attente de validation de leurs enseignements <em>%s</em>";
     
     /**
-     * Témoin indiquant s'il faut appliquer le filtre Structure.
-     * 
-     * @var boolean
-     */
-    protected $findByStructure = true;
-    
-    /**
      * Témoin indiquant s'il faut que l'intervenant soit à l'étape concernée dans le WF pour être acceptable.
      * 
      * @var boolean
@@ -58,8 +51,6 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         $qb = parent::getQueryBuilder()
                 ->join("int.service", "s")
                 ->join("s.elementPedagogique", "ep")
@@ -75,13 +66,18 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
             $service->finderByWfEtapeCourante($this->getWorkflowStepKey(), $qb);
         }
         
-        /**
-         * Type d'intervenant.
-         */
-//        $qb->andWhere("ti.code = :type")->setParameter('type', TypeIntervenantEntity::CODE_EXTERIEUR);
-        $qb->andWhere("ti = :type")->setParameter('type', $this->getTypeIntervenant());
         
-        if ($this->findByStructure && $this->getStructure()) {
+        /**
+         * Filtrage par type d'intervenant.
+         */
+        $qb
+                ->andWhere("ti = :type")
+                ->setParameter('type', $this->getTypeIntervenant());
+        
+        /**
+         * Filtrage par structure d'intervention.
+         */
+        if ($this->getStructure()) {
             $qb
                     ->andWhere("ep.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
@@ -90,27 +86,22 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
         /**
          * Les volumes horaires ne doivent pas être validés.
          */
-        $qb->andWhere("vh.validation IS EMPTY");
+        $qb
+                ->leftJoin("vh.validation", "val")
+                ->andWhere("val.id IS NULL");
+        
+        /**
+         * Eviction des données historisées.
+         */
+        $qb
+                ->andWhere("1 = pasHistorise(s)")
+                ->andWhere("1 = pasHistorise(ep)")
+                ->andWhere("1 = pasHistorise(vh)")
+                ->andWhere("1 = pasHistorise(val)");
         
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Validation',
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\VolumeHoraire',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
     
     /**

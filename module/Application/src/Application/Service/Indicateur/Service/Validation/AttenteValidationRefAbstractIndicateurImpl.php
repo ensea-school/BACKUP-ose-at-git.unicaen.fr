@@ -19,13 +19,6 @@ abstract class AttenteValidationRefAbstractIndicateurImpl extends AbstractInterv
     protected $pluralTitlePattern   = "%s %s sont en attente de validation de leur référentiel <em>%s</em>";
     
     /**
-     * Témoin indiquant s'il faut appliquer le filtre Structure.
-     * 
-     * @var boolean
-     */
-    protected $findByStructure = true;
-    
-    /**
      * Témoin indiquant s'il faut que l'intervenant soit à l'étape concernée dans le WF pour être acceptable.
      * 
      * @var boolean
@@ -58,8 +51,6 @@ abstract class AttenteValidationRefAbstractIndicateurImpl extends AbstractInterv
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         $qb = parent::getQueryBuilder()
                 ->join("int.serviceReferentiel", "s")
                 ->join("s.fonction", "f")
@@ -76,11 +67,16 @@ abstract class AttenteValidationRefAbstractIndicateurImpl extends AbstractInterv
         }
         
         /**
-         * Type d'intervenant.
+         * Filtrage par Type d'intervenant.
          */
-        $qb->andWhere("ti = :type")->setParameter('type', $this->getTypeIntervenant());
+        $qb
+                ->andWhere("ti = :type")
+                ->setParameter('type', $this->getTypeIntervenant());
         
-        if ($this->findByStructure && $this->getStructure()) {
+        /**
+         * Filtrage par structure d'intervention.
+         */
+        if ($this->getStructure()) {
             $qb
                     ->andWhere("f.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
@@ -89,27 +85,22 @@ abstract class AttenteValidationRefAbstractIndicateurImpl extends AbstractInterv
         /**
          * Les volumes horaires ne doivent pas être validés.
          */
-        $qb->andWhere("vh.validation IS EMPTY");
+        $qb
+                ->leftJoin("vh.validation", "val")
+                ->andWhere("val.id IS NULL");
+        
+        /**
+         * Eviction des données historisées.
+         */
+        $qb
+                ->andWhere("1 = pasHistorise(s)")
+                ->andWhere("1 = pasHistorise(f)")
+                ->andWhere("1 = pasHistorise(vh)")
+                ->andWhere("1 = pasHistorise(val)");
         
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Validation',
-                'Application\Entity\Db\ServiceReferentiel',
-                'Application\Entity\Db\FonctionReferentiel',
-                'Application\Entity\Db\VolumeHoraireRef',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
     
     /**

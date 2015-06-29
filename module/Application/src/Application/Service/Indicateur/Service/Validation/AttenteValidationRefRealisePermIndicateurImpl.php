@@ -28,13 +28,20 @@ class AttenteValidationRefRealisePermIndicateurImpl extends AttenteValidationRef
      */
     protected function getQueryBuilder()
     {
+        $qb = parent::getQueryBuilder();
+        
         /**
-         * Le réalisé doit être cloturé.
+         * En plus, le réalisé doit être cloturé.
          */
-        $qb = parent::getQueryBuilder()
+        $qb
                 ->join("int.validation", "v")
                 ->join("v.typeValidation", "tv", Join::WITH, "tv.code = :tvCode")
                 ->setParameter('tvCode', TypeValidationEntity::CODE_CLOTURE_REALISE);
+        
+        /**
+         * Eviction des données historisées.
+         */
+        $qb->andWhere("1 = pasHistorise(v)");
         
         return $qb;
     }

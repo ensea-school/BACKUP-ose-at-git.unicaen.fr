@@ -12,6 +12,7 @@ return [
                     'REPLACE'  => 'Common\ORM\Query\Functions\Replace',
                     'OSE_DIVERS_STRUCTURE_DANS_STRUCTURE' => 'Common\ORM\Query\Functions\OseDivers\StructureDansStructure',
                     'compriseEntre' => 'Common\ORM\Query\Functions\OseDivers\CompriseEntre',
+                    'pasHistorise'  => 'Common\ORM\Query\Functions\OseDivers\PasHistorise',
                 ],
                 'filters' => [
                     'historique' => 'Common\ORM\Filter\HistoriqueFilter',

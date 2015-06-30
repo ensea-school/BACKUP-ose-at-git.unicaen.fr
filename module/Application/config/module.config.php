@@ -262,6 +262,7 @@ return array_merge_recursive(
     include 'contrat.config.php',
     include 'validation.config.php',
     include 'gestion.config.php',
+    include 'droits.config.php',
     include 'agrement.config.php',
     include 'formule.config.php',
     include 'workflow.config.php',

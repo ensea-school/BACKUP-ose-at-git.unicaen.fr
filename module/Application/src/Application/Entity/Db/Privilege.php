@@ -8,6 +8,12 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class Privilege
 {
+    const DROIT_ROLE_VISUALISATION          = 'droit-role-visualisation';
+    const DROIT_ROLE_EDITION                = 'droit-role-edition';
+    const DROIT_PRIVILEGE_VISUALISATION     = 'droit-privilege-visualisation';
+    const DROIT_PRIVILEGE_EDITION           = 'droit-privilege-edition';
+    const DROIT_AFFECTATION_VISUALISATION   = 'droit-affectation-visualisation';
+    const DROIT_AFFECTATION_EDITION         = 'droit-affectation-edition';
     const ENSEIGNEMENT_VISUALISATION        = 'enseignement-visualisation';
     const ENSEIGNEMENT_EXPORT_CSV           = 'enseignement-export-csv';
     const IMPORT_ECARTS                     = 'import-ecarts';
@@ -26,8 +32,7 @@ class Privilege
     const MODIF_SERVICE_DU_VISUALISATION    = 'modif-service-du-visualisation';
     const MODIF_SERVICE_DU_EDITION          = 'modif-service-du-edition';
     const MODIF_SERVICE_DU_ASSOCIATION      = 'modif-service-du-association';
-    const PRIVILEGE_VISUALISATION           = 'privilege-visualisation';
-    const PRIVILEGE_EDITION                 = 'privilege-edition';
+
 
 
 

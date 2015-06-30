@@ -27,33 +27,38 @@ class PrivilegeRuleProvider implements ProviderInterface
         $this->setServiceLocator($serviceLocator);
 
         $session = $this->getSessionContainer();
+//        if (! isset($session->rules)){
+            $session->rules = $this->makeRules($config);
+//        }
+    }
 
-        if (! isset($session->rules)){
-            $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
+    public function makeRules( array $config )
+    {
+        $pr = $this->getPrivilegeProvider()->getPrivilegesRoles();
 
-            foreach( $config as $grant => $rules ){
-                foreach( $rules as $index => $rule ){
-                    if (is_array($rule)){
-                        $privileges = (array)$rule[0];
-                        $rs = [];
-                        foreach( $pr as $privilege => $roles ){
-                            if (in_array($privilege, $privileges)){
-                                $rs = array_unique( array_merge($rs, $roles) );
-                            }
+        foreach( $config as $grant => $rules ){
+            foreach( $rules as $index => $rule ){
+                if (is_array($rule)){
+                    $privileges = (array)$rule[0];
+                    $rs = [];
+                    foreach( $pr as $privilege => $roles ){
+                        if (in_array($privilege, $privileges)){
+                            $rs = array_unique( array_merge($rs, $roles) );
                         }
-                        $config[$grant][$index][0] = $rs;
                     }
+                    $config[$grant][$index][0] = $rs;
                 }
             }
-            $session->rules = $config;
-            if (! isset($session->rules['allow'])) $session->rules['allow'] = [];
-            foreach( $pr as $privilege => $roles ){
-                $session->rules['allow'][] = [
-                    $roles,
-                    'privilege/'.$privilege
-                ];
-            }
         }
+        $rules = $config;
+        if (! isset($rules['allow'])) $rules['allow'] = [];
+        foreach( $pr as $privilege => $roles ){
+            $rules['allow'][] = [
+                $roles,
+                'privilege/'.$privilege
+            ];
+        }
+        return $rules;
     }
 
     /**

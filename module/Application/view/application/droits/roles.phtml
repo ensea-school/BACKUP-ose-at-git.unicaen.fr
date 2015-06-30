@@ -3,7 +3,8 @@
 
 /* @var $roles Application\Entity\Db\Role[] */
 
-$ajoutUrl = $this->url( 'gestion/droits/roles/edition' );
+$canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DROIT_ROLE_EDITION);
+$ajoutUrl = $this->url( 'droits/roles/edition' );
 
 ?>
 <table class="table table-condensed table-bordered">
@@ -11,26 +12,30 @@ $ajoutUrl = $this->url( 'gestion/droits/roles/edition' );
         <th>Code</th>
         <th>Libellé</th>
         <th>Périmètre</th>
+        <?php if ($canEdit): ?>
         <th>Action</th>
+        <?php endif; ?>
     </tr>
 <?php foreach( $roles as $role ):
-    $editionUrl     = $this->url( 'gestion/droits/roles/edition',     ['role' => $role->getId()] );
-    $suppressionUrl = $this->url( 'gestion/droits/roles/suppression', ['role' => $role->getId()] );
+    $editionUrl     = $this->url( 'droits/roles/edition',     ['role' => $role->getId()] );
+    $suppressionUrl = $this->url( 'droits/roles/suppression', ['role' => $role->getId()] );
 ?>
     <tr>
         <td><?php echo $role->getCode(); ?></td>
         <td><?php echo $role->getLibelle(); ?></td>
         <td><?php echo $role->getPerimetre(); ?></td>
+        <?php if ($canEdit): ?>
         <td style="width:1%;white-space: nowrap;text-align: center">
             <?php if (true == true): // droits ?>
             <a href="<?php echo $editionUrl; ?>" class="ajax-modal" data-event="role-edition"><span class="glyphicon glyphicon-edit"></span></a>
             <a href="<?php echo $suppressionUrl; ?>" class="ajax-modal" data-event="role-suppression"><span class="glyphicon glyphicon-remove"></span></a>
             <?php endif; ?>
         </td>
+        <?php endif; ?>
     </tr>
 <?php endforeach; ?>
 </table>
-<?php if (true == true): // droits ?>
+<?php if ($canEdit): // droits ?>
 <a href="<?php echo $ajoutUrl ?>" class="btn btn-primary ajax-modal" data-event="role-edition">Création d'un nouveau rôle</a>
 <?php endif; ?>
 <?php echo $this->modalAjaxDialog('roles-edition-suppression'); ?>

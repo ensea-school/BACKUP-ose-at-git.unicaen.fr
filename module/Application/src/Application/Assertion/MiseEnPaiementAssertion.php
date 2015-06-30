@@ -25,12 +25,6 @@ class MiseEnPaiementAssertion extends AbstractAssertion
     use \Application\Service\Traits\TypeVolumeHoraireAwareTrait;
     
     use \UnicaenApp\Service\MessageCollectorAwareTrait;
-    
-    const PRIVILEGE_VISUALISATION      = 'visualisation';
-    const PRIVILEGE_DEMANDE            = 'demande';
-    const PRIVILEGE_VALIDATION         = 'validation';
-    const PRIVILEGE_MISE_EN_PAIEMENT   = 'mise-en-paiement';
-
 
     protected function assertEntity(Acl $acl, RoleInterface $role = null, ResourceInterface $entity = null, $privilege = null)
     {

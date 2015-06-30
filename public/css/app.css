@@ -374,7 +374,7 @@ ul.privileges-form li label {
     width:200px;
 }
 
-.droits-tbl td a.refuse {
+.droits-tbl td span.refuse {
     opacity: 0.5;   
 }
 

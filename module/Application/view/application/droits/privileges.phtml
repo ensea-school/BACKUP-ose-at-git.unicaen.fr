@@ -40,13 +40,13 @@ $id = uniqid();
         <th class="privilege"><?php echo $privilege ?></th>
         <?php $statut=null; foreach( $roles as $role ): ?>
             <td class="modifier" data-role="<?php echo $role->getId() ?>" data-privilege="<?php echo $privilege->getId() ?>">
-            <?php echo $this->partial( '/application/gestion/partial/tbl-link', compact('role','statut','privilege')) ?>
+            <?php echo $this->partial( '/application/droits/partial/tbl-link', compact('role','statut','privilege')) ?>
             </td>
         <?php endforeach; ?>
         <th class="separator ">&nbsp;</th>
         <?php $role=null; foreach( $statuts as $statut ): ?>
             <td class="modifier" data-statut="<?php echo $statut->getId() ?>" data-privilege="<?php echo $privilege->getId() ?>">
-            <?php echo $this->partial( '/application/gestion/partial/tbl-link', compact('role','statut','privilege')) ?>
+            <?php echo $this->partial( '/application/droits/partial/tbl-link', compact('role','statut','privilege')) ?>
             </td>
         <?php endforeach; ?>
     </tr>

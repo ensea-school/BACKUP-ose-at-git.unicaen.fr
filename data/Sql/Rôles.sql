@@ -1,21 +1,23 @@
 -- liste des comptes utilisateurs
 select
-  tr.code role,
+  a.id a_id,
+  r.code role,
   s.libelle_court structure,
   p.nom_usuel nom,
   p.prenom prenom,
   src.libelle source,
-  r.id,
-  r.source_code
+  a.id,
+  a.source_code
 from
-  affectation r
-  JOIN personnel p ON p.id = r.personnel_id AND p.histo_destruction IS NULL
-  JOIN role tr ON tr.id = r.role_id AND tr.histo_destruction IS NULL
-  JOIN source src ON src.id = r.source_id
-  LEFT JOIN structure s ON s.id = r.structure_id AND s.histo_destruction IS NULL
+  affectation a
+  JOIN personnel p ON p.id = a.personnel_id AND p.histo_destruction IS NULL
+  JOIN role r ON r.id = a.role_id AND r.histo_destruction IS NULL
+  JOIN source src ON src.id = a.source_id
+  LEFT JOIN structure s ON s.id = a.structure_id AND s.histo_destruction IS NULL
 WHERE
-  r.histo_destruction IS NULL
-  --AND r.source_id = OSE_IMPORT.GET_SOURCE_ID('OSE')
+  a.histo_destruction IS NULL
+  AND s.source_code IN ('12')
+  --AND src.code = 'OSE'
 ORDER BY
   structure, nom, source, role;
 
@@ -29,7 +31,7 @@ select nom_usuel, prenom, source_code, histo_destruction from personnel where 1 
 - Sandra MAHIEU
  */
 
-select id, libelle_court, libelle_long, source_code from structure where libelle_court like '%Psy%' AND niveau = 2;
+select id, libelle_court, libelle_long, source_code from structure where libelle_court like '%SEGGAT%' AND niveau = 2;
 
 select * from type_role where histo_destruction is null;
 

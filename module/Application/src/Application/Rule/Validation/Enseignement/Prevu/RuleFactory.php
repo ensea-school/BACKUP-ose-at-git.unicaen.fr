@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Rule\Validation\Referentiel;
+namespace Application\Rule\Validation\Enseignement\Prevu;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -8,20 +8,21 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  *
  */
-class ValidationPrevuRuleFactory implements FactoryInterface
+class RuleFactory implements FactoryInterface
 {
     /**
-     * {@inheritDoc}
-     *
-     * @return ValidationEnsPrevuRule
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return Rule
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $tvh = $serviceLocator->get('applicationTypeVolumeHoraire')->getPrevu();
-        
-        $rule = new ValidationPrevuRule();
+
+        $rule = new Rule();
         $rule->setTypeVolumeHoraire($tvh);
         
         return $rule;
     }
+
+
 }

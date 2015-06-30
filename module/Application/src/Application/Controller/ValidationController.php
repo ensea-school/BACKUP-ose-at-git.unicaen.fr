@@ -13,8 +13,7 @@ use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Form\Intervenant\DossierValidation;
 use Application\Form\Intervenant\ServiceValidation;
 use Application\Form\Intervenant\ReferentielValidation;
-use Application\Rule\Validation\ValidationEnseignementRule;
-use Application\Rule\Validation\ValidationReferentielRule;
+use Application\Rule\Validation\ValidationEnsRefAbstractRule;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -200,13 +199,12 @@ class ValidationController extends AbstractActionController
         $this->formValider   = $this->getFormValidationService()->setIntervenant($this->getIntervenant())->init();
         $this->title         = "Validation des enseignements de type '$typeVolumeHoraire' <small>{$this->getIntervenant()}</small>";
         $typeValidation      = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_ENSEIGNEMENT)->getQuery()->getOneOrNullResult();
-        $servicesNonValides  = [];
         $messages            = [];
 
         $this->getEvent()->setParam('typeVolumeHoraire', $typeVolumeHoraire);
         
         // interrogation des règles métiers de validation
-        $rule = $this->getServiceLocator()->get('ValidationEnseignementRule') /* @var $rule ValidationEnseignementRule */
+        $rule = $this->getServiceLocator()->get('ValidationEnseignementRule') /* @var $rule ValidationEnsRefAbstractRule */
                 ->setIntervenant($this->getIntervenant())
                 ->setTypeVolumeHoraire($typeVolumeHoraire)
                 ->setRole($role)
@@ -362,13 +360,12 @@ class ValidationController extends AbstractActionController
         $this->title            = "Validation du référentiel de type '$typeVolumeHoraire' <small>{$this->getIntervenant()}</small>";
         $structureAffect        = $this->getIntervenant()->getStructure();
         $typeValidation         = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_REFERENTIEL)->getQuery()->getOneOrNullResult();
-        $referentielsNonValides = [];
         $messages               = [];
 
         $this->initFilters();
 
         // interrogation des règles métiers de validation
-        $rule = $this->getServiceLocator()->get('ValidationReferentielRule') /* @var $rule ValidationReferentielRule */
+        $rule = $this->getServiceLocator()->get('ValidationReferentielRule') /* @var $rule ValidationEnsRefAbstractRule */
                 ->setIntervenant($this->getIntervenant())
                 ->setTypeVolumeHoraire($typeVolumeHoraire)
                 ->setRole($role);

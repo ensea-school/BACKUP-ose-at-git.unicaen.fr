@@ -224,10 +224,10 @@ return [
             'ClotureRealiseAssertion'          => 'Application\\Assertion\\ClotureRealiseAssertion',
         ],
         'factories' => [
-            'ValidationEnseignementPrevuRule'   => 'Application\\Rule\\Validation\\Enseignement\\ValidationPrevuRuleFactory',
-            'ValidationEnseignementRealiseRule' => 'Application\\Rule\\Validation\\Enseignement\\ValidationRealiseRuleFactory',
-            'ValidationReferentielPrevuRule'    => 'Application\\Rule\\Validation\\Referentiel\\ValidationPrevuRuleFactory',
-            'ValidationReferentielRealiseRule'  => 'Application\\Rule\\Validation\\Referentiel\\ValidationRealiseRuleFactory',
+            'ValidationEnseignementPrevuRule'   => 'Application\\Rule\\Validation\\Enseignement\\Prevu\\RuleFactory',
+            'ValidationEnseignementRealiseRule' => 'Application\\Rule\\Validation\\Enseignement\\Realise\\RuleFactory',
+            'ValidationReferentielPrevuRule'    => 'Application\\Rule\\Validation\\Referentiel\\Prevu\\RuleFactory',
+            'ValidationReferentielRealiseRule'  => 'Application\\Rule\\Validation\\Referentiel\\Realise\\RuleFactory',
         ],
         'initializers' => [
         ],

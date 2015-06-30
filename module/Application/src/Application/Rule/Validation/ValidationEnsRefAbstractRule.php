@@ -4,7 +4,6 @@ namespace Application\Rule\Validation;;
 
 use Application\Acl\AdministrateurRole;
 use Application\Acl\IntervenantRole;
-use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Structure;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Rule\AbstractBusinessRule;
@@ -12,51 +11,22 @@ use Application\Rule\Paiement\MiseEnPaiementExisteRule;
 use Application\Service\Workflow\WorkflowIntervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
+use Application\Traits\IntervenantAwareTrait;
+use Application\Traits\TypeVolumeHoraireAwareTrait;
 use Common\Exception\LogicException;
 
 /**
- * Tentative de centralisation des "règles métier" concernant la validation des enseignements.
+ * Tentative de centralisation des "règles métier" concernant la validation des enseignements et du référentiel.
  * 
- * Détermine en fonction du contexte courant les paramètres nécessaires à la validation
- * des enseignements.
+ * Détermine en fonction du contexte courant les paramètres nécessaires à la validation.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule implements WorkflowIntervenantAwareInterface
 {
+    use IntervenantAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
     use WorkflowIntervenantAwareTrait;
-    
-    /**
-     * @var Intervenant
-     */
-    protected $intervenant;
-
-    /**
-     * @var TypeVolumeHoraire
-     */
-    protected $typeVolumeHoraire;
-
-    /**
-     * 
-     * @param Intervenant $intervenant
-     * @return self
-     */
-    public function setIntervenant(Intervenant $intervenant)
-    {
-        $this->intervenant = $intervenant;
-        return $this;
-    }
-
-    /**
-     * 
-     * @param TypeVolumeHoraire $typeVolumeHoraire
-     * @return self
-     */
-    public function setTypeVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire)
-    {
-        $this->typeVolumeHoraire = $typeVolumeHoraire;
-        return $this;
-    }
 
     /**
      * Exécute la règle.
@@ -73,7 +43,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
         if (! $this->typeVolumeHoraire) {
             throw new LogicException("Un type de volume horaire doit être spécifié.");
         }
-        
+
         if (! in_array($this->typeVolumeHoraire->getCode(), TypeVolumeHoraire::$codes)) {
             throw new LogicException("Type de volume horaire spécifié inattendu.");
         }
@@ -83,7 +53,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
                 ->determineStructureValidation();
         
         return $this;
-    }
+    }    
 
     /**
      * Détermine la structure associée au rôle utilisateur courant.
@@ -169,7 +139,8 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
     
     /**
      * Assertions concernant les demandes de mise en paiement.
-     * 
+     *
+     * @param string $privilege
      * @return boolean
      */
     protected function isAllowedMiseEnPaiement($privilege)
@@ -185,8 +156,7 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
         
         // recherche existence d'une demande de mise en paiement
         $demandeMepExiste = $this->getRuleMiseEnPaiementExiste()->execute();
-//        var_dump($demandeMepExiste);
-        
+
         /**
          * Impossible de dévalider si la moindre demande de mise en paiement existe.
          */

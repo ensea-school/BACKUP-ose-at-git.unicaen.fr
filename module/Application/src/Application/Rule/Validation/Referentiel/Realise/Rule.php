@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Rule\Validation\Enseignement;
+namespace Application\Rule\Validation\Referentiel\Realise;
 
 use Application\Rule\Validation\ValidationEnsRefAbstractRule;
 use Application\Acl\ComposanteRole;
@@ -8,14 +8,11 @@ use Application\Acl\AdministrateurRole;
 use Application\Service\Workflow\Workflow;
 
 /**
- * Tentative de centralisation des "règles métier" concernant la validation des enseignements PREVUS.
- * 
- * Détermine en fonction du contexte courant les paramètres nécessaires à la validation
- * des enseignements PREVUS.
+ * Spécificités de la validation du référentiel RÉALISÉ.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class ValidationPrevuRule extends ValidationEnsRefAbstractRule
+class Rule extends ValidationEnsRefAbstractRule
 {
     /**
      * Détermine selon le contexte la ou les composantes d'intervention (éventuelles) à utiliser comme
@@ -26,23 +23,13 @@ class ValidationPrevuRule extends ValidationEnsRefAbstractRule
     protected function determineStructuresIntervention()
     {
         /**
-         * Intervenant permanent : peu importe la structure d'intervention.
+         * Validation par chaque structure du référentiel.
          */
-        if ($this->intervenant->estPermanent()) {
-            $this->structuresIntervention = null;
-        }
-        /**
-         * Intervenant vacataire : la structure d'intervention doit correspondre à la 
-         * structure du rôle (i.e. structure de responsabilité).
-         */
-        else {
-            $this->structuresIntervention = [ (string) $this->structureRole => $this->structureRole ];
-        }
-        
+        $this->structuresIntervention = $this->structureRole;
+
         if ($this->structuresIntervention) {
             $this->addMessage(
-                    sprintf("Seuls les enseignements dont la structure d'intervention est %s peuvent être validés.", 
-                            implode(" ou ", array_keys($this->structuresIntervention))),
+                    "Seul le référentiel dont la structure est '{$this->structuresIntervention}' peuvt être validé.", 
                     'info');
         }
         
@@ -57,22 +44,14 @@ class ValidationPrevuRule extends ValidationEnsRefAbstractRule
     protected function determineStructureValidation()
     {
         /**
-         * Intervenant permanent : validation par la composante d'affectation de l'intervenant.
+         * Validation par chaque structure du référentiel.
          */
-        if ($this->intervenant->estPermanent()) {
-            $this->structureValidation = $this->intervenant->getStructure();
-        }
-        /**
-         * Intervenant vacataire : validation par chaque composante d'intervention des enseignements la concernant.
-         */
-        else {
-            $this->structureValidation = $this->structureRole;
-        }
+        $this->structureValidation = $this->structureRole;
         
         $this->addMessage(
-                "Les enseignements ne peuvent être validés que par la structure '{$this->structureValidation}'.", 
+                "Le référentiel ne peut être validé que par la structure '{$this->structureValidation}'.", 
                 'info');
-                 
+        
         return $this;
     }
     
@@ -100,21 +79,20 @@ class ValidationPrevuRule extends ValidationEnsRefAbstractRule
          *********************************************************/
         if (
                 $this->role instanceof ComposanteRole ||
-                $this->role instanceof AdministrateurRole && $this->structureRole
+                $this->role instanceof AdministrateurRole
         ) {
             if ('read' === $privilege) {
                 return true; // les composantes voient tout
             }
-            
+
             /**
-             * Intervenant permanent : validation par la composante d'affectation de l'intervenant ;
-             * Intervenant vacataire : validation par chaque composante d'intervention des enseignements la concernant.
+             * Validation par chaque structure du référentiel.
              */
             return $this->structureRole === $this->structureValidation;
         }
 
         /*********************************************************
-         *                      Autres cas
+         *                      Autres rôles
          *********************************************************/
         if ('read' === $privilege) {
             return true;
@@ -130,6 +108,6 @@ class ValidationPrevuRule extends ValidationEnsRefAbstractRule
      */
     protected function getWorkflowStepKey()
     {
-        return Workflow::SERVICE_VALIDATION;
+        return Workflow::REFERENTIEL_VALIDATION_REALISE;
     }
 }

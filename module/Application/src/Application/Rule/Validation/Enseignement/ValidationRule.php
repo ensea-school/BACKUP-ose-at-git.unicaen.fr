@@ -56,6 +56,14 @@ class ValidationRule extends ValidationEnsRefAbstractRule
     }
 
     /**
+     * @return ValidationEnsRefAbstractRule
+     */
+    protected function determineStructureRole()
+    {
+        return $this->getDelegate()->determineStructureRole();
+    }
+
+    /**
      * Détermine selon le contexte la ou les composantes d'intervention (éventuelles) à utiliser comme
      * critère de recherche des enseignements déjà validés ou à valider.
      *

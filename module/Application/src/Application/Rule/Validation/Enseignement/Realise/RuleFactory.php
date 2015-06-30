@@ -19,7 +19,7 @@ class RuleFactory implements FactoryInterface
     {
         $rule = $this->ruleDependingOnCurrentRole($serviceLocator);
 
-        $tvh = $serviceLocator->get('applicationTypeVolumeHoraire')->getPrevu();
+        $tvh = $serviceLocator->get('applicationTypeVolumeHoraire')->getRealise();
         $rule->setTypeVolumeHoraire($tvh);
 
         return $rule;

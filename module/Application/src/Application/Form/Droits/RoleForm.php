@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Form\Gestion;
+namespace Application\Form\Droits;
 
 use Zend\Form;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;

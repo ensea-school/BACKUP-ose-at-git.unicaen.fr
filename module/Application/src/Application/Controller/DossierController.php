@@ -251,9 +251,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
         $anneePrecedente            = $this->getServiceContext()->getAnneePrecedente();
         $vacExistantAnneePrecedente = $this->intervenantVacataireAnneesPrecedentes(1);
         $appExistaitAnneePrecedente = $this->getServiceContext()->applicationExists($anneePrecedente);
-        $vacExistantAnneePrecedente = null;
-        $appExistaitAnneePrecedente = true;
-        
+
         if ($vacExistantAnneePrecedente) {            
             /**
              * Si l'intervenant était un vacataire connu l'année précédente, alors

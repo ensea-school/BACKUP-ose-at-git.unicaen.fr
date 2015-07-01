@@ -186,7 +186,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
                 ],
             ],
             'attributes' => [
-                'title' => "Numéro INSEE (sécurité sociale) avec la clé de contrôle",
+                'info_icon' => "Numéro INSEE (sécurité sociale) avec la clé de contrôle",
             ],
             'type'       => 'Text',
         ]);
@@ -247,7 +247,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
                 'label' => 'Adresse mail personnelle (éventuelle)',
             ],
             'attributes' => [
-                'title' => "Si vous renseignez une adresse mail perso, celle-ci sera utitlisée pour vous contacter.",
+                'info_icon' => "Si vous renseignez une adresse mail perso, celle-ci sera uttilisée pour vous contacter.",
                 'readonly' => false
             ],
             'type'       => 'Text',

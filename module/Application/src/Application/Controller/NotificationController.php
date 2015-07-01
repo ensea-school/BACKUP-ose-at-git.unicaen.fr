@@ -110,6 +110,7 @@ EOS;
         $renderer = $this->getServiceLocator()->get('view_manager')->getRenderer();  /* @var $renderer PhpRenderer */
         $force    = (bool) $request->getParam('force');
         $nis      = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs($force);
+        $role     = $this->getServiceContext()->getSelectedIdentityRole();
         
         if ($request instanceof ConsoleRequest) {
             // S'il s'agit d'une requête de type Console (CLI), le plugin de contrôleur Url utilisé par les indicateurs
@@ -160,7 +161,12 @@ EOS;
                     ->setSubject(sprintf("[%s Notif %s] %s", $app, $ni->getFrequenceToString(), $indicateurImpl->getTitle()))
                     ->setBody($body)
                     ->addTo($ni->getPersonnel()->getEmail(), "" . $ni->getPersonnel());
-                    
+
+            // NB: S'il s'agit d'une requête de type Console (CLI), il n'y a pas de rôle courant.
+            if ($role && $role->getPersonnel()) {
+                $message->addCc($role->getPersonnel()->getEmail(), "" . $role->getPersonnel());
+            }
+
             // envoi
             $this->mail()->send($message);
             

@@ -223,7 +223,7 @@ $main =  [
             'context' => 'Application\Controller\Plugin\Context',
         ],
         'factories' => [
-            'mail'    => 'Application\Controller\Plugin\MailWithLogPluginFactory',
+//            'mail'    => 'Application\Controller\Plugin\MailWithLogPluginFactory',
         ],
     ],
     'view_manager' => [

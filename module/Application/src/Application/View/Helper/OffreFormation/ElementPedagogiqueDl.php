@@ -45,6 +45,11 @@ class ElementPedagogiqueDl extends AbstractDl
         }
 
         $details[] = sprintf($tplDtdd,
+            "Année :",
+            $this->entity->getAnnee()
+        );
+
+        $details[] = sprintf($tplDtdd,
             "Libellé :",
             $this->entity->getLibelle()
         );

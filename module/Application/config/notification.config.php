@@ -58,6 +58,15 @@ return [
                             ],
                         ],
                     ],
+                    'test-send-mail' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route' => '/test-send-mail',
+                            'defaults' => [
+                                'action' => 'test-send-mail',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -102,7 +111,7 @@ return [
                 ],
                 [
                     'controller' => 'Application\Controller\Notification',
-                    'action'     => ['notifier-indicateurs'],
+                    'action'     => ['notifier-indicateurs', 'test-send-mail'],
                     'roles'      => [],
                 ],
             ],

@@ -242,6 +242,37 @@ EOS;
             'form'    => $form,
         ]);
     }
+
+
+    /**
+     * Test d'envoi de mail à l'utilisateur connecté.
+     * Permet de vérifier que l'envoi de mail fonctionne sur le serveur.
+     */
+    public function testSendMailAction()
+    {
+        $role          = $this->getServiceContext()->getSelectedIdentityRole();
+        $html          = '<h1>Test d\'envoi de mail</h1><p>Ceci est un test, merci de ne pas en tenir compte.</p>';
+        $part          = new MimePart($html);
+        $part->type    = Mime::TYPE_HTML;
+        $part->charset = 'UTF-8';
+        $body          = new MimeMessage();
+        $body->addPart($part);
+
+        // init
+        $message = new MailMessage();
+        $message->setEncoding('UTF-8')
+            ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
+            ->setSubject(sprintf("[%s] %s", $app, "Test"))
+            ->setBody($body)
+            ->addTo($email = $role->getPersonnel()->getEmail(), "" . $role->getPersonnel());
+
+        // envoi
+        $this->mail()->send($message);
+
+        echo("Un mail a été envoyé à l'adresse $email.");
+
+        return false;
+    }
     
     /**
      * @return StructureEntity

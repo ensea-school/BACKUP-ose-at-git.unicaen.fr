@@ -237,6 +237,18 @@ abstract class AbstractEntityService extends AbstractService
     }
 
     /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
+     */
+    public function orderBy( QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        /* ne fait rien ici!! */
+        return $qb;
+    }
+
+    /**
      * Retourne une liste d'entités en fonction du QueryBuilder donné
      *
      * La liste de présente sous la forme d'un tableau associatif, dont les clés sont les ID des entités et les valeurs les entités elles-mêmes
@@ -248,6 +260,7 @@ abstract class AbstractEntityService extends AbstractService
     public function getList(QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
+        $this->orderBy($qb);
         $entities = $qb->getQuery()->execute();
         $result = [];
         $entityClass = $this->getEntityClass();

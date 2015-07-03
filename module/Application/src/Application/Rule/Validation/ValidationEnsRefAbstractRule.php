@@ -73,16 +73,6 @@ abstract class ValidationEnsRefAbstractRule extends AbstractBusinessRule impleme
             $this->structureRole = $this->role->getStructure();
         }
         
-        /** 
-         * Rôle Administrateur.
-         * 
-         * Pour permettre au rôle Administrateur d'agir sans avoir sélectionné de composante de responsabilité,
-         * on considère que la composante de responsabilité est la structure d'affectation de l'intervenant.
-         */
-        if ($this->role instanceof AdministrateurRole && ! $this->role->getStructure()) {
-            $this->structureRole = $this->intervenant->getStructure();
-        }
-        
         return $this;
     }
 

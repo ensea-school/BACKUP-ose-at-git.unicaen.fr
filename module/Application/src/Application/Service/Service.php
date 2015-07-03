@@ -527,14 +527,19 @@ class Service extends AbstractEntityService
          */
         if (null !== $structureEns) {
             $structureEns = (array) $structureEns;
-            $whereStr     = in_array(null, $structureEns) ? ["ep.structure IS NULL"] : [];
+            $whereStr = [];
+            if (array_key_exists(ServiceEntity::HORS_ETABLISSEMENT, $structureEns)) {
+                $whereStr[] = "ep.structure IS NULL";
+            }
             $structureEns = array_filter($structureEns);
             foreach ($structureEns as $s) {
                 $paramName = uniqid("str");
                 $whereStr[] = "strens = :" . $paramName;
                 $qb->setParameter($paramName, $s);
             }
-            $qb->andWhere(implode(' OR ', $whereStr));
+            if ($whereStr) {
+                $qb->andWhere(implode(' OR ', $whereStr));
+            }
         }
         
         return $qb->getQuery()->getResult();
@@ -577,14 +582,19 @@ class Service extends AbstractEntityService
         }
         if (null !== $structureEns) {
             $structureEns = (array) $structureEns;
-            $whereStr     = in_array(null, $structureEns) ? ["ep.structure IS NULL"] : [];
+            $whereStr = [];
+            if (array_key_exists(ServiceEntity::HORS_ETABLISSEMENT, $structureEns)) {
+                $whereStr[] = "ep.structure IS NULL";
+            }
             $structureEns = array_filter($structureEns);
             foreach ($structureEns as $s) {
                 $paramName = uniqid("str");
                 $whereStr[] = "strens = :" . $paramName;
                 $qb->setParameter($paramName, $s);
             }
-            $qb->andWhere(implode(' OR ', $whereStr));
+            if ($whereStr) {
+                $qb->andWhere(implode(' OR ', $whereStr));
+            }
         }
         
         return $qb;

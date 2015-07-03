@@ -13,6 +13,8 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class Service implements HistoriqueAwareInterface, ResourceInterface
 {
+    const HORS_ETABLISSEMENT = "hors Établissement";
+
     /**
      * @var \DateTime
      */

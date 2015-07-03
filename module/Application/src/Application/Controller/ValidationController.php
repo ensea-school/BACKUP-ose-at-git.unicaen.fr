@@ -211,7 +211,7 @@ class ValidationController extends AbstractActionController
                 ->execute();
         $structuresEns       = $rule->getStructuresIntervention();
         $structureValidation = $rule->getStructureValidation();
-        
+
         $this->collectValidationsServices($typeValidation, $typeVolumeHoraire, $structuresEns, $structureValidation);
 
         $this->em()->clear('Application\Entity\Db\Service'); // INDISPENSABLE entre 2 requêtes sur Service !

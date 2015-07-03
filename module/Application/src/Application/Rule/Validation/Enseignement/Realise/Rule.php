@@ -2,6 +2,7 @@
 
 namespace Application\Rule\Validation\Enseignement\Realise;
 
+use Application\Entity\Db\Service;
 use Application\Rule\Validation\ValidationEnsRefAbstractRule;
 use Application\Acl\ComposanteRole;
 use Application\Acl\AdministrateurRole;
@@ -33,7 +34,7 @@ class Rule extends ValidationEnsRefAbstractRule
          * (hors UCBN <=> structure d'intervention = null).
          */
         if ($this->intervenant->estPermanent() && $this->structureRole === $this->intervenant->getStructure()) {
-            $this->structuresIntervention["hors UCBN"] = null;
+            $this->structuresIntervention[Service::HORS_ETABLISSEMENT] = null;
         }
         
         if ($this->structuresIntervention) {

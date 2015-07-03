@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Service as ServiceEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Entity\Db\Validation as ValidationEntity;
@@ -339,14 +340,19 @@ class Validation extends AbstractEntityService
         }
         if (null !== $structureEns) {
             $structureEns = (array) $structureEns;
-            $whereStr     = in_array(null, $structureEns) ? ["ep.structure IS NULL"] : [];
+            $whereStr = [];
+            if (array_key_exists(ServiceEntity::HORS_ETABLISSEMENT, $structureEns)) {
+                $whereStr[] = "ep.structure IS NULL";
+            }
             $structureEns = array_filter($structureEns);
             foreach ($structureEns as $s) {
                 $paramName = uniqid("str");
                 $whereStr[] = "strens = :" . $paramName;
                 $qb->setParameter($paramName, $s);
             }
-            $qb->andWhere(implode(' OR ', $whereStr));
+            if ($whereStr) {
+                $qb->andWhere(implode(' OR ', $whereStr));
+            }
         }
         if ($structureValidation) {
             $qb->andWhere("str = :structureValidation")->setParameter('structureValidation', $structureValidation);

@@ -7,6 +7,7 @@ use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Common\Constants;
 use DateTime;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -104,7 +105,12 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIntervenantResultIndic
         $this->getEntityManager()->clear('Application\Entity\Db\Contrat');
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Contrat')->createQueryBuilder("c");
-        $qb->join("c.fichier", "f");
+        $qb
+            ->join("c.intervenant", "intc", Join::WITH, "1 = pasHistorise(intc)")
+            ->join("c.fichier", "f", Join::WITH, "1 = pasHistorise(f)")
+            ->andWhere("intc.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee())
+            ->andWhere("1 = pasHistorise(c)");
         
         if ($this->getDate()) {
             $qb
@@ -132,15 +138,15 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIntervenantResultIndic
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         // INDISPENSABLE si plusieurs requêtes successives sur IntervenantExterieur !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("int.contrat", "c")
-                ->join("c.fichier", "f");
+            ->join("int.contrat", "c", Join::WITH, "1 = pasHistorise(c)")
+            ->join("c.fichier", "f", Join::WITH, "1 = pasHistorise(f)")
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee());
      
         /**
          * NB: pas besoin de consulter la progression dans le workflow car si l'intervenant a déjà un contrat/avenant,
@@ -162,19 +168,5 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIntervenantResultIndic
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Contrat',
-                'Application\Entity\Db\Fichier',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
 }

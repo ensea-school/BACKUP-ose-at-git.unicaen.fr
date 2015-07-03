@@ -1,19 +1,23 @@
 <?php
 
-namespace Application\Service\Indicateur\Service\Validation;
+namespace Application\Service\Indicateur\Service\Validation\Referentiel\Realise;
 
+use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\WfEtape;
-use Application\Service\Indicateur\Service\Validation\AttenteValidationEnsAbstractIndicateurImpl;
+use Application\Service\Indicateur\Service\Validation\Referentiel\AttenteValidationAbstractIndicateurImpl as BaseAttenteValidationAbstractIndicateurImpl;
+use Application\Traits\TypeIntervenantAwareTrait;
+use Application\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AttenteValidationRefPrevuAbstractIndicateurImpl extends AttenteValidationRefAbstractIndicateurImpl
+abstract class AttenteValidationAbstractIndicateurImpl extends BaseAttenteValidationAbstractIndicateurImpl
 {
-    use \Application\Traits\TypeVolumeHoraireAwareTrait;
-    use \Application\Traits\TypeIntervenantAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use TypeIntervenantAwareTrait;
     
     /**
      * Retourne le type de volume horaire utile à cet indicateur.
@@ -23,7 +27,7 @@ abstract class AttenteValidationRefPrevuAbstractIndicateurImpl extends AttenteVa
     public function getTypeVolumeHoraire()
     {
         if (null === $this->typeVolumeHoraire) {
-            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
+            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getRealise();
         }
         
         return $this->typeVolumeHoraire;
@@ -38,7 +42,7 @@ abstract class AttenteValidationRefPrevuAbstractIndicateurImpl extends AttenteVa
     public function getResultUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
-                'intervenant/validation-referentiel', 
+                'intervenant/validation-referentiel-realise', 
                 ['intervenant' => $result->getSourceCode()], 
                 ['force_canonical' => true]);
     }
@@ -49,6 +53,6 @@ abstract class AttenteValidationRefPrevuAbstractIndicateurImpl extends AttenteVa
      */
     protected function getWorkflowStepKey()
     {
-        return WfEtape::CODE_REFERENTIEL_VALIDATION;
+        return WfEtape::CODE_REFERENTIEL_VALIDATION_REALISE;
     }
 }

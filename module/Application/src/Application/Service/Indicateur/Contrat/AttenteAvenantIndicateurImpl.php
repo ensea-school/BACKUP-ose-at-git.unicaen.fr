@@ -38,19 +38,23 @@ class AttenteAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurIm
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("int.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
-                ->join("int.service", "s")
-                ->join("s.elementPedagogique", "ep")
-                ->join("s.volumeHoraire", "vh")
-                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")->setParameter('tvh', $this->getTypeVolumeHoraire())
-                ->join("vh.validation", "v");
+            ->join("int.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
+            ->join("int.service", "s")
+            ->join("s.elementPedagogique", "ep")
+            ->join("s.volumeHoraire", "vh")
+            ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")->setParameter('tvh', $this->getTypeVolumeHoraire())
+            ->join("vh.validation", "v")
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee())
+            ->andWhere("1 = pasHistorise(s)")
+            ->andWhere("1 = pasHistorise(ep)")
+            ->andWhere("1 = pasHistorise(vh)")
+            ->andWhere("1 = pasHistorise(v)");
         
         if ($this->getStructure()) {
             $qb
@@ -62,9 +66,12 @@ class AttenteAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurIm
          * L'intervenant doit posséder un contrat initial validé.
          */
         $qb
-                ->join("int.contrat", "ci", Join::WITH, "ci.validation IS NOT NULL")
-                ->join("ci.typeContrat", "tc", Join::WITH, "tc.code = :codeTypeContratInitial")
-                ->setParameter('codeTypeContratInitial', TypeContrat::CODE_CONTRAT);
+            ->join("int.contrat", "ci")
+            ->join("ci.validation", "vci")
+            ->join("ci.typeContrat", "tc", Join::WITH, "tc.code = :codeTypeContratInitial")
+            ->setParameter('codeTypeContratInitial', TypeContrat::CODE_CONTRAT)
+            ->andWhere("1 = pasHistorise(ci)")
+            ->andWhere("1 = pasHistorise(vci)");
         
         /**
          * L'étape Contrat/avenant doit être l'étape courante pour la composante d'enseignement concernée.
@@ -82,22 +89,6 @@ class AttenteAvenantIndicateurImpl extends AbstractIntervenantResultIndicateurIm
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\VolumeHoraire',
-                'Application\Entity\Db\Validation',
-                'Application\Entity\Db\Contrat',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
     
     public function getTypeVolumeHoraire()

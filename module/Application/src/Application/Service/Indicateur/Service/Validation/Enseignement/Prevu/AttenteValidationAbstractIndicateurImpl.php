@@ -1,19 +1,21 @@
 <?php
 
-namespace Application\Service\Indicateur\Service\Validation;
+namespace Application\Service\Indicateur\Service\Validation\Enseignement\Prevu;
 
 use Application\Entity\Db\WfEtape;
-use Application\Service\Indicateur\Service\Validation\AttenteValidationEnsAbstractIndicateurImpl;
+use Application\Service\Indicateur\Service\Validation\Enseignement\AttenteValidationAbstractIndicateurImpl as BaseAttenteValidationAbstractIndicateurImpl;
+use Application\Traits\TypeIntervenantAwareTrait;
+use Application\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AttenteValidationEnsPrevuAbstractIndicateurImpl extends AttenteValidationEnsAbstractIndicateurImpl
+abstract class AttenteValidationAbstractIndicateurImpl extends BaseAttenteValidationAbstractIndicateurImpl
 {
-    use \Application\Traits\TypeVolumeHoraireAwareTrait;
-    use \Application\Traits\TypeIntervenantAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use TypeIntervenantAwareTrait;
     
     /**
      * Retourne le type de volume horaire utile à cet indicateur.

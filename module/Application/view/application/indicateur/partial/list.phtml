@@ -17,7 +17,7 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
     <tbody>
         <?php foreach ($this->indicateursImpl as $indicateurImpl): /* @var $indicateurs AbstractIndicateurImpl[] */ ?>
             <?php 
-            $indicateurEntity = $indicateurImpl->getEntity();  /* @var $indicateurEntity Indicateur */
+            $indicateurEntity = $indicateurImpl->getIndicateurEntity();  /* @var $indicateurEntity Indicateur */
             ?>
             <tr>
                 <td class="categorie">

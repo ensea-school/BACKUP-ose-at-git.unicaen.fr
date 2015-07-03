@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service\Indicateur\Service\Validation;
+namespace Application\Service\Indicateur\Service\Validation\Enseignement;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
@@ -13,7 +13,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
+abstract class AttenteValidationAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     protected $singularTitlePattern = "%s %s est en attente de validation de ses enseignements <em>%s</em>";
     protected $pluralTitlePattern   = "%s %s sont en attente de validation de leurs enseignements <em>%s</em>";
@@ -52,11 +52,14 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
     protected function getQueryBuilder()
     {
         $qb = parent::getQueryBuilder()
-                ->join("int.service", "s")
-                ->join("s.elementPedagogique", "ep")
-                ->join("s.volumeHoraire", "vh")
-                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-                ->setParameter('tvh', $this->getTypeVolumeHoraire());
+            ->join("int.service", "s")
+            ->join("s.elementPedagogique", "ep")
+            ->join("s.volumeHoraire", "vh")
+            ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+            ->setParameter('tvh', $this->getTypeVolumeHoraire())
+            ->andWhere("1 = pasHistorise(s)")
+            ->andWhere("1 = pasHistorise(ep)")
+            ->andWhere("1 = pasHistorise(vh)");
         
         /**
          * L'intervenant doit être à l'étape concernée dans le WF.
@@ -87,17 +90,8 @@ abstract class AttenteValidationEnsAbstractIndicateurImpl extends AbstractInterv
          * Les volumes horaires ne doivent pas être validés.
          */
         $qb
-                ->leftJoin("vh.validation", "val")
-                ->andWhere("val.id IS NULL");
-        
-        /**
-         * Eviction des données historisées.
-         */
-        $qb
-                ->andWhere("1 = pasHistorise(s)")
-                ->andWhere("1 = pasHistorise(ep)")
-                ->andWhere("1 = pasHistorise(vh)")
-                ->andWhere("1 = pasHistorise(val)");
+            ->leftJoin("vh.validation", "val", Join::WITH, "1 = pasHistorise(val)")
+            ->andWhere("val.id IS NULL");
         
         $qb->orderBy("int.nomUsuel, int.prenom");
         

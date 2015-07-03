@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service\Indicateur\Service\Validation;
+namespace Application\Service\Indicateur\Service\Validation\Enseignement\Prevu;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 
@@ -9,7 +9,7 @@ use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteValidationRefPrevuPermIndicateurImpl extends AttenteValidationRefPrevuAbstractIndicateurImpl
+class AttenteValidationVacIndicateurImpl extends AttenteValidationAbstractIndicateurImpl
 {
     /**
      * Retourne le type d'intervenant utile à cet indicateur.
@@ -20,7 +20,7 @@ class AttenteValidationRefPrevuPermIndicateurImpl extends AttenteValidationRefPr
     {
         if (null === $this->typeIntervenant) {
             $this->typeIntervenant = 
-                    $this->getServiceLocator()->get('ApplicationTypeIntervenant')->getByCode(TypeIntervenantEntity::CODE_PERMANENT);
+                    $this->getServiceLocator()->get('ApplicationTypeIntervenant')->getByCode(TypeIntervenantEntity::CODE_EXTERIEUR);
         }
         
         return $this->typeIntervenant;

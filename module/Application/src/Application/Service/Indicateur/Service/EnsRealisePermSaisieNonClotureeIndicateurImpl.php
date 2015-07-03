@@ -41,15 +41,14 @@ class EnsRealisePermSaisieNonClotureeIndicateurImpl extends AbstractIntervenantR
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         /**
          * Aucune validation de type "clôture du réalisé" ne doit exister.
          */
         $selectCloture = 
                 "SELECT v FROM Application\Entity\Db\Validation v " .
                 "JOIN v.typeValidation tv WITH tv.code = :tvCode " .
-                "WHERE v.intervenant = int";
+                "WHERE v.intervenant = int " .
+                "AND 1 = pasHistorise(v)";
         $qb = parent::getQueryBuilder()
                 ->andWhere("NOT EXISTS ( $selectCloture )")
                 ->setParameter('tvCode', TypeValidationEntity::CODE_CLOTURE_REALISE);
@@ -66,16 +65,18 @@ class EnsRealisePermSaisieNonClotureeIndicateurImpl extends AbstractIntervenantR
          */
         $selectEns = 
                 "SELECT s FROM Application\Entity\Db\Service s " .
-                "JOIN s.elementPedagogique ep " .
-                "JOIN s.volumeHoraire vh " .
+                "JOIN s.elementPedagogique ep WITH 1 = pasHistorise(ep) " .
+                "JOIN s.volumeHoraire vh WITH 1 = pasHistorise(vh) " .
                 "JOIN vh.typeVolumeHoraire tvh WITH tvh.code = :tvhCode " .
-                "WHERE s.intervenant = int ";
+                "WHERE s.intervenant = int " .
+                "AND 1 = pasHistorise(s)";
         $selectRef = 
                 "SELECT sr FROM Application\Entity\Db\ServiceReferentiel sr " .
-                "JOIN sr.fonction f " .
-                "JOIN sr.volumeHoraireReferentiel vhr " .
+                "JOIN sr.fonction f WITH 1 = pasHistorise(f) " .
+                "JOIN sr.volumeHoraireReferentiel vhr WITH 1 = pasHistorise(vhr) " .
                 "JOIN vhr.typeVolumeHoraire tvhr WITH tvhr.code = :tvhCode " .
-                "WHERE sr.intervenant = int ";
+                "WHERE sr.intervenant = int " .
+                "AND 1 = pasHistorise(sr)";
 
         /**
          * Composante d'intervention éventuelle.
@@ -95,25 +96,6 @@ class EnsRealisePermSaisieNonClotureeIndicateurImpl extends AbstractIntervenantR
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Validation',
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\VolumeHoraire',
-                'Application\Entity\Db\ServiceReferentiel',
-                'Application\Entity\Db\FonctionReferentiel',
-                'Application\Entity\Db\VolumeHoraireReferentiel',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
     
     /**

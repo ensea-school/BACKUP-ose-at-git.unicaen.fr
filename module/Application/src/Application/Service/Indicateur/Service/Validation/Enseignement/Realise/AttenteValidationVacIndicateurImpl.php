@@ -1,16 +1,15 @@
 <?php
 
-namespace Application\Service\Indicateur\Service\Validation;
+namespace Application\Service\Indicateur\Service\Validation\Enseignement\Realise;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
-use Application\Service\Indicateur\Service\Validation\AttenteValidationEnsPrevuAbstractIndicateurImpl;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteValidationEnsPrevuVacIndicateurImpl extends AttenteValidationEnsPrevuAbstractIndicateurImpl
+class AttenteValidationVacIndicateurImpl extends AttenteValidationAbstractIndicateurImpl
 {
     /**
      * Retourne le type d'intervenant utile à cet indicateur.

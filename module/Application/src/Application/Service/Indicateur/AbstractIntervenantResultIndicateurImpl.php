@@ -34,7 +34,7 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
             }
             catch (ORMException $e) {
                 throw new RuntimeException(
-                        "Erreur rencontrée lors de la requete de l'indicateur {$this->getEntity()->getCode()}.", 
+                        "Erreur rencontrée lors de la requete de l'indicateur {$this->getIndicateurEntity()->getCode()}.",
                         null, 
                         $e);
             }
@@ -100,7 +100,7 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
             }
             catch (ORMException $e) {
                 throw new RuntimeException(
-                        "Erreur rencontrée lors de la requete COUNT de l'indicateur {$this->getEntity()->getCode()}.", 
+                        "Erreur rencontrée lors de la requete COUNT de l'indicateur {$this->getIndicateurEntity()->getCode()}.",
                         null, 
                         $e);
             }
@@ -121,12 +121,13 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("int");
         $qb
-                ->select("int, si, ti, str")
-                ->join("int.statut", "si")
-                ->join("int.type", "ti")
-                ->join("int.structure", "str")
-                ->andWhere("int.annee = :annee")
-                ->setParameter("annee", $this->getServiceContext()->getAnnee());
+            ->select("int, si, ti, str")
+            ->join("int.statut", "si")
+            ->join("int.type", "ti")
+            ->join("int.structure", "str")
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee())
+            ->andWhere("1 = pasHistorise(int)");
         
         $qb->orderBy("int.nomUsuel, int.prenom");
         

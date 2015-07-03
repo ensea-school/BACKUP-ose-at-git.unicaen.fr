@@ -37,19 +37,23 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIntervenant
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         // INDISPENSABLE si plusieurs requêtes successives sur IntervenantExterieur !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("int.contrat", "c")
-                ->join("int.service", "s")
-                ->join("s.elementPedagogique", "ep")
-                ->join("s.volumeHoraire", "vh", Join::WITH, "vh.contrat IS NULL")
-                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :codeTvh")
-                ->setParameter('codeTvh', TypeVolumeHoraire::CODE_PREVU);
+            ->join("int.contrat", "c")
+            ->join("int.service", "s")
+            ->join("s.elementPedagogique", "ep")
+            ->join("s.volumeHoraire", "vh", Join::WITH, "vh.contrat IS NULL")
+            ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :codeTvh")
+            ->setParameter('codeTvh', TypeVolumeHoraire::CODE_PREVU)
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee())
+            ->andWhere("1 = pasHistorise(s)")
+            ->andWhere("1 = pasHistorise(ep)")
+            ->andWhere("1 = pasHistorise(vh)")
+            ->andWhere("1 = pasHistorise(c)");
      
         /**
          * NB: pas besoin de consulter la progression dans le workflow car si l'intervenant a déjà un contrat/avenant,
@@ -66,21 +70,5 @@ class SaisieServiceApresContratAvenantIndicateurImpl extends AbstractIntervenant
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Contrat',
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\VolumeHoraire',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
 }

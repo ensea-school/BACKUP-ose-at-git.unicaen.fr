@@ -35,47 +35,39 @@ class DonneesPersoDiffImportIndicateurImpl extends AbstractIntervenantResultIndi
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         // INDISPENSABLE si plusieurs requêtes successives sur IntervenantExterieur !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("int.statut", "st", Join::WITH, "st.peutSaisirDossier = 1")
-                ->join("int.vIndicDiffDossier", "vidd")
-                ->andWhere(
-                        "vidd.adresseDossier IS NOT NULL OR " . 
-                        "vidd.ribDossier IS NOT NULL OR " . 
-                        "vidd.nomUsuelDossier IS NOT NULL OR " . 
-                        "vidd.prenomDossier IS NOT NULL");
+            ->join("int.statut", "st", Join::WITH, "st.peutSaisirDossier = 1")
+            ->join("int.vIndicDiffDossier", "vidd")
+            ->andWhere(
+                    "vidd.adresseDossier IS NOT NULL OR " .
+                    "vidd.ribDossier IS NOT NULL OR " .
+                    "vidd.nomUsuelDossier IS NOT NULL OR " .
+                    "vidd.prenomDossier IS NOT NULL")
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee());
         
         /**
          * L'intervenant doit intervenir dans la structure spécifiée éventuelle.
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s")
-                    ->join("s.elementPedagogique", "ep", Join::WITH, "ep.structure = :structure")
-                    ->setParameter('structure', $this->getStructure());
+                ->join("int.service", "s")
+                ->join("s.elementPedagogique", "ep", Join::WITH, "ep.structure = :structure")
+                ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
+                ->setParameter('structure', $this->getStructure())
+                ->andWhere("1 = pasHistorise(s)")
+                ->andWhere("1 = pasHistorise(ep)")
+                ->andWhere("1 = pasHistorise(vh)");
         }
         
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\ElementPedagogique',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
 }

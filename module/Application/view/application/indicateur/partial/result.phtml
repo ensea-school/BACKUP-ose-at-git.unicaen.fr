@@ -14,7 +14,7 @@
 
 <?php 
 if ($this->indicateurImpl->getResult()): ?>
-    <?php $url = $this->url('notification/indicateur-intervenants', ['indicateur' => $this->indicateurImpl->getEntity()->getId()]); ?>
+    <?php $url = $this->url('notification/indicateur-intervenants', ['indicateur' => $this->indicateurImpl->getIndicateurEntity()->getId()]); ?>
     <a class="ajax-modal" 
        data-event="event-send-mail"
        href="<?php echo $url ?>">Rédiger un mail pour tous ces intervenants...</a>

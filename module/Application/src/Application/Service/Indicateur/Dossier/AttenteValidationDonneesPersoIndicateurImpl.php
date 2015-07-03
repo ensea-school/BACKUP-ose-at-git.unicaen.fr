@@ -37,14 +37,14 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIntervenantRes
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         // INDISPENSABLE si plusieurs requêtes successives sur IntervenantExterieur !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
         $qb
-                ->join("int.statut", "st", Join::WITH, "st.peutSaisirDossier = 1");
+            ->join("int.statut", "st", Join::WITH, "st.peutSaisirDossier = 1")
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee());
         
         /**
          * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape 
@@ -60,31 +60,19 @@ class AttenteValidationDonneesPersoIndicateurImpl extends AbstractIntervenantRes
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s")
-                    ->join("s.elementPedagogique", "ep", Join::WITH, "ep.structure = :structure")
-                    ->join("s.volumeHoraire", "vh")
-                    ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-                    ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
-                    ->setParameter('structure', $this->getStructure());
+                ->join("int.service", "s")
+                ->join("s.elementPedagogique", "ep", Join::WITH, "ep.structure = :structure")
+                ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
+                ->setParameter('structure', $this->getStructure())
+                ->andWhere("1 = pasHistorise(s)")
+                ->andWhere("1 = pasHistorise(ep)")
+                ->andWhere("1 = pasHistorise(vh)");
         }
         
         $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\VolumeHoraire',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
 }

@@ -6,6 +6,7 @@ use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\VIndicAttenteDemandeMep as VIndicAttenteDemandeMepEntity;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
+use Application\Traits\TypeIntervenantAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Filter\Callback;
 use Zend\Filter\FilterInterface;
@@ -17,7 +18,7 @@ use Zend\Filter\FilterInterface;
  */
 abstract class AttenteDemandeMepAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
-    use \Application\Traits\TypeIntervenantAwareTrait;
+    use TypeIntervenantAwareTrait;
     
     protected $singularTitlePattern = "%s %s peut    faire l'objet d'une demande de mise en paiement";
     protected $pluralTitlePattern   = "%s %s peuvent faire l'objet d'une demande de mise en paiement";
@@ -61,8 +62,6 @@ abstract class AttenteDemandeMepAbstractIndicateurImpl extends AbstractIntervena
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
         $this->getEntityManager()->clear('Application\Entity\Db\VIndicAttenteDemandeMep');
         
@@ -72,7 +71,9 @@ abstract class AttenteDemandeMepAbstractIndicateurImpl extends AbstractIntervena
                 ->join("v.structure", "str")
                 ->join("v.intervenant", "int")
                 ->join("int.structure", "aff")
-                ->join("int.statut", "si");
+                ->join("int.statut", "si")
+                ->andWhere("int.annee = :annee")
+                ->setParameter("annee", $this->getServiceContext()->getAnnee());
         
         /**
          * Type intervenant.

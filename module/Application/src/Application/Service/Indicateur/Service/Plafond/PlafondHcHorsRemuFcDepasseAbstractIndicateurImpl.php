@@ -6,6 +6,7 @@ use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\VIndicDepassHcHorsRemuFc;
 use Application\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
+use Application\Traits\TypeVolumeHoraireAwareTrait;
 use Common\Util;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -19,7 +20,7 @@ use Zend\Filter\Callback;
  */
 abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends AbstractIntervenantResultIndicateurImpl implements TypeVolumeHoraireAwareInterface
 {
-    use \Application\Traits\TypeVolumeHoraireAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
     
     protected $singularTitlePattern = "%s intervenant a    un total HC hors rémunération FC D713-60 <em>%s Saisi</em> qui dépasse le plafond correspondant à son statut";
     protected $pluralTitlePattern   = "%s intervenants ont un total HC hors rémunération FC D713-60 <em>%s Saisi</em> qui dépasse le plafond correspondant à leur statut";
@@ -83,8 +84,6 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         $annee = $this->getServiceContext()->getAnnee();
         
         // INDISPENSABLE si plusieurs requêtes successives sur VIndicDepassHcHorsRemuFc !
@@ -101,7 +100,9 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
                 ->join("v.typeVolumeHoraire", "tvh", Join::WITH, "tvh.code = :codeTvh")
                 ->andWhere("int.annee = :annee")
                 ->setParameter("annee", $annee)
-                ->setParameter('codeTvh', $this->getTypeVolumeHoraire()->getCode());
+                ->setParameter('codeTvh', $this->getTypeVolumeHoraire()->getCode())
+                ->andWhere("1 = pasHistorise(int)")
+                ->andWhere("1 = pasHistorise(str)");
         
         if ($this->getStructure()) {
             /**
@@ -120,19 +121,5 @@ abstract class PlafondHcHorsRemuFcDepasseAbstractIndicateurImpl extends Abstract
         $qb->orderBy("str.libelleCourt, int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Intervenant',
-                'Application\Entity\Db\Structure',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
 }

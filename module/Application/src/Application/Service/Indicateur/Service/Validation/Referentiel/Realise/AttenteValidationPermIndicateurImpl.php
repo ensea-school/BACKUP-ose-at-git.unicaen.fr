@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service\Indicateur\Service\Validation;
+namespace Application\Service\Indicateur\Service\Validation\Referentiel\Realise;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
@@ -11,7 +11,7 @@ use Doctrine\ORM\Query\Expr\Join;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteValidationRefRealisePermIndicateurImpl extends AttenteValidationRefRealiseAbstractIndicateurImpl
+class AttenteValidationPermIndicateurImpl extends AttenteValidationAbstractIndicateurImpl
 {
     protected $singularTitlePattern = "%s %s a   clôturé la saisie de ses   services réalisés et est  en attente de validation de son  référentiel <em>%s</em>";
     protected $pluralTitlePattern   = "%s %s ont clôturé la saisie de leurs services réalisés et sont en attente de validation de leur référentiel <em>%s</em>";
@@ -34,14 +34,9 @@ class AttenteValidationRefRealisePermIndicateurImpl extends AttenteValidationRef
          * En plus, le réalisé doit être cloturé.
          */
         $qb
-                ->join("int.validation", "v")
+                ->join("int.validation", "v", Join::WITH, "1 = pasHistorise(v)")
                 ->join("v.typeValidation", "tv", Join::WITH, "tv.code = :tvCode")
                 ->setParameter('tvCode', TypeValidationEntity::CODE_CLOTURE_REALISE);
-        
-        /**
-         * Eviction des données historisées.
-         */
-        $qb->andWhere("1 = pasHistorise(v)");
         
         return $qb;
     }

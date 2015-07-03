@@ -54,10 +54,9 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIntervenant
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         $qb = parent::getQueryBuilder()
-                ->andWhere("ti.code = :type")->setParameter('type', TypeIntervenant::CODE_EXTERIEUR);
+            ->andWhere("ti.code = :type")
+            ->setParameter('type', TypeIntervenant::CODE_EXTERIEUR);
         
         /**
          * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape 
@@ -73,32 +72,21 @@ abstract class AttenteAgrementAbstractIndicateurImpl extends AbstractIntervenant
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s")
-                    ->join("s.elementPedagogique", "ep")
-                    ->join("s.volumeHoraire", "vh")
-                    ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-                    ->andWhere( "ep.structure = :structure")
-                    ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
-                    ->setParameter('structure', $this->getStructure());
+                ->join("int.service", "s")
+                ->join("s.elementPedagogique", "ep")
+                ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                ->andWhere( "ep.structure = :structure")
+                ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
+                ->setParameter('structure', $this->getStructure())
+                ->andWhere("1 = pasHistorise(s)")
+                ->andWhere("1 = pasHistorise(ep)")
+                ->andWhere("1 = pasHistorise(vh)");
         }
         
         $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\VolumeHoraire',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
     
     protected $typeAgrement;

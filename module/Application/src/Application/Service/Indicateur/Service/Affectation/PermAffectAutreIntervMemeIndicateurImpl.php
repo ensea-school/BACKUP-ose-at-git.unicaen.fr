@@ -3,7 +3,6 @@
 namespace Application\Service\Indicateur\Service\Affectation;
 
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
-use Application\Service\Indicateur\Service\Affectation\IntervAffectAutreIntervMemeAbstractIndicateurImpl;
 use Application\Entity\Db\TypeIntervenant;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Doctrine\ORM\QueryBuilder;

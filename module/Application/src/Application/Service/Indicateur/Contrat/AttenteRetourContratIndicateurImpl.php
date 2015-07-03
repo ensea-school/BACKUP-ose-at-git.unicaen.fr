@@ -54,6 +54,9 @@ class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndica
         $this->getEntityManager()->clear('Application\Entity\Db\Contrat');
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Contrat')->createQueryBuilder("c");
+        $qb
+            ->join("c.intervenant", "intc", Join::WITH, "intc.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee());
         
         $this->initQueryBuilder($qb);
         
@@ -66,10 +69,11 @@ class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndica
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
-        $qb->join("int.contrat", "c");
+        $qb
+            ->join("int.contrat", "c")
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee());
         
         $this->initQueryBuilder($qb);
         
@@ -84,10 +88,10 @@ class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndica
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
         $qb
-                ->join("c.typeContrat", "tc", Join::WITH, "tc.code = :codeTypeContrat")
-                ->setParameter('codeTypeContrat', TypeContrat::CODE_CONTRAT)
-                ->join("c.validation", "v")
-                ->andWhere("c.dateRetourSigne IS NULL");
+            ->join("c.typeContrat", "tc", Join::WITH, "tc.code = :codeTypeContrat")
+            ->setParameter('codeTypeContrat', TypeContrat::CODE_CONTRAT)
+            ->join("c.validation", "v", Join::WITH, "1 = pasHistorise(v)")
+            ->andWhere("c.dateRetourSigne IS NULL AND 1 = pasHistorise(c)");
      
         /**
          * NB: pas besoin de consulter la progression dans le workflow car si l'intervenant a déjà un contrat/avenant,
@@ -99,19 +103,5 @@ class AttenteRetourContratIndicateurImpl extends AbstractIntervenantResultIndica
                     ->andWhere("c.structure = :structure")
                     ->setParameter('structure', $this->getStructure());
         }
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Contrat',
-                'Application\Entity\Db\Validation',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
 }

@@ -66,9 +66,11 @@ abstract class AttenteMepAbstractIndicateurImpl extends AbstractIntervenantResul
         
         $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicAttenteMep')->createQueryBuilder("v");
         $qb
-                ->join("v.intervenant", "int")
-                ->join("int.structure", "aff")
-                ->join("int.statut", "si");
+            ->join("v.intervenant", "int")
+            ->join("int.structure", "aff")
+            ->join("int.statut", "si")
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee());
         
         /**
          * L'intervenant doit posséder des heures complémentaire pouvant faire l'objet d'une (demande de) mise en paiement.

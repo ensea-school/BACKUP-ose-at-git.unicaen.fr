@@ -38,8 +38,6 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
         $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
         
@@ -52,15 +50,18 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
                 // l'étape Contrat doit être courante
                 ->join("int.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
                 ->join("p.etape", "e", Join::WITH, "e.code = :ce")
-                ->setParameter('ce', WfEtape::CODE_CONTRAT);
+                ->setParameter('ce', WfEtape::CODE_CONTRAT)
+                ->andWhere("int.annee = :annee")
+                ->setParameter("annee", $this->getServiceContext()->getAnnee())
+                ->andWhere("1 = pasHistorise(a)");
         
         if ($this->getStructure()) {
             $qb
-                    ->leftJoin("int.contrat", "c", Join::WITH, "c.validation IS NOT NULL AND c.structure = :structure")
+                    ->leftJoin("int.contrat", "c", Join::WITH, "c.validation IS NOT NULL AND c.structure = :structure AND 1 = pasHistorise(c)")
                     ->setParameter('structure', $this->getStructure());
         }
         else {
-            $qb->leftJoin("int.contrat", "c", Join::WITH, "c.validation IS NOT NULL");
+            $qb->leftJoin("int.contrat", "c", Join::WITH, "c.validation IS NOT NULL AND 1 = pasHistorise(c)");
         }
         
         $qb->andWhere("c.id IS NULL");
@@ -70,34 +71,20 @@ class AgrementCAMaisPasContratIndicateurImpl extends AbstractIntervenantResultIn
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s")
-                    ->join("s.elementPedagogique", "ep")
-                    ->setParameter('structure', $this->getStructure())
-                    ->join("s.volumeHoraire", "vh")
-                    ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-                    ->andWhere("ep.structure = :structure")
-                    ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu());
+                ->join("int.service", "s")
+                ->join("s.elementPedagogique", "ep")
+                ->setParameter('structure', $this->getStructure())
+                ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                ->andWhere("ep.structure = :structure")
+                ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
+                ->andWhere("1 = pasHistorise(s)")
+                ->andWhere("1 = pasHistorise(ep)")
+                ->andWhere("1 = pasHistorise(vh)");
         }
         
         $qb->orderBy("int.nomUsuel, int.prenom");
          
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Agrement',
-                'Application\Entity\Db\Contrat',
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\VolumeHoraire',
-                'Application\Entity\Db\Validation',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
 }

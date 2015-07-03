@@ -1,11 +1,10 @@
 <?php
 
-namespace Application\Service\Indicateur\Service\Validation;
+namespace Application\Service\Indicateur\Service\Validation\Referentiel\Realise;
 
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
-use Application\Entity\Db\WfEtape;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
@@ -19,7 +18,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AttenteValidationRefRealisePermAutreCompIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
+class AttenteValidationPermAutreCompIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
     use IntervenantAwareTrait;
     use ServiceReferentielAwareTrait;
@@ -73,13 +72,16 @@ class AttenteValidationRefRealisePermAutreCompIndicateurImpl extends AbstractInt
             ->join("s.fonction", "f")
             ->join("s.volumeHoraireReferentiel", "vh")
             ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-            ->setParameter('tvh', $this->getTypeVolumeHoraire());
+            ->setParameter('tvh', $this->getTypeVolumeHoraire())
+            ->andWhere("1 = pasHistorise(s)")
+            ->andWhere("1 = pasHistorise(f)")
+            ->andWhere("1 = pasHistorise(vh)");
 
         /**
          * La saisie du réalisé de l'intervenant doit avoir été clôturée.
          */
         $qb
-            ->join("int.validation", "clo")
+            ->join("int.validation", "clo", Join::WITH, "1 = pasHistorise(clo)")
             ->join("clo.typeValidation", "tvClo", Join::WITH, "tvClo.code = :tvCloCode")
             ->setParameter('tvCloCode', TypeValidationEntity::CODE_CLOTURE_REALISE);
 
@@ -101,23 +103,13 @@ class AttenteValidationRefRealisePermAutreCompIndicateurImpl extends AbstractInt
             /**
              * Les volumes horaires effectués dans la composante d'intervention spécifiée doivent être validés.
              */
-            $qb
-                ->join("vh.validation", "val")
-                ->andWhere("1 = pasHistorise(val)");
+            $qb->join("vh.validation", "val", Join::WITH, "1 = pasHistorise(val)");
         }
 
         /**
          * Les autres composantes d'intervention que celle spécifiée ne doivent pas avoir validé.
          */
         $this->appendCriteriaValidationAutresComposantes($qb);
-
-        /**
-         * Eviction des données historisées.
-         */
-        $qb
-            ->andWhere("1 = pasHistorise(s)")
-            ->andWhere("1 = pasHistorise(f)")
-            ->andWhere("1 = pasHistorise(vh)");
 
         $qb->orderBy("int.nomUsuel, int.prenom");
 

@@ -3,6 +3,7 @@
 namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Indicateur as IndicateurEntity;
+use Application\Entity\Db\Structure as StructureEntity;
 use Application\Service\AbstractService;
 use Application\Traits\StructureAwareTrait;
 use Traversable;
@@ -34,16 +35,16 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
     /**
      * @var IndicateurEntity 
      */
-    protected $entity;
+    protected $indicateurEntity;
     
     /**
      * 
-     * @param IndicateurEntity $entity
+     * @param IndicateurEntity $indicateurEntity
      * @return self
      */
-    public function setEntity(IndicateurEntity $entity)
+    public function setIndicateurEntity(IndicateurEntity $indicateurEntity)
     {
-        $this->entity = $entity;
+        $this->indicateurEntity = $indicateurEntity;
         
         return $this;
     }
@@ -52,9 +53,9 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
      * 
      * @return IndicateurEntity
      */
-    function getEntity()
+    function getIndicateurEntity()
     {
-        return $this->entity;
+        return $this->indicateurEntity;
     }
 
     /**
@@ -149,9 +150,10 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
     /**
      * Surcharge pour mettre l'indicateur à l'état "dirty" lorsque la structure change.
      * 
-     * @param \Application\Entity\Db\Structure $structure
+     * @param StructureEntity $structure
+     * @return self
      */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
+    public function setStructure(StructureEntity $structure = null)
     {
         if ($structure !== $this->getStructure()) {
             $this->setDirty();

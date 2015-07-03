@@ -1,20 +1,21 @@
 <?php
 
-namespace Application\Service\Indicateur\Service\Validation;
+namespace Application\Service\Indicateur\Service\Validation\Referentiel\Prevu;
 
-use Application\Entity\Db\Intervenant as IntervenantEntity;
-use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\WfEtape;
+use Application\Service\Indicateur\Service\Validation\Referentiel\AttenteValidationAbstractIndicateurImpl as BaseAttenteValidationAbstractIndicateurImpl;
+use Application\Traits\TypeIntervenantAwareTrait;
+use Application\Traits\TypeVolumeHoraireAwareTrait;
 
 /**
  * 
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AttenteValidationEnsRealiseAbstractIndicateurImpl extends AttenteValidationEnsAbstractIndicateurImpl
+abstract class AttenteValidationAbstractIndicateurImpl extends BaseAttenteValidationAbstractIndicateurImpl
 {
-    use \Application\Traits\TypeVolumeHoraireAwareTrait;
-    use \Application\Traits\TypeIntervenantAwareTrait;
+    use TypeVolumeHoraireAwareTrait;
+    use TypeIntervenantAwareTrait;
     
     /**
      * Retourne le type de volume horaire utile à cet indicateur.
@@ -24,7 +25,7 @@ abstract class AttenteValidationEnsRealiseAbstractIndicateurImpl extends Attente
     public function getTypeVolumeHoraire()
     {
         if (null === $this->typeVolumeHoraire) {
-            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getRealise();
+            $this->typeVolumeHoraire = $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu();
         }
         
         return $this->typeVolumeHoraire;
@@ -39,7 +40,7 @@ abstract class AttenteValidationEnsRealiseAbstractIndicateurImpl extends Attente
     public function getResultUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
-                'intervenant/validation-service-realise', 
+                'intervenant/validation-referentiel', 
                 ['intervenant' => $result->getSourceCode()], 
                 ['force_canonical' => true]);
     }
@@ -50,6 +51,6 @@ abstract class AttenteValidationEnsRealiseAbstractIndicateurImpl extends Attente
      */
     protected function getWorkflowStepKey()
     {
-        return WfEtape::CODE_SERVICE_VALIDATION_REALISE;
+        return WfEtape::CODE_REFERENTIEL_VALIDATION;
     }
 }

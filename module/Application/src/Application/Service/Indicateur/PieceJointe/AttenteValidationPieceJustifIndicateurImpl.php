@@ -5,6 +5,7 @@ namespace Application\Service\Indicateur\PieceJointe;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\WfEtape;
+use Application\Service\Traits\IntervenantAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -15,6 +16,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AttenteValidationPieceJustifIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
 {
+    use IntervenantAwareTrait;
+
     protected $singularTitlePattern = "%s vacataire est en attente de validation de ses pièces justificatives obligatoires";
     protected $pluralTitlePattern   = "%s vacataires sont en attente de validation de leurs pièces justificatives obligatoires";
     
@@ -37,49 +40,36 @@ class AttenteValidationPieceJustifIndicateurImpl extends AbstractIntervenantResu
      */
     protected function getQueryBuilder()
     {
-        $this->initFilters();
-        
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
         $this->getEntityManager()->clear('Application\Entity\Db\Intervenant');
-        
-        $service = $this->getServiceLocator()->get('ApplicationIntervenant');
         
         /**
          * Dans la progression de l'intervenant dans le WF, toutes les étapes précédant l'étape 
          * "Validation des pièces justificatives" doivent avoir été franchies.
          */
-        $qb = $service->finderByWfEtapeCourante(WfEtape::CODE_PJ_VALIDATION);
+        $qb = $this->getServiceIntervenant()->finderByWfEtapeCourante(WfEtape::CODE_PJ_VALIDATION);
+        $qb
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee());
         
         /**
          * L'intervenant doit intervenir dans la structure spécifiée.
          */
         if ($this->getStructure()) {
             $qb
-                    ->join("int.service", "s")
-                    ->join("s.elementPedagogique", "ep", Join::WITH, "ep.structure = :structure")
-                    ->join("s.volumeHoraire", "vh")
-                    ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-                    ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
-                    ->setParameter('structure', $this->getStructure());
+                ->join("int.service", "s")
+                ->join("s.elementPedagogique", "ep", Join::WITH, "ep.structure = :structure")
+                ->join("s.volumeHoraire", "vh")
+                ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
+                ->setParameter('tvh', $this->getServiceLocator()->get('ApplicationTypeVolumeHoraire')->getPrevu())
+                ->setParameter('structure', $this->getStructure())
+                ->andWhere("1 = pasHistorise(s)")
+                ->andWhere("1 = pasHistorise(ep)")
+                ->andWhere("1 = pasHistorise(vh)");
         }
         
         $qb->orderBy("int.nomUsuel, int.prenom");
         
         return $qb;
-    }
-    
-    /**
-     * Activation du filtrage Doctrine sur l'historique.
-     */
-    protected function initFilters()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\VolumeHoraire',
-                'Application\Entity\Db\ElementPedagogique',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
     }
 }

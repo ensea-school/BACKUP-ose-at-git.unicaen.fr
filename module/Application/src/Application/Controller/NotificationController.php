@@ -357,7 +357,7 @@ class IndicateurIntervenantsMailer
     
     public function getDefaultSubject()
     {
-        $subject = sprintf("%s : %s", $this->controller->appInfos()->getNom(), $this->indicateurImpl->getEntity()->getType());
+        $subject = sprintf("%s : %s", $this->controller->appInfos()->getNom(), $this->indicateurImpl->getIndicateurEntity()->getType());
         
         return $subject;
     }

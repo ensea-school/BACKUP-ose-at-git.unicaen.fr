@@ -39,48 +39,48 @@ class Indicateur extends AbstractEntityService
      * @param string $code
      * @return \Application\Entity\Db\Indicateur
      */
-    public function getByCode( $code )
+    public function getByCode($code)
     {
         if (null == $code) return null;
         return $this->getRepo()->findOneBy(['code' => $code]);
     }
 
     /**
-     * Retourne la liste des étapes
      *
-     * @param QueryBuilder|null $queryBuilder
+     * @param QueryBuilder $qb
      * @param string|null $alias
-     * @return IndicateurEntity[]
+     * @return \Application\Entity\Db\Indicateur[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function getList(QueryBuilder $qb = null, $alias = null)
     {
-        list($qb,$alias) = $this->initQuery($qb, $alias);
-        
+        list($qb, $alias) = $this->initQuery($qb, $alias);
+
         $qb
-                ->andWhere("$alias.enabled = 1")
-                ->addOrderBy("$alias.type, $alias.ordre");
-        
+            ->andWhere("$alias.enabled = 1")
+            ->addOrderBy("$alias.type, $alias.ordre");
+
         return parent::getList($qb, $alias);
     }
-    
+
     /**
-     * 
+     *
      * @param IndicateurEntity $indicateur
      * @param StructureEntity $structure
      * @return AbstractIndicateurImpl
      */
     public function getIndicateurImpl(IndicateurEntity $indicateur, StructureEntity $structure = null)
     {
+        /** @var AbstractIndicateurImpl $impl */
         $impl = clone $this->getServiceLocator()->get($indicateur->getCode());
         $impl
-                ->setEntity($indicateur)
-                ->setStructure($structure);
-        
+            ->setIndicateurEntity($indicateur)
+            ->setStructure($structure);
+
         return $impl;
     }
-    
+
     /**
-     * 
+     *
      * @param IndicateurEntity[] $indicateurs
      * @param StructureEntity $structure
      * @return AbstractIndicateurImpl[]
@@ -91,7 +91,7 @@ class Indicateur extends AbstractEntityService
         foreach ($indicateurs as $indicateur) {
             $impls[$indicateur->getId()] = $this->getIndicateurImpl($indicateur, $structure);
         }
-        
+
         return $impls;
     }
 }

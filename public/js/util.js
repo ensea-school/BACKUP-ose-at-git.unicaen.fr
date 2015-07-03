@@ -200,6 +200,45 @@ function highlight(term, base, cssClass)
         return that;
     }
 
+    /**
+     * Associe une classe à un elément de page HTMl.
+     * Cette classe pourra comporter des méthodes qui permettront de gérer le comportement de l'objet
+     *
+     * L'association peut se faire pour un ou plusieurs éléments.
+     * Chaque élément possède alors son propre objet
+     *
+     * Si className n'est pas précisé, alors c'est l'attribut "data-bind-class" de l'élément qui définit la classe de l'objet.
+     * Si même le "data-bind-class" n'est pas défini alors rien ne sera fait.
+     *
+     * La classe pourra accéder à l'élément, qui lui est transmis via la propriété this.element
+     * Si la classe comporte une méthode init, alors cette dernière sera automatiquement exécutés lors de l'association.
+     *
+     * La méthode init peut être utile pour connecter les événements aux méthodes de l'objet par exemple.
+     *
+     * @param string|undefined className
+     */
+    $.fn.bindClass = function( className ) {
+        $(this).each( function(){
+            var cn = className ? className : $(this).data("bind-class"); // si non précisée alors on la récupèredepuis le dataset
+            if (cn && ! $(this)[0].object){
+                var obj = eval("new "+cn);
+                $(this)[0].object = obj;
+                obj.element = $(this);
+                if (obj.init) obj.init();
+            }
+        } );
+    };
+
+    /**
+     * Récupère l'objet correspondant à l'élément s'il existe. Retourne undefined sinon.
+     *
+     * @returns {Object|undefined}
+     */
+    $.fn.getObject = function() {
+        var element = $(this)[0];
+        return element.object;
+    };
+
 }) ( jQuery );
     
  /**

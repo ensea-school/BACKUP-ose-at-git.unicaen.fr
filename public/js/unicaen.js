@@ -1,11 +1,11 @@
 /**
  * unicaen.js
- * 
+ *
  * Javascript commun à toutes les applis.
  */
 $(function() {
     /**
-     * Détection de réponse "403 Unauthorized" aux requêtes AJAX pour rediriger vers 
+     * Détection de réponse "403 Unauthorized" aux requêtes AJAX pour rediriger vers
      * la page de connexion.
      */
     $(document).ajaxComplete(function(event, xhr, settings) {
@@ -17,7 +17,7 @@ $(function() {
             }
         }
     });
-    
+
     /**
      * Installation d'un lien permettant de remonter en haut de la page.
      * Ce lien apparaît lorsque c'est nécessaire.
@@ -28,7 +28,7 @@ $(function() {
     $(window).scroll(function() {
         if ($(this).scrollTop() > 100) {
             $('.scrollup').fadeIn();
-        } 
+        }
         else {
             $('.scrollup').fadeOut();
         }
@@ -45,22 +45,22 @@ $(function() {
 
 
 /**
- * Installation d'un mécanisme d'ouverture de fenêtre modale Bootstrap 3 lorsqu'un lien 
- * ayant la classe CSS 'modal-action' est cliqué. 
+ * Installation d'un mécanisme d'ouverture de fenêtre modale Bootstrap 3 lorsqu'un lien
+ * ayant la classe CSS 'modal-action' est cliqué.
  * Et de gestion de la soumission du formulaire éventuel se trouvant dans la fenêtre modale.
- * 
+ *
  * @param dialogDivId Id DOM éventuel de la div correspondant à la fenêtre modale
  */
 function AjaxModalListener(dialogDivId)
 {
     this.eventListener    = $("body");
     this.modalContainerId = dialogDivId ? dialogDivId : "modal-div-gjksdgfkdjsgffsd";
-    
-    this.getModalDialog = function() 
+
+    this.getModalDialog = function()
     {
         var modal = $("#" + this.modalContainerId);
         if (!modal.length) {
-            var modal = 
+            var modal =
                 $('<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" />').append(
                     $('<div class="modal-dialog" />').append(
                         $('<div class="modal-content" />').append(
@@ -72,7 +72,7 @@ function AjaxModalListener(dialogDivId)
         }
         return modal;
     };
-    this.extractNewModalContent = function(data) 
+    this.extractNewModalContent = function(data)
     {
         var selector = '.modal-header, .modal-body, .modal-footer';
         // seuls les header, body et footer nous intéressent
@@ -85,44 +85,44 @@ function AjaxModalListener(dialogDivId)
         // suppression de l'éventuel titre identique présent dans le body
         if (title = $(".modal-title", newModalContent).html()) {
             $(":header", newModalContent.filter(".modal-body")).filter(function() { return $(this).html() === title; }).remove();
-        }        
+        }
         return newModalContent;
     }
-    this.getDialogBody = function() 
-    { 
-        return $("div.modal-body", this.getModalDialog()); 
+    this.getDialogBody = function()
+    {
+        return $("div.modal-body", this.getModalDialog());
     };
-    this.getDialogFooter = function() 
-    { 
-        return $("div.modal-footer", this.getModalDialog()); 
+    this.getDialogFooter = function()
+    {
+        return $("div.modal-footer", this.getModalDialog());
     };
-    this.getForm = function() 
-    { 
-        return $("form", this.getDialogBody()); 
+    this.getForm = function()
+    {
+        return $("form", this.getDialogBody());
     };
-    this.getSubmitButton = function() 
-    { 
-        return $("#" + this.modalContainerId + " .btn-primary"); 
+    this.getSubmitButton = function()
+    {
+        return $("#" + this.modalContainerId + " .btn-primary");
     };
 
     /**
      * Fonction lancée à l'ouverture de la fenêtre modale
      */
-    this.modalShownListener = function(e) 
+    this.modalShownListener = function(e)
     {
         // déplacement du bouton submit dans le footer
 //        this.getSubmitButton().prependTo(this.getDialogFooter());
     };
-    
+
     /**
      * Interception des clics sur les liens adéquats pour affichage de la fenêtre modale
      */
-    this.anchorClickListener = function(e) 
+    this.anchorClickListener = function(e)
     {
         var anchor      = $(e.currentTarget);
         var url         = anchor.attr('href');
         var modalDialog = this.getModalDialog();
-        
+
         if (url && url !== "#") {
             // transmet à la DIV le lien cliqué (car fournit l'événement à déclencher à la soumission du formulaire)
             modalDialog.data('a', anchor);
@@ -131,13 +131,16 @@ function AjaxModalListener(dialogDivId)
             $.get(url, { modal: 1 }, $.proxy(function(data) {
                 // remplacement du contenu de la fenêtre modale
                 $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
+
+                // Binding éventuel des classes si nécessaire...
+                $(".modal-content", modalDialog).find("*").bindClass();
             }, this));
         }
-        
+
         e.preventDefault();
     };
 
-   /**
+    /**
      * Interception des clics sur les liens inclus dans les modales pour rafraichir la modale au lieu de la page
      */
     this.innerAnchorClickListener = function(e)
@@ -145,19 +148,22 @@ function AjaxModalListener(dialogDivId)
         var anchor      = $(e.currentTarget);
         var url         = anchor.attr('href');
         var modalDialog = this.getModalDialog();
-        
+
         if (url && url !== "#") {
             // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
             $.get(url, { modal: 1 }, $.proxy(function(data) {
                 // remplacement du contenu de la fenêtre modale
                 $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
+
+                // Binding éventuel des classes si nécessaire...
+                $(".modal-content", modalDialog).find("*").bindClass();
             }, this));
         }
-        
+
         e.preventDefault();
     };
 
-    this.btnPrimaryClickListener = function(e) 
+    this.btnPrimaryClickListener = function(e)
     {
         var form = this.getForm();
         if (form.length) {
@@ -165,7 +171,7 @@ function AjaxModalListener(dialogDivId)
             e.preventDefault();
         }
     };
-    
+
     this.formSubmitListener = function(e)
     {
         var modalDialog = this.getModalDialog();
@@ -174,11 +180,15 @@ function AjaxModalListener(dialogDivId)
         var postData    = $.merge([{ name: 'modal', value: 1 }], form.serializeArray()); // paramètre "modal" indispensable
         var url         = form.attr('action');
         var isRedirect  = url.indexOf("redirect=") > -1 || $("input[name=redirect]").val();
-        
+
         // requête AJAX de soumission du formulaire
         $.post(url, postData, $.proxy(function(data) {
             // mise à jour du "content" de la fenêtre modale seulement
             $(".modal-content", modalDialog).html(this.extractNewModalContent(data));
+
+            // Binding éventuel des classes si nécessaire...
+            $(".modal-content", modalDialog).find("*").bindClass();
+
             // tente de déterminer si le formulaire éventuel contient des erreurs de validation
             var terminated = !isRedirect && ($(".input-error, .has-error, .has-errors, .alert.alert-danger", modalDialog).length ? false : true);
             if (terminated) {
@@ -195,7 +205,7 @@ function AjaxModalListener(dialogDivId)
             }
             dialogBody.css('opacity', '1.0');
         }, this));
-        
+
         e.preventDefault();
     };
 }
@@ -206,30 +216,30 @@ AjaxModalListener.singleton = null;
 /**
  * Installation du mécanisme d'ouverture de fenêtre modale.
  */
-AjaxModalListener.install = function(dialogDivId) 
+AjaxModalListener.install = function(dialogDivId)
 {
     if (null === AjaxModalListener.singleton) {
         AjaxModalListener.singleton = new AjaxModalListener(dialogDivId);
         AjaxModalListener.singleton.start();
     }
-    
+
     return AjaxModalListener.singleton;
 };
 /**
  * Désinstallation du mécanisme d'ouverture de fenêtre modale.
  */
-AjaxModalListener.uninstall = function() 
+AjaxModalListener.uninstall = function()
 {
     if (null !== AjaxModalListener.singleton) {
         AjaxModalListener.singleton.stop();
     }
-    
+
     return AjaxModalListener.singleton;
 };
 /**
  * Démarrage du mécanisme d'ouverture de fenêtre modale.
  */
-AjaxModalListener.prototype.start = function() 
+AjaxModalListener.prototype.start = function()
 {
     // interception des clics sur les liens adéquats pour affichage de la fenêtre modale
     this.eventListener.on("click", "a.ajax-modal", $.proxy(this.anchorClickListener, this));
@@ -249,30 +259,30 @@ AjaxModalListener.prototype.start = function()
     });
 
     this.eventListener.on('shown.bs.modal', "#" + this.modalContainerId, $.proxy(this.modalShownListener, this));
-    
+
     return this;
 };
 /**
  * Arrêt du mécanisme d'ouverture de fenêtre modale.
  */
-AjaxModalListener.prototype.stop = function() 
+AjaxModalListener.prototype.stop = function()
 {
     this.eventListener
-            .off("click", "a.ajax-modal", $.proxy(this.anchorClickListener, this))
-            .off("click", this.getSubmitButton().selector, $.proxy(this.btnPrimaryClickListener, this))
-            .off("submit", "#" + this.modalContainerId + " form", $.proxy(this.formSubmitListener, this))
-            .off('hidden.bs.modal', "#" + this.modalContainerId);
-    
+        .off("click", "a.ajax-modal", $.proxy(this.anchorClickListener, this))
+        .off("click", this.getSubmitButton().selector, $.proxy(this.btnPrimaryClickListener, this))
+        .off("submit", "#" + this.modalContainerId + " form", $.proxy(this.formSubmitListener, this))
+        .off('hidden.bs.modal', "#" + this.modalContainerId);
+
     return this;
 };
-    
+
 
 
 
 
 /***************************************************************************************************************************************************
-    Popover
-/***************************************************************************************************************************************************/
+ Popover
+ /***************************************************************************************************************************************************/
 
 function ajaxPopoverInit(){
     jQuery.fn.popover.Constructor.prototype.replace = function () {
@@ -300,14 +310,14 @@ function ajaxPopoverInit(){
         var parentLeft   = this.options.container == 'body' ? 0 : $parent.offset().left
 
         placement = placement == 'bottom' && pos.top   + pos.height  + actualHeight - docScroll > parentHeight  ? 'top'    :
-                    placement == 'top'    && pos.top   - docScroll   - actualHeight < 0                         ? 'bottom' :
-                    placement == 'right'  && pos.right + actualWidth > parentWidth                              ? 'left'   :
+            placement == 'top'    && pos.top   - docScroll   - actualHeight < 0                         ? 'bottom' :
+                placement == 'right'  && pos.right + actualWidth > parentWidth                              ? 'left'   :
                     placement == 'left'   && pos.left  - actualWidth < parentLeft                               ? 'right'  :
-                    placement
+                        placement
 
         $tip
-          .removeClass(orgPlacement)
-          .addClass(placement)
+            .removeClass(orgPlacement)
+            .addClass(placement)
 
         var calculatedOffset = this.getCalculatedOffset(placement, pos, actualWidth, actualHeight)
 
@@ -323,9 +333,9 @@ function ajaxPopoverInit(){
         var target = $(e.target);
 
         var content = $.ajax({
-                url: target.attr('href'),
-                async: false
-            }).responseText;
+            url: target.attr('href'),
+            async: false
+        }).responseText;
 
         div = $("div.popover").last(); // Recherche la dernière division créée, qui est le conteneur du popover
         div.data('a', target); // On lui assigne le lien d'origine
@@ -351,6 +361,10 @@ function ajaxPopoverInit(){
             form.serialize(),
             function(data) {
                 div.html(data);
+
+                // Binding éventuel des classes si nécessaire...
+                div.find("*").bindClass();
+
                 var terminated = $(".input-error, .has-error, .has-errors, .alert", $(data)).length ? false : true;
                 if (terminated) {
                     // recherche de l'id de l'événement à déclencher parmi les data de la DIV

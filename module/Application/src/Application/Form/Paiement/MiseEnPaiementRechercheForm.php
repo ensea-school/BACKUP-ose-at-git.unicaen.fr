@@ -90,6 +90,8 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
             'type' => 'Select',
             'attributes' => [
                 'multiple' => 'multiple',
+                'size'      => 20,
+                //'class'    => 'selectpicker'
             ],
             'name' => 'intervenants',
             'options' => [

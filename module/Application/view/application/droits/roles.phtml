@@ -12,9 +12,7 @@ $ajoutUrl = $this->url( 'droits/roles/edition' );
         <th>Code</th>
         <th>Libellé</th>
         <th>Périmètre</th>
-        <?php if ($canEdit): ?>
-        <th>Action</th>
-        <?php endif; ?>
+        <?php if ($canEdit): ?><th>Action</th><?php endif; ?>
     </tr>
 <?php foreach( $roles as $role ):
     $editionUrl     = $this->url( 'droits/roles/edition',     ['role' => $role->getId()] );
@@ -26,10 +24,8 @@ $ajoutUrl = $this->url( 'droits/roles/edition' );
         <td><?php echo $role->getPerimetre(); ?></td>
         <?php if ($canEdit): ?>
         <td style="width:1%;white-space: nowrap;text-align: center">
-            <?php if (true == true): // droits ?>
             <a href="<?php echo $editionUrl; ?>" class="ajax-modal" data-event="role-edition"><span class="glyphicon glyphicon-edit"></span></a>
             <a href="<?php echo $suppressionUrl; ?>" class="ajax-modal" data-event="role-suppression"><span class="glyphicon glyphicon-remove"></span></a>
-            <?php endif; ?>
         </td>
         <?php endif; ?>
     </tr>

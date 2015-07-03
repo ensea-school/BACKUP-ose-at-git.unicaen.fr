@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\PersonnelAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Service\Intervenant as IntervenantService;
@@ -14,7 +16,8 @@ use Application\Service\Intervenant as IntervenantService;
  */
 class RechercheController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
+    use ContextAwareTrait;
+    use PersonnelAwareTrait;
 
     public function intervenantAction()
     {
@@ -101,6 +104,32 @@ class RechercheController extends AbstractActionController
         uasort($result, function($v1, $v2) { return strcasecmp($v1['label'], $v2['label']); });
 
 //        var_dump($result);
+
+        return new JsonModel($result);
+    }
+
+    public function personnelFindAction()
+    {
+        $this->em()->getFilters()->enable('historique')->init(
+            'Application\Entity\Db\Personnel',
+            $this->getServiceContext()->getDateObservation()
+        );
+
+        if (!($term = $this->params()->fromQuery('term'))) {
+            return new JsonModel([]);
+        }
+
+        $qb        = $this->getServicePersonnel()->finderByTerm($term);
+        $personnels  = $this->getServicePersonnel()->getList($qb);
+
+        $result = [];
+        foreach ($personnels as $personnel) {
+            $result[$personnel->getId()] = [
+                'id' => $personnel->getId(),
+                'label' => (string)$personnel,
+                'template' => $personnel.' <small class="bg-info">n° '.$personnel->getSourceCode().', '.$personnel->getStructure().'</small>'
+            ];
+        };
 
         return new JsonModel($result);
     }

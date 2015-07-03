@@ -1,6 +1,4 @@
 /**
- * Formulaire de demande de mise en paiement
- *
  * @constructor
  * @this {DroitsTbl}
  * @param {string} id
@@ -60,4 +58,39 @@ DroitsTbl.get = function( id )
     if (null == DroitsTbl.instances) DroitsTbl.instances = new Array();
     if (null == DroitsTbl.instances[id]) DroitsTbl.instances[id] = new DroitsTbl(id);
     return DroitsTbl.instances[id];
+}
+
+
+/**
+ *
+ * @constructor
+ */
+function AffectationForm()
+{
+    this.element = null;
+
+    this.updateStructureVisibility = function()
+    {
+        var roleMustHaveStructure = $.inArray( parseInt(this.getElementRole().val()), this.getRolesMustHaveStructure() ) > -1;
+
+        if (roleMustHaveStructure){
+            this.getElementStructure().parents( '.form-group' ).show();
+        }else{
+            this.getElementStructure().parents( '.form-group' ).hide();
+        }
+    }
+
+    /**
+     * Initialisation
+     */
+    this.init = function()
+    {
+        var that = this;
+        this.getElementRole().on( 'change', function(){ that.updateStructureVisibility() } );
+        this.updateStructureVisibility();
+    }
+
+    this.getRolesMustHaveStructure = function(){ return this.element.data('roles-must-have-structure'); };
+    this.getElementRole            = function(){ return this.element.find('select[name="role"]'      ); };
+    this.getElementStructure       = function(){ return this.element.find('select[name="structure"]' ); };
 }

@@ -27,7 +27,7 @@ trait AffectationAwareTrait
 
     /**
      *
-     * @return RolAffectatione
+     * @return Affectation
      * @throws \Common\Exception\RuntimeException
      */
     public function getServiceAffectation()

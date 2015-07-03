@@ -2,13 +2,16 @@
 
 namespace Application\Entity\Db;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Source
  */
 class Source
 {
+    const CODE_SOURCE_HARPEGE = 'Harpege';
+    const CODE_SOURCE_OSE     = 'OSE';
+    const CODE_SOURCE_TEST    = 'Test';
+    const CODE_SOURCE_APOGEE  = 'Apogee';
+
     /**
      * @var string
      */
@@ -109,21 +112,6 @@ class Source
         return $this->id;
     }
 
-
-	/**************************************************************************************************
-	 * 										Début ajout
-	 **************************************************************************************************/
-
-    const ID_SOURCE_HARPEGE = 1;
-    const ID_SOURCE_OSE     = 2;
-    const ID_SOURCE_TEST    = 3;
-    const ID_SOURCE_APOGEE  = 4;
-
-    const CODE_SOURCE_HARPEGE = 'Harpege';
-    const CODE_SOURCE_OSE     = 'OSE';
-    const CODE_SOURCE_TEST    = 'Test';
-    const CODE_SOURCE_APOGEE  = 'Apogee';
-
     /**
      * Retourne la représentation littérale de cet objet.
      * 
@@ -132,5 +120,10 @@ class Source
     public function __toString()
     {
         return $this->getLibelle();
+    }
+
+    public function isOse()
+    {
+        return $this->code === self::CODE_SOURCE_OSE;
     }
 }

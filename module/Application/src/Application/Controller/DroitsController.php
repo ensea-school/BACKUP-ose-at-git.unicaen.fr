@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Db\Affectation;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Entity\Db\Role;
 use Application\Entity\Db\StatutIntervenant;
@@ -20,7 +21,11 @@ class DroitsController extends AbstractActionController
 {
     use \Application\Service\Traits\RoleAwareTrait,
         \Application\Service\Traits\StatutIntervenantAwareTrait,
-        \Application\Service\Traits\PrivilegeAwareTrait
+        \Application\Service\Traits\PrivilegeAwareTrait,
+        \Application\Service\Traits\AffectationAwareTrait,
+        \Application\Service\Traits\StructureAwareTrait,
+        \Application\Service\Traits\PersonnelAwareTrait,
+        \Application\Service\Traits\SourceAwareTrait
     ;
 
     /**
@@ -171,6 +176,113 @@ class DroitsController extends AbstractActionController
         $this->em()->refresh($statut);
     }
 
+
+
+    public function affectationsAction()
+    {
+        $tri = $this->params()->fromQuery('tri', 'structure');
+
+        $serviceAffectations = $this->getServiceAffectation();
+
+        list($qb,$alias) = $serviceAffectations->initQuery();
+
+        $serviceAffectations->join( $this->getServiceRole(), $qb, 'role', true);
+        $serviceAffectations->join( $this->getServicePersonnel(), $qb, 'personnel', true);
+        $serviceAffectations->join( $this->getServiceSource(), $qb, 'source', true);
+        $serviceAffectations->leftJoin( $this->getServiceStructure(), $qb, 'structure', true);
+
+        /* @var $qb \Doctrine\ORM\QueryBuilder */
+
+        switch($tri){
+        case 'structure':
+            $this->getServiceStructure()->orderBy($qb);
+            $this->getServiceRole()->orderBy($qb);
+            $this->getServicePersonnel()->orderBy($qb);
+            $this->getServiceSource()->orderBy($qb);
+        break;
+        case 'role':
+            $this->getServiceRole()->orderBy($qb);
+            $this->getServicePersonnel()->orderBy($qb);
+            $this->getServiceStructure()->orderBy($qb);
+            $this->getServiceSource()->orderBy($qb);
+        break;
+        case 'personnel':
+            $this->getServicePersonnel()->orderBy($qb);
+            $this->getServiceStructure()->orderBy($qb);
+            $this->getServiceRole()->orderBy($qb);
+            $this->getServiceSource()->orderBy($qb);
+        break;
+        case 'source':
+            $this->getServiceSource()->orderBy($qb);
+            $this->getServiceStructure()->orderBy($qb);
+            $this->getServiceRole()->orderBy($qb);
+            $this->getServicePersonnel()->orderBy($qb);
+        break;
+        }
+
+        $affectations = $serviceAffectations->getList( $qb );
+
+        return compact('affectations', 'tri');
+    }
+
+    public function affectationEditionAction()
+    {
+        $affectation = $this->context()->affectationFromRoute();
+        /* @var $affectation Affectation */
+        $errors = [];
+
+        $form = $this->getFormAffectation();
+        if (empty($affectation)){
+            $title = 'Création d\'une nouvelle affectation';
+            $affectation = $this->getServiceAffectation()->newEntity();
+            $form->setObject($affectation);
+        }else{
+            $title = 'Édition de l\'affectation';
+            $form->bind($affectation);
+        }
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                try {
+                    if (! $affectation->getRole()->getPerimetre()->isComposante()){
+                        $affectation->setStructure(null);
+                    }
+                    $this->getServiceAffectation()->save($affectation);
+                    $form->get('id')->setValue($affectation->getId()); // transmet le nouvel ID
+                }
+                catch (\Exception $e) {
+                    $e        = DbException::translate($e);
+                    $errors[] = $e->getMessage();
+                }
+            }
+        }
+
+        return compact('form', 'title', 'errors');
+    }
+
+    public function affectationSuppressionAction()
+    {
+        $affectation = $this->context()->mandatory()->affectationFromRoute();
+
+        $title     = "Suppression de l'affectation";
+        $form      = new \Application\Form\Supprimer('suppr');
+        $errors = [];
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+
+        if ($this->getRequest()->isPost()) {
+            try {
+                $this->getServiceAffectation()->delete($affectation);
+            }catch(\Exception $e){
+                $e = DbException::translate($e);
+                $errors[] = $e->getMessage();
+            }
+        }
+        return compact('affectation', 'title', 'form', 'errors');
+    }
+
     /**
      * @param string $roleStatutCode
      * @return \Zend\Form\Form
@@ -217,11 +329,19 @@ class DroitsController extends AbstractActionController
 
     /**
      *
-     * @return \Application\Form\Gestion\RoleForm
+     * @return \Application\Form\Droits\RoleForm
      */
     public function getFormRole()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('DroitsRoleForm');
+    }
+
+    /**
+     * @return \Application\Form\Droits\AffectationForm
+     */
+    public function getFormAffectation()
+    {
+        return $this->getServiceLocator()->get('FormElementManager')->get('DroitsAffectationForm');
     }
 
     /**

@@ -79,6 +79,44 @@ return [
                             ],
                         ],
                     ],
+                    'affectations' => [
+                        'type'    => 'Literal',
+                        'may_terminate' => true,
+                        'options' => [
+                            'route'    => '/affectations',
+                            'defaults' => [
+                                'action' => 'affectations',
+                            ],
+                        ],
+                        'child_routes' => [
+                            'edition' => [
+                                'type'    => 'Segment',
+                                'may_terminate' => true,
+                                'options' => [
+                                    'route'    => '/edition[/:affectation]',
+                                    'constraints' => [
+                                        'affectation' => '[0-9]*',
+                                    ],
+                                    'defaults' => [
+                                        'action' => 'affectation-edition',
+                                    ],
+                                ],
+                            ],
+                            'suppression' => [
+                                'type'    => 'Segment',
+                                'may_terminate' => true,
+                                'options' => [
+                                    'route'    => '/suppression/:affectation',
+                                    'constraints' => [
+                                        'affectation' => '[0-9]*',
+                                    ],
+                                    'defaults' => [
+                                        'action' => 'affectation-suppression',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -107,6 +145,13 @@ return [
                                         'title'  => "Gestion des privilèges",
                                         'route'  => 'droits/privileges',
                                         'resource' => 'controller/Application\Controller\Droits:privileges',
+                                        'withtarget' => true,
+                                    ],
+                                    'affectations' => [
+                                        'label'  => "Affectations",
+                                        'title'  => "Gestion des affectations",
+                                        'route'  => 'droits/affectations',
+                                        'resource' => 'controller/Application\Controller\Droits:affectations',
                                         'withtarget' => true,
                                     ],
                                 ],
@@ -160,6 +205,11 @@ return [
                     'action'     => ['privileges-modifier'],
                     'privileges' => [Privilege::DROIT_PRIVILEGE_EDITION]
                 ],
+                [
+                    'controller' => 'Application\Controller\Droits',
+                    'action'     => ['affectation-edition', 'affectation-suppression'],
+                    'privileges' => [Privilege::DROIT_AFFECTATION_EDITION]
+                ],
             ],
         ],
     ],
@@ -177,6 +227,7 @@ return [
         'invokables' => [
             'DroitsRoleForm'       => 'Application\Form\Droits\RoleForm',
             'DroitsPrivilegesForm' => 'Application\Form\Droits\PrivilegesForm',
+            'DroitsAffectationForm'=> 'Application\Form\Droits\AffectationForm',
         ],
     ],
     'public_files' => [

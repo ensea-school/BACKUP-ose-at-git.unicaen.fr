@@ -32,16 +32,14 @@ class Role extends AbstractEntityService
     }
 
     /**
-     * Retourne la liste des rôles
      *
-     * @param QueryBuilder|null $queryBuilder
+     * @param QueryBuilder|null $qb
      * @param string|null $alias
-     * @return \Application\Entity\Db\Role[]
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelle");
-        return parent::getList($qb, $alias);
+        return $qb;
     }
 }

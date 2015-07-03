@@ -2,7 +2,9 @@
 
 namespace Application\Service;
 
+use Application\Service\Traits\SourceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
+use Application\Entity\Db\Affectation as EntityAffectation;
 
 /**
  * Description of Affectation
@@ -11,6 +13,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class Affectation extends AbstractEntityService
 {
+    use SourceAwareTrait;
+
     /**
      * retourne la classe des entités
      *
@@ -31,7 +35,22 @@ class Affectation extends AbstractEntityService
     {
         return 'aff';
     }
-    
+
+    /**
+     * Sauvegarde une entité
+     *
+     * @param EntityAffectation $entity
+     * @throws \Common\Exception\RuntimeException
+     * @return mixed
+     */
+    public function save($entity)
+    {
+        if (! $entity->getSource()){
+            $entity->setSource( $this->getServiceSource()->getOse() );
+        }
+        return parent::save($entity);
+    }
+
     /**
      * 
      * @param \Application\Entity\Db\Role|string $role

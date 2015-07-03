@@ -2,6 +2,12 @@
     Divers
 /***************************************************************************************************************************************************/
 
+function test(){
+
+    alert('test');
+
+}
+
 $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
     if ($('body').hasClass('development')){
         errorDialog.show( 'Une erreur '+jqxhr.status + '('+jqxhr.statusText+') est survenue', jqxhr.responseText );

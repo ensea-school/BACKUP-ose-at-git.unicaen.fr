@@ -52,4 +52,16 @@ class Source extends AbstractEntityService
     {
         return $this->getRepo()->findOneBy(['code' => SourceEntity::CODE_SOURCE_TEST]);
     }
+
+    /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
+     */
+    public function orderBy( QueryBuilder $qb=null, $alias=null )
+    {
+        list($qb,$alias) = $this->initQuery($qb, $alias);
+        $qb->addOrderBy("$alias.libelle");
+        return $qb;
+    }
 }

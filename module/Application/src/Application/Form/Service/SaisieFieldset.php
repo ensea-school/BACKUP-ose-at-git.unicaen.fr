@@ -44,7 +44,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
     public function init()
     {
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url Zend\View\Helper\Url */
+        /* @var $url \Zend\View\Helper\Url */
 
         $this->etablissement = $this->getServiceContext()->getEtablissement();
 

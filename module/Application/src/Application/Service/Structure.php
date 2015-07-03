@@ -231,15 +231,14 @@ class Structure extends AbstractEntityService
     }
 
     /**
-     * Retourne la liste des structures
      *
-     * @param QueryBuilder|null $queryBuilder
-     * @return Application\Entity\Db\TypeFormation[]
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
      */
-    public function getList( QueryBuilder $qb=null, $alias=null )
+    public function orderBy( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy("$alias.libelleCourt");
-        return parent::getList($qb, $alias);
+        return $qb;
     }
 }

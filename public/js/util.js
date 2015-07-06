@@ -81,6 +81,7 @@ $.fn.autocompleteUnicaen = function(options)
         if (ui.item.id) {
             $(event.target).val(ui.item.label);
             $('#' + opts.elementDomId).val(ui.item.id);
+            $('#' + opts.elementDomId).trigger("change");
         }
         return false;
     };
@@ -94,14 +95,19 @@ $.fn.autocompleteUnicaen = function(options)
         // on doit vider le champ caché lorsque l'utilisateur tape le moindre caractère (touches spéciales du clavier exclues)
         .keypress(function(event) {
             if (event.which === 8 || event.which >= 32) { // 8=backspace, 32=space
+                var lastVal = $('#' + opts.elementDomId).val();
                 $('#' + opts.elementDomId).val(null);
+                if (null === lastVal) $('#' + opts.elementDomId).trigger("change");
             }
         })
         // on doit vider le champ caché lorsque l'utilisateur vide l'autocomplete (aucune sélection)
         // (nécessaire pour Chromium par exemple)
         .keyup(function() {
             if (!$(this).val().trim().length) {
+                var lastVal = $('#' + opts.elementDomId).val();
                 $('#' + opts.elementDomId).val(null);
+                $('#' + opts.elementDomId).trigger("change");
+                if (null === lastVal) $('#' + opts.elementDomId).trigger("change");
             }
         })
         // ajoute de quoi faire afficher plus d'infos dans la liste de résultat de la recherche
@@ -240,7 +246,7 @@ function highlight(term, base, cssClass)
     };
 
 }) ( jQuery );
-    
+
  /**
  * Exécuté quand le graphe DOM est chargé.
  */

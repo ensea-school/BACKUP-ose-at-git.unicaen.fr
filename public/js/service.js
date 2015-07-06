@@ -252,85 +252,121 @@ ServiceListe.get = function( id ){
 
 
 
-function ServiceForm( id ) {
+function ServiceForm(){
+    this.updating = false;
 
-    this.id = id;
-
-    this.showInterneExterne = function(){
-        if ('service-interne' == this.id){
-            $('#element-interne').show();
-            $('#element-externe').hide();
-            $("input[name='service\\[etablissement\\]\\[label\\]']").val('');
-            $("input[name='service\\[etablissement\\]\\[id\\]']").val('');
+    this.onInterneExterneChange = function()
+    {
+        if ('service-interne' == this.getInterneExterne()){
+            this.element.find('#element-externe').hide();
+            this.getElementEtablissementId().val('');
+            this.getElementEtablissementLabel().val('');
+            this.element.find('#element-interne').show();
         }else{
-            $('#element-interne').hide();
-            $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']").val('');
-            $("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']").val('');
-            $('#element-externe').show();
+            this.element.find('#element-interne').hide();
+            this.getElementElementPedagogiqueId().val('');
+            this.getElementElementPedagogiqueLabel().val('');
+            this.element.find('#element-externe').show();
         }
-        this.refreshFormVolumesHoraires(
-            $('form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[id\\]"]').val(),
-            $("input[name='service\\[etablissement\\]\\[id\\]']").val(),
-            $("input[name='type-volume-horaire']").val()
-        );
+        this.updateVolumesHoraires();
     }
 
-    this.refreshFormVolumesHoraires = function( elementId, etablissementId, typeVolumeHoraireId ){
-        $('form#service div#volumes-horaires').refresh({
-            element      : elementId,
-            etablissement: etablissementId,
-            'type-volume-horaire': typeVolumeHoraireId
+    this.updateVolumesHoraires = function()
+    {
+        var that = this;
+
+        this.updating = true;
+        this.updateVolumesHorairesSaisie();
+        this.getElementVolumesHoraires().refresh({
+            element              : this.getElementElementPedagogiqueId().val(),
+            etablissement        : this.getElementEtablissementId().val(),
+            'type-volume-horaire': this.getElementTypeVolumeHoraire().val()
         }, function(){
-            $('form#service div#volumes-horaires input.form-control').each( function(element){
-                $(this).val('0');
-            } );
+            that.getElementVolumesHoraires().find('input.form-control').val('0');
+            that.updating = false;
+            that.initVolumesHoraires();
         });
     }
 
-    this.prevuToRealise = function( periode ){
-        $("form#service div.periode#"+periode+" .form-control").each( function(){
+    this.updateVolumesHorairesSaisie = function()
+    {
+        /* Volumes horaires en lecture seule si c'est en cours de mise à jour */
+        var readOnly = this.updating;
+
+        /* Volume horaires en lecture seule si on est en mode interne et qu'aucun élément n'est sélectionné */
+        if ('service-interne' == this.getInterneExterne() && '' == this.getElementElementPedagogiqueId().val() ){
+            readOnly = true;
+        }
+/*        text = 'UPDATING = ' + (this.updating ? 'true' : 'false');
+        text += "\nINTERNE = " + (this.getInterneExterne());
+        text += "\nEP VIDE = " + ('' == this.getElementElementPedagogiqueId().val() ? 'true' : 'false');
+        text += "\nrésultat RO = " + (readOnly ? 'true' : 'false');
+        alert(text);*/
+
+        this.getElementVolumesHoraires().find('input.form-control').prop('disabled', readOnly);
+        this.getElementVolumesHoraires().find('button.prevu-to-realise').prop('disabled', readOnly);
+    }
+
+    this.prevuToRealise = function( periode )
+    {
+        var that = this;
+
+        this.element.find("div.periode#"+periode+" input.form-control").each( function(){
             var id = $(this).attr('name').replace(periode+'[', 'prev-').replace(']','');
-            var value = $("form#service div.periode#"+periode+" #"+id).data('heures');
+            var value = that.element.find("div.periode#"+periode+" #"+id).data('heures');
             $(this).val( value );
         });
     }
 
+    this.init = function()
+    {
+        var that = this;
+
+        /* Détection de changement d'état du radio interne-externe */
+        this.getElementInterneExterne().on('change', function(){
+            that.onInterneExterneChange();
+        });
+
+        /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
+        this.getElementElementPedagogiqueId().on("autocompleteselect", function() {
+            that.updateVolumesHoraires();
+        } );
+
+        this.getElementElementPedagogiqueId().on("change", function() {
+            that.updateVolumesHoraires();
+        } );
+
+        this.initVolumesHoraires();
+    }
+
+    this.initVolumesHoraires = function()
+    {
+        var that = this;
+
+        /* Détection de click sur les boutons prévu => réalisé */
+        this.element.find("button.prevu-to-realise").on('click', function(){
+            var periode = $(this).parents('div.periode').attr('id');
+            that.prevuToRealise( periode );
+        } );
+
+        this.updateVolumesHorairesSaisie();
+    }
+
+    this.getInterneExterne = function()
+    {
+        var result = this.element.find('input[name="service\\[interne-externe\\]"]:checked').val();
+        return result==undefined ? 'service-interne' : result;
+    }
+
+    this.getElementInterneExterne          = function(){ return this.element.find('input[name="service\\[interne-externe\\]"]'); };
+    this.getElementElementPedagogiqueId    = function(){ return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[id\\]']"); };
+    this.getElementElementPedagogiqueLabel = function(){ return this.element.find("input[name='service\\[element-pedagogique\\]\\[element\\]\\[label\\]']"); };
+    this.getElementElementPedagogiqueListe = function(){ return this.element.find("select#element-liste" ); };
+    this.getElementEtablissementId         = function(){ return this.element.find("input[name='service\\[etablissement\\]\\[id\\]']"); };
+    this.getElementEtablissementLabel      = function(){ return this.element.find("input[name='service\\[etablissement\\]\\[label\\]']"); };
+    this.getElementTypeVolumeHoraire       = function(){ return this.element.find("input[name='type-volume-horaire']"); };
+    this.getElementVolumesHoraires         = function(){ return this.element.find('div#volumes-horaires'); };
 }
-
-ServiceForm.get = function( id ){
-    if (null == ServiceForm.services) ServiceForm.services = new Array();
-    if (null == ServiceForm.services[id]) ServiceForm.services[id] = new ServiceForm(id);
-    return ServiceForm.services[id];
-}
-
-ServiceForm.init = function(){
-    /* Détection de changement d'état du radio interne-externe */
-    $("body").on('change', 'form#service input[name="service\\[interne-externe\\]"]', function(){
-        ServiceForm.get(this.value).showInterneExterne( $( this ).val() );
-    });
-
-    /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
-    $( "body" ).on( "autocompleteselect", 'form#service input[name="service\\[element-pedagogique\\]\\[element\\]\\[label\\]"]', function( event, ui ) {
-        var serviceId = $('form#service input[name="service\\[id\\]"]').val();
-        var elementId = ui.item.id;
-        ServiceForm.get(serviceId).refreshFormVolumesHoraires( elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val(), $("input[name='type-volume-horaire']").val() );
-    } );
-
-    /* Détection des changements d'éléments pédagogiques dans le formulaire de saisie */
-    $( "body form#service select#element-liste" ).on( "change", function( event, ui ) {
-        var serviceId = $('form#service input[name="service\\[id\\]"]').val();
-        var elementId = $(this).val();
-        ServiceForm.get(serviceId).refreshFormVolumesHoraires( elementId, $("input[name='service\\[etablissement\\]\\[id\\]']").val(), $("input[name='type-volume-horaire']").val() );
-    } );
-
-    $("form#service button.prevu-to-realise").on('click', function(){
-        var serviceId = $('form#service input[name="service\\[id\\]"]').val();
-        var periode = $(this).parents('div.periode').attr('id')
-        ServiceForm.get(serviceId).prevuToRealise( periode );
-    } );
-}
-
-
 
 
 

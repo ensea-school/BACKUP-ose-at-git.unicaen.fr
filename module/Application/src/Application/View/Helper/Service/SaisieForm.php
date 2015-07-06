@@ -99,9 +99,6 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
         $res .= $this->getView()->formHidden($this->form->get('type-volume-horaire'));
         $res .= $this->getView()->formHidden($fservice->get('id'));
         $res .= $this->getView()->form()->closeTag().'<br />';
-        $res .= '<script type="text/javascript">';
-        $res .= '$(function() { ServiceForm.init(); });';
-        $res .= '</script>';
         return $res;
     }
 

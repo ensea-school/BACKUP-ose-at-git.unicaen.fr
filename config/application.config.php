@@ -10,7 +10,7 @@ $modules = [
     'Common',
     'Application',
     'Import',
-    'ZendDeveloperTools'
+    //'ZendDeveloperTools'
 ];
 
 if ( file_exists(dirname(dirname(__FILE__)).'/module/Debug') ) {

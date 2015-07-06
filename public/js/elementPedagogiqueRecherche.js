@@ -50,9 +50,11 @@ function ElementPedagogiqueRecherche( id )
     {
         var id = this.getElementListeElement().val();
         var label = this.getElementListeElement().find(":selected").text();
+        var lastVal = this.element.find('input#element').val();
 
-        this.element.find('input#element').attr('value', id );
-        this.getElementAutocompleteElement().attr('value', label);
+        this.element.find('input#element').val(id);
+        if (lastVal != id) this.element.find('input#element').trigger("change");
+        this.getElementAutocompleteElement().val(label);
     }
 
     this.filterSelect = function( select, values )

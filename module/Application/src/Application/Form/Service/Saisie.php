@@ -2,6 +2,7 @@
 
 namespace Application\Form\Service;
 
+use Common\Exception\InvalidArgumentException;
 use Zend\Form\Form;
 use Application\Entity\Db\Etablissement;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -52,7 +53,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
      * @param  object $object
      * @param  int $flags
      * @return mixed|void
-     * @throws Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {
@@ -69,6 +70,8 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
         /* @var $url Zend\View\Helper\Url */
 
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceSaisieHydrator'));
+
+        $this->setAttribute('data-bind-class', 'ServiceForm');
 
         // Product Fieldset
         // Here, we define Product fieldset as base fieldset

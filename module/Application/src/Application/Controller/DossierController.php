@@ -212,8 +212,8 @@ class DossierController extends AbstractActionController implements WorkflowInte
     private function getSubmitButtonLabel()
     {
         $label = null;
-        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf Workflow */
 // Mis en commentaire tant que le WF n'est pas béton...
+//        $wf    = $this->getWorkflowIntervenant()->setIntervenant($this->intervenant); /* @var $wf Workflow */
 //        $role  = $this->getServiceContext()->getSelectedIdentityRole();
 //        $step  = $wf->getNextStep($wf->getStepForCurrentRoute());
 //

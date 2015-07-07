@@ -60,8 +60,6 @@ $dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Inter
 
 <script type="text/javascript">
     $(function() {
-        $(":input").tooltip({ placement: 'bottom' });
-        
         var readonly = <?php echo $this->readonly ? 'true' : 'false' ?>;
 
         managePaysNaissance();

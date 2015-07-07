@@ -19,7 +19,7 @@ class ValidationPiecesJointesStep extends Step
             IntervenantPermanentRole::ROLE_ID => "Je visualise la validation des pièces justificatives",
             IntervenantExterieurRole::ROLE_ID => "Je visualise la validation des pièces justificatives",
             ComposanteRole::ROLE_ID           => "Validation des pièces justificatives à fournir par l'intervenant",
-            'default'                         => "Validation des pièces justificatives",
+            'default'                         => "Je visualise la validation des pièces justificatives",
         ];
         $descriptions = [
             IntervenantPermanentRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",

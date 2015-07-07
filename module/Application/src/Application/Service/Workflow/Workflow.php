@@ -134,7 +134,6 @@ class Workflow extends AbstractWorkflow
 
             $step = $this->createStep($etape);
             $step
-                    ->setLabel($etape->getLibelle())
                     ->setIsCurrent($isCurrent)
                     ->setDone($done);
             

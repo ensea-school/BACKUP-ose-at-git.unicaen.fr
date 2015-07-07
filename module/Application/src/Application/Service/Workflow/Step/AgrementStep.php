@@ -42,7 +42,7 @@ class AgrementStep extends Step implements TypeAgrementAwareInterface
             IntervenantPermanentRole::ROLE_ID => sprintf("Je visualise l'agrément '%s';", $this->getTypeAgrement()),
             IntervenantExterieurRole::ROLE_ID => sprintf("Je visualise l'agrément '%s'", $this->getTypeAgrement()),
             ComposanteRole::ROLE_ID           => sprintf("Je visualise l'agrément '%s' de l'intervenant", $this->getTypeAgrement()),
-            'default'                         => sprintf("Agrément '%s'", $this->getTypeAgrement()),
+            'default'                         => sprintf("Je visualise l'agrément '%s'", $this->getTypeAgrement()),
         ];
 
         $this->setLabels($labels);

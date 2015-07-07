@@ -19,7 +19,7 @@ class ValidationServiceRealiseStep extends Step
             IntervenantPermanentRole::ROLE_ID => "Je visualise la validation de mes services réalisés",
             IntervenantExterieurRole::ROLE_ID => "Je visualise la validation de mes enseignements réalisés",
             ComposanteRole::ROLE_ID           => "Je visualise la validation des services réalisés de l'intervenant",
-            'default'                         => "Validation des enseignements réalisés",
+            'default'                         => "Je visualise la validation des enseignements réalisés",
         ];
         $descriptions = [
             IntervenantPermanentRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",

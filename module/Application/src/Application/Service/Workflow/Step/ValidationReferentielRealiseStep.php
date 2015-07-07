@@ -19,7 +19,7 @@ class ValidationReferentielRealiseStep extends Step
             IntervenantPermanentRole::ROLE_ID => "Je visualise la validation de mon référentiel réalisé",
             IntervenantExterieurRole::ROLE_ID => "Je visualise la validation de mon référentiel réalisé",
             ComposanteRole::ROLE_ID           => "Je visualise la validation du référentiel réalisé de l'intervenant",
-            'default'                         => "Validation du référentiel réalisé",
+            'default'                         => "Je visualise la validation du référentiel réalisé",
         ];
         $descriptions = [
             IntervenantPermanentRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",

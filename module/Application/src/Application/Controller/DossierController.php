@@ -26,6 +26,7 @@ use Doctrine\ORM\EntityManager;
 use NumberFormatter;
 use UnicaenApp\Controller\Plugin\MessengerPlugin;
 use UnicaenApp\Util;
+use UnicaenAuth\Service\UserContext;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -175,7 +176,13 @@ class DossierController extends AbstractActionController implements WorkflowInte
                 $this->getServiceDossier()->enregistrerDossier($dossier, $this->intervenant);
 //                $notified = $this->notify($this->intervenant);
                 $this->flashMessenger()->addSuccessMessage("Données personnelles enregistrées avec succès.");
-                
+
+                // Lorsqu'un intervenant modifie son dossier, le rôle à sélectionner à la prochine requête doit correspondre
+                // au statut choisi dans le dossier.
+                if ($role instanceof IntervenantRole) {
+                    $this->getServiceUserContext()->setNextSelectedIdentityRole($dossier->getStatut()->getRoleId());
+                }
+
                 return $this->redirect()->toUrl($this->getModifierRedirectionUrl());
             }
         }
@@ -189,6 +196,14 @@ class DossierController extends AbstractActionController implements WorkflowInte
         ]);
         
         return $view;
+    }
+
+    /**
+     * @return UserContext
+     */
+    private function getServiceUserContext()
+    {
+        return $this->getServiceLocator()->get('authUserContext');
     }
 
     /**

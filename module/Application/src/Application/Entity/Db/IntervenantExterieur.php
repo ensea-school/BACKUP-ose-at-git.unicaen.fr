@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use Application\Entity\Db\Dossier;
 
 /**
  * IntervenantExterieur
@@ -152,16 +153,10 @@ class IntervenantExterieur extends Intervenant
     /**
      * Set dossier
      *
-     * @param \Application\Entity\Db\Dossier $dossier
+     * @param Dossier $dossier
      * @return IntervenantExterieur
      */
-//    public function setDossier(\Application\Entity\Db\Dossier $dossier = null)
-//    {
-//        $this->dossier = $dossier;
-//
-//        return $this;
-//    }
-    public function setDossier(\Application\Entity\Db\Dossier $dossier)
+    public function setDossier(Dossier $dossier)
     {
         $this->dossier->clear();
         $this->dossier->add($dossier);
@@ -172,15 +167,13 @@ class IntervenantExterieur extends Intervenant
     /**
      * Get dossier
      *
-     * @return \Application\Entity\Db\Dossier 
+     * @return Dossier|null
      */
-//    public function getDossier()
-//    {
-//        return $this->dossier;
-//    }
     public function getDossier()
     {
-        return $this->dossier->first();
+        $dossiers = $this->dossier->filter(function(Dossier $d) { return $d->getHistoDestruction() === null; });
+
+        return $dossiers->first() ?: null;
     }
 
     /**

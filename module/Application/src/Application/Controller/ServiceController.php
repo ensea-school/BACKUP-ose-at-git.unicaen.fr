@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Debug\Util;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Exception\RuntimeException;
@@ -61,7 +62,6 @@ class ServiceController extends AbstractActionController
     private function getFilteredServices($intervenant, $recherche)
     {
                 //\Test\Util::sqlLog($this->getServiceService()->getEntityManager());
-        $role                      = $this->getServiceContext()->getSelectedIdentityRole();
 
         $service                   = $this->getServiceService();
         $volumeHoraireService      = $this->getServiceVolumeHoraire();
@@ -104,8 +104,8 @@ class ServiceController extends AbstractActionController
            ->addOrderBy( $periodeService->getAlias().'.libelleCourt')
            ->addOrderBy( $elementPedagogiqueService->getAlias().'.sourceCode' );
 
-        if (! $intervenant && $role instanceof \Application\Acl\ComposanteRole){
-            $service->finderByComposante($role->getStructure(), $qb);
+        if (! $intervenant && $composante = $this->getServiceContext()->getSelectedIdentityRole()->getStructure()){
+            $service->finderByComposante($composante, $qb);
         }
         return $qb;
     }

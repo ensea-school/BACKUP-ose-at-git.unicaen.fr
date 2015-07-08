@@ -88,7 +88,7 @@ class AppLink extends AbstractTranslatorHelper
         $select->setName('annee');
         $select->setAttribute('id', 'annee');
         $select->setAttribute('data-url', $this->router->assemble(array(), array('name' => $this->homeRouteName)));
-        $select->setAttribute('onchange', 'document.location.href=$(this).data("url")+"?annee="+this.value');
+        $select->setAttribute('onchange', 'changementAnnee(this.value);');
         $select->setValueOptions( $this->getAnnees() );
         $select->setValue($this->getAnnee()->getId());
 

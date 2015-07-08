@@ -100,6 +100,19 @@ $main =  [
                     ],
                 ],
             ],
+            'changement-annee' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route'    => '/changement-annee/:annee',
+                    'constraints' => [
+                        'annee' => '[0-9]*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'Application\Controller\Index',
+                        'action'     => 'changement-annee',
+                    ],
+                ],
+            ],
         ],
     ],
     'navigation' => [
@@ -153,6 +166,15 @@ $main =  [
         ],
         'rule_providers' => [
             'Application\Provider\Rule\PrivilegeRuleProvider' => []
+        ],
+        'guards' => [
+            'BjyAuthorize\Guard\Controller' => [
+                [
+                    'controller' => 'Application\Controller\Index',
+                    'action'     => ['changement-annee'],
+                    'roles'      => ['guest'],
+                ],
+            ],
         ],
     ],
     'service_manager' => [

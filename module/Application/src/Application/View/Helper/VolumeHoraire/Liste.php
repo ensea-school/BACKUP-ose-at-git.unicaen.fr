@@ -258,8 +258,12 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 
     public function getPeriodes()
     {
-        $periodes = $this->getServiceService()->getPeriodes( $this->getVolumeHoraireListe()->getService() );
-        $vhPeriodes = $this->getVolumeHoraireListe()->getPeriodes();
+        $vhl = $this->getVolumeHoraireListe()->getChild()
+                                             ->setTypeIntervention(false)
+                                             ->setPeriode(false);
+
+        $periodes = $this->getServiceService()->getPeriodes( $vhl->getService() );
+        $vhPeriodes = $vhl->getPeriodes();
         foreach($vhPeriodes as $periode ){
             if (! isset($periodes[$periode->getId()])) $periodes[$periode->getId()] = $periode;
         }

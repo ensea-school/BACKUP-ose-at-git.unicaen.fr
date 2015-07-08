@@ -3,6 +3,7 @@ namespace Application\Provider\Identity;
 
 use Application\Acl;
 use Application\Entity\Db\Affectation;
+use Application\Service\Traits\IntervenantAwareTrait;
 use UnicaenApp\Service\EntityManagerAwareInterface;
 use UnicaenApp\Service\EntityManagerAwareTrait;
 use UnicaenAuth\Provider\Identity\ChainableProvider;
@@ -20,7 +21,8 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
 {
     use ServiceLocatorAwareTrait,
         EntityManagerAwareTrait,
-        \Application\Traits\SessionContainerTrait
+        \Application\Traits\SessionContainerTrait,
+        IntervenantAwareTrait
     ;
 
 
@@ -74,11 +76,17 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
             /**
              * Rôle correspondant au type d'intervenant auquel appartient l'utilisateur
              */
-            if ($intervenant = $utilisateur->getIntervenant()){
-                if ($intervenant->getStatut()->getSourceCode() != 'NON_AUTORISES'){
-                    $roles[] = $intervenant->getStatut()->getRoleId();
-                }
-            }return $roles;
+            if ($ldapUser = $serviceAuthUserContext->getLdapUser()){
+                $intervenantSourceCode = (integer)$ldapUser->getSupannEmpId();
+                $intervenant = $this->getServiceIntervenant()->importer($intervenantSourceCode);
+            }else{
+                $intervenant = null;
+            }
+
+            if ($intervenant && $intervenant->getStatut()->getSourceCode() != 'NON_AUTORISES'){
+                $roles[] = $intervenant->getStatut()->getRoleId();
+            }
+            return $roles;
 //            $session->roles = $roles;
 //        }
 //        return $session->roles;

@@ -169,6 +169,14 @@ class IntervenantController extends AbstractActionController implements Workflow
 
     public function voirHeuresCompAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\Service',
+                'Application\Entity\Db\VolumeHoraire'
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
+
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         /* @var $intervenant \Application\Entity\Db\Intervenant */
         $form = $this->getFormHeuresComp();

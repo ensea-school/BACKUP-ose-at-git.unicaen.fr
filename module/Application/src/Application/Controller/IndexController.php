@@ -2,9 +2,9 @@
 
 namespace Application\Controller;
 
+use Application\Service\Traits\IntervenantAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Application\Interfaces\PersonnelAwareInterface;
 
 /**
  *
@@ -12,7 +12,8 @@ use Application\Interfaces\PersonnelAwareInterface;
 class IndexController extends AbstractActionController
 {
     use \Application\Service\Traits\ContextAwareTrait,
-        \Application\Service\Traits\AnneeAwareTrait
+        \Application\Service\Traits\AnneeAwareTrait,
+        IntervenantAwareTrait
     ;
 
     /**
@@ -21,13 +22,6 @@ class IndexController extends AbstractActionController
      */
     public function indexAction()
     {
-        /* Prise en compte du changement d'année!! */
-        $annee = $this->params()->fromQuery('annee');
-        if ($annee){
-            $annee = $this->getServiceAnnee()->get($annee);
-            $this->getServiceContext()->setAnnee($annee);
-        }
-
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
         $view = new ViewModel([
@@ -41,5 +35,33 @@ class IndexController extends AbstractActionController
         }
 
         return $view;
+    }
+
+    public function changementAnneeAction()
+    {
+        /* Prise en compte du changement d'année!! */
+        $annee = $this->params()->fromRoute('annee');
+        if ($annee){
+            $annee = $this->getServiceAnnee()->get($annee);
+            $this->getServiceContext()->setAnnee($annee);
+
+            $role = $this->getServiceContext()->getSelectedIdentityRole();
+            if ($role->getIntervenant()){
+                $intervenant = $this->getServiceIntervenant()->getBySourceCode($role->getIntervenant()->getSourceCode());
+                $this->getServiceUserContext()->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
+            }
+        }
+
+
+
+        return [];
+    }
+
+    /**
+     * @return UserContext
+     */
+    private function getServiceUserContext()
+    {
+        return $this->getServiceLocator()->get('authUserContext');
     }
 }

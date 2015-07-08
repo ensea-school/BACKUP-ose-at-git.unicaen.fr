@@ -352,7 +352,9 @@ class VolumeHoraireListe
     public function get()
     {
         $data = [];
-        foreach( $this->getService()->getVolumeHoraire() as $volumeHoraire ){
+
+        $vhs = $this->getService()->getVolumeHoraire();
+        foreach( $vhs as $volumeHoraire ){
             if ($this->match($volumeHoraire)){
                 $data[$volumeHoraire->getId()] = $volumeHoraire;
             }
@@ -410,6 +412,7 @@ class VolumeHoraireListe
         foreach( $periodes as $p ){
             if ($p !== $periode) return true;
         }
+        return false;
     }
 
     /**

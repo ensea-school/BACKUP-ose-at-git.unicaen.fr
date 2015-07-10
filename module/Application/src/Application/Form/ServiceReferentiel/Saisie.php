@@ -2,7 +2,10 @@
 
 namespace Application\Form\ServiceReferentiel;
 
+use Application\Entity\Db\Service;
 use Zend\Form\Form;
+use Zend\Form\FormInterface;
+use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\Form\Element\Hidden;
@@ -12,7 +15,7 @@ use Zend\Form\Element\Hidden;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterface, ServiceLocatorAwareInterface
+class Saisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
@@ -29,11 +32,10 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
      * @param  \Application\Entity\Db\ServiceReferentiel $object
      * @param  int $flags
      * @return mixed|void
-     * @throws Exception\InvalidArgumentException
      */
-    public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
+    public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
-        if ($object instanceof \Application\Entity\Db\Service && $object->getTypeVolumeHoraire()) {
+        if ($object instanceof Service && $object->getTypeVolumeHoraire()) {
             $this->get('type-volume-horaire')->setValue($object->getTypeVolumeHoraire()->getId());
         }
         return parent::bind($object, $flags);
@@ -42,7 +44,7 @@ class Saisie extends Form implements \Zend\InputFilter\InputFilterProviderInterf
     public function init()
     {
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url Zend\View\Helper\Url */
+        /* @var $url \Zend\View\Helper\Url */
 
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormServiceReferentielSaisieHydrator'));
 

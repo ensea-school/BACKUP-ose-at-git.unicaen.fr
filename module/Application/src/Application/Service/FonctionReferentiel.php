@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Service;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Description of FonctionReferentiel
@@ -28,5 +29,14 @@ class FonctionReferentiel extends AbstractEntityService
     public function getAlias()
     {
         return 'fonc_ref';
+    }
+
+    public function getList(QueryBuilder $qb = null, $alias = null)
+    {
+        list($qb, $alias) = $this->initQuery();
+
+        $qb->addOrderBy("$alias.libelleLong");
+
+        return parent::getList($qb, $alias);
     }
 }

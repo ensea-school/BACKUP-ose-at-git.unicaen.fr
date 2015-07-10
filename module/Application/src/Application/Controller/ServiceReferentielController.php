@@ -174,7 +174,7 @@ class ServiceReferentielController extends AbstractActionController
             $title   = "Ajout de référentiel";
         }
         
-        $assertionEntity = $this->getServiceServiceReferentiel()->newEntity();
+        $assertionEntity = $service->newEntity();
         $assertionEntity
                 ->setTypeVolumeHoraire($typeVolumeHoraire)
                 ->setIntervenant($intervenant);

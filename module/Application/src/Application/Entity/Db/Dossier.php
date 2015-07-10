@@ -758,7 +758,7 @@ class Dossier implements HistoriqueAwareInterface
 //                ->setDepartementNaissance($intervenant->getDepNaissance())
                 ->setVilleNaissance($intervenant->getVilleNaissanceLibelle())
                 ->setNumeroInsee($intervenant->getNumeroInsee() . $intervenant->getNumeroInseeCle())
-                ->setAdresse((string) $intervenant->getAdressePrincipale(true))
+                ->setAdresse((string) $intervenant->getAdressePrincipale())
                 ->setEmail($intervenant->getEmail())
                 ->setTelephone($intervenant->getTelPro() ?: $intervenant->getTelMobile())
                 ->setStatut($intervenant->getStatut())

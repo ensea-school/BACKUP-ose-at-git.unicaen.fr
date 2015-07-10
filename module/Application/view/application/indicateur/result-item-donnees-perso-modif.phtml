@@ -1,0 +1,53 @@
+<?php $this->headTitle()->append($this->intervenant->getNomUsuel())->append($this->title) ?>
+
+<h1 class="page-header"><?php echo $this->title ?> <small><?php echo $this->intervenant ?></small></h1>
+
+<?php
+$modifications = $this->intervenant->getIndicModifDossier(); /** @var $modifications \Application\Entity\Db\IndicModifDossier[] */
+$urlPurge      = $this->url('indicateur/purger-indicateur-donnees-perso-modif', ['intervenant' => $this->intervenant->getSourceCode()]);
+$urlPostPurge  = $this->url('indicateur/result', ['indicateur' => $this->indicateur->getId()]);
+?>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Information modifiée</th>
+            <th>Ancienne valeur</th>
+            <th>Nouvelle valeur</th>
+            <th>Date et auteur de la modification</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($modifications as $modif): ?>
+        <tr>
+            <td><?php echo $modif->getAttrName() ?></td>
+            <td>
+                <pre><?php echo $modif->getAttrOldValue() ?></pre>
+                <div class="pull-right"><small>Source: <?php echo $modif->getAttrOldSourceName() ?></small></div>
+            </td>
+            <td>
+                <pre><?php echo $modif->getAttrNewValue() ?></pre>
+                <div class="pull-right"><small>Source: <?php echo $modif->getAttrNewSourceName() ?></small></div>
+            </td>
+            <td>
+                <?php echo sprintf("Le %s <br>par %s",
+                    $modif->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT),
+                    $modif->getHistoModificateur()) ?>
+            </td>
+        </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+<a href="<?php echo $this->url('intervenant/saisir-dossier', ['intervenant' => $this->intervenant->getSourceCode()]) ?>"
+   >Accéder à la page des données personnelles de <?php echo $this->intervenant ?></a>
+
+<hr/>
+
+<a href="<?php echo $urlPurge ?>" class="btn btn-danger ajax-modal" data-event="event-purger-indic">Ok, effacer cet historique</a>
+<script>
+    $("body").on("event-purger-indic", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        window.location.replace('<?php echo $urlPostPurge ?>');
+    });
+</script>

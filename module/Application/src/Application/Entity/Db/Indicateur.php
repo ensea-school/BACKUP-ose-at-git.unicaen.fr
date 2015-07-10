@@ -7,6 +7,8 @@ namespace Application\Entity\Db;
  */
 class Indicateur
 {
+    const CODE_DONNEES_PERSO_MODIF = 'DonneesPersoModif';
+
     /**
      * @var integer
      */

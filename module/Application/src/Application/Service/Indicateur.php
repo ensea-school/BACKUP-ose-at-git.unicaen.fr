@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Intervenant;
+use Application\Entity\Db\Utilisateur;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\Structure as StructureEntity;
@@ -93,5 +95,33 @@ class Indicateur extends AbstractEntityService
         }
 
         return $impls;
+    }
+
+    /**
+     * Suppression (historisation) de l'historique des modifications sur les données perso d'un intervenant.
+     *
+     * @param Intervenant $intervenant
+     * @param Utilisateur $destructeur
+     * @return $this
+     */
+    public function purgerIndicateurDonneesPersoModif(Intervenant $intervenant, Utilisateur $destructeur)
+    {
+        $role = $this->getServiceContext()->getSelectedIdentityRole();
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->update('Application\Entity\Db\IndicModifDossier', 't')
+            ->set("t.histoDestruction", ":destruction")
+            ->set("t.histoDestructeur", ":destructeur")
+            ->where("t.intervenant = :intervenant")
+            ->andWhere("1 = pasHistorise(t)");
+
+        $qb
+            ->setParameter('intervenant', $intervenant)
+            ->setParameter('destructeur', $destructeur)
+            ->setParameter('destruction', new \DateTime());
+
+        $qb->getQuery()->execute();
+
+        return $this;
     }
 }

@@ -115,6 +115,7 @@
     <one-to-many field="formuleResultat" target-entity="Application\Entity\Db\FormuleResultat" mapped-by="intervenant" />
     <one-to-many field="wfIntervenantEtape" target-entity="Application\Entity\Db\WfIntervenantEtape" mapped-by="intervenant" />
     <one-to-one field="vIndicDiffDossier" target-entity="Application\Entity\Db\VIndicDiffDossier" mapped-by="intervenant" />
+    <one-to-many field="indicModifDossier" target-entity="Application\Entity\Db\IndicModifDossier" mapped-by="intervenant" />
     <one-to-many field="miseEnPaiementIntervenantStructure" target-entity="Application\Entity\Db\MiseEnPaiementIntervenantStructure" mapped-by="intervenant" />
     <one-to-many field="vIndicAttenteDemandeMep" target-entity="Application\Entity\Db\VIndicAttenteDemandeMep"   mapped-by="intervenant" />
     <one-to-many field="vIndicAttenteMep"        target-entity="Application\Entity\Db\VIndicAttenteMep"          mapped-by="intervenant" />

@@ -296,6 +296,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     private $vIndicDiffDossier;
 
     /**
+     * @var \Application\Entity\Db\IndicModifDossier
+     */
+    private $indicModifDossier;
+
+    /**
      * miseEnPaiementIntervenantStructure
      *
      * @var MiseEnPaiementIntervenantStructure
@@ -1493,24 +1498,29 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
     /**
-     * Get adresse principale
+     * Retourne l'adresse principale éventuelle.
      *
-     * @param bool $returnFirstAddressIfNoPrimaryAddressFound
-     * @return AdresseIntervenant
+     * NB: si aucune adresse principale n'est trouvée, la 1ère adresse non principale trouvée est retournée.
+     *
+     * @return AdresseIntervenant|null
      */
-    public function getAdressePrincipale($returnFirstAddressIfNoPrimaryAddressFound = false)
+    public function getAdressePrincipale()
     {
-        if (!count($this->getAdresse())) {
+        $adresses = $this->getAdresse();
+
+        if (! count($adresses)) {
             return null;
         }
 
-        foreach ($this->getAdresse() as $a) { /* @var $a AdresseIntervenant */
+        foreach ($adresses as $a) { /* @var $a AdresseIntervenant */
             if ($a->getPrincipale()) {
                 return $a;
             }
         }
 
-        return $returnFirstAddressIfNoPrimaryAddressFound ? reset($this->getAdresse()) : null;
+        $adresse = $adresses->first();
+
+        return $adresse ?: null;
     }
 
     /**
@@ -1577,6 +1587,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getVIndicDiffDossier()
     {
         return $this->vIndicDiffDossier;
+    }
+
+    /**
+     * Get indicDiffDossier
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIndicModifDossier()
+    {
+        return $this->indicModifDossier;
     }
 
     /**

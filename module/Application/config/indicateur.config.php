@@ -24,7 +24,7 @@ return [
                     'result' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:indicateur[/structure/:structure]',
+                            'route' => '/result/:indicateur[/structure/:structure]',
                             'constraints' => [
                                 'indicateur' => '[0-9]*',
                                 'structure'  => '[0-9]*',
@@ -37,7 +37,7 @@ return [
                     'abonner' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:indicateur/abonner',
+                            'route' => '/abonner/:indicateur',
                             'constraints' => [
                                 'indicateur' => '[0-9]*',
                             ],
@@ -49,7 +49,7 @@ return [
                     'abonnements' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route' => '/:personnel/abonnements',
+                            'route' => '/abonnements/:personnel',
                             'constraints' => [
                                 'personnel' => '[0-9]*',
                             ],
@@ -65,6 +65,18 @@ return [
                             'constraints' => [
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'intervenant' => '[0-9]*',
+                            ],
+                        ],
+                    ],
+                    'purger-indicateur-donnees-perso-modif' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route' => '/purger-indicateur-donnees-perso-modif/:intervenant',
+                            'constraints' => [
+                                'intervenant' => '[0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'purger-indicateur-donnees-perso-modif',
                             ],
                         ],
                     ],
@@ -95,7 +107,15 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Indicateur',
-                    'action'     => ['index', 'result', 'abonner', 'abonnements', 'result-item-donnees-perso-diff-import'],
+                    'action'     => [
+                        'index',
+                        'result',
+                        'abonner',
+                        'abonnements',
+                        'result-item-donnees-perso-diff-import',
+                        'result-item-donnees-perso-modif',
+                        'purger-indicateur-donnees-perso-modif'
+                    ],
                     'roles'      => [R_ROLE, ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                 ],
             ],
@@ -140,6 +160,7 @@ return [
             'SaisieServiceApresContratAvenant'         => 'Application\\Service\\Indicateur\\Contrat\\SaisieServiceApresContratAvenantIndicateurImpl',
             'AttenteValidationDonneesPerso'            => 'Application\\Service\\Indicateur\\Dossier\\AttenteValidationDonneesPersoIndicateurImpl',
             'DonneesPersoDiffImport'                   => 'Application\\Service\\Indicateur\\Dossier\\DonneesPersoDiffImportIndicateurImpl',
+            'DonneesPersoModif'                        => 'Application\\Service\\Indicateur\\Dossier\\DonneesPersoModifIndicateurImpl',
             'AttenteDemandeMepVac'                     => 'Application\\Service\\Indicateur\\Paiement\\AttenteDemandeMepVacIndicateurImpl',
             'AttenteDemandeMepPerm'                    => 'Application\\Service\\Indicateur\\Paiement\\AttenteDemandeMepPermIndicateurImpl',
             'AttenteMepVac'                            => 'Application\\Service\\Indicateur\\Paiement\\AttenteMepVacIndicateurImpl',

@@ -2,8 +2,8 @@
 
 namespace Application\Service;
 
-use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\Utilisateur;
+use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Application\Entity\Db\Utilisateur as UtilisateurEntity;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\Structure as StructureEntity;
@@ -100,11 +100,11 @@ class Indicateur extends AbstractEntityService
     /**
      * Suppression (historisation) de l'historique des modifications sur les données perso d'un intervenant.
      *
-     * @param Intervenant $intervenant
-     * @param Utilisateur $destructeur
+     * @param IntervenantEntity $intervenant
+     * @param UtilisateurEntity $destructeur
      * @return $this
      */
-    public function purgerIndicateurDonneesPersoModif(Intervenant $intervenant, Utilisateur $destructeur)
+    public function purgerIndicateurDonneesPersoModif(IntervenantEntity $intervenant, UtilisateurEntity $destructeur)
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 

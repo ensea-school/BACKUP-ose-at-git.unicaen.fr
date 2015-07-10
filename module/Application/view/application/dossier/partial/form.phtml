@@ -53,7 +53,16 @@ $dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Inter
         <?php endif ?>
     </div>
 </div>
-<?php echo $this->form()->closeTag() ?> 
+<?php echo $this->form()->closeTag() ?>
+
+
+<?php if ($this->dossier->getId()): ?>
+    <hr/>
+    <div class="pull-right"><em>Dernière modification: <?php echo $this->dossier->getHistoModificationEtModificateurToString() ?></em></div>
+<?php endif ?>
+
+
+
 
 
 <script type="text/javascript" src="<?php echo $this->basePath() . '/js/moment-with-locales.min.js' ?>"></script>

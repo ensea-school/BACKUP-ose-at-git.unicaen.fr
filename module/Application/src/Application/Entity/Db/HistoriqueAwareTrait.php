@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use Common\Constants;
 
 /**
  * Code commun aux entités possédant une gestion d'historique.
@@ -106,6 +107,16 @@ trait HistoriqueAwareTrait
     public function getHistoModification()
     {
         return $this->histoModification;
+    }
+
+    /**
+     * Retourne la date et l'auteur de la dernière modification au format "Le dd/mm/yyyy à hh:mm par Tartanpion".
+     *
+     * @return string
+     */
+    public function getHistoModificationEtModificateurToString()
+    {
+        return sprintf("Le %s par %s", $this->getHistoModification()->format(Constants::DATETIME_FORMAT), $this->getHistoModificateur());
     }
 
     /**

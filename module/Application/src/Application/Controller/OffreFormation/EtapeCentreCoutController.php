@@ -3,8 +3,7 @@
 namespace Application\Controller\OffreFormation;
 
 use Application\Entity\Db\Etape;
-use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutSaisieForm;
-use Application\Service\ElementPedagogique as ElementPedagogiqueService;
+use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm;
 use Common\Exception\RuntimeException;
 use Zend\Mvc\Controller\AbstractActionController;
 
@@ -16,8 +15,9 @@ use Zend\Mvc\Controller\AbstractActionController;
 class EtapeCentreCoutController extends AbstractActionController
 {
     use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
+        \Application\Service\Traits\ContextAwareTrait;
+
+
 
     /**
      *
@@ -28,26 +28,27 @@ class EtapeCentreCoutController extends AbstractActionController
     {
         $this->em()->getFilters()->enable('annee')->init(
             [
-                'Application\Entity\Db\ElementPedagogique'
+                'Application\Entity\Db\ElementPedagogique',
+                'Application\Entity\Db\CentreCout',
+                'Application\Entity\Db\CentreCoutEp'
             ],
             $this->getServiceContext()->getAnnee()
         );
 
-        $etape  = $this->context()->mandatory()->etapeFromRoute('id'); /* @var $etape Etape */
-        $form   = $this->getFormSaisie();
+        $etape = $this->context()->mandatory()->etapeFromRoute('id');
+        /* @var $etape Etape */
+        $form = $this->getForm();
         $errors = [];
 
-        $form
-                ->setAttribute('action', $this->url()->fromRoute(null, [], [], true))
-                ->bind($etape);
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form->bind($etape);
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $this->em()->flush();
-            }
-            else {
+            } else {
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
@@ -56,12 +57,14 @@ class EtapeCentreCoutController extends AbstractActionController
         return compact('etape', 'title', 'form', 'errors');
     }
 
+
+
     /**
      *
-     * @return EtapeCentreCoutSaisieForm
+     * @return EtapeCentreCoutForm
      */
-    protected function getFormSaisie()
+    protected function getForm()
     {
-        return $this->getServiceLocator()->get('FormElementManager')->get('EtapeCentreCoutSaisieForm');
+        return $this->getServiceLocator()->get('FormElementManager')->get('EtapeCentreCoutForm');
     }
 }

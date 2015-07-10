@@ -2,6 +2,8 @@
 
 namespace Application\Service;
 
+use Application\Service\Traits\CheminPedagogiqueAwareTrait;
+use Application\Service\Traits\ElementModulateurAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 
@@ -12,6 +14,9 @@ use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
  */
 class ElementPedagogique extends AbstractEntityService
 {
+    use CheminPedagogiqueAwareTrait;
+    use ElementModulateurAwareTrait;
+
     /**
      * retourne la classe des entités
      *
@@ -383,8 +388,7 @@ where rang = 1
 
         $result = parent::save($entity);
         /* Sauvegarde automatique des éléments-modulateurs associés */
-        $serviceElementModulateur = $this->getServiceLocator()->get('applicationElementModulateur');
-        /* @var $serviceElementModulateur ElementModulateur */
+        $serviceElementModulateur = $this->getServiceElementModulateur();
         foreach( $entity->getElementModulateur() as $elementModulateur ){
             if ($elementModulateur->getRemove()){
                 $serviceElementModulateur->delete($elementModulateur);
@@ -413,20 +417,16 @@ where rang = 1
         return parent::delete($entity, $softDelete);
     }
 
-    public function getList(QueryBuilder $qb=null, $alias=null)
+    /**
+     *
+     * @param QueryBuilder|null $qb
+     * @param string|null $alias
+     * @return QueryBuilder|null
+     */
+    public function orderBy( QueryBuilder $qb=null, $alias=null )
     {
         list($qb,$alias) = $this->initQuery($qb, $alias);
         $qb->addOrderBy($this->getAlias().'.libelle');
-        return parent::getList($qb, $alias);
+        return $qb;
     }
-
-    /**
-     *
-     * @return CheminPedagogique
-     */
-    protected function getServiceCheminPedagogique()
-    {
-        return $this->getServiceLocator()->get('ApplicationCheminPedagogique');
-    }
-
 }

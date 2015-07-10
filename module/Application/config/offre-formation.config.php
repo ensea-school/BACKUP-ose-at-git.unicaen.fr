@@ -382,8 +382,6 @@ return [
             'FormElementPedagogiqueRechercheHydrator' => 'Application\\Form\\OffreFormation\\ElementPedagogiqueRechercheHydrator',
             'ElementModulateursFormHydrator'          => 'Application\\Form\\OffreFormation\\ElementModulateursHydrator',
             'EtapeModulateursFormHydrator'            => 'Application\\Form\\OffreFormation\\EtapeModulateursHydrator',
-            'EtapeCentreCoutFormHydrator'             => 'Application\\Form\\OffreFormation\\EtapeCentreCout\\EtapeCentreCoutFormHydrator',
-            'ElementCentreCoutFieldsetHydrator'       => 'Application\\Form\\OffreFormation\\EtapeCentreCout\\ElementCentreCoutFieldsetHydrator',
         ],
     ],
     'form_elements' => [
@@ -393,8 +391,8 @@ return [
             'ElementPedagogiqueSaisie'                => 'Application\Form\OffreFormation\ElementPedagogiqueSaisie',
             'EtapeModulateursSaisie'                  => 'Application\Form\OffreFormation\EtapeModulateursSaisie',
             'ElementModulateursFieldset'              => 'Application\Form\OffreFormation\ElementModulateursFieldset',
-            'EtapeCentreCoutSaisieForm'               => 'Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutSaisieForm',
-            'ElementCentreCoutSaisieFieldset'         => 'Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutSaisieFieldset',
+            'EtapeCentreCoutForm'                     => 'Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm',
+            'ElementCentreCoutFieldset'               => 'Application\Form\OffreFormation\EtapeCentreCout\ElementCentreCoutFieldset',
         ],
     ],
     'view_helpers' => [
@@ -403,8 +401,8 @@ return [
             'ElementModulateursSaisieFieldset' => 'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset',
             'ElementPedagogique'               => 'Application\View\Helper\OffreFormation\ElementPedagogique',
             'Etape'                            => 'Application\View\Helper\OffreFormation\EtapeViewHelper',
-            'FormEtapeCentreCoutSaisie'        => 'Application\View\Helper\OffreFormation\FormEtapeCentreCoutSaisieHelper',
-            'FieldsetElementCentreCoutSaisie'  => 'Application\View\Helper\OffreFormation\FieldsetElementCentreCoutSaisieHelper',
+            'EtapeCentreCoutForm'              => 'Application\View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper',
+            'ElementCentreCoutFieldset'        => 'Application\View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper',
         ],
     ],
 

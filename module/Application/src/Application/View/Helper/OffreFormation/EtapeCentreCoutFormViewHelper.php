@@ -2,36 +2,30 @@
 
 namespace Application\View\Helper\OffreFormation;
 
-use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutSaisieForm;
-use Application\Entity\Db\ElementPedagogique;
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Form\OffreFormation\EtapeCentreCout\EtapeCentreCoutForm;
 use Zend\Form\Element\Select;
+use Zend\View\Helper\AbstractHtmlElement;
 
 /**
- * Dessine le formulaire de type EtapeCentreCoutSaisieForm.
+ * Dessine le formulaire de type EtapeCentreCoutFormViewHelper.
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  * @see EtapeCentreCoutSaisieForm
  */
-class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceLocatorAwareInterface
+class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ElementPedagogiqueAwareTrait
-    ;
 
     /**
-     * @var EtapeCentreCoutSaisieForm
+     * @var EtapeCentreCoutForm
      */
     protected $form;
 
     /**
      *
-     * @param EtapeCentreCoutSaisieForm $form
+     * @param EtapeCentreCoutForm $form
      * @return self|string
      */
-    public function __invoke(EtapeCentreCoutSaisieForm $form = null)
+    public function __invoke(EtapeCentreCoutForm $form = null)
     {
         if (null === $form) {
             return $this;
@@ -43,12 +37,12 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
     /**
      * Rendu du formulaire
      *
-     * @param EtapeCentreCoutSaisieForm $form
+     * @param EtapeCentreCoutForm $form
      * @return string
      */
-    public function render(EtapeCentreCoutSaisieForm $form)
+    public function render(EtapeCentreCoutForm $form)
     {
-        $elements    = $this->getServiceElementPedagogique()->getList($this->getServiceElementPedagogique()->finderByEtape($form->getEtape())); /* @var $elements ElementPedagogique[] */
+        $elements = $form->getEtape()->getElementPedagogique();
         $typesHeures = $form->getTypesHeures();
 
         if (empty($elements)) {
@@ -65,10 +59,7 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
         $res .= '/*select.type-heures { display: inline; width: 75%; }*/';
         $res .= 'th.element-pedagogique, td.element-pedagogique { width: 50%; }';
         $res .= '</style>';
-        $res .= '<script type="text/javascript">';
-        $res .= ' $(function() { EtapeCentreCout.init(); });';
-        $res .= '</script>';
-        
+
         $res .= '<table class="table table-bordered table-extra-condensed">';
         
         $res .= '<tr>';
@@ -82,13 +73,8 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
         
         $res .= '<tr>';
         foreach ($typesHeures as $th) {
-            $thElement = new Select($th->getCode());
-            $thElement
-                    ->setValueOptions(['' => '(Aucun)'] + $form->getCentresCoutsToArray($th))
-                    ->setAttribute('class', 'form-control type-heures header-select selectpicker');
-            
             $res .= '<th>';
-            $res .= $this->getView()->formSelect($thElement);
+            $res .= $this->getView()->formSelect( $form->get($th->getCode()) );
             $res .= ' <button type="button" class="btn btn-default btn-sm form-set-value pull-right" data-code="' . $th->getCode() . '" title="Appliquer à tous"><span class="glyphicon glyphicon-arrow-down"></span></button>';
             $res .= '</th>';
         }
@@ -98,7 +84,7 @@ class FormEtapeCentreCoutSaisieHelper extends AbstractHelper implements ServiceL
             $res .= '<tr>';
             $res .= '<th class="element-pedagogique">' . $element . '</th>';
             $formElement = $form->get('EL' . $element->getId());
-            $res .= $this->getView()->fieldsetElementCentreCoutSaisie()->render($formElement, $typesHeures, true);
+            $res .= $this->getView()->ElementCentreCoutFieldset()->render($formElement, $typesHeures, true);
             $res .= '</tr>';
         }
         

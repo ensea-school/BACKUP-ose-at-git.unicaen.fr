@@ -176,6 +176,7 @@ return [
             'ApplicationMiseEnPaiementIntervenantStructure' => 'Application\Service\MiseEnPaiementIntervenantStructure',
             'ApplicationTypeHeures'                         => 'Application\Service\TypeHeures',
             'ApplicationCentreCout'                         => 'Application\Service\CentreCout',
+            'ApplicationCentreCoutEp'                       => 'Application\Service\CentreCoutEp',
             'MiseEnPaiementAssertion'                       => 'Application\Assertion\MiseEnPaiementAssertion',
             'MiseEnPaiementExisteRule'                      => 'Application\Rule\Paiement\MiseEnPaiementExisteRule',
         ],

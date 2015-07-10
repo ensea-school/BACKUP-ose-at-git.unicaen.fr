@@ -1,36 +1,22 @@
-<style>
-    div.bootstrap-select.header-select { width: 85% !important; }
-    button.form-set-value { width: 10% !important; }
-</style>
+<?php $this->headTitle($title); ?>
+<h1 class="page-header"><?php echo $title ?></h1>
 
 <?php
 
-$this->headTitle($title);
-echo '<h1 class="page-header">' . $title . '</h1>';
-
-echo $this->formEtapeCentreCoutSaisie($form);
+echo $this->etapeCentreCoutForm($form);
 
 echo $this->formErrors($form);
 if ($errors) {
     echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
 }
+
 ?>
+<style>
+    div.bootstrap-select.header-select {
+        width: 85% !important;
+    }
 
-<script>
-    $(function() {
-        /**
-         * Redéfinition de la fonction définie dans "app.js" pour que cela fonctionne avec le "bootstrap-select" installé
-         * sur les select.
-         */
-        EtapeCentreCout.setFormValues = function (typeHeuresCode, value)
-        {
-            $('form#etape-centre-cout select[name$="\\[' + typeHeuresCode + '\\]"]').selectpicker('val', value);
-        }
-
-        /**
-         * Installation d'un "bootstrap-select" sur les select.
-         */
-        $('select.selectpicker').attr('data-live-search', 'true').selectpicker();
-    });
-
-</script>
+    button.form-set-value {
+        width: 10% !important;
+    }
+</style>

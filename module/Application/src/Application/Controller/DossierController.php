@@ -20,6 +20,7 @@ use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Application\Service\Workflow\Workflow;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
+use Application\Validator\NumeroINSEEValidator;
 use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\EntityManager;
@@ -143,7 +144,6 @@ class DossierController extends AbstractActionController implements WorkflowInte
         }
         
         $this->intervenant = $intervenant;
-        $this->form = $this->getFormModifier();
         
         $serviceValidation = $this->getServiceValidation();
         $qb = $serviceValidation->finderByType(TypeValidation::CODE_DONNEES_PERSO);
@@ -158,15 +158,15 @@ class DossierController extends AbstractActionController implements WorkflowInte
             $this->readonly = true;
         }
 
-        $this->form->get('submit')->setAttribute('value', $this->getSubmitButtonLabel());
-
         $service->canAdd($this->intervenant, true);
         
         if (!($dossier = $this->intervenant->getDossier())) {
             $dossier = $service->newEntity()->fromIntervenant($this->intervenant);
             $this->intervenant->setDossier($dossier);
         }
-        
+
+        $this->form = $this->getFormModifier();
+        $this->form->get('submit')->setAttribute('value', $this->getSubmitButtonLabel());
         $this->form->bind($this->intervenant);
         
         if (!$this->readonly && $this->getRequest()->isPost()) {
@@ -261,6 +261,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
      */
     private function getFormModifier()
     {
+        $dossier         = $this->intervenant->getDossier();
         $form            = $this->getServiceLocator()->get('FormElementManager')->get('IntervenantDossier'); /* @var $form DossierForm */
         $dossierFieldset = $form->get('dossier'); /* @var $dossierFieldset DossierFieldset */
         
@@ -301,6 +302,15 @@ class DossierController extends AbstractActionController implements WorkflowInte
          */
         if ($this->intervenant->getStatut()->estBiatss()) {
             $dossierFieldset->remove('emailPerso');
+        }
+
+        /**
+         * Pas de sélection de la France par défaut si le numéro INSEE correspond à une naissance hors France.
+         */
+        if ($dossier->getNumeroInsee() && ! $dossier->getNumeroInseeEstProvisoire()) {
+            if (NumeroINSEEValidator::hasCodeDepartementEtranger($dossier->getNumeroInsee())) {
+                $dossierFieldset->get('paysNaissance')->setValue(null);
+            }
         }
         
         return $form;

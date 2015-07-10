@@ -41,7 +41,10 @@ class DossierFieldsetDoctrineHydrator extends DoctrineObject
     public function extract($dossier)
     {
         $data = parent::extract($dossier);
-        
+
+        if ($dossier->getPaysNaissance() === null) {
+            unset($data['paysNaissance']); // indispensable pour que la valeur par défaut soit sélectionnée!
+        }
         if ($dossier->getDateNaissance() && $dossier->getDateNaissance() instanceof DateTime) {
             $data['dateNaissance'] = $dossier->getDateNaissance()->format(Constants::DATE_FORMAT);
         }
@@ -50,7 +53,7 @@ class DossierFieldsetDoctrineHydrator extends DoctrineObject
         }
         
         $this->processPremierRecrutement($data);
-        
+
         return $data;
     }
     

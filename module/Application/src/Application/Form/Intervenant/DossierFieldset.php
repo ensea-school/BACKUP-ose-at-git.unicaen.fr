@@ -322,7 +322,7 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
 
         return $this;
     }
-    
+
     /**
      * Should return an array specification compatible with
      * {@link Zend\InputFilter\Factory::createInputFilter()}.

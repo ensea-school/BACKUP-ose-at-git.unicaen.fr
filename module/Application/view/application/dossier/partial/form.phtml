@@ -78,11 +78,6 @@ $dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Inter
         {
             var tfDate     = $("input[name='dossier[dateNaissance]']");
             var selectPays = $("select[name='dossier[paysNaissance]']");
-            
-            // sélection de la France par défaut
-            if (! selectPays.val()) {
-                $("option.france", selectPays).prop("selected", "selected");
-            }
         
             moment.locale('fr');
             

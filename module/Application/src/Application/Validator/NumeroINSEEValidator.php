@@ -158,10 +158,7 @@ class NumeroINSEEValidator extends NumeroINSEE
     
     private function isValidDepartementHorsFrance($value)
     {
-        $departement = substr($value, 5, 2);
-        
-        // le code département doit être "99" pour un pays étranger
-        if ($departement !== '99') {
+        if (! $this->hasCodeDepartementEtranger($value)) {
             $this->error(self::MSG_DEPT);
             return false;
         }
@@ -239,5 +236,19 @@ class NumeroINSEEValidator extends NumeroINSEE
         }
         
         return null;
+    }
+
+    /**
+     * Teste si un numéro INSEE possède le code département de naissance associé à un pays étranger.
+     *
+     * @param string Numéro INSEE à tester
+     * @return bool
+     */
+    static public function hasCodeDepartementEtranger($value)
+    {
+        $departement = substr($value, 5, 2);
+
+        // le code département doit être "99" pour un pays étranger
+        return $departement === '99';
     }
 }

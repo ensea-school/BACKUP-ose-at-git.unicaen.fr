@@ -1179,7 +1179,7 @@
             "source": {
                 "type": "svn",
                 "url": "https://svn.unicaen.fr/svn/UnicaenApp",
-                "reference": "/trunk/@607"
+                "reference": "/trunk/@615"
             },
             "require": {
                 "doctrine/doctrine-orm-module": ">=0.7",

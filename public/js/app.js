@@ -5,13 +5,13 @@
 
 $(function ()
 {
-    $(document).ajaxError(function (event, jqxhr, settings, exception)
-    {
-        if ($('body').hasClass('development')) {
-            errorDialog.show('Une erreur ' + jqxhr.status + '(' + jqxhr.statusText + ') est survenue', jqxhr.responseText);
-        }
-        console.log(jqxhr);
-    });
+    //$(document).ajaxError(function (event, jqxhr, settings, exception)
+    //{
+    //    if ($('body').hasClass('development')) {
+    //        errorDialog.show('Une erreur ' + jqxhr.status + '(' + jqxhr.statusText + ') est survenue', jqxhr.responseText);
+    //    }
+    //    console.log(jqxhr);
+    //});
 
     // installation de tooltip Bootstrap sur les icônes d'information (i)
     $(".info-icon").tooltip();

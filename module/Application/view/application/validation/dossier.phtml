@@ -28,6 +28,7 @@ if (! $this->dossier) {
 <div class="<?php echo $classValide ?>">
     <?php echo $this->partial('application/dossier/partial/form', [
         'form'     => $formModifier,
+        'dossier'  => $dossier,
         'readonly' => true,
     ]) ?>
 </div>

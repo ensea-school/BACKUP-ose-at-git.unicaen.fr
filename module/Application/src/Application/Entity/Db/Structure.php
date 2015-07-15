@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Structure
@@ -116,10 +117,10 @@ class Structure implements HistoriqueAwareInterface
 
     function __construct()
     {
-        $this->structureNiv2                        = new \Doctrine\Common\Collections\Collection;
-        $this->elementPedagogique                   = new \Doctrine\Common\Collections\Collection;
-        $this->centreCout                           = new \Doctrine\Common\Collections\Collection;
-        $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\Collection;
+        $this->structureNiv2                        = new ArrayCollection();
+        $this->elementPedagogique                   = new ArrayCollection();
+        $this->centreCout                           = new ArrayCollection();
+        $this->miseEnPaiementIntervenantStructure   = new ArrayCollection();
     }
 
 

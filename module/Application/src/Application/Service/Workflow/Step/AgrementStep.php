@@ -2,10 +2,9 @@
 
 namespace Application\Service\Workflow\Step;
 
+use Application\Acl\IntervenantRole;
 use Application\Interfaces\TypeAgrementAwareInterface;
 use Application\Traits\TypeAgrementAwareTrait;
-use Application\Acl\IntervenantPermanentRole;
-use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeAgrement;
 
@@ -21,9 +20,8 @@ class AgrementStep extends Step implements TypeAgrementAwareInterface
     public function __construct()
     {
         $descriptions = [
-            IntervenantPermanentRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",
-            IntervenantExterieurRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",
-            ComposanteRole::ROLE_ID           => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",
+            IntervenantRole::ROLE_ID => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",
+            ComposanteRole::ROLE_ID  => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed sem libero. Nam urna magna, fringilla et blandit aliquam, condimentum a velit. Vivamus sollicitudin blandit augue ut dapibus. Vivamus faucibus quis massa id tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis auctor suscipit mauris, in suscipit quam lacinia ut. Nam ac mollis enim, quis tincidunt sem.",
         ];
 
         $this
@@ -39,10 +37,9 @@ class AgrementStep extends Step implements TypeAgrementAwareInterface
         $this->setRouteParams(['typeAgrement' => $this->getTypeAgrement()->getId()]);
 
         $labels = [
-            IntervenantPermanentRole::ROLE_ID => sprintf("Je visualise l'agrément '%s';", $this->getTypeAgrement()),
-            IntervenantExterieurRole::ROLE_ID => sprintf("Je visualise l'agrément '%s'", $this->getTypeAgrement()),
-            ComposanteRole::ROLE_ID           => sprintf("Je visualise l'agrément '%s' de l'intervenant", $this->getTypeAgrement()),
-            'default'                         => sprintf("Je visualise l'agrément '%s'", $this->getTypeAgrement()),
+            IntervenantRole::ROLE_ID => sprintf("Je visualise l'agrément '%s';", $this->getTypeAgrement()),
+            ComposanteRole::ROLE_ID  => sprintf("Je visualise l'agrément '%s' de l'intervenant", $this->getTypeAgrement()),
+            'default'                => sprintf("Je visualise l'agrément '%s'", $this->getTypeAgrement()),
         ];
 
         $this->setLabels($labels);
@@ -54,6 +51,7 @@ class AgrementStep extends Step implements TypeAgrementAwareInterface
      * Spécifie le type d'agrément concerné.
      *
      * @param TypeAgrement $typeAgrement type d'agrément concerné
+     * @return $this
      */
     public function setTypeAgrement(TypeAgrement $typeAgrement = null)
     {

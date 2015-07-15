@@ -3,6 +3,7 @@
 namespace Application\Service\Workflow\Step;
 
 use Application\Acl\ComposanteRole;
+use Application\Acl\IntervenantRole;
 use Common\Exception\LogicException;
 use Zend\Permissions\Acl\Role\RoleInterface;
 
@@ -96,6 +97,9 @@ abstract class Step
             $key = $role->getRoleId();
             if ($role instanceof ComposanteRole) {
                 $key = ComposanteRole::ROLE_ID;
+            }
+            elseif ($role instanceof IntervenantRole) {
+                $key = IntervenantRole::ROLE_ID;
             }
         }
 

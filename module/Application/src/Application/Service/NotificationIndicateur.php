@@ -8,6 +8,10 @@ use Application\Entity\Db\Personnel as PersonnelEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Common\Exception\LogicException;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Traits\MessageAwareInterface;
 use UnicaenApp\Traits\MessageAwareTrait;
 
@@ -110,7 +114,7 @@ class NotificationIndicateur extends AbstractEntityService
      * - l'âge de la dernière notification est supérieur à la fréquence de notification.
      * 
      * @param bool $force Si true, toutes les notifications sont considérées comme devant être faites
-     * @return \Doctrine\Common\Collections\Collection
+     * @return QueryBuilder
      */
     public function findNotificationsIndicateurs($force = false)
     {
@@ -120,7 +124,7 @@ class NotificationIndicateur extends AbstractEntityService
         $qb = $this->getRepo()->createQueryBuilder("ni")
                 ->select("ni, p, i, s")
                 ->join("ni.personnel", "p")
-                ->join("ni.indicateur", "i", \Doctrine\ORM\Query\Expr\Join::WITH, "i.enabled = 1")
+                ->join("ni.indicateur", "i", Join::WITH, "i.enabled = 1")
                 ->leftJoin("ni.structure", "s")
                 ->orderBy("p.nomUsuel, i.type, i.ordre");
         
@@ -131,5 +135,194 @@ class NotificationIndicateur extends AbstractEntityService
         }
         
         return $qb->getQuery()->getResult();
+    }
+
+
+    /**
+     * @return NotificationIndicateurQueryBuilder
+     */
+    public function createQueryBuilder()
+    {
+        return new NotificationIndicateurQueryBuilder($this->getEntityManager());
+    }
+}
+
+
+
+
+
+//--------------------------------------------------------------------------------------
+//
+// Expérimentation : expressivité du query builder.
+//
+//--------------------------------------------------------------------------------------
+
+class NotificationIndicateurQueryBuilder extends QueryBuilder
+{
+    protected $rootAlias = "ni";
+
+    public function __construct(EntityManagerInterface $em, $rootAlias = null)
+    {
+        parent::__construct($em);
+
+        $this->rootAlias = $rootAlias ?: $this->rootAlias;
+        $this->initWithDefault();
+    }
+
+    public function initWithDefault()
+    {
+        $this
+            ->from('Application\Entity\Db\NotificationIndicateur', $this->rootAlias)
+            ->select("$this->rootAlias, p, i, s")
+            ->join("$this->rootAlias.personnel", "p")
+            ->join("$this->rootAlias.indicateur", "i", Join::WITH, "i.enabled = 1")
+            ->leftJoin("$this->rootAlias.structure", "s")
+            ->orderBy("p.nomUsuel, i.type, i.ordre");
+
+        return $this;
+    }
+
+    public function andWhereIndicateurIs(IndicateurEntity $indicateur)
+    {
+        return $this->applyExpr(new AndWhereIndicateurIs($indicateur, "i")); // alias si pas de jointure: "$this->rootAlias.indicateur"
+    }
+
+    public function andWhereIndicateurIsEnabled($enabled = true)
+    {
+        return $this->applyExpr(new AndWhereIndicateurEnabled($enabled, "i")); // NB: l'alias "$this->rootAlias.indicateur" est impossible ici
+    }
+
+    public function andWherePersonnelIs(PersonnelEntity $personnel)
+    {
+        return $this->applyExpr(new AndWherePersonnelIs($personnel, "p")); // alias si pas de jointure: "$this->rootAlias.personnel"
+    }
+
+    public function andWhereStructureIs(StructureEntity $structure)
+    {
+        return $this->applyExpr(new AndWhereStructurelIs($structure, "s"));
+    }
+
+    public function andWhereNotificationNecessaire($notificationNecessaire = true)
+    {
+        return $this->applyExpr(new AndWhereNotificationNecessaire($notificationNecessaire, "ni"));
+    }
+
+    private function applyExpr(AndWhereExpr $expr)
+    {
+        $expr->applyToQueryBuilder($this);
+        return $this;
+    }
+}
+
+class AndWherePersonnelIs extends AndWhereExpr
+{
+    public function __construct(PersonnelEntity $entity, $alias)
+    {
+        parent::__construct($alias);
+
+        $this->where      = "$alias = :personnel";
+        $this->parameters = ['personnel' => $entity];
+    }
+
+    protected function getJoinSuggestion($rootAlias)
+    {
+        return sprintf(
+            "Peut-être avez-vous oublié de faire la jointure suivante: '->join(\"%s.personnel\", \"%s\")'.",
+            $rootAlias,
+            $this->alias
+        );
+    }
+}
+
+class AndWhereStructurelIs extends AndWhereExpr
+{
+    public function __construct(StructureEntity $entity, $alias)
+    {
+        parent::__construct($alias);
+
+        $this->where      = "$alias = :structure";
+        $this->parameters = ['structure' => $entity];
+    }
+}
+
+class AndWhereNotificationNecessaire extends AndWhereExpr
+{
+    public function __construct($notificationNecessaire = true, $alias)
+    {
+        parent::__construct($alias);
+
+        $this->where = $notificationNecessaire ?
+            "$alias.dateDernNotif IS NULL OR $alias.dateDernNotif + $alias.frequence/(24*60*60) <= :now" :
+            "$alias.dateDernNotif IS NOT NULL AND $alias.dateDernNotif + $alias.frequence/(24*60*60) > :now" ;
+        $this->parameters = ['now' => new DateTime()];
+    }
+}
+
+
+
+
+
+
+class AndWhereIndicateurIs extends AndWhereExpr
+{
+    public function __construct(IndicateurEntity $entity, $alias)
+    {
+        parent::__construct($alias);
+
+        $this->where      = "$alias = :indicateur";
+        $this->parameters = ['indicateur' => $entity];
+    }
+}
+
+class AndWhereIndicateurEnabled extends AndWhereExpr
+{
+    public function __construct($enabled = true, $alias)
+    {
+        parent::__construct($alias);
+
+        $this->where      = "$alias.enabled = :enabled";
+        $this->parameters = ['enabled' => (bool) $enabled];
+    }
+}
+
+
+
+
+
+
+abstract class AndWhereExpr
+{
+    protected $alias;
+    protected $where;
+    protected $parameters;
+
+    public function __construct($alias)
+    {
+        $this->alias = $alias;
+    }
+
+    public static function instance(array $args = [])
+    {
+        $expr = new static($args['alias']);
+    }
+
+    public function applyToQueryBuilder(QueryBuilder $qb)
+    {
+        if (! in_array($this->alias, $qb->getAllAliases())) {
+            throw new \RuntimeException("L'alias $this->alias est inconnu du QueryBuilder. " . $this->getJoinSuggestion($qb->getRootAlias()));
+        }
+
+        $qb->andWhere($this->where);
+
+        foreach ((array) $this->parameters as $name => $value) {
+            $qb->setParameter($name, $value);
+        }
+
+        return $this;
+    }
+
+    protected function getJoinSuggestion($rootAlias)
+    {
+        return "";
     }
 }

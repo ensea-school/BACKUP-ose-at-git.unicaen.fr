@@ -7,6 +7,7 @@ use Application\Controller\Plugin\Context;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
 use Application\Interfaces\StructureAwareInterface;
 use Application\Service\Indicateur as IndicateurService;
+use Application\Service\Indicateur\AbstractIndicateurImpl;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
@@ -51,7 +52,7 @@ class NotificationController extends AbstractActionController
     public function indicateursAction()
     {
         $nis = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs(false);
-        
+
         $viewModel = new ViewModel();
         $viewModel
                 ->setVariable('nis', $nis)
@@ -106,13 +107,12 @@ EOS;
      */
     public function notifierIndicateursAction()
     {
-        $request  = $this->getRequest();
-        $renderer = $this->getServiceLocator()->get('view_manager')->getRenderer();  /* @var $renderer PhpRenderer */
-        $force    = (bool) $request->getParam('force');
-        $nis      = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs($force);
-        $role     = $this->getServiceContext()->getSelectedIdentityRole();
-        
+        $request = $this->getRequest();
+
         if ($request instanceof ConsoleRequest) {
+            $force = (bool) $request->getParam('force');
+            $debug = (bool) $request->getParam('debug');
+
             // S'il s'agit d'une requête de type Console (CLI), le plugin de contrôleur Url utilisé par les indicateurs
             // n'est pas en mesure de construire des URL (car le ConsoleRouter ne sait pas ce qu'est une URL!).
             // On injecte donc provisoirement un HttpRouter dans le circuit.
@@ -129,7 +129,13 @@ EOS;
                     ->setScheme($request->getParam('requestUriScheme', "http")); // ex: "http", "https"
             $httpRouter->setRequestUri($httpUri);
         }
-        
+        else {
+            $force = (bool) $this->params('force');
+            $debug = false;
+        }
+
+        $nis = $this->getServiceNotificationIndicateur()->findNotificationsIndicateurs($force);
+
         foreach ($nis as $ni) { /* @var $ni NotificationIndicateurEntity */
             $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($ni->getIndicateur(), $ni->getStructure());
             
@@ -142,29 +148,16 @@ EOS;
             if (! (int) $indicateurImpl->getResultCount()) {
                 continue;
             }
-            
-            // corps au format HTML
-            $html = $renderer->render('application/notification/mail/indicateur', [
-                'indicateurImpl' => $indicateurImpl,
-                'ni'             => $ni,
-            ]);
-            $part          = new MimePart($html);
-            $part->type    = Mime::TYPE_HTML;
-            $part->charset = 'UTF-8';
-            $body          = new MimeMessage();
-            $body->addPart($part);
-        
-            // init
-            $message       = new MailMessage();
-            $message->setEncoding('UTF-8')
-                    ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
-                    ->setSubject(sprintf("[%s Notif %s] %s", $app, $ni->getFrequenceToString(), $indicateurImpl->getTitle()))
-                    ->setBody($body)
-                    ->addTo($ni->getPersonnel()->getEmail(), "" . $ni->getPersonnel());
 
-            // NB: S'il s'agit d'une requête de type Console (CLI), il n'y a pas de rôle courant.
-            if ($role && $role->getPersonnel()) {
-                $message->addCc($role->getPersonnel()->getEmail(), "" . $role->getPersonnel());
+            $message = $this->createMessageNotificationIndicateur($indicateurImpl, $ni);
+
+            // en mode debug, on s'arrête là (pas d'envoi de mail)
+            if ($debug) {
+                $this->getLogger()->debug("");
+                $this->getLogger()->debug("###################################################################################");
+                $this->getLogger()->debug("Subject : " . $message->getSubject());
+                $this->getLogger()->debug("To      : ", iterator_to_array($message->getTo()));
+                continue;
             }
 
             // envoi
@@ -186,7 +179,101 @@ EOS;
         
         exit;
     }
-    
+
+    /**
+     *
+     * @return \Zend\Log\Logger
+     */
+    private function getLogger()
+    {
+        return $this->getServiceLocator()->get('logger');
+    }
+
+    /**
+     * Notifications manuelle par mail d'une personne concernant un indicateur.
+     *
+     * NB: La notification n'est consignée dans l'hostorique des notifications.
+     */
+    public function notifierIndicateurPersonnelAction()
+    {
+        $indicateur = $this->context()->mandatory()->indicateurFromRoute();
+        $personnel  = $this->context()->mandatory()->personnelFromRoute();
+
+        $qb = $this->getServiceNotificationIndicateur()->createQueryBuilder()
+            ->andWhereIndicateurIs($indicateur)
+            ->andWherePersonnelIs($personnel)
+            ->andWhereIndicateurIsEnabled();
+
+        $nis = $qb->getQuery()->getResult();
+
+        foreach ($nis as $ni) { /* @var $ni NotificationIndicateurEntity */
+            $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($ni->getIndicateur(), $ni->getStructure());
+
+            // certains indicateurs ont besoin d'un critère de date
+            if ($indicateurImpl instanceof DateAwareIndicateurImplInterface) {
+                $indicateurImpl->setDate($ni->getDateDernNotif());
+            }
+
+            // pas de notification si l'indicateur ne renvoit rien
+            if (! (int) $indicateurImpl->getResultCount()) {
+                continue;
+            }
+
+            $message = $this->createMessageNotificationIndicateur($indicateurImpl, $ni);
+
+            // envoi
+            $this->mail()->send($message);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param AbstractIndicateurImpl $indicateurImpl
+     * @param NotificationIndicateurEntity $ni
+     * @param string $pid
+     * @return MailMessage
+     * @throws \Exception
+     */
+    private function createMessageNotificationIndicateur(AbstractIndicateurImpl $indicateurImpl, NotificationIndicateurEntity $ni, $pid = null)
+    {
+        $request  = $this->getRequest();
+        $renderer = $this->getServiceLocator()->get('view_manager')->getRenderer();  /* @var $renderer PhpRenderer */
+        $role     = $this->getServiceContext()->getSelectedIdentityRole();
+        $pid      = null;
+
+        if ($request instanceof ConsoleRequest) {
+            $pid = $this->getRequest()->getParam('pid');
+        }
+
+        // corps au format HTML
+        $html = $renderer->render('application/notification/mail/indicateur', [
+            'indicateurImpl' => $indicateurImpl,
+            'ni'             => $ni,
+            'pid'            => $pid,
+        ]);
+        $part          = new MimePart($html);
+        $part->type    = Mime::TYPE_HTML;
+        $part->charset = 'UTF-8';
+        $body          = new MimeMessage();
+        $body->addPart($part);
+
+        // init
+        $message       = new MailMessage();
+        $message->setEncoding('UTF-8')
+            ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
+            ->setSubject(sprintf("[%s Notif %s] %s", $app, $ni->getFrequenceToString(), $indicateurImpl->getTitle()))
+            ->setBody($body)
+            ->addTo($ni->getPersonnel()->getEmail(), "" . $ni->getPersonnel());
+
+        // NB: S'il s'agit d'une requête de type Console (CLI), il n'y a pas de rôle courant.
+        if ($role && $role->getPersonnel()) {
+            $message->addCc($role->getPersonnel()->getEmail(), "" . $role->getPersonnel());
+        }
+
+        return $message;
+    }
+
     /**
      * 
      * 

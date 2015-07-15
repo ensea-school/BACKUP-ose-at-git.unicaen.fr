@@ -58,6 +58,19 @@ return [
                             ],
                         ],
                     ],
+                    'notifier-indicateur-personnel' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route' => '/notifier-indicateur-personnel/:indicateur/:personnel',
+                            'constraints' => [
+                                'indicateur' => '[0-9]*',
+                                'personnel'  => '[0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'notifier-indicateur-personnel',
+                            ],
+                        ],
+                    ],
                     'test-send-mail' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -77,7 +90,7 @@ return [
                 'notifier-indicateurs' => [
                     'type'    => 'Simple',
                     'options' => [
-                        'route'    => 'notifier indicateurs [--force] --requestUriHost= [--requestUriScheme=]',
+                        'route'    => 'notifier indicateurs [--pid=] [--debug] [--force] --requestUriHost= [--requestUriScheme=]',
                         'defaults' => [
                             'controller' => 'Application\Controller\Notification',
                             'action'     => 'notifier-indicateurs'
@@ -101,7 +114,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Notification',
-                    'action'     => ['indicateurs', 'indicateur-fetch-title'],
+                    'action'     => ['indicateurs', 'indicateur-fetch-title', 'notifier-indicateur-personnel'],
                     'roles'      => [AdministrateurRole::ROLE_ID],
                 ],
                 [

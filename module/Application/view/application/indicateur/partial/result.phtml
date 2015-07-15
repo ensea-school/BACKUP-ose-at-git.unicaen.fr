@@ -13,7 +13,7 @@
 </ul>
 
 <?php 
-if ($this->indicateurImpl->getResult()): ?>
+if ($this->displaySendMailLink && $this->indicateurImpl->getResult()): ?>
     <?php $url = $this->url('notification/indicateur-intervenants', ['indicateur' => $this->indicateurImpl->getIndicateurEntity()->getId()]); ?>
     <a class="ajax-modal" 
        data-event="event-send-mail"

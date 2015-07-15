@@ -3,7 +3,7 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
 /* @var $indicateurImpl AbstractIndicateurImpl */
 ?>
 
-<h1 class="page-header">Notification indicateurs</h1>
+<h1 class="page-header">Abonnements aux notifications des indicateurs</h1>
 
 <style>
     .indicateur { width: 35%; }
@@ -20,6 +20,7 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
             <th class="date">Date d'abonnement</th>
             <th class="date">Dernière notif</th>
             <th class="date">Prochaine notif éventuelle</th>
+            <th>Notifier</th>
         </tr>
     </thead>
     <tbody>
@@ -36,6 +37,12 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
             <td class="date"><?php echo $ni->getDateAbonnementToString() ?></td>
             <td class="date"><?php echo $ni->getDateDernNotifToString() ?></td>
             <td class="date"><?php echo $ni->getDateProchaineNotifToString() ?></td>
+            <td>
+                <?php $urlNotifierPersonnel = $this->url('notification/notifier-indicateur-personnel', [
+                    'indicateur' => $ni->getIndicateur()->getId(),
+                    'personnel' => $ni->getPersonnel()->getId(),
+                ]); ?>
+                <a href="<?php echo $urlNotifierPersonnel ?>">Notifier par mail</a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

@@ -6,7 +6,7 @@ use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 <?php $this->headTitle()->append($this->indicateur . "")->append("Indicateur") ?>
 <h1 class="page-header"><?php echo $title = $indicateurImpl->getTitle() ?></h1>
 
-<?php echo $this->partial('application/indicateur/partial/result', ['indicateurImpl' => $indicateurImpl]); ?>
+<?php echo $this->partial('application/indicateur/partial/result', ['indicateurImpl' => $indicateurImpl, 'displaySendMailLink' => true]); ?>
 
 
 <!-- Inclusion du script de l'éditeur WYSIWYG (vers HTML) : http://www.tinymce.com -->

@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Acl\IntervenantRole;
+use Application\Entity\Db\Intervenant;
 use Zend\Mvc\Controller\AbstractActionController;
 use UnicaenApp\Util;
 use Common\Exception\RuntimeException;
@@ -222,9 +224,11 @@ class ValidationController extends AbstractActionController
 
         if (!count($servicesNonValides)) {
             $this->validation = current($this->validations);
-            $message = sprintf("Aucun enseignement de type '$typeVolumeHoraire' à valider%s n'a été trouvé.",
+            if (! $role instanceof IntervenantRole) {
+                $message = sprintf("Aucun enseignement de type '$typeVolumeHoraire' à valider%s n'a été trouvé.",
                     $structuresEns ? " concernant la structure d'intervention " . implode(" ou ", array_keys($structuresEns)) : null);
-            $messages[] = $message;
+                $messages[] = $message;
+            }
         }
 
         if (count($servicesNonValides) && !$this->validation) {

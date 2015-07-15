@@ -495,7 +495,7 @@ class Service extends AbstractEntityService
      * @param TypeVolumeHoraireEntity $typeVolumeHoraire
      * @param IntervenantEntity $intervenant
      * @param StructureEntity[array|null $structureEns
-     * @return QueryBuilder
+     * @return array
      */
     public function fetchServicesDisposPourValidation(
             TypeVolumeHoraireEntity $typeVolumeHoraire,

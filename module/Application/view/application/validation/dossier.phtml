@@ -2,20 +2,29 @@
 
 <h1 class="page-header"><?php echo $title ?></h1>
 
-<?php 
+<?php
+use Application\Service\Message\MessageConstants as MsgId;
+
 $classValide = $validation->getId() ? "bg-success" : null;
 
 $this->messenger()->addMessagesFromFlashMessenger();
 
+/**
+ * Message Données perso saisies/validées ou non.
+ */
 if (! $this->dossier) {
-    $this->messenger()->addMessage("Les données personnelles n'ont pas été saisies.", 'danger');
+    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_PAS_SAISIES, ['intervenant' => $this->intervenant]);
+    $sev = 'danger';
 }
 elseif ($validation->getId()) {
-    $this->messenger()->addMessage(sprintf("Les données personnelles sont validées. <br /><br />%s", $this->validationDl($validation)), 'success');
+    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_VALIDEES, ['validationDetails' => "<br/><br/>" . $this->validationDl($this->validation)]);
+    $sev = 'success';
 }
 else {
-    $this->messenger()->addMessage("Les données personnelles n'ont pas encore été validées", 'warning');
+    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_PAS_VALIDEES, ['intervenant' => $this->intervenant]);
+    $sev = 'warning';
 }
+$this->messenger()->addMessage($msg, $sev);
 
 echo $this->messenger();
 

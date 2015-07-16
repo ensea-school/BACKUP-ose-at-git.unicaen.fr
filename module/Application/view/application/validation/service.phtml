@@ -1,6 +1,6 @@
-<?php $this->headTitle()->append($intervenant->getNomUsuel())->append("Validation des enseignements de type '$typeVolumeHoraire'") ?>
+<?php $this->headTitle()->append($intervenant->getNomUsuel())->append($title) ?>
 
-<h1 class="page-header"><?php echo $title ?></small></h1>
+<h1 class="page-header"><?php echo $title ?> <small><?php echo $this->intervenant ?></small></h1>
 
 <?php 
 if ($this->attenteValidationMessage) {

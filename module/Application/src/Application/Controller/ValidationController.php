@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Acl\IntervenantRole;
 use Application\Entity\Db\Intervenant;
+use Application\Exception\DbException;
 use Zend\Mvc\Controller\AbstractActionController;
 use UnicaenApp\Util;
 use Common\Exception\RuntimeException;
@@ -17,6 +18,7 @@ use Application\Form\Intervenant\ServiceValidation;
 use Application\Form\Intervenant\ReferentielValidation;
 use Application\Rule\Validation\ValidationEnsRefAbstractRule;
 use Doctrine\ORM\Query\Expr\Join;
+use Zend\View\Model\ViewModel;
 
 /**
  * Description of ValidationController
@@ -72,7 +74,7 @@ class ValidationController extends AbstractActionController
     private $title;
 
     /**
-     * @var \Zend\View\Model\ViewModel
+     * @var ViewModel
      */
     private $view;
 
@@ -102,7 +104,7 @@ class ValidationController extends AbstractActionController
 
      * NB : une seule validation pour toutes les composantes.
      * 
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function dossierAction()
     {
@@ -150,7 +152,7 @@ class ValidationController extends AbstractActionController
             }
         }
 
-        $this->view = new \Zend\View\Model\ViewModel([
+        $this->view = new ViewModel([
             'intervenant' => $intervenant,
             'dossier'     => $dossier,
             'validation'  => $this->validation,
@@ -176,7 +178,7 @@ class ValidationController extends AbstractActionController
         $controller       = 'Application\Controller\Dossier';
         $params           = $this->getEvent()->getRouteMatch()->getParams();
         $params['action'] = 'modifier';
-        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel \Zend\View\Model\ViewModel */
+        $viewModel        = $this->forward()->dispatch($controller, $params); /* @var $viewModel ViewModel */
 
         return $viewModel->form;
     }
@@ -184,7 +186,7 @@ class ValidationController extends AbstractActionController
     /**
      * Validation des enseignements prévisionnels par la composante d'affectation de l'intervenant.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      * @throws \Common\Exception\MessageException
      *
      * @todo voirServiceAction et modifierServiceAction doivent sans doute pouvoir être fusionnée...
@@ -199,7 +201,7 @@ class ValidationController extends AbstractActionController
         $role                = $this->getServiceContext()->getSelectedIdentityRole();
         $typeVolumeHoraire   = $this->getTypeVolumeHoraire();
         $this->formValider   = $this->getFormValidationService()->setIntervenant($this->getIntervenant())->init();
-        $this->title         = "Validation des enseignements de type '$typeVolumeHoraire' <small>{$this->getIntervenant()}</small>";
+        $this->title         = $this->getPageTitleForService();
         $typeValidation      = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_ENSEIGNEMENT)->getQuery()->getOneOrNullResult();
         $messages            = [];
 
@@ -224,11 +226,19 @@ class ValidationController extends AbstractActionController
 
         if (!count($servicesNonValides)) {
             $this->validation = current($this->validations);
-            if (! $role instanceof IntervenantRole) {
-                $message = sprintf("Aucun enseignement de type '$typeVolumeHoraire' à valider%s n'a été trouvé.",
-                    $structuresEns ? " concernant la structure d'intervention " . implode(" ou ", array_keys($structuresEns)) : null);
-                $messages[] = $message;
+            if ($role instanceof IntervenantRole) {
+                $message = sprintf(
+                    "Tout vos enseignements %s n'ont pas encore été validés",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnels" : "réalisés"
+                );
+            } else {
+                $message = sprintf(
+                    "Aucun enseignement %s n'est en attente de validation%s.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnel" : "réalisé",
+                    $structuresEns ? " par la structure " . implode(" ou ", array_keys($structuresEns)) : null
+                );
             }
+            $messages[] = $message;
         }
 
         if (count($servicesNonValides) && !$this->validation) {
@@ -247,12 +257,12 @@ class ValidationController extends AbstractActionController
 
             $this->formValider->bind($this->validation);
 
-            $messages[] = sprintf("Des enseignements de type '%s' à valider par la structure '%s' ont été trouvés...",
-                    $typeVolumeHoraire,
+            $messages[] = sprintf("Enseignements %s en attente de validation par la structure '%s'.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnels" : "réalisés",
                     $structureValidation);
         }
 
-        $this->view = new \Zend\View\Model\ViewModel([
+        $this->view = new ViewModel([
             'role'              => $role,
             'typeVolumeHoraire' => $typeVolumeHoraire,
             'intervenant'       => $this->getIntervenant(),
@@ -281,7 +291,7 @@ class ValidationController extends AbstractActionController
                     $this->flashMessenger()->addSuccessMessage("Validation enregistrée avec succès.");
                 }
                 catch (\Exception $e) {
-                    $e        = \Application\Exception\DbException::translate($e);
+                    $e        = DbException::translate($e);
                     $this->flashMessenger()->addErrorMessage($e->getMessage());
                 }
 
@@ -292,6 +302,20 @@ class ValidationController extends AbstractActionController
         $this->injectAttenteValidationMessage();
         
         return $this->view;
+    }
+
+    private function getPageTitleForService()
+    {
+        $typeVolumeHoraire = $this->getTypeVolumeHoraire();
+        $title             = "Validation des enseignements";
+
+        if ($typeVolumeHoraire->isPrevu()) {
+            $title .= " prévisionnels";
+        } elseif ($typeVolumeHoraire->isRealise()) {
+            $title .= " réalisés";
+        }
+
+        return $title;
     }
 
     /**
@@ -350,7 +374,7 @@ class ValidationController extends AbstractActionController
      * Un gestionnaire de composante (dé)valide le référentiel des intervenants affectés à sa composante.
      * NB: un rôle sans structure (ex: administrateur) peut aussi (dé)valider (ssi il est habilité).
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      * @throws RuntimeException
      */
     public function referentielAction()
@@ -361,7 +385,7 @@ class ValidationController extends AbstractActionController
         $role                   = $this->getServiceContext()->getSelectedIdentityRole();
         $typeVolumeHoraire      = $this->getServiceTypeVolumehoraire()->getByCode($this->params()->fromRoute('type-volume-horaire-code', TypeVolumeHoraire::CODE_PREVU));
         $this->formValider      = $this->getFormValidationService()->setIntervenant($this->getIntervenant())->init();
-        $this->title            = "Validation du référentiel de type '$typeVolumeHoraire' <small>{$this->getIntervenant()}</small>";
+        $this->title            = $this->getPageTitleForReferentiel();//"Validation du référentiel de type '$typeVolumeHoraire' <small>{$this->getIntervenant()}</small>";
         $structureAffect        = $this->getIntervenant()->getStructure();
         $typeValidation         = $this->getServiceTypeValidation()->finderByCode(TypeValidation::CODE_REFERENTIEL)->getQuery()->getOneOrNullResult();
         $messages               = [];
@@ -394,9 +418,18 @@ class ValidationController extends AbstractActionController
 
         if (!count($referentielsNonValides)) {
             $this->validation = current($this->validations);
-            $message = sprintf("Aucun référentiel de type '%s' %s à valider n'a été trouvé.",
-                    $typeVolumeHoraire,
-                    $structureRef ? " concernant la structure '$structureRef'" : null);
+            if ($role instanceof IntervenantRole) {
+                $message = sprintf(
+                    "Tout votre référentiel % n'a pas encore été validé.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnels" : "réalisés"
+                );
+            } else {
+                $message = sprintf(
+                    "Aucun référentiel %s%s à valider n'a été trouvé.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnel" : "réalisé",
+                    $structureRef ? " concernant la structure '$structureRef'" : null
+                );
+            }
             $messages[] = $message;
         }
 
@@ -416,12 +449,12 @@ class ValidationController extends AbstractActionController
 
             $this->formValider->bind($this->validation);
 
-            $messages[] = sprintf("Du référentiel de type '%s' à valider par la structure '%s' ont été trouvés...",
-                    $typeVolumeHoraire,
+            $messages[] = sprintf("Référentiel %s en attente de validation par la structure '%s'.",
+                    $typeVolumeHoraire->isPrevu() ? "prévisionnel" : "réalisé",
                     $structureValidation);
         }
 
-        $this->view = new \Zend\View\Model\ViewModel([
+        $this->view = new ViewModel([
             'role'                 => $role,
             'typeVolumeHoraire'    => $typeVolumeHoraire,
             'intervenant'          => $this->getIntervenant(),
@@ -455,6 +488,20 @@ class ValidationController extends AbstractActionController
         $this->injectAttenteValidationMessage();
         
         return $this->view;
+    }
+
+    private function getPageTitleForReferentiel()
+    {
+        $typeVolumeHoraire = $this->getTypeVolumeHoraire();
+        $title             = "Validation du référentiel";
+
+        if ($typeVolumeHoraire->isPrevu()) {
+            $title .= " prévisionnel";
+        } elseif ($typeVolumeHoraire->isRealise()) {
+            $title .= " réalisé";
+        }
+
+        return $title;
     }
 
     /**
@@ -574,7 +621,7 @@ class ValidationController extends AbstractActionController
 
         $title     = "Suppression de la validation";
         $form      = new \Application\Form\Supprimer('suppr');
-        $viewModel = new \Zend\View\Model\ViewModel();
+        $viewModel = new ViewModel();
 
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 

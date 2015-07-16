@@ -3,19 +3,33 @@
 <h1 class="page-header">Données personnelles <small><?php echo $this->intervenant ?></small></h1>
 
 <?php
+use Application\Service\Message\MessageConstants as MsgId;
+
+/**
+ * Message Données perso saisies ou non.
+ */
 if ($this->dossier->getId()) {
-    $this->messenger()->addMessage("Les données personnelles ont été saisies.", 'success');
+    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_SAISIES, ['intervenant' => $this->intervenant]);
+    $sev = 'success';
+} else {
+    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_PAS_SAISIES, ['intervenant' => $this->intervenant]);
+    $sev = 'warning';
 }
-else {
-    $this->messenger()->addMessage("Les données personnelles n'ont pas été saisies.", 'danger');
-}
+$this->messenger()->addMessage($msg, $sev);
+
+/**
+ * Message Données perso validées ou non.
+ */
 if ($this->validation) {
-    $this->messenger()->addMessage(
-            sprintf("Les données personnelles ont été validées. <br /><br />%s", $this->validationDl($this->validation)), 'success');
+    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_VALIDEES, ['validationDetails' => "<br/><br/>" . $this->validationDl($this->validation)]);
+    $this->messenger()->addMessage($msg, 'success');
 }
-$this->messenger()->addMessage(
-        "Ces données sont indispensables pour éditer votre contrat et mettre en paiement vos heures complémentaires éventuelles.",
-        'warning');
+
+/**
+ * Message Importance des données perso.
+ */
+$msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_IMPORTANTES);
+$this->messenger()->addMessage($msg, 'warning');
 ?>
 
 <?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>

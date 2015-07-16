@@ -291,5 +291,6 @@ return array_merge_recursive(
     include 'indicateur.config.php',
     include 'notification.config.php',
     include 'paiement.config.php',
-    include 'log.config.php'
+    include 'log.config.php',
+    include 'message.config.php'
 );

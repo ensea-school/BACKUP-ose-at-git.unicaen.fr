@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use UnicaenAuth\Entity\Db\AbstractUser;
 
 /**
  * Interface des entités possédant une gestion d'historique.
@@ -13,7 +14,7 @@ interface HistoriqueAwareInterface
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
-     * @return IntervenantPermanent
+     * @return self
      */
     public function setHistoCreation($histoCreation);
 
@@ -28,7 +29,7 @@ interface HistoriqueAwareInterface
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
-     * @return IntervenantPermanent
+     * @return self
      */
     public function setHistoDestruction($histoDestruction);
 
@@ -43,7 +44,7 @@ interface HistoriqueAwareInterface
      * Set histoModification
      *
      * @param \DateTime $histoModification
-     * @return IntervenantPermanent
+     * @return self
      */
     public function setHistoModification($histoModification);
 
@@ -57,45 +58,45 @@ interface HistoriqueAwareInterface
     /**
      * Set histoModificateur
      *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return IntervenantPermanent
+     * @param AbstractUser $histoModificateur
+     * @return self
      */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null);
+    public function setHistoModificateur(AbstractUser $histoModificateur = null);
 
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return AbstractUser
      */
     public function getHistoModificateur();
 
     /**
      * Set histoDestructeur
      *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return IntervenantPermanent
+     * @param AbstractUser $histoDestructeur
+     * @return self
      */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null);
+    public function setHistoDestructeur(AbstractUser $histoDestructeur = null);
 
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return AbstractUser
      */
     public function getHistoDestructeur();
 
     /**
      * Set histoCreateur
      *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return IntervenantPermanent
+     * @param AbstractUser $histoCreateur
+     * @return self
      */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null);
+    public function setHistoCreateur(AbstractUser $histoCreateur = null);
 
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return AbstractUser
      */
     public function getHistoCreateur();
 }

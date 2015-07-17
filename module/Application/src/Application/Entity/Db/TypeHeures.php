@@ -7,6 +7,8 @@ namespace Application\Entity\Db;
  */
 class TypeHeures implements HistoriqueAwareInterface
 {
+    use HistoriqueAwareTrait;
+
     const FI          = 'fi';
     const FA          = 'fa';
     const FC          = 'fc';
@@ -17,21 +19,6 @@ class TypeHeures implements HistoriqueAwareInterface
      * @var string
      */
     private $code;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
 
     /**
      * @var string
@@ -59,21 +46,6 @@ class TypeHeures implements HistoriqueAwareInterface
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoCreateur;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $centreCout;
@@ -90,10 +62,12 @@ class TypeHeures implements HistoriqueAwareInterface
     private $typeHeuresElement;
 
 
+
     /**
      * Set code
      *
      * @param string $code
+     *
      * @return TypeHeures
      */
     public function setCode($code)
@@ -103,89 +77,25 @@ class TypeHeures implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
         return $this->code;
     }
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return TypeHeures
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return TypeHeures
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return TypeHeures
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set libelleCourt
      *
      * @param string $libelleCourt
+     *
      * @return TypeHeures
      */
     public function setLibelleCourt($libelleCourt)
@@ -195,20 +105,25 @@ class TypeHeures implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelleCourt
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleCourt()
     {
         return $this->libelleCourt;
     }
 
+
+
     /**
      * Set libelleLong
      *
      * @param string $libelleLong
+     *
      * @return TypeHeures
      */
     public function setLibelleLong($libelleLong)
@@ -218,20 +133,25 @@ class TypeHeures implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelleLong
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleLong()
     {
         return $this->libelleLong;
     }
 
+
+
     /**
      * Set ordre
      *
      * @param integer $ordre
+     *
      * @return TypeHeures
      */
     public function setOrdre($ordre)
@@ -241,20 +161,25 @@ class TypeHeures implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get ordre
      *
-     * @return integer 
+     * @return integer
      */
     public function getOrdre()
     {
         return $this->ordre;
     }
 
+
+
     /**
      * Set eligibleCentreCoutEp
      *
      * @param boolean $eligibleCentreCoutEp
+     *
      * @return TypeHeures
      */
     public function setEligibleCentreCoutEp($eligibleCentreCoutEp)
@@ -264,114 +189,55 @@ class TypeHeures implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get eligibleCentreCoutEp
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEligibleCentreCoutEp()
     {
         return $this->eligibleCentreCoutEp;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return TypeHeures
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return TypeHeures
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return TypeHeures
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
 
     /**
      * Get centreCout
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCentreCout()
     {
         return $this->centreCout;
     }
 
+
+
     /**
      * Get elementPedagogique
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
     }
+
+
 
     /**
      *
@@ -382,16 +248,22 @@ class TypeHeures implements HistoriqueAwareInterface
         return $this->typeHeuresElement;
     }
 
+
+
     /**
      *
      * @param \Application\Entity\Db\TypeHeures $typeHeuresElement
+     *
      * @return \Application\Entity\Db\TypeHeures
      */
     function setTypeHeuresElement(TypeHeures $typeHeuresElement)
     {
         $this->typeHeuresElement = $typeHeuresElement;
+
         return $this;
     }
+
+
 
     /**
      *
@@ -402,12 +274,14 @@ class TypeHeures implements HistoriqueAwareInterface
         return $this->getLibelleCourt();
     }
 
+
+
     /**
      *
      * @return string
      */
     public function toHtml()
     {
-        return '<abbr title="'.$this->getLibelleLong().'">'.$this->getLibelleCourt().'</abbr>';
+        return '<abbr title="' . $this->getLibelleLong() . '">' . $this->getLibelleCourt() . '</abbr>';
     }
 }

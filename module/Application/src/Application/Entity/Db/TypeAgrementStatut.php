@@ -7,22 +7,8 @@ namespace Application\Entity\Db;
  */
 class TypeAgrementStatut implements HistoriqueAwareInterface
 {
+    use HistoriqueAwareTrait;
     use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
-    
-    /**
-     * @var \DateTime
-     */
-    private $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
 
     /**
      * @var boolean
@@ -40,21 +26,6 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoCreateur;
-
-    /**
      * @var \Application\Entity\Db\TypeAgrement
      */
     private $type;
@@ -64,104 +35,42 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
      */
     private $statut;
 
+
+
     /**
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         return sprintf("Id=%s, Statut=%s, Type=%s, Oblig=%d, 1erRecrut=%d, Seuil=%s",
-                $this->getId(),
-                sprintf("%s (%s)", $this->getStatut(), $this->getStatut()->getId()),
-                sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
-                $this->getObligatoire(),
-                $this->getPremierRecrutement(),
-                $this->getSeuilHeures() ?: "Aucun");
+            $this->getId(),
+            sprintf("%s (%s)", $this->getStatut(), $this->getStatut()->getId()),
+            sprintf("%s (%s)", $this->getType(), $this->getType()->getId()),
+            $this->getObligatoire(),
+            $this->getPremierRecrutement(),
+            $this->getSeuilHeures() ?: "Aucun");
     }
+
+
 
     /**
      * Get seuilHeures
      *
-     * @return integer 
+     * @return integer
      */
     public function getSeuilHeures()
     {
         return $this->seuilHetd;
     }
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return TypeAgrementStatut
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return TypeAgrementStatut
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return TypeAgrementStatut
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set premierRecrutement
      *
      * @param boolean $premierRecrutement
+     *
      * @return TypeAgrementStatut
      */
     public function setPremierRecrutement($premierRecrutement)
@@ -171,20 +80,25 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get premierRecrutement
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPremierRecrutement()
     {
         return $this->premierRecrutement;
     }
 
+
+
     /**
      * Set obligatoire
      *
      * @param boolean $obligatoire
+     *
      * @return TypeAgrementStatut
      */
     public function setObligatoire($obligatoire)
@@ -194,10 +108,13 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Set seuilHetd
      *
      * @param integer $seuilHetd
+     *
      * @return TypeAgrementStatut
      */
     public function setSeuilHetd($seuilHetd)
@@ -207,89 +124,25 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return TypeAgrementStatut
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return TypeAgrementStatut
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return TypeAgrementStatut
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
 
     /**
      * Set type
      *
      * @param \Application\Entity\Db\TypeAgrement $type
+     *
      * @return TypeAgrementStatut
      */
     public function setType(\Application\Entity\Db\TypeAgrement $type = null)
@@ -299,20 +152,25 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get type
      *
-     * @return \Application\Entity\Db\TypeAgrement 
+     * @return \Application\Entity\Db\TypeAgrement
      */
     public function getType()
     {
         return $this->type;
     }
 
+
+
     /**
      * Set statutIntervenant
      *
      * @param \Application\Entity\Db\StatutIntervenant $statut
+     *
      * @return TypeAgrementStatut
      */
     public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
@@ -322,10 +180,12 @@ class TypeAgrementStatut implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get statutIntervenant
      *
-     * @return \Application\Entity\Db\StatutIntervenant 
+     * @return \Application\Entity\Db\StatutIntervenant
      */
     public function getStatut()
     {

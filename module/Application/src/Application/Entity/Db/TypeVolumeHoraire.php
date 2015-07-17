@@ -7,35 +7,22 @@ namespace Application\Entity\Db;
  */
 class TypeVolumeHoraire implements HistoriqueAwareInterface
 {
-    const CODE_PREVU    = 'PREVU';
-    const CODE_REALISE  = 'REALISE';
-    const CODE_PAYE     = 'PAYE';
-    
+    use HistoriqueAwareTrait;
+
+    const CODE_PREVU   = 'PREVU';
+    const CODE_REALISE = 'REALISE';
+    const CODE_PAYE    = 'PAYE';
+
     static public $codes = [
         self::CODE_PREVU,
         self::CODE_REALISE,
         self::CODE_PAYE,
     ];
-    
+
     /**
      * @var string
      */
     private $code;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
 
     /**
      * @var string
@@ -52,55 +39,49 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
      */
     private $id;
 
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoModificateur;
 
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoCreateur;
 
     /**
      * Retourne <code>true</code> si le code de ce type de volume horaire est PREVU.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public function isPrevu()
     {
         return self::CODE_PREVU === $this->getCode();
     }
 
+
+
     /**
      * Retourne <code>true</code> si le code de ce type de volume horaire est REALISE.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public function isRealise()
     {
         return self::CODE_REALISE === $this->getCode();
     }
 
+
+
     /**
      * Retourne <code>true</code> si le code de ce type de volume horaire est PAYE.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public function isPaye()
     {
         return self::CODE_PAYE === $this->getCode();
     }
 
+
+
     /**
      * Set code
      *
      * @param string $code
+     *
      * @return TypeVolumeHoraire
      */
     public function setCode($code)
@@ -110,89 +91,25 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
         return $this->code;
     }
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return TypeVolumeHoraire
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return TypeVolumeHoraire
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return TypeVolumeHoraire
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return TypeVolumeHoraire
      */
     public function setLibelle($libelle)
@@ -202,20 +119,25 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
         return $this->libelle;
     }
 
+
+
     /**
      * Set ordre
      *
      * @param integer $ordre
+     *
      * @return TypeVolumeHoraire
      */
     public function setOrdre($ordre)
@@ -224,6 +146,8 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get ordre
@@ -235,87 +159,22 @@ class TypeVolumeHoraire implements HistoriqueAwareInterface
         return $this->ordre;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
-     * Set histoModificateur
      *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return TypeVolumeHoraire
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return TypeVolumeHoraire
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return TypeVolumeHoraire
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-    
-    /**
-     * 
      * @return string
      */
     public function __toString()

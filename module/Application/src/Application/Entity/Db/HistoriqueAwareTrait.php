@@ -1,12 +1,14 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use Common\Constants;
+use UnicaenAuth\Entity\Db\AbstractUser;
 
 /**
  * Code commun aux entités possédant une gestion d'historique.
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
 trait HistoriqueAwareTrait
 {
@@ -26,17 +28,17 @@ trait HistoriqueAwareTrait
     protected $histoDestruction;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var AbstractUser
      */
     protected $histoCreateur;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var AbstractUser
      */
     protected $histoModificateur;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
+     * @var AbstractUser
      */
     protected $histoDestructeur;
 
@@ -136,14 +138,16 @@ trait HistoriqueAwareTrait
         return sprintf("Le %s par %s", $this->getHistoModification()->format(Constants::DATETIME_FORMAT), $this->getHistoModificateur());
     }
 
+
+
     /**
      * Set histoModificateur
      *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
+     * @param AbstractUser $histoModificateur
      *
      * @return self
      */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
+    public function setHistoModificateur(AbstractUser $histoModificateur = null)
     {
         $this->histoModificateur = $histoModificateur;
 
@@ -155,7 +159,7 @@ trait HistoriqueAwareTrait
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur
+     * @return AbstractUser
      */
     public function getHistoModificateur()
     {
@@ -167,11 +171,11 @@ trait HistoriqueAwareTrait
     /**
      * Set histoDestructeur
      *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     * @param AbstractUser $histoDestructeur
      *
      * @return self
      */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
+    public function setHistoDestructeur(AbstractUser $histoDestructeur = null)
     {
         $this->histoDestructeur = $histoDestructeur;
 
@@ -183,7 +187,7 @@ trait HistoriqueAwareTrait
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur
+     * @return AbstractUser
      */
     public function getHistoDestructeur()
     {
@@ -195,11 +199,11 @@ trait HistoriqueAwareTrait
     /**
      * Set histoCreateur
      *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     * @param AbstractUser $histoCreateur
      *
      * @return self
      */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
+    public function setHistoCreateur(AbstractUser $histoCreateur = null)
     {
         $this->histoCreateur = $histoCreateur;
 
@@ -211,7 +215,7 @@ trait HistoriqueAwareTrait
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur
+     * @return AbstractUser
      */
     public function getHistoCreateur()
     {
@@ -220,6 +224,13 @@ trait HistoriqueAwareTrait
 
 
 
+    /**
+     * Détermine si l'entité est historisée ou non
+     *
+     * @param \DateTime|null $dateObs
+     *
+     * @return bool
+     */
     public function estNonHistorise(\DateTime $dateObs = null)
     {
         if (empty($dateObs)) $dateObs = new \DateTime();
@@ -233,17 +244,5 @@ trait HistoriqueAwareTrait
         if ($dFin && !($dObs < $dFin)) return false;
 
         return true;
-//        d_obs := TRUNC( COALESCE( d_obs, SYSDATE ) );
-//    d_deb := TRUNC( date_debut );
-//    d_fin := TRUNC( date_fin   );
-//
-//    IF d_deb IS NOT NULL AND NOT d_deb <= d_obs THEN
-//      RETURN 0;
-//    END IF;
-//    IF d_fin IS NOT NULL AND NOT d_obs < d_fin THEN
-//      RETURN 0;
-//    END IF;
-//    RETURN 1;
-
     }
 }

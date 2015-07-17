@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -8,20 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Structure implements HistoriqueAwareInterface
 {
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
+    use HistoriqueAwareTrait;
 
     /**
      * @var string
@@ -64,24 +52,9 @@ class Structure implements HistoriqueAwareInterface
     protected $type;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
      * @var \Application\Entity\Db\Etablissement
      */
     protected $etablissement;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Structure
@@ -94,7 +67,7 @@ class Structure implements HistoriqueAwareInterface
     protected $structureNiv2;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection 
+     * @var \Doctrine\Common\Collections\Collection
      */
     protected $elementPedagogique;
 
@@ -112,91 +85,21 @@ class Structure implements HistoriqueAwareInterface
 
 
 
-
-
-
     function __construct()
     {
-        $this->structureNiv2                        = new ArrayCollection;
-        $this->elementPedagogique                   = new ArrayCollection;
-        $this->centreCout                           = new ArrayCollection;
-        $this->miseEnPaiementIntervenantStructure   = new ArrayCollection;
+        $this->structureNiv2                      = new ArrayCollection;
+        $this->elementPedagogique                 = new ArrayCollection;
+        $this->centreCout                         = new ArrayCollection;
+        $this->miseEnPaiementIntervenantStructure = new ArrayCollection;
     }
 
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return Structure
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return Structure
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Structure
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set libelleCourt
      *
      * @param string $libelleCourt
+     *
      * @return Structure
      */
     public function setLibelleCourt($libelleCourt)
@@ -206,20 +109,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelleCourt
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleCourt()
     {
         return $this->libelleCourt;
     }
 
+
+
     /**
      * Set libelleLong
      *
      * @param string $libelleLong
+     *
      * @return Structure
      */
     public function setLibelleLong($libelleLong)
@@ -229,20 +137,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelleLong
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleLong()
     {
         return $this->libelleLong;
     }
 
+
+
     /**
      * Set niveau
      *
      * @param integer $niveau
+     *
      * @return Structure
      */
     public function setNiveau($niveau)
@@ -252,20 +165,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get niveau
      *
-     * @return integer 
+     * @return integer
      */
     public function getNiveau()
     {
         return $this->niveau;
     }
 
+
+
     /**
      * Set sourceCode
      *
      * @param string $sourceCode
+     *
      * @return Structure
      */
     public function setSourceCode($sourceCode)
@@ -275,20 +193,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get sourceCode
      *
-     * @return string 
+     * @return string
      */
     public function getSourceCode()
     {
         return $this->sourceCode;
     }
 
+
+
     /**
      * Set contactPj
      *
      * @param string $contactPj
+     *
      * @return Structure
      */
     public function setContactPj($contactPj)
@@ -298,30 +221,37 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get contactPj
      *
-     * @return string 
+     * @return string
      */
     public function getContactPj()
     {
         return $this->contactPj;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
+     *
      * @return Structure
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
@@ -331,20 +261,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get source
      *
-     * @return \Application\Entity\Db\Source 
+     * @return \Application\Entity\Db\Source
      */
     public function getSource()
     {
         return $this->source;
     }
 
+
+
     /**
      * Set type
      *
      * @param \Application\Entity\Db\TypeStructure $type
+     *
      * @return Structure
      */
     public function setType(\Application\Entity\Db\TypeStructure $type = null)
@@ -354,66 +289,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get type
      *
-     * @return \Application\Entity\Db\TypeStructure 
+     * @return \Application\Entity\Db\TypeStructure
      */
     public function getType()
     {
         return $this->type;
     }
 
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Structure
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Structure
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
 
     /**
      * Set etablissement
      *
      * @param \Application\Entity\Db\Etablissement $etablissement
+     *
      * @return Structure
      */
     public function setEtablissement(\Application\Entity\Db\Etablissement $etablissement = null)
@@ -423,43 +317,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get etablissement
      *
-     * @return \Application\Entity\Db\Etablissement 
+     * @return \Application\Entity\Db\Etablissement
      */
     public function getEtablissement()
     {
         return $this->etablissement;
     }
 
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Structure
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
 
     /**
      * Set parente
      *
      * @param \Application\Entity\Db\Structure $parente
+     *
      * @return Structure
      */
     public function setParente(\Application\Entity\Db\Structure $parente = null)
@@ -469,20 +345,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get parente
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Structure
      */
     public function getParente()
     {
         return $this->parente;
     }
 
+
+
     /**
      * Set structureNiv2
      *
      * @param \Application\Entity\Db\Structure $structureNiv2
+     *
      * @return Structure
      */
     public function setParenteNiv2(\Application\Entity\Db\Structure $structureNiv2 = null)
@@ -492,20 +373,25 @@ class Structure implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get structureNiv2
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Structure
      */
     public function getParenteNiv2()
     {
         return $this->structureNiv2;
     }
 
+
+
     /**
      * Add elementPedagogique
      *
      * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     *
      * @return Intervenant
      */
     public function addElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
@@ -514,6 +400,8 @@ class Structure implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove elementPedagogique
@@ -525,20 +413,25 @@ class Structure implements HistoriqueAwareInterface
         $this->elementPedagogique->removeElement($elementPedagogique);
     }
 
+
+
     /**
      * Get elementPedagogique
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
     }
 
+
+
     /**
      * Add centreCout
      *
      * @param \Application\Entity\Db\CentreCout $centreCout
+     *
      * @return Intervenant
      */
     public function addCentreCout(\Application\Entity\Db\CentreCout $centreCout)
@@ -547,6 +440,8 @@ class Structure implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove centreCout
@@ -558,6 +453,8 @@ class Structure implements HistoriqueAwareInterface
         $this->service->removeElement($centreCout);
     }
 
+
+
     /**
      * Get centreCout
      *
@@ -567,6 +464,8 @@ class Structure implements HistoriqueAwareInterface
     {
         return $this->centreCout;
     }
+
+
 
     /**
      * Get miseEnPaiementIntervenantStructure
@@ -578,9 +477,11 @@ class Structure implements HistoriqueAwareInterface
         return $this->miseEnPaiementIntervenantStructure;
     }
 
+
+
     /**
      * Retourne la représentation littérale de cet objet.
-     * 
+     *
      * @return string
      */
     public function __toString()
@@ -588,10 +489,12 @@ class Structure implements HistoriqueAwareInterface
         return $this->getLibelleCourt();
     }
 
+
+
     /**
      * Get source id
      *
-     * @return integer 
+     * @return integer
      * @see \Application\Entity\Db\Source
      */
     public function getSourceToString()
@@ -599,14 +502,37 @@ class Structure implements HistoriqueAwareInterface
         return $this->getSource()->getLibelle();
     }
 
+
+
     /**
      * Teste si cette structure est une structure fille de la structure de niveau 2 spécifiée.
      *
-     * @param \Application\Entity\Db\Structure $structureDeNiv2 
-     * @return bool 
+     * @param \Application\Entity\Db\Structure $structureDeNiv2
+     *
+     * @return bool
      */
     public function estFilleDeLaStructureDeNiv2(\Application\Entity\Db\Structure $structureDeNiv2)
     {
         return $this->getParenteNiv2()->getId() === $structureDeNiv2->getId();
     }
+
+
+
+    /**
+     * @since PHP 5.6.0
+     * This method is called by var_dump() when dumping an object to get the properties that should be shown.
+     * If the method isn't defined on an object, then all public, protected and private properties will be shown.
+     *
+     * @return array
+     * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
+     */
+    function __debugInfo()
+    {
+        return [
+            'id'           => $this->id,
+            'libelleCourt' => $this->libelleCourt,
+            'historisee'   => !$this->estNonHistorise(),
+        ];
+    }
+
 }

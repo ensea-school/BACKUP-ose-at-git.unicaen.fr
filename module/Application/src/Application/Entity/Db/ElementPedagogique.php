@@ -9,24 +9,32 @@ use Application\Interfaces\AnneeAwareInterface;
  */
 class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface
 {
+    use HistoriqueAwareTrait;
+
+
+
     public function __toString()
     {
-        return $this->getSourceCode().' - '.$this->getLibelle();
+        return $this->getSourceCode() . ' - ' . $this->getLibelle();
     }
+
+
 
     /**
      * Retourne les étapes auxquelles est lié cet élément pédagogique.
      *
      * @param bool $principaleIncluse Faut-il inclure l'étape principale ou non ?
+     *
      * @return array
      */
     public function getEtapes($principaleIncluse = true)
     {
         $etapePrincipale = $this->getEtape();
-        $etapes = [];
+        $etapes          = [];
 
         if (($chemins = $this->getCheminPedagogique())) {
-            foreach ($this->getCheminPedagogique() as $cp) { /* @var $cp \Application\Entity\Db\CheminPedagogique */
+            foreach ($this->getCheminPedagogique() as $cp) {
+                /* @var $cp \Application\Entity\Db\CheminPedagogique */
                 if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
                     continue;
                 }
@@ -38,20 +46,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $etapes;
     }
 
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
 
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
 
     /**
      * @var string
@@ -146,21 +141,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     protected $source;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
      * @var \Application\Entity\Db\Etape
      */
     protected $etape;
@@ -199,17 +179,21 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
 
 
-
     public function getHasChanged()
     {
         return $this->hasChanged;
     }
 
+
+
     public function setHasChanged($hasChanged)
     {
         $this->hasChanged = $hasChanged;
+
         return $this;
     }
+
+
 
     /**
      * Constructor
@@ -219,79 +203,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         $this->cheminPedagogique = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return ElementPedagogique
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return ElementPedagogique
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return ElementPedagogique
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return ElementPedagogique
      */
     public function setLibelle($libelle)
@@ -300,6 +218,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Get libelle
@@ -311,10 +231,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->libelle;
     }
 
+
+
     /**
      * Set sourceCode
      *
      * @param string $sourceCode
+     *
      * @return ElementPedagogique
      */
     public function setSourceCode($sourceCode)
@@ -323,6 +246,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Get sourceCode
@@ -334,10 +259,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->sourceCode;
     }
 
+
+
     /**
      * Set annee
      *
      * @param \Application\Entity\Db\Annee $annee
+     *
      * @return Service
      */
     public function setAnnee(\Application\Entity\Db\Annee $annee = null)
@@ -346,6 +274,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Get annee
@@ -357,10 +287,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->annee;
     }
 
+
+
     /**
      * Set tauxFoad
      *
      * @param float $tauxFoad
+     *
      * @return ElementPedagogique
      */
     public function setTauxFoad($tauxFoad)
@@ -369,6 +302,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Get tauxFoad
@@ -380,6 +315,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->tauxFoad;
     }
 
+
+
     /**
      *
      * @return boolean
@@ -388,6 +325,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     {
         return $this->fi;
     }
+
+
 
     /**
      *
@@ -398,6 +337,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->fc;
     }
 
+
+
     /**
      *
      * @return boolean
@@ -406,6 +347,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     {
         return $this->fa;
     }
+
+
 
     /**
      *
@@ -416,6 +359,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->tauxFi;
     }
 
+
+
     /**
      *
      * @return float
@@ -424,6 +369,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     {
         return $this->tauxFc;
     }
+
+
 
     /**
      *
@@ -434,92 +381,122 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->tauxFa;
     }
 
-/**
+
+
+    /**
      *
      * @param boolean $fi
+     *
      * @return self
      */
     public function setFi($fi)
     {
         $this->fi = $fi;
+
         return $this;
     }
+
+
 
     /**
      *
      * @param boolean $fc
+     *
      * @return self
      */
     public function setFc($fc)
     {
         $this->fc = $fc;
+
         return $this;
     }
+
+
 
     /**
      *
      * @param boolean $fa
+     *
      * @return self
      */
     public function setFa($fa)
     {
         $this->fa = $fa;
+
         return $this;
     }
+
+
 
     /**
      *
      * @param float $tauxFi
+     *
      * @return self
      */
     public function setTauxFi($tauxFi)
     {
         $this->tauxFi = $tauxFi;
+
         return $this;
     }
+
+
 
     /**
      *
      * @param float $tauxFc
+     *
      * @return self
      */
     public function setTauxFc($tauxFc)
     {
         $this->tauxFc = $tauxFc;
+
         return $this;
     }
+
+
 
     /**
      *
      * @param float $tauxFa
+     *
      * @return self
      */
     public function setTauxFa($tauxFa)
     {
         $this->tauxFa = $tauxFa;
+
         return $this;
     }
+
+
 
     /**
      * Retourne, sous forme de chaîne de caractères, la liste des régimes d'inscription
      *
-     * @param boolean $inHtml   Détermine si le résultat doit ou non être formatté en HTML
+     * @param boolean $inHtml Détermine si le résultat doit ou non être formatté en HTML
+     *
      * @return string
      */
-    public function getRegimesInscription( $inHtml = false )
+    public function getRegimesInscription($inHtml = false)
     {
         $regimes = [];
-        if ($inHtml){
-            if ($this->getFi()) $regimes[] = '<abbr title="Formation initiale ('.number_format($this->getTauxFi()*100, 2, ',', ' ').'%)">FI</abbr>';
-            if ($this->getFc()) $regimes[] = '<abbr title="Formation continue ('.number_format($this->getTauxFc()*100, 2, ',', ' ').'%)">FC</abbr>';
-            if ($this->getFa()) $regimes[] = '<abbr title="Formation en apprentissage ('.number_format($this->getTauxFa()*100, 2, ',', ' ').'%)">FA</abbr>';
-        }else{
+        if ($inHtml) {
+            if ($this->getFi()) $regimes[] = '<abbr title="Formation initiale (' . number_format($this->getTauxFi() * 100, 2, ',', ' ') . '%)">FI</abbr>';
+            if ($this->getFc()) $regimes[] = '<abbr title="Formation continue (' . number_format($this->getTauxFc() * 100, 2, ',', ' ') . '%)">FC</abbr>';
+            if ($this->getFa()) $regimes[] = '<abbr title="Formation en apprentissage (' . number_format($this->getTauxFa() * 100, 2, ',', ' ') . '%)">FA</abbr>';
+        } else {
             if ($this->getFi()) $regimes[] = 'FI';
             if ($this->getFc()) $regimes[] = 'FC';
             if ($this->getFa()) $regimes[] = 'FA';
         }
-        return implode( ', ', $regimes );
+
+        return implode(', ', $regimes);
     }
+
+
 
     /**
      * Get id
@@ -531,10 +508,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->id;
     }
 
+
+
     /**
      * Set structure
      *
      * @param \Application\Entity\Db\Structure $structure
+     *
      * @return ElementPedagogique
      */
     public function setStructure(\Application\Entity\Db\Structure $structure = null)
@@ -543,6 +523,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Get structure
@@ -554,10 +536,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->structure;
     }
 
+
+
     /**
      * Set periode
      *
      * @param \Application\Entity\Db\Periode $periode
+     *
      * @return ElementPedagogique
      */
     public function setPeriode(\Application\Entity\Db\Periode $periode = null)
@@ -566,6 +551,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Get periode
@@ -577,10 +564,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->periode;
     }
 
+
+
     /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
+     *
      * @return ElementPedagogique
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
@@ -589,6 +579,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Get source
@@ -600,79 +592,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->source;
     }
 
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return ElementPedagogique
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return ElementPedagogique
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return ElementPedagogique
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
 
     /**
      * Set etape
      *
      * @param \Application\Entity\Db\Etape $etape
+     *
      * @return ElementPedagogique
      */
     public function setEtape(\Application\Entity\Db\Etape $etape = null)
@@ -681,6 +607,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Get etape
@@ -692,10 +620,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->etape;
     }
 
+
+
     /**
      * Add cheminPedagogique
      *
      * @param \Application\Entity\Db\CheminPedagogique $cheminPedagogique
+     *
      * @return Etape
      */
     public function addCheminPedagogique(\Application\Entity\Db\CheminPedagogique $cheminPedagogique)
@@ -704,6 +635,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Remove cheminPedagogique
@@ -715,6 +648,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         $this->cheminPedagogique->removeElement($cheminPedagogique);
     }
 
+
+
     /**
      * Get cheminPedagogique
      *
@@ -725,10 +660,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->cheminPedagogique;
     }
 
+
+
     /**
      * Add elementModulateur
      *
      * @param ElementModulateur $elementModulateur
+     *
      * @return ElementPedagogique
      */
     public function addElementModulateur(ElementModulateur $elementModulateur)
@@ -737,6 +675,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Remove elementModulateur
@@ -748,6 +688,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         $this->elementModulateur->removeElement($elementModulateur);
     }
 
+
+
     /**
      * Get elementModulateur
      *
@@ -758,10 +700,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->elementModulateur;
     }
 
+
+
     /**
      * Add service
      *
      * @param \Application\Entity\Db\Service $service
+     *
      * @return Service
      */
     public function addService(\Application\Entity\Db\Service $service)
@@ -770,6 +715,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Remove service
@@ -781,6 +728,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         $this->service->removeElement($service);
     }
 
+
+
     /**
      * Get service
      *
@@ -790,6 +739,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     {
         return $this->service;
     }
+
+
 
     /**
      * Get typeIntervention
@@ -801,6 +752,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->typeIntervention;
     }
 
+
+
     /**
      * Get typeModulateur
      *
@@ -810,6 +763,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     {
         return $this->typeModulateur;
     }
+
+
 
     /**
      * Get typeHeures
@@ -821,10 +776,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         return $this->typeHeures;
     }
 
+
+
     /**
      * Add centreCoutEp
      *
      * @param \Application\Entity\Db\CentreCoutEp $centreCoutEp
+     *
      * @return CentreCoutEp
      */
     public function addCentreCoutEp(\Application\Entity\Db\CentreCoutEp $centreCoutEp)
@@ -833,6 +791,8 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $this;
     }
+
+
 
     /**
      * Remove centreCoutEp
@@ -844,10 +804,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
         $this->centreCoutEp->removeElement($centreCoutEp);
     }
 
+
+
     /**
      * Get centreCoutEp
      *
      * @param \Application\Entity\Db\TypeHeures $th Eventuel seul type d'heures à prendre en compte
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getCentreCoutEp(TypeHeures $th = null)
@@ -856,25 +819,30 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
             return $this->centreCoutEp;
         }
 
-        $f     = function(CentreCoutEp $ccEp) use ($th) { return $ccEp->getTypeHeures() === $th; };
+        $f     = function (CentreCoutEp $ccEp) use ($th) {
+            return $ccEp->getTypeHeures() === $th;
+        };
         $slice = $this->centreCoutEp->filter($f);
 
         if (count($slice) > 1) {
             throw new \Common\Exception\LogicException(sprintf(
-                    "Anomalie dans la base de données : plus d'un centre de coûts trouvé pour l'élément pédagogique %s et le type d'heures %s.",
-                    $this,
-                    $th));
+                "Anomalie dans la base de données : plus d'un centre de coûts trouvé pour l'élément pédagogique %s et le type d'heures %s.",
+                $this,
+                $th));
         }
 
         return $slice;
     }
 
-    public function __debugInfo() {
+
+
+    public function __debugInfo()
+    {
         return [
             'id'         => $this->id,
             'annee'      => $this->annee ? $this->annee->getLibelle() : null,
             'sourceCode' => $this->sourceCode,
-            'libelle'    => $this->libelle
+            'libelle'    => $this->libelle,
         ];
     }
 }

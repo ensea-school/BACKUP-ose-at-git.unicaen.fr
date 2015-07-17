@@ -383,3 +383,7 @@ ul.privileges-form li label {
     background-color: #d9534f;
     color:white;
 }
+
+div#navbar pre{
+    display: none;
+}

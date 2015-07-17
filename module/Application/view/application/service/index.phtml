@@ -15,9 +15,10 @@ if ($intervenant){
     $this->headTitle()->append("Enseignements");
 }
 
-$serviceListe = $this->serviceListe( $services );
+$serviceListe = $this->serviceListe( $services ); /* @var $serviceListe \Application\View\Helper\Service\Liste  */
 $serviceListe->setTypeVolumeHoraire($typeVolumeHoraire)
              ->setAddButtonVisibility($canAddService);
+if ($intervenant) $serviceListe->showPrevuToPrevu($intervenant);
 
 ?>
 

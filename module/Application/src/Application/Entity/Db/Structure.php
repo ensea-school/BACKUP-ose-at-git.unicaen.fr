@@ -117,10 +117,10 @@ class Structure implements HistoriqueAwareInterface
 
     function __construct()
     {
-        $this->structureNiv2                        = new ArrayCollection();
-        $this->elementPedagogique                   = new ArrayCollection();
-        $this->centreCout                           = new ArrayCollection();
-        $this->miseEnPaiementIntervenantStructure   = new ArrayCollection();
+        $this->structureNiv2                        = new ArrayCollection;
+        $this->elementPedagogique                   = new ArrayCollection;
+        $this->centreCout                           = new ArrayCollection;
+        $this->miseEnPaiementIntervenantStructure   = new ArrayCollection;
     }
 
 

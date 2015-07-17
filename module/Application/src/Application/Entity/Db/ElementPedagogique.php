@@ -868,4 +868,13 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $slice;
     }
+
+    public function __debugInfo() {
+        return [
+            'id'         => $this->id,
+            'annee'      => $this->annee ? $this->annee->getLibelle() : null,
+            'sourceCode' => $this->sourceCode,
+            'libelle'    => $this->libelle
+        ];
+    }
 }

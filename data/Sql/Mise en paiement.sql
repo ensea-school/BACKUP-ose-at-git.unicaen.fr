@@ -24,7 +24,7 @@ WHERE
   --1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
   --AND i.source_code = '21472'
   --AND mep.histo_modificateur_id=2504
-  i.source_code = '14810'
+  i.source_code = '5402'
  -- AND s.id = 372
  -- AND to_char(mep.histo_modification,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
 ;

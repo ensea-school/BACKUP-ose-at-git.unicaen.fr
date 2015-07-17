@@ -68,7 +68,7 @@ class Utilisateur implements UserInterface, ProviderInterface
     /**
      * Get displayName
      *
-     * @return string 
+     * @return string
      */
     public function getDisplayName()
     {
@@ -91,7 +91,7 @@ class Utilisateur implements UserInterface, ProviderInterface
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -114,7 +114,7 @@ class Utilisateur implements UserInterface, ProviderInterface
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -137,7 +137,7 @@ class Utilisateur implements UserInterface, ProviderInterface
     /**
      * Get state
      *
-     * @return integer 
+     * @return integer
      */
     public function getState()
     {
@@ -160,7 +160,7 @@ class Utilisateur implements UserInterface, ProviderInterface
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
@@ -170,7 +170,7 @@ class Utilisateur implements UserInterface, ProviderInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -229,7 +229,7 @@ class Utilisateur implements UserInterface, ProviderInterface
 	 **************************************************************************************************/
 
     /**
-     * 
+     *
      * @return string
      */
     public function __toString()
@@ -246,10 +246,10 @@ class Utilisateur implements UserInterface, ProviderInterface
     public function setId($id)
     {
         $this->id = $id;
-        
+
         return $this;
     }
-    
+
     /************************ Interface ProviderInterface ******************/
     
     /**

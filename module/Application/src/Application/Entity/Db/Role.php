@@ -10,7 +10,7 @@ use Zend\Permissions\Acl\Role\RoleInterface;
 class Role implements HistoriqueAwareInterface, RoleInterface
 {
     use HistoriqueAwareTrait;
- 
+
     const CODE_RESPONSABLE_COMPOSANTE  = 'responsable-composante';
     const CODE_GESTIONNAIRE_COMPOSANTE = 'gestionnaire-composante';
 

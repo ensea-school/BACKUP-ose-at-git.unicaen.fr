@@ -10,7 +10,6 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class PieceJointe implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
-    
     const RESOURCE_ID = 'PieceJointe';
 
     /**

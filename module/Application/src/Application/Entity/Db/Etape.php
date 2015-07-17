@@ -7,6 +7,8 @@ namespace Application\Entity\Db;
  */
 class Etape implements HistoriqueAwareInterface
 {
+    use HistoriqueAwareTrait;
+
     /**
      * Retourne la représentation littérale de cet objet.
      *
@@ -16,7 +18,9 @@ class Etape implements HistoriqueAwareInterface
     {
         return $this->getLibelle();
     }
-    
+
+
+
     /**
      * Retourne la représentation littérale du niveau corresponadnt à cette étape.
      *
@@ -26,21 +30,8 @@ class Etape implements HistoriqueAwareInterface
     {
         return $this->getTypeFormation()->getGroupe()->getLibelleCourt() . $this->getNiveau();
     }
-    
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
 
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
 
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
 
     /**
      * @var string
@@ -102,95 +93,13 @@ class Etape implements HistoriqueAwareInterface
      */
     private $domaineFonctionnel;
 
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
 
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
-
-
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return Etape
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return Etape
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Etape
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return Etape
      */
     public function setLibelle($libelle)
@@ -200,20 +109,25 @@ class Etape implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
         return $this->libelle;
     }
 
+
+
     /**
      * Set niveau
      *
      * @param integer $niveau
+     *
      * @return Etape
      */
     public function setNiveau($niveau)
@@ -223,15 +137,19 @@ class Etape implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get niveau
      *
-     * @return integer 
+     * @return integer
      */
     public function getNiveau()
     {
         return $this->niveau;
     }
+
+
 
     /**
      * Get niveauFormation
@@ -242,13 +160,17 @@ class Etape implements HistoriqueAwareInterface
     {
         $res = $this->niveauFormation->first();
         if (false === $res) $res = null;
+
         return $res;
     }
+
+
 
     /**
      * Set sourceCode
      *
      * @param string $sourceCode
+     *
      * @return Etape
      */
     public function setSourceCode($sourceCode)
@@ -258,20 +180,25 @@ class Etape implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get sourceCode
      *
-     * @return string 
+     * @return string
      */
     public function getSourceCode()
     {
         return $this->sourceCode;
     }
 
+
+
     /**
      * Set specifiqueEchanges
      *
      * @param boolean $specifiqueEchanges
+     *
      * @return Etape
      */
     public function setSpecifiqueEchanges($specifiqueEchanges)
@@ -281,30 +208,37 @@ class Etape implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get specifiqueEchanges
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSpecifiqueEchanges()
     {
         return $this->specifiqueEchanges;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
      * Add elementPedagogique
      *
      * @param \Application\Entity\Db\ElementPedagogique $elementPedagogique
+     *
      * @return Etape
      */
     public function addElementPedagogique(\Application\Entity\Db\ElementPedagogique $elementPedagogique)
@@ -313,6 +247,8 @@ class Etape implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove elementPedagogique
@@ -324,20 +260,25 @@ class Etape implements HistoriqueAwareInterface
         $this->elementPedagogique->removeElement($elementPedagogique);
     }
 
+
+
     /**
      * Get elementPedagogique
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getElementPedagogique()
     {
         return $this->elementPedagogique;
     }
 
+
+
     /**
      * Add cheminPedagogique
      *
      * @param \Application\Entity\Db\CheminPedagogique $cheminPedagogique
+     *
      * @return Etape
      */
     public function addCheminPedagogique(\Application\Entity\Db\CheminPedagogique $cheminPedagogique)
@@ -346,6 +287,8 @@ class Etape implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove cheminPedagogique
@@ -357,20 +300,25 @@ class Etape implements HistoriqueAwareInterface
         $this->cheminPedagogique->removeElement($cheminPedagogique);
     }
 
+
+
     /**
      * Get cheminPedagogique
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCheminPedagogique()
     {
         return $this->cheminPedagogique;
     }
 
+
+
     /**
      * Set structure
      *
      * @param \Application\Entity\Db\Structure $structure
+     *
      * @return Etape
      */
     public function setStructure(\Application\Entity\Db\Structure $structure = null)
@@ -380,20 +328,25 @@ class Etape implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get structure
      *
-     * @return \Application\Entity\Db\Structure 
+     * @return \Application\Entity\Db\Structure
      */
     public function getStructure()
     {
         return $this->structure;
     }
 
+
+
     /**
      * Set typeFormation
      *
      * @param \Application\Entity\Db\TypeFormation $typeFormation
+     *
      * @return Etape
      */
     public function setTypeFormation(\Application\Entity\Db\TypeFormation $typeFormation = null)
@@ -403,20 +356,25 @@ class Etape implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get typeFormation
      *
-     * @return \Application\Entity\Db\TypeFormation 
+     * @return \Application\Entity\Db\TypeFormation
      */
     public function getTypeFormation()
     {
         return $this->typeFormation;
     }
 
+
+
     /**
      * Set domaineFonctionnel
      *
      * @param \Application\Entity\Db\DomaineFonctionnel $domaineFonctionnel
+     *
      * @return Etape
      */
     public function setDomaineFonctionnel(\Application\Entity\Db\DomaineFonctionnel $domaineFonctionnel = null)
@@ -425,6 +383,8 @@ class Etape implements HistoriqueAwareInterface
 
         return $this;
     }
+
+
 
     /**
      * Get domaineFonctionnel
@@ -436,10 +396,13 @@ class Etape implements HistoriqueAwareInterface
         return $this->domaineFonctionnel;
     }
 
+
+
     /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
+     *
      * @return Etape
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
@@ -449,82 +412,16 @@ class Etape implements HistoriqueAwareInterface
         return $this;
     }
 
+
+
     /**
      * Get source
      *
-     * @return \Application\Entity\Db\Source 
+     * @return \Application\Entity\Db\Source
      */
     public function getSource()
     {
         return $this->source;
     }
 
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Etape
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Etape
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Etape
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
 }

@@ -8,7 +8,6 @@ namespace Application\Entity\Db;
 class Personnel implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
-    
     /**
      * @var string
      */

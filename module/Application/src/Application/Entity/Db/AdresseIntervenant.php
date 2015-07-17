@@ -5,8 +5,10 @@ namespace Application\Entity\Db;
 /**
  * AdresseIntervenant
  */
-class AdresseIntervenant
+class AdresseIntervenant implements HistoriqueAwareInterface
 {
+    use HistoriqueAwareTrait;
+
     /**
      * @var string
      */
@@ -16,21 +18,6 @@ class AdresseIntervenant
      * @var string
      */
     protected $codePostal;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
 
     /**
      * @var string
@@ -97,26 +84,13 @@ class AdresseIntervenant
      */
     protected $source;
 
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
 
 
     /**
      * Set batiment
      *
      * @param string $batiment
+     *
      * @return AdresseIntervenant
      */
     public function setBatiment($batiment)
@@ -125,6 +99,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get batiment
@@ -136,10 +112,13 @@ class AdresseIntervenant
         return $this->batiment;
     }
 
+
+
     /**
      * Set codePostal
      *
      * @param string $codePostal
+     *
      * @return AdresseIntervenant
      */
     public function setCodePostal($codePostal)
@@ -148,6 +127,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get codePostal
@@ -159,79 +140,13 @@ class AdresseIntervenant
         return $this->codePostal;
     }
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return AdresseIntervenant
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return AdresseIntervenant
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return AdresseIntervenant
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set localite
      *
      * @param string $localite
+     *
      * @return AdresseIntervenant
      */
     public function setLocalite($localite)
@@ -240,6 +155,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get localite
@@ -251,10 +168,13 @@ class AdresseIntervenant
         return $this->localite;
     }
 
+
+
     /**
      * Set mentionComplementaire
      *
      * @param string $mentionComplementaire
+     *
      * @return AdresseIntervenant
      */
     public function setMentionComplementaire($mentionComplementaire)
@@ -263,6 +183,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get mentionComplementaire
@@ -274,10 +196,13 @@ class AdresseIntervenant
         return $this->mentionComplementaire;
     }
 
+
+
     /**
      * Set nomVoie
      *
      * @param string $nomVoie
+     *
      * @return AdresseIntervenant
      */
     public function setNomVoie($nomVoie)
@@ -286,6 +211,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get nomVoie
@@ -297,10 +224,13 @@ class AdresseIntervenant
         return $this->nomVoie;
     }
 
+
+
     /**
      * Set noVoie
      *
      * @param string $noVoie
+     *
      * @return AdresseIntervenant
      */
     public function setNoVoie($noVoie)
@@ -309,6 +239,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get noVoie
@@ -320,10 +252,13 @@ class AdresseIntervenant
         return $this->noVoie;
     }
 
+
+
     /**
      * Set paysCodeInsee
      *
      * @param string $paysCodeInsee
+     *
      * @return AdresseIntervenant
      */
     public function setPaysCodeInsee($paysCodeInsee)
@@ -332,6 +267,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get paysCodeInsee
@@ -343,10 +280,13 @@ class AdresseIntervenant
         return $this->paysCodeInsee;
     }
 
+
+
     /**
      * Set paysLibelle
      *
      * @param string $paysLibelle
+     *
      * @return AdresseIntervenant
      */
     public function setPaysLibelle($paysLibelle)
@@ -355,6 +295,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get paysLibelle
@@ -366,10 +308,13 @@ class AdresseIntervenant
         return $this->paysLibelle;
     }
 
+
+
     /**
      * Set principale
      *
      * @param boolean $principale
+     *
      * @return AdresseIntervenant
      */
     public function setPrincipale($principale)
@@ -378,6 +323,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get principale
@@ -389,10 +336,13 @@ class AdresseIntervenant
         return $this->principale;
     }
 
+
+
     /**
      * Set sourceCode
      *
      * @param string $sourceCode
+     *
      * @return AdresseIntervenant
      */
     public function setSourceCode($sourceCode)
@@ -401,6 +351,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get sourceCode
@@ -412,10 +364,13 @@ class AdresseIntervenant
         return $this->sourceCode;
     }
 
+
+
     /**
      * Set telDomicile
      *
      * @param string $telDomicile
+     *
      * @return AdresseIntervenant
      */
     public function setTelDomicile($telDomicile)
@@ -424,6 +379,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get telDomicile
@@ -435,10 +392,13 @@ class AdresseIntervenant
         return $this->telDomicile;
     }
 
+
+
     /**
      * Set ville
      *
      * @param string $ville
+     *
      * @return AdresseIntervenant
      */
     public function setVille($ville)
@@ -447,6 +407,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get ville
@@ -458,6 +420,8 @@ class AdresseIntervenant
         return $this->ville;
     }
 
+
+
     /**
      * Get id
      *
@@ -468,10 +432,13 @@ class AdresseIntervenant
         return $this->id;
     }
 
+
+
     /**
      * Set intervenant
      *
      * @param \Application\Entity\Db\Intervenant $intervenant
+     *
      * @return AdresseIntervenant
      */
     public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
@@ -480,6 +447,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get intervenant
@@ -491,10 +460,13 @@ class AdresseIntervenant
         return $this->intervenant;
     }
 
+
+
     /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
+     *
      * @return AdresseIntervenant
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
@@ -503,6 +475,8 @@ class AdresseIntervenant
 
         return $this;
     }
+
+
 
     /**
      * Get source
@@ -514,74 +488,7 @@ class AdresseIntervenant
         return $this->source;
     }
 
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return AdresseIntervenant
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return AdresseIntervenant
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return AdresseIntervenant
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
 
     /**
      *
@@ -589,21 +496,21 @@ class AdresseIntervenant
      */
     public function __toString()
     {
-        $part1 = [];
+        $part1   = [];
         $part1[] = $this->getNoVoie();
         $part1[] = $this->getNomVoie();
         $part1[] = $this->getBatiment();
         $part1[] = $this->getMentionComplementaire();
-        $part1 = implode(', ', array_filter($part1));
+        $part1   = implode(', ', array_filter($part1));
 
-        $part2 = [];
+        $part2   = [];
         $part2[] = $this->getLocalite();
         $part2[] = $this->getCodePostal();
         $part2[] = $this->getVille();
         $part2[] = $this->getPaysLibelle();
-        $part2 = implode(', ', array_filter($part2));
+        $part2   = implode(', ', array_filter($part2));
 
-        $parts = [];
+        $parts   = [];
         $parts[] = $part1;
         $parts[] = $part2;
 

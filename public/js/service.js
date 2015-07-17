@@ -164,6 +164,22 @@ function ServiceListe( id ){
         );
     }
 
+    this.setPrevusFromPrevus = function(){
+        var that = this;
+        $.get(
+            Url("service/initialisation/"+this.getElementPrevuToPrevu().data('intervenant')),
+            {},
+            function( data ){
+                if (data != 'OK'){
+                    $("#"+that.id+" #prevu-to-prevu-modal").modal('hide');
+                    $("#"+that.id+" #prevu-to-prevu-modal").after( '<div style="margin-top:.5em">' + data + '</div>' );
+                }else{
+                    window.location.reload();
+                }
+            }
+        );
+    }
+
     this.init2 = function(){
         var thatId = this.id;
         $("#"+this.id+" .service-details-button").off();
@@ -187,6 +203,7 @@ function ServiceListe( id ){
         $("#"+this.id+" .service-show-all-details").on('click', function(){ ServiceListe.get(thatId).showAllDetails(); });
         $("#"+this.id+" .service-hide-all-details").on('click', function(){ ServiceListe.get(thatId).hideAllDetails(); });
         $("#"+this.id+" .prevu-to-realise").on('click', function(){ ServiceListe.get(thatId).setRealisesFromPrevus(); });
+        this.getElementPrevuToPrevu().on('click', function(){ ServiceListe.get(thatId).setPrevusFromPrevus(); });
         this.init2();
 
         $("body").on("service-modify-message", function(event, data) {
@@ -240,6 +257,8 @@ function ServiceListe( id ){
             ServiceListe.get(thatId).onAfterSaisie( serviceId );
         });
     }
+
+    this.getElementPrevuToPrevu = function(){ return $("#"+this.id+" .prevu-to-prevu") };
 }
 
 ServiceListe.get = function( id ){

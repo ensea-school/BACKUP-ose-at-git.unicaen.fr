@@ -9,45 +9,17 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 {
+    use HistoriqueAwareTrait;
+
     /**
      * @var float
      */
     protected $heures;
 
     /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
-
-    /**
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\Service
@@ -94,7 +66,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
      *
      * @var boolean
      */
-    protected $remove=false;
+    protected $remove = false;
 
     /**
      * @var FormuleVolumeHoraire
@@ -116,6 +88,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         $this->formuleResultatVolumeHoraire = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+
     /**
      *
      * @return string
@@ -125,17 +99,19 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         $ep = $this->getService()->getElementPedagogique();
 
         return implode(" - ", [
-                "Id " . $this->getId(),
-                $ep ? $ep->getStructure() : '',
-                "Service " . $this->getService()->getId(),
-                "EP " . ($ep ? $ep->getSourceCode() : '') . " (".($ep ? $ep->getId() : '').")",
-                $this->getHeures() . "h",
-                $this->getTypeIntervention(),
-                count($this->getValidation()) . " validations",
-                $this->getContrat() ? "Contrat " . $this->getContrat()->getId() : "Aucun contrat",
-                $this->getHistoDestructeur() ? "Supprimé" : $this->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT)
+            "Id " . $this->getId(),
+            $ep ? $ep->getStructure() : '',
+            "Service " . $this->getService()->getId(),
+            "EP " . ($ep ? $ep->getSourceCode() : '') . " (" . ($ep ? $ep->getId() : '') . ")",
+            $this->getHeures() . "h",
+            $this->getTypeIntervention(),
+            count($this->getValidation()) . " validations",
+            $this->getContrat() ? "Contrat " . $this->getContrat()->getId() : "Aucun contrat",
+            $this->getHistoDestructeur() ? "Supprimé" : $this->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT),
         ]);
     }
+
+
 
     /**
      * Détermine si le volume horaire a vocation à être supprimé ou non
@@ -143,18 +119,24 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
     public function setRemove($remove)
     {
         $this->remove = (boolean)$remove;
+
         return $this;
     }
+
+
 
     public function getRemove()
     {
         return $this->remove;
     }
 
+
+
     /**
      * Set heures
      *
      * @param float $heures
+     *
      * @return VolumeHoraire
      */
     public function setHeures($heures)
@@ -163,6 +145,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get heures
@@ -174,74 +158,7 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->heures;
     }
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return VolumeHoraire
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return VolumeHoraire
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return VolumeHoraire
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Get id
@@ -253,79 +170,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->id;
     }
 
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return VolumeHoraire
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return VolumeHoraire
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return VolumeHoraire
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
 
     /**
      * Set service
      *
      * @param \Application\Entity\Db\Service $service
+     *
      * @return VolumeHoraire
      */
     public function setService(\Application\Entity\Db\Service $service = null)
@@ -334,6 +185,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get service
@@ -345,10 +198,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->service;
     }
 
+
+
     /**
      * Set motifNonPaiement
      *
      * @param \Application\Entity\Db\MotifNonPaiement $motifNonPaiement
+     *
      * @return VolumeHoraire
      */
     public function setMotifNonPaiement(\Application\Entity\Db\MotifNonPaiement $motifNonPaiement = null)
@@ -357,6 +213,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get motifNonPaiement
@@ -368,10 +226,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->motifNonPaiement;
     }
 
+
+
     /**
      * Set periode
      *
      * @param \Application\Entity\Db\Periode $periode
+     *
      * @return VolumeHoraire
      */
     public function setPeriode(\Application\Entity\Db\Periode $periode = null)
@@ -380,6 +241,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get periode
@@ -391,10 +254,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->periode;
     }
 
+
+
     /**
      * Set typeIntervention
      *
      * @param \Application\Entity\Db\TypeIntervention $typeIntervention
+     *
      * @return VolumeHoraire
      */
     public function setTypeIntervention(\Application\Entity\Db\TypeIntervention $typeIntervention = null)
@@ -403,6 +269,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get typeIntervention
@@ -414,10 +282,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->typeIntervention;
     }
 
+
+
     /**
      * Set typeVolumeHoraire
      *
      * @param \Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire
+     *
      * @return VolumeHoraire
      */
     public function setTypeVolumeHoraire(\Application\Entity\Db\TypeVolumeHoraire $typeVolumeHoraire = null)
@@ -426,6 +297,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get typeVolumeHoraire
@@ -437,10 +310,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->typeVolumeHoraire;
     }
 
+
+
     /**
      * Set contrat
      *
      * @param \Application\Entity\Db\Contrat $contrat
+     *
      * @return VolumeHoraire
      */
     public function setContrat(\Application\Entity\Db\Contrat $contrat = null)
@@ -449,6 +325,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get contrat
@@ -460,10 +338,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->contrat;
     }
 
+
+
     /**
      * Add validation
      *
      * @param \Application\Entity\Db\Validation $validation
+     *
      * @return self
      */
     public function addValidation(\Application\Entity\Db\Validation $validation)
@@ -472,6 +353,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove validation
@@ -483,10 +366,13 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         $this->validation->removeElement($validation);
     }
 
+
+
     /**
      * Get validation
      *
      * @param \Application\Entity\Db\TypeValidation $type
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getValidation(TypeValidation $type = null)
@@ -498,11 +384,15 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
             return null;
         }
 
-        $filter      = function(Validation $validation) use ($type) { return $type === $validation->getTypeValidation(); };
+        $filter      = function (Validation $validation) use ($type) {
+            return $type === $validation->getTypeValidation();
+        };
         $validations = $this->validation->filter($filter);
 
         return $validations;
     }
+
+
 
     /**
      * Get etatVolumeHoraire
@@ -514,6 +404,8 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->etatVolumeHoraire->first();
     }
 
+
+
     /**
      * Get formuleVolumeHoraire
      *
@@ -524,34 +416,42 @@ class VolumeHoraire implements HistoriqueAwareInterface, ResourceInterface
         return $this->formuleVolumeHoraire;
     }
 
+
+
     /**
      * Get formuleResultatVolumeHoraire
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormuleResultatVolumeHoraire( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumeHoraire=null )
+    public function getFormuleResultatVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumeHoraire = null)
     {
-        $filter = function( FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire ) use ($typeVolumeHoraire, $etatVolumeHoraire) {
+        $filter = function (FormuleResultatVolumeHoraire $formuleResultatVolumeHoraire) use ($typeVolumeHoraire, $etatVolumeHoraire) {
             if (isset($typeVolumeHoraire) && $typeVolumeHoraire !== $formuleResultatVolumeHoraire->getFormuleResultat()->getTypeVolumeHoraire()) {
                 return false;
             }
             if (isset($etatVolumeHoraire) && $etatVolumeHoraire !== $formuleResultatVolumeHoraire->getFormuleResultat()->getEtatVolumeHoraire()) {
                 return false;
             }
+
             return true;
         };
+
         return $this->formuleResultatVolumeHoraire->filter($filter);
     }
+
+
 
     /**
      * Get formuleResultatVolumeHoraire
      *
      * @return FormuleResultatVolumeHoraire
      */
-    public function getUniqueFormuleResultatVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire )
+    public function getUniqueFormuleResultatVolumeHoraire(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumeHoraire)
     {
         return $this->getFormuleResultatVolumeHoraire($typeVolumeHoraire, $etatVolumeHoraire)->first();
     }
+
+
 
     public function getResourceId()
     {

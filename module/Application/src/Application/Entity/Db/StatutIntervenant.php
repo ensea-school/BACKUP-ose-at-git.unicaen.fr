@@ -21,7 +21,7 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     const BIATSS             = 'BIATSS';
     const SALAR_PRIVE        = 'SALAR_PRIVE';
     const SALAR_PUBLIC       = 'SALAR_PUBLIC';
-    const AUTO_LIBER_INDEP          = 'AUTO_LIBER_INDEP';
+    const AUTO_LIBER_INDEP   = 'AUTO_LIBER_INDEP';
     const RETR_UCBN          = 'RETR_UCBN';
     const RETR_HORS_UCBN     = 'RETR_HORS_UCBN';
     const ETUD_UCBN          = 'ETUD_UCBN';
@@ -29,6 +29,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     const SS_EMPLOI_NON_ETUD = 'SS_EMPLOI_NON_ETUD';
     const AUTRES             = 'AUTRES';
     const NON_AUTORISE       = 'NON_AUTORISE';
+
+
 
     /**
      *
@@ -38,6 +40,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     {
         return $this->getLibelle();
     }
+
+
 
     /**
      * Indique si ce statut correspond à un intervenant permanent.
@@ -49,6 +53,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_PERMANENT;
     }
 
+
+
     /**
      * Indique si ce statut correspond aux vacataires.
      *
@@ -58,6 +64,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     {
         return $this->getTypeIntervenant()->getCode() == TypeIntervenant::CODE_EXTERIEUR;
     }
+
+
 
     /**
      * Indique si ce statut correspond aux vacataires BIATSS.
@@ -69,6 +77,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return self::BIATSS === $this->getSourceCode();
     }
 
+
+
     /**
      * Indique si ce statut correspond aux "Autres cas".
      *
@@ -79,6 +89,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return self::AUTRES === $this->getSourceCode();
     }
 
+
+
     /**
      * Indique si ce statut correspond aux Agents Temporaires Vacataires.
      *
@@ -88,6 +100,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     {
         return in_array($this->getSourceCode(), [self::ETUD_HORS_UCBN, self::ETUD_UCBN, self::RETR_HORS_UCBN]);
     }
+
+
 
     /**
      * @var \Application\Entity\Db\Source
@@ -219,6 +233,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
      */
     private $privilege;
 
+
+
     /**
      *
      * @return boolean
@@ -227,6 +243,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     {
         return $this->nonAutorise;
     }
+
+
 
     /**
      *
@@ -237,6 +255,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->peutSaisirService;
     }
 
+
+
     /**
      *
      * @return boolean
@@ -246,38 +266,52 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->peutSaisirReferentiel;
     }
 
+
+
     /**
      *
      * @param boolean $peutSaisirReferentiel
+     *
      * @return \Application\Entity\Db\StatutIntervenant
      */
     function setPeutSaisirReferentiel($peutSaisirReferentiel)
     {
         $this->peutSaisirReferentiel = $peutSaisirReferentiel;
+
         return $this;
     }
+
+
 
     /**
      *
      * @param boolean $nonAutorise
+     *
      * @return \Application\Entity\Db\StatutIntervenant
      */
     function setNonAutorise($nonAutorise)
     {
         $this->nonAutorise = $nonAutorise;
+
         return $this;
     }
+
+
 
     /**
      *
      * @param boolean $peutSaisirService
+     *
      * @return \Application\Entity\Db\StatutIntervenant
      */
     function setPeutSaisirService($peutSaisirService)
     {
         $this->peutSaisirService = $peutSaisirService;
+
         return $this;
     }
+
+
 
     /**
      *
@@ -288,21 +322,28 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->peutChoisirDansDossier;
     }
 
+
+
     /**
      *
      * @param boolean $peutChoisirDansDossier
+     *
      * @return \Application\Entity\Db\StatutIntervenant
      */
     function setPeutChoisirDansDossier($peutChoisirDansDossier)
     {
         $this->peutChoisirDansDossier = $peutChoisirDansDossier;
+
         return $this;
     }
+
+
 
     /**
      * Spécifie si ce statut permet la saisie des données personnelles.
      *
      * @param boolean $peutSaisirDossier
+     *
      * @return self
      */
     public function setPeutSaisirDossier($peutSaisirDossier = true)
@@ -311,6 +352,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Indique si ce statut permet la saisie des données personnelles.
@@ -322,10 +365,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->peutSaisirDossier;
     }
 
+
+
     /**
      * Spécifie si ce statut permet l'établissement d'un contrat/avenant.
      *
      * @param boolean $peutAvoirContrat
+     *
      * @return self
      */
     public function setPeutAvoirContrat($peutAvoirContrat = true)
@@ -334,6 +380,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Indique si ce statut permet l'établissement d'un contrat/avenant.
@@ -345,10 +393,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->peutAvoirContrat;
     }
 
+
+
     /**
      * Set depassement
      *
      * @param boolean $depassement
+     *
      * @return StatutIntervenant
      */
     public function setDepassement($depassement)
@@ -357,6 +408,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get depassement
@@ -368,10 +421,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->depassement;
     }
 
+
+
     /**
      * Set fonctionEC
      *
      * @param boolean $fonctionEC
+     *
      * @return StatutIntervenant
      */
     public function setFonctionEC($fonctionEC)
@@ -380,6 +436,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get fonctionEC
@@ -391,10 +449,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->fonctionEC;
     }
 
+
+
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
+     *
      * @return StatutIntervenant
      */
     public function setHistoCreation($histoCreation)
@@ -403,6 +464,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get histoCreation
@@ -414,10 +477,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->histoCreation;
     }
 
+
+
     /**
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
+     *
      * @return StatutIntervenant
      */
     public function setHistoDestruction($histoDestruction)
@@ -426,6 +492,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get histoDestruction
@@ -437,10 +505,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->histoDestruction;
     }
 
+
+
     /**
      * Set histoModification
      *
      * @param \DateTime $histoModification
+     *
      * @return StatutIntervenant
      */
     public function setHistoModification($histoModification)
@@ -449,6 +520,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get histoModification
@@ -460,10 +533,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->histoModification;
     }
 
+
+
     /**
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return StatutIntervenant
      */
     public function setLibelle($libelle)
@@ -472,6 +548,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get libelle
@@ -483,6 +561,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->libelle;
     }
 
+
+
     /**
      * Get ordre
      *
@@ -493,10 +573,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->ordre;
     }
 
+
+
     /**
      * Set ordre
      *
      * @param integer $ordre
+     *
      * @return self
      */
     public function setOrdre($ordre)
@@ -506,10 +589,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this;
     }
 
+
+
     /**
      * Set serviceStatutaire
      *
      * @param float $serviceStatutaire
+     *
      * @return StatutIntervenant
      */
     public function setServiceStatutaire($serviceStatutaire)
@@ -518,6 +604,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get serviceStatutaire
@@ -529,10 +617,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->serviceStatutaire;
     }
 
+
+
     /**
      * Set plafondReferentiel
      *
      * @param float $plafondReferentiel
+     *
      * @return StatutIntervenant
      */
     public function setPlafondReferentiel($plafondReferentiel)
@@ -541,6 +632,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get plafondReferentiel
@@ -552,10 +645,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->plafondReferentiel;
     }
 
+
+
     /**
      * Set maximumHETD
      *
      * @param float $maximumHETD
+     *
      * @return StatutIntervenant
      */
     public function setMaximumHETD($maximumHETD)
@@ -564,6 +660,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get maximumHETD
@@ -575,10 +673,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->maximumHETD;
     }
 
+
+
     /**
      * Set sourceCode
      *
      * @param string $sourceCode
+     *
      * @return StatutIntervenant
      */
     public function setSourceCode($sourceCode)
@@ -587,6 +688,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get sourceCode
@@ -598,6 +701,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->sourceCode;
     }
 
+
+
     /**
      * Get id
      *
@@ -608,10 +713,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->id;
     }
 
+
+
     /**
      * Set typeIntervenant
      *
      * @param \Application\Entity\Db\TypeIntervenant $typeIntervenant
+     *
      * @return StatutIntervenant
      */
     public function setTypeIntervenant(\Application\Entity\Db\TypeIntervenant $typeIntervenant = null)
@@ -620,6 +728,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get typeIntervenant
@@ -631,10 +741,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->typeIntervenant;
     }
 
+
+
     /**
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
+     *
      * @return StatutIntervenant
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
@@ -643,6 +756,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get histoModificateur
@@ -654,10 +769,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->histoModificateur;
     }
 
+
+
     /**
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     *
      * @return StatutIntervenant
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
@@ -666,6 +784,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get histoDestructeur
@@ -677,10 +797,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->histoDestructeur;
     }
 
+
+
     /**
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     *
      * @return StatutIntervenant
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
@@ -689,6 +812,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get histoCreateur
@@ -700,10 +825,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->histoCreateur;
     }
 
+
+
     /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
+     *
      * @return StatutIntervenant
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
@@ -712,6 +840,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Get source
@@ -723,10 +853,13 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->source;
     }
 
+
+
     /**
      * Add typeAgrementStatut
      *
      * @param \Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut
+     *
      * @return TypeTypeAgrementStatut
      */
     public function addTypeAgrementStatut(\Application\Entity\Db\TypeAgrementStatut $typeAgrementStatut)
@@ -735,6 +868,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove typeAgrementStatut
@@ -746,6 +881,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         $this->typeAgrementStatut->removeElement($typeAgrementStatut);
     }
 
+
+
     /**
      * Get typeAgrementStatut
      *
@@ -755,6 +892,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
     {
         return $this->typeAgrementStatut;
     }
+
+
 
     /**
      * Get typePieceJointeStatut
@@ -766,21 +905,25 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->typePieceJointeStatut;
     }
 
+
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->typeAgrementStatut = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->typeAgrementStatut    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->typePieceJointeStatut = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->privilege = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->privilege             = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
 
     /**
      * Add privilege
      *
      * @param \Application\Entity\Db\Privilege $privilege
+     *
      * @return StatutIntervenant
      */
     public function addPrivilege(\Application\Entity\Db\Privilege $privilege)
@@ -789,6 +932,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
 
         return $this;
     }
+
+
 
     /**
      * Remove privilege
@@ -800,6 +945,8 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         $this->privilege->removeElement($privilege);
     }
 
+
+
     /**
      * Get privilege
      *
@@ -810,28 +957,55 @@ class StatutIntervenant implements HistoriqueAwareInterface, RoleInterface
         return $this->privilege;
     }
 
+
+
     /**
      * Détermine si le type de rôle possède un provilège ou non.
      * Si le privilège transmis est un objet de classe Privilege, alors il est inutile de fournir la ressource, sinon il est obligatoire de la préciser
      *
      * @param Privilege|string $privilege
+     *
      * @return boolean
      * @throws \Common\Exception\LogicException
      */
-    public function hasPrivilege( $privilege )
+    public function hasPrivilege($privilege)
     {
-        if ($privilege instanceof Privilege){
+        if ($privilege instanceof Privilege) {
             $privilege = $privilege->getFullCode();
         }
         $privileges = $this->getPrivilege();
-        foreach( $privileges as $priv ){
+        foreach ($privileges as $priv) {
             if ($priv->getFullCode() === $privilege) return true;
         }
+
         return false;
     }
 
+
+
     public function getRoleId()
     {
-        return 'statut/'.$this->getSourceCode();
+        return 'statut/' . $this->getSourceCode();
     }
+
+
+
+    /**
+     * @since PHP 5.6.0
+     * This method is called by var_dump() when dumping an object to get the properties that should be shown.
+     * If the method isn't defined on an object, then all public, protected and private properties will be shown.
+     *
+     * @return array
+     * @link  http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.debuginfo
+     */
+    function __debugInfo()
+    {
+        return [
+            'id'         => $this->id,
+            'sourceCode' => $this->sourceCode,
+            'libelle'    => $this->libelle,
+            'type'       => $this->typeIntervenant ? $this->typeIntervenant->getLibelle() : null,
+        ];
+    }
+
 }

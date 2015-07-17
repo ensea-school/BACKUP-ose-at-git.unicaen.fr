@@ -49,9 +49,9 @@ class ServiceReferentiel extends AbstractEntityService
      * @param string|null $alias         Alias d'entité
      * @return array
      */
-    public function initQuery(QueryBuilder $qb=null, $alias=null)
+    public function initQuery(QueryBuilder $qb=null, $alias=null, array $fields = [])
     {
-        list($qb, $alias) = parent::initQuery($qb, $alias);
+        list($qb, $alias) = parent::initQuery($qb, $alias, $fields);
 
         $this->join( $this->getServiceStructure()          , $qb, 'structure'  , true, $alias )
              ->join( $this->getServiceFonctionReferentiel(), $qb, 'fonction'   , true, $alias )

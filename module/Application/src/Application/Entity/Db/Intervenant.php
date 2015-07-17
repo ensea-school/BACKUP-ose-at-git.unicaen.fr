@@ -16,6 +16,8 @@ use Application\Interfaces\AnneeAwareInterface;
  */
 abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface
 {
+    use HistoriqueAwareTrait;
+
     /**
      * @var \DateTime
      * @Annotation\Type("UnicaenApp\Form\Element\DateInfSup")
@@ -43,21 +45,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * @Annotation\Options({"label":"Adresse mail :"})
      */
     protected $email;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
 
     /**
      * @var string
@@ -221,21 +208,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $IBAN;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
-
-    /**
      * @var \Application\Entity\Db\TypeIntervenant
      */
     protected $type;
@@ -327,28 +299,33 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     private $vIndicDepassRef;
 
+
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->affectation                          = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->adresse                              = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->validation                           = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->agrement                             = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->service                              = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->serviceReferentiel                   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleResultat                      = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formuleIntervenant                   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vIndicAttenteDemandeMep              = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vIndicAttenteMep                     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->affectation                        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->adresse                            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->validation                         = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->agrement                           = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->service                            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviceReferentiel                 = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleResultat                    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formuleIntervenant                 = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->miseEnPaiementIntervenantStructure = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vIndicAttenteDemandeMep            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vIndicAttenteMep                   = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+
 
     /**
      * Set dateNaissance
      *
      * @param \DateTime $dateNaissance
+     *
      * @return Intervenant
      */
     public function setDateNaissance($dateNaissance)
@@ -357,6 +334,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get dateNaissance
@@ -368,10 +347,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->dateNaissance;
     }
 
+
+
     /**
      * Set depNaissanceCodeInsee
      *
      * @param string $depNaissanceCodeInsee
+     *
      * @return Intervenant
      */
     public function setDepNaissanceCodeInsee($depNaissanceCodeInsee)
@@ -380,6 +362,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get depNaissanceCodeInsee
@@ -391,10 +375,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->depNaissanceCodeInsee;
     }
 
+
+
     /**
      * Set depNaissanceLibelle
      *
      * @param string $depNaissanceLibelle
+     *
      * @return Intervenant
      */
     public function setDepNaissanceLibelle($depNaissanceLibelle)
@@ -403,6 +390,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get depNaissanceLibelle
@@ -414,10 +403,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->depNaissanceLibelle;
     }
 
+
+
     /**
      * Set email
      *
      * @param string $email
+     *
      * @return Intervenant
      */
     public function setEmail($email)
@@ -426,6 +418,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get email
@@ -437,88 +431,25 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->email;
     }
 
+
+
     /**
      * Retourne l'adresse mail personnelle éventuelle.
      * Si elle est null et que le paramètre le demande, retourne l'adresse par défaut.
      *
      * @param bool $fallbackOnDefault
-     * @return string 
+     *
+     * @return string
      */
     abstract public function getEmailPerso($fallbackOnDefault = false);
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return Intervenant
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return Intervenant
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Intervenant
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Set nomPatronymique
      *
      * @param string $nomPatronymique
+     *
      * @return Intervenant
      */
     public function setNomPatronymique($nomPatronymique)
@@ -527,6 +458,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get nomPatronymique
@@ -538,10 +471,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->nomPatronymique;
     }
 
+
+
     /**
      * Set nomUsuel
      *
      * @param string $nomUsuel
+     *
      * @return Intervenant
      */
     public function setNomUsuel($nomUsuel)
@@ -550,6 +486,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get nomUsuel
@@ -561,10 +499,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->nomUsuel;
     }
 
+
+
     /**
      * Set numeroInsee
      *
      * @param string $numeroInsee
+     *
      * @return Intervenant
      */
     public function setNumeroInsee($numeroInsee)
@@ -573,6 +514,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get numeroInsee
@@ -584,10 +527,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->numeroInsee;
     }
 
+
+
     /**
      * Set numeroInseeCle
      *
      * @param string $numeroInseeCle
+     *
      * @return Intervenant
      */
     public function setNumeroInseeCle($numeroInseeCle)
@@ -596,6 +542,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get numeroInseeCle
@@ -607,10 +555,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->numeroInseeCle ? sprintf('%02d', $this->numeroInseeCle) : $this->numeroInseeCle;
     }
 
+
+
     /**
      * Set numeroInseeProvisoire
      *
      * @param boolean $numeroInseeProvisoire
+     *
      * @return Intervenant
      */
     public function setNumeroInseeProvisoire($numeroInseeProvisoire)
@@ -619,6 +570,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get numeroInseeProvisoire
@@ -630,10 +583,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->numeroInseeProvisoire;
     }
 
+
+
     /**
      * Set paysNaissanceCodeInsee
      *
      * @param string $paysNaissanceCodeInsee
+     *
      * @return Intervenant
      */
     public function setPaysNaissanceCodeInsee($paysNaissanceCodeInsee)
@@ -642,6 +598,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get paysNaissanceCodeInsee
@@ -653,10 +611,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->paysNaissanceCodeInsee;
     }
 
+
+
     /**
      * Set paysNaissanceLibelle
      *
      * @param string $paysNaissanceLibelle
+     *
      * @return Intervenant
      */
     public function setPaysNaissanceLibelle($paysNaissanceLibelle)
@@ -665,6 +626,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get paysNaissanceLibelle
@@ -676,10 +639,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->paysNaissanceLibelle;
     }
 
+
+
     /**
      * Set paysNationaliteCodeInsee
      *
      * @param string $paysNationaliteCodeInsee
+     *
      * @return Intervenant
      */
     public function setPaysNationaliteCodeInsee($paysNationaliteCodeInsee)
@@ -688,6 +654,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get paysNationaliteCodeInsee
@@ -699,10 +667,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->paysNationaliteCodeInsee;
     }
 
+
+
     /**
      * Set paysNationaliteLibelle
      *
      * @param string $paysNationaliteLibelle
+     *
      * @return Intervenant
      */
     public function setPaysNationaliteLibelle($paysNationaliteLibelle)
@@ -711,6 +682,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get paysNationaliteLibelle
@@ -722,10 +695,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->paysNationaliteLibelle;
     }
 
+
+
     /**
      * Set prenom
      *
      * @param string $prenom
+     *
      * @return Intervenant
      */
     public function setPrenom($prenom)
@@ -734,6 +710,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get prenom
@@ -745,10 +723,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->prenom;
     }
 
+
+
     /**
      * Set sourceCode
      *
      * @param string $sourceCode
+     *
      * @return Intervenant
      */
     public function setSourceCode($sourceCode)
@@ -757,6 +738,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get sourceCode
@@ -768,10 +751,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->sourceCode;
     }
 
+
+
     /**
      * Set telMobile
      *
      * @param string $telMobile
+     *
      * @return Intervenant
      */
     public function setTelMobile($telMobile)
@@ -780,6 +766,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get telMobile
@@ -791,10 +779,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->telMobile;
     }
 
+
+
     /**
      * Set telPro
      *
      * @param string $telPro
+     *
      * @return Intervenant
      */
     public function setTelPro($telPro)
@@ -803,6 +794,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get telPro
@@ -814,10 +807,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->telPro;
     }
 
+
+
     /**
      * Set villeNaissanceCodeInsee
      *
      * @param string $villeNaissanceCodeInsee
+     *
      * @return Intervenant
      */
     public function setVilleNaissanceCodeInsee($villeNaissanceCodeInsee)
@@ -826,6 +822,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get villeNaissanceCodeInsee
@@ -837,10 +835,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->villeNaissanceCodeInsee;
     }
 
+
+
     /**
      * Set villeNaissanceLibelle
      *
      * @param string $villeNaissanceLibelle
+     *
      * @return Intervenant
      */
     public function setVilleNaissanceLibelle($villeNaissanceLibelle)
@@ -849,6 +850,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get villeNaissanceLibelle
@@ -860,6 +863,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->villeNaissanceLibelle;
     }
 
+
+
     /**
      * Get id
      *
@@ -870,10 +875,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->id;
     }
 
+
+
     /**
      * Set annee
      *
      * @param \Application\Entity\Db\Annee $annee
+     *
      * @return Service
      */
     public function setAnnee(\Application\Entity\Db\Annee $annee = null)
@@ -882,6 +890,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get annee
@@ -893,10 +903,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->annee;
     }
 
+
+
     /**
      * Add affectation
      *
      * @param \Application\Entity\Db\AffectationRecherche $affectation
+     *
      * @return Intervenant
      */
     public function addAffectation(\Application\Entity\Db\AffectationRecherche $affectation)
@@ -905,6 +918,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Remove affectation
@@ -916,6 +931,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $this->affectation->removeElement($affectation);
     }
 
+
+
     /**
      * Get affectation
      *
@@ -926,10 +943,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->affectation;
     }
 
+
+
     /**
      * Add adresse
      *
      * @param \Application\Entity\Db\AdresseIntervenant $adresse
+     *
      * @return Intervenant
      */
     public function addAdresse(\Application\Entity\Db\AdresseIntervenant $adresse)
@@ -938,6 +958,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Remove adresse
@@ -949,6 +971,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $this->adresse->removeElement($adresse);
     }
 
+
+
     /**
      * Get adresse
      *
@@ -958,6 +982,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->adresse;
     }
+
+
 
     /**
      * Get adresse princ
@@ -969,10 +995,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->adressePrinc;
     }
 
+
+
     /**
      * Set source
      *
      * @param \Application\Entity\Db\Source $source
+     *
      * @return Intervenant
      */
     public function setSource(\Application\Entity\Db\Source $source = null)
@@ -981,6 +1010,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get source
@@ -992,10 +1023,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->source;
     }
 
+
+
     /**
      * Set statut
      *
      * @param \Application\Entity\Db\StatutIntervenant $statut
+     *
      * @return Intervenant
      */
     public function setStatut(\Application\Entity\Db\StatutIntervenant $statut = null)
@@ -1004,6 +1038,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get statut
@@ -1015,10 +1051,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->statut;
     }
 
+
+
     /**
      * Set civilite
      *
      * @param \Application\Entity\Db\Civilite $civilite
+     *
      * @return Intervenant
      */
     public function setCivilite(\Application\Entity\Db\Civilite $civilite = null)
@@ -1027,6 +1066,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get civilite
@@ -1038,10 +1079,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->civilite;
     }
 
+
+
     /**
      * Set BIC
      *
      * @param string $BIC
+     *
      * @return Intervenant
      */
     public function setBIC($BIC = null)
@@ -1050,6 +1094,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get BIC
@@ -1061,10 +1107,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->BIC;
     }
 
+
+
     /**
      * Set IBAN
      *
      * @param string $IBAN
+     *
      * @return Intervenant
      */
     public function setIBAN($IBAN = null)
@@ -1073,6 +1122,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get IBAN
@@ -1084,79 +1135,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->IBAN;
     }
 
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Intervenant
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Intervenant
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Intervenant
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
 
     /**
      * Set type
      *
      * @param \Application\Entity\Db\TypeIntervenant $type
+     *
      * @return Intervenant
      */
     public function setType(\Application\Entity\Db\TypeIntervenant $type = null)
@@ -1165,6 +1150,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get type
@@ -1176,10 +1163,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->type;
     }
 
+
+
     /**
      * Set structure
      *
      * @param \Application\Entity\Db\Structure $structure
+     *
      * @return Intervenant
      */
     public function setStructure(\Application\Entity\Db\Structure $structure = null)
@@ -1188,6 +1178,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get structure
@@ -1199,10 +1191,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->structure;
     }
 
+
+
     /**
      * Set discipline
      *
      * @param \Application\Entity\Db\Discipline $discipline
+     *
      * @return Intervenant
      */
     public function setDiscipline(\Application\Entity\Db\Discipline $discipline = null)
@@ -1211,6 +1206,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get discipline
@@ -1222,10 +1219,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->discipline;
     }
 
+
+
     /**
      * Add service
      *
      * @param \Application\Entity\Db\Service $service
+     *
      * @return Intervenant
      */
     public function addService(\Application\Entity\Db\Service $service)
@@ -1234,6 +1234,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Remove service
@@ -1245,6 +1247,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $this->service->removeElement($service);
     }
 
+
+
     /**
      * Get service
      *
@@ -1255,10 +1259,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->service;
     }
 
+
+
     /**
      * Add service référentiel
      *
      * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
+     *
      * @return Intervenant
      */
     public function addServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel)
@@ -1268,21 +1275,24 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this;
     }
 
+
+
     /**
      * Remove serviceReferentiel
      *
      * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
-     * @param bool $softDelete
+     * @param bool                                      $softDelete
      */
     public function removeServiceReferentiel(\Application\Entity\Db\ServiceReferentiel $serviceReferentiel, $softDelete = true)
     {
         if ($softDelete && $serviceReferentiel instanceof HistoriqueAwareInterface) {
             $serviceReferentiel->setHistoDestruction(new \DateTime());
-        }
-        else {
+        } else {
             $this->serviceReferentiel->removeElement($serviceReferentiel);
         }
     }
+
+
 
     /**
      * Get service référentiel
@@ -1294,6 +1304,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->serviceReferentiel;
     }
 
+
+
     /**
      * Get serviceReferentielToStrings
      *
@@ -1302,17 +1314,21 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getServiceReferentielToStrings()
     {
         $services = [];
-        foreach ($this->getServiceReferentiel() as $sr) { /* @var $sr \Application\Entity\Db\ServiceReferentiel */
+        foreach ($this->getServiceReferentiel() as $sr) {
+            /* @var $sr \Application\Entity\Db\ServiceReferentiel */
             $services[] = "" . $sr;
         }
 
         return $services;
     }
 
+
+
     /**
      * Remove all serviceReferentiel
      *
      * @param bool $softDelete
+     *
      * @return self
      */
     public function removeAllServiceReferentiel($softDelete = true)
@@ -1324,10 +1340,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this;
     }
 
+
+
     /**
      * Get validation
      *
      * @param \Application\Entity\Db\TypeValidation $type
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getValidation(TypeValidation $type = null)
@@ -1339,16 +1358,21 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
             return null;
         }
 
-        $filter      = function(Validation $validation) use ($type) { return $type === $validation->getTypeValidation(); };
+        $filter      = function (Validation $validation) use ($type) {
+            return $type === $validation->getTypeValidation();
+        };
         $validations = $this->validation->filter($filter);
 
         return $validations;
     }
 
+
+
     /**
      * Add agrement
      *
      * @param \Application\Entity\Db\Agrement $agrement
+     *
      * @return Intervenant
      */
     public function addAgrement(\Application\Entity\Db\Agrement $agrement)
@@ -1357,6 +1381,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Remove agrement
@@ -1367,6 +1393,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         $this->agrement->removeElement($agrement);
     }
+
+
 
     /**
      * Get agrement
@@ -1382,16 +1410,19 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
             return $this->agrement;
         }
 
-        $filter   = function(Agrement $agrement) use ($typeAgrement) {
+        $filter    = function (Agrement $agrement) use ($typeAgrement) {
             if ($typeAgrement && $typeAgrement !== $agrement->getType()) {
                 return false;
             }
+
             return true;
         };
         $agrements = $this->agrement->filter($filter);
 
         return $agrements;
     }
+
+
 
     /**
      * Get utilisateur
@@ -1403,6 +1434,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->utilisateur;
     }
 
+
+
     /**
      * Indique si cet intervenant est permanent.
      *
@@ -1412,6 +1445,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->getStatut()->estPermanent();
     }
+
+
 
     /**
      * Get estUneFemme
@@ -1423,6 +1458,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return Civilite::SEXE_F === $this->getCivilite()->getSexe();
     }
 
+
+
     /**
      * Get civilite
      *
@@ -1433,6 +1470,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->getCivilite()->getLibelleCourt();
     }
 
+
+
     /**
      * Get affectations
      *
@@ -1442,6 +1481,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return "" . $this->getStructure() ?: "(Inconnue)";
     }
+
+
 
     /**
      * Get source id
@@ -1454,6 +1495,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->getSource()->getLibelle();
     }
 
+
+
     /**
      * Get type id
      *
@@ -1465,6 +1508,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this instanceof IntervenantPermanent ? TypeIntervenant::TYPE_PERMANENT : TypeIntervenant::TYPE_EXTERIEUR;
     }
 
+
+
     /**
      * Retourne la représentation littérale de cet objet.
      *
@@ -1474,6 +1519,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return strtoupper($this->getNomUsuel()) . ' ' . ucfirst($this->getPrenom());
     }
+
+
 
     /**
      * Get nomUsuel
@@ -1487,6 +1534,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $f->filter($this);
     }
 
+
+
     /**
      * Get dateNaissance
      *
@@ -1496,6 +1545,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->dateNaissance->format(Constants::DATE_FORMAT);
     }
+
+
 
     /**
      * Retourne l'adresse principale éventuelle.
@@ -1512,7 +1563,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
             return null;
         }
 
-        foreach ($adresses as $a) { /* @var $a AdresseIntervenant */
+        foreach ($adresses as $a) { 
+            /* @var $a AdresseIntervenant */
             if ($a->getPrincipale()) {
                 return $a;
             }
@@ -1523,10 +1575,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $adresse ?: null;
     }
 
+
+
     /**
      * Set premierRecrutement
      *
      * @param null|boolean $premierRecrutement
+     *
      * @return Dossier
      */
     public function setPremierRecrutement($premierRecrutement)
@@ -1535,6 +1590,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Get premierRecrutement
@@ -1546,10 +1603,13 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->premierRecrutement;
     }
 
+
+
     /**
      * Add wfIntervenantEtape
      *
      * @param \Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape
+     *
      * @return Intervenant
      */
     public function addWfIntervenantEtape(\Application\Entity\Db\WfIntervenantEtape $wfIntervenantEtape)
@@ -1558,6 +1618,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
         return $this;
     }
+
+
 
     /**
      * Remove wfIntervenantEtape
@@ -1569,6 +1631,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $this->wfIntervenantEtape->removeElement($wfIntervenantEtape);
     }
 
+
+
     /**
      * Get wfIntervenantEtape
      *
@@ -1578,6 +1642,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->wfIntervenantEtape;
     }
+
+
 
     /**
      * Get vIndicDiffDossier
@@ -1599,6 +1665,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->indicModifDossier;
     }
 
+
+
     /**
      * Get vIndicAttenteDemandeMep
      *
@@ -1608,6 +1676,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->vIndicAttenteDemandeMep;
     }
+
+
 
     /**
      * Get vIndicAttenteMep
@@ -1619,6 +1689,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->vIndicAttenteMep;
     }
 
+
+
     /**
      * Get vIndicDepassHcHorsRemuFc
      *
@@ -1628,6 +1700,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->vIndicDepassHcHorsRemuFc;
     }
+
+
 
     /**
      * Get vIndicDepassRef
@@ -1639,6 +1713,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         return $this->vIndicDepassRef;
     }
 
+
+
     /**
      * Get formuleReferentiel
      *
@@ -1646,16 +1722,20 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormuleReferentiel( Structure $structure=null )
+    public function getFormuleReferentiel(Structure $structure = null)
     {
-        $filter = function( FormuleReferentiel $formuleReferentiel ) use ($structure) {
+        $filter = function (FormuleReferentiel $formuleReferentiel) use ($structure) {
             if ($structure && $structure !== $formuleReferentiel->getStructure()) {
                 return false;
             }
+
             return true;
         };
+
         return $this->formuleReferentiel->filter($filter);
     }
+
+
 
     /**
      * Get formuleResultat
@@ -1665,19 +1745,23 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormuleResultat( TypeVolumeHoraire $typeVolumeHoraire=null, EtatVolumeHoraire $etatVolumehoraire=null )
+    public function getFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire = null, EtatVolumeHoraire $etatVolumehoraire = null)
     {
-        $filter = function( FormuleResultat $formuleResultat ) use ($typeVolumeHoraire, $etatVolumehoraire) {
+        $filter = function (FormuleResultat $formuleResultat) use ($typeVolumeHoraire, $etatVolumehoraire) {
             if ($typeVolumeHoraire && $typeVolumeHoraire !== $formuleResultat->getTypeVolumeHoraire()) {
                 return false;
             }
             if ($etatVolumehoraire && $etatVolumehoraire !== $formuleResultat->getEtatVolumeHoraire()) {
                 return false;
             }
+
             return true;
         };
+
         return $this->formuleResultat->filter($filter);
     }
+
+
 
     /**
      * Get unique formuleResultat
@@ -1687,15 +1771,18 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      *
      * @return FormuleResultat
      */
-    public function getUniqueFormuleResultat( TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire )
+    public function getUniqueFormuleResultat(TypeVolumeHoraire $typeVolumeHoraire, EtatVolumeHoraire $etatVolumehoraire)
     {
         $formuleResultat = $this->getFormuleResultat($typeVolumeHoraire, $etatVolumehoraire)->first();
-        if (false === $formuleResultat){
+        if (false === $formuleResultat) {
             $formuleResultat = new FormuleResultat;
-            $formuleResultat->init( $this, $typeVolumeHoraire, $etatVolumehoraire );
+            $formuleResultat->init($this, $typeVolumeHoraire, $etatVolumehoraire);
         }
+
         return $formuleResultat;
     }
+
+
 
     /**
      * Get utilisateur
@@ -1708,6 +1795,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     }
 
 
+
     /**
      * Get miseEnPaiementIntervenantStructure
      *
@@ -1717,6 +1805,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->miseEnPaiementIntervenantStructure;
     }
+
 
 
     /**

@@ -1,7 +1,6 @@
 <?php
 
 namespace Application\Entity\Db;
-use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Privilege

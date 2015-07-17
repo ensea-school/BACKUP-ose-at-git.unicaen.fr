@@ -7,7 +7,6 @@ namespace Application\Entity\Db;
  */
 class Parametre
 {
-    
     /**
      * @var string
      */

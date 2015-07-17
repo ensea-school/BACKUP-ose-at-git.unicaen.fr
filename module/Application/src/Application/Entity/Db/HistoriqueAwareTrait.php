@@ -8,7 +8,7 @@ use Common\Constants;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-trait HistoriqueAwareTrait 
+trait HistoriqueAwareTrait
 {
     /**
      * @var \DateTime
@@ -24,7 +24,7 @@ trait HistoriqueAwareTrait
      * @var \DateTime
      */
     protected $histoDestruction;
-    
+
     /**
      * @var \Application\Entity\Db\Utilisateur
      */
@@ -40,10 +40,13 @@ trait HistoriqueAwareTrait
      */
     protected $histoDestructeur;
 
+
+
     /**
      * Set histoCreation
      *
      * @param \DateTime $histoCreation
+     *
      * @return self
      */
     public function setHistoCreation($histoCreation)
@@ -53,20 +56,25 @@ trait HistoriqueAwareTrait
         return $this;
     }
 
+
+
     /**
      * Get histoCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoCreation()
     {
         return $this->histoCreation;
     }
 
+
+
     /**
      * Set histoDestruction
      *
      * @param \DateTime $histoDestruction
+     *
      * @return self
      */
     public function setHistoDestruction($histoDestruction)
@@ -76,20 +84,25 @@ trait HistoriqueAwareTrait
         return $this;
     }
 
+
+
     /**
      * Get histoDestruction
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoDestruction()
     {
         return $this->histoDestruction;
     }
 
+
+
     /**
      * Set histoModification
      *
      * @param \DateTime $histoModification
+     *
      * @return self
      */
     public function setHistoModification($histoModification)
@@ -99,15 +112,19 @@ trait HistoriqueAwareTrait
         return $this;
     }
 
+
+
     /**
      * Get histoModification
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getHistoModification()
     {
         return $this->histoModification;
     }
+
+
 
     /**
      * Retourne la date et l'auteur de la dernière modification au format "Le dd/mm/yyyy à hh:mm par Tartanpion".
@@ -123,6 +140,7 @@ trait HistoriqueAwareTrait
      * Set histoModificateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoModificateur
+     *
      * @return self
      */
     public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
@@ -132,20 +150,25 @@ trait HistoriqueAwareTrait
         return $this;
     }
 
+
+
     /**
      * Get histoModificateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoModificateur()
     {
         return $this->histoModificateur;
     }
 
+
+
     /**
      * Set histoDestructeur
      *
      * @param \Application\Entity\Db\Utilisateur $histoDestructeur
+     *
      * @return self
      */
     public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
@@ -155,20 +178,25 @@ trait HistoriqueAwareTrait
         return $this;
     }
 
+
+
     /**
      * Get histoDestructeur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoDestructeur()
     {
         return $this->histoDestructeur;
     }
 
+
+
     /**
      * Set histoCreateur
      *
      * @param \Application\Entity\Db\Utilisateur $histoCreateur
+     *
      * @return self
      */
     public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
@@ -178,13 +206,44 @@ trait HistoriqueAwareTrait
         return $this;
     }
 
+
+
     /**
      * Get histoCreateur
      *
-     * @return \Application\Entity\Db\Utilisateur 
+     * @return \Application\Entity\Db\Utilisateur
      */
     public function getHistoCreateur()
     {
         return $this->histoCreateur;
+    }
+
+
+
+    public function estNonHistorise(\DateTime $dateObs = null)
+    {
+        if (empty($dateObs)) $dateObs = new \DateTime();
+
+
+        $dObs = $dateObs->format('Y-m-d');
+        $dDeb = $this->getHistoCreation() ? $this->getHistoCreation()->format('Y-m-d') : null;
+        $dFin = $this->getHistoDestruction() ? $this->getHistoDestruction()->format('Y-m-d') : null;
+
+        if ($dDeb && !($dDeb <= $dObs)) return false;
+        if ($dFin && !($dObs < $dFin)) return false;
+
+        return true;
+//        d_obs := TRUNC( COALESCE( d_obs, SYSDATE ) );
+//    d_deb := TRUNC( date_debut );
+//    d_fin := TRUNC( date_fin   );
+//
+//    IF d_deb IS NOT NULL AND NOT d_deb <= d_obs THEN
+//      RETURN 0;
+//    END IF;
+//    IF d_fin IS NOT NULL AND NOT d_obs < d_fin THEN
+//      RETURN 0;
+//    END IF;
+//    RETURN 1;
+
     }
 }

@@ -7,25 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Periode
  */
-class Periode
+class Periode implements HistoriqueAwareInterface
 {
+    use HistoriqueAwareTrait;
     const SEMESTRE_1 = 'S1';
     const SEMESTRE_2 = 'S2';
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    protected $histoModification;
 
     /**
      * @var integer
@@ -43,21 +29,6 @@ class Periode
     protected $code;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoDestructeur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    protected $histoCreateur;
-
-	/**
      * @var boolean
      */
     protected $enseignement;
@@ -91,9 +62,7 @@ class Periode
      */
     protected $numeroMoisPaiement;
 
-
-
-        /**
+    /**
      * miseEnPaiementIntervenantStructure
      *
      * @var MiseEnPaiementIntervenantStructure
@@ -102,90 +71,27 @@ class Periode
 
 
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return Periode
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return Periode
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return Periode
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
-
     public function getCode()
     {
         return $this->code;
     }
 
+
+
     public function setCode($code)
     {
         $this->code = $code;
+
         return $this;
     }
+
+
 
     /**
      * Set ordre
      *
      * @param integer $ordre
+     *
      * @return Periode
      */
     public function setOrdre($ordre)
@@ -195,99 +101,37 @@ class Periode
         return $this;
     }
 
+
+
     /**
      * Get ordre
      *
-     * @return integer 
+     * @return integer
      */
     public function getOrdre()
     {
         return $this->ordre;
     }
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return Periode
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
 
-        return $this;
-    }
 
     /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return Periode
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return Periode
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
-
-	/**
      * Set enseignement
      *
      * @param boolean $enseignement
+     *
      * @return Periode
      */
     public function setEnseignement($enseignement)
@@ -297,20 +141,25 @@ class Periode
         return $this;
     }
 
+
+
     /**
      * Get enseignement
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEnseignement()
     {
         return $this->enseignement;
     }
 
+
+
     /**
      * Set libelleCourt
      *
      * @param string $libelleCourt
+     *
      * @return Periode
      */
     public function setLibelleCourt($libelleCourt)
@@ -320,20 +169,25 @@ class Periode
         return $this;
     }
 
+
+
     /**
      * Get libelleCourt
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleCourt()
     {
         return $this->libelleCourt;
     }
 
+
+
     /**
      * Set libelleLong
      *
      * @param string $libelleLong
+     *
      * @return Periode
      */
     public function setLibelleLong($libelleLong)
@@ -343,20 +197,25 @@ class Periode
         return $this;
     }
 
+
+
     /**
      * Get libelleLong
      *
-     * @return string 
+     * @return string
      */
     public function getLibelleLong()
     {
         return $this->libelleLong;
     }
 
+
+
     /**
      * Set paiement
      *
      * @param boolean $paiement
+     *
      * @return Periode
      */
     public function setPaiement($paiement)
@@ -366,20 +225,25 @@ class Periode
         return $this;
     }
 
+
+
     /**
      * Get paiement
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPaiement()
     {
         return $this->paiement;
     }
 
+
+
     /**
      * Set moisOriginePaiement
      *
      * @param boolean $moisOriginePaiement
+     *
      * @return Periode
      */
     public function setMoisOriginePaiement($moisOriginePaiement)
@@ -388,6 +252,8 @@ class Periode
 
         return $this;
     }
+
+
 
     /**
      * Get moisOriginePaiement
@@ -399,10 +265,13 @@ class Periode
         return $this->moisOriginePaiement;
     }
 
+
+
     /**
      * Set numeroMoisPaiement
      *
      * @param boolean $numeroMoisPaiement
+     *
      * @return Periode
      */
     public function setNumeroMoisPaiement($numeroMoisPaiement)
@@ -411,6 +280,8 @@ class Periode
 
         return $this;
     }
+
+
 
     /**
      * Get numeroMoisPaiement
@@ -422,23 +293,29 @@ class Periode
         return $this->numeroMoisPaiement;
     }
 
+
+
     /**
      * Retourne la date de paiement de la période
      *
      * @param Annee $annee
+     *
      * @return \DateTime
      */
-    public function getDatePaiement( Annee $annee )
+    public function getDatePaiement(Annee $annee)
     {
         if (null == $this->getNumeroMoisPaiement()) return null;
-        $year = $annee->getId();
+        $year  = $annee->getId();
         $month = $this->getNumeroMoisPaiement();
-        $day = 1;
+        $day   = 1;
         if ($month < 9) $year++;
         $a_date = date("Y-m-t", mktime(0, 0, 0, $month, $day, $year));
-        $date = \DateTime::createFromFormat('Y-m-d', $a_date);
+        $date   = \DateTime::createFromFormat('Y-m-d', $a_date);
+
         return $date;
     }
+
+
 
     /**
      * Get miseEnPaiementIntervenantStructure
@@ -450,6 +327,8 @@ class Periode
         return $this->miseEnPaiementIntervenantStructure;
     }
 
+
+
     /**
      *
      * @return string
@@ -458,4 +337,5 @@ class Periode
     {
         return $this->getLibelleLong();
     }
+
 }

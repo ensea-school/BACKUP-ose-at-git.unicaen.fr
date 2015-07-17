@@ -2,6 +2,8 @@ select
   i.id i_id,
   i.source_code i_code,
   s.id s_id,
+  ep.source_code ep_source_code,
+  str.libelle_court structure,
   vh.ID vh_id, 
   epp.libelle_long periode_ep,
   TVH.LIBELLE type_volume_horaire,
@@ -23,20 +25,21 @@ from
   JOIN periode p on p.id = vh.periode_id
   JOIN type_intervention ti on ti.id = vh.type_intervention_id
   LEFT JOIN element_pedagogique ep ON ep.id = s.element_pedagogique_id
+  LEFT JOIN structure str ON str.id = ep.structure_id
   LEFT JOIN VALIDATION_VOL_HORAIRE vvh on VVH.VOLUME_HORAIRE_ID = vh.id
   LEFT JOIN validation v ON v.id = VVH.VALIDATION_ID
   LEFT JOIN periode epp on epp.id = ep.periode_id
 where
   1=1
-  AND i.source_code = '36886'
+  AND i.source_code = '2421'
 --  AND s.id = 3208
-  AND vh.histo_destruction IS NULL
+ -- AND vh.histo_destruction IS NULL
   --AND contrat_id = 341
   AND tvh.id = 2
   AND vh.periode_id = 12
   --AND i.nom_usuel = 'Campart'
   --AND ti.code = 'TP'
-  AND validation_id is not null
+  AND validation_id is null
 order by
   s_id, type_volume_horaire, periode, TI.ORDRE;
   

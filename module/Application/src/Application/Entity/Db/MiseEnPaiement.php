@@ -9,8 +9,10 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
  */
 class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 {
-    const A_METTRE_EN_PAIEMENT  = 'a-mettre-en-paiement';
-    const MIS_EN_PAIEMENT       = 'mis-en-paiement';
+    use HistoriqueAwareTrait;
+
+    const A_METTRE_EN_PAIEMENT = 'a-mettre-en-paiement';
+    const MIS_EN_PAIEMENT      = 'mis-en-paiement';
 
     /**
      * @var \DateTime
@@ -21,21 +23,6 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
      * @var \DateTime
      */
     private $dateValidation;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoCreation;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoDestruction;
-
-    /**
-     * @var \DateTime
-     */
-    private $histoModification;
 
     /**
      * @var integer
@@ -73,24 +60,9 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     private $validation;
 
     /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoModificateur;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoDestructeur;
-
-    /**
      * @var \Application\Entity\Db\FormuleResultatService
      */
     private $formuleResultatService;
-
-    /**
-     * @var \Application\Entity\Db\Utilisateur
-     */
-    private $histoCreateur;
 
     /**
      * @var \Application\Entity\Db\FormuleResultatServiceReferentiel
@@ -105,15 +77,19 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
     protected $miseEnPaiementIntervenantStructure;
 
 
+
     public function __construct()
     {
-        $this->miseEnPaiementIntervenantStructure   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->miseEnPaiementIntervenantStructure = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+
 
     /**
      * Set dateMiseEnPaiement
      *
      * @param \DateTime $dateMiseEnPaiement
+     *
      * @return MiseEnPaiement
      */
     public function setDateMiseEnPaiement($dateMiseEnPaiement)
@@ -123,20 +99,25 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * Get dateMiseEnPaiement
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateMiseEnPaiement()
     {
         return $this->dateMiseEnPaiement;
     }
 
+
+
     /**
      * Set dateValidation
      *
      * @param \DateTime $dateValidation
+     *
      * @return MiseEnPaiement
      */
     public function setDateValidation($dateValidation)
@@ -146,99 +127,37 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * Get dateValidation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateValidation()
     {
         return $this->dateValidation;
     }
 
-    /**
-     * Set histoCreation
-     *
-     * @param \DateTime $histoCreation
-     * @return MiseEnPaiement
-     */
-    public function setHistoCreation($histoCreation)
-    {
-        $this->histoCreation = $histoCreation;
 
-        return $this;
-    }
-
-    /**
-     * Get histoCreation
-     *
-     * @return \DateTime 
-     */
-    public function getHistoCreation()
-    {
-        return $this->histoCreation;
-    }
-
-    /**
-     * Set histoDestruction
-     *
-     * @param \DateTime $histoDestruction
-     * @return MiseEnPaiement
-     */
-    public function setHistoDestruction($histoDestruction)
-    {
-        $this->histoDestruction = $histoDestruction;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestruction
-     *
-     * @return \DateTime 
-     */
-    public function getHistoDestruction()
-    {
-        return $this->histoDestruction;
-    }
-
-    /**
-     * Set histoModification
-     *
-     * @param \DateTime $histoModification
-     * @return MiseEnPaiement
-     */
-    public function setHistoModification($histoModification)
-    {
-        $this->histoModification = $histoModification;
-
-        return $this;
-    }
-
-    /**
-     * Get histoModification
-     *
-     * @return \DateTime 
-     */
-    public function getHistoModification()
-    {
-        return $this->histoModification;
-    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
+
     /**
      * Set periodePaiement
      *
      * @param \Application\Entity\Db\Periode $periodePaiement
+     *
      * @return MiseEnPaiement
      */
     public function setPeriodePaiement(\Application\Entity\Db\Periode $periodePaiement = null)
@@ -248,20 +167,25 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * Get periodePaiement
      *
-     * @return \Application\Entity\Db\Periode 
+     * @return \Application\Entity\Db\Periode
      */
     public function getPeriodePaiement()
     {
         return $this->periodePaiement;
     }
 
+
+
     /**
      * Set heures
      *
      * @param float $heures
+     *
      * @return MiseEnPaiement
      */
     public function setHeures($heures)
@@ -270,6 +194,8 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get heures
@@ -281,10 +207,13 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this->heures;
     }
 
+
+
     /**
      * Set typeHeures
      *
      * @param \Application\Entity\Db\TypeHeures $typeHeures
+     *
      * @return self
      */
     public function setTypeHeures(\Application\Entity\Db\TypeHeures $typeHeures = null)
@@ -293,6 +222,8 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get typeHeures
@@ -304,10 +235,13 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this->typeHeures;
     }
 
+
+
     /**
      * Set centreCout
      *
      * @param \Application\Entity\Db\CentreCout $centreCout
+     *
      * @return MiseEnPaiement
      */
     public function setCentreCout(\Application\Entity\Db\CentreCout $centreCout = null)
@@ -316,6 +250,8 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get centreCout
@@ -327,6 +263,8 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this->centreCout;
     }
 
+
+
     /**
      *
      * @return DomaineFonctionnel
@@ -336,21 +274,28 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this->domaineFonctionnel;
     }
 
+
+
     /**
      *
      * @param DomaineFonctionnel $domaineFonctionnel
+     *
      * @return self
      */
     function setDomaineFonctionnel(DomaineFonctionnel $domaineFonctionnel)
     {
         $this->domaineFonctionnel = $domaineFonctionnel;
+
         return $this;
     }
+
+
 
     /**
      * Set validation
      *
      * @param \Application\Entity\Db\Validation $validation
+     *
      * @return MiseEnPaiement
      */
     public function setValidation(\Application\Entity\Db\Validation $validation = null)
@@ -360,66 +305,25 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * Get validation
      *
-     * @return \Application\Entity\Db\Validation 
+     * @return \Application\Entity\Db\Validation
      */
     public function getValidation()
     {
         return $this->validation;
     }
 
-    /**
-     * Set histoModificateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoModificateur
-     * @return MiseEnPaiement
-     */
-    public function setHistoModificateur(\Application\Entity\Db\Utilisateur $histoModificateur = null)
-    {
-        $this->histoModificateur = $histoModificateur;
 
-        return $this;
-    }
-
-    /**
-     * Get histoModificateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoModificateur()
-    {
-        return $this->histoModificateur;
-    }
-
-    /**
-     * Set histoDestructeur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoDestructeur
-     * @return MiseEnPaiement
-     */
-    public function setHistoDestructeur(\Application\Entity\Db\Utilisateur $histoDestructeur = null)
-    {
-        $this->histoDestructeur = $histoDestructeur;
-
-        return $this;
-    }
-
-    /**
-     * Get histoDestructeur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoDestructeur()
-    {
-        return $this->histoDestructeur;
-    }
 
     /**
      * Set formuleResultatService
      *
      * @param \Application\Entity\Db\FormuleResultatService $formuleResultatService
+     *
      * @return MiseEnPaiement
      */
     public function setFormuleResultatService(\Application\Entity\Db\FormuleResultatService $formuleResultatService = null)
@@ -429,15 +333,19 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this;
     }
 
+
+
     /**
      * Get formuleResultatService
      *
-     * @return \Application\Entity\Db\FormuleResultatService 
+     * @return \Application\Entity\Db\FormuleResultatService
      */
     public function getFormuleResultatService()
     {
         return $this->formuleResultatService;
     }
+
+
 
     /**
      *
@@ -445,58 +353,43 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
      */
     public function getServiceAPayer()
     {
-        if ($this->formuleResultatService           ) return $this->formuleResultatService;
+        if ($this->formuleResultatService) return $this->formuleResultatService;
         if ($this->formuleResultatServiceReferentiel) return $this->formuleResultatServiceReferentiel;
+
         return null;
     }
+
+
 
     /**
      *
      * @param ServiceAPayerInterface $serviceAPayer
+     *
      * @return self
      */
-    public function setServiceAPayer(ServiceAPayerInterface $serviceAPayer = null )
+    public function setServiceAPayer(ServiceAPayerInterface $serviceAPayer = null)
     {
-        if ($serviceAPayer instanceof FormuleResultatService           ){
-            $this->setFormuleResultatService( $serviceAPayer );
+        if ($serviceAPayer instanceof FormuleResultatService) {
+            $this->setFormuleResultatService($serviceAPayer);
             $this->setFormuleResultatServiceReferentiel();
-        }elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel){
+        } elseif ($serviceAPayer instanceof FormuleResultatServiceReferentiel) {
             $this->setFormuleResultatService();
-            $this->setFormuleResultatServiceReferentiel( $serviceAPayer );
-        }else{
+            $this->setFormuleResultatServiceReferentiel($serviceAPayer);
+        } else {
             $this->setFormuleResultatService();
             $this->setFormuleResultatServiceReferentiel();
         }
-        return $this;
-    }
-
-    /**
-     * Set histoCreateur
-     *
-     * @param \Application\Entity\Db\Utilisateur $histoCreateur
-     * @return MiseEnPaiement
-     */
-    public function setHistoCreateur(\Application\Entity\Db\Utilisateur $histoCreateur = null)
-    {
-        $this->histoCreateur = $histoCreateur;
 
         return $this;
     }
 
-    /**
-     * Get histoCreateur
-     *
-     * @return \Application\Entity\Db\Utilisateur 
-     */
-    public function getHistoCreateur()
-    {
-        return $this->histoCreateur;
-    }
+
 
     /**
      * Set formuleResultatServiceReferentiel
      *
      * @param \Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel
+     *
      * @return MiseEnPaiement
      */
     public function setFormuleResultatServiceReferentiel(\Application\Entity\Db\FormuleResultatServiceReferentiel $formuleResultatServiceReferentiel = null)
@@ -505,6 +398,8 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
 
         return $this;
     }
+
+
 
     /**
      * Get formuleResultatServiceReferentiel
@@ -516,6 +411,8 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this->formuleResultatServiceReferentiel;
     }
 
+
+
     /**
      * Get miseEnPaiementIntervenantStructure
      *
@@ -526,15 +423,20 @@ class MiseEnPaiement implements HistoriqueAwareInterface, ResourceInterface
         return $this->miseEnPaiementIntervenantStructure;
     }
 
+
+
     /**
      *
      * @return string
      */
     public function getEtat()
     {
-        if (! $this->getDateMiseEnPaiement()) return self::A_METTRE_EN_PAIEMENT;
+        if (!$this->getDateMiseEnPaiement()) return self::A_METTRE_EN_PAIEMENT;
+
         return self::MIS_EN_PAIEMENT;
     }
+
+
 
     /**
      * Returns the string identifier of the Resource

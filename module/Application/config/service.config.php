@@ -134,6 +134,18 @@ return [
                             ],
                         ],
                     ],
+                    'initialisation' => [
+                        'type'  => 'Segment',
+                        'options' => [
+                            'route'    => '/initialisation/:intervenant',
+                            'constraints' => [
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'initialisation',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             'referentiel' => [
@@ -226,7 +238,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh','constatation', 'cloturer-saisie'],
+                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'cloturer-saisie'],
                     'roles' => [R_ROLE],
                 ], [
                     'controller' => 'Application\Controller\Service',

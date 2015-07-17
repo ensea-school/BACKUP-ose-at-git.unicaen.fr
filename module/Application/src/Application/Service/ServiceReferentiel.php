@@ -228,11 +228,23 @@ class ServiceReferentiel extends AbstractEntityService
         StructureEntity $structure
     )
     {
-        return $this->getRepo()->findOneBy([
+        $result = $this->getRepo()->findOneBy([
             'intervenant' => $intervenant,
             'fonction'    => $fonction,
             'structure'   => $structure,
         ]);
+
+        if (count($result) > 1){
+            foreach( $result as $sr ){
+                /* @var $sr \Application\Entity\Db\ServiceReferentiel  */
+                if ($sr->estNonHistorise()) return $sr;
+            }
+            return $sr[0]; // sinon retourne le premier trouvé...
+        }elseif(isset($result[0])){
+            return $result[0];
+        }else{
+            return null;
+        }
     }
 
 

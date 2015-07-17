@@ -215,11 +215,23 @@ class Service extends AbstractEntityService
         EtablissementEntity $etablissement
     )
     {
-        return $this->getRepo()->findOneBy([
+        $result = $this->getRepo()->findBy([
             'intervenant'        => $intervenant,
             'elementPedagogique' => $elementPedagogique,
             'etablissement'      => $etablissement,
         ]);
+
+        if (count($result) > 1){
+            foreach( $result as $sr ){
+                /* @var $sr \Application\Entity\Db\Service  */
+                if ($sr->estNonHistorise()) return $sr;
+            }
+            return $sr[0]; // sinon retourne le premier trouvé...
+        }elseif(isset($result[0])){
+            return $result[0];
+        }else{
+            return null;
+        }
     }
 
 

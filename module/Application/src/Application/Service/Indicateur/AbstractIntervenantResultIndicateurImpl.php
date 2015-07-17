@@ -4,6 +4,7 @@ namespace Application\Service\Indicateur;
 
 use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
+use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\ORMException;
@@ -52,7 +53,16 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
     public function getResultFormatter()
     {
         if (null === $this->resultFormatter) {
-            $this->resultFormatter = new Callback(function(IntervenantEntity $resultItem) { 
+            $method = __METHOD__;
+            $this->resultFormatter = new Callback(function($resultItem) use ($method) {
+                if (! $resultItem instanceof IntervenantEntity) {
+                    throw new LogicException(sprintf(
+                        "L'argument transmis au formatter de résultat n'est pas du type %s attendu, redéfinissez la méthode %s dans la classe %s pour fournir un autre formatter.",
+                        'Application\Entity\Db\Intervenant',
+                        $method,
+                        get_called_class()
+                    ));
+                }
                 $out = sprintf("%s <small>(n°%s%s)</small>", 
                         $resultItem, 
                         $resultItem->getSourceCode(),

@@ -5,6 +5,7 @@ namespace Application\Service\Indicateur\Service\Validation\Referentiel\Realise;
 use Application\Entity\Db\TypeIntervenant as TypeIntervenantEntity;
 use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
+use Application\Entity\Db\VIndicAttenteValidRefAutre;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\ServiceReferentielAwareTrait;
@@ -12,6 +13,7 @@ use Application\Traits\TypeIntervenantAwareTrait;
 use Application\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Zend\Filter\Callback;
 
 /**
  *
@@ -47,105 +49,78 @@ class AttenteValidationPermAutreCompIndicateurImpl extends AbstractIntervenantRe
         return parent::getTitle($appendStructure);
     }
 
-
     /**
      * Retourne l'URL de la page concernant une ligne de résultat de l'indicateur.
      *
-     * @param IntervenantEntity $result
+     * @param VIndicAttenteValidRefAutre $result
      * @return string
      */
     public function getResultUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
             'intervenant/validation-referentiel-realise',
-            ['intervenant' => $result->getSourceCode()],
+            ['intervenant' => $result->getIntervenant()->getSourceCode()],
             ['force_canonical' => true]);
     }
 
     /**
+     * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
+     *
+     * @return FilterInterface
+     */
+    public function getResultFormatter()
+    {
+        if (null === $this->resultFormatter) {
+            $this->resultFormatter = new Callback(function(VIndicAttenteValidRefAutre $resultItem) {
+                $out = sprintf("%s <small>(n°%s%s)</small>",
+                    $i = $resultItem->getIntervenant(),
+                    $i->getSourceCode(),
+                    $i->getStatut()->estPermanent() ? ", Affectation: " . $i->getStructure() : null);
+                return $out;
+            });
+        }
+
+        return $this->resultFormatter;
+    }
+
+    /**
+     *
      * @return QueryBuilder
      */
     protected function getQueryBuilder()
     {
-        $qb = parent::getQueryBuilder()
-            ->join("int.serviceReferentiel", "s")
-            ->join("s.fonction", "f")
-            ->join("s.volumeHoraireReferentiel", "vh")
-            ->join("vh.typeVolumeHoraire", "tvh", Join::WITH, "tvh = :tvh")
-            ->setParameter('tvh', $this->getTypeVolumeHoraire())
-            ->andWhere("1 = pasHistorise(s)")
-            ->andWhere("1 = pasHistorise(f)")
-            ->andWhere("1 = pasHistorise(vh)");
+        // INDISPENSABLE si plusieurs requêtes successives avec des critères différents sur la même entité !
+        $this->getEntityManager()->clear('Application\Entity\Db\VIndicAttenteValidRefAutre');
+
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\VIndicAttenteValidRefAutre')->createQueryBuilder("v");
+        $qb
+            ->addSelect("int, aff, si, str")
+            ->join("v.structure", "str")
+            ->join("v.intervenant", "int")
+            ->join("int.structure", "aff")
+            ->join("int.statut", "si")
+            ->andWhere("int.annee = :annee")
+            ->setParameter("annee", $this->getServiceContext()->getAnnee());
 
         /**
-         * La saisie du réalisé de l'intervenant doit avoir été clôturée.
+         * Type intervenant.
          */
         $qb
-            ->join("int.validation", "clo", Join::WITH, "1 = pasHistorise(clo)")
-            ->join("clo.typeValidation", "tvClo", Join::WITH, "tvClo.code = :tvCloCode")
-            ->setParameter('tvCloCode', TypeValidationEntity::CODE_CLOTURE_REALISE);
-
-        /**
-         * Filtrage par type d'intervenant.
-         */
-        $qb
-            ->andWhere("ti = :type")
+            ->andWhere("si.typeIntervenant = :type")
             ->setParameter('type', $this->getTypeIntervenant());
 
         /**
-         * Filtrage par composante d'intervention.
+         * Composante d'intervention.
          */
         if ($this->getStructure()) {
             $qb
-                ->andWhere("s.structure = :structure")
+                ->andWhere("v.structure = :structure")
                 ->setParameter('structure', $this->getStructure());
-
-            /**
-             * Les volumes horaires effectués dans la composante d'intervention spécifiée doivent être validés.
-             */
-            $qb->join("vh.validation", "val", Join::WITH, "1 = pasHistorise(val)");
         }
 
-        /**
-         * Les autres composantes d'intervention que celle spécifiée ne doivent pas avoir validé.
-         */
-        $this->appendCriteriaValidationAutresComposantes($qb);
-
-        $qb->orderBy("int.nomUsuel, int.prenom");
+        $qb->orderBy("str.libelleCourt, int.nomUsuel, int.prenom");
 
         return $qb;
-    }
-
-    private function appendCriteriaValidationAutresComposantes(QueryBuilder $qb)
-    {
-        $qbAutreComp = $this->getServiceServiceReferentiel()->getRepo()->createQueryBuilder("sAutreComp");
-        $qbAutreComp
-            ->join("sAutreComp.fonction", "fAutreComp")
-            ->join("sAutreComp.volumeHoraireReferentiel", "vhAutreComp")
-            ->join("vhAutreComp.typeVolumeHoraire", "tvhAutreComp", Join::WITH, "tvhAutreComp = :tvh")
-            ->leftJoin("vhAutreComp.validation", "valAutreComp")
-            ->andWhere("valAutreComp.id IS NULL")
-            ->andWhere("sAutreComp.intervenant = int");
-
-        if ($this->getStructure()) {
-            $qbAutreComp->andWhere("sAutreComp.structure <> :structure");
-        }
-        else {
-            // si aucune structure n'est spécifiée, on ne filtre pas par composante d'intervention
-        }
-
-        // Eviction des données historisées.
-        $qbAutreComp
-            ->andWhere("1 = pasHistorise(sAutreComp)")
-            ->andWhere("1 = pasHistorise(fAutreComp)")
-            ->andWhere("1 = pasHistorise(vhAutreComp)")
-            ->andWhere("1 = pasHistorise(valAutreComp)");
-
-        $dqlAutresComposantes = $qbAutreComp->getDQL();
-
-        $qb->andWhere("EXISTS ($dqlAutresComposantes)");
-
-        return $this;
     }
 
     /**

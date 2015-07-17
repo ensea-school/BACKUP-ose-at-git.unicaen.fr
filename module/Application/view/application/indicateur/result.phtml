@@ -3,8 +3,8 @@ use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 /* @var $indicateurImpl AbstractIntervenantResultIndicateurImpl */
 ?>
 
-<?php $this->headTitle()->append($this->indicateur . "")->append("Indicateur") ?>
-<h1 class="page-header"><?php echo $title = $indicateurImpl->getTitle() ?></h1>
+<?php $this->headTitle()->append((string)$this->indicateur) ?>
+<h1 class="page-header"><?php echo $title = $indicateurImpl->getTitle() ?> <small><?php echo $this->indicateur ?></small></h1>
 
 <?php echo $this->partial('application/indicateur/partial/result', ['indicateurImpl' => $indicateurImpl, 'displaySendMailLink' => true]); ?>
 

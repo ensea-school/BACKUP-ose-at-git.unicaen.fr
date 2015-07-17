@@ -8,6 +8,7 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
     <thead>
         <tr>
             <th class="categorie">Catégorie</th>
+            <th class="numero">N°</th>
             <th class="intitule">Intitulé de l'indicateur</th>
             <?php if ($this->showAbonnement): ?>
             <th class="notification">Notification par mail</th>
@@ -23,7 +24,11 @@ use Application\Service\Indicateur\AbstractIndicateurImpl;
                 <td class="categorie">
                     <?php echo $indicateurEntity->getType() ?>
                 </td>
-                
+
+                <td class="numero">
+                    <?php echo $indicateurEntity->getNumero() ?>
+                </td>
+
                 <td class="intitule">
                     <?php if ($indicateurImpl->getResultCount()): ?>
                         <a href="<?php echo $this->url('indicateur/result', ['indicateur' => $indicateurEntity->getId()]) ?>"

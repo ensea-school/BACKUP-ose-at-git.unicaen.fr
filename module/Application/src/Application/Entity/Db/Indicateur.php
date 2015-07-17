@@ -15,6 +15,11 @@ class Indicateur
     private $id;
     
     /**
+     * @var integer
+     */
+    private $numero;
+    
+    /**
      * @var string
      */
     private $code;
@@ -40,7 +45,7 @@ class Indicateur
      */
     public function __toString()
     {
-        return $this->getCode();
+        return "Indicateur N°" . $this->getNumero();
     }
             
     /**
@@ -51,6 +56,29 @@ class Indicateur
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id interne
+     *
+     * @param string $numero
+     * @return Indicateur
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get id interne
+     *
+     * @return string
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 
     /**

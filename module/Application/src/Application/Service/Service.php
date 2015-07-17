@@ -751,7 +751,7 @@ class Service extends AbstractEntityService
     public function getPrevusFromPrevusData( IntervenantEntity $intervenant )
     {
         $tvhPrevu  = $this->getServiceTypeVolumeHoraire()->getPrevu();
-        $evhValide = $this->getServiceEtatVolumeHoraire()->getSaisi();
+        $evhValide = $this->getServiceEtatVolumeHoraire()->getValide();
 
         $intervenantPrec = $this->getServiceIntervenant()->getBySourceCode(
             $intervenant->getSourceCode(),

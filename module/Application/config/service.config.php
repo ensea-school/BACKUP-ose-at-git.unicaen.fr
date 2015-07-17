@@ -205,6 +205,18 @@ return [
                             ],
                         ],
                     ],
+                    'initialisation' => [
+                        'type'  => 'Segment',
+                        'options' => [
+                            'route'    => '/initialisation/:intervenant',
+                            'constraints' => [
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'initialisation',
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -246,7 +258,7 @@ return [
                     'roles' => [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT]
                 ], [
                     'controller' => 'Application\Controller\ServiceReferentiel',
-                    'action' => ['index', 'saisie', 'suppression', 'rafraichir-ligne', 'constatation'],
+                    'action' => ['index', 'saisie', 'suppression', 'rafraichir-ligne', 'initialisation', 'constatation'],
                     'roles' => [R_ROLE],
                 ],
             ],

@@ -219,6 +219,14 @@ class ServiceReferentielController extends AbstractActionController
         return compact('service', 'params', 'details', 'onlyContent');
     }
 
+    public function initialisationAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $this->getServiceServiceReferentiel()->setPrevusFromPrevus($intervenant);
+        $errors = [];
+        return compact('errors');
+    }
+
     public function constatationAction()
     {
         $this->initFilters();

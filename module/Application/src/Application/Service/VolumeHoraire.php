@@ -4,7 +4,6 @@ namespace Application\Service;
 
 use Application\Service\Traits\TypeVolumeHoraireAwareTrait;
 use Doctrine\ORM\QueryBuilder;
-use Application\Entity\Db\TypeVolumeHoraire as TypeVolumeHoraireEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;

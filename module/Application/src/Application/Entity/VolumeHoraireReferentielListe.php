@@ -39,6 +39,11 @@ class VolumeHoraireReferentielListe
     protected $validation = false;
 
     /**
+     * @var bool
+     */
+    protected $filterByHistorique = true;
+
+    /**
      *
      * @param ServiceReferentiel $service
      */
@@ -137,6 +142,24 @@ class VolumeHoraireReferentielListe
     }
 
     /**
+     * @return boolean
+     */
+    public function getFilterByHistorique()
+    {
+        return $this->filterByHistorique;
+    }
+
+
+
+    /**
+     * @param boolean $filterByHistorique
+     */
+    public function setFilterByHistorique($filterByHistorique)
+    {
+        $this->filterByHistorique = $filterByHistorique;
+    }
+
+    /**
      * Détermine si un volume horaire répond aux critères de la liste ou non
      * 
      * @param VolumeHoraireReferentiel $volumeHoraire
@@ -145,6 +168,9 @@ class VolumeHoraireReferentielListe
     public function match(VolumeHoraireReferentiel $volumeHoraire)
     {
         if ($volumeHoraire->getRemove()) { // Si le volume horaire est en cours de suppression
+            return false;
+        }
+        if ($this->filterByHistorique && ! $volumeHoraire->estNonHistorise()){
             return false;
         }
         if (false !== $this->typeVolumeHoraire) {

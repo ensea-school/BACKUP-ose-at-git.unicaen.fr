@@ -135,7 +135,8 @@ trait HistoriqueAwareTrait
      */
     public function getHistoModificationEtModificateurToString()
     {
-        return sprintf("Le %s par %s", $this->getHistoModification()->format(Constants::DATETIME_FORMAT), $this->getHistoModificateur());
+        $dateModif = $this->getHistoModification() ? $this->getHistoModification()->format(Constants::DATETIME_FORMAT) : null;
+        return sprintf("Le %s par %s", $dateModif, $this->getHistoModificateur());
     }
 
 

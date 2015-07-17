@@ -257,15 +257,14 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $out .= '</div>';
             $out .= '</div>';
             $out .= '</div>';
-        } elseif ($this->prevuToPrevu && ! empty($this->getServiceService()->getPrevusFromPrevusData($this->prevuToPrevu))) {
+        } elseif ($this->prevuToPrevu && $this->getServiceService()->getPrevusFromPrevusData($this->prevuToPrevu)) {
             $attribs = [
                 'class'       => 'btn btn-warning prevu-to-prevu-show',
                 'data-toggle' => 'modal',
                 'data-target' => '#prevu-to-prevu-modal',
                 //'data-event'    => 'service-constatation',
                 //'href'          => $this->getAddUrl(),
-                'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière"
-                    . ". Attention toutefois : si des heures réalisées ont déjà été saisies alors ces dernières seront écrasées!",
+                'title'       => "Initialiser le service prévisionnel avec le service prévisionnel validé l'année dernière",
             ];
             $out .= '<button type="button" ' . $this->htmlAttribs($attribs) . '>Prévu '.$this->getServiceContext()->getAnneePrecedente().' <span class="glyphicon glyphicon-arrow-right"></span> Prévu '.$this->getServiceContext()->getAnnee().'</button>&nbsp;';
             $out .= '<div class="modal fade" id="prevu-to-prevu-modal" tabindex="-1" role="dialog" aria-hidden="true">';
@@ -277,7 +276,6 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $out .= '</div>';
             $out .= '<div class="modal-body">';
             $out .= '<p>Souhaitez-vous réellement initialiser votre service prévisionnel à partir de votre service prévisionnel validé de l\'an dernier ?</p>';
-            $out .= '<div class="alert alert-warning" role="alert">Attention : si des heures ont déjà été saisies alors ces dernières seront écrasées!</div>';
             $out .= '</div>';
             $out .= '<div class="modal-footer">';
             $out .= '<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>';

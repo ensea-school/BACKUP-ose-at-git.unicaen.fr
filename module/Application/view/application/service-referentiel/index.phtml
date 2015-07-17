@@ -23,6 +23,8 @@ $serviceReferentielListe = $this->serviceReferentielListe( $services );
 $serviceReferentielListe
         ->setTypeVolumeHoraire($typeVolumeHoraire)
         ->setAddButtonVisibility($canAddServiceReferentiel);
+if ($intervenant)
+    $serviceReferentielListe->showPrevuToPrevu($intervenant);
 ?>
 
 <h1 class="page-header"><?php echo $title; ?></h1>

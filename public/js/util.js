@@ -602,3 +602,41 @@ function refreshSession(url, refreshTimeInMs)
         $.get(url, { ts: Date.now() }); // le timestamp empêche simplement la mise en cache par le navigateur
     }, refreshTimeInMs);
 }
+
+/**
+ * Installe devant chacun des éléments d'une liste une case à cocher.
+ * Installe aussi à la suite du conteneur des éléments (targetElements.last().parent()) 2 liens permettant de
+ * "Cocher tout" et de "Décocher tout".
+ *
+ * @param jQuery targetElements Liste d'objets jQuery pour lesquels on veut ajouter une case à cocher à chacun
+ * @param string checkboxName Nom à donner aux cases à cocher, ex: "intervenant" => <input name="intervenant[]" .../>
+ * @param boolean initiallyChecked Cocher ou non les cases à cocher par défaut ?
+ * @returns La liste des cases à cocher créées (objets jQuery correspondant aux <input type="checkbox">)
+ */
+function installCheckboxes(targetElements, checkboxName, initiallyChecked)
+{
+    $.each(targetElements, function(index, element) {
+        $(element).prepend(
+            $("<input/>")
+                .attr("type", "checkbox")
+                .attr("name", checkboxName + "[]")
+                .attr('value', $(element).data("id"))
+                .attr("class", "check-" + checkboxName)
+                .prop('checked', initiallyChecked ? true : false)
+        );
+    });
+
+    var cocherTout   = $("<a href=# class=checkall-"   + checkboxName + ">Cocher tout</a>");
+    var decocherTout = $("<a href=# class=uncheckall-" + checkboxName + ">Décocher tout</a>");
+
+    targetElements.last().parent().after(
+        $("<p/>").append(
+            $("<small/>").append(cocherTout, " / ", decocherTout)
+        )
+    );
+
+    cocherTout  .click(function(event) { $("input.check-" + checkboxName).prop('checked', true) .trigger("change"); event.preventDefault(); });
+    decocherTout.click(function(event) { $("input.check-" + checkboxName).prop('checked', false).trigger("change"); event.preventDefault(); });
+
+    return $("input.check-" + checkboxName);
+}

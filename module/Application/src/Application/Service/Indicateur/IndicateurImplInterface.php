@@ -39,7 +39,7 @@ interface IndicateurImplInterface
      * 
      * @return FilterInterface
      */
-    public function getResultFormatter();
+    public function getResultItemFormatter();
     
     /**
      * Retourne l'URL associée à un item de la liste de résultat renvoyée par l'indicateur.
@@ -47,5 +47,5 @@ interface IndicateurImplInterface
      * @param mixed $resultItem Un item de la liste de résultat
      * @return string
      */
-    public function getResultUrl($resultItem);
+    public function getResultItemUrl($resultItem);
 }

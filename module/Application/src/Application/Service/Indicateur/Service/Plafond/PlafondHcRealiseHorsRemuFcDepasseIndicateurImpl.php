@@ -26,7 +26,7 @@ class PlafondHcRealiseHorsRemuFcDepasseIndicateurImpl extends PlafondHcHorsRemuF
      * @param IntervenantEntity $result
      * @return string
      */
-    public function getResultUrl($result)
+    public function getResultItemUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/services-realises', 

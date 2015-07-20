@@ -37,45 +37,47 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
         
         return parent::getTitle($appendStructure);
     }
+
+    /**
+     * Retourne le filtre retournant l'intervenant correspondant à chaque item de résultat.
+     *
+     * @return FilterInterface
+     */
+    public function getResultItemIntervenantExtractor()
+    {
+        if (null === $this->resultItemIntervenantExtractor) {
+            $this->resultItemIntervenantExtractor = new Callback(function(VIndicDepassRef $resultItem) {
+                $intervenant = $resultItem->getIntervenant();
+                return $intervenant;
+            });
+        }
+
+        return $this->resultItemIntervenantExtractor;
+    }
     
     /**
      * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
      * 
      * @return FilterInterface
      */
-    public function getResultFormatter()
+    public function getResultItemFormatter()
     {
-        if (null === $this->resultFormatter) {
-            $this->resultFormatter = new Callback(function(VIndicDepassRef $resultItem) { 
+        if (null === $this->resultItemFormatter) {
+            $this->resultItemFormatter = new Callback(function(VIndicDepassRef $resultItem) {
+                $intervenant = $this->getResultItemIntervenantExtractor()->filter($resultItem);
                 $out = sprintf("<strong>%s</strong> : %s <small>(n°%s, %s%s)</small>, total Référentiel = %s (plafond = %s)", 
-                        $resultItem->getStructure(), 
-                        $i = $resultItem->getIntervenant(), 
-                        $i->getSourceCode(),
-                        $i->getStatut(),
-                        $i->getStatut()->estPermanent() ? ", " . $i->getStructure() : null,
-                        Util::formattedHeures($resultItem->getTotal()),
-                        $resultItem->getPlafond());
+                    $resultItem->getStructure(),
+                    $intervenant,
+                    $intervenant->getSourceCode(),
+                    $intervenant->getStatut(),
+                    $intervenant->getStatut()->estPermanent() ? ", " . $intervenant->getStructure() : null,
+                    Util::formattedHeures($resultItem->getTotal()),
+                    $resultItem->getPlafond());
                 return $out;
             });
         }
         
-        return $this->resultFormatter;
-    }
-    
-    /**
-     * Collecte et retourne les adresses mails de tous les intervenants retournés par cet indicateur.
-     * 
-     * @return array
-     */
-    public function getResultEmails()
-    {
-        $resultEmails = [];
-        foreach ($this->getResult() as $r) { /* @var $r VIndicDepassRef */
-            $intervenant = $r->getIntervenant();
-            $resultEmails[$intervenant->getEmailPerso(true)] = $intervenant->getNomComplet();
-        }
-        
-        return $resultEmails;
+        return $this->resultItemFormatter;
     }
     
     /**

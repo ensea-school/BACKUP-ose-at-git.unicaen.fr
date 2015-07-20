@@ -6,6 +6,7 @@ use Application\Entity\Db\Annee;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
+use Common\Filter\IntervenantEmailFormatter;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\ORMException;
 use Traversable;
@@ -20,7 +21,8 @@ use Zend\Filter\FilterInterface;
 abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateurImpl
 {
     protected $intervenantMessage;
-    
+    protected $resultItemIntervenantExtractor;
+
     /**
      * Retourne la liste de résultats renvoyée par l'indicateur.
      * 
@@ -44,49 +46,78 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
             
         return $this->result;
     }
+
+    /**
+     * Retourne le filtre retournant l'intervenant correspondant à chaque item de résultat.
+     *
+     * @return FilterInterface
+     */
+    public function getResultItemIntervenantExtractor()
+    {
+        if (null === $this->resultItemIntervenantExtractor) {
+            $method = __METHOD__;
+            $this->resultItemIntervenantExtractor = new Callback(function($resultItem) use ($method) {
+                $this->assertCallbackResultItemArgumentIsIntervenant($resultItem, $method);
+                $intervenant = $resultItem;
+                return $intervenant;
+            });
+        }
+
+        return $this->resultItemIntervenantExtractor;
+    }
+
+    private function assertCallbackResultItemArgumentIsIntervenant($resultItem, $method)
+    {
+        if (! $resultItem instanceof IntervenantEntity) {
+            throw new LogicException(sprintf(
+                "L'argument transmis au filtre n'est pas du type %s attendu, redéfinissez la méthode %s dans la classe %s pour fournir un autre filtre.",
+                'Application\Entity\Db\Intervenant',
+                $method,
+                get_called_class()
+            ));
+        }
+
+        return $this;
+    }
     
     /**
      * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
      * 
      * @return FilterInterface
      */
-    public function getResultFormatter()
+    public function getResultItemFormatter()
     {
-        if (null === $this->resultFormatter) {
+        if (null === $this->resultItemFormatter) {
             $method = __METHOD__;
-            $this->resultFormatter = new Callback(function($resultItem) use ($method) {
-                if (! $resultItem instanceof IntervenantEntity) {
-                    throw new LogicException(sprintf(
-                        "L'argument transmis au formatter de résultat n'est pas du type %s attendu, redéfinissez la méthode %s dans la classe %s pour fournir un autre formatter.",
-                        'Application\Entity\Db\Intervenant',
-                        $method,
-                        get_called_class()
-                    ));
-                }
-                $out = sprintf("%s <small>(n°%s%s)</small>", 
-                        $resultItem, 
-                        $resultItem->getSourceCode(),
-                        $resultItem->getStatut()->estPermanent() ? ", " . $resultItem->getStructure() : null);
+            $this->resultItemFormatter = new Callback(function($resultItem) use ($method) {
+                $intervenant = $this->getResultItemIntervenantExtractor()->filter($resultItem);
+                $out = sprintf("%s <small>(n°%s%s)</small>",
+                    $intervenant,
+                    $intervenant->getSourceCode(),
+                    $intervenant->getStatut()->estPermanent() ? ", " . $intervenant->getStructure() : null);
                 return $out;
             });
         }
         
-        return $this->resultFormatter;
+        return $this->resultItemFormatter;
     }
-    
+
     /**
-     * Collecte et retourne les adresses mails de tous les intervenants retournés par cet indicateur.
-     * 
-     * @return array
+     * Retourne le filtre permettant d'obtenir l'id éventuel de chaque item de résultat.
+     *
+     * @return FilterInterface
      */
-    public function getResultEmails()
+    public function getResultItemIdExtractor()
     {
-        $resultEmails = [];
-        foreach ($this->getResult() as $r) { /* @var $r IntervenantEntity */
-            $resultEmails[$r->getEmailPerso(true)] = $r->getNomComplet();
+        if (null === $this->resultItemIdExtractor) {
+            $method = __METHOD__;
+            $this->resultItemIdExtractor = new Callback(function($resultItem) use ($method) {
+                $intervenant = $this->getResultItemIntervenantExtractor()->filter($resultItem);
+                return (string) $intervenant->getSourceCode(); // NB: les intervenants sont généralement identifiés par leur sourceCode.
+            });
         }
-        
-        return $resultEmails;
+
+        return $this->resultItemIdExtractor;
     }
     
     /**
@@ -153,7 +184,7 @@ abstract class AbstractIntervenantResultIndicateurImpl extends AbstractIndicateu
     {
         return $this->intervenantMessage;
     }
-    
+
     /**
      * 
      * @return Annee

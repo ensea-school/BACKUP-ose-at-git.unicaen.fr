@@ -6,6 +6,7 @@ use Application\Entity\Db\Indicateur as IndicateurEntity;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Service\AbstractService;
 use Application\Traits\StructureAwareTrait;
+use Common\Exception\LogicException;
 use Traversable;
 use Zend\Filter\Callback;
 use Zend\Filter\FilterInterface;
@@ -89,16 +90,21 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
     /**
      * @var FilterInterface 
      */
-    protected $resultFormatter;
+    protected $resultItemFormatter;
+
+    /**
+     * @var FilterInterface
+     */
+    protected $resultItemIdExtractor;
     
     /**
      * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
      * 
      * @return FilterInterface
      */
-    public function getResultFormatter()
+    public function getResultItemFormatter()
     {
-        if (null === $this->resultFormatter) {
+        if (null === $this->resultItemFormatter) {
             $toString = function($value) { 
                 if (!is_object($value) && settype($value, 'string') !== false 
                         || is_object($value) && method_exists($value, '__toString')) {
@@ -107,10 +113,20 @@ abstract class AbstractIndicateurImpl extends AbstractService implements Indicat
                 return sprintf("Impossible de formatter l'item de type '%s' en chaîne de caractères.", 
                         is_object($value) ? get_class($value) : gettype($value));
             };
-            $this->resultFormatter = new Callback($toString);
+            $this->resultItemFormatter = new Callback($toString);
         }
         
-        return $this->resultFormatter;
+        return $this->resultItemFormatter;
+    }
+
+    /**
+     * Retourne le filtre permettant d'obtenir l'id éventuel de chaque item de résultat.
+     *
+     * @return FilterInterface
+     */
+    public function getResultItemIdExtractor()
+    {
+        throw new LogicException("Méthode non implémentée");
     }
     
     /**

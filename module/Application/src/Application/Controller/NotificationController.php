@@ -5,16 +5,19 @@ namespace Application\Controller;
 use Application\Acl\AdministrateurRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
-use Application\Interfaces\StructureAwareInterface;
 use Application\Service\Indicateur as IndicateurService;
 use Application\Service\Indicateur\AbstractIndicateurImpl;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
+use Application\Service\Traits\ContextAwareTrait;
 use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
+use Common\Filter\IntervenantEmailFormatter;
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use UnicaenApp\Controller\Plugin\Mail;
+use UnicaenApp\Util;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Form\Element\Text;
 use Zend\Form\Element\Textarea;
@@ -36,13 +39,13 @@ use Zend\View\Renderer\PhpRenderer;
  *
  * @method EntityManager em()
  * @method Context              context()
- * @method \UnicaenApp\Controller\Plugin\Mail mail()
+ * @method Mail mail()
  * 
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class NotificationController extends AbstractActionController
 {
-    use \Application\Service\Traits\ContextAwareTrait;
+    use ContextAwareTrait;
     
     /**
      * Visualisation de tous les abonnements aux indicateurs.
@@ -275,7 +278,8 @@ EOS;
     }
 
     /**
-     * 
+     * Envoi de mail aux intervenants retournés par un indicateur.
+     * NB: 1 mail pour chaque intervenant.
      * 
      * @return ViewModel
      * @throws MessageException
@@ -285,6 +289,7 @@ EOS;
         $role       = $this->getServiceContext()->getSelectedIdentityRole();
         $indicateur = $this->context()->mandatory()->indicateurFromRoute();
         $structure  = $this->context()->structureFromRoute();
+        $intervenantsSourceCodesSelectionnes = $this->params()->fromQuery('intervenant');
         
         if (! $role instanceof AdministrateurRole) {
             $structure = null;
@@ -294,20 +299,32 @@ EOS;
         if (! $indicateurImpl instanceof AbstractIntervenantResultIndicateurImpl) {
             throw new RuntimeException("Indicateur non pris en charge.");
         }
-        
-        $emails = $indicateurImpl->getResultEmails();
-        if (! $emails) {
-            throw new MessageException("Aucun destinataire trouvé.");
+
+        // Extraction de l'email de chaque intervenant retourné par l'indicateur.
+        // Si une sélection d'intervenants est spécifiée, on filtre les emails en conséquence.
+        $destinataires = [];
+        foreach ($indicateurImpl->getResult() as $resultItem) {
+            $intervenant = $indicateurImpl->getResultItemIntervenantExtractor()->filter($resultItem);
+            if (! $intervenantsSourceCodesSelectionnes || in_array($intervenant->getSourceCode(), $intervenantsSourceCodesSelectionnes)) {
+                $destinataires[] = $intervenant;
+            }
         }
-        
+        $formatter = new IntervenantEmailFormatter();
+        $emails = $formatter->filter($destinataires);
+        if (($intervenantsWithNoEmail = $formatter->getIntervenantsWithNoEmail())) {
+            throw new MessageException(
+                "Aucune adresse mail trouvée pour l'intervenant suivant: " . implode(", ", Util::collectionAsOptions($intervenantsWithNoEmail)));
+        }
+
         $mailer  = new IndicateurIntervenantsMailer($this, $indicateurImpl);
         $from    = $mailer->getFrom();
         $subject = $mailer->getDefaultSubject();
         $body    = $mailer->getDefaultBody();
 
         $form = new Form();
-        $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
+        $form->setAttribute('action', $this->url()->fromRoute(null, [], ['query' => $this->params()->fromQuery()], true));
         $form->add((new Text('from'))->setValue($from));
+        $form->add((new Text('nombre'))->setValue(count($emails)));
         $form->add((new Text('subject'))->setValue($subject));
         $form->add((new Textarea('body'))->setValue($body));
         $form->add((new Submit('submit')));
@@ -329,7 +346,6 @@ EOS;
             'form'    => $form,
         ]);
     }
-
 
     /**
      * Test d'envoi de mail à l'utilisateur connecté.

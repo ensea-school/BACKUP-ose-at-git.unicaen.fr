@@ -56,7 +56,7 @@ class AttenteValidationPermAutreCompIndicateurImpl extends AbstractIntervenantRe
      * @param VIndicAttenteValidEnsAutre $result
      * @return string
      */
-    public function getResultUrl($result)
+    public function getResultItemUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
             'intervenant/validation-service-realise',
@@ -65,23 +65,41 @@ class AttenteValidationPermAutreCompIndicateurImpl extends AbstractIntervenantRe
     }
 
     /**
+     * Retourne le filtre retournant l'intervenant correspondant à chaque item de résultat.
+     *
+     * @return FilterInterface
+     */
+    public function getResultItemIntervenantExtractor()
+    {
+        if (null === $this->resultItemIntervenantExtractor) {
+            $this->resultItemIntervenantExtractor = new Callback(function(VIndicAttenteValidEnsAutre $resultItem) {
+                $intervenant = $resultItem->getIntervenant();
+                return $intervenant;
+            });
+        }
+
+        return $this->resultItemIntervenantExtractor;
+    }
+
+    /**
      * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
      *
      * @return FilterInterface
      */
-    public function getResultFormatter()
+    public function getResultItemFormatter()
     {
-        if (null === $this->resultFormatter) {
-            $this->resultFormatter = new Callback(function(VIndicAttenteValidEnsAutre $resultItem) {
+        if (null === $this->resultItemFormatter) {
+            $this->resultItemFormatter = new Callback(function(VIndicAttenteValidEnsAutre $resultItem) {
+                $intervenant = $this->getResultItemIntervenantExtractor()->filter($resultItem);
                 $out = sprintf("%s <small>(n°%s%s)</small>",
-                    $i = $resultItem->getIntervenant(),
-                    $i->getSourceCode(),
-                    $i->getStatut()->estPermanent() ? ", Affectation: " . $i->getStructure() : null);
+                    $intervenant,
+                    $intervenant->getSourceCode(),
+                    $intervenant->getStatut()->estPermanent() ? ", Affectation: " . $intervenant->getStructure() : null);
                 return $out;
             });
         }
 
-        return $this->resultFormatter;
+        return $this->resultItemFormatter;
     }
 
     /**

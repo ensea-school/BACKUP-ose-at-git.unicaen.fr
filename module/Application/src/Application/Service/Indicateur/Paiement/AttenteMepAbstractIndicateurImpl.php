@@ -46,7 +46,7 @@ abstract class AttenteMepAbstractIndicateurImpl extends AbstractIntervenantResul
      * @param IntervenantEntity $result
      * @return string
      */
-    public function getResultUrl($result)
+    public function getResultItemUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
                 'paiement/etat-demande-paiement', 
@@ -113,42 +113,44 @@ abstract class AttenteMepAbstractIndicateurImpl extends AbstractIntervenantResul
             $this->getServiceContext()->getDateObservation()
         );
     }
+
+    /**
+     * Retourne le filtre retournant l'intervenant correspondant à chaque item de résultat.
+     *
+     * @return FilterInterface
+     */
+    public function getResultItemIntervenantExtractor()
+    {
+        if (null === $this->resultItemIntervenantExtractor) {
+            $this->resultItemIntervenantExtractor = new Callback(function(VIndicAttenteMepEntity $resultItem) {
+                $intervenant = $resultItem->getIntervenant();
+                return $intervenant;
+            });
+        }
+
+        return $this->resultItemIntervenantExtractor;
+    }
     
     /**
      * Retourne le filtre permettant de formater comme il se doit chaque item de résultat.
      * 
      * @return FilterInterface
      */
-    public function getResultFormatter()
+    public function getResultItemFormatter()
     {
-        if (null === $this->resultFormatter) {
-            $this->resultFormatter = new Callback(function(VIndicAttenteMepEntity $resultItem) { 
+        if (null === $this->resultItemFormatter) {
+            $this->resultItemFormatter = new Callback(function(VIndicAttenteMepEntity $resultItem) {
+                $intervenant = $this->getResultItemIntervenantExtractor()->filter($resultItem);
                 $out = sprintf("<strong>%s</strong> : %s <small>(n°%s%s)</small>", 
-                        $resultItem->getStructure(), 
-                        $i = $resultItem->getIntervenant(), 
-                        $i->getSourceCode(),
-                        $i->getStatut()->estPermanent() ? ", Affectation: " . $i->getStructure() : null);
+                    $resultItem->getStructure(),
+                    $intervenant,
+                    $intervenant->getSourceCode(),
+                    $intervenant->getStatut()->estPermanent() ? ", Affectation: " . $intervenant->getStructure() : null);
                 return $out;
             });
         }
         
-        return $this->resultFormatter;
-    }
-    
-    /**
-     * Collecte et retourne les adresses mails de tous les intervenants retournés par cet indicateur.
-     * 
-     * @return array
-     */
-    public function getResultEmails()
-    {
-        $resultEmails = [];
-        foreach ($this->getResult() as $r) { /* @var $r VIndicAttenteMepEntity */
-            $intervenant = $r->getIntervenant();
-            $resultEmails[$intervenant->getEmailPerso(true)] = $intervenant->getNomComplet();
-        }
-        
-        return $resultEmails;
+        return $this->resultItemFormatter;
     }
     
     /**

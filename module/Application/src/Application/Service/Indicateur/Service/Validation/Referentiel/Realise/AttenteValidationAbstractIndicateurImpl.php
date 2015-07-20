@@ -39,7 +39,7 @@ abstract class AttenteValidationAbstractIndicateurImpl extends BaseAttenteValida
      * @param IntervenantEntity $result
      * @return string
      */
-    public function getResultUrl($result)
+    public function getResultItemUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/validation-referentiel-realise', 

@@ -40,7 +40,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
      * @param IntervenantEntity $result
      * @return string
      */
-    public function getResultUrl($result)
+    public function getResultItemUrl($result)
     {
         return $this->getHelperUrl()->fromRoute(
                 'intervenant/services', 
@@ -53,10 +53,10 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
      * 
      * @return FilterInterface
      */
-    public function getResultFormatter()
+    public function getResultItemFormatter()
     {
-        if (null === $this->resultFormatter) {
-            $this->resultFormatter = new Callback(function(IntervenantEntity $resultItem) { 
+        if (null === $this->resultItemFormatter) {
+            $this->resultItemFormatter = new Callback(function(IntervenantEntity $resultItem) {
                 $details = [];
                 foreach ($resultItem->getService() as $service) { /* @var $service Service */
                     $ep      = $service->getElementPedagogique();
@@ -79,7 +79,7 @@ class EnsHistoIndicateurImpl extends AbstractIntervenantResultIndicateurImpl
             });
         }
         
-        return $this->resultFormatter;
+        return $this->resultItemFormatter;
     }
     
     /**

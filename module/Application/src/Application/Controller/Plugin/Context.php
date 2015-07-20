@@ -118,18 +118,9 @@ class Context extends Params implements ServiceLocatorAwareInterface
         $em = $this->getServiceLocator()->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 
         /* Cas particulier pour les intervenants : import implicite */
-        if ('intervenant' === $target && (int)$value){
-            $sourceCode = (string)(int)$value;
-            if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
-                $this->getProcessusImport()->intervenant($sourceCode); // Import
-                if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
-                    throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
-                }
-            }
-            $value = $intervenant;
+        if ('intervenant' === $target && $value) {
+            $value = $this->intervenantFromSourceCode($value);
         }
-
-//        var_dump($value, $method, $target);
 
         if ($this->mandatory && null === $value) {
             throw new LogicException("Paramètre requis introuvable : '$target'.");
@@ -154,6 +145,35 @@ class Context extends Params implements ServiceLocatorAwareInterface
         $this->mandatory = false;
 
         return $value;
+    }
+
+
+    /**
+     * Fetch avec import préalable si besoin d'un ou plusieurs intervenants à partir du source code.
+     *
+     * @param string|string[] $sourceCodes
+     * @return \Application\Entity\Db\Intervenant|array
+     */
+    private function intervenantFromSourceCode($sourceCodes)
+    {
+        if (is_scalar($sourceCodes)) {
+            $sourceCode = (string)(int) $sourceCodes;
+            if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
+                $this->getProcessusImport()->intervenant($sourceCode); // Import
+                if (!($intervenant = $this->getServiceIntervenant()->getBySourceCode($sourceCode))) {
+                    throw new RuntimeException("L'intervenant suivant est introuvable après import : sourceCode = $sourceCode.");
+                }
+            }
+
+            return $intervenant;
+        }
+
+        $intervenants = [];
+        foreach ($sourceCodes as $sourceCode) {
+            $intervenants[$sourceCode] = $this->intervenantFromSourceCode($sourceCode) ;
+        }
+
+        return $intervenants;
     }
 
     /**

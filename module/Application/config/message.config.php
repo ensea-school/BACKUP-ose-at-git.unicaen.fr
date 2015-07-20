@@ -42,8 +42,8 @@ return [
             [
                 'id' => MsgConst::ID_DONNEES_PERSO_IMPORTANTES,
                 'contents' => [
-                    ComposanteRole::ROLE_ID => "Ces données sont indispensables pour éditer le contrat et mettre en paiement les heures complémentaires éventuelles.",
-                    IntervenantRole::ROLE_ID => "Ces données sont indispensables pour éditer votre contrat et mettre en paiement vos heures complémentaires éventuelles.",
+                    ComposanteRole::ROLE_ID => "Ces données sont indispensables pour éditer le contrat et mettre en paiement les heures d'enseignement.",
+                    IntervenantRole::ROLE_ID => "Ces données sont indispensables pour éditer votre contrat et mettre en paiement vos heures d'enseignement.",
                 ],
             ],
         ],

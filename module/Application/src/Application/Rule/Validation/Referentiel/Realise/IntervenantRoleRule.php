@@ -2,11 +2,6 @@
 
 namespace Application\Rule\Validation\Referentiel\Realise;
 
-use Application\Rule\Validation\ValidationEnsRefAbstractRule;
-use Application\Acl\ComposanteRole;
-use Application\Acl\AdministrateurRole;
-use Application\Service\Workflow\Workflow;
-
 /**
  * Spécificités de la validation du référentiel réalisé du point de vue du rôle Intervenant.
  *

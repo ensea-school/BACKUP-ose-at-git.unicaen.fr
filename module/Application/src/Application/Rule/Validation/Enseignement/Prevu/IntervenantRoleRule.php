@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Rule\Validation\Enseignement\Realise;
+namespace Application\Rule\Validation\Enseignement\Prevu;
 
 /**
  * Spécificités de la validation des enseignements réalisés du point de vue du rôle Intervenant.

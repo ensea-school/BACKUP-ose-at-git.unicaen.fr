@@ -133,7 +133,7 @@ class ValidationController extends AbstractActionController
             $this->validation = $serviceValidation->newEntity($typeValidation);
             $this->validation
                     ->setIntervenant($intervenant)
-                    ->setStructure($role->getStructure());
+                    ->setStructure($intervenant->getStructure());
         }
         
         $this->formValider = $this->getFormDossier($this->validation);

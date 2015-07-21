@@ -27,6 +27,42 @@ class Role extends NamedRole
 
 
 
+    /**
+     * Détermine si le périmètre du rôle courant est de niveau intervenant
+     *
+     * @return bool
+     */
+    public function isPerimetreIntervenant()
+    {
+        return $this->getIntervenant() ? true : false;
+    }
+
+
+
+    /**
+     * Détermine si le périmètre du rôle courant est de niveau composante
+     *
+     * @return bool
+     */
+    public function isPerimetreComposante()
+    {
+        return $this->getStructure() ? true : false;
+    }
+
+
+
+    /**
+     * Détermine si le périmètre du rôle courant est de niveau établissement
+     *
+     * @return bool
+     */
+    public function isPerimetreEtablissement()
+    {
+        return !$this->getStructure() && !$this->getIntervenant();
+    }
+
+
+
     public function __construct($id = self::ROLE_ID, $parent = 'user', $name = 'Rôle', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);

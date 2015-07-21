@@ -228,7 +228,7 @@ class ValidationController extends AbstractActionController
             $this->validation = current($this->validations);
             if ($role instanceof IntervenantRole) {
                 $message = sprintf(
-                    "Tout vos enseignements %s n'ont pas encore été validés",
+                    "Tous vos enseignements %s ont été validés.",
                     $typeVolumeHoraire->isPrevu() ? "prévisionnels" : "réalisés"
                 );
             } else {

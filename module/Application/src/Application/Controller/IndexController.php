@@ -13,8 +13,9 @@ class IndexController extends AbstractActionController
 {
     use \Application\Service\Traits\ContextAwareTrait,
         \Application\Service\Traits\AnneeAwareTrait,
-        IntervenantAwareTrait
-    ;
+        IntervenantAwareTrait;
+
+
 
     /**
      *
@@ -37,25 +38,27 @@ class IndexController extends AbstractActionController
         return $view;
     }
 
+
+
     public function changementAnneeAction()
     {
         /* Prise en compte du changement d'année!! */
         $annee = $this->params()->fromRoute('annee');
-        if ($annee){
+        if ($annee) {
             $annee = $this->getServiceAnnee()->get($annee);
             $this->getServiceContext()->setAnnee($annee);
 
             $role = $this->getServiceContext()->getSelectedIdentityRole();
-            if ($role->getIntervenant()){
+            if ($role->getIntervenant()) {
                 $intervenant = $this->getServiceIntervenant()->getBySourceCode($role->getIntervenant()->getSourceCode());
                 $this->getServiceUserContext()->setNextSelectedIdentityRole($intervenant->getStatut()->getRoleId());
             }
         }
 
-
-
         return [];
     }
+
+
 
     /**
      * @return UserContext

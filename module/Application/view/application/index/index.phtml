@@ -1,68 +1,82 @@
-<?php $this->headTitle("Accueil") ?>
+<?php
 
-<?php echo $this->messenger()->addMessagesFromFlashMessenger() ?>
+/* @var $role \Application\Acl\Role */
 
-<div class="jumbotron">
-    <h1>OSE <small>Organisation des Services d'Enseignement</small></h1>
-    <p class="lead">Bienvenue dans l'application de saisie des enseignements de l'université de Caen.</p>
-    <p>Année <?php echo $annee ?>.</p>
-    
-    <?php if (($identity = $this->identity())): ?>
-    
-        <?php 
-        $message = null;
-        $url   = $this->url('home');
-        $label = $this->translate("Accueil...");
-        if ($role instanceof \Application\Acl\IntervenantRole) {
-            $intervenant = $role->getIntervenant();
-            if ($intervenant->getStatut()->getNonAutorise()){
-                $message = "<div class='alert alert-danger'> Votre statut ne vous permet pas de vous connecter à OSE.</div>";
-            }elseif ($intervenant instanceof \Application\Entity\Db\IntervenantExterieur) {
-                $message = null;
-            }elseif ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
-                $message = null;
+$this->headTitle("Accueil");
+echo $this->messenger()->addMessagesFromFlashMessenger();
+
+?>
+    <div class="jumbotron">
+        <h1>OSE
+            <small>Organisation des Services d'Enseignement</small>
+        </h1>
+        <p class="lead">Bienvenue dans l'application de saisie des enseignements de l'université de Caen.</p>
+
+        <p>Année <?php echo $annee ?>.</p>
+
+        <?php
+        if ($role){
+
+            if ($role->isPerimetreIntervenant()){
+
+                $intervenant = $role->getIntervenant();
+                if ($intervenant->getStatut()->getNonAutorise()){
+
+                    ?><p><div class='alert alert-danger'> Votre statut ne vous permet pas de vous connecter à OSE.</div></p><?php
+
+                }else{
+
+                    $wf = $this->workflow($intervenant, $role)->getWorkflow();
+                    if ($wf->getSteps()) {
+                        $step = $wf->getCurrentStep() ?: $wf->getLastStep();
+                        /* @var $wf \Application\Service\Workflow\WorkflowIntervenantExterieur */
+                        $url   = $wf->getStepUrl($step);
+                        $label = $this->translate($step->getLabel($role));
+
+                        ?><p><a class="btn btn-primary btn-large" href="<?php echo $url ?>"><?php echo $label ?></a></p><?php
+                    }
+
+                }
+
+            }elseif ($role->isPerimetreComposante()) {
+
+                $url   = $this->url('service/resume');
+                $label = $this->translate("Tableau synthétique des enseignements concernant ma composante...");
+                ?><p><a class="btn btn-primary btn-large" href="<?php echo $url ?>"><?php echo $label ?></a></p><?php
+
             }
-            $wf = $this->workflow($intervenant, $role)->getWorkflow();
-            if ($wf->getSteps()) {
-                $step  = $wf->getCurrentStep() ?: $wf->getLastStep(); /* @var $wf \Application\Service\Workflow\WorkflowIntervenantExterieur */
-                $url   = $wf->getStepUrl($step);
-                $label = $this->translate($step->getLabel($role));
-            }
-        }
-        elseif ($role instanceof \Application\Acl\ComposanteRole) {
-            $url   = $this->url('service/resume');
-            $label = $this->translate("Tableau synthétique des enseignements concernant ma composante...");
+
+        }else{
+
+            ?><a class="btn btn-success btn-large" href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Connectez-vous...') ?></a><?php
+
         }
         ?>
-        <?php if ($message): ?>
-        <p><?php echo $message ?></p>
-        <?php endif; ?>
-        <p><a class="btn btn-primary btn-large" href="<?php echo $url ?>"><?php echo $label ?></a></p>
-        
-    <?php else: ?>
+    </div>
 
-        <a class="btn btn-success btn-large" href="<?php echo $this->url('zfcuser/login') ?>"><?php echo $this->translate('Connectez-vous...') ?></a>
-
-    <?php endif; ?>
-</div>
-
-<!-------------------------- Indicateurs (AJAX) -------------------------->
+    <!-------------------------- Indicateurs (AJAX) -------------------------->
 <?php if (isset($this->abonnementsUrl)): ?>
-<script>
-    $(function() {
-        var url = '<?php echo $this->abonnementsUrl ?>';
-        $(".abonnements").hide();
-        $("#abonnements").load(url, [], function() { 
-            $(".abonnements").fadeIn();
-            $(this).hide().fadeIn(); 
+    <script>
+        $(function ()
+        {
+            var url = '<?php echo $this->abonnementsUrl ?>';
+            $(".abonnements").hide();
+            $("#abonnements").load(url, [], function ()
+            {
+                $(".abonnements").fadeIn();
+                $(this).hide().fadeIn();
+            });
         });
-    });
-</script>
-<h2 class="abonnements">Vos indicateurs <a class="btn btn-default btn-sm pull-right" href="<?php echo $this->url('indicateur') ?>">Gérer vos abonnements à des indicateurs</a></h2>
-<div id="abonnements"><div class="loading"></div></div>
+    </script>
+    <h2 class="abonnements">Vos indicateurs <a class="btn btn-default btn-sm pull-right"
+                                               href="<?php echo $this->url('indicateur') ?>">Gérer vos abonnements à des
+            indicateurs</a></h2>
+    <div id="abonnements">
+        <div class="loading"></div>
+    </div>
 <?php endif ?>
-        
-<!----------------------------- Feuille de route --------------------------->
+
+    <!----------------------------- Feuille de route --------------------------->
 <?php if (isset($intervenant)): ?>
-<?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', ['intervenant' => $intervenant, 'role' => $role]); ?>
+    <?php echo $this->partial('application/intervenant/partial/feuille-de-route.phtml', ['intervenant' => $intervenant, 'role' => $role]); ?>
 <?php endif;

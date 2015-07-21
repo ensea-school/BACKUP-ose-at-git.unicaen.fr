@@ -90,14 +90,12 @@ class StructureController extends AbstractActionController
             throw new RuntimeException("Structure '$id' spécifiée introuvable.");
         }
 
-        $import = $this->getServiceLocator()->get('ImportProcessusImport');
-        $changements = $import->structureGetDifferentiel($structure);
         $title = "Détails d'une structure";
         $short = $this->params()->fromQuery('short', false);
 
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/structure/voir')
-                  ->setVariables(compact('structure', 'changements', 'title', 'short'));
+                  ->setVariables(compact('structure', 'title', 'short'));
 
         return $viewModel;
     }

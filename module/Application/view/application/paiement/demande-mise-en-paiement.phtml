@@ -3,6 +3,8 @@
 /* @var $intervenant Application\Entity\Db\Intervenant */
 /* @var $serviceaAPayer Application\Entity\Db\ServiceAPayerInterface[] */
 /* @var $saved boolean */
+/* @var $dateDerniereModif DateTime */
+/* @var $dernierModificateur \Application\Entity\Db\Utilisateur */
 
 $title = 'Demande de mise en paiement';
 if ($intervenant){
@@ -26,6 +28,10 @@ $html = $this->demandeMiseEnPaiement( $servicesAPayer )->render();
 echo $this->messageCollector();
 
 echo $html;
+
+echo '<hr/>';
+echo '<div class="pull-right"><em>Dernière modification: '.sprintf("Le %s par %s", $dateDerniereModif->format('d/m/Y'), $dernierModificateur).'</em></div>';
+
 
 if ($saved){
 ?>

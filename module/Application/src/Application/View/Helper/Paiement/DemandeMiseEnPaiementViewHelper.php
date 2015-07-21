@@ -2,6 +2,10 @@
 
 namespace Application\View\Helper\Paiement;
 
+use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\DomaineFonctionnelAwareTrait;
+use Application\Service\Traits\EtablissementAwareTrait;
+use Application\Service\Traits\TypeHeuresAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -19,10 +23,10 @@ use Application\Entity\Db\DomaineFonctionnel;
  */
 class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\DomaineFonctionnelAwareTrait,
-        \Application\Service\Traits\TypeHeuresAwareTrait
-    ;
+    use ServiceLocatorAwareTrait;
+    use DomaineFonctionnelAwareTrait;
+    use TypeHeuresAwareTrait;
+    use ContextAwareTrait;
 
     private $servicesAPayer = [];
 
@@ -134,7 +138,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
     public function renderServiceAPayer( ServiceAPayerInterface $serviceAPayer )
     {
         $out  = '<div class="service-a-payer" id="'.$this->getServiceAPayerId($serviceAPayer).'">';
-        $out .= '<ul class="breadcrumb"><li>'.$this->renderHead( $serviceAPayer ).'</li></ul>';
+        $out .= $this->renderHead( $serviceAPayer );
         $typesHeures = $this->getServiceTypeHeures()->getList( $this->getServiceTypeHeures()->finderByServiceaPayer($serviceAPayer));
         $colSpan = 12 / count($typesHeures);
         if ($colSpan > 6) $colSpan = 6;
@@ -149,18 +153,26 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
 
     public function renderHead( ServiceAPayerInterface $serviceAPayer )
     {
+        $cartridgeItems = [];
+
+        $cartridgeItems[] = $this->getView()->structure( $serviceAPayer->getStructure() )->renderLink();
         if ($serviceAPayer instanceof FormuleResultatService){
             if ($serviceAPayer->getService()->getElementPedagogique()){
-                $out = $this->getView()->etape( $serviceAPayer->getService()->getElementPedagogique()->getEtape() )->renderLink();
-                $out .= ' > ';
-                $out .= $this->getView()->elementPedagogique( $serviceAPayer->getService()->getElementPedagogique() )->renderLink();
-                return $out;
+                $cartridgeItems[] = $this->getView()->etape( $serviceAPayer->getService()->getElementPedagogique()->getEtape() )->renderLink();
+                $cartridgeItems[] = $this->getView()->elementPedagogique( $serviceAPayer->getService()->getElementPedagogique() )->renderLink();
             }else{
-                return $this->getView()->etablissement( $serviceAPayer->getService()->getEtablissement() )->renderLink();
+                $cartridgeItems[] = 'Enseignements hors '.$this->getServiceContext()->getEtablissement()->getLibelle();
+                $cartridgeItems[] = $this->getView()->etablissement( $serviceAPayer->getService()->getEtablissement() )->renderLink();
             }
         }elseif($serviceAPayer instanceof FormuleResultatServiceReferentiel){
-            return $this->getView()->fonctionReferentiel( $serviceAPayer->getServiceReferentiel()->getFonction() )->renderLink();
+            $cartridgeItems[] = 'Référentiel';
+            $cartridgeItems[] = $this->getView()->fonctionReferentiel( $serviceAPayer->getServiceReferentiel()->getFonction() )->renderLink();
         }
+
+        return $this->getView()->cartridge($cartridgeItems, [
+            'theme'      => 'gray',
+            'attributes' => ['style' => 'padding-bottom: 5px'],
+        ]);
     }
 
     public function renderMiseEnPaiementListe( ServiceAPayerInterface $serviceAPayer, TypeHeures $typeHeures, $colSpan=12 )

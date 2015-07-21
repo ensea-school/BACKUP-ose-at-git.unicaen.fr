@@ -31,4 +31,11 @@ return [
             ],
         ],
     ],
+    'view_helpers' => [
+        'invokables' => [
+            'cartridge' => 'Common\View\Helper\CartridgeViewHelper',
+        ],
+        'initializers' => [
+        ],
+    ],
 ];

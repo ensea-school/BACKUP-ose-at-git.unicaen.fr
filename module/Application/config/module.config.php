@@ -267,6 +267,7 @@ $main =  [
         ],
         'css' => [
             'bootstrap-select/css/bootstrap-select.min.css',
+            'css/cartridge.css',
         ]
     ]
 ];

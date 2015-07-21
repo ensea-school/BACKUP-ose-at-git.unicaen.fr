@@ -24,7 +24,7 @@ $dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Inter
         <?php echo $this->formControlGroup($dossier->get('numeroInsee')->setAttribute('readonly', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('numeroInseeEstProvisoire')->setAttribute('disabled', $this->readonly)); ?>
         <?php echo $this->formControlGroup($dossier->get('adresse')->setAttribute('readonly', $this->readonly)); ?>
-        <?php echo $this->formControlGroup($dossier->get('email')->setAttribute('readonly', $this->readonly)); ?>
+        <?php echo $this->formControlGroup($dossier->get('email')->setAttribute('readonly', true)); ?>
         <?php if ($dossier->has('emailPerso')) {
             echo $this->formControlGroup($dossier->get('emailPerso')->setAttribute('readonly', $this->readonly)); 
         } ?>

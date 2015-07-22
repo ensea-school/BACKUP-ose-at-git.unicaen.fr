@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Service\Traits\IntervenantAwareTrait;
+use UnicaenCode\Util;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 

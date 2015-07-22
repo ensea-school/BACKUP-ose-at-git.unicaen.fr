@@ -9,12 +9,12 @@ $modules = [
     'UnicaenLdap',
     'Common',
     'Application',
-    'Import',
-    //'ZendDeveloperTools'
+    'Import'
 ];
 
-if ( file_exists(dirname(dirname(__FILE__)).'/module/Debug') ) {
-    $modules[] = 'Debug';
+if ( 'development' == $env ) {
+    $modules[] = 'ZendDeveloperTools';
+    $modules[] = 'UnicaenCode';
 }
 
 return [

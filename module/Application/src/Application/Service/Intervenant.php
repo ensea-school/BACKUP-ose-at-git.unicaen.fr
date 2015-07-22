@@ -212,8 +212,6 @@ class Intervenant extends AbstractEntityService
      */
     public function importer($sourceCode)
     {
-        $repo = $this->getEntityManager()->getRepository($this->getEntityClass());
-
         if ($intervenant = $this->getBySourceCode($sourceCode)) {
             return $intervenant;
         }
@@ -221,6 +219,8 @@ class Intervenant extends AbstractEntityService
         $import = $this->getServiceLocator()->get('importProcessusImport');
         /* @var $import Import */
         $import->intervenant($sourceCode);
+
+        $repo = $this->getEntityManager()->getRepository($this->getEntityClass());
 
         if (!($intervenant = $repo->findOneBySourceCode($sourceCode))) {
             throw new RuntimeException("Vous n'êtes pas autorisé à vous connecter à OSE avec ce compte. Vous vous prions de vous rapprocher de votre composante pour en obtenir un valide.");

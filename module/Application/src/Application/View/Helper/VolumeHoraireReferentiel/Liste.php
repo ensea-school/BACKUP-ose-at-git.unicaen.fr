@@ -104,7 +104,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
 
     public function renderHeures(VolumeHoraireReferentielListe $volumeHoraireListe)
     {
-        $heures = \Common\Util::formattedHeures($volumeHoraireListe->getHeures());
+        $heures = \UnicaenApp\Util::formattedNumber($volumeHoraireListe->getHeures());
 
         $query = $volumeHoraireListe->filtersToArray();
         

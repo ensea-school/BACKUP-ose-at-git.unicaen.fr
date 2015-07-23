@@ -317,7 +317,7 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         $out                        = '';
         $out .= '<tr>';
         $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de référentiel :</th>\n";
-        $out .= "<td id=\"total-referentiel\" style=\"text-align:right\" colspan=\"" . $typesInterventionDisplayed . "\">" . \Common\Util::formattedHeures($data['total_general']) . "</td>\n";
+        $out .= "<td id=\"total-referentiel\" style=\"text-align:right\" colspan=\"" . $typesInterventionDisplayed . "\">" . \UnicaenApp\Util::formattedNumber($data['total_general']) . "</td>\n";
         $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";
 

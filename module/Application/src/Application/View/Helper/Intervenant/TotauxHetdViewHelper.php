@@ -66,22 +66,22 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
         <table class="table table-bordered" style="width:auto;">
             <?php if ($fr->getServiceDu() > 0): ?>
             <tr><th>Service Du</th>
-                <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getServiceDu()) ?></td></tr>
+                <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getServiceDu()) ?></td></tr>
             <?php endif; ?>
 
             <tr><th>Service assuré</th>
-                <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getTotal()) ?></td></tr>
+                <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getTotal()) ?></td></tr>
 
             <?php if ($fr->getIntervenant()->estPermanent()): ?>
 
                 <?php if ($fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceFi() > 0): ?>
                 <tr><th style="padding-left:5em">Dont enseignements</th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceFi()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getHeuresServiceFa() + $fr->getHeuresServiceFc() + $fr->getHeuresServiceFi()) ?></td></tr>
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresServiceReferentiel() > 0): ?>
                 <tr><th style="padding-left:5em">Dont référentiel</th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresServiceReferentiel()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getHeuresServiceReferentiel()) ?></td></tr>
                 <?php endif; ?>
 
             <?php endif; ?>
@@ -90,39 +90,39 @@ class TotauxHetdViewHelper extends AbstractHtmlElement implements FormuleResulta
 
                 <?php if ($fr->getIntervenant()->estPermanent()): ?>
                 <tr><th>Heures complémentaires</th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresCompl()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getHeuresCompl()) ?></td></tr>
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplFi() > 0): ?>
                 <tr><th style="padding-left:5em">Dont <abbr title="Formation initiale">FI</abbr></th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplFi()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFi()) ?></td></tr>
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplFa() > 0): ?>
                 <tr><th style="padding-left:5em">Dont <abbr title="Formation en apprentissage">FA</abbr></th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplFa()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFa()) ?></td></tr>
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplFc() > 0): ?>
                 <tr><th style="padding-left:5em">Dont <abbr title="Formation continue">FC</abbr></th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplFc()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFc()) ?></td></tr>
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplFcMajorees() > 0): ?>
                 <tr><th style="padding-left:5em">Dont <abbr title="Rémunération FC au titre de l'article D714-60 du code de l’Éducation">rémunération FC D714-60</abbr></th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplFcMajorees()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getHeuresComplFcMajorees()) ?></td></tr>
                 <?php endif; ?>
 
                 <?php if ($fr->getHeuresComplReferentiel() > 0): ?>
                 <tr><th style="padding-left:5em">Dont référentiel</th>
-                    <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getHeuresComplReferentiel()) ?></td></tr>
+                    <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getHeuresComplReferentiel()) ?></td></tr>
                 <?php endif; ?>
 
             <?php endif; ?>
             <?php if ($fr->getSousService() > 0) : ?>
 
             <tr><th>Sous-service</th>
-                <td style="text-align: right"><?php echo \Common\Util::formattedHeures($fr->getSousService()) ?></td></tr>
+                <td style="text-align: right"><?php echo \UnicaenApp\Util::formattedNumber($fr->getSousService()) ?></td></tr>
 
             <?php endif; ?>
         </table>

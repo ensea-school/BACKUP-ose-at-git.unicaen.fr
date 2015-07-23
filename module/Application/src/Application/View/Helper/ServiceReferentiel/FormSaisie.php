@@ -6,7 +6,7 @@ use Application\Acl\IntervenantRole;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\VolumeHoraireReferentielListe;
 use Application\Form\ServiceReferentiel\SaisieFieldset;
-use Common\Util;
+use UnicaenApp\Util;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\View\Helper\AbstractHelper;
@@ -105,7 +105,7 @@ EOS;
 EOS;
             $rappelPrevu = sprintf($template,
                     $heures,
-                    Util::formattedHeures($vhl->getHeures()));
+                    Util::formattedNumber($vhl->getHeures()));
             
             /**
              * Bouton Prévu->Réalisé

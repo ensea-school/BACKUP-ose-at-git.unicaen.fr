@@ -7,7 +7,7 @@ use Application\Entity\Db\VIndicDepassRef;
 use Application\Interfaces\TypeVolumeHoraireAwareInterface;
 use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Traits\TypeVolumeHoraireAwareTrait;
-use Common\Util;
+use UnicaenApp\Util;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Zend\Stdlib\Hydrator\Filter\FilterInterface;
@@ -71,7 +71,7 @@ abstract class PlafondRefDepasseAbstractIndicateurImpl extends AbstractIntervena
                     $intervenant->getSourceCode(),
                     $intervenant->getStatut(),
                     $intervenant->getStatut()->estPermanent() ? ", " . $intervenant->getStructure() : null,
-                    Util::formattedHeures($resultItem->getTotal()),
+                    Util::formattedNumber($resultItem->getTotal()),
                     $resultItem->getPlafond());
                 return $out;
             });

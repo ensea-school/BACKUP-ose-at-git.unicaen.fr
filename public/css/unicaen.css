@@ -1,7 +1,9 @@
 body {
-    font-family: ubuntu,arial,sans-serif;
-    padding-top: 60px; 
+    font-family: ubuntu, arial, sans-serif;
+    padding-top: 60px;
 }
+
+/* Personnalisation de l'affichage en fonction de l'état du l'application (development, test, production) */
 
 body.development {
     background-image: url("//gest.unicaen.fr/images/dev.png");
@@ -30,22 +32,44 @@ body.test .navbar-inverse .navbar-nav .active a {
 }
 
 body.test div#contenu-principal {
-    background-color:white;
+    background-color: white;
 }
 
 body.development div#contenu-principal {
-    background-color:white;
+    background-color: white;
 }
 
 body.development div#navbar div.collapse pre {
-    position:absolute;
+    position: absolute;
 }
 
 body.development div#navbar div.collapse table {
-    position:absolute;
+    position: absolute;
 }
 
-a.navbar-brand h1 { 
+/* FIN */
+
+/* Divers : affichage des nombres */
+
+input[type=number] {
+    padding-right: 1px;
+}
+
+span.number-negatif {
+    color: red;
+}
+
+span.label-danger span.number-negatif {
+    color: white;
+}
+
+span.number span.number-dec-00 {
+    opacity: 0.3;
+}
+
+/* FIN */
+
+a.navbar-brand h1 {
     font-size: 30px;
     padding: 0;
     margin: 0;
@@ -59,16 +83,19 @@ div.navbar.breadcrumbs {
 #footer {
     margin-bottom: 20px;
 }
+
 #footer ul {
     width: 75%;
     margin: auto;
     text-align: center;
 }
+
 #footer ul li {
     display: inline;
     padding: 0 1em;
     border-left: 1px gray solid;
 }
+
 #footer ul > li:first-child {
     border: none;
 }
@@ -87,7 +114,9 @@ thead {
     font-weight: bold;
 }
 
-body.wait * { cursor: wait; }
+body.wait * {
+    cursor: wait;
+}
 
 fieldset > fieldset {
     margin-left: 1.5em;
@@ -124,7 +153,7 @@ ul.action.list-inline li {
     padding: 0;
 }
 
-div.messenger span.glyphicon { 
+div.messenger span.glyphicon {
     float: left;
     margin-right: 0.5em;
 }
@@ -137,19 +166,19 @@ div.ui-datepicker {
     z-index: 1051 !important; /* NB: doit être supérieur à la modale Bootstrap qui est à 1050 */
 }
 
-div.multicheckbox label { 
-    display: block; 
-    font-weight: normal; 
-    margin-bottom: 10px; 
+div.multicheckbox label {
+    display: block;
+    font-weight: normal;
+    margin-bottom: 10px;
 }
+
 div.multicheckbox label input[type=checkbox],
-div.multicheckbox label input[type=radio] { 
+div.multicheckbox label input[type=radio] {
     float: left;
     margin-right: 5px;
     width: 15px;
-    height: auto; 
+    height: auto;
 }
-
 
 .loading {
     background-image: url('//gest.unicaen.fr/images/ajax-loader-h.gif');
@@ -158,13 +187,16 @@ div.multicheckbox label input[type=radio] {
     min-height: 16px;
     min-width: 11px;
 }
+
 a.loading {
     color: transparent;
 }
+
 a.btn.loading, button.loading {
     /*opacity: 0.5;*/
     background-position: center center;
 }
+
 select.loading {
     background-position: 3px center;
     color: transparent;

@@ -375,13 +375,13 @@ class Liste extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             } else {
                 $display = ';display:none';
             }
-            $out .= "<td id=\"" . $ti->getCode() . "\" class=\"type-intervention " . $ti->getCode() . "\" style=\"text-align:right$display\">" . \Common\Util::formattedHeures($data[$ti->getCode()]) . "</td>\n";
+            $out .= "<td id=\"" . $ti->getCode() . "\" class=\"type-intervention " . $ti->getCode() . "\" style=\"text-align:right$display\">" . \UnicaenApp\Util::formattedNumber($data[$ti->getCode()]) . "</td>\n";
         }
         $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";
         $out .= '<tr>';
         $out .= "<th colspan=\"$colspan\" style=\"text-align:right\">Total des heures de service :</th>\n";
-        $out .= "<td id=\"total-general\" style=\"text-align:right\" colspan=\"" . $typesInterventionDisplayed . "\">" . \Common\Util::formattedHeures($data['total_general']) . "</td>\n";
+        $out .= "<td id=\"total-general\" style=\"text-align:right\" colspan=\"" . $typesInterventionDisplayed . "\">" . \UnicaenApp\Util::formattedNumber($data['total_general']) . "</td>\n";
         $out .= "<td>&nbsp;</td>\n";
         $out .= "</tr>\n";
 

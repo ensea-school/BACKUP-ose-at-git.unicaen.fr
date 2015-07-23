@@ -240,7 +240,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
         if ($hasForbiddenPeriodes) $out .= '<abbr class="bg-danger" title="Des heures sont renseignées sur une période non conforme à la période de l\'enseignement">';
         if ($hasBadTypeIntervention) $out .= '<abbr class="bg-danger" title="Ce type d\'intervention n\'est pas appliquable à cet enseignement">';
 
-        $out .= \Common\Util::formattedHeures($heures);
+        $out .= \UnicaenApp\Util::formattedNumber($heures);
 
         if ($hasBadTypeIntervention) $out .= '</abbr>';
         if ($hasForbiddenPeriodes) $out .= '</abbr>';

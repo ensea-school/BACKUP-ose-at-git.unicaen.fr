@@ -217,10 +217,10 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
         if ($params['heures-mep'] > 0){
             $title = [];
             foreach( $params['mises-en-paiement'] as $periode => $heures ){
-                $title[] = $periode.' : '.strip_tags(\Common\Util::formattedHeures($heures)).' hetd mis en paiement';
+                $title[] = $periode.' : '.strip_tags(\UnicaenApp\Util::formattedNumber($heures)).' hetd mis en paiement';
             }
             $title = implode( '&#13;', $title );
-            $out .= '<tr><td class="nombre"><abbr title="'.$title.'">'.\Common\Util::formattedHeures($params['heures-mep']).'</td><td>HETD déjà mises en paiement</td></tr>';
+            $out .= '<tr><td class="nombre"><abbr title="'.$title.'">'.\UnicaenApp\Util::formattedNumber($params['heures-mep']).'</td><td>HETD déjà mises en paiement</td></tr>';
         }
         $out .= '<tfoot>';
 
@@ -228,7 +228,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             $out .= '<tr>';
             $out .= '<td class="nombre">';
             if (! $readOnly) $out .= '<button class="btn btn-default heures-non-dmep" type="button" title="Demander ces heures en paiement">';
-            $out .= \Common\Util::formattedHeures($params['heures-non-dmep']);
+            $out .= \UnicaenApp\Util::formattedNumber($params['heures-non-dmep']);
             if (! $readOnly) $out .= '</button>';
             $out .= '</td>';
             $out .= '<th>HETD restantes</th>';
@@ -239,7 +239,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             $out .= '</tr>';
         }
         $out .= '<tr class="active">';
-        $out .= '<td class="nombre heures-total">'.\Common\Util::formattedHeures($params['heures-total']).'</td>';
+        $out .= '<td class="nombre heures-total">'.\UnicaenApp\Util::formattedNumber($params['heures-total']).'</td>';
         $out .= '<th>HETD au total</th>';
         $out .= '<td>&nbsp;</td>';
         if ($serviceAPayer->isDomaineFonctionnelModifiable()){

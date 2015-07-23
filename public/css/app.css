@@ -20,24 +20,6 @@ table {
     background-color:white;
 }
 
-/* Divers : affichage des heures */
-
-input[type=number] {
-    padding-right:1px;
-}
-
-span.heures-negatif {
-    color: red;
-}
-
-span.label-danger span.heures-negatif {
-    color: white;
-}
-
-span.heures span.heures-dec-00 {
-    opacity: 0.3;
-}
-
 
 /* Services */
 table.table-extra-condensed tr td {

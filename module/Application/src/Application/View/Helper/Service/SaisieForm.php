@@ -147,7 +147,7 @@ class SaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
             if ($inRealise){
                 $heures = $vhl->setTypeIntervention($typeIntervention)->getHeures();
                 $res .= '<br />Prévues : <span id="prev-'.$typeIntervention->getCode().'" data-heures="'.$heures.'">';
-                $res .= \Common\Util::formattedHeures( $heures );
+                $res .= \UnicaenApp\Util::formattedNumber( $heures );
                 $res .= '</span>';
             }
             $res .= '<br />';

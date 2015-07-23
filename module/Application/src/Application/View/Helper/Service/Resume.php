@@ -119,12 +119,12 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
                 foreach( $typesIntervention as $ti ){
                     $totaux['type-intervention-'.$ti->getCode()] += $line['type-intervention-'.$ti->getCode()];
                     $totaux['heures'] += $line['type-intervention-'.$ti->getCode()];
-                    $res .= '<td style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($line['type-intervention-'.$ti->getCode()]).'</td>'."\n";
+                    $res .= '<td style="text-align:right;white-space:nowrap">'.\UnicaenApp\Util::formattedNumber($line['type-intervention-'.$ti->getCode()]).'</td>'."\n";
                 }
             }
             $totaux['heures-ref'] += $line['heures-ref'];
             $totaux['total'] += $line['total'];
-            $res .= '<td style="text-align:right;white-space:nowrap">'.($intervenantPermanent ? \Common\Util::formattedHeures($line['heures-ref']) : $na).'</td>'."\n";
+            $res .= '<td style="text-align:right;white-space:nowrap">'.($intervenantPermanent ? \UnicaenApp\Util::formattedNumber($line['heures-ref']) : $na).'</td>'."\n";
             $res .= $this->renderServiceDu( $line['heures-service-statutaire'] + $line['heures-service-du-modifie'] );
             $res .= $this->renderSoldeHetd($line['solde'], $intervenantPermanent);
             $res .= '</tr>'."\n";
@@ -135,16 +135,16 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
         $res .= '<th rowspan="'.($hasTi ? '2' : '1').'" style="text-align:right">'.$totaux['intervenant'].' intervenants</th>'."\n";
         if ($hasTi){
             foreach( $typesIntervention as $ti ){
-                $res .= '        <th style="text-align:right;white-space:nowrap"><abbr title="'.$ti->getLibelle().'">'.\Common\Util::formattedHeures($totaux['type-intervention-'.$ti->getCode()]).'</abbr></th>'."\n";
+                $res .= '        <th style="text-align:right;white-space:nowrap"><abbr title="'.$ti->getLibelle().'">'.\UnicaenApp\Util::formattedNumber($totaux['type-intervention-'.$ti->getCode()]).'</abbr></th>'."\n";
             }
         }
-        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'" style="text-align:right;white-space:nowrap">'.\Common\Util::formattedHeures($totaux['heures-ref']).'</th>'."\n";
+        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'" style="text-align:right;white-space:nowrap">'.\UnicaenApp\Util::formattedNumber($totaux['heures-ref']).'</th>'."\n";
         $res .= '<th rowspan="'.($hasTi ? '2' : '1').'">&nbsp;</th>'."\n";
-        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\Common\Util::formattedHeures($totaux['total']).'</span></th>'."\n";
+        $res .= '<th rowspan="'.($hasTi ? '2' : '1').'"><span style="white-space:nowrap">Tot. <abbr title="Heures Complémentaires">HC</abbr></span> <span style="white-space:nowrap">'.\UnicaenApp\Util::formattedNumber($totaux['total']).'</span></th>'."\n";
         $res .= '</tr>'."\n";
         $res .= '<tr>'."\n";
         if ($hasTi){
-            $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right;white-space:nowrap">Total des heures de service : '.\Common\Util::formattedHeures($totaux['heures']).'</th>'."\n";
+            $res .= '<th colspan="'.count($typesIntervention).'" style="text-align:right;white-space:nowrap">Total des heures de service : '.\UnicaenApp\Util::formattedNumber($totaux['heures']).'</th>'."\n";
         }
         $res .= '</tr>'."\n";
         $res .= '</tfoot>'."\n";
@@ -157,7 +157,7 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
         $class = '';
         if (is_numeric($serviceDu)){
             if ($serviceDu < 0) $class = ' class="bg-danger"';
-            $serviceDu = \Common\Util::formattedHeures($serviceDu);
+            $serviceDu = \UnicaenApp\Util::formattedNumber($serviceDu);
         }
 
         $res = '<td style="text-align:right;white-space:nowrap"'.$class.'>'.$serviceDu.'</td>'."\n";
@@ -172,9 +172,9 @@ class Resume extends AbstractHelper implements ServiceLocatorAwareInterface
             if ($intervanantPermanent){
             if ($solde > 0){ $class = ' class="bg-warning"'; $plus = '+';}
             if ($solde < 0) $class = ' class="bg-danger"';
-            $solde = $plus.\Common\Util::formattedHeures($solde);
+            $solde = $plus.\UnicaenApp\Util::formattedNumber($solde);
             }else{
-                $solde = \Common\Util::formattedHeures($solde);
+                $solde = \UnicaenApp\Util::formattedNumber($solde);
         }
         }
 

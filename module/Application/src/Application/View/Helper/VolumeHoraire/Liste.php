@@ -193,7 +193,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
     public function renderHeures(VolumeHoraireListe $volumeHoraireListe)
     {
         $heures = $volumeHoraireListe->getHeures();
-        $heures = \Common\Util::formattedHeures($heures);
+        $heures = \UnicaenApp\Util::formattedNumber($heures);
 
         $query = $volumeHoraireListe->filtersToArray();
         if (false === $volumeHoraireListe->getMotifNonPaiement()){

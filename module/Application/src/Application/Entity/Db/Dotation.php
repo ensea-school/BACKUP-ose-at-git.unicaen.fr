@@ -3,6 +3,8 @@
 namespace Application\Entity\Db;
 
 use Application\Interfaces\AnneeAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
  * Dotation

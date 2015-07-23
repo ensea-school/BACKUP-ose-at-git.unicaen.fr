@@ -3,6 +3,8 @@
 namespace Application\Entity\Db;
 
 use \Application\Traits\ObligatoireSelonSeuilHeuresAwareTrait;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
  * TypePieceJointeStatut

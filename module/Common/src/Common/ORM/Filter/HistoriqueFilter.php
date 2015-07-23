@@ -24,7 +24,7 @@ class HistoriqueFilter extends SQLFilter
     public function addFilterConstraint(ClassMetaData $targetEntity, $targetTableAlias)
     {
         // Check if the entity implements the required interface
-        if (!$targetEntity->reflClass->implementsInterface('Application\Entity\Db\HistoriqueAwareInterface')) {
+        if (!$targetEntity->reflClass->implementsInterface('UnicaenApp\Entity\HistoriqueAwareInterface')) {
             return "";
         }
 

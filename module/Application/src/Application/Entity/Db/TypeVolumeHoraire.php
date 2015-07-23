@@ -1,6 +1,8 @@
 <?php
 
 namespace Application\Entity\Db;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
  * TypeVolumeHoraire

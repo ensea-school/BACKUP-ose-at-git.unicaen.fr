@@ -2,7 +2,7 @@
 
 namespace Application\View\Helper;
 
-use Application\Entity\Db\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
 use Application\Entity\Db\Source;
 
 /**

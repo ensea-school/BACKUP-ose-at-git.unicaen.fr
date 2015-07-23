@@ -3,6 +3,8 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\VolumeHoraireListe;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**

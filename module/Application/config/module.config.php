@@ -41,7 +41,7 @@ $main =  [
             'orm_default' => [
                 'subscribers' => [
                     'Doctrine\DBAL\Event\Listeners\OracleSessionInit',
-                    'Common\ORM\Event\Listeners\HistoriqueListener',
+                    'UnicaenApp\HistoriqueListener',
                 ],
             ],
         ],
@@ -180,7 +180,6 @@ $main =  [
     'service_manager' => [
         'invokables' => [
             'AuthenticatedUserSavedListener'                 => 'Application\AuthenticatedUserSavedListener',
-            'Common\ORM\Event\Listeners\HistoriqueListener'  => 'Common\ORM\Event\Listeners\HistoriqueListener',
             'ApplicationAnnee'                               => 'Application\\Service\\Annee',
             'ApplicationContext'                             => 'Application\\Service\\Context',
             'ApplicationLocalContext'                        => 'Application\\Service\\LocalContext',

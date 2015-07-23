@@ -7,7 +7,7 @@ use Zend\Stdlib\Hydrator\ObjectProperty;
 use Doctrine\ORM\QueryBuilder;
 use UnicaenApp\Exception\RuntimeException;
 use Doctrine\ORM\Query\Expr;
-use \Application\Entity\Db\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
 
 /**
  *
@@ -101,7 +101,7 @@ abstract class AbstractEntityService extends AbstractService
     public function hasHistorique()
     {
         if (null === $this->hasHistorique) {
-            $this->hasHistorique = $this->getReflectionClass()->implementsInterface('Application\Entity\Db\HistoriqueAwareInterface');
+            $this->hasHistorique = $this->getReflectionClass()->implementsInterface('UnicaenApp\Entity\HistoriqueAwareInterface');
         }
 
         return $this->hasHistorique;
@@ -517,7 +517,7 @@ abstract class AbstractEntityService extends AbstractService
     {
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
-        $hasHistorique = is_subclass_of($this->getEntityClass(), 'Application\Entity\Db\HistoriqueAwareInterface');
+        $hasHistorique = is_subclass_of($this->getEntityClass(), 'UnicaenApp\Entity\HistoriqueAwareInterface');
         if ($hasHistorique) {
             $dateObservation = $this->getServiceContext()->getDateObservation();
             if ($dateObservation) {

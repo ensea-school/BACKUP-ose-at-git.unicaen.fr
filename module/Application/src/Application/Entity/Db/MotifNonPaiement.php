@@ -3,6 +3,8 @@
 namespace Application\Entity\Db;
 
 use Doctrine\ORM\Mapping as ORM;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
  * MotifNonPaiement

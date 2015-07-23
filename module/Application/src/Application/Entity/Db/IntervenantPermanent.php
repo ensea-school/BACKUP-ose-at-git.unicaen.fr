@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
 
 /**
  * IntervenantPermanent

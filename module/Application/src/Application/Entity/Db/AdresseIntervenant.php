@@ -1,6 +1,8 @@
 <?php
 
 namespace Application\Entity\Db;
+use UnicaenApp\Entity\HistoriqueAwareInterface;
+use UnicaenApp\Entity\HistoriqueAwareTrait;
 
 /**
  * AdresseIntervenant
@@ -8,7 +10,6 @@ namespace Application\Entity\Db;
 class AdresseIntervenant implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
-
     /**
      * @var string
      */

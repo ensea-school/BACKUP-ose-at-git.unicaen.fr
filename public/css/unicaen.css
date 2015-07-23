@@ -3,6 +3,48 @@ body {
     padding-top: 60px; 
 }
 
+body.development {
+    background-image: url("//gest.unicaen.fr/images/dev.png");
+}
+
+body.test {
+    background-image: url("//gest.unicaen.fr/images/test.png");
+}
+
+body.development .navbar-inverse {
+    background-image: linear-gradient(to bottom, #660000 0px, #870a0a 100%);
+    border-color: #660000;
+}
+
+body.development .navbar-inverse .navbar-nav .active a {
+    background-image: linear-gradient(to bottom, #d22828 0px, #a41212 100%);
+}
+
+body.test .navbar-inverse {
+    background-image: linear-gradient(to bottom, #002768 0px, #0a3783 100%);
+    border-color: #002768;
+}
+
+body.test .navbar-inverse .navbar-nav .active a {
+    background-image: linear-gradient(to bottom, #3773d7 0px, #1d57b7 100%);
+}
+
+body.test div#contenu-principal {
+    background-color:white;
+}
+
+body.development div#contenu-principal {
+    background-color:white;
+}
+
+body.development div#navbar div.collapse pre {
+    position:absolute;
+}
+
+body.development div#navbar div.collapse table {
+    position:absolute;
+}
+
 a.navbar-brand h1 { 
     font-size: 30px;
     padding: 0;

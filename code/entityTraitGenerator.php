@@ -1,6 +1,12 @@
 <h1>Génération des aware traits de getters/setters d\'entités</h1>
 <?php
 
+/**
+ * @var $this \Zend\View\Renderer\PhpRenderer
+ * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $viewName string
+ */
+
 use UnicaenCode\Util;
 
 $outputdir = '/tmp/entityTraits/';

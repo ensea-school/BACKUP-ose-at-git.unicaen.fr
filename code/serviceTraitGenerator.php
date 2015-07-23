@@ -1,6 +1,12 @@
 <h1>Génération des aware traits d\'accès aux services</h1>
 <?php
 
+/**
+ * @var $this \Zend\View\Renderer\PhpRenderer
+ * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $viewName string
+ */
+
 $outputdir = '/tmp/serviceTraits/';
 
 $sIntrospection = $controller->getServiceLocator()->get('UnicaenCode\Introspection');

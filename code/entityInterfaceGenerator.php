@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @var $this \Zend\View\Renderer\PhpRenderer
+ * @var $controller \Zend\Mvc\Controller\AbstractController
+ * @var $viewName string
+ */
+
 use UnicaenCode\Util;
 
 

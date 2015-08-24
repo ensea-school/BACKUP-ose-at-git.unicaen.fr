@@ -169,7 +169,7 @@ class Service implements ServiceManagerAwareInterface, DbUserAwareInterface {
 
     /**
      *
-     * @return Utilisateur
+     * @return UserInterface
      */
     public function getAppDbUser()
     {

@@ -226,6 +226,68 @@ BEGIN
   end if;
 END;
 /
+
+---------------------------
+--Modifié PACKAGE
+--OSE_DIVERS
+---------------------------
+CREATE OR REPLACE PACKAGE "OSE"."OSE_DIVERS" AS 
+
+  FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC;
+
+  FUNCTION implode(i_query VARCHAR2, i_seperator VARCHAR2 DEFAULT ',') RETURN VARCHAR2;
+
+  FUNCTION intervenant_est_permanent( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION intervenant_est_non_autorise( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION intervenant_peut_saisir_serv( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION NIVEAU_FORMATION_ID_CALC( gtf_id NUMERIC, gtf_pertinence_niveau NUMERIC, niveau NUMERIC DEFAULT NULL ) RETURN NUMERIC;
+
+  FUNCTION STRUCTURE_DANS_STRUCTURE( structure_testee NUMERIC, structure_cible NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION STR_REDUCE( str CLOB ) RETURN CLOB;
+  
+  FUNCTION STR_FIND( haystack CLOB, needle VARCHAR2 ) RETURN NUMERIC;
+  
+  FUNCTION LIKED( haystack CLOB, needle CLOB ) RETURN NUMERIC;
+
+  FUNCTION COMPRISE_ENTRE( date_debut DATE, date_fin DATE, date_obs DATE DEFAULT NULL, inclusif NUMERIC DEFAULT 0 ) RETURN NUMERIC;
+
+  PROCEDURE DO_NOTHING;
+
+  FUNCTION VOLUME_HORAIRE_VALIDE( volume_horaire_id NUMERIC ) RETURN NUMERIC;
+
+  FUNCTION CALCUL_TAUX_FI( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+  
+  FUNCTION CALCUL_TAUX_FC( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+  
+  FUNCTION CALCUL_TAUX_FA( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
+
+  FUNCTION STRUCTURE_UNIV_GET_ID RETURN NUMERIC;
+
+  FUNCTION ANNEE_UNIVERSITAIRE( date_ref DATE DEFAULT SYSDATE, mois_deb_au NUMERIC DEFAULT 9, jour_deb_au NUMERIC DEFAULT 1 ) RETURN NUMERIC;
+
+  PROCEDURE SYNC_LOG( msg CLOB );
+
+  FUNCTION FORMATTED_RIB (bic VARCHAR2, iban VARCHAR2) RETURN VARCHAR2;
+  
+  FUNCTION FORMATTED_ADRESSE(
+    no_voie                VARCHAR2,
+    nom_voie               VARCHAR2,
+    batiment               VARCHAR2,
+    mention_complementaire VARCHAR2,
+    localite               VARCHAR2,
+    code_postal            VARCHAR2,
+    ville                  VARCHAR2,
+    pays_libelle           VARCHAR2)
+  RETURN VARCHAR2;
+  
+END OSE_DIVERS;
+/
+
+
 ---------------------------
 --Nouveau TRIGGER
 --INDIC_TRG_MODIF_DOSSIER
@@ -479,65 +541,9 @@ BEGIN
   
 END;
 /
----------------------------
---Modifié PACKAGE
---OSE_DIVERS
----------------------------
-CREATE OR REPLACE PACKAGE "OSE"."OSE_DIVERS" AS 
 
-  FUNCTION INTERVENANT_HAS_PRIVILEGE( intervenant_id NUMERIC, privilege_name VARCHAR2 ) RETURN NUMERIC;
 
-  FUNCTION implode(i_query VARCHAR2, i_seperator VARCHAR2 DEFAULT ',') RETURN VARCHAR2;
 
-  FUNCTION intervenant_est_permanent( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION intervenant_est_non_autorise( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION intervenant_peut_saisir_serv( INTERVENANT_ID NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION NIVEAU_FORMATION_ID_CALC( gtf_id NUMERIC, gtf_pertinence_niveau NUMERIC, niveau NUMERIC DEFAULT NULL ) RETURN NUMERIC;
-
-  FUNCTION STRUCTURE_DANS_STRUCTURE( structure_testee NUMERIC, structure_cible NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION STR_REDUCE( str CLOB ) RETURN CLOB;
-  
-  FUNCTION STR_FIND( haystack CLOB, needle VARCHAR2 ) RETURN NUMERIC;
-  
-  FUNCTION LIKED( haystack CLOB, needle CLOB ) RETURN NUMERIC;
-
-  FUNCTION COMPRISE_ENTRE( date_debut DATE, date_fin DATE, date_obs DATE DEFAULT NULL, inclusif NUMERIC DEFAULT 0 ) RETURN NUMERIC;
-
-  PROCEDURE DO_NOTHING;
-
-  FUNCTION VOLUME_HORAIRE_VALIDE( volume_horaire_id NUMERIC ) RETURN NUMERIC;
-
-  FUNCTION CALCUL_TAUX_FI( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
-  
-  FUNCTION CALCUL_TAUX_FC( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
-  
-  FUNCTION CALCUL_TAUX_FA( eff_fi FLOAT, eff_fc FLOAT, eff_fa FLOAT, fi NUMERIC, fc NUMERIC, fa NUMERIC, arrondi NUMERIC DEFAULT 15 ) RETURN FLOAT;
-
-  FUNCTION STRUCTURE_UNIV_GET_ID RETURN NUMERIC;
-
-  FUNCTION ANNEE_UNIVERSITAIRE( date_ref DATE DEFAULT SYSDATE, mois_deb_au NUMERIC DEFAULT 9, jour_deb_au NUMERIC DEFAULT 1 ) RETURN NUMERIC;
-
-  PROCEDURE SYNC_LOG( msg CLOB );
-
-  FUNCTION FORMATTED_RIB (bic VARCHAR2, iban VARCHAR2) RETURN VARCHAR2;
-  
-  FUNCTION FORMATTED_ADRESSE(
-    no_voie                VARCHAR2,
-    nom_voie               VARCHAR2,
-    batiment               VARCHAR2,
-    mention_complementaire VARCHAR2,
-    localite               VARCHAR2,
-    code_postal            VARCHAR2,
-    ville                  VARCHAR2,
-    pays_libelle           VARCHAR2)
-  RETURN VARCHAR2;
-  
-END OSE_DIVERS;
-/
 ---------------------------
 --Modifié PACKAGE BODY
 --OSE_WORKFLOW

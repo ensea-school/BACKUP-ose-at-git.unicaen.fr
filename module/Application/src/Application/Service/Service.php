@@ -226,7 +226,7 @@ class Service extends AbstractEntityService
                 /* @var $sr \Application\Entity\Db\Service  */
                 if ($sr->estNonHistorise()) return $sr;
             }
-            return $sr[0]; // sinon retourne le premier trouvé...
+            return $result[0]; // sinon retourne le premier trouvé...
         }elseif(isset($result[0])){
             return $result[0];
         }else{

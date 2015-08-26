@@ -800,6 +800,11 @@ class Service extends AbstractEntityService
                 $oldElement->getSourceCode(),
                 $this->getServiceContext()->getAnnee()
             ) : null;
+
+            if ($newElement && ! $newElement->estNonHistorise()){
+                $newElement = null; // s'il n'est pas actif alors on ne reporte pas
+            }
+
             $newPeriode = $newElement ? $newElement->getPeriode() : null;
 
             if (empty($oldElement) || !empty($newElement)) {

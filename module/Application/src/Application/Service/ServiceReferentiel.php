@@ -517,31 +517,36 @@ EOS;
 
             /* @var $service \Application\Entity\Db\ServiceReferentiel */
 
-            $o = [
-                'type-volume-horaire' => $tvhPrevu,
-                'fonction'            => $service->getFonction(),
-                'structure'           => $service->getStructure(),
-                'commentaires'        => $service->getCommentaires(),
-                'heures'              => $service->getVolumeHoraireReferentielListe()->getHeures(),
-                'service'             => $this->getBy(
-                    $intervenant,
-                    $service->getFonction(),
-                    $service->getStructure()
-                ),
-            ];
+            $ok =  $service->getFonction()->estNonHistorise()
+                && $service->getStructure()->estNonHistorise();
 
-            $newService = $o['service'];
-            /* @var $newService \Application\Entity\Db\ServiceReferentiel */
+            if ($ok){
+                $o = [
+                    'type-volume-horaire' => $tvhPrevu,
+                    'fonction'            => $service->getFonction(),
+                    'structure'           => $service->getStructure(),
+                    'commentaires'        => $service->getCommentaires(),
+                    'heures'              => $service->getVolumeHoraireReferentielListe()->getHeures(),
+                    'service'             => $this->getBy(
+                        $intervenant,
+                        $service->getFonction(),
+                        $service->getStructure()
+                    ),
+                ];
 
-            // pour ne pas écraser les serices précédemment saisis avec des heures
-            if (
-            !(
-                $newService
-                && $newService->estNonHistorise()
-                && $newService->getVolumeHoraireReferentielListe()->getHeures() > 0
-            )
-            ) {
-                $old[] = $o;
+                $newService = $o['service'];
+                /* @var $newService \Application\Entity\Db\ServiceReferentiel */
+
+                // pour ne pas écraser les serices précédemment saisis avec des heures
+                if (
+                !(
+                    $newService
+                    && $newService->estNonHistorise()
+                    && $newService->getVolumeHoraireReferentielListe()->getHeures() > 0
+                )
+                ) {
+                    $old[] = $o;
+                }
             }
         }
 

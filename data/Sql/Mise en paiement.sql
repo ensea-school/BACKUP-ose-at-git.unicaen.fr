@@ -24,13 +24,13 @@ WHERE
   --1 = ose_divers.comprise_entre( mep.histo_creation, mep.histo_destruction )
   --AND i.source_code = '21472'
   --AND mep.histo_modificateur_id=2504
-  i.source_code = '5402'
+  i.source_code = '5288'
  -- AND s.id = 372
  -- AND to_char(mep.histo_modification,'YYYY-MM-DD') = to_char(SYSDATE,'YYYY-MM-DD')
 ;
 
 
---delete from mise_en_paiement where id in (29,31);
+--delete from mise_en_paiement where id in (1);
 
 --update mise_en_paiement set heures = 1.38 WHERE id = 446;
 
@@ -40,7 +40,17 @@ WHERE
 --;
 
 
-
+18126,
+18125,
+18124,
+18123,
+18122,
+18121,
+18120,
+18119,
+18118,
+18117,
+12891
 
 
 

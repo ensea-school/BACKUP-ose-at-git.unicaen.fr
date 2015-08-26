@@ -228,7 +228,7 @@ class ServiceReferentiel extends AbstractEntityService
         StructureEntity $structure
     )
     {
-        $result = $this->getRepo()->findOneBy([
+        $result = $this->getRepo()->findBy([
             'intervenant' => $intervenant,
             'fonction'    => $fonction,
             'structure'   => $structure,

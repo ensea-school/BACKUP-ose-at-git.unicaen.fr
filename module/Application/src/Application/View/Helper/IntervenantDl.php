@@ -16,6 +16,8 @@ class IntervenantDl extends AbstractDl
      */
     protected $entity;
 
+
+
     /**
      *
      *
@@ -27,8 +29,8 @@ class IntervenantDl extends AbstractDl
             return '';
         }
 
-        $tplDtdd  = $this->getTemplateDtDd();
-        $html     = '';
+        $tplDtdd = $this->getTemplateDtDd();
+        $html    = '';
 
         /**
          * Identité
@@ -41,8 +43,7 @@ class IntervenantDl extends AbstractDl
                 "Identité :",
                 sprintf("%s, %s", $this->entity, $this->entity->getCiviliteToString())
             );
-        }
-        else {
+        } else {
             $identite[] = sprintf($tplDtdd,
                 "NOM prénom :",
                 $this->entity
@@ -55,7 +56,7 @@ class IntervenantDl extends AbstractDl
         }
 
         if ($this->short) {
-            $parts = [
+            $parts      = [
                 $this->entity->getDateNaissanceToString(),
                 $this->entity->getVilleNaissanceLibelle(),
                 $this->entity->getPaysNaissanceLibelle(),
@@ -64,8 +65,7 @@ class IntervenantDl extends AbstractDl
                 "Naissance :",
                 implode(", ", $parts)
             );
-        }
-        else {
+        } else {
             $identite[] = sprintf($tplDtdd,
                 "Date de naissance :",
                 $this->entity->getDateNaissanceToString()
@@ -102,7 +102,7 @@ class IntervenantDl extends AbstractDl
          * Coordonnées
          */
 
-        $coord    = [];
+        $coord = [];
 
         $coord[] = sprintf($tplDtdd,
             "Email :",
@@ -135,7 +135,7 @@ class IntervenantDl extends AbstractDl
          * Métier
          */
 
-        $metier   = [];
+        $metier = [];
 
         $metier[] = sprintf($tplDtdd,
             "Type d'intervenant :",
@@ -166,17 +166,16 @@ class IntervenantDl extends AbstractDl
             );
 
             $metier[] = sprintf($tplDtdd,
-                 "Discipline :",
-                 $this->entity->getDiscipline() ?: "(Inconnue)"
-             );
+                "Discipline :",
+                $this->entity->getDiscipline() ?: "(Inconnue)"
+            );
 
             if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
                 $metier[] = sprintf($tplDtdd,
                     "Corps :",
                     $this->entity->getCorps()
                 );
-            }
-            elseif ($this->entity instanceof \Application\Entity\Db\IntervenantExterieur) {
+            } elseif ($this->entity instanceof \Application\Entity\Db\IntervenantExterieur) {
                 $metier[] = sprintf($tplDtdd,
                     "Régime sécu :",
                     $this->entity->getRegimeSecu() ?: "(Inconnu)"
@@ -189,48 +188,6 @@ class IntervenantDl extends AbstractDl
         }
 
         $html .= sprintf($this->getTemplateDl('intervenant intervenant-metier'), implode(PHP_EOL, $metier)) . PHP_EOL;
-
-//        /**
-//         * Référentiel
-//         */
-//
-//        $fonctions = array();
-//
-//        if (!$this->short) {
-//            if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
-//                $serviceRef = "Aucun";
-//                if (($services = $this->entity->getServiceReferentielToStrings())) {
-//                    $serviceRef = $this->getView()->htmlList($services);
-//                }
-//                $fonctions[] = sprintf($tplDtdd,
-//                    "Service référentiel :",
-//                    $serviceRef
-//                );
-//            }
-//        }
-//
-//        $html .= sprintf($this->getTemplateDl('intervenant intervenant-fonction'), implode(PHP_EOL, $fonctions)) . PHP_EOL;
-//
-//        /**
-//         * Modification de service dû
-//         */
-//
-//        $modificationsServiceDu = array();
-//
-//        if (!$this->short) {
-//            if ($this->entity instanceof \Application\Entity\Db\IntervenantPermanent) {
-//                $msd = "Aucune";
-//                if (($modifs = $this->entity->getModificationServiceDuToStrings())) {
-//                    $msd = $this->getView()->htmlList($modifs);
-//                }
-//                $modificationsServiceDu[] = sprintf($tplDtdd,
-//                    'Modif. de service dû :',
-//                    $msd
-//                );
-//            }
-//        }
-//
-//        $html .= sprintf($this->getTemplateDl('intervenant intervenant-modif-servie-du'), implode(PHP_EOL, $modificationsServiceDu)) . PHP_EOL;
 
         /**
          * Divers

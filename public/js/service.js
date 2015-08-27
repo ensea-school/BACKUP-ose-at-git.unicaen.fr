@@ -122,6 +122,7 @@ function ServiceListe(id)
             $("#service-resume").refresh();
         }
         $("#wf-nav-next").refresh(); // mise à jour de la navigation du Workflow
+        $("#s-horodatage").refresh();
     }
 
     this.onAfterSaisie = function (serviceId)

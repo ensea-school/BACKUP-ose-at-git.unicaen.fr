@@ -457,6 +457,16 @@ class ServiceController extends AbstractActionController
 
 
 
+    public function horodatageAction()
+    {
+        $intervenant = $this->getEvent()->getParam('intervenant');
+        $typeVolumeHoraire = $this->getEvent()->getParam('typeVolumeHoraire');
+        $referentiel = $this->params('referentiel') ? true : false;
+        return compact('intervenant', 'typeVolumeHoraire', 'referentiel');
+    }
+
+
+
     public function volumesHorairesRefreshAction()
     {
         $this->initFilters();

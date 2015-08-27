@@ -222,6 +222,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    protected $histoService;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
     protected $serviceReferentiel;
 
     /**
@@ -313,6 +318,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $this->validation                         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->agrement                           = new \Doctrine\Common\Collections\ArrayCollection();
         $this->service                            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->histoService                       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviceReferentiel                 = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleResultat                    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formuleIntervenant                 = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1264,6 +1270,58 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
 
     /**
+     * Add histo service
+     *
+     * @param HistoIntervenantService $histoService
+     *
+     * @return Intervenant
+     */
+    public function addHistoService(HistoIntervenantService $histoService)
+    {
+        $this->histoService[] = $histoService;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove histo service
+     *
+     * @param HistoIntervenantService $histoService
+     */
+    public function removeHistoService(HistoIntervenantService $histoService)
+    {
+        $this->histoService->removeElement($histoService);
+    }
+
+
+
+    /**
+     * Get histo service
+     *
+     * @param TypeVolumeHoraire|null $typeVolumeHoraire
+     * @param boolean $referentiel
+     *
+     * @return HistoIntervenantService
+     */
+    public function getHistoService( $typeVolumeHoraire, $referentiel=false )
+    {
+        $result = $this->histoService->filter( function( HistoIntervenantService $histoService ) use ($typeVolumeHoraire, $referentiel){
+            return
+                $histoService->getTypeVolumeHoraire() == $typeVolumeHoraire
+                && $histoService->getReferentiel() == $referentiel;
+        } );
+        if ($result->count() == 1){
+            return $result->first();
+        }else{
+            return null;
+        }
+    }
+
+
+
+    /**
      * Add service référentiel
      *
      * @param \Application\Entity\Db\ServiceReferentiel $serviceReferentiel
@@ -1561,11 +1619,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         $adresses = $this->getAdresse();
 
-        if (! count($adresses)) {
+        if (!count($adresses)) {
             return null;
         }
 
-        foreach ($adresses as $a) { 
+        foreach ($adresses as $a) {
             /* @var $a AdresseIntervenant */
             if ($a->getPrincipale()) {
                 return $a;
@@ -1656,6 +1714,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->vIndicDiffDossier;
     }
+
+
 
     /**
      * Get indicDiffDossier

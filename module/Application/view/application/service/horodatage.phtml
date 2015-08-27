@@ -1,0 +1,8 @@
+<?php
+
+$ihs = $intervenant->getHistoService($typeVolumeHoraire, $referentiel);
+if ($ihs){
+    echo '<hr/>';
+    echo '<div class="pull-right"><em>Dernière modification: '.sprintf("Le %s par %s", $ihs->getHistoModification()->format('d/m/Y'), $ihs->getHistoModificateur()).'</em></div>';
+    echo '<br />';
+}

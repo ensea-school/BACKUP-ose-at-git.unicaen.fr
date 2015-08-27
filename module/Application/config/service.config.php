@@ -44,6 +44,20 @@ return [
                             ],
                         ],
                     ],
+                    'horodatage' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/horodatage/:intervenant/:typeVolumeHoraire/:referentiel',
+                            'constraints' => [
+                                'intervenant'       => '[0-9]*',
+                                'typeVolumeHoraire' => '[0-9]*',
+                                'referentiel'       => '[0-9]*',
+                            ],
+                            'defaults' => [
+                                'action' => 'horodatage',
+                            ],
+                        ],
+                    ],
                     'modifier' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -250,7 +264,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'cloturer-saisie'],
+                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'cloturer-saisie','horodatage'],
                     'roles' => [R_ROLE],
                 ], [
                     'controller' => 'Application\Controller\Service',

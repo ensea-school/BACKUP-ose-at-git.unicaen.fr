@@ -19,6 +19,7 @@ function ServiceReferentielListe(id)
             $("#service-resume").refresh();
         }
         $("#wf-nav-next").refresh(); // mise à jour de la navigation du Workflow
+        $("#sr-horodatage").refresh();
     }
 
     this.onAfterSaisie = function (serviceId)

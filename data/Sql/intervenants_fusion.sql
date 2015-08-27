@@ -7,10 +7,11 @@ alter trigger "OSE"."SERVICE_CK" disable;
 alter trigger "OSE"."F_SERVICE_S" disable;
 alter trigger "OSE"."F_SERVICE_REFERENTIEL_S" disable;
 alter trigger "OSE"."F_VALIDATION_S" disable;
+alter trigger "OSE"."FORMULE_RES_SERVICE_DEL_CK" disable;
 /
 DECLARE
-  old_source_code NUMERIC := '86859';
-  new_source_code NUMERIC := '83799';
+  old_source_code NUMERIC := '99322';
+  new_source_code NUMERIC := '26623';
 
   old_id NUMERIC;
   new_id NUMERIC;
@@ -23,8 +24,8 @@ DECLARE
   
   ose_id NUMERIC;
 BEGIN
-  select id INTO old_id from intervenant where source_code = old_source_code;  
-  select id INTO new_id from intervenant where source_code = new_source_code;
+  select id INTO old_id from intervenant where source_code = old_source_code AND annee_id = 2014;  
+  select id INTO new_id from intervenant where source_code = new_source_code AND annee_id = 2014;
 
   select id, dossier_id INTO ie_old_id, old_dossier_id from intervenant_exterieur where id = old_id;
   select id, dossier_id INTO ie_new_id, new_dossier_id from intervenant_exterieur where id = new_id;
@@ -64,6 +65,7 @@ alter trigger "OSE"."SERVICE_CK" enable;
 alter trigger "OSE"."F_SERVICE_S" enable;
 alter trigger "OSE"."F_SERVICE_REFERENTIEL_S" enable;
 alter trigger "OSE"."F_VALIDATION_S" enable;
+alter trigger "OSE"."FORMULE_RES_SERVICE_DEL_CK" enable;
 /
 
 

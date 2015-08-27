@@ -103,6 +103,7 @@
     <one-to-many field="adresse" target-entity="Application\Entity\Db\AdresseIntervenant" mapped-by="intervenant" />
     <one-to-one field="adressePrinc" target-entity="Application\Entity\Db\AdresseIntervenantPrinc" mapped-by="intervenant" />
     <one-to-many field="service" target-entity="Application\Entity\Db\Service" mapped-by="intervenant" />
+    <one-to-many field="histoService" target-entity="Application\Entity\Db\HistoIntervenantService" mapped-by="intervenant" />
     <one-to-many field="serviceReferentiel" target-entity="Application\Entity\Db\ServiceReferentiel" mapped-by="intervenant">
       <cascade>
         <cascade-persist/>

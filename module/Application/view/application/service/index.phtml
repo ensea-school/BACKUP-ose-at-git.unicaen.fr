@@ -59,9 +59,31 @@ if ($intervenant) $serviceListe->showPrevuToPrevu($intervenant);
     <hr />
 
     <?php echo $serviceListe->render(); ?>
+    <div id="s-horodatage" data-url="<?php echo $this->url('service/horodatage', [
+        'intervenant'       => $intervenant->getSourceCode(),
+        'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+        'referentiel'       => false
+    ]); ?>">
+        <?php echo $this->partial('application/service/horodatage', [
+            'intervenant'       => $intervenant,
+            'typeVolumeHoraire' => $typeVolumeHoraire,
+            'referentiel'       => false
+        ]); ?>
+    </div>
 
     <?php if ($intervenant === null || $intervenant->getStatut()->getPeutSaisirReferentiel()): ?>
         <?php echo $this->servicesRefListe; ?>
+        <div id="sr-horodatage" data-url="<?php echo $this->url('service/horodatage', [
+            'intervenant'       => $intervenant->getSourceCode(),
+            'typeVolumeHoraire' => $typeVolumeHoraire->getId(),
+            'referentiel'       => true
+        ]); ?>">
+            <?php echo $this->partial('application/service/horodatage', [
+                'intervenant'       => $intervenant,
+                'typeVolumeHoraire' => $typeVolumeHoraire,
+                'referentiel'       => true
+            ]); ?>
+        </div>
     <?php endif; ?>
 
     <!-- bouton de cloture de la saisie du réalisé des permanents -->

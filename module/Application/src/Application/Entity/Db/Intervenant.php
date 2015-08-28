@@ -1315,10 +1315,11 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         if ($result->count() == 1) { // un seul résultat
             return $result->first();
         } elseif ($result->count() == 2) { // deux possibles : pour le service et pour le VH
-            if ($result[0]->getHistoModification() > $result[1]->getHistoModification()) {
-                return $result[0];
+            $r = array_values($result->toArray());
+            if ($r[0]->getHistoModification() > $r[1]->getHistoModification()) {
+                return $r[0];
             } else {
-                return $result[1];
+                return $r[1];
             }
         } else {
             return null;

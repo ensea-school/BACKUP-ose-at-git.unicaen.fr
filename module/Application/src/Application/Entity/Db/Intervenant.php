@@ -1301,20 +1301,26 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      * Get histo service
      *
      * @param TypeVolumeHoraire|null $typeVolumeHoraire
-     * @param boolean $referentiel
+     * @param boolean                $referentiel
      *
      * @return HistoIntervenantService
      */
-    public function getHistoService( $typeVolumeHoraire, $referentiel=false )
+    public function getHistoService($typeVolumeHoraire, $referentiel = false)
     {
-        $result = $this->histoService->filter( function( HistoIntervenantService $histoService ) use ($typeVolumeHoraire, $referentiel){
+        $result = $this->histoService->filter(function (HistoIntervenantService $histoService) use ($typeVolumeHoraire, $referentiel) {
             return
-                $histoService->getTypeVolumeHoraire() == $typeVolumeHoraire
+                ($histoService->getTypeVolumeHoraire() == $typeVolumeHoraire || $histoService->getTypeVolumeHoraire() === null)
                 && $histoService->getReferentiel() == $referentiel;
-        } );
-        if ($result->count() == 1){
+        });
+        if ($result->count() == 1) { // un seul résultat
             return $result->first();
-        }else{
+        } elseif ($result->count() == 2) { // deux possibles : pour le service et pour le VH
+            if ($result[0]->getHistoModification() > $result[1]->getHistoModification()) {
+                return $result[0];
+            } else {
+                return $result[1];
+            }
+        } else {
             return null;
         }
     }

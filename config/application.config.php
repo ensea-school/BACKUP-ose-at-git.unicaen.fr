@@ -1,6 +1,6 @@
 <?php
 
-$env = getenv('APP_ENV') ?: 'production';
+$env = getenv('APPLICATION_ENV') ?: 'production';
 
 $modules = [
     'ZfcBase', 'DoctrineModule', 'DoctrineORMModule', 'ZfcUser', 'ZfcUserDoctrineORM', 'BjyAuthorize',
@@ -9,7 +9,7 @@ $modules = [
     'UnicaenLdap',
     'Common',
     'Application',
-    'Import'
+    'Import',
 ];
 
 if ( 'development' == $env ) {

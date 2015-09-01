@@ -3,12 +3,14 @@
  *
  * Javascript commun à toutes les applis.
  */
-$(function() {
+$(function ()
+{
     /**
      * Détection de réponse "403 Unauthorized" aux requêtes AJAX pour rediriger vers
      * la page de connexion.
      */
-    $(document).ajaxComplete(function(event, xhr, settings) {
+    $(document).ajaxComplete(function (event, xhr, settings)
+    {
         if (xhr.status === 403) {
             if (confirm("Votre session a expiré, vous devez vous reconnecter.\n\nCliquez sur OK pour être redirigé(e) vers la page de connexion...")) {
                 var pne = window.location.pathname.split('/');
@@ -25,7 +27,8 @@ $(function() {
     if ($(window).scrollTop() > 100) {
         $('.scrollup').fadeIn();
     }
-    $(window).scroll(function() {
+    $(window).scroll(function ()
+    {
         if ($(this).scrollTop() > 100) {
             $('.scrollup').fadeIn();
         }
@@ -33,14 +36,75 @@ $(function() {
             $('.scrollup').fadeOut();
         }
     });
-    $('.scrollup').click(function() {
-        $("html, body").animate({ scrollTop: 0 }, 300);
+    $('.scrollup').click(function ()
+    {
+        $("html, body").animate({scrollTop: 0}, 300);
         return false;
     });
 
     ajaxPopoverInit();
     AjaxModalListener.install();
+
+    /* Utilisation du WidgetInitializer */
+    WidgetInitializer.install();
 });
+
+
+
+/**
+ * Système d'initialisation automatique de widgets
+ *
+ */
+WidgetInitializer = {
+    /**
+     * Liste des widgets déclarés (format [className => widgetName])
+     * className = Nom de la classe CSS qui déclenche l'association
+     * widgetName = Nom du widget (sans le namespace)
+     */
+    widgets: {},
+
+    _initializeWidget: function (className, widgetName)
+    {
+        eval('$(".' + className + '").' + widgetName + '();');
+    },
+
+    /**
+     * Ajoute un nouveau Widget à l'initializer
+     *
+     * @param string className
+     * @param string widgetName
+     */
+    add: function (className, widgetName)
+    {
+        WidgetInitializer.widgets[className] = widgetName;
+        this._initializeWidget(className, widgetName);
+    },
+
+    /**
+     * Lance automatiquement l'association de tous les widgets déclarés avec les éléments HTMl de classe correspondante
+     */
+    run: function ()
+    {
+        for (className in this.widgets) {
+            this._initializeWidget(className, this.widgets[className]);
+        }
+    },
+
+    /**
+     * Installe le WidgetInitializer pour qu'il se lance au chargement de la page ET après chaque requête AJAX
+     */
+    install: function ()
+    {
+        var that = this;
+
+        this.run();
+        $(document).ajaxSuccess(function ()
+        {
+            that.run();
+        });
+    }
+
+};
 
 
 
@@ -53,10 +117,10 @@ $(function() {
  */
 function AjaxModalListener(dialogDivId)
 {
-    this.eventListener    = $("body");
+    this.eventListener = $("body");
     this.modalContainerId = dialogDivId ? dialogDivId : "modal-div-gjksdgfkdjsgffsd";
 
-    this.getModalDialog = function()
+    this.getModalDialog = function ()
     {
         var modal = $("#" + this.modalContainerId);
         if (!modal.length) {
@@ -68,11 +132,11 @@ function AjaxModalListener(dialogDivId)
                         )
                     )
                 );
-            modal.attr('id', this.modalContainerId).appendTo("body").modal({ show: false });
+            modal.attr('id', this.modalContainerId).appendTo("body").modal({show: false});
         }
         return modal;
     };
-    this.extractNewModalContent = function(data)
+    this.extractNewModalContent = function (data)
     {
         var selector = '.modal-header, .modal-body, .modal-footer';
         // seuls les header, body et footer nous intéressent
@@ -84,23 +148,23 @@ function AjaxModalListener(dialogDivId)
         $(data).filter(':not(' + selector + ')').prependTo(newModalContent.filter(".modal-body"));
         // suppression de l'éventuel titre identique présent dans le body
         if (title = $(".modal-title", newModalContent).html()) {
-            $(":header", newModalContent.filter(".modal-body")).filter(function() { return $(this).html() === title; }).remove();
+            $(":header", newModalContent.filter(".modal-body")).filter(function () { return $(this).html() === title; }).remove();
         }
         return newModalContent;
     }
-    this.getDialogBody = function()
+    this.getDialogBody = function ()
     {
         return $("div.modal-body", this.getModalDialog());
     };
-    this.getDialogFooter = function()
+    this.getDialogFooter = function ()
     {
         return $("div.modal-footer", this.getModalDialog());
     };
-    this.getForm = function()
+    this.getForm = function ()
     {
         return $("form", this.getDialogBody());
     };
-    this.getSubmitButton = function()
+    this.getSubmitButton = function ()
     {
         return $("#" + this.modalContainerId + " .btn-primary");
     };
@@ -108,7 +172,7 @@ function AjaxModalListener(dialogDivId)
     /**
      * Fonction lancée à l'ouverture de la fenêtre modale
      */
-    this.modalShownListener = function(e)
+    this.modalShownListener = function (e)
     {
         // déplacement du bouton submit dans le footer
 //        this.getSubmitButton().prependTo(this.getDialogFooter());
@@ -117,10 +181,10 @@ function AjaxModalListener(dialogDivId)
     /**
      * Interception des clics sur les liens adéquats pour affichage de la fenêtre modale
      */
-    this.anchorClickListener = function(e)
+    this.anchorClickListener = function (e)
     {
-        var anchor      = $(e.currentTarget);
-        var url         = anchor.attr('href');
+        var anchor = $(e.currentTarget);
+        var url = anchor.attr('href');
         var modalDialog = this.getModalDialog();
 
         if (url && url !== "#") {
@@ -128,7 +192,8 @@ function AjaxModalListener(dialogDivId)
             modalDialog.data('a', anchor);
 
             // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
-            $.get(url, { modal: 1 }, $.proxy(function(data) {
+            $.get(url, {modal: 1}, $.proxy(function (data)
+            {
                 // remplacement du contenu de la fenêtre modale
                 $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
 
@@ -143,15 +208,16 @@ function AjaxModalListener(dialogDivId)
     /**
      * Interception des clics sur les liens inclus dans les modales pour rafraichir la modale au lieu de la page
      */
-    this.innerAnchorClickListener = function(e)
+    this.innerAnchorClickListener = function (e)
     {
-        var anchor      = $(e.currentTarget);
-        var url         = anchor.attr('href');
+        var anchor = $(e.currentTarget);
+        var url = anchor.attr('href');
         var modalDialog = this.getModalDialog();
 
         if (url && url !== "#") {
             // requête AJAX pour obtenir le nouveau contenu de la fenêtre modale
-            $.get(url, { modal: 1 }, $.proxy(function(data) {
+            $.get(url, {modal: 1}, $.proxy(function (data)
+            {
                 // remplacement du contenu de la fenêtre modale
                 $(".modal-content", modalDialog.modal('show')).html(this.extractNewModalContent(data));
 
@@ -163,7 +229,7 @@ function AjaxModalListener(dialogDivId)
         e.preventDefault();
     };
 
-    this.btnPrimaryClickListener = function(e)
+    this.btnPrimaryClickListener = function (e)
     {
         var form = this.getForm();
         if (form.length) {
@@ -172,17 +238,18 @@ function AjaxModalListener(dialogDivId)
         }
     };
 
-    this.formSubmitListener = function(e)
+    this.formSubmitListener = function (e)
     {
         var modalDialog = this.getModalDialog();
-        var dialogBody  = this.getDialogBody().css('opacity', '0.5');
-        var form        = $(e.target);
-        var postData    = $.merge([{ name: 'modal', value: 1 }], form.serializeArray()); // paramètre "modal" indispensable
-        var url         = form.attr('action');
-        var isRedirect  = url.indexOf("redirect=") > -1 || $("input[name=redirect]").val();
+        var dialogBody = this.getDialogBody().css('opacity', '0.5');
+        var form = $(e.target);
+        var postData = $.merge([{name: 'modal', value: 1}], form.serializeArray()); // paramètre "modal" indispensable
+        var url = form.attr('action');
+        var isRedirect = url.indexOf("redirect=") > -1 || $("input[name=redirect]").val();
 
         // requête AJAX de soumission du formulaire
-        $.post(url, postData, $.proxy(function(data) {
+        $.post(url, postData, $.proxy(function (data)
+        {
             // mise à jour du "content" de la fenêtre modale seulement
             $(".modal-content", modalDialog).html(this.extractNewModalContent(data));
 
@@ -195,12 +262,12 @@ function AjaxModalListener(dialogDivId)
                 // recherche de l'id de l'événement à déclencher parmi les data du lien cliqué
                 var modalEventName = modalDialog.data('a').data('event');
                 if (modalEventName) {
-                    var args  = this.getForm().serializeArray();
-                    var event = jQuery.Event(modalEventName, { div: modalDialog, a: modalDialog.data('a') });
+                    var args = this.getForm().serializeArray();
+                    var event = jQuery.Event(modalEventName, {div: modalDialog, a: modalDialog.data('a')});
 //                        console.log("Triggering '" + event.type + "' event...");
 //                        console.log("Event object : ", event);
 //                        console.log("Trigger args : ", args);
-                    this.eventListener.trigger(event, [ args ]);
+                    this.eventListener.trigger(event, [args]);
                 }
             }
             dialogBody.css('opacity', '1.0');
@@ -216,7 +283,7 @@ AjaxModalListener.singleton = null;
 /**
  * Installation du mécanisme d'ouverture de fenêtre modale.
  */
-AjaxModalListener.install = function(dialogDivId)
+AjaxModalListener.install = function (dialogDivId)
 {
     if (null === AjaxModalListener.singleton) {
         AjaxModalListener.singleton = new AjaxModalListener(dialogDivId);
@@ -228,7 +295,7 @@ AjaxModalListener.install = function(dialogDivId)
 /**
  * Désinstallation du mécanisme d'ouverture de fenêtre modale.
  */
-AjaxModalListener.uninstall = function()
+AjaxModalListener.uninstall = function ()
 {
     if (null !== AjaxModalListener.singleton) {
         AjaxModalListener.singleton.stop();
@@ -239,7 +306,7 @@ AjaxModalListener.uninstall = function()
 /**
  * Démarrage du mécanisme d'ouverture de fenêtre modale.
  */
-AjaxModalListener.prototype.start = function()
+AjaxModalListener.prototype.start = function ()
 {
     // interception des clics sur les liens adéquats pour affichage de la fenêtre modale
     this.eventListener.on("click", "a.ajax-modal", $.proxy(this.anchorClickListener, this));
@@ -254,7 +321,8 @@ AjaxModalListener.prototype.start = function()
     this.eventListener.on("submit", "#" + this.modalContainerId + " form", $.proxy(this.formSubmitListener, this));
 
     // force le contenu de la fenêtre modale à être "recalculé" à chaque ouverture
-    this.eventListener.on('hidden.bs.modal', "#" + this.modalContainerId, function(e) {
+    this.eventListener.on('hidden.bs.modal', "#" + this.modalContainerId, function (e)
+    {
         $(e.target).removeData('bs.modal');
     });
 
@@ -265,7 +333,7 @@ AjaxModalListener.prototype.start = function()
 /**
  * Arrêt du mécanisme d'ouverture de fenêtre modale.
  */
-AjaxModalListener.prototype.stop = function()
+AjaxModalListener.prototype.stop = function ()
 {
     this.eventListener
         .off("click", "a.ajax-modal", $.proxy(this.anchorClickListener, this))
@@ -284,8 +352,10 @@ AjaxModalListener.prototype.stop = function()
  Popover
  /***************************************************************************************************************************************************/
 
-function ajaxPopoverInit(){
-    jQuery.fn.popover.Constructor.prototype.replace = function () {
+function ajaxPopoverInit()
+{
+    jQuery.fn.popover.Constructor.prototype.replace = function ()
+    {
         var $tip = this.tip()
 
         var placement = typeof this.options.placement == 'function' ?
@@ -297,22 +367,22 @@ function ajaxPopoverInit(){
 
         this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
 
-        var pos          = this.getPosition()
-        var actualWidth  = $tip[0].offsetWidth
+        var pos = this.getPosition()
+        var actualWidth = $tip[0].offsetWidth
         var actualHeight = $tip[0].offsetHeight
 
         var $parent = this.$element.parent()
 
         var orgPlacement = placement
-        var docScroll    = document.documentElement.scrollTop || document.body.scrollTop
-        var parentWidth  = this.options.container == 'body' ? window.innerWidth  : $parent.outerWidth()
+        var docScroll = document.documentElement.scrollTop || document.body.scrollTop
+        var parentWidth = this.options.container == 'body' ? window.innerWidth : $parent.outerWidth()
         var parentHeight = this.options.container == 'body' ? window.innerHeight : $parent.outerHeight()
-        var parentLeft   = this.options.container == 'body' ? 0 : $parent.offset().left
+        var parentLeft = this.options.container == 'body' ? 0 : $parent.offset().left
 
-        placement = placement == 'bottom' && pos.top   + pos.height  + actualHeight - docScroll > parentHeight  ? 'top'    :
-            placement == 'top'    && pos.top   - docScroll   - actualHeight < 0                         ? 'bottom' :
-                placement == 'right'  && pos.right + actualWidth > parentWidth                              ? 'left'   :
-                    placement == 'left'   && pos.left  - actualWidth < parentLeft                               ? 'right'  :
+        placement = placement == 'bottom' && pos.top + pos.height + actualHeight - docScroll > parentHeight ? 'top' :
+            placement == 'top' && pos.top - docScroll - actualHeight < 0 ? 'bottom' :
+                placement == 'right' && pos.right + actualWidth > parentWidth ? 'left' :
+                    placement == 'left' && pos.left - actualWidth < parentLeft ? 'right' :
                         placement
 
         $tip
@@ -329,7 +399,8 @@ function ajaxPopoverInit(){
         html: true,
         trigger: 'click',
         content: 'Chargement...',
-    }).on('shown.bs.popover', ".ajax-popover", function (e) {
+    }).on('shown.bs.popover', ".ajax-popover", function (e)
+    {
         var target = $(e.target);
 
         var content = $.ajax({
@@ -339,27 +410,31 @@ function ajaxPopoverInit(){
 
         div = $("div.popover").last(); // Recherche la dernière division créée, qui est le conteneur du popover
         div.data('a', target); // On lui assigne le lien d'origine
-        div.html( content );
+        div.html(content);
         target.popover('replace'); // repositionne le popover en fonction de son redimentionnement
         div.find("form:not(.filter) :input:first").focus(); // donne le focus automatiquement au premier élément de formulaire trouvé qui n'est pas un filtre
     });
 
-    $("body").on("click", "a.ajax-popover", function(){ // Désactive le changement de page lors du click
+    $("body").on("click", "a.ajax-popover", function ()
+    { // Désactive le changement de page lors du click
         return false;
     });
 
-    $("body").on("click", "div.popover .fermer", function(e){ // Tout élément cliqué qui contient la classe .fermer ferme le popover
+    $("body").on("click", "div.popover .fermer", function (e)
+    { // Tout élément cliqué qui contient la classe .fermer ferme le popover
         div = $(e.target).parents('div.popover');
         div.data('a').popover('hide');
     });
 
-    $("body").on("submit", "div.popover div.popover-content form", function(e) {
+    $("body").on("submit", "div.popover div.popover-content form", function (e)
+    {
         var form = $(e.target);
         var div = $(e.target).parents('div.popover');
         $.post(
             form.attr('action'),
             form.serialize(),
-            function(data) {
+            function (data)
+            {
                 div.html(data);
 
                 // Binding éventuel des classes si nécessaire...
@@ -369,12 +444,66 @@ function ajaxPopoverInit(){
                 if (terminated) {
                     // recherche de l'id de l'événement à déclencher parmi les data de la DIV
                     var modalEventName = div.data('a').data('event');
-                    var args           = form.serializeArray();
-                    var event = jQuery.Event(modalEventName, { a: div.data('a'), div: div });
-                    $("body").trigger(event, [ args ]);
+                    var args = form.serializeArray();
+                    var event = jQuery.Event(modalEventName, {a: div.data('a'), div: div});
+                    $("body").trigger(event, [args]);
                 }
             }
         );
         e.preventDefault();
     });
 }
+
+
+
+
+$.widget("ose.formAdvancedMultiCheckbox", {
+
+    height: function (height)
+    {
+        if (height === undefined) {
+            return this.getItemsDiv().css('max-height');
+        } else {
+            this.getItemsDiv().css('max-height', height);
+        }
+    },
+
+    overflow: function (overflow)
+    {
+        if (overflow === undefined) {
+            return this.getItemsDiv().css('overflow');
+        } else {
+            this.getItemsDiv().css('overflow', overflow);
+        }
+    },
+
+    selectAll: function ()
+    {
+        this.getItems().prop("checked", true);
+    },
+
+    selectNone: function ()
+    {
+        this.getItems().prop("checked", false);
+    },
+
+    _create: function ()
+    {
+        var that = this;
+        this.getSelectAllBtn().on('click', function(){ that.selectAll(); });
+        this.getSelectNoneBtn().on('click', function(){ that.selectNone(); });
+    },
+
+    //@formatter:off
+    getItemsDiv     : function() { return this.element.find('div#items');           },
+    getItems        : function() { return this.element.find("input[type=checkbox]");},
+    getSelectAllBtn : function() { return this.element.find("a.btn.select-all");    },
+    getSelectNoneBtn: function() { return this.element.find("a.btn.select-none");    }
+    //@formatter:on
+
+});
+
+$(function ()
+{
+    WidgetInitializer.add('form-advanced-multi-checkbox', 'formAdvancedMultiCheckbox');
+});

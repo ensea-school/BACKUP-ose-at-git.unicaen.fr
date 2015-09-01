@@ -48,10 +48,10 @@ $this->headTitle()->append($title);
                 if (MiseEnPaiement::MIS_EN_PAIEMENT === $etat){
                     echo $this->formControlGroup($rechercheForm->get('periode'));
                     if ($rechercheForm->get('periode')->getValue()){
-                        echo $this->formControlGroup($rechercheForm->get('intervenants'));
+                        echo $this->formControlGroup($rechercheForm->get('intervenants'), $this->formAdvancedMultiCheckbox()->setHeight('20em'));
                     }
                 }else{
-                    echo $this->formControlGroup($rechercheForm->get('intervenants'));
+                    echo $this->formControlGroup($rechercheForm->get('intervenants'), $this->formAdvancedMultiCheckbox()->setHeight('20em'));
                 }
             }
         }
@@ -70,11 +70,6 @@ $this->headTitle()->append($title);
         echo $this->formErrors( $rechercheForm );
         ?>
     </div>
-    <script type="text/javascript">
-        $(function() {
-            PaiementMiseEnPaiementRechercheForm.get("<?php echo $rechercheForm->getId(); ?>").init();
-        });
-    </script>
 </div>
 <?php
 

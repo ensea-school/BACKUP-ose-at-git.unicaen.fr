@@ -71,7 +71,7 @@ $forwarded = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDE
         <div id="footer" class="container">
             <ul class="navigation">
     <li>
-        <a title="Page&#x20;d&#x27;accueil&#x20;du&#x20;site&#x20;de&#x20;l&#x27;Universit&#xE9;&#x20;de&#x20;Caen&#x20;-&#x20;Basse&#x20;Normandie" class="ucbn" href="http&#x3A;&#x2F;&#x2F;www.unicaen.fr&#x2F;">Université de Caen - Basse Normandie</a>
+        <a title="Page&#x20;d&#x27;accueil&#x20;du&#x20;site&#x20;de&#x20;l&#x27;Universit&#xE9;&#x20;de&#x20;Caen&#x20;-&#x20;Basse&#x20;Normandie" class="ucbn" href="http&#x3A;&#x2F;&#x2F;www.unicaen.fr&#x2F;">Université de Caen - Normandie</a>
     </li>
     <li>
         <a title="&#xC0;&#x20;propos&#x20;de&#x20;cette&#x20;application" class="apropos" href="&#x2F;ose&#x2F;apropos">À propos</a>

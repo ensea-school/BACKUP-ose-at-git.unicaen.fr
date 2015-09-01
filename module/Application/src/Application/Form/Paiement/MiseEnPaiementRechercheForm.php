@@ -87,11 +87,9 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
         ]);
 
         $this->add([
-            'type' => 'Select',
+            'type' => 'Zend\Form\Element\MultiCheckbox',
             'attributes' => [
                 'multiple' => 'multiple',
-                'size'      => 20,
-                //'class'    => 'selectpicker'
             ],
             'name' => 'intervenants',
             'options' => [

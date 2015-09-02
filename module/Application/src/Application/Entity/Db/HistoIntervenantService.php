@@ -188,19 +188,5 @@ class HistoIntervenantService
     {
         return $this->histoModificateur;
     }
-
-
-
-    /**
-     * Retourne la date et l'auteur de la dernière modification au format "Le dd/mm/yyyy à hh:mm par Tartanpion".
-     *
-     * @return string
-     */
-    public function getHistoModificationEtModificateurToString()
-    {
-        $dateModif = $this->getHistoModification() ? $this->getHistoModification()->format('d/m/Y à H:i') : null;
-
-        return sprintf("Le %s par %s", $dateModif, $this->getHistoModificateur());
-    }
 }
 

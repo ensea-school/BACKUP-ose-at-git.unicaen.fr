@@ -132,17 +132,9 @@ return [
                             'voir' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'    => '/voir/:id',
-                                    'constraints' => [ 'id' => '[0-9]*' ],
+                                    'route'    => '/voir/:etape',
+                                    'constraints' => [ 'etape' => '[0-9]*' ],
                                     'defaults' => [ 'action' => 'voir' ],
-                                ],
-                            ],
-                            'apercevoir' => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'    => '/apercevoir/:id',
-                                    'constraints' => [ 'id' => '[0-9]*' ],
-                                    'defaults' => [ 'action' => 'apercevoir' ],
                                 ],
                             ],
                             'ajouter' => [

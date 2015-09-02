@@ -213,13 +213,11 @@ $main =  [
             'appLink'                    => 'Application\View\Helper\AppLinkFactory',
         ],
         'invokables' => [
-            'historiqueDl' => 'Application\View\Helper\HistoriqueDl',
-            'validationDl' => 'Application\View\Helper\ValidationDl',
-            'mailto'       => 'Application\View\Helper\Mailto',
-            'intervenantDl'        => 'Application\View\Helper\IntervenantDl',
-            'adresseDl'            => 'Application\View\Helper\AdresseDl',
-            'elementPedagogiqueDl' => 'Application\View\Helper\OffreFormation\ElementPedagogiqueDl',
-            'etapeDl'              => 'Application\View\Helper\OffreFormation\EtapeDl',
+            'validationDl'          => 'Application\View\Helper\ValidationDl',
+            'mailto'                => 'Application\View\Helper\Mailto',
+            'intervenantDl'         => 'Application\View\Helper\IntervenantDl',
+            'adresseDl'             => 'Application\View\Helper\AdresseDl',
+            'elementPedagogiqueDl'  => 'Application\View\Helper\OffreFormation\ElementPedagogiqueDl',
             'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
         ],
     ],
@@ -250,9 +248,6 @@ $main =  [
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',
-        ],
-        'strategies' => [
-//            'ModalStrategy',
         ],
     ],
     'public_files' => [

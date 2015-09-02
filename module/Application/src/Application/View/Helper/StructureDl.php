@@ -59,7 +59,7 @@ class StructureDl extends AbstractDl
         $html .= sprintf($this->getTemplateDl('structure structure-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;
 
         if (!$this->short) {
-            $html .= $this->getView()->historiqueDl($entity, $this->horizontal);
+            $html .= $this->getView()->historique($entity, $this->horizontal);
         }
 
         return $html;

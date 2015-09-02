@@ -56,10 +56,12 @@ $dossier = $this->form->get('dossier'); /* @var $dossier \Application\Form\Inter
 <?php echo $this->form()->closeTag() ?>
 
 
-<?php if ($this->dossier->getId()): ?>
-    <hr/>
-    <div class="pull-right"><em>Dernière modification: <?php echo $this->dossier->getHistoModificationEtModificateurToString() ?></em></div>
-<?php endif ?>
+<?php
+if ($this->dossier->getId()){
+    echo $this->historique( $this->dossier );
+}
+?>
+
 
 
 

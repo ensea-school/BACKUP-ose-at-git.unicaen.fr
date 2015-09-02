@@ -112,7 +112,7 @@ class AdresseDl extends AbstractDl
 
             $dtdds[] = sprintf($tplDtdd,
                 "Historique :",
-                $this->getView()->historiqueDl($this->entity)
+                $this->getView()->historique($this->entity)
             );
         }
 

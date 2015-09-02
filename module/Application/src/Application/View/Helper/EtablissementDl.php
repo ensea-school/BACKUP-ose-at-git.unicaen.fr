@@ -56,7 +56,7 @@ class EtablissementDl extends AbstractDl
 
             $dtdds[] = sprintf($tplDtdd,
                 "Historique :",
-                $this->getView()->historiqueDl($entity)
+                $this->getView()->historique($entity)
             );
         }
 

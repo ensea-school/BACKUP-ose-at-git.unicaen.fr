@@ -68,7 +68,7 @@ class Dl extends AbstractDl
          */
 
         if (!$this->short) {
-            $html .= $this->getView()->historiqueDl($this->entity, $this->horizontal);
+            $html .= $this->getView()->historique($this->entity, $this->horizontal);
         }
 
         return $html;

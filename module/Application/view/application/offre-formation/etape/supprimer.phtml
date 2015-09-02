@@ -3,8 +3,8 @@ if (isset($errors) && $errors) {
     echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
 }
 else {
-    echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression de cet enregistrement ?</p>';
-    echo $this->etapeDl($entity, true, true);
+    echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression de cette formation ?</p>';
+    echo $this->etape($entity);
 
     echo $this->form()->openTag($form);
     echo $this->formHidden($form->get('id'));

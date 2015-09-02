@@ -29,10 +29,7 @@ echo $this->messageCollector();
 
 echo $html;
 
-echo '<hr/>';
-if ($dateDerniereModif){
-    echo '<div class="pull-right"><em>Dernière modification: '.sprintf("Le %s par %s", $dateDerniereModif->format('d/m/Y'), $dernierModificateur).'</em></div>';
-}
+echo $this->historique()->setHistoModification($dateDerniereModif)->setHistoModificateur($dernierModificateur);
 
 
 if ($saved){

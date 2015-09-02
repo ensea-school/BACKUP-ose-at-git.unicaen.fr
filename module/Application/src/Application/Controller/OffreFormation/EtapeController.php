@@ -2,6 +2,10 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
+use Application\Service\Traits\EtapeAwareTrait;
+use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\NiveauEtapeAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Service\Etape as EtapeService;
@@ -17,7 +21,11 @@ use Application\Exception\DbException;
  */
 class EtapeController extends AbstractActionController
 {
-    use \Application\Service\Traits\LocalContextAwareTrait;
+    use LocalContextAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use EtapeAwareTrait;
+    use NiveauEtapeAwareTrait;
+
 
     public function ajouterAction()
     {
@@ -107,36 +115,12 @@ class EtapeController extends AbstractActionController
         return compact('entity', 'title', 'form', 'errors');
     }
 
-    public function apercevoirAction()
+    public function voirAction()
     {
-        $etape       = $this->context()->mandatory()->etapeFromRoute('id');
-        $import      = $this->getServiceLocator()->get('ImportProcessusImport');
-        $changements = $import->etapeGetDifferentiel($etape);
-        $title       = "Aperçu d'une formation";
-        $short       = $this->params()->fromQuery('short', false);
-
-        return compact('etape','short','title','changements');
+        $etape = $this->getEvent()->getParam('etape');
+        $title = 'Formation';
+        return compact('etape','title');
     }
-
-    /**
-     * Retourne au format JSON les étapes distincts des éléments pédagogiques
-     * pour la structure et le niveau éventuellement spécifiés en GET.
-     *
-     * @return \Zend\View\Model\JsonModel
-     *
-    public function searchAction()
-    {
-        $structure = $this->context()->structureFromQuery();
-        $niveau    = $this->context()->niveauFromQuery();
-
-        $params = [];
-        $params['structure'] = $structure instanceof \Application\Entity\Db\Structure ? $structure : null;
-        $params['niveau']    = $niveau;
-
-        $result = $this->getServiceElementPedagogique()->finderDistinctEtapes($params)->getQuery()->getResult();
-
-        return new \Zend\View\Model\JsonModel(\UnicaenApp\Util::collectionAsOptions($result));
-    }*/
 
     /**
      * Retourne le formulaire d'ajout/modif d'Etape.
@@ -148,31 +132,4 @@ class EtapeController extends AbstractActionController
         return $this->getServiceLocator()->get('FormElementManager')->get('EtapeSaisie');
     }
 
-    /**
-     * Retourne le service ElementPedagogique.
-     *
-     * @return ElementPedagogiqueService
-     */
-    protected function getServiceElementPedagogique()
-    {
-        return $this->getServiceLocator()->get('applicationElementPedagogique');
-    }
-
-    /**
-     * Retourne le service Etape
-     *
-     * @return EtapeService
-     */
-    protected function getServiceEtape()
-    {
-        return $this->getServiceLocator()->get('applicationEtape');
-    }
-
-    /**
-     * @return \Application\Service\NiveauEtape
-     */
-    protected function getServiceNiveauEtape()
-    {
-        return $this->getServiceLocator()->get('applicationNiveauEtape');
-    }
 }

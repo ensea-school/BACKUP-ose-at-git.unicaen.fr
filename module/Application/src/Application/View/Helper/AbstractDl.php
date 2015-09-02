@@ -2,14 +2,14 @@
 
 namespace Application\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Zend\View\Helper\AbstractHtmlElement;
 
 /**
  * Description of AbstractDl
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-abstract class AbstractDl extends AbstractHelper
+abstract class AbstractDl extends AbstractHtmlElement
 {
     /**
      * @var mixed

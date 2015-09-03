@@ -31,8 +31,6 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
-        $eventManager->attach($sm->get('AuthenticatedUserSavedListener'));
-
         /* Utilise un layout spécial si on est en AJAX. Valable pour TOUS les modules de l'application */
         $eventManager->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController','dispatch',
             function( \Zend\Mvc\MvcEvent $e) {

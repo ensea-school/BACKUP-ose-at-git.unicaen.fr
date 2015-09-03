@@ -516,7 +516,6 @@ return array(
     'Application\Rule\AbstractRulesEvaluator'                                                                             => __DIR__ . '/src/Application/Rule/AbstractRulesEvaluator.php',
     'Application\Rule\RulesEvaluatorInterface'                                                                            => __DIR__ . '/src/Application/Rule/RulesEvaluatorInterface.php',
     'Application\Rule\AbstractRule'                                                                                       => __DIR__ . '/src/Application/Rule/AbstractRule.php',
-    'Application\AuthenticatedUserSavedListener'                                                                          => __DIR__ . '/src/Application/AuthenticatedUserSavedListener.php',
     'Application\Acl\DrhRole'                                                                                             => __DIR__ . '/src/Application/Acl/DrhRole.php',
     'Application\Acl\EtablissementRole'                                                                                   => __DIR__ . '/src/Application/Acl/EtablissementRole.php',
     'Application\Acl\Role'                                                                                                => __DIR__ . '/src/Application/Acl/Role.php',

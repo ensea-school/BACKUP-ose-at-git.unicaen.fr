@@ -179,7 +179,6 @@ $main = [
     ],
     'service_manager'    => [
         'invokables'         => [
-            'AuthenticatedUserSavedListener'      => 'Application\AuthenticatedUserSavedListener',
             'ApplicationAnnee'                    => 'Application\\Service\\Annee',
             'ApplicationContext'                  => 'Application\\Service\\Context',
             'ApplicationLocalContext'             => 'Application\\Service\\LocalContext',

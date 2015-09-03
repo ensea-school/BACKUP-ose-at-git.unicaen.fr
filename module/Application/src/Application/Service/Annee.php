@@ -105,7 +105,6 @@ class Annee extends AbstractEntityService
     public function getChoixAnnees()
     {
         $session = $this->getSessionContainer();
-
         if (! isset($session->choixAnnees)){
             $sql = 'SELECT DISTINCT
                 annee_id

@@ -2,39 +2,39 @@
 
 namespace Application;
 
-const R_ROLE                        = 'user';
-const R_ADMINISTRATEUR              = Acl\AdministrateurRole::ROLE_ID;
-const R_COMPOSANTE                  = Acl\ComposanteRole::ROLE_ID;
-const R_DRH                         = Acl\DrhRole::ROLE_ID;
-const R_ETABLISSEMENT               = Acl\EtablissementRole::ROLE_ID;
-const R_INTERVENANT                 = Acl\IntervenantRole::ROLE_ID;
-const R_INTERVENANT_PERMANENT       = Acl\IntervenantPermanentRole::ROLE_ID;
-const R_INTERVENANT_EXTERIEUR       = Acl\IntervenantExterieurRole::ROLE_ID;
+const R_ROLE                  = 'user';
+const R_ADMINISTRATEUR        = Acl\AdministrateurRole::ROLE_ID;
+const R_COMPOSANTE            = Acl\ComposanteRole::ROLE_ID;
+const R_DRH                   = Acl\DrhRole::ROLE_ID;
+const R_ETABLISSEMENT         = Acl\EtablissementRole::ROLE_ID;
+const R_INTERVENANT           = Acl\IntervenantRole::ROLE_ID;
+const R_INTERVENANT_PERMANENT = Acl\IntervenantPermanentRole::ROLE_ID;
+const R_INTERVENANT_EXTERIEUR = Acl\IntervenantExterieurRole::ROLE_ID;
 
 
-$R_ALL = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT, R_INTERVENANT];
+$R_ALL             = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT, R_INTERVENANT];
 $R_NOT_INTERVENANT = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT];
-$R_COMMUN = [R_ADMINISTRATEUR, R_DRH, R_ETABLISSEMENT];
+$R_COMMUN          = [R_ADMINISTRATEUR, R_DRH, R_ETABLISSEMENT];
 
-$main =  [
-    'doctrine' => [
-        'connection' => [
+$main = [
+    'doctrine'           => [
+        'connection'   => [
             'orm_default' => [
                 'driverClass' => 'Doctrine\DBAL\Driver\OCI8\Driver',
             ],
         ],
-        'driver' => [
+        'driver'       => [
             'orm_default_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
                 'paths' => [
                     __DIR__ . '/../src/Application/Entity/Db/Mapping',
                 ],
             ],
-            'orm_default' => [
+            'orm_default'        => [
                 'class'   => 'Doctrine\ORM\Mapping\Driver\DriverChain',
                 'drivers' => [
-                    'Application\Entity\Db' => 'orm_default_driver'
-                ]
+                    'Application\Entity\Db' => 'orm_default_driver',
+                ],
             ],
         ],
         'eventmanager' => [
@@ -45,22 +45,22 @@ $main =  [
                 ],
             ],
         ],
-        'cache' => [
+        'cache'        => [
             'apc' => [
                 'namespace' => 'OSE__' . __NAMESPACE__,
             ],
         ],
     ],
-    'zfcuser' => [
+    'zfcuser'            => [
         // telling ZfcUser to use our own class
         'user_entity_class' => 'Application\Entity\Db\Utilisateur',
-//        // telling ZfcUserDoctrineORM to skip the entities it defines
-//        'enable_default_entities' => false,
+        //        // telling ZfcUserDoctrineORM to skip the entities it defines
+        //        'enable_default_entities' => false,
     ],
-    'router' => [
+    'router'             => [
         'routes' => [
-            'home' => [
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+            'home'             => [
+                'type'    => 'Zend\Mvc\Router\Http\Literal',
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
@@ -73,9 +73,9 @@ $main =  [
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /application/:controller/:action
-            'application' => [
-                'type'    => 'Literal',
-                'options' => [
+            'application'      => [
+                'type'          => 'Literal',
+                'options'       => [
                     'route'    => '/application',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
@@ -84,7 +84,7 @@ $main =  [
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
+                /*'child_routes' => [
                     'default' => [
                         'type'    => 'Segment',
                         'options' => [
@@ -98,16 +98,16 @@ $main =  [
                             ],
                         ],
                     ],
-                ],
+                ],*/
             ],
             'changement-annee' => [
-                'type' => 'Segment',
+                'type'    => 'Segment',
                 'options' => [
-                    'route'    => '/changement-annee/:annee',
+                    'route'       => '/changement-annee/:annee',
                     'constraints' => [
                         'annee' => '[0-9]*',
                     ],
-                    'defaults' => [
+                    'defaults'    => [
                         'controller' => 'Application\Controller\Index',
                         'action'     => 'changement-annee',
                     ],
@@ -115,38 +115,38 @@ $main =  [
             ],
         ],
     ],
-    'navigation' => [
+    'navigation'         => [
         'default' => [
             'home' => [
                 'pages' => [
                     'intervenant' => [
                         // réservation de l'emplacement pour le menu Intervenant
                     ],
-                    'service' => [
+                    'service'     => [
                         // réservation de l'emplacement pour le menu Enseignements
                     ],
-                    'of' => [
+                    'of'          => [
                         // réservation de l'emplacement pour le menu Offre de formation
                     ],
-                    'gestion' => [
+                    'gestion'     => [
                         // réservation de l'emplacement pour le menu Gestion
                     ],
                 ],
             ],
         ],
     ],
-    'unicaen-auth' => [
+    'unicaen-auth'       => [
         /**
          * Fournisseurs d'identité.
          */
         'identity_providers' => [
 //            200 => 'UnicaenAuth\Provider\Identity\Db',
 //            100 => 'UnicaenAuth\Provider\Identity\Ldap',
-            50  => 'ApplicationIdentityProvider'
+50 => 'ApplicationIdentityProvider',
         ],
     ],
-    'bjyauthorize' => [
-        'role_providers' => [
+    'bjyauthorize'       => [
+        'role_providers'     => [
             'ApplicationRoleProvider' => [
                 'Application\\Acl\\Role',
 
@@ -157,17 +157,17 @@ $main =  [
                 'Application\\Acl\\DrhRole',
                 'Application\\Acl\\EtablissementRole',
                 'Application\\Acl\\IntervenantRole',
-                    'Application\\Acl\\IntervenantExterieurRole',
-                    'Application\\Acl\\IntervenantPermanentRole',
+                'Application\\Acl\\IntervenantExterieurRole',
+                'Application\\Acl\\IntervenantPermanentRole',
             ],
         ],
         'resource_providers' => [
             'ApplicationPrivilege' => [],
         ],
-        'rule_providers' => [
-            'Application\Provider\Rule\PrivilegeRuleProvider' => []
+        'rule_providers'     => [
+            'Application\Provider\Rule\PrivilegeRuleProvider' => [],
         ],
-        'guards' => [
+        'guards'             => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Index',
@@ -177,48 +177,47 @@ $main =  [
             ],
         ],
     ],
-    'service_manager' => [
-        'invokables' => [
-            'AuthenticatedUserSavedListener'                 => 'Application\AuthenticatedUserSavedListener',
-            'ApplicationAnnee'                               => 'Application\\Service\\Annee',
-            'ApplicationContext'                             => 'Application\\Service\\Context',
-            'ApplicationLocalContext'                        => 'Application\\Service\\LocalContext',
-            'ApplicationParametres'                          => 'Application\\Service\\Parametres',
-            'ApplicationUtilisateur'                         => 'Application\\Service\\Utilisateur',
-            'ApplicationTypeIntervention'                    => 'Application\\Service\\TypeIntervention',
-            'ApplicationSource'                              => 'Application\\Service\\Source',
-            'ApplicationAffectation'                         => 'Application\\Service\\Affectation',
-            'ApplicationRole'                                => 'Application\\Service\\Role',
-            'ApplicationPrivilege'                           => 'Application\\Service\\Privilege',
-            'ApplicationPays'                                => 'Application\\Service\\Pays',
-            'ApplicationDepartement'                         => 'Application\\Service\\Departement',
-            'IntervenantNavigationPageVisibility'            => 'Application\\Service\\IntervenantNavigationPageVisibility',
-            'TestAssertion'                                  => 'Application\\Assertion\\TestAssertion',
+    'service_manager'    => [
+        'invokables'         => [
+            'AuthenticatedUserSavedListener'      => 'Application\AuthenticatedUserSavedListener',
+            'ApplicationAnnee'                    => 'Application\\Service\\Annee',
+            'ApplicationContext'                  => 'Application\\Service\\Context',
+            'ApplicationLocalContext'             => 'Application\\Service\\LocalContext',
+            'ApplicationParametres'               => 'Application\\Service\\Parametres',
+            'ApplicationUtilisateur'              => 'Application\\Service\\Utilisateur',
+            'ApplicationTypeIntervention'         => 'Application\\Service\\TypeIntervention',
+            'ApplicationSource'                   => 'Application\\Service\\Source',
+            'ApplicationAffectation'              => 'Application\\Service\\Affectation',
+            'ApplicationRole'                     => 'Application\\Service\\Role',
+            'ApplicationPrivilege'                => 'Application\\Service\\Privilege',
+            'ApplicationPays'                     => 'Application\\Service\\Pays',
+            'ApplicationDepartement'              => 'Application\\Service\\Departement',
+            'IntervenantNavigationPageVisibility' => 'Application\\Service\\IntervenantNavigationPageVisibility',
+            'TestAssertion'                       => 'Application\\Assertion\\TestAssertion',
         ],
-        'aliases' => array(
-            'PrivilegeProvider'                              => 'ApplicationPrivilege'
-        ),
-        'factories' => [
-            'navigation'                  => 'Application\Service\NavigationFactoryFactory',
-            'ApplicationRoleProvider'     => 'Application\Provider\Role\RoleProviderFactory',
-            'ApplicationIdentityProvider' => 'Application\Provider\Identity\IdentityProviderFactory',
+        'aliases'            => [
+            'PrivilegeProvider' => 'ApplicationPrivilege',
+        ],
+        'factories'          => [
+            'navigation'                     => 'Application\Service\NavigationFactoryFactory',
+            'ApplicationRoleProvider'        => 'Application\Provider\Role\RoleProviderFactory',
+            'ApplicationIdentityProvider'    => 'Application\Provider\Identity\IdentityProviderFactory',
             'BjyAuthorize\Service\Authorize' => 'Application\Service\AuthorizeFactory', // surcharge!!!
         ],
         'abstract_factories' => [
         ],
     ],
-    'view_helpers' => [
-        'factories' => [
+    'view_helpers'       => [
+        'factories'  => [
             'userProfileSelectRadioItem' => 'Application\View\Helper\UserProfileSelectRadioItemFactory',
             'appLink'                    => 'Application\View\Helper\AppLinkFactory',
         ],
         'invokables' => [
-            'validationDl'          => 'Application\View\Helper\ValidationDl',
-            'utilisateur'           => 'Application\View\Helper\UtilisateurViewHelper',
-            'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
+            'validationDl' => 'Application\View\Helper\ValidationDl',
+            'utilisateur'  => 'Application\View\Helper\UtilisateurViewHelper',
         ],
     ],
-    'translator' => [
+    'translator'         => [
         'translation_file_patterns' => [
             [
                 'type'     => 'gettext',
@@ -227,9 +226,9 @@ $main =  [
             ],
         ],
     ],
-    'controllers' => [
+    'controllers'        => [
         'invokables' => [
-            'Application\Controller\Index'   => 'Application\Controller\IndexController',
+            'Application\Controller\Index'       => 'Application\Controller\IndexController',
             'UnicaenAuth\Controller\Utilisateur' => 'Application\Controller\UtilisateurController',
         ],
     ],
@@ -238,17 +237,17 @@ $main =  [
             'em'      => 'Application\Controller\Plugin\Em',
             'context' => 'Application\Controller\Plugin\Context',
         ],
-        'factories' => [
+        'factories'  => [
 //            'mail'    => 'Application\Controller\Plugin\MailWithLogPluginFactory',
         ],
     ],
-    'view_manager' => [
+    'view_manager'       => [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
     ],
-    'public_files' => [
-        'js' => [
+    'public_files'       => [
+        'js'  => [
             'js/datepicker-fr.js',
             'js/elementPedagogiqueRecherche.js',
             'js/service.js',
@@ -259,8 +258,8 @@ $main =  [
         'css' => [
             'bootstrap-select/css/bootstrap-select.min.css',
             'css/cartridge.css',
-        ]
-    ]
+        ],
+    ],
 ];
 
 return array_merge_recursive(

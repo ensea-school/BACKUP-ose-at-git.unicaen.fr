@@ -13,4 +13,6 @@ class Constants
     
     const SEXE_M = 'M';
     const SEXE_F = 'F';
+
+    const ADRESSE_PAYS_DEFAULT = 'FRANCE';
 }

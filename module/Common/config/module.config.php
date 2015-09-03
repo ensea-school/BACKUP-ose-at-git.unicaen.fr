@@ -3,26 +3,26 @@
 namespace Application;
 
 return [
-    'doctrine' => [
+    'doctrine'     => [
         'configuration' => [
             'orm_default' => [
                 'string_functions' => [
-                    'CONVERT'  => 'Common\ORM\Query\Functions\Convert',
-                    'CONTAINS' => 'Common\ORM\Query\Functions\Contains',
-                    'REPLACE'  => 'Common\ORM\Query\Functions\Replace',
+                    'CONVERT'                             => 'Common\ORM\Query\Functions\Convert',
+                    'CONTAINS'                            => 'Common\ORM\Query\Functions\Contains',
+                    'REPLACE'                             => 'Common\ORM\Query\Functions\Replace',
                     'OSE_DIVERS_STRUCTURE_DANS_STRUCTURE' => 'Common\ORM\Query\Functions\OseDivers\StructureDansStructure',
-                    'compriseEntre' => 'Common\ORM\Query\Functions\OseDivers\CompriseEntre',
-                    'pasHistorise'  => 'Common\ORM\Query\Functions\OseDivers\PasHistorise',
+                    'compriseEntre'                       => 'Common\ORM\Query\Functions\OseDivers\CompriseEntre',
+                    'pasHistorise'                        => 'Common\ORM\Query\Functions\OseDivers\PasHistorise',
                 ],
-                'filters' => [
+                'filters'          => [
                     'historique' => 'Common\ORM\Filter\HistoriqueFilter',
                     'etape'      => 'Common\ORM\Filter\EtapeFilter',
                     'annee'      => 'Common\ORM\Filter\AnneeFilter',
                 ],
-            ]
+            ],
         ],
     ],
-    'translator' => [
+    'translator'   => [
         'translation_file_patterns' => [
             [
                 'type'     => 'phparray',
@@ -32,8 +32,9 @@ return [
         ],
     ],
     'view_helpers' => [
-        'invokables' => [
-            'cartridge' => 'Common\View\Helper\CartridgeViewHelper',
+        'invokables'   => [
+            'cartridge'       => 'Common\View\Helper\CartridgeViewHelper',
+            'formButtonGroup' => 'Common\Form\View\Helper\FormButtonGroup',
         ],
         'initializers' => [
         ],

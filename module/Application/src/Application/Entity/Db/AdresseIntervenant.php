@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use Common\Constants;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -497,24 +498,16 @@ class AdresseIntervenant implements HistoriqueAwareInterface
      */
     public function __toString()
     {
-        $part1   = [];
-        $part1[] = $this->getNoVoie();
-        $part1[] = $this->getNomVoie();
-        $part1[] = $this->getBatiment();
-        $part1[] = $this->getMentionComplementaire();
-        $part1   = implode(', ', array_filter($part1));
+        $pays = $this->getPaysLibelle();
+        if (strtoupper($pays) == Constants::ADRESSE_PAYS_DEFAULT) $pays = '';
 
-        $part2   = [];
-        $part2[] = $this->getLocalite();
-        $part2[] = $this->getCodePostal();
-        $part2[] = $this->getVille();
-        $part2[] = $this->getPaysLibelle();
-        $part2   = implode(', ', array_filter($part2));
-
-        $parts   = [];
-        $parts[] = $part1;
-        $parts[] = $part2;
-
-        return implode(PHP_EOL, array_filter($parts));
+        return implode( "\n", array_filter([
+            trim( $this->getNoVoie().' '.$this->getNomVoie() ),
+            trim( $this->getBatiment() ),
+            trim( $this->getMentionComplementaire() ),
+            trim( $this->getLocalite() ),
+            trim( $this->getCodePostal().' '.$this->getVille() ),
+            trim( $pays )
+        ]));
     }
 }

@@ -16,47 +16,38 @@ use Application\Exception\DbException;
 class ElementPedagogiqueController extends AbstractActionController
 {
     use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait
-    ;
+        \Application\Service\Traits\ContextAwareTrait;
+
 
 
     public function voirAction()
     {
-        $element = $this->context()->mandatory()->elementPedagogiqueFromRoute('id');
-        $title   = "Détails d'un enseignement";
-        $short   = $this->params()->fromQuery('short', false);
+        $element = $this->getEvent()->getParam('elementPedagogique');
+        $title   = "Enseignement";
 
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables(compact('element', 'title', 'short'));
-
-        return $viewModel;
+        return compact('element', 'title');
     }
 
-    public function apercevoirAction()
-    {
-        $element = $this->context()->mandatory()->elementPedagogiqueFromRoute('id');
-        $title   = "Aperçu d'un enseignement";
-        $short   = $this->params()->fromQuery('short', false);
 
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables(compact('element', 'title', 'short'));
-
-        return $viewModel;
-    }
 
     public function ajouterAction()
     {
         return $this->saisirAction();
     }
 
+
+
     public function modifierAction()
     {
         return $this->saisirAction();
     }
 
+
+
     protected function saisirAction()
     {
-        $etape   = $this->context()->mandatory()->etapeFromRoute(); /* @var $etape \Application\Entity\Db\Etape */
+        $etape = $this->context()->mandatory()->etapeFromRoute();
+        /* @var $etape \Application\Entity\Db\Etape */
         $id      = $this->params()->fromRoute('id');
         $service = $this->getServiceElementPedagogique();
         $title   = $id ? "Modification d'un enseignement" : "Création d'un enseignement";
@@ -68,11 +59,11 @@ class ElementPedagogiqueController extends AbstractActionController
         if ($id) {
             $entity = $service->getRepo()->find($id);
             $form->bind($entity);
-        }
-        else {
-            $entity = $service->newEntity(); /* @var $entity \Application\Entity\Db\ElementPedagogique */
+        } else {
+            $entity = $service->newEntity();
+            /* @var $entity \Application\Entity\Db\ElementPedagogique */
             $entity->setEtape($etape)
-                   ->setStructure($etape->getStructure());
+                ->setStructure($etape->getStructure());
             $form->setObject($entity);
         }
 
@@ -85,8 +76,7 @@ class ElementPedagogiqueController extends AbstractActionController
                 try {
                     $service->save($entity);
                     $form->get('id')->setValue($entity->getId()); // transmet le nouvel ID
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $e        = DbException::translate($e);
                     $errors[] = $e->getMessage();
                 }
@@ -95,23 +85,25 @@ class ElementPedagogiqueController extends AbstractActionController
 
         $viewModel = new \Zend\View\Model\ViewModel();
         $viewModel->setTemplate('application/offre-formation/element-pedagogique/saisir')
-                ->setVariables(compact('form', 'title', 'errors'));
+            ->setVariables(compact('form', 'title', 'errors'));
 
         return $viewModel;
     }
 
+
+
     public function supprimerAction()
     {
         $id = $this->params()->fromRoute('id', 0);
-        if (!($id = $this->params()->fromRoute('id'))){
+        if (!($id = $this->params()->fromRoute('id'))) {
             throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
 
-        $service   = $this->getServiceElementPedagogique();
-        $entity    = $service->getRepo()->find($id);
-        $title     = "Suppression d'enseignement";
-        $form      = new \Application\Form\Supprimer('suppr');
-        $errors = [];
+        $service = $this->getServiceElementPedagogique();
+        $entity  = $service->getRepo()->find($id);
+        $title   = "Suppression d'enseignement";
+        $form    = new \Application\Form\Supprimer('suppr');
+        $errors  = [];
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $service->canAdd(true);
@@ -119,13 +111,16 @@ class ElementPedagogiqueController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             try {
                 $service->delete($entity);
-            }catch(\Exception $e){
-                $e = DbException::translate($e);
+            } catch (\Exception $e) {
+                $e        = DbException::translate($e);
                 $errors[] = $e->getMessage();
             }
         }
+
         return compact('entity', 'title', 'form', 'errors');
     }
+
+
 
     /**
      * Action pour rechercher des éléments pédagogiques.
@@ -147,7 +142,7 @@ class ElementPedagogiqueController extends AbstractActionController
     {
         $this->em()->getFilters()->enable('annee')->init(
             [
-                'Application\Entity\Db\ElementPedagogique'
+                'Application\Entity\Db\ElementPedagogique',
             ],
             $this->getServiceContext()->getAnnee()
         );
@@ -156,14 +151,14 @@ class ElementPedagogiqueController extends AbstractActionController
         $niveau    = $this->context()->niveauFromQuery();
         $etape     = $this->context()->etapeFromQuery();
         $element   = $this->context()->elementPedagogiqueFromQuery();
-        $term = $this->params()->fromQuery('term');
+        $term      = $this->params()->fromQuery('term');
 
-        if (! $etape && !$term) {
+        if (!$etape && !$term) {
             exit;
         }
 
         // respect des filtres éventuels spécifiés en GET ou sinon en session
-        $params = [];
+        $params              = [];
         $params['structure'] = $structure;
         $params['niveau']    = $niveau;
         $params['etape']     = $etape;
@@ -172,11 +167,11 @@ class ElementPedagogiqueController extends AbstractActionController
         $params['limit']     = $limit = 101;
 
         // fetch
-        $found     = $this->getServiceElementPedagogique()->getSearchResultByTerm($params);
+        $found = $this->getServiceElementPedagogique()->getSearchResultByTerm($params);
 
         $result = [];
         foreach ($found as $item) {
-            if ($item['NB_CH'] > 1){
+            if ($item['NB_CH'] > 1) {
                 $item['LIBELLE_ETAPE'] = 'Enseignement commun à plusieurs parcours';
             }
 
@@ -188,7 +183,7 @@ class ElementPedagogiqueController extends AbstractActionController
                 $extra .= sprintf('<span class="element-rech etape" title="%s">%s</span>', "Formation", $item['LIBELLE_ETAPE']);
             }
             $extra .= "Année" !== $item['LIBELLE_PE'] ? sprintf('<span class="element-rech periode" title="%s">%s</span>', "Période", $item['LIBELLE_PE']) : null;
-            $template = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Enseignement");
+            $template            = sprintf('<span class="element-rech extra">{extra}</span><span class="element-rech element" title="%s">{label}</span>', "Enseignement");
             $result[$item['ID']] = [
                 'id'       => $item['ID'],
                 'label'    => $item['SOURCE_CODE'] . ' ' . $item['LIBELLE'],
@@ -202,18 +197,23 @@ class ElementPedagogiqueController extends AbstractActionController
         return new \Zend\View\Model\JsonModel($result);
     }
 
+
+
     public function getPeriodeAction()
     {
         $elementPedagogique = $this->context()->elementPedagogiqueFromRoute();
-        $code = null;
-        if ($elementPedagogique){
-            if ($periode = $elementPedagogique->getPeriode()){
+        $code               = null;
+        if ($elementPedagogique) {
+            if ($periode = $elementPedagogique->getPeriode()) {
                 $code = $periode->getCode();
             }
         }
-        $result = ['periode' => [ 'code' => $code ] ];
+        $result = ['periode' => ['code' => $code]];
+
         return new \Zend\View\Model\JsonModel($result);
     }
+
+
 
     /**
      * Retourne le formulaire d'ajout/modif d'ElementPedagogique.

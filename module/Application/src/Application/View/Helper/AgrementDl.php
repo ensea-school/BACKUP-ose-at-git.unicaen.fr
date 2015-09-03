@@ -43,7 +43,7 @@ class AgrementDl extends AbstractDl
         $dtdds[] = sprintf($tplDtdd,
             "Date et auteur de l'enregistrement :",
             $entity->getHistoModification()->format(Constants::DATETIME_FORMAT)
-                . ' par ' . $this->getView()->mailto($entity->getHistoModificateur())
+                . ' par ' . $this->getView()->utilisateur($entity->getHistoModificateur())
         );
 
         $html .= sprintf($this->getTemplateDl('agrement agrement-details'), implode(PHP_EOL, $dtdds)) . PHP_EOL;

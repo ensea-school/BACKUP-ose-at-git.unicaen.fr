@@ -13,7 +13,7 @@
     </div>
     <div class="col-md-8 intervenant-voir">
         <?php if (false !== $intervenant): ?>
-            <?php echo $intervenant ? $this->intervenantDl($intervenant, true) : "Intervenant introuvable dans OSE." ?>
+            <?php echo $intervenant ? $this->intervenant($intervenant) : "Intervenant introuvable dans OSE." ?>
         <?php endif ?>
         <?php if ($intervenant): ?>
             <?php echo $this->navigation('navigation')->menuContextuel()->withTarget($intervenant->getId()) ?>

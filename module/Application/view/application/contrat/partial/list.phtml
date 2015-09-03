@@ -39,7 +39,7 @@ $role        = $this->role;
             <td>
                 <p>
                     <strong><?php echo $contrat ?></strong> créé par
-                    <?php echo $this->mailto($contrat->getHistoModificateur()) ?>
+                    <?php echo $this->utilisateur($contrat->getHistoModificateur()) ?>
 
                     <?php if ($this->isAllowed($contrat, ContratAssertion::PRIVILEGE_EXPORTER)): ?>
                     <span class="pull-right">

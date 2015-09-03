@@ -5,13 +5,13 @@ namespace Import;
 use Application\Entity\Db\Privilege;
 
 return [
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
-            'Import\Controller\Import'      => 'Import\Controller\ImportController',
+            'Import\Controller\Import' => 'Import\Controller\ImportController',
         ],
     ],
 
-    'router' => [
+    'router'          => [
         'routes' => [
             'import' => [
                 'type'    => 'Segment',
@@ -19,16 +19,16 @@ return [
                     'route'    => '/import[/:action][/:table]',
                     'defaults' => [
                         '__NAMESPACE__' => 'Import\Controller',
-                        'controller' => 'Import',
-                        'action'     => 'index',
-                        'table'      => null
+                        'controller'    => 'Import',
+                        'action'        => 'index',
+                        'table'         => null,
                     ],
                 ],
             ],
         ],
     ],
 
-    'navigation' => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -37,27 +37,27 @@ return [
                         'order'    => 1,
                         'route'    => 'import',
                         'resource' => 'controller/Import\Controller\Import:index',
-                        'pages' => [
-                            'admin' => [
-                                'label'  => "Tableau de bord principal",
-                                'route'  => 'import',
+                        'pages'    => [
+                            'admin'    => [
+                                'label'    => "Tableau de bord principal",
+                                'route'    => 'import',
                                 'resource' => 'controller/Import\Controller\Import:showimporttbl',
-                                'params' => [
+                                'params'   => [
                                     'action' => 'showImportTbl',
                                 ],
-                                'visible' => true,
-                                'pages' => [
+                                'visible'  => true,
+                                'pages'    => [
 
                                 ],
                             ],
                             'showDiff' => [
-                                'label'  => "Écarts entre OSE et ses sources",
-                                'route'  => 'import',
+                                'label'    => "Écarts entre OSE et ses sources",
+                                'route'    => 'import',
                                 'resource' => 'controller/Import\Controller\Import:showdiff',
-                                'params' => [
+                                'params'   => [
                                     'action' => 'showDiff',
                                 ],
-                                'visible' => true,
+                                'visible'  => true,
                             ],
                         ],
                     ],
@@ -66,7 +66,7 @@ return [
         ],
     ],
 
-    'bjyauthorize' => [
+    'bjyauthorize'    => [
         'guards' => [
             'Application\Guard\PrivilegeController' => [
                 [
@@ -86,7 +86,7 @@ return [
                 ],
                 [
                     'controller' => 'Import\Controller\Import',
-                    'action'     => ['update','updateTables'],
+                    'action'     => ['update', 'updateTables'],
                     'privileges' => [Privilege::IMPORT_MAJ],
                 ],
                 [
@@ -98,7 +98,27 @@ return [
         ],
     ],
 
-    'view_manager' => [
+    'service_manager' => [
+        'invokables' => [
+            'importServiceSchema'         => 'Import\\Service\\Schema',
+            'importServiceQueryGenerator' => 'Import\\Service\\QueryGenerator',
+            'importServiceIntervenant'    => 'Import\\Service\\Intervenant',
+            'importServiceDifferentiel'   => 'Import\\Service\\Differentiel',
+            'importProcessusImport'       => 'Import\\Processus\\Import',
+        ],
+        'factories'  => [
+
+        ],
+    ],
+
+    'view_helpers'    => [
+        'invokables' => [
+            'differentielListe' => 'Import\View\Helper\DifferentielListe',
+            'differentielLigne' => 'Import\View\Helper\DifferentielLigne\DifferentielLigne',
+        ],
+    ],
+
+    'view_manager'    => [
         'template_path_stack' => [
             'import' => __DIR__ . '/../view',
         ],

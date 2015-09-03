@@ -2,15 +2,15 @@
 
 namespace Application\View\Helper;
         
-use Zend\View\Helper\AbstractHelper;
 use Application\Entity\Db\Utilisateur;
+use Zend\View\Helper\AbstractHtmlElement;
 
 /**
- * Description of Mailto
+ * Description of UtilisateurViewHelper
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Mailto extends AbstractHelper
+class UtilisateurViewHelper extends AbstractHtmlElement
 {
     /**
      * 

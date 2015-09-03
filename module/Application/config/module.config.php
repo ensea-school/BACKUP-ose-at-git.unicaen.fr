@@ -214,10 +214,7 @@ $main =  [
         ],
         'invokables' => [
             'validationDl'          => 'Application\View\Helper\ValidationDl',
-            'mailto'                => 'Application\View\Helper\Mailto',
-            'intervenantDl'         => 'Application\View\Helper\IntervenantDl',
-            'adresseDl'             => 'Application\View\Helper\AdresseDl',
-            'elementPedagogiqueDl'  => 'Application\View\Helper\OffreFormation\ElementPedagogiqueDl',
+            'utilisateur'           => 'Application\View\Helper\UtilisateurViewHelper',
             'fieldsetElementPedagogiqueRecherche' => 'Application\View\Helper\OffreFormation\FieldsetElementPedagogiqueRecherche',
         ],
     ],

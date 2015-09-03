@@ -85,14 +85,13 @@ class EtapeViewHelper extends AbstractHtmlElement
         $etape = $this->getEtape();
         if (!$etape) return '';
 
+        $url = $this->getView()->url('of/etape/voir', ['etape' => $etape->getId()]);
+        $out = '<a href="' . $url . '" data-po-href="' . $url . '" class="ajax-modal">' . $etape . '</a>';
+
         if ($etape->getHistoDestruction() && 0 == $etape->getCheminPedagogique()->count()) {
-            return '<span class="bg-danger"><abbr title="Cette formation n\'existe plus">' . $etape . '</abbr></span>';
+            return '<span class="bg-danger"><abbr title="Cette formation n\'existe plus">' . $out . '</abbr></span>';
+        } else {
+            return $out;
         }
-
-        $url   = $this->getView()->url('of/etape/voir', ['etape' => $etape->getId()]);
-        $pourl = $this->getView()->url('of/etape/voir', ['etape' => $etape->getId()]);
-        $out   = '<a href="' . $url . '" data-po-href="' . $pourl . '" class="ajax-modal">' . $etape . '</a>';
-
-        return $out;
     }
 }

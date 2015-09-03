@@ -35,7 +35,7 @@ class ValidationDl extends AbstractDl
         $dtdds[] = sprintf($tplDtdd,
             "Date et auteur :",
             $entity->getHistoModification()->format(\Common\Constants::DATETIME_FORMAT)
-                . ' par ' . $this->getView()->mailto($entity->getHistoModificateur())
+                . ' par ' . $this->getView()->utilisateur($entity->getHistoModificateur())
         );
 
 //        if ($entity->getDateConseilAcademique()) {

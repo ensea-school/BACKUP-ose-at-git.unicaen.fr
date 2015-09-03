@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Entity\DB;
+namespace Application\Entity\Db;
 
 trait ServiceAPayerTrait
 {

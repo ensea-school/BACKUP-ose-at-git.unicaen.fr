@@ -94,6 +94,22 @@ span.element-rech.periode {
  * Autre
  */
 
+dl.dl-horizontal.intervenant dt{
+    width: 200px;
+}
+
+dl.dl-horizontal.intervenant dd{
+    margin-left: 220px;
+}
+
+dl.dl-horizontal.element dt{
+    width: 200px;
+}
+
+dl.dl-horizontal.element dd{
+    margin-left: 220px;
+}
+
 .nombre {
     text-align:right;
     white-space: nowrap;
@@ -104,9 +120,20 @@ h1.page-header {
 }
 
 
+.modal-header {
+    padding: 10px;
+    background-color: #428BCA;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin:1px;
+}
 .modal-header h1,
 .modal-header h2 { 
-    line-height: 90%; 
+    line-height: 90%;
+    font-size:12pt;
+    font-weight: 100;
+    text-shadow: inset;
+    color: white;
 }
 
 .modal-body h1 {

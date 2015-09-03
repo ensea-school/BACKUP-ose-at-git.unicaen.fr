@@ -58,17 +58,9 @@ return [
                             'voir' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'    => '/voir/:id',
-                                    'constraints' => [ 'id' => '[0-9]*' ],
+                                    'route'    => '/voir/:elementPedagogique',
+                                    'constraints' => [ 'elementPedagogique' => '[0-9]*' ],
                                     'defaults' => [ 'action' => 'voir' ],
-                                ],
-                            ],
-                            'apercevoir' => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'    => '/apercevoir/:id',
-                                    'constraints' => [ 'id' => '[0-9]*' ],
-                                    'defaults' => [ 'action' => 'apercevoir' ],
                                 ],
                             ],
                             'ajouter' => [
@@ -391,7 +383,7 @@ return [
         'invokables' => [
             'EtapeModulateursSaisieForm'       => 'Application\View\Helper\OffreFormation\EtapeModulateursSaisieForm',
             'ElementModulateursSaisieFieldset' => 'Application\View\Helper\OffreFormation\ElementModulateursSaisieFieldset',
-            'ElementPedagogique'               => 'Application\View\Helper\OffreFormation\ElementPedagogique',
+            'ElementPedagogique'               => 'Application\View\Helper\OffreFormation\ElementPedagogiqueViewHelper',
             'Etape'                            => 'Application\View\Helper\OffreFormation\EtapeViewHelper',
             'EtapeCentreCoutForm'              => 'Application\View\Helper\OffreFormation\EtapeCentreCoutFormViewHelper',
             'ElementCentreCoutFieldset'        => 'Application\View\Helper\OffreFormation\ElementCentreCoutFieldsetViewHelper',

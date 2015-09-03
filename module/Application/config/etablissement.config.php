@@ -77,7 +77,6 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-            'etablissementDl'   => 'Application\View\Helper\EtablissementDl',
             'etablissement'     => 'Application\View\Helper\EtablissementViewHelper',
         ],
     ],

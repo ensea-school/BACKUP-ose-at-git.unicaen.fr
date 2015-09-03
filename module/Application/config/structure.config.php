@@ -116,7 +116,6 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-            'structureDl'       => 'Application\View\Helper\StructureDl',
             'structure'         => 'Application\View\Helper\StructureViewHelper',
         ],
     ],

@@ -8,56 +8,56 @@ use Application\Acl\IntervenantRole;
 use Application\Controller\AgrementController;
 
 return [
-    'router' => [
+    'router'          => [
         'routes' => [
             'intervenant' => [
                 'child_routes' => [
                     'agrement' => [
-                        'type'    => 'Segment',
-                        'options' => [
-                            'route' => '/:intervenant/agrement',
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/:intervenant/agrement',
                             'constraints' => [
                                 'intervenant' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'controller' => 'Agrement',
-                                'action' => 'index',
+                                'action'     => 'index',
                             ],
                         ],
                         'may_terminate' => true,
-                        'child_routes' => [
-                            'liste' => [
+                        'child_routes'  => [
+                            'liste'    => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route' => '/:typeAgrement',
+                                    'route'       => '/:typeAgrement',
                                     'constraints' => [
                                         'typeAgrement' => '[0-9]*',
                                     ],
-                                    'defaults' => [
+                                    'defaults'    => [
                                         'action' => 'lister',
                                     ],
                                 ],
                             ],
-                            'ajouter' => [
+                            'ajouter'  => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route' => '/:typeAgrement/ajouter',
+                                    'route'       => '/:typeAgrement/ajouter',
                                     'constraints' => [
                                         'typeAgrement' => '[0-9]*',
                                     ],
-                                    'defaults' => [
+                                    'defaults'    => [
                                         'action' => AgrementController::ACTION_AJOUTER,
                                     ],
                                 ],
                             ],
-                            'voir' => [
+                            'voir'     => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route' => '/voir/:agrement',
+                                    'route'       => '/voir/:agrement',
                                     'constraints' => [
                                         'agrement' => '[0-9]*',
                                     ],
-                                    'defaults' => [
+                                    'defaults'    => [
                                         'action' => AgrementController::ACTION_VOIR,
                                     ],
                                 ],
@@ -65,12 +65,12 @@ return [
                             'voir-str' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route' => '/:typeAgrement/voir-str[/:structure]',
+                                    'route'       => '/:typeAgrement/voir-str[/:structure]',
                                     'constraints' => [
                                         'typeAgrement' => '[0-9]*',
-                                        'structure' => '[0-9]*',
+                                        'structure'    => '[0-9]*',
                                     ],
-                                    'defaults' => [
+                                    'defaults'    => [
                                         'action' => AgrementController::ACTION_VOIR_STR,
                                     ],
                                 ],
@@ -78,11 +78,11 @@ return [
                             'modifier' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route' => '/modifier/:agrement',
+                                    'route'       => '/modifier/:agrement',
                                     'constraints' => [
                                         'agrement' => '[0-9]*',
                                     ],
-                                    'defaults' => [
+                                    'defaults'    => [
                                         'action' => AgrementController::ACTION_MODIFIER,
                                     ],
                                 ],
@@ -91,27 +91,27 @@ return [
                     ],
                 ],
             ],
-            'gestion' => [
+            'gestion'     => [
                 'child_routes' => [
                     'agrement' => [
-                        'type'    => 'Literal',
-                        'options' => [
-                            'route' => '/agrement',
+                        'type'          => 'Literal',
+                        'options'       => [
+                            'route'    => '/agrement',
                             'defaults' => [
                                 'controller' => 'Agrement',
-                                'action' => 'index'
+                                'action'     => 'index',
                             ],
                         ],
                         'may_terminate' => true,
-                        'child_routes' => [
+                        'child_routes'  => [
                             'ajouter-lot' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route' => '/:typeAgrement/ajouter-lot',
+                                    'route'       => '/:typeAgrement/ajouter-lot',
                                     'constraints' => [
                                         'typeAgrement' => '[0-9]*',
                                     ],
-                                    'defaults' => [
+                                    'defaults'    => [
                                         'action' => AgrementController::ACTION_AJOUTER_LOT,
                                     ],
                                 ],
@@ -122,7 +122,7 @@ return [
             ],
         ],
     ],
-    'navigation' => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -132,35 +132,35 @@ return [
                                 'label'         => "Agrément",
                                 'title'         => "Agrément de l'intervenant",
                                 'route'         => 'intervenant/agrement',
-                                'paramsInject' => [
+                                'paramsInject'  => [
                                     'intervenant',
                                 ],
                                 'withtarget'    => true,
                                 'resource'      => 'controller/Application\Controller\Agrement:index',
                                 'visible'       => 'IntervenantNavigationPageVisibility',
                                 'pagesProvider' => [
-                                    'type'       => 'AgrementIntervenantNavigationPagesProvider',
-                                    'route'      => 'intervenant/agrement/liste',
+                                    'type'         => 'AgrementIntervenantNavigationPagesProvider',
+                                    'route'        => 'intervenant/agrement/liste',
                                     'paramsInject' => [
                                         'intervenant',
                                     ],
-                                    'withtarget' => true,
-                                    'resource'   => 'controller/Application\Controller\Agrement:lister',
-                                    'visible'    => 'IntervenantNavigationPageVisibility',
+                                    'withtarget'   => true,
+                                    'resource'     => 'controller/Application\Controller\Agrement:lister',
+                                    'visible'      => 'IntervenantNavigationPageVisibility',
                                 ],
                             ],
                         ],
                     ],
-                    'gestion' => [
+                    'gestion'     => [
                         'pages' => [
                             'agrement' => [
-                                'label'  => "Agréments par lot",
-                                'title'  => "Gestion des agréments par lot",
-                                'route'  => 'gestion/agrement',
-                                'resource' => 'controller/Application\Controller\Agrement:index',
+                                'label'         => "Agréments par lot",
+                                'title'         => "Gestion des agréments par lot",
+                                'route'         => 'gestion/agrement',
+                                'resource'      => 'controller/Application\Controller\Agrement:index',
                                 'pagesProvider' => [
-                                    'type'  => 'AgrementNavigationPagesProvider',
-                                    'route' => 'gestion/agrement/ajouter-lot',
+                                    'type'       => 'AgrementNavigationPagesProvider',
+                                    'route'      => 'gestion/agrement/ajouter-lot',
                                     'withtarget' => true,
                                     'resource'   => 'controller/Application\Controller\Agrement:' . AgrementController::ACTION_AJOUTER_LOT,
                                     'privilege'  => AgrementController::ACTION_AJOUTER_LOT,
@@ -173,8 +173,8 @@ return [
             ],
         ],
     ],
-    'bjyauthorize' => [
-        'guards' => [
+    'bjyauthorize'    => [
+        'guards'             => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Agrement',
@@ -195,7 +195,7 @@ return [
                 'Agrement' => [],
             ],
         ],
-        'rule_providers' => [
+        'rule_providers'     => [
             'BjyAuthorize\Provider\Rule\Config' => [
                 'allow' => [
                     [
@@ -208,16 +208,13 @@ return [
             ],
         ],
     ],
-    'controllers' => [
-        'invokables' => [
+    'controllers'     => [
+        'invokables'   => [
             'Application\Controller\Agrement' => 'Application\Controller\AgrementController',
-        ],
-        'initializers' => [
-            'Application\Service\Initializer\AgrementServiceAwareInitializer',
         ],
     ],
     'service_manager' => [
-        'invokables' => [
+        'invokables'   => [
             'ApplicationAgrement'                        => 'Application\\Service\\Agrement',
             'ApplicationTypeAgrement'                    => 'Application\\Service\\TypeAgrement',
             'ApplicationTypeAgrementStatut'              => 'Application\\Service\\TypeAgrementStatut',
@@ -225,17 +222,14 @@ return [
             'AgrementIntervenantNavigationPagesProvider' => 'Application\\Service\\AgrementIntervenantNavigationPagesProvider',
             'AgrementAssertion'                          => 'Application\\Assertion\\AgrementAssertion',
         ],
-        'initializers' => [
-            'Application\Service\Initializer\AgrementServiceAwareInitializer',
-        ],
     ],
-    'view_helpers' => [
+    'view_helpers'    => [
         'invokables' => [
-            'agrementDl'    => 'Application\View\Helper\AgrementDl',
+            'agrement'      => 'Application\View\Helper\AgrementViewHelper',
             'isAllowedCRUD' => 'Application\View\Helper\IsAllowedCRUD',
         ],
     ],
-    'form_elements' => [
+    'form_elements'   => [
         'invokables' => [
             'AgrementSaisieForm' => 'Application\Form\Agrement\Saisie',
         ],

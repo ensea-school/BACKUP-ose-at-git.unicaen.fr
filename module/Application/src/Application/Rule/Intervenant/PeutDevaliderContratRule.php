@@ -12,7 +12,6 @@ use Application\Entity\Db\Contrat;
  */
 class PeutDevaliderContratRule extends \Application\Rule\AbstractRule
 {
-    use \Application\Service\Initializer\ContratServiceAwareTrait;
     use \Application\Traits\IntervenantAwareTrait;
 
     const MESSAGE_NON_VALIDE     = 'messageNonValide';

@@ -5,7 +5,7 @@
 <?php $form->prepare(); ?>
 <?php if ($form->get('valide')->getValue()): ?>
     <?php echo $this->messenger()->setMessage(
-            sprintf("Vos données personnelles ont été validées. <hr />%s", $this->validationDl($validation)), 'success') ?>
+            sprintf("Vos données personnelles ont été validées. <hr />%s", $this->validation($validation)), 'success') ?>
 <?php else: ?>
     <?php echo $this->messenger()->setMessage("Vos données personnelles n'ont pas encore été validées.", 'info') ?>
 <?php endif; ?>

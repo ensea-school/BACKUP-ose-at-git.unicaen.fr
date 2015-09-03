@@ -1,7 +1,3 @@
 <h1><?php echo $etablissement ?> <small>(<?php echo $etablissement->getDepartement() ?>)</small></h1>
 
-<?php echo $this->etablissementDl($etablissement, true, $short) ?>
-
-<br /><?php foreach( $changements as $changement ) { echo $this->differentielLigne( $changement ); } ?>
-
-<?php //echo $this->navigation('navigation')->menuContextuel()->withTarget($etablissement->getId()) ?>
+<?php echo $this->etablissement($etablissement);

@@ -264,7 +264,7 @@ return [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\Service',
-                    'action' => ['index', 'export', 'saisie', 'suppression', 'voir', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'cloturer-saisie','horodatage'],
+                    'action' => ['index', 'export', 'saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'cloturer-saisie','horodatage'],
                     'roles' => [R_ROLE],
                 ], [
                     'controller' => 'Application\Controller\Service',
@@ -321,9 +321,6 @@ return [
             'Application\Controller\Service'            => 'Application\Controller\ServiceController',
             'Application\Controller\ServiceReferentiel' => 'Application\Controller\ServiceReferentielController',
         ],
-        'initializers' => [
-            'Application\Service\Initializer\ServiceServiceAwareInitializer',
-        ],
     ],
     'service_manager' => [
         'invokables' => [
@@ -342,11 +339,6 @@ return [
             'ServiceAssertion'                             => 'Application\\Assertion\\ServiceAssertion',
             'ServiceReferentielAssertion'                  => 'Application\\Assertion\\ServiceReferentielAssertion',
         ],
-        'factories' => [
-        ],
-        'initializers' => [
-            'Application\Service\Initializer\ServiceServiceAwareInitializer',
-        ],
     ],
     'form_elements' => [
         'invokables' => [
@@ -359,8 +351,6 @@ return [
     ],
     'view_helpers' => [
         'invokables' => [
-            'serviceDl'                    => 'Application\View\Helper\Service\Dl',
-            'serviceReferentielDl'         => 'Application\View\Helper\ServiceReferentiel\Dl',
             'serviceSaisieForm'            => 'Application\View\Helper\Service\SaisieForm',
             'formServiceReferentielSaisie' => 'Application\View\Helper\ServiceReferentiel\FormSaisie',
             'serviceResume'                => 'Application\View\Helper\Service\Resume',

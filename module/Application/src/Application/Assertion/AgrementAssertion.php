@@ -6,11 +6,9 @@ use Application\Acl\ComposanteRole;
 use Application\Controller\AgrementController;
 use Application\Entity\Db\Agrement;
 use Application\Entity\Db\TypeAgrement;
-use Application\Provider\Role\RoleProvider;
 use Application\Rule\Intervenant\AgrementFourniRule;
 use Application\Rule\Intervenant\NecessiteAgrementRule;
-use Application\Service\Initializer\AgrementServiceAwareInterface;
-use Application\Service\Initializer\AgrementServiceAwareTrait;
+use Application\Service\Traits\AgrementAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenant;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
@@ -23,9 +21,9 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwareInterface, WorkflowIntervenantAwareInterface
+class AgrementAssertion extends AbstractAssertion implements WorkflowIntervenantAwareInterface
 {
-    use AgrementServiceAwareTrait;
+    use AgrementAwareTrait;
     use WorkflowIntervenantAwareTrait;
     
     /**
@@ -177,7 +175,7 @@ class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwar
      */
     private function getRuleNecessiteAgrement()
     {
-        $rule = $this->getAgrementService()->getRuleNecessiteAgrement();
+        $rule = $this->getServiceAgrement()->getRuleNecessiteAgrement();
         $rule
                 ->setIntervenant($this->resource->getIntervenant())
                 ->setTypeAgrement($this->resource->getType());
@@ -190,7 +188,7 @@ class AgrementAssertion extends AbstractAssertion implements AgrementServiceAwar
      */
     private function getRuleAgrementFourni()
     {
-        $rule = $this->getAgrementService()->getRuleAgrementFourni();
+        $rule = $this->getServiceAgrement()->getRuleAgrementFourni();
         $rule
                 ->setIntervenant($this->resource->getIntervenant())
                 ->setTypeAgrement($this->resource->getType());

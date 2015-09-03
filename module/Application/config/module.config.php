@@ -212,7 +212,7 @@ $main = [
             'appLink'                    => 'Application\View\Helper\AppLinkFactory',
         ],
         'invokables' => [
-            'validationDl' => 'Application\View\Helper\ValidationDl',
+            'validation' => 'Application\View\Helper\ValidationViewHelper',
             'utilisateur'  => 'Application\View\Helper\UtilisateurViewHelper',
         ],
     ],

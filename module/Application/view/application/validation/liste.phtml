@@ -20,7 +20,7 @@
         <tr>
             <td><?php echo $structure ?></td>
             <td>
-                <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
+                <?php echo $this->messenger()->setMessage("<br />" . $this->validation($validation), 'success') ?>
                 <a href="#" class="voir-enseignements" data-target="#validation-<?php echo $validation->getId() ?>"
                    title="Cliquez pour voir/masquer les enseignements concernés par cette validation">Voir/masquer les enseignements concernés</a>
             </td>

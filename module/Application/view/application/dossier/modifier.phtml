@@ -21,7 +21,7 @@ $this->messenger()->addMessage($msg, $sev);
  * Message Données perso validées ou non.
  */
 if ($this->validation) {
-    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_VALIDEES, ['validationDetails' => "<br/><br/>" . $this->validationDl($this->validation)]);
+    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_VALIDEES, ['validationDetails' => "<br/><br/>" . $this->validation($this->validation)]);
     $this->messenger()->addMessage($msg, 'success');
 }
 

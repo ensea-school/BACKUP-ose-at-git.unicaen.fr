@@ -568,9 +568,6 @@ return [
         'aliases' => [
             'IntervenantController' => 'Application\Controller\Intervenant',
         ],
-        'initializers' => [
-            'Application\Service\Initializer\IntervenantServiceAwareInitializer',
-        ],
     ],
     'service_manager' => [
         'invokables' => [
@@ -592,9 +589,6 @@ return [
             'NecessiteAgrementRule'                 => 'Application\Rule\Intervenant\NecessiteAgrementRule',
             'AgrementFourniRule'                    => 'Application\Rule\Intervenant\AgrementFourniRule',
             'EstAffecteRule'                        => 'Application\Rule\Intervenant\EstAffecteRule',
-        ],
-        'initializers' => [
-            'Application\Service\Initializer\IntervenantServiceAwareInitializer',
         ],
     ],
     'view_helpers' => [

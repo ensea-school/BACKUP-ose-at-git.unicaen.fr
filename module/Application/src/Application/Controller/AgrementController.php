@@ -10,12 +10,9 @@ use Application\Entity\Db\TypeAgrement;
 use Application\Form\Agrement\Saisie;
 use Application\Rule\Intervenant\AgrementFourniRule;
 use Application\Rule\Intervenant\NecessiteAgrementRule;
-use Application\Service\Initializer\AgrementServiceAwareInterface;
-use Application\Service\Initializer\AgrementServiceAwareTrait;
-use Application\Service\Initializer\IntervenantServiceAwareInterface;
-use Application\Service\Initializer\IntervenantServiceAwareTrait;
-use Application\Service\Initializer\ServiceServiceAwareInterface;
-use Application\Service\Initializer\ServiceServiceAwareTrait;
+use Application\Service\Traits\AgrementAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
+use Application\Service\Traits\ServiceAwareTrait;
 use Application\Service\Workflow\WorkflowIntervenantAwareInterface;
 use Application\Service\Workflow\WorkflowIntervenantAwareTrait;
 use Common\Exception\LogicException;
@@ -27,6 +24,7 @@ use Doctrine\ORM\QueryBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\View\Model\ViewModel;
+use Application\Service\Traits\ContextAwareTrait;
 
 /**
  * Opérations sur les agréments.
@@ -36,15 +34,13 @@ use Zend\View\Model\ViewModel;
  *
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
-class AgrementController extends AbstractActionController
-implements AgrementServiceAwareInterface, IntervenantServiceAwareInterface, ServiceServiceAwareInterface,
-           WorkflowIntervenantAwareInterface
+class AgrementController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
     use WorkflowIntervenantAwareTrait;
-    use AgrementServiceAwareTrait;
-    use IntervenantServiceAwareTrait;
-    use ServiceServiceAwareTrait;
-    use \Application\Service\Traits\ContextAwareTrait;
+    use AgrementAwareTrait;
+    use IntervenantAwareTrait;
+    use ServiceAwareTrait;
+    use ContextAwareTrait;
 
     const ACTION_VOIR        = "voir";
     const ACTION_VOIR_STR    = "voir-str";
@@ -304,7 +300,7 @@ implements AgrementServiceAwareInterface, IntervenantServiceAwareInterface, Serv
             $data = $this->getRequest()->getPost();
             $this->formSaisie->setData($data);
             if ($this->formSaisie->isValid()) {
-                $this->getAgrementService()->save($this->agrement);
+                $this->getS()->save($this->agrement);
             }
         }
 
@@ -350,7 +346,7 @@ implements AgrementServiceAwareInterface, IntervenantServiceAwareInterface, Serv
          * Recherche des intervenants concernés :
          * ce sont ceux qui sont à l'étape adéquate dans le WF.
          */
-        $serviceIntervenant = $this->getIntervenantService();
+        $serviceIntervenant = $this->getServiceIntervenant();
         $qb = $serviceIntervenant->initQuery()[0]; /* @var $qb QueryBuilder */
         $qb
                 ->join("int.wfIntervenantEtape", "p", Join::WITH, "p.courante = 1")
@@ -377,7 +373,7 @@ implements AgrementServiceAwareInterface, IntervenantServiceAwareInterface, Serv
                         $agrement = clone $this->agrement;
                         $agrement->setIntervenant($intervenants[$id]);
 
-                        $this->getAgrementService()->save($agrement);
+                        $this->getServiceAgrement()->save($agrement);
                     }
                     $this->flashMessenger()->addSuccessMessage(count($data['intervenants']) . " agrément(s) enregistré(s) avec succès.");
                     $this->redirect()->toRoute(null, [], [], true);
@@ -433,7 +429,7 @@ implements AgrementServiceAwareInterface, IntervenantServiceAwareInterface, Serv
 
         $this->initFilters();
 
-        $service = $this->getAgrementService();
+        $service = $this->getServiceAgrement();
 
         $qb = $service->finderByType($this->typeAgrement);
         if ($structure) {
@@ -451,7 +447,7 @@ implements AgrementServiceAwareInterface, IntervenantServiceAwareInterface, Serv
      */
     private function getNewEntity()
     {
-        $agrement = $this->getAgrementService()->newEntity(); /* @var $agrement Agrement */
+        $agrement = $this->getServiceAgrement()->newEntity(); /* @var $agrement Agrement */
         $agrement
                 ->setType($this->typeAgrement)
                 ->setIntervenant($this->intervenant);

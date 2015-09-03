@@ -109,44 +109,17 @@ return [
             ],
         ],
     ],
-    'navigation' => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'volume-horaire' => [
-                        'label'    => 'Volumes horaires',
-                        'title'    => "Gestion des volumes horaires",
-                        'visible' => false,
-                        'route'    => 'volume-horaire',
-                        'params' => [
-                            'action' => 'index',
-                        ],
-                        'pages' => [
-                            'consultation' => [
-                                'label'  => "Consultation",
-                                'title'  => "Consultation des volumes horaires",
-                                'route'  => 'volume-horaire',
-                                'visible' => false,
-                                'withtarget' => true,
-                                'pages' => [],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
     'bjyauthorize' => [
         'guards' => [
             'BjyAuthorize\Guard\Controller' => [
                 [
                     'controller' => 'Application\Controller\VolumeHoraire',
-                    'action' => ['voir', 'liste', 'saisie'],
+                    'action' => ['liste', 'saisie'],
                     'roles' => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR]
                 ],
                 [
                     'controller' => 'Application\Controller\VolumeHoraireReferentiel',
-                    'action' => ['voir', 'liste', 'saisie'],
+                    'action' => ['liste', 'saisie'],
                     'roles' => [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR]
                 ],
             ],

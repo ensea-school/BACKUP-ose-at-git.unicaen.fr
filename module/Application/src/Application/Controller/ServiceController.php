@@ -428,21 +428,6 @@ class ServiceController extends AbstractActionController
 
 
 
-    public function voirAction()
-    {
-        $service = $this->getServiceService();
-        if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
-            throw new LogicException("Aucun identifiant de service spécifié.");
-        }
-        if (!($service = $service->getRepo()->find($id))) {
-            throw new RuntimeException("Service '$id' spécifié introuvable.");
-        }
-
-        return compact('service');
-    }
-
-
-
     public function rafraichirLigneAction()
     {
         $this->initFilters();

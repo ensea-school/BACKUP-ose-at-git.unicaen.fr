@@ -20,19 +20,6 @@ class VolumeHoraireController extends AbstractActionController
     use \Application\Service\Traits\VolumeHoraireAwareTrait;
     use \Application\Service\Traits\ServiceAwareTrait;
 
-
-    public function voirAction()
-    {
-        if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
-            throw new LogicException("Aucun identifiant de volume horaire spécifié.");
-        }
-        if (!($volumeHoraire = $this->getServiceVolumeHoraire()->getRepo()->find($id))) {
-            throw new RuntimeException("Volume horaire '$id' spécifié introuvable.");
-        }
-
-        return compact('volumeHoraire');
-    }
-
     public function listeAction()
     {
         $this->em()->getFilters()->enable('historique')->init(

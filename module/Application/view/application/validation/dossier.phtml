@@ -17,7 +17,7 @@ if (! $this->dossier) {
     $sev = 'danger';
 }
 elseif ($validation->getId()) {
-    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_VALIDEES, ['validationDetails' => "<br/><br/>" . $this->validationDl($this->validation)]);
+    $msg = $this->message()->render(MsgId::ID_DONNEES_PERSO_VALIDEES, ['validationDetails' => "<br/><br/>" . $this->validation($this->validation)]);
     $sev = 'success';
 }
 else {

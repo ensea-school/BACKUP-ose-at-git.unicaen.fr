@@ -39,7 +39,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger()->addMessages($messages)
             </td>
             <td>
                 <?php if ($validation->getId()): ?>
-                    <?php echo $this->messenger()->setMessage("<br />" . $this->validationDl($validation)->setIncludeTypeValidation(true), 'success') ?>
+                    <?php echo $this->messenger()->setMessage("<br />" . $this->validation($validation), 'success') ?>
                     <?php echo $servicesValidation ?>
                     <?php if ($this->isAllowed($validation, 'delete')): ?>
                         <a href="<?php echo $this->url('validation/supprimer', ['validation' => $validation->getId(), 'typeVolumeHoraire' => $typeVolumeHoraire->getId()]) ?>"

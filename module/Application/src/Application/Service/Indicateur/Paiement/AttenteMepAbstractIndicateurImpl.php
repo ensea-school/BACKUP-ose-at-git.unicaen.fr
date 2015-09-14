@@ -107,7 +107,7 @@ abstract class AttenteMepAbstractIndicateurImpl extends AbstractIntervenantResul
     {
         $this->getEntityManager()->getFilters()->enable('historique')->init(
             [
-                'Application\Entity\Db\Structure',
+                //'Application\Entity\Db\Structure',
                 'Application\Entity\Db\Intervenant',
             ],
             $this->getServiceContext()->getDateObservation()

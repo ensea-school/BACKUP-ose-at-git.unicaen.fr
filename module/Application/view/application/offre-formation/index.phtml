@@ -202,7 +202,8 @@ $this->placeholder('export-of-link')->captureEnd();
                                    href="<?php echo $ei['url'] ?>"><?php echo $ei['label'] ?></a>
                         <?php endif; ?>
                         <?php
-                        echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs glyphicon glyphicon-search" style="float:right"></span>');
+                        if ($ei['etape'])
+                            echo $this->etape($ei['etape'])->renderLink('<span class="btn btn-default btn-xs glyphicon glyphicon-search" style="float:right"></span>');
                         ?>
                         <div style="clear: both"></div>
                         </li>

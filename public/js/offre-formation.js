@@ -158,7 +158,6 @@ function ElementPedagogiqueRecherche(id)
     {
         var that = this;
 
-        $('.selectpicker').selectpicker();
         this.getStructureElement().change(function () { that.updateValues(); });
         this.getNiveauElement().change(function () { that.updateValues(); });
         this.getFormationElement().change(function () { that.updateValues(); });

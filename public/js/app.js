@@ -11,6 +11,7 @@ $(function ()
 
     // installation de tooltip Bootstrap sur les icônes d'information (i)
     $(".info-icon").tooltip();
+    WidgetInitializer.add('selectpicker', 'selectpicker');
 });
 
 function errorDialog() {}

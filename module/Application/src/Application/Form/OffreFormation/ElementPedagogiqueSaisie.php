@@ -47,6 +47,10 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
             'options'    => [
                 'label' => 'Formation',
             ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
+            ],
             'type'       => 'Select',
         ]);
 
@@ -134,6 +138,10 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
             'name'       => 'structure',
             'options'    => [
                 'label' => 'Structure',
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
             ],
             'type'       => 'Select',
         ]);

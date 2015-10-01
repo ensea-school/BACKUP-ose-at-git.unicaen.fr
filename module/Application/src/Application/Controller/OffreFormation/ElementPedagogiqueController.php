@@ -40,7 +40,6 @@ class ElementPedagogiqueController extends AbstractActionController
     protected function saisirAction()
     {
         $element = $this->getEvent()->getParam('elementPedagogique');
-        $service = $this->getServiceElementPedagogique();
         $title   = $element ? "Modification d'un enseignement" : "Création d'un enseignement";
         $form    = $this->getFormAjouterModifier();
         $errors  = [];

@@ -1,11 +1,22 @@
-<?php echo $this->form()->openTag($form->prepare()); ?>
-
 <?php
+
+/* @var $form \Application\Form\OffreFormation\ElementPedagogiqueSaisie */
+/* @var $errors array */
+
+echo $this->form()->openTag($form->prepare());
+
 if ($errors) {
     echo $this->messenger()->setMessages([UnicaenApp\View\Helper\Messenger::ERROR => $errors]);
 }
 ?>
 
+<div class="row">
+    <div class="col-sm-12">
+        <?php
+        echo $this->formControlGroup($form->get('structure'));
+        ?>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-12">
         <?php
@@ -17,11 +28,6 @@ if ($errors) {
     <div class="col-sm-4">
         <?php
         echo $this->formControlGroup($form->get('source-code'));
-        ?>
-    </div>
-    <div class="col-sm-8">
-        <?php
-        echo $this->formControlGroup($form->get('structure'));
         ?>
     </div>
 </div>

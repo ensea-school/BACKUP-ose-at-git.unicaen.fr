@@ -1,33 +1,35 @@
 /***** verrue pour le menu de niveau 3 : à déplacer vers unicaen.css...? */
-.nav-pills>li.active li.active>a/*, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus*/ {
+.nav-pills > li.active li.active > a /*, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus*/
+{
     color: #fff;
     background-color: #428bca;
     opacity: 0.6;
 }
-.nav-pills>li li>a {
+
+.nav-pills > li li > a {
     border-radius: 4px;
 }
-.nav>li li>a {
+
+.nav > li li > a {
     position: relative;
     display: block;
     padding: 2px 5px;
     margin-top: 2px;
 }
+
 /*****/
 
-
 table {
-    background-color:white;
+    background-color: white;
 }
-
 
 /* Services */
 table.table-extra-condensed tr td {
-    padding:2px;
+    padding: 2px;
 }
 
 table.table-extra-condensed tr th {
-    padding:2px;
+    padding: 2px;
 }
 
 table.service, table.service-referentiel {
@@ -40,7 +42,7 @@ table.service table.volume-horaire, table.service-referentiel table.volume-horai
 
 table.service div#vhl-prev {
     margin-bottom: 2px;
-    opacity:.5;
+    opacity: .5;
 }
 
 table.service div#vhl-prev table {
@@ -49,22 +51,22 @@ table.service div#vhl-prev table {
 
 table.service td.actions, table.service-referentiel td.actions {
     white-space: nowrap;
-    text-align:center;
+    text-align: center;
 }
 
-table.service tfoot td.type-intervention{
+table.service tfoot td.type-intervention {
     white-space: nowrap;
 }
 
 table.service td.actions a, table.service-referentiel td.actions a {
     margin-left: 0.2em;
-    margin-right:0.2em;
+    margin-right: 0.2em;
 }
 
 div.service-show-hide-buttons {
-    padding-bottom:3px;
-    padding-top:3px;
-    text-align:right;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    text-align: right;
 }
 
 div.service-liste table.service tr.volume-horaire {
@@ -82,6 +84,7 @@ span.element-rech.element {
     padding: 0 5px 0 5px;
     margin-right: 0.5em;
 }
+
 span.element-rech.etape,
 span.element-rech.periode {
     /*background-color: #babdb6;*/
@@ -89,48 +92,47 @@ span.element-rech.periode {
     background-color: #caddf4;
 }
 
-
 /**
  * Autre
  */
 
-dl.dl-horizontal.intervenant dt{
+dl.dl-horizontal.intervenant dt {
     width: 200px;
 }
 
-dl.dl-horizontal.intervenant dd{
+dl.dl-horizontal.intervenant dd {
     margin-left: 220px;
 }
 
-dl.dl-horizontal.element dt{
+dl.dl-horizontal.element dt {
     width: 200px;
 }
 
-dl.dl-horizontal.element dd{
+dl.dl-horizontal.element dd {
     margin-left: 220px;
 }
 
 .nombre {
-    text-align:right;
+    text-align: right;
     white-space: nowrap;
 }
 
-h1.page-header { 
+h1.page-header {
     margin-top: 10px;
 }
-
 
 .modal-header {
     padding: 10px;
     background-color: #428BCA;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    margin:1px;
+    margin: 1px;
 }
+
 .modal-header h1,
-.modal-header h2 { 
+.modal-header h2 {
     line-height: 90%;
-    font-size:12pt;
+    font-size: 12pt;
     font-weight: 100;
     text-shadow: inset;
     color: white;
@@ -147,6 +149,7 @@ h1.page-header {
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
 }
+
 /* IE 6 doesn't support max-height, we use height instead, but this forces the menu to always be this tall */
 /*html .ui-autocomplete {
     height: 300px;
@@ -163,70 +166,66 @@ span.sas-highlight {
 
 /* Gestion des popovers */
 div.popover {
-    max-width:600px;
+    max-width: 600px;
 }
 
 div.scr-center {
     position: fixed;
     width: 100%;
-    height:100%;
-    top:0px;
-    left:0px;
-    z-index:9999;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 9999;
 }
 
-div.scr-center div.alert{
-    margin-top:5em;
-    width:60%;
+div.scr-center div.alert {
+    margin-top: 5em;
+    width: 60%;
     margin: none;
     margin-left: auto;
     margin-right: auto;
     max-height: 600px;
-    overflow:auto;
+    overflow: auto;
 }
-
 
 form#service div#element-interne div.col-md-5 {
     clear: both;
 }
 
-
 form#service div.volume-horaire-saisie-multiple div {
-    float:left;
-    width:10em;
-    height:5em;
+    float: left;
+    width: 10em;
+    height: 5em;
 }
 
 form#service div.volume-horaire-saisie-multiple div input {
-    width:7em;
-    display:inline;
+    width: 7em;
+    display: inline;
 }
 
 form#service div.volume-horaire-saisie-multiple-fin {
     clear: both;
 }
 
-td .form-group{
+td .form-group {
     margin-bottom: 0px;
 }
 
-form#modulateurs-saisie th select{
+form#modulateurs-saisie th select {
     display: inline;
-    width:auto;
+    width: auto;
 }
 
-
-
 /* Personnalisation du bootstrap-select */
-.bootstrap-select .dropdown-menu li.divider{
+.bootstrap-select .dropdown-menu li.divider {
     display: none;
 }
 
-.bootstrap-select .dropdown-menu{
+.bootstrap-select .dropdown-menu {
     font-size: 10pt;
 }
 
-.bootstrap-select .dropdown-menu li a.opt{
+.bootstrap-select .dropdown-menu li a.opt {
     margin-left: 2em;
 }
 
@@ -239,16 +238,13 @@ form#modulateurs-saisie th select{
     padding-left: 0px;
 }
 
-.bootstrap-select button.selectpicker span.pull-left{
+.bootstrap-select button.selectpicker span.pull-left {
     padding-left: 10px;
 }
 
-
-
-
 /* Possibilité de changer l'année depuis la barre de menu du haut */
 .navbar-brand h1 span {
-    font-size:12pt;
+    font-size: 12pt;
 }
 
 #navbar .container .navbar-header {
@@ -259,7 +255,7 @@ form#modulateurs-saisie th select{
 
 #navbar .container .navbar-header select {
     margin-top: 12px;
-    height:26px;
+    height: 26px;
 }
 
 .navbar-nav li a {
@@ -267,68 +263,64 @@ form#modulateurs-saisie th select{
     padding-right: 7px;
 }
 
-
-
 ul.privileges-form {
-    list-style-type: none;   
+    list-style-type: none;
 }
 
 ul.privileges-form li {
-    margin-top:0.5em;
-    margin-bottom:0.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 ul.privileges-form li label {
-    margin-left:0.5em;
+    margin-left: 0.5em;
 }
 
-
-
-.table-header-rotated th.row-header{
-  width: auto;
+.table-header-rotated th.row-header {
+    width: auto;
 }
 
-.table-header-rotated td{
-  width: 40px;
-  vertical-align: middle;
-  text-align: center;
+.table-header-rotated td {
+    width: 40px;
+    vertical-align: middle;
+    text-align: center;
 }
 
-.table-header-rotated th.rotate-45{
-  border: none;
-  height: 200px;
-  width: 40px;
-  min-width: 40px;
-  max-width: 40px;
-  position: relative;
-  vertical-align: bottom;
-  padding: 0;
-  line-height: 1;
-  white-space: nowrap;
+.table-header-rotated th.rotate-45 {
+    border: none;
+    height: 200px;
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    position: relative;
+    vertical-align: bottom;
+    padding: 0;
+    line-height: 1;
+    white-space: nowrap;
 }
 
-.table-header-rotated th.rotate-45 > div{
-  position: relative;
-  top: 0px;
-  left: 83px;
-  height: 100%;
-  transform:skew(-40deg,0deg);
-  overflow: hidden;
-  border-right: 1px solid #ddd;
+.table-header-rotated th.rotate-45 > div {
+    position: relative;
+    top: 0px;
+    left: 83px;
+    height: 100%;
+    transform: skew(-40deg, 0deg);
+    overflow: hidden;
+    border-right: 1px solid #ddd;
 }
 
-.table-header-rotated th.rotate-45 > div.first{
-  border-left: 1px solid #ddd;
+.table-header-rotated th.rotate-45 > div.first {
+    border-left: 1px solid #ddd;
 }
 
 .table-header-rotated th.rotate-45 span {
-  transform:skew(40deg,0deg) rotate(310deg);
-  position: absolute;
-  bottom: 40px;
-  left: -30px;
-  display: inline-block;
-  width: 100px;
-  text-align: left;
+    transform: skew(40deg, 0deg) rotate(310deg);
+    position: absolute;
+    bottom: 40px;
+    left: -30px;
+    display: inline-block;
+    width: 100px;
+    text-align: left;
 }
 
 .table-header-rotated .separator {
@@ -338,19 +330,30 @@ ul.privileges-form li label {
 .droits-tbl th.privilege {
     min-width: 200px;
     max-width: 200px;
-    width:200px;
+    width: 200px;
 }
 
 .droits-tbl td span.refuse {
-    opacity: 0.5;   
+    opacity: 0.5;
 }
-
 
 .bg-historique {
     background-color: #d9534f;
-    color:white;
+    color: white;
 }
 
-div#navbar pre{
+div#navbar pre {
     display: none;
+}
+
+.etape-centre-cout {
+    margin-top: 2px;
+}
+
+.etape-modulateurs {
+    margin-top: 2px;
+}
+
+.etape-modulateurs th.element-pedagogique, .etape-modulateurs td.element-pedagogique {
+    width: 50%;
 }

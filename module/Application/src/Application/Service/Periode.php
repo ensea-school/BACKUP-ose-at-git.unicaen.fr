@@ -49,12 +49,19 @@ class Periode extends AbstractEntityService
      * @param \DateTime $date
      * @return PeriodeEntity
      */
-    public function getDatePeriodePaiement( \DateTime $date=null )
+    public function getPeriodePaiement( \DateTime $date=null )
     {
+        $anneeDateDebut = $this->getServiceContext()->getAnnee()->getDateDebut();
+        $aY = (int)$anneeDateDebut->format('Y');
+        $aM = (int)$anneeDateDebut->format('n');
+
         if (empty($date)) $date = new \DateTime;
-        $mois = (int)$date->format('m');
-        if (0 == $mois) return null;
-        return $this->getRepo()->findOneBy(['moisOriginePaiement' => $mois]);
+        $dY = (int)$date->format('Y');
+        $dM = (int)$date->format('n');
+
+        $ecartMoisPaiement = ($dY-$aY)*12 + $dM - $aM;
+
+        return $this->getRepo()->findOneBy(['paiement' => true, 'ecartMoisPaiement' => $ecartMoisPaiement]);
     }
 
     /**
@@ -78,17 +85,20 @@ class Periode extends AbstractEntityService
         $serviceMiseEnPaiement = $this->getServiceLocator()->get('applicationMiseEnPaiement');
         /* @var $serviceMiseEnPaiement MiseEnPaiement */
 
-        $serviceStructure = $this->getServiceLocator()->get('applicationStructure');
-        /* @var $serviceStructure Structure */
+        $serviceIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
+        /* @var $serviceIntervenant Intervenant */
 
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
         $this               ->join( $serviceMIS             , $qb, 'miseEnPaiementIntervenantStructure', false, $alias );
         $serviceMIS         ->join( $serviceMiseEnPaiement  , $qb, 'miseEnPaiement'                                    );
+        $serviceMIS         ->join( $serviceIntervenant     , $qb, 'intervenant', false );
 
         if ($structure){
             $serviceMIS->finderByStructure( $structure, $qb );
         }
+
+        $serviceIntervenant->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
 
         return $qb;
     }

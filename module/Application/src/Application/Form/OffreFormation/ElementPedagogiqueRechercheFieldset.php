@@ -113,7 +113,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
                 'label_attributes' => [
                     'title' => "Enseignement",
                 ],
-                'empty_option' => "(Tous)",
+                'empty_option' => "(Aucun enseignement sélectionné)",
                 'disable_inarray_validator' => true,
             ],
             'attributes' => [
@@ -141,7 +141,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
             'type' => 'UnicaenApp\Form\Element\SearchAndSelect',
         ]);
 
-        $this->get('element')->setAutoCompleteSource( $url('of/element/default', ['action' => 'search']) );
+        $this->get('element')->setAutoCompleteSource( $url('of/element/search') );
     }
 
     public function populateOptions()

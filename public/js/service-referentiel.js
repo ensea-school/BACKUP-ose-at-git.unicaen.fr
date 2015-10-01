@@ -237,3 +237,58 @@ ServiceReferentielForm.init = function ()
         ServiceReferentielForm.get(serviceId).prevuToRealise();
     });
 }
+
+
+
+
+
+
+/*************** Propre à l'affichage des services référentiels ***************/
+
+function ServiceReferentiel(id)
+{
+
+    this.id = id;
+
+    this.onAfterAdd = function ()
+    {
+        $.get(ServiceReferentiel.voirLigneUrl, [], function (data) { $("#services-ref").replaceWith($(data).filter("table").fadeIn()); });
+        $("#formule-totaux-hetd").refresh();
+    }
+
+    this.onAfterDelete = function ()
+    {
+        $("#service-ref-" + this.id + "-ligne").fadeOut().remove();
+        $("#formule-totaux-hetd").refresh();
+    }
+}
+
+ServiceReferentiel.get = function (id)
+{
+    if (null == ServiceReferentiel.services) ServiceReferentiel.services = new Array();
+    if (null == ServiceReferentiel.services[id]) ServiceReferentiel.services[id] = new ServiceReferentiel(id);
+    return ServiceReferentiel.services[id];
+}
+
+ServiceReferentiel.init = function (voirLigneUrl)
+{
+    ServiceReferentiel.voirLigneUrl = voirLigneUrl;
+
+    $("body").on("service-ref-add-message service-ref-modify-message", function (event, data)
+    {
+        var id = null;
+        event.div.modal('hide'); // ferme la fenêtre modale
+        ServiceReferentiel.get(id).onAfterAdd();
+    });
+
+    $("body").on("service-ref-delete-message", function (event, data)
+    {
+        event.div.modal('hide'); // ferme la fenêtre modale
+//        console.log(event.a.data('id'));
+        ServiceReferentiel.get(event.a.data('id')).onAfterDelete();
+    });
+}
+
+
+
+

@@ -1,15 +1,19 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * Etape
  */
-class Etape implements HistoriqueAwareInterface
+class Etape implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
+
+
 
     /**
      * Retourne la représentation littérale de cet objet.
@@ -426,4 +430,15 @@ class Etape implements HistoriqueAwareInterface
         return $this->source;
     }
 
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'Etape';
+    }
 }

@@ -1,3 +1,9 @@
+<?php
+/* @var $periodes \Application\Entity\Db\Periode[] */
+/* @var $annee \Application\Entity\Db\Annee */
+
+?>
+
 <h1>Extraction Winpaie</h1>
 
 <?php if (isset($types)): ?>
@@ -21,7 +27,7 @@ foreach( $types as $type ){
 <?php
 foreach( $periodes as $periode ){
     $url = $this->url('paiement/extraction-winpaie', ['type' => $type->getCode(), 'periode' => $periode->getCode()]);
-    $title = $periode->getLibelleLong();
+    $title = $periode->getLibelleAnnuel($annee);
     echo '<li><a href="'.$url.'">'.$title.'</a></li>';
 }
 ?>

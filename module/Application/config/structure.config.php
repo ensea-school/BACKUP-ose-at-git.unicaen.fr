@@ -101,6 +101,11 @@ return [
                 ],
             ],
         ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'Structure' => [],
+            ],
+        ],
     ],
     'controllers' => [
         'invokables' => [

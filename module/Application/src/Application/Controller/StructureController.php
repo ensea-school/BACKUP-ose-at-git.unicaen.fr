@@ -86,31 +86,12 @@ class StructureController extends AbstractActionController
         if (!($id = $this->params()->fromRoute('id', $this->params()->fromPost('id')))) {
             throw new LogicException("Aucun identifiant de structure spécifié.");
         }
-        if (!($structure = $this->getServiceStructure()->getRepo()->find($id))) {
+        if (!($structure = $this->getServiceStructure()->get($id))) {
             throw new RuntimeException("Structure '$id' spécifiée introuvable.");
         }
 
-        $title = "Détails d'une structure";
-        $short = $this->params()->fromQuery('short', false);
-
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setTemplate('application/structure/voir')
-                  ->setVariables(compact('structure', 'title', 'short'));
-
-        return $viewModel;
+        $title = "Structure";
+        return compact('structure', 'title');
     }
 
-    public function apercevoirAction()
-    {
-        $structure = $this->context()->mandatory()->structureFromRoute('id');
-        $short     = $this->params()->fromQuery('short', false);
-
-        $import = $this->getServiceLocator()->get('ImportProcessusImport');
-        $changements = $import->structureGetDifferentiel($structure);
-        $title = "Aperçu d'une structure";
-
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setVariables(compact('structure', 'changements', 'title', 'short'));
-        return $viewModel;
-    }
 }

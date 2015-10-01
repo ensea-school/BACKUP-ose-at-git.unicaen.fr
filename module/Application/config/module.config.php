@@ -248,10 +248,10 @@ $main = [
     'public_files'       => [
         'js'  => [
             'js/datepicker-fr.js',
-            'js/elementPedagogiqueRecherche.js',
             'js/service.js',
             'js/service-referentiel.js',
             'js/paiement.js',
+            'js/offre-formation.js',
             'bootstrap-select/js/bootstrap-select.min.js',
         ],
         'css' => [

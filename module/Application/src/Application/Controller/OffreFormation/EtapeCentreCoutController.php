@@ -35,7 +35,7 @@ class EtapeCentreCoutController extends AbstractActionController
             $this->getServiceContext()->getAnnee()
         );
 
-        $etape = $this->context()->mandatory()->etapeFromRoute('id');
+        $etape = $this->getEvent()->getParam('etape');
         /* @var $etape Etape */
         $form = $this->getForm();
         $errors = [];

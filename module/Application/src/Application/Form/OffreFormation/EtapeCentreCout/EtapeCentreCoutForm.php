@@ -53,8 +53,7 @@ class EtapeCentreCoutForm extends Form implements InputFilterProviderInterface, 
     public function init()
     {
         $this->setName('etape-centre-cout');
-        $this->setAttribute('data-bind-class', 'EtapeCentreCout');
-
+        $this->setAttribute('class', 'etape-centre-cout');
         $hydrator = new EtapeCentreCoutFormHydrator;
         $this->setHydrator($hydrator);
         $this->setAllowedObjectBindingClass('Application\Entity\Db\Etape');

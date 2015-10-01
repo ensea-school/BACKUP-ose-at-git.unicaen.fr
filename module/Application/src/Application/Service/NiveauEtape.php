@@ -32,19 +32,4 @@ class NiveauEtape extends AbstractService
         return $niveau;
     }
 
-    /**
-     * @return GroupeTypeFormation
-     */
-    protected function getServiceGroupeTypeformation()
-    {
-        return $this->getServiceLocator()->get('applicationGroupeTypeFormation');
-    }
-
-    /**
-     * @return serviceClass
-     */
-    protected function getfunctionName()
-    {
-        return $this->getServiceLocator()->get('serviceName');
-    }
 }

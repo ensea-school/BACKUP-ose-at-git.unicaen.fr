@@ -54,12 +54,6 @@ class EtapeCentreCoutFormViewHelper extends AbstractHtmlElement
 
         $form->prepare();
         $res = $this->getView()->form()->openTag($form);
-        $res .= '<style>';
-        $res .= '.modal-dialog { width: 60%; }';
-        $res .= '/*select.type-heures { display: inline; width: 75%; }*/';
-        $res .= 'th.element-pedagogique, td.element-pedagogique { width: 50%; }';
-        $res .= '</style>';
-
         $res .= '<table class="table table-bordered table-extra-condensed">';
         
         $res .= '<tr>';

@@ -2,8 +2,10 @@
 
 namespace Application\Service;
 
+use Application\Entity\Db\Privilege;
 use Application\Service\Traits\CheminPedagogiqueAwareTrait;
 use Application\Service\Traits\ElementModulateurAwareTrait;
+use Application\Service\Traits\SourceAwareTrait;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
@@ -17,6 +19,7 @@ class ElementPedagogique extends AbstractEntityService
 {
     use CheminPedagogiqueAwareTrait;
     use ElementModulateurAwareTrait;
+    use SourceAwareTrait;
 
 
 
@@ -52,7 +55,7 @@ class ElementPedagogique extends AbstractEntityService
      * @param \Doctrine\ORM\QueryBuilder $qb
      *
      * @return \Doctrine\ORM\QueryBuilder
-     */
+     *
     public function finder(array $filters = [], QueryBuilder $qb = null, $alias = null)
     {
         if (null === $qb) {
@@ -88,80 +91,8 @@ class ElementPedagogique extends AbstractEntityService
         }
 
         return $qb;
-    }
+    }*/
 
-
-
-    /**
-     * Retourne le chercheur des niveaux distincts.
-     *
-     * @param array                      $filters
-     * @param \Doctrine\ORM\QueryBuilder $qbWithEp
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function finderDistinctNiveaux(array $filters = [], QueryBuilder $qb = null, $alias = null)
-    {
-        $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
-        $qb
-            ->select('e, tf, gtf')
-            ->distinct()
-            ->from('Application\Entity\Db\Etape', 'e')
-            ->innerJoin('e.typeFormation', 'tf')
-            ->innerJoin('tf.groupe', 'gtf')
-            ->innerJoin('e.elementPedagogique', 'ep')
-//                ->innerJoin('ep.structure', 's')
-            ->orderBy('gtf.ordre, e.niveau');
-
-        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-            $qb
-                ->andWhere('ep.structure = :struct')
-                ->setParameter('struct', $filters['structure']);
-        }
-
-//        var_dump($qb->getQuery()->getSQL());
-        return $qb;
-    }
-
-
-
-    /**
-     * Retourne le chercheur d'étapes distinctes.
-     *
-     * @param array                      $filters
-     * @param \Doctrine\ORM\QueryBuilder $qb
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function finderDistinctEtapes(array $filters = [], QueryBuilder $qb = null, $alias = null)
-    {
-        $qb = new \Doctrine\ORM\QueryBuilder($this->getEntityManager());
-        $qb
-            ->select('e, tf, gtf')
-            ->distinct()
-            ->from('Application\Entity\Db\Etape', 'e')
-            ->innerJoin('e.elementPedagogique', 'ep')
-            ->leftJoin('ep.periode', 'p')
-            ->innerJoin('e.typeFormation', 'tf')
-            ->innerJoin('tf.groupe', 'gtf')
-            ->innerJoin('ep.structure', 's')
-            ->orderBy('gtf.ordre, e.niveau, e.sourceCode');
-
-//        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-//            $qb->andWhere('ep.structure = :struct')->setParameter('struct', $filters['structure']);
-//        }
-        if (isset($filters['structure']) && $filters['structure'] instanceof \Application\Entity\Db\Structure) {
-            $qb->andWhere('s.structureNiv2 = :structure')->setParameter('structure', $filters['structure']);
-        }
-        if (isset($filters['niveau']) && $filters['niveau']) {
-            if ($filters['niveau'] instanceof \Application\Entity\NiveauEtape) {
-                $filters['niveau'] = $filters['niveau']->getId();
-            }
-            $qb->andWhere('CONCAT(gtf.libelleCourt, CONCAT( \'-\', e.niveau )) = :niveau')->setParameter('niveau', $filters['niveau']);
-        }
-
-        return $qb;
-    }
 
 
 
@@ -341,11 +272,11 @@ where rang = 1
      * Détermine si on peut ajouter une étape ou non
      *
      * @return boolean
-     */
+     *
     public function canAdd($runEx = false)
     {
         $localContext = $this->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
+        /* @var $localContext \Application\Service\LocalContext *
 
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
@@ -379,7 +310,7 @@ where rang = 1
      * @param int|\Application\Entity\Db\ElementPedagogique $element
      *
      * @return boolean
-     */
+     *
     public function canSave($element, $runEx = false)
     {
         if (!$this->canAdd($runEx)) {
@@ -398,21 +329,20 @@ where rang = 1
         }
 
         return true;
-    }
+    }*/
 
 
 
     /**
      * Retourne une nouvelle entité, initialisée avec les bons paramètres
      *
-     * @return EtapeEntity
+     * @return \Application\Entity\Db\ElementPedagogique
      */
     public function newEntity()
     {
-        $this->canAdd(true);
         $entity = parent::newEntity();
         // toutes les entités créées ont OSE pour source!!
-        $entity->setSource($this->getServiceLocator()->get('ApplicationSource')->getOse());
+        $entity->setSource($this->getServiceSource()->getOse());
 
         return $entity;
     }
@@ -429,6 +359,10 @@ where rang = 1
      */
     public function save($entity)
     {
+        if (! $this->getAuthorize()->isAllowed($entity,Privilege::ODF_ELEMENT_EDITION)){
+            throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cet enseignement.');
+        }
+
         // si absence de chemin pédagogique, création du chemin
         if (!$entity->getCheminPedagogique()->count()) {
             $cp = $this->getServiceCheminPedagogique()->newEntity();
@@ -449,7 +383,7 @@ where rang = 1
         $result = parent::save($entity);
         /* Sauvegarde automatique des éléments-modulateurs associés */
         $serviceElementModulateur = $this->getServiceElementModulateur();
-        foreach ($entity->getElementModulateur() as $elementModulateur) {
+        if ($entity->getElementModulateur()) foreach ($entity->getElementModulateur() as $elementModulateur) {
             if ($elementModulateur->getRemove()) {
                 $serviceElementModulateur->delete($elementModulateur);
             } else {
@@ -472,6 +406,10 @@ where rang = 1
      */
     public function delete($entity, $softDelete = true)
     {
+        if (! $this->getAuthorize()->isAllowed($entity,Privilege::ODF_ELEMENT_EDITION)){
+            throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cet enseignement.');
+        }
+
         foreach ($entity->getCheminPedagogique() as $cp) {
             /* @var $cp \Application\Entity\Db\CheminPedagogique */
             $cp->getEtape()->removeCheminPedagogique($cp);

@@ -2,6 +2,7 @@
 
 namespace Application\Form\OffreFormation;
 
+use Application\Service\Traits\TypeModulateurAwareTrait;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -18,6 +19,7 @@ use Application\Entity\Db\Etape;
 class EtapeModulateursSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use TypeModulateurAwareTrait;
 
     /**
      * Etape
@@ -37,6 +39,8 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
         $hydrator = $this->getServiceLocator()->getServiceLocator()->get('EtapeModulateursFormHydrator');
         $this->setHydrator($hydrator);
 
+        $this->setAttribute('class', 'etape-modulateurs');
+
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
         /* @var $url Zend\View\Helper\Url */
         $this->setAttribute('action', $url(null, [], [], true));
@@ -53,8 +57,7 @@ class EtapeModulateursSaisie extends Form implements InputFilterProviderInterfac
         if (! $etape){
             throw new \Common\Exception\RuntimeException('Etape non spécifiée');
         }
-        $serviceTypeModulateur = $this->getServiceLocator()->getServiceLocator()->get('applicationTypeModulateur');
-        return $serviceTypeModulateur->getList( $serviceTypeModulateur->finderByEtape($etape) );
+        return $this->getServiceTypeModulateur()->getList( $this->getServiceTypeModulateur()->finderByEtape($etape) );
     }
 
     /**

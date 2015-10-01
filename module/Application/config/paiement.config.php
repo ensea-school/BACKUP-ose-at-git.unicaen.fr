@@ -5,24 +5,24 @@ namespace Application;
 use Application\Entity\Db\Privilege;
 
 return [
-    'router' => [
+    'router'          => [
         'routes' => [
             'paiement' => [
-                'type'    => 'Literal',
+                'type'          => 'Literal',
                 'may_terminate' => true,
-                'options' => [
-                    'route' => '/paiement',
+                'options'       => [
+                    'route'    => '/paiement',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller' => 'Paiement',
-                        'action' => 'index',
+                        'controller'    => 'Paiement',
+                        'action'        => 'index',
                     ],
                 ],
-                'child_routes' => [
+                'child_routes'  => [
                     'etat-demande-paiement' => [
-                        'type'    => 'Literal',
+                        'type'          => 'Literal',
                         'may_terminate' => true,
-                        'options' => [
+                        'options'       => [
                             'route'    => '/etat-demande-paiement',
                             'defaults' => [
                                 'action' => 'etatPaiement',
@@ -30,23 +30,23 @@ return [
                             ],
                         ],
                     ],
-                    'mise-en-paiement' => [
-                        'type'    => 'Segment',
+                    'mise-en-paiement'      => [
+                        'type'          => 'Segment',
                         'may_terminate' => true,
-                        'options' => [
-                            'route'    => '/mise-en-paiement/:structure/:intervenants',
+                        'options'       => [
+                            'route'       => '/mise-en-paiement/:structure/:intervenants',
                             'constraints' => [
-                                'structure' => '[0-9]*'
+                                'structure' => '[0-9]*',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'action' => 'MiseEnPaiement',
                             ],
                         ],
                     ],
-                    'etat-paiement' => [
-                        'type'    => 'Literal',
+                    'etat-paiement'         => [
+                        'type'          => 'Literal',
                         'may_terminate' => true,
-                        'options' => [
+                        'options'       => [
                             'route'    => '/etat-paiement',
                             'defaults' => [
                                 'action' => 'etatPaiement',
@@ -55,22 +55,22 @@ return [
                         ],
                     ],
                     'mises-en-paiement-csv' => [
-                        'type'    => 'Literal',
+                        'type'          => 'Literal',
                         'may_terminate' => true,
-                        'options' => [
+                        'options'       => [
                             'route'    => '/mises-en-paiement-csv',
                             'defaults' => [
-                                'action' => 'misesEnPaiementCsv'
+                                'action' => 'misesEnPaiementCsv',
                             ],
                         ],
                     ],
-                    'extraction-winpaie' => [
-                        'type'    => 'Segment',
+                    'extraction-winpaie'    => [
+                        'type'          => 'Segment',
                         'may_terminate' => true,
-                        'options' => [
+                        'options'       => [
                             'route'    => '/extraction-winpaie[/:type][/:periode]',
                             'defaults' => [
-                                'action' => 'extractionWinpaie'
+                                'action' => 'extractionWinpaie',
                             ],
                         ],
                     ],
@@ -78,7 +78,7 @@ return [
             ],
         ],
     ],
-    'navigation' => [
+    'navigation'      => [
         'default' => [
             'home' => [
                 'pages' => [
@@ -88,25 +88,25 @@ return [
                                 'label'    => "Mises en paiement",
                                 'title'    => "Mises en paiement",
                                 'route'    => 'paiement/etat-demande-paiement',
-                                'resource' => 'privilege/'.Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                                'resource' => 'privilege/' . Privilege::MISE_EN_PAIEMENT_VISUALISATION,
                             ],
-                            'etat-paiement' => [
+                            'etat-paiement'         => [
                                 'label'    => "État de paiement",
                                 'title'    => "État de paiement",
                                 'route'    => 'paiement/etat-paiement',
-                                'resource' => 'privilege/'.Privilege::MISE_EN_PAIEMENT_VISUALISATION,
+                                'resource' => 'privilege/' . Privilege::MISE_EN_PAIEMENT_VISUALISATION,
                             ],
                             'mises-en-paiement-csv' => [
                                 'label'    => "Mises en paiement (CSV)",
                                 'title'    => "Extraction des mises en paiement et demandes de mises en paiement au format tableur (CSV)",
                                 'route'    => 'paiement/mises-en-paiement-csv',
-                                'resource' => 'privilege/'.Privilege::MISE_EN_PAIEMENT_EXPORT_CSV,
+                                'resource' => 'privilege/' . Privilege::MISE_EN_PAIEMENT_EXPORT_CSV,
                             ],
-                            'extraction-winpaie' => [
+                            'extraction-winpaie'    => [
                                 'label'    => "Extraction Winpaie",
                                 'title'    => "Export des données de paiement au format Winpaie",
                                 'route'    => 'paiement/extraction-winpaie',
-                                'resource' => 'privilege/'.Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE,
+                                'resource' => 'privilege/' . Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE,
                             ],
                         ],
                     ],
@@ -114,14 +114,14 @@ return [
             ],
         ],
     ],
-    'bjyauthorize' => [
-        'guards' => [
+    'bjyauthorize'    => [
+        'guards'             => [
             'Application\Guard\PrivilegeController' => [
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['demandeMiseEnPaiement'],
                     'privileges' => [
-                        Privilege::MISE_EN_PAIEMENT_DEMANDE
+                        Privilege::MISE_EN_PAIEMENT_DEMANDE,
                     ],
                     'assertion'  => 'MiseEnPaiementAssertion',
                 ],
@@ -135,19 +135,19 @@ return [
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['miseEnPaiement'],
-                    'privileges' => [Privilege::MISE_EN_PAIEMENT_VISUALISATION]
+                    'privileges' => [Privilege::MISE_EN_PAIEMENT_VISUALISATION],
                 ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['misesEnPaiementCsv'],
                     'privileges' => [
                         Privilege::MISE_EN_PAIEMENT_EXPORT_CSV,
-                    ]
-                ],                
+                    ],
+                ],
                 [
                     'controller' => 'Application\Controller\Paiement',
                     'action'     => ['extractionWinpaie'],
-                    'privileges' => [Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE]
+                    'privileges' => [Privilege::MISE_EN_PAIEMENT_EXPORT_PAIE],
                 ],
             ],
         ],
@@ -156,14 +156,13 @@ return [
                 'MiseEnPaiement' => [],
             ],
         ],
-        'rule_providers' => [
+        'rule_providers'     => [
             'Application\Provider\Rule\PrivilegeRuleProvider' => [
                 'allow' => [
                     [
-                        Privilege::MISE_EN_PAIEMENT_DEMANDE,
-                        'MiseEnPaiement',
-                        [Privilege::MISE_EN_PAIEMENT_DEMANDE],
-                        'MiseEnPaiementAssertion',
+                        'privileges' => Privilege::MISE_EN_PAIEMENT_DEMANDE,
+                        'resources'  => 'MiseEnPaiement',
+                        'assertion'  => 'MiseEnPaiementAssertion',
                     ],
                 ],
             ],
@@ -181,21 +180,21 @@ return [
             'MiseEnPaiementExisteRule'                      => 'Application\Rule\Paiement\MiseEnPaiementExisteRule',
         ],
     ],
-    'view_helpers' => [
+    'view_helpers'    => [
         'invokables' => [
-            'DemandeMiseEnPaiement'                 => 'Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper',
-            'TypeHeures'                            => 'Application\View\Helper\Paiement\TypeHeuresViewHelper',
+            'DemandeMiseEnPaiement' => 'Application\View\Helper\Paiement\DemandeMiseEnPaiementViewHelper',
+            'TypeHeures'            => 'Application\View\Helper\Paiement\TypeHeuresViewHelper',
         ],
     ],
-    'form_elements' => [
+    'form_elements'   => [
         'invokables' => [
-            'PaiementMiseEnPaiementForm'            => 'Application\Form\Paiement\MiseEnPaiementForm',
-            'PaiementMiseEnPaiementRechercheForm'   => 'Application\Form\Paiement\MiseEnPaiementRechercheForm',
+            'PaiementMiseEnPaiementForm'          => 'Application\Form\Paiement\MiseEnPaiementForm',
+            'PaiementMiseEnPaiementRechercheForm' => 'Application\Form\Paiement\MiseEnPaiementRechercheForm',
         ],
     ],
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
-            'Application\Controller\Paiement'       => 'Application\Controller\PaiementController',
+            'Application\Controller\Paiement' => 'Application\Controller\PaiementController',
         ],
     ],
 ];

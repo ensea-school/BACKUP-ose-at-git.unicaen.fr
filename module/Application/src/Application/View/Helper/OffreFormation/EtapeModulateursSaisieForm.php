@@ -69,12 +69,6 @@ class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocato
 
         $form->prepare();
         $res = $this->getView()->form()->openTag($form);
-        $res .= '<style>';
-        $res .= '.modal-dialog { width: 60%; }';
-        $res .= '</style>';
-        $res .= '<script type="text/javascript">';
-        $res .= ' $(function() { Modulateur.init(); });';
-        $res .= '</script>';
         $res .= '<table class="table table-bordered table-extra-condensed">';
         $res .= '<tr>';
         $res .= '<th rowspan="2">Elément</th>';

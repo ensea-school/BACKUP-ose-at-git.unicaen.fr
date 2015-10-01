@@ -51,18 +51,14 @@ class Periode implements HistoriqueAwareInterface
     protected $paiement;
 
     /**
-     * moisOriginePaiement
-     *
      * @var integer
      */
-    protected $moisOriginePaiement;
+    protected $ecartMois;
 
     /**
-     * numeroMoisPaiement
-     *
      * @var integer
      */
-    protected $numeroMoisPaiement;
+    protected $ecartMoisPaiement;
 
     /**
      * miseEnPaiementIntervenantStructure
@@ -214,6 +210,20 @@ class Periode implements HistoriqueAwareInterface
 
 
     /**
+     * Retourne le libellé assorti d'une année à afficher
+     *
+     * @param Annee $annee
+     *
+     * @return string
+     */
+    public function getLibelleAnnuel(Annee $annee)
+    {
+        $datePaiement = $this->getDatePaiement($annee);
+        return $this->getLibelleLong().' '.$datePaiement->format('Y');
+    }
+
+
+    /**
      * Set paiement
      *
      * @param boolean $paiement
@@ -242,15 +252,15 @@ class Periode implements HistoriqueAwareInterface
 
 
     /**
-     * Set moisOriginePaiement
+     * Set ecartMois
      *
-     * @param boolean $moisOriginePaiement
+     * @param integer $ecartMois
      *
      * @return Periode
      */
-    public function setMoisOriginePaiement($moisOriginePaiement)
+    public function setEcartMois($ecartMois)
     {
-        $this->moisOriginePaiement = $moisOriginePaiement;
+        $this->ecartMois = $ecartMois;
 
         return $this;
     }
@@ -258,27 +268,27 @@ class Periode implements HistoriqueAwareInterface
 
 
     /**
-     * Get moisOriginePaiement
+     * Get ecartMois
      *
      * @return boolean
      */
-    public function getMoisOriginePaiement()
+    public function getEcartMois()
     {
-        return $this->moisOriginePaiement;
+        return $this->ecartMois;
     }
 
 
 
     /**
-     * Set numeroMoisPaiement
+     * Set ecartMoisPaiement
      *
-     * @param boolean $numeroMoisPaiement
+     * @param integer $ecartMoisPaiement
      *
      * @return Periode
      */
-    public function setNumeroMoisPaiement($numeroMoisPaiement)
+    public function setEcartMoisPaiement($ecartMoisPaiement)
     {
-        $this->numeroMoisPaiement = $numeroMoisPaiement;
+        $this->ecartMoisPaiement = $ecartMoisPaiement;
 
         return $this;
     }
@@ -286,13 +296,13 @@ class Periode implements HistoriqueAwareInterface
 
 
     /**
-     * Get numeroMoisPaiement
+     * Get ecartMoisPaiement
      *
      * @return boolean
      */
-    public function getNumeroMoisPaiement()
+    public function getEcartMoisPaiement()
     {
-        return $this->numeroMoisPaiement;
+        return $this->ecartMoisPaiement;
     }
 
 
@@ -306,12 +316,13 @@ class Periode implements HistoriqueAwareInterface
      */
     public function getDatePaiement(Annee $annee)
     {
-        if (null == $this->getNumeroMoisPaiement()) return null;
-        $year  = $annee->getId();
-        $month = $this->getNumeroMoisPaiement();
-        $day   = 1;
-        if ($month < 9) $year++;
-        $a_date = date("Y-m-t", mktime(0, 0, 0, $month, $day, $year));
+
+        $dm = ((int)$annee->getDateDebut()->format('m') + $this->getEcartMois());
+
+        $da = (int)$annee->getDateDebut()->format('Y') + floor($dm / 12);
+        $dm = $dm % 12;
+
+        $a_date = date("Y-m-t", mktime(0, 0, 0, $dm, 1, $da));
         $date   = \DateTime::createFromFormat('Y-m-d', $a_date);
 
         return $date;

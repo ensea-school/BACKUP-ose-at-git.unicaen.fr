@@ -2,13 +2,11 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait;
-use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\NiveauEtapeAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Service\ElementPedagogique as ElementPedagogiqueService;
-use Application\Service\Etape as EtapeService;
 use Application\Exception\DbException;
 
 /**
@@ -17,53 +15,31 @@ use Application\Exception\DbException;
  * @method \Doctrine\ORM\EntityManager            em()
  * @method \Application\Controller\Plugin\Context context()
  *
- * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class EtapeController extends AbstractActionController
 {
-    use LocalContextAwareTrait;
+    use ContextAwareTrait;
     use ElementPedagogiqueAwareTrait;
     use EtapeAwareTrait;
     use NiveauEtapeAwareTrait;
 
 
-    public function ajouterAction()
-    {
-        return $this->saisirAction();
-    }
-
-    public function modifierAction()
-    {
-        return $this->saisirAction();
-    }
 
     protected function saisirAction()
     {
-        $structure = $this->context()->mandatory()->structureFromRoute();
-        $niveau    = $this->context()->niveauFromRoute();
-        $id        = $this->params()->fromRoute('id');
-        $service   = $this->getServiceEtape();
-        $title     = $id ? "Modification d'une formation" : "Création d'une nouvelle formation";
-        $form      = $this->getFormAjouterModifier();
-        $errors    = [];
-
-        // persiste les filtres dans le contexte local
-        $localContext = $this->getServiceLocalContext();
-
-        $localContext
-                ->setStructure($structure)
-                ->setNiveau($niveau ? $this->getServiceNiveauEtape()->get($niveau) : null);
+        $etape   = $this->getEvent()->getParam('etape');
+        $service = $this->getServiceEtape();
+        $title   = $etape ? "Modification d'une formation" : "Création d'une nouvelle formation";
+        $form    = $this->getFormSaisie();
+        $errors  = [];
 
         $service->canAdd(true);
 
-        if ($id) {
-            $entity = $service->get($id);
-            $form->bind($entity);
-        }
-        else {
-            $entity = $service->newEntity();
-            $entity->setStructure($structure);
-            $form->setObject($entity);
+        if ($etape) {
+            $form->bind($etape);
+        } else {
+            $etape = $service->newEntity();
+            $form->setObject($etape);
         }
 
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -73,61 +49,64 @@ class EtapeController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 try {
-                    $service->save($entity);
-                    $form->get('id')->setValue($entity->getId()); // transmet le nouvel ID
-                }
-                catch (\Exception $e) {
+                    $service->save($etape);
+                    $form->get('id')->setValue($etape->getId()); // transmet le nouvel ID
+                } catch (\Exception $e) {
                     $e        = DbException::translate($e);
                     $errors[] = $e->getMessage();
                 }
             }
         }
 
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setTemplate('application/offre-formation/etape/saisie')
-                ->setVariables(compact('form', 'title', 'errors'));
-
-        return $viewModel;
+        return compact('form', 'title', 'errors');
     }
+
+
 
     public function supprimerAction()
     {
-        if (!($id = $this->params()->fromRoute('id'))) {
+        if (!($etape = $this->getEvent()->getParam('etape'))) {
             throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
-        $service   = $this->getServiceEtape();
-        $entity    = $service->getRepo()->find($id);
-        $title     = "Suppression de formation";
-        $form      = new \Application\Form\Supprimer('suppr');
-        $errors = [];
+        $service = $this->getServiceEtape();
+        $title   = "Suppression de formation";
+        $form    = new \Application\Form\Supprimer('suppr');
+        $errors  = [];
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
 
         $service->canAdd(true);
 
         if ($this->getRequest()->isPost()) {
             try {
-                $service->delete($entity);
-            }catch(\Exception $e){
-                $e = DbException::translate($e);
+                $service->delete($etape);
+            } catch (\Exception $e) {
+                $e        = DbException::translate($e);
                 $errors[] = $e->getMessage();
             }
         }
-        return compact('entity', 'title', 'form', 'errors');
+
+        return compact('etape', 'title', 'form', 'errors');
     }
+
+
 
     public function voirAction()
     {
-        $etape = $this->getEvent()->getParam('etape');
-        $title = 'Formation';
-        return compact('etape','title');
+        $etape        = $this->getEvent()->getParam('etape');
+        $title        = 'Formation';
+        $serviceEtape = $this->getServiceEtape();
+
+        return compact('etape', 'title', 'serviceEtape');
     }
+
+
 
     /**
      * Retourne le formulaire d'ajout/modif d'Etape.
      *
      * @return \Application\Form\OffreFormation\EtapeSaisie
      */
-    protected function getFormAjouterModifier()
+    protected function getFormSaisie()
     {
         return $this->getServiceLocator()->get('FormElementManager')->get('EtapeSaisie');
     }

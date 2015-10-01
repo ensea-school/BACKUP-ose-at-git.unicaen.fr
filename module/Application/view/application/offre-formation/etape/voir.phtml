@@ -1,3 +1,33 @@
-<h3><?php echo $etape ?> <small><?php echo $etape->getSourceCode() ?></small></h3>
+<h3><?php echo $etape ?>
+    <small><?php echo $etape->getSourceCode() ?></small>
+</h3>
 
-<?php echo $this->etape($etape) ?>
+<?php
+
+/* @var $serviceEtape \Application\Service\Etape */
+
+$tabs = [
+    [
+        'id'      => 'fiche',
+        'label'   => 'Fiche',
+        'content' => (string)$this->etape($etape),
+    ],
+];
+
+if ($serviceEtape->canEditCentresCouts($etape)){
+    $tabs[] = [
+        'id'    => 'centres-couts',
+        'label' => '<span class="glyphicon glyphicon-euro"></span> Centres de coûts',
+        'url'   => $this->url('of/etape/centres-couts', ['etape' => $etape->getId()]),
+    ];
+}
+
+if ($serviceEtape->canEditModulateurs($etape)){
+    $tabs[] = [
+        'id'    => 'modulateurs',
+        'label' => '<span class="glyphicon glyphicon-list-alt"></span> Modulateurs',
+        'url'   => $this->url('of/etape/modulateurs', ['etape' => $etape->getId()]),
+    ];
+}
+
+echo $this->tabajax($tabs);

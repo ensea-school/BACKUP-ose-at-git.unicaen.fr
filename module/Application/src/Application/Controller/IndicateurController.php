@@ -6,7 +6,6 @@ use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Structure as StructureEntity;
 use Application\Entity\Db\VIndicModifDossier;
 use Application\Service\Indicateur as IndicateurService;
-use Application\Service\Indicateur\Dossier\DonneesPersoModifIndicateurImpl;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
 use Doctrine\ORM\EntityManager;
 use Application\Entity\Db\Indicateur;

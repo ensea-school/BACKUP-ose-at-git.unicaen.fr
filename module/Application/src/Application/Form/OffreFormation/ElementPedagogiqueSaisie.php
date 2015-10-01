@@ -2,10 +2,15 @@
 
 namespace Application\Form\OffreFormation;
 
+use Application\Service\Traits\EtapeAwareTrait;
+use Application\Service\Traits\LocalContextAwareTrait;
+use Application\Service\Traits\PeriodeAwareTrait;
+use Application\Service\Traits\StructureAwareTrait;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Description of ElementPedagogiqueSaisie
@@ -15,6 +20,12 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use LocalContextAwareTrait;
+    use EtapeAwareTrait;
+    use PeriodeAwareTrait;
+    use StructureAwareTrait;
+
+
 
     /**
      * This function is automatically called when creating element with factory. It
@@ -24,18 +35,19 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
     {
         /* Définition de l'hydrateur */
         $hydrator = new ElementPedagogiqueSaisieHydrator();
-        $hydrator->setServiceLocator($this->getServiceLocator()->getServiceLocator());
+        $hydrator->setServiceEtape($this->getServiceEtape());
+        $hydrator->setServicePeriode($this->getServicePeriode());
+        $hydrator->setServiceStructure($this->getServiceStructure());
         $this->setHydrator($hydrator);
 
+        $this->setAttribute('class', 'element-pedagogique-saisie');
+
         $this->add([
-            'name'    => 'etape',
-            'options' => [
+            'name'       => 'etape',
+            'options'    => [
                 'label' => 'Formation',
             ],
-            'attributes' => [
-                'disabled' => true,
-            ],
-            'type'    => 'Select',
+            'type'       => 'Select',
         ]);
 
         $this->add([
@@ -43,7 +55,7 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
             'options' => [
                 'label' => 'Code',
             ],
-            'type'    => 'Text'
+            'type'    => 'Text',
         ]);
 
         $this->add([
@@ -51,13 +63,13 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
             'options' => [
                 'label' => 'Libellé',
             ],
-            'type'    => 'Text'
+            'type'    => 'Text',
         ]);
 
         $this->add([
             'name'    => 'periode',
             'options' => [
-                'label'         => 'Période',
+                'label' => 'Période',
             ],
             'type'    => 'Select',
         ]);
@@ -119,19 +131,16 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
         ]);
 
         $this->add([
-            'name'    => 'structure',
-            'options' => [
+            'name'       => 'structure',
+            'options'    => [
                 'label' => 'Structure',
             ],
-            'attributes' => [
-                'disabled' => true,
-            ],
-            'type'    => 'Select',
+            'type'       => 'Select',
         ]);
 
         $this->add([
             'name' => 'id',
-            'type' => 'Hidden'
+            'type' => 'Hidden',
         ]);
 
         $this->add([
@@ -139,48 +148,33 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
             'type'       => 'Submit',
             'attributes' => [
                 'value' => 'Enregistrer',
-                'class' => 'btn btn-primary',
+                'class' => 'btn btn-primary enregistrer',
             ],
         ]);
 
-        $localContext = $this->getServiceLocator()->getServiceLocator()->get('applicationLocalContext');
-        /* @var $localContext \Application\Service\LocalContext */
+        $localContext = $this->getServiceLocalContext();
 
         // init étape
+        $this->get('etape')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceEtape()->getList()));
         if (($etape = $localContext->getEtape())) {
-            // si un filtre étape est positionné dans le contexte local, on l'utilise
-            $this->get('etape')
-                    ->setValueOptions([$id = $etape->getId() => (string) $etape])
-                    ->setValue($id);
-        }
-        else {
-            $serviceEtape = $this->getServiceLocator()->getServiceLocator()->get('ApplicationEtape');
-            $this->get('etape')
-                    ->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $serviceEtape->getList() ) )
-                    ->setAttribute('disabled', false);
+            $this->get('etape')->setValue($etape->getId());
         }
 
         // peuplement liste des périodes
-        $servicePeriode = $this->getServiceLocator()->getServiceLocator()->get('ApplicationPeriode');
         $this->get('periode')
-                ->setEmptyOption("")
-                ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($servicePeriode->getEnseignement()));
+            ->setEmptyOption("")
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServicePeriode()->getEnseignement()));
 
         // peuplement liste des structures
-        if ($localContext->getStructure()) {
-            // si un filtre structure est positionné dans le contexte local, on l'utilise
-            $this->get('structure')
-                    ->setValueOptions([$id = $localContext->getStructure()->getId() => (string) $localContext->getStructure()])
-                    ->setValue($id);
-        }
-        else {
-            $serviceStructure = $this->getServiceLocator()->getServiceLocator()->get('ApplicationStructure');
-            $qb = $serviceStructure->finderByEnseignement( $serviceStructure->finderByNiveau(2) );
-            $this->get('structure')
-                    ->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $serviceStructure->getList($qb) ) )
-                    ->setAttribute('disabled', false);
+        $serviceStructure = $this->getServiceStructure();
+        $qb               = $serviceStructure->finderByEnseignement($serviceStructure->finderByNiveau(2));
+        $this->get('structure')->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
+        if ($structure = $localContext->getStructure()) {
+            $this->get('structure')->setValue($structure->getId());
         }
     }
+
+
 
     /**
      * Should return an array specification compatible with
@@ -191,27 +185,24 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
     public function getInputFilterSpecification()
     {
         return [
-            'taux-foad' => [
+            'taux-foad'   => [
                 'required' => true,
-//                'validators' => array(
-//                    array('name' => 'Float'),
-//                ),
             ],
-            'taux-fc' => [
+            'taux-fc'     => [
                 'required' => true,
                 'filters'  => [
                     ['name' => 'Zend\Filter\StringTrim'],
                     new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
                 ],
             ],
-            'taux-fi' => [
+            'taux-fi'     => [
                 'required' => true,
                 'filters'  => [
                     ['name' => 'Zend\Filter\StringTrim'],
                     new \Zend\Filter\PregReplace(['pattern' => '/,/', 'replacement' => '.']),
                 ],
             ],
-            'taux-fa' => [
+            'taux-fa'     => [
                 'required' => true,
                 'filters'  => [
                     ['name' => 'Zend\Filter\StringTrim'],
@@ -221,18 +212,89 @@ class ElementPedagogiqueSaisie extends Form implements InputFilterProviderInterf
             'source-code' => [
                 'required' => true,
             ],
-            'libelle' => [
+            'libelle'     => [
                 'required' => true,
             ],
-            'periode' => [
+            'periode'     => [
                 'required' => false,
             ],
-            'etape' => [
-                'required' => false,
+            'etape'       => [
+                'required' => true,
             ],
-            'structure' => [
-                'required' => false,
+            'structure'   => [
+                'required' => true,
             ],
         ];
+    }
+}
+
+
+
+
+
+/**
+ *
+ *
+ * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
+ */
+class ElementPedagogiqueSaisieHydrator implements HydratorInterface
+{
+    use EtapeAwareTrait;
+    use PeriodeAwareTrait;
+    use StructureAwareTrait;
+
+
+
+    /**
+     * Hydrate $object with the provided $data.
+     *
+     * @param  array                                     $data
+     * @param  \Application\Entity\Db\ElementPedagogique $object
+     *
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+        $object->setSourceCode($data['source-code']);
+        $object->setLibelle($data['libelle']);
+        $object->setEtape($this->getServiceEtape()->get($data['etape']));
+        $object->setPeriode($this->getServicePeriode()->get($data['periode']));
+        $object->setTauxFoad((float)$data['taux-foad']);
+        $object->setTauxFc((float)$data['taux-fc']);
+        $object->setTauxFi((float)$data['taux-fi']);
+        $object->setTauxFa((float)$data['taux-fa']);
+        $object->setFc((float)$data['taux-fc'] > 0);
+        $object->setFi((float)$data['taux-fi'] > 0);
+        $object->setFa((float)$data['taux-fa'] > 0);
+        $object->setStructure($this->getServiceStructure()->get($data['structure']));
+
+        return $object;
+    }
+
+
+
+    /**
+     * Extract values from an object
+     *
+     * @param  \Application\Entity\Db\ElementPedagogique $object
+     *
+     * @return array
+     */
+    public function extract($object)
+    {
+        $data = [
+            'etape'       => ($e = $object->getEtape()) ? $e->getId() : null,
+            'source-code' => $object->getSourceCode(),
+            'libelle'     => $object->getLibelle(),
+            'id'          => $object->getId(),
+            'periode'     => ($p = $object->getPeriode()) ? $p->getId() : null,
+            'taux-foad'   => $object->getTauxFoad(),
+            'structure'   => ($s = $object->getStructure()) ? $s->getId() : null,
+            'taux-fc'     => $object->getTauxFc(),
+            'taux-fi'     => $object->getTauxFi(),
+            'taux-fa'     => $object->getTauxFa(),
+        ];
+
+        return $data;
     }
 }

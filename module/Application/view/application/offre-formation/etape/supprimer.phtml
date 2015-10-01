@@ -4,7 +4,7 @@ if (isset($errors) && $errors) {
 }
 else {
     echo '<p class="lead text-danger"><strong>Attention!</strong> Confirmez-vous la suppression de cette formation ?</p>';
-    echo $this->etape($entity);
+    echo $this->etape($etape)->renderDescription();
 
     echo $this->form()->openTag($form);
     echo $this->formHidden($form->get('id'));

@@ -4,6 +4,10 @@ namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\Etape as Entity;
 use Application\Traits\EtapeAwareTrait;
+use Application\Service\Traits\EtapeAwareTrait as ServiceEtapeAwareTrait;
+use Application\Util;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
 
 /**
@@ -11,9 +15,11 @@ use Zend\View\Helper\AbstractHtmlElement;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeViewHelper extends AbstractHtmlElement
+class EtapeViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
 {
     use EtapeAwareTrait;
+    use ServiceLocatorAwareTrait;
+    use ServiceEtapeAwareTrait;
 
 
 
@@ -49,7 +55,7 @@ class EtapeViewHelper extends AbstractHtmlElement
      *
      * @return string Code HTML
      */
-    public function render()
+    public function renderDescription()
     {
         $entity = $this->getEtape();
 
@@ -73,6 +79,36 @@ class EtapeViewHelper extends AbstractHtmlElement
         }
         $html .= "</dl>";
 
+        return $html;
+    }
+
+
+
+    /**
+     *
+     *
+     * @return string Code HTML
+     */
+    public function render()
+    {
+        $entity = $this->getEtape();
+
+        if (!$entity) {
+            return '';
+        }
+
+        $html = $this->renderDescription();
+
+        $buttons = '';
+        if ($this->getServiceEtape()->canSave($entity)) {
+            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
+            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
+        }
+
+        if ($buttons) {
+            $html .= "<div class=\"actions\">$buttons</div>";
+        }
+
         $html .= $this->getView()->historique($entity);
 
         return $html;
@@ -80,18 +116,41 @@ class EtapeViewHelper extends AbstractHtmlElement
 
 
 
-    public function renderLink()
+    public function renderLink($content = null, $attributes = [])
     {
         $etape = $this->getEtape();
         if (!$etape) return '';
 
-        $url = $this->getView()->url('of/etape/voir', ['etape' => $etape->getId()]);
-        $out = '<a href="' . $url . '" data-po-href="' . $url . '" class="ajax-modal">' . $etape . '</a>';
+        if (!$content) $content = (string)$etape;
+
+        $default = [
+            'href'  => $this->getView()->url('of/etape/voir', ['etape' => $etape->getId()]),
+            'class' => ['etape-link', 'ajax-modal'],
+            'id'    => $etape->getId(),
+        ];
 
         if ($etape->getHistoDestruction() && 0 == $etape->getCheminPedagogique()->count()) {
-            return '<span class="bg-danger"><abbr title="Cette formation n\'existe plus">' . $out . '</abbr></span>';
-        } else {
-            return $out;
+            $default['title']   = 'Cette formation n\'existe plus';
+            $default['class'][] = 'bg-danger';
         }
+
+        return '<a ' . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . '</a>';
+    }
+
+
+
+    public function renderAjouterLink($content='', $attributes = [])
+    {
+        if (!$this->getServiceEtape()->canAdd(false)) return '';
+
+        if (!$content) $content = '<span class="glyphicon glyphicon-plus"></span> Ajouter une formation';
+
+        $default = [
+            'href'  => $this->getView()->url('of/etape/ajouter'),
+            'class' => ['etape-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default'],
+            'title' => 'Ajouter une formation',
+        ];
+
+        return '<a ' . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . '</a>';
     }
 }

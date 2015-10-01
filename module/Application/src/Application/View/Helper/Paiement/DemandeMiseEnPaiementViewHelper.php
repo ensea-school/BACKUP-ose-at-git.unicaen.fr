@@ -348,7 +348,7 @@ class DemandeMiseEnPaiementViewHelper extends AbstractHtmlElement implements Ser
             return $a['periode']->getOrdre() > $b['periode']->getOrdre();
         });
         foreach( $mepBuffer as $mb ){
-            $params['mises-en-paiement'][(string)$mb['periode']] = $mb['heures'];
+            $params['mises-en-paiement'][$mb['periode']->getLibelleAnnuel($this->getServiceContext()->getAnnee())] = $mb['heures'];
         }
 
         return $params;

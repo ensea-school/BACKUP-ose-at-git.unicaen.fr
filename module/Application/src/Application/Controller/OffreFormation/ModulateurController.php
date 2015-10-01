@@ -34,7 +34,7 @@ class ModulateurController extends AbstractActionController
             $this->getServiceContext()->getAnnee()
         );
 
-        $etape = $this->context()->etapeFromRoute('id');
+        $etape = $this->getEvent()->getParam('etape');
         /* @var $etape \Application\Entity\Db\Etape */
 
         if (! $etape){

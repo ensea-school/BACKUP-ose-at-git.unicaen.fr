@@ -619,36 +619,36 @@ function MiseEnPaiementListe(demandeMiseEnPaiement, element)
 
 
 
-function PaiementMiseEnPaiementRechercheForm(id)
-{
-    this.id = id;
-    this.element = $(".paiement-mise-en-paiement-recherche-form#" + this.id);
+/**
+ * paiementMiseEnPaiementRechercheForm
+ */
+$.widget("ose.paiementMiseEnPaiementRechercheForm", {
 
-    this.onTypeIntervenantChange = function ()
+    onTypeIntervenantChange: function ()
     {
         var structureElement = this.getStructureElement()
         if (structureElement) {
             structureElement.val('');
         }
         this.onStructureChange();
-    }
+    },
 
-    this.onStructureChange = function ()
+    onStructureChange: function ()
     {
         var periodeElement = this.getPeriodeElement()
         if (periodeElement) {
             periodeElement.val('');
         }
         this.onPeriodeChange();
-    }
+    },
 
-    this.onPeriodeChange = function ()
+    onPeriodeChange: function ()
     {
         this.intervenantsSelectNone();
         this.getSuiteElement().click();
-    }
+    },
 
-    this.onIntervenantsChange = function ()
+    onIntervenantsChange: function ()
     {
         if (this.getIntervenantsElement().is(':visible')) {
             this.getSuiteElement().hide();
@@ -661,37 +661,41 @@ function PaiementMiseEnPaiementRechercheForm(id)
             this.getSuiteElement().show();
             this.hideActions();
         }
-    }
+    },
 
-    this.hideActions = function ()
+    hideActions: function ()
     {
         this.getAfficherElement().hide();
         this.getExporterPdfElement().hide();
         this.getExporterCsvEtat().hide();
         this.getExporterCsvWinpaie().hide();
-    }
+    },
 
-    this.showActions = function ()
+    showActions: function ()
     {
         this.getAfficherElement().show();
         this.getExporterPdfElement().show();
         this.getExporterCsvEtat().show();
         this.getExporterCsvWinpaie().show();
-    }
+    },
 
-    this.intervenantsSelectAll = function ()
+    intervenantsSelectAll: function ()
     {
         this.getIntervenantsElement().find("option").prop("selected", "selected");
         this.onIntervenantsChange();
-    }
+    },
 
-    this.intervenantsSelectNone = function ()
+    intervenantsSelectNone: function ()
     {
         this.getIntervenantsElement().val([]);
         this.onIntervenantsChange();
-    }
+    },
 
-    this.init = function ()
+
+
+
+
+    _create: function ()
     {
         var that = this;
 
@@ -713,70 +717,67 @@ function PaiementMiseEnPaiementRechercheForm(id)
             }
         });
         this.onIntervenantsChange();
-    }
+    },
 
-    this.getTypeIntervenantElement = function ()
+    getTypeIntervenantElement: function ()
     {
         return this.element.find('[name="type-intervenant"]');
-    }
+    },
 
-    this.getStructureElement = function ()
+    getStructureElement: function ()
     {
         return this.element.find('[name="structure"]');
-    }
+    },
 
-    this.getPeriodeElement = function ()
+    getPeriodeElement: function ()
     {
         return this.element.find('[name="periode"]');
-    }
+    },
 
-    this.getIntervenantsElement = function ()
+    getIntervenantsElement: function ()
     {
         return this.element.find('[name="intervenants[]"]');
-    }
+    },
 
-    this.getSuiteElement = function ()
+    getSuiteElement: function ()
     {
         return this.element.find('[name="suite"]');
-    }
+    },
 
-    this.getAfficherElement = function ()
+    getAfficherElement: function ()
     {
         return this.element.find('[name="afficher"]');
-    }
+    },
 
-    this.getExporterPdfElement = function ()
+    getExporterPdfElement: function ()
     {
         return this.element.find('[name="exporter-pdf"]');
-    }
+    },
 
-    this.getExporterCsvEtat = function ()
+    getExporterCsvEtat: function ()
     {
         return this.element.find('[name="exporter-csv-etat"]');
-    }
+    },
 
-    this.getExporterCsvWinpaie = function ()
+    getExporterCsvWinpaie: function ()
     {
         return this.element.find('[name="exporter-csv-winpaie"]');
-    }
+    },
 
-    this.getEtat = function ()
+    getEtat: function ()
     {
         return this.element.parents('.filter').data('etat');
     }
-}
 
-/**
- *
- * @param {string} id
- * @returns {PaiementMiseEnPaiementRechercheForm}
- */
-PaiementMiseEnPaiementRechercheForm.get = function (id)
+});
+
+$(function ()
 {
-    if (null == PaiementMiseEnPaiementRechercheForm.instances) PaiementMiseEnPaiementRechercheForm.instances = new Array();
-    if (null == PaiementMiseEnPaiementRechercheForm.instances[id]) PaiementMiseEnPaiementRechercheForm.instances[id] = new PaiementMiseEnPaiementRechercheForm(id);
-    return PaiementMiseEnPaiementRechercheForm.instances[id];
-}
+    WidgetInitializer.add('paiement-mise-en-paiement-recherche-form', 'paiementMiseEnPaiementRechercheForm');
+});
+
+
+
 
 
 function PaiementMiseEnPaiementForm(id)

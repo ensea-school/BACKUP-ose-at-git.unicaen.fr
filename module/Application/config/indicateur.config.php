@@ -5,6 +5,7 @@ namespace Application;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\DrhRole;
+use UnicaenApp\Util;
 
 return [
     'router' => [
@@ -14,8 +15,7 @@ return [
                 'options' => [
                     'route'    => '/gestion/indicateur',
                     'defaults' => [
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Indicateur',
+                        'controller'    => 'Application\Controller\Indicateur',
                         'action'        => 'index',
                     ],
                 ],
@@ -94,7 +94,7 @@ return [
                                 'label'    => "Indicateurs",
                                 'title'    => "Indicateurs",
                                 'route'    => 'indicateur',
-                                'resource' => 'controller/Application\Controller\Indicateur:index',
+                                'resource' => Util::actionToResource('Application\Controller\Indicateur','index'),
                             ],
                         ],
                     ],

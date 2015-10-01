@@ -39,14 +39,24 @@ class PrivilegeRuleProvider implements ProviderInterface
         foreach( $config as $grant => $rules ){
             foreach( $rules as $index => $rule ){
                 if (is_array($rule)){
-                    $privileges = (array)$rule[0];
-                    $rs = [];
+                    $privileges = (array)$rule['privileges'];
+                    $ressources = $rule['resources'];
+                    $assertion = isset($rule['assertion']) ? $rule['assertion'] : null;
+                    $bjyRoles = [];
                     foreach( $pr as $privilege => $roles ){
                         if (in_array($privilege, $privileges)){
-                            $rs = array_unique( array_merge($rs, $roles) );
+                            $bjyRoles = array_unique( array_merge($bjyRoles, $roles) );
                         }
                     }
-                    $config[$grant][$index][0] = $rs;
+
+                    $bjyRule = [
+                        $bjyRoles,
+                        $ressources,
+                        $privileges
+                    ];
+                    if ($assertion) $bjyRule[3] = $assertion;
+
+                    $config[$grant][$index] = $bjyRule;
                 }
             }
         }

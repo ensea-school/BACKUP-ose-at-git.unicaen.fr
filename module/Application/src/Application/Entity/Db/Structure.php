@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -9,7 +10,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 /**
  * Structure
  */
-class Structure implements HistoriqueAwareInterface
+class Structure implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
@@ -535,6 +536,18 @@ class Structure implements HistoriqueAwareInterface
             'libelleCourt' => $this->libelleCourt,
             'historisee'   => !$this->estNonHistorise(),
         ];
+    }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'Structure';
     }
 
 }

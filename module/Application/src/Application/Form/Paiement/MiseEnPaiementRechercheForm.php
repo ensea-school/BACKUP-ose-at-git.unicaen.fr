@@ -2,6 +2,7 @@
 
 namespace Application\Form\Paiement;
 
+use Application\Service\Traits\ContextAwareTrait;
 use Zend\Form\Form;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
@@ -17,6 +18,7 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
 {
     use ServiceLocatorAwareTrait,
         \Application\Service\Traits\TypeIntervenantAwareTrait;
+    use ContextAwareTrait;
 
     /**
      *
@@ -146,7 +148,8 @@ class MiseEnPaiementRechercheForm extends Form implements InputFilterProviderInt
      */
     public function populatePeriodes( $periodes )
     {
-        $this->get('periode')->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $periodes ) );
+        $annee = $this->getServiceContext()->getAnnee();
+        $this->get('periode')->setValueOptions( \UnicaenApp\Util::collectionAsOptions( $periodes, false, function($p) use ($annee){ return $p->getLibelleAnnuel($annee); } ) );
     }
 
     /**

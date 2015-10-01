@@ -31,6 +31,16 @@ class Privilege
     const MODIF_SERVICE_DU_VISUALISATION    = 'modif-service-du-visualisation';
     const MODIF_SERVICE_DU_EDITION          = 'modif-service-du-edition';
     const MODIF_SERVICE_DU_ASSOCIATION      = 'modif-service-du-association';
+    const ODF_CENTRES_COUT_EDITION          = 'odf-centres-cout-edition';
+    const ODF_ELEMENT_EDITION               = 'odf-element-edition';
+    const ODF_ETAPE_EDITION                 = 'odf-etape-edition';
+    const ODF_EXPORT_CSV                    = 'odf-export-csv';
+    const ODF_MODULATEURS_EDITION           = 'odf-modulateurs-edition';
+    const ODF_TAUX_MIXITE_EDITION           = 'odf-taux-mixite-edition';
+    const ODF_VISUALISATION                 = 'odf-visualisation';
+    const ODF_ELEMENT_VISUALISATION         = 'odf-element-visualisation';
+    const ODF_ETAPE_VISUALISATION           = 'odf-etape-visualisation';
+
 
 
 

@@ -2,6 +2,7 @@
 
 namespace Application\Form\OffreFormation;
 
+use Application\Service\Traits\ContextAwareTrait;
 use Application\Service\Traits\DomaineFonctionnelAwareTrait;
 use Application\Service\Traits\LocalContextAwareTrait;
 use Application\Service\Traits\StructureAwareTrait;
@@ -20,6 +21,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
+    use ContextAwareTrait;
     use LocalContextAwareTrait;
     use StructureAwareTrait;
     use DomaineFonctionnelAwareTrait;
@@ -113,21 +115,14 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
             ],
         ]);
 
-        $localContext = $this->getServiceLocalContext();
 
-        // peuplement liste des structures
-        if ($localContext->getStructure()) {
-            // si un filtre structure est positionné dans le contexte local, on l'utilise
-            $this->get('structure')
-                ->setValueOptions([$id = $localContext->getStructure()->getId() => (string)$localContext->getStructure()])
-                ->setValue($id)
-                ->setAttribute('disabled', true);
-        } else {
-            $serviceStructure = $this->getServiceStructure();
-            $qb               = $serviceStructure->finderByEnseignement($serviceStructure->finderByNiveau(2));
-            $this->get('structure')
-                ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
+        $serviceStructure = $this->getServiceStructure();
+        $qb               = $serviceStructure->finderByEnseignement($serviceStructure->finderByNiveau(2));
+        if ($structure = $this->getServiceContext()->getStructure()) {
+            $serviceStructure->finderById($qb, $structure->getId()); // Filtre
         }
+        $this->get('structure')
+            ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($serviceStructure->getList($qb)));
 
         // peuplement liste des types de formation
         $valueOptions = \UnicaenApp\Util::collectionAsOptions($this->getTypesFormation());
@@ -140,12 +135,17 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
             ->setEmptyOption("(Aucun)")
             ->setValueOptions(\UnicaenApp\Util::collectionAsOptions($this->getServiceDomaineFonctionnel()->getList()));
 
+        $localContext = $this->getServiceLocalContext();
+
+        if ($structure = $localContext->getStructure()) {
+            // si un filtre structure est positionné dans le contexte local, on l'utilise
+            $this->get('structure')->setValue($structure->getId());
+        }
+
         // init niveau
         if ($localContext->getNiveau()) {
             // si un filtre niveau est positionné dans le contexte local, on l'utilise
-            $this->get('niveau')
-                ->setValue($localContext->getNiveau()->getNiv())
-                ->setAttribute('readonly', true);
+            $this->get('niveau')->setValue($localContext->getNiveau()->getNiv());
         }
     }
 

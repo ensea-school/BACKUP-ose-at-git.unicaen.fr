@@ -5,11 +5,12 @@ namespace Application\Entity\Db;
 use Application\Interfaces\AnneeAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * ElementPedagogique
  */
-class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface
+class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
@@ -847,4 +848,17 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
             'libelle'    => $this->libelle,
         ];
     }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'ElementPedagogique';
+    }
+
 }

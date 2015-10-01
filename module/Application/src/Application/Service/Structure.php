@@ -206,10 +206,16 @@ class Structure extends AbstractEntityService
         $serviceMiseEnPaiement = $this->getServiceLocator()->get('applicationMiseEnPaiement');
         /* @var $serviceMiseEnPaiement MiseEnPaiement */
 
+        $serviceIntervenant = $this->getServiceLocator()->get('applicationIntervenant');
+        /* @var $serviceIntervenant Intervenant */
+
         list($qb,$alias) = $this->initQuery($qb, $alias);
 
         $this               ->join( $serviceMIS             , $qb, 'miseEnPaiementIntervenantStructure', false, $alias );
         $serviceMIS         ->join( $serviceMiseEnPaiement  , $qb, 'miseEnPaiement'                         );
+        $serviceMIS         ->join( $serviceIntervenant     , $qb, 'intervenant', false );
+
+        $serviceIntervenant->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
 
         return $qb;
     }

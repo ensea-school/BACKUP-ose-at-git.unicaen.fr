@@ -22,6 +22,13 @@ class ElementPedagogiqueController extends AbstractActionController
 
     public function voirAction()
     {
+        $this->em()->getFilters()->enable('historique')->init(
+            [
+                'Application\Entity\Db\CheminPedagogique',
+                'Application\Entity\Db\VolumeHoraire',
+            ],
+            $this->getServiceContext()->getDateObservation()
+        );
         $element = $this->getEvent()->getParam('elementPedagogique');
         $title   = "Enseignement";
 
@@ -30,41 +37,19 @@ class ElementPedagogiqueController extends AbstractActionController
 
 
 
-    public function ajouterAction()
-    {
-        return $this->saisirAction();
-    }
-
-
-
-    public function modifierAction()
-    {
-        return $this->saisirAction();
-    }
-
-
-
     protected function saisirAction()
     {
-        $etape = $this->context()->mandatory()->etapeFromRoute();
-        /* @var $etape \Application\Entity\Db\Etape */
-        $id      = $this->params()->fromRoute('id');
+        $element = $this->getEvent()->getParam('elementPedagogique');
         $service = $this->getServiceElementPedagogique();
-        $title   = $id ? "Modification d'un enseignement" : "Création d'un enseignement";
+        $title   = $element ? "Modification d'un enseignement" : "Création d'un enseignement";
         $form    = $this->getFormAjouterModifier();
         $errors  = [];
 
-        $service->canAdd(true);
-
-        if ($id) {
-            $entity = $service->getRepo()->find($id);
-            $form->bind($entity);
+        if ($element) {
+            $form->bind($element);
         } else {
-            $entity = $service->newEntity();
-            /* @var $entity \Application\Entity\Db\ElementPedagogique */
-            $entity->setEtape($etape)
-                ->setStructure($etape->getStructure());
-            $form->setObject($entity);
+            $element = $this->getServiceElementPedagogique()->newEntity();
+            $form->setObject($element);
         }
 
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
@@ -74,8 +59,8 @@ class ElementPedagogiqueController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 try {
-                    $service->save($entity);
-                    $form->get('id')->setValue($entity->getId()); // transmet le nouvel ID
+                    $this->getServiceElementPedagogique()->save($element);
+                    $form->get('id')->setValue($element->getId()); // transmet le nouvel ID
                 } catch (\Exception $e) {
                     $e        = DbException::translate($e);
                     $errors[] = $e->getMessage();
@@ -83,41 +68,35 @@ class ElementPedagogiqueController extends AbstractActionController
             }
         }
 
-        $viewModel = new \Zend\View\Model\ViewModel();
-        $viewModel->setTemplate('application/offre-formation/element-pedagogique/saisir')
-            ->setVariables(compact('form', 'title', 'errors'));
-
-        return $viewModel;
+        return compact('form', 'title', 'errors');
     }
 
 
 
     public function supprimerAction()
     {
-        $id = $this->params()->fromRoute('id', 0);
-        if (!($id = $this->params()->fromRoute('id'))) {
+        $element = $this->getEvent()->getParam('elementPedagogique');
+        if (!$element) {
             throw new \Common\Exception\RuntimeException('L\'identifiant n\'est pas bon ou n\'a pas été fourni');
         }
 
-        $service = $this->getServiceElementPedagogique();
-        $entity  = $service->getRepo()->find($id);
-        $title   = "Suppression d'enseignement";
-        $form    = new \Application\Form\Supprimer('suppr');
-        $errors  = [];
+        $title  = "Suppression d'enseignement";
+        $form   = new \Application\Form\Supprimer('suppr');
+        $errors = [];
         $form->setAttribute('action', $this->url()->fromRoute(null, [], [], true));
-
-        $service->canAdd(true);
+        $deleted = false;
 
         if ($this->getRequest()->isPost()) {
             try {
-                $service->delete($entity);
+                $this->getServiceElementPedagogique()->delete($element);
+                $deleted = true;
             } catch (\Exception $e) {
                 $e        = DbException::translate($e);
                 $errors[] = $e->getMessage();
             }
         }
 
-        return compact('entity', 'title', 'form', 'errors');
+        return compact('element', 'title', 'form', 'errors', 'deleted');
     }
 
 

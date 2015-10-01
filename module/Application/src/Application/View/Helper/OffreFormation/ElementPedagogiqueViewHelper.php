@@ -3,8 +3,10 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\ElementPedagogique as Entity;
+use Application\Entity\Db\Privilege;
 use Application\Traits\ElementPedagogiqueAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
+use Application\Util;
 
 /**
  * Description of ElementPedagogiqueViewHelper
@@ -49,7 +51,7 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
      *
      * @return string Code HTML
      */
-    public function render()
+    public function renderDescription()
     {
         $entity = $this->getElementPedagogique();
 
@@ -73,11 +75,39 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
             $vars["Formation"] = $entity->getEtape();
         }
 
-        $html = "<dl class=\"element dl-horizontal\">\n";
+        $html = "<dl class=\"etape dl-horizontal\">\n";
         foreach ($vars as $key => $value) {
             $html .= "\t<dt>$key :</dt><dd>$value</dd>\n";
         }
         $html .= "</dl>";
+
+        return $html;
+    }
+
+
+
+    /**
+     *
+     *
+     * @return string Code HTML
+     */
+    public function render()
+    {
+        $entity = $this->getElementPedagogique();
+
+        if (!$entity) {
+            return '';
+        }
+
+        $html = $this->renderDescription();
+
+
+        if ($this->getView()->isAllowed($entity,Privilege::ODF_ELEMENT_EDITION)){
+            $buttons = '';
+            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/element/modifier', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
+            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/element/supprimer', ['elementPedagogique' => $entity->getId()]) . '" data-event="element-pedagogique-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
+            $html .= "<div class=\"actions\">$buttons</div>";
+        }
 
         $html .= $this->getView()->historique($entity);
 
@@ -86,26 +116,40 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
 
 
 
-    public function renderLink($format = 'original')
+    public function renderLink($content = null, $attributes = [])
     {
         $element = $this->getElementPedagogique();
         if (!$element) return '';
 
-        switch ($format) {
-            case 'libelle':
-                $str = $element->getLibelle();
-                break;
-            default:
-                $str = (string)$element;
-        }
+        if (!$content) $content = (string)$element;
 
-        $url   = $this->getView()->url('of/element/voir', ['elementPedagogique' => $element->getId()]);
-        $out   = '<a href="' . $url . '" data-po-href="' . $url . '" class="ajax-modal">' . $str . '</a>';
+        $default = [
+            'href'       => $this->getView()->url('of/element/voir', ['elementPedagogique' => $element->getId()]),
+            'class'      => ['element-pedagogique-link', 'ajax-modal'],
+            'id'         => $element->getId(),
+        ];
 
         if ($element->getHistoDestruction()) {
-            return '<span class="bg-danger"><abbr title="Cet élément pédagogique n\'existe plus">' . $out . '</abbr></span>';
-        } else {
-            return $out;
+            $default['title']   = 'Cet enseignement n\'existe plus';
+            $default['class'][] = 'bg-danger';
         }
+
+        return '<a ' . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . '</a>';
+    }
+
+
+
+    public function renderAjouterLink($content = '', $attributes = [])
+    {
+        if (!$content) $content = '<span class="glyphicon glyphicon-plus"></span> Ajouter un enseignement';
+
+        $default = [
+            'href'       => $this->getView()->url('of/element/ajouter'),
+            'class'      => ['element-pedagogique-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default'],
+            'data-event' => 'element-pedagogique-ajouter',
+            'title'      => 'Ajouter un enseignement',
+        ];
+
+        return '<a ' . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . '</a>';
     }
 }

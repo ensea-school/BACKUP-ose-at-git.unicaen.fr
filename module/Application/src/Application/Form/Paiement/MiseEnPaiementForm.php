@@ -2,6 +2,7 @@
 
 namespace Application\Form\Paiement;
 
+use Application\Service\Traits\PeriodeAwareTrait;
 use Zend\Form\Form;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
@@ -18,6 +19,7 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
     use ServiceLocatorAwareTrait,
         \Application\Service\Traits\ContextAwareTrait
     ;
+    use PeriodeAwareTrait;
 
     /**
      *
@@ -60,13 +62,13 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
                 ->setAttribute('data-dates-mise-en-paiement', json_encode($datesMiseEnPaiement));
 
         
-        $defaultPeriode = $this->getServicePeriode()->getDatePeriodePaiement();
+        $defaultPeriode = $this->getServicePeriode()->getPeriodePaiement();
         $this->add([
             'type' => 'Select',
             'name' => 'periode',
             'options' => [
                 'label' => 'Période',
-                'value_options' => \UnicaenApp\Util::collectionAsOptions($periodes),
+                'value_options' => \UnicaenApp\Util::collectionAsOptions($periodes,false,function($p) use ($annee) { return $p->getLibelleAnnuel($annee); }),
             ],
             'attributes' => [
                 'value' => $defaultPeriode ? $defaultPeriode->getId() : null,
@@ -118,11 +120,4 @@ class MiseEnPaiementForm extends Form implements InputFilterProviderInterface, S
         ];
     }
 
-    /**
-     * @return \Application\Service\Periode
-     */
-    protected function getServicePeriode()
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('applicationPeriode');
-    }
 }

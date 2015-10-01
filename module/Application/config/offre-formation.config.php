@@ -5,6 +5,9 @@ namespace Application;
 use Application\Acl\AdministrateurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
+use Application\Entity\Db\ElementPedagogique;
+use Application\Entity\Db\Privilege;
+use UnicaenApp\Util;
 
 return [
     'router'          => [
@@ -45,16 +48,6 @@ return [
                         ],
                         'may_terminate' => false,
                         'child_routes'  => [
-                            'default'     => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/:action[/:id]',
-                                    'constraints' => [
-                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                        'id'     => '[0-9]*',
-                                    ],
-                                ],
-                            ],
                             'voir'        => [
                                 'type'    => 'Segment',
                                 'options' => [
@@ -66,28 +59,31 @@ return [
                             'ajouter'     => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/ajouter/:etape',
-                                    'constraints' => ['etape' => '[0-9]*'],
-                                    'defaults'    => ['action' => 'ajouter'],
+                                    'route'    => '/ajouter',
+                                    'defaults' => ['action' => 'saisir'],
                                 ],
                             ],
                             'modifier'    => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/modifier/:etape/:id',
-                                    'constraints' => [
-                                        'etape' => '[0-9]*',
-                                        'id'    => '[0-9]*',
-                                    ],
-                                    'defaults'    => ['action' => 'modifier'],
+                                    'route'       => '/modifier/:elementPedagogique',
+                                    'constraints' => ['elementPedagogique' => '[0-9]*'],
+                                    'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
                             'supprimer'   => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/supprimer/:id',
-                                    'constraints' => ['id' => '[0-9]*'],
+                                    'route'       => '/supprimer/:elementPedagogique',
+                                    'constraints' => ['elementPedagogique' => '[0-9]*'],
                                     'defaults'    => ['action' => 'supprimer'],
+                                ],
+                            ],
+                            'search'      => [
+                                'type'    => 'Literal',
+                                'options' => [
+                                    'route'    => '/search',
+                                    'defaults' => ['action' => 'search'],
                                 ],
                             ],
                             'get-periode' => [
@@ -111,16 +107,6 @@ return [
                         ],
                         'may_terminate' => false,
                         'child_routes'  => [
-                            'default'       => [
-                                'type'    => 'Segment',
-                                'options' => [
-                                    'route'       => '/:action[/:id]',
-                                    'constraints' => [
-                                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                        'id'     => '[0-9]*',
-                                    ],
-                                ],
-                            ],
                             'voir'          => [
                                 'type'    => 'Segment',
                                 'options' => [
@@ -132,34 +118,31 @@ return [
                             'ajouter'       => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/ajouter/:structure[/niveau/:niveau]',
-                                    'constraints' => ['structure' => '[0-9]*'],
-                                    'defaults'    => ['action' => 'ajouter'],
+                                    'route'    => '/ajouter',
+                                    'defaults' => ['action' => 'saisir'],
                                 ],
                             ],
                             'modifier'      => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/modifier/:structure/:id',
-                                    'constraints' => ['id' => '[0-9]*'],
-                                    'defaults'    => ['action' => 'modifier'],
+                                    'route'       => '/modifier/:etape',
+                                    'constraints' => ['etape' => '[0-9]*'],
+                                    'defaults'    => ['action' => 'saisir'],
                                 ],
                             ],
                             'supprimer'     => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/supprimer/:id',
-                                    'constraints' => ['id' => '[0-9]*'],
+                                    'route'       => '/supprimer/:etape',
+                                    'constraints' => ['etape' => '[0-9]*'],
                                     'defaults'    => ['action' => 'supprimer'],
                                 ],
                             ],
                             'modulateurs'   => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/modulateurs/:id',
-                                    'constraints' => [
-                                        'etape' => '[0-9]*',
-                                    ],
+                                    'route'       => '/modulateurs/:etape',
+                                    'constraints' => ['etape' => '[0-9]*'],
                                     'defaults'    => [
                                         '__NAMESPACE__' => 'Application\Controller\OffreFormation',
                                         'controller'    => 'Modulateur',
@@ -170,7 +153,7 @@ return [
                             'centres-couts' => [
                                 'type'    => 'Segment',
                                 'options' => [
-                                    'route'       => '/centres-couts/:id',
+                                    'route'       => '/centres-couts/:etape',
                                     'constraints' => [
                                         'etape' => '[0-9]*',
                                     ],
@@ -194,94 +177,26 @@ return [
                         'label'    => 'Offre de formation',
                         'title'    => "Gestion de l'offre de formation",
                         'route'    => 'of',
-                        'resource' => 'controller/Application\Controller\OffreFormation:index',
-                        'pages'    => [
-                            'element-ajouter'     => [
-                                'label'    => "Créer un nouvel enseignement",
-                                'title'    => "Créer un nouvel enseignement pour la formation sélectionnée",
-                                'route'    => 'of/element/ajouter',
-                                'resource' => 'controller/Application\Controller\OffreFormation\ElementPedagogique:ajouter',
-                                'visible'  => false,
-                                'icon'     => 'glyphicon glyphicon-plus',
-                                'category' => 'element',
-                            ],
-                            'element-modifier'    => [
-                                'label'      => "Modifier cet enseignement",
-                                'title'      => "Modifier cet enseignement",
-                                'route'      => 'of/element/modifier',
-                                'resource'   => 'controller/Application\Controller\OffreFormation\ElementPedagogique:modifier',
-                                'visible'    => false,
-                                'icon'       => 'glyphicon glyphicon-edit',
-                                'withtarget' => true,
-                                'category'   => 'element',
-                            ],
-                            'element-supprimer'   => [
-                                'label'      => "Supprimer cette formation",
-                                'title'      => "Supprimer cette formation",
-                                'route'      => 'of/element/supprimer',
-                                'resource'   => 'controller/Application\Controller\OffreFormation\ElementPedagogique:supprimer',
-                                'visible'    => false,
-                                'icon'       => 'glyphicon glyphicon-remove',
-                                'withtarget' => true,
-                                'category'   => 'element',
-                            ],
-                            'etape-ajouter'       => [
-                                'label'    => "Créer une nouvelle formation",
-                                'title'    => "Créer une nouvelle formation",
-                                'route'    => 'of/etape/ajouter',
-                                'resource' => 'controller/Application\Controller\OffreFormation\Etape:ajouter',
-                                'visible'  => false,
-                                'icon'     => 'glyphicon glyphicon-plus',
-                                'category' => 'etape',
-                            ],
-                            'etape-modifier'      => [
-                                'label'      => "Modifier cette formation",
-                                'title'      => "Modifier cette formation",
-                                'route'      => 'of/etape/modifier',
-                                'resource'   => 'controller/Application\Controller\OffreFormation\Etape:modifier',
-                                'visible'    => false,
-                                'icon'       => 'glyphicon glyphicon-edit',
-                                'withtarget' => true,
-                                'category'   => 'etape',
-                            ],
-                            'etape-supprimer'     => [
-                                'label'      => "Supprimer cette formation",
-                                'title'      => "Supprimer cette formation",
-                                'route'      => 'of/etape/supprimer',
-                                'resource'   => 'controller/Application\Controller\OffreFormation\Etape:supprimer',
-                                'visible'    => false,
-                                'icon'       => 'glyphicon glyphicon-remove',
-                                'withtarget' => true,
-                                'category'   => 'etape',
-                            ],
-                            'etape-modulateurs'   => [
-                                'label'      => "Editer les modulateurs liés à cette formation",
-                                'title'      => "Editer les modulateurs liés à cette formation",
-                                'route'      => 'of/etape/modulateurs',
-                                'resource'   => 'controller/Application\Controller\OffreFormation\Modulateur:saisir',
-                                'visible'    => false,
-                                'icon'       => 'glyphicon glyphicon-list-alt',
-                                'withtarget' => true,
-                                'category'   => 'modulateur',
-                            ],
-                            'etape-centres-couts' => [
-                                'label'      => "Paramétrer les centres de coûts",
-                                'title'      => "Paramétrer les centres de coûts liés à cette formation",
-                                'route'      => 'of/etape/centres-couts',
-                                'resource'   => 'controller/Application\Controller\OffreFormation\EtapeCentreCout:saisir',
-                                'visible'    => false,
-                                'icon'       => 'glyphicon glyphicon-euro',
-                                'withtarget' => true,
-                                'category'   => 'centres-couts',
-                            ],
-                        ],
+                        'resource' => Util::actionToResource('Application\Controller\OffreFormation', 'index'),
                     ],
                 ],
             ],
         ],
     ],
     'bjyauthorize'    => [
-        'guards' => [
+        'guards'             => [
+            'Application\Guard\PrivilegeController' => [
+                [
+                    'controller' => 'Application\Controller\OffreFormation',
+                    'action'     => ['index'],
+                    'privileges' => Privilege::ODF_VISUALISATION,
+                ],
+                [
+                    'controller' => 'Application\Controller\OffreFormation',
+                    'action'     => ['export'],
+                    'privileges' => Privilege::ODF_EXPORT_CSV,
+                ],
+            ],
             'BjyAuthorize\Guard\Controller' => [
                 /**
                  * OffreFormation
@@ -291,22 +206,17 @@ return [
                     'action'     => ['search-structures', 'search-niveaux'],
                     'roles'      => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                 ],
-                [
-                    'controller' => 'Application\Controller\OffreFormation',
-                    'action'     => ['index', 'export'],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                ],
                 /**
                  * Etape
                  */
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
-                    'action'     => ['voir', 'apercevoir', 'search'],
-                    'roles'      => ['user'],
+                    'action'     => ['voir', 'search'],
+                    'roles'      => [R_ROLE],
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
-                    'action'     => ['ajouter', 'modifier', 'supprimer'],
+                    'action'     => ['saisir', 'supprimer'],
                     'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                 ],
                 /**
@@ -314,12 +224,12 @@ return [
                  */
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
-                    'action'     => ['voir', 'apercevoir', 'search', 'getPeriode'],
+                    'action'     => ['voir', 'search', 'getPeriode'],
                     'roles'      => [R_ROLE],
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
-                    'action'     => ['ajouter', 'modifier', 'supprimer'],
+                    'action'     => ['saisir', 'supprimer'],
                     'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                 ],
                 /**
@@ -337,6 +247,36 @@ return [
                     'controller' => 'Application\Controller\OffreFormation\EtapeCentreCout',
                     'action'     => ['saisir'],
                     'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                ],
+            ],
+        ],
+        'resource_providers' => [
+            'BjyAuthorize\Provider\Resource\Config' => [
+                'ElementPedagogique' => [],
+                'Etape'              => [],
+            ],
+        ],
+        'rule_providers'     => [
+            'Application\Provider\Rule\PrivilegeRuleProvider' => [
+                'allow' => [
+                    [
+                        'privileges' => Privilege::ODF_ELEMENT_VISUALISATION,
+                        'resources'  => ['ElementPedagogique', 'Structure'],
+                    ],
+                    [
+                        'privileges' => Privilege::ODF_ELEMENT_EDITION,
+                        'resources'  => ['ElementPedagogique', 'Structure'],
+                        'assertion'  => 'AssertionOffreDeFormation',
+                    ],
+                    [
+                        'privileges' => Privilege::ODF_ETAPE_VISUALISATION,
+                        'resources'  => ['Etape', 'Structure'],
+                    ],
+                    [
+                        'privileges' => Privilege::ODF_ETAPE_EDITION,
+                        'resources'  => ['Etape', 'Structure'],
+                        'assertion'  => 'AssertionOffreDeFormation',
+                    ],
                 ],
             ],
         ],
@@ -366,6 +306,7 @@ return [
             'FormElementPedagogiqueRechercheHydrator' => 'Application\\Form\\OffreFormation\\ElementPedagogiqueRechercheHydrator',
             'ElementModulateursFormHydrator'          => 'Application\\Form\\OffreFormation\\ElementModulateursHydrator',
             'EtapeModulateursFormHydrator'            => 'Application\\Form\\OffreFormation\\EtapeModulateursHydrator',
+            'AssertionOffreDeFormation'               => 'Application\Assertion\OffreDeFormationAssertion',
         ],
     ],
     'form_elements'   => [

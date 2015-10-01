@@ -140,6 +140,7 @@ class PaiementController extends AbstractActionController
             }
 
             $qb = $this->getServiceIntervenant()->finderByMiseEnPaiement($structure, $periode);
+            $this->getServiceIntervenant()->finderByAnnee( $this->getServiceContext()->getAnnee(), $qb );
             $this->getServiceMiseEnPaiement()->finderByTypeIntervenant($typeIntervenant, $qb);
             $this->getServiceMiseEnPaiement()->finderByEtat($etat, $qb);
             $rechercheForm->populateIntervenants($this->getServiceIntervenant()->getList($qb));
@@ -194,7 +195,7 @@ class PaiementController extends AbstractActionController
         $htmlTitle .= ucfirst($structure->getLibelleLong());
 
         if ($periode) {
-            $htmlTitle .= '<br />Paye du mois de ' . lcfirst($periode->getLibelleLong());
+            $htmlTitle .= '<br />Paye du mois de ' . lcfirst($periode->getLibelleAnnuel($this->getServiceContext()->getAnnee()));
         }
 
         $exp->setHeaderTitle($htmlTitle)
@@ -286,11 +287,12 @@ class PaiementController extends AbstractActionController
 
             return compact('types');
         } elseif (empty($periode)) {
+            $annee = $this->getServiceContext()->getAnnee();
             $qb = $this->getServicePeriode()->finderByMiseEnPaiement();
             $this->getServiceMiseEnPaiement()->finderByEtat(MiseEnPaiement::MIS_EN_PAIEMENT, $qb);
             $periodes = $this->getServicePeriode()->getList($qb);
 
-            return compact('type', 'periodes');
+            return compact('type', 'periodes', 'annee');
         } else {
             $recherche = new MiseEnPaiementRecherche;
             $recherche->setPeriode($periode);
@@ -312,7 +314,7 @@ class PaiementController extends AbstractActionController
             foreach ($data as $d) {
                 $csvModel->addLine($d);
             }
-            $csvModel->setFilename('ose-export-winpaie-' . strtolower($recherche->getPeriode()) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv');
+            $csvModel->setFilename(str_replace( ' ', '_', 'ose-export-winpaie-' . strtolower($recherche->getPeriode()->getLibelleAnnuel($this->getServiceContext()->getAnnee())) . '-' . strtolower($recherche->getTypeIntervenant()->getLibelle()) . '.csv'));
 
             return $csvModel;
         }

@@ -24,6 +24,9 @@ class OffreDeFormationAssertion extends AbstractAssertion
     {
         if (!$role instanceof Role) return false;
 
+        /* @var $role \Application\Entity\Db\Role */
+        if (! $this->acl->isAllowed($role,'privilege/'.$privilege)) return false;
+
         if ($entity instanceof ElementPedagogique) {
             switch ($privilege) {
                 case Privilege::ODF_ELEMENT_EDITION:

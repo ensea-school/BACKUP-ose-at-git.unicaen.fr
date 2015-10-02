@@ -63,6 +63,24 @@ class Role extends NamedRole
 
 
 
+    /**
+     * Détermine si le rôle courant possède un privilège ou non
+     *
+     * @param $privilege
+     *
+     * @return bool
+     */
+    public function hasPrivilege($privilege)
+    {
+        if ($this->dbRole) {
+            return $this->dbRole->hasPrivilege($privilege);
+        } else {
+            return false;
+        }
+    }
+
+
+
     public function __construct($id = self::ROLE_ID, $parent = 'user', $name = 'Rôle', $description = null, $selectable = true)
     {
         parent::__construct($id, $parent, $name, $description, $selectable);

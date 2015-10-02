@@ -184,7 +184,7 @@ $this->placeholder('export-of-link')->captureEnd();
         <div class="panel panel-default">
             <div class="panel-heading">
                 Formation
-                <?php echo $this->etape($etape)->renderAjouterLink('<span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
+                <?php if ($this->isAllowed($structure,\Application\Entity\Db\Privilege::ODF_ETAPE_EDITION)) echo $this->etape($etape)->renderAjouterLink('<span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn-xs', 'style' => 'float:right']) ?>
             </div>
             <div class="panel-body">
                 Cliquez sur la formation dont vous voulez voir les enseignements...

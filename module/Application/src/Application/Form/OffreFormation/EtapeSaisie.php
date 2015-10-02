@@ -43,6 +43,7 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
         $hydrator->setServiceStructure($this->getServiceStructure());
         $hydrator->setServiceTypeFormation($this->getServiceTypeFormation());
         $this->setHydrator($hydrator);
+        $this->setAttribute('class', 'etape-saisie');
 
         /* construction du formulaire */
         $this->add([
@@ -65,6 +66,10 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
             'name'    => 'type-formation',
             'options' => [
                 'label' => 'Type de formation',
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
             ],
             'type'    => 'Select',
         ]);
@@ -90,6 +95,10 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
             'options' => [
                 'label' => 'Structure',
             ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
+            ],
             'type'    => 'Select',
         ]);
 
@@ -97,6 +106,10 @@ class EtapeSaisie extends Form implements InputFilterProviderInterface, ServiceL
             'name'    => 'domaine-fonctionnel',
             'options' => [
                 'label' => 'Domaine fonctionnel',
+            ],
+            'attributes' => [
+                'class' => 'selectpicker',
+                'data-live-search' => 'true'
             ],
             'type'    => 'Select',
         ]);

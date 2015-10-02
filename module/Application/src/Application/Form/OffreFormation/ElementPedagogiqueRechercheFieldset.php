@@ -41,7 +41,7 @@ class ElementPedagogiqueRechercheFieldset extends Fieldset implements InputFilte
     public function init()
     {
         $url = $this->getServiceLocator()->getServiceLocator()->get('viewhelpermanager')->get('url');
-        /* @var $url Zend\View\Helper\Url */
+        /* @var $url \Zend\View\Helper\Url */
 
         $this->setHydrator($this->getServiceLocator()->getServiceLocator()->get('FormElementPedagogiqueRechercheHydrator'))
              ->setAllowedObjectBindingClass('Application\Entity\Db\ElementPedagogique');

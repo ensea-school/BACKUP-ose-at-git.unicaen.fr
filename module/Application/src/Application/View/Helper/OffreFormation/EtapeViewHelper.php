@@ -3,6 +3,7 @@
 namespace Application\View\Helper\OffreFormation;
 
 use Application\Entity\Db\Etape as Entity;
+use Application\Entity\Db\Privilege;
 use Application\Traits\EtapeAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait as ServiceEtapeAwareTrait;
 use Application\Util;
@@ -100,9 +101,9 @@ class EtapeViewHelper extends AbstractHtmlElement implements ServiceLocatorAware
         $html = $this->renderDescription();
 
         $buttons = '';
-        if ($this->getServiceEtape()->canSave($entity)) {
-            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
-            $buttons .= '<a class="btn btn-default" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
+        if ($this->getView()->isAllowed($entity,Privilege::ODF_ETAPE_EDITION)){
+            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '" data-event="etape-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
+            $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
         }
 
         if ($buttons) {
@@ -141,13 +142,12 @@ class EtapeViewHelper extends AbstractHtmlElement implements ServiceLocatorAware
 
     public function renderAjouterLink($content='', $attributes = [])
     {
-        if (!$this->getServiceEtape()->canAdd(false)) return '';
-
         if (!$content) $content = '<span class="glyphicon glyphicon-plus"></span> Ajouter une formation';
 
         $default = [
             'href'  => $this->getView()->url('of/etape/ajouter'),
             'class' => ['etape-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default'],
+            'data-event' => 'etape-ajouter',
             'title' => 'Ajouter une formation',
         ];
 

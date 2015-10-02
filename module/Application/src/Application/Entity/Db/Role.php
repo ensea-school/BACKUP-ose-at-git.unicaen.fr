@@ -220,4 +220,25 @@ class Role implements HistoriqueAwareInterface, RoleInterface
     {
         return $this->privilege;
     }
+
+
+
+    /**
+     * @param Privilege|string $privilege
+     *
+     * @return boolean
+     */
+    public function hasPrivilege( $privilege )
+    {
+        if ($privilege instanceof Privilege){
+            return $this->getPrivilege()->contains($privilege);
+        }else{
+            $privileges = $this->getPrivilege();
+            /* @var $privileges Privilege[] */
+            foreach( $privileges as $priv ){
+                if ($priv->getFullCode() === $privilege) return true;
+            }
+            return false;
+        }
+    }
 }

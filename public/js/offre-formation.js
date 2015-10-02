@@ -291,88 +291,45 @@ $(function ()
 
 
 
-/***************************************************************************************************************************************************
- Offre de formation
- /***************************************************************************************************************************************************/
+/**
+ * etapeSaisie
+ */
+$.widget("ose.etapeSaisie", {
 
-//$("body").on("etape-after-suppression", function(event, data) {
-//    window.history.back();
-//});
+    onAjouter: function(event)
+    {
+        window.location = updateQueryStringParameter(window.location.href, "etape", this.getId());
+    },
 
-function Etape(id)
+    onModifier: function(event)
+    {
+        window.location = updateQueryStringParameter(window.location.href, "etape", this.getId());
+    },
+
+    getId: function()
+    {
+        return this.element.find('input[name=id]').val();
+    }
+});
+
+$(function ()
 {
-
-    this.id = id;
-
-    this.onAfterAdd = function ()
-    {
-//        $.get( Etape.voirLigneUrl + "/" + this.id, function( data ) {
-//            $("#etape-" + this.id + "-ligne").refresh();
-//            $('#etapes > tbody:last').append(data);
-//        });
-        window.location = updateQueryStringParameter(window.location.href, "etape", this.id);
-    }
-
-    this.onAfterModify = function ()
-    {
-//        $( "#etape-"+this.id+"-ligne" ).refresh( {details:details} );
-        window.location = updateQueryStringParameter(window.location.href, "etape", this.id);
-    }
-
-    this.onAfterDelete = function ()
-    {
-//        $( "#etape-"+this.id+"-ligne" ).fadeOut().remove();
+    WidgetInitializer.add('etape-saisie', 'etapeSaisie');
+    $("body").on("etape-ajouter", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        event.div.find('.etape-saisie').etapeSaisie();
+        event.div.find('.etape-saisie').etapeSaisie('onAjouter', event);
+    });
+    $("body").on("etape-modifier", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
+        event.div.find('.etape-saisie').etapeSaisie();
+        event.div.find('.etape-saisie').etapeSaisie('onModifier', event);
+    });
+    $("body").on("etape-supprimer", function(event, data) {
+        event.div.modal('hide'); // ferme la fenêtre modale
         window.location.reload();
-    }
-}
-
-Etape.get = function (id)
-{
-    if (null == Etape.services) Etape.services = new Array();
-    if (null == Etape.services[id]) Etape.services[id] = new Etape(id);
-    return Etape.services[id];
-}
-
-Etape.init = function (voirLigneUrl)
-{
-    Etape.voirLigneUrl = voirLigneUrl;
-
-    $("body").on("event-of-etape-ajouter", function (event, data)
-    {
-        var id = null;
-        event.div.modal('hide'); // ferme la fenêtre modale
-        for (i in data) {
-            if (data[i].name === 'id') {
-                id = data[i].value;
-                break;
-            }
-        }
-        if (id) {
-            Etape.get(id).onAfterAdd();
-        }
     });
-
-    $("body").on("event-of-etape-modifier", function (event, data)
-    {
-        var id = null;
-        event.div.modal('hide'); // ferme la fenêtre modale
-        for (i in data) {
-            if (data[i].name === 'id') {
-                id = data[i].value;
-                break;
-            }
-        }
-        if (id) {
-            Etape.get(id).onAfterModify();
-        }
-    });
-
-    $("body").on("event-of-etape-supprimer", function (event, data)
-    {
-        event.div.modal('hide'); // ferme la fenêtre modale
-        Etape.get(event.a.data('id')).onAfterDelete();
-    });
-}
+});
 
 
 
@@ -392,10 +349,6 @@ $.widget("ose.elementPedagogiqueSaisie", {
     {
         window.location.reload();
     },
-
-    _create: function (){
-
-    }
 
 });
 

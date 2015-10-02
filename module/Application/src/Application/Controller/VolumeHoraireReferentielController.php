@@ -4,7 +4,6 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\RuntimeException;
-use Common\Exception\LogicException;
 use Application\Exception\DbException;
 
 /**
@@ -23,12 +22,9 @@ class VolumeHoraireReferentielController extends AbstractActionController
 
     public function listeAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\VolumeHoraireReferentiel'
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\VolumeHoraireReferentiel'
+        ]);
         $service = $this->context()->serviceReferentielFromRoute('id');
         if (! $service) throw new RuntimeException("Service non spécifié ou introuvable.");
 
@@ -41,12 +37,9 @@ class VolumeHoraireReferentielController extends AbstractActionController
 
     public function saisieAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\VolumeHoraireReferentiel'
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\VolumeHoraireReferentiel'
+        ]);
         $service           = $this->context()->serviceReferentielFromRoute(); /* @var $service \Application\Entity\Db\ServiceReferentiel */
         $typeVolumehoraire = $this->context()->typeVolumeHoraireFromQueryPost('type-volume-horaire');
         $errors = [];

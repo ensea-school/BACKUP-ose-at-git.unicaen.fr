@@ -86,6 +86,12 @@ class EtapeController extends AbstractActionController
 
     public function voirAction()
     {
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\ElementPedagogique',
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            'Application\Entity\Db\ElementPedagogique',
+        ]);
         $etape        = $this->getEvent()->getParam('etape');
         $title        = 'Formation';
         $serviceEtape = $this->getServiceEtape();

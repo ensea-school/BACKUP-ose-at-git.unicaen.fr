@@ -102,13 +102,10 @@ abstract class AttenteDemandeMepAbstractIndicateurImpl extends AbstractIntervena
      */
     protected function initFilters()
     {
-        $this->getEntityManager()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Structure',
-                'Application\Entity\Db\Intervenant',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->getEntityManager()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\Structure',
+            'Application\Entity\Db\Intervenant',
+        ]);
     }
 
     /**

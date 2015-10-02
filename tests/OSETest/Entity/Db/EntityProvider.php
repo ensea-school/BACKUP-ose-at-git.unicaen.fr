@@ -170,8 +170,6 @@ class EntityProvider
 
         Asset::setSource($this->getSource());
 
-        $this->getEntityManager()->getFilters()->enable('historique');
-
         // recherche du pseudo-utilisateur OSE
         if (!($param = $this->getEntityManager()->getRepository("Application\Entity\Db\Parametre")->findOneByNom($nom = 'oseuser'))) {
             throw new RuntimeException("Paramètre '$nom' introuvable.");

@@ -74,16 +74,13 @@ class DossierController extends AbstractActionController implements WorkflowInte
      */
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Intervenant',
-                'Application\Entity\Db\IntervenantExterieur',
-                'Application\Entity\Db\Validation',
-                'Application\Entity\Db\TypeValidation',
-                'Application\Entity\Db\Dossier',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\Intervenant',
+            'Application\Entity\Db\IntervenantExterieur',
+            'Application\Entity\Db\Validation',
+            'Application\Entity\Db\TypeValidation',
+            'Application\Entity\Db\Dossier',
+        ]);
     }
 
     /**

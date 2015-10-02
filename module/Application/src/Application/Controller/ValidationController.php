@@ -85,18 +85,15 @@ class ValidationController extends AbstractActionController
      */
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Validation',
-                'Application\Entity\Db\TypeValidation',
-                'Application\Entity\Db\Dossier',
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\VolumeHoraire',
-                'Application\Entity\Db\ServiceReferentiel',
-                'Application\Entity\Db\VolumeHoraireReferentiel',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\Validation',
+            'Application\Entity\Db\TypeValidation',
+            'Application\Entity\Db\Dossier',
+            'Application\Entity\Db\Service',
+            'Application\Entity\Db\VolumeHoraire',
+            'Application\Entity\Db\ServiceReferentiel',
+            'Application\Entity\Db\VolumeHoraireReferentiel',
+        ]);
     }
 
     /**

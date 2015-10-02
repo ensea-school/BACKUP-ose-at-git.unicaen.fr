@@ -59,13 +59,6 @@ class RoleProvider implements ProviderInterface, EntityManagerAwareInterface
 
 
 
-    public function init()
-    {
-        $this->getEntityManager()->getFilters()->enable('historique');
-    }
-
-
-
     /**
      * @return RoleInterface[]
      */

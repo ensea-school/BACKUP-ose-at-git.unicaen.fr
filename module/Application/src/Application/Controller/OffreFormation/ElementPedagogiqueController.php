@@ -22,13 +22,10 @@ class ElementPedagogiqueController extends AbstractActionController
 
     public function voirAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\CheminPedagogique',
-                'Application\Entity\Db\VolumeHoraire',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\CheminPedagogique',
+            'Application\Entity\Db\VolumeHoraire',
+        ]);
         $element = $this->getEvent()->getParam('elementPedagogique');
         $title   = "Enseignement";
 
@@ -118,12 +115,9 @@ class ElementPedagogiqueController extends AbstractActionController
      */
     public function searchAction()
     {
-        $this->em()->getFilters()->enable('annee')->init(
-            [
-                'Application\Entity\Db\ElementPedagogique',
-            ],
-            $this->getServiceContext()->getAnnee()
-        );
+        $this->em()->getFilters()->enable('annee')->init([
+            'Application\Entity\Db\ElementPedagogique',
+        ]);
 
         $structure = $this->context()->structureFromQuery();
         $niveau    = $this->context()->niveauFromQuery();

@@ -23,27 +23,29 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertEntity(Acl $acl, RoleInterface $role = null, ResourceInterface $entity = null, $privilege = null)
     {
         if (!$role instanceof Role) return false;
-
-        /* @var $role \Application\Entity\Db\Role */
-        if (! $this->acl->isAllowed($role,'privilege/'.$privilege)) return false;
+        if (!$this->acl->isAllowed($role, 'privilege/' . $privilege)) return false;
 
         if ($entity instanceof ElementPedagogique) {
             switch ($privilege) {
                 case Privilege::ODF_ELEMENT_EDITION:
                     return $this->assertElementPedagogiqueSaisie($role, $entity);
             }
-        }elseif ($entity instanceof Etape) {
+        } elseif ($entity instanceof Etape) {
             switch ($privilege) {
                 case Privilege::ODF_ETAPE_EDITION:
                     return $this->assertEtapeSaisie($role, $entity);
+                case Privilege::ODF_CENTRES_COUT_EDITION:
+                    return $this->assertEtapeSaisieCentresCouts($role, $entity);
             }
-        }elseif($entity instanceof Structure){
+        } elseif ($entity instanceof Structure) {
             switch ($privilege) {
                 case Privilege::ODF_ETAPE_EDITION:
                 case Privilege::ODF_ELEMENT_EDITION:
+                case Privilege::ODF_CENTRES_COUT_EDITION:
                     return $this->assertStructureSaisie($role, $entity);
             }
         }
+
         return true;
     }
 
@@ -60,7 +62,15 @@ class OffreDeFormationAssertion extends AbstractAssertion
     protected function assertEtapeSaisie(Role $role, Etape $etape)
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
-            && $this->assertSourceSaisie($etape->getSource());
+        && $this->assertSourceSaisie($etape->getSource());
+    }
+
+
+
+    protected function assertEtapeSaisieCentresCouts(Role $role, Etape $etape)
+    {
+        return $this->assertStructureSaisie($role, $etape->getStructure())
+        && $etape->getElementPedagogique()->count() > 0;
     }
 
 
@@ -70,6 +80,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
         if ($rs = $role->getStructure()) {
             return $rs === $structure;
         }
+
         return true;
     }
 

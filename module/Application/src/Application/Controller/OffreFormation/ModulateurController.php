@@ -21,18 +21,12 @@ class ModulateurController extends AbstractActionController
 
     protected function saisirAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\ElementModulateur'
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
-        $this->em()->getFilters()->enable('annee')->init(
-            [
-                'Application\Entity\Db\ElementPedagogique'
-            ],
-            $this->getServiceContext()->getAnnee()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\ElementModulateur'
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            'Application\Entity\Db\ElementPedagogique'
+        ]);
 
         $etape = $this->getEvent()->getParam('etape');
         /* @var $etape \Application\Entity\Db\Etape */

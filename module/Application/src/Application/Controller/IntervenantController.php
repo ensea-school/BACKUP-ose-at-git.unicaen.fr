@@ -132,8 +132,6 @@ class IntervenantController extends AbstractActionController implements Workflow
     {
         $role = $this->getServiceContext()->getSelectedIdentityRole();
 
-        $this->em()->getFilters()->enable('historique');
-
         if ($role instanceof \Application\Acl\IntervenantRole) {
             $intervenant = $role->getIntervenant();
         }
@@ -153,8 +151,6 @@ class IntervenantController extends AbstractActionController implements Workflow
 
     public function apercevoirAction()
     {
-        $this->em()->getFilters()->enable('historique');
-
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
 
         $import = $this->getServiceLocator()->get('ImportProcessusImport');
@@ -169,13 +165,10 @@ class IntervenantController extends AbstractActionController implements Workflow
 
     public function voirHeuresCompAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\VolumeHoraire'
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\Service',
+            'Application\Entity\Db\VolumeHoraire'
+        ]);
 
         $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         /* @var $intervenant \Application\Entity\Db\Intervenant */

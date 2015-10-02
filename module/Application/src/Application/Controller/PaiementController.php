@@ -41,9 +41,7 @@ class PaiementController extends AbstractActionController
             'Application\Entity\Db\ServiceReferentiel',
             'Application\Entity\Db\VolumeHoraireReferentiel',
             'Application\Entity\Db\Validation',
-        ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        ]);
     }
 
 

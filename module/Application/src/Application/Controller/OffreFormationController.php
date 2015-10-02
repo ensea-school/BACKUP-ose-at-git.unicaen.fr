@@ -40,25 +40,17 @@ class OffreFormationController extends AbstractActionController
     protected function initFilters()
     {
         /* Mise en place des filtres */
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\TypeFormation',
-                'Application\Entity\Db\GroupeTypeFormation',
-                //'Application\Entity\Db\Structure',
-                'Application\Entity\Db\TypeModulateur',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
-        $this->em()->getFilters()->enable('annee')->init(
-            [
-                'Application\Entity\Db\ElementPedagogique',
-            ],
-            $this->getServiceContext()->getAnnee()
-        );
-        $this->em()->getFilters()->enable('etape')
-            ->setAnnee($this->getServiceContext()->getAnnee())
-            ->setDateObservation($this->getServiceContext()->getDateObservation());
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\ElementPedagogique',
+            'Application\Entity\Db\TypeFormation',
+            'Application\Entity\Db\GroupeTypeFormation',
+            //'Application\Entity\Db\Structure',
+            'Application\Entity\Db\TypeModulateur',
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            'Application\Entity\Db\ElementPedagogique',
+            'Application\Entity\Db\Etape',
+        ]);
     }
 
 
@@ -201,6 +193,7 @@ class OffreFormationController extends AbstractActionController
         list($structure, $niveau, $etape) = $this->getParams();
 
         $elements = $this->getNeep($structure, $niveau, $etape)[2];
+        /* @var $elements \Application\Entity\Db\ElementPedagogique[] */
 
         $csvModel = new \UnicaenApp\View\Model\CsvModel();
         $csvModel->setHeader([
@@ -211,10 +204,11 @@ class OffreFormationController extends AbstractActionController
             'Libellé enseignement',
             'Période',
             'FOAD',
-            'Régimes d\'inscription',
+            'Taux FI',
+            'Taux FA',
+            'Taux FC',
         ]);
         foreach ($elements as $element) {
-            /* @var $elements \Application\Entity\Db\ElementPedagogique */
             $etape = $element->getEtape();
             $csvModel->addLine([
                 $etape->getSourceCode(),
@@ -224,7 +218,9 @@ class OffreFormationController extends AbstractActionController
                 $element->getLibelle(),
                 $element->getPeriode(),
                 $element->getTauxFoad(),
-                $element->getRegimesInscription(),
+                $element->getTauxFi(),
+                $element->getTauxFa(),
+                $element->getTauxFc()
             ]);
         }
         $csvModel->setFilename('offre-de-formation.csv');

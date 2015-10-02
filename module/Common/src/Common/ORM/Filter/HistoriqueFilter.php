@@ -2,6 +2,7 @@
 
 namespace Common\ORM\Filter;
 
+use Application\Service\Traits\ContextAwareTrait;
 use Doctrine\ORM\Mapping\ClassMetaData;
 use Doctrine\ORM\Query\Filter\SQLFilter;
 
@@ -10,15 +11,12 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class HistoriqueFilter extends SQLFilter
+class HistoriqueFilter extends AbstractFilter
 {
+    use ContextAwareTrait;
+
     protected $enabledEntities = [];
 
-    /**
-     *
-     * @var \DateTime
-     */
-    protected $dateObservation = null;
 
 
     public function addFilterConstraint(ClassMetaData $targetEntity, $targetTableAlias)
@@ -28,91 +26,80 @@ class HistoriqueFilter extends SQLFilter
             return "";
         }
 
-        if (isset($this->enabledEntities[$targetEntity->name])){
-            if ($this->dateObservation){
-                $this->setParameter('date_observation', $this->dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);
-                return '1 = OSE_DIVERS.COMPRISE_ENTRE('.$targetTableAlias.'.HISTO_CREATION,'.$targetTableAlias.'.HISTO_DESTRUCTION, '.$this->getParameter('date_observation').')';
-            }else{
-                return '1 = OSE_DIVERS.COMPRISE_ENTRE('.$targetTableAlias.'.HISTO_CREATION,'.$targetTableAlias.'.HISTO_DESTRUCTION)';
+        if (isset($this->enabledEntities[$targetEntity->name])) {
+            $dateObservation = $this->getServiceContext()->getDateObservation();
+
+            if ($dateObservation) {
+                $this->setParameter('date_observation', $dateObservation, \Doctrine\DBAL\Types\Type::DATETIME);
+
+                return '1 = OSE_DIVERS.COMPRISE_ENTRE(' . $targetTableAlias . '.HISTO_CREATION,' . $targetTableAlias . '.HISTO_DESTRUCTION, ' . $this->getParameter('date_observation') . ')';
+            } else {
+                return '1 = OSE_DIVERS.COMPRISE_ENTRE(' . $targetTableAlias . '.HISTO_CREATION,' . $targetTableAlias . '.HISTO_DESTRUCTION)';
             }
-        }else{
+        } else {
             return '';
         }
     }
 
-    /**
-     * 
-     * @return \DateTime
-     */
-    function getDateObservation()
-    {
-        return $this->dateObservation;
-    }
 
-    /**
-     *
-     * @param \DateTime $dateObservation
-     * @return \Common\ORM\Filter\HistoriqueFilter
-     */
-    function setDateObservation(\DateTime $dateObservation=null)
-    {
-        $this->dateObservation = $dateObservation;
-        return $this;
-    }
 
     /**
      * Désactive le filtre pour une ou des entités données
      *
      * @param string|string[] $entity
+     *
      * @return self
      */
-    public function disableForEntity( $entity )
+    public function disableForEntity($entity)
     {
-        if (is_array($entity)){
-            foreach($entity as $e){
+        if (is_array($entity)) {
+            foreach ($entity as $e) {
                 unset($this->enabledEntities[$e]);
             }
-        }else{
+        } else {
             unset($this->enabledEntities[$entity]);
         }
+
         return $this;
     }
+
+
 
     /**
      * Active le filtre pour une ou des entités données
      *
      * @param string|string[] $entity
+     *
      * @return self
      */
     public function enableForEntity($entity)
     {
-        if (is_array($entity)){
-            foreach($entity as $e){
+        if (is_array($entity)) {
+            foreach ($entity as $e) {
                 $this->enabledEntities[$e] = true;
             }
-        }else{
+        } else {
             $this->enabledEntities[$entity] = true;
         }
+
         return $this;
     }
 
+
+
     /**
      * Initialisation rapide du filtre!!
-     * 
+     *
      * @param string|string[] $entity
-     * @param \DateTime|null $dateObservation
+     *
      * @return self
      */
-    public function init($entity, $dateObservation=null)
+    public function init($entity, $dateObservation = null)
     {
-        if ($entity){
+        if ($entity) {
             $this->enableForEntity($entity);
         }
-        if ($dateObservation){
-            $this->setDateObservation($dateObservation);
-        }else{
-            $this->setDateObservation();
-        }
+
         return $this;
     }
 }

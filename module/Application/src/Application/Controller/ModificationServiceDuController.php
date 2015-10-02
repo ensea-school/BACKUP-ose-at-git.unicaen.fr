@@ -23,10 +23,9 @@ class ModificationServiceDuController extends AbstractActionController
      */
     public function saisirAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
+        $this->em()->getFilters()->enable('historique')->init([
             'Application\Entity\Db\ModificationServiceDu',
-            $this->getServiceContext()->getDateObservation()
-        );
+        ]);
 
         $intervenant = $this->getEvent()->getParam('intervenant');
         $canEdit     = $this->isAllowed( $intervenant, \Application\Entity\Db\Privilege::MODIF_SERVICE_DU_EDITION );

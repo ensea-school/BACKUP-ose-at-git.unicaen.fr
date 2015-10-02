@@ -45,13 +45,10 @@ class ServiceController extends AbstractActionController
      */
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\VolumeHoraire',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\Service',
+            'Application\Entity\Db\VolumeHoraire',
+        ]);
     }
 
 

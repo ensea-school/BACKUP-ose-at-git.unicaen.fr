@@ -37,15 +37,12 @@ class ServiceReferentielController extends AbstractActionController
 
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\ServiceReferentiel',
-                'Application\Entity\Db\FonctionReferentiel',
-                'Application\Entity\Db\Structure',
-                'Application\Entity\Db\VolumeHoraireReferentiel',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\ServiceReferentiel',
+            'Application\Entity\Db\FonctionReferentiel',
+            'Application\Entity\Db\Structure',
+            'Application\Entity\Db\VolumeHoraireReferentiel',
+        ]);
     }
 
 

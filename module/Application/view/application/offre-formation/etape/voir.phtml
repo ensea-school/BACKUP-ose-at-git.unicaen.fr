@@ -14,7 +14,7 @@ $tabs = [
     ],
 ];
 
-if ($serviceEtape->canEditCentresCouts($etape)){
+if ($this->isAllowed($etape,\Application\Entity\Db\Privilege::ODF_CENTRES_COUT_EDITION)){
     $tabs[] = [
         'id'    => 'centres-couts',
         'label' => '<span class="glyphicon glyphicon-euro"></span> Centres de coûts',

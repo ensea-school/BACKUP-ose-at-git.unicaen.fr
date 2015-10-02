@@ -19,10 +19,15 @@ use Zend\Console\Request as ConsoleRequest;
 
 class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInterface
 {
+    /**
+     * @var ServiceLocatorInterface
+     */
+    public static $serviceLocator;
+
     public function onBootstrap(MvcEvent $e)
     {
         $sm = $e->getApplication()->getServiceManager();
-
+        self::$serviceLocator = $sm; // Hack pour les filtres Doctrine ! ! !
         if (!$e->getRequest() instanceof ConsoleRequest) {
             $this->injectPublicFiles($sm);
         }

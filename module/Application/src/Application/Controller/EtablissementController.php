@@ -56,10 +56,9 @@ class EtablissementController extends AbstractActionController
 
     public function rechercheAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
+        $this->em()->getFilters()->enable('historique')->init([
             'Application\Entity\Db\Etablissement',
-            $this->getServiceContext()->getDateObservation()
-        );
+        ]);
 
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel([]);

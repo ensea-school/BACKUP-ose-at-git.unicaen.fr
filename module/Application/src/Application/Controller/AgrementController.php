@@ -85,13 +85,10 @@ class AgrementController extends AbstractActionController implements WorkflowInt
      */
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Agrement',
-                'Application\Entity\Db\TypeAgrement',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\Agrement',
+            'Application\Entity\Db\TypeAgrement',
+        ]);
     }
 
     /**

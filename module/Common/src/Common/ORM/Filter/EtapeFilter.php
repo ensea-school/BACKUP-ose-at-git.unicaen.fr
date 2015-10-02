@@ -2,36 +2,31 @@
 
 namespace Common\ORM\Filter;
 
+use Application\Service\Traits\ContextAwareTrait;
 use Doctrine\ORM\Mapping\ClassMetaData;
-use Doctrine\ORM\Query\Filter\SQLFilter;
 
 /**
  * Description of EtapeFilter
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeFilter extends SQLFilter
+class EtapeFilter extends AbstractFilter
 {
-    use \Application\Traits\AnneeAwareTrait;
-
-    /**
-     *
-     * @var \DateTime
-     */
-    protected $dateObservation = null;
-
+    use ContextAwareTrait;
 
     public function addFilterConstraint(ClassMetaData $targetEntity, $targetTableAlias)
     {
         if ($targetEntity->name != 'Application\Entity\Db\Etape') return '';
 
+        $dateObservation = $this->getServiceContext()->getDateObservation();
+
         $sqldObs = '';
-        if ($this->dateObservation){
+        if ($dateObservation){
             $sqldObs = ', '.$this->getParameter('date_observation');
-            $this->setParameter('date_observation', $this->dateObservation);
+            $this->setParameter('date_observation', $dateObservation);
         }
 
-        $annee = $this->getAnnee()->getId();
+        $annee = $this->getServiceContext()->getAnnee()->getId();
 
         return "
           1 = OSE_DIVERS.COMPRISE_ENTRE($targetTableAlias.HISTO_CREATION,$targetTableAlias.HISTO_DESTRUCTION$sqldObs)
@@ -46,25 +41,5 @@ class EtapeFilter extends SQLFilter
               AND cp.etape_id = $targetTableAlias.id
               AND ep.annee_id = $annee
           )";
-    }
-
-    /**
-     *
-     * @return \DateTime
-     */
-    function getDateObservation()
-    {
-        return $this->dateObservation;
-    }
-
-    /**
-     *
-     * @param \DateTime $dateObservation
-     * @return \Common\ORM\Filter\HistoriqueFilter
-     */
-    function setDateObservation(\DateTime $dateObservation=null)
-    {
-        $this->dateObservation = $dateObservation;
-        return $this;
     }
 }

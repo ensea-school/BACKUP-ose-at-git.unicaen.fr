@@ -42,13 +42,10 @@ class IdentityProvider implements ServiceLocatorAwareInterface, ChainableProvide
 //        $session = $this->getSessionContainer();
 
 //        if (! isset($session->roles)) {
-            $this->getEntityManager()->getFilters()->enable('historique')->init(
-                [
-                    'Application\Entity\Db\Role',
-                    'Application\Entity\Db\Affectation',
-                ],
-                new \DateTime
-            );
+            $this->getEntityManager()->getFilters()->enable('historique')->init([
+                'Application\Entity\Db\Role',
+                'Application\Entity\Db\Affectation',
+            ]);
 
             $roles = [];
 

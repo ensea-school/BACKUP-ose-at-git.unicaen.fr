@@ -42,10 +42,9 @@ class RechercheController extends AbstractActionController
 
     public function intervenantFindAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
+        $this->em()->getFilters()->enable('historique')->init([
             'Application\Entity\Db\Intervenant',
-            $this->getServiceContext()->getDateObservation()
-        );
+        ]);
 
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel([]);
@@ -110,10 +109,9 @@ class RechercheController extends AbstractActionController
 
     public function personnelFindAction()
     {
-        $this->em()->getFilters()->enable('historique')->init(
+        $this->em()->getFilters()->enable('historique')->init([
             'Application\Entity\Db\Personnel',
-            $this->getServiceContext()->getDateObservation()
-        );
+        ]);
 
         if (!($term = $this->params()->fromQuery('term'))) {
             return new JsonModel([]);

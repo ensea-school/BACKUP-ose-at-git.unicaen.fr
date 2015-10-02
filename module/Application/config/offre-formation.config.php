@@ -277,6 +277,11 @@ return [
                         'resources'  => ['Etape', 'Structure'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
+                    [
+                        'privileges' => Privilege::ODF_CENTRES_COUT_EDITION,
+                        'resources'  => ['Etape', 'Structure'],
+                        'assertion'  => 'AssertionOffreDeFormation',
+                    ],
                 ],
             ],
         ],

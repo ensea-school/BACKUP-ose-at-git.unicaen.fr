@@ -26,14 +26,14 @@ class EtapeCentreCoutController extends AbstractActionController
      */
     protected function saisirAction()
     {
-        $this->em()->getFilters()->enable('annee')->init(
-            [
-                'Application\Entity\Db\ElementPedagogique',
-                'Application\Entity\Db\CentreCout',
-                'Application\Entity\Db\CentreCoutEp'
-            ],
-            $this->getServiceContext()->getAnnee()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\ElementPedagogique',
+            'Application\Entity\Db\CentreCout',
+            'Application\Entity\Db\CentreCoutEp'
+        ]);
+        $this->em()->getFilters()->enable('annee')->init([
+            'Application\Entity\Db\ElementPedagogique',
+        ]);
 
         $etape = $this->getEvent()->getParam('etape');
         /* @var $etape Etape */

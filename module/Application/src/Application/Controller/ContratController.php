@@ -42,16 +42,13 @@ class ContratController extends AbstractActionController
      */
     protected function initFilters()
     {
-        $this->em()->getFilters()->enable('historique')->init(
-            [
-                'Application\Entity\Db\Contrat',
-                'Application\Entity\Db\TypeContrat',
-                'Application\Entity\Db\Service',
-                'Application\Entity\Db\VolumeHoraire',
-                'Application\Entity\Db\Validation',
-            ],
-            $this->getServiceContext()->getDateObservation()
-        );
+        $this->em()->getFilters()->enable('historique')->init([
+            'Application\Entity\Db\Contrat',
+            'Application\Entity\Db\TypeContrat',
+            'Application\Entity\Db\Service',
+            'Application\Entity\Db\VolumeHoraire',
+            'Application\Entity\Db\Validation',
+        ]);
     }
 
     /**

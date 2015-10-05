@@ -10,7 +10,6 @@
     "require": {
         "unicaen/unicaen-app":                  "dev-trunk",
         "unicaen/unicaen-auth":                 "dev-trunk",
-        "unicaen/unicaen-ldap":                 "dev-trunk",
         "zendframework/zend-code":              "2.4.*",
         "zendframework/zend-form":              "2.4.*",
         "bjyoungblood/bjy-authorize":           "dev-master",

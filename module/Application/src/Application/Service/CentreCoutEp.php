@@ -3,7 +3,9 @@
 namespace Application\Service;
 
 use Application\Entity\Db\CentreCoutEp as CentreCoutEpEntity;
+use Application\Entity\Db\Privilege;
 use Application\Service\Traits\SourceAwareTrait;
+use BjyAuthorize\Exception\UnAuthorizedException;
 
 /**
  * Description of CentreCoutEp
@@ -34,6 +36,22 @@ class CentreCoutEp extends AbstractEntityService
         return 'ccep';
     }
 
+
+
+    /**
+     * Retourne une nouvelle entité de la classe donnée
+     *
+     * @return mixed
+     */
+    public function newEntity()
+    {
+        $entity = parent::newEntity();
+        $entity->setSource( $this->getServiceSource()->getOse() );
+        return $entity;
+    }
+
+
+
     /**
      * Sauvegarde un centre de coûts
      *
@@ -43,9 +61,10 @@ class CentreCoutEp extends AbstractEntityService
      */
     public function save($entity)
     {
-        if (! $entity->getSource()){
-            $entity->setSource( $this->getServiceSource()->getOse() );
+        if (! $this->getAuthorize()->isAllowed($entity,Privilege::ODF_CENTRES_COUT_EDITION)){
+            throw new UnAuthorizedException('Vous n\'avez pas les droits requis pour associer/dissocier un centre de coûts de cet enseignement');
         }
+
         if ( ! $entity->getSourceCode()
             && ($cc = $entity->getCentreCout())
             && ($th = $entity->getTypeHeures())

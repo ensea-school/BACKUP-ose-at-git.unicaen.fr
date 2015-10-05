@@ -839,7 +839,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
 
 
-    public function __debugInfo()
+    /*public function __debugInfo()
     {
         return [
             'id'         => $this->id,
@@ -847,7 +847,7 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
             'sourceCode' => $this->sourceCode,
             'libelle'    => $this->libelle,
         ];
-    }
+    }*/
 
 
 

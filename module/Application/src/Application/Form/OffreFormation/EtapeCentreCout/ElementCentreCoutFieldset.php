@@ -230,15 +230,21 @@ class ElementCentreCoutFieldsetHydrator implements HydratorInterface
                 /* @var $ccEp CentreCoutEp */
                 $element->removeCentreCoutEp($ccEp);
                 $this->getServiceCentreCoutEp()->delete($ccEp);
-            }
-            if ($creating) {
+            } elseif ($creating) {
                 $ccEp = $this->getServiceCentreCoutEp()->newEntity();
                 $cc = $this->getServiceCentreCout()->get($newCcId);
                 $ccEp
                     ->setCentreCout($cc)
                     ->setTypeHeures($th)
                     ->setElementPedagogique($element);
+                $element->addCentreCoutEp($ccEp);
                 $this->getServiceCentreCoutEp()->save($ccEp);
+            }elseif($ccEp = $element->getCentreCoutEp($th)->first()){ // modification d'un existant
+                if ($newCcId != $ccEp->getCentreCout()->getId()) {
+                    $cc = $this->getServiceCentreCout()->get($newCcId);
+                    $ccEp->setCentreCout($cc);
+                    $this->getServiceCentreCoutEp()->save($ccEp);
+                }
             }
         }
 

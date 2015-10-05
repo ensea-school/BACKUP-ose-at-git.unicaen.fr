@@ -74,7 +74,7 @@ class EtapeCentreCoutForm extends Form implements InputFilterProviderInterface, 
 
         $this->add([
             'name' => 'id',
-            'type' => 'Hidden'
+            'type' => 'Hidden',
         ]);
 
         $this->add([
@@ -147,15 +147,15 @@ class EtapeCentreCoutForm extends Form implements InputFilterProviderInterface, 
     public function getInputFilterSpecification()
     {
         $elements = $this->getEtape()->getElementPedagogique();
-        $filters = [];
+        $filters  = [];
         foreach ($this->getTypesHeures() as $th) {
             $filters[$th->getCode()] = [
-                'required' => false
+                'required' => false,
             ];
         }
         foreach ($elements as $element) {
             $filters['EL' . $element->getId()] = [
-                'required' => false
+                'required' => false,
             ];
         }
 
@@ -207,7 +207,7 @@ class EtapeCentreCoutForm extends Form implements InputFilterProviderInterface, 
     {
         if (!array_key_exists($th->getCode(), $this->centresCouts)) {
             $centresCout = [];
-            $elements = $this->getEtape()->getElementPedagogique();
+            $elements    = $this->getEtape()->getElementPedagogique();
             foreach ($elements as $element) {
                 $elFieldset = $this->get('EL' . $element->getId());
                 /* @var $elFieldset ElementCentreCoutFieldset */
@@ -283,7 +283,7 @@ class EtapeCentreCoutFormHydrator implements HydratorInterface
     public function extract($object)
     {
         $data = [
-            'id' => $object->getId()
+            'id' => $object->getId(),
         ];
 
         $elements = $object->getElementPedagogique();

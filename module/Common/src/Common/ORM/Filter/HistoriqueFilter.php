@@ -4,7 +4,6 @@ namespace Common\ORM\Filter;
 
 use Application\Service\Traits\ContextAwareTrait;
 use Doctrine\ORM\Mapping\ClassMetaData;
-use Doctrine\ORM\Query\Filter\SQLFilter;
 
 /**
  * Description of HistoriqueFilter

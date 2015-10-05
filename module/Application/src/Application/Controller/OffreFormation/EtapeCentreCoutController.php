@@ -48,6 +48,7 @@ class EtapeCentreCoutController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 $this->em()->flush();
+                $form->bind($etape); // on re-binde pour forcer la MAJ
             } else {
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }

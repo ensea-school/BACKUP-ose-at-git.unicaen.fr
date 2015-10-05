@@ -343,6 +343,8 @@ where rang = 1
         $entity = parent::newEntity();
         // toutes les entités créées ont OSE pour source!!
         $entity->setSource($this->getServiceSource()->getOse());
+        // on crée pour l'année courante
+        $entity->setAnnee($this->getServiceContext()->getAnnee());
 
         return $entity;
     }
@@ -374,10 +376,6 @@ where rang = 1
             $entity->addCheminPedagogique($cp);
 
             $this->getEntityManager()->persist($cp);
-        }
-
-        if (!$entity->getAnnee()) {
-            $entity->setAnnee($this->getServiceContext()->getAnnee());
         }
 
         $result = parent::save($entity);

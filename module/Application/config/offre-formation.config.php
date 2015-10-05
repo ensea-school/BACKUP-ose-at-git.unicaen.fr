@@ -197,7 +197,7 @@ return [
                     'privileges' => Privilege::ODF_EXPORT_CSV,
                 ],
             ],
-            'BjyAuthorize\Guard\Controller' => [
+            'BjyAuthorize\Guard\Controller'         => [
                 /**
                  * OffreFormation
                  */
@@ -254,6 +254,7 @@ return [
             'BjyAuthorize\Provider\Resource\Config' => [
                 'ElementPedagogique' => [],
                 'Etape'              => [],
+                'CentreCoutEp'       => [],
             ],
         ],
         'rule_providers'     => [
@@ -279,7 +280,7 @@ return [
                     ],
                     [
                         'privileges' => Privilege::ODF_CENTRES_COUT_EDITION,
-                        'resources'  => ['Etape', 'Structure'],
+                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'CentreCoutEp'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                 ],

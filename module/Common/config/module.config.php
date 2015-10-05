@@ -1,6 +1,6 @@
 <?php
 
-namespace Application;
+namespace Common;
 
 return [
     'doctrine'     => [
@@ -16,7 +16,6 @@ return [
                 ],
                 'filters'          => [
                     'historique' => 'Common\ORM\Filter\HistoriqueFilter',
-                    'etape'      => 'Common\ORM\Filter\EtapeFilter',
                     'annee'      => 'Common\ORM\Filter\AnneeFilter',
                 ],
             ],
@@ -35,8 +34,6 @@ return [
         'invokables'   => [
             'cartridge'       => 'Common\View\Helper\CartridgeViewHelper',
             'formButtonGroup' => 'Common\Form\View\Helper\FormButtonGroup',
-        ],
-        'initializers' => [
         ],
     ],
 ];

@@ -4,6 +4,7 @@ namespace Common\ORM\Filter;
 
 use Application\Module;
 use Doctrine\ORM\Query\Filter\SQLFilter;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Description of AbstractFilter
@@ -12,8 +13,11 @@ use Doctrine\ORM\Query\Filter\SQLFilter;
  */
 abstract class AbstractFilter extends SQLFilter
 {
-    protected function getServiceLocator()
+    use ServiceLocatorAwareTrait;
+
+    public function getServiceLocator()
     {
+        if ($this->serviceLocator) return $this->serviceLocator;
         return Module::$serviceLocator;
     }
 }

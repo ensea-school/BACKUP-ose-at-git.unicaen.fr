@@ -3,11 +3,12 @@
 namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * CentreCoutEp
  */
-class CentreCoutEp implements HistoriqueAwareInterface
+class CentreCoutEp implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
@@ -192,4 +193,17 @@ class CentreCoutEp implements HistoriqueAwareInterface
     {
         return $this->centreCout;
     }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'CentreCoutEp';
+    }
+
 }

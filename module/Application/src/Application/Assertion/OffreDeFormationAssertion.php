@@ -2,6 +2,7 @@
 
 namespace Application\Assertion;
 
+use Application\Entity\Db\CentreCoutEp;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Source;
@@ -29,6 +30,8 @@ class OffreDeFormationAssertion extends AbstractAssertion
             switch ($privilege) {
                 case Privilege::ODF_ELEMENT_EDITION:
                     return $this->assertElementPedagogiqueSaisie($role, $entity);
+                case Privilege::ODF_CENTRES_COUT_EDITION:
+                    return $this->assertElementPedagogiqueSaisieCentresCouts($role, $entity);
             }
         } elseif ($entity instanceof Etape) {
             switch ($privilege) {
@@ -43,6 +46,11 @@ class OffreDeFormationAssertion extends AbstractAssertion
                 case Privilege::ODF_ELEMENT_EDITION:
                 case Privilege::ODF_CENTRES_COUT_EDITION:
                     return $this->assertStructureSaisie($role, $entity);
+            }
+        } elseif($entity instanceof CentreCoutEp){
+            switch ($privilege) {
+                case Privilege::ODF_CENTRES_COUT_EDITION:
+                    return $this->assertCentreCoutEpSaisieCentresCouts($role, $entity);
             }
         }
 
@@ -71,6 +79,20 @@ class OffreDeFormationAssertion extends AbstractAssertion
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
         && $etape->getElementPedagogique()->count() > 0;
+    }
+
+
+
+    protected function assertCentreCoutEpSaisieCentresCouts(Role $role, CentreCoutEp $centreCoutEp)
+    {
+        return $this->assertElementPedagogiqueSaisieCentresCouts($role,$centreCoutEp->getElementPedagogique());
+    }
+
+
+
+    protected function assertElementPedagogiqueSaisieCentresCouts(Role $role, ElementPedagogique $elementPedagogique)
+    {
+        return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
     }
 
 

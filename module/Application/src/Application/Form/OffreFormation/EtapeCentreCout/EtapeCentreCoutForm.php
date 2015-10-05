@@ -113,7 +113,8 @@ class EtapeCentreCoutForm extends Form implements InputFilterProviderInterface, 
         $element
             ->setLabel($th->getLibelleCourt())
             ->setValueOptions(['' => '(Aucun)'] + $this->getServiceCentreCout()->formatCentresCouts($this->getCentresCouts($th)))
-            ->setAttribute('class', 'form-control type-heures header-select selectpicker');
+            ->setAttribute('class', 'form-control type-heures header-select selectpicker')
+            ->setAttribute('data-live-search', 'true');
 
         return $element;
     }

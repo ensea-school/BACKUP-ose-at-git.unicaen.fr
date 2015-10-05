@@ -2,8 +2,8 @@
 
 namespace Application\Controller\OffreFormation;
 
+use Application\Service\Traits\EtapeAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
-use Application\Service\ElementPedagogique as ElementPedagogiqueService;
 use Application\Exception\DbException;
 
 /**
@@ -16,27 +16,28 @@ use Application\Exception\DbException;
  */
 class ModulateurController extends AbstractActionController
 {
-    use \Application\Service\Traits\ElementPedagogiqueAwareTrait,
-        \Application\Service\Traits\ContextAwareTrait;
+    use EtapeAwareTrait;
+
+
 
     protected function saisirAction()
     {
         $this->em()->getFilters()->enable('historique')->init([
-            'Application\Entity\Db\ElementModulateur'
+            'Application\Entity\Db\ElementModulateur',
         ]);
         $this->em()->getFilters()->enable('annee')->init([
-            'Application\Entity\Db\ElementPedagogique'
+            'Application\Entity\Db\ElementPedagogique',
         ]);
 
         $etape = $this->getEvent()->getParam('etape');
         /* @var $etape \Application\Entity\Db\Etape */
 
-        if (! $etape){
+        if (!$etape) {
             throw new \Common\Exception\RuntimeException('La formation n\'a pas été spécifiée ou bien elle est invalide.');
         }
 
-        $form    = $this->getFormSaisie();
-        $errors  = [];
+        $form   = $this->getFormSaisie();
+        $errors = [];
 
         $form->bind($etape);
 
@@ -45,18 +46,13 @@ class ModulateurController extends AbstractActionController
             $form->setData($request->getPost());
             if ($form->isValid()) {
                 try {
-                    $elements = $etape->getElementPedagogique();
-                    foreach( $elements as $element ){
-                        if ($element->getHasChanged()){
-                            $this->getServiceElementPedagogique()->save($element);
-                        }
-                    }
-                }
-                catch (\Exception $e) {
+                    $this->getServiceEtape()->saveModulateurs($etape);
+                    $form->bind($etape); // forçage de rafraichissement de formulaire, je ne sais pas pouquoi il faut faire çà!!
+                } catch (\Exception $e) {
                     $e        = DbException::translate($e);
                     $errors[] = $e->getMessage();
                 }
-            }else{
+            } else {
                 $errors[] = 'La validation du formulaire a échoué. L\'enregistrement des données n\'a donc pas été fait.';
             }
         }
@@ -64,6 +60,8 @@ class ModulateurController extends AbstractActionController
 
         return compact('title', 'form', 'errors');
     }
+
+
 
     /**
      *

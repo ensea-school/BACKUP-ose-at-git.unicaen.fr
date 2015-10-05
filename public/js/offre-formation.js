@@ -192,21 +192,13 @@ $.widget("ose.etapeCentreCout", {
     {
         var that = this;
 
-        this.element.on("event-of-etape-centres-couts", function (event, data)
-        {
-            event.div.modal('hide'); // ferme la fenêtre modale
-        });
-
-        this.element.on("click", "button.form-set-value", function (e)
+        this.element.find("button.form-set-value").click( function (e)
         {
             var typeHeuresCode = $(this).data('code');
             var value = that.getElementEtapeSelect(typeHeuresCode).val();
             that.setFormValues(typeHeuresCode, value);
             e.stopPropagation();
         });
-
-        // Activation du SelectPicker
-        this.element.find('select.selectpicker').attr('data-live-search', 'true').selectpicker();
     },
 
     setFormValues: function (typeHeuresCode, value)
@@ -249,11 +241,6 @@ $.widget("ose.etapeModulateurs", {
     _create: function ()
     {
         var that = this;
-
-        /*$("body").on("event-of-etape-modulateurs", function (event, data)
-        {
-            event.div.modal('hide'); // ferme la fenêtre modale
-        });*/
 
         this.getElementElementSelects()
         this.element.find("button.form-set-value").click( function ()

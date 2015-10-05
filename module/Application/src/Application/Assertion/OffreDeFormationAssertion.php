@@ -3,6 +3,7 @@
 namespace Application\Assertion;
 
 use Application\Entity\Db\CentreCoutEp;
+use Application\Entity\Db\ElementModulateur;
 use Application\Entity\Db\ElementPedagogique;
 use Application\Entity\Db\Etape;
 use Application\Entity\Db\Source;
@@ -32,6 +33,8 @@ class OffreDeFormationAssertion extends AbstractAssertion
                     return $this->assertElementPedagogiqueSaisie($role, $entity);
                 case Privilege::ODF_CENTRES_COUT_EDITION:
                     return $this->assertElementPedagogiqueSaisieCentresCouts($role, $entity);
+                case Privilege::ODF_MODULATEURS_EDITION:
+                    return $this->assertElementPedagogiqueSaisieModulateurs($role, $entity);
             }
         } elseif ($entity instanceof Etape) {
             switch ($privilege) {
@@ -39,18 +42,26 @@ class OffreDeFormationAssertion extends AbstractAssertion
                     return $this->assertEtapeSaisie($role, $entity);
                 case Privilege::ODF_CENTRES_COUT_EDITION:
                     return $this->assertEtapeSaisieCentresCouts($role, $entity);
+                case Privilege::ODF_MODULATEURS_EDITION:
+                    return $this->assertEtapeSaisieModulateurs($role, $entity);
             }
         } elseif ($entity instanceof Structure) {
             switch ($privilege) {
                 case Privilege::ODF_ETAPE_EDITION:
                 case Privilege::ODF_ELEMENT_EDITION:
                 case Privilege::ODF_CENTRES_COUT_EDITION:
+                case Privilege::ODF_MODULATEURS_EDITION:
                     return $this->assertStructureSaisie($role, $entity);
             }
-        } elseif($entity instanceof CentreCoutEp){
+        } elseif ($entity instanceof CentreCoutEp) {
             switch ($privilege) {
                 case Privilege::ODF_CENTRES_COUT_EDITION:
                     return $this->assertCentreCoutEpSaisieCentresCouts($role, $entity);
+            }
+        } elseif ($entity instanceof ElementModulateur) {
+            switch ($privilege) {
+                case Privilege::ODF_MODULATEURS_EDITION:
+                    return $this->assertElementModulateurSaisieModulateurs($role, $entity);
             }
         }
 
@@ -59,6 +70,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
+    /* ---- Edition étapes & éléments ---- */
     protected function assertElementPedagogiqueSaisie(Role $role, ElementPedagogique $elementPedagogique)
     {
         return $this->assertStructureSaisie($role, $elementPedagogique->getStructure())
@@ -75,6 +87,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
+    /* ---- Centres de coûts ---- */
     protected function assertEtapeSaisieCentresCouts(Role $role, Etape $etape)
     {
         return $this->assertStructureSaisie($role, $etape->getStructure())
@@ -85,7 +98,7 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
     protected function assertCentreCoutEpSaisieCentresCouts(Role $role, CentreCoutEp $centreCoutEp)
     {
-        return $this->assertElementPedagogiqueSaisieCentresCouts($role,$centreCoutEp->getElementPedagogique());
+        return $this->assertElementPedagogiqueSaisieCentresCouts($role, $centreCoutEp->getElementPedagogique());
     }
 
 
@@ -97,6 +110,30 @@ class OffreDeFormationAssertion extends AbstractAssertion
 
 
 
+    /* ---- Modulateurs ---- */
+    protected function assertEtapeSaisieModulateurs(Role $role, Etape $etape)
+    {
+        return $this->assertStructureSaisie($role, $etape->getStructure())
+        && $etape->getElementPedagogique()->count() > 0;
+    }
+
+
+
+    protected function assertElementPedagogiqueSaisieModulateurs(Role $role, ElementPedagogique $elementPedagogique)
+    {
+        return $this->assertStructureSaisie($role, $elementPedagogique->getStructure());
+    }
+
+
+
+    protected function assertElementModulateurSaisieModulateurs(Role $role, CentreCoutEp $centreCoutEp)
+    {
+        return $this->assertElementPedagogiqueSaisieCentresCouts($role, $centreCoutEp->getElementPedagogique());
+    }
+
+
+
+    /* ---- Globaux ---- */
     protected function assertStructureSaisie(Role $role, Structure $structure)
     {
         if ($rs = $role->getStructure()) {

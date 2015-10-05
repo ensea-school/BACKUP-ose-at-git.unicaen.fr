@@ -6,6 +6,7 @@ use Application\Entity\Db\Privilege;
 use Application\Service\Traits\CheminPedagogiqueAwareTrait;
 use Application\Service\Traits\ElementModulateurAwareTrait;
 use Application\Service\Traits\SourceAwareTrait;
+use BjyAuthorize\Exception\UnAuthorizedException;
 use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\ElementPedagogique as ElementPedagogiqueEntity;
 use Application\Entity\Db\Annee as AnneeEntity;
@@ -362,7 +363,7 @@ where rang = 1
     public function save($entity)
     {
         if (! $this->getAuthorize()->isAllowed($entity,Privilege::ODF_ELEMENT_EDITION)){
-            throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cet enseignement.');
+            throw new UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cet enseignement.');
         }
 
         // si absence de chemin pédagogique, création du chemin
@@ -378,18 +379,7 @@ where rang = 1
             $this->getEntityManager()->persist($cp);
         }
 
-        $result = parent::save($entity);
-        /* Sauvegarde automatique des éléments-modulateurs associés */
-        $serviceElementModulateur = $this->getServiceElementModulateur();
-        if ($entity->getElementModulateur()) foreach ($entity->getElementModulateur() as $elementModulateur) {
-            if ($elementModulateur->getRemove()) {
-                $serviceElementModulateur->delete($elementModulateur);
-            } else {
-                $serviceElementModulateur->save($elementModulateur);
-            }
-        }
-
-        return $result;
+        return parent::save($entity);
     }
 
 

@@ -118,7 +118,8 @@ class ElementCentreCoutFieldset extends Fieldset implements InputFilterProviderI
         $element
             ->setLabel($th->getLibelleCourt())
             ->setValueOptions(['' => '(Aucun)'] + $this->getServiceCentreCout()->formatCentresCouts($this->getCentresCouts($th)))
-            ->setAttribute('class', 'type-heures selectpicker');
+            ->setAttribute('class', 'type-heures selectpicker')
+            ->setAttribute('data-live-search', 'true');
 
         return $element;
     }

@@ -134,7 +134,10 @@ class ElementPedagogiqueViewHelper extends AbstractHtmlElement
             $default['class'][] = 'bg-danger';
         }
 
-        return '<a ' . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . '</a>';
+        $tag = 'a';
+        if (! $this->getView()->isAllowed('privilege/'.Privilege::ODF_ELEMENT_VISUALISATION)) $tag = 'span';
+
+        return "<$tag " . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . "</$tag>";
     }
 
 

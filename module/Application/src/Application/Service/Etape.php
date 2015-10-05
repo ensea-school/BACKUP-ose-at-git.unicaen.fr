@@ -15,6 +15,7 @@ class Etape extends AbstractEntityService
 {
     use Traits\LocalContextAwareTrait;
     use Traits\SourceAwareTrait;
+    use Traits\ElementModulateurAwareTrait;
 
 
 
@@ -250,62 +251,61 @@ class Etape extends AbstractEntityService
      * public function canDelete(EtapeEntity $etape, $runEx=false)
      * {
      * return $this->canSave($etape,$runEx);
+     * }*
+     *
+     * public function canEditModulateurs($etape, $runEx = false)
+     * {
+     * if (!$etape instanceof EtapeEntity) {
+     * $etape = $this->get($etape);
+     * }
+     *
+     * $ir = $this->getServiceContext()->getSelectedIdentityRole();
+     * if ($ir instanceof \Application\Acl\ComposanteRole) {
+     * if ($etape->getStructure() != $ir->getStructure()) {
+     * return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour éditer les modulateurs de cette structure', $runEx);
+     * }
+     * } elseif ($ir->getRoleId() == \Application\Acl\Role::ROLE_ID || $ir->getRoleId() == 'user') {
+     * return $this->cannotDoThat('Vous n\'êtes pas autorisé à éditer de modulateurs', $runEx);
+     * } elseif ($ir instanceof \Application\Acl\IntervenantRole) {
+     * return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité d\'ajouter de modulateur', $runEx);
+     * }
+     *
+     * $stm = $this->getServiceLocator()->get('applicationTypeModulateur');
+     * /* @var $stm \Application\Service\TypeModulateur *
+     * if (0 === $stm->count($stm->finderByEtape($etape))) {
+     * return $this->cannotDoThat('Aucun modulateur ne peut être saisi sur cette étape', $runEx);
+     * }
+     *
+     * return true;
+     * }
+     *
+     *
+     *
+     * public function canEditCentresCouts($etape, $runEx = false)
+     * {
+     * if (!$etape instanceof EtapeEntity) {
+     * $etape = $this->get($etape);
+     * }
+     *
+     * $ir = $this->getServiceContext()->getSelectedIdentityRole();
+     * if ($ir instanceof \Application\Acl\ComposanteRole) {
+     * if ($etape->getStructure() != $ir->getStructure()) {
+     * return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour paramétrer les centres de coûts de cette structure', $runEx);
+     * }
+     * } elseif ($ir->getRoleId() == \Application\Acl\Role::ROLE_ID || $ir->getRoleId() == 'user') {
+     * return $this->cannotDoThat('Vous n\'êtes pas autorisé à paramétrer les centres de coûts', $runEx);
+     * } elseif ($ir instanceof \Application\Acl\IntervenantRole) {
+     * return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité de paramétrer les centres de coûts', $runEx);
+     * }
+     *
+     * //        $stm = $this->getServiceLocator()->get('applicationTypeModulateur');
+     * //        /* @var $stm \Application\Service\TypeModulateur *
+     * //        if (0 === $stm->count( $stm->finderByEtape($etape) ) ){
+     * //            return $this->cannotDoThat('Aucun modulateur ne peut être saisi sur cette étape', $runEx);
+     * //        }
+     *
+     * return true;
      * }*/
-
-    public function canEditModulateurs($etape, $runEx = false)
-    {
-        if (!$etape instanceof EtapeEntity) {
-            $etape = $this->get($etape);
-        }
-
-        $ir = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($ir instanceof \Application\Acl\ComposanteRole) {
-            if ($etape->getStructure() != $ir->getStructure()) {
-                return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour éditer les modulateurs de cette structure', $runEx);
-            }
-        } elseif ($ir->getRoleId() == \Application\Acl\Role::ROLE_ID || $ir->getRoleId() == 'user') {
-            return $this->cannotDoThat('Vous n\'êtes pas autorisé à éditer de modulateurs', $runEx);
-        } elseif ($ir instanceof \Application\Acl\IntervenantRole) {
-            return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité d\'ajouter de modulateur', $runEx);
-        }
-
-        $stm = $this->getServiceLocator()->get('applicationTypeModulateur');
-        /* @var $stm \Application\Service\TypeModulateur */
-        if (0 === $stm->count($stm->finderByEtape($etape))) {
-            return $this->cannotDoThat('Aucun modulateur ne peut être saisi sur cette étape', $runEx);
-        }
-
-        return true;
-    }
-
-
-
-    public function canEditCentresCouts($etape, $runEx = false)
-    {
-        if (!$etape instanceof EtapeEntity) {
-            $etape = $this->get($etape);
-        }
-
-        $ir = $this->getServiceContext()->getSelectedIdentityRole();
-        if ($ir instanceof \Application\Acl\ComposanteRole) {
-            if ($etape->getStructure() != $ir->getStructure()) {
-                return $this->cannotDoThat('Vous n\'avez pas les autorisations nécessaires pour paramétrer les centres de coûts de cette structure', $runEx);
-            }
-        } elseif ($ir->getRoleId() == \Application\Acl\Role::ROLE_ID || $ir->getRoleId() == 'user') {
-            return $this->cannotDoThat('Vous n\'êtes pas autorisé à paramétrer les centres de coûts', $runEx);
-        } elseif ($ir instanceof \Application\Acl\IntervenantRole) {
-            return $this->cannotDoThat('Les intervenants n\'ont pas la possibilité de paramétrer les centres de coûts', $runEx);
-        }
-
-//        $stm = $this->getServiceLocator()->get('applicationTypeModulateur');
-//        /* @var $stm \Application\Service\TypeModulateur */
-//        if (0 === $stm->count( $stm->finderByEtape($etape) ) ){
-//            return $this->cannotDoThat('Aucun modulateur ne peut être saisi sur cette étape', $runEx);
-//        }
-
-        return true;
-    }
-
 
 
     /**
@@ -343,10 +343,33 @@ class Etape extends AbstractEntityService
 
 
 
+    public function saveModulateurs(EtapeEntity $etape)
+    {
+        if (!$this->getAuthorize()->isAllowed($etape, Privilege::ODF_MODULATEURS_EDITION)) {
+            throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à enregistrer cette formation.');
+        }
+
+        $serviceElementModulateur = $this->getServiceElementModulateur();
+        $elements                 = $etape->getElementPedagogique()->toArray();
+        foreach ($elements as $element) {
+            if ($eemList = $element->getElementModulateur()) {
+                foreach ($eemList as $elementModulateur) {
+                    if ($elementModulateur->getRemove()) {
+                        $serviceElementModulateur->delete($elementModulateur);
+                    } else {
+                        $serviceElementModulateur->save($elementModulateur);
+                    }
+                }
+            }
+        }
+    }
+
+
+
     /**
      *
      * @param EtapeEntity $entity
-     * @param boolean $softDelete Simple historisation ou bien destruction pure et simple
+     * @param boolean     $softDelete Simple historisation ou bien destruction pure et simple
      *
      * @return self
      */
@@ -355,6 +378,7 @@ class Etape extends AbstractEntityService
         if (!$this->getAuthorize()->isAllowed($entity, Privilege::ODF_ETAPE_EDITION)) {
             throw new \UnAuthorizedException('Vous n\'êtes pas autorisé(e) à supprimer cette formation.');
         }
+
         return parent::delete($entity, $softDelete);
     }
 

@@ -3,11 +3,12 @@
 namespace Application\Entity\Db;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
 /**
  * ElementModulateur
  */
-class ElementModulateur implements HistoriqueAwareInterface
+class ElementModulateur implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
 
@@ -36,7 +37,7 @@ class ElementModulateur implements HistoriqueAwareInterface
 
 
     /**
-     * Détermine si le volume horaire a vocation à être supprimé ou non
+     * Détermine si l'entité a vocation à être supprimée ou non
      */
     public function setRemove($remove)
     {
@@ -118,6 +119,18 @@ class ElementModulateur implements HistoriqueAwareInterface
     public function getElement()
     {
         return $this->element;
+    }
+
+
+
+    /**
+     * Returns the string identifier of the Resource
+     *
+     * @return string
+     */
+    public function getResourceId()
+    {
+        return 'ElementModulateur';
     }
 
 }

@@ -186,9 +186,10 @@ return [
     'bjyauthorize'    => [
         'guards'             => [
             'Application\Guard\PrivilegeController' => [
+                /* Global */
                 [
                     'controller' => 'Application\Controller\OffreFormation',
-                    'action'     => ['index'],
+                    'action'     => ['index','search-structures', 'search-niveaux'],
                     'privileges' => Privilege::ODF_VISUALISATION,
                 ],
                 [
@@ -196,57 +197,39 @@ return [
                     'action'     => ['export'],
                     'privileges' => Privilege::ODF_EXPORT_CSV,
                 ],
-            ],
-            'BjyAuthorize\Guard\Controller'         => [
-                /**
-                 * OffreFormation
-                 */
-                [
-                    'controller' => 'Application\Controller\OffreFormation',
-                    'action'     => ['search-structures', 'search-niveaux'],
-                    'roles'      => [IntervenantRole::ROLE_ID, ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
-                ],
-                /**
-                 * Etape
-                 */
+                /* Etapes */
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => ['voir', 'search'],
-                    'roles'      => [R_ROLE],
+                    'privileges' => Privilege::ODF_ETAPE_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\Etape',
                     'action'     => ['saisir', 'supprimer'],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'privileges' => Privilege::ODF_ETAPE_EDITION,
                 ],
-                /**
-                 * ElementPedagogique
-                 */
+                /* Éléments pédagogiques */
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
-                    'action'     => ['voir', 'search', 'getPeriode'],
-                    'roles'      => [R_ROLE],
+                    'action'     => ['voir', 'search', 'getPeriode'], // getPeriode est utilisé pour la saisie de service!!!
+                    'privileges' => Privilege::ODF_ELEMENT_VISUALISATION,
                 ],
                 [
                     'controller' => 'Application\Controller\OffreFormation\ElementPedagogique',
                     'action'     => ['saisir', 'supprimer'],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'privileges' => Privilege::ODF_ELEMENT_VISUALISATION,
                 ],
-                /**
-                 * Modulateur
-                 */
+                /* Modulateurs */
                 [
                     'controller' => 'Application\Controller\OffreFormation\Modulateur',
                     'action'     => ['saisir'],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'privileges' => Privilege::ODF_MODULATEURS_EDITION,
                 ],
-                /**
-                 * Centre de Cout des Etapes
-                 */
+                /* Centres de coûts */
                 [
                     'controller' => 'Application\Controller\OffreFormation\EtapeCentreCout',
                     'action'     => ['saisir'],
-                    'roles'      => [ComposanteRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'privileges' => Privilege::ODF_CENTRES_COUT_EDITION,
                 ],
             ],
         ],
@@ -255,23 +238,16 @@ return [
                 'ElementPedagogique' => [],
                 'Etape'              => [],
                 'CentreCoutEp'       => [],
+                'ElementModulateur'  => [],
             ],
         ],
         'rule_providers'     => [
             'Application\Provider\Rule\PrivilegeRuleProvider' => [
                 'allow' => [
                     [
-                        'privileges' => Privilege::ODF_ELEMENT_VISUALISATION,
-                        'resources'  => ['ElementPedagogique', 'Structure'],
-                    ],
-                    [
                         'privileges' => Privilege::ODF_ELEMENT_EDITION,
                         'resources'  => ['ElementPedagogique', 'Structure'],
                         'assertion'  => 'AssertionOffreDeFormation',
-                    ],
-                    [
-                        'privileges' => Privilege::ODF_ETAPE_VISUALISATION,
-                        'resources'  => ['Etape', 'Structure'],
                     ],
                     [
                         'privileges' => Privilege::ODF_ETAPE_EDITION,
@@ -281,6 +257,11 @@ return [
                     [
                         'privileges' => Privilege::ODF_CENTRES_COUT_EDITION,
                         'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'CentreCoutEp'],
+                        'assertion'  => 'AssertionOffreDeFormation',
+                    ],
+                    [
+                        'privileges' => Privilege::ODF_MODULATEURS_EDITION,
+                        'resources'  => ['Etape', 'Structure', 'ElementPedagogique', 'ElementModulateur'],
                         'assertion'  => 'AssertionOffreDeFormation',
                     ],
                 ],
@@ -298,20 +279,20 @@ return [
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationElementPedagogique'           => 'Application\\Service\\ElementPedagogique',
-            'ApplicationCheminPedagogique'            => 'Application\\Service\\CheminPedagogique',
-            'ApplicationEtape'                        => 'Application\\Service\\Etape',
-            'ApplicationTypeFormation'                => 'Application\\Service\\TypeFormation',
-            'ApplicationGroupeTypeFormation'          => 'Application\\Service\\GroupeTypeFormation',
-            'ApplicationNiveauEtape'                  => 'Application\\Service\\NiveauEtape',
-            'ApplicationNiveauFormation'              => 'Application\\Service\\NiveauFormation',
-            'ApplicationModulateur'                   => 'Application\\Service\\Modulateur',
-            'ApplicationElementModulateur'            => 'Application\\Service\\ElementModulateur',
-            'ApplicationTypeModulateur'               => 'Application\\Service\\TypeModulateur',
-            'ApplicationDomaineFonctionnel'           => 'Application\\Service\\DomaineFonctionnel',
-            'FormElementPedagogiqueRechercheHydrator' => 'Application\\Form\\OffreFormation\\ElementPedagogiqueRechercheHydrator',
-            'ElementModulateursFormHydrator'          => 'Application\\Form\\OffreFormation\\ElementModulateursHydrator',
-            'EtapeModulateursFormHydrator'            => 'Application\\Form\\OffreFormation\\EtapeModulateursHydrator',
+            'ApplicationElementPedagogique'           => 'Application\Service\ElementPedagogique',
+            'ApplicationCheminPedagogique'            => 'Application\Service\CheminPedagogique',
+            'ApplicationEtape'                        => 'Application\Service\Etape',
+            'ApplicationTypeFormation'                => 'Application\Service\TypeFormation',
+            'ApplicationGroupeTypeFormation'          => 'Application\Service\GroupeTypeFormation',
+            'ApplicationNiveauEtape'                  => 'Application\Service\NiveauEtape',
+            'ApplicationNiveauFormation'              => 'Application\Service\NiveauFormation',
+            'ApplicationModulateur'                   => 'Application\Service\Modulateur',
+            'ApplicationElementModulateur'            => 'Application\Service\ElementModulateur',
+            'ApplicationTypeModulateur'               => 'Application\Service\TypeModulateur',
+            'ApplicationDomaineFonctionnel'           => 'Application\Service\DomaineFonctionnel',
+            'FormElementPedagogiqueRechercheHydrator' => 'Application\Form\OffreFormation\ElementPedagogiqueRechercheHydrator',
+            'ElementModulateursFormHydrator'          => 'Application\Form\OffreFormation\ElementModulateursHydrator',
+            'EtapeModulateursFormHydrator'            => 'Application\Form\OffreFormation\EtapeModulateursHydrator',
             'AssertionOffreDeFormation'               => 'Application\Assertion\OffreDeFormationAssertion',
         ],
     ],

@@ -101,7 +101,7 @@ class EtapeViewHelper extends AbstractHtmlElement implements ServiceLocatorAware
         $html = $this->renderDescription();
 
         $buttons = '';
-        if ($this->getView()->isAllowed($entity,Privilege::ODF_ETAPE_EDITION)){
+        if ($this->getView()->isAllowed($entity, Privilege::ODF_ETAPE_EDITION)) {
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/modifier', ['etape' => $entity->getId()]) . '" data-event="etape-modifier"><span class="glyphicon glyphicon-pencil"></span> Modifier</a>';
             $buttons .= '<a class="btn btn-default ajax-modal" href="' . $this->getView()->url('of/etape/supprimer', ['etape' => $entity->getId()]) . '" data-event="etape-supprimer"><span class="glyphicon glyphicon-trash"></span> Supprimer</a>';
         }
@@ -130,25 +130,29 @@ class EtapeViewHelper extends AbstractHtmlElement implements ServiceLocatorAware
             'id'    => $etape->getId(),
         ];
 
+
         if ($etape->getHistoDestruction() && 0 == $etape->getCheminPedagogique()->count()) {
             $default['title']   = 'Cette formation n\'existe plus';
             $default['class'][] = 'bg-danger';
         }
 
-        return '<a ' . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . '</a>';
+        $tag = 'a';
+        if (! $this->getView()->isAllowed('privilege/'.Privilege::ODF_ETAPE_VISUALISATION)) $tag = 'span';
+
+        return "<$tag " . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . "</$tag>";
     }
 
 
 
-    public function renderAjouterLink($content='', $attributes = [])
+    public function renderAjouterLink($content = '', $attributes = [])
     {
         if (!$content) $content = '<span class="glyphicon glyphicon-plus"></span> Ajouter une formation';
 
         $default = [
-            'href'  => $this->getView()->url('of/etape/ajouter'),
-            'class' => ['etape-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default'],
+            'href'       => $this->getView()->url('of/etape/ajouter'),
+            'class'      => ['etape-ajouter-link', 'ajax-modal', 'iconify', 'btn', 'btn-default'],
             'data-event' => 'etape-ajouter',
-            'title' => 'Ajouter une formation',
+            'title'      => 'Ajouter une formation',
         ];
 
         return '<a ' . $this->htmlAttribs(Util::mergeHtmlAttribs($default, $attributes)) . '>' . $content . '</a>';

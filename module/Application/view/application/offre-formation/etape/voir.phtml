@@ -22,7 +22,7 @@ if ($this->isAllowed($etape,\Application\Entity\Db\Privilege::ODF_CENTRES_COUT_E
     ];
 }
 
-if ($serviceEtape->canEditModulateurs($etape)){
+if ($this->isAllowed($etape,\Application\Entity\Db\Privilege::ODF_MODULATEURS_EDITION)){
     $tabs[] = [
         'id'    => 'modulateurs',
         'label' => '<span class="glyphicon glyphicon-list-alt"></span> Modulateurs',

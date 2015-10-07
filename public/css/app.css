@@ -154,10 +154,6 @@ h1.page-header {
     margin-top: 0;
 }
 
-.modal-dialog .modal-footer {
-    padding: 0px;
-    padding-top:.5em;
-}
 
 /* Autocomplete jQuery */
 .ui-autocomplete {

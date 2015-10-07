@@ -3,10 +3,11 @@
 namespace Application\Controller;
 
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\IntervenantAwareTrait;
 use Application\Service\Traits\PersonnelAwareTrait;
+use UnicaenCode\Util;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Application\Service\Intervenant as IntervenantService;
 
 /**
  * Description of RechercheController
@@ -18,6 +19,7 @@ class RechercheController extends AbstractActionController
 {
     use ContextAwareTrait;
     use PersonnelAwareTrait;
+    use IntervenantAwareTrait;
 
     public function intervenantAction()
     {
@@ -118,6 +120,7 @@ class RechercheController extends AbstractActionController
         }
 
         $qb        = $this->getServicePersonnel()->finderByTerm($term);
+        $this->getServicePersonnel()->join('applicationStructure', $qb, 'structure');
         $personnels  = $this->getServicePersonnel()->getList($qb);
 
         $result = [];
@@ -125,20 +128,11 @@ class RechercheController extends AbstractActionController
             $result[$personnel->getId()] = [
                 'id' => $personnel->getId(),
                 'label' => (string)$personnel,
+                'structure' => $personnel->getStructure()->getId(),
                 'template' => $personnel.' <small class="bg-info">n° '.$personnel->getSourceCode().', '.$personnel->getStructure().'</small>'
             ];
         };
 
         return new JsonModel($result);
-    }
-
-    /**
-     * Retourne le service Intervenant.
-     *
-     * @return IntervenantService
-     */
-    protected function getServiceIntervenant()
-    {
-        return $this->getServiceLocator()->get('applicationIntervenant');
     }
 }

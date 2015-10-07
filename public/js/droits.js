@@ -4,32 +4,34 @@
  * @param {string} id
  * @returns {DroitsTbl}
  */
-function DroitsTbl( id )
+function DroitsTbl(id)
 {
-    this.id      = id;
-    this.element = $(".droits-tbl#"+this.id);
+    this.id = id;
+    this.element = $(".droits-tbl#" + this.id);
 
-    this.modifier = function( td, action )
+    this.modifier = function (td, action)
     {
         var that = this;
         td.html("<div class=\"loading\">&nbsp;</div>");
-        td.load( Url('droits/privileges/modifier'), {
-            role     : td.data("role"     ),
-            statut   : td.data("statut"   ),
+        td.load(Url('droits/privileges/modifier'), {
+            role: td.data("role"),
+            statut: td.data("statut"),
             privilege: td.data("privilege"),
-            action   : action
-        }, function(){
+            action: action
+        }, function ()
+        {
             that.initModifierClick(td); // pour reconnecter l'action du lien...
-        } );
-        
+        });
+
     }
 
 
-    this.initModifierClick = function( td )
+    this.initModifierClick = function (td)
     {
         var that = this;
-        td.find("a").on("click", function(){
-            that.modifier( td, $(this).data("action") );
+        td.find("a").on("click", function ()
+        {
+            that.modifier(td, $(this).data("action"));
         });
     }
 
@@ -38,11 +40,12 @@ function DroitsTbl( id )
      *
      * @returns {undefined}
      */
-    this.init = function()
+    this.init = function ()
     {
         var that = this;
-        this.element.find("td.modifier").each( function(){
-            that.initModifierClick( $(this) );
+        this.element.find("td.modifier").each(function ()
+        {
+            that.initModifierClick($(this));
         });
         return this;
     }
@@ -53,7 +56,7 @@ function DroitsTbl( id )
  * @param {string} id
  * @returns {DroitsTbl}
  */
-DroitsTbl.get = function( id )
+DroitsTbl.get = function (id)
 {
     if (null == DroitsTbl.instances) DroitsTbl.instances = new Array();
     if (null == DroitsTbl.instances[id]) DroitsTbl.instances[id] = new DroitsTbl(id);
@@ -65,32 +68,45 @@ DroitsTbl.get = function( id )
  *
  * @constructor
  */
-function AffectationForm()
-{
-    this.element = null;
+$.widget("ose.affectationForm", {
 
-    this.updateStructureVisibility = function()
+    onPersonnelChange: function (item)
     {
-        var roleMustHaveStructure = $.inArray( parseInt(this.getElementRole().val()), this.getRolesMustHaveStructure() ) > -1;
+        this.getElementStructure().val(item.structure);
+    },
 
-        if (roleMustHaveStructure){
-            this.getElementStructure().parents( '.form-group' ).show();
-        }else{
-            this.getElementStructure().parents( '.form-group' ).hide();
+    updateStructureVisibility: function ()
+    {
+        var roleMustHaveStructure = $.inArray(parseInt(this.getElementRole().val()), this.getRolesMustHaveStructure()) > -1;
+
+        if (roleMustHaveStructure) {
+            this.getElementStructure().parents('.form-group').show();
+        } else {
+            this.getElementStructure().parents('.form-group').hide();
         }
-    }
+    },
 
-    /**
-     * Initialisation
-     */
-    this.init = function()
+
+
+    _create: function ()
     {
         var that = this;
-        this.getElementRole().on( 'change', function(){ that.updateStructureVisibility() } );
+        this.getElementRole().on('change', function () { that.updateStructureVisibility() });
+        this.getElementPersonnel().on("change",function (e, item) { that.onPersonnelChange(item); });
         this.updateStructureVisibility();
-    }
+    },
 
-    this.getRolesMustHaveStructure = function(){ return this.element.data('roles-must-have-structure'); };
-    this.getElementRole            = function(){ return this.element.find('select[name="role"]'      ); };
-    this.getElementStructure       = function(){ return this.element.find('select[name="structure"]' ); };
-}
+
+
+    //@formatter:off
+    getRolesMustHaveStructure   : function () { return this.element.data('roles-must-have-structure'); },
+    getElementPersonnel         : function () { return this.element.find('input[name="personnel\\[id\\]"]'); },
+    getElementRole              : function () { return this.element.find('select[name="role"]'); },
+    getElementStructure         : function () { return this.element.find('select[name="structure"]'); }
+    //@formatter:on
+});
+
+$(function ()
+{
+    WidgetInitializer.add('affectation-form', 'affectationForm');
+});

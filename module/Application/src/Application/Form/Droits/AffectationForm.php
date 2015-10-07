@@ -47,7 +47,7 @@ class AffectationForm extends Form\Form implements ServiceLocatorAwareInterface
         }
 
         $this->setAttribute('data-roles-must-have-structure', json_encode($rolesMustHaveStructure));
-        $this->setAttribute('data-bind-class', 'AffectationForm');
+        $this->setAttribute('class','affectation-form');
 
         $qb = $this->getServiceStructure()->finderByEnseignement();
         $this->getServiceStructure()->finderByNiveau(2, $qb);

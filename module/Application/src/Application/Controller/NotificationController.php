@@ -2,7 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Acl\AdministrateurRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\NotificationIndicateur as NotificationIndicateurEntity;
 use Application\Service\Indicateur as IndicateurService;
@@ -11,6 +10,7 @@ use Application\Service\Indicateur\AbstractIntervenantResultIndicateurImpl;
 use Application\Service\Indicateur\DateAwareIndicateurImplInterface;
 use Application\Service\NotificationIndicateur as NotificationIndicateurService;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\IndicateurAwareTrait;
 use Common\Exception\MessageException;
 use Common\Exception\RuntimeException;
 use Common\Filter\IntervenantEmailFormatter;
@@ -46,6 +46,7 @@ use Zend\View\Renderer\PhpRenderer;
 class NotificationController extends AbstractActionController
 {
     use ContextAwareTrait;
+    use IndicateurAwareTrait;
     
     /**
      * Visualisation de tous les abonnements aux indicateurs.
@@ -286,17 +287,13 @@ EOS;
      */
     public function indicateurIntervenantsAction()
     {
-        $role       = $this->getServiceContext()->getSelectedIdentityRole();
-        $indicateur = $this->context()->mandatory()->indicateurFromRoute();
-        $structure  = $this->context()->structureFromRoute();
+        $role                                = $this->getServiceContext()->getSelectedIdentityRole();
+        $indicateur                          = $this->context()->mandatory()->indicateurFromRoute();
+        $structure                           = $role->getStructure() ?: $this->context()->structureFromRoute();
         $intervenantsSourceCodesSelectionnes = $this->params()->fromQuery('intervenant');
-        
-        if (! $role instanceof AdministrateurRole) {
-            $structure = null;
-        }
-        
-        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $structure ?: $this->getStructure());
-        if (! $indicateurImpl instanceof AbstractIntervenantResultIndicateurImpl) {
+
+        $indicateurImpl = $this->getServiceIndicateur()->getIndicateurImpl($indicateur, $structure);
+        if (!$indicateurImpl instanceof AbstractIntervenantResultIndicateurImpl) {
             throw new RuntimeException("Indicateur non pris en charge.");
         }
 
@@ -305,12 +302,12 @@ EOS;
         $destinataires = [];
         foreach ($indicateurImpl->getResult() as $resultItem) {
             $intervenant = $indicateurImpl->getResultItemIntervenantExtractor()->filter($resultItem);
-            if (! $intervenantsSourceCodesSelectionnes || in_array($intervenant->getSourceCode(), $intervenantsSourceCodesSelectionnes)) {
+            if (!$intervenantsSourceCodesSelectionnes || in_array($intervenant->getSourceCode(), $intervenantsSourceCodesSelectionnes)) {
                 $destinataires[] = $intervenant;
             }
         }
         $formatter = new IntervenantEmailFormatter();
-        $emails = $formatter->filter($destinataires);
+        $emails    = $formatter->filter($destinataires);
         if (($intervenantsWithNoEmail = $formatter->getIntervenantsWithNoEmail())) {
             throw new MessageException(
                 "Aucune adresse mail trouvée pour l'intervenant suivant: " . implode(", ", Util::collectionAsOptions($intervenantsWithNoEmail)));
@@ -330,75 +327,24 @@ EOS;
         $form->add((new Submit('submit')));
         $form->getInputFilter()->get('subject')->setRequired(true);
         $form->getInputFilter()->get('body')->setRequired(true);
-        
+
         if ($this->getRequest()->isPost()) {
             $post = $this->getRequest()->getPost();
             if ($form->setData($post)->isValid()) {
                 $mailer->send($emails, $post);
             }
         }
-        
-        return new ViewModel([
+
+        return [
             'title'   => "Envoyer un mail aux intervenants",
             'count'   => count($emails),
             'subject' => $subject,
             'body'    => $body,
             'form'    => $form,
-        ]);
+        ];
     }
 
-    /**
-     * Test d'envoi de mail à l'utilisateur connecté.
-     * Permet de vérifier que l'envoi de mail fonctionne sur le serveur.
-     */
-    public function testSendMailAction()
-    {
-        $role          = $this->getServiceContext()->getSelectedIdentityRole();
-        $html          = '<h1>Test d\'envoi de mail</h1><p>Ceci est un test, merci de ne pas en tenir compte.</p>';
-        $part          = new MimePart($html);
-        $part->type    = Mime::TYPE_HTML;
-        $part->charset = 'UTF-8';
-        $body          = new MimeMessage();
-        $body->addPart($part);
 
-        // init
-        $message = new MailMessage();
-        $message->setEncoding('UTF-8')
-            ->setFrom('ne_pas_repondre@unicaen.fr', "Application " . ($app = $this->appInfos()->getNom()))
-            ->setSubject(sprintf("[%s] %s", $app, "Test"))
-            ->setBody($body)
-            ->addTo($email = $role->getPersonnel()->getEmail(), "" . $role->getPersonnel());
-
-        // envoi
-        $this->mail()->send($message);
-
-        echo("Un mail a été envoyé à l'adresse $email.");
-
-        return false;
-    }
-    
-    /**
-     * @return StructureEntity
-     */
-    private function getStructure()
-    {
-        $role = $this->getServiceContext()->getSelectedIdentityRole();
-        
-//        if ($role instanceof StructureAwareInterface) {
-//            return $role->getStructure();
-//        }
-//        
-//        return null;
-        return $role->getStructure();
-    }
-    
-    /**
-     * @return IndicateurService
-     */
-    private function getServiceIndicateur()
-    {
-        return $this->getServiceLocator()->get('IndicateurService');
-    }
     
     /**
      * @return NotificationIndicateurService

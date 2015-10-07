@@ -33,7 +33,7 @@ class Indicateur extends AbstractEntityService
      */
     public function getAlias()
     {
-        return 'i';
+        return 'indic';
     }
 
     /**

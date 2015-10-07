@@ -1,23 +1,13 @@
 <?php
 
 namespace Application\Entity\Db;
-use Application\Entity\Db\Dossier;
+
 
 /**
  * IntervenantExterieur
  */
 class IntervenantExterieur extends Intervenant
 {
-    /**
-     * @var \Application\Entity\Db\TypePoste
-     */
-    protected $typePoste;
-
-    /**
-     * @var \Application\Entity\Db\RegimeSecu
-     */
-    protected $regimeSecu;
-
     /**
      * @var \Application\Entity\Db\TypeIntervenantExterieur
      */
@@ -38,76 +28,37 @@ class IntervenantExterieur extends Intervenant
      */
     protected $contrat;
 
+
+
     /**
-     * 
+     *
      */
     public function __construct()
     {
         $this->contrat = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
+
+
     /**
      * Get estUneFemme
      *
-     * @return bool 
+     * @return bool
      */
     public function estUneFemme()
     {
         $civilite = $this->getDossier() ? $this->getDossier()->getCivilite() : $this->getCivilite();
-        
+
         return Civilite::SEXE_F === $civilite->getSexe();
     }
 
-    /**
-     * Set typePoste
-     *
-     * @param \Application\Entity\Db\TypePoste $typePoste
-     * @return IntervenantExterieur
-     */
-    public function setTypePoste(\Application\Entity\Db\TypePoste $typePoste = null)
-    {
-        $this->typePoste = $typePoste;
 
-        return $this;
-    }
-
-    /**
-     * Get typePoste
-     *
-     * @return \Application\Entity\Db\TypePoste 
-     */
-    public function getTypePoste()
-    {
-        return $this->typePoste;
-    }
-
-    /**
-     * Set regimeSecu
-     *
-     * @param \Application\Entity\Db\RegimeSecu $regimeSecu
-     * @return IntervenantExterieur
-     */
-    public function setRegimeSecu(\Application\Entity\Db\RegimeSecu $regimeSecu = null)
-    {
-        $this->regimeSecu = $regimeSecu;
-
-        return $this;
-    }
-
-    /**
-     * Get regimeSecu
-     *
-     * @return \Application\Entity\Db\RegimeSecu 
-     */
-    public function getRegimeSecu()
-    {
-        return $this->regimeSecu;
-    }
 
     /**
      * Set typeIntervenantExterieur
      *
      * @param \Application\Entity\Db\TypeIntervenantExterieur $typeIntervenantExterieur
+     *
      * @return IntervenantExterieur
      */
     public function setTypeIntervenantExterieur(\Application\Entity\Db\TypeIntervenantExterieur $typeIntervenantExterieur = null)
@@ -117,20 +68,25 @@ class IntervenantExterieur extends Intervenant
         return $this;
     }
 
+
+
     /**
      * Get typeIntervenantExterieur
      *
-     * @return \Application\Entity\Db\TypeIntervenantExterieur 
+     * @return \Application\Entity\Db\TypeIntervenantExterieur
      */
     public function getTypeIntervenantExterieur()
     {
         return $this->typeIntervenantExterieur;
     }
 
+
+
     /**
      * Set situationFamiliale
      *
      * @param \Application\Entity\Db\SituationFamiliale $situationFamiliale
+     *
      * @return IntervenantExterieur
      */
     public function setSituationFamiliale(\Application\Entity\Db\SituationFamiliale $situationFamiliale = null)
@@ -140,20 +96,25 @@ class IntervenantExterieur extends Intervenant
         return $this;
     }
 
+
+
     /**
      * Get situationFamiliale
      *
-     * @return \Application\Entity\Db\SituationFamiliale 
+     * @return \Application\Entity\Db\SituationFamiliale
      */
     public function getSituationFamiliale()
     {
         return $this->situationFamiliale;
     }
 
+
+
     /**
      * Set dossier
      *
      * @param Dossier $dossier
+     *
      * @return IntervenantExterieur
      */
     public function setDossier(Dossier $dossier)
@@ -164,6 +125,8 @@ class IntervenantExterieur extends Intervenant
         return $this;
     }
 
+
+
     /**
      * Get dossier
      *
@@ -171,15 +134,20 @@ class IntervenantExterieur extends Intervenant
      */
     public function getDossier()
     {
-        $dossiers = $this->dossier->filter(function(Dossier $d) { return $d->getHistoDestruction() === null; });
+        $dossiers = $this->dossier->filter(function (Dossier $d) {
+            return $d->getHistoDestruction() === null;
+        });
 
         return $dossiers->first() ?: null;
     }
+
+
 
     /**
      * Add contrat
      *
      * @param \Application\Entity\Db\Contrat $contrat
+     *
      * @return Intervenant
      */
     public function addContrat(\Application\Entity\Db\Contrat $contrat)
@@ -188,6 +156,8 @@ class IntervenantExterieur extends Intervenant
 
         return $this;
     }
+
+
 
     /**
      * Remove contrat
@@ -199,32 +169,38 @@ class IntervenantExterieur extends Intervenant
         $this->contrat->removeElement($contrat);
     }
 
+
+
     /**
      * Get contrat
      *
      * @param \Application\Entity\Db\TypeContrat $typeContrat
-     * @param \Application\Entity\Db\Structure $structure
-     * @return \Doctrine\Common\Collections\Collection 
+     * @param \Application\Entity\Db\Structure   $structure
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContrat(TypeContrat $typeContrat = null, Structure $structure = null)
     {
         if (null === $this->contrat) {
             return null;
         }
-        
-        $filter   = function(Contrat $contrat) use ($typeContrat, $structure) {
+
+        $filter   = function (Contrat $contrat) use ($typeContrat, $structure) {
             if ($typeContrat && $typeContrat !== $contrat->getTypeContrat()) {
                 return false;
             }
             if ($structure && $structure !== $contrat->getStructure()) {
                 return false;
             }
-            return true; 
+
+            return true;
         };
         $contrats = $this->contrat->filter($filter);
-        
+
         return $contrats;
     }
+
+
 
     /**
      * Get contrat initial
@@ -236,14 +212,18 @@ class IntervenantExterieur extends Intervenant
         if (!count($this->getContrat())) {
             return null;
         }
-        
+
         $type = TypeContrat::CODE_CONTRAT;
-        
-        $filter   = function($contrat) use ($type) { return $type === $contrat->getTypeContrat()->getCode(); };
+
+        $filter   = function ($contrat) use ($type) {
+            return $type === $contrat->getTypeContrat()->getCode();
+        };
         $contrats = $this->getContrat()->filter($filter);
 
         return count($contrats) ? $contrats->first() : null;
     }
+
+
 
     /**
      * Get avenants
@@ -253,32 +233,37 @@ class IntervenantExterieur extends Intervenant
     public function getAvenants()
     {
         $type = TypeContrat::CODE_AVENANT;
-        
-        $filter   = function(Contrat $contrat) use ($type) { return $type === $contrat->getTypeContrat()->getCode(); };
+
+        $filter   = function (Contrat $contrat) use ($type) {
+            return $type === $contrat->getTypeContrat()->getCode();
+        };
         $contrats = $this->getContrat()->filter($filter);
-        
+
         return $contrats;
     }
-    
+
+
+
     /**
      * Retourne l'adresse mail personnelle éventuelle.
      * Si elle est null et que le paramètre le demande, retourne l'adresse par défaut.
      *
      * @param bool $fallbackOnDefault
-     * @return string 
+     *
+     * @return string
      */
     public function getEmailPerso($fallbackOnDefault = false)
     {
         $mail = null;
-        
+
         if ($this->getDossier()) {
             $mail = $this->getDossier()->getEmailPerso();
         }
-        
+
         if (!$mail && $fallbackOnDefault) {
             $mail = $this->getEmail();
         }
-        
+
         return $mail;
     }
 }

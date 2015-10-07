@@ -42,34 +42,6 @@ class PieceJointe extends AbstractEntityService
     }
 
     /**
-     * Retourne la liste des pièces jointes d'un type donné.
-     *
-     * @param TypePieceJointeEntity $type
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
-     */
-    public function finderByType(TypePieceJointeEntity $type, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        $qb->andWhere("$alias.type = :type")->setParameter('type', $type);
-        return $qb;
-    }
-
-    /**
-     * Retourne la liste des pièces jointes d'un dossier donné.
-     *
-     * @param \Application\Entity\Db\Dossier $dossier
-     * @param QueryBuilder|null $queryBuilder
-     * @return QueryBuilder
-     */
-    public function finderByDossier(\Application\Entity\Db\Dossier $dossier, QueryBuilder $qb = null, $alias = null)
-    {
-        list($qb, $alias) = $this->initQuery($qb, $alias);
-        $qb->andWhere("$alias.dossier = :dossier")->setParameter('dossier', $dossier);
-        return $qb;
-    }
-
-    /**
      * Ajoute comme critère l'existence ou l'inexistence de fichier joint.
      *
      * @param boolean $exists

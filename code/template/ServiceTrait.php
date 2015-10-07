@@ -3,6 +3,7 @@
 namespace Application\Service\Traits;
 
 use Application\Service\<entityClass>;
+use Application\Module;
 use Common\Exception\RuntimeException;
 
 trait <entityClass>AwareTrait
@@ -33,15 +34,17 @@ trait <entityClass>AwareTrait
     public function getService<entityClass>()
     {
         if (empty($this->service<entityClass>)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
-            }
+            $serviceLocator = Module::$serviceLocator;
+            if (! $serviceLocator){
+                if (! method_exists($this, 'getServiceLocator')) {
+                    throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+                }
 
-            $serviceLocator = $this->getServiceLocator();
-            if (method_exists($serviceLocator, 'getServiceLocator')) {
-                $serviceLocator = $serviceLocator->getServiceLocator();
+                $serviceLocator = $this->getServiceLocator();
+                if (method_exists($serviceLocator, 'getServiceLocator')) {
+                    $serviceLocator = $serviceLocator->getServiceLocator();
+                }
             }
-
             return $serviceLocator->get('application<entityClass>');
         }else{
             return $this->service<entityClass>;

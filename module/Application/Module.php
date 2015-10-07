@@ -27,7 +27,7 @@ class Module implements ConsoleUsageProviderInterface, ConsoleBannerProviderInte
     public function onBootstrap(MvcEvent $e)
     {
         $sm = $e->getApplication()->getServiceManager();
-        self::$serviceLocator = $sm; // Initialisation pour les filtres Doctrine!!
+        self::$serviceLocator = $sm; // Initialisation pour les filtres Doctrine et les traits!!
         if (!$e->getRequest() instanceof ConsoleRequest) {
             $this->injectPublicFiles($sm);
         }

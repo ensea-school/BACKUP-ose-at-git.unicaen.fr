@@ -4,8 +4,7 @@ namespace Application\View\Helper\OffreFormation;
 
 use Application\Form\OffreFormation\EtapeModulateursSaisie;
 use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Application\Service\Traits\ElementPedagogiqueAwareTrait;
 use Zend\Form\Element\Select;
 
 /**
@@ -13,11 +12,9 @@ use Zend\Form\Element\Select;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeModulateursSaisieForm extends AbstractHelper implements ServiceLocatorAwareInterface
+class EtapeModulateursSaisieForm extends AbstractHelper
 {
-    use ServiceLocatorAwareTrait,
-        \Application\Service\Traits\ElementPedagogiqueAwareTrait
-    ;
+    use ElementPedagogiqueAwareTrait;
 
     /**
      * @var Saisie

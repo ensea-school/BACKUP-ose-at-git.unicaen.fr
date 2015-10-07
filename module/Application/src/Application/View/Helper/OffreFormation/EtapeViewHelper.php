@@ -7,8 +7,6 @@ use Application\Entity\Db\Privilege;
 use Application\Traits\EtapeAwareTrait;
 use Application\Service\Traits\EtapeAwareTrait as ServiceEtapeAwareTrait;
 use Application\Util;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\View\Helper\AbstractHtmlElement;
 
 /**
@@ -16,10 +14,9 @@ use Zend\View\Helper\AbstractHtmlElement;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class EtapeViewHelper extends AbstractHtmlElement implements ServiceLocatorAwareInterface
+class EtapeViewHelper extends AbstractHtmlElement
 {
     use EtapeAwareTrait;
-    use ServiceLocatorAwareTrait;
     use ServiceEtapeAwareTrait;
 
 

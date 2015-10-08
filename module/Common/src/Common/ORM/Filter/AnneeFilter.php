@@ -22,9 +22,9 @@ class AnneeFilter extends AbstractFilter
     public function addFilterConstraint(ClassMetaData $targetEntity, $targetTableAlias)
     {
         if (isset($this->enabledEntities[$targetEntity->name])) {
-            if ($targetEntity->name == 'Application\Entity\Db\Etape') {
+            if ($targetEntity->name == Application\Entity\Db\Etape::class) {
                 return $this->addEtapeFilterConstraint($targetTableAlias);
-            } elseif ($targetEntity->reflClass->implementsInterface('Application\Interfaces\AnneeAwareInterface')) {
+            } elseif ($targetEntity->reflClass->implementsInterface(Application\Entity\Db\Interfaces\AnneeAwareInterface::class)) {
                 return $targetTableAlias . '.ANNEE_ID = ' . $this->getServiceContext()->getAnnee()->getId();
             }
         }

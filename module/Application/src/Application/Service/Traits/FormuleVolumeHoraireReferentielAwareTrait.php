@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\FormuleVolumeHoraireReferentiel;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of FormuleVolumeHoraireReferentielAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait FormuleVolumeHoraireReferentielAwareTrait
 {
     /**
-     * description
-     *
      * @var FormuleVolumeHoraireReferentiel
      */
     private $serviceFormuleVolumeHoraireReferentiel;
 
+
+
+
+
     /**
-     *
      * @param FormuleVolumeHoraireReferentiel $serviceFormuleVolumeHoraireReferentiel
      * @return self
      */
@@ -25,27 +32,28 @@ trait FormuleVolumeHoraireReferentielAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return FormuleVolumeHoraireReferentiel
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceFormuleVolumeHoraireReferentiel()
     {
         if (empty($this->serviceFormuleVolumeHoraireReferentiel)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationFormuleVolumeHoraireReferentiel');
-        }else{
-            return $this->serviceFormuleVolumeHoraireReferentiel;
         }
+        $this->serviceFormuleVolumeHoraireReferentiel = $serviceLocator->get('ApplicationFormuleVolumeHoraireReferentiel');
+        }
+        return $this->serviceFormuleVolumeHoraireReferentiel;
     }
-
 }

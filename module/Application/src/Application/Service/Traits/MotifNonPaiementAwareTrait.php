@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\MotifNonPaiement;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of MotifNonPaiementAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait MotifNonPaiementAwareTrait
 {
     /**
-     * description
-     *
      * @var MotifNonPaiement
      */
     private $serviceMotifNonPaiement;
 
+
+
+
+
     /**
-     *
      * @param MotifNonPaiement $serviceMotifNonPaiement
      * @return self
      */
@@ -25,27 +32,28 @@ trait MotifNonPaiementAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return MotifNonPaiement
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceMotifNonPaiement()
     {
         if (empty($this->serviceMotifNonPaiement)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationMotifNonPaiement');
-        }else{
-            return $this->serviceMotifNonPaiement;
         }
+        $this->serviceMotifNonPaiement = $serviceLocator->get('ApplicationMotifNonPaiement');
+        }
+        return $this->serviceMotifNonPaiement;
     }
-
 }

@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\ServiceAPayer;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of ServiceAPayerAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait ServiceAPayerAwareTrait
 {
     /**
-     * description
-     *
      * @var ServiceAPayer
      */
     private $serviceServiceAPayer;
 
+
+
+
+
     /**
-     *
      * @param ServiceAPayer $serviceServiceAPayer
      * @return self
      */
@@ -25,27 +32,28 @@ trait ServiceAPayerAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return ServiceAPayer
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceServiceAPayer()
     {
         if (empty($this->serviceServiceAPayer)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationServiceAPayer');
-        }else{
-            return $this->serviceServiceAPayer;
         }
+        $this->serviceServiceAPayer = $serviceLocator->get('ApplicationServiceAPayer');
+        }
+        return $this->serviceServiceAPayer;
     }
-
 }

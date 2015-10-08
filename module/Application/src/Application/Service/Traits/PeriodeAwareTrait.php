@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Periode;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of PeriodeAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait PeriodeAwareTrait
 {
     /**
-     * description
-     *
      * @var Periode
      */
     private $servicePeriode;
 
+
+
+
+
     /**
-     *
      * @param Periode $servicePeriode
      * @return self
      */
@@ -25,27 +32,28 @@ trait PeriodeAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Periode
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServicePeriode()
     {
         if (empty($this->servicePeriode)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationPeriode');
-        }else{
-            return $this->servicePeriode;
         }
+        $this->servicePeriode = $serviceLocator->get('ApplicationPeriode');
+        }
+        return $this->servicePeriode;
     }
-
 }

@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Role;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of RoleAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait RoleAwareTrait
 {
     /**
-     * description
-     *
      * @var Role
      */
     private $serviceRole;
 
+
+
+
+
     /**
-     *
      * @param Role $serviceRole
      * @return self
      */
@@ -25,27 +32,28 @@ trait RoleAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Role
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceRole()
     {
         if (empty($this->serviceRole)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationRole');
-        }else{
-            return $this->serviceRole;
         }
+        $this->serviceRole = $serviceLocator->get('ApplicationRole');
+        }
+        return $this->serviceRole;
     }
-
 }

@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\MotifModificationServiceDu;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of MotifModificationServiceDuAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait MotifModificationServiceDuAwareTrait
 {
     /**
-     * description
-     *
      * @var MotifModificationServiceDu
      */
     private $serviceMotifModificationServiceDu;
 
+
+
+
+
     /**
-     *
      * @param MotifModificationServiceDu $serviceMotifModificationServiceDu
      * @return self
      */
@@ -25,27 +32,28 @@ trait MotifModificationServiceDuAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return MotifModificationServiceDu
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceMotifModificationServiceDu()
     {
         if (empty($this->serviceMotifModificationServiceDu)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationMotifModificationServiceDu');
-        }else{
-            return $this->serviceMotifModificationServiceDu;
         }
+        $this->serviceMotifModificationServiceDu = $serviceLocator->get('ApplicationMotifModificationServiceDu');
+        }
+        return $this->serviceMotifModificationServiceDu;
     }
-
 }

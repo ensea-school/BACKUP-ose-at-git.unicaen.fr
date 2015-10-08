@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Source;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of SourceAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait SourceAwareTrait
 {
     /**
-     * description
-     *
      * @var Source
      */
     private $serviceSource;
 
+
+
+
+
     /**
-     *
      * @param Source $serviceSource
      * @return self
      */
@@ -25,27 +32,28 @@ trait SourceAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Source
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceSource()
     {
         if (empty($this->serviceSource)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationSource');
-        }else{
-            return $this->serviceSource;
         }
+        $this->serviceSource = $serviceLocator->get('ApplicationSource');
+        }
+        return $this->serviceSource;
     }
-
 }

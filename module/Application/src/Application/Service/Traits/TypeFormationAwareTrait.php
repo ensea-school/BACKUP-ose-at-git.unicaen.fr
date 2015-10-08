@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\TypeFormation;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of TypeFormationAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait TypeFormationAwareTrait
 {
     /**
-     * description
-     *
      * @var TypeFormation
      */
     private $serviceTypeFormation;
 
+
+
+
+
     /**
-     *
      * @param TypeFormation $serviceTypeFormation
      * @return self
      */
@@ -25,27 +32,28 @@ trait TypeFormationAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return TypeFormation
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceTypeFormation()
     {
         if (empty($this->serviceTypeFormation)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationTypeFormation');
-        }else{
-            return $this->serviceTypeFormation;
         }
+        $this->serviceTypeFormation = $serviceLocator->get('ApplicationTypeFormation');
+        }
+        return $this->serviceTypeFormation;
     }
-
 }

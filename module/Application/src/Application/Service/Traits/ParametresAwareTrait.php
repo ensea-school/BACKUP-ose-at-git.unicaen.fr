@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Parametres;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of ParametresAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait ParametresAwareTrait
 {
     /**
-     * description
-     *
      * @var Parametres
      */
     private $serviceParametres;
 
+
+
+
+
     /**
-     *
      * @param Parametres $serviceParametres
      * @return self
      */
@@ -25,27 +32,28 @@ trait ParametresAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Parametres
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceParametres()
     {
         if (empty($this->serviceParametres)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationParametres');
-        }else{
-            return $this->serviceParametres;
         }
+        $this->serviceParametres = $serviceLocator->get('ApplicationParametres');
+        }
+        return $this->serviceParametres;
     }
-
 }

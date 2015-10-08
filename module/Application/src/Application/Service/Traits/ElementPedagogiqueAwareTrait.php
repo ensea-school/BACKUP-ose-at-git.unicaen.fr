@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\ElementPedagogique;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of ElementPedagogiqueAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait ElementPedagogiqueAwareTrait
 {
     /**
-     * description
-     *
      * @var ElementPedagogique
      */
     private $serviceElementPedagogique;
 
+
+
+
+
     /**
-     *
      * @param ElementPedagogique $serviceElementPedagogique
      * @return self
      */
@@ -25,27 +32,28 @@ trait ElementPedagogiqueAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return ElementPedagogique
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceElementPedagogique()
     {
         if (empty($this->serviceElementPedagogique)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationElementPedagogique');
-        }else{
-            return $this->serviceElementPedagogique;
         }
+        $this->serviceElementPedagogique = $serviceLocator->get('ApplicationElementPedagogique');
+        }
+        return $this->serviceElementPedagogique;
     }
-
 }

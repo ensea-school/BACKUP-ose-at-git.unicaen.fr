@@ -3,49 +3,57 @@
 namespace Application\Service\Traits;
 
 use Application\Service\FormuleResultatService;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of FormuleResultatServiceAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait FormuleResultatServiceAwareTrait
 {
     /**
-     * description
-     *
      * @var FormuleResultatService
      */
-    private $serviceFormuleResultatService;
+    private $serviceFormuleResultat;
+
+
+
+
 
     /**
-     *
-     * @param FormuleResultatService $serviceFormuleResultatService
+     * @param FormuleResultatService $serviceFormuleResultat
      * @return self
      */
-    public function setServiceFormuleResultatService( FormuleResultatService $serviceFormuleResultatService )
+    public function setServiceFormuleResultat( FormuleResultatService $serviceFormuleResultat )
     {
-        $this->serviceFormuleResultatService = $serviceFormuleResultatService;
+        $this->serviceFormuleResultat = $serviceFormuleResultat;
         return $this;
     }
 
+
+
     /**
-     *
      * @return FormuleResultatService
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
-    public function getServiceFormuleResultatService()
+    public function getServiceFormuleResultat()
     {
-        if (empty($this->serviceFormuleResultatService)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        if (empty($this->serviceFormuleResultat)){
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationFormuleResultatService');
-        }else{
-            return $this->serviceFormuleResultatService;
         }
+        $this->serviceFormuleResultat = $serviceLocator->get('ApplicationFormuleResultatService');
+        }
+        return $this->serviceFormuleResultat;
     }
-
 }

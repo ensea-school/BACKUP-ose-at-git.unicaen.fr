@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Agrement;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of AgrementAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait AgrementAwareTrait
 {
     /**
-     * description
-     *
      * @var Agrement
      */
     private $serviceAgrement;
 
+
+
+
+
     /**
-     *
      * @param Agrement $serviceAgrement
      * @return self
      */
@@ -25,27 +32,28 @@ trait AgrementAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Agrement
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceAgrement()
     {
         if (empty($this->serviceAgrement)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationAgrement');
-        }else{
-            return $this->serviceAgrement;
         }
+        $this->serviceAgrement = $serviceLocator->get('ApplicationAgrement');
+        }
+        return $this->serviceAgrement;
     }
-
 }

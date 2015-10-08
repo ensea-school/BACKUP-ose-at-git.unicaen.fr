@@ -2,7 +2,7 @@
 
 namespace Application\Entity\Db;
 
-use Application\Interfaces\AnneeAwareInterface;
+use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;

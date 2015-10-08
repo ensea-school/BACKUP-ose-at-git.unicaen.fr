@@ -7,7 +7,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Form\Annotation;
 use Common\Constants;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
-use Application\Interfaces\AnneeAwareInterface;
+use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 
 /**
  * Intervenant

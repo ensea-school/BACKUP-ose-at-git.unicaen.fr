@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\FonctionReferentiel;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of FonctionReferentielAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait FonctionReferentielAwareTrait
 {
     /**
-     * description
-     *
      * @var FonctionReferentiel
      */
     private $serviceFonctionReferentiel;
 
+
+
+
+
     /**
-     *
      * @param FonctionReferentiel $serviceFonctionReferentiel
      * @return self
      */
@@ -25,27 +32,28 @@ trait FonctionReferentielAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return FonctionReferentiel
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceFonctionReferentiel()
     {
         if (empty($this->serviceFonctionReferentiel)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationFonctionReferentiel');
-        }else{
-            return $this->serviceFonctionReferentiel;
         }
+        $this->serviceFonctionReferentiel = $serviceLocator->get('ApplicationFonctionReferentiel');
+        }
+        return $this->serviceFonctionReferentiel;
     }
-
 }

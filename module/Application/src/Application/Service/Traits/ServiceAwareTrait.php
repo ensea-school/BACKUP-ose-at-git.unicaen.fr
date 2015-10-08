@@ -3,49 +3,57 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Service;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of ServiceAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait ServiceAwareTrait
 {
     /**
-     * description
-     *
      * @var Service
      */
-    private $serviceService;
+    private $service;
+
+
+
+
 
     /**
-     *
-     * @param Service $serviceService
+     * @param Service $service
      * @return self
      */
-    public function setServiceService( Service $serviceService )
+    public function setService( Service $service )
     {
-        $this->serviceService = $serviceService;
+        $this->service = $service;
         return $this;
     }
 
+
+
     /**
-     *
      * @return Service
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
-    public function getServiceService()
+    public function getService()
     {
-        if (empty($this->serviceService)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        if (empty($this->service)){
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationService');
-        }else{
-            return $this->serviceService;
         }
+        $this->service = $serviceLocator->get('ApplicationService');
+        }
+        return $this->service;
     }
-
 }

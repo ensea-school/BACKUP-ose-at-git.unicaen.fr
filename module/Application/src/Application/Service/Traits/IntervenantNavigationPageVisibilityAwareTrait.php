@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\IntervenantNavigationPageVisibility;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of IntervenantNavigationPageVisibilityAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait IntervenantNavigationPageVisibilityAwareTrait
 {
     /**
-     * description
-     *
      * @var IntervenantNavigationPageVisibility
      */
     private $serviceIntervenantNavigationPageVisibility;
 
+
+
+
+
     /**
-     *
      * @param IntervenantNavigationPageVisibility $serviceIntervenantNavigationPageVisibility
      * @return self
      */
@@ -25,27 +32,28 @@ trait IntervenantNavigationPageVisibilityAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return IntervenantNavigationPageVisibility
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceIntervenantNavigationPageVisibility()
     {
         if (empty($this->serviceIntervenantNavigationPageVisibility)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationIntervenantNavigationPageVisibility');
-        }else{
-            return $this->serviceIntervenantNavigationPageVisibility;
         }
+        $this->serviceIntervenantNavigationPageVisibility = $serviceLocator->get('IntervenantNavigationPageVisibility');
+        }
+        return $this->serviceIntervenantNavigationPageVisibility;
     }
-
 }

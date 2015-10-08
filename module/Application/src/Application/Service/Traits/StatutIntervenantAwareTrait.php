@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\StatutIntervenant;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of StatutIntervenantAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait StatutIntervenantAwareTrait
 {
     /**
-     * description
-     *
      * @var StatutIntervenant
      */
     private $serviceStatutIntervenant;
 
+
+
+
+
     /**
-     *
      * @param StatutIntervenant $serviceStatutIntervenant
      * @return self
      */
@@ -25,27 +32,28 @@ trait StatutIntervenantAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return StatutIntervenant
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceStatutIntervenant()
     {
         if (empty($this->serviceStatutIntervenant)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationStatutIntervenant');
-        }else{
-            return $this->serviceStatutIntervenant;
         }
+        $this->serviceStatutIntervenant = $serviceLocator->get('ApplicationStatutIntervenant');
+        }
+        return $this->serviceStatutIntervenant;
     }
-
 }

@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\CentreCoutEp;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of CentreCoutEpAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait CentreCoutEpAwareTrait
 {
     /**
-     * description
-     *
      * @var CentreCoutEp
      */
     private $serviceCentreCoutEp;
 
+
+
+
+
     /**
-     *
      * @param CentreCoutEp $serviceCentreCoutEp
      * @return self
      */
@@ -25,27 +32,28 @@ trait CentreCoutEpAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return CentreCoutEp
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceCentreCoutEp()
     {
         if (empty($this->serviceCentreCoutEp)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationCentreCoutEp');
-        }else{
-            return $this->serviceCentreCoutEp;
         }
+        $this->serviceCentreCoutEp = $serviceLocator->get('ApplicationCentreCoutEp');
+        }
+        return $this->serviceCentreCoutEp;
     }
-
 }

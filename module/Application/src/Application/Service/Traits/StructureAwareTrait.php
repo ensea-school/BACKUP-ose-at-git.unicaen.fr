@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Structure;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of StructureAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait StructureAwareTrait
 {
     /**
-     * description
-     *
      * @var Structure
      */
     private $serviceStructure;
 
+
+
+
+
     /**
-     *
      * @param Structure $serviceStructure
      * @return self
      */
@@ -25,27 +32,28 @@ trait StructureAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Structure
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceStructure()
     {
         if (empty($this->serviceStructure)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationStructure');
-        }else{
-            return $this->serviceStructure;
         }
+        $this->serviceStructure = $serviceLocator->get('ApplicationStructure');
+        }
+        return $this->serviceStructure;
     }
-
 }

@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Validation;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of ValidationAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait ValidationAwareTrait
 {
     /**
-     * description
-     *
      * @var Validation
      */
     private $serviceValidation;
 
+
+
+
+
     /**
-     *
      * @param Validation $serviceValidation
      * @return self
      */
@@ -25,27 +32,28 @@ trait ValidationAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Validation
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceValidation()
     {
         if (empty($this->serviceValidation)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationValidation');
-        }else{
-            return $this->serviceValidation;
         }
+        $this->serviceValidation = $serviceLocator->get('ApplicationValidation');
+        }
+        return $this->serviceValidation;
     }
-
 }

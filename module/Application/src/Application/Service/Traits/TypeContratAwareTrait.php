@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\TypeContrat;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of TypeContratAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait TypeContratAwareTrait
 {
     /**
-     * description
-     *
      * @var TypeContrat
      */
     private $serviceTypeContrat;
 
+
+
+
+
     /**
-     *
      * @param TypeContrat $serviceTypeContrat
      * @return self
      */
@@ -25,27 +32,28 @@ trait TypeContratAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return TypeContrat
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceTypeContrat()
     {
         if (empty($this->serviceTypeContrat)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationTypeContrat');
-        }else{
-            return $this->serviceTypeContrat;
         }
+        $this->serviceTypeContrat = $serviceLocator->get('ApplicationTypeContrat');
+        }
+        return $this->serviceTypeContrat;
     }
-
 }

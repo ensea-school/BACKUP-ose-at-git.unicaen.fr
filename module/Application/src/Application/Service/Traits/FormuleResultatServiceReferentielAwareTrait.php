@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\FormuleResultatServiceReferentiel;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of FormuleResultatServiceReferentielAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait FormuleResultatServiceReferentielAwareTrait
 {
     /**
-     * description
-     *
      * @var FormuleResultatServiceReferentiel
      */
     private $serviceFormuleResultatServiceReferentiel;
 
+
+
+
+
     /**
-     *
      * @param FormuleResultatServiceReferentiel $serviceFormuleResultatServiceReferentiel
      * @return self
      */
@@ -25,27 +32,28 @@ trait FormuleResultatServiceReferentielAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return FormuleResultatServiceReferentiel
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceFormuleResultatServiceReferentiel()
     {
         if (empty($this->serviceFormuleResultatServiceReferentiel)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationFormuleResultatServiceReferentiel');
-        }else{
-            return $this->serviceFormuleResultatServiceReferentiel;
         }
+        $this->serviceFormuleResultatServiceReferentiel = $serviceLocator->get('ApplicationFormuleResultatServiceReferentiel');
+        }
+        return $this->serviceFormuleResultatServiceReferentiel;
     }
-
 }

@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\EtatVolumeHoraire;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of EtatVolumeHoraireAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait EtatVolumeHoraireAwareTrait
 {
     /**
-     * description
-     *
      * @var EtatVolumeHoraire
      */
     private $serviceEtatVolumeHoraire;
 
+
+
+
+
     /**
-     *
      * @param EtatVolumeHoraire $serviceEtatVolumeHoraire
      * @return self
      */
@@ -25,27 +32,28 @@ trait EtatVolumeHoraireAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return EtatVolumeHoraire
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceEtatVolumeHoraire()
     {
         if (empty($this->serviceEtatVolumeHoraire)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationEtatVolumeHoraire');
-        }else{
-            return $this->serviceEtatVolumeHoraire;
         }
+        $this->serviceEtatVolumeHoraire = $serviceLocator->get('ApplicationEtatVolumeHoraire');
+        }
+        return $this->serviceEtatVolumeHoraire;
     }
-
 }

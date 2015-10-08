@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Perimetre;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of PerimetreAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait PerimetreAwareTrait
 {
     /**
-     * description
-     *
      * @var Perimetre
      */
     private $servicePerimetre;
 
+
+
+
+
     /**
-     *
      * @param Perimetre $servicePerimetre
      * @return self
      */
@@ -25,27 +32,28 @@ trait PerimetreAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Perimetre
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServicePerimetre()
     {
         if (empty($this->servicePerimetre)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationPerimetre');
-        }else{
-            return $this->servicePerimetre;
         }
+        $this->servicePerimetre = $serviceLocator->get('ApplicationPerimetre');
+        }
+        return $this->servicePerimetre;
     }
-
 }

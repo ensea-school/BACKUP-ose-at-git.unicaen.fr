@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\PieceJointe;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of PieceJointeAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait PieceJointeAwareTrait
 {
     /**
-     * description
-     *
      * @var PieceJointe
      */
     private $servicePieceJointe;
 
+
+
+
+
     /**
-     *
      * @param PieceJointe $servicePieceJointe
      * @return self
      */
@@ -25,27 +32,28 @@ trait PieceJointeAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return PieceJointe
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServicePieceJointe()
     {
         if (empty($this->servicePieceJointe)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationPieceJointe');
-        }else{
-            return $this->servicePieceJointe;
         }
+        $this->servicePieceJointe = $serviceLocator->get('ApplicationPieceJointe');
+        }
+        return $this->servicePieceJointe;
     }
-
 }

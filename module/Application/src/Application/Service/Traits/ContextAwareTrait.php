@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Context;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of ContextAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait ContextAwareTrait
 {
     /**
-     * description
-     *
      * @var Context
      */
     private $serviceContext;
 
+
+
+
+
     /**
-     *
      * @param Context $serviceContext
      * @return self
      */
@@ -25,27 +32,28 @@ trait ContextAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Context
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceContext()
     {
         if (empty($this->serviceContext)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationContext');
-        }else{
-            return $this->serviceContext;
         }
+        $this->serviceContext = $serviceLocator->get('ApplicationContext');
+        }
+        return $this->serviceContext;
     }
-
 }

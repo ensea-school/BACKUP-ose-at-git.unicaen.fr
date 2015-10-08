@@ -2,7 +2,9 @@
 
 namespace Application\Entity\Db;
 
-use Application\Interfaces\AnneeAwareInterface;
+use Application\Entity\Db\Interfaces\AnneeAwareInterface;
+use Application\Entity\Db\Traits\AnneeAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -11,6 +13,8 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
  */
 class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
 {
+    use AnneeAwareTrait;
+    use StructureAwareTrait;
     use HistoriqueAwareTrait;
 
     /**
@@ -29,19 +33,10 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
     private $id;
 
     /**
-     * @var \Application\Entity\Db\Structure
-     */
-    private $structure;
-
-    /**
      * @var \Application\Entity\Db\TypeDotation
      */
     private $type;
 
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    private $annee;
 
 
 
@@ -114,34 +109,6 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
 
 
     /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return Dotation
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-
-
-    /**
      * Set type
      *
      * @param \Application\Entity\Db\TypeDotation $type
@@ -165,33 +132,5 @@ class Dotation implements HistoriqueAwareInterface, AnneeAwareInterface
     public function getType()
     {
         return $this->type;
-    }
-
-
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return Dotation
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 }

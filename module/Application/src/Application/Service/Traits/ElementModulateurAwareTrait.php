@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\ElementModulateur;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of ElementModulateurAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait ElementModulateurAwareTrait
 {
     /**
-     * description
-     *
      * @var ElementModulateur
      */
     private $serviceElementModulateur;
 
+
+
+
+
     /**
-     *
      * @param ElementModulateur $serviceElementModulateur
      * @return self
      */
@@ -25,27 +32,28 @@ trait ElementModulateurAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return ElementModulateur
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceElementModulateur()
     {
         if (empty($this->serviceElementModulateur)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationElementModulateur');
-        }else{
-            return $this->serviceElementModulateur;
         }
+        $this->serviceElementModulateur = $serviceLocator->get('ApplicationElementModulateur');
+        }
+        return $this->serviceElementModulateur;
     }
-
 }

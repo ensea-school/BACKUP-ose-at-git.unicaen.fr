@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\WfEtape;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of WfEtapeAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait WfEtapeAwareTrait
 {
     /**
-     * description
-     *
      * @var WfEtape
      */
     private $serviceWfEtape;
 
+
+
+
+
     /**
-     *
      * @param WfEtape $serviceWfEtape
      * @return self
      */
@@ -25,27 +32,28 @@ trait WfEtapeAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return WfEtape
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceWfEtape()
     {
         if (empty($this->serviceWfEtape)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationWfEtape');
-        }else{
-            return $this->serviceWfEtape;
         }
+        $this->serviceWfEtape = $serviceLocator->get('WfEtapeService');
+        }
+        return $this->serviceWfEtape;
     }
-
 }

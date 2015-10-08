@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\Intervenant;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of IntervenantAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait IntervenantAwareTrait
 {
     /**
-     * description
-     *
      * @var Intervenant
      */
     private $serviceIntervenant;
 
+
+
+
+
     /**
-     *
      * @param Intervenant $serviceIntervenant
      * @return self
      */
@@ -25,27 +32,28 @@ trait IntervenantAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return Intervenant
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceIntervenant()
     {
         if (empty($this->serviceIntervenant)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationIntervenant');
-        }else{
-            return $this->serviceIntervenant;
         }
+        $this->serviceIntervenant = $serviceLocator->get('ApplicationIntervenant');
+        }
+        return $this->serviceIntervenant;
     }
-
 }

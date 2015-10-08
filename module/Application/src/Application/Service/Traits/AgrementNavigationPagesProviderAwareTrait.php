@@ -3,19 +3,26 @@
 namespace Application\Service\Traits;
 
 use Application\Service\AgrementNavigationPagesProvider;
-use Common\Exception\RuntimeException;
+use Application\Module;
+use RuntimeException;
 
+/**
+ * Description of AgrementNavigationPagesProviderAwareTrait
+ *
+ * @author UnicaenCode
+ */
 trait AgrementNavigationPagesProviderAwareTrait
 {
     /**
-     * description
-     *
      * @var AgrementNavigationPagesProvider
      */
     private $serviceAgrementNavigationPagesProvider;
 
+
+
+
+
     /**
-     *
      * @param AgrementNavigationPagesProvider $serviceAgrementNavigationPagesProvider
      * @return self
      */
@@ -25,27 +32,28 @@ trait AgrementNavigationPagesProviderAwareTrait
         return $this;
     }
 
+
+
     /**
-     *
      * @return AgrementNavigationPagesProvider
-     * @throws \Common\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getServiceAgrementNavigationPagesProvider()
     {
         if (empty($this->serviceAgrementNavigationPagesProvider)){
-            if (! method_exists($this, 'getServiceLocator')) {
-                throw new RuntimeException( 'La classe '.get_class($this).' n\'a pas accès au ServiceLocator.');
+        $serviceLocator = Module::$serviceLocator;
+        if (! $serviceLocator) {
+            if (!method_exists($this, 'getServiceLocator')) {
+                throw new RuntimeException('La classe ' . get_class($this) . ' n\'a pas accès au ServiceLocator.');
             }
 
             $serviceLocator = $this->getServiceLocator();
             if (method_exists($serviceLocator, 'getServiceLocator')) {
                 $serviceLocator = $serviceLocator->getServiceLocator();
             }
-
-            return $serviceLocator->get('applicationAgrementNavigationPagesProvider');
-        }else{
-            return $this->serviceAgrementNavigationPagesProvider;
         }
+        $this->serviceAgrementNavigationPagesProvider = $serviceLocator->get('AgrementNavigationPagesProvider');
+        }
+        return $this->serviceAgrementNavigationPagesProvider;
     }
-
 }

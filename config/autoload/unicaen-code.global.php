@@ -1,8 +1,8 @@
 <?php
 
 $settings = [
-    'view-dir'     => APPLICATION_PATH . '/code',
-    'template-dir' => APPLICATION_PATH . '/code/template',
+    'view-dirs'     => [APPLICATION_PATH . '/code'],
+    'template-dirs' => [APPLICATION_PATH . '/code/template'],
 ];
 
 return [

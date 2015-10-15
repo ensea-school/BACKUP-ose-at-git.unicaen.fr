@@ -2,28 +2,17 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Application\Entity\Db\IntervenantExterieur" table="INTERVENANT_EXTERIEUR">
     <indexes>
-      <index name="IDX_8FEA72F0A1E47BD5" columns="TYPE_INTERVENANT_EXTERIEUR_ID"/>
       <index name="IDX_8FEA72F05E37C346" columns="SITUATION_FAMILIALE_ID"/>
       <index name="IDX_8FEA72F0E9B3446E" columns="SOURCE_ID"/>
       <index name="IDX_8FEA72F059860CDC" columns="HISTO_CREATEUR_ID"/>
       <index name="IDX_8FEA72F07E9E2204" columns="HISTO_DESTRUCTEUR_ID"/>
       <index name="IDX_8FEA72F063F06898" columns="HISTO_MODIFICATEUR_ID"/>
     </indexes>
-    <unique-constraints>
-      <unique-constraint name="ie_source_un" columns="SOURCE_CODE"/>
-    </unique-constraints>
     <id name="id" association-key="true"/>
     <many-to-one field="situationFamiliale" target-entity="Application\Entity\Db\SituationFamiliale">
       <join-columns>
         <join-column name="SITUATION_FAMILIALE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-<!--    <many-to-one field="dossier" target-entity="Application\Entity\Db\Dossier">
-      <join-columns>
-        <join-column name="DOSSIER_ID" referenced-column-name="ID"/>
-      </join-columns>
-    </many-to-one>-->
-    <one-to-many field="dossier" target-entity="Application\Entity\Db\Dossier" mapped-by="intervenant" />
-    <one-to-many field="contrat" target-entity="Application\Entity\Db\Contrat" mapped-by="intervenant" />
   </entity>
 </doctrine-mapping>

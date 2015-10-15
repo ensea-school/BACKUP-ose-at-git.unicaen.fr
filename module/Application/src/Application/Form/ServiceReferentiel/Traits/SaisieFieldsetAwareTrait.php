@@ -52,7 +52,7 @@ trait SaisieFieldsetAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->fieldsetServiceReferentielSaisie = $serviceLocator->getServiceLocator('FormElementManager')->get('ServiceReferentielSaisieFieldset');
+            $this->fieldsetServiceReferentielSaisie = $serviceLocator->get('FormElementManager')->get('ServiceReferentielSaisieFieldset');
         }
         return $this->fieldsetServiceReferentielSaisie;
     }

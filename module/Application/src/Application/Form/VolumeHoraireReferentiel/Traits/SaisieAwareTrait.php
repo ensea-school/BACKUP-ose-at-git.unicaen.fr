@@ -52,7 +52,7 @@ trait SaisieAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formVolumeHoraireReferentielSaisie = $serviceLocator->getServiceLocator('FormElementManager')->get('VolumeHoraireReferentielSaisie');
+            $this->formVolumeHoraireReferentielSaisie = $serviceLocator->get('FormElementManager')->get('VolumeHoraireReferentielSaisie');
         }
         return $this->formVolumeHoraireReferentielSaisie;
     }

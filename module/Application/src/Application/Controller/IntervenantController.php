@@ -336,8 +336,8 @@ class IntervenantController extends AbstractActionController implements Workflow
             $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
 
-        if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
-            throw new \Common\Exception\MessageException("Pas encore implémenté pour IntervenantPermanent");
+        if ($intervenant->estPermanent()) {
+            throw new \Common\Exception\MessageException("Pas encore implémenté pour un permanent");
         }
 
         $title = sprintf("Feuille de route <small>%s</small>", $intervenant);

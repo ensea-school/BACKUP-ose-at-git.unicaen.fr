@@ -52,7 +52,7 @@ trait MotifModificationServiceDuFieldsetAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->fieldsetIntervenantMotifModificationServiceDu = $serviceLocator->getServiceLocator('FormElementManager')->get('IntervenantMotifModificationServiceDuFieldset');
+            $this->fieldsetIntervenantMotifModificationServiceDu = $serviceLocator->get('FormElementManager')->get('IntervenantMotifModificationServiceDuFieldset');
         }
         return $this->fieldsetIntervenantMotifModificationServiceDu;
     }

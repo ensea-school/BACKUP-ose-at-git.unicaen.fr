@@ -52,7 +52,7 @@ trait MiseEnPaiementFormAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formPaiementMiseEnPaiement = $serviceLocator->getServiceLocator('FormElementManager')->get('PaiementMiseEnPaiementForm');
+            $this->formPaiementMiseEnPaiement = $serviceLocator->get('FormElementManager')->get('PaiementMiseEnPaiementForm');
         }
         return $this->formPaiementMiseEnPaiement;
     }

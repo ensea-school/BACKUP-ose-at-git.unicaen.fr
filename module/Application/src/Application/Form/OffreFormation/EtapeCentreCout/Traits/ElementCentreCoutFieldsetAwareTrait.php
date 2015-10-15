@@ -52,7 +52,7 @@ trait ElementCentreCoutFieldsetAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout = $serviceLocator->getServiceLocator('FormElementManager')->get('ElementCentreCoutFieldset');
+            $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout = $serviceLocator->get('FormElementManager')->get('ElementCentreCoutFieldset');
         }
         return $this->fieldsetOffreFormationEtapeCentreCoutElementCentreCout;
     }

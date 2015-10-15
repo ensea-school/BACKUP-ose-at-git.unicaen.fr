@@ -46,9 +46,9 @@
         <join-column name="TYPE_INTERVENTION_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="elementDiscipline" target-entity="Application\Entity\Db\ElementDiscipline">
+    <many-to-one field="elementPedagogique" target-entity="Application\Entity\Db\ElementPedagogique">
       <join-columns>
-        <join-column name="ELEMENT_DISCIPLINE_ID" referenced-column-name="ID"/>
+        <join-column name="ELEMENT_PEDAGOGIQUE_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
   </entity>

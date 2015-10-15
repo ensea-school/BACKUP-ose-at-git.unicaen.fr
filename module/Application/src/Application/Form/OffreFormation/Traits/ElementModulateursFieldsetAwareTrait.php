@@ -52,7 +52,7 @@ trait ElementModulateursFieldsetAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->fieldsetOffreFormationElementModulateurs = $serviceLocator->getServiceLocator('FormElementManager')->get('ElementModulateursFieldset');
+            $this->fieldsetOffreFormationElementModulateurs = $serviceLocator->get('FormElementManager')->get('ElementModulateursFieldset');
         }
         return $this->fieldsetOffreFormationElementModulateurs;
     }

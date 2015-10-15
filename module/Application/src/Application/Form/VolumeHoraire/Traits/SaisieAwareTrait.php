@@ -52,7 +52,7 @@ trait SaisieAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formVolumeHoraireSaisie = $serviceLocator->getServiceLocator('FormElementManager')->get('VolumeHoraireSaisie');
+            $this->formVolumeHoraireSaisie = $serviceLocator->get('FormElementManager')->get('VolumeHoraireSaisie');
         }
         return $this->formVolumeHoraireSaisie;
     }

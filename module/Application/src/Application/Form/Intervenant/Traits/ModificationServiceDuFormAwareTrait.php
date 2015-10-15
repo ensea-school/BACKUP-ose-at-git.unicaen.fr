@@ -52,7 +52,7 @@ trait ModificationServiceDuFormAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formIntervenantModificationServiceDu = $serviceLocator->getServiceLocator('FormElementManager')->get('IntervenantModificationServiceDuForm');
+            $this->formIntervenantModificationServiceDu = $serviceLocator->get('FormElementManager')->get('IntervenantModificationServiceDuForm');
         }
         return $this->formIntervenantModificationServiceDu;
     }

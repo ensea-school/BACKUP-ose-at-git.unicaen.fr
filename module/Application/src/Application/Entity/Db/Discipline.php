@@ -24,11 +24,6 @@ class Discipline implements HistoriqueAwareInterface
     protected $libelleLong;
 
     /**
-     * @var integer
-     */
-    protected $ordre;
-
-    /**
      * @var string
      */
     protected $sourceCode;
@@ -97,34 +92,6 @@ class Discipline implements HistoriqueAwareInterface
     public function getLibelleLong()
     {
         return $this->libelleLong;
-    }
-
-
-
-    /**
-     * Set ordre
-     *
-     * @param integer $ordre
-     *
-     * @return Discipline
-     */
-    public function setOrdre($ordre)
-    {
-        $this->ordre = $ordre;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get ordre
-     *
-     * @return integer
-     */
-    public function getOrdre()
-    {
-        return $this->ordre;
     }
 
 

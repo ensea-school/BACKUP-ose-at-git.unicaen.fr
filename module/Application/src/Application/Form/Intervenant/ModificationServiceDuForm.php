@@ -5,7 +5,6 @@ namespace Application\Form\Intervenant;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Application\Entity\Db\IntervenantPermanent;
 
 /**
  * Formulaire de modification de service dû d'un intervenant.
@@ -80,17 +79,13 @@ class ModificationServiceDuForm extends Form implements ServiceLocatorAwareInter
      *
      * Ensures the object is populated with validated values.
      *
-     * @param  \Application\Entity\Db\IntervenantPermanent $object
+     * @param  \Application\Entity\Db\Intervenant $object
      * @param  int $flags
      * @return mixed|void
      * @throws Exception\InvalidArgumentException
      */
     public function bind($object, $flags = \Zend\Form\FormInterface::VALUES_NORMALIZED)
     {
-        if (!$object instanceof IntervenantPermanent) {
-            throw new LogicException("Intervenant spécifié invalide.");
-        }
-
         return parent::bind($object, $flags);
     }
 }

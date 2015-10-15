@@ -1,0 +1,48 @@
+<?php
+/* @var $disciplines \Application\Entity\Db\Discipline[] */
+
+$canEdit = $this->isAllowed('privilege/'.\Application\Entity\Db\Privilege::DISCIPLINE_EDITION);
+?>
+
+<h1>Gestion des disciplines</h1>
+<table class="table table-bordered">
+    <htead>
+        <tr>
+            <th>Code</th>
+            <th>Libellé court</th>
+            <th>Libellé long</th>
+            <th>Src/Actions</th>
+        </tr>
+    </htead>
+    <tbody>
+    <?php foreach( $disciplines as $discipline ): ?>
+        <tr>
+            <td style="text-align: center"><?php echo $discipline->getSourceCode(); ?></td>
+            <td><?php echo $discipline->getLibelleCourt(); ?></td>
+            <td><?php echo $discipline->getLibelleLong(); ?></td>
+            <td style="text-align: center">
+            <?php if ($discipline->getSource()->isOse() && $canEdit): ?>
+                <a class="ajax-modal" data-event="discipline-edition" href="<?php echo $this->url('discipline/saisir', ['discipline' => $discipline->getId()])?>" title="Modifier la discipline"><span class="glyphicon glyphicon-edit"></span></a>
+                <a class="ajax-modal" data-event="discipline-suppression" href="<?php echo $this->url('discipline/supprimer', ['discipline' => $discipline->getId()])?>" title="Supprimer la discipline"><span class="glyphicon glyphicon-remove"></span></a>
+            <?php else: ?>
+                <?php echo $discipline->getSource(); ?>
+            <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php if ($canEdit):?>
+<a class="btn btn-primary ajax-modal" data-event="discipline-edition" href="<?php echo $this->url('discipline/saisir'); ?>"><span class="glyphicon glyphicon-plus"></span> Ajout d'une nouvelle discipline</a>
+<?php endif; ?>
+<script type="text/javascript">
+    $(function() {
+        $("body").on("discipline-edition", function(event, data) {
+            window.location.reload();
+        });
+
+        $("body").on("discipline-suppression", function(event, data) {
+            window.location.reload();
+        });
+    });
+</script>

@@ -52,7 +52,7 @@ trait HeuresCompFormAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formIntervenantHeuresComp = $serviceLocator->getServiceLocator('FormElementManager')->get('IntervenantHeuresCompForm');
+            $this->formIntervenantHeuresComp = $serviceLocator->get('FormElementManager')->get('IntervenantHeuresCompForm');
         }
         return $this->formIntervenantHeuresComp;
     }

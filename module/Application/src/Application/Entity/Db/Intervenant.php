@@ -2,6 +2,9 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\DisciplineAwareTrait;
+use Application\Entity\Db\Traits\DossierAwareTrait;
+use Application\Entity\Db\Traits\GradeAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Form\Annotation;
@@ -19,6 +22,9 @@ use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInterface, ResourceInterface, AnneeAwareInterface
 {
     use HistoriqueAwareTrait;
+    use GradeAwareTrait;
+    use DisciplineAwareTrait;
+    use DossierAwareTrait;
 
     /**
      * @var \DateTime
@@ -186,11 +192,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     protected $structure;
 
     /**
-     * @var \Application\Entity\Db\Discipline
-     */
-    protected $discipline;
-
-    /**
      * @var \Application\Entity\Db\Civilite
      * @Annotation\Type("Zend\Form\Element\Select")
      * @Annotation\Filter({"name":"StringTrim"})
@@ -306,6 +307,16 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     private $vIndicDepassRef;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $modificationServiceDu;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $contrat;
+
 
 
     /**
@@ -325,6 +336,8 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
         $this->miseEnPaiementIntervenantStructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vIndicAttenteDemandeMep            = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vIndicAttenteMep                   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->modificationServiceDu              = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contrat                            = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -438,18 +451,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     {
         return $this->email;
     }
-
-
-
-    /**
-     * Retourne l'adresse mail personnelle éventuelle.
-     * Si elle est null et que le paramètre le demande, retourne l'adresse par défaut.
-     *
-     * @param bool $fallbackOnDefault
-     *
-     * @return string
-     */
-    abstract public function getEmailPerso($fallbackOnDefault = false);
 
 
 
@@ -1202,34 +1203,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
 
 
     /**
-     * Set discipline
-     *
-     * @param \Application\Entity\Db\Discipline $discipline
-     *
-     * @return Intervenant
-     */
-    public function setDiscipline(\Application\Entity\Db\Discipline $discipline = null)
-    {
-        $this->discipline = $discipline;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get discipline
-     *
-     * @return \Application\Entity\Db\Discipline
-     */
-    public function getDiscipline()
-    {
-        return $this->discipline;
-    }
-
-
-
-    /**
      * Add service
      *
      * @param \Application\Entity\Db\Service $service
@@ -1522,7 +1495,10 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      */
     public function estUneFemme()
     {
-        return Civilite::SEXE_F === $this->getCivilite()->getSexe();
+        $civilite = $this->getDossier() ? $this->getDossier()->getCivilite() : $this->getCivilite();
+        return Civilite::SEXE_F === $civilite->getSexe();
+
+        //return Civilite::SEXE_F === $this->getCivilite()->getSexe();
     }
 
 
@@ -1560,19 +1536,6 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getSourceToString()
     {
         return $this->getSource()->getLibelle();
-    }
-
-
-
-    /**
-     * Get type id
-     *
-     * @return integer
-     * @see \Application\Entity\Db\TypeIntervenant
-     */
-    public function getTypeId()
-    {
-        return $this instanceof IntervenantPermanent ? TypeIntervenant::TYPE_PERMANENT : TypeIntervenant::TYPE_EXTERIEUR;
     }
 
 
@@ -1649,7 +1612,7 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
      *
      * @param null|boolean $premierRecrutement
      *
-     * @return Dossier
+     * @return self
      */
     public function setPremierRecrutement($premierRecrutement)
     {
@@ -1873,6 +1836,213 @@ abstract class Intervenant implements IntervenantInterface, HistoriqueAwareInter
     public function getMiseEnPaiementIntervenantStructure()
     {
         return $this->miseEnPaiementIntervenantStructure;
+    }
+
+
+
+    /**
+     * Add modificationServiceDu
+     *
+     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
+     *
+     * @return Intervenant
+     */
+    public function addModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu)
+    {
+        $this->modificationServiceDu[] = $modificationServiceDu;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove modificationServiceDu
+     *
+     * @param \Application\Entity\Db\ModificationServiceDu $modificationServiceDu
+     * @param bool                                         $softDelete
+     */
+    public function removeModificationServiceDu(\Application\Entity\Db\ModificationServiceDu $modificationServiceDu, $softDelete = true)
+    {
+        if ($softDelete && $modificationServiceDu instanceof HistoriqueAwareInterface) {
+            $modificationServiceDu->setHistoDestruction(new \DateTime());
+        } else {
+            $this->modificationServiceDu->removeElement($modificationServiceDu);
+        }
+    }
+
+
+
+    /**
+     * Get modificationServiceDu
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getModificationServiceDu()
+    {
+        return $this->modificationServiceDu;
+    }
+
+
+
+    /**
+     * Get modificationServiceDuToStrings
+     *
+     * @return string[]
+     */
+    public function getModificationServiceDuToStrings()
+    {
+        $services = [];
+        foreach ($this->getModificationServiceDu() as $sr) {
+            /* @var $sr \Application\Entity\Db\ModificationServiceDu */
+            $services[] = "" . $sr;
+        }
+
+        return $services;
+    }
+
+
+
+    /**
+     * Remove all modificationServiceDu
+     *
+     * @param bool $softDelete
+     *
+     * @return self
+     */
+    public function removeAllModificationServiceDu($softDelete = true)
+    {
+        foreach ($this->getModificationServiceDu() as $modificationServiceDu) {
+            $this->removeModificationServiceDu($modificationServiceDu, $softDelete);
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * Retourne l'adresse mail personnelle éventuelle.
+     * Si elle est null et que le paramètre le demande, retourne l'adresse par défaut.
+     *
+     * @param bool $fallbackOnDefault
+     *
+     * @return string
+     */
+    public function getEmailPerso($fallbackOnDefault = false)
+    {
+        $mail = null;
+
+        if ($this->getDossier()) {
+            $mail = $this->getDossier()->getEmailPerso();
+        }
+
+        if (!$mail && $fallbackOnDefault) {
+            $mail = $this->getEmail();
+        }
+
+        return $mail;
+    }
+
+
+
+    /**
+     * Add contrat
+     *
+     * @param \Application\Entity\Db\Contrat $contrat
+     *
+     * @return Intervenant
+     */
+    public function addContrat(\Application\Entity\Db\Contrat $contrat)
+    {
+        $this->contrat[] = $contrat;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Remove contrat
+     *
+     * @param \Application\Entity\Db\Contrat $contrat
+     */
+    public function removeContrat(\Application\Entity\Db\Contrat $contrat)
+    {
+        $this->contrat->removeElement($contrat);
+    }
+
+
+
+    /**
+     * Get contrat
+     *
+     * @param \Application\Entity\Db\TypeContrat $typeContrat
+     * @param \Application\Entity\Db\Structure   $structure
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContrat(TypeContrat $typeContrat = null, Structure $structure = null)
+    {
+        if (null === $this->contrat) {
+            return null;
+        }
+
+        $filter   = function (Contrat $contrat) use ($typeContrat, $structure) {
+            if ($typeContrat && $typeContrat !== $contrat->getTypeContrat()) {
+                return false;
+            }
+            if ($structure && $structure !== $contrat->getStructure()) {
+                return false;
+            }
+
+            return true;
+        };
+        $contrats = $this->contrat->filter($filter);
+
+        return $contrats;
+    }
+
+
+
+    /**
+     * Get contrat initial
+     *
+     * @return Contrat|null
+     */
+    public function getContratInitial()
+    {
+        if (!count($this->getContrat())) {
+            return null;
+        }
+
+        $type = TypeContrat::CODE_CONTRAT;
+
+        $filter   = function ($contrat) use ($type) {
+            return $type === $contrat->getTypeContrat()->getCode();
+        };
+        $contrats = $this->getContrat()->filter($filter);
+
+        return count($contrats) ? $contrats->first() : null;
+    }
+
+
+
+    /**
+     * Get avenants
+     *
+     * @return Contrat[]|null
+     */
+    public function getAvenants()
+    {
+        $type = TypeContrat::CODE_AVENANT;
+
+        $filter   = function (Contrat $contrat) use ($type) {
+            return $type === $contrat->getTypeContrat()->getCode();
+        };
+        $contrats = $this->getContrat()->filter($filter);
+
+        return $contrats;
     }
 
 

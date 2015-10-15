@@ -52,7 +52,7 @@ trait ModificationServiceDuFieldsetAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->fieldsetIntervenantModificationServiceDu = $serviceLocator->getServiceLocator('FormElementManager')->get('IntervenantModificationServiceDuFieldset');
+            $this->fieldsetIntervenantModificationServiceDu = $serviceLocator->get('FormElementManager')->get('IntervenantModificationServiceDuFieldset');
         }
         return $this->fieldsetIntervenantModificationServiceDu;
     }

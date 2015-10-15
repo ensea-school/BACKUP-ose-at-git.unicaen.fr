@@ -42,14 +42,14 @@ use Zend\View\Model\ViewModel;
  */
 class DossierController extends AbstractActionController implements WorkflowIntervenantAwareInterface
 {
-    use WorkflowIntervenantAwareTrait,
-        ContextAwareTrait,
-        IntervenantAwareTrait,
-        ServiceAwareTrait,
-        DossierAwareTrait,
-        ValidationAwareTrait,
-        StatutIntervenantAwareTrait
-    ;
+    use WorkflowIntervenantAwareTrait;
+    use ContextAwareTrait;
+    use IntervenantAwareTrait;
+    use ServiceAwareTrait;
+    use DossierAwareTrait;
+    use ValidationAwareTrait;
+    use StatutIntervenantAwareTrait;
+
 
     /**
      * @var IntervenantExterieur

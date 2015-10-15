@@ -2,7 +2,7 @@
 
 namespace Application\Service\Interfaces;
 
-use Application\Service\Service;
+use Application\Service\ServiceService;
 use RuntimeException;
 
 /**
@@ -13,10 +13,11 @@ use RuntimeException;
 interface ServiceAwareInterface
 {
     /**
-     * @param Service $service
-     * @return self
+     * @param ServiceService $service
+     *
+*@return self
      */
-    public function setService( Service $service );
+    public function setService(ServiceService $service );
 
 
 

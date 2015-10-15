@@ -52,7 +52,7 @@ trait ElementPedagogiqueRechercheFieldsetAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->fieldsetOffreFormationElementPedagogiqueRecherche = $serviceLocator->getServiceLocator('FormElementManager')->get('FormElementPedagogiqueRechercheFieldset');
+            $this->fieldsetOffreFormationElementPedagogiqueRecherche = $serviceLocator->get('FormElementManager')->get('FormElementPedagogiqueRechercheFieldset');
         }
         return $this->fieldsetOffreFormationElementPedagogiqueRecherche;
     }

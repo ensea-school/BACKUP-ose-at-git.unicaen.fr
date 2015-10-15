@@ -18,7 +18,6 @@
     <field name="histoModification" type="datetime" column="HISTO_MODIFICATION" nullable="false"/>
     <field name="libelleCourt" type="string" column="LIBELLE_COURT" length="20" nullable="true"/>
     <field name="libelleLong" type="string" column="LIBELLE_LONG" length="200" nullable="false"/>
-    <field name="ordre" type="integer" column="ORDRE" nullable="false"/>
     <field name="sourceCode" type="string" column="SOURCE_CODE" length="100" nullable="false"/>
     <many-to-one field="source" target-entity="Application\Entity\Db\Source">
       <join-columns>

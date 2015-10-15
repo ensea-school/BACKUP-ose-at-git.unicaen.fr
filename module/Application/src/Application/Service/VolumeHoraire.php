@@ -98,7 +98,7 @@ class VolumeHoraire extends AbstractEntityService
         list($qb, $alias) = $this->initQuery($qb, $alias);
 
         $serviceService = $this->getServiceLocator()->get('applicationService');
-        /* @var $serviceService Service */
+        /* @var $serviceService ServiceService */
 
         $serviceElement = $this->getServiceLocator()->get('applicationElementPedagogique');
         /* @var $element ElementPedagogique */

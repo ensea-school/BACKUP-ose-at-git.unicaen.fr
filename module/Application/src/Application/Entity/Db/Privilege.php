@@ -7,6 +7,9 @@ namespace Application\Entity\Db;
  */
 class Privilege
 {
+    const DISCIPLINE_EDITION                = 'discipline-edition';
+    const DISCIPLINE_GESTION                = 'discipline-gestion';
+    const DISCIPLINE_VISUALISATION          = 'discipline-visualisation';
     const DROIT_ROLE_VISUALISATION          = 'droit-role-visualisation';
     const DROIT_ROLE_EDITION                = 'droit-role-edition';
     const DROIT_PRIVILEGE_VISUALISATION     = 'droit-privilege-visualisation';

@@ -52,7 +52,7 @@ trait SaisieMultipleFieldsetAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->fieldsetVolumeHoraireReferentielSaisieMultiple = $serviceLocator->getServiceLocator('FormElementManager')->get('VolumeHoraireReferentielSaisieMultipleFieldset');
+            $this->fieldsetVolumeHoraireReferentielSaisieMultiple = $serviceLocator->get('FormElementManager')->get('VolumeHoraireReferentielSaisieMultipleFieldset');
         }
         return $this->fieldsetVolumeHoraireReferentielSaisieMultiple;
     }

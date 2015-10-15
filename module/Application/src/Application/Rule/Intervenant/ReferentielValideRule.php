@@ -3,6 +3,7 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\TypeValidation;
+use Application\Service\Traits\TypeValidationAwareTrait;
 use Application\Service\TypeValidation as TypeValidationService;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -14,6 +15,8 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ReferentielValideRule extends AbstractIntervenantRule
 {
+    use TypeValidationAwareTrait;
+
     const MESSAGE_AUCUNE = 'messageAucune';
 
     /**
@@ -73,7 +76,7 @@ class ReferentielValideRule extends AbstractIntervenantRule
     public function getQueryBuilder()
     {
         $em = $this->getServiceIntervenant()->getEntityManager();
-        $qb = $em->getRepository('Application\Entity\Db\IntervenantPermanent')->createQueryBuilder("i")
+        $qb = $em->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
                 ->select("i.id")
                 ->distinct()
                 ->join("i.serviceReferentiel", 'r')
@@ -97,14 +100,5 @@ class ReferentielValideRule extends AbstractIntervenantRule
         $typeValidation = $qb->getQuery()->getOneOrNullResult();
 
         return $typeValidation;
-    }
-
-    /**
-     *
-     * @return TypeValidationService
-     */
-    private function getServiceTypeValidation()
-    {
-        return $this->getServiceLocator()->get('ApplicationTypeValidation');
     }
 }

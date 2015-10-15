@@ -104,7 +104,7 @@ class Ligne extends AbstractHtmlElement implements ServiceLocatorAwareInterface,
             $out .= '<td>'.$this->renderIntervenant($service->getIntervenant()).'</td>';
         }
         if ($liste->getColumnVisibility('structure-aff')){
-            if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantPermanent){
+            if ($service->getIntervenant()->estPermanent()){
                 $out .= '<td>'.$this->renderStructure( $service->getIntervenant()->getStructure() )."</td>\n";
             } else {
                 $out .= "<td>&nbsp;</td>\n";

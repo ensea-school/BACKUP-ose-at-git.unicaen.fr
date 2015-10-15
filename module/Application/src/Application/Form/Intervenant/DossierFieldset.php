@@ -8,6 +8,8 @@ use Application\Entity\Db\StatutIntervenant as StatutIntervenantEntity;
 use Application\Service\Departement as DepartementService;
 use Application\Service\Pays as PaysService;
 use Application\Service\Traits\ContextAwareTrait;
+use Application\Service\Traits\DepartementAwareTrait;
+use Application\Service\Traits\PaysAwareTrait;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Application\Validator\DepartementNaissanceValidator;
 use Application\Validator\NumeroINSEEValidator;
@@ -33,6 +35,8 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
     use ServiceLocatorAwareTrait;
     use ContextAwareTrait;
     use StatutIntervenantAwareTrait;
+    use PaysAwareTrait;
+    use DepartementAwareTrait;
 
     static private $franceId;
     
@@ -424,22 +428,6 @@ class DossierFieldset extends Fieldset implements ServiceLocatorAwareInterface, 
         ];
 
         return $spec;
-    }
-    
-    /**
-     * @return PaysService
-     */
-    private function getServicePays() 
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('ApplicationPays');
-    }
-    
-    /**
-     * @return DepartementService
-     */
-    private function getServiceDepartement() 
-    {
-        return $this->getServiceLocator()->getServiceLocator()->get('ApplicationDepartement');
     }
 }
 

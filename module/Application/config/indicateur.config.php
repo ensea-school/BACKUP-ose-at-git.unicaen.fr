@@ -116,27 +116,10 @@ return [
                         'result-item-donnees-perso-modif',
                         'purger-indicateur-donnees-perso-modif'
                     ],
-                    'roles'      => [R_ROLE, ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID],
+                    'roles'      => ['user', ComposanteRole::ROLE_ID, DrhRole::ROLE_ID, AdministrateurRole::ROLE_ID],
                 ],
             ],
         ],
-//        'resource_providers' => array(
-//            'BjyAuthorize\Provider\Resource\Config' => array(
-//                'Intervenant' => [],
-//            ),
-//        ),
-//        'rule_providers' => array(
-//            'BjyAuthorize\Provider\Rule\Config' => array(
-//                'allow' => array(
-//                    array(
-//                        $R_ALL,
-//                        'Intervenant',
-//                        array('total-heures-comp'),
-//                        'IntervenantAssertion',
-//                    ),
-//                ),
-//            ),
-//        ),
     ],
     'controllers' => [
         'invokables' => [

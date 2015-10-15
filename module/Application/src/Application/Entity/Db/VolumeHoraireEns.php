@@ -2,6 +2,9 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\ElementPedagogiqueAwareTrait;
+use Application\Entity\Db\Traits\SourceAwareTrait;
+use Application\Entity\Db\Traits\TypeInterventionAwareTrait;
 use Doctrine\ORM\Mapping as ORM;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
@@ -12,6 +15,14 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 class VolumeHoraireEns implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
+    use ElementPedagogiqueAwareTrait;
+    use SourceAwareTrait;
+    use TypeInterventionAwareTrait;
+
+    /**
+     * @var integer
+     */
+    protected $id;
 
     /**
      * @var float
@@ -23,25 +34,17 @@ class VolumeHoraireEns implements HistoriqueAwareInterface
      */
     protected $sourceCode;
 
-    /**
-     * @var integer
-     */
-    protected $id;
+
 
     /**
-     * @var \Application\Entity\Db\Source
+     * Get id
+     *
+     * @return integer
      */
-    protected $source;
-
-    /**
-     * @var \Application\Entity\Db\TypeIntervention
-     */
-    protected $typeIntervention;
-
-    /**
-     * @var \Application\Entity\Db\ElementDiscipline
-     */
-    protected $elementDiscipline;
+    public function getId()
+    {
+        return $this->id;
+    }
 
 
 
@@ -97,104 +100,5 @@ class VolumeHoraireEns implements HistoriqueAwareInterface
     public function getSourceCode()
     {
         return $this->sourceCode;
-    }
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return VolumeHoraireEns
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-
-
-    /**
-     *
-     *
-     * /**
-     * Set typeIntervention
-     *
-     * @param \Application\Entity\Db\TypeIntervention $typeIntervention
-     *
-     * @return VolumeHoraireEns
-     */
-    public function setTypeIntervention(\Application\Entity\Db\TypeIntervention $typeIntervention = null)
-    {
-        $this->typeIntervention = $typeIntervention;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get typeIntervention
-     *
-     * @return \Application\Entity\Db\TypeIntervention
-     */
-    public function getTypeIntervention()
-    {
-        return $this->typeIntervention;
-    }
-
-
-
-    /**
-     * Set elementDiscipline
-     *
-     * @param \Application\Entity\Db\ElementDiscipline $elementDiscipline
-     *
-     * @return VolumeHoraireEns
-     */
-    public function setElementDiscipline(\Application\Entity\Db\ElementDiscipline $elementDiscipline = null)
-    {
-        $this->elementDiscipline = $elementDiscipline;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get elementDiscipline
-     *
-     * @return \Application\Entity\Db\ElementDiscipline
-     */
-    public function getElementDiscipline()
-    {
-        return $this->elementDiscipline;
     }
 }

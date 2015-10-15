@@ -3,6 +3,12 @@
 namespace Application\Entity\Db;
 
 use Application\Entity\Db\Interfaces\AnneeAwareInterface;
+use Application\Entity\Db\Traits\AnneeAwareTrait;
+use Application\Entity\Db\Traits\DisciplineAwareTrait;
+use Application\Entity\Db\Traits\EtapeAwareTrait;
+use Application\Entity\Db\Traits\PeriodeAwareTrait;
+use Application\Entity\Db\Traits\SourceAwareTrait;
+use Application\Entity\Db\Traits\StructureAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -13,41 +19,12 @@ use Zend\Permissions\Acl\Resource\ResourceInterface;
 class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
-
-
-
-    public function __toString()
-    {
-        return $this->getSourceCode() . ' - ' . $this->getLibelle();
-    }
-
-
-
-    /**
-     * Retourne les étapes auxquelles est lié cet élément pédagogique.
-     *
-     * @param bool $principaleIncluse Faut-il inclure l'étape principale ou non ?
-     *
-     * @return array
-     */
-    public function getEtapes($principaleIncluse = true)
-    {
-        $etapePrincipale = $this->getEtape();
-        $etapes          = [];
-
-        if (($chemins = $this->getCheminPedagogique())) {
-            foreach ($this->getCheminPedagogique() as $cp) {
-                /* @var $cp \Application\Entity\Db\CheminPedagogique */
-                if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
-                    continue;
-                }
-                $etapes[$cp->getOrdre()] = $cp->getEtape();
-            }
-            ksort($etapes);
-        }
-
-        return $etapes;
-    }
+    use DisciplineAwareTrait;
+    use AnneeAwareTrait;
+    use StructureAwareTrait;
+    use PeriodeAwareTrait;
+    use SourceAwareTrait;
+    use EtapeAwareTrait;
 
 
 
@@ -60,11 +37,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
      * @var string
      */
     protected $sourceCode;
-
-    /**
-     * @var \Application\Entity\Db\Annee
-     */
-    protected $annee;
 
     /**
      * @var integer
@@ -129,26 +101,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     protected $service;
 
     /**
-     * @var \Application\Entity\Db\Structure
-     */
-    protected $structure;
-
-    /**
-     * @var \Application\Entity\Db\Periode
-     */
-    protected $periode;
-
-    /**
-     * @var \Application\Entity\Db\Source
-     */
-    protected $source;
-
-    /**
-     * @var \Application\Entity\Db\Etape
-     */
-    protected $etape;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $elementModulateur;
@@ -179,6 +131,41 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
      * @var \Doctrine\Common\Collections\Collection
      */
     private $centreCoutEp;
+
+
+
+    public function __toString()
+    {
+        return $this->getSourceCode() . ' - ' . $this->getLibelle();
+    }
+
+
+
+    /**
+     * Retourne les étapes auxquelles est lié cet élément pédagogique.
+     *
+     * @param bool $principaleIncluse Faut-il inclure l'étape principale ou non ?
+     *
+     * @return array
+     */
+    public function getEtapes($principaleIncluse = true)
+    {
+        $etapePrincipale = $this->getEtape();
+        $etapes          = [];
+
+        if (($chemins = $this->getCheminPedagogique())) {
+            foreach ($this->getCheminPedagogique() as $cp) {
+                /* @var $cp \Application\Entity\Db\CheminPedagogique */
+                if (!$principaleIncluse && $etapePrincipale === $cp->getEtape()) {
+                    continue;
+                }
+                $etapes[$cp->getOrdre()] = $cp->getEtape();
+            }
+            ksort($etapes);
+        }
+
+        return $etapes;
+    }
 
 
 
@@ -260,34 +247,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
     public function getSourceCode()
     {
         return $this->sourceCode;
-    }
-
-
-
-    /**
-     * Set annee
-     *
-     * @param \Application\Entity\Db\Annee $annee
-     *
-     * @return Service
-     */
-    public function setAnnee(\Application\Entity\Db\Annee $annee = null)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get annee
-     *
-     * @return \Application\Entity\Db\Annee
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
     }
 
 
@@ -514,118 +473,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
 
     /**
-     * Set structure
-     *
-     * @param \Application\Entity\Db\Structure $structure
-     *
-     * @return ElementPedagogique
-     */
-    public function setStructure(\Application\Entity\Db\Structure $structure = null)
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get structure
-     *
-     * @return \Application\Entity\Db\Structure
-     */
-    public function getStructure()
-    {
-        return $this->structure;
-    }
-
-
-
-    /**
-     * Set periode
-     *
-     * @param \Application\Entity\Db\Periode $periode
-     *
-     * @return ElementPedagogique
-     */
-    public function setPeriode(\Application\Entity\Db\Periode $periode = null)
-    {
-        $this->periode = $periode;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get periode
-     *
-     * @return \Application\Entity\Db\Periode
-     */
-    public function getPeriode()
-    {
-        return $this->periode;
-    }
-
-
-
-    /**
-     * Set source
-     *
-     * @param \Application\Entity\Db\Source $source
-     *
-     * @return ElementPedagogique
-     */
-    public function setSource(\Application\Entity\Db\Source $source = null)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get source
-     *
-     * @return \Application\Entity\Db\Source
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-
-
-    /**
-     * Set etape
-     *
-     * @param \Application\Entity\Db\Etape $etape
-     *
-     * @return ElementPedagogique
-     */
-    public function setEtape(\Application\Entity\Db\Etape $etape = null)
-    {
-        $this->etape = $etape;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get etape
-     *
-     * @return \Application\Entity\Db\Etape
-     */
-    public function getEtape()
-    {
-        return $this->etape;
-    }
-
-
-
-    /**
      * Add cheminPedagogique
      *
      * @param \Application\Entity\Db\CheminPedagogique $cheminPedagogique
@@ -836,18 +683,6 @@ class ElementPedagogique implements HistoriqueAwareInterface, AnneeAwareInterfac
 
         return $slice;
     }
-
-
-
-    /*public function __debugInfo()
-    {
-        return [
-            'id'         => $this->id,
-            'annee'      => $this->annee ? $this->annee->getLibelle() : null,
-            'sourceCode' => $this->sourceCode,
-            'libelle'    => $this->libelle,
-        ];
-    }*/
 
 
 

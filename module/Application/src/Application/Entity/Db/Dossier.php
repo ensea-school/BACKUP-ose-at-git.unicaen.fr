@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -10,12 +11,8 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 class Dossier implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
+    use IntervenantAwareTrait;
 
-    /**
-     * @var \Application\Entity\Db\IntervenantExterieur
-     */
-    private $intervenant;
-    
     /**
      * @var string
      */
@@ -117,28 +114,6 @@ class Dossier implements HistoriqueAwareInterface
     public function __construct()
     {
         $this->pieceJointe = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\IntervenantExterieur $intervenant
-     * @return self
-     */
-    public function setIntervenant(\Application\Entity\Db\IntervenantExterieur $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-        return $this;
-    }
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\IntervenantExterieur 
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
     }
 
     /**
@@ -584,7 +559,6 @@ class Dossier implements HistoriqueAwareInterface
     public function fromIntervenant(IntervenantExterieur $intervenant)
     {
         $this
-                ->setIntervenant($intervenant)
                 ->setNomUsuel($intervenant->getNomUsuel())
                 ->setNomPatronymique($intervenant->getNomPatronymique())
                 ->setPrenom($intervenant->getPrenom())

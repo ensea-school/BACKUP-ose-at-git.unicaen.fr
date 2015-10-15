@@ -5,38 +5,99 @@ namespace Application;
 use Application\Entity\Db\Privilege;
 
 return [
-    'router' => [
+    'router'          => [
         'routes' => [
             'gestion' => [
-                'type'    => 'Literal',
-                'options' => [
-                    'route' => '/gestion',
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/gestion',
                     'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
-                        'controller' => 'Gestion',
-                        'action' => 'index',
+                        'controller'    => 'Gestion',
+                        'action'        => 'index',
                     ],
                 ],
                 'may_terminate' => true,
             ],
-        ],
-    ],
-    'navigation' => [
-        'default' => [
-            'home' => [
-                'pages' => [
-                    'gestion' => [
-                        'label'  => "Gestion",
-                        'route'  => 'gestion',
-                        'resource' => 'controller/Application\Controller\Gestion:index',
+            'discipline' => [
+                'type'          => 'Literal',
+                'options'       => [
+                    'route'    => '/discipline',
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller' => 'Discipline',
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'voir'      => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/voir/:discipline',
+                            'constraints' => [
+                                'discipline' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'voir',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'saisir'    => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/saisir[/:discipline]',
+                            'constraints' => [
+                                'discipline' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'saisir',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'supprimer' => [
+                        'type'          => 'Segment',
+                        'options'       => [
+                            'route'       => '/supprimer/:discipline',
+                            'constraints' => [
+                                'discipline' => '[0-9]*',
+                            ],
+                            'defaults'    => [
+                                'action' => 'supprimer',
+                            ],
+                        ],
+                        'may_terminate' => true,
                     ],
                 ],
             ],
         ],
     ],
-    'bjyauthorize' => [
+    'navigation'      => [
+        'default' => [
+            'home' => [
+                'pages' => [
+                    'gestion' => [
+                        'label'    => "Gestion",
+                        'route'    => 'gestion',
+                        'resource' => 'controller/Application\Controller\Gestion:index',
+                        'pages' => [
+                            'discipline' => [
+                                'label'    => "Disciplines",
+                                'title'    => "Gestion des disciplines",
+                                'route'    => 'discipline',
+                                'resource' => 'privilege/'.Privilege::DISCIPLINE_GESTION
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'bjyauthorize'    => [
         'guards' => [
-            'Application\Guard\PrivilegeController' => [
+            Guard\PrivilegeController::class => [
                 [
                     'controller' => 'Application\Controller\Gestion',
                     'action'     => ['index'],
@@ -49,12 +110,44 @@ return [
                         Privilege::DROIT_AFFECTATION_VISUALISATION,
                     ],
                 ],
+                [
+                    'controller' => 'Application\Controller\Discipline',
+                    'action'     => ['index'],
+                    'privileges' => [
+                        Privilege::DISCIPLINE_GESTION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Discipline',
+                    'action'     => ['voir'],
+                    'privileges' => [
+                        Privilege::DISCIPLINE_VISUALISATION,
+                    ],
+                ],
+                [
+                    'controller' => 'Application\Controller\Discipline',
+                    'action'     => ['saisir','supprimer'],
+                    'privileges' => [
+                        Privilege::DISCIPLINE_EDITION,
+                    ],
+                ],
             ],
         ],
     ],
-    'controllers' => [
+    'controllers'     => [
         'invokables' => [
-            'Application\Controller\Gestion' => 'Application\Controller\GestionController',
+            'Application\Controller\Gestion'    => Controller\GestionController::class,
+            'Application\Controller\Discipline' => Controller\DisciplineController::class,
+        ],
+    ],
+    'service_manager' => [
+        'invokables' => [
+            'ApplicationDiscipline' => Service\DisciplineService::class,
+        ],
+    ],
+    'form_elements' => [
+        'invokables' => [
+            'DisciplineForm'       => Form\DisciplineForm::class,
         ],
     ],
 ];

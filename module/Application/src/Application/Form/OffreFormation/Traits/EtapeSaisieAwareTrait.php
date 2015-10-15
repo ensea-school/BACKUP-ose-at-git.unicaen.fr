@@ -52,7 +52,7 @@ trait EtapeSaisieAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formOffreFormationEtapeSaisie = $serviceLocator->getServiceLocator('FormElementManager')->get('EtapeSaisie');
+            $this->formOffreFormationEtapeSaisie = $serviceLocator->get('FormElementManager')->get('EtapeSaisie');
         }
         return $this->formOffreFormationEtapeSaisie;
     }

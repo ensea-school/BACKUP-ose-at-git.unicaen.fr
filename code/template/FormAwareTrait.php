@@ -52,7 +52,7 @@ trait <class>
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this-><variable> = $serviceLocator->getServiceLocator('FormElementManager')->get('<name>');
+            $this-><variable> = $serviceLocator->get('FormElementManager')->get('<name>');
         }
         return $this-><variable>;
     }

@@ -35,7 +35,7 @@ use Zend\Session\Container as SessionContainer;
  *
  * @author Laurent LÉCLUSE <laurent.lecluse at unicaen.fr>
  */
-class Service extends AbstractEntityService
+class ServiceService extends AbstractEntityService
 {
     use ElementPedagogiqueAwareTrait;
     use IntervenantAwareTrait;

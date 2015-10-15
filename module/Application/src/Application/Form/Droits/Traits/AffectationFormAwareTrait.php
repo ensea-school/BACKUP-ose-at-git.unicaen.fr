@@ -52,7 +52,7 @@ trait AffectationFormAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formDroitsAffectation = $serviceLocator->getServiceLocator('FormElementManager')->get('DroitsAffectationForm');
+            $this->formDroitsAffectation = $serviceLocator->get('FormElementManager')->get('DroitsAffectationForm');
         }
         return $this->formDroitsAffectation;
     }

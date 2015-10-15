@@ -92,7 +92,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Structure',
                     'action' => ['voir', 'apercevoir'],
-                    'roles' => [R_ROLE]
+                    'roles' => ['user']
                 ],
                 [
                     'controller' => 'Application\Controller\Structure',

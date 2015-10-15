@@ -52,7 +52,7 @@ trait DossierAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formIntervenantDossier = $serviceLocator->getServiceLocator('FormElementManager')->get('IntervenantDossier');
+            $this->formIntervenantDossier = $serviceLocator->get('FormElementManager')->get('IntervenantDossier');
         }
         return $this->formIntervenantDossier;
     }

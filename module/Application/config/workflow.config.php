@@ -51,23 +51,6 @@ return [
                 ],
             ],
         ],
-//        'resource_providers' => array(
-//            'BjyAuthorize\Provider\Resource\Config' => array(
-//                'Intervenant' => [],
-//            ),
-//        ),
-//        'rule_providers' => array(
-//            'BjyAuthorize\Provider\Rule\Config' => array(
-//                'allow' => array(
-//                    array(
-//                        $R_ALL,
-//                        'Intervenant',
-//                        array('total-heures-comp'),
-//                        'IntervenantAssertion',
-//                    ),
-//                ),
-//            ),
-//        ),
     ],
     'controllers' => [
         'invokables' => [

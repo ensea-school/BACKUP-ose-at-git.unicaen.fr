@@ -150,7 +150,7 @@ class ServiceAssertion extends AbstractAssertion
                     return true;
                 }
                 if ($this->inCxtPrevu){
-                    if ($this->intervenant instanceof IntervenantPermanent) {
+                    if ($this->intervenant->estPermanent()) {
                         if ($roleStructure === $intervenantStructure) {
                             /* la composante d'affectation doit pouvoir saisir et contrôler les heures effectuées par ses permanents dans quelque composante que ce soit. */
                             return true;
@@ -166,7 +166,7 @@ class ServiceAssertion extends AbstractAssertion
                         // un gestionnaire peut saisir réalisé des enseignements que sur sa propre composante
                         return true;
                     }
-                    if ($this->intervenant instanceof IntervenantPermanent
+                    if ($this->intervenant->estPermanent()
                         &&  $roleStructure === $intervenantStructure
                     ){
                         // un gestionnaire doit pouvoir saisir des services réalisés sur d'autres composantes (et même hors-UCBN)

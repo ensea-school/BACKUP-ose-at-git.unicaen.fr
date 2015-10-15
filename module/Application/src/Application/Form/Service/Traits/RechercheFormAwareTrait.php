@@ -52,7 +52,7 @@ trait RechercheFormAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formServiceRecherche = $serviceLocator->getServiceLocator('FormElementManager')->get('ServiceRechercheForm');
+            $this->formServiceRecherche = $serviceLocator->get('FormElementManager')->get('ServiceRechercheForm');
         }
         return $this->formServiceRecherche;
     }

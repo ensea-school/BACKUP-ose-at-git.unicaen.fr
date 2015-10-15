@@ -25,6 +25,8 @@ from
   LEFT JOIN structure sa ON sa.id = a.structure_id AND sa.niveau = 2
 where
   NVL(ni.structure_id,0) <> NVL(a.structure_id,0)
+ORDER BY
+  personnel, indicateur
 ;
 
 delete from NOTIFICATION_INDICATEUR where

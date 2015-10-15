@@ -2,6 +2,7 @@
 
 namespace Application\Entity\Db;
 
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -13,6 +14,7 @@ use Application\Entity\VolumeHoraireReferentielListe;
 class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
 {
     use HistoriqueAwareTrait;
+    use IntervenantAwareTrait;
 
     /**
      * @var string
@@ -23,11 +25,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var \Application\Entity\Db\IntervenantPermanent
-     */
-    protected $intervenant;
 
     /**
      * @var \Application\Entity\Db\Structure
@@ -127,34 +124,6 @@ class ServiceReferentiel implements HistoriqueAwareInterface, ResourceInterface
     public function getId()
     {
         return $this->id;
-    }
-
-
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\IntervenantPermanent $intervenant
-     *
-     * @return ServiceReferentiel
-     */
-    public function setIntervenant(\Application\Entity\Db\IntervenantPermanent $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\IntervenantPermanent
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
     }
 
 

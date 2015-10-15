@@ -66,8 +66,8 @@ class ContratController extends AbstractActionController
         else {
             $intervenant = $this->context()->mandatory()->intervenantFromRoute();
         }
-
-        if ($intervenant instanceof \Application\Entity\Db\IntervenantPermanent) {
+        /* @var $intervenant Intervenant */
+        if ($intervenant->estPermanent()) {
             throw new \Common\Exception\MessageException("Les intervenants permanents n'ont pas de contrat.");
         }
 
@@ -746,7 +746,7 @@ class ContratController extends AbstractActionController
     }
 
     /**
-     * @return \Application\Service\Service
+     * @return \Application\Service\ServiceService
      */
     private function getServiceService()
     {

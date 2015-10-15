@@ -52,7 +52,7 @@ trait SaisieFieldsetAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->fieldsetServiceSaisie = $serviceLocator->getServiceLocator('FormElementManager')->get('ServiceSaisieFieldset');
+            $this->fieldsetServiceSaisie = $serviceLocator->get('FormElementManager')->get('ServiceSaisieFieldset');
         }
         return $this->fieldsetServiceSaisie;
     }

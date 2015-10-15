@@ -2,7 +2,7 @@
 
 namespace Application\Form\Intervenant;
 
-use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\Intervenant;
 use Application\Service\Traits\StatutIntervenantAwareTrait;
 use Common\Exception\LogicException;
 use Zend\Form\Element\Csrf;
@@ -57,10 +57,11 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
 
     /**
      * Redéfinition pour tester le type d'objet fourni.
+     * @param $object Intervenant
      */
     public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
-        if (!$object instanceof IntervenantExterieur) {
+        if ($object->estPermanent()) {
             throw new LogicException("Ce formulaire ne peut être bindé qu'à un IntervenantExterieur.");
         }
 

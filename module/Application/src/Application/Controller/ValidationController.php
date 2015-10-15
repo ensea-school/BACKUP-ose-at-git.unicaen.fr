@@ -746,7 +746,7 @@ class ValidationController extends AbstractActionController
     }
 
     /**
-     * @return \Application\Service\Service
+     * @return \Application\Service\ServiceService
      */
     private function getServiceService()
     {

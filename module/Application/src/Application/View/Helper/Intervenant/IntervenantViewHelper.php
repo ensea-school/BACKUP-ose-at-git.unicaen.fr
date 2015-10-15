@@ -76,6 +76,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
                 "Affectation principale"            => $entity->getStructure() ?: "(Inconnue)",
                 "Affectation recherche"             => count($aff = $entity->getAffectation()) ? implode(" ; ", $aff->toArray()) : "(Inconnue)",
                 "Discipline"                        => $entity->getDiscipline() ?: "(Inconnue)",
+                "Corps & grade"                     => $entity->getGrade() ? $entity->getGrade()->toStringWithCorps() : "Aucun"
             ],
             'divers'      => [
                 "Id"              => $entity->getId(),
@@ -86,8 +87,6 @@ class IntervenantViewHelper extends AbstractHtmlElement
         /* @deprecated en attendant la fusion des types d'intervenants... */
         if ($entity instanceof \Application\Entity\Db\IntervenantExterieur) {
             $vars['identite']['Situation familiale'] = $entity->getSituationFamiliale() ?: "(Inconnue)";
-        } elseif ($entity instanceof \Application\Entity\Db\IntervenantPermanent) {
-            $vars['metier']['Corps'] = $entity->getCorps();
         }
 
         $html = '';

@@ -52,7 +52,7 @@ trait SaisieAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formAgrementSaisie = $serviceLocator->getServiceLocator('FormElementManager')->get('AgrementSaisieForm');
+            $this->formAgrementSaisie = $serviceLocator->get('FormElementManager')->get('AgrementSaisieForm');
         }
         return $this->formAgrementSaisie;
     }

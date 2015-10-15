@@ -265,7 +265,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Service',
                     'action' => ['index', 'export', 'saisie', 'suppression', 'rafraichir-ligne', 'volumes-horaires-refresh', 'initialisation', 'constatation', 'cloturer-saisie','horodatage'],
-                    'roles' => [R_ROLE],
+                    'roles' => ['user'],
                 ], [
                     'controller' => 'Application\Controller\Service',
                     'action' => ['resume','resume-refresh','recherche'],
@@ -273,7 +273,7 @@ return [
                 ], [
                     'controller' => 'Application\Controller\ServiceReferentiel',
                     'action' => ['index', 'saisie', 'suppression', 'rafraichir-ligne', 'initialisation', 'constatation'],
-                    'roles' => [R_ROLE],
+                    'roles' => ['user'],
                 ],
             ],
         ],
@@ -289,7 +289,7 @@ return [
             'BjyAuthorize\Provider\Rule\Config' => [
                  'allow' => [
                     [
-                        [R_ROLE],
+                        ['user'],
                         'Service',
                         ['create', 'read', 'delete', 'update'],
                         'ServiceAssertion',
@@ -307,7 +307,7 @@ return [
                         'ServiceAssertion',
                     ],
                     [
-                        [R_INTERVENANT, /*R_INTERVENANT_PERMANENT,*/ R_COMPOSANTE, R_ADMINISTRATEUR],
+                        [R_INTERVENANT, R_COMPOSANTE, R_ADMINISTRATEUR],
                         'ServiceReferentiel',
                         ['create', 'read', 'delete', 'update'],
                         'ServiceReferentielAssertion'
@@ -318,49 +318,49 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            'Application\Controller\Service'            => Application\Controller\ServiceController::class,
-            'Application\Controller\ServiceReferentiel' => Application\Controller\ServiceReferentielController::class,
+            'Application\Controller\Service'            => Controller\ServiceController::class,
+            'Application\Controller\ServiceReferentiel' => Controller\ServiceReferentielController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'ApplicationService'                           => Application\Service\Service::class,
-            'ApplicationServiceReferentiel'                => Application\Service\ServiceReferentiel::class,
-            'ApplicationFonctionReferentiel'               => Application\Service\FonctionReferentiel::class,
-            'ApplicationPeriode'                           => Application\Service\Periode::class,
-            'ApplicationMotifNonPaiement'                  => Application\Service\MotifNonPaiement::class,
-            'ApplicationModificationServiceDu'             => Application\Service\ModificationServiceDu::class,
-            'ServiceRechercheHydrator'                     => Application\Entity\Service\RechercheHydrator::class,
-            'ServiceRechercheFormHydrator'                 => Application\Form\Service\RechercheFormHydrator::class,
-            'FormServiceSaisieFieldsetHydrator'            => Application\Form\Service\SaisieFieldsetHydrator::class,
-            'FormServiceSaisieHydrator'                    => Application\Form\Service\SaisieHydrator::class,
-            'FormServiceReferentielSaisieFieldsetHydrator' => Application\Form\ServiceReferentiel\SaisieFieldsetHydrator::class,
-            'FormServiceReferentielSaisieHydrator'         => Application\Form\ServiceReferentiel\SaisieHydrator::class,
-            'ServiceAssertion'                             => Application\Assertion\ServiceAssertion::class,
-            'ServiceReferentielAssertion'                  => Application\Assertion\ServiceReferentielAssertion::class,
+            'ApplicationService'                           => Service\ServiceService::class,
+            'ApplicationServiceReferentiel'                => Service\ServiceReferentiel::class,
+            'ApplicationFonctionReferentiel'               => Service\FonctionReferentiel::class,
+            'ApplicationPeriode'                           => Service\Periode::class,
+            'ApplicationMotifNonPaiement'                  => Service\MotifNonPaiement::class,
+            'ApplicationModificationServiceDu'             => Service\ModificationServiceDu::class,
+            'ServiceRechercheHydrator'                     => Entity\Service\RechercheHydrator::class,
+            'ServiceRechercheFormHydrator'                 => Form\Service\RechercheFormHydrator::class,
+            'FormServiceSaisieFieldsetHydrator'            => Form\Service\SaisieFieldsetHydrator::class,
+            'FormServiceSaisieHydrator'                    => Form\Service\SaisieHydrator::class,
+            'FormServiceReferentielSaisieFieldsetHydrator' => Form\ServiceReferentiel\SaisieFieldsetHydrator::class,
+            'FormServiceReferentielSaisieHydrator'         => Form\ServiceReferentiel\SaisieHydrator::class,
+            'ServiceAssertion'                             => Assertion\ServiceAssertion::class,
+            'ServiceReferentielAssertion'                  => Assertion\ServiceReferentielAssertion::class,
         ],
     ],
     'form_elements' => [
         'invokables' => [
-            'ServiceSaisie'                    => Application\Form\Service\Saisie::class,
-            'ServiceSaisieFieldset'            => Application\Form\Service\SaisieFieldset::class,
-            'ServiceReferentielSaisie'         => Application\Form\ServiceReferentiel\Saisie::class,
-            'ServiceReferentielSaisieFieldset' => Application\Form\ServiceReferentiel\SaisieFieldset::class,
-            'ServiceRechercheForm'             => Application\Form\Service\RechercheForm::class,
+            'ServiceSaisie'                    => Form\Service\Saisie::class,
+            'ServiceSaisieFieldset'            => Form\Service\SaisieFieldset::class,
+            'ServiceReferentielSaisie'         => Form\ServiceReferentiel\Saisie::class,
+            'ServiceReferentielSaisieFieldset' => Form\ServiceReferentiel\SaisieFieldset::class,
+            'ServiceRechercheForm'             => Form\Service\RechercheForm::class,
         ],
     ],
     'view_helpers' => [
         'invokables' => [
-            'serviceSaisieForm'            => Application\View\Helper\Service\SaisieForm::class,
-            'formServiceReferentielSaisie' => Application\View\Helper\ServiceReferentiel\FormSaisie::class,
-            'serviceResume'                => Application\View\Helper\Service\Resume::class,
-            'FonctionReferentiel'          => Application\View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
+            'serviceSaisieForm'            => View\Helper\Service\SaisieForm::class,
+            'formServiceReferentielSaisie' => View\Helper\ServiceReferentiel\FormSaisie::class,
+            'serviceResume'                => View\Helper\Service\Resume::class,
+            'FonctionReferentiel'          => View\Helper\ServiceReferentiel\FonctionReferentielViewHelper::class,
         ],
         'factories' => [
-            'serviceListe'            => Application\View\Helper\Service\ListeFactory::class,
-            'serviceLigne'            => Application\View\Helper\Service\LigneFactory::class,
-            'serviceReferentielListe' => Application\View\Helper\ServiceReferentiel\ListeFactory::class,
-            'serviceReferentielLigne' => Application\View\Helper\ServiceReferentiel\LigneFactory::class,
+            'serviceListe'            => View\Helper\Service\ListeFactory::class,
+            'serviceLigne'            => View\Helper\Service\LigneFactory::class,
+            'serviceReferentielListe' => View\Helper\ServiceReferentiel\ListeFactory::class,
+            'serviceReferentielLigne' => View\Helper\ServiceReferentiel\LigneFactory::class,
         ],
         'javascript' => [
             '/test.js'

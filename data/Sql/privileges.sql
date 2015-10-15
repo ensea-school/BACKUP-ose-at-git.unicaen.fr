@@ -1,13 +1,13 @@
   
-  
+  /*
 INSERT INTO CATEGORIE_PRIVILEGE (
   ID,
   CODE,
   LIBELLE
 ) VALUES (
   CATEGORIE_PRIVILEGE_ID_SEQ.nextval,
-  'droit',
-  'Gestion des droits d''accès'
+  'discipline',
+  'Gestion des disciplines'
 );
 
 INSERT INTO PRIVILEGE (
@@ -27,12 +27,11 @@ FROM (
 
 --      SELECT 'droit' c, 'role-visualisation' p, 'Rôles - Visualisation' l FROM dual
 --UNION SELECT 'droit' c, 'role-edition' p, 'Rôles - Édition' l FROM dual
-SELECT 'droit' c, 'privilege-visualisation' p, 'Privilèges - Visualisation' l FROM dual
-UNION SELECT 'droit' c, 'privilege-edition' p, 'Privilèges - Édition' l FROM dual
-UNION SELECT 'droit' c, 'affectation-visualisation' p, 'Affectations - Visualisation' l FROM dual
-UNION SELECT 'droit' c, 'affectation-edition' p, 'Affectations - Édition' l FROM dual
+      SELECT 'discipline' c, 'gestion' p, 'Gestion' l FROM dual
+UNION SELECT 'discipline' c, 'visualisation' p, 'Visualisation' l FROM dual
+UNION SELECT 'discipline' c, 'edition' p, 'Édition' l FROM dual
 
-) t1;
+) t1;*/
 
 select
   /*/
@@ -49,13 +48,9 @@ order by
 
 
 
-update privilege set ordre = 3 where id = 37;
-update privilege set ordre = 4 where id = 36;
-update privilege set ordre = 5 where id = 35;
-update privilege set ordre = 6 where id = 34;
 
 
 
-UPDATE CATEGORIE_PRIVILEGE SET CODE = 'droit' WHERE CODE = 'privilege';
-update privilege set code = 'role-visualisation' where code = 'visualisation' AND categorie_id = (SELECT id FROM categorie_privilege WHERE code='droit');
-update privilege set code = 'role-edition' where code = 'edition' AND categorie_id = (SELECT id FROM categorie_privilege WHERE code='droit');
+--UPDATE CATEGORIE_PRIVILEGE SET CODE = 'droit' WHERE CODE = 'privilege';
+--update privilege set code = 'role-visualisation' where code = 'visualisation' AND categorie_id = (SELECT id FROM categorie_privilege WHERE code='droit');
+--update privilege set code = 'role-edition' where code = 'edition' AND categorie_id = (SELECT id FROM categorie_privilege WHERE code='droit');

@@ -52,7 +52,7 @@ trait PrivilegesFormAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formDroitsPrivileges = $serviceLocator->getServiceLocator('FormElementManager')->get('DroitsPrivilegesForm');
+            $this->formDroitsPrivileges = $serviceLocator->get('FormElementManager')->get('DroitsPrivilegesForm');
         }
         return $this->formDroitsPrivileges;
     }

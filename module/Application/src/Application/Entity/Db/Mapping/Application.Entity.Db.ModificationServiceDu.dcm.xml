@@ -36,7 +36,7 @@
         <join-column name="MOTIF_ID" referenced-column-name="ID"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="intervenant" target-entity="Application\Entity\Db\IntervenantPermanent">
+    <many-to-one field="intervenant" target-entity="Application\Entity\Db\Intervenant">
       <join-columns>
         <join-column name="INTERVENANT_ID" referenced-column-name="ID"/>
       </join-columns>

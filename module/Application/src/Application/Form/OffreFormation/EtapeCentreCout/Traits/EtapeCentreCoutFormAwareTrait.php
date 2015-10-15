@@ -52,7 +52,7 @@ trait EtapeCentreCoutFormAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formOffreFormationEtapeCentreCoutEtapeCentreCout = $serviceLocator->getServiceLocator('FormElementManager')->get('EtapeCentreCoutForm');
+            $this->formOffreFormationEtapeCentreCoutEtapeCentreCout = $serviceLocator->get('FormElementManager')->get('EtapeCentreCoutForm');
         }
         return $this->formOffreFormationEtapeCentreCoutEtapeCentreCout;
     }

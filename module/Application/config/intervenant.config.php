@@ -511,7 +511,7 @@ return [
                 [
                     'controller' => 'Application\Controller\Intervenant',
                     'action'     => ['apercevoir',],
-                    'roles'      => [R_ROLE],
+                    'roles'      => ['user'],
                 ],
                 [
                     'controller' => 'Application\Controller\Intervenant',

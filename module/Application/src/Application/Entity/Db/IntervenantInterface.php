@@ -91,11 +91,4 @@ interface IntervenantInterface
      */
     public function getSourceCode();
 
-    /**
-     * Get type id
-     *
-     * @return integer
-     * @see \Application\Entity\Db\TypeIntervenant
-     */
-    public function getTypeId();
 }

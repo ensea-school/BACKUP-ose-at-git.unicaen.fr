@@ -2,7 +2,7 @@
 
 namespace Application\Service\Traits;
 
-use Application\Service\Service;
+use Application\Service\ServiceService;
 use Application\Module;
 use RuntimeException;
 
@@ -14,7 +14,7 @@ use RuntimeException;
 trait ServiceAwareTrait
 {
     /**
-     * @var Service
+     * @var ServiceService
      */
     private $service;
 
@@ -23,10 +23,11 @@ trait ServiceAwareTrait
 
 
     /**
-     * @param Service $service
-     * @return self
+     * @param ServiceService $service
+     *
+*@return self
      */
-    public function setService( Service $service )
+    public function setServiceService(ServiceService $service )
     {
         $this->service = $service;
         return $this;
@@ -35,10 +36,10 @@ trait ServiceAwareTrait
 
 
     /**
-     * @return Service
+     * @return ServiceService
      * @throws RuntimeException
      */
-    public function getService()
+    public function getServiceService()
     {
         if (empty($this->service)){
         $serviceLocator = Module::$serviceLocator;

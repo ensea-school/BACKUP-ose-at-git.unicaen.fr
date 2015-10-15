@@ -17,7 +17,7 @@ trait WorkflowIntervenantAwareTrait
     protected $workflowIntervenant;
     
     /**
-     * Retourne le workflow IntervenantPermanent ou IntervenantExterieur.
+     * Retourne le workflow Intervenant.
      * 
      * @return WorkflowIntervenant
      */

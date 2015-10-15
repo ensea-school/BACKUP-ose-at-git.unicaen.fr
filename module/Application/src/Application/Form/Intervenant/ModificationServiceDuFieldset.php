@@ -3,7 +3,7 @@
 namespace Application\Form\Intervenant;
 
 use Zend\Form\Fieldset;
-use Application\Entity\Db\IntervenantPermanent;
+use Application\Entity\Db\Intervenant;
 
 /**
  * Fieldset de saisie des modifications de service dû par un intervenant.
@@ -19,7 +19,7 @@ class ModificationServiceDuFieldset extends Fieldset implements \Zend\ServiceMan
     {
         $this
                 ->setHydrator(new ModificationServiceDuFieldsetHydrator())
-                ->setObject(new IntervenantPermanent());
+                ->setObject(new Intervenant());
 
         $targetElement = $this->getServiceLocator()->get('IntervenantMotifModificationServiceDuFieldset');
 
@@ -44,7 +44,7 @@ class ModificationServiceDuFieldsetHydrator implements \Zend\Stdlib\Hydrator\Hyd
     /**
      * Extract values from an object
      *
-     * @param  IntervenantPermanent $intervenant
+     * @param  Intervenant $intervenant
      * @return array
      */
     public function extract($intervenant)
@@ -58,8 +58,8 @@ class ModificationServiceDuFieldsetHydrator implements \Zend\Stdlib\Hydrator\Hyd
      * Hydrate $object with the provided $data.
      *
      * @param  array $data
-     * @param  IntervenantPermanent $intervenant
-     * @return IntervenantPermanent
+     * @param  Intervenant $intervenant
+     * @return Intervenant
      */
     public function hydrate(array $data, $intervenant)
     {

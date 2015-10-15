@@ -2,19 +2,15 @@
 
 namespace Application;
 
-const R_ROLE                  = 'user';
 const R_ADMINISTRATEUR        = Acl\AdministrateurRole::ROLE_ID;
 const R_COMPOSANTE            = Acl\ComposanteRole::ROLE_ID;
 const R_DRH                   = Acl\DrhRole::ROLE_ID;
 const R_ETABLISSEMENT         = Acl\EtablissementRole::ROLE_ID;
 const R_INTERVENANT           = Acl\IntervenantRole::ROLE_ID;
-const R_INTERVENANT_PERMANENT = Acl\IntervenantPermanentRole::ROLE_ID;
 const R_INTERVENANT_EXTERIEUR = Acl\IntervenantExterieurRole::ROLE_ID;
 
 
 $R_ALL             = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT, R_INTERVENANT];
-$R_NOT_INTERVENANT = [R_ADMINISTRATEUR, R_COMPOSANTE, R_DRH, R_ETABLISSEMENT];
-$R_COMMUN          = [R_ADMINISTRATEUR, R_DRH, R_ETABLISSEMENT];
 
 $main = [
     'doctrine'           => [
@@ -142,7 +138,7 @@ $main = [
         'identity_providers' => [
 //            200 => 'UnicaenAuth\Provider\Identity\Db',
 //            100 => 'UnicaenAuth\Provider\Identity\Ldap',
-50 => 'ApplicationIdentityProvider',
+            50 => 'ApplicationIdentityProvider',
         ],
     ],
     'bjyauthorize'       => [

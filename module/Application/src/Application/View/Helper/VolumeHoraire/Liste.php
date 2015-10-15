@@ -274,7 +274,7 @@ class Liste extends AbstractHelper implements ServiceLocatorAwareInterface
     }
 
     /**
-     * @return \Application\Service\Service
+     * @return \Application\Service\ServiceService
      */
     protected function getServiceService()
     {

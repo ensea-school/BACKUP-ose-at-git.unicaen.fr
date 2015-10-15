@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+use Application\Entity\Db\Traits\IntervenantAwareTrait;
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -10,6 +11,7 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
 class ModificationServiceDu implements HistoriqueAwareInterface
 {
     use HistoriqueAwareTrait;
+    use IntervenantAwareTrait;
 
 
 
@@ -49,11 +51,6 @@ class ModificationServiceDu implements HistoriqueAwareInterface
      * @var \Application\Entity\Db\MotifModificationServiceDu
      */
     protected $motif;
-
-    /**
-     * @var \Application\Entity\Db\IntervenantPermanent
-     */
-    protected $intervenant;
 
 
 
@@ -151,31 +148,4 @@ class ModificationServiceDu implements HistoriqueAwareInterface
         return $this->motif;
     }
 
-
-
-    /**
-     * Set intervenant
-     *
-     * @param \Application\Entity\Db\IntervenantPermanent $intervenant
-     *
-     * @return ModificationServiceDu
-     */
-    public function setIntervenant(\Application\Entity\Db\IntervenantPermanent $intervenant = null)
-    {
-        $this->intervenant = $intervenant;
-
-        return $this;
-    }
-
-
-
-    /**
-     * Get intervenant
-     *
-     * @return \Application\Entity\Db\IntervenantPermanent
-     */
-    public function getIntervenant()
-    {
-        return $this->intervenant;
-    }
 }

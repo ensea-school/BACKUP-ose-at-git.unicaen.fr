@@ -52,7 +52,7 @@ trait ElementPedagogiqueSaisieAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formOffreFormationElementPedagogiqueSaisie = $serviceLocator->getServiceLocator('FormElementManager')->get('ElementPedagogiqueSaisie');
+            $this->formOffreFormationElementPedagogiqueSaisie = $serviceLocator->get('FormElementManager')->get('ElementPedagogiqueSaisie');
         }
         return $this->formOffreFormationElementPedagogiqueSaisie;
     }

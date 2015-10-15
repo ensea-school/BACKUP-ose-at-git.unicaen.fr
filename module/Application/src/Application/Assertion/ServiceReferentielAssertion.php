@@ -8,7 +8,6 @@ use Application\Acl\DrhRole;
 use Application\Acl\EtablissementRole;
 use Application\Acl\IntervenantRole;
 use Application\Acl\IntervenantPermanentRole;
-use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\ServiceReferentiel;
 use Application\Entity\Db\TypeVolumeHoraire;
 use Application\Entity\Db\Structure;
@@ -108,7 +107,7 @@ class ServiceReferentielAssertion extends AbstractAssertion
             return false;
         }
         
-        if (! $this->intervenant instanceof IntervenantPermanent) {
+        if (! $this->intervenant->estPermanent()) {
             return false; // pas de référentiel pour les intervenants extérieurs
         }
 
@@ -223,7 +222,7 @@ class ServiceReferentielAssertion extends AbstractAssertion
                 return true;
             }
             if (
-                    $this->intervenant instanceof IntervenantPermanent &&
+                    $this->intervenant->estPermanent() &&
                     $this->intervenantStructure === $roleStructure
             ) {
                 // Un gestionnaire peut agir sur les permanents de sa composante pour n'importe quelle composante d'intervention

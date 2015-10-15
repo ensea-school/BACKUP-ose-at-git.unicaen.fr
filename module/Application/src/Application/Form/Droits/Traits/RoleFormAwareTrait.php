@@ -52,7 +52,7 @@ trait RoleFormAwareTrait
                     $serviceLocator = $serviceLocator->getServiceLocator();
                 }
             }
-            $this->formDroitsRole = $serviceLocator->getServiceLocator('FormElementManager')->get('DroitsRoleForm');
+            $this->formDroitsRole = $serviceLocator->get('FormElementManager')->get('DroitsRoleForm');
         }
         return $this->formDroitsRole;
     }

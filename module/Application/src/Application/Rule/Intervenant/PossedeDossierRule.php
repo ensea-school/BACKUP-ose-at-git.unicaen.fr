@@ -2,7 +2,6 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\IntervenantExterieur;
 use Common\Exception\LogicException;
 
 /**
@@ -71,13 +70,13 @@ class PossedeDossierRule extends AbstractIntervenantRule
     public function getQueryBuilder()
     {
         $em = $this->getServiceIntervenant()->getEntityManager();
-        $qb = $em->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i")
+        $qb = $em->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
                 ->select("i.id")
                 ->join("i.dossier", "d");
 
         if ($this->getIntervenant()) {
-            if (!$this->getIntervenant() instanceof IntervenantExterieur) {
-                throw new LogicException("L'intervenant spécifié doit être un IntervenantExterieur.");
+            if ($this->getIntervenant()->estPermanent()) {
+                throw new LogicException("L'intervenant spécifié doit être un vacataire.");
             }
 
             $qb->andWhere("i = " . $this->getIntervenant()->getId());

@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Acl\IntervenantRole;
 use Application\Controller\Plugin\Context;
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\Listener\DossierListener;
 use Application\Entity\Db\TypeValidation;
@@ -52,7 +52,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
 
 
     /**
-     * @var IntervenantExterieur
+     * @var Intervenant
      */
     private $intervenant;
 
@@ -76,7 +76,6 @@ class DossierController extends AbstractActionController implements WorkflowInte
     {
         $this->em()->getFilters()->enable('historique')->init([
             'Application\Entity\Db\Intervenant',
-            'Application\Entity\Db\IntervenantExterieur',
             'Application\Entity\Db\Validation',
             'Application\Entity\Db\TypeValidation',
             'Application\Entity\Db\Dossier',
@@ -127,7 +126,7 @@ class DossierController extends AbstractActionController implements WorkflowInte
         }
         
         // refetch intervenant avec jointure sur dossier (et respect de l'historique)
-        $qb = $this->em()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("i")
+        $qb = $this->em()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("i")
                 ->select("i, d")
                 ->leftJoin("i.dossier", "d")
                 ->andWhere("i = :i")

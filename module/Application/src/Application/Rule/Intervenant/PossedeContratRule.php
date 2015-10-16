@@ -2,10 +2,8 @@
 
 namespace Application\Rule\Intervenant;
 
-use Application\Entity\Db\IntervenantExterieur;
 use Application\Traits\StructureAwareTrait;
 use Application\Traits\TypeContratAwareTrait;
-use Common\Exception\LogicException;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -68,7 +66,7 @@ class PossedeContratRule extends AbstractIntervenantRule
     public function getQueryBuilder()
     {
         $qb = $this->getServiceIntervenant()->getEntityManager()->createQueryBuilder()
-                ->from("Application\Entity\Db\IntervenantExterieur", "i")
+                ->from("Application\Entity\Db\Intervenant", "i")
                 ->select("i.id")
                 ->join("i.contrat", "c");
 
@@ -97,7 +95,7 @@ class PossedeContratRule extends AbstractIntervenantRule
     public function isRelevant()
     {
         if ($this->getIntervenant()) {
-            return $this->getIntervenant() instanceof IntervenantExterieur;
+            return !$this->getIntervenant()->estPermanent();
         }
 
         return true;

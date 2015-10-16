@@ -5,7 +5,7 @@ namespace Application\Controller;
 use Application\Assertion\FichierAssertion;
 use Application\Assertion\PieceJointeAssertion;
 use Application\Entity\Db\Fichier;
-use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\TypePieceJointe;
 use Application\Entity\Db\TypePieceJointeStatut;
@@ -89,7 +89,7 @@ class PieceJointeController extends AbstractActionController implements Workflow
     {
         $this->initFilters();
 
-        if (!$this->getIntervenant() instanceof IntervenantExterieur) {
+        if ($this->getIntervenant()->estPermanent()) {
             throw new MessageException("Les pièces justificatives ne concernent que les intervenants extérieurs.");
         }
 
@@ -469,7 +469,7 @@ class PieceJointeController extends AbstractActionController implements Workflow
 
 
     /**
-     * @var IntervenantExterieur
+     * @var Intervenant
      */
     private $intervenant;
 

@@ -6,7 +6,6 @@ use Doctrine\ORM\QueryBuilder;
 use Application\Entity\Db\TypePieceJointe as TypePieceJointeEntity;
 use Application\Entity\Db\PieceJointe as PieceJointeEntity;
 use Application\Entity\Db\Fichier as FichierEntity;
-use Application\Entity\Db\IntervenantExterieur as IntervenantExterieurEntity;
 use Application\Entity\Db\Intervenant as IntervenantEntity;
 use Application\Entity\Db\TypeValidation as TypeValidationEntity;
 use Application\Assertion\PieceJointeAssertion;
@@ -120,7 +119,7 @@ EOS;
      * @param boolean $deleteFiles Supprimer les fichiers après création de la PJ$
      * @return PieceJointeEntity[]
      */
-    public function ajouterFichiers($files, IntervenantExterieurEntity $intervenant, TypePieceJointeEntity $type, $deleteFiles = true)
+    public function ajouterFichiers($files, IntervenantEntity $intervenant, TypePieceJointeEntity $type, $deleteFiles = true)
     {
         if (!$files) {
            throw new \Common\Exception\LogicException("Aucune donnée sur les fichiers spécifiée.");

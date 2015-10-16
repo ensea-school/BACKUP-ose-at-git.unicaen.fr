@@ -39,9 +39,9 @@ class AttenteContratIndicateurImpl extends AbstractIntervenantResultIndicateurIm
     protected function getQueryBuilder()
     {
         // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
-        $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
+        $this->getEntityManager()->clear('Application\Entity\Db\Intervenant');
         
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("int");
         $qb
             ->join("int.statut", "st", Join::WITH, "st.peutAvoirContrat = 1")
             ->join("int.service", "s")

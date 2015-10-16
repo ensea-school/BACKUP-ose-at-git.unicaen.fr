@@ -7,7 +7,6 @@ use Application\Acl\ComposanteRole;
 use Application\Acl\DrhRole;
 use Application\Acl\EtablissementRole;
 use Application\Acl\IntervenantRole;
-use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\Service;
 use Zend\Permissions\Acl\Acl;

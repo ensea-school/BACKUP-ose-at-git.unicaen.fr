@@ -2,6 +2,8 @@
 
 namespace Common\ORM\Filter;
 
+use Application\Entity\Db\Etape;
+use Application\Entity\Db\Interfaces\AnneeAwareInterface;
 use Application\Service\Traits\ContextAwareTrait;
 use Doctrine\ORM\Mapping\ClassMetaData;
 use Application\Entity\Db\Annee;
@@ -22,9 +24,9 @@ class AnneeFilter extends AbstractFilter
     public function addFilterConstraint(ClassMetaData $targetEntity, $targetTableAlias)
     {
         if (isset($this->enabledEntities[$targetEntity->name])) {
-            if ($targetEntity->name == Application\Entity\Db\Etape::class) {
+            if ($targetEntity->name == Etape::class) {
                 return $this->addEtapeFilterConstraint($targetTableAlias);
-            } elseif ($targetEntity->reflClass->implementsInterface(Application\Entity\Db\Interfaces\AnneeAwareInterface::class)) {
+            } elseif ($targetEntity->reflClass->implementsInterface(AnneeAwareInterface::class)) {
                 return $targetTableAlias . '.ANNEE_ID = ' . $this->getServiceContext()->getAnnee()->getId();
             }
         }

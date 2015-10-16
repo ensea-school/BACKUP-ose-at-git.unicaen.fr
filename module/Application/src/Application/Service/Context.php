@@ -8,7 +8,6 @@ use Application\Entity\Db\Annee         as AnneeEntity;
 use Application\Entity\Db\Structure     as StructureEntity;
 use \DateTime;
 use Zend\Session\Container;
-use \Application\Interfaces\StructureAwareInterface;
 
 /**
  * Service fournissant les différents contextes de fonctionnement de l'application.
@@ -17,12 +16,12 @@ use \Application\Interfaces\StructureAwareInterface;
  */
 class Context extends AbstractService
 {
-    use Traits\EtablissementAwareTrait,
-        Traits\AnneeAwareTrait,
-        Traits\IntervenantAwareTrait,
-        Traits\ParametresAwareTrait,
-        Traits\StructureAwareTrait
-    ;
+    use Traits\EtablissementAwareTrait;
+    use Traits\AnneeAwareTrait;
+    use Traits\IntervenantAwareTrait;
+    use Traits\ParametresAwareTrait;
+    use Traits\StructureAwareTrait;
+
 
     /**
      * selectedIdentityRole

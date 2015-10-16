@@ -138,10 +138,10 @@ class ContratAvenantDeposesIndicateurImpl extends AbstractIntervenantResultIndic
      */
     protected function getQueryBuilder()
     {
-        // INDISPENSABLE si plusieurs requêtes successives sur IntervenantExterieur !
-        $this->getEntityManager()->clear('Application\Entity\Db\IntervenantExterieur');
+        // INDISPENSABLE si plusieurs requêtes successives sur Intervenant !
+        $this->getEntityManager()->clear('Application\Entity\Db\Intervenant');
         
-        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\IntervenantExterieur')->createQueryBuilder("int");
+        $qb = $this->getEntityManager()->getRepository('Application\Entity\Db\Intervenant')->createQueryBuilder("int");
         $qb
             ->join("int.contrat", "c", Join::WITH, "1 = pasHistorise(c)")
             ->join("c.fichier", "f", Join::WITH, "1 = pasHistorise(f)")

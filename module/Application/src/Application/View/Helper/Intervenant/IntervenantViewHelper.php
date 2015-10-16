@@ -85,7 +85,7 @@ class IntervenantViewHelper extends AbstractHtmlElement
         ];
 
         /* @deprecated en attendant la fusion des types d'intervenants... */
-        if ($entity instanceof \Application\Entity\Db\IntervenantExterieur) {
+        if (!$entity->estPermanent()) {
             $vars['identite']['Situation familiale'] = $entity->getSituationFamiliale() ?: "(Inconnue)";
         }
 

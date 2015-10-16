@@ -62,7 +62,7 @@ class Dossier extends Form implements ServiceLocatorAwareInterface
     public function bind($object, $flags = FormInterface::VALUES_NORMALIZED)
     {
         if ($object->estPermanent()) {
-            throw new LogicException("Ce formulaire ne peut être bindé qu'à un IntervenantExterieur.");
+            throw new LogicException("Ce formulaire ne peut être bindé qu'à un vacataire.");
         }
 
         return parent::bind($object, $flags);

@@ -553,10 +553,10 @@ class Dossier implements HistoriqueAwareInterface
         
     /**
      * 
-     * @param \Application\Entity\Db\IntervenantExterieur $intervenant
+     * @param \Application\Entity\Db\Intervenant $intervenant
      * @return \Application\Entity\Db\Dossier
      */
-    public function fromIntervenant(IntervenantExterieur $intervenant)
+    public function fromIntervenant(Intervenant $intervenant)
     {
         $this
                 ->setNomUsuel($intervenant->getNomUsuel())

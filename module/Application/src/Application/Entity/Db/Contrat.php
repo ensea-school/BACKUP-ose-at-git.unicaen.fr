@@ -24,7 +24,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     private $typeContrat;
 
     /**
-     * @var \Application\Entity\Db\IntervenantExterieur
+     * @var \Application\Entity\Db\Intervenant
      */
     private $intervenant;
 
@@ -226,11 +226,11 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Set intervenant
      *
-     * @param \Application\Entity\Db\IntervenantExterieur $intervenant
+     * @param \Application\Entity\Db\Intervenant $intervenant
      *
      * @return self
      */
-    public function setIntervenant(\Application\Entity\Db\IntervenantExterieur $intervenant = null)
+    public function setIntervenant(\Application\Entity\Db\Intervenant $intervenant = null)
     {
         $this->intervenant = $intervenant;
 
@@ -242,7 +242,7 @@ class Contrat implements HistoriqueAwareInterface, ResourceInterface
     /**
      * Get intervenant
      *
-     * @return \Application\Entity\Db\IntervenantExterieur
+     * @return \Application\Entity\Db\Intervenant
      */
     public function getIntervenant()
     {

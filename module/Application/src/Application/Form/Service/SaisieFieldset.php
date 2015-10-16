@@ -10,7 +10,7 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Application\Entity\Db\IntervenantExterieur;
+
 
 /**
  * Description of SaisieFieldset
@@ -70,7 +70,7 @@ class SaisieFieldset extends Fieldset implements InputFilterProviderInterface, S
             $this->add($intervenant);
         }
 
-        if (!($identityRole instanceof IntervenantRole && $identityRole->getIntervenant() instanceof IntervenantExterieur)){
+        if (!($identityRole instanceof IntervenantRole && !$identityRole->getIntervenant()->estPermanent())){
             $this->add([
                 'type'       => 'Radio',
                 'name'       => 'interne-externe',

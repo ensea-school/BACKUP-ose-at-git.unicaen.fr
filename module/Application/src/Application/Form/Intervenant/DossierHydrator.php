@@ -2,7 +2,7 @@
 namespace Application\Form\Intervenant;
 
 use Application\Entity\Db\Dossier as DossierEntity;
-use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\StatutIntervenant;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
@@ -25,8 +25,8 @@ class DossierHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param  array $data
-     * @param  IntervenantExterieur $intervenant
-     * @return IntervenantExterieur
+     * @param  Intervenant $intervenant
+     * @return Intervenant
      */
     public function hydrate(array $data, $intervenant)
     {
@@ -47,7 +47,7 @@ class DossierHydrator implements HydratorInterface
     /**
      * Extract values from an object
      *
-     * @param  IntervenantExterieur $intervenant
+     * @param  Intervenant $intervenant
      * @return array
      */
     public function extract($intervenant)

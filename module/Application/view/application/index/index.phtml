@@ -29,7 +29,7 @@ echo $this->messenger()->addMessagesFromFlashMessenger();
                     $wf = $this->workflow($intervenant, $role)->getWorkflow();
                     if ($wf->getSteps()) {
                         $step = $wf->getCurrentStep() ?: $wf->getLastStep();
-                        /* @var $wf \Application\Service\Workflow\WorkflowIntervenantExterieur */
+                        /* @var $wf \Application\Service\Workflow\WorkflowIntervenant */
                         $url   = $wf->getStepUrl($step);
                         $label = $this->translate($step->getLabel($role));
 

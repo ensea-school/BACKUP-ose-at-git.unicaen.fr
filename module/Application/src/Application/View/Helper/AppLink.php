@@ -1,6 +1,7 @@
 <?php
 namespace Application\View\Helper;
 
+use Application\Entity\Db\Traits\AnneeAwareTrait;
 use Zend\I18n\View\Helper\AbstractTranslatorHelper;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Router\RouteStackInterface;
@@ -19,7 +20,7 @@ use Zend\Form\Element\Select;
  */
 class AppLink extends AbstractTranslatorHelper
 {
-    use \Application\Traits\AnneeAwareTrait;
+    use AnneeAwareTrait;
 
     /**
      * @var string

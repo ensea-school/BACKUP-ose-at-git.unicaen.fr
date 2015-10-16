@@ -59,7 +59,7 @@ class ValidationController extends AbstractActionController
     private $isReferentiel;
 
     /**
-     * @var \Application\Entity\Db\IntervenantExterieur
+     * @var \Application\Entity\Db\Intervenant
      */
     private $intervenant;
 

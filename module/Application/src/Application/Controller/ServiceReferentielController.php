@@ -11,7 +11,6 @@ use Application\Service\Traits\VolumeHoraireReferentielAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Exception\MessageException;
 use Application\Exception\DbException;
-use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Service\Recherche;
 use Application\Service\Traits\ContextAwareTrait;
 

@@ -2,8 +2,6 @@
 
 namespace Application\Service\Workflow\Step;
 
-use Application\Acl\IntervenantPermanentRole;
-use Application\Acl\IntervenantExterieurRole;
 use Application\Acl\ComposanteRole;
 use Application\Acl\IntervenantRole;
 

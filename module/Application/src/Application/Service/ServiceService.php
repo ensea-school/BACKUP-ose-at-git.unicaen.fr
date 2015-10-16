@@ -478,7 +478,7 @@ class ServiceService extends AbstractEntityService
     /**
      * Retourne la liste des services selon l'étape donnée
      *
-     * @param string            $statutInterv "Application\Entity\Db\IntervenantPermanent" ou "Application\Entity\Db\IntervenantExterieur"
+     * @param TypeIntervenantEntity $typeIntervenant
      * @param QueryBuilder|null $queryBuilder
      *
      * @return QueryBuilder
@@ -1250,7 +1250,7 @@ class ServiceService extends AbstractEntityService
 
     public function canHaveMotifNonPaiement(ServiceEntity $service, $runEx = false)
     {
-        if ($service->getIntervenant() instanceof \Application\Entity\Db\IntervenantExterieur) {
+        if (!$service->getIntervenant()->estPermanent()) {
             return $this->cannotDoThat("Un intervenant vacataire ne peut pas avoir de motif de non paiement", $runEx);
         }
         if ($this->getServiceContext()->getSelectedIdentityRole() instanceof \Application\Acl\IntervenantRole) {

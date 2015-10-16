@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Entity\Db;
+
 use UnicaenApp\Entity\HistoriqueAwareInterface;
 use UnicaenApp\Entity\HistoriqueAwareTrait;
 
@@ -9,12 +10,10 @@ use UnicaenApp\Entity\HistoriqueAwareTrait;
  */
 class TypeIntervenant implements HistoriqueAwareInterface
 {
-    use HistoriqueAwareTrait;
+    CONST CODE_PERMANENT = 'P';
+    CONST CODE_EXTERIEUR = 'E';
 
-    public $classToCode = [
-        'Application\Entity\Db\IntervenantPermanent' => 'P',
-        'Application\Entity\Db\IntervenantExterieur' => 'E',
-    ];
+    use HistoriqueAwareTrait;
 
     /**
      * @var string
@@ -98,13 +97,6 @@ class TypeIntervenant implements HistoriqueAwareInterface
     {
         return $this->id;
     }
-
-
-
-    CONST CODE_PERMANENT = 'P';
-    CONST CODE_EXTERIEUR = 'E';
-    CONST TYPE_PERMANENT = 1;
-    CONST TYPE_EXTERIEUR = 2;
 
 
 

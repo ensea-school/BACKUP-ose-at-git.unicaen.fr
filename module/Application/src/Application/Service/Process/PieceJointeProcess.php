@@ -3,7 +3,7 @@
 namespace Application\Service\Process;
 
 use Application\Entity\Db\Dossier;
-use Application\Entity\Db\IntervenantExterieur;
+use Application\Entity\Db\Intervenant;
 use Application\Entity\Db\PieceJointe;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\TypePieceJointe;
@@ -145,17 +145,17 @@ class PieceJointeProcess extends AbstractService
     }
 
     /**
-     * @var IntervenantExterieur
+     * @var Intervenant
      */
     private $intervenant;
 
     /**
      *
-     * @param IntervenantExterieur $intervenant
+     * @param Intervenant $intervenant
      * @return \Application\Service\DossierProcess
      * @throws AucuneAFournirException
      */
-    public function setIntervenant(IntervenantExterieur $intervenant)
+    public function setIntervenant(Intervenant $intervenant)
     {
         $this->intervenant = $intervenant;
 
@@ -174,7 +174,7 @@ class PieceJointeProcess extends AbstractService
     }
 
     /**
-     * @return IntervenantExterieur
+     * @return Intervenant
      */
     public function getIntervenant()
     {

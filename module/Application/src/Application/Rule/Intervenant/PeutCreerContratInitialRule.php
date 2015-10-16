@@ -3,7 +3,6 @@
 namespace Application\Rule\Intervenant;
 
 use Application\Entity\Db\Contrat;
-use Application\Entity\Db\IntervenantExterieur;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\Validation;
 use Application\Entity\Db\VolumeHoraire;
@@ -63,7 +62,7 @@ class PeutCreerContratInitialRule extends PeutCreerContratAbstractRule
     
     public function isRelevant()
     {
-        return $this->getIntervenant() instanceof IntervenantExterieur;
+        return !$this->getIntervenant()->estPermanent();
     }
     
     /**

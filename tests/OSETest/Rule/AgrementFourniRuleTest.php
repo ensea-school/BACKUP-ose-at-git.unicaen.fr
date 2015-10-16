@@ -3,8 +3,6 @@
 namespace OSETest\Rule;
 
 use Application\Entity\Db\Intervenant;
-use Application\Entity\Db\IntervenantExterieur;
-use Application\Entity\Db\IntervenantPermanent;
 use Application\Entity\Db\StatutIntervenant;
 use Application\Entity\Db\TypeAgrement;
 use Application\Entity\Db\TypeAgrementStatut;
@@ -27,12 +25,12 @@ class AgrementFourniRuleTest extends BaseRuleTest
     protected $rule;
     
     /**
-     * @var IntervenantExterieur 
+     * @var Intervenant
      */
     private $ie;
     
     /**
-     * @var IntervenantPermanent
+     * @var Intervenant
      */
     private $ip;
     

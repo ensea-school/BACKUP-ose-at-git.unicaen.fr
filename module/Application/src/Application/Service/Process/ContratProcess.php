@@ -2,22 +2,19 @@
 
 namespace Application\Service\Process;
 
-use Application\Acl\ComposanteRole;
 use Application\Entity\Db\TypeContrat;
 use Application\Entity\Db\TypeValidation;
 use Application\Rule\Intervenant\PeutCreerAvenantRule;
 use Application\Rule\Intervenant\PeutCreerContratInitialRule;
 use Application\Service\AbstractService;
-use Application\Service\Contrat as ContratService;
 use Application\Traits\IntervenantAwareTrait;
-use Common\Exception\LogicException;
 use Common\Exception\RuntimeException;
 use Application\Entity\Db\Contrat;
 
 /**
  * Workflow de création des contrats et avenants.
  *
- * @method \Application\Entity\Db\IntervenantExterieur getIntervenant() Description
+ * @method \Application\Entity\Db\Intervenant getIntervenant() Description
  * @author Bertrand GAUTHIER <bertrand.gauthier at unicaen.fr>
  */
 class ContratProcess extends AbstractService
